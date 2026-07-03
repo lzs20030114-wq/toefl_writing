@@ -15,6 +15,37 @@ import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 
 /* ── NavSidebar ── */
 
+/* 侧栏安静列表项：促销/入口统一用这个中性样式，避免各处内联复制后漂移 */
+function SidebarActionItem({ emoji, title, sub, onClick, navBdr, navItemHover, t1, t3, style }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        width: "100%",
+        display: "flex", alignItems: "center", gap: 8,
+        padding: "9px 11px",
+        background: "transparent",
+        border: `1px solid ${navBdr}`,
+        borderRadius: 8,
+        cursor: "pointer",
+        fontFamily: HOME_FONT,
+        textAlign: "left",
+        transition: "background 0.15s ease",
+        ...style,
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.background = navItemHover; }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+    >
+      <span style={{ fontSize: 14, flexShrink: 0 }}>{emoji}</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: t1, lineHeight: 1.3 }}>{title}</div>
+        <div style={{ fontSize: 10, color: t3, marginTop: 1 }}>{sub}</div>
+      </div>
+      <span style={{ fontSize: 11, color: t3, flexShrink: 0 }}>›</span>
+    </button>
+  );
+}
+
 export function NavSidebar({
   activeSection,
   onSectionChange,
@@ -187,6 +218,15 @@ export function NavSidebar({
             <button onClick={showLoginModal} style={{ width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 700, border: "none", background: T.primary, color: "#fff", borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT }}>
               登录 / 注册
             </button>
+            {/* 未登录也保留邀请入口（点击会先弹登录），否则桌面端整个邀请漏斗对访客不可见 */}
+            {onOpenReferral && (
+              <SidebarActionItem
+                emoji="🎁" title="邀请备考搭子" sub="每人 +3 天 Pro · 无上限"
+                onClick={onOpenReferral}
+                navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
+                style={{ marginTop: 8 }}
+              />
+            )}
           </div>
         ) : (
           /* Logged in */
@@ -232,7 +272,7 @@ export function NavSidebar({
 
             {/* Upgrade button */}
             {tier === "free" && (
-              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", padding: "7px 0", fontSize: 11, fontWeight: 700, border: "none", background: "linear-gradient(135deg,#087355,#0891B2)", color: "#fff", borderRadius: 6, cursor: "pointer", fontFamily: HOME_FONT, marginBottom: 6 }}>
+              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", padding: "7px 0", fontSize: 11, fontWeight: 700, border: "none", background: T.primary, color: "#fff", borderRadius: 6, cursor: "pointer", fontFamily: HOME_FONT, marginBottom: 6 }}>
                 升级 Pro
               </button>
             )}
@@ -245,12 +285,12 @@ export function NavSidebar({
             {/* Inline stats */}
             <div style={{ display: "flex", gap: 12, marginBottom: 8, padding: "6px 0" }}>
               {[
-                { label: "练习", value: totalCount > 0 ? String(totalCount) : "-", color: T.primary },
-                { label: "7日", value: String(weekCount), color: T.cyan },
-                { label: "模考", value: bestMock !== null ? bestMock.toFixed(1) : "-", color: T.amber },
-              ].map(({ label, value, color }) => (
+                { label: "练习", value: totalCount > 0 ? String(totalCount) : "-" },
+                { label: "7日", value: String(weekCount) },
+                { label: "模考", value: bestMock !== null ? bestMock.toFixed(1) : "-" },
+              ].map(({ label, value }) => (
                 <div key={label} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: isChallenge ? CH.t1 : color, fontVariantNumeric: "tabular-nums" }}>{value}</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: t1, fontVariantNumeric: "tabular-nums" }}>{value}</div>
                   <div style={{ fontSize: 9, color: t3 }}>{label}</div>
                 </div>
               ))}
@@ -258,31 +298,12 @@ export function NavSidebar({
 
             {/* Referral entry */}
             {onOpenReferral && (
-              <button
+              <SidebarActionItem
+                emoji="🎁" title="邀请备考搭子" sub="每人 +3 天 Pro · 无上限"
                 onClick={onOpenReferral}
-                style={{
-                  width: "100%",
-                  display: "flex", alignItems: "center", gap: 8,
-                  padding: "8px 10px",
-                  marginBottom: 8,
-                  background: "linear-gradient(135deg, #ecfdf5 0%, #ecfeff 100%)",
-                  border: `1px solid rgba(13,150,104,0.22)`,
-                  borderRadius: 8,
-                  cursor: "pointer",
-                  fontFamily: HOME_FONT,
-                  textAlign: "left",
-                  transition: "box-shadow 0.15s ease",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 2px 8px rgba(8,115,85,0.12)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "none"; }}
-              >
-                <span style={{ fontSize: 14, flexShrink: 0 }}>🎁</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "#065f46", lineHeight: 1.3 }}>邀请备考搭子</div>
-                  <div style={{ fontSize: 10, color: "#0e7c66", marginTop: 1 }}>每人 +3 天 Pro · 无上限</div>
-                </div>
-                <span style={{ fontSize: 11, color: "#0e7c66", flexShrink: 0 }}>›</span>
-              </button>
+                navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
+                style={{ marginBottom: 8 }}
+              />
             )}
 
             {/* Feedback toggle */}
@@ -364,28 +385,11 @@ export function NavSidebar({
       {/* ── Survey re-open entry (logged-in only) ── */}
       {isLoggedIn && (
         <div style={{ borderTop: `1px solid ${navBdr}`, padding: "10px 14px 12px" }}>
-          <button
+          <SidebarActionItem
+            emoji="📝" title="填写题库体验问卷" sub="说说新题感受 · 得 +1 天 Pro"
             onClick={openFirstSetSurvey}
-            style={{
-              width: "100%",
-              display: "flex", alignItems: "center", gap: 8,
-              padding: "9px 11px",
-              background: "linear-gradient(135deg,#10b981,#06b6d4)",
-              border: "none", borderRadius: 8,
-              cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left",
-              boxShadow: "0 2px 10px rgba(8,145,178,0.28)",
-              transition: "box-shadow 0.15s ease, transform 0.15s ease",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 14px rgba(8,145,178,0.40)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 2px 10px rgba(8,145,178,0.28)"; e.currentTarget.style.transform = "none"; }}
-          >
-            <span style={{ fontSize: 14, flexShrink: 0 }}>📝</span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: "#fff", lineHeight: 1.3 }}>填写题库体验问卷</div>
-              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.88)", marginTop: 1 }}>说说新题感受 · 得 +1 天 Pro</div>
-            </div>
-            <span style={{ fontSize: 12, color: "#fff", flexShrink: 0 }}>›</span>
-          </button>
+            navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
+          />
         </div>
       )}
     </div>

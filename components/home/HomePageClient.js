@@ -26,11 +26,11 @@ export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
   const bg = isChallenge
     ? "linear-gradient(135deg, #1a0a1e 0%, #1a1028 100%)"
-    : "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 50%, #FCD34D 100%)";
-  const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : "1px solid #F59E0B";
-  const textColor = isChallenge ? "#FDE68A" : "#78350F";
-  const subColor = isChallenge ? "rgba(253,230,138,0.7)" : "#92400E";
-  const btnBg = isChallenge ? "rgba(251,191,36,0.15)" : "rgba(120,53,15,0.1)";
+    : T.card;
+  const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : `1px solid ${T.bdr}`;
+  const textColor = isChallenge ? "#FDE68A" : T.t1;
+  const subColor = isChallenge ? "rgba(253,230,138,0.7)" : T.t2;
+  const btnBg = isChallenge ? "rgba(251,191,36,0.15)" : T.bdrSubtle;
   return (
     <div style={{ marginBottom: 14, borderRadius: 12, background: bg, border, overflow: "hidden", ...fadeIn(140) }}>
       <div
@@ -328,7 +328,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>TOEFL 备考</span>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
-              <span className="home-nav-ai" style={{ fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</span>
               <AnnouncementButton isChallenge={false} />
             </div>
           </div>
@@ -366,7 +365,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             sessions={sessions}
             fadeIn={fadeIn}
             userCode={userCode} userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
-            onOpenReferral={handleOpenReferral}
           />
           <StudyPlanColumn
             userCode={userCode}

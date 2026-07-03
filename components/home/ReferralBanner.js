@@ -68,25 +68,18 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
   const safeFadeIn = typeof fadeIn === "function" ? fadeIn(120) : {};
 
   return (
-    <>
-      <style>{`
-        @keyframes referral-gift-wobble {
-          0%, 100% { transform: rotate(-2deg); }
-          50%      { transform: rotate(2deg); }
-        }
-      `}</style>
-      <div
-        style={{
-          marginBottom: 14,
-          background: "linear-gradient(135deg, #ecfdf5 0%, #ecfeff 100%)",
-          border: "1px solid rgba(13,150,104,0.22)",
-          borderRadius: 12,
-          overflow: "hidden",
-          fontFamily: HOME_FONT,
-          boxShadow: "0 1px 2px rgba(8,115,85,0.05)",
-          ...safeFadeIn,
-        }}
-      >
+    <div
+      style={{
+        marginBottom: 14,
+        background: T.card,
+        border: `1px solid ${T.bdr}`,
+        borderRadius: 12,
+        overflow: "hidden",
+        fontFamily: HOME_FONT,
+        boxShadow: T.shadow,
+        ...safeFadeIn,
+      }}
+    >
         {/* Header — always visible, click to toggle */}
         <div
           role="button"
@@ -106,13 +99,11 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
             style={{
               fontSize: 20,
               display: "inline-flex",
-              transformOrigin: "center",
-              animation: "referral-gift-wobble 4s ease-in-out infinite",
               flexShrink: 0,
             }}
           >🎁</span>
 
-          <div style={{ flex: 1, minWidth: 0, fontSize: 13, fontWeight: 700, color: "#065f46", lineHeight: 1.4 }}>
+          <div style={{ flex: 1, minWidth: 0, fontSize: 13, fontWeight: 700, color: T.t1, lineHeight: 1.4 }}>
             备考搭子也来用一下？<span style={{ color: T.primary }}>邀请一人送 3 天 Pro</span>
           </div>
 
@@ -121,8 +112,8 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
               flexShrink: 0,
               padding: "4px 11px",
               borderRadius: 999,
-              background: "rgba(8,115,85,0.1)",
-              color: "#0e7c66",
+              background: T.bdrSubtle,
+              color: T.t2,
               fontSize: 11,
               fontWeight: 600,
               whiteSpace: "nowrap",
@@ -166,7 +157,7 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
             padding: open ? "0 16px 14px" : "0 16px",
           }}
         >
-          <p style={{ margin: 0, fontSize: 12, color: "#0e7c66", lineHeight: 1.75 }}>
+          <p style={{ margin: 0, fontSize: 12, color: T.t2, lineHeight: 1.75 }}>
             把邀请码或链接发给朋友。TA 注册并完成 1 次练习后，<strong style={{ color: T.primary }}>你的 Pro 自动 +3 天</strong>。
           </p>
           <button
@@ -176,7 +167,7 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
               padding: "8px 18px",
               borderRadius: 8,
               border: "none",
-              background: "linear-gradient(135deg, #087355, #0891B2)",
+              background: T.primary,
               color: "#fff",
               fontSize: 12,
               fontWeight: 700,
@@ -192,7 +183,6 @@ export function ReferralBanner({ isLoggedIn, onOpen, fadeIn }) {
             {isLoggedIn ? "查看我的邀请链接 →" : "登录开始邀请 →"}
           </button>
         </div>
-      </div>
-    </>
+    </div>
   );
 }

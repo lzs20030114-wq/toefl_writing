@@ -5,7 +5,6 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
-import { ReferralBanner } from "./ReferralBanner";
 import { ComingSoonSection } from "./ComingSoonSection";
 import { ReadingSectionContent } from "./ReadingSectionContent";
 import { ListeningSectionContent } from "./ListeningSectionContent";
@@ -19,7 +18,6 @@ export function SectionContent({
   postWritingCounts, bsMistakeCount, readingMistakeCount, listeningMistakeCount, sessions,
   fadeIn,
   userTier, isLoggedIn, showLoginModal, userCode,
-  onOpenReferral,
 }) {
   const section = SECTIONS.find((s) => s.id === activeSection);
   if (!section) return null;
@@ -35,7 +33,6 @@ export function SectionContent({
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions} mistakeCount={readingMistakeCount}
-        onOpenReferral={onOpenReferral}
       />
     );
   }
@@ -47,7 +44,6 @@ export function SectionContent({
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions} mistakeCount={listeningMistakeCount}
-        onOpenReferral={onOpenReferral}
       />
     );
   }
@@ -59,7 +55,6 @@ export function SectionContent({
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions}
-        onOpenReferral={onOpenReferral}
       />
     );
   }
@@ -125,16 +120,6 @@ export function SectionContent({
         </p>
       </div>
 
-      {/* Feature strip */}
-      <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>- 覆盖三类写作任务（排序 · 邮件 · 学术讨论）</span>
-          <span>- 模拟考试限时练习</span>
-          <span>- AI 评分与反馈</span>
-          <span>- 仅供练习使用，不代表官方考试评分</span>
-        </div>
-      </div>
-
       {/* Task grid */}
       <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
         {gridItems.map((item) => (
@@ -173,9 +158,9 @@ export function SectionContent({
         />
       </div>
 
-      {/* Promo + Referral banners — moved below the task grid for a cleaner top of page */}
+      {/* Promo banner below the task grid; the referral entry lives in NavSidebar
+          on desktop — rendering the same offer twice on one screen was pure noise. */}
       <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
-      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>

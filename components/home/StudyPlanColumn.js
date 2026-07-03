@@ -179,7 +179,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
   const t1 = isChallenge ? CH.t1 : T.t1;
   const t2 = isChallenge ? CH.t2 : T.t2;
   const t3 = isChallenge ? CH.t2 : T.t3;
-  const subBg = isChallenge ? "rgba(255,255,255,0.04)" : "#F7FAF9";
+  const subBg = isChallenge ? "rgba(255,255,255,0.04)" : T.bgSoft;
   const hairline = isChallenge ? CH.cardBorder : T.bdrSubtle;
   const ringTrack = isChallenge ? "rgba(255,255,255,0.08)" : "#ECF1EE";
   const modernCard = (pad) => sideCard({ padding: pad, borderRadius: 18, boxShadow: isChallenge ? "none" : "0 2px 12px rgba(10,40,25,0.06)" });
@@ -391,7 +391,7 @@ function StreakHero({ streak, isChallenge, t3 }) {
         background: isChallenge ? "rgba(242,112,46,0.10)" : "linear-gradient(135deg,#FFF3E8 0%,#FFE3CC 100%)",
         border: `1px dashed ${isChallenge ? "rgba(242,112,46,0.42)" : "#FFC79A"}`,
       }}>
-        <div style={{ flexShrink: 0, opacity: 0.92, animation: "sp-flameBob 3.4s ease-in-out infinite" }}>
+        <div style={{ flexShrink: 0, opacity: 0.92 }}>
           <Flame size={34} grad={["#FFD27A", "#FF7A2E"]} id="sp-flame-zero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -412,7 +412,7 @@ function StreakHero({ streak, isChallenge, t3 }) {
       {/* 顶部柔光 */}
       <div style={{ position: "absolute", top: -34, left: -12, width: 130, height: 78, background: "radial-gradient(ellipse, rgba(255,255,255,0.42), transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 13 }}>
-        <div style={{ flexShrink: 0, animation: "sp-flameBob 2.6s ease-in-out infinite" }}>
+        <div style={{ flexShrink: 0 }}>
           <Flame size={44} grad={tier.flame} id="sp-flame-hero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -456,7 +456,6 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
         let content = null;
         let numColor = cell.isFuture ? (isChallenge ? "rgba(255,255,255,0.2)" : "#C6D0CB") : (missed ? t3 : t2);
         let ring = "none";
-        let anim = "none";
 
         if (done) {
           circleBg = T.primary;
@@ -465,7 +464,6 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
           circleBg = isChallenge ? "rgba(217,119,6,0.14)" : T.amberSoft;
           ring = `inset 0 0 0 2px ${T.amber}`;
           numColor = T.amber;
-          anim = "sp-todayPulse 1.8s ease-in-out infinite";
         }
         if (isExam) ring = `inset 0 0 0 2px ${T.rose}`;
 
@@ -474,7 +472,7 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
             <span style={{ fontSize: 9.5, color: t3, fontWeight: 600 }}>{WEEKDAYS[i]}</span>
             <div
               title={done ? `练习 ${cell.count} 次` : (isExam ? "考试日" : "")}
-              style={{ width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, animation: anim, fontSize: 11, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
+              style={{ width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, fontSize: 11, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
             >
               {content || cell.date.getDate()}
             </div>
