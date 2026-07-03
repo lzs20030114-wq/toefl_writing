@@ -10,6 +10,7 @@ import { ComingSoonSection } from "./ComingSoonSection";
 import { ReadingSectionContent } from "./ReadingSectionContent";
 import { ListeningSectionContent } from "./ListeningSectionContent";
 import { SpeakingSectionContent } from "./SpeakingSectionContent";
+import { MyBankSectionContent } from "./MyBankSectionContent";
 
 export function SectionContent({
   activeSection,
@@ -17,7 +18,7 @@ export function SectionContent({
   gridItems, hoverKey, setHoverKey,
   postWritingCounts, bsMistakeCount, readingMistakeCount, listeningMistakeCount, sessions,
   fadeIn,
-  userTier, isLoggedIn, showLoginModal,
+  userTier, isLoggedIn, showLoginModal, userCode,
   onOpenReferral,
 }) {
   const section = SECTIONS.find((s) => s.id === activeSection);
@@ -59,6 +60,16 @@ export function SectionContent({
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions}
         onOpenReferral={onOpenReferral}
+      />
+    );
+  }
+
+  if (activeSection === "my-bank") {
+    return (
+      <MyBankSectionContent
+        isChallenge={isChallenge} fadeIn={fadeIn}
+        userCode={userCode} userTier={userTier}
+        isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
       />
     );
   }

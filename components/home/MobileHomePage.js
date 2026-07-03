@@ -12,6 +12,7 @@ import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
+import MyBankImporter from "../userBank/MyBankImporter";
 
 /* ── 颜色工具 ── */
 const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
@@ -130,7 +131,7 @@ export function MobileHomePage({
                 flex: "1 1 0", minWidth: 0,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 border: "none", background: "transparent",
-                padding: "10px 4px", fontSize: 12,
+                padding: "10px 2px", fontSize: 11.5, letterSpacing: -0.2,
                 fontWeight: isActive ? 700 : 500,
                 color: isActive ? (isChallenge ? CH.t1 : accent.color) : (isSoon ? (isChallenge ? "rgba(255,255,255,0.25)" : "#b0b8c0") : t2),
                 cursor: "pointer", fontFamily: HOME_FONT,
@@ -161,6 +162,12 @@ export function MobileHomePage({
         </div>
       ) : activeSection === "reading" ? (
         <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
+      ) : activeSection === "my-bank" ? (
+        <MobileMyBankSection
+          userCode={userCode} tier={tier} isLoggedIn={isLoggedIn}
+          showLoginModal={showLoginModal} onUpgrade={() => setUpgradeOpen(true)}
+          t1={t1} t2={t2}
+        />
       ) : (
       <>
       {/* ── 标题 + 模式切换 ── */}
@@ -678,6 +685,28 @@ function MobileReadingSection({ isChallenge, isPractice, mode, switchMode, query
           <span style={{ color: t2 }}>›</span>
         </Link>
       </div>
+    </>
+  );
+}
+
+/* ── Mobile My Bank Section ── */
+
+function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
+  return (
+    <>
+      <div style={{ marginBottom: 14 }}>
+        <h1 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>我的题库</h1>
+        <div style={{ fontSize: 12, color: t2, lineHeight: 1.5 }}>
+          导入你自己的学术讨论 / 邮件题——粘贴文本或上传截图，AI 识别后在练习页以「我的」标签出现。
+        </div>
+      </div>
+      <MyBankImporter
+        variant="panel"
+        code={isLoggedIn ? userCode : ""}
+        tier={tier}
+        onRequireUpgrade={onUpgrade}
+        onRequireLogin={showLoginModal}
+      />
     </>
   );
 }
