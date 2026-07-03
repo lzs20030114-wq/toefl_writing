@@ -46,6 +46,15 @@ export const SECTIONS = [
     description: "Listen & Repeat · Take an Interview",
     descriptionZh: "听后复述、模拟面试，TOEFL 2026 新题型",
   },
+  {
+    id: "my-bank",
+    label: "My Bank",
+    labelZh: "我的题库",
+    icon: "📥",
+    status: SECTION_STATUS.ACTIVE,
+    description: "Import your own Discussion & Email prompts",
+    descriptionZh: "导入你自己的学术讨论 / 邮件题，粘贴文本或上传截图识别",
+  },
 ];
 
 export const SECTION_ACCENTS = {
@@ -53,6 +62,7 @@ export const SECTION_ACCENTS = {
   reading: { color: "#3B82F6", soft: "#EFF6FF" },
   listening: { color: "#8B5CF6", soft: "#F5F3FF" },
   speaking: { color: "#F59E0B", soft: "#FFFBEB" },
+  "my-bank": { color: "#E11D48", soft: "#FFF1F2" },
 };
 
 export const TOOLS = [

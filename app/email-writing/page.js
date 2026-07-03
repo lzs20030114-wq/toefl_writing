@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { WritingTask } from "../../components/writing/WritingTask";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
@@ -9,6 +9,8 @@ import { normalizeReportLanguage } from "../../lib/reportLanguage";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { loadDoneIds } from "../../lib/sessionStore";
 import EM_DATA from "../../data/emailWriting/prompts.json";
+import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
+import { stashPromptSnapshot } from "../../lib/history/retry";
 
 function buildEmailTopics() {
   return (Array.isArray(EM_DATA) ? EM_DATA : [])
@@ -40,6 +42,24 @@ function EmailWritingPageClient() {
   // regardless of mode — so the WritingTask snapshot handoff always gets to run.
   const isRetry = retryPromptId.length > 0;
   const [pickedPromptId, setPickedPromptId] = useState(null);
+
+  // 个人题库（用户导入的邮件题）：运行时拉取，并入 picker（带「我的」标签）。
+  const [personalRaw, setPersonalRaw] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    fetchPersonalBank("email").then((rows) => { if (alive) setPersonalRaw(rows); });
+    return () => { alive = false; };
+  }, []);
+  const personalById = useMemo(() => {
+    const m = new Map();
+    for (const raw of personalRaw) m.set(String(raw.id), raw);
+    return m;
+  }, [personalRaw]);
+  const items = useMemo(
+    () => [...mapPersonalToPicker("email", personalRaw), ...buildEmailTopics()],
+    [personalRaw]
+  );
+
   const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
   if (isPractice && !isRetry && !pickedPromptId) {
@@ -49,10 +69,14 @@ function EmailWritingPageClient() {
         <TopicPicker
           title="Write an Email"
           section="Writing Practice | Task 2"
-          items={buildEmailTopics()}
+          items={items}
           doneIds={doneIds}
           accent={{ color: "#0891B2", soft: "#ECFEFF" }}
-          onSelect={(id) => setPickedPromptId(id)}
+          onSelect={(id) => {
+            const raw = personalById.get(String(id));
+            if (raw) stashPromptSnapshot("email", raw);
+            setPickedPromptId(id);
+          }}
           onExit={onExit}
         />
       </UsageGateWrapper>
