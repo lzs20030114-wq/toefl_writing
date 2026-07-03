@@ -1,13 +1,13 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 534,
+  "n": 544,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
     {
       "name": "length_band.easy",
       "verdict": "PASS",
-      "detail": "got 0.277 want 0.246±0.05"
+      "detail": "got 0.276 want 0.246±0.05"
     },
     {
       "name": "length_band.med",
@@ -17,27 +17,27 @@
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.118 want 0.159±0.05"
+      "detail": "got 0.119 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.684 band [0.55,0.69]"
+      "detail": "got 0.686 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.191 band [0.18,0.29]"
+      "detail": "got 0.189 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.169 max 0.17"
+      "detail": "got 0.167 max 0.17"
     },
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.685 min 0.38"
+      "detail": "got 0.682 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
@@ -62,75 +62,75 @@
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.715 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.719 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
       "verdict": "PASS",
-      "detail": "got 0.876 band [0.68,0.97]"
+      "detail": "got 0.875 band [0.68,0.97]"
     },
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.098 max 0.45"
+      "detail": "got 0.099 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.088 band [0.08,0.45]"
+      "detail": "got 0.086 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.776 min 0.1"
+      "detail": "got 0.779 min 0.1"
     },
     {
       "name": "answer.signature_q(dir-only)",
       "verdict": "WARN",
-      "detail": "got 0.06 vs real 0.167"
+      "detail": "got 0.059 vs real 0.167"
     },
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/534 fail"
+      "detail": "0/544 fail"
     }
   ],
   "metrics": {
     "length": {
-      "mean": 8.63,
+      "mean": 8.64,
       "median": 8,
       "p10": 7,
       "p90": 12,
       "max": 13
     },
     "length_bands": {
-      "easy": 0.277,
+      "easy": 0.276,
       "med": 0.605,
-      "hard": 0.118
+      "hard": 0.119
     },
     "register": {
-      "first_person": 0.684,
-      "contraction": 0.191,
-      "casual_opener": 0.058,
-      "third_person_formal": 0.169
+      "first_person": 0.686,
+      "contraction": 0.189,
+      "casual_opener": 0.057,
+      "third_person_formal": 0.167
     },
     "structure": {
       "relative_clause": 0.178,
       "passive": 0.075,
-      "embedded_question": 0.154,
-      "negation": 0.163,
+      "embedded_question": 0.151,
+      "negation": 0.162,
       "modal": 0.086,
       "subordinate": 0.107
     },
     "diversity": {
-      "opening_trigram_diversity": 0.685,
+      "opening_trigram_diversity": 0.682,
       "exact_dup_rate": 0
     },
     "hard_band_profile": {
-      "n": 63,
-      "first_person": 0.794,
-      "relative_clause": 0.587,
-      "passive": 0.127
+      "n": 65,
+      "first_person": 0.769,
+      "relative_clause": 0.569,
+      "passive": 0.138
     }
   },
   "per_item_audit": [
@@ -11611,6 +11611,217 @@
     {
       "answer": "Who do I ask about renewing my books?",
       "setId": 54,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I found out when the shuttle actually left.",
+      "setId": 55,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "subord"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I still haven't chosen my electives yet.",
+      "setId": 55,
+      "W": 7,
+      "band": "easy",
+      "index": 8,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The professor who leads my writing seminar canceled our meeting today.",
+      "setId": 55,
+      "W": 11,
+      "band": "med",
+      "index": 13,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The new microscopes were installed by the science lab staff last week.",
+      "setId": 55,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "passive"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "My courses feel busier than they did last year.",
+      "setId": 55,
+      "W": 9,
+      "band": "med",
+      "index": 9,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "You can still reserve the upstairs study room for the whole afternoon.",
+      "setId": 55,
+      "W": 12,
+      "band": "hard",
+      "index": 13,
+      "struct": [
+        "modal"
+      ],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where do I get my mailbox key?",
+      "setId": 55,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I figured out why the printers kept jamming.",
+      "setId": 55,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I found out which office collects the forms.",
+      "setId": 55,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I hung it up by the library entrance.",
+      "setId": 55,
       "W": 8,
       "band": "med",
       "index": 8,

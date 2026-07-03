@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Mariana tell you about the shuttle time?",
+      "answer": "I found out when the shuttle actually left.",
+      "chunks": ["i", "found out", "the", "shuttle", "actually left", "did"],
+      "prefilled": ["when"],
+      "prefilled_positions": {"when": 3},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (indirect when-clause)"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Did Olivia help you pick your electives?",
+      "answer": "I still haven't chosen my electives yet.",
+      "chunks": ["i", "still", "haven't", "chosen", "my", "electives", "no"],
+      "prefilled": ["yet"],
+      "prefilled_positions": {"yet": 6},
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did Diane mention the seminar change to you?",
+      "answer": "The professor who leads my writing seminar canceled our meeting today.",
+      "chunks": ["the", "professor", "who leads", "canceled", "our meeting today", "were"],
+      "prefilled": ["my writing seminar"],
+      "prefilled_positions": {"my writing seminar": 4},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause (subject who)"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "You'll be relieved the lab finally got new gear.",
+      "answer": "The new microscopes were installed by the science lab staff last week.",
+      "chunks": ["the new", "microscopes", "were installed", "by the", "science lab staff", "last week"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["passive voice (agent by-phrase)"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did Margot mention the workload to you this term?",
+      "answer": "My courses feel busier than they did last year.",
+      "chunks": ["my", "courses", "feel", "than", "they did", "last year", "more"],
+      "prefilled": ["busier"],
+      "prefilled_positions": {"busier": 3},
+      "distractor": "more",
+      "has_question_mark": false,
+      "grammar_points": ["comparative (adjective + than)"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "What did Naomi tell you about the study room?",
+      "answer": "You can still reserve the upstairs study room for the whole afternoon.",
+      "chunks": ["you", "can", "still", "reserve", "the", "study room", "for the", "whole afternoon", "was"],
+      "prefilled": ["upstairs"],
+      "prefilled_positions": {"upstairs": 5},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["modal suggestion (can)"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "I just transferred into the north dorm.",
+      "answer": "Where do I get my mailbox key?",
+      "chunks": ["where", "do", "get", "my mailbox key", "did"],
+      "prefilled": ["i"],
+      "prefilled_positions": {"i": 2},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question (do-support)"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "What did Harold ask you about the printers?",
+      "answer": "I figured out why the printers kept jamming.",
+      "chunks": ["i", "figured out", "why", "kept", "jamming", "had"],
+      "prefilled": ["the printers"],
+      "prefilled_positions": {"the printers": 4},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (indirect why-clause)"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did Emma ask you where to hand in the forms?",
+      "answer": "I found out which office collects the forms.",
+      "chunks": ["i", "found out", "which", "office", "collects", "the forms", "leave"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "leave",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (indirect which-clause)"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did Julian leave your umbrella by the door?",
+      "answer": "I hung it up by the library entrance.",
+      "chunks": ["i", "hung", "it", "up", "library entrance", "put"],
+      "prefilled": ["by the"],
+      "prefilled_positions": {"by the": 4},
+      "distractor": "put",
+      "has_question_mark": false,
+      "grammar_points": ["past tense placement"]
+    }
+  ]
+}

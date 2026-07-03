@@ -8,99 +8,207 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["campus small-talk", "embedded questions", "negation", "relative clause", "passive", "comparative"],
-      "favorite": {"prompt": "You should really check out the new gym.", "answer": "How much does a monthly pass cost?"},
+      "accepted": 30,
+      "topics": [
+        "campus small-talk",
+        "embedded questions",
+        "negation",
+        "relative clause",
+        "passive",
+        "comparative"
+      ],
+      "favorite": {
+        "prompt": "You should really check out the new gym.",
+        "answer": "How much does a monthly pass cost?"
+      },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["business", "education", "psychology", "political science"],
-      "favorite": {"subtopic": "psychology", "preview": "We've been examining how people relate to their own past this semester. Psychologists disagree sharply about nostalgia"},
+      "topics": [
+        "business",
+        "education",
+        "psychology",
+        "political science"
+      ],
+      "favorite": {
+        "subtopic": "psychology",
+        "preview": "We've been examining how people relate to their own past this semester. Psychologists disagree sharply about nostalgia"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["社区生活", "职场工作", "住宿", "服务与活动"],
-      "favorite": {"subtopic": "住宿", "preview": "You moved into a furnished studio three weeks ago, and the building's only elevator has been out of service since last Friday."},
+      "topics": [
+        "社区生活",
+        "职场工作",
+        "住宿",
+        "服务与活动"
+      ],
+      "favorite": {
+        "subtopic": "住宿",
+        "preview": "You moved into a furnished studio three weeks ago, and the building's only elevator has been out of service since last Friday."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["anthropology/language origins", "physics/superconductivity", "chemistry/organic compounds", "materials_science/polymer composites", "sociology/housing policy"],
-      "favorite": {"subtopic": "chemistry/organic compounds", "preview": "Organic compounds, chemical substances built around frameworks of carbon atoms, form the material basis of all known life."},
+      "topics": [
+        "anthropology/language origins",
+        "physics/superconductivity",
+        "chemistry/organic compounds",
+        "materials_science/polymer composites",
+        "sociology/housing policy"
+      ],
+      "favorite": {
+        "subtopic": "chemistry/organic compounds",
+        "preview": "Organic compounds, chemical substances built around frameworks of carbon atoms, form the material basis of all known life."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/seed dispersal", "environmental_science/sustainable agriculture", "psychology/creativity", "history/industrial revolution", "geology/minerals", "astronomy/cosmic radiation"],
-      "favorite": {"subtopic": "biology/seed dispersal", "preview": "Seed dispersal is the natural process by which plants spread their offspring away from the parent to new ground."},
+      "topics": [
+        "biology/seed dispersal",
+        "environmental_science/sustainable agriculture",
+        "psychology/creativity",
+        "history/industrial revolution",
+        "geology/minerals",
+        "astronomy/cosmic radiation"
+      ],
+      "favorite": {
+        "subtopic": "biology/seed dispersal",
+        "preview": "Seed dispersal is the natural process by which plants spread their offspring away from the parent to new ground."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/rescheduled club meeting", "notice/fire alarm testing", "email/student ID replacement", "notice/fire alarm testing"],
-      "favorite": {"subtopic": "email/rescheduled club meeting", "preview": "Hi Maya, Quick update — the Photography Club meeting has moved to this Thursday at 6:30 PM in Room 118."},
+      "topics": [
+        "email/rescheduled club meeting",
+        "notice/fire alarm testing",
+        "email/student ID replacement",
+        "notice/fire alarm testing"
+      ],
+      "favorite": {
+        "subtopic": "email/rescheduled club meeting",
+        "preview": "Hi Maya, Quick update — the Photography Club meeting has moved to this Thursday at 6:30 PM in Room 118."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/campus bookstore order pickup", "notice/community garden plot registration"],
-      "favorite": {"subtopic": "notice/community garden plot registration", "preview": "Registration for garden plots at the Riverside Community Garden opens on March 1 and closes on March 20."},
+      "topics": [
+        "email/campus bookstore order pickup",
+        "notice/community garden plot registration"
+      ],
+      "favorite": {
+        "subtopic": "notice/community garden plot registration",
+        "preview": "Registration for garden plots at the Riverside Community Garden opens on March 1 and closes on March 20."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["art_history/rediscovery of perspective", "history/origins of the fire department", "biology/convergent evolution", "geology/ice cores and ancient climate"],
-      "favorite": {"subtopic": "history/origins of the fire department", "preview": "When you picture a fire department, you probably imagine a public crew paid by the city and ready to help anyone in trouble."},
+      "topics": [
+        "art_history/rediscovery of perspective",
+        "history/origins of the fire department",
+        "biology/convergent evolution",
+        "geology/ice cores and ancient climate"
+      ],
+      "favorite": {
+        "subtopic": "history/origins of the fire department",
+        "preview": "When you picture a fire department, you probably imagine a public crew paid by the city and ready to help anyone in trouble."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["campus_dorm_life/elective choice", "plans_social/beach trip rescheduling", "plans_social/dinner party food", "recommendations/mystery thriller", "campus_dorm_life/chore schedule"],
-      "favorite": {"subtopic": "plans_social/rescheduling a weekend beach trip around a storm", "preview": "Are we still on for the beach on Saturday? I've been looking forward to it all week."},
+      "topics": [
+        "campus_dorm_life/elective choice",
+        "plans_social/beach trip rescheduling",
+        "plans_social/dinner party food",
+        "recommendations/mystery thriller",
+        "campus_dorm_life/chore schedule"
+      ],
+      "favorite": {
+        "subtopic": "plans_social/rescheduling a weekend beach trip around a storm",
+        "preview": "Are we still on for the beach on Saturday? I've been looking forward to it all week."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event/spring symposium", "logistics/bike-share stations", "academic_event/thesis defense schedule", "logistics/shuttle route change", "facility_change/bookstore move"],
-      "favorite": {"subtopic": "academic_event/spring academic symposium", "preview": "Good afternoon, members. I'm thrilled to announce that the Linguistics Society's Spring Symposium will take place next Thursday at 3 p.m."},
+      "topics": [
+        "academic_event/spring symposium",
+        "logistics/bike-share stations",
+        "academic_event/thesis defense schedule",
+        "logistics/shuttle route change",
+        "facility_change/bookstore move"
+      ],
+      "favorite": {
+        "subtopic": "academic_event/spring academic symposium",
+        "preview": "Good afternoon, members. I'm thrilled to announce that the Linguistics Society's Spring Symposium will take place next Thursday at 3 p.m."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["campus_academic/borrowing lecture notes", "social/schedule conflict", "campus_daily/shuttle schedule", "campus_academic/group project deadline", "campus_daily/dorm maintenance", "campus_daily/lost-and-found", "social/offering help", "general_daily/asking directions"],
-      "favorite": {"subtopic": "campus_daily/dorm maintenance issue", "preview": "Why's the heater in my room broken? — correct reply shifts context: I'll send maintenance up right away."},
+      "topics": [
+        "campus_academic/borrowing lecture notes",
+        "social/schedule conflict",
+        "campus_daily/shuttle schedule",
+        "campus_academic/group project deadline",
+        "campus_daily/dorm maintenance",
+        "campus_daily/lost-and-found",
+        "social/offering help",
+        "general_daily/asking directions"
+      ],
+      "favorite": {
+        "subtopic": "campus_daily/dorm maintenance issue",
+        "preview": "Why's the heater in my room broken? — correct reply shifts context: I'll send maintenance up right away."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Watercolor Painting (how-to)", "Student Health Center orientation", "Campus Gym induction"],
-      "favorite": {"subtopic": "Watercolor Painting (how-to)", "preview": "Lastly, once your painting is dry, press the sheet flat under a heavy book overnight."},
+      "topics": [
+        "Watercolor Painting (how-to)",
+        "Student Health Center orientation",
+        "Campus Gym induction"
+      ],
+      "favorite": {
+        "subtopic": "Watercolor Painting (how-to)",
+        "preview": "Lastly, once your painting is dry, press the sheet flat under a heavy book overnight."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-03T19:48:53Z",
+  "r2_session_id": "routine-r2-20260703-193053"
 }
