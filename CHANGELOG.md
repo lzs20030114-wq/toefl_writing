@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-03 — v1.10.0
+
+- **新功能「我的题库」发布**（`feat/user-question-bank`，`58acf25` 经 `8cecba6` 合入 + `7e67052` + `e5fc060`）：左侧栏第 5 个 nav-section（`sections.js` 注册 `my-bank`，`MyBankSectionContent` / 移动端 `MobileMyBankSection` + `components/userBank/MyBankImporter.js`）。用户可导入自己的学术讨论 / 邮件题：粘贴文本走 `app/api/user-bank/extract`（DeepSeek 结构化抽取，prompt 在 `lib/ai/prompts/questionExtraction.js`），题目截图走 `extract-image`（Qwen-VL 视觉识别，`lib/ai/qwenVision.js` + `imageExtraction.js` prompt + `lib/userBank/imageSniff.js` 图片类型嗅探），存 `user_question_banks` 表（`scripts/sql/user-question-banks.sql`），练习页题目选择器以「我的」分组出现。附带修复：面板漏传 `userCode` 导致已登录仍显示「请先登录」（`7e67052`）；题型选择器改为全题型分组网格、未上线题型标「开发中」（`e5fc060`）。
+- **首页整体降噪改版**（`ae93f89` 一期 + `2c35df1` 二期）：一期——桌面端移除与侧栏重复的邀请横幅、删 feature strip 与顶栏 AI 声明、停掉三个无限循环动画（礼物摇摆 / 火苗跳动 / 今日圈脉冲）、金色横幅与侧栏促销压平为中性卡、任务卡 accent 收敛到仅时间标签（新增 `T.bgSoft` / `T.shadowHover` token）；review 发现并修复未登录桌面用户失去邀请入口的问题（侧栏未登录分支补 `SidebarActionItem` 邀请项）。二期——首页组件字号消灭半像素档与 9px 以下、800 字重全部降 700、倒计时 48→36px；删侧栏三统计行（与右栏重复）、右栏「考试日/目标分」bento 瓦片改环下单行文本、打卡页脚去今日状态文字；删除 632 行死组件 `HomeSidebar.js`（活 helper 迁 `sidebarWidgets.js` 并全部 token 化）、NavSidebar 散落 hex 收敛。
+- **新功能聚光灯引导**（`components/home/FeatureSpotlight.js`）：通用一次性 coach-mark——目标元素保持明亮 + 呼吸光圈，四块 backdrop-blur 面板压暗页面其余部分，旁侧带箭头说明气泡（去看看 / 知道了 / ESC / 点暗区均可关）；`useSpotlightGate` 按 `featureId` 在 localStorage（`toefl-feature-spotlight-seen`）去重，已在目标页自动标已读，开启延迟 1.1s 等入场动画与异步数据落定，气泡位置自适应（右侧放不下自动落到目标下方）。本期挂「我的题库」：桌面 NavSidebar 项 + 移动端顶部 tab（`data-section-id` 锚点），挑战模式不弹。
+- **题库夜间例行扩充**（`ca4873e` 及此前 routine checkpoints）：BS `questions.json` / Email / Discussion 合入新题，Reading（AP/CTW/RDL）、Listening（LA/LAT/LC/LCR）、Speaking（repeat）staging 补充待审题。
+
 ## 2026-06-28 — 后台 / 基建补记（未发用户公告）
 
 > v1.9.3（6-18）→ v1.9.4（6-26）之间合入但当时未进 CHANGELOG 的非用户面改动，集中补记。均不构成用户可感知发布（opt-in / 一次性问卷 / 后台），故不发版本公告。
