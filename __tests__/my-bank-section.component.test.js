@@ -20,7 +20,8 @@ describe("MyBankSectionContent gating", () => {
   test("logged-in user with a code sees the importer, not the login gate", async () => {
     render(<MyBankSectionContent {...baseProps} userCode="TEST12" userTier="legacy" isLoggedIn={true} />);
     expect(await screen.findByText("AI 抽取题目")).toBeTruthy();
-    expect(screen.getByText("学术讨论")).toBeTruthy();
+    // 「学术讨论」出现在题型卡片和②区选中徽章两处，用 getAllByText
+    expect(screen.getAllByText("学术讨论").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("点击选择或拖入图片")).toBeTruthy();
     expect(screen.queryByText("请先登录")).toBeNull();
   });

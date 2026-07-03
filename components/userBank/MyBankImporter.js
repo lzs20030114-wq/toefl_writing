@@ -1,15 +1,63 @@
 "use client";
-// 个人题库导入器（可复用）——粘贴文本 / 上传图片 → AI 抽取 → 预览勾选 → 存 → 已存列表。
+// 个人题库导入器（可复用）——选题型 → 粘贴文本 / 上传图片 → AI 抽取 → 预览勾选 → 存 → 已存列表。
 // 被 /my-bank 独立页（variant="page"）和首页「我的题库」section（variant="panel"，桌面+移动）共用。
 // 不读 localStorage、不挂 UpgradeModal：code/tier 由父层给，升级/登录用 onRequireUpgrade/onRequireLogin 回调。
+//
+// 题型选择器展示全部 4 技能 12 题型（按技能分组、沿用 SECTION_ACCENTS 配色），当前仅
+// 学术讨论 + 邮件可导入，其余降透明度标「开发中」占位——roadmap 直接画在界面上，
+// 后续题型上线只需把 live 翻 true + 补 stored/practice/placeholder。
 import { useCallback, useEffect, useState } from "react";
 import { C, FONT, Btn, SurfaceCard } from "../shared/ui";
+import { SECTION_ACCENTS } from "../home/sections";
 
 // 抽取器 key（academic/email）→ 存储/练习 type（discussion/email）。边界处映射，库里只存后者。
-const TYPE_TABS = [
-  { key: "academic", stored: "discussion", label: "学术讨论", practice: "/academic-writing?mode=practice" },
-  { key: "email", stored: "email", label: "邮件写作", practice: "/email-writing?mode=practice" },
+const TYPE_GROUPS = [
+  {
+    id: "writing", label: "写作", icon: "✍️", accent: SECTION_ACCENTS.writing,
+    types: [
+      {
+        key: "academic", stored: "discussion", label: "学术讨论", en: "Academic Discussion", live: true,
+        practice: "/academic-writing?mode=practice",
+        placeholder: "粘贴学术讨论题文本（教授提问 + 两位同学的回复）。一次可粘多道。",
+      },
+      {
+        key: "email", stored: "email", label: "邮件写作", en: "Write an Email", live: true,
+        practice: "/email-writing?mode=practice",
+        placeholder: "粘贴邮件题文本（含情景、写作要求、要点）。一次可粘多道。",
+      },
+      { key: "build", label: "连词成句", en: "Build a Sentence", live: false },
+    ],
+  },
+  {
+    id: "reading", label: "阅读", icon: "📖", accent: SECTION_ACCENTS.reading,
+    types: [
+      { key: "ctw", label: "单词补全", en: "Complete the Words", live: false },
+      { key: "rdl", label: "日常阅读", en: "Read in Daily Life", live: false },
+      { key: "ap", label: "学术短文", en: "Academic Passage", live: false },
+    ],
+  },
+  {
+    id: "listening", label: "听力", icon: "🎧", accent: SECTION_ACCENTS.listening,
+    types: [
+      { key: "lcr", label: "选择回应", en: "Choose a Response", live: false },
+      { key: "la", label: "听公告", en: "Announcement", live: false },
+      { key: "lc", label: "听对话", en: "Conversation", live: false },
+      { key: "lat", label: "学术讲座", en: "Academic Talk", live: false },
+    ],
+  },
+  {
+    id: "speaking", label: "口语", icon: "🗣️", accent: SECTION_ACCENTS.speaking,
+    types: [
+      { key: "repeat", label: "听后复述", en: "Listen & Repeat", live: false },
+      { key: "interview", label: "模拟面试", en: "Take an Interview", live: false },
+    ],
+  },
 ];
+
+const ALL_TYPES = TYPE_GROUPS.flatMap((g) => g.types);
+const LIVE_TYPES = ALL_TYPES.filter((t) => t.live);
+const groupOfType = (t) => TYPE_GROUPS.find((g) => g.types.includes(t));
+const groupOfStored = (stored) => TYPE_GROUPS.find((g) => g.types.some((t) => t.stored === stored));
 
 const BD = C.bd2 || "#e2e8f0";
 const ACCEPT = "image/png,image/jpeg,image/webp";
@@ -58,6 +106,56 @@ async function downscaleImage(file, maxDim = 1600, quality = 0.85) {
   }
 }
 
+/* ── 题型卡片 ── */
+function TypeChip({ type, accent, selected, onSelect }) {
+  const [hover, setHover] = useState(false);
+  const live = type.live;
+  return (
+    <button
+      disabled={!live}
+      onClick={() => live && onSelect(type.key)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      aria-pressed={live ? selected : undefined}
+      style={{
+        display: "flex", flexDirection: "column", gap: 3,
+        padding: "10px 12px", borderRadius: 10, textAlign: "left",
+        fontFamily: FONT, transition: "all .15s", position: "relative",
+        border: `1.5px solid ${selected ? accent.color : hover && live ? accent.color + "66" : live ? BD : C.bdrSubtle}`,
+        background: selected ? accent.soft : live ? "#fff" : "#f8fafb",
+        opacity: live ? 1 : 0.58,
+        cursor: live ? "pointer" : "not-allowed",
+        boxShadow: selected ? `0 1px 6px ${accent.color}22` : "none",
+      }}
+    >
+      {/* 首行只放中文名（+选中✓），保证 3-4 字名字不被截断；徽章放次行英文名旁 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+        <span style={{
+          flex: 1, minWidth: 0, fontSize: 13, fontWeight: 700,
+          color: selected ? accent.color : live ? C.t1 : C.t2,
+          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+        }}>
+          {type.label}
+        </span>
+        {live && selected && <span style={{ fontSize: 12, fontWeight: 800, color: accent.color, flexShrink: 0 }}>✓</span>}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+        <span style={{ flex: 1, minWidth: 0, fontSize: 10.5, color: C.t3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {type.en}
+        </span>
+        {!live && (
+          <span style={{
+            fontSize: 9.5, fontWeight: 700, padding: "1px 6px", borderRadius: 999,
+            background: "#eef1f4", color: "#8b95a1", flexShrink: 0, letterSpacing: 0.3,
+          }}>
+            开发中
+          </span>
+        )}
+      </div>
+    </button>
+  );
+}
+
 export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequireLogin, variant = "panel" }) {
   const [typeKey, setTypeKey] = useState("academic");
   const [text, setText] = useState("");
@@ -74,9 +172,11 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
   const [list, setList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
 
-  const tab = TYPE_TABS.find((t) => t.key === typeKey) || TYPE_TABS[0];
+  const tab = LIVE_TYPES.find((t) => t.key === typeKey) || LIVE_TYPES[0];
+  const tabAccent = groupOfType(tab)?.accent || SECTION_ACCENTS.writing;
   const looksPro = tier === "pro" || tier === "legacy";
   const busy = parsing || imgBusy;
+  const pad = variant === "panel" ? 18 : 22;
 
   const loadList = useCallback(async (c) => {
     if (!c) return;
@@ -97,7 +197,9 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     else setList([]);
   }, [code, loadList]);
 
-  function resetInputs() {
+  function selectType(key) {
+    if (key === typeKey) return;
+    setTypeKey(key);
     setParsed(null);
     setSelected(new Set());
     setErr("");
@@ -259,91 +361,123 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
         </SurfaceCard>
       )}
 
-      {/* 导入卡片 */}
-      <SurfaceCard style={{ padding: variant === "panel" ? 18 : 22, marginBottom: 16 }}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
-          {TYPE_TABS.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => { setTypeKey(t.key); resetInputs(); }}
+      {/* ① 选择题型 —— 全部题型按技能分组展示，未上线的标「开发中」占位 */}
+      <SurfaceCard style={{ padding: pad, marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 10, flexWrap: "wrap", marginBottom: 4 }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>
+            <span style={{ color: C.t3, fontWeight: 700, marginRight: 6 }}>①</span>选择题型
+          </div>
+          <div style={{ fontSize: 11.5, color: C.t3 }}>
+            已支持 {LIVE_TYPES.length} 种 · 其余题型陆续开放
+          </div>
+        </div>
+
+        {TYPE_GROUPS.map((g) => (
+          <div key={g.id} style={{ marginTop: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ width: 7, height: 7, borderRadius: 999, background: g.accent.color, flexShrink: 0 }} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: C.t2, letterSpacing: 0.3 }}>
+                {g.label} <span style={{ color: C.t3, fontWeight: 600 }}>{g.id.charAt(0).toUpperCase() + g.id.slice(1)}</span>
+              </span>
+              <span style={{ flex: 1, height: 1, background: C.bdrSubtle }} />
+            </div>
+            <div style={{
+              display: "grid", gap: 8, marginTop: 8,
+              gridTemplateColumns: "repeat(auto-fill, minmax(122px, 1fr))",
+            }}>
+              {g.types.map((t) => (
+                <TypeChip
+                  key={t.key}
+                  type={t}
+                  accent={g.accent}
+                  selected={t.live && typeKey === t.key}
+                  onSelect={selectType}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </SurfaceCard>
+
+      {/* ② 导入 —— 粘贴文本 | 上传截图 双栏（窄屏自动堆叠） */}
+      <SurfaceCard style={{ padding: pad, marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
+          <div style={{ fontSize: 15, fontWeight: 800, color: C.t1 }}>
+            <span style={{ color: C.t3, fontWeight: 700, marginRight: 6 }}>②</span>导入题目
+          </div>
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: "2px 10px", borderRadius: 999,
+            background: tabAccent.soft, color: tabAccent.color,
+          }}>
+            {tab.label}
+          </span>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 14, alignItems: "stretch" }}>
+          {/* 粘贴文本 */}
+          <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.t2, marginBottom: 6 }}>📋 粘贴文本</div>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={tab.placeholder}
               style={{
-                padding: "7px 16px", borderRadius: 999, fontSize: 13, fontWeight: 700, cursor: "pointer",
-                fontFamily: FONT, transition: "all .15s",
-                border: `1px solid ${typeKey === t.key ? C.nav : BD}`,
-                background: typeKey === t.key ? C.nav : "#fff",
-                color: typeKey === t.key ? "#fff" : C.t2,
+                flex: 1, width: "100%", minHeight: 150, resize: "vertical", boxSizing: "border-box",
+                border: `1px solid ${BD}`, borderRadius: 10, padding: "12px 14px",
+                fontSize: 14, lineHeight: 1.6, color: C.t1, fontFamily: FONT, outline: "none",
+              }}
+            />
+            <div style={{ marginTop: 10 }}>
+              <Btn onClick={handleParse} disabled={busy || !text.trim()}>
+                {parsing ? "识别中…" : "AI 抽取题目"}
+              </Btn>
+            </div>
+          </div>
+
+          {/* 上传截图 */}
+          <div style={{ flex: "1 1 240px", display: "flex", flexDirection: "column", minWidth: 0 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.t2, marginBottom: 6 }}>🖼️ 上传截图</div>
+            <label
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                if (busy) return;
+                const f = e.dataTransfer?.files?.[0];
+                if (f) handleImageFile(f);
+              }}
+              style={{
+                flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
+                padding: "20px 16px", borderRadius: 10, textAlign: "center", minHeight: 150, boxSizing: "border-box",
+                border: `1.5px dashed ${dragOver ? tabAccent.color : BD}`,
+                background: dragOver ? tabAccent.soft : "#fafbfc",
+                cursor: busy ? "default" : "pointer", transition: "all .15s",
               }}
             >
-              {t.label}
-            </button>
-          ))}
+              <input
+                type="file"
+                accept={ACCEPT}
+                disabled={busy}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ""; }}
+                style={{ display: "none" }}
+              />
+              <span style={{ fontSize: 22 }}>{imgBusy ? "⏳" : "🖼️"}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>
+                {imgBusy ? "识别中，请稍候…" : "点击选择或拖入图片"}
+              </span>
+              <span style={{ fontSize: 11, color: C.t3 }}>PNG / JPEG / WebP · 一张图可含多道题</span>
+            </label>
+          </div>
         </div>
 
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={typeKey === "email"
-            ? "粘贴邮件题文本（含情景、写作要求、要点）。一次可粘多道。"
-            : "粘贴学术讨论题文本（教授提问 + 两位同学的回复）。一次可粘多道。"}
-          style={{
-            width: "100%", minHeight: 150, resize: "vertical", boxSizing: "border-box",
-            border: `1px solid ${BD}`, borderRadius: 10, padding: "12px 14px",
-            fontSize: 14, lineHeight: 1.6, color: C.t1, fontFamily: FONT, outline: "none",
-          }}
-        />
-        <div style={{ marginTop: 12 }}>
-          <Btn onClick={handleParse} disabled={busy || !text.trim()}>
-            {parsing ? "识别中…" : "AI 抽取题目"}
-          </Btn>
-        </div>
-
-        {/* 分隔 */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "16px 0" }}>
-          <div style={{ flex: 1, height: 1, background: BD }} />
-          <span style={{ fontSize: 12, color: C.t3 }}>或上传题目截图</span>
-          <div style={{ flex: 1, height: 1, background: BD }} />
-        </div>
-
-        {/* 图片上传 / 拖拽区 */}
-        <label
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragOver(false);
-            if (busy) return;
-            const f = e.dataTransfer?.files?.[0];
-            if (f) handleImageFile(f);
-          }}
-          style={{
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
-            padding: "20px 16px", borderRadius: 12, textAlign: "center",
-            border: `1.5px dashed ${dragOver ? C.blue : BD}`,
-            background: dragOver ? C.ltB : "#fafbfc",
-            cursor: busy ? "default" : "pointer", transition: "all .15s",
-          }}
-        >
-          <input
-            type="file"
-            accept={ACCEPT}
-            disabled={busy}
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ""; }}
-            style={{ display: "none" }}
-          />
-          <span style={{ fontSize: 22 }}>{imgBusy ? "⏳" : "🖼️"}</span>
-          <span style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>
-            {imgBusy ? "识别中，请稍候…" : "点击选择或拖入图片"}
-          </span>
-          <span style={{ fontSize: 11, color: C.t3 }}>支持 PNG / JPEG / WebP，一张图可含多道题</span>
-        </label>
-
-        {err && <div style={{ marginTop: 10, fontSize: 13, color: C.red }}>{err}</div>}
-        {savedMsg && <div style={{ marginTop: 10, fontSize: 13, color: C.green }}>{savedMsg}</div>}
+        {err && <div style={{ marginTop: 12, fontSize: 13, color: C.red }}>{err}</div>}
+        {savedMsg && <div style={{ marginTop: 12, fontSize: 13, color: C.green }}>{savedMsg}</div>}
       </SurfaceCard>
 
       {/* 预览 + 勾选 */}
       {parsed && (
-        <SurfaceCard style={{ padding: variant === "panel" ? 18 : 22, marginBottom: 16 }}>
+        <SurfaceCard style={{ padding: pad, marginBottom: 16 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
             识别到 {parsed.length} 道题，勾选要存入的：
           </div>
@@ -359,8 +493,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                   key={i}
                   style={{
                     display: "flex", gap: 10, padding: "12px 14px", borderRadius: 10,
-                    border: `1px solid ${on && ok ? C.nav : BD}`,
-                    background: ok ? (on ? "#f8fafc" : "#fff") : "#f9fafb",
+                    border: `1px solid ${on && ok ? tabAccent.color : BD}`,
+                    background: ok ? (on ? tabAccent.soft : "#fff") : "#f9fafb",
                     opacity: ok ? 1 : 0.6, cursor: ok ? "pointer" : "not-allowed",
                   }}
                 >
@@ -399,7 +533,7 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
       )}
 
       {/* 已存列表 */}
-      <SurfaceCard style={{ padding: variant === "panel" ? 18 : 22 }}>
+      <SurfaceCard style={{ padding: pad }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 12 }}>
           已存 {list.length} 道
         </div>
@@ -410,17 +544,19 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {list.map((it) => {
-              const stored = TYPE_TABS.find((t) => t.stored === it.type);
+              const storedType = ALL_TYPES.find((t) => t.stored === it.type);
+              const g = groupOfStored(it.type);
+              const chipAccent = g?.accent || SECTION_ACCENTS.writing;
               const label = it.type === "email"
                 ? String(it?.data?.scenario || "(邮件题)").slice(0, 70)
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
               return (
                 <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: `1px solid ${BD}`, borderRadius: 8 }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: "#eef2ff", color: "#4f46e5", flexShrink: 0 }}>
-                    {stored?.label || it.type}
+                  <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: chipAccent.soft, color: chipAccent.color, flexShrink: 0 }}>
+                    {storedType?.label || it.type}
                   </span>
                   <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: C.t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
-                  {stored && <a href={stored.practice} style={{ fontSize: 12, color: C.blue, textDecoration: "none", flexShrink: 0 }}>去练习</a>}
+                  {storedType?.practice && <a href={storedType.practice} style={{ fontSize: 12, color: C.blue, textDecoration: "none", flexShrink: 0 }}>去练习</a>}
                   <button onClick={() => handleDelete(it)} style={{ border: "none", background: "none", color: C.red, fontSize: 12, cursor: "pointer", flexShrink: 0, fontFamily: FONT }}>删除</button>
                 </div>
               );
