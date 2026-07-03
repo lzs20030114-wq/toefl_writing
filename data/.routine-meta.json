@@ -1,46 +1,38 @@
 {
-  "session_id": "routine-20260702-190417",
-  "completed_at": "2026-07-02T19:17:15Z",
-  "duration_minutes": 12.8,
-  "model": "Claude Opus 4.8",
-  "highlight": "阅读 AP 首现光学/纺织纤维/月球风化层选材，写作 disc/email 全数通过；BS 单项 20/20 但难度冻结门未过，待 R2 重试",
+  "session_id": "routine-20260703-114516",
+  "completed_at": "2026-07-03T12:02:02Z",
+  "duration_minutes": 17,
+  "model": "Claude Sonnet 5",
+  "highlight": "BS 难度冻结门本轮 20/20 全数 PASS（前一晚 R1 曾因该门整体 FAIL 归零，靠 R2 补齐）；题库增至 50 sets，新增 marine biology 学科讨论题与恒星形成天文学阅读题",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "campus life",
-        "classes/registration",
-        "library/dorms",
-        "fitness center",
-        "embedded questions (whether/if/when)",
-        "negation",
-        "passive voice",
+        "simple present/past statements",
+        "indirect/embedded questions (if/whether/wh-clause)",
+        "present perfect negation",
         "relative clauses",
-        "direct wh/yes-no questions"
+        "direct wh-questions",
+        "passive voice",
+        "phrasal verbs",
+        "past perfect"
       ],
       "favorite": {
-        "prompt": "What did you need to find out before registration?",
-        "answer": "I really needed to know which of the two electives still counted."
+        "prompt": "There's a new fitness class starting Monday.",
+        "answer": "How do I reserve a spot in the class?"
       },
       "retried_after_fail": false,
-      "failure_reason": "20/20 通过单项校验，但 BS 难度冻结门 FAIL：register.contraction 0.175<0.18、register.third_person_formal 0.171>0.17、embedded_question 漂移 2.52x（真库聚合门，非本批单独问题）；live 库未改动",
-      "r2_supplemented": true,
-      "r2_items_added": 20
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "environmental science",
-        "business",
-        "psychology",
-        "political science"
-      ],
+      "topics": ["marine biology", "social studies", "public health", "history and culture"],
       "favorite": {
-        "subtopic": "environmental science",
-        "preview": "We've been examining how cities can cool themselves as summers grow hotter this semester. One proposal"
+        "subtopic": "marine biology",
+        "preview": "We've been discussing coral reef decline this semester. Many reef scientists now try to speed up r"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -48,15 +40,10 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "职场工作",
-        "社区生活",
-        "住宿",
-        "消费售后"
-      ],
+      "topics": ["职场工作", "社区生活", "服务与活动", "校园学业"],
       "favorite": {
         "subtopic": "社区生活",
-        "preview": "You volunteer at a neighborhood community garden that recently switched to a new online sign-up system for weekend shifts. The system keeps double-booking people, and last Saturday four volunteers all showed up to weed the same plot."
+        "preview": "You recently began attending a weekly coding workshop hosted at your local community center."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -64,16 +51,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "sociology/aging populations",
-        "physics/optics",
-        "materials_science/textile fibers",
-        "astronomy/lunar geology",
-        "technology/steam power"
-      ],
+      "topics": ["business/trade networks", "astronomy/star formation", "psychology/cognitive bias", "art/calligraphy", "history/maritime navigation"],
       "favorite": {
-        "subtopic": "astronomy/lunar geology",
-        "preview": "Regolith is the layer of loose, shattered rock and fine dust that blankets the solid bedrock of the Moon."
+        "subtopic": "astronomy/star formation",
+        "preview": "Star formation is the process by which diffuse clouds of gas and dust collapse under gravity to c"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -81,17 +62,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/microbiology",
-        "environmental_science/ozone layer",
-        "psychology/placebo effect",
-        "history/silk road",
-        "geology/minerals",
-        "astronomy/cosmic radiation"
-      ],
+      "topics": ["biology/insect colonies", "environmental_science/sustainable agriculture", "psychology/language acquisition", "history/colonial trade", "geology/gemstone formation", "astronomy/satellite technology"],
       "favorite": {
-        "subtopic": "history/silk road",
-        "preview": "The Silk Road was a vast network of trade routes that once linked China with distant lands to the west."
+        "subtopic": "biology/insect colonies",
+        "preview": "Many insect species live in highly organized colonies where thousands of individuals cooperate for a shared purpose."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -99,15 +73,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "notice",
-        "notice",
-        "notice",
-        "notice"
-      ],
+      "topics": ["email/parking permit pickup", "email/student ID replacement", "notice/wifi maintenance outage", "notice/heating repair"],
       "favorite": {
-        "subtopic": "notice/shuttle-detour",
-        "preview": "Notice: Because of road repairs on Elm Street, the Blue Line shuttle will follow a detour from May 5"
+        "subtopic": "email/parking permit pickup",
+        "preview": "Hi Marisol, Your spring parking permit is ready for pickup at the Transportation Office, R"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -115,13 +84,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "email/library-overdue",
-        "email/roommate-maintenance"
-      ],
+      "topics": ["menu/study-hour café specials", "email/tutoring appointment confirmation"],
       "favorite": {
-        "subtopic": "email/roommate-maintenance",
-        "preview": "Subject: Kitchen Faucet Repair — This Thursday Morning. Hi Daniel, I wanted to let you know"
+        "subtopic": "menu/study-hour café specials",
+        "preview": "Located on the ground floor of Kessler Library, The Grind House Café serves coffee, ligh"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -129,15 +95,10 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "the fundamental attribution error in everyday judgments",
-        "how recording technology changed the way music was composed",
-        "why Impressionists painted outdoors and what that meant for color theory",
-        "the concept of ecological succession after a wildfire"
-      ],
+      "topics": ["psychology/peak-end rule", "biology/bioluminescence", "astronomy/moon liquid water", "music/recording technology"],
       "favorite": {
-        "subtopic": "the concept of ecological succession after a wildfire",
-        "preview": "A forest fire looks like an ending. The trees are blackened, the ground is ash, and the animals are"
+        "subtopic": "the peak-end rule in how people remember experiences",
+        "preview": "The peak-end rule describes a curious pattern in how people remember experiences, and it comes"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -145,16 +106,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "planning a birthday surprise party for a classmate",
-        "swapping music recommendations (bored of pop)",
-        "returning a too-small sweater at a store counter",
-        "caring for a sister's struggling houseplant (fern)",
-        "choosing an elective for next term"
-      ],
+      "topics": ["music recommendations", "movie discussion", "birthday party planning", "concert tickets", "cooking tips"],
       "favorite": {
-        "subtopic": "caring for a sister's struggling houseplant (fern)",
-        "preview": "You've been carrying that fern everywhere. What's wrong with it? I'm plant-sitting my sister's fern"
+        "subtopic": "movie discussion (recommendations_opinions)",
+        "preview": "I saw that new mystery thriller last night. Have you heard about it?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -162,16 +117,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "community garden rooftop spring cleanup volunteer event",
-        "campus shuttle temporary detour due to bridge renovation",
-        "undergraduate poster session open to all majors",
-        "alumna guest lecture on her research career path",
-        "biology end-of-semester project showcase with awards"
-      ],
+      "topics": ["facility_change/bookstore move", "career_services/resume clinic", "facility_change/lab relocation", "academic_event/spring symposium", "info_session/off-campus housing"],
       "favorite": {
-        "subtopic": "alumna guest lecture on her research career path",
-        "preview": "I'm pleased to announce that our department will host a special guest lecture this coming Wednesday evening."
+        "subtopic": "spring academic symposium with limited seats and prerequisites",
+        "preview": "Due to overwhelming interest in last year's spring symposium, this year's event will require advance"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -179,19 +128,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "writing center location",
-        "concert status tonight",
-        "study group invitation",
-        "chemistry course registration",
-        "lost-and-found backpack",
-        "campus parking permit",
-        "grad school acceptance",
-        "rescheduling a better time"
-      ],
+      "topics": ["social", "campus_academic", "campus_daily", "general_daily"],
       "favorite": {
-        "subtopic": "grad school acceptance",
-        "preview": "I just found out I'm going to grad school. — friend sharing exciting personal news, idiomatic congrats"
+        "subtopic": "social — friend sharing news (roommate moving out)",
+        "preview": "Didn't you hear my roommate's moving out? — a context_shift item where the reply solves"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -199,19 +139,13 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "Hardware Store Help",
-        "Campus Gym Induction",
-        "Chemistry Lab Safety"
-      ],
+      "topics": ["Watercolor Painting", "IT Help Desk", "Student Health Clinic"],
       "favorite": {
-        "subtopic": "Chemistry Lab Safety",
-        "preview": "Safety goggles are kept by the door."
+        "subtopic": "Student Health Clinic",
+        "preview": "The waiting area is just ahead."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-02T19:47:28Z",
-  "r2_session_id": "routine-r2-20260702-193047"
+  }
 }

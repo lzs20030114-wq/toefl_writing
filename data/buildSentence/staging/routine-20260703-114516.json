@@ -1,0 +1,513 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "What did Mariana say about tonight's study session?",
+      "answer": "I have a meeting with my group.",
+      "chunks": [
+        "i",
+        "have",
+        "a",
+        "meeting",
+        "with",
+        "having"
+      ],
+      "prefilled": [
+        "my group"
+      ],
+      "prefilled_positions": {
+        "my group": 5
+      },
+      "distractor": "having",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple present statement",
+        "prepositional phrase"
+      ]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you find a seat in the lecture hall?",
+      "answer": "I grabbed one near the back row.",
+      "chunks": [
+        "i",
+        "one",
+        "near",
+        "the",
+        "back row",
+        "did"
+      ],
+      "prefilled": [
+        "grabbed"
+      ],
+      "prefilled_positions": {
+        "grabbed": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple past statement",
+        "prepositional phrase"
+      ]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Why do you look stressed about the exam?",
+      "answer": "I was wondering if the exam got moved.",
+      "chunks": [
+        "i",
+        "was wondering",
+        "the exam",
+        "got",
+        "moved",
+        "does"
+      ],
+      "prefilled": [
+        "if"
+      ],
+      "prefilled_positions": {
+        "if": 3
+      },
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect question (if-clause)",
+        "embedded clause"
+      ]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "What did the mailroom say about your package?",
+      "answer": "I finally found out when my package arrived.",
+      "chunks": [
+        "i",
+        "found out",
+        "when",
+        "my package",
+        "arrived",
+        "find"
+      ],
+      "prefilled": [
+        "finally"
+      ],
+      "prefilled_positions": {
+        "finally": 1
+      },
+      "distractor": "find",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect/embedded question (wh-clause)",
+        "past tense narrative"
+      ]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Have you checked your email today?",
+      "answer": "I haven't opened my inbox since yesterday morning.",
+      "chunks": [
+        "i",
+        "opened",
+        "my inbox",
+        "since",
+        "yesterday morning",
+        "not"
+      ],
+      "prefilled": [
+        "haven't"
+      ],
+      "prefilled_positions": {
+        "haven't": 1
+      },
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": [
+        "present perfect negation",
+        "time expression"
+      ]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Did you get your assignment back yet?",
+      "answer": "The professor who graded it left a comment.",
+      "chunks": [
+        "who",
+        "graded it",
+        "left",
+        "a",
+        "comment"
+      ],
+      "prefilled": [
+        "The professor"
+      ],
+      "prefilled_positions": {
+        "The professor": 0
+      },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause",
+        "past tense statement"
+      ]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "I just switched into your discussion section.",
+      "answer": "Which room does our group meet in?",
+      "chunks": [
+        "which",
+        "room",
+        "our",
+        "group",
+        "meet",
+        "in",
+        "did"
+      ],
+      "prefilled": [
+        "does"
+      ],
+      "prefilled_positions": {
+        "does": 2
+      },
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": [
+        "direct wh-question",
+        "subject-verb inversion"
+      ]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "What did the tech team say about the broken printer?",
+      "answer": "The broken printer was finally replaced by the campus tech team yesterday.",
+      "chunks": [
+        "was finally",
+        "replaced",
+        "by",
+        "the",
+        "campus",
+        "tech team yesterday",
+        "were"
+      ],
+      "prefilled": [
+        "The broken printer"
+      ],
+      "prefilled_positions": {
+        "The broken printer": 0
+      },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": [
+        "passive voice",
+        "time expression"
+      ]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "When did you last see your calculator?",
+      "answer": "The classmate who borrowed my calculator this week forgot to return it.",
+      "chunks": [
+        "who",
+        "borrowed",
+        "my calculator",
+        "this week",
+        "forgot to",
+        "return",
+        "it",
+        "borrowing"
+      ],
+      "prefilled": [
+        "The classmate"
+      ],
+      "prefilled_positions": {
+        "The classmate": 0
+      },
+      "distractor": "borrowing",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause",
+        "past tense narrative"
+      ]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "I just remembered we have a group project due.",
+      "answer": "I'm not sure if my teammates already started the project.",
+      "chunks": [
+        "i'm",
+        "not sure",
+        "my teammates",
+        "already started",
+        "the project",
+        "was"
+      ],
+      "prefilled": [
+        "if"
+      ],
+      "prefilled_positions": {
+        "if": 3
+      },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect question (if-clause)",
+        "present tense narrative"
+      ]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "What did Julian say about the club fair?",
+      "answer": "I signed up for the photography club.",
+      "chunks": [
+        "i",
+        "for",
+        "the",
+        "photography",
+        "club",
+        "signing"
+      ],
+      "prefilled": [
+        "signed up"
+      ],
+      "prefilled_positions": {
+        "signed up": 1
+      },
+      "distractor": "signing",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple past statement",
+        "phrasal verb"
+      ]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Did you print your essay before class?",
+      "answer": "I saved it to a shared drive.",
+      "chunks": [
+        "i",
+        "it",
+        "to",
+        "a",
+        "shared drive",
+        "save"
+      ],
+      "prefilled": [
+        "saved"
+      ],
+      "prefilled_positions": {
+        "saved": 1
+      },
+      "distractor": "save",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple past statement",
+        "prepositional phrase"
+      ]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Why do you seem worried about the club dues?",
+      "answer": "I wasn't sure whether the fee had increased.",
+      "chunks": [
+        "i",
+        "wasn't sure",
+        "the fee",
+        "had",
+        "increased",
+        "does"
+      ],
+      "prefilled": [
+        "whether"
+      ],
+      "prefilled_positions": {
+        "whether": 3
+      },
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect question (whether-clause)",
+        "past perfect"
+      ]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "What did the front desk mention about your key?",
+      "answer": "I found out my key card was deactivated.",
+      "chunks": [
+        "i",
+        "found",
+        "out",
+        "was",
+        "deactivated",
+        "were"
+      ],
+      "prefilled": [
+        "my key card"
+      ],
+      "prefilled_positions": {
+        "my key card": 3
+      },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect report (found out)",
+        "passive voice"
+      ]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "Are you coming to trivia night tonight?",
+      "answer": "I still haven't finished my chemistry homework tonight.",
+      "chunks": [
+        "i",
+        "haven't",
+        "finished",
+        "my chemistry",
+        "homework",
+        "tonight",
+        "hasn't"
+      ],
+      "prefilled": [
+        "still"
+      ],
+      "prefilled_positions": {
+        "still": 1
+      },
+      "distractor": "hasn't",
+      "has_question_mark": false,
+      "grammar_points": [
+        "present perfect negation",
+        "adverb of time"
+      ]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Did you enjoy the concert last weekend?",
+      "answer": "The friend who invited me forgot her ticket.",
+      "chunks": [
+        "who",
+        "invited",
+        "me",
+        "forgot",
+        "her ticket"
+      ],
+      "prefilled": [
+        "The friend"
+      ],
+      "prefilled_positions": {
+        "The friend": 0
+      },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause",
+        "past tense statement"
+      ]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "There's a new fitness class starting Monday.",
+      "answer": "How do I reserve a spot in the class?",
+      "chunks": [
+        "how",
+        "i",
+        "reserve",
+        "a",
+        "spot",
+        "in the",
+        "class",
+        "does"
+      ],
+      "prefilled": [
+        "do"
+      ],
+      "prefilled_positions": {
+        "do": 1
+      },
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": [
+        "direct wh-question",
+        "subject-verb inversion"
+      ]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "What did the housing office say about your room change?",
+      "answer": "My room change request was finally approved by the campus housing office.",
+      "chunks": [
+        "was finally",
+        "approved",
+        "by",
+        "the",
+        "campus",
+        "housing office",
+        "is"
+      ],
+      "prefilled": [
+        "My room change request"
+      ],
+      "prefilled_positions": {
+        "My room change request": 0
+      },
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": [
+        "passive voice",
+        "time expression"
+      ]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Where did you leave your laptop charger?",
+      "answer": "The roommate who borrowed my charger left it in the dorm kitchen.",
+      "chunks": [
+        "who",
+        "borrowed",
+        "my charger",
+        "left",
+        "it",
+        "in the",
+        "dorm kitchen",
+        "borrowing"
+      ],
+      "prefilled": [
+        "The roommate"
+      ],
+      "prefilled_positions": {
+        "The roommate": 0
+      },
+      "distractor": "borrowing",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause",
+        "past tense narrative"
+      ]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "I just got back from the registrar's office.",
+      "answer": "I couldn't tell if my registration had gone through.",
+      "chunks": [
+        "i",
+        "couldn't tell",
+        "my registration",
+        "had",
+        "gone",
+        "through",
+        "wasn't"
+      ],
+      "prefilled": [
+        "if"
+      ],
+      "prefilled_positions": {
+        "if": 3
+      },
+      "distractor": "wasn't",
+      "has_question_mark": false,
+      "grammar_points": [
+        "indirect question (if-clause)",
+        "past perfect"
+      ]
+    }
+  ]
+}
