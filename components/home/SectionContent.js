@@ -124,12 +124,6 @@ export function SectionContent({
         </div>
       </div>
 
-      {/* Promo */}
-      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
-
-      {/* Referral banner — invite friends, get +3 days Pro */}
-      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
-
       {/* Task grid */}
       <div className="home-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
         {gridItems.map((item) => (
@@ -167,6 +161,10 @@ export function SectionContent({
           badge={sessions.length > 0 ? `${sessions.length} 条记录` : "暂无记录"}
         />
       </div>
+
+      {/* Promo + Referral banners — moved below the task grid for a cleaner top of page */}
+      <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
+      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>
