@@ -1,0 +1,275 @@
+{
+  "_meta": {
+    "session": "routine-20260703-114516",
+    "hint": "nightly LC generation; item 3 situation swapped from the assigned 'cheese dinner party' (already in DO-NOT-REUSE list) to a distinct pizza/party-planning situation to avoid duplication"
+  },
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I need new music. I've been listening to the same three pop singers for months and I'm so bored." },
+        { "speaker": "Man", "text": "Have you tried anything outside pop? I've been really into this indie folk band called Hollow Pines lately." },
+        { "speaker": "Woman", "text": "Indie folk? Really?" },
+        { "speaker": "Man", "text": "Well, it's mellow, mostly acoustic guitar and vocal harmonies. Their album 'Riverbend' is a good place to start." },
+        { "speaker": "Woman", "text": "That sounds really different from what I usually play. Can you send me the link tonight?" },
+        { "speaker": "Man", "text": "Sure, I'll text it tonight. Skip the first track though, it's just an instrumental intro." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man suggest the woman try?",
+          "options": {
+            "A": "An indie folk band called Hollow Pines",
+            "B": "A pop singer she has never heard before",
+            "C": "A jazz playlist he made himself",
+            "D": "The woman's favorite pop album again"
+          },
+          "answer": "A",
+          "explanation": "男生说他最近在听一个叫Hollow Pines的独立民谣乐队，并推荐她尝试，所以A正确。B把独立民谣错误地说成流行歌手，属于wrong_detail；C爵士歌单对话中未提及，属于related_but_not_stated；D把男生的推荐错误地归为女生自己喜欢的流行专辑，属于misattributed。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Attend a live concert by the band next week",
+            "B": "Ask the man to teach her guitar",
+            "C": "Listen to the album once it's sent",
+            "D": "Keep listening only to her usual pop singers"
+          },
+          "answer": "C",
+          "explanation": "女生请男生把链接发给她，男生答应今晚发送，所以她接下来最可能是收到链接后听这张专辑，C正确。A去看乐队现场演出属于过度推断，属于over_inference；B请男生教吉他与对话内容无关，属于unrelated_next_step；D女生本来就是因为厌倦了原来的流行歌手才想找新音乐，继续只听原来的歌手与她的意图相反，属于rejected_option。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I saw that new mystery thriller last night. Have you heard about it?" },
+        { "speaker": "Man", "text": "Oh, really? How was it?" },
+        { "speaker": "Woman", "text": "The plot twists were incredible, I didn't see the ending coming. But it's almost three hours long." },
+        { "speaker": "Man", "text": "Three hours is a lot. Is it worth sitting through that whole time?" },
+        { "speaker": "Woman", "text": "Mostly, yeah, I just got a little restless near the end." },
+        { "speaker": "Man", "text": "I'll probably wait for it to stream instead." },
+        { "speaker": "Woman", "text": "Good idea. Just don't read any reviews, the twists are worth the surprise." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "A concert they are planning to attend together",
+            "B": "A movie the woman saw, twists and length",
+            "C": "The exact ticket price for the mystery thriller",
+            "D": "The man's growing disappointment with the ending of the film"
+          },
+          "answer": "B",
+          "explanation": "两人主要在讨论女生刚看的一部悬疑片，包括它的情节反转和片长问题，所以B正确。A音乐会话题在对话中完全没有出现，属于wrong_topic；C只是背景细节，票价并非讨论重点，属于too_narrow；D把情况完全说反了——男生根本还没看这部电影，也没有表示失望，属于reversed_situation。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Go to the theater to see it this weekend",
+            "B": "Convince the woman to watch it again with him",
+            "C": "Write a detailed review of the plot twists",
+            "D": "Wait for the movie to stream instead"
+          },
+          "answer": "D",
+          "explanation": "男生说自己大概会等这部电影上线流媒体再看，所以D正确。A去电影院看是男生已经放弃的选项，属于rejected_option；B说服女生再看一遍对话中未提及，属于unrelated_next_step；C写详细影评远超对话内容所支持的范围，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students deciding how many pizzas and drinks to order for a birthday party",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How many pizzas do you think we should order for Maya's birthday party this Saturday afternoon?" },
+        { "speaker": "Man", "text": "We're expecting around fifteen people, so four large pizzas should be enough." },
+        { "speaker": "Woman", "text": "Four might be too few if a lot of people show up. Let's get five, just in case." },
+        { "speaker": "Man", "text": "Good point. What about drinks?" },
+        { "speaker": "Woman", "text": "Let's do a mix of soda and sparkling water, since not everyone likes soda, and maybe some lemonade too." },
+        { "speaker": "Man", "text": "Good call. I'll place the order online tonight so it arrives on time." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will the man and woman serve besides pizza?",
+          "options": {
+            "A": "Only soda, since it's easier to serve",
+            "B": "Coffee and tea for the guests",
+            "C": "A mix of soda and sparkling water",
+            "D": "Just sparkling water only, since Maya seems to prefer it"
+          },
+          "answer": "C",
+          "explanation": "女生提议苏打水和气泡水都准备一些，因为不是所有人都喜欢苏打水，所以C正确。A只准备苏打水与对话内容相反（他们决定混合两种），属于wrong_detail；B咖啡和茶对话中未提及，属于related_but_not_stated；D把想法错误地归因给Maya的个人喜好，对话中并未提到这点，属于misattributed。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Place the order online later tonight",
+            "B": "Drive to the store to buy more pizzas",
+            "C": "Change the party's guest list to fewer people",
+            "D": "Print out a party invitation for guests"
+          },
+          "answer": "A",
+          "explanation": "男生说他今晚会在网上下单，所以A正确。B开车去买更多披萨对话中未提及，属于unrelated_next_step；C减少客人数量远超对话所暗示的内容，属于over_inference；D打印派对邀请函与对话内容无关，属于related_but_not_stated。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends deciding whether to buy concert tickets now or wait",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you seen ticket prices for the fall concert yet? They're still pretty high." },
+        { "speaker": "Man", "text": "Yeah, I checked yesterday. I was thinking we should wait a couple of weeks to see whether the prices actually drop." },
+        { "speaker": "Woman", "text": "That's risky, though." },
+        { "speaker": "Man", "text": "Prices usually drop closer to the date if it's not selling well." },
+        { "speaker": "Woman", "text": "I don't know. I'd rather pay a little more now and know for sure that we have seats." },
+        { "speaker": "Man", "text": "Good, let's just buy them tonight then, so we don't have to keep worrying about it." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the man and woman mainly discussing?",
+          "options": {
+            "A": "Complaints about the sound quality at recent past concerts",
+            "B": "The exact date when the concert takes place",
+            "C": "A plan to sell their extra concert tickets",
+            "D": "Whether to buy concert tickets now or later"
+          },
+          "answer": "D",
+          "explanation": "两人在讨论是现在就买音乐会门票还是再等等看价格会不会下降，所以D正确。A音响质量的抱怨在对话中完全没有提到，属于wrong_topic；B具体日期只是背景信息，并非讨论重点，属于too_narrow；C卖掉多余门票与对话内容相反——他们是在讨论要不要买，而不是卖，属于reversed_situation。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "too_narrow",
+            "C": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man and woman most likely do?",
+          "options": {
+            "A": "Wait several more weeks to buy tickets",
+            "B": "Purchase the tickets tonight, not later",
+            "C": "Ask the venue for a group discount",
+            "D": "Try to resell their tickets for profit"
+          },
+          "answer": "B",
+          "explanation": "男生最后说“Good, let's just buy them tonight”，所以他们决定今晚就买票，B正确。A继续等待是他们最终放弃的选项，属于rejected_option；C向场馆申请团体折扣对话中未提及，属于unrelated_next_step；D转卖门票获利远超对话内容所支持的范围，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Could you help me pick out stir-fry ingredients? I've never cooked one before." },
+        { "speaker": "Man", "text": "Sure. The key is prepping everything before you turn on the heat, since it cooks fast." },
+        { "speaker": "Woman", "text": "Okay. I was thinking chicken, broccoli, and some kind of sauce." },
+        { "speaker": "Man", "text": "That works. Grab pre-cut vegetables too, it'll save a lot of chopping time." },
+        { "speaker": "Woman", "text": "Good idea. Should I just buy a bottled sauce, or make my own?" },
+        { "speaker": "Man", "text": "A quick mix of soy sauce, garlic, and cornstarch tastes better and takes two minutes." },
+        { "speaker": "Woman", "text": "Alright, I'll get those. Thanks!" }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the man and woman mainly doing?",
+          "options": {
+            "A": "Discussing how to prepare a stir-fry while shopping",
+            "B": "Comparing grocery prices at two different stores",
+            "C": "Deciding which brand of bottled sauce to buy",
+            "D": "Debating whether to cook at home or eat out"
+          },
+          "answer": "A",
+          "explanation": "两人一边在超市购物，一边讨论如何准备炒菜，包括食材和酱料的做法，所以A正确。B比较不同商店的价格在对话中完全没有出现，属于wrong_topic；C只涉及酱料这一个细节，并非整体讨论内容，属于too_narrow；D在家做饭还是外食的争论与对话内容相反——他们已经决定要自己做炒菜了，属于reversed_situation。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely buy for the sauce?",
+          "options": {
+            "A": "Buy a bottled sauce from the store shelf",
+            "B": "Return the pre-cut vegetables to the shelf",
+            "C": "Buy the ingredients for a homemade stir-fry sauce",
+            "D": "Sign up for a cooking class at the store"
+          },
+          "answer": "C",
+          "explanation": "男生建议用酱油、大蒜和玉米淀粉自己调酱汁，味道更好且只需两分钟，女生最后说会去买这些食材，所以C正确。A直接买瓶装酱料是女生本来考虑但被男生的建议取代的选项，属于rejected_option；B把切好的蔬菜放回去对话中未提及，属于unrelated_next_step；D报名烹饪课远超对话内容所支持的范围，属于over_inference。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}
