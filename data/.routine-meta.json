@@ -1,149 +1,140 @@
 {
-  "session_id": "routine-20260703-114516",
-  "completed_at": "2026-07-03T12:02:02Z",
+  "session_id": "routine-20260703-170354",
+  "completed_at": "2026-07-03T17:21:13Z",
   "duration_minutes": 17,
   "model": "Claude Sonnet 5",
-  "highlight": "BS 难度冻结门本轮 20/20 全数 PASS（前一晚 R1 曾因该门整体 FAIL 归零，靠 R2 补齐）；题库增至 50 sets，新增 marine biology 学科讨论题与恒星形成天文学阅读题",
+  "highlight": "本轮12题库70/70全部通过；BS批次语域门槛压线修复，AP新增变质岩地质选段",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": [
-        "simple present/past statements",
-        "indirect/embedded questions (if/whether/wh-clause)",
-        "present perfect negation",
-        "relative clauses",
-        "direct wh-questions",
-        "passive voice",
-        "phrasal verbs",
-        "past perfect"
-      ],
-      "favorite": {
-        "prompt": "There's a new fitness class starting Monday.",
-        "answer": "How do I reserve a spot in the class?"
-      },
+      "topics": ["relative clause", "indirect/embedded question", "passive voice", "negation", "comparative adjective", "direct wh-question", "conjoined predicate"],
+      "favorite": {"prompt": "What did you learn about the tutor from your stats class?", "answer": "The tutor who helped me with statistics last semester finally graduated."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["marine biology", "social studies", "public health", "history and culture"],
-      "favorite": {
-        "subtopic": "marine biology",
-        "preview": "We've been discussing coral reef decline this semester. Many reef scientists now try to speed up r"
-      },
+      "topics": [
+        "history and culture: should museums repatriate colonial-era artifacts to their countries of origin",
+        "computer science: should social media platforms rely primarily on AI (vs. human moderators) for content moderation",
+        "sociology: is the rise of multigenerational households ultimately beneficial for families",
+        "economics: would a four-day workweek benefit most industries or only a select few"
+      ],
+      "favorite": {"subtopic": "computer science", "preview": "Automated systems can now flag harmful material almost instantly, but they still make mistakes. Some engineers argue AI moderation is faster"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["职场工作", "社区生活", "服务与活动", "校园学业"],
-      "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You recently began attending a weekly coding workshop hosted at your local community center."
-      },
+      "topics": [
+        "服务与活动: wrong-date concert tickets purchased for a jazz show, contacting venue box office",
+        "校园学业: requesting a recommendation letter from a professor for a summer research program",
+        "日常社交: asking a friend to return a borrowed bicycle before a weekend cycling trip",
+        "消费售后: delayed online headphones order needed as a birthday gift by Saturday"
+      ],
+      "favorite": {"subtopic": "服务与活动", "preview": "You are attending a jazz concert next Friday with three friends, and you just discovered that the tickets you purchased are for the wrong date because of a mistake on the venue's booking page."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["business/trade networks", "astronomy/star formation", "psychology/cognitive bias", "art/calligraphy", "history/maritime navigation"],
-      "favorite": {
-        "subtopic": "astronomy/star formation",
-        "preview": "Star formation is the process by which diffuse clouds of gas and dust collapse under gravity to c"
-      },
+      "topics": ["sociology/education systems", "geology/rock formation", "chemistry/catalysis", "anthropology/early agriculture", "psychology/cognitive development"],
+      "favorite": {"subtopic": "geology/rock formation", "preview": "Metamorphic rock is rock whose original mineral structure has been transformed by intense heat and pressure without"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/insect colonies", "environmental_science/sustainable agriculture", "psychology/language acquisition", "history/colonial trade", "geology/gemstone formation", "astronomy/satellite technology"],
-      "favorite": {
-        "subtopic": "biology/insect colonies",
-        "preview": "Many insect species live in highly organized colonies where thousands of individuals cooperate for a shared purpose."
-      },
+      "topics": ["biology/coral reefs", "environmental_science/sustainable agriculture", "psychology/habit formation", "history/Roman engineering", "geology/fossils", "astronomy/comets"],
+      "favorite": {"subtopic": "astronomy/comets", "preview": "Comets are icy bodies left over from the early formation of the solar system, orbiting the sun on long paths."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/parking permit pickup", "email/student ID replacement", "notice/wifi maintenance outage", "notice/heating repair"],
-      "favorite": {
-        "subtopic": "email/parking permit pickup",
-        "preview": "Hi Marisol, Your spring parking permit is ready for pickup at the Transportation Office, R"
-      },
+      "topics": ["notice: Lost-and-found unclaimed items to be donated with $2 electronics fee after May 30", "social_media: Student praises campus garden's extended spring hours near Baxter Hall", "email: Research coordinator confirms sleep-study session with $15 cash compensation", "social_media: Free Saturday yoga class in the Quad, moves to Gym 2 if it rains"],
+      "favorite": {"subtopic": "social_media/free Saturday yoga class in the Quad", "preview": "Free yoga class in the Quad this Saturday, June 20, from 9:00 to 10:00 AM! No sign-up needed"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["menu/study-hour café specials", "email/tutoring appointment confirmation"],
-      "favorite": {
-        "subtopic": "menu/study-hour café specials",
-        "preview": "Located on the ground floor of Kessler Library, The Grind House Café serves coffee, ligh"
-      },
+      "topics": ["email: Makerspace welcome/orientation email with fees and safety rules", "social_media: Student post recommending the Fall Maker Fair on campus"],
+      "favorite": {"subtopic": "social_media/Fall Maker Fair recommendation", "preview": "Just got back from the Fall Maker Fair in the Quad and I'm still buzzing!! If you haven't been to"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["psychology/peak-end rule", "biology/bioluminescence", "astronomy/moon liquid water", "music/recording technology"],
-      "favorite": {
-        "subtopic": "the peak-end rule in how people remember experiences",
-        "preview": "The peak-end rule describes a curious pattern in how people remember experiences, and it comes"
-      },
+      "topics": [
+        "environmental_science: how green roofs reduce urban stormwater runoff",
+        "ecology: how invasive species disrupt native food webs",
+        "architecture: the influence of climate on traditional vernacular housing",
+        "anthropology: how gift-giving rituals reinforce social bonds across cultures"
+      ],
+      "favorite": {"subtopic": "anthropology/how gift-giving rituals reinforce social bonds across cultures", "preview": "Gift-giving might seem like a simple act of generosity, but anthropologists have long argued that in many societies"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["music recommendations", "movie discussion", "birthday party planning", "concert tickets", "cooking tips"],
-      "favorite": {
-        "subtopic": "movie discussion (recommendations_opinions)",
-        "preview": "I saw that new mystery thriller last night. Have you heard about it?"
-      },
+      "topics": [
+        "errands_service: two friends figuring out a bus or train schedule for a day trip",
+        "recommendations_opinions: two friends debating whether a new cafe is worth the price",
+        "errands_service: two students talking about a pet or houseplant one is caring for",
+        "plans_social: two friends deciding whether to buy concert tickets now or wait",
+        "recommendations_opinions: two students swapping music recommendations because one is bored of the same pop singers"
+      ],
+      "favorite": {"subtopic": "recommendations_opinions/two students swapping music recommendations because one is bored of the same pop singers", "preview": "I've been stuck on the same five pop artists for months. I need something different."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/bookstore move", "career_services/resume clinic", "facility_change/lab relocation", "academic_event/spring symposium", "info_session/off-campus housing"],
-      "favorite": {
-        "subtopic": "spring academic symposium with limited seats and prerequisites",
-        "preview": "Due to overwhelming interest in last year's spring symposium, this year's event will require advance"
-      },
+      "topics": [
+        "facility_change: new fitness equipment installation at recreation center",
+        "facility_change: computer lab relocating to a different floor",
+        "academic_event: student research poster session open to all majors",
+        "academic_event: undergraduate research symposium abstract submission deadline",
+        "info_session: health insurance enrollment information session"
+      ],
+      "favorite": {"subtopic": "facility_change/computer lab relocating to a different floor", "preview": "Due to ongoing electrical rewiring in Hendricks Hall, the Computer Science computer lab will relocate from the third floor"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["social", "campus_academic", "campus_daily", "general_daily"],
-      "favorite": {
-        "subtopic": "social — friend sharing news (roommate moving out)",
-        "preview": "Didn't you hear my roommate's moving out? — a context_shift item where the reply solves"
-      },
+      "topics": [
+        "social: responding to an invitation or suggestion",
+        "campus_academic: student discussing a presentation topic with partner",
+        "campus_daily: student asking about dorm maintenance issue",
+        "general_daily: asking a store clerk about a return or exchange",
+        "social: acknowledging someone's unavailability or schedule conflict",
+        "social: expressing concern about a friend's situation",
+        "general_daily: checking if a service (post office, bank) is open",
+        "general_daily: asking for directions to a nearby location"
+      ],
+      "favorite": {"subtopic": "general_daily/checking if a service (post office, bank) is open", "preview": "How late is the bank open tonight? -> I can transfer that for you right now."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Watercolor Painting", "IT Help Desk", "Student Health Clinic"],
-      "favorite": {
-        "subtopic": "Student Health Clinic",
-        "preview": "The waiting area is just ahead."
-      },
+      "topics": ["Watercolor Painting (how-to): art class instructor", "Campus Gym Induction: fitness center coordinator", "IT Help Desk: IT support technician"],
+      "favorite": {"subtopic": "Campus Gym Induction", "preview": "Locker rooms are located downstairs."},
       "retried_after_fail": false,
       "failure_reason": ""
     }
