@@ -1,0 +1,99 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "text": "Subject: Your Textbook Order Is Ready for Pickup\n\nDear Marcus,\n\nYour order from the Campus Bookstore in Weller Hall is ready for pickup. Please bring your student ID and this confirmation to the service desk on the first floor between 9:00 AM and 5:00 PM, Monday through Friday.\n\nTwo of your three books have arrived. The third title, Introduction to Molecular Biology, is temporarily out of stock and will ship separately by September 18. Orders that are not collected within ten days will be returned to the shelves, and a $5 restocking fee will be applied to your account.\n\nIf you'd like the remaining book held at the desk rather than shipped, just reply to this message and we'll set it aside for you.\n\nThanks,\nPriya Nadar\nCampus Bookstore Staff",
+      "format_metadata": {
+        "from": "Priya Nadar, Campus Bookstore Staff",
+        "to": "Marcus",
+        "subject": "Your Textbook Order Is Ready for Pickup"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what will happen if Marcus does not collect his order within ten days?",
+          "options": {
+            "A": "A replacement order will be shipped to his home.",
+            "B": "A $5 restocking fee will be added to his account.",
+            "C": "A second confirmation notice will be emailed to him.",
+            "D": "A hold will be placed on his student ID card."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that orders not collected within ten days will be returned to the shelves and that a $5 restocking fee will be applied to the account, which matches option B."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the book Introduction to Molecular Biology?",
+          "options": {
+            "A": "It is already waiting at the first-floor service desk.",
+            "B": "It is not currently available in the store's stock.",
+            "C": "It has to be bought from a different bookstore.",
+            "D": "It will be returned to the shelves within ten days."
+          },
+          "correct_answer": "B",
+          "explanation": "Because the email describes this title as temporarily out of stock and says it will ship separately later, we can infer that it is not currently available in the store, making B correct."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To remind Marcus to pay an overdue bookstore charge.",
+            "B": "To advertise a seasonal sale at the Campus Bookstore.",
+            "C": "To notify Marcus that his book order is ready for pickup.",
+            "D": "To confirm that all three of Marcus's books have arrived."
+          },
+          "correct_answer": "C",
+          "explanation": "The email's central message, stated in the opening line and supported by the pickup instructions, is that Marcus's order is ready to be collected, so C captures the main purpose. Option D is wrong because only two of the three books have arrived."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "text": "Community Garden Plot Registration — Spring Season\n\nRegistration for garden plots at the Riverside Community Garden opens on March 1 and closes on March 20. Plots are assigned on a first-come, first-served basis, and residents are encouraged to apply early. The garden is located behind Fenwick Recreation Center and is open daily from 7:00 AM to 8:00 PM.\n\nEach plot measures ten feet by ten feet and may be reserved for a $30 seasonal fee, which covers water and shared tool use. Applications must be submitted in person at the Recreation Center office.\n\nPlease observe the following guidelines:\n- Only organic fertilizers are permitted; chemical pesticides are prohibited.\n- Plots must be planted within three weeks of assignment or they may be reassigned.\n- Water is available at the central spigot from 7:00 AM to 10:00 AM only.\n- A $10 deposit for garden keys will be refunded when the keys are returned.\n\nFor questions, please contact garden coordinator Ms. Alvarez at the Recreation Center front desk.",
+      "format_metadata": {
+        "title": "Community Garden Plot Registration — Spring Season",
+        "location": "Riverside Community Garden, behind Fenwick Recreation Center"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what does the $30 seasonal fee cover?",
+          "options": {
+            "A": "Water use and access to shared tools.",
+            "B": "Organic fertilizer and a garden key deposit.",
+            "C": "Membership at the Fenwick Recreation Center.",
+            "D": "Delivery of fresh soil to each garden plot."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that the $30 seasonal fee covers water and shared tool use, which is paraphrased in option A. The other options combine real passage terms in relationships the text does not support."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when is water available at the central spigot?",
+          "options": {
+            "A": "From 7:00 AM to 8:00 PM daily.",
+            "B": "From 8:00 AM to 10:00 AM only.",
+            "C": "From 7:00 AM to 10:00 AM only.",
+            "D": "From 7:00 PM to 8:00 PM each evening."
+          },
+          "correct_answer": "C",
+          "explanation": "The guidelines specify that water is available at the central spigot from 7:00 AM to 10:00 AM only, matching option C. Option A repeats the garden's overall opening hours, not the spigot hours."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a gardener who does not plant a plot within three weeks of assignment?",
+          "options": {
+            "A": "They will receive a full refund of the seasonal fee.",
+            "B": "They must pay an additional ten-dollar late fee.",
+            "C": "They will be offered a larger plot the next season.",
+            "D": "They may lose the plot to another applicant."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice warns that plots not planted within three weeks may be reassigned, so it can be inferred that the gardener may lose the plot to someone else, as stated in option D."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

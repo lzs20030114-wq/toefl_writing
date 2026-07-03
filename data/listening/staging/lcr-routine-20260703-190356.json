@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What'd you jot down in today's lecture?",
+      "options": {
+        "A": "How much detail do you want?",
+        "B": "My notebook ran out of pages.",
+        "C": "She sits in the front row.",
+        "D": "Yes, class starts at nine."
+      },
+      "answer": "A",
+      "explanation": "说话人想借今天的课堂笔记。正确答案A用反问推进对话，先弄清对方需要多详细的内容，符合counter_question范式。B是语义联想陷阱，把'笔记'联想到'笔记本'，说本子没纸了，并没回应借笔记的请求。C完全离题，谈论别人坐哪排，与借笔记无关。D答非所问，用是/否加上课时间来回答，而说话人问的是笔记内容，属于答错问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where can we meet if you're free later?",
+      "options": {
+        "A": "The meeting room needs new chairs.",
+        "B": "How about the café near campus?",
+        "C": "She already flew home for break.",
+        "D": "Yes, I'm free after five."
+      },
+      "answer": "B",
+      "explanation": "说话人在协调时间冲突，问在哪里见面。正确答案B用反问提出一个具体地点作为替代方案，推进了对话，符合counter_question范式。A是语义联想陷阱，把'meet'联想到'meeting room'去描述房间，答非所问。C完全离题，说别人回家了，与见面无关。D答错了问题：说话人问的是'哪里'(地点)，D却回答'什么时候'(时间)，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do the shuttles run this weekend?",
+      "options": {
+        "A": "The bus stop got a new sign.",
+        "B": "I left my umbrella on board.",
+        "C": "Which route are you taking?",
+        "D": "No, I'd rather just walk."
+      },
+      "answer": "C",
+      "explanation": "说话人在确认周末班车是否运行。正确答案C用反问确认对方要坐哪条线路，推进对话以便给出准确信息，符合counter_question范式。A是语义联想陷阱，把'班车'联想到'公交站'去描述新牌子，没回答是否运行。B完全离题，说自己把伞落在车上，是另一件事。D误读了意图，回答的是个人偏好'我宁愿走路'，而不是班车时刻信息，属于误解范式。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can we finish this if we're quick today?",
+      "options": {
+        "A": "The project folder won't open.",
+        "B": "She switched to another team.",
+        "C": "Yes, I read the chapter twice.",
+        "D": "Let's ask for an extension instead."
+      },
+      "answer": "D",
+      "explanation": "说话人担心小组作业能否在截止前赶完。正确答案D不直接回答能否赶完，而是解决背后的真正问题——去申请延期，符合context_shift范式。A是语义联想陷阱，把'project'联想到打不开的项目文件，没回应能否完成。B完全离题，说别人换组了，与截止无关。C答错了侧面：用'是的，我读了两遍章节'回应，但读章节和完成项目是两回事，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why's the heater in my room broken?",
+      "options": {
+        "A": "I'll send maintenance up right away.",
+        "B": "That room has a lovely view.",
+        "C": "She moved out last semester.",
+        "D": "It's just past the stairwell."
+      },
+      "answer": "A",
+      "explanation": "说话人在宿舍前台反映暖气坏了。正确答案A不去解释为什么坏，而是直接解决问题——马上派维修人员上去，符合context_shift范式。B是语义联想陷阱，把'房间'联想去夸风景，忽略了故障。C完全离题，说别人搬走了，与暖气无关。D答错了问题：说话人问的是'为什么'，D却回答'在哪里'(楼梯旁)，属于答错问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I think I've left my backpack here.",
+      "options": {
+        "A": "Backpacks are half off today.",
+        "B": "Let me check the back room.",
+        "C": "The weather turned cold last night.",
+        "D": "You can buy one downstairs."
+      },
+      "answer": "B",
+      "explanation": "说话人在失物招领处说可能把背包落在这儿了。正确答案B以话语标记'Let me'开头，间接地提出去后面房间帮忙查看，符合marker_led_indirect范式。A是语义联想陷阱，把'背包'联想到打折促销，没帮忙找。C完全离题，谈天气，与失物无关。D误读了意图，把'落下背包'误解成'想买背包'，属于误解范式。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "You're clearly stressed about this deadline.",
+      "options": {
+        "A": "The road was really stressful today.",
+        "B": "Time management is a hard skill.",
+        "C": "Don't worry, I've got your back.",
+        "D": "She's meeting us for dinner."
+      },
+      "answer": "C",
+      "explanation": "说话人注意到对方因截止日期而焦虑，想给予帮助。正确答案C用习惯表达'I've got your back'(我挺你/有我在)配合安慰性话语标记，自然地表示支持，符合idiomatic范式。A是误解范式，把'stressed(焦虑)'当成'stressful(费劲)'去谈路况，偷换了词义。B是语义联想陷阱，把'截止日期'联想到'时间管理'讲一句道理，没给出情感回应。D完全离题，说别人来吃饭，与关心对方无关。",
+      "distractor_types": {
+        "A": "misinterpretation",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How do I get to the closest pharmacy?",
+      "options": {
+        "A": "That pharmacy has friendly staff.",
+        "B": "I usually shop in the evening.",
+        "C": "Yes, it's open until nine.",
+        "D": "Go straight and turn left."
+      },
+      "answer": "D",
+      "explanation": "说话人问怎么去最近的药店。正确答案D直接给出路线'直走再左转'，符合direct_topical范式(简单题可少量直答)。A是语义联想陷阱，把'药店'联想去夸店员态度，没给路线。B完全离题，说自己晚上购物的习惯，与路线无关。C答错了问题：说话人问的是'怎么走'，C却用是/否加营业时间来回答，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

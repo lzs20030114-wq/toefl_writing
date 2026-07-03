@@ -1,0 +1,270 @@
+{
+  "items": [
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I still can't decide which elective to take next term. It's between film history and intro to marine biology." },
+        { "speaker": "Man", "text": "Really? Those are pretty different. What's pulling you toward each one?" },
+        { "speaker": "Woman", "text": "Film history fits my schedule perfectly, but I've heard the marine biology professor is amazing. Her class meets at eight in the morning, though." },
+        { "speaker": "Man", "text": "Hmm. You're not exactly a morning person. Remember how you slept through our nine o'clock seminar all last year?" },
+        { "speaker": "Woman", "text": "That's a fair point. The early start would probably just wreck me." },
+        { "speaker": "Man", "text": "Then go with the one that actually fits your life. You'll get more out of it." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two students mainly discussing?",
+          "options": {
+            "A": "Which elective the woman should take next term",
+            "B": "Why the woman missed a morning seminar",
+            "C": "How to switch out of a marine biology class",
+            "D": "The best professors in the film department"
+          },
+          "answer": "A",
+          "explanation": "对话从头到尾都在讨论女生下学期该选电影史还是海洋生物学这门选修课，所以A正确。B只是男生提到的一个细节（她曾睡过早课），不是对话主旨，属于too_narrow。C说她想退掉海洋生物学，但她还没选这门课，属于对情境的误读reversed_situation。D把话题换成电影系最好的教授，对话根本没谈，属于wrong_topic。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Drop both electives from her schedule",
+            "B": "Ask to reschedule the biology class",
+            "C": "Sign up for the film history course",
+            "D": "Force herself to wake up early"
+          },
+          "answer": "C",
+          "explanation": "女生承认早八点会让她吃不消，男生建议选真正适合她生活作息的那门，而电影史正好契合她的日程，因此她很可能选电影史，C正确。A说她两门都退掉，对话没有任何依据，属于over_inference。B说去申请调整生物课时间，对话从未提及，属于unrelated_next_step。D说逼自己早起，但她明确表示早起会把她拖垮，等于她已否决了这个方案，属于rejected_option。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are we still on for the beach on Saturday? I've been looking forward to it all week." },
+        { "speaker": "Man", "text": "I want to, but I just checked the forecast — there's a storm rolling in Saturday afternoon, winds up to forty miles an hour." },
+        { "speaker": "Woman", "text": "Oh no. Could we go early and leave before it hits?" },
+        { "speaker": "Man", "text": "The thing is, the coastal road floods when it rains hard. We might not make it back." },
+        { "speaker": "Woman", "text": "I'd rather not get stranded. What if we moved the whole trip to Sunday? It looks clear then." },
+        { "speaker": "Man", "text": "Sunday works better for me anyway. Let's lock it in." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two friends mainly trying to decide?",
+          "options": {
+            "A": "Which beach along the coast to visit",
+            "B": "Whether to reschedule their beach trip",
+            "C": "How to avoid the flooded coastal road",
+            "D": "What gear to pack for the storm"
+          },
+          "answer": "B",
+          "explanation": "整段对话围绕周六有风暴、能否改期展开，最后决定改到周日，所以主旨是要不要重新安排海滩之行，B正确。A讨论去哪片海滩，对话根本没比较不同海滩，属于wrong_topic。C只是男生提到的一个理由（沿海公路会被淹），不是整段的核心议题，属于too_narrow。D说为风暴准备装备，对话没谈打包问题，属于wrong_topic。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two friends most likely do?",
+          "options": {
+            "A": "Cancel the trip completely",
+            "B": "Drive to the coast on Saturday morning",
+            "C": "Find an indoor activity for the weekend",
+            "D": "Go to the beach on Sunday instead"
+          },
+          "answer": "D",
+          "explanation": "两人商定把整个行程挪到天气晴朗的周日，男生还说周日对他更合适、就这么定了，因此他们很可能周日去海滩，D正确。A说彻底取消，但他们并未取消，只是改期，属于rejected_option。B说周六早上照样开车去，女生虽提过早点去，但因道路会被淹没而放弃，属于rejected_option。C说找个室内活动，对话从未提及室内计划，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Okay, for the dinner party on Friday, I'm putting you in charge of the cheese board. Any ideas?" },
+        { "speaker": "Man", "text": "Sure! I was thinking a sharp cheddar, some brie, and maybe a blue cheese for people who like strong flavors." },
+        { "speaker": "Woman", "text": "Brie and cheddar sound perfect, but let's skip the blue cheese. Half the group can't stand it." },
+        { "speaker": "Man", "text": "Good call. I'll grab some grapes and crackers to go with them, then." },
+        { "speaker": "Woman", "text": "Great. Oh, and can you get a baguette too? Mia's bringing that spinach dip she always makes." },
+        { "speaker": "Man", "text": "Will do. I'll swing by the market after my class this afternoon." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Which cheese did the woman decide not to include?",
+          "options": {
+            "A": "The sharp cheddar",
+            "B": "The brie",
+            "C": "The blue cheese",
+            "D": "A goat cheese"
+          },
+          "answer": "C",
+          "explanation": "女生明确说去掉蓝纹奶酪，因为一半人受不了它，所以C正确。A切达奶酪和B布里奶酪她都说很完美、要保留，属于改错关键事实的wrong_detail。D羊奶酪在对话里从未出现，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do this afternoon?",
+          "options": {
+            "A": "Buy the food at the market",
+            "B": "Prepare the spinach dip for the party",
+            "C": "Cancel the dinner party",
+            "D": "Ask friends to bring their own cheese"
+          },
+          "answer": "A",
+          "explanation": "男生说下课后要去市场，负责买奶酪、葡萄、饼干和法棍，所以他今天下午很可能去市场采购食材，A正确。B说他自己做菠菜蘸酱，但那是Mia带来的，与他无关，属于unrelated_next_step。C说取消聚会，对话毫无此意，属于over_inference。D说让朋友各自带奶酪，对话没有这个安排，属于unrelated_next_step。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You finally watched that mystery thriller everyone's talking about, right? What did you think?" },
+        { "speaker": "Man", "text": "Honestly, the plot twists were brilliant. I did not see the ending coming at all." },
+        { "speaker": "Woman", "text": "That's what I keep hearing. So you'd recommend it?" },
+        { "speaker": "Man", "text": "Mostly, yeah. My one complaint is that it's nearly three hours long. The middle section really dragged." },
+        { "speaker": "Woman", "text": "Three hours? Wow. I was going to see it tonight, but I've got an early lab tomorrow." },
+        { "speaker": "Man", "text": "Then maybe save it for the weekend. You won't want to watch it tired." },
+        { "speaker": "Woman", "text": "Yeah, that makes sense. I'll wait till Saturday when I can actually enjoy it." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What was the man's main criticism of the movie?",
+          "options": {
+            "A": "The plot twists were predictable",
+            "B": "The ending was disappointing",
+            "C": "The acting felt unconvincing",
+            "D": "It was too long and dragged"
+          },
+          "answer": "D",
+          "explanation": "男生唯一的不满是影片将近三个小时、中段特别拖沓，所以D正确。A说反转很好猜，但他恰恰称赞反转精彩、没料到结局，属于改错事实的wrong_detail。B说结局令人失望，也与他的评价相反，属于wrong_detail。C说表演不到位，对话从未提及演技，属于related_but_not_stated。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Watch the movie tonight after her lab",
+            "B": "Wait until the weekend to watch it",
+            "C": "Skip the movie because it's too long",
+            "D": "Ask the man to watch it again with her"
+          },
+          "answer": "B",
+          "explanation": "女生因为明天有早课，采纳了男生的建议，说要等到周六再看，所以她很可能周末才看这部电影，B正确。A说她今晚看，但她已因早课放弃今晚，属于rejected_option。C说她因为太长干脆不看了，但她仍打算看、只是推迟，属于over_inference。D说她请男生再陪看一遍，对话没有此意，属于unrelated_next_step。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore schedule",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, can we finally sort out a cleaning schedule? The kitchen's been a mess all week." },
+        { "speaker": "Man", "text": "Yeah, we should. How about I take the kitchen and you handle the bathroom?" },
+        { "speaker": "Woman", "text": "That works, but let's swap every other week so it's fair. I don't want to be stuck scrubbing the tub forever." },
+        { "speaker": "Man", "text": "Good idea. And should we pick a set day? Sunday mornings seem easy for both of us." },
+        { "speaker": "Woman", "text": "Sunday's perfect. I'll put a chart on the fridge so we don't forget whose turn it is." },
+        { "speaker": "Man", "text": "Nice. I'll set a reminder on my phone too, just in case." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman suggest to keep the chores fair?",
+          "options": {
+            "A": "Swapping tasks every other week",
+            "B": "Hiring a weekly cleaning service",
+            "C": "Doing all the chores together",
+            "D": "Cleaning the kitchen every day"
+          },
+          "answer": "A",
+          "explanation": "女生提议两人每隔一周互换任务，这样才公平、她才不会一直刷浴缸，所以A正确。B请每周清洁服务，对话从未提及，属于related_but_not_stated。C说两人一起做所有家务，但他们是分工负责厨房和浴室，属于wrong_detail。D说每天打扫厨房，但他们定的是周日固定打扫，属于wrong_detail。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Clean the bathroom right away",
+            "B": "Ask the man to do all chores",
+            "C": "Post a chore chart on the fridge",
+            "D": "Cancel the cleaning schedule entirely"
+          },
+          "answer": "C",
+          "explanation": "女生说她会在冰箱上贴一张表，好让两人记住轮到谁，所以她接下来很可能去做并张贴打扫值日表，C正确。A说她立刻去打扫浴室，对话没有立即行动的意思，属于unrelated_next_step。B说让男生包揽所有家务，与两人平分的约定相反，属于over_inference。D说彻底取消这个计划，与他们刚达成的安排矛盾，属于over_inference。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

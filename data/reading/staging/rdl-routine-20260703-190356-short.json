@@ -1,0 +1,136 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Maya, Quick update — the Photography Club meeting has moved to this Thursday at 6:30 PM in Room 118, Bell Hall, instead of our usual Tuesday slot. Please bring your $5 supplies fee if you haven't paid it yet. See you there! Best, Dev",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when will the Photography Club meeting now take place?",
+          "options": {
+            "A": "6:30 PM on Thursday",
+            "B": "6:30 PM on Tuesday",
+            "C": "8:00 PM on Thursday",
+            "D": "5:00 PM on Tuesday"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the meeting has moved to Thursday at 6:30 PM, replacing the usual Tuesday slot, so option A is correct."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the $5 supplies fee?",
+          "options": {
+            "A": "It covers snacks for every meeting.",
+            "B": "It must be paid at the door.",
+            "C": "It will be refunded to members later.",
+            "D": "It was already paid by some students."
+          },
+          "correct_answer": "D",
+          "explanation": "Dev asks Maya to bring the fee only 'if you haven't paid it yet,' which implies some members have already paid, making D the best inference."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Fire alarm testing will be conducted in Whitman Hall on Monday, October 14, from 9:00 AM to 11:00 AM. Alarms will sound intermittently during this period. Residents are advised to remain in their rooms and may contact the Facilities Office with any questions.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will the fire alarm testing be conducted?",
+          "options": {
+            "A": "Anderson Hall",
+            "B": "The Facilities Office",
+            "C": "Whitman Hall",
+            "D": "The residence lounge"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice specifies that testing will be conducted in Whitman Hall, so option C is correct."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the alarms during the testing period?",
+          "options": {
+            "A": "The alarms signal a test, not danger.",
+            "B": "The alarms will ring without stopping.",
+            "C": "The alarms require an immediate evacuation.",
+            "D": "The alarms are newly installed this week."
+          },
+          "correct_answer": "A",
+          "explanation": "Because residents are told to remain in their rooms while alarms sound intermittently, the alarms clearly signal a scheduled test rather than a real emergency, making A the best inference."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Sam, To replace your lost student ID, please visit the Campus Card Office in Room 210, Foster Center, before Friday, March 6. Bring a photo and the $10 replacement fee. Your new card will be ready within two business days. Thanks, Registrar Staff",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Sam bring to the Campus Card Office?",
+          "options": {
+            "A": "A form and five dollars",
+            "B": "An ID card and a receipt",
+            "C": "A passport and twenty dollars",
+            "D": "A photograph and ten dollars"
+          },
+          "correct_answer": "D",
+          "explanation": "The email instructs Sam to bring a photo and the $10 replacement fee, which option D paraphrases as a photograph and ten dollars."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when will Sam's new card be ready?",
+          "options": {
+            "A": "In one working day",
+            "B": "In two working days",
+            "C": "In four working days",
+            "D": "In one full week"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the new card will be ready within two business days, which option B restates as two working days."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: Fire alarm testing is scheduled in Bradley Hall on Wednesday, November 5, from 2:00 PM to 4:00 PM. All alarms will be activated briefly. Tampering with any alarm during testing will result in a $50 fine. Questions may be directed to the Housing Office.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the fire alarm testing occur?",
+          "options": {
+            "A": "Between 9:00 and 11:00 AM",
+            "B": "Between 12:00 and 2:00 PM",
+            "C": "Between 2:00 and 4:00 PM",
+            "D": "Between 4:00 and 6:00 PM"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice schedules testing from 2:00 PM to 4:00 PM, which option C restates as between 2:00 and 4:00 PM."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the alarms during the testing?",
+          "options": {
+            "A": "The alarms will stay silent throughout.",
+            "B": "The alarms do not mean real danger.",
+            "C": "The alarms require an immediate evacuation.",
+            "D": "The alarms will ring for the entire day."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the alarms are activated only briefly as part of scheduled testing, they do not indicate a genuine fire, making B the best inference."
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}
