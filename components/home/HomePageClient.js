@@ -17,6 +17,7 @@ import { countListeningMistakes } from "../../lib/listeningMistakes";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { StudyPlanColumn } from "./StudyPlanColumn";
+import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 
@@ -117,6 +118,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
   const isMobile = useIsMobile();
+
+  // 「我的题库」新功能一次性聚光灯引导（桌面端；移动端在 MobileHomePage 内自带）
+  const bankSpotlight = useSpotlightGate({
+    featureId: "my-bank-2026-07",
+    enabled: !isMobile && isLoggedIn && !isChallenge,
+    alreadyThere: activeSection === "my-bank",
+    targetSelector: '[data-section-id="my-bank"]',
+  });
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -368,6 +377,15 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           />
         </div>
       </div>
+      {bankSpotlight.open && !isChallenge && (
+        <FeatureSpotlight
+          targetSelector='[data-section-id="my-bank"]'
+          title="我的题库"
+          description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
+          onCta={() => { bankSpotlight.close(); setActiveSection("my-bank"); }}
+          onDismiss={bankSpotlight.close}
+        />
+      )}
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
       )}

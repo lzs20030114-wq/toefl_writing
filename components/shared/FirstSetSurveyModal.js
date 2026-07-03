@@ -293,6 +293,7 @@ export function FirstSetSurveyModal({
 
   return createPortal(
     <div
+      data-tp-overlay
       role="dialog"
       aria-modal="true"
       aria-label="新手体验问卷"
