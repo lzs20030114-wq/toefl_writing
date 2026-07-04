@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { RepeatTask } from "../../components/speaking/RepeatTask";
 import { InterviewTask } from "../../components/speaking/InterviewTask";
+import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import REPEAT_DATA from "../../data/speaking/bank/repeat.json";
 import INTERVIEW_DATA from "../../data/speaking/bank/interview.json";
 
@@ -77,6 +78,36 @@ function SpeakingPageClient() {
     setRandomSet(set);
   }, [type, isPractice]);
 
+  // 个人题库（用户导入的口语题）：运行时拉取当前 type，并入 practice picker（带「我的」标签）。
+  // 全局题库是构建期静态 import，无法每用户化；个人题只进 practice，不进 standard 随机池。
+  const [personalRaw, setPersonalRaw] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    setPersonalRaw([]);
+    fetchPersonalBank(type).then((rows) => { if (alive) setPersonalRaw(rows); });
+    return () => { alive = false; };
+  }, [type]);
+  const personalById = useMemo(() => {
+    const m = new Map();
+    for (const raw of personalRaw) m.set(String(raw.id), raw);
+    return m;
+  }, [personalRaw]);
+
+  // 把个人 raw set 归一化成任务组件吃的形状：repeat 补 per-sentence 稳定 id + difficulty 缺省；
+  // interview 组件只吃 {id,question,category,difficulty}，缺失优雅回退，无需补。
+  function resolvePersonalSet(raw) {
+    if (!raw) return null;
+    if (type === "repeat") {
+      const sentences = (Array.isArray(raw.sentences) ? raw.sentences : []).map((s, i) => ({
+        ...s,
+        id: s.id || `${raw.id}_s${i}`,
+        difficulty: s.difficulty || "medium",
+      }));
+      return { ...raw, sentences };
+    }
+    return raw; // interview: consumed as-is
+  }
+
   const onExit = () => router.push("/?section=speaking");
 
   // Pro gate
@@ -99,13 +130,13 @@ function SpeakingPageClient() {
 
   // Practice mode: topic picker when no set selected
   if (isPractice && !pickedSetId) {
-    const bank = type === "repeat" ? REPEAT_DATA : INTERVIEW_DATA;
-    if ((bank.items || []).length === 0) {
+    const staticTopics = type === "repeat" ? buildRepeatTopics() : buildInterviewTopics();
+    const items = [...mapPersonalToPicker(type, personalRaw), ...staticTopics];
+    if (items.length === 0) {
       return <EmptyState type={type} onExit={onExit} />;
     }
     const doneKey = type === "repeat" ? DONE_KEYS.REPEAT : DONE_KEYS.INTERVIEW;
     const doneIds = loadDoneIds(doneKey);
-    const items = type === "repeat" ? buildRepeatTopics() : buildInterviewTopics();
     const title = type === "repeat" ? "Listen & Repeat" : "Take an Interview";
     const section = type === "repeat" ? "Speaking Practice | Task 1" : "Speaking Practice | Task 2";
 
@@ -122,11 +153,12 @@ function SpeakingPageClient() {
     );
   }
 
-  // Resolve the active set
+  // Resolve the active set — personal bank first (usr_ ids absent from static bank), then static.
   let activeSet;
   if (isPractice && pickedSetId) {
     const bank = type === "repeat" ? REPEAT_DATA : INTERVIEW_DATA;
-    activeSet = (bank.items || []).find((s) => s.id === pickedSetId);
+    activeSet = resolvePersonalSet(personalById.get(String(pickedSetId)))
+      || (bank.items || []).find((s) => s.id === pickedSetId);
   } else {
     activeSet = randomSet;
   }

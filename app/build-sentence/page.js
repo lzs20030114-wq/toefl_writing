@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BuildSentenceTask } from "../../components/buildSentence/BuildSentenceTask";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
@@ -10,7 +10,13 @@ import { normalizeReportLanguage } from "../../lib/reportLanguage";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { loadDoneIds } from "../../lib/sessionStore";
 import { translateGrammarPoint } from "../../lib/utils";
+import { fetchPersonalBank } from "../../lib/userBank/personalBank";
 import BS_DATA from "../../data/buildSentence/questions.json";
+
+// Synthetic category id for the user's imported "My Bank" build questions. 'gp-' prefix aligns
+// with the static grammar-category ids; 'personal' is not a real grammar_point, so the static
+// grammarCategory() logic never produces it — no collision with the built-in categories.
+const PERSONAL_CATEGORY_ID = "gp-personal";
 
 /* ── Grammar-point canonical category mapping ─────────────────────── */
 function grammarCategory(rawTag) {
@@ -60,7 +66,15 @@ function buildGrammarTopics() {
 }
 
 /* ── Collect questions for a grammar category ─────────────────────── */
-function questionsForCategory(categoryId) {
+// personalQuestions = the user's imported build题（raw promptData with a usr_ id）. For the
+// synthetic "My Bank" category we return those directly; every other id is a static grammar
+// category resolved from the global bank. Personal questions carry no integer __sourceSetId,
+// so they never pollute the global done-set (see useBuildSentenceSession done-set filtering).
+function questionsForCategory(categoryId, personalQuestions = []) {
+  if (categoryId === PERSONAL_CATEGORY_ID) {
+    return (Array.isArray(personalQuestions) ? personalQuestions : [])
+      .map((q) => ({ ...q, __sourceGroupId: categoryId }));
+  }
   const cat = categoryId.replace(/^gp-/, "");
   const allQuestions = (BS_DATA.question_sets || []).flatMap((s) => s.questions || []);
   return allQuestions
@@ -93,8 +107,9 @@ function saveBatchProgress(categoryId, batchIdx, data) {
 }
 
 /* ── Batch questions for a category ──────────────────────────────── */
-function getBatchesForCategory(categoryId) {
-  const questions = questionsForCategory(categoryId);
+// slice() naturally allows a short tail batch, so 3-5 personal questions form one valid batch.
+function getBatchesForCategory(categoryId, personalQuestions = []) {
+  const questions = questionsForCategory(categoryId, personalQuestions);
   const batches = [];
   for (let i = 0; i < questions.length; i += BATCH_SIZE) {
     batches.push(questions.slice(i, i + BATCH_SIZE));
@@ -103,9 +118,9 @@ function getBatchesForCategory(categoryId) {
 }
 
 /* ── Set List View ───────────────────────────────────────────────── */
-function PracticeSetList({ categoryId, onSelect, onBack }) {
-  const catName = categoryId.replace(/^gp-/, "");
-  const batches = getBatchesForCategory(categoryId);
+function PracticeSetList({ categoryId, personalQuestions, onSelect, onBack }) {
+  const catName = categoryId === PERSONAL_CATEGORY_ID ? "我的题库" : categoryId.replace(/^gp-/, "");
+  const batches = getBatchesForCategory(categoryId, personalQuestions);
   const totalQ = batches.reduce((s, b) => s + b.length, 0);
 
   return (
@@ -175,16 +190,37 @@ function BuildSentencePageClient() {
   const [pickedBatchIdx, setPickedBatchIdx] = useState(null);
   const onExit = () => router.push(isPractice ? "/?mode=practice" : "/");
 
+  // 个人题库（用户导入的连词成句题）：运行时拉取，仅并入 practice 分类卡「我的题库」。
+  // 全局题库是构建期静态 import，无法每用户化；个人题只进 practice，不进 standard/random，也不进模考。
+  // 已知且接受的口径：BS 练习页本身无 Pro gate，过期 Pro 仍能练已导入的存量个人题——
+  // 导入侧 (/extract、/api/user-bank POST) 是 Pro-gated，泄漏面仅限「练已存量」，不影响新增。
+  const [personalQuestions, setPersonalQuestions] = useState([]);
+  useEffect(() => {
+    if (!isPractice) return;
+    let alive = true;
+    fetchPersonalBank("build").then((rows) => { if (alive) setPersonalQuestions(rows); });
+    return () => { alive = false; };
+  }, [isPractice]);
+
   /* Stage 1: Category picker */
   if (isPractice && !pickedCategoryId) {
     const doneIds = loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP);
     const doneStrings = new Set([...doneIds].map(String));
+    // Append a synthetic 「我的题库」 card only when the user has imported build questions.
+    const personalCard = personalQuestions.length > 0
+      ? [{
+          id: PERSONAL_CATEGORY_ID,
+          tag: `${personalQuestions.length} 题`,
+          title: "📥 我的题库",
+          subtitle: "你导入的连词成句题",
+        }]
+      : [];
     return (
       <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title="Build a Sentence"
           section="Writing Practice | Task 1"
-          items={buildGrammarTopics()}
+          items={[...personalCard, ...buildGrammarTopics()]}
           doneIds={doneStrings}
           accent={{ color: "#D97706", soft: "#FFFBEB" }}
           onSelect={(id) => setPickedCategoryId(id)}
@@ -200,6 +236,7 @@ function BuildSentencePageClient() {
       <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <PracticeSetList
           categoryId={pickedCategoryId}
+          personalQuestions={personalQuestions}
           onSelect={(idx) => setPickedBatchIdx(idx)}
           onBack={() => setPickedCategoryId(null)}
         />
@@ -211,7 +248,7 @@ function BuildSentencePageClient() {
   let practiceQuestions = null;
   let initialResults = null;
   if (isPractice && pickedCategoryId && pickedBatchIdx !== null) {
-    const batches = getBatchesForCategory(pickedCategoryId);
+    const batches = getBatchesForCategory(pickedCategoryId, personalQuestions);
     practiceQuestions = batches[pickedBatchIdx] || [];
 
     const progress = loadBatchProgress(pickedCategoryId, pickedBatchIdx);

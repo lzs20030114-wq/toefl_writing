@@ -7,13 +7,27 @@ import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
 const { callQwenVision, bufferToDataUrl } = require("../../../../lib/ai/qwenVision");
 const { IMAGE_EXTRACTION_PROMPTS, SUPPORTED_IMAGE_TYPES } = require("../../../../lib/ai/prompts/imageExtraction");
-const { extractJson, postProcessBuild } = require("../../../../lib/ai/prompts/questionExtraction");
-const { sniffImageMime } = require("../../../../lib/userBank/imageSniff");
+const {
+  extractJson,
+  postProcessBuild,
+  validateBuildForImport,
+  postProcessRepeat,
+  postProcessInterview,
+  postProcessRdl,
+  postProcessAp,
+  postProcessCtw,
+  postProcessLcr,
+  postProcessLa,
+  postProcessLat,
+  postProcessLc,
+} = require("../../../../lib/ai/prompts/questionExtraction");
+const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
 export const maxDuration = 60; // Qwen-VL 典型 3-15s；给 Vercel 留足余量
 
 const limiter = createRateLimiter("user-bank-extract-image", { window: 60_000, max: 10 });
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4 MB（Vercel body ~4.5MB，客户端已下采样）
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // **合计** 4 MB（Vercel body ~4.5MB，客户端已下采样）
+const MAX_IMAGES = 3; // AP 学术短文常跨 2-3 张截图；单图上传天然向后兼容
 
 // Origin guard copied verbatim from /api/ai (app/api/ai/route.js:34-63) / user-bank/extract.
 function normalizeHost(raw) {
@@ -51,12 +65,13 @@ export async function POST(request) {
     const form = await request.formData().catch(() => null);
     if (!form) return jsonError(400, "Expected multipart/form-data");
 
-    const type = String(form.get("type") || ""); // 'academic' | 'email'（extractor key）
+    const type = String(form.get("type") || ""); // extractor key（academic/email/build/repeat/interview/rdl/ap）
     const userCode = String(form.get("userCode") || "");
-    const file = form.get("image");
+    // 1-3 张图（form.getAll 对单图上传返回长度 1 的数组 → 向后兼容旧客户端）。
+    const files = form.getAll("image").filter((f) => f && typeof f.arrayBuffer === "function");
 
     if (!SUPPORTED_IMAGE_TYPES.includes(type)) return jsonError(400, "Invalid type");
-    if (!file || typeof file.arrayBuffer !== "function") return jsonError(400, "Missing image");
+    if (files.length === 0) return jsonError(400, "Missing image");
 
     // Pro + 每日额度门禁：放在付费 VL 调用之前。
     const gate = await gateUserBankRequest({ userCode });
@@ -67,19 +82,18 @@ export async function POST(request) {
       return jsonError(503, "图片识别暂未开通（DASHSCOPE_API_KEY 未配置），请改用粘贴文本。");
     }
 
-    const buf = Buffer.from(await file.arrayBuffer());
-    if (buf.length === 0) return jsonError(400, "Empty image");
-    if (buf.length > MAX_IMAGE_BYTES) {
-      return jsonError(413, `图片过大（>${Math.round(MAX_IMAGE_BYTES / 1024 / 1024)}MB），请压缩后重试`);
-    }
-    const mime = sniffImageMime(buf);
-    if (!mime) return jsonError(415, "仅支持 JPEG / PNG / WebP 图片");
+    // 逐张 magic-byte 嗅探 + 张数/合计体积门（helper 可单测，路由只做搬运）。
+    const buffers = [];
+    for (const f of files) buffers.push(Buffer.from(await f.arrayBuffer()));
+    const batch = validateImageBatch(buffers, { maxCount: MAX_IMAGES, maxTotalBytes: MAX_IMAGE_BYTES });
+    if (!batch.ok) return jsonError(batch.status, batch.error);
 
     let rawContent;
     try {
       const out = await callQwenVision({
         systemPrompt: IMAGE_EXTRACTION_PROMPTS[type], // 含 SAFETY_PREAMBLE 注入防护
-        imageUrls: bufferToDataUrl(buf, mime),
+        // callQwenVision 的 imageUrls 本就支持数组（lib/ai/qwenVision.js:40-54）。
+        imageUrls: batch.images.map((im) => bufferToDataUrl(im.buffer, im.mime)),
       });
       rawContent = out?.content || "";
     } catch (e) {
@@ -97,9 +111,39 @@ export async function POST(request) {
       );
     }
 
-    // 与粘贴路径对齐：build 类型需服务端补算（当前 my-bank 仅 academic/email，此处为将来兼容）。
+    // 与粘贴路径对齐：build/repeat/interview 类型需服务端补算（难度/词数确定性推导）。
     if (type === "build") {
-      questions = questions.map((q) => postProcessBuild(q));
+      // Same as the paste path: postProcessBuild backfills, then validateBuildForImport does the
+      // deterministic distractor-inference + schema fatal gate + ambiguity warning.
+      questions = questions.map((q) => validateBuildForImport(postProcessBuild(q)));
+    } else if (type === "repeat") {
+      questions = questions.map((q) => postProcessRepeat(q));
+    } else if (type === "interview") {
+      questions = questions.map((q) => postProcessInterview(q));
+    } else if (type === "rdl") {
+      questions = questions.map((q) => postProcessRdl(q));
+    } else if (type === "ap") {
+      questions = questions.map((q) => postProcessAp(q));
+    } else if (type === "ctw") {
+      // 图片路径语义：传一张含英文段落的资料照片 → Qwen-VL 纯转写文字 → 服务端机械挖空
+      //（不是还原已挖空的真题）；产物与粘贴路径完全一致。
+      questions = questions.map((q) => postProcessCtw(q));
+    } else if (type === "lcr") {
+      // 图片语义：LCR 真题界面常只有选项没有口播句 → speaker:"" → postProcessLcr 标 invalid，
+      // 引导用户手补口播句（预览不可编辑就改贴文本）。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLcr(q));
+    } else if (type === "la") {
+      // 图片语义：LA 真题界面常只有题没公告稿 → announcement:"" → postProcessLa 标 invalid，
+      // 引导用户改贴公告文本。机经帖截图（含公告稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLa(q));
+    } else if (type === "lat") {
+      // 图片语义：LAT 真题界面常只有题没讲座稿 → transcript:"" → postProcessLat 标 invalid，
+      // 引导用户改贴讲座文本。机经帖截图（含讲座稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLat(q));
+    } else if (type === "lc") {
+      // 图片语义：LC 真题界面常只有题没对话稿 → conversation:[] → postProcessLc 标 invalid（轮数不足），
+      // 引导用户改贴对话文本。机经帖截图（含对话稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLc(q));
     }
 
     return Response.json({ ok: true, questions });
