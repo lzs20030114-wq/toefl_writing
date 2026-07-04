@@ -9,6 +9,7 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
+import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import LCR_DATA from "../../data/listening/bank/lcr.json";
 import LA_DATA from "../../data/listening/bank/la.json";
 import LC_DATA from "../../data/listening/bank/lc.json";
@@ -64,6 +65,71 @@ function buildLCRTopics() {
   }));
 }
 
+// LA / LC / LAT practice topic builders. Previously the picker hardcoded LCR for ALL
+// four subtypes, so la/lc/lat practice links (\u9996\u9875 mode=practice) resolved into the LCR
+// list and then died on a wrong-bank id lookup ("\u6682\u65e0\u9898\u76ee"). Each now builds its own list:
+// tag = context/subject, title = situation/topic first line, subtitle = a short descriptor.
+function buildLATopics() {
+  return (LA_DATA.items || []).map((i) => ({
+    id: i.id,
+    tag: CONTEXT_LABELS[i.context] || i.context || "Announcement",
+    title: firstLine(i.situation || i.announcement),
+    subtitle: `${(i.questions || []).length} \u9898`,
+  }));
+}
+function buildLCTopics() {
+  return (LC_DATA.items || []).map((i) => ({
+    id: i.id,
+    tag: CONTEXT_LABELS[i.context] || i.context || "Conversation",
+    title: firstLine(i.situation),
+    subtitle: `${(i.questions || []).length} \u9898`,
+  }));
+}
+function buildLATTopics() {
+  return (LAT_DATA.items || []).map((i) => ({
+    id: i.id,
+    tag: i.subject || "Lecture",
+    title: firstLine(i.topic || i.transcript),
+    subtitle: `${(i.questions || []).length} \u9898`,
+  }));
+}
+
+// Per-subtype picker config: which topic builder, done-key, and picker copy. This replaces
+// the LCR-hardcoded practice branch \u2014 la/lc/lat are now first-class practice modes.
+const PRACTICE_CONFIG = {
+  lcr: {
+    build: buildLCRTopics,
+    doneKey: DONE_STORAGE_KEYS.LISTENING_LCR,
+    title: "Listen & Choose a Response",
+    section: "Listening Practice | LCR",
+    description: "Listen to a speaker and choose the most appropriate response. No time limit in practice mode.",
+  },
+  la: {
+    build: buildLATopics,
+    doneKey: DONE_STORAGE_KEYS.LISTENING_LA,
+    title: "Listen to an Announcement",
+    section: "Listening Practice | Announcement",
+    description: "Listen to a campus announcement and answer the questions. No time limit in practice mode.",
+  },
+  lc: {
+    build: buildLCTopics,
+    doneKey: DONE_STORAGE_KEYS.LISTENING_LC,
+    title: "Listen to a Conversation",
+    section: "Listening Practice | Conversation",
+    description: "Listen to a conversation between two speakers and answer the questions. No time limit in practice mode.",
+  },
+  lat: {
+    build: buildLATTopics,
+    doneKey: DONE_STORAGE_KEYS.LISTENING_LAT,
+    title: "Listen to an Academic Talk",
+    section: "Listening Practice | Academic Talk",
+    description: "Listen to an academic lecture and answer the questions. No time limit in practice mode.",
+  },
+};
+
+// Only LCR is wired into the personal question bank in this phase (la/lc/lat added later).
+const PERSONAL_PRACTICE_TYPES = new Set(["lcr"]);
+
 function ListeningPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -79,6 +145,23 @@ function ListeningPageClient() {
 
   // Practice mode: topic picker state
   const [pickedItemId, setPickedItemId] = useState(null);
+
+  // Personal-bank items for the current subtype (practice only; standard/planner never see them).
+  // rawItems drives the picker "我的" cards; personalById resolves the picked id back to the
+  // full item so it can be handed to the task component (audio_url may be null → AudioPlayer TTS).
+  const [personalRaw, setPersonalRaw] = useState([]);
+  useEffect(() => {
+    let cancelled = false;
+    if (!isPractice || !PERSONAL_PRACTICE_TYPES.has(type)) {
+      setPersonalRaw([]);
+      return;
+    }
+    fetchPersonalBank(type)
+      .then((rows) => { if (!cancelled) setPersonalRaw(Array.isArray(rows) ? rows : []); })
+      .catch(() => { if (!cancelled) setPersonalRaw([]); });
+    return () => { cancelled = true; };
+  }, [type, isPractice]);
+  const personalById = new Map(personalRaw.map((p) => [p.id, p]));
 
   // Standard mode: random batch or single item
   const [randomItems, setRandomItems] = useState(null);
@@ -137,17 +220,20 @@ function ListeningPageClient() {
 
   // ── Practice mode: show TopicPicker when no item selected ──
   if (isPractice && !pickedItemId) {
-    const doneKey = DONE_STORAGE_KEYS.LISTENING_LCR;
-    const doneIds = loadDoneIds(doneKey);
-    const items = buildLCRTopics();
-    const title = "Listen & Choose a Response";
-    const section = "Listening Practice | LCR";
+    const cfg = PRACTICE_CONFIG[type] || PRACTICE_CONFIG.lcr;
+    const doneIds = loadDoneIds(cfg.doneKey);
+    // Prepend the user's personal "我的" cards before the global bank (practice-only,
+    // like the reading/speaking pages). Only wired for types in PERSONAL_PRACTICE_TYPES.
+    const personalItems = PERSONAL_PRACTICE_TYPES.has(type)
+      ? mapPersonalToPicker(type, personalRaw)
+      : [];
+    const items = [...personalItems, ...cfg.build()];
 
     return (
       <TopicPicker
-        title={title}
-        section={section}
-        description="Listen to a speaker and choose the most appropriate response. No time limit in practice mode."
+        title={cfg.title}
+        section={cfg.section}
+        description={cfg.description}
         items={items}
         doneIds={doneIds}
         accent={LISTENING_ACCENT}
@@ -165,8 +251,12 @@ function ListeningPageClient() {
   let taskItems = null;
   let singleItem = null;
 
-  if (isPractice && pickedItemId && bankData) {
-    singleItem = bankData.items.find((i) => i.id === pickedItemId) || null;
+  if (isPractice && pickedItemId) {
+    // Personal-bank items win over the global bank (both are practice-only). A personal
+    // item may have audio_url=null → LCRTask/AudioPlayer falls back to browser TTS.
+    singleItem =
+      personalById.get(pickedItemId) ||
+      (bankData ? bankData.items.find((i) => i.id === pickedItemId) || null : null);
   } else {
     taskItems = randomItems;
   }
@@ -243,7 +333,9 @@ function ListeningPageClient() {
         ...reviewData,
       },
     });
-    addDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR, Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id]);
+    // Per-subtype done key (was hardcoded to LCR for all four subtypes).
+    const doneKey = (PRACTICE_CONFIG[subtype] || PRACTICE_CONFIG.lcr).doneKey;
+    addDoneIds(doneKey, Array.isArray(itemsUsed) ? itemsUsed.map((i) => i.id) : [itemsUsed.id]);
   }
 
   const taskOnExit = isPractice ? () => setPickedItemId(null) : onExit;

@@ -5,10 +5,15 @@ import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseA
 import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 import { jsonError } from "../../../lib/apiResponse";
 import { gateUserBankRequest } from "../../../lib/userBankAuth";
+import { stripClientAudioUrl, userAudioStoragePath } from "../../../lib/userBank/listeningAudio";
 
 // Storage whitelist follows shipped types. Widen alongside each launch (discussion+email
-// P0; repeat+interview, then build, then rdl+ap, then ctw). The DB CHECK covers all 12 subtypes already.
-const VALID_TYPES = new Set(["discussion", "email", "repeat", "interview", "build", "rdl", "ap", "ctw"]);
+// P0; repeat+interview, then build, then rdl+ap, then ctw, then lcr). The DB CHECK covers all 12 subtypes already.
+const VALID_TYPES = new Set(["discussion", "email", "repeat", "interview", "build", "rdl", "ap", "ctw", "lcr"]);
+// Listening audio_url is minted SERVER-SIDE only (by /api/user-bank/render-audio). A
+// client-supplied audio_url is stripped on save (security patch A) and only OUR-bucket URLs under
+// this user's own prefix are reaped on delete (patch B). Both live in lib/userBank/listeningAudio
+// (pure + unit-tested); see stripClientAudioUrl / userAudioStoragePath.
 const VALID_STATUS = new Set(["ready", "draft"]);
 const ITEM_MAX_BYTES = 16 * 1024;
 const MAX_ITEMS_PER_REQUEST = 50;
@@ -50,6 +55,18 @@ function isOriginAllowed(request) {
     .map((v) => normalizeHost(v))
     .filter(Boolean);
   return [host, ...xfh].includes(originHost);
+}
+
+// Best-effort delete of a user's own rendered audio object. Never throws. Path derivation +
+// same-user whitelist lives in userAudioStoragePath (lib/userBank/listeningAudio, unit-tested).
+async function reapUserAudio(code, audioUrl) {
+  const path = userAudioStoragePath(code, audioUrl);
+  if (!path) return;
+  try {
+    await supabaseAdmin.storage.from("listening_audio").remove([path]);
+  } catch {
+    /* ignore — nightly sweep is the backstop */
+  }
 }
 
 function validateItem(item, fallbackType) {
@@ -117,14 +134,20 @@ export async function POST(request) {
 
     // One Date.now() per request; index disambiguates the batch. 'usr_' reserved prefix.
     const ts = Date.now();
-    const rows = items.map((item, i) => ({
-      user_code: code,
-      type: String(item.type || fallbackType).toLowerCase(),
-      data: item.data,
-      status: item.status && VALID_STATUS.has(String(item.status)) ? String(item.status) : "ready",
-      source: body?.source || item.source || null,
-      item_id: `usr_${code}_${ts}_${i}`,
-    }));
+    const rows = items.map((item, i) => {
+      const rowType = String(item.type || fallbackType).toLowerCase();
+      // Security patch A: strip any client-supplied audio_url on listening items — audio is minted
+      // server-side only (/api/user-bank/render-audio). Never塞 a client URL into <audio src>.
+      const data = stripClientAudioUrl(rowType, item.data);
+      return {
+        user_code: code,
+        type: rowType,
+        data,
+        status: item.status && VALID_STATUS.has(String(item.status)) ? String(item.status) : "ready",
+        source: body?.source || item.source || null,
+        item_id: `usr_${code}_${ts}_${i}`,
+      };
+    });
 
     const { data: inserted, error } = await supabaseAdmin
       .from("user_question_banks")
@@ -173,8 +196,18 @@ export async function DELETE(request) {
       return jsonError(400, "Provide either ?id= or ?itemId=");
     }
 
-    const { data, error } = await query.select("id");
+    // Return data too so we can reap any server-rendered audio object (patch B). The delete
+    // is scoped to .eq('user_code'), so returned rows are always this user's own.
+    const { data, error } = await query.select("id,data");
     if (error) return jsonError(400, error.message || "Delete failed");
+
+    // Security patch B: best-effort reap the storage object for a listening item whose
+    // audio_url points at OUR bucket under this user's own prefix (listening_audio/user/{code}/…).
+    // Failure is ignored — the nightly sweep is the backstop for orphans.
+    // FUTURE: a scheduled routine should list `user/` and delete objects with no matching row.
+    await Promise.all(
+      (data || []).map((row) => reapUserAudio(code, row?.data?.audio_url))
+    );
 
     return Response.json({ ok: true, removed: (data || []).length });
   } catch (e) {

@@ -63,7 +63,14 @@ const TYPE_GROUPS = [
   {
     id: "listening", label: "听力", icon: "🎧", accent: SECTION_ACCENTS.listening,
     types: [
-      { key: "lcr", label: "选择回应", en: "Choose a Response", live: false },
+      {
+        key: "lcr", stored: "lcr", label: "选择回应", en: "Choose a Response", live: true,
+        practice: "/listening?type=lcr&mode=practice",
+        // 产品口径：收「口播句 + 4 选项 + 答案」机经文字（答案可缺，AI 代解+复核）。真题界面截图
+        // 常只有选项没有口播句 → 会被标 invalid，引导手补口播句（见附录 C LCR §3）。保存后自动
+        // 用 edge-tts 给口播句配音（免费，best-effort；失败则练习时浏览器朗读）。
+        placeholder: "粘贴听力选择回应题：① 口播的那句英文 ② 四个回应选项（A-D）③ 答案（可缺，AI 会代解）。一次可粘多道。保存后自动配音。",
+      },
       { key: "la", label: "听公告", en: "Announcement", live: false },
       { key: "lc", label: "听对话", en: "Conversation", live: false },
       { key: "lat", label: "学术讲座", en: "Academic Talk", live: false },
@@ -101,6 +108,7 @@ const INVALID_HINT = {
   rdl: "材料原文 + 至少 1 道 A-D 选项齐全的题",
   ap: "文章全文 + A-D 选项齐全的题目",
   ctw: "45-120 词英文原文（能挖出 10 个空）",
+  lcr: "口播句 + A-D 四个回应选项",
 };
 
 const BD = C.bd2 || "#e2e8f0";
@@ -111,6 +119,20 @@ const CLIENT_TOTAL_UPLOAD_BYTES = Math.floor(3.8 * 1024 * 1024); // 服务端合
 
 // 阅读 MCQ 题型（rdl/ap）：预览带逐题答案选择器 + verify 复核徽章。
 const READING_KEYS = new Set(["rdl", "ap"]);
+// 听力选择回应（lcr）：一条即一题（speaker + options + answer），复用「答案选择器 + verify 徽章」
+// 预览与 packaging，但形状是单题。VERIFY_KEYS = 需要跑 /api/user-bank/verify 的全部题型。
+const LCR_KEYS = new Set(["lcr"]);
+const VERIFY_KEYS = new Set([...READING_KEYS, ...LCR_KEYS]);
+
+// 归一化取「小题列表」：rdl/ap 是 q.questions[]；lcr 单题→包成 1 元素数组（stem=口播句），
+// 让答案选择器 / effectiveAnswer / verify 徽章走同一套下标逻辑（i=item, j=小题）。
+function itemQuestions(typeKey, q) {
+  if (LCR_KEYS.has(typeKey)) {
+    if (!q) return [];
+    return [{ stem: q.speaker, options: q.options, correct_answer: q.answer }];
+  }
+  return Array.isArray(q?.questions) ? q.questions : [];
+}
 
 // CTW 预览：所见即所练——直接用服务端机械挖空产出的 blanked_text；缺时按 blanks 现算一份
 //（position=全局词索引；缺口=original_word.length-fragment.length，与 CTWTask.js:111 同口径）。
@@ -186,12 +208,23 @@ function isValidCtw(q) {
     !!(q?.passage && String(q.passage).trim()) &&
     Array.isArray(q?.blanks) && q.blanks.length >= 1;
 }
+// LCR: server (postProcessLcr) stamps q.invalid on schema failure. Client re-checks the
+// essentials — speaker + complete A-D options present (so a partial AI response can't slip
+// through). NOTE: like reading, the ANSWER may still be null here; it's enforced at SAVE time
+// (用户点选 / 抽取自带 / verify AI 代解).
+function isValidLcr(q) {
+  const opts = q?.options && typeof q.options === "object" ? q.options : null;
+  return q?.invalid !== true &&
+    !!(q?.speaker && String(q.speaker).trim()) && !!opts &&
+    ANSWER_KEYS.every((k) => String(opts[k] || "").trim());
+}
 function isValid(typeKey, q) {
   if (typeKey === "email") return isValidEmail(q);
   if (typeKey === "repeat") return isValidRepeat(q);
   if (typeKey === "interview") return isValidInterview(q);
   if (typeKey === "build") return isValidBuild(q);
   if (typeKey === "ctw") return isValidCtw(q);
+  if (LCR_KEYS.has(typeKey)) return isValidLcr(q);
   if (READING_KEYS.has(typeKey)) return isValidReading(q);
   return isValidAcademic(q);
 }
@@ -318,6 +351,10 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
   const [answerPick, setAnswerPick] = useState({});
   const verifyGenRef = useRef(0);
 
+  // 听力配音态（保存后自动为每条 LCR 调 /api/user-bank/render-audio，串行）。
+  // audioMsg = 顶部一行进度文案（配音中… / ✓ 已配音 N 条 / ⚠ M 条将用浏览器朗读）。best-effort。
+  const [audioMsg, setAudioMsg] = useState("");
+
   const [list, setList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
 
@@ -360,10 +397,11 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
 
   // 每题的「生效答案」：用户点选 > 抽取自带（用户材料里的答案键）> verify 的 AI 代解。
   // 三者皆无 → null（保存前必须解决：等复核或手动点选）。
+  // 归一化取答案：rdl/ap 从 questions[j].correct_answer；lcr 单题从 item.answer（itemQuestions 已归一）。
   function effectiveAnswer(i, j) {
     const picked = answerPick[`${i}:${j}`];
     if (picked) return picked;
-    const own = normAnswer(parsed?.[i]?.questions?.[j]?.correct_answer);
+    const own = normAnswer(itemQuestions(typeKey, parsed?.[i])[j]?.correct_answer);
     if (own) return own;
     const vr = verifyMap[i];
     const r = vr?.status === "done" ? (vr.results || [])[j] : null;
@@ -412,8 +450,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     setSelected(next);
     setVerifyMap({});
     setAnswerPick({});
-    if (READING_KEYS.has(typeKey)) {
-      runVerifyAll(questions, typeKey); // fire-and-forget（内部逐 item 兜错）
+    if (VERIFY_KEYS.has(typeKey)) {
+      runVerifyAll(questions, typeKey); // fire-and-forget（内部逐 item 兜错；lcr 也走）
     }
   }
 
@@ -551,6 +589,25 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
         data: bankFields,
       }));
     }
+    if (LCR_KEYS.has(typeKey)) {
+      // One DB item per LCR question. Resolve the answer (点选 > 抽取自带 > AI 代解——handleSave
+      // 已保证可解), backfill explanation from verify reasoning when the source had none, and
+      // strip preview-only advisory fields. audio_url is NEVER sent from the client (server strips
+      // it anyway, security patch A) — it's minted by /api/user-bank/render-audio after save.
+      return chosenIdx.map((i) => {
+        const { warnings: _w, invalid: _i, invalid_reason: _ir, audio_url: _au, ...bank } = parsed[i];
+        const vr = verifyMap[i];
+        const r = vr?.status === "done" ? (vr.results || [])[0] : null;
+        const explanation = String(parsed[i]?.explanation || "").trim() || String(r?.explanation || "").trim();
+        return {
+          data: {
+            ...bank,
+            answer: effectiveAnswer(i, 0),
+            ...(explanation ? { explanation } : {}),
+          },
+        };
+      });
+    }
     if (typeKey === "repeat") {
       return [{
         data: {
@@ -580,21 +637,53 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     return chosen.map((q) => ({ data: q }));
   }
 
+  // 保存成功后串行为每条听力题配音（edge-tts）。best-effort：整体 try/catch，单条失败继续；
+  // 顶部一行状态徽章：配音中… → ✓ 已配音 N 条（失败的 M 条练习时会用浏览器朗读）。
+  async function renderAudioForSaved(savedItems) {
+    const ids = savedItems.map((it) => it.item_id).filter(Boolean);
+    if (ids.length === 0) { setAudioMsg(""); return; }
+    setAudioMsg(`配音中…（0/${ids.length}）`);
+    let done = 0;
+    let ok = 0;
+    for (const itemId of ids) {
+      try {
+        const res = await fetch("/api/user-bank/render-audio", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userCode: code, itemId }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json?.ok && json.audio_url) ok += 1;
+      } catch {
+        /* best-effort：失败=练习时浏览器朗读 */
+      }
+      done += 1;
+      setAudioMsg(`配音中…（${done}/${ids.length}）`);
+    }
+    const failed = ids.length - ok;
+    setAudioMsg(
+      failed === 0
+        ? `✓ 已为 ${ok} 道配音`
+        : `✓ 已配音 ${ok} 道 · ⚠ ${failed} 道将用浏览器朗读（配音失败不影响练习）`
+    );
+  }
+
   async function handleSave() {
     setErr("");
     setSavedMsg("");
+    setAudioMsg("");
     if (!parsed) return;
     const chosenIdx = [...selected].sort((a, b) => a - b).filter((i) => isValid(typeKey, parsed[i]));
     const chosen = chosenIdx.map((i) => parsed[i]);
     if (chosen.length === 0) { setErr("没有可保存的题（被选中的题缺少必要字段）"); return; }
-    // 阅读题：每小题必须有生效答案（RDLTask 判分依赖 correct_answer，缺失会把用户永远判错）。
-    // verify fail-open 不阻塞保存的前提是用户可手动点选补齐——这里就是那道闸。
-    if (READING_KEYS.has(typeKey)) {
+    // MCQ 题（阅读 rdl/ap + 听力 lcr）：每小题必须有生效答案（判分依赖 correct_answer/answer，
+    // 缺失会把用户永远判错）。verify fail-open 不阻塞保存的前提是用户可手动点选补齐——这里就是那道闸。
+    if (VERIFY_KEYS.has(typeKey)) {
       const unresolved = chosenIdx.some((i) =>
-        (parsed[i].questions || []).some((_, j) => !effectiveAnswer(i, j))
+        itemQuestions(typeKey, parsed[i]).some((_, j) => !effectiveAnswer(i, j))
       );
       if (unresolved) {
-        setErr("还有小题未确定答案：等 AI 复核完成，或在预览里点选每题的正确答案（A-D）后再保存。");
+        setErr("还有题未确定答案：等 AI 复核完成，或在预览里点选正确答案（A-D）后再保存。");
         return;
       }
     }
@@ -628,6 +717,12 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
       setVerifyMap({});
       setAnswerPick({});
       loadList(code);
+      // 听力题：保存成功后自动为每条配音（edge-tts，best-effort）。不阻塞——失败则练习时浏览器朗读。
+      if (LCR_KEYS.has(typeKey) && Array.isArray(json.items) && json.items.length > 0) {
+        renderAudioForSaved(json.items);
+      } else {
+        setAudioMsg("");
+      }
     } catch {
       setErr("网络错误，请稍后重试");
     } finally {
@@ -783,6 +878,7 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
 
         {err && <div style={{ marginTop: 12, fontSize: 13, color: C.red }}>{err}</div>}
         {savedMsg && <div style={{ marginTop: 12, fontSize: 13, color: C.green }}>{savedMsg}</div>}
+        {audioMsg && <div style={{ marginTop: 6, fontSize: 12.5, color: C.t2 }}>{audioMsg}</div>}
       </SurfaceCard>
 
       {/* 预览 + 勾选 */}
@@ -841,6 +937,66 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                           {(Array.isArray(q.blanks) ? q.blanks.length : (q.blank_count || 0))} 空 · {q.word_count || countWords(q.passage)} 词
                           {q.topic ? ` · ${q.topic}` : ""}
                         </div>
+                        {Array.isArray(q.warnings) && q.warnings.length > 0 && (
+                          <div style={{ fontSize: 11, color: "#B45309", marginTop: 6 }}>⚠️ {q.warnings.join("；")}</div>
+                        )}
+                        {q.invalid && q.invalid_reason && (
+                          <div style={{ fontSize: 11, color: C.red, marginTop: 4 }}>{String(q.invalid_reason)}</div>
+                        )}
+                      </>
+                    ) : LCR_KEYS.has(typeKey) ? (
+                      <>
+                        {/* 口播句（练习时朗读的那一句）+ 单题答案选择器 + 复核徽章 */}
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>
+                          <b>🔊 口播：</b>{String(q.speaker || "(缺口播句)")}
+                        </div>
+                        {q.situation && (
+                          <div style={{ fontSize: 12, color: C.t2, marginTop: 3 }}>情景：{String(q.situation)}</div>
+                        )}
+                        {itemQuestions(typeKey, q).map((qq, j) => {
+                          const vr = verifyMap[i];
+                          const r = vr?.status === "done" ? (vr.results || [])[j] : null;
+                          const eff = ok ? effectiveAnswer(i, j) : null;
+                          return (
+                            <div key={j} style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${BD}` }}>
+                              <div style={{ fontSize: 11.5, color: C.t2, lineHeight: 1.6 }}>
+                                {ANSWER_KEYS.map((k) => `${k}. ${String(qq?.options?.[k] ?? "—")}`).join("　")}
+                                {ok && <VerifyBadge state={vr?.status} result={r} />}
+                              </div>
+                              {ok && (
+                                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 5, flexWrap: "wrap" }}>
+                                  <span style={{ fontSize: 11, color: C.t3 }}>答案</span>
+                                  {ANSWER_KEYS.map((k) => (
+                                    <button
+                                      key={k}
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setAnswerPick((prev) => ({ ...prev, [`${i}:${j}`]: k }));
+                                      }}
+                                      style={{
+                                        width: 26, height: 22, borderRadius: 6, fontSize: 11, fontWeight: 700,
+                                        cursor: "pointer", fontFamily: FONT, lineHeight: 1,
+                                        border: `1px solid ${eff === k ? tabAccent.color : BD}`,
+                                        background: eff === k ? tabAccent.color : "#fff",
+                                        color: eff === k ? "#fff" : C.t2,
+                                      }}
+                                    >
+                                      {k}
+                                    </button>
+                                  ))}
+                                  {r?.verdict === "mismatch" && (
+                                    <span style={{ fontSize: 11, color: "#B45309" }}>
+                                      你标 {r.marked_answer} / AI 判 {r.ai_answer}，点选裁决
+                                    </span>
+                                  )}
+                                  {!eff && <span style={{ fontSize: 11, color: C.t3 }}>（待复核 / 可手动点选）</span>}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                         {Array.isArray(q.warnings) && q.warnings.length > 0 && (
                           <div style={{ fontSize: 11, color: "#B45309", marginTop: 6 }}>⚠️ {q.warnings.join("；")}</div>
                         )}
@@ -987,6 +1143,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                 ? `${String(it?.data?.passage || "(学术短文)").slice(0, 60)} · ${(it?.data?.questions || []).length} 题`
                 : it.type === "ctw"
                 ? `${String(it?.data?.first_sentence || it?.data?.passage || "(单词补全)").slice(0, 60)} · ${(it?.data?.blanks || []).length} 空`
+                : it.type === "lcr"
+                ? `${String(it?.data?.speaker || "(选择回应)").slice(0, 60)}${it?.data?.audio_url ? " · 🔊" : ""}`
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
               // rdl 双池：练习链接按该条的 variant（缺失则按题数派生）指对池子。
               const practiceHref = it.type === "rdl"

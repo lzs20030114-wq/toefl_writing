@@ -20,6 +20,7 @@ import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../../lib/ai/deepseekHttp");
 const { auditRDLItem, buildAnswerPrompt, parseJson } = require("../../../../lib/readingGen/answerAuditor");
+const { auditLCRItem } = require("../../../../lib/listeningGen/lcrAuditor");
 
 export const maxDuration = 90; // 路径 (a) 是 2 次串行 DeepSeek 调用（各 ~10-20s）
 
@@ -109,6 +110,41 @@ function normAnswer(raw) {
   return VALID_ANSWERS.has(s) ? s : null;
 }
 
+// LCR verify: normalize the single item, run the independent-answer auditor, and return the
+// SAME { results: [...] } envelope the front-end already renders for rdl/ap (one entry here).
+// fail-open: any auditor error / bad shape → 400 (bad request) or the caller's catch → 502.
+async function verifyLcr(rawItem) {
+  const speaker = String(rawItem.speaker || "").trim();
+  const rawOpts = rawItem.options && typeof rawItem.options === "object" && !Array.isArray(rawItem.options) ? rawItem.options : null;
+  if (!speaker || !rawOpts) return jsonError(400, "LCR item needs a speaker line and options");
+  const options = {};
+  for (const k of ["A", "B", "C", "D"]) {
+    const v = String(rawOpts[k] == null ? "" : rawOpts[k]).trim();
+    if (!v) return jsonError(400, "LCR item needs complete A-D options");
+    options[k] = v;
+  }
+  const marked = normAnswer(rawItem.answer);
+
+  // auditLCRItem(item, callAI) → { match, ambiguous, aiAnswer, ... }. It compares aiAnswer to
+  // item.answer; when the user hasn't marked one we pass a null answer so match is irrelevant and
+  // we drive the verdict off aiAnswer directly.
+  const audit = await auditLCRItem({ speaker, options, answer: marked }, (prompt) => verifyCallAI(prompt));
+  if (audit.error) return jsonError(502, "复核失败，请稍后重试");
+
+  const ai = normAnswer(audit.aiAnswer);
+  let entry;
+  if (!ai) {
+    entry = { question: "Q1", verdict: "unverified", ai_answer: null, marked_answer: marked };
+  } else if (!marked) {
+    entry = { question: "Q1", verdict: "ai_answered", ai_answer: ai, marked_answer: null, explanation: String(audit.reasoning || "") };
+  } else if (ai === marked) {
+    entry = { question: "Q1", verdict: "ok", ai_answer: ai, marked_answer: marked };
+  } else {
+    entry = { question: "Q1", verdict: "mismatch", ai_answer: ai, marked_answer: marked, reason: String(audit.reasoning || "") };
+  }
+  return Response.json({ ok: true, results: [entry] });
+}
+
 export async function POST(request) {
   try {
     const contentLength = Number(request.headers.get("content-length") || 0);
@@ -120,7 +156,7 @@ export async function POST(request) {
 
     const body = await request.json().catch(() => ({}));
     const type = String(body?.type || "");
-    if (type !== "rdl" && type !== "ap") return jsonError(400, "Invalid type");
+    if (type !== "rdl" && type !== "ap" && type !== "lcr") return jsonError(400, "Invalid type");
     const rawItem = body?.item;
     if (!rawItem || typeof rawItem !== "object" || Array.isArray(rawItem)) {
       return jsonError(400, "Missing item");
@@ -131,6 +167,14 @@ export async function POST(request) {
     if (!gate.ok) return Response.json({ error: gate.error, code: gate.code }, { status: gate.status });
 
     if (!process.env.DEEPSEEK_API_KEY) return jsonError(503, "DEEPSEEK_API_KEY not configured");
+
+    // ── LCR (听力选择回应): one item = one question (speaker + 4 options + answer). Uses the
+    // existing lcrAuditor's independent-answer pass (callAI injected). Two口径 mirror rdl/ap:
+    //   answer present → auditLCRItem 复核（AI 独立选 best）→ ok / mismatch。
+    //   answer missing → same call, aiAnswer 填补 → verdict "ai_answered".
+    if (type === "lcr") {
+      return await verifyLcr(rawItem);
+    }
 
     // AP 穿 RDL 马甲：passage → text，之后全程按 RDL item 处理。
     const text = String((type === "ap" ? rawItem.passage : rawItem.text) || "").trim();

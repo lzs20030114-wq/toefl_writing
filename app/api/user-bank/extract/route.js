@@ -17,6 +17,7 @@ const {
   postProcessRdl,
   postProcessAp,
   postProcessCtw,
+  postProcessLcr,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -152,6 +153,11 @@ export async function POST(request) {
       // Reading CTW（贴原文自动挖空）：AI 只清洗转写，服务端跑 cTestBlanker 机械挖空产出完整 item
       //（答案=原文，天然零错）；词数 <45 标 invalid、>120 只警告；ctwValidator 告警塞进 warnings。
       questions = questions.map((q) => postProcessCtw(q));
+    } else if (type === "lcr") {
+      // Listening LCR（口播句+4选项+答案）：schema 门（speaker/选项/答案枚举）标 invalid；
+      // 答案可缺（verify 用 lcrAuditor 代解）；context/difficulty/answer_paradigm 给缺省；
+      // 音频不在这里出——保存后由 /api/user-bank/render-audio 服务端 edge-tts 渲染回写。
+      questions = questions.map((q) => postProcessLcr(q));
     }
 
     return Response.json({ ok: true, questions });

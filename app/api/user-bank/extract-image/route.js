@@ -16,6 +16,7 @@ const {
   postProcessRdl,
   postProcessAp,
   postProcessCtw,
+  postProcessLcr,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
@@ -124,6 +125,10 @@ export async function POST(request) {
       // 图片路径语义：传一张含英文段落的资料照片 → Qwen-VL 纯转写文字 → 服务端机械挖空
       //（不是还原已挖空的真题）；产物与粘贴路径完全一致。
       questions = questions.map((q) => postProcessCtw(q));
+    } else if (type === "lcr") {
+      // 图片语义：LCR 真题界面常只有选项没有口播句 → speaker:"" → postProcessLcr 标 invalid，
+      // 引导用户手补口播句（预览不可编辑就改贴文本）。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLcr(q));
     }
 
     return Response.json({ ok: true, questions });
