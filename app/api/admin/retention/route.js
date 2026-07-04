@@ -26,7 +26,15 @@ const FEATURE_LABELS = {
   mock: "写作模考",
 };
 const FEATURE_ORDER = ["bs", "discussion", "email", "reading", "listening", "speaking", "mock"];
+// AI-gated features hit /api/ai and are capped at 3/day for free users; the
+// rest are locally graded + unlimited. Surfaced so the reader never compares a
+// quota-capped feature's raw 做题量 against an uncapped one at face value.
+const FEATURE_AI_GATED = {
+  bs: false, reading: false, listening: false,
+  discussion: true, email: true, mock: true, speaking: true,
+};
 const featureLabel = (f) => FEATURE_LABELS[f] || f;
+const featureAiGated = (f) => FEATURE_AI_GATED[f] === true;
 const featureRank = (f) => {
   const i = FEATURE_ORDER.indexOf(f);
   return i === -1 ? FEATURE_ORDER.length : i;
@@ -61,39 +69,54 @@ const viewMissing = (e) =>
 // Build the feature-engagement block from the four feature_* views. Returns
 // { available, features, firstTouch, weekly } — available=false when the views
 // don't exist yet (migration not run).
+//
+// Each feature carries raw counts in three segments (all / pro / free) so the
+// page can toggle away the free-tier paywall confound; derived rates (人均 /
+// 复练率 / 占比) are computed page-side per selected segment. Sorted by 触达
+// 用户 (all) — the comparable "attraction" signal — NOT by 题目数, whose unit
+// differs per feature and is only meaningful within a feature.
 function buildFeatures({ totals, firstTouch, sticky, weekly }) {
   const totalsRows = totals || [];
   const stickyByFeature = new Map((sticky || []).map((r) => [r.feature, r]));
 
-  const totalItems = totalsRows.reduce((s, r) => s + num(r.items), 0);
-
   const features = totalsRows
     .map((r) => {
-      const items = num(r.items);
-      const sessions = num(r.sessions);
-      const users = num(r.users);
       const s = stickyByFeature.get(r.feature);
       const mature = s ? num(s.mature_users) : 0;
       const returned = s ? num(s.returned_users) : 0;
       return {
         feature: r.feature,
         label: featureLabel(r.feature),
-        items,
-        sessions,
-        users,
+        aiGated: featureAiGated(r.feature),
         active7d: num(r.active_7d),
         active30d: num(r.active_30d),
-        itemsPerUser: users ? Math.round((items / users) * 10) / 10 : null,
-        sessionsPerUser: users ? Math.round((sessions / users) * 10) / 10 : null,
-        itemShare: pct(items, totalItems),
-        repeatRate2: pct(num(r.repeat_2plus), users),
-        repeatRate3: pct(num(r.repeat_3plus), users),
         stickinessMature: mature,
         stickinessReturned: returned,
         stickinessPct: pct(returned, mature),
+        // Raw counts per segment; page derives rates/shares from these.
+        segments: {
+          all: {
+            users: num(r.users),
+            sessions: num(r.sessions),
+            items: num(r.items),
+            repeat2: num(r.repeat_2plus),
+          },
+          pro: {
+            users: num(r.users_pro),
+            sessions: num(r.sessions_pro),
+            items: num(r.items_pro),
+            repeat2: num(r.repeat2_pro),
+          },
+          free: {
+            users: num(r.users_free),
+            sessions: num(r.sessions_free),
+            items: num(r.items_free),
+            repeat2: num(r.repeat2_free),
+          },
+        },
       };
     })
-    .sort((a, b) => b.items - a.items || featureRank(a.feature) - featureRank(b.feature));
+    .sort((a, b) => b.segments.all.users - a.segments.all.users || featureRank(a.feature) - featureRank(b.feature));
 
   const totalFirstTouch = (firstTouch || []).reduce((s, r) => s + num(r.users), 0);
   const firstTouchOut = (firstTouch || [])

@@ -73,53 +73,88 @@ const td = {
   borderBottom: "1px solid " + C.bdrSubtle, whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums",
 };
 
-// ---- Feature ranking: 做题量排行 ----------------------------------------
-function FeatureRanking({ features }) {
+// Below this many reached users a feature's rates are too noisy to trust.
+const MIN_CONFIDENCE_USERS = 5;
+
+const pctOf = (n, d) => (d > 0 ? Math.round((n / d) * 1000) / 10 : null);
+
+function AiTag({ gated }) {
+  return gated ? (
+    <span title="AI 评分，免费用户 3 次/天 —— 做题量受额度限制" style={{ background: "#fef3c7", color: "#92400e", borderRadius: 4, padding: "1px 5px", fontSize: 9.5, fontWeight: 700 }}>
+      AI·限额
+    </span>
+  ) : (
+    <span title="本地判分，免费无限" style={{ background: "#ecfdf5", color: "#065f46", borderRadius: 4, padding: "1px 5px", fontSize: 9.5, fontWeight: 700 }}>
+      免费无限
+    </span>
+  );
+}
+
+// ---- Feature ranking: 功能吸引力（按触达用户排序）------------------------
+function FeatureRanking({ features, segment }) {
   if (!features?.length) {
     return <div style={{ padding: 20, color: C.t3, fontSize: 13 }}>暂无做题记录。</div>;
   }
-  const maxItems = Math.max(...features.map((f) => f.items), 1);
+  const seg = (f) => f.segments?.[segment] || f.segments?.all || { users: 0, sessions: 0, items: 0, repeat2: 0 };
+  const rows = features
+    .map((f) => ({ f, s: seg(f) }))
+    .sort((a, b) => b.s.users - a.s.users);
+  const maxUsers = Math.max(...rows.map((r) => r.s.users), 1);
+  const totalItems = rows.reduce((sum, r) => sum + r.s.items, 0);
+
   return (
     <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
             <th style={{ ...th, textAlign: "left", paddingLeft: 16 }}>功能</th>
-            <th style={{ ...th, minWidth: 200 }}>题目数（主）</th>
-            <th style={th}>场次</th>
-            <th style={th}>触达用户</th>
-            <th style={th}>人均题目</th>
+            <th style={{ ...th, minWidth: 190 }}>触达用户（主）</th>
             <th style={th}>复练率 ≥2次</th>
-            <th style={th}>近7天活跃</th>
+            <th style={th} title="首次使用 ≥7 天前的用户里之后又回来的比例（全部用户口径）">功能留存</th>
+            <th style={th} title="各功能单位不同（造句一场几十题 / 写作一篇算1），不可跨功能直接比大小">题目数·投入量</th>
+            <th style={th}>场次</th>
           </tr>
         </thead>
         <tbody>
-          {features.map((f) => (
-            <tr key={f.feature}>
-              <td style={{ ...td, textAlign: "left", paddingLeft: 16 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ width: 9, height: 9, borderRadius: 2, background: featureColor(f.feature), flexShrink: 0 }} />
-                  <span style={{ fontWeight: 700, color: C.t1 }}>{f.label}</span>
-                </span>
-              </td>
-              <td style={td}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
-                  <div style={{ flex: 1, maxWidth: 120, height: 8, background: C.bdrSubtle, borderRadius: 4, overflow: "hidden" }}>
-                    <div style={{ width: `${Math.max((f.items / maxItems) * 100, 2)}%`, height: "100%", background: featureColor(f.feature), borderRadius: 4 }} />
+          {rows.map(({ f, s }) => {
+            const lowConf = s.users > 0 && s.users < MIN_CONFIDENCE_USERS;
+            const dim = s.users === 0;
+            const repeatRate = pctOf(s.repeat2, s.users);
+            const itemShare = pctOf(s.items, totalItems);
+            return (
+              <tr key={f.feature} style={{ opacity: dim ? 0.45 : 1 }}>
+                <td style={{ ...td, textAlign: "left", paddingLeft: 16 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span style={{ width: 9, height: 9, borderRadius: 2, background: featureColor(f.feature), flexShrink: 0 }} />
+                    <span style={{ fontWeight: 700, color: C.t1 }}>{f.label}</span>
+                    <AiTag gated={f.aiGated} />
+                    {lowConf ? (
+                      <span title={`触达用户仅 ${s.users} 人，比率噪声大`} style={{ background: "#f1f5f9", color: "#64748b", borderRadius: 4, padding: "1px 5px", fontSize: 9.5, fontWeight: 700 }}>样本少</span>
+                    ) : null}
+                  </span>
+                </td>
+                <td style={td}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
+                    <div style={{ flex: 1, maxWidth: 110, height: 8, background: C.bdrSubtle, borderRadius: 4, overflow: "hidden" }}>
+                      <div style={{ width: `${Math.max((s.users / maxUsers) * 100, 2)}%`, height: "100%", background: featureColor(f.feature), borderRadius: 4 }} />
+                    </div>
+                    <span style={{ fontWeight: 800, color: C.nav, minWidth: 42, textAlign: "right" }}>{s.users.toLocaleString()}</span>
                   </div>
-                  <span style={{ fontWeight: 800, color: C.nav, minWidth: 46, textAlign: "right" }}>{f.items.toLocaleString()}</span>
-                  <span style={{ fontSize: 10.5, color: C.t3, minWidth: 40, textAlign: "right" }}>{f.itemShare != null ? `${f.itemShare}%` : "—"}</span>
-                </div>
-              </td>
-              <td style={{ ...td, color: C.t1 }}>{f.sessions.toLocaleString()}</td>
-              <td style={{ ...td, color: C.t1 }}>{f.users.toLocaleString()}</td>
-              <td style={{ ...td, color: C.t1, fontWeight: 600 }}>{f.itemsPerUser ?? "—"}</td>
-              <td style={{ ...td, color: f.repeatRate2 != null ? C.t1 : C.t3 }} title={f.repeatRate3 != null ? `≥3次: ${f.repeatRate3}%` : ""}>
-                {f.repeatRate2 != null ? `${f.repeatRate2}%` : "—"}
-              </td>
-              <td style={{ ...td, color: C.t2 }}>{f.active7d.toLocaleString()}</td>
-            </tr>
-          ))}
+                </td>
+                <td style={{ ...td, color: repeatRate != null && !lowConf ? C.t1 : C.t3, fontWeight: repeatRate != null ? 600 : 400 }}>
+                  {repeatRate != null ? `${repeatRate}%` : "—"}
+                </td>
+                <td style={{ ...td, color: f.stickinessPct != null ? C.t1 : C.t3 }} title={f.stickinessMature ? `${f.stickinessReturned}/${f.stickinessMature} 人` : "无满7天用户"}>
+                  {f.stickinessPct != null ? `${f.stickinessPct}%` : "—"}
+                </td>
+                <td style={{ ...td, color: C.t3 }} title="投入量参考，不可跨功能比">
+                  {s.items.toLocaleString()}
+                  <span style={{ fontSize: 10, marginLeft: 5 }}>{itemShare != null ? `${itemShare}%` : ""}</span>
+                </td>
+                <td style={{ ...td, color: C.t2 }}>{s.sessions.toLocaleString()}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -269,6 +304,7 @@ export default function AdminRetentionPage() {
   const [error, setError] = useState("");
   const [days, setDays] = useState(60);
   const [legacyOpen, setLegacyOpen] = useState(false);
+  const [segment, setSegment] = useState("all"); // all | pro | free
 
   async function fetchData(d) {
     setLoading(true);
@@ -334,18 +370,45 @@ export default function AdminRetentionPage() {
           <StatCard value={st?.mau} label="月活 MAU" sub="近 30 天" color={C.nav} />
         </div>
 
-        {/* ① 功能做题量排行 — 页面重心 */}
+        {/* ① 功能吸引力排行 — 页面重心 */}
         <Card
-          title="功能做题量排行"
-          hint="题目数为主口径（BS=造句题数 / 阅读听力=选择题数 / 模考=task 数 / 写作=1篇）· 全部历史 · 按题目数降序"
+          title="功能吸引力排行"
+          hint="按「触达用户」排序——它和复练率才是可跨功能比的吸引力信号。题目数各功能单位不同（不可比），已降为灰色投入量参考。全部历史。"
+          right={
+            <div style={{ display: "flex", gap: 4 }}>
+              {[
+                { k: "all", label: "全部" },
+                { k: "pro", label: "Pro·无限额" },
+                { k: "free", label: "免费" },
+              ].map(({ k, label }) => (
+                <button
+                  key={k}
+                  onClick={() => setSegment(k)}
+                  style={{
+                    padding: "4px 10px", borderRadius: 6, fontSize: 11.5, fontWeight: segment === k ? 700 : 500,
+                    border: "1px solid " + (segment === k ? C.blue : C.bdr),
+                    background: segment === k ? C.blue : "#fff",
+                    color: segment === k ? "#fff" : C.t2, cursor: "pointer",
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          }
         >
-          {featuresAvailable === false ? <MigrationNotice /> : pending ? skeleton : <FeatureRanking features={features} />}
+          {segment === "all" ? (
+            <div style={{ padding: "10px 16px 0", fontSize: 11, color: "#9a3412", background: "#fff7ed", borderBottom: "1px solid #fde68a", lineHeight: 1.5, paddingBottom: 10 }}>
+              ⚠️ 「全部」口径下，<b>AI·限额</b>功能（写作/模考/口语）的做题量被免费 3 次/天卡住，和免费无限功能不可比。想公平比吸引力，切到 <b>Pro·无限额</b> 段看——那里没有额度墙。
+            </div>
+          ) : null}
+          {featuresAvailable === false ? <MigrationNotice /> : pending ? skeleton : <FeatureRanking features={features} segment={segment} />}
         </Card>
 
         {/* ② 功能级留存 — 替代按天激活 */}
         <Card
           title="功能级留存（用了还回来）"
-          hint="首次使用某功能 ≥7 天前的成熟用户里，之后又回来用同一功能的比例 · 替代「注册后第N天有没有登录」"
+          hint="首次使用某功能 ≥7 天前的成熟用户里，之后又回来用同一功能的比例 · 替代「注册后第N天有没有登录」· 全部用户口径"
         >
           {featuresAvailable === false ? <MigrationNotice /> : pending ? skeleton : <FeatureStickiness features={features} />}
         </Card>
