@@ -1,104 +1,104 @@
 {
-  "session_id": "routine-20260703-190356",
-  "completed_at": "2026-07-03T19:27:46Z",
-  "duration_minutes": 24,
-  "model": "Claude Opus 4.8",
-  "highlight": "12 库全部刷新，共 70 题；reading-ap 首现化学/有机化合物课题",
+  "session_id": "routine-20260704-170301",
+  "completed_at": "2026-07-04T17:28:25Z",
+  "duration_minutes": 25,
+  "model": "Claude Sonnet 5",
+  "highlight": "首次出现化学催化(AP)与人类学口述传统课题；BS 20题全过嵌入问题漂移带(仅3/20命中)",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": ["campus small-talk", "embedded questions", "negation", "relative clause", "passive", "comparative"],
-      "favorite": {"prompt": "You should really check out the new gym.", "answer": "How much does a monthly pass cost?"},
+      "topics": ["direct wh-question", "indirect question", "negation", "relative clause", "passive voice", "reported feeling"],
+      "favorite": {"prompt": "Your favorite café just moved to a new location.", "answer": "How far is it from the main campus?"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["business", "education", "psychology", "political science"],
-      "favorite": {"subtopic": "psychology", "preview": "We've been examining how people relate to their own past this semester. Psychologists disagree sharply about nostalgia"},
+      "topics": ["environmental science", "social studies", "public policy", "economics"],
+      "favorite": {"subtopic": "public policy", "preview": "More and more coastal cities are considering laws that would require landlords to disclose a property's flood history"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["社区生活", "职场工作", "住宿", "服务与活动"],
-      "favorite": {"subtopic": "住宿", "preview": "You moved into a furnished studio three weeks ago, and the building's only elevator has been out of service since last Friday."},
+      "topics": ["住宿", "职场工作", "社区生活", "消费售后"],
+      "favorite": {"subtopic": "住宿", "preview": "You have been renting a studio apartment for four months. Recently, the bathroom ceiling started leaking"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["anthropology/language origins", "physics/superconductivity", "chemistry/organic compounds", "materials_science/polymer composites", "sociology/housing policy"],
-      "favorite": {"subtopic": "chemistry/organic compounds", "preview": "Organic compounds, chemical substances built around frameworks of carbon atoms, form the material basis of all known life."},
+      "topics": ["chemistry/catalysis", "anthropology/oral traditions", "art/photography history", "materials_science/polymer composites", "business/market dynamics"],
+      "favorite": {"subtopic": "chemistry/catalysis", "preview": "Catalysis is the process by which a substance, known as a catalyst, accelerates a chemical reaction"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/seed dispersal", "environmental_science/sustainable agriculture", "psychology/creativity", "history/industrial revolution", "geology/minerals", "astronomy/cosmic radiation"],
-      "favorite": {"subtopic": "biology/seed dispersal", "preview": "Seed dispersal is the natural process by which plants spread their offspring away from the parent to new ground."},
+      "topics": ["biology/bioluminescence", "environmental_science/urban heat islands", "psychology/habit formation", "history/maritime navigation", "geology/geysers", "astronomy/solar system"],
+      "favorite": {"subtopic": "biology/bioluminescence", "preview": "Bioluminescence is a natural phenomenon in which living organisms create their own light through internal"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/rescheduled club meeting", "notice/fire alarm testing", "email/student ID replacement", "notice/fire alarm testing"],
-      "favorite": {"subtopic": "email/rescheduled club meeting", "preview": "Hi Maya, Quick update — the Photography Club meeting has moved to this Thursday at 6:30 PM in Room 118."},
+      "topics": ["social_media/free yoga class", "flyer/used textbook sale", "email/mailroom package pickup", "flyer/campus cleanup volunteer signup"],
+      "favorite": {"subtopic": "social_media/free yoga class", "preview": "Free yoga in the Quad this Saturday at 9:00 AM! Instructor Maya Torres leads the session"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/campus bookstore order pickup", "notice/community garden plot registration"],
-      "favorite": {"subtopic": "notice/community garden plot registration", "preview": "Registration for garden plots at the Riverside Community Garden opens on March 1 and closes on March 20."},
+      "topics": ["email/chem lab partner coordination", "notice/dining hall allergen policy"],
+      "favorite": {"subtopic": "notice/dining hall allergen policy", "preview": "Dining Services Notice: Updated Allergen Labeling Policy. Effective Monday, September 8, all food stations"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["art_history/rediscovery of perspective", "history/origins of the fire department", "biology/convergent evolution", "geology/ice cores and ancient climate"],
-      "favorite": {"subtopic": "history/origins of the fire department", "preview": "When you picture a fire department, you probably imagine a public crew paid by the city and ready to help anyone in trouble."},
+      "topics": ["music/nationalist compositions", "biology/coral reef acidification", "psychology/spacing effect", "art_history/Impressionist plein air painting"],
+      "favorite": {"subtopic": "psychology/the spacing effect", "preview": "Cramming the night before a test feels productive, but the spacing effect suggests it's only"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["campus_dorm_life/elective choice", "plans_social/beach trip rescheduling", "plans_social/dinner party food", "recommendations/mystery thriller", "campus_dorm_life/chore schedule"],
-      "favorite": {"subtopic": "plans_social/rescheduling a weekend beach trip around a storm", "preview": "Are we still on for the beach on Saturday? I've been looking forward to it all week."},
+      "topics": ["errands_service/day trip schedule", "recommendations_opinions/new cafe pricing", "plans_social/birthday surprise", "campus_dorm_life/elective choice", "recommendations_opinions/book club novel ending"],
+      "favorite": {"subtopic": "recommendations_opinions/book club novel ending", "preview": "What did you think of the ending of the novel for book club?"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["academic_event/spring symposium", "logistics/bike-share stations", "academic_event/thesis defense schedule", "logistics/shuttle route change", "facility_change/bookstore move"],
-      "favorite": {"subtopic": "academic_event/spring academic symposium", "preview": "Good afternoon, members. I'm thrilled to announce that the Linguistics Society's Spring Symposium will take place next Thursday at 3 p.m."},
+      "topics": ["facility_change/bookstore move", "career_services/mock interviews", "campus_activity/food festival", "academic_event/semester showcase", "facility_change/fitness equipment"],
+      "favorite": {"subtopic": "facility_change/campus bookstore moving", "preview": "Attention students, faculty, and staff. The campus bookstore will relocate from its current location"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["campus_academic/borrowing lecture notes", "social/schedule conflict", "campus_daily/shuttle schedule", "campus_academic/group project deadline", "campus_daily/dorm maintenance", "campus_daily/lost-and-found", "social/offering help", "general_daily/asking directions"],
-      "favorite": {"subtopic": "campus_daily/dorm maintenance issue", "preview": "Why's the heater in my room broken? — correct reply shifts context: I'll send maintenance up right away."},
+      "topics": ["campus_daily/dorm maintenance", "social/schedule conflict", "campus_academic/lab report", "campus_academic/group project deadline", "campus_academic/course prerequisites", "general_daily/store return", "general_daily/directions", "campus_academic/exam format"],
+      "favorite": {"subtopic": "general_daily/store return", "preview": "Where can I return this defective blender?"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Watercolor Painting (how-to)", "Student Health Center orientation", "Campus Gym induction"],
-      "favorite": {"subtopic": "Watercolor Painting (how-to)", "preview": "Lastly, once your painting is dry, press the sheet flat under a heavy book overnight."},
+      "topics": ["Chemistry Lab Safety", "Watercolor Painting (how-to)", "Student Health Center"],
+      "favorite": {"subtopic": "Watercolor Painting (how-to)", "preview": "Lastly, add fine details once your painting is completely dry, and step back to check the overall composition."},
       "retried_after_fail": false,
       "failure_reason": ""
     }
