@@ -14,6 +14,8 @@ const {
   validateBuildForImport,
   postProcessRepeat,
   postProcessInterview,
+  postProcessRdl,
+  postProcessAp,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -139,6 +141,12 @@ export async function POST(request) {
       questions = questions.map((q) => postProcessRepeat(q));
     } else if (type === "interview") {
       questions = questions.map((q) => postProcessInterview(q));
+    } else if (type === "rdl") {
+      // Reading: schema gate（选项/题干/答案枚举）标 invalid；词数只进 warnings；variant 服务端派生。
+      questions = questions.map((q) => postProcessRdl(q));
+    } else if (type === "ap") {
+      // Reading: 同上 + paragraphs 服务端从 \n\n 派生 + insert_text 可作答性 + 段号引用检查。
+      questions = questions.map((q) => postProcessAp(q));
     }
 
     return Response.json({ ok: true, questions });

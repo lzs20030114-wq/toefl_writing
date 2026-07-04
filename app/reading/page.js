@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CTWTask } from "../../components/reading/CTWTask";
 import { RDLTask } from "../../components/reading/RDLTask";
@@ -10,6 +10,7 @@ import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
 import { pickWithTopicDiversity } from "../../lib/recentTopics";
+import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 // RDL bank is split into two pools by question count:
 //   rdl-short.json — 83 items, each with 2 questions  → ?variant=short
@@ -157,6 +158,29 @@ function ReadingPageClient() {
     setRandomItem(resume || pickReadingItem(type, pool));
   }, [type, variant, isPractice]);
 
+  // 个人题库（用户导入的 rdl/ap）：运行时拉取，只并入 practice picker（带「我的」标签）；
+  // standard/random/draft 恢复零改动（个人题不进随机池）。仿 app/speaking/page.js:83-94。
+  const [personalRaw, setPersonalRaw] = useState([]);
+  useEffect(() => {
+    if (!isPractice || (type !== "rdl" && type !== "ap")) {
+      setPersonalRaw([]);
+      return;
+    }
+    let alive = true;
+    setPersonalRaw([]);
+    fetchPersonalBank(type).then((rows) => { if (alive) setPersonalRaw(rows); });
+    return () => { alive = false; };
+  }, [type, isPractice]);
+  const personalById = useMemo(() => {
+    const m = new Map();
+    for (const raw of personalRaw) m.set(String(raw.id), raw);
+    return m;
+  }, [personalRaw]);
+  // rdl 按 variant 分池：个人题恰好 2 题 → short 池，否则 → long 池（与静态双池口径一致）。
+  const personalForPicker = type === "rdl"
+    ? personalRaw.filter((d) => ((d.questions || []).length === 2) === (variant === "short"))
+    : personalRaw;
+
   const onExit = () => router.push("/?section=reading");
 
   // Gate: Pro only
@@ -181,7 +205,9 @@ function ReadingPageClient() {
   if (isPractice && !pickedItemId) {
     const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
     const doneIds = loadDoneIds(doneKey);
-    const items = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics(variant);
+    // 个人题（「我的」标签）排最前；ctw 无个人题（personalForPicker 恒为空数组）。
+    const staticItems = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics(variant);
+    const items = [...mapPersonalToPicker(type, personalForPicker), ...staticItems];
     const title = type === "ctw" ? "Complete the Words" : type === "ap" ? "Academic Passage" : "Read in Daily Life";
     const section = type === "ctw" ? "Reading Practice | Task 1" : type === "ap" ? "Reading Practice | Task 3" : "Reading Practice | Task 2";
 
@@ -205,12 +231,15 @@ function ReadingPageClient() {
     // pool so a short-variant id doesn't accidentally hit a long-variant
     // record (item ids are unique across pools, but using the right pool
     // also keeps the item shape consistent with what the user picked).
+    // Personal bank first — usr_ ids never appear in static banks (reserved prefix), so
+    // the Map lookup is a pure fallthrough for global picks. No snapshot handoff needed:
+    // this page resolves items in-component (unlike the writing pages).
     if (type === "ctw") {
       item = CTW_DATA.items.find((i) => i.id === pickedItemId);
     } else if (type === "ap") {
-      item = AP_DATA.items.find((i) => i.id === pickedItemId);
+      item = personalById.get(String(pickedItemId)) || AP_DATA.items.find((i) => i.id === pickedItemId);
     } else {
-      item = rdlPool(variant).find((i) => i.id === pickedItemId);
+      item = personalById.get(String(pickedItemId)) || rdlPool(variant).find((i) => i.id === pickedItemId);
     }
   } else {
     item = randomItem;

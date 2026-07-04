@@ -13,13 +13,16 @@ const {
   validateBuildForImport,
   postProcessRepeat,
   postProcessInterview,
+  postProcessRdl,
+  postProcessAp,
 } = require("../../../../lib/ai/prompts/questionExtraction");
-const { sniffImageMime } = require("../../../../lib/userBank/imageSniff");
+const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
 export const maxDuration = 60; // Qwen-VL 典型 3-15s；给 Vercel 留足余量
 
 const limiter = createRateLimiter("user-bank-extract-image", { window: 60_000, max: 10 });
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4 MB（Vercel body ~4.5MB，客户端已下采样）
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // **合计** 4 MB（Vercel body ~4.5MB，客户端已下采样）
+const MAX_IMAGES = 3; // AP 学术短文常跨 2-3 张截图；单图上传天然向后兼容
 
 // Origin guard copied verbatim from /api/ai (app/api/ai/route.js:34-63) / user-bank/extract.
 function normalizeHost(raw) {
@@ -57,12 +60,13 @@ export async function POST(request) {
     const form = await request.formData().catch(() => null);
     if (!form) return jsonError(400, "Expected multipart/form-data");
 
-    const type = String(form.get("type") || ""); // 'academic' | 'email'（extractor key）
+    const type = String(form.get("type") || ""); // extractor key（academic/email/build/repeat/interview/rdl/ap）
     const userCode = String(form.get("userCode") || "");
-    const file = form.get("image");
+    // 1-3 张图（form.getAll 对单图上传返回长度 1 的数组 → 向后兼容旧客户端）。
+    const files = form.getAll("image").filter((f) => f && typeof f.arrayBuffer === "function");
 
     if (!SUPPORTED_IMAGE_TYPES.includes(type)) return jsonError(400, "Invalid type");
-    if (!file || typeof file.arrayBuffer !== "function") return jsonError(400, "Missing image");
+    if (files.length === 0) return jsonError(400, "Missing image");
 
     // Pro + 每日额度门禁：放在付费 VL 调用之前。
     const gate = await gateUserBankRequest({ userCode });
@@ -73,19 +77,18 @@ export async function POST(request) {
       return jsonError(503, "图片识别暂未开通（DASHSCOPE_API_KEY 未配置），请改用粘贴文本。");
     }
 
-    const buf = Buffer.from(await file.arrayBuffer());
-    if (buf.length === 0) return jsonError(400, "Empty image");
-    if (buf.length > MAX_IMAGE_BYTES) {
-      return jsonError(413, `图片过大（>${Math.round(MAX_IMAGE_BYTES / 1024 / 1024)}MB），请压缩后重试`);
-    }
-    const mime = sniffImageMime(buf);
-    if (!mime) return jsonError(415, "仅支持 JPEG / PNG / WebP 图片");
+    // 逐张 magic-byte 嗅探 + 张数/合计体积门（helper 可单测，路由只做搬运）。
+    const buffers = [];
+    for (const f of files) buffers.push(Buffer.from(await f.arrayBuffer()));
+    const batch = validateImageBatch(buffers, { maxCount: MAX_IMAGES, maxTotalBytes: MAX_IMAGE_BYTES });
+    if (!batch.ok) return jsonError(batch.status, batch.error);
 
     let rawContent;
     try {
       const out = await callQwenVision({
         systemPrompt: IMAGE_EXTRACTION_PROMPTS[type], // 含 SAFETY_PREAMBLE 注入防护
-        imageUrls: bufferToDataUrl(buf, mime),
+        // callQwenVision 的 imageUrls 本就支持数组（lib/ai/qwenVision.js:40-54）。
+        imageUrls: batch.images.map((im) => bufferToDataUrl(im.buffer, im.mime)),
       });
       rawContent = out?.content || "";
     } catch (e) {
@@ -112,6 +115,10 @@ export async function POST(request) {
       questions = questions.map((q) => postProcessRepeat(q));
     } else if (type === "interview") {
       questions = questions.map((q) => postProcessInterview(q));
+    } else if (type === "rdl") {
+      questions = questions.map((q) => postProcessRdl(q));
+    } else if (type === "ap") {
+      questions = questions.map((q) => postProcessAp(q));
     }
 
     return Response.json({ ok: true, questions });

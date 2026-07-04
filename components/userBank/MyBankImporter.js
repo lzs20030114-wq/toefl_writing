@@ -3,10 +3,10 @@
 // 被 /my-bank 独立页（variant="page"）和首页「我的题库」section（variant="panel"，桌面+移动）共用。
 // 不读 localStorage、不挂 UpgradeModal：code/tier 由父层给，升级/登录用 onRequireUpgrade/onRequireLogin 回调。
 //
-// 题型选择器展示全部 4 技能 12 题型（按技能分组、沿用 SECTION_ACCENTS 配色），当前仅
-// 学术讨论 + 邮件可导入，其余降透明度标「开发中」占位——roadmap 直接画在界面上，
+// 题型选择器展示全部 4 技能 12 题型（按技能分组、沿用 SECTION_ACCENTS 配色），未上线的
+// 降透明度标「开发中」占位——roadmap 直接画在界面上，
 // 后续题型上线只需把 live 翻 true + 补 stored/practice/placeholder。
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { C, FONT, Btn, SurfaceCard } from "../shared/ui";
 import { SECTION_ACCENTS } from "../home/sections";
 
@@ -38,8 +38,20 @@ const TYPE_GROUPS = [
     id: "reading", label: "阅读", icon: "📖", accent: SECTION_ACCENTS.reading,
     types: [
       { key: "ctw", label: "单词补全", en: "Complete the Words", live: false },
-      { key: "rdl", label: "日常阅读", en: "Read in Daily Life", live: false },
-      { key: "ap", label: "学术短文", en: "Academic Passage", live: false },
+      {
+        key: "rdl", stored: "rdl", label: "日常阅读", en: "Read in Daily Life", live: true,
+        // rdl 双池按题数分（2 题→short）；已存列表按每条 data.variant 覆盖此默认链接。
+        practice: "/reading?type=rdl&variant=long&mode=practice",
+        // 产品口径：只收「文+题」，**不做**「只给文章让 AI 出题」——价值最低、机器味风险
+        // 最高，研究已裁决砍掉（见附录 B RDL §3 档 3）。答案可缺：AI 代解 + 第二考官复核。
+        placeholder: "粘贴日常阅读材料（通知/邮件/传单等）和它的选择题（每题 A-D 四个选项）。没有答案也行——AI 会代解并复核。一次可粘多篇。",
+      },
+      {
+        key: "ap", stored: "ap", label: "学术短文", en: "Academic Passage", live: true,
+        practice: "/reading?type=ap&mode=practice",
+        // 同上：只收「文+题」，不做 AI 出题（AP insert_text 曾出过 140 条不可作答事故）。
+        placeholder: "粘贴学术短文全文（段落之间保留空行）和它的题目（每题 A-D 四个选项）。答案可缺——AI 会代解并复核。一次可粘多篇。",
+      },
     ],
   },
   {
@@ -80,11 +92,23 @@ const INVALID_HINT = {
   repeat: "英文句子 3-25 词",
   interview: "英文问题 10-60 词",
   build: "问句 + 回应句 + 词块（且服务端校验通过）",
+  rdl: "材料原文 + 至少 1 道 A-D 选项齐全的题",
+  ap: "文章全文 + A-D 选项齐全的题目",
 };
 
 const BD = C.bd2 || "#e2e8f0";
 const ACCEPT = "image/png,image/jpeg,image/webp";
 const CLIENT_MAX_BYTES = 25 * 1024 * 1024; // 下采样前的粗筛上限，防 canvas OOM
+const MAX_IMAGES = 3; // 与 /api/user-bank/extract-image 一致（AP 常跨 2-3 张截图）
+const CLIENT_TOTAL_UPLOAD_BYTES = Math.floor(3.8 * 1024 * 1024); // 服务端合计 4MB，客户端留余量预检
+
+// 阅读 MCQ 题型（rdl/ap）：预览带逐题答案选择器 + verify 复核徽章。
+const READING_KEYS = new Set(["rdl", "ap"]);
+const ANSWER_KEYS = ["A", "B", "C", "D"];
+function normAnswer(v) {
+  const s = String(v == null ? "" : v).trim().toUpperCase();
+  return ANSWER_KEYS.includes(s) ? s : null;
+}
 
 // 与 WritingTask 的 normalize 最小要求一致——不满足的条目入库后会开成「已下线」，故导入时就拦掉。
 function isValidAcademic(q) {
@@ -116,11 +140,24 @@ function isValidBuild(q) {
     Array.isArray(q?.chunks) && q.chunks.length >= 2 &&
     !!(q?.prompt && String(q.prompt).trim());
 }
+// Reading (rdl/ap): the server post-processors are the authority (schema gate stamps
+// q.invalid + Chinese reason). Client re-checks the basics so a partial AI response can't
+// slip through. NOTE: answers may still be null here — resolving every question's answer
+// (用户点选 / 抽取自带 / verify 代解) is enforced at SAVE time, not here.
+function isValidReading(q) {
+  const body = String(q?.text || q?.passage || "").trim();
+  const questions = Array.isArray(q?.questions) ? q.questions : [];
+  return q?.invalid !== true && !!body && questions.length > 0 &&
+    questions.every((qq) =>
+      qq && String(qq.stem || "").trim() && qq.options &&
+      ANSWER_KEYS.every((k) => String(qq.options[k] || "").trim()));
+}
 function isValid(typeKey, q) {
   if (typeKey === "email") return isValidEmail(q);
   if (typeKey === "repeat") return isValidRepeat(q);
   if (typeKey === "interview") return isValidInterview(q);
   if (typeKey === "build") return isValidBuild(q);
+  if (READING_KEYS.has(typeKey)) return isValidReading(q);
   return isValidAcademic(q);
 }
 
@@ -204,6 +241,28 @@ function TypeChip({ type, accent, selected, onSelect }) {
   );
 }
 
+/* ── 阅读题逐题复核徽章（fail-open 的可视化）──
+   ✓复核一致（AI 独立作答=用户答案）/ ⚠不一致（预览里点选裁决，不静默改）/
+   AI 代解（用户没贴答案，答案由 verify 填补）/ 未复核（verify 失败或超时，仍可手动点选保存）。 */
+function VerifyBadge({ state, result }) {
+  let bg = "#eef1f4", color = "#8b95a1", label = "未复核";
+  if (state === "pending") {
+    label = "复核中…";
+  } else if (state === "done" && result) {
+    if (result.verdict === "ok") { bg = "#F0FDF4"; color = "#059669"; label = "✓ 复核一致"; }
+    else if (result.verdict === "mismatch") { bg = "#FFFBEB"; color = "#B45309"; label = "⚠ 不一致"; }
+    else if (result.verdict === "ai_answered") { bg = "#EFF6FF"; color = "#2563EB"; label = "AI 代解"; }
+  }
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 700, padding: "1px 7px", borderRadius: 999,
+      background: bg, color, marginLeft: 6, whiteSpace: "nowrap", verticalAlign: "middle",
+    }}>
+      {label}
+    </span>
+  );
+}
+
 export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequireLogin, variant = "panel" }) {
   const [typeKey, setTypeKey] = useState("academic");
   const [text, setText] = useState("");
@@ -216,6 +275,13 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
   const [err, setErr] = useState("");
   const [saving, setSaving] = useState(false);
   const [savedMsg, setSavedMsg] = useState("");
+
+  // 阅读题（rdl/ap）复核态：verifyMap[itemIdx] = {status:'pending'|'done'|'failed', results?}；
+  // answerPick[`${itemIdx}:${qIdx}`] = 用户在预览里点选的答案（裁决/手动补答案）。
+  // verifyGenRef 防串台：换题型/重新抽取后，旧一代 verify worker 的迟到结果直接丢弃。
+  const [verifyMap, setVerifyMap] = useState({});
+  const [answerPick, setAnswerPick] = useState({});
+  const verifyGenRef = useRef(0);
 
   const [list, setList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
@@ -252,6 +318,55 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     setSelected(new Set());
     setErr("");
     setSavedMsg("");
+    verifyGenRef.current += 1; // 淘汰在途 verify worker
+    setVerifyMap({});
+    setAnswerPick({});
+  }
+
+  // 每题的「生效答案」：用户点选 > 抽取自带（用户材料里的答案键）> verify 的 AI 代解。
+  // 三者皆无 → null（保存前必须解决：等复核或手动点选）。
+  function effectiveAnswer(i, j) {
+    const picked = answerPick[`${i}:${j}`];
+    if (picked) return picked;
+    const own = normAnswer(parsed?.[i]?.questions?.[j]?.correct_answer);
+    if (own) return own;
+    const vr = verifyMap[i];
+    const r = vr?.status === "done" ? (vr.results || [])[j] : null;
+    return normAnswer(r?.ai_answer);
+  }
+
+  // 抽取成功后对每个有效阅读 item 自动调 /api/user-bank/verify（并发 ≤2，逐题更新徽章）。
+  // fail-open：单个 item 复核失败只标「未复核」，不打断其他 item、不阻塞保存。
+  async function runVerifyAll(items, tKey) {
+    const gen = ++verifyGenRef.current;
+    const indices = items.map((_, i) => i).filter((i) => isValid(tKey, items[i]));
+    setVerifyMap(Object.fromEntries(indices.map((i) => [i, { status: "pending" }])));
+    let cursor = 0;
+    const worker = async () => {
+      for (;;) {
+        const at = cursor;
+        cursor += 1;
+        if (at >= indices.length) return;
+        const i = indices[at];
+        let next = { status: "failed" };
+        try {
+          const res = await fetch("/api/user-bank/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userCode: code, type: tKey, item: items[i] }),
+          });
+          const json = await res.json().catch(() => ({}));
+          if (res.ok && json?.ok && Array.isArray(json.results)) {
+            next = { status: "done", results: json.results };
+          }
+        } catch {
+          /* keep failed → 未复核 */
+        }
+        if (verifyGenRef.current !== gen) return; // 已被新一轮抽取/换题型取代
+        setVerifyMap((prev) => ({ ...prev, [i]: next }));
+      }
+    };
+    await Promise.all([worker(), worker()]);
   }
 
   // 抽取结果落到同一预览态（粘贴 / 图片共用）。
@@ -260,6 +375,11 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     const next = new Set();
     questions.forEach((q, i) => { if (isValid(typeKey, q)) next.add(i); });
     setSelected(next);
+    setVerifyMap({});
+    setAnswerPick({});
+    if (READING_KEYS.has(typeKey)) {
+      runVerifyAll(questions, typeKey); // fire-and-forget（内部逐 item 兜错）
+    }
   }
 
   // 统一消费 /extract 与 /extract-image 的返回；null = 已处理错误/需升级，调用方停手。
@@ -300,21 +420,37 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     }
   }
 
-  async function handleImageFile(file) {
+  // 多图上传（1-3 张）：AP 学术短文一屏装不下，文章+题目常 2-3 张截图。
+  // 单图路径不变（长度 1 的数组）；逐张下采样后合计超限则提示。
+  async function handleImageFiles(fileList) {
     setErr("");
     setSavedMsg("");
     setParsed(null);
-    if (!file) return;
+    const files = Array.from(fileList || []).filter(Boolean);
+    if (files.length === 0) return;
     if (!code) { setErr("请先登录"); return; }
-    if (!/^image\//.test(file.type)) { setErr("请选择图片文件（PNG / JPEG / WebP）"); return; }
-    if (file.size > CLIENT_MAX_BYTES) { setErr("图片过大，请选小一点的截图"); return; }
+    if (files.length > MAX_IMAGES) { setErr(`一次最多 ${MAX_IMAGES} 张图片（长材料可按顺序分屏截图）`); return; }
+    for (const f of files) {
+      if (!/^image\//.test(f.type)) { setErr("请选择图片文件（PNG / JPEG / WebP）"); return; }
+      if (f.size > CLIENT_MAX_BYTES) { setErr("图片过大，请选小一点的截图"); return; }
+    }
     setImgBusy(true);
     try {
-      const blob = await downscaleImage(file);
+      const blobs = [];
+      let total = 0;
+      for (const f of files) {
+        const b = await downscaleImage(f);
+        total += b?.size || 0;
+        blobs.push(b);
+      }
+      if (total > CLIENT_TOTAL_UPLOAD_BYTES) {
+        setErr("图片合计过大（压缩后仍超限），请减少张数或截小一点");
+        return;
+      }
       const fd = new FormData();
       fd.append("type", typeKey);
       fd.append("userCode", code);
-      fd.append("image", blob, "upload.jpg");
+      blobs.forEach((b, i) => fd.append("image", b, `upload-${i + 1}.jpg`));
       const res = await fetch("/api/user-bank/extract-image", { method: "POST", body: fd });
       const json = await res.json().catch(() => ({}));
       if (res.status === 503) { setErr(json?.error || "图片识别暂未开通，请改用粘贴文本"); return; }
@@ -338,10 +474,34 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
   }
 
   // Per-type save packaging.
-  //  writing (academic/email) & build: one DB item per question.
+  //  writing (academic/email) & build & reading (rdl/ap): one DB item per question/passage.
   //  repeat/interview: bundle ALL chosen items into ONE "set" DB item, because the
   //  speaking bank's unit is a set (RepeatTask/InterviewTask consume an array).
-  function packItems(typeKey, chosen) {
+  function packItems(typeKey, chosen, chosenIdx) {
+    if (READING_KEYS.has(typeKey)) {
+      // One DB item per passage. Strip preview-only advisory fields; resolve every question's
+      // correct_answer（用户点选 > 抽取自带 > verify AI 代解——handleSave 已保证全部可解）；
+      // 原材料没有解析时，用 verify 的 reasoning 回填 explanation（RDLTask 提交后会展示）。
+      return chosenIdx.map((i) => {
+        const { warnings: _w, invalid: _i, invalid_reason: _ir, ...bank } = parsed[i];
+        const vr = verifyMap[i];
+        const questions = (parsed[i].questions || []).map((qq, j) => {
+          const r = vr?.status === "done" ? (vr.results || [])[j] : null;
+          const { explanation: _e, ...qBase } = qq || {};
+          const explanation = String(qq?.explanation || "").trim() || String(r?.explanation || "").trim();
+          return {
+            ...qBase,
+            correct_answer: effectiveAnswer(i, j),
+            ...(explanation ? { explanation } : {}),
+          };
+        });
+        // rdl 的 variant 服务端 postProcess 已按题数派生；这里兜底补齐（保存前补的口径）。
+        const extra = typeKey === "rdl" && !bank.variant
+          ? { variant: questions.length === 2 ? "short" : "long" }
+          : {};
+        return { data: { ...bank, ...extra, questions } };
+      });
+    }
     if (typeKey === "build") {
       // One item per question (like writing). Strip the preview-only advisory fields
       // (warnings/ambiguous/invalid/invalid_reason) so the stored bank item stays canonical.
@@ -382,8 +542,20 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     setErr("");
     setSavedMsg("");
     if (!parsed) return;
-    const chosen = parsed.filter((_, i) => selected.has(i)).filter((q) => isValid(typeKey, q));
+    const chosenIdx = [...selected].sort((a, b) => a - b).filter((i) => isValid(typeKey, parsed[i]));
+    const chosen = chosenIdx.map((i) => parsed[i]);
     if (chosen.length === 0) { setErr("没有可保存的题（被选中的题缺少必要字段）"); return; }
+    // 阅读题：每小题必须有生效答案（RDLTask 判分依赖 correct_answer，缺失会把用户永远判错）。
+    // verify fail-open 不阻塞保存的前提是用户可手动点选补齐——这里就是那道闸。
+    if (READING_KEYS.has(typeKey)) {
+      const unresolved = chosenIdx.some((i) =>
+        (parsed[i].questions || []).some((_, j) => !effectiveAnswer(i, j))
+      );
+      if (unresolved) {
+        setErr("还有小题未确定答案：等 AI 复核完成，或在预览里点选每题的正确答案（A-D）后再保存。");
+        return;
+      }
+    }
     const isSpeaking = typeKey === "repeat" || typeKey === "interview";
     setSaving(true);
     try {
@@ -394,7 +566,7 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
           code,
           type: tab.stored,
           source: parsedSource,
-          items: packItems(typeKey, chosen),
+          items: packItems(typeKey, chosen, chosenIdx),
         }),
       });
       const json = await res.json();
@@ -410,6 +582,9 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
       setParsed(null);
       setSelected(new Set());
       setText("");
+      verifyGenRef.current += 1;
+      setVerifyMap({});
+      setAnswerPick({});
       loadList(code);
     } catch {
       setErr("网络错误，请稍后重试");
@@ -536,8 +711,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                 e.preventDefault();
                 setDragOver(false);
                 if (busy) return;
-                const f = e.dataTransfer?.files?.[0];
-                if (f) handleImageFile(f);
+                const fs = e.dataTransfer?.files;
+                if (fs && fs.length > 0) handleImageFiles(fs);
               }}
               style={{
                 flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
@@ -550,15 +725,16 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
               <input
                 type="file"
                 accept={ACCEPT}
+                multiple
                 disabled={busy}
-                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImageFile(f); e.target.value = ""; }}
+                onChange={(e) => { const fs = e.target.files; if (fs && fs.length > 0) handleImageFiles(fs); e.target.value = ""; }}
                 style={{ display: "none" }}
               />
               <span style={{ fontSize: 22 }}>{imgBusy ? "⏳" : "🖼️"}</span>
               <span style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>
                 {imgBusy ? "识别中，请稍候…" : "点击选择或拖入图片"}
               </span>
-              <span style={{ fontSize: 11, color: C.t3 }}>PNG / JPEG / WebP · 一张图可含多道题</span>
+              <span style={{ fontSize: 11, color: C.t3 }}>PNG / JPEG / WebP · 最多 {MAX_IMAGES} 张 · 长材料可分屏截图</span>
             </label>
           </div>
         </div>
@@ -609,6 +785,69 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                       <>
                         <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>{String(q.question || "(无问题)")}</div>
                         <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{countWords(q.question)} 词</div>
+                      </>
+                    ) : READING_KEYS.has(typeKey) ? (
+                      <>
+                        {/* 原文截断 + 逐题 stem/选项 + 答案选择器 + 复核徽章 */}
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>
+                          {(() => {
+                            const body = String(q.text || q.passage || "(无原文)");
+                            return body.length > 180 ? body.slice(0, 177) + "..." : body;
+                          })()}
+                        </div>
+                        {(Array.isArray(q.questions) ? q.questions : []).map((qq, j) => {
+                          const vr = verifyMap[i];
+                          const r = vr?.status === "done" ? (vr.results || [])[j] : null;
+                          const eff = ok ? effectiveAnswer(i, j) : null;
+                          return (
+                            <div key={j} style={{ marginTop: 8, paddingTop: 8, borderTop: `1px dashed ${BD}` }}>
+                              <div style={{ fontSize: 12.5, color: C.t1, lineHeight: 1.5 }}>
+                                <b>Q{j + 1}.</b> {String(qq?.stem || "(无题干)")}
+                                {ok && <VerifyBadge state={vr?.status} result={r} />}
+                              </div>
+                              <div style={{ fontSize: 11.5, color: C.t2, marginTop: 3, lineHeight: 1.6 }}>
+                                {ANSWER_KEYS.map((k) => `${k}. ${String(qq?.options?.[k] ?? "—")}`).join("　")}
+                              </div>
+                              {ok && (
+                                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 5, flexWrap: "wrap" }}>
+                                  <span style={{ fontSize: 11, color: C.t3 }}>答案</span>
+                                  {ANSWER_KEYS.map((k) => (
+                                    <button
+                                      key={k}
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setAnswerPick((prev) => ({ ...prev, [`${i}:${j}`]: k }));
+                                      }}
+                                      style={{
+                                        width: 26, height: 22, borderRadius: 6, fontSize: 11, fontWeight: 700,
+                                        cursor: "pointer", fontFamily: FONT, lineHeight: 1,
+                                        border: `1px solid ${eff === k ? tabAccent.color : BD}`,
+                                        background: eff === k ? tabAccent.color : "#fff",
+                                        color: eff === k ? "#fff" : C.t2,
+                                      }}
+                                    >
+                                      {k}
+                                    </button>
+                                  ))}
+                                  {r?.verdict === "mismatch" && (
+                                    <span style={{ fontSize: 11, color: "#B45309" }}>
+                                      你标 {r.marked_answer} / AI 判 {r.ai_answer}，点选裁决
+                                    </span>
+                                  )}
+                                  {!eff && <span style={{ fontSize: 11, color: C.t3 }}>（待复核 / 可手动点选）</span>}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                        {Array.isArray(q.warnings) && q.warnings.length > 0 && (
+                          <div style={{ fontSize: 11, color: "#B45309", marginTop: 6 }}>⚠️ {q.warnings.join("；")}</div>
+                        )}
+                        {q.invalid && q.invalid_reason && (
+                          <div style={{ fontSize: 11, color: C.red, marginTop: 4 }}>{String(q.invalid_reason)}</div>
+                        )}
                       </>
                     ) : typeKey === "build" ? (
                       <>
@@ -680,14 +919,22 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                 ? `${String(it?.data?.topic || "面试题")} · ${(it?.data?.questions || []).length} 问`
                 : it.type === "build"
                 ? String(it?.data?.prompt || it?.data?.answer || "(连词成句题)").slice(0, 70)
+                : it.type === "rdl"
+                ? `${String(it?.data?.format_metadata?.title || it?.data?.text || "(日常阅读)").slice(0, 60)} · ${(it?.data?.questions || []).length} 题`
+                : it.type === "ap"
+                ? `${String(it?.data?.passage || "(学术短文)").slice(0, 60)} · ${(it?.data?.questions || []).length} 题`
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
+              // rdl 双池：练习链接按该条的 variant（缺失则按题数派生）指对池子。
+              const practiceHref = it.type === "rdl"
+                ? `/reading?type=rdl&variant=${it?.data?.variant === "short" || (it?.data?.questions || []).length === 2 ? "short" : "long"}&mode=practice`
+                : storedType?.practice;
               return (
                 <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: `1px solid ${BD}`, borderRadius: 8 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, background: chipAccent.soft, color: chipAccent.color, flexShrink: 0 }}>
                     {storedType?.label || it.type}
                   </span>
                   <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: C.t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</span>
-                  {storedType?.practice && <a href={storedType.practice} style={{ fontSize: 12, color: C.blue, textDecoration: "none", flexShrink: 0 }}>去练习</a>}
+                  {practiceHref && <a href={practiceHref} style={{ fontSize: 12, color: C.blue, textDecoration: "none", flexShrink: 0 }}>去练习</a>}
                   <button onClick={() => handleDelete(it)} style={{ border: "none", background: "none", color: C.red, fontSize: 12, cursor: "pointer", flexShrink: 0, fontFamily: FONT }}>删除</button>
                 </div>
               );
