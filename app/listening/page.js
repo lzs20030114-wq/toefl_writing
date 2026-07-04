@@ -127,8 +127,9 @@ const PRACTICE_CONFIG = {
   },
 };
 
-// Personal question bank wiring: LCR (phase 3-1) + LA/LAT (phase 3-2). LC (双说话人) added later.
-const PERSONAL_PRACTICE_TYPES = new Set(["lcr", "la", "lat"]);
+// Personal question bank wiring: all four listening subtypes (LCR phase 3-1, LA/LAT phase 3-2,
+// LC 双说话人 phase 3-3). Every subtype now merges the user's "我的" cards into its practice picker.
+const PERSONAL_PRACTICE_TYPES = new Set(["lcr", "la", "lat", "lc"]);
 
 function ListeningPageClient() {
   const router = useRouter();

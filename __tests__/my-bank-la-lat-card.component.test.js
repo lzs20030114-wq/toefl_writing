@@ -37,10 +37,15 @@ describe("MyBankImporter LA/LAT cards", () => {
     expect(screen.getByPlaceholderText(/讲座文字稿/)).toBeTruthy();
   });
 
-  test("听对话 (LC) remains a 开发中 placeholder (not wired this phase)", () => {
+  test("听对话 (LC) is now live and selectable (wired in phase 3-3)", () => {
     render(<MyBankImporter code="ABC123" tier="pro" />);
     const chip = screen.getByText("听对话").closest("button");
-    expect(chip.disabled).toBe(true);
-    expect(chip.getAttribute("aria-pressed")).toBeNull();
+    expect(chip.disabled).toBe(false);
+    expect(chip.getAttribute("aria-pressed")).not.toBeNull();
+
+    fireEvent.click(chip);
+    expect(chip.getAttribute("aria-pressed")).toBe("true");
+    // Placeholder guides pasting the two-speaker dialogue (双人对话稿).
+    expect(screen.getByPlaceholderText(/双人对话稿/)).toBeTruthy();
   });
 });

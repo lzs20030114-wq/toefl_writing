@@ -20,6 +20,7 @@ const {
   postProcessLcr,
   postProcessLa,
   postProcessLat,
+  postProcessLc,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -169,6 +170,12 @@ export async function POST(request) {
       // Listening LAT（讲座稿 + 4-6 题）：transcript 空/过短标 invalid；容真题 800 词/6 题（上限只警告、
       // 题数区间 2-6）；每题 stem/选项缺则剔除；answer 可缺（verify 用 latAuditor 代解）。
       questions = questions.map((q) => postProcessLat(q));
+    } else if (type === "lc") {
+      // Listening LC（双说话人对话 + 2 题）：speakers 恒 2 且各带 gender（缺则按 name 推断，推不出标
+      // invalid）；conversation <4 轮或 <40 词标 invalid、上限只警告；出现名单外说话人（切分错位）标
+      // invalid；每题 stem/选项缺则剔除；answer 可缺（verify 用 lcAuditor 代解）。缺题由 prompt 阶段
+      // AI 已补 main_idea/detail 各一题。音频（多音色）由保存后 /api/user-bank/render-audio 回写。
+      questions = questions.map((q) => postProcessLc(q));
     }
 
     return Response.json({ ok: true, questions });

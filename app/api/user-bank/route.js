@@ -8,8 +8,9 @@ import { gateUserBankRequest } from "../../../lib/userBankAuth";
 import { stripClientAudioUrl, userAudioStoragePath } from "../../../lib/userBank/listeningAudio";
 
 // Storage whitelist follows shipped types. Widen alongside each launch (discussion+email
-// P0; repeat+interview, then build, then rdl+ap, then ctw, then lcr). The DB CHECK covers all 12 subtypes already.
-const VALID_TYPES = new Set(["discussion", "email", "repeat", "interview", "build", "rdl", "ap", "ctw", "lcr", "la", "lat"]);
+// P0; repeat+interview, then build, then rdl+ap, then ctw, then lcr, then la+lat, then lc).
+// All 12 subtypes are now live; the DB CHECK constraint covers the same set.
+const VALID_TYPES = new Set(["discussion", "email", "repeat", "interview", "build", "rdl", "ap", "ctw", "lcr", "la", "lat", "lc"]);
 // Listening audio_url is minted SERVER-SIDE only (by /api/user-bank/render-audio). A
 // client-supplied audio_url is stripped on save (security patch A) and only OUR-bucket URLs under
 // this user's own prefix are reaped on delete (patch B). Both live in lib/userBank/listeningAudio

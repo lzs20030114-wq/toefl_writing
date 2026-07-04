@@ -19,6 +19,7 @@ const {
   postProcessLcr,
   postProcessLa,
   postProcessLat,
+  postProcessLc,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
@@ -139,6 +140,10 @@ export async function POST(request) {
       // 图片语义：LAT 真题界面常只有题没讲座稿 → transcript:"" → postProcessLat 标 invalid，
       // 引导用户改贴讲座文本。机经帖截图（含讲座稿+题）则整块抽出。与粘贴路径产物一致。
       questions = questions.map((q) => postProcessLat(q));
+    } else if (type === "lc") {
+      // 图片语义：LC 真题界面常只有题没对话稿 → conversation:[] → postProcessLc 标 invalid（轮数不足），
+      // 引导用户改贴对话文本。机经帖截图（含对话稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLc(q));
     }
 
     return Response.json({ ok: true, questions });

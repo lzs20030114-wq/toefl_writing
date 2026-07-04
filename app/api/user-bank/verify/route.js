@@ -23,6 +23,7 @@ const { auditRDLItem, buildAnswerPrompt, parseJson } = require("../../../../lib/
 const { auditLCRItem } = require("../../../../lib/listeningGen/lcrAuditor");
 const { auditLAItem } = require("../../../../lib/listeningGen/laAuditor");
 const { auditLATItem } = require("../../../../lib/listeningGen/latAuditor");
+const { auditLCItem } = require("../../../../lib/listeningGen/lcAuditor");
 
 export const maxDuration = 90; // 路径 (a) 是 2 次串行 DeepSeek 调用（各 ~10-20s）
 
@@ -194,6 +195,57 @@ async function verifyListening(rawItem, auditItem, textField) {
   return Response.json({ ok: true, results });
 }
 
+// LC verify: a TWO-speaker conversation + multi-question MCQ. Unlike LA/LAT (single text field),
+// auditLCItem reads item.conversation + item.questions, so LC needs its own request shaping —
+// but its result envelope (audit.details[] with questionIndex/aiAnswer/reasoning) is IDENTICAL, so
+// the results mapping is the same as verifyListening's. answer may be null per question (verify 代解).
+async function verifyLcConversation(rawItem) {
+  const rawTurns = Array.isArray(rawItem.conversation) ? rawItem.conversation : [];
+  const conversation = [];
+  for (const t of rawTurns) {
+    const speaker = String(t?.speaker || "").trim();
+    const text = String(t?.text || "").trim();
+    if (text) conversation.push({ speaker, text });
+  }
+  const rawQuestions = Array.isArray(rawItem.questions) ? rawItem.questions : [];
+  if (conversation.length === 0 || rawQuestions.length === 0) {
+    return jsonError(400, "item must include the conversation turns and at least one question");
+  }
+  if (rawQuestions.length > MAX_QUESTIONS) return jsonError(400, `Too many questions (max ${MAX_QUESTIONS})`);
+
+  const questions = [];
+  const marked = [];
+  for (const q of rawQuestions) {
+    const stem = String(q?.stem || "").trim();
+    const opts = q?.options && typeof q.options === "object" && !Array.isArray(q.options) ? q.options : null;
+    if (!stem || !opts) return jsonError(400, "Each question needs a stem and options");
+    const options = {};
+    for (const k of ["A", "B", "C", "D"]) {
+      const v = String(opts[k] == null ? "" : opts[k]).trim();
+      if (!v) return jsonError(400, "Each question needs complete A-D options");
+      options[k] = v;
+    }
+    const m = normAnswer(q?.answer);
+    marked.push(m);
+    questions.push({ type: q?.type, stem, options, answer: m });
+  }
+
+  const audit = await auditLCItem({ conversation, questions }, (prompt) => verifyCallAI(prompt));
+  if (audit.error || !Array.isArray(audit.details)) return jsonError(502, "复核失败，请稍后重试");
+
+  const results = questions.map((_, i) => {
+    const d = audit.details.find((r) => r.questionIndex === i) || audit.details[i];
+    const ai = normAnswer(d && d.aiAnswer);
+    const reasoning = String((d && d.reasoning) || "");
+    const key = `Q${i + 1}`;
+    if (!ai) return { question: key, verdict: "unverified", ai_answer: null, marked_answer: marked[i] };
+    if (!marked[i]) return { question: key, verdict: "ai_answered", ai_answer: ai, marked_answer: null, explanation: reasoning };
+    if (ai === marked[i]) return { question: key, verdict: "ok", ai_answer: ai, marked_answer: marked[i] };
+    return { question: key, verdict: "mismatch", ai_answer: ai, marked_answer: marked[i], reason: reasoning };
+  });
+  return Response.json({ ok: true, results });
+}
+
 export async function POST(request) {
   try {
     const contentLength = Number(request.headers.get("content-length") || 0);
@@ -205,7 +257,7 @@ export async function POST(request) {
 
     const body = await request.json().catch(() => ({}));
     const type = String(body?.type || "");
-    if (!["rdl", "ap", "lcr", "la", "lat"].includes(type)) return jsonError(400, "Invalid type");
+    if (!["rdl", "ap", "lcr", "la", "lat", "lc"].includes(type)) return jsonError(400, "Invalid type");
     const rawItem = body?.item;
     if (!rawItem || typeof rawItem !== "object" || Array.isArray(rawItem)) {
       return jsonError(400, "Missing item");
@@ -230,6 +282,10 @@ export async function POST(request) {
     // envelope. Same两口径: answer present → ok/mismatch; missing → ai_answered.
     if (type === "la") return await verifyListening(rawItem, auditLAItem, "announcement");
     if (type === "lat") return await verifyListening(rawItem, auditLATItem, "transcript");
+
+    // ── LC (听对话): two-speaker conversation + multi-question MCQ. Uses lcAuditor (reads
+    // conversation + questions), mapped to the same rdl/ap results envelope.
+    if (type === "lc") return await verifyLcConversation(rawItem);
 
     // AP 穿 RDL 马甲：passage → text，之后全程按 RDL item 处理。
     const text = String((type === "ap" ? rawItem.passage : rawItem.text) || "").trim();

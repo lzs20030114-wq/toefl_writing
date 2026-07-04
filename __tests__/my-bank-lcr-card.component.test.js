@@ -29,11 +29,11 @@ describe("MyBankImporter LCR card", () => {
     expect(textarea).toBeTruthy();
   });
 
-  // LA (听公告) + LAT (学术讲座) went live in phase 3-2; only LC (听对话) remains 开发中.
-  test("听对话 (LC) remains a 开发中 placeholder", () => {
+  // All four listening subtypes are now live (LCR 3-1, LA/LAT 3-2, LC 3-3).
+  test("听对话 (LC) is live and selectable (wired in phase 3-3)", () => {
     render(<MyBankImporter code="ABC123" tier="pro" />);
     const chip = screen.getByText("听对话").closest("button");
-    expect(chip.disabled).toBe(true);
-    expect(chip.getAttribute("aria-pressed")).toBeNull();
+    expect(chip.disabled).toBe(false);
+    expect(chip.getAttribute("aria-pressed")).not.toBeNull();
   });
 });

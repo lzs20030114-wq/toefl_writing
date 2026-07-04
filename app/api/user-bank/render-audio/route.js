@@ -22,7 +22,11 @@ import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
 const { generateSpeech } = require("../../../../lib/tts/edgeTts");
 const { uploadAudio } = require("../../../../lib/tts/storage");
-const { renderSpokenAudio, isSegmentedType } = require("../../../../lib/userBank/listeningAudioRender");
+const {
+  renderSpokenAudio,
+  isSegmentedType,
+  renderConversationAudio,
+} = require("../../../../lib/userBank/listeningAudioRender");
 
 // LAT lecture transcripts run 250-800 words; a single edge-tts synth of a 700-word稿 can brush the
 // 60s ceiling once upload is added. Bump to 180 (先例: /api/ai:16). LAT renders in ~600-char
@@ -32,25 +36,30 @@ export const maxDuration = 180;
 
 const limiter = createRateLimiter("user-bank-render-audio", { window: 60_000, max: 8 });
 
-// Listening types this endpoint can render, and how to pull the spoken text from data.
-// Written as a map so LC can be added later (conversation → two-voice path).
+// Single-speaker listening types: how to pull the spoken text from data. LC is NOT here — it's a
+// two-speaker conversation rendered via a separate multi-voice path (renderConversationAudio).
 const LISTENING_TEXT_EXTRACTORS = {
   lcr: (data) => String(data?.speaker || "").trim(),
   la: (data) => String(data?.announcement || "").trim(),
   lat: (data) => String(data?.transcript || "").trim(),
 };
 
-// Edge voice preset per type (single-speaker rendering; LC's two-voice path is future work).
-// LA → an announcement voice; LAT → a lecture voice (edgeTts.js preset table).
+// Edge voice preset per single-speaker type. LA → an announcement voice; LAT → a lecture voice
+// (edgeTts.js preset table). LC picks TWO distinct presets per item from its speakers[].gender
+// (pickConversationVoices), so it's not in this single-preset map.
 const LISTENING_PRESET = {
   lcr: "lcr_campus_female",
   la: "announcement_classroom",
   lat: "lecture_male",
 };
 
-// Segmentation + mp3-concat logic lives in lib/userBank/listeningAudioRender (pure + unit-tested);
-// this route only injects the edge-tts synth. LAT (isSegmentedType) renders in ~600-char segments
-// then byte-concats the mp3 frames; lcr/la render in one call.
+// Types this endpoint can render at all (single-speaker text OR LC conversation).
+const RENDERABLE_TYPES = new Set([...Object.keys(LISTENING_TEXT_EXTRACTORS), "lc"]);
+
+// Segmentation + mp3-concat + multi-voice logic lives in lib/userBank/listeningAudioRender (pure +
+// unit-tested); this route only injects the edge-tts synth. LAT (isSegmentedType) renders in
+// ~600-char segments then byte-concats; lcr/la render in one call; LC renders each turn with its
+// speaker's preset then byte-concats (two distinct voices so换人听得出来).
 
 // Origin guard copied verbatim from /api/ai (app/api/ai/route.js:34-63) / user-bank/extract.
 function normalizeHost(raw) {
@@ -110,21 +119,32 @@ export async function POST(request) {
       .maybeSingle();
     if (error || !row) return softFail("item not found");
 
-    const extractText = LISTENING_TEXT_EXTRACTORS[row.type];
-    if (!extractText) return softFail(`type "${row.type}" has no audio`);
-    const text = extractText(row.data);
-    if (!text) return softFail("no spoken text to render");
+    if (!RENDERABLE_TYPES.has(row.type)) return softFail(`type "${row.type}" has no audio`);
 
-    // Render (edge-tts, in-memory Buffer — proven by scripts/spike-edge-tts.mjs). lcr/la = one synth
-    // call; lat = segmented + mp3-frame concat (long transcript). Any failure → softFail (browser TTS).
-    const preset = LISTENING_PRESET[row.type] || "default";
+    // Render (edge-tts, in-memory Buffer — proven by scripts/spike-edge-tts.mjs). Any failure →
+    // softFail (browser TTS). LC = two-voice conversation (each turn synthesized with its speaker's
+    // preset, mp3 frames concatenated); lcr/la = one synth call; lat = segmented + mp3-frame concat.
     let buffer;
     try {
-      buffer = await renderSpokenAudio(
-        text,
-        (seg) => generateSpeech(seg, { preset, format: "mp3" }),
-        { segmented: isSegmentedType(row.type) }
-      );
+      if (row.type === "lc") {
+        const data = row.data && typeof row.data === "object" ? row.data : {};
+        const conversation = Array.isArray(data.conversation) ? data.conversation : [];
+        if (conversation.length === 0) return softFail("no conversation to render");
+        buffer = await renderConversationAudio(
+          conversation,
+          data.speakers,
+          (text, preset) => generateSpeech(text, { preset, format: "mp3" })
+        );
+      } else {
+        const text = LISTENING_TEXT_EXTRACTORS[row.type](row.data);
+        if (!text) return softFail("no spoken text to render");
+        const preset = LISTENING_PRESET[row.type] || "default";
+        buffer = await renderSpokenAudio(
+          text,
+          (seg) => generateSpeech(seg, { preset, format: "mp3" }),
+          { segmented: isSegmentedType(row.type) }
+        );
+      }
     } catch (e) {
       return softFail(`tts failed: ${(e && e.message) || "unknown"}`);
     }
