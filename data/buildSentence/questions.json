@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-07-04T17:15:58.917Z",
+  "generated_at": "2026-07-04T19:44:28.786Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -14451,6 +14451,256 @@
           "grammar_points": [
             "simple past statement",
             "time adverbial 'this morning'"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 57,
+      "questions": [
+        {
+          "id": "ets_s57_q1",
+          "prompt": "Did Harold try the new fitness machines?",
+          "answer": "I tried the new rowing machine this morning.",
+          "chunks": [
+            "I",
+            "the new",
+            "rowing machine",
+            "this morning"
+          ],
+          "prefilled": [
+            "tried"
+          ],
+          "prefilled_positions": {
+            "tried": 1
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple past",
+            "statement"
+          ]
+        },
+        {
+          "id": "ets_s57_q2",
+          "prompt": "There's a new shuttle running downtown.",
+          "answer": "Where do I catch the campus shuttle?",
+          "chunks": [
+            "where",
+            "do I",
+            "the",
+            "campus shuttle"
+          ],
+          "prefilled": [
+            "catch"
+          ],
+          "prefilled_positions": {
+            "catch": 3
+          },
+          "distractor": "does",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question",
+            "wh-question"
+          ]
+        },
+        {
+          "id": "ets_s57_q3",
+          "prompt": "I heard the library changed its hours.",
+          "answer": "How late does the main library stay open?",
+          "chunks": [
+            "how late",
+            "the main",
+            "library",
+            "stay",
+            "open"
+          ],
+          "prefilled": [
+            "does"
+          ],
+          "prefilled_positions": {
+            "does": 2
+          },
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question",
+            "wh-question"
+          ]
+        },
+        {
+          "id": "ets_s57_q4",
+          "prompt": "Did Olivia hear anything about the trip?",
+          "answer": "I wanted to know whether the trip was canceled.",
+          "chunks": [
+            "I",
+            "whether",
+            "the trip",
+            "was",
+            "canceled"
+          ],
+          "prefilled": [
+            "wanted to know"
+          ],
+          "prefilled_positions": {
+            "wanted to know": 1
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "indirect question with whether"
+          ]
+        },
+        {
+          "id": "ets_s57_q5",
+          "prompt": "Does Mariana know the exact deadline?",
+          "answer": "I asked if the deadline had already passed.",
+          "chunks": [
+            "I",
+            "if",
+            "the",
+            "deadline",
+            "had already",
+            "passed"
+          ],
+          "prefilled": [
+            "asked"
+          ],
+          "prefilled_positions": {
+            "asked": 1
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "reported question with if"
+          ]
+        },
+        {
+          "id": "ets_s57_q6",
+          "prompt": "Did Hector find the seminar details?",
+          "answer": "I asked Hector about the seminar room.",
+          "chunks": [
+            "I",
+            "hector",
+            "about",
+            "the",
+            "seminar",
+            "room"
+          ],
+          "prefilled": [
+            "asked"
+          ],
+          "prefilled_positions": {
+            "asked": 1
+          },
+          "distractor": "asks",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "reported request"
+          ]
+        },
+        {
+          "id": "ets_s57_q7",
+          "prompt": "Have you signed up for the workshop?",
+          "answer": "I have not registered for the workshop yet.",
+          "chunks": [
+            "I",
+            "have not",
+            "for",
+            "the",
+            "workshop",
+            "yet"
+          ],
+          "prefilled": [
+            "registered"
+          ],
+          "prefilled_positions": {
+            "registered": 3
+          },
+          "distractor": "haven't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect negative"
+          ]
+        },
+        {
+          "id": "ets_s57_q8",
+          "prompt": "Did Naomi remind you about registration?",
+          "answer": "You should not miss the registration deadline.",
+          "chunks": [
+            "you",
+            "should not",
+            "the",
+            "registration",
+            "deadline"
+          ],
+          "prefilled": [
+            "miss"
+          ],
+          "prefilled_positions": {
+            "miss": 3
+          },
+          "distractor": "shouldn't",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "modal advice"
+          ]
+        },
+        {
+          "id": "ets_s57_q9",
+          "prompt": "Did Julian mention how the paper went?",
+          "answer": "My economics professor praised the detailed research paper that I submitted last week.",
+          "chunks": [
+            "my economics",
+            "professor",
+            "the detailed",
+            "research paper",
+            "that",
+            "I",
+            "submitted",
+            "last week"
+          ],
+          "prefilled": [
+            "praised"
+          ],
+          "prefilled_positions": {
+            "praised": 3
+          },
+          "distractor": "praising",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "complex sentence"
+          ]
+        },
+        {
+          "id": "ets_s57_q10",
+          "prompt": "Did Diane update you on the scholarship?",
+          "answer": "My full scholarship application was finally approved by the registrar last Friday.",
+          "chunks": [
+            "my full",
+            "scholarship",
+            "application",
+            "was",
+            "finally approved",
+            "last Friday"
+          ],
+          "prefilled": [
+            "by the registrar"
+          ],
+          "prefilled_positions": {
+            "by the registrar": 7
+          },
+          "distractor": "were",
+          "has_question_mark": false,
+          "grammar_points": [
+            "passive voice",
+            "complex sentence"
           ]
         }
       ]
