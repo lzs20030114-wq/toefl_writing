@@ -43,9 +43,18 @@ describe("MyBankImporter reading cards", () => {
     expect(textarea).toBeTruthy();
   });
 
-  test("单词补全 (CTW) remains 开发中 (research verdict: 阅读只上 RDL+AP 这一批)", () => {
+  test("单词补全 (CTW) card renders live and is selectable, placeholder 引导贴原文自动挖空", () => {
     render(<MyBankImporter code="ABC123" tier="pro" />);
+
     const ctwChip = screen.getByText("单词补全").closest("button");
-    expect(ctwChip.disabled).toBe(true);
+    expect(ctwChip).toBeTruthy();
+    expect(ctwChip.disabled).toBe(false);
+    expect(ctwChip.getAttribute("aria-pressed")).not.toBeNull();
+
+    fireEvent.click(ctwChip);
+    expect(ctwChip.getAttribute("aria-pressed")).toBe("true");
+    // 「贴原文自动挖空」引导：C-test 自动挖 10 个空，答案即原文（不做真题截图还原）。
+    const textarea = screen.getByPlaceholderText(/英文原文.*自动挖 10 个空.*答案即原文/);
+    expect(textarea).toBeTruthy();
   });
 });

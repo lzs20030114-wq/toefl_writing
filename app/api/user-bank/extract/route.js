@@ -16,6 +16,7 @@ const {
   postProcessInterview,
   postProcessRdl,
   postProcessAp,
+  postProcessCtw,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -147,6 +148,10 @@ export async function POST(request) {
     } else if (type === "ap") {
       // Reading: 同上 + paragraphs 服务端从 \n\n 派生 + insert_text 可作答性 + 段号引用检查。
       questions = questions.map((q) => postProcessAp(q));
+    } else if (type === "ctw") {
+      // Reading CTW（贴原文自动挖空）：AI 只清洗转写，服务端跑 cTestBlanker 机械挖空产出完整 item
+      //（答案=原文，天然零错）；词数 <45 标 invalid、>120 只警告；ctwValidator 告警塞进 warnings。
+      questions = questions.map((q) => postProcessCtw(q));
     }
 
     return Response.json({ ok: true, questions });

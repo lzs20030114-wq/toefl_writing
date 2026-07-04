@@ -15,6 +15,7 @@ const {
   postProcessInterview,
   postProcessRdl,
   postProcessAp,
+  postProcessCtw,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
@@ -119,6 +120,10 @@ export async function POST(request) {
       questions = questions.map((q) => postProcessRdl(q));
     } else if (type === "ap") {
       questions = questions.map((q) => postProcessAp(q));
+    } else if (type === "ctw") {
+      // 图片路径语义：传一张含英文段落的资料照片 → Qwen-VL 纯转写文字 → 服务端机械挖空
+      //（不是还原已挖空的真题）；产物与粘贴路径完全一致。
+      questions = questions.map((q) => postProcessCtw(q));
     }
 
     return Response.json({ ok: true, questions });

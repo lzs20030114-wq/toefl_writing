@@ -37,7 +37,13 @@ const TYPE_GROUPS = [
   {
     id: "reading", label: "阅读", icon: "📖", accent: SECTION_ACCENTS.reading,
     types: [
-      { key: "ctw", label: "单词补全", en: "Complete the Words", live: false },
+      {
+        key: "ctw", stored: "ctw", label: "单词补全", en: "Complete the Words", live: true,
+        practice: "/reading?type=ctw&mode=practice",
+        // 产品口径：只做「贴原文自动挖空」，**不做**「真题截图还原」——OCR 出来无 ground truth，
+        // 答案键和缺口长度都不可信（研究已裁决砍掉，见附录 B CTW §a）。
+        placeholder: "粘贴一段 45-120 词的英文原文（academic 段落最佳），系统会按 C-test 规则自动挖 10 个空，答案即原文。一次可粘多段。",
+      },
       {
         key: "rdl", stored: "rdl", label: "日常阅读", en: "Read in Daily Life", live: true,
         // rdl 双池按题数分（2 题→short）；已存列表按每条 data.variant 覆盖此默认链接。
@@ -94,6 +100,7 @@ const INVALID_HINT = {
   build: "问句 + 回应句 + 词块（且服务端校验通过）",
   rdl: "材料原文 + 至少 1 道 A-D 选项齐全的题",
   ap: "文章全文 + A-D 选项齐全的题目",
+  ctw: "45-120 词英文原文（能挖出 10 个空）",
 };
 
 const BD = C.bd2 || "#e2e8f0";
@@ -104,6 +111,24 @@ const CLIENT_TOTAL_UPLOAD_BYTES = Math.floor(3.8 * 1024 * 1024); // 服务端合
 
 // 阅读 MCQ 题型（rdl/ap）：预览带逐题答案选择器 + verify 复核徽章。
 const READING_KEYS = new Set(["rdl", "ap"]);
+
+// CTW 预览：所见即所练——直接用服务端机械挖空产出的 blanked_text；缺时按 blanks 现算一份
+//（position=全局词索引；缺口=original_word.length-fragment.length，与 CTWTask.js:111 同口径）。
+function ctwBlankedText(q) {
+  if (q?.blanked_text && String(q.blanked_text).trim()) return String(q.blanked_text);
+  const passage = String(q?.passage || "");
+  const blanks = Array.isArray(q?.blanks) ? q.blanks : [];
+  if (!passage || blanks.length === 0) return passage;
+  const byPos = new Map(blanks.map((b) => [b.position, b]));
+  return passage.split(/\s+/).map((word, wi) => {
+    const b = byPos.get(wi);
+    if (!b) return word;
+    const frag = String(b.displayed_fragment || "");
+    const missing = Math.max(0, String(b.original_word || "").length - frag.length);
+    const trailing = word.match(/[.,;:!?]+$/)?.[0] || "";
+    return frag + "_".repeat(missing) + trailing;
+  }).join(" ");
+}
 const ANSWER_KEYS = ["A", "B", "C", "D"];
 function normAnswer(v) {
   const s = String(v == null ? "" : v).trim().toUpperCase();
@@ -152,11 +177,21 @@ function isValidReading(q) {
       qq && String(qq.stem || "").trim() && qq.options &&
       ANSWER_KEYS.every((k) => String(qq.options[k] || "").trim()));
 }
+// CTW: the server (postProcessCtw) is the authority — it runs cTestBlanker + word-count gate and
+// stamps q.invalid on failure. The client trusts that flag + checks the mechanically-produced
+// passage/blanks are present (so a partial response can't slip through). NOTE: 挖空是纯机械代码，
+// 答案=原文，所以没有 rdl/ap 那种「答案待解」环节——预览即所练。
+function isValidCtw(q) {
+  return q?.invalid !== true &&
+    !!(q?.passage && String(q.passage).trim()) &&
+    Array.isArray(q?.blanks) && q.blanks.length >= 1;
+}
 function isValid(typeKey, q) {
   if (typeKey === "email") return isValidEmail(q);
   if (typeKey === "repeat") return isValidRepeat(q);
   if (typeKey === "interview") return isValidInterview(q);
   if (typeKey === "build") return isValidBuild(q);
+  if (typeKey === "ctw") return isValidCtw(q);
   if (READING_KEYS.has(typeKey)) return isValidReading(q);
   return isValidAcademic(q);
 }
@@ -509,6 +544,13 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
         data: bankFields,
       }));
     }
+    if (typeKey === "ctw") {
+      // One item per passage. The bank item was produced by the server (cTestBlanker) already —
+      // just strip the preview-only advisory fields so the stored item is the canonical bank shape.
+      return chosen.map(({ warnings: _w, invalid: _i, invalid_reason: _ir, ...bankFields }) => ({
+        data: bankFields,
+      }));
+    }
     if (typeKey === "repeat") {
       return [{
         data: {
@@ -786,6 +828,26 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                         <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>{String(q.question || "(无问题)")}</div>
                         <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{countWords(q.question)} 词</div>
                       </>
+                    ) : typeKey === "ctw" ? (
+                      <>
+                        {/* 所见即所练：展示机械挖空后的段落（含下划线缺口）+ 空数/词数 + warnings 黄字 */}
+                        <div style={{
+                          fontSize: 13, color: C.t1, lineHeight: 1.9, fontFamily: "'Georgia', serif",
+                          whiteSpace: "pre-wrap", wordBreak: "break-word",
+                        }}>
+                          {ctwBlankedText(q) || "(无原文)"}
+                        </div>
+                        <div style={{ fontSize: 12, color: C.t2, marginTop: 6 }}>
+                          {(Array.isArray(q.blanks) ? q.blanks.length : (q.blank_count || 0))} 空 · {q.word_count || countWords(q.passage)} 词
+                          {q.topic ? ` · ${q.topic}` : ""}
+                        </div>
+                        {Array.isArray(q.warnings) && q.warnings.length > 0 && (
+                          <div style={{ fontSize: 11, color: "#B45309", marginTop: 6 }}>⚠️ {q.warnings.join("；")}</div>
+                        )}
+                        {q.invalid && q.invalid_reason && (
+                          <div style={{ fontSize: 11, color: C.red, marginTop: 4 }}>{String(q.invalid_reason)}</div>
+                        )}
+                      </>
                     ) : READING_KEYS.has(typeKey) ? (
                       <>
                         {/* 原文截断 + 逐题 stem/选项 + 答案选择器 + 复核徽章 */}
@@ -923,6 +985,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                 ? `${String(it?.data?.format_metadata?.title || it?.data?.text || "(日常阅读)").slice(0, 60)} · ${(it?.data?.questions || []).length} 题`
                 : it.type === "ap"
                 ? `${String(it?.data?.passage || "(学术短文)").slice(0, 60)} · ${(it?.data?.questions || []).length} 题`
+                : it.type === "ctw"
+                ? `${String(it?.data?.first_sentence || it?.data?.passage || "(单词补全)").slice(0, 60)} · ${(it?.data?.blanks || []).length} 空`
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
               // rdl 双池：练习链接按该条的 variant（缺失则按题数派生）指对池子。
               const practiceHref = it.type === "rdl"

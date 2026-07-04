@@ -50,6 +50,24 @@ describe("fetchPersonalBank reading shape-guards", () => {
     expect(rows[0].id).toBe("usr_ABC123_2_0");
     expect(rows[0].passage).toMatch(/Fluid dynamics/);
   });
+
+  // CTW: guard requires passage + ≥1 blank, each blank with original_word / displayed_fragment /
+  // numeric position (CTWTask locates blanks by position + scores fragment+input===original_word).
+  const goodBlank = { position: 9, original_word: "clownfish", displayed_fragment: "clow", word_index_in_sentence: 1, sentence_index: 1 };
+
+  test("ctw: keeps well-formed items, drops missing passage / empty blanks / blank missing fields / non-numeric position", async () => {
+    mockItems([
+      { item_id: "usr_ABC123_3_0", data: { passage: "Reefs host clownfish. They shelter safely.", first_sentence: "Reefs host clownfish.", blanks: [goodBlank], blank_count: 1 } },
+      { item_id: "usr_ABC123_3_1", data: { blanks: [goodBlank] } },                                                  // no passage → drop
+      { item_id: "usr_ABC123_3_2", data: { passage: "Some passage text.", blanks: [] } },                            // empty blanks → drop
+      { item_id: "usr_ABC123_3_3", data: { passage: "Some passage text.", blanks: [{ ...goodBlank, original_word: "" }] } }, // blank missing original_word → drop
+      { item_id: "usr_ABC123_3_4", data: { passage: "Some passage text.", blanks: [{ ...goodBlank, position: "9" }] } },     // non-numeric position → drop
+    ]);
+    const rows = await fetchPersonalBank("ctw");
+    expect(rows.length).toBe(1);
+    expect(rows[0].id).toBe("usr_ABC123_3_0");
+    expect(rows[0].blanks).toHaveLength(1);
+  });
 });
 
 // mapPersonalToPicker must emit the reading picker item shape { id, tag, title, subtitle }
@@ -92,5 +110,31 @@ describe("mapPersonalToPicker reading shapes", () => {
     expect(items[0].title).toMatch(/Fluid dynamics concerns/);
     expect(items[0].subtitle).toBe("fluid dynamics");
     expect(items[0].personal).toBe(true);
+  });
+
+  test("ctw item titles from first_sentence, subtitle from topic, blank-count fallback", () => {
+    const items = mapPersonalToPicker("ctw", [
+      {
+        id: "usr_ABC123_3_0",
+        topic: "biology",
+        first_sentence: "Clownfish and sea anemones form a remarkable partnership.",
+        passage: "Clownfish and sea anemones form a remarkable partnership. They protect each other.",
+        blank_count: 10,
+        blanks: new Array(10).fill({ position: 0, original_word: "x", displayed_fragment: "x" }),
+      },
+    ]);
+    expect(items[0].id).toBe("usr_ABC123_3_0");
+    expect(items[0].tag).toBe("我的");
+    expect(items[0].title).toMatch(/Clownfish and sea anemones/);
+    expect(items[0].subtitle).toBe("biology");
+    expect(items[0].personal).toBe(true);
+  });
+
+  test("ctw title falls back to passage first line when first_sentence absent; long titles truncate", () => {
+    const items = mapPersonalToPicker("ctw", [
+      { id: "usr_ABC123_3_1", topic: "history", passage: "Ancient trade routes shaped early civilizations. Goods moved far.", blank_count: 10 },
+    ]);
+    expect(items[0].title).toMatch(/Ancient trade routes/);
+    expect(items[0].subtitle).toBe("history");
   });
 });

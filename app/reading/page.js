@@ -158,11 +158,11 @@ function ReadingPageClient() {
     setRandomItem(resume || pickReadingItem(type, pool));
   }, [type, variant, isPractice]);
 
-  // 个人题库（用户导入的 rdl/ap）：运行时拉取，只并入 practice picker（带「我的」标签）；
+  // 个人题库（用户导入的 rdl/ap/ctw）：运行时拉取，只并入 practice picker（带「我的」标签）；
   // standard/random/draft 恢复零改动（个人题不进随机池）。仿 app/speaking/page.js:83-94。
   const [personalRaw, setPersonalRaw] = useState([]);
   useEffect(() => {
-    if (!isPractice || (type !== "rdl" && type !== "ap")) {
+    if (!isPractice || (type !== "rdl" && type !== "ap" && type !== "ctw")) {
       setPersonalRaw([]);
       return;
     }
@@ -205,7 +205,7 @@ function ReadingPageClient() {
   if (isPractice && !pickedItemId) {
     const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
     const doneIds = loadDoneIds(doneKey);
-    // 个人题（「我的」标签）排最前；ctw 无个人题（personalForPicker 恒为空数组）。
+    // 个人题（「我的」标签）排最前（rdl/ap/ctw 均支持；ctw 无 variant 分池，personalForPicker=personalRaw）。
     const staticItems = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics(variant);
     const items = [...mapPersonalToPicker(type, personalForPicker), ...staticItems];
     const title = type === "ctw" ? "Complete the Words" : type === "ap" ? "Academic Passage" : "Read in Daily Life";
@@ -235,7 +235,7 @@ function ReadingPageClient() {
     // the Map lookup is a pure fallthrough for global picks. No snapshot handoff needed:
     // this page resolves items in-component (unlike the writing pages).
     if (type === "ctw") {
-      item = CTW_DATA.items.find((i) => i.id === pickedItemId);
+      item = personalById.get(String(pickedItemId)) || CTW_DATA.items.find((i) => i.id === pickedItemId);
     } else if (type === "ap") {
       item = personalById.get(String(pickedItemId)) || AP_DATA.items.find((i) => i.id === pickedItemId);
     } else {
