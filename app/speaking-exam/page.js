@@ -2,8 +2,9 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getSavedTier } from "../../lib/AuthContext";
+import { getSavedTier, getSavedCode } from "../../lib/AuthContext";
 import { SpeakingExamShell } from "../../components/mockExam/SpeakingExamShell";
+import UpgradeModal from "../../components/shared/UpgradeModal";
 import { C, FONT } from "../../components/shared/ui";
 
 function SpeakingExamClient() {
@@ -13,10 +14,17 @@ function SpeakingExamClient() {
 
   const [isPro, setIsPro] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [userCode, setUserCode] = useState("");
+  const [userTier, setUserTier] = useState("free");
+  // 此页是独立路由，不在首页根组件下，全局 open-upgrade-modal 事件监听者
+  // （挂在 HomePageClient 上）到不了这里，所以自持 UpgradeModal。
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   useEffect(() => {
     const t = getSavedTier();
     setIsPro(t === "pro" || t === "legacy");
+    setUserTier(t || "free");
+    setUserCode(getSavedCode() || "");
     setChecked(true);
   }, []);
 
@@ -51,13 +59,17 @@ function SpeakingExamClient() {
           >
             {"\u53E3\u8BED\u6A21\u8003\u4EC5\u5BF9 Pro \u7528\u6237\u5F00\u653E\u3002\u5347\u7EA7 Pro \u5373\u53EF\u89E3\u9501\u5B8C\u6574\u53E3\u8BED\u6D4B\u8BD5\u3002"}
           </div>
+          {upgradeOpen && (
+            <UpgradeModal
+              userCode={userCode}
+              currentTier={userTier}
+              onClose={() => setUpgradeOpen(false)}
+              onUpgraded={() => window.location.reload()}
+            />
+          )}
           <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
             <button
-              onClick={() => {
-                try {
-                  window.dispatchEvent(new CustomEvent("open-upgrade-modal"));
-                } catch {}
-              }}
+              onClick={() => setUpgradeOpen(true)}
               style={{
                 padding: "10px 24px",
                 borderRadius: 8,
