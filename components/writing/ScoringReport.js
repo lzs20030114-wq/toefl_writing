@@ -211,7 +211,7 @@ export function ScoringReport({ result, type }) {
         )}
       </DisclosureSection>
 
-      <DisclosureSection title="词汇等级分析" preview={getVocabPreview(essayPlainText)} contentStyle={{ padding: 14 }}>
+      <DisclosureSection title="用词与多样性" preview={getVocabPreview(essayPlainText)} contentStyle={{ padding: 14 }}>
         <VocabCEFRPanel text={essayPlainText} isPro={isPro} onUpgrade={() => setShowUpgrade(true)} />
       </DisclosureSection>
 

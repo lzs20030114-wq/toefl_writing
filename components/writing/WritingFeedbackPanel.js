@@ -163,7 +163,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   const WRITING_TABS = [
     { id: "macro", label: "宏观评价与建议" },
     { id: "linebyline", label: "逐句批注大纲" },
-    { id: "vocab", label: "词汇分析" },
+    { id: "vocab", label: "用词分析" },
     { id: "sample", label: "范文对比分析" },
   ];
 

@@ -138,45 +138,23 @@ function ColoredText({ words, text }) {
   );
 }
 
-/* ── Upgrade suggestion cards ── */
-function UpgradeCards({ suggestions }) {
-  if (!suggestions || suggestions.length === 0) return null;
+/* ── ETS-alignment note ──
+ * The CEFR distribution is DESCRIPTIVE reference only. Official TOEFL Writing
+ * rubrics reward precise / idiomatic / appropriate word choice and vocabulary
+ * RANGE in service of meaning — never word difficulty/rarity. This note keeps
+ * users from reading the chart as "use harder words to score higher". */
+function VocabRubricNote() {
   return (
-    <div style={{ display: "grid", gap: 8 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#334155" }}>
-        词汇升级建议
-      </div>
-      {suggestions.map((s, idx) => (
-        <div
-          key={idx}
-          style={{
-            display: "flex", alignItems: "center", gap: 10,
-            padding: "8px 12px",
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: 8,
-            fontSize: 13,
-          }}
-        >
-          <span style={{
-            background: LEVEL_COLORS[s.level]?.bg || "#f1f5f9",
-            color: LEVEL_COLORS[s.level]?.main || "#94a3b8",
-            padding: "2px 8px", borderRadius: 4, fontWeight: 700, fontSize: 12,
-          }}>
-            {s.original}
-            <span style={{ fontSize: 10, opacity: 0.7, marginLeft: 3 }}>{s.level}</span>
-          </span>
-          <span style={{ color: "#94a3b8", fontSize: 16 }}>{"\u2192"}</span>
-          <span style={{
-            background: LEVEL_COLORS[s.upgradeLevel]?.bg || "#fff7ed",
-            color: LEVEL_COLORS[s.upgradeLevel]?.main || "#f97316",
-            padding: "2px 8px", borderRadius: 4, fontWeight: 700, fontSize: 12,
-          }}>
-            {s.upgrade}
-            <span style={{ fontSize: 10, opacity: 0.7, marginLeft: 3 }}>{s.upgradeLevel}</span>
-          </span>
-        </div>
-      ))}
+    <div
+      style={{
+        fontSize: 12, color: "#64748b", lineHeight: 1.7,
+        background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8,
+        padding: "10px 12px",
+      }}
+    >
+      词汇等级分布仅供参考，<b style={{ color: "#475569" }}>不计入 TOEFL 评分</b>。基础词占比高很正常——
+      官方评分看的是用词是否<b style={{ color: "#475569" }}>准确、地道、贴合语境</b>，而不是词有多难。
+      刻意用生僻／高级词替换简单词，如果不自然或不精准，反而会被判为用词错误而扣分。
     </div>
   );
 }
@@ -194,7 +172,7 @@ function VocabUpgradeBanner({ onClick }) {
         cursor: "pointer", fontSize: 12, fontWeight: 700, color: "#087355",
       }}
     >
-      <span>{"\uD83D\uDD12"}</span>
+      <span>{"🔒"}</span>
       <span>升级 Pro 解锁完整词汇分析</span>
       <span style={{ padding: "4px 12px", borderRadius: 6, background: "linear-gradient(135deg, #087355, #0891B2)", color: "#fff", fontSize: 11, fontWeight: 700 }}>升级</span>
     </div>
@@ -230,6 +208,9 @@ export default function VocabCEFRPanel({ text, isPro = true, onUpgrade }) {
         </div>
       </div>
 
+      {/* ETS-alignment note — always visible, never gated */}
+      <VocabRubricNote />
+
       {/* Section 2: Colored text — blurred for free users */}
       <div style={blurStyle}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#334155", marginBottom: 8 }}>
@@ -249,23 +230,16 @@ export default function VocabCEFRPanel({ text, isPro = true, onUpgrade }) {
         </div>
       </div>
 
-      {/* Section 3: Upgrade suggestions — blurred for free users */}
-      <div style={blurStyle}>
-        <UpgradeCards suggestions={analysis.upgradeSuggestions} />
-      </div>
-
       {/* Upgrade banner for free users */}
       {!isPro && onUpgrade && <VocabUpgradeBanner onClick={onUpgrade} />}
     </div>
   );
 }
 
-/** Get preview string for DisclosureSection */
+/** Get preview string for DisclosureSection — neutral range metric, not a "B2+ %" to chase */
 export function getVocabPreview(text) {
   if (!text) return "暂无";
   const a = analyzeVocabulary(text);
   if (a.totalCounted === 0) return "暂无";
-  const basic = (a.distribution.A1 || 0) + (a.distribution.A2 || 0);
-  const adv = (a.distribution.B2 || 0) + (a.distribution.C1 || 0) + (a.distribution.C2 || 0);
-  return `基础词 ${basic}% \u00B7 B2+ ${adv}%`;
+  return `覆盖 ${a.distinctLevels} 个词汇等级`;
 }
