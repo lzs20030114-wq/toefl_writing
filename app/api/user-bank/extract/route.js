@@ -18,6 +18,8 @@ const {
   postProcessAp,
   postProcessCtw,
   postProcessLcr,
+  postProcessLa,
+  postProcessLat,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -158,6 +160,15 @@ export async function POST(request) {
       // 答案可缺（verify 用 lcrAuditor 代解）；context/difficulty/answer_paradigm 给缺省；
       // 音频不在这里出——保存后由 /api/user-bank/render-audio 服务端 edge-tts 渲染回写。
       questions = questions.map((q) => postProcessLcr(q));
+    } else if (type === "la") {
+      // Listening LA（公告稿 + 2 题）：announcement 空/过短标 invalid；词数上限只警告；题数区间外
+      //（1-3）只警告；每题 stem/选项缺则剔除；answer 可缺（verify 用 laAuditor 代解）。缺题由 prompt
+      // 阶段 AI 已补出 main_idea/detail 各一题（answer=null 交 verify 复核）。
+      questions = questions.map((q) => postProcessLa(q));
+    } else if (type === "lat") {
+      // Listening LAT（讲座稿 + 4-6 题）：transcript 空/过短标 invalid；容真题 800 词/6 题（上限只警告、
+      // 题数区间 2-6）；每题 stem/选项缺则剔除；answer 可缺（verify 用 latAuditor 代解）。
+      questions = questions.map((q) => postProcessLat(q));
     }
 
     return Response.json({ ok: true, questions });

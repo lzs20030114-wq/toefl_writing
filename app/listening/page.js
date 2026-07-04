@@ -127,8 +127,8 @@ const PRACTICE_CONFIG = {
   },
 };
 
-// Only LCR is wired into the personal question bank in this phase (la/lc/lat added later).
-const PERSONAL_PRACTICE_TYPES = new Set(["lcr"]);
+// Personal question bank wiring: LCR (phase 3-1) + LA/LAT (phase 3-2). LC (双说话人) added later.
+const PERSONAL_PRACTICE_TYPES = new Set(["lcr", "la", "lat"]);
 
 function ListeningPageClient() {
   const router = useRouter();

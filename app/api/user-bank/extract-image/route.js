@@ -17,6 +17,8 @@ const {
   postProcessAp,
   postProcessCtw,
   postProcessLcr,
+  postProcessLa,
+  postProcessLat,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 const { validateImageBatch } = require("../../../../lib/userBank/imageSniff");
 
@@ -129,6 +131,14 @@ export async function POST(request) {
       // 图片语义：LCR 真题界面常只有选项没有口播句 → speaker:"" → postProcessLcr 标 invalid，
       // 引导用户手补口播句（预览不可编辑就改贴文本）。与粘贴路径产物一致。
       questions = questions.map((q) => postProcessLcr(q));
+    } else if (type === "la") {
+      // 图片语义：LA 真题界面常只有题没公告稿 → announcement:"" → postProcessLa 标 invalid，
+      // 引导用户改贴公告文本。机经帖截图（含公告稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLa(q));
+    } else if (type === "lat") {
+      // 图片语义：LAT 真题界面常只有题没讲座稿 → transcript:"" → postProcessLat 标 invalid，
+      // 引导用户改贴讲座文本。机经帖截图（含讲座稿+题）则整块抽出。与粘贴路径产物一致。
+      questions = questions.map((q) => postProcessLat(q));
     }
 
     return Response.json({ ok: true, questions });

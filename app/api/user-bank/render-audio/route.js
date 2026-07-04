@@ -22,21 +22,35 @@ import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
 const { generateSpeech } = require("../../../../lib/tts/edgeTts");
 const { uploadAudio } = require("../../../../lib/tts/storage");
+const { renderSpokenAudio, isSegmentedType } = require("../../../../lib/userBank/listeningAudioRender");
 
-export const maxDuration = 60; // edge-tts 单句 ~2s；给 Vercel + 上传留足余量
+// LAT lecture transcripts run 250-800 words; a single edge-tts synth of a 700-word稿 can brush the
+// 60s ceiling once upload is added. Bump to 180 (先例: /api/ai:16). LAT renders in ~600-char
+// segments串行, so worst case is bounded by segment count × per-call latency; any segment failure
+// fail-opens to browser TTS (softFail), never a hang.
+export const maxDuration = 180;
 
 const limiter = createRateLimiter("user-bank-render-audio", { window: 60_000, max: 8 });
 
 // Listening types this endpoint can render, and how to pull the spoken text from data.
-// Written as a map so LA/LC/LAT can be added later (announcement / conversation / transcript).
+// Written as a map so LC can be added later (conversation → two-voice path).
 const LISTENING_TEXT_EXTRACTORS = {
   lcr: (data) => String(data?.speaker || "").trim(),
+  la: (data) => String(data?.announcement || "").trim(),
+  lat: (data) => String(data?.transcript || "").trim(),
 };
 
 // Edge voice preset per type (single-speaker rendering; LC's two-voice path is future work).
+// LA → an announcement voice; LAT → a lecture voice (edgeTts.js preset table).
 const LISTENING_PRESET = {
   lcr: "lcr_campus_female",
+  la: "announcement_classroom",
+  lat: "lecture_male",
 };
+
+// Segmentation + mp3-concat logic lives in lib/userBank/listeningAudioRender (pure + unit-tested);
+// this route only injects the edge-tts synth. LAT (isSegmentedType) renders in ~600-char segments
+// then byte-concats the mp3 frames; lcr/la render in one call.
 
 // Origin guard copied verbatim from /api/ai (app/api/ai/route.js:34-63) / user-bank/extract.
 function normalizeHost(raw) {
@@ -101,10 +115,16 @@ export async function POST(request) {
     const text = extractText(row.data);
     if (!text) return softFail("no spoken text to render");
 
-    // Render (edge-tts, in-memory Buffer — proven by scripts/spike-edge-tts.mjs).
+    // Render (edge-tts, in-memory Buffer — proven by scripts/spike-edge-tts.mjs). lcr/la = one synth
+    // call; lat = segmented + mp3-frame concat (long transcript). Any failure → softFail (browser TTS).
+    const preset = LISTENING_PRESET[row.type] || "default";
     let buffer;
     try {
-      buffer = await generateSpeech(text, { preset: LISTENING_PRESET[row.type] || "default", format: "mp3" });
+      buffer = await renderSpokenAudio(
+        text,
+        (seg) => generateSpeech(seg, { preset, format: "mp3" }),
+        { segmented: isSegmentedType(row.type) }
+      );
     } catch (e) {
       return softFail(`tts failed: ${(e && e.message) || "unknown"}`);
     }
