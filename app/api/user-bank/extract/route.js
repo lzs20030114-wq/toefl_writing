@@ -11,6 +11,7 @@ const {
   isExtractableType,
   extractJson,
   postProcessBuild,
+  validateBuildForImport,
   postProcessRepeat,
   postProcessInterview,
 } = require("../../../../lib/ai/prompts/questionExtraction");
@@ -131,7 +132,9 @@ export async function POST(request) {
     }
 
     if (type === "build") {
-      questions = questions.map((q) => postProcessBuild(q));
+      // postProcessBuild fills prefilled_positions/has_question_mark; validateBuildForImport
+      // then runs the deterministic distractor-inference + schema fatal gate + ambiguity warning.
+      questions = questions.map((q) => validateBuildForImport(postProcessBuild(q)));
     } else if (type === "repeat") {
       questions = questions.map((q) => postProcessRepeat(q));
     } else if (type === "interview") {

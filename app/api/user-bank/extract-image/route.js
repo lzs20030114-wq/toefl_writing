@@ -10,6 +10,7 @@ const { IMAGE_EXTRACTION_PROMPTS, SUPPORTED_IMAGE_TYPES } = require("../../../..
 const {
   extractJson,
   postProcessBuild,
+  validateBuildForImport,
   postProcessRepeat,
   postProcessInterview,
 } = require("../../../../lib/ai/prompts/questionExtraction");
@@ -104,7 +105,9 @@ export async function POST(request) {
 
     // 与粘贴路径对齐：build/repeat/interview 类型需服务端补算（难度/词数确定性推导）。
     if (type === "build") {
-      questions = questions.map((q) => postProcessBuild(q));
+      // Same as the paste path: postProcessBuild backfills, then validateBuildForImport does the
+      // deterministic distractor-inference + schema fatal gate + ambiguity warning.
+      questions = questions.map((q) => validateBuildForImport(postProcessBuild(q)));
     } else if (type === "repeat") {
       questions = questions.map((q) => postProcessRepeat(q));
     } else if (type === "interview") {

@@ -25,7 +25,13 @@ const TYPE_GROUPS = [
         practice: "/email-writing?mode=practice",
         placeholder: "粘贴邮件题文本（含情景、写作要求、要点）。一次可粘多道。",
       },
-      { key: "build", label: "连词成句", en: "Build a Sentence", live: false },
+      {
+        key: "build", stored: "build", label: "连词成句", en: "Build a Sentence", live: true,
+        practice: "/build-sentence?mode=practice",
+        // 产品口径：只收「真题三件套」，**不做**「给一句话 AI 自动造题」——单题导入无 batch
+        // 级多样性约束，distractor 塌陷 + 多解歧义会重演，研究已裁决砍掉（见附录 A §3）。
+        placeholder: "粘贴 TOEFL 连词成句真题三件套：① A 的问句 ② B 的完整回应句 ③「/」分隔的词块条。一次可粘多道。",
+      },
     ],
   },
   {
@@ -73,6 +79,7 @@ const INVALID_HINT = {
   email: "情景/要求/至少 3 个要点",
   repeat: "英文句子 3-25 词",
   interview: "英文问题 10-60 词",
+  build: "问句 + 回应句 + 词块（且服务端校验通过）",
 };
 
 const BD = C.bd2 || "#e2e8f0";
@@ -100,10 +107,20 @@ function isValidInterview(q) {
   const n = countWords(q?.question);
   return !!(q?.question && String(q.question).trim()) && n >= 10 && n <= 60;
 }
+// Build: the server (validateBuildForImport) is the authority — it runs the word-bag /
+// schema-fatal gate and stamps q.invalid on failure. The client just trusts that flag +
+// checks the basic fields are present (so a partial AI response can't slip through).
+function isValidBuild(q) {
+  return q?.invalid !== true &&
+    !!(q?.answer && String(q.answer).trim()) &&
+    Array.isArray(q?.chunks) && q.chunks.length >= 2 &&
+    !!(q?.prompt && String(q.prompt).trim());
+}
 function isValid(typeKey, q) {
   if (typeKey === "email") return isValidEmail(q);
   if (typeKey === "repeat") return isValidRepeat(q);
   if (typeKey === "interview") return isValidInterview(q);
+  if (typeKey === "build") return isValidBuild(q);
   return isValidAcademic(q);
 }
 
@@ -321,10 +338,17 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
   }
 
   // Per-type save packaging.
-  //  writing (academic/email): one DB item per question (current behavior).
+  //  writing (academic/email) & build: one DB item per question.
   //  repeat/interview: bundle ALL chosen items into ONE "set" DB item, because the
   //  speaking bank's unit is a set (RepeatTask/InterviewTask consume an array).
   function packItems(typeKey, chosen) {
+    if (typeKey === "build") {
+      // One item per question (like writing). Strip the preview-only advisory fields
+      // (warnings/ambiguous/invalid/invalid_reason) so the stored bank item stays canonical.
+      return chosen.map(({ warnings: _w, ambiguous: _a, invalid: _i, invalid_reason: _ir, ...bankFields }) => ({
+        data: bankFields,
+      }));
+    }
     if (typeKey === "repeat") {
       return [{
         data: {
@@ -586,6 +610,29 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                         <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>{String(q.question || "(无问题)")}</div>
                         <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{countWords(q.question)} 词</div>
                       </>
+                    ) : typeKey === "build" ? (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>
+                          <b>问：</b>{String(q.prompt || "(无问句)")}
+                        </div>
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5, marginTop: 4 }}>
+                          <b>答：</b>{String(q.answer || "(无答案)")}
+                        </div>
+                        <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>
+                          词块：{(Array.isArray(q.chunks) ? q.chunks : []).join(" / ") || "—"}
+                        </div>
+                        {q.distractor && (
+                          <div style={{ fontSize: 12, color: C.t2, marginTop: 2 }}>干扰项：{String(q.distractor)}</div>
+                        )}
+                        {q.invalid && q.invalid_reason && (
+                          <div style={{ fontSize: 11, color: C.red, marginTop: 4 }}>{String(q.invalid_reason)}</div>
+                        )}
+                        {q.ambiguous && (
+                          <div style={{ fontSize: 11, color: "#B45309", marginTop: 4 }}>
+                            ⚠️ 该题词块可能有多种正确排列，练习时判分可能偏严
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <>
                         <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>
@@ -631,6 +678,8 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                 ? `${String(it?.data?.scenario || "复述题")} · ${(it?.data?.sentences || []).length} 句`
                 : it.type === "interview"
                 ? `${String(it?.data?.topic || "面试题")} · ${(it?.data?.questions || []).length} 问`
+                : it.type === "build"
+                ? String(it?.data?.prompt || it?.data?.answer || "(连词成句题)").slice(0, 70)
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
               return (
                 <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: `1px solid ${BD}`, borderRadius: 8 }}>
