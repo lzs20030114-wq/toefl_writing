@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-04 — v1.11.0
+
+- **「我的题库」全题型扩展**（`feat/user-bank-phase1` 六棒经 `6a511ef` 合入；实施全部由 Opus 4.8 subagent 完成、Fable 规划/验收；研究依据 `data/claudeGen/reports/USER-BANK-ALL-TYPES-RESEARCH-2026-07-04.md` 6-agent 调研）：12 题型全部可导入可练习。DB 前置：`scripts/sql/user-question-banks-widen-types.sql`（一次性把 `user_question_banks.type` CHECK 放宽到全 12 类，已在 Supabase 手动执行）。
+  - **口语 repeat/interview**（`f794eae`）：粘贴句子/面试问题打包成「套」入库；提示音走浏览器 speechSynthesis 零 TTS 成本；interview 评分复用已上线 `interviewScorer`（与题库解耦）；`postProcessRepeat/Interview` 按词数确定性定难度（3-25/10-60 词外及非英文标 invalid）；评分 prompt（`lib/ai/prompts/speaking.js`）补不可信数据声明。
+  - **连词成句 BS**（`a9532ec`）：只收「真题三件套」（A 问句+B 完整回应+词块条），不做单句 AI 造题（distractor 塌陷/多解歧义风险，研究裁决）；`validateBuildForImport` 用词袋差集**代码反推 distractor**（AI 给错以代码为准）+ `buildSentenceSchema` fatal 拦截；BS practice 页新增「我的题库」合成分类卡（`gp-personal`）。
+  - **阅读 RDL+AP**（`99c5e19`）：新端点 `POST /api/user-bank/verify`——答案全有→`auditRDLItem` 独立作答复核（ok/mismatch），缺失→AI 代解填补（ai_answered），fail-open 不阻塞保存；`auditRDLItem` 加可选 `callAIOverride` 注入参数（缺省行为逐字不变，夜间 merge 管线零影响）；预览逐题 A-D 答案选择器 + ✓/⚠/AI 代解徽章（不一致不静默改、用户裁决）+ 保存闸「每小题必须有生效答案」；`extract-image` 升级多图（1-3 张、`validateImageBatch` 逐张 magic-byte+合计≤4MB，AP 跨屏截图场景）。
+  - **阅读 CTW**（`3cfe599`）：「贴原文自动挖空」——AI 仅清洗/转写，挖空由 `cTestBlanker.processPassage` 机械产出（与全局库同一段代码，答案=原文天然零错，测试断言逐字一致）；真题截图还原砍掉（OCR 无 ground truth）。
+  - **听力基建+LCR**（`813f181`）：修既有 bug——practice 选题器硬编码 LCR 致 la/lc/lat 死端（四子类各建 topics+独立 done-key）；新端点 `POST /api/user-bank/render-audio`——edge-tts 内存渲染（免费，spike 实证纯 Node 出合法 mp3）→ 存 `listening_audio/user/{CODE}/{item_id}-{ts}.mp3`（时间戳唯一名，适配 /api/audio immutable 缓存）→ 回写 audio_url，全程 best-effort（失败=AudioPlayer 浏览器朗读兜底）；安全补丁 `lib/userBank/listeningAudio.js`：POST strip 客户端 audio_url（音频 URL 仅服务端可写，防任意外域进 `<audio src>`）+ DELETE own-prefix 白名单顺手删桶（路径穿越防护）。
+  - **听力 LA+LAT**（`de953a2`）：真题长稿放宽口径（validator schema errors 只取 warnings 绝不当 blocker，LAT 800 词/6 题能收）；缺题时抽取阶段 AI 补题（answer=null 交 verify 代解）；LAT 长稿分段配音（`lib/userBank/listeningAudioRender.js`：按句 ≤600 字符切、串行合成、mp3 帧拼接，synth 注入可单测）；render-audio maxDuration 60→180。
+  - **听力 LC**（`94138ea`）：LC 特供预览——逐轮说话人徽章点击切换修切分错位（LC 特有风险：错一轮全篇音色乱）；`pickConversationVoices` 按 gender 映射且双 preset 强制不同（映射逻辑从 `generate-lc.mjs` 复制为纯函数，源脚本零改动）；`verifyLcConversation` 专用 shaping。
+  - 横切：新文本抽取 prompt 全部自带 `TEXT_SAFETY_PREAMBLE` 注入防护（存量冻结 prompt 零改动）；个人题只进 practice picker，模考/planner/standard 随机池/merge 管线零改动（隔离有测试与 grep 证据）；jest 403→571 全过零回归。
+
 ## 2026-07-03 — v1.10.0
 
 - **新功能「我的题库」发布**（`feat/user-question-bank`，`58acf25` 经 `8cecba6` 合入 + `7e67052` + `e5fc060`）：左侧栏第 5 个 nav-section（`sections.js` 注册 `my-bank`，`MyBankSectionContent` / 移动端 `MobileMyBankSection` + `components/userBank/MyBankImporter.js`）。用户可导入自己的学术讨论 / 邮件题：粘贴文本走 `app/api/user-bank/extract`（DeepSeek 结构化抽取，prompt 在 `lib/ai/prompts/questionExtraction.js`），题目截图走 `extract-image`（Qwen-VL 视觉识别，`lib/ai/qwenVision.js` + `imageExtraction.js` prompt + `lib/userBank/imageSniff.js` 图片类型嗅探），存 `user_question_banks` 表（`scripts/sql/user-question-banks.sql`），练习页题目选择器以「我的」分组出现。附带修复：面板漏传 `userCode` 导致已登录仍显示「请先登录」（`7e67052`）；题型选择器改为全题型分组网格、未上线题型标「开发中」（`e5fc060`）。
