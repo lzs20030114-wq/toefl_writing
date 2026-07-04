@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby coffee spot",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's the nearest place to get coffee around here?",
+      "options": {
+        "A": "You're in luck, there's a cart right around the corner.",
+        "B": "I usually prefer tea in the mornings.",
+        "C": "The staff meeting starts at noon today.",
+        "D": "It opens at seven every single day."
+      },
+      "answer": "A",
+      "explanation": "A 直接、自然地指出附近就有咖啡摊，回应了“在哪里”，最合适。B 借“coffee→tea”做语义联想陷阱；C 完全离题；D 答的是“几点”而非“在哪”。",
+      "distractor_types": {"B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "a student unsure about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm not totally sure what the lab report needs to include.",
+      "options": {
+        "A": "My printer is out of ink again.",
+        "B": "Did you check the rubric the TA posted online?",
+        "C": "The bus was really late again today.",
+        "D": "Yes, the labs are held on Tuesdays."
+      },
+      "answer": "B",
+      "explanation": "B 用反问推进对话，指向能解决疑问的评分标准，最合适。A 借“report→printer”做语义联想；C 离题；D 答非所问（时间）。",
+      "distractor_types": {"A": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "a classmate asking how to get the day's lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the best way to get today's lecture notes?",
+      "options": {
+        "A": "That song has a really catchy note.",
+        "B": "I already had my lunch, thanks.",
+        "C": "Actually, I can just share my scanned copy with you.",
+        "D": "Yes, I take a lot of notes."
+      },
+      "answer": "C",
+      "explanation": "C 以“Actually”引出间接而有用的回应，直接解决了要笔记的需求。A 用“notes”的一词多义（音符）设陷阱；B 离题；D 用“notes（记笔记）”误读并未回答问题。",
+      "distractor_types": {"A": "polysemy_misinterpretation", "B": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend who seems stressed",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why does Marco seem so stressed out lately?",
+      "options": {
+        "A": "Stress can really affect your sleep.",
+        "B": "The library closes at ten tonight.",
+        "C": "Since last Thursday, I believe.",
+        "D": "Beats me, but I really hope he's okay."
+      },
+      "answer": "D",
+      "explanation": "D 用习语“Beats me”表示不清楚原因，并自然地表达关心，最贴切。A 借“stressed→stress”做语义联想却不回应；B 离题；C 答的是“从何时起”而非“为什么”。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "a student wondering how much reading is on the exam",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I still don't know how much of the reading will be on the exam.",
+      "options": {
+        "A": "Have you tried asking the professor after class?",
+        "B": "I failed my driving exam last year.",
+        "C": "The cafeteria changed its whole menu again.",
+        "D": "Yes, I studied hard all weekend."
+      },
+      "answer": "A",
+      "explanation": "A 用反问推进对话，建议直接问教授，最合适。B 借“exam→driving exam”做语义联想；C 离题；D 答非所问。",
+      "distractor_types": {"B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "campus_academic",
+      "situation": "a student asking a professor about office hours",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you have any office hours this Thursday?",
+      "options": {
+        "A": "My office is on the third floor.",
+        "B": "As a matter of fact, I'm free all afternoon.",
+        "C": "The printer jammed again this morning.",
+        "D": "Because I had another meeting."
+      },
+      "answer": "B",
+      "explanation": "B 用习语“As a matter of fact”自然确认周四有空，最合适。A 借“office→office 位置”做语义联想；C 离题；D 答的是“为什么”，与是非问不符。",
+      "distractor_types": {"A": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "campus_daily",
+      "situation": "a student checking lost-and-found at the front desk",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How do I report a jacket I left in the library?",
+      "options": {
+        "A": "That jacket looks really warm.",
+        "B": "The elevator is out of service.",
+        "C": "Well, just fill out this form at the desk.",
+        "D": "Yesterday around three, I think."
+      },
+      "answer": "C",
+      "explanation": "C 以“Well”引出间接指引，直接告诉了办理方式，最合适。A 借“jacket”做语义联想；B 离题；D 答的是“何时”，与“如何”不符。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "off_topic", "D": "wrong_question_type"}
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about exchanging an item",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I exchange this shirt for a larger size?",
+      "options": {
+        "A": "That shirt comes in three colors.",
+        "B": "The store closes at nine tonight.",
+        "C": "Because it was already on sale.",
+        "D": "Of course, just keep your receipt handy."
+      },
+      "answer": "D",
+      "explanation": "D 用习语“Of course”爽快同意并给出提醒，最合适。A 借“shirt”做语义联想；B 离题；C 答的是“为什么”，与是非问不符。",
+      "distractor_types": {"A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type"}
+    }
+  ]
+}

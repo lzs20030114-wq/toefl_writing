@@ -1,104 +1,209 @@
 {
-  "session_id": "routine-20260704-170301",
-  "completed_at": "2026-07-04T17:28:25Z",
-  "duration_minutes": 25,
-  "model": "Claude Sonnet 5",
-  "highlight": "首次出现化学催化(AP)与人类学口述传统课题；BS 20题全过嵌入问题漂移带(仅3/20命中)",
+  "session_id": "routine-20260704-190409",
+  "completed_at": "2026-07-04T19:33:37.736Z",
+  "duration_minutes": 30,
+  "model": "Claude Opus 4.8",
+  "highlight": "12 库全数生成，PASS1 70/70；BS 用 found-out 型嵌入句把嵌入/三人称漂移压回真题带内，通过难度冻结门",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
-      "topics": ["direct wh-question", "indirect question", "negation", "relative clause", "passive voice", "reported feeling"],
-      "favorite": {"prompt": "Your favorite café just moved to a new location.", "answer": "How far is it from the main campus?"},
+      "topics": [
+        "direct wh-question",
+        "indirect/embedded (found out)",
+        "negation",
+        "passive",
+        "relative clause",
+        "comparative",
+        "conjoined predicate"
+      ],
+      "favorite": {
+        "prompt": "Did you find out who to see about transferring?",
+        "answer": "I wanted to know which advisor handles the transfer paperwork this term."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["environmental science", "social studies", "public policy", "economics"],
-      "favorite": {"subtopic": "public policy", "preview": "More and more coastal cities are considering laws that would require landlords to disclose a property's flood history"},
+      "topics": [
+        "education",
+        "economics",
+        "technology and media",
+        "public health"
+      ],
+      "favorite": {
+        "subtopic": "education",
+        "preview": "We've been examining how first-year courses are graded this semester. A number of universities have begun replacing lett"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["住宿", "职场工作", "社区生活", "消费售后"],
-      "favorite": {"subtopic": "住宿", "preview": "You have been renting a studio apartment for four months. Recently, the bathroom ceiling started leaking"},
+      "topics": [
+        "服务与活动",
+        "校园学业",
+        "消费售后",
+        "职场工作"
+      ],
+      "favorite": {
+        "subtopic": "校园学业",
+        "preview": "You are a second-year biology major hoping to enroll in an advanced genetics seminar that is already full. The course re"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["chemistry/catalysis", "anthropology/oral traditions", "art/photography history", "materials_science/polymer composites", "business/market dynamics"],
-      "favorite": {"subtopic": "chemistry/catalysis", "preview": "Catalysis is the process by which a substance, known as a catalyst, accelerates a chemical reaction"},
+      "topics": [
+        "business/market dynamics",
+        "psychology/perception",
+        "biology/hibernation",
+        "materials_science/ceramics",
+        "environmental_science/conservation"
+      ],
+      "favorite": {
+        "subtopic": "business/market dynamics",
+        "preview": "Network effects describe a market dynamic in which a product becomes more valuable to each individual user as the total "
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/bioluminescence", "environmental_science/urban heat islands", "psychology/habit formation", "history/maritime navigation", "geology/geysers", "astronomy/solar system"],
-      "favorite": {"subtopic": "biology/bioluminescence", "preview": "Bioluminescence is a natural phenomenon in which living organisms create their own light through internal"},
+      "topics": [
+        "biology/insect colonies",
+        "environmental_science/desertification",
+        "psychology/social behavior",
+        "history/cultural exchange",
+        "geology/river deltas",
+        "astronomy/cosmic radiation"
+      ],
+      "favorite": {
+        "subtopic": "biology/insect colonies",
+        "preview": "Leafcutter ants run one of the most sophisticated farming operations in the natural world. Workers slice small fragments"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["social_media/free yoga class", "flyer/used textbook sale", "email/mailroom package pickup", "flyer/campus cleanup volunteer signup"],
-      "favorite": {"subtopic": "social_media/free yoga class", "preview": "Free yoga in the Quad this Saturday at 9:00 AM! Instructor Maya Torres leads the session"},
+      "topics": [
+        "email/lab safety training",
+        "social_media/campus garden hours",
+        "notice/lost and found disposal",
+        "notice/vending machine refund"
+      ],
+      "favorite": {
+        "subtopic": "email/lab safety training",
+        "preview": "Hi Marcus, this is a reminder that the required lab safety training is on Thursday, October 12, at 3:00 PM in Room 118 o"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/chem lab partner coordination", "notice/dining hall allergen policy"],
-      "favorite": {"subtopic": "notice/dining hall allergen policy", "preview": "Dining Services Notice: Updated Allergen Labeling Policy. Effective Monday, September 8, all food stations"},
+      "topics": [
+        "notice/vending machine refund",
+        "email/makerspace welcome"
+      ],
+      "favorite": {
+        "subtopic": "notice/vending machine refund",
+        "preview": "Vending Machine Refund Procedure — Campus Facilities The Department of Campus Facilities has updated how students recove"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["music/nationalist compositions", "biology/coral reef acidification", "psychology/spacing effect", "art_history/Impressionist plein air painting"],
-      "favorite": {"subtopic": "psychology/the spacing effect", "preview": "Cramming the night before a test feels productive, but the spacing effect suggests it's only"},
+      "topics": [
+        "music",
+        "art_history",
+        "history",
+        "psychology"
+      ],
+      "favorite": {
+        "subtopic": "music",
+        "preview": "Think about how a composer works today versus two centuries ago. Before recording existed, music lived only in the momen"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["errands_service/day trip schedule", "recommendations_opinions/new cafe pricing", "plans_social/birthday surprise", "campus_dorm_life/elective choice", "recommendations_opinions/book club novel ending"],
-      "favorite": {"subtopic": "recommendations_opinions/book club novel ending", "preview": "What did you think of the ending of the novel for book club?"},
+      "topics": [
+        "recommendations_opinions",
+        "campus_dorm_life",
+        "recommendations_opinions",
+        "campus_dorm_life",
+        "plans_social"
+      ],
+      "favorite": {
+        "subtopic": "two students comparing their reactions to a mystery novel they both read",
+        "preview": "Did you finish that mystery novel for lit class? I honestly couldn't put it down. I did, but the ending really let me do"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/bookstore move", "career_services/mock interviews", "campus_activity/food festival", "academic_event/semester showcase", "facility_change/fitness equipment"],
-      "favorite": {"subtopic": "facility_change/campus bookstore moving", "preview": "Attention students, faculty, and staff. The campus bookstore will relocate from its current location"},
+      "topics": [
+        "campus_activity",
+        "guest_speaker",
+        "academic_event",
+        "academic_event",
+        "facility_change"
+      ],
+      "favorite": {
+        "subtopic": "rooftop garden spring cleanup volunteer event",
+        "preview": "Attention students. The Campus Green Club is looking for volunteers to help with our spring cleanup of the rooftop garde"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["campus_daily/dorm maintenance", "social/schedule conflict", "campus_academic/lab report", "campus_academic/group project deadline", "campus_academic/course prerequisites", "general_daily/store return", "general_daily/directions", "campus_academic/exam format"],
-      "favorite": {"subtopic": "general_daily/store return", "preview": "Where can I return this defective blender?"},
+      "topics": [
+        "idiomatic",
+        "counter_question",
+        "marker_led_indirect",
+        "idiomatic",
+        "counter_question",
+        "idiomatic",
+        "marker_led_indirect",
+        "idiomatic"
+      ],
+      "favorite": {
+        "subtopic": "asking for directions to a nearby coffee spot",
+        "preview": "Where's the nearest place to get coffee around here?"
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["Chemistry Lab Safety", "Watercolor Painting (how-to)", "Student Health Center"],
-      "favorite": {"subtopic": "Watercolor Painting (how-to)", "preview": "Lastly, add fine details once your painting is completely dry, and step back to check the overall composition."},
+      "topics": [
+        "Watercolor Painting (how-to)",
+        "Recycling Center Tour",
+        "Planetarium Visit"
+      ],
+      "favorite": {
+        "subtopic": "Watercolor Painting (how-to)",
+        "preview": "First, tape your paper to the board."
+      },
       "retried_after_fail": false,
       "failure_reason": ""
     }

@@ -1,0 +1,129 @@
+{
+  "items": [
+    {
+      "context": "campus_activity",
+      "situation": "rooftop garden spring cleanup volunteer event",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Campus Green Club is looking for volunteers to help with our spring cleanup of the rooftop garden this Saturday, April 20th. We'll be clearing beds and planting fresh herbs from 9 a.m. behind Hartley Hall. Tools and gloves are provided, but please wear closed-toe shoes and clothes you don't mind getting dirty. No gardening experience is needed at all. If you'd like to join us, sign up on the club's page by Thursday so we can order enough lunch for everyone.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To recruit volunteers for a garden cleanup", "B": "To announce a change in the garden's hours", "C": "To advertise a new gardening course", "D": "To remind students to renew club membership"},
+          "answer": "A",
+          "explanation": "通知目的是招募志愿者参加花园清理，A 对。B、C、D 均非其目的。",
+          "distractor_types": {"B": "too_narrow", "C": "wrong_purpose", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "What are participants asked to wear?",
+          "options": {"A": "Protective gloves from home", "B": "A matching club t-shirt", "C": "Closed-toe shoes", "D": "Formal clothing"},
+          "answer": "C",
+          "explanation": "通知要求穿包头的鞋，C 对。手套由主办方提供，故 A 错；B、D 未提及或与场合相反。",
+          "distractor_types": {"A": "wrong_detail", "B": "related_but_not_stated", "D": "reversed_intent"}
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "a renowned climate scientist giving a guest lecture on campus",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "I'm pleased to announce that our department will host Dr. Elena Marsh, a leading climate researcher, for a special lecture next Wednesday at 4 p.m. in Whitfield Auditorium. Dr. Marsh will discuss her recent work on ocean currents, a topic directly relevant to several of your courses this term. Seating is quite limited, so we're asking students to reserve a spot through the department website in advance. A short question-and-answer session will follow the talk. I strongly encourage anyone considering graduate study in this field to attend.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the lecture?",
+          "options": {"A": "Pay an entrance fee at the door", "B": "Reserve a spot on the department website", "C": "Submit a written question beforehand", "D": "Bring a copy of their transcript"},
+          "answer": "B",
+          "explanation": "通知要求提前在系网站预约座位，B 对。A、D 未提及；C 把问答环节误当成入场条件。",
+          "distractor_types": {"A": "related_but_not_stated", "C": "misattributed_detail", "D": "related_but_not_stated"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the lecture?",
+          "options": {"A": "It is open only to faculty members", "B": "It will last for several hours", "C": "It offers unlimited seating", "D": "It is expected to attract many students"},
+          "answer": "D",
+          "explanation": "座位有限、需预约、系主任大力鼓励，可推出预计吸引很多学生，D 对。A、C 与原文相反；B 夸大。",
+          "distractor_types": {"A": "wrong_detail", "B": "over_inference", "C": "unrelated_inference"}
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "honors thesis oral defense schedule announcement",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "This is a reminder that the schedule for this year's honors thesis defenses has now been posted outside the History Department office in Kohler Hall. Defenses will run from May 5th through May 9th, and each student has been assigned a specific thirty-minute slot. Please check your assigned time carefully, as slots cannot be swapped after Friday. Candidates should arrive fifteen minutes early and bring two printed copies of their thesis for the committee. Family and friends are welcome to attend, though seating in the room is limited.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To announce a new thesis topic for students", "B": "To cancel this year's thesis defenses", "C": "To inform students that the defense schedule is posted", "D": "To recruit new committee members"},
+          "answer": "C",
+          "explanation": "通知核心是告知答辩时间表已张贴，C 对。A、D 无关；B 与内容相反。",
+          "distractor_types": {"A": "wrong_purpose", "B": "reversed_intent", "D": "wrong_purpose"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who want to change their assigned time?",
+          "options": {"A": "They must arrange it before Friday", "B": "They may swap slots at any time", "C": "They will be given an extra slot", "D": "They must email the committee every day"},
+          "answer": "A",
+          "explanation": "原文说周五后不能调换，可推出想换须在周五前处理，A 对。B 与原文相反；C、D 无依据。",
+          "distractor_types": {"B": "reversed_intent", "C": "over_inference", "D": "unrelated_inference"}
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. The Engineering Student Society is excited to share the schedule for this semester's senior capstone presentations. Presentations will take place next Friday, December 8th, in the Design Studio on the second floor of Baxter Hall, beginning at 1 p.m. Each team will have ten minutes to present, followed by questions from the audience. Light refreshments will be served throughout the afternoon. We encourage all students, especially first- and second-years, to come see what our seniors have built. No registration is required to attend.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To recruit new members for the society", "B": "To announce a change of venue", "C": "To collect fees for the projects", "D": "To share the schedule for capstone presentations"},
+          "answer": "D",
+          "explanation": "通知目的是公布毕业设计展示的日程，D 对。A、C 无关；B 只是细节且并非变更。",
+          "distractor_types": {"A": "wrong_purpose", "B": "too_narrow", "C": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "How long does each team have to present?",
+          "options": {"A": "Five minutes", "B": "Ten minutes", "C": "Fifteen minutes", "D": "Thirty minutes"},
+          "answer": "B",
+          "explanation": "原文明确每组有十分钟，B 对，其余为改动的数字干扰项。",
+          "distractor_types": {"A": "wrong_detail", "C": "wrong_detail", "D": "wrong_detail"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated campus art gallery",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Due to the completion of extensive renovations, the university's Fenwick Art Gallery will officially reopen this Monday, October 2nd. The gallery now features improved lighting, a new climate-control system, and an expanded student exhibition space. To celebrate the occasion, admission will be free for all students during the first full week. Regular hours will be 10 a.m. to 6 p.m., Tuesday through Sunday. Please note that large bags must be checked at the front desk before entering. We invite everyone to visit and explore the newly restored collection.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {"A": "To announce the reopening of a renovated gallery", "B": "To advertise a new art course", "C": "To apologize for a delayed renovation", "D": "To recruit volunteers for the gallery"},
+          "answer": "A",
+          "explanation": "通知目的是宣布翻修后的画廊重新开放，A 对。B、C、D 均非其目的。",
+          "distractor_types": {"B": "wrong_purpose", "C": "wrong_purpose", "D": "wrong_purpose"}
+        },
+        {
+          "type": "detail",
+          "stem": "What must visitors do with large bags?",
+          "options": {"A": "Leave them at home", "B": "Carry them at all times", "C": "Check them at the front desk", "D": "Pay a small storage fee"},
+          "answer": "C",
+          "explanation": "原文要求大包在前台寄存，C 对。A、D 未提及；B 与规定相反。",
+          "distractor_types": {"A": "related_but_not_stated", "B": "reversed_intent", "D": "related_but_not_stated"}
+        }
+      ]
+    }
+  ]
+}

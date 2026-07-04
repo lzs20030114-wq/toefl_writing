@@ -1,0 +1,179 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing their reactions to a mystery novel they both read",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Did you finish that mystery novel for lit class? I honestly couldn't put it down."},
+        {"speaker": "Man", "text": "I did, but the ending really let me down. It felt way too rushed to me."},
+        {"speaker": "Woman", "text": "Oh, I actually loved the ending. All those little clues from the first chapters suddenly clicked."},
+        {"speaker": "Man", "text": "Hmm, maybe I missed them. I was so focused on the detective that I skimmed the side characters."},
+        {"speaker": "Woman", "text": "That's probably it. You should reread the opening chapter. The whole solution is basically hidden right there."},
+        {"speaker": "Man", "text": "Yeah, I think I will. Now I'm curious about what I overlooked."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the students mainly discussing?",
+          "options": {"A": "Their differing reactions to a novel's ending", "B": "How to write a good mystery story", "C": "A disagreement they had with their professor", "D": "Which literature class to take next term"},
+          "answer": "A",
+          "explanation": "两人主要在讨论对小说结尾的不同看法，A 对。B、C、D 均未出现在对话中。",
+          "distractor_types": {"B": "wrong_topic", "C": "wrong_topic", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {"A": "Drop the literature class", "B": "Ask the professor for an extension", "C": "Reread the beginning of the novel", "D": "Return the book to the library"},
+          "answer": "C",
+          "explanation": "男生说“我想我会重读”，且女生建议重读开头，故 C 对。A、B、D 无依据。",
+          "distractor_types": {"A": "over_inference", "B": "unrelated_next_step", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair cleaning and quiet-hours schedule",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Man", "text": "Hey, can we finally settle a cleaning schedule for the apartment? The kitchen's getting out of hand."},
+        {"speaker": "Woman", "text": "Definitely. How about I take the kitchen on weekends and you handle the bathroom?"},
+        {"speaker": "Man", "text": "That works for me. And could we agree on quiet hours? I've got an early lab every morning."},
+        {"speaker": "Woman", "text": "Sure. Let's say no loud music after ten on weeknights."},
+        {"speaker": "Man", "text": "Perfect. I'll write it all on the whiteboard so neither of us forgets."},
+        {"speaker": "Woman", "text": "Great. Honestly, I feel better already now that this is sorted."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman agree to clean?",
+          "options": {"A": "The bathroom every weekend", "B": "The kitchen on weekends", "C": "The whole apartment daily", "D": "The living room on weeknights"},
+          "answer": "B",
+          "explanation": "女生说她周末负责厨房，故 B 对。A 张冠李戴（浴室是男生的）；C、D 未提及。",
+          "distractor_types": {"A": "misattributed", "C": "wrong_detail", "D": "related_but_not_stated"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {"A": "Buy new cleaning supplies", "B": "Move to a different apartment", "C": "Cancel his early lab", "D": "Write the schedule on the whiteboard"},
+          "answer": "D",
+          "explanation": "男生说要把安排写在白板上，故 D 对。A、B 无依据；C 与他早课的说法相反。",
+          "distractor_types": {"A": "unrelated_next_step", "B": "over_inference", "C": "rejected_option"}
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a history podcast to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "You have to try that history podcast I mentioned. Each episode is only about twenty minutes."},
+        {"speaker": "Man", "text": "Twenty minutes? That's perfect for my bus ride. What makes it so good?"},
+        {"speaker": "Woman", "text": "The host tells real events like suspense stories. I never realized history could be so gripping."},
+        {"speaker": "Man", "text": "Nice. I usually listen to comedy stuff, but I've been wanting something with more substance."},
+        {"speaker": "Woman", "text": "Then this is ideal. Start with the episode on the lost expedition. It's easily the best one."},
+        {"speaker": "Man", "text": "Cool, I'll download it tonight before bed."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the students mainly doing?",
+          "options": {"A": "Planning a trip together", "B": "Comparing their daily bus routes", "C": "Recommending a podcast to each other", "D": "Studying for a history exam"},
+          "answer": "C",
+          "explanation": "对话核心是女生向男生推荐一档播客，C 对。A、B、D 均非对话主题。",
+          "distractor_types": {"A": "wrong_topic", "B": "too_narrow", "D": "wrong_topic"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {"A": "Listen to the recommended episode", "B": "Cancel his podcast subscription", "C": "Switch entirely to comedy shows", "D": "Start recording his own podcast"},
+          "answer": "A",
+          "explanation": "男生说今晚就下载，且女生推荐了具体一集，故 A 对。B、C 与其话相反；D 无依据。",
+          "distractor_types": {"B": "reversed_situation", "C": "reversed_situation", "D": "over_inference"}
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "a student asking a friend for recommendations on a couch for a small dorm room",
+      "difficulty": "easy",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Man", "text": "You just redid your dorm room, right? I'm hunting for a couch that fits a really tiny space."},
+        {"speaker": "Woman", "text": "Oh, get a futon. Mine folds flat, so it works as a bed when friends stay over."},
+        {"speaker": "Man", "text": "That's smart. Was it expensive, though?"},
+        {"speaker": "Woman", "text": "Not really. I found mine secondhand through the campus swap page. Barely used, half the price."},
+        {"speaker": "Man", "text": "Perfect, I'm on a tight budget. I'll check that page tonight."},
+        {"speaker": "Woman", "text": "Good call. Just measure your doorway first so it actually fits through."}
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman recommend the man buy?",
+          "options": {"A": "A large sectional sofa", "B": "A pair of matching armchairs", "C": "A brand-new bed frame", "D": "A fold-out futon"},
+          "answer": "D",
+          "explanation": "女生推荐可折叠的 futon，故 D 对。A、C 与建议相反；B 未提及。",
+          "distractor_types": {"A": "wrong_detail", "B": "related_but_not_stated", "C": "wrong_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {"A": "Buy a couch from a store today", "B": "Look at the campus swap page", "C": "Give up on finding a couch", "D": "Borrow the woman's futon"},
+          "answer": "B",
+          "explanation": "男生说今晚查那个交换页面，故 B 对。A 与预算相反；C、D 无依据。",
+          "distractor_types": {"A": "rejected_option", "C": "over_inference", "D": "unrelated_next_step"}
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "hard",
+      "speakers": [
+        {"name": "Woman", "role": "student", "gender": "female"},
+        {"name": "Man", "role": "student", "gender": "male"}
+      ],
+      "conversation": [
+        {"speaker": "Woman", "text": "Okay, we're feeding eight people Saturday. What cheeses should we grab for the board?"},
+        {"speaker": "Man", "text": "Let's do a mix, one sharp, one soft, and something mild so everyone finds a favorite."},
+        {"speaker": "Woman", "text": "Good thinking. Should we get crackers, or is bread better?"},
+        {"speaker": "Man", "text": "Both, honestly. But let's skip the fancy imported stuff. It'll blow our whole budget."},
+        {"speaker": "Woman", "text": "Agreed. I'll grab grapes and nuts too. They stretch the board without costing much."},
+        {"speaker": "Man", "text": "Perfect. Then I think we're basically set."}
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the students mainly discussing?",
+          "options": {"A": "What food to buy for a dinner party", "B": "How to cook a hot main course", "C": "Where to hold their party", "D": "How many guests to invite"},
+          "answer": "A",
+          "explanation": "两人主要在商量聚会要买什么食物，A 对。B、C 未涉及；D 中人数已定，非讨论点。",
+          "distractor_types": {"B": "wrong_topic", "C": "too_narrow", "D": "reversed_situation"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the students' budget?",
+          "options": {"A": "They have unlimited money to spend", "B": "They plan to buy costly imported cheese", "C": "They are trying to keep the cost down", "D": "They will ask each guest to pay"},
+          "answer": "C",
+          "explanation": "两人特意避开昂贵进口货、选便宜实惠的搭配，可推出在控制开支，C 对。A、B 与其话相反；D 无依据。",
+          "distractor_types": {"A": "reversed_situation", "B": "reversed_situation", "D": "over_inference"}
+        }
+      ]
+    }
+  ]
+}
