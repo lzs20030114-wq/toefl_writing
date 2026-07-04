@@ -7,7 +7,12 @@ import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
 const { callQwenVision, bufferToDataUrl } = require("../../../../lib/ai/qwenVision");
 const { IMAGE_EXTRACTION_PROMPTS, SUPPORTED_IMAGE_TYPES } = require("../../../../lib/ai/prompts/imageExtraction");
-const { extractJson, postProcessBuild } = require("../../../../lib/ai/prompts/questionExtraction");
+const {
+  extractJson,
+  postProcessBuild,
+  postProcessRepeat,
+  postProcessInterview,
+} = require("../../../../lib/ai/prompts/questionExtraction");
 const { sniffImageMime } = require("../../../../lib/userBank/imageSniff");
 
 export const maxDuration = 60; // Qwen-VL 典型 3-15s；给 Vercel 留足余量
@@ -97,9 +102,13 @@ export async function POST(request) {
       );
     }
 
-    // 与粘贴路径对齐：build 类型需服务端补算（当前 my-bank 仅 academic/email，此处为将来兼容）。
+    // 与粘贴路径对齐：build/repeat/interview 类型需服务端补算（难度/词数确定性推导）。
     if (type === "build") {
       questions = questions.map((q) => postProcessBuild(q));
+    } else if (type === "repeat") {
+      questions = questions.map((q) => postProcessRepeat(q));
+    } else if (type === "interview") {
+      questions = questions.map((q) => postProcessInterview(q));
     }
 
     return Response.json({ ok: true, questions });

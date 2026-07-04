@@ -48,8 +48,16 @@ const TYPE_GROUPS = [
   {
     id: "speaking", label: "口语", icon: "🗣️", accent: SECTION_ACCENTS.speaking,
     types: [
-      { key: "repeat", label: "听后复述", en: "Listen & Repeat", live: false },
-      { key: "interview", label: "模拟面试", en: "Take an Interview", live: false },
+      {
+        key: "repeat", stored: "repeat", label: "听后复述", en: "Listen & Repeat", live: true,
+        practice: "/speaking?type=repeat&mode=practice",
+        placeholder: "粘贴 3-7 句英文句子（一行一句或一段混排都行），会打包成一套复述题。一次一批。",
+      },
+      {
+        key: "interview", stored: "interview", label: "模拟面试", en: "Take an Interview", live: true,
+        practice: "/speaking?type=interview&mode=practice",
+        placeholder: "粘贴 1-4 个英文面试问题（一行一个），会打包成一套面试题。一次一批。",
+      },
     ],
   },
 ];
@@ -58,6 +66,14 @@ const ALL_TYPES = TYPE_GROUPS.flatMap((g) => g.types);
 const LIVE_TYPES = ALL_TYPES.filter((t) => t.live);
 const groupOfType = (t) => TYPE_GROUPS.find((g) => g.types.includes(t));
 const groupOfStored = (stored) => TYPE_GROUPS.find((g) => g.types.some((t) => t.stored === stored));
+
+// Per-type hint for greyed-out (invalid) preview rows.
+const INVALID_HINT = {
+  academic: "教授提问 + 至少 2 位同学",
+  email: "情景/要求/至少 3 个要点",
+  repeat: "英文句子 3-25 词",
+  interview: "英文问题 10-60 词",
+};
 
 const BD = C.bd2 || "#e2e8f0";
 const ACCEPT = "image/png,image/jpeg,image/webp";
@@ -72,8 +88,23 @@ function isValidEmail(q) {
   const goals = Array.isArray(q?.goals) ? q.goals.filter(Boolean) : [];
   return !!(q?.scenario && q?.direction && goals.length >= 3);
 }
+function countWords(s) {
+  return String(s || "").trim().split(/\s+/).filter(Boolean).length;
+}
+// Speaking: per-item validity mirrors the server post-processors' word bands.
+function isValidRepeat(q) {
+  const n = countWords(q?.sentence);
+  return !!(q?.sentence && String(q.sentence).trim()) && n >= 3 && n <= 25;
+}
+function isValidInterview(q) {
+  const n = countWords(q?.question);
+  return !!(q?.question && String(q.question).trim()) && n >= 10 && n <= 60;
+}
 function isValid(typeKey, q) {
-  return typeKey === "email" ? isValidEmail(q) : isValidAcademic(q);
+  if (typeKey === "email") return isValidEmail(q);
+  if (typeKey === "repeat") return isValidRepeat(q);
+  if (typeKey === "interview") return isValidInterview(q);
+  return isValidAcademic(q);
 }
 
 // 客户端下采样：手机截图常 8-12MB，直接传必超 Vercel body(~4.5MB)。压到长边 ≤1600、jpeg 0.85。
@@ -289,12 +320,47 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
     });
   }
 
+  // Per-type save packaging.
+  //  writing (academic/email): one DB item per question (current behavior).
+  //  repeat/interview: bundle ALL chosen items into ONE "set" DB item, because the
+  //  speaking bank's unit is a set (RepeatTask/InterviewTask consume an array).
+  function packItems(typeKey, chosen) {
+    if (typeKey === "repeat") {
+      return [{
+        data: {
+          scenario: "我的导入",
+          sentences: chosen.map((q) => ({
+            sentence: String(q.sentence || "").trim(),
+            word_count: q.word_count,
+            difficulty: q.difficulty || "medium",
+            ...(q.timing_seconds != null ? { timing_seconds: q.timing_seconds } : {}),
+          })),
+        },
+      }];
+    }
+    if (typeKey === "interview") {
+      return [{
+        data: {
+          topic: parsed?.[0]?.topic || "我的面试题",
+          questions: chosen.map((q, i) => ({
+            position: `Q${i + 1}`,
+            question: String(q.question || "").trim(),
+            word_count: q.word_count,
+            ...(q.difficulty ? { difficulty: q.difficulty } : {}),
+          })),
+        },
+      }];
+    }
+    return chosen.map((q) => ({ data: q }));
+  }
+
   async function handleSave() {
     setErr("");
     setSavedMsg("");
     if (!parsed) return;
     const chosen = parsed.filter((_, i) => selected.has(i)).filter((q) => isValid(typeKey, q));
     if (chosen.length === 0) { setErr("没有可保存的题（被选中的题缺少必要字段）"); return; }
+    const isSpeaking = typeKey === "repeat" || typeKey === "interview";
     setSaving(true);
     try {
       const res = await fetch("/api/user-bank", {
@@ -304,7 +370,7 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
           code,
           type: tab.stored,
           source: parsedSource,
-          items: chosen.map((q) => ({ data: q })),
+          items: packItems(typeKey, chosen),
         }),
       });
       const json = await res.json();
@@ -314,7 +380,9 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
         return;
       }
       const n = Array.isArray(json.items) ? json.items.length : 0;
-      setSavedMsg(`已存入「我的题库」${n} 道，去练习页即可练。`);
+      setSavedMsg(isSpeaking
+        ? `已存入「我的题库」1 套（${chosen.length} ${typeKey === "repeat" ? "句" : "问"}），去练习页即可练。`
+        : `已存入「我的题库」${n} 道，去练习页即可练。`);
       setParsed(null);
       setSelected(new Set());
       setText("");
@@ -482,7 +550,7 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
             识别到 {parsed.length} 道题，勾选要存入的：
           </div>
           <div style={{ fontSize: 12, color: C.t2, marginBottom: 14 }}>
-            灰色条目缺少必要字段（{typeKey === "email" ? "情景/要求/至少 3 个要点" : "教授提问 + 至少 2 位同学"}），无法保存。
+            灰色条目缺少必要字段（{INVALID_HINT[typeKey] || INVALID_HINT.academic}），无法保存。
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {parsed.map((q, i) => {
@@ -507,6 +575,16 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
                         <div style={{ fontSize: 12, color: C.t2, marginTop: 2 }}>
                           要点：{(Array.isArray(q.goals) ? q.goals : []).filter(Boolean).join("；") || "—"}
                         </div>
+                      </>
+                    ) : typeKey === "repeat" ? (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>{String(q.sentence || "(无句子)")}</div>
+                        <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{countWords(q.sentence)} 词</div>
+                      </>
+                    ) : typeKey === "interview" ? (
+                      <>
+                        <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.5 }}>{String(q.question || "(无问题)")}</div>
+                        <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{countWords(q.question)} 词</div>
                       </>
                     ) : (
                       <>
@@ -549,6 +627,10 @@ export default function MyBankImporter({ code, tier, onRequireUpgrade, onRequire
               const chipAccent = g?.accent || SECTION_ACCENTS.writing;
               const label = it.type === "email"
                 ? String(it?.data?.scenario || "(邮件题)").slice(0, 70)
+                : it.type === "repeat"
+                ? `${String(it?.data?.scenario || "复述题")} · ${(it?.data?.sentences || []).length} 句`
+                : it.type === "interview"
+                ? `${String(it?.data?.topic || "面试题")} · ${(it?.data?.questions || []).length} 问`
                 : String(it?.data?.professor?.text || "(讨论题)").slice(0, 70);
               return (
                 <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: `1px solid ${BD}`, borderRadius: 8 }}>

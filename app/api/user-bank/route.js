@@ -6,7 +6,9 @@ import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 import { jsonError } from "../../../lib/apiResponse";
 import { gateUserBankRequest } from "../../../lib/userBankAuth";
 
-const VALID_TYPES = new Set(["discussion", "email"]);
+// Storage whitelist follows shipped types. Widen alongside each launch (discussion+email
+// P0; repeat+interview this launch). The DB CHECK covers all 12 subtypes already.
+const VALID_TYPES = new Set(["discussion", "email", "repeat", "interview"]);
 const VALID_STATUS = new Set(["ready", "draft"]);
 const ITEM_MAX_BYTES = 16 * 1024;
 const MAX_ITEMS_PER_REQUEST = 50;

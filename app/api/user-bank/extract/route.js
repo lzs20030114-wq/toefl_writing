@@ -11,6 +11,8 @@ const {
   isExtractableType,
   extractJson,
   postProcessBuild,
+  postProcessRepeat,
+  postProcessInterview,
 } = require("../../../../lib/ai/prompts/questionExtraction");
 
 export const maxDuration = 180;
@@ -130,6 +132,10 @@ export async function POST(request) {
 
     if (type === "build") {
       questions = questions.map((q) => postProcessBuild(q));
+    } else if (type === "repeat") {
+      questions = questions.map((q) => postProcessRepeat(q));
+    } else if (type === "interview") {
+      questions = questions.map((q) => postProcessInterview(q));
     }
 
     return Response.json({ ok: true, questions });
