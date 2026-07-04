@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. The Campus Recreation Center will be adding a full set of new cardio and strength-training machines to the second-floor fitness room starting this Monday. Installation crews will be working in that room from 8 a.m. to noon each day through Friday, so the space will be closed during those hours. The rest of the fitness room, including the free-weight area, will stay open as usual. We're also asking members to use the north entrance this week, since the south doors will be blocked by delivery equipment. All the new machines should be ready for full use by next Saturday. Thanks for your patience while we upgrade the space.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To describe new equipment installation and temporary access changes",
+            "B": "To announce permanent closure of the fitness room",
+            "C": "To advertise a new personal training program",
+            "D": "To explain how to use the free-weight area"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知主要说明健身房二楼新设备安装的时间安排及临时出入调整，A准确概括了整体目的。B错（reversed_intent）：健身房只是临时受安装影响，周六即可全面使用，并非永久关闭，与通知内容相反。C错（wrong_purpose）：通知完全没有提到会员打折促销的内容。D错（too_narrow）：通知只是提到自由重量区照常开放这一细节，并非整个通知想说明如何使用自由重量区，范围过窄。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are members asked to do this week?",
+          "options": {
+            "A": "Avoid the fitness room entirely until Saturday",
+            "B": "Sign up in advance for an equipment orientation",
+            "C": "Use the north entrance instead of the south doors",
+            "D": "Pick up new equipment at the south doors"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知明确要求本周会员改用北门出入，因为南门被运货设备挡住。A错（wrong_detail）：健身房其余区域（包括自由重量区）本周照常开放，并非要求会员完全避开健身房，与事实不符。B错（related_but_not_stated）：设备使用讲解报名貌似合理，但通知没有提及。D错（misattributed_detail）：南门是被货物挡住无法通行，而不是新设备的取货地点，把细节张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "computer lab relocating to a different floor",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Due to ongoing electrical rewiring in Hendricks Hall, the Computer Science computer lab will relocate from the third floor to the first floor beginning next Tuesday. The new space, room 112, will offer the same forty workstations along with two additional printer stations. Students should note that the third-floor lab will be completely inaccessible starting Monday evening, so please save your work and log out before then. All lab hours remain unchanged, running from 8 a.m. to 11 p.m. daily. Anyone with software installed locally on a third-floor machine should contact the IT help desk by Friday to arrange a transfer. We're expecting the move to be finished within a single weekend.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do before the third-floor lab closes on Monday evening?",
+          "options": {
+            "A": "Print all pending documents at the new printer stations",
+            "B": "Save their work and log out of lab computers",
+            "C": "Move their personal software to the first-floor lab themselves",
+            "D": "Submit a request form to reserve a workstation"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通知要求学生在周一晚上机房关闭前保存好工作并登出电脑。A错（wrong_detail）：新的打印站设在一楼新机房，通知并没有要求学生现在赶去打印文件，与事实不符。C错（misattributed_detail）：本地软件转移是由IT服务台负责协调安排，而不是要求学生自己动手搬到一楼机房，张冠李戴。D错（related_but_not_stated）：提交表格预约工位貌似合理的校园做法，但通知里完全没有提到。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that lab hours will remain unchanged?",
+          "options": {
+            "A": "To advertise extended late-night hours for exams",
+            "B": "To explain why the third-floor lab closed early",
+            "C": "To state that the lab operates from 8 a.m. to 11 p.m. daily",
+            "D": "To reassure students that the move won't reduce their usual access to the lab"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通知特意说明机房搬迁后开放时间保持不变（早8点到晚11点），可以推断出学校想借此让学生放心，搬迁不会减少他们平时使用机房的机会。A错（over_inference）：通知没有提到会延长夜间考试时段，属过度推断。B错（unrelated_inference）：三楼机房关闭的原因是电路改造，与开放时间说明是两回事，属无关推断。C错（literal_restatement）：这只是把“每天早8点到晚11点”这句话原样复述一遍，并不是真正的推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "student research poster session open to all majors",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that the Biology Department will host its annual Undergraduate Research Poster Session next Thursday from 3 to 6 p.m. in the Wentworth Atrium. This year, we're opening the event to students from every major, not just biology, so anyone with a completed or ongoing research project is welcome to present. Each presenter will need a poster no larger than three feet by four feet, and setup begins at 2:30 p.m. Light snacks and drinks will be provided throughout the afternoon. If you'd like to present, please email the department office by next Monday with your project title. We're looking forward to seeing a wide range of research this year.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain new poster size regulations",
+            "B": "To cancel this year's poster session",
+            "C": "To invite students from all majors to present research",
+            "D": "To recruit judges for the poster competition"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知的核心是邀请各专业学生参加本届海报展示交流会，C准确概括整体目的。A错（too_narrow）：海报尺寸只是布展的一个细节要求，并非通知想说明的整体目的，范围过窄。B错（reversed_intent）：通知宣布的是照常举办、甚至扩大参与范围，而非取消活动，意思相反。D错（wrong_purpose）：通知里完全没有提到招募评委的内容。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about this year's poster session?",
+          "options": {
+            "A": "Students from any major may present their research",
+            "B": "Posters must be submitted online in advance",
+            "C": "Only completed research projects are eligible",
+            "D": "Setup must be finished by 3 p.m. for judging"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知明确说明今年向所有专业学生开放，不仅限于生物专业。B错（wrong_detail）：通知没有要求提前在线提交海报，只提到发邮件报名并提供题目，与事实不符。C错（wrong_detail）：通知说明已完成或进行中的研究项目均可参加，并非只接受已完成项目，与事实相反。D错（misattributed_detail）：下午2:30是布展开始的时间，通知里没有提到评审截止安排，把细节张冠李戴。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "undergraduate research symposium abstract submission deadline",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "This is a reminder that abstracts for the spring Undergraduate Research Symposium are due this Friday by 5 p.m. through the online submission portal on the Provost's Office website. The symposium itself will take place on April 22nd in the Merrick Ballroom, and it's open to undergraduates in any department, not only the sciences. Each abstract should be no more than 300 words and must include your faculty mentor's name. You don't need finished results to apply; work still in progress is welcome as long as you can describe your methods. Selected students will present a ten-minute talk followed by questions from faculty judges. Late abstracts will not be reviewed, so please plan ahead.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required in order to submit an abstract?",
+          "options": {
+            "A": "A complete set of final results",
+            "B": "Approval from the Provost's Office in advance",
+            "C": "Registration for the ten-minute talk",
+            "D": "The name of a faculty mentor"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通知明确要求摘要中必须包含指导老师的姓名。A错（wrong_detail）：通知特别说明不需要最终完整的研究成果，进行中的工作也可以申请，与事实相反。B错（related_but_not_stated）：提前获得教务长办公室批准貌似合理，但通知没有提及。C错（misattributed_detail）：十分钟报告是入选学生之后才需要做的事，并非提交摘要的必要条件，把细节张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who submit their abstracts late?",
+          "options": {
+            "A": "They will automatically be entered into next year's symposium",
+            "B": "Their submissions will not be considered for the symposium",
+            "C": "They will need approval from their faculty mentor instead",
+            "D": "Their abstract must be exactly 300 words"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通知明确指出逾期摘要不会被审阅，可以推断出迟交的学生其投稿将不会被纳入本届研讨会的考虑范围。A错（over_inference）：通知完全没有提到自动进入明年研讨会的安排，属过度推断。C错（unrelated_inference）：导师批准与迟交摘要无关，通知里也没有这样的说法，属无关推断。D错（literal_restatement）：这只是把“不超过300字”这一已说明的要求重复一遍（还改成了“必须正好300字”），并不是对迟交后果的推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "Open enrollment for the university's student health insurance plan begins this Monday and runs through the end of the month. The Student Health Advising Office will hold a walk-in information session this Wednesday from 1 to 3 p.m. in the Wellness Center conference room to help you compare plan options and answer questions about coverage. Advisors will be on hand to explain deductibles, prescription coverage, and how to add a dependent to your plan. You don't need an appointment, but you'll want to bring your student ID and, if you have one, your insurance card. Students who are covered under a parent's plan may want to attend to review waiver requirements. Enrollment forms must be submitted online by the 30th.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To inform students about a health insurance enrollment session",
+            "B": "To announce a change in insurance premium rates",
+            "C": "To require all students to purchase university insurance",
+            "D": "To describe the deductible amounts for this year's plan"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知的主要目的是告知学生健康保险开放注册说明会的时间和地点，A准确概括整体目的。B错（wrong_purpose）：通知完全没有提到保费变化的内容。C错（reversed_intent）：通知提到已被父母保险覆盖的学生仍可来了解豁免要求，说明并非强制所有学生都购买校方保险，与“强制购买”意思相反。D错（too_narrow）：免赔额只是说明会上会讲解的一个细节，并非通知的整体目的，范围过窄。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to the information session?",
+          "options": {
+            "A": "Proof of on-campus housing",
+            "B": "A completed enrollment form",
+            "C": "Their student ID",
+            "D": "A letter from their parent's insurance company"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知建议学生带上学生证参加说明会。A错（related_but_not_stated）：校内住宿证明貌似合理，但通知没有提及。B错（wrong_detail）：注册表格要求在线提交，而不是带到说明会现场，与事实不符。D错（misattributed_detail）：父母保险相关内容涉及的是豁免资格审核，通知并未要求带一封父母保险公司的信函，把细节张冠李戴。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

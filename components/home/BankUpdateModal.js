@@ -30,6 +30,7 @@ export function BankUpdateModal({ isLoggedIn }) {
 
   return (
     <div
+      data-tp-overlay
       onClick={dismiss}
       style={{
         position: "fixed", inset: 0, zIndex: 1000,

@@ -123,7 +123,7 @@ function PressButton({ onClick, bg, edge, color = "#fff", style, children, title
       onPointerUp={() => setPressed(false)}
       onPointerLeave={() => setPressed(false)}
       style={{
-        border: "none", borderRadius: 14, background: bg, color, fontFamily: HOME_FONT, fontWeight: 800, cursor: "pointer",
+        border: "none", borderRadius: 14, background: bg, color, fontFamily: HOME_FONT, fontWeight: 700, cursor: "pointer",
         boxShadow: pressed ? `0 1px 0 ${edge}` : `0 4px 0 ${edge}`,
         transform: pressed ? "translateY(3px)" : "translateY(0)",
         transition: "transform .07s ease, box-shadow .07s ease",
@@ -171,7 +171,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
   }, [userCode]);
 
   const practiceMap = useMemo(() => buildPracticeMap(sessions), [sessions]);
-  const { streak, practicedToday } = useMemo(() => computeStreak(practiceMap, now), [practiceMap, now]);
+  const { streak } = useMemo(() => computeStreak(practiceMap, now), [practiceMap, now]);
   const days = daysUntil(plan.examDate, now);
   const tone = countdownTone(days);
   const goalSet = hasGoal(plan);
@@ -179,7 +179,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
   const t1 = isChallenge ? CH.t1 : T.t1;
   const t2 = isChallenge ? CH.t2 : T.t2;
   const t3 = isChallenge ? CH.t2 : T.t3;
-  const subBg = isChallenge ? "rgba(255,255,255,0.04)" : "#F7FAF9";
+  const subBg = isChallenge ? "rgba(255,255,255,0.04)" : T.bgSoft;
   const hairline = isChallenge ? CH.cardBorder : T.bdrSubtle;
   const ringTrack = isChallenge ? "rgba(255,255,255,0.08)" : "#ECF1EE";
   const modernCard = (pad) => sideCard({ padding: pad, borderRadius: 18, boxShadow: isChallenge ? "none" : "0 2px 12px rgba(10,40,25,0.06)" });
@@ -225,7 +225,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
       <div style={{ ...modernCard("15px 16px 16px"), ...fadeIn(140) }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
           <IconBadge name="flag" isChallenge={isChallenge} />
-          <span style={{ fontSize: 14, fontWeight: 800, color: t1, flex: 1 }}>备考目标</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: t1, flex: 1 }}>备考目标</span>
           {goalSet && (
             <button
               onClick={() => setEditorOpen(true)} title="编辑目标"
@@ -243,10 +243,10 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
             <div style={{ width: 50, height: 50, borderRadius: 16, margin: "0 auto 12px", display: "flex", alignItems: "center", justifyContent: "center", background: isChallenge ? "rgba(13,150,104,0.12)" : T.primarySoft, border: `1px solid ${isChallenge ? "rgba(13,150,104,0.22)" : T.primaryMist}` }}>
               <Icon name="flag" color={T.primary} size={24} />
             </div>
-            <div style={{ fontSize: 12.5, color: t2, lineHeight: 1.65, marginBottom: 14 }}>
+            <div style={{ fontSize: 13, color: t2, lineHeight: 1.65, marginBottom: 14 }}>
               设置考试日期与目标分，<br />开启专属倒计时与每日督促。
             </div>
-            <PressButton onClick={() => setEditorOpen(true)} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", padding: "11px 0", fontSize: 13.5 }}>
+            <PressButton onClick={() => setEditorOpen(true)} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", padding: "11px 0", fontSize: 14 }}>
               设置目标
             </PressButton>
           </div>
@@ -257,39 +257,36 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
                 <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", width: 140, height: 140, borderRadius: "50%", background: `radial-gradient(circle, ${tone}16 0%, transparent 68%)`, pointerEvents: "none" }} />
                 <ProgressRing size={134} stroke={9} progress={ringProgress} color={tone} track={`${tone}26`}>
                   {days < 0 ? (
-                    <span style={{ fontSize: 17, fontWeight: 800, color: t3 }}>已结束</span>
+                    <span style={{ fontSize: 17, fontWeight: 700, color: t3 }}>已结束</span>
                   ) : days === 0 ? (
                     <>
-                      <span style={{ fontSize: 22, fontWeight: 800, color: tone }}>今天</span>
+                      <span style={{ fontSize: 22, fontWeight: 700, color: tone }}>今天</span>
                       <span style={{ fontSize: 11, color: t3, fontWeight: 700 }}>考试日 🎉</span>
                     </>
                   ) : (
                     <>
                       <span style={{ fontSize: 10, color: t3, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>距考试</span>
-                      <span style={{ fontSize: 48, fontWeight: 800, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1.5, marginTop: 1 }}>{days}</span>
-                      <span style={{ fontSize: 12, color: t2, fontWeight: 800, marginTop: 1 }}>天</span>
+                      <span style={{ fontSize: 36, fontWeight: 700, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1.5, marginTop: 1 }}>{days}</span>
+                      <span style={{ fontSize: 12, color: t2, fontWeight: 700, marginTop: 1 }}>天</span>
                     </>
                   )}
                 </ProgressRing>
               </div>
             )}
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-              <BentoTile label="考试日" subBg={subBg} hairline={hairline} t3={t3}>
-                {plan.examDate ? (
-                  <span style={{ fontSize: 14, fontWeight: 800, color: t1 }}>
-                    {exDate.md}<span style={{ fontSize: 10.5, fontWeight: 600, color: t3, marginLeft: 3 }}>{exDate.wd}</span>
-                  </span>
-                ) : <span style={{ fontSize: 13, fontWeight: 700, color: t3 }}>未设置</span>}
-              </BentoTile>
-              <BentoTile label="目标分" subBg={subBg} hairline={hairline} t3={t3}>
-                {plan.targetScore != null ? (
-                  <span style={{ fontSize: 16, fontWeight: 800, color: T.primary, fontVariantNumeric: "tabular-nums" }}>
-                    {fmtBand(plan.targetScore)}<span style={{ fontSize: 10.5, fontWeight: 600, color: t3, marginLeft: 2 }}>分</span>
-                  </span>
-                ) : <span style={{ fontSize: 13, fontWeight: 700, color: t3 }}>未设置</span>}
-              </BentoTile>
-            </div>
+            {/* 考试日只在这一行出现一次；目标分平时由下方进度条展示，
+                仅当进度条不渲染（还没有当前分）时并入这一行，避免同卡重复 */}
+            {(plan.examDate || (plan.targetScore != null && effectiveCurrent == null)) && (
+              <div style={{ textAlign: "center", fontSize: 12, color: t2, lineHeight: 1.5 }}>
+                {plan.examDate && (
+                  <>考试日 <b style={{ color: t1, fontWeight: 700 }}>{exDate.md}</b> {exDate.wd}</>
+                )}
+                {plan.examDate && plan.targetScore != null && effectiveCurrent == null && " · "}
+                {plan.targetScore != null && effectiveCurrent == null && (
+                  <>目标 <b style={{ color: T.primary, fontWeight: 700 }}>{fmtBand(plan.targetScore)}</b> 分</>
+                )}
+              </div>
+            )}
 
             {plan.targetScore != null && (
               effectiveCurrent != null ? (
@@ -297,7 +294,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
               ) : (
                 <button
                   onClick={() => setEditorOpen(true)}
-                  style={{ width: "100%", marginTop: 9, padding: "8px 0", fontSize: 11.5, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
+                  style={{ width: "100%", marginTop: 9, padding: "8px 0", fontSize: 12, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
                 >
                   + 记录当前水平，追踪进步
                 </button>
@@ -305,7 +302,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
             )}
 
             {pep(days) && (
-              <div style={{ marginTop: 11, fontSize: 11.5, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center" }}>
+              <div style={{ marginTop: 11, fontSize: 12, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center" }}>
                 {pep(days)}
               </div>
             )}
@@ -317,7 +314,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
       <div style={{ ...modernCard("15px 16px 14px"), ...fadeIn(220) }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
           <IconBadge name="flame" isChallenge={isChallenge} tint="#F2702E" soft="rgba(242,112,46,0.14)" border="rgba(242,112,46,0.28)" />
-          <span style={{ fontSize: 14, fontWeight: 800, color: t1, flex: 1 }}>学习打卡</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: t1, flex: 1 }}>学习打卡</span>
         </div>
 
         {/* 连胜火焰主视觉 */}
@@ -332,7 +329,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
                 <button
                   key={o.k}
                   onClick={() => setCalView(o.k)}
-                  style={{ border: "none", borderRadius: 999, padding: "4px 13px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s", background: sel ? (isChallenge ? "rgba(13,150,104,0.22)" : "#fff") : "transparent", color: sel ? T.primary : t3, boxShadow: sel && !isChallenge ? "0 1px 4px rgba(0,0,0,0.1)" : "none" }}
+                  style={{ border: "none", borderRadius: 999, padding: "4px 13px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s", background: sel ? (isChallenge ? "rgba(13,150,104,0.22)" : "#fff") : "transparent", color: sel ? T.primary : t3, boxShadow: sel && !isChallenge ? "0 1px 4px rgba(0,0,0,0.1)" : "none" }}
                 >
                   {o.l}
                 </button>
@@ -346,18 +343,12 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
         ) : calView === "month" ? (
           <MonthView view={view} setView={setView} practiceMap={practiceMap} todayKey={todayKey} examKey={examKey} isChallenge={isChallenge} t1={t1} t2={t2} t3={t3} hairline={hairline} />
         ) : (
-          <HeatmapView practiceMap={practiceMap} now={now} examKey={examKey} isChallenge={isChallenge} t2={t2} t3={t3} />
+          <HeatmapView practiceMap={practiceMap} now={now} examKey={examKey} isChallenge={isChallenge} t3={t3} />
         )}
 
-        {/* 今日状态 + 统计 */}
-        <div style={{ marginTop: 13, paddingTop: 11, borderTop: `1px solid ${hairline}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11.5, fontWeight: 700, color: practicedToday ? T.primary : t3 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: practicedToday ? T.primary : "transparent", border: practicedToday ? "none" : `1.5px solid ${t3}`, flexShrink: 0 }} />
-            {practicedToday ? "今日已打卡" : "今天还没练习"}
-          </span>
-          <span style={{ fontSize: 10.5, color: t3, fontVariantNumeric: "tabular-nums" }}>
-            本月 {currentMonthCount} · 累计 {totalCount} 天
-          </span>
+        {/* 统计（今日状态由上方周历的今日圈直接呈现，不再重复文字提示） */}
+        <div style={{ marginTop: 13, paddingTop: 11, borderTop: `1px solid ${hairline}`, textAlign: "center", fontSize: 11, color: t3, fontVariantNumeric: "tabular-nums" }}>
+          本月 {currentMonthCount} 天 · 累计 {totalCount} 天
         </div>
       </div>
 
@@ -391,11 +382,11 @@ function StreakHero({ streak, isChallenge, t3 }) {
         background: isChallenge ? "rgba(242,112,46,0.10)" : "linear-gradient(135deg,#FFF3E8 0%,#FFE3CC 100%)",
         border: `1px dashed ${isChallenge ? "rgba(242,112,46,0.42)" : "#FFC79A"}`,
       }}>
-        <div style={{ flexShrink: 0, opacity: 0.92, animation: "sp-flameBob 3.4s ease-in-out infinite" }}>
+        <div style={{ flexShrink: 0, opacity: 0.92 }}>
           <Flame size={34} grad={["#FFD27A", "#FF7A2E"]} id="sp-flame-zero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, color: isChallenge ? CH.t1 : "#C2541E" }}>点燃今日的火苗</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: isChallenge ? CH.t1 : "#C2541E" }}>点燃今日的火苗</div>
           <div style={{ fontSize: 11, color: isChallenge ? t3 : "#B0703E", marginTop: 3, lineHeight: 1.4 }}>完成一组练习，点亮连续打卡 🔥</div>
         </div>
       </div>
@@ -412,16 +403,16 @@ function StreakHero({ streak, isChallenge, t3 }) {
       {/* 顶部柔光 */}
       <div style={{ position: "absolute", top: -34, left: -12, width: 130, height: 78, background: "radial-gradient(ellipse, rgba(255,255,255,0.42), transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 13 }}>
-        <div style={{ flexShrink: 0, animation: "sp-flameBob 2.6s ease-in-out infinite" }}>
+        <div style={{ flexShrink: 0 }}>
           <Flame size={44} grad={tier.flame} id="sp-flame-hero" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-            <span style={{ fontSize: 34, fontWeight: 800, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1, textShadow: "0 1px 3px rgba(120,30,0,0.32)" }}>{streak}</span>
-            <span style={{ fontSize: 13, fontWeight: 800, color: "#fff" }}>天</span>
-            <span style={{ fontSize: 10.5, fontWeight: 700, color: "rgba(255,255,255,0.85)", marginLeft: 2 }}>连续打卡</span>
+            <span style={{ fontSize: 28, fontWeight: 700, color: "#fff", lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1, textShadow: "0 1px 3px rgba(120,30,0,0.32)" }}>{streak}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>天</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.85)", marginLeft: 2 }}>连续打卡</span>
           </div>
-          <div style={{ fontSize: 12.5, fontWeight: 700, color: "rgba(255,255,255,0.94)", marginTop: 5, lineHeight: 1.2, textShadow: "0 1px 2px rgba(120,30,0,0.22)" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,0.94)", marginTop: 5, lineHeight: 1.2, textShadow: "0 1px 2px rgba(120,30,0,0.22)" }}>
             {next ? "火苗正旺，别让它熄灭" : "🔥 传奇连胜，火苗不灭"}
           </div>
         </div>
@@ -432,7 +423,7 @@ function StreakHero({ streak, isChallenge, t3 }) {
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.94)", fontWeight: 700 }}>
             {next ? `🔥 再练 ${next.min - streak} 天满 ${next.min} 天` : "🔥 已达成 365 天里程碑"}
           </span>
-          {next && <span style={{ fontSize: 10, color: "#fff", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}>{streak}/{next.min}</span>}
+          {next && <span style={{ fontSize: 10, color: "#fff", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{streak}/{next.min}</span>}
         </div>
         <div style={{ height: 6, borderRadius: 99, background: "rgba(255,255,255,0.32)", overflow: "hidden" }}>
           <div style={{ width: `${mPct * 100}%`, height: "100%", borderRadius: 99, background: "#fff", boxShadow: "0 0 6px rgba(255,255,255,0.55)", transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
@@ -456,7 +447,6 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
         let content = null;
         let numColor = cell.isFuture ? (isChallenge ? "rgba(255,255,255,0.2)" : "#C6D0CB") : (missed ? t3 : t2);
         let ring = "none";
-        let anim = "none";
 
         if (done) {
           circleBg = T.primary;
@@ -465,16 +455,15 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
           circleBg = isChallenge ? "rgba(217,119,6,0.14)" : T.amberSoft;
           ring = `inset 0 0 0 2px ${T.amber}`;
           numColor = T.amber;
-          anim = "sp-todayPulse 1.8s ease-in-out infinite";
         }
         if (isExam) ring = `inset 0 0 0 2px ${T.rose}`;
 
         return (
           <div key={cell.key} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-            <span style={{ fontSize: 9.5, color: t3, fontWeight: 600 }}>{WEEKDAYS[i]}</span>
+            <span style={{ fontSize: 10, color: t3, fontWeight: 600 }}>{WEEKDAYS[i]}</span>
             <div
               title={done ? `练习 ${cell.count} 次` : (isExam ? "考试日" : "")}
-              style={{ width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, animation: anim, fontSize: 11, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
+              style={{ width: 26, height: 26, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: circleBg, boxShadow: ring, fontSize: 11, fontWeight: 700, color: numColor, fontVariantNumeric: "tabular-nums" }}
             >
               {content || cell.date.getDate()}
             </div>
@@ -485,23 +474,14 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
   );
 }
 
-function BentoTile({ label, children, subBg, hairline, t3 }) {
-  return (
-    <div style={{ background: subBg, border: `1px solid ${hairline}`, borderRadius: 12, padding: "9px 11px", display: "flex", flexDirection: "column", gap: 3, minWidth: 0 }}>
-      <span style={{ fontSize: 10, color: t3, fontWeight: 600 }}>{label}</span>
-      <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{children}</span>
-    </div>
-  );
-}
-
 function ScoreProgress({ current, target, label, t2, t3, ringTrack }) {
   const pct = target > 0 ? Math.max(0, Math.min(1, current / target)) : 0;
   const reached = current >= target;
   return (
     <div style={{ marginTop: 11 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-        <span style={{ fontSize: 10.5, color: t3 }}>{label || "当前"} <b style={{ color: t2, fontSize: 12, fontWeight: 800 }}>{fmtBand(current)}</b></span>
-        <span style={{ fontSize: 10.5, color: t3 }}>目标 <b style={{ color: T.primary, fontSize: 12, fontWeight: 800 }}>{fmtBand(target)}</b></span>
+        <span style={{ fontSize: 11, color: t3 }}>{label || "当前"} <b style={{ color: t2, fontSize: 12, fontWeight: 700 }}>{fmtBand(current)}</b></span>
+        <span style={{ fontSize: 11, color: t3 }}>目标 <b style={{ color: T.primary, fontSize: 12, fontWeight: 700 }}>{fmtBand(target)}</b></span>
       </div>
       <div style={{ height: 9, borderRadius: 99, background: ringTrack, overflow: "hidden", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.06)" }}>
         <div style={{ width: `${pct * 100}%`, height: "100%", borderRadius: 99, background: reached ? `linear-gradient(90deg, ${T.cyan}, ${T.primary})` : `linear-gradient(90deg, ${T.primaryMist}, ${T.primary})`, transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
@@ -553,7 +533,7 @@ function MonthView({ view, setView, practiceMap, todayKey, examKey, isChallenge,
               if (isExam) { ring = `inset 0 0 0 1.5px ${T.rose}`; if (!practiced) color = T.rose; }
               else if (isToday) { ring = `inset 0 0 0 1.5px ${practiced ? "rgba(255,255,255,0.85)" : T.primary}`; if (!practiced) color = T.primary; }
               return (
-                <div key={ci} title={isExam ? "考试日" : (practiced ? `练习 ${count} 次` : "")} style={{ height: 27, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11.5, fontWeight: practiced || isToday || isExam ? 700 : 500, background: bg, color, boxShadow: ring, fontVariantNumeric: "tabular-nums", opacity: cell.inMonth ? 1 : 0.5 }}>
+                <div key={ci} title={isExam ? "考试日" : (practiced ? `练习 ${count} 次` : "")} style={{ height: 27, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: practiced || isToday || isExam ? 700 : 500, background: bg, color, boxShadow: ring, fontVariantNumeric: "tabular-nums", opacity: cell.inMonth ? 1 : 0.5 }}>
                   {cell.date.getDate()}
                 </div>
               );
@@ -565,7 +545,7 @@ function MonthView({ view, setView, practiceMap, todayKey, examKey, isChallenge,
   );
 }
 
-function HeatmapView({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
+function HeatmapView({ practiceMap, now, examKey, isChallenge, t3 }) {
   const columns = useMemo(() => buildHeatmapColumns(practiceMap, now, HEATMAP_WEEKS), [practiceMap, now]);
   const cells = useMemo(() => columns.flat(), [columns]);
   return (
@@ -587,9 +567,9 @@ function HeatmapView({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
         })}
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4, marginTop: 9 }}>
-        <span style={{ fontSize: 9.5, color: t3 }}>少</span>
+        <span style={{ fontSize: 10, color: t3 }}>少</span>
         {[0, 1, 2, 3].map((n) => (<div key={n} style={{ width: 11, height: 11, borderRadius: 3, background: heatColor(n, isChallenge).bg }} />))}
-        <span style={{ fontSize: 9.5, color: t3 }}>多</span>
+        <span style={{ fontSize: 10, color: t3 }}>多</span>
       </div>
     </div>
   );
@@ -616,7 +596,7 @@ function GoalEditor({ plan, onSave, onClear, onClose }) {
           <div style={{ width: 28, height: 28, borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", background: T.primarySoft, border: `1px solid ${T.primaryMist}` }}>
             <Icon name="flag" color={T.primary} size={15} />
           </div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: "#1A2420" }}>设置备考目标</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: "#1A2420" }}>设置备考目标</div>
         </div>
         <div style={{ fontSize: 12, color: "#5A6B62", marginBottom: 18, lineHeight: 1.5 }}>记录考试时间与目标分，主页会为你倒计时督促。</div>
 
@@ -629,7 +609,7 @@ function GoalEditor({ plan, onSave, onClear, onClose }) {
         <div style={{ display: "flex", gap: 6 }}>
           {TARGET_PRESETS.map((v) => {
             const active = Number(target) === v;
-            return (<button key={v} onClick={() => setTarget(String(v))} style={{ flex: 1, padding: "9px 0", fontSize: 13, fontWeight: 800, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT, border: `1px solid ${active ? T.primary : "#DDE5DF"}`, background: active ? T.primarySoft : "#fff", color: active ? T.primaryDeep : "#5A6B62", transition: "all .12s" }}>{fmtBand(v)}</button>);
+            return (<button key={v} onClick={() => setTarget(String(v))} style={{ flex: 1, padding: "9px 0", fontSize: 13, fontWeight: 700, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT, border: `1px solid ${active ? T.primary : "#DDE5DF"}`, background: active ? T.primarySoft : "#fff", color: active ? T.primaryDeep : "#5A6B62", transition: "all .12s" }}>{fmtBand(v)}</button>);
           })}
         </div>
 
@@ -641,7 +621,7 @@ function GoalEditor({ plan, onSave, onClear, onClose }) {
           {BAND_OPTIONS.map((v) => (<option key={v} value={String(v)}>{fmtBand(v)} 分</option>))}
         </select>
 
-        <PressButton onClick={save} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", marginTop: 20, padding: "12px 0", fontSize: 14.5 }}>保存</PressButton>
+        <PressButton onClick={save} bg={T.primary} edge={T.primaryDeep} style={{ width: "100%", marginTop: 20, padding: "12px 0", fontSize: 14 }}>保存</PressButton>
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12 }}>
           <button onClick={onClear} style={{ border: "none", background: "none", color: "#B0654E", fontSize: 12, cursor: "pointer", fontFamily: HOME_FONT, padding: "2px 0", opacity: 0.8 }}>清除目标</button>
           <button onClick={onClose} style={{ border: "none", background: "none", color: "#5A6B62", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT, padding: "2px 0" }}>取消</button>

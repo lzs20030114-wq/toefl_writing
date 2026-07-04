@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you want to come to my birthday dinner?",
+      "options": {
+        "A": "I wouldn't miss it for the world.",
+        "B": "Dinner reservations fill up fast downtown.",
+        "C": "Birthdays are my favorite holiday of all.",
+        "D": "I turned twenty-one last April."
+      },
+      "answer": "A",
+      "explanation": "说话者用一般疑问句问“你想来我的生日晚宴吗？”。A用习语“I wouldn't miss it for the world”（我说什么也不会错过）自然地表示欣然接受邀请，属于习语式回应，正确。B抓住“dinner”这一关联词，谈论市中心餐厅订位很抢手，属于语义联想陷阱，没有回应是否赴约。C泛泛谈“生日是我最喜欢的节日”，是语法正确但离题的句子，没有回应邀请本身。D回答的是“你多大了”而不是“你要不要来”，属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I can't decide between two topics for our presentation.",
+      "options": {
+        "A": "Presentations should be at least ten minutes long.",
+        "B": "Let's flip a coin and settle it.",
+        "C": "The projector in that room is broken.",
+        "D": "I decided to switch my major last week."
+      },
+      "answer": "B",
+      "explanation": "说话者陈述“我在两个展示主题之间拿不定主意”。B用习语“flip a coin”（抛硬币决定）自然地提出解决办法，属于习语式回应，正确。A关于展示报告至少要十分钟长，抓住“presentation”这一关联词，属于语义联想陷阱，没有帮忙做决定。C说那间教室的投影仪坏了，是语法正确但完全离题的句子。D把“decide”重新用于“决定换专业”这件不相关的事，属于同词不同义的误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where do I report a broken heater in my room?",
+      "options": {
+        "A": "The heater warms up in about five minutes.",
+        "B": "The dorms were repainted over the summer.",
+        "C": "You're in luck, the front desk handles that.",
+        "D": "It usually takes about a week to fix."
+      },
+      "answer": "C",
+      "explanation": "学生问“我该去哪里报修房间里坏掉的暖气”。C用习语“You're in luck”（algo你运气好）自然地告知前台可以处理，属于习语式回应，正确。A抓住“heater”这一关联词，说暖气五分钟就能热起来，属于语义联想陷阱，没有回答该去哪里报修。B说宿舍楼夏天重新粉刷过，是语法正确但完全离题的句子。D回答的是“要多久能修好”而不是“该去哪里报修”，属于答非所问的错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "This sweater has a small hole in it.",
+      "options": {
+        "A": "Sweaters are on sale this week.",
+        "B": "I bought a similar one last year.",
+        "C": "I have a big hole in my schedule today.",
+        "D": "Actually, I can exchange that for you."
+      },
+      "answer": "D",
+      "explanation": "顾客向店员陈述“这件毛衣上有个小洞”，暗示想要退换。D以话语标记“Actually”开头，主动提出可以为顾客更换，是标记引导的间接帮助性回应，正确。A抓住“sweater”这一关联词，说毛衣本周在打折，属于语义联想陷阱，没有回应破损问题。B说自己去年买过类似的，是语法正确但完全离题的句子。C把“hole”重新用于“日程安排上有个空档”这一比喻义，属于同词不同义的误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Are you free to talk this afternoon?",
+      "options": {
+        "A": "Yes, I'm free after two o'clock.",
+        "B": "Afternoon classes always run late here.",
+        "C": "I talked to her about it yesterday.",
+        "D": "The weather's supposed to clear up soon."
+      },
+      "answer": "A",
+      "explanation": "说话者用一般疑问句问“你今天下午有空聊聊吗”。A直接给出具体的空闲时间“两点以后有空”，属于直接回答型，正确。B抓住“afternoon”这一关联词，说这里的下午课总是拖堂，属于语义联想陷阱，没有回应是否有空。C把“talk”重新用于“昨天跟她谈过这件事”，主语和时间都不对，属于同词不同义的误解陷阱。D说天气快要放晴了，是语法正确但完全离题的句子。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why do you seem so stressed lately?",
+      "options": {
+        "A": "Stress can cause headaches and fatigue.",
+        "B": "Let's grab coffee and talk it through.",
+        "C": "I switched to a new phone plan recently.",
+        "D": "The seam on my jacket ripped again."
+      },
+      "answer": "B",
+      "explanation": "朋友关心地问“你最近怎么看起来压力这么大”。B不解释压力的原因，而是提议“我们去喝杯咖啡聊聊”，转向解决对方情绪上的根本需求，属于情境转移，正确。A泛泛谈压力会导致头痛和疲劳，抓住“stressed”这一关联词，属于语义联想陷阱，没有真正关心对方。C说自己最近换了新的手机套餐，是语法正确但完全离题的句子。D把“seem”听成同音词“seam”（衣缝），说自己夹克的缝线又开了，属于同音异义的误解陷阱，是较难的干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How late is the bank open tonight?",
+      "options": {
+        "A": "Banks are usually busiest around lunchtime.",
+        "B": "We had a picnic by the river bank.",
+        "C": "I can transfer that for you right now.",
+        "D": "The weather report says rain tonight."
+      },
+      "answer": "C",
+      "explanation": "说话者问“银行今晚开到多晚”，背后真正需求可能是要办理业务。C不回答具体的营业时间，而是提出“我现在就能帮你转账”，直接解决对方的根本需求，属于情境转移，正确。A泛泛谈银行通常午间最忙，抓住“bank”这一关联词，属于语义联想陷阱，没有回答营业时间。B把“bank”用作“河岸”这一同形异义词，说去河边野餐，属于一词多义的误解陷阱，是较难的干扰项。D说天气预报说今晚有雨，抓住“tonight”一词，是语法正确但完全离题的句子。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the quickest way to the pharmacy?",
+      "options": {
+        "A": "Pharmacies usually close around nine.",
+        "B": "I picked up my prescription yesterday.",
+        "C": "The way you explained it made sense.",
+        "D": "Just head straight and turn left."
+      },
+      "answer": "D",
+      "explanation": "说话者问“去药店最快的路怎么走”。D以话语标记“Just”开头，给出简洁明确的路线指引“直走然后左转”，是标记引导的间接回应，正确。A谈药店通常几点关门，抓住“pharmacy”这一关联词，属于语义联想陷阱，没有回答路线问题。B说自己昨天去取了药，是语法正确但完全离题的句子。C把“way”重新用于“方式、方法”这一含义，说“你解释的方式讲得通”，属于同词不同义的误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}

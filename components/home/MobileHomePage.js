@@ -13,6 +13,7 @@ import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 import MyBankImporter from "../userBank/MyBankImporter";
+import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 
 /* ── 颜色工具 ── */
 const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
@@ -31,6 +32,14 @@ export function MobileHomePage({
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("writing");
   const tier = userTier || "free";
+
+  // 「我的题库」新功能一次性聚光灯引导（与桌面端共用同一 featureId，不会重复弹）
+  const bankSpotlight = useSpotlightGate({
+    featureId: "my-bank-2026-07",
+    enabled: isLoggedIn && !isChallenge,
+    alreadyThere: activeSection === "my-bank",
+    targetSelector: '[data-section-id="my-bank"]',
+  });
   const [showDesktopTip, setShowDesktopTip] = useState(false);
   const desktopTipRef = useRef(false);
 
@@ -126,6 +135,7 @@ export function MobileHomePage({
           return (
             <button
               key={sec.id}
+              data-section-id={sec.id}
               onClick={() => setActiveSection(sec.id)}
               style={{
                 flex: "1 1 0", minWidth: 0,
@@ -323,6 +333,16 @@ export function MobileHomePage({
           currentTier={tier}
           onClose={() => setUpgradeOpen(false)}
           onUpgraded={() => window.location.reload()}
+        />
+      )}
+
+      {bankSpotlight.open && !isChallenge && (
+        <FeatureSpotlight
+          targetSelector='[data-section-id="my-bank"]'
+          title="我的题库"
+          description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
+          onCta={() => { bankSpotlight.close(); setActiveSection("my-bank"); }}
+          onDismiss={bankSpotlight.close}
         />
       )}
     </div>

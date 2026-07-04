@@ -5,7 +5,6 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
-import { ReferralBanner } from "./ReferralBanner";
 
 const SPEAKING_ACCENT = SECTION_ACCENTS.speaking;
 
@@ -33,7 +32,6 @@ export function SpeakingSectionContent({
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
   sessions = [],
-  onOpenReferral,
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
@@ -206,9 +204,8 @@ export function SpeakingSectionContent({
         />
       )}
 
-      {/* Promo + Referral banners — moved below the task grid for a cleaner top of page */}
+      {/* Promo banner below the task grid; desktop referral entry lives in NavSidebar */}
       <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />
-      <ReferralBanner isLoggedIn={isLoggedIn} onOpen={onOpenReferral} fadeIn={fadeIn} />
 
       {/* Footer */}
       <div style={{ fontSize: 10, color: isChallenge ? CH.t2 : T.t3, opacity: 0.65, lineHeight: 1.6, textAlign: "center", ...fadeIn(520) }}>

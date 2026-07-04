@@ -6,8 +6,6 @@ import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { formatMinutesLabel, getTaskTimeSeconds, normalizePracticeMode, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { extractPostWritingPracticeItems, groupPostWritingPracticeItems } from "../../lib/postWritingPractice";
 import { ChallengeEffects } from "./ChallengeEffects";
-import { HomeLinkCard, HomeTaskCard } from "./HomeTaskCard";
-import { HomeSidebar } from "./HomeSidebar";
 import { MobileHomePage } from "./MobileHomePage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TASK_ACCENTS } from "./theme";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -19,6 +17,7 @@ import { countListeningMistakes } from "../../lib/listeningMistakes";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { StudyPlanColumn } from "./StudyPlanColumn";
+import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 
@@ -26,11 +25,11 @@ export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
   const bg = isChallenge
     ? "linear-gradient(135deg, #1a0a1e 0%, #1a1028 100%)"
-    : "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 50%, #FCD34D 100%)";
-  const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : "1px solid #F59E0B";
-  const textColor = isChallenge ? "#FDE68A" : "#78350F";
-  const subColor = isChallenge ? "rgba(253,230,138,0.7)" : "#92400E";
-  const btnBg = isChallenge ? "rgba(251,191,36,0.15)" : "rgba(120,53,15,0.1)";
+    : T.card;
+  const border = isChallenge ? "1px solid rgba(251,191,36,0.3)" : `1px solid ${T.bdr}`;
+  const textColor = isChallenge ? "#FDE68A" : T.t1;
+  const subColor = isChallenge ? "rgba(253,230,138,0.7)" : T.t2;
+  const btnBg = isChallenge ? "rgba(251,191,36,0.15)" : T.bdrSubtle;
   return (
     <div style={{ marginBottom: 14, borderRadius: 12, background: bg, border, overflow: "hidden", ...fadeIn(140) }}>
       <div
@@ -104,7 +103,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [fbSent, setFbSent] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState(null);
   const [fbHistory, setFbHistory] = useState([]);
-  const [fbHistLoading, setFbHistLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
   const [referralModalOpen, setReferralModalOpen] = useState(false);
@@ -120,6 +118,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
   const isMobile = useIsMobile();
+
+  // 「我的题库」新功能一次性聚光灯引导（桌面端；移动端在 MobileHomePage 内自带）
+  const bankSpotlight = useSpotlightGate({
+    featureId: "my-bank-2026-07",
+    enabled: !isMobile && isLoggedIn && !isChallenge,
+    alreadyThere: activeSection === "my-bank",
+    targetSelector: '[data-section-id="my-bank"]',
+  });
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -180,14 +186,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
   async function loadFbHistory() {
     if (!userCode) return;
-    setFbHistLoading(true);
     try {
       const res = await fetch(`/api/feedback?userCode=${encodeURIComponent(userCode)}`);
       const body = await parseJsonSafe(res);
       if (res.ok) setFbHistory(Array.isArray(body?.rows) ? body.rows : []);
-    } catch { /* silent */ } finally {
-      setFbHistLoading(false);
-    }
+    } catch { /* silent */ }
   }
 
   useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen, userCode]);
@@ -268,7 +271,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             borderBottom: isChallenge ? `2px solid ${CH.navBorder}` : `1px solid ${T.bdrSubtle}`,
           }}>
             <div style={{ width: 24, height: 24, borderRadius: 6, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontSize: 11, fontWeight: 800 }}>T</span>
+              <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>T</span>
             </div>
             <span style={{ marginLeft: 8, fontWeight: 700, fontSize: 14, color: isChallenge ? "#fff" : T.t1 }}>TreePractice</span>
             <div style={{ marginLeft: "auto" }}><AnnouncementButton isChallenge={isChallenge} /></div>
@@ -322,13 +325,12 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           <div className="home-nav" style={{ position: "sticky", top: 0, zIndex: 10, height: 52, display: "flex", alignItems: "center", padding: "0 36px", background: "rgba(255,255,255,0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.bdrSubtle}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontSize: 13, fontWeight: 800 }}>T</span>
+                <span style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>T</span>
               </div>
               <span style={{ fontWeight: 700, fontSize: 15, color: T.t1 }}>TreePractice</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primaryMist}`, borderRadius: 5, padding: "1px 6px", letterSpacing: 0.3 }}>TOEFL 备考</span>
             </div>
             <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
-              <span className="home-nav-ai" style={{ fontSize: 12, color: T.t3 }}>部分内容由 AI 辅助生成</span>
               <AnnouncementButton isChallenge={false} />
             </div>
           </div>
@@ -348,13 +350,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             isChallenge={isChallenge}
             userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
-            totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
             fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText}
             fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
-            fbHistory={fbHistory} fbHistLoading={fbHistLoading}
+            fbHistory={fbHistory}
             copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover}
-            bsMistakeCount={bsMistakeCount} postWritingCounts={postWritingCounts}
-            sideCard={sideCard} fadeIn={fadeIn}
+            fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
           />
           <SectionContent
@@ -366,7 +366,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             sessions={sessions}
             fadeIn={fadeIn}
             userCode={userCode} userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
-            onOpenReferral={handleOpenReferral}
           />
           <StudyPlanColumn
             userCode={userCode}
@@ -378,6 +377,15 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           />
         </div>
       </div>
+      {bankSpotlight.open && !isChallenge && (
+        <FeatureSpotlight
+          targetSelector='[data-section-id="my-bank"]'
+          title="我的题库"
+          description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
+          onCta={() => { bankSpotlight.close(); setActiveSection("my-bank"); }}
+          onDismiss={bankSpotlight.close}
+        />
+      )}
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
       )}
