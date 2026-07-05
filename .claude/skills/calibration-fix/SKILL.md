@@ -1,6 +1,6 @@
 ---
 name: calibration-fix
-description: Diagnose and fix a question-quality REGRESSION against real TPO ground truth, then lock it so it cannot silently regress again. Use when a generated dimension drifted from real exam style (e.g. "prefilled is all he/she/names", "distractors collapsed to did", "topics too repetitive", "sentence types off"), when output "doesn't feel like real TPO", or when a previously-fixed quality issue came back. Works for any bank (BS / Discussion / Email / Reading).
+description: 「题目退化了」「变简单了」「难度退步了」「不像真题」「机器味」「语气生硬」「偏口语需要校准」「干扰词又全都变成了did」「之前修的又退化了」「全校准一下」「现在的题都没问题吗」. Diagnose and fix a question-quality REGRESSION against real TPO ground truth, then lock it so it cannot silently regress again. Use when a generated dimension drifted from real exam style (e.g. "prefilled is all he/she/names", "distractors collapsed to did", "topics too repetitive", "sentence types off"), when output "doesn't feel like real TPO", or when a previously-fixed quality issue came back. Works for any bank (BS / Discussion / Email / Reading).
 user-invocable: true
 argument-hint: [dimension, e.g. "distractor variety" | "prefilled person-ratio" | "AP topic diversity"]
 ---

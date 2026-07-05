@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Pre-push check chain — review diff scope, run the test suite, self-audit the changes, verify migration/flag/env preconditions, then commit and push to main. Use whenever the user says "推送"、"推"、"合main"、"部署"、"确认无bug就推"、"提交上去" or otherwise asks to ship the current changes.
+description: Pre-push check chain — review diff scope, run the test suite, self-audit the changes, verify migration/flag/env preconditions, then commit and push to main. Use whenever the user says "推"、"推送"、"推上去"、"合main"、"部署"、"提交改动"、"确认无bug就推送"、"查一下bug 没bug就提交"、"替换题库 然后推"、"更新日志推上去"、"提交上去" or otherwise asks to ship the current changes. "更新日志推上去" means run /release-notes first, then this skill.
 user-invocable: true
 argument-hint: [optional commit message hint]
 ---

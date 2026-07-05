@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: Publish a new release by updating both CHANGELOG.md (developer-facing) and data/announcements.json (user-facing in-app panel) together. Use whenever the user says "更新"、"发版"、"更新日志"、"更新公告"、"release notes" or asks to write release notes / announce a release.
+description: Publish a new release by updating both CHANGELOG.md (developer-facing) and data/announcements.json (user-facing in-app panel) together. Use whenever the user says "更新"、"发版"、"更新日志"、"更新公告"、"release notes"、"先给我个更新日志然后推送"、"跑完了 main上线，再更新日志"、"把目前为止的更新总结一下更新日志" or asks to write release notes / announce a release.
 user-invocable: true
 argument-hint: [optional summary of what's in this release]
 ---

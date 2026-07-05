@@ -1,6 +1,6 @@
 ---
 name: research-reuse
-description: Research whether an existing GitHub project or open-source solution can be reused instead of building from scratch, evaluate candidates against project constraints, and produce a build-vs-buy recommendation report. Use when the user asks "看看github有没有现成的"、"有没有半成品"、"能不能直接拿来用"、"调研一下方案" or wants to check for existing solutions before building something new.
+description: Research whether an existing GitHub project or open-source solution can be reused instead of building from scratch, evaluate candidates against project constraints, and produce a build-vs-buy recommendation report. Use when the user asks "看看github有没有现成的"、"有没有半成品"、"能不能直接拿来用"、"调研一下方案"、"查查github上面有没有"、"看看有没有现成的工具"、"广泛找参考"、"有没有可以直接拿来复用的"、"先做仔细的方案研究而不是直接开始做" or wants to check for existing solutions before building something new.
 user-invocable: true
 argument-hint: <要调研的功能/方案主题>
 ---

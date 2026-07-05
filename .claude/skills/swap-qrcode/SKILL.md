@@ -1,6 +1,6 @@
 ---
 name: swap-qrcode
-description: Replace the WeChat group QR code image shown across the app. Use when the user says "换二维码"、"新的群二维码" or wants to update the group QR code image.
+description: Replace the WeChat group QR code image shown across the app. Use when the user says "换二维码"、"新的群二维码"、"二维码过期了 更新一下"、"新的群二维码在桌面，名字叫X 换上去"、"桌面上有个叫X的jpg 换上" or wants to update the group QR code image. The user typically drops the new image on the desktop (usually `C:\Users\35827\Desktop\` or "D盘桌面") and names the filename in the message.
 user-invocable: true
 argument-hint: [新图片路径,默认在桌面]
 ---

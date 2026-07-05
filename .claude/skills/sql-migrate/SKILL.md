@@ -1,6 +1,6 @@
 ---
 name: sql-migrate
-description: Supabase migration ritual for this project — write SQL to scripts/sql/, hand it to the user to run in the Supabase SQL Editor, then register it in scripts/sql/MIGRATIONS.md once confirmed. Use whenever the user talks about creating tables, database migrations, schema changes, or adding/altering columns ("建表"、"迁移"、"SQL"、"schema"、"字段").
+description: Supabase migration ritual for this project — write SQL to scripts/sql/, hand it to the user to run in the Supabase SQL Editor, then register it in scripts/sql/MIGRATIONS.md once confirmed. Use whenever the user talks about creating tables, database migrations, schema changes, or adding/altering columns ("建表"、"迁移"、"SQL"、"schema"、"字段"、"给我建表的命令"、"给我建表的代码"、"supabase的建表命令发我"、"sql要我怎么跑"). Also trigger when the user reports completion ("建好了"、"跑完了"、"建表完成了") — that means run the registration/bookkeeping step.
 user-invocable: true
 argument-hint: [description of the schema change]
 ---
@@ -31,7 +31,7 @@ argument-hint: [description of the schema change]
 
 ## Step 3 — 登记
 
-等用户回复"跑完了"/"执行了"/类似确认后，在 `scripts/sql/MIGRATIONS.md` 里追加一行登记：
+等用户回复"跑完了"/"执行了"/"建好了"/"建表完成了"/类似确认后，在 `scripts/sql/MIGRATIONS.md` 里追加一行登记：
 
 ```
 | <文件名> | <今天日期> | 已跑 | <一句话说明这个迁移做了什么> |
