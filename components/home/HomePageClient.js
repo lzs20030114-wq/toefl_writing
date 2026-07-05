@@ -20,6 +20,7 @@ import { StudyPlanColumn } from "./StudyPlanColumn";
 import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
+import UpgradeModal from "../shared/UpgradeModal";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -106,6 +107,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [copied, setCopied] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
   const [referralModalOpen, setReferralModalOpen] = useState(false);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   function handleOpenReferral() {
     if (!isLoggedIn) {
@@ -133,6 +135,21 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
     return () => window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
   }, []);
+
+  // 「升级 Pro」按钮点击后会 dispatch 全局 open-upgrade-modal 事件（Reading/
+  // Listening/Speaking section 内的按钮，以及移动端 section）。此前全项目没有
+  // 监听者，按钮点了没反应。这里在首页根组件上挂唯一监听者，弹出 UpgradeModal。
+  useEffect(() => {
+    const onOpenUpgrade = () => {
+      if (!isLoggedIn) {
+        showLoginModal();
+        return;
+      }
+      setUpgradeOpen(true);
+    };
+    window.addEventListener("open-upgrade-modal", onOpenUpgrade);
+    return () => window.removeEventListener("open-upgrade-modal", onOpenUpgrade);
+  }, [isLoggedIn, showLoginModal]);
 
   const { totalCount, weekCount, bestMock } = useMemo(() => {
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -295,6 +312,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         {referralModalOpen && (
           <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
         )}
+        {upgradeOpen && (
+          <UpgradeModal
+            userCode={userCode}
+            currentTier={userTier}
+            onClose={() => setUpgradeOpen(false)}
+            onUpgraded={() => window.location.reload()}
+          />
+        )}
         <BankUpdateModal isLoggedIn={isLoggedIn} />
         <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
         <ActivatedToast />
@@ -388,6 +413,14 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       )}
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
+      )}
+      {upgradeOpen && (
+        <UpgradeModal
+          userCode={userCode}
+          currentTier={userTier}
+          onClose={() => setUpgradeOpen(false)}
+          onUpgraded={() => window.location.reload()}
+        />
       )}
       <BankUpdateModal isLoggedIn={isLoggedIn} />
       <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
