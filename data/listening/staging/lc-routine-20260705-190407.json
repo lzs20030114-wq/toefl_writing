@@ -1,0 +1,270 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm so bored of hearing the same pop singers on every playlist. I need something new for studying." },
+        { "speaker": "Man", "text": "Have you tried any lo-fi hip hop? There's this artist, DJ Marlo, whose beats are perfect for concentrating. No lyrics to distract you." },
+        { "speaker": "Woman", "text": "No lyrics? That actually sounds ideal. I always end up singing along and losing focus." },
+        { "speaker": "Man", "text": "Exactly. I'll text you the link to his study playlist. It's got about three hours of music." },
+        { "speaker": "Woman", "text": "Perfect, thanks! I'll put it on tonight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, why is DJ Marlo's music good for studying?",
+          "options": {
+            "A": "It has no lyrics to distract the listener",
+            "B": "It is only ten minutes long",
+            "C": "It features famous pop singers",
+            "D": "It is played in the campus library"
+          },
+          "answer": "A",
+          "explanation": "男生明确说 DJ Marlo 的音乐 \"No lyrics to distract you\"（没有歌词分散注意力），所以 A 正确。B 错：他说播放列表约有三小时，不是十分钟。C 错：女生正是厌倦了流行歌手，而这是 lo-fi hip hop，并非流行歌手。D 错：对话从未提到校园图书馆播放。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Write her own study playlist",
+            "B": "Delete all of her pop music",
+            "C": "Listen to the playlist while studying tonight",
+            "D": "Ask the man to sing along with her"
+          },
+          "answer": "C",
+          "explanation": "女生最后说 \"I'll put it on tonight\"（今晚就听），结合她需要学习用的音乐，可推断她今晚会边学习边听这个播放列表，故 C 正确。A 错：过度推断，她只是接受了男生的推荐，没说要自己做歌单。B 错：过度推断，她只是厌倦流行歌，没说要删掉所有流行音乐。D 错：与对话无关，男生只是发链接，没提到一起唱。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you see that new mystery film everyone's talking about? I finally watched it last night." },
+        { "speaker": "Man", "text": "Not yet. Was it any good? I heard mixed things." },
+        { "speaker": "Woman", "text": "The plot twists were incredible — I never saw the ending coming. But honestly, it ran almost three hours. I got restless in the middle." },
+        { "speaker": "Man", "text": "Three hours? Did the slow part ruin it for you?" },
+        { "speaker": "Woman", "text": "Not really. The twists made up for it. I'd still recommend it — just watch it at home so you can take a break." },
+        { "speaker": "Man", "text": "Good call. I'll stream it this weekend then." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What complaint did the woman have about the film?",
+          "options": {
+            "A": "The plot twists were predictable",
+            "B": "It was too long",
+            "C": "The ending was disappointing",
+            "D": "The sound quality was poor"
+          },
+          "answer": "B",
+          "explanation": "女生说电影 \"ran almost three hours\"，还在中间坐不住了 (\"got restless in the middle\")，说明她唯一的不满是太长，故 B 正确。A 错：她说反转 \"incredible\"（精彩），完全没料到结局，并非可预测。C 错：她说 \"never saw the ending coming\"，对结局是称赞而非失望。D 错：对话从未提到音效。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Watch the film in a theater tonight",
+            "B": "Avoid the film entirely",
+            "C": "Ask the cinema for a refund",
+            "D": "Stream the film at home this weekend"
+          },
+          "answer": "D",
+          "explanation": "男生最后说 \"I'll stream it this weekend then\"，且女生建议在家看以便中途休息，故 D 正确。A 错：女生明确建议在家看而非影院，男生也没说今晚去影院，属被否决的选项。B 错：过度推断，他并没有说完全不看，反而打算周末看。C 错：与对话无关，没人提到退款。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter (service — minority)",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "store_clerk", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I'd like to return this sweater. I bought it last week, but it's a size too small." },
+        { "speaker": "Man", "text": "No problem. Do you have your receipt with you?" },
+        { "speaker": "Woman", "text": "Yes, right here. I was hoping to exchange it for a large instead of a refund." },
+        { "speaker": "Man", "text": "Let me check... I'm sorry, we're out of that style in large right now. I can give you a full refund, or order one for you online." },
+        { "speaker": "Woman", "text": "Hmm, how long would the online order take?" },
+        { "speaker": "Man", "text": "About five business days, shipped straight to your home." },
+        { "speaker": "Woman", "text": "That's fine, I'm not in a hurry. Let's do the online order." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why does the woman want to return the sweater?",
+          "options": {
+            "A": "It is the wrong color",
+            "B": "It has a hole in it",
+            "C": "It is a size too small",
+            "D": "She lost the receipt"
+          },
+          "answer": "C",
+          "explanation": "女生一开口就说 \"it's a size too small\"（尺码太小），故 C 正确。A 错：对话从未提到颜色。B 错：没提到破洞，属看似合理但未提及。D 错：她明确说收据 \"right here\"，收据在手上，并未丢失。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Wait for the larger sweater to arrive by mail",
+            "B": "Come back to the store tomorrow",
+            "C": "Pick out a completely different style",
+            "D": "Take a full refund instead"
+          },
+          "answer": "A",
+          "explanation": "女生说 \"Let's do the online order\"，而男生说网购大码会在约五个工作日内寄到家，故她会在家等大码毛衣寄到，A 正确。B 错：与对话无关，她没说明天回店里。C 错：过度推断，她要的是同款大码，没说换别的款式。D 错：男生提出退款选项，但女生选择了网购下单，退款是被她否决的选项。",
+          "distractor_types": {
+            "B": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students talking about a cat one of them is pet-sitting",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm watching my neighbor's cat this week while she's traveling. It's my first time pet-sitting." },
+        { "speaker": "Man", "text": "Oh nice! How's it going so far?" },
+        { "speaker": "Woman", "text": "Honestly, a little stressful. The cat won't eat, and I'm worried something's wrong. She barely touched her food yesterday." },
+        { "speaker": "Man", "text": "Cats get picky when their owner's away. Did you keep the same food and feeding spot the owner uses?" },
+        { "speaker": "Woman", "text": "I moved the bowl to the kitchen, actually. Maybe that's the problem." },
+        { "speaker": "Man", "text": "Probably. Put it back where the cat's used to eating. They really don't like change." },
+        { "speaker": "Woman", "text": "That makes sense. I'll move it back tonight." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to find a new apartment",
+            "B": "The woman's plan to adopt a cat",
+            "C": "A cat that has run away",
+            "D": "A problem the woman is having while pet-sitting"
+          },
+          "answer": "D",
+          "explanation": "整段对话围绕女生帮邻居看猫、猫不吃东西的困扰以及如何解决展开，故 D 抓住主旨。A 错：完全不同的校园话题，没提找房子。B 错：把情况说反了，她是在临时照看邻居的猫，并非要领养猫。C 错：猫没有走失，问题是它不吃东西，属另一个话题。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "reversed_situation",
+            "C": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Take the cat to a veterinarian",
+            "B": "Move the food bowl back to its usual spot",
+            "C": "Buy a different brand of cat food",
+            "D": "Ask her neighbor to come home early"
+          },
+          "answer": "B",
+          "explanation": "男生建议把碗放回猫习惯吃饭的地方，女生回应 \"I'll move it back tonight\"，故 B 正确。A 错：过度推断，两人只谈到换回喂食位置，没提去看兽医。C 错：与对话无关，问题被判断为喂食位置而非食物本身。D 错：过度推断，没人提到让邻居提前回来。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students comparing how they get to campus — bike, bus, or walk",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How do you usually get to campus? I've been taking the bus, but it's always so packed." },
+        { "speaker": "Man", "text": "I used to bike, but my route got torn up for construction. Now I mostly walk — twenty-five minutes, but at least it's reliable." },
+        { "speaker": "Woman", "text": "Twenty-five minutes isn't bad. The bus is supposed to be faster, but with all the stops it takes just as long." },
+        { "speaker": "Man", "text": "Exactly. And you're stuck if one gets canceled. Walking, I always know when I'll arrive." },
+        { "speaker": "Woman", "text": "Maybe I should try walking too. My apartment's only about a mile away." },
+        { "speaker": "Man", "text": "Definitely give it a shot. You might actually enjoy the fresh air." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly talking about?",
+          "options": {
+            "A": "Different ways of getting to campus",
+            "B": "A construction project near the man's home",
+            "C": "Problems with the campus bus schedule",
+            "D": "The woman's plan to move closer to campus"
+          },
+          "answer": "A",
+          "explanation": "两人比较坐公交、骑车、步行三种到校方式的优劣，故 A 概括了主旨。B 错：施工只是男生弃骑车改步行的一个细节，不是主题，过于狭窄。C 错：公交问题只是其中一部分细节，也过于狭窄。D 错：女生只是说公寓离校约一英里、想试试步行，并没有搬家计划，属曲解情况。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Buy a bicycle for her commute",
+            "B": "Complain to the bus company",
+            "C": "Try walking to campus",
+            "D": "Move to an apartment near campus"
+          },
+          "answer": "C",
+          "explanation": "女生说 \"Maybe I should try walking too\"，并提到公寓只有约一英里，男生也鼓励她试试，故 C 正确。A 错：与对话无关，且男生的骑车路线因施工被毁，两人没谈到买自行车。B 错：过度推断，她只是抱怨公交拥挤，没打算投诉公交公司。D 错：过度推断，她没有搬家的想法，只是想换出行方式。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise from the shared building",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Didn't you hear all that noise last night?",
+      "options": {
+        "A": "Actually, I was out until midnight.",
+        "B": "I always sleep with earplugs in.",
+        "C": "The mail carrier came early today.",
+        "D": "It's just past the stairwell."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记「Actually」开头，间接回应——说自己午夜才回家，暗示没听到，是自然的对话推进。B是语义联想陷阱：由「noise/声音」联想到「earplugs耳塞」，但陈述个人习惯，没回答昨晚是否听到。C完全离题，谈邮差与噪音无关。D答非所问，回答的是「在哪里」而非「你有没有听到」，属于错误问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How about we grab tacos from that truck?",
+      "options": {
+        "A": "I had tacos for lunch yesterday.",
+        "B": "Sounds good, I love their tacos.",
+        "C": "My chemistry lab got rescheduled again.",
+        "D": "Every thirty minutes, I think."
+      },
+      "answer": "B",
+      "explanation": "正确答案B直接回应了提议，表示赞同并说喜欢那家的taco，是对「要不要去吃taco」最自然的答复。A是语义联想陷阱：重复了「tacos」这个内容词，但讲的是昨天的事，没回应今天的提议。C完全离题，谈化学实验课与吃饭无关。D答非所问，「每三十分钟」是回答班车间隔的，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Aren't you free to hit the beach Saturday?",
+      "options": {
+        "A": "I sunburn really easily these days.",
+        "B": "My cousin visited us last weekend.",
+        "C": "Count me in, I'd love that.",
+        "D": "Because the forecast looks clear."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用惯用表达「Count me in」表示欣然接受邀请，语气热情自然。A是语义联想陷阱：由「beach/海滩」联想到「sunburn晒伤」，但只谈个人肤质，没回答是否有空。B完全离题，谈表亲来访与本周末计划无关。D答非所问，「因为天气预报晴」回答的是「为什么去」而非「你有没有空」，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't get my introduction to sound right.",
+      "options": {
+        "A": "The book's introduction runs pretty long.",
+        "B": "I parked in the visitor lot.",
+        "C": "Yes, you can cite three sources.",
+        "D": "Well, let's read it aloud together."
+      },
+      "answer": "D",
+      "explanation": "正确答案D以话语标记「Well」开头，提出一起朗读来找问题，间接而有效地回应了求助，是写作中心助教的自然反应。A是语义/一词多义陷阱：把「introduction引言」误当成「书的前言」，答非其意。B完全离题，谈停车与写作无关。C答非所问，回答的是「能引用几个来源」这类许可问题，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking the shuttle schedule",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time does the last shuttle leave?",
+      "options": {
+        "A": "Actually, it runs until eleven now.",
+        "B": "The shuttle stop moved near the gym.",
+        "C": "My laptop battery died in class.",
+        "D": "From the stop behind the union."
+      },
+      "answer": "A",
+      "explanation": "正确答案A以话语标记「Actually」开头，间接给出新信息——末班车现在延到十一点，恰好回应了对方问的时间。B是语义联想陷阱：重复「shuttle」但讲的是站点位置（错误方面），没回答时间。C完全离题，谈笔记本电脑与班车无关。D答非所问，「在学生会后面的站」回答的是「从哪里发车」而非「几点」，属于错误问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a course reading list",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why isn't the reading list posted online yet?",
+      "options": {
+        "A": "The reading room is on floor two.",
+        "B": "Beats me, maybe ask the professor.",
+        "C": "I dropped that class last term.",
+        "D": "It's due by next Friday."
+      },
+      "answer": "B",
+      "explanation": "正确答案B用惯用语「Beats me」（我也不知道）自然承认不清楚，并建议去问教授，推进了对话。A是语义/一词多义陷阱：把「reading阅读材料」误接到「reading room阅览室」的位置上，答非其意。C完全离题，谈自己退课与清单是否上传无关。D答非所问，「下周五截止」回答的是截止时间，而非「为什么还没上传」，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling a shop to check its business hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm calling to see if you're open today.",
+      "options": {
+        "A": "The front door sticks in winter.",
+        "B": "I ordered two coffees earlier today.",
+        "C": "Absolutely, come on by anytime.",
+        "D": "We're right across from the bank."
+      },
+      "answer": "C",
+      "explanation": "正确答案C用惯用表达「Absolutely, come on by」间接确认了正在营业并欢迎光临，是接线店员的自然口吻。A是语义联想陷阱：由「open开门」联想到「door门」，却只谈门难开，没回答营不营业。B完全离题，谈自己点过咖啡与店铺是否营业无关。D答非所问，「就在银行对面」回答的是位置而非是否营业，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where do you keep your lecture notes?",
+      "options": {
+        "A": "I lost my notebook last week.",
+        "B": "The lecture hall was freezing today.",
+        "C": "Yesterday, right after the seminar.",
+        "D": "Which lecture do you mean exactly?"
+      },
+      "answer": "D",
+      "explanation": "正确答案D以反问推进对话，先弄清对方想要哪节课的笔记，是自然的澄清式回应。A是语义联想陷阱：由「notes笔记」联想到「notebook笔记本」，只谈自己弄丢了，没回答存放位置。B完全离题，谈教室冷与笔记存放无关。C答非所问，「昨天研讨会后」回答的是「什么时候」而非「在哪里」，属于错误问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

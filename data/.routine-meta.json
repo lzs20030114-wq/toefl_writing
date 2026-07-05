@@ -1,29 +1,41 @@
 {
-  "session_id": "routine-20260705-170307",
-  "completed_at": "2026-07-05T17:40:12Z",
-  "duration_minutes": 37,
-  "model": "Claude Sonnet 5",
-  "highlight": "新增\"安静请假\"社会学讨论题 + 杠杆原理物理听力题，BS 库通过难度冻结门(59 sets)",
+  "session_id": "routine-20260705-190407",
+  "completed_at": "2026-07-05T19:15:27.168Z",
+  "duration_minutes": 11,
+  "model": "Claude Opus 4.8",
+  "highlight": "本轮 70 题全生成：disc/email 已并库，reading/listening/speaking 入 staging 待审计路由；BS 仅两项 register 擦边 FAIL 交 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["indirect/embedded question", "negation", "relative clause", "modal", "passive voice", "direct wh-question", "modal advice"],
+      "accepted": 0,
+      "topics": [
+        "embedded questions",
+        "passive voice",
+        "relative clauses",
+        "negation",
+        "direct questions",
+        "campus life"
+      ],
       "favorite": {
-        "prompt": "Did you finish moving into the new apartment?",
-        "answer": "The friend who helped me move canceled at the last minute."
+        "prompt": "There are so many new clubs this term.",
+        "answer": "I finally joined the hiking club that meets near the lake every weekend."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "BS 难度冻结门 FAIL：register.first_person 0.692>[0.55,0.69]、register.contraction 0.177<[0.18,0.29]（聚合库边界擦肩，交 R2）"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["sociology", "business", "public policy", "computer science"],
+      "topics": [
+        "economics",
+        "education",
+        "environmental science",
+        "psychology"
+      ],
       "favorite": {
-        "subtopic": "sociology",
-        "preview": "We've been discussing how digital tools are reshaping workplace norms this semester. A growing trend called"
+        "subtopic": "environmental science",
+        "preview": "We've been examining how everyday equipment contributes to urban pollution this semester. A single gas-powered leaf blower can emit more hydrocarbons in one hour than a car driven several hundred miles."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -31,10 +43,15 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "住宿", "职场工作"],
+      "topics": [
+        "服务与活动",
+        "日常社交",
+        "消费售后",
+        "住宿"
+      ],
       "favorite": {
-        "subtopic": "住宿",
-        "preview": "You live in a university apartment complex, and the card reader on the laundry room door has stopped working"
+        "subtopic": "服务与活动",
+        "preview": "You recently signed up for a weekend pottery workshop offered by the community arts center. The confirmation email did not mention what materials to bring or where the studio is located."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -42,10 +59,16 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["technology/steam power", "art/cinema history", "geology/ice ages", "history/trade routes", "environmental_science/desertification"],
+      "topics": [
+        "psychology/learning",
+        "physics/thermodynamics",
+        "art/mosaic art",
+        "business/market dynamics",
+        "chemistry/catalysis"
+      ],
       "favorite": {
-        "subtopic": "environmental_science/desertification",
-        "preview": "Desertification is the gradual process by which productive, vegetated land deteriorates into arid, unproductive"
+        "subtopic": "art/mosaic art",
+        "preview": "A mosaic is a picture or pattern produced by fitting together many small pieces of colored stone, glass, or ceramic, known as tesserae."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -53,10 +76,17 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/plant biology", "environmental_science/conservation", "psychology/perception", "history/exploration", "geology/rock formation", "astronomy/nebulae"],
+      "topics": [
+        "biology/insect colonies",
+        "environmental_science/carbon cycle",
+        "psychology/creativity",
+        "history/trade routes",
+        "geology/volcanism",
+        "astronomy/dwarf planets"
+      ],
       "favorite": {
-        "subtopic": "psychology/perception",
-        "preview": "Perception is the process by which the brain organizes sensory information into a coherent picture of the"
+        "subtopic": "geology/volcanism",
+        "preview": "Volcanism occurs when molten rock from deep inside the Earth rises and erupts onto the surface."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -64,10 +94,15 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/meal plan refund", "email/office hours change", "email/interlibrary loan", "email/office hours and fee"],
+      "topics": [
+        "email",
+        "email",
+        "email",
+        "social_media"
+      ],
       "favorite": {
-        "subtopic": "email/interlibrary loan",
-        "preview": "The interlibrary loan book you requested, Cognitive Maps in Urban Design, has arrived at the Circulation"
+        "subtopic": "social_media/quiet-study-spot",
+        "preview": "Just found the best study spot on campus — the library basement, Level B2! Super quiet, tons of outlets, and the vending machine has coffee for only $1.50."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -75,10 +110,13 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/flu shot appointment", "email/study group formation"],
+      "topics": [
+        "email",
+        "notice"
+      ],
       "favorite": {
-        "subtopic": "email/study group formation",
-        "preview": "A few of us are putting together a study group for the microeconomics final on December 9, and we wanted"
+        "subtopic": "email/internship-deadline",
+        "preview": "Subject: Summer Internship Application Deadline — Action Needed. Dear Marcus, This is a reminder that applications for the Summer Internship Program are due Friday, March 14, by 5:00 PM."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -86,10 +124,15 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["biology/cleaner fish symbiosis", "music/recording technology", "physics/lever principle", "art_history/impressionist outdoor painting"],
+      "topics": [
+        "astronomy",
+        "anthropology",
+        "art_history",
+        "architecture"
+      ],
       "favorite": {
-        "subtopic": "physics/lever principle",
-        "preview": "A lever is a simple machine that multiplies an applied force by redistributing it across a rigid bar"
+        "subtopic": "astronomy",
+        "preview": "When we search for liquid water in our solar system, we usually think of planets sitting in the so-called habitable zone"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -97,10 +140,16 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social/concert tickets", "campus_dorm_life/quiet hours", "plans_social/dinner party", "recommendations_opinions/podcast", "recommendations_opinions/restaurant"],
+      "topics": [
+        "recommendations_opinions",
+        "recommendations_opinions",
+        "errands_service",
+        "errands_service",
+        "campus_dorm_life"
+      ],
       "favorite": {
-        "subtopic": "plans_social/concert tickets",
-        "preview": "Have you seen how fast tickets for the fall concert are selling? I keep debating whether to buy"
+        "subtopic": "campus_dorm_life",
+        "preview": "How do you usually get to campus? I've been taking the bus, but it's always so packed. He used to bike but construction forced him to walk."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -108,10 +157,16 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/fitness equipment", "academic_event/essay competition", "facility_change/lounge closure", "guest_speaker/author visit", "campus_activity/movie night"],
+      "topics": [
+        "undergraduate poster showcase open to all majors",
+        "statistics computer lab relocating to ground floor",
+        "professional wardrobe pop-up and free headshot clinic",
+        "campus dining hall switching to summer hours",
+        "student health insurance enrollment info session"
+      ],
       "favorite": {
-        "subtopic": "guest_speaker/author visit",
-        "preview": "I'm pleased to announce that award-winning novelist Elena Marsh will be visiting our department next Tuesday"
+        "subtopic": "professional wardrobe pop-up and free headshot clinic",
+        "preview": "The Career Center is teaming up with the Alumni Association to bring you a Professional Wardrobe Pop-Up and free headshots"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -119,10 +174,17 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["general_daily/bank hours", "general_daily/neighbor noise", "social/stress support", "general_daily/directions", "social/friend news", "campus_daily/dorm maintenance", "social/schedule conflict", "social/friend concern"],
+      "topics": [
+        "neighbor_noise",
+        "campus_lunch",
+        "weekend_beach",
+        "writing_center",
+        "shuttle_schedule",
+        "reading_list"
+      ],
       "favorite": {
-        "subtopic": "social/friend concern",
-        "preview": "I'm worried about my roommate, she's barely eating anything these days."
+        "subtopic": "reading_list",
+        "preview": "Speaker asks 'Why isn't the reading list posted online yet?' — correct answer uses the idiom 'Beats me, maybe ask the professor.'"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -130,10 +192,14 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["IT Help Desk", "Recycling Center Tour", "Planetarium Visit"],
+      "topics": [
+        "Chemistry Lab Safety",
+        "Recycling Center Tour",
+        "Watercolor Painting"
+      ],
       "favorite": {
         "subtopic": "Recycling Center Tour",
-        "preview": "Before you leave, check the posted schedule for special collection days, since some materials are only accepted"
+        "preview": "If you are not sure which bin to use, please check the sorting guide mounted beside the main gate."
       },
       "retried_after_fail": false,
       "failure_reason": ""
