@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "text": "Subject: Flu Shot Appointment Confirmed - Nov 14\n\nDear Ms. Alvarez,\n\nThis email confirms your flu shot appointment at the Campus Health Clinic on Thursday, November 14, at 3:30 PM. Please arrive ten minutes early to complete a brief health questionnaire, and bring your student ID and insurance card if you have one.\n\nIf you're enrolled in the standard student health plan, the vaccine is fully covered. Students without the plan will be charged a $20 fee, payable by card or through your student account at the time of the visit.\n\nPlease note that the clinic asks patients to wait in the lobby for fifteen minutes after receiving the shot, in case of any reaction. If you need to reschedule, you can do so anytime before Wednesday at 5 PM through the online portal; appointments canceled after that time cannot be refunded for students who paid the fee.\n\nWe look forward to seeing you on the 14th.\n\nBest regards,\nCampus Health Clinic",
+      "format_metadata": {
+        "from": "Campus Health Clinic",
+        "to": "Ms. Alvarez",
+        "subject": "Flu Shot Appointment Confirmed - Nov 14"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should students bring to the appointment?",
+          "options": {
+            "A": "Their vaccination record from last year",
+            "B": "Their class schedule for the semester",
+            "C": "Their parking permit",
+            "D": "Their student ID and insurance card"
+          },
+          "correct_answer": "D",
+          "explanation": "The email asks students to \"bring your student ID and insurance card if you have one.\""
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how much will students without the standard health plan be charged?",
+          "options": {
+            "A": "$20",
+            "B": "$10",
+            "C": "$35",
+            "D": "$50"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states \"students without the plan will be charged a $20 fee.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who cancel their appointment after Wednesday at 5 PM?",
+          "options": {
+            "A": "They will automatically be rescheduled for the following week.",
+            "B": "They will receive the vaccine for free regardless.",
+            "C": "They may not get a refund if they already paid the fee.",
+            "D": "They will be banned from future clinic services."
+          },
+          "correct_answer": "C",
+          "explanation": "The email states appointments \"canceled after that time cannot be refunded for students who paid the fee.\""
+        }
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Forming a Study Group for the Microeconomics Final\n\nHi everyone,\n\nA few of us are putting together a study group for the microeconomics final on December 9, and we wanted to see if you'd like to join. The plan is to meet twice before the exam: once this Sunday afternoon and again the Tuesday right before the test.\n\nWe're thinking of meeting in the small group room on the third floor of the library, since it can be reserved in advance and has a whiteboard. Each person would take responsibility for summarizing one or two lecture topics to present to the group, so no one has to review everything alone.\n\nIf you're interested, reply by Friday so we can finalize the room reservation and split up the topics fairly. Feel free to suggest a different meeting time if Sunday doesn't work well for your schedule.\n\nHope to see you there!\n\nPriya",
+      "format_metadata": {
+        "from": "Priya",
+        "to": "classmates",
+        "subject": "Forming a Study Group for the Microeconomics Final"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where does the group plan to meet?",
+          "options": {
+            "A": "In the main reading room",
+            "B": "In the small group room on the third floor",
+            "C": "In the campus coffee shop",
+            "D": "In the economics department lounge"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says they are \"thinking of meeting in the small group room on the third floor of the library.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the study group's approach to reviewing material?",
+          "options": {
+            "A": "Each member will review the entire course alone before meeting.",
+            "B": "Each member will be responsible for only part of the material.",
+            "C": "Each member will be tested individually before joining.",
+            "D": "Each member will be graded on their presentation."
+          },
+          "correct_answer": "B",
+          "explanation": "The email states each person would \"take responsibility for summarizing one or two lecture topics,\" dividing the material among members."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To complain about the difficulty of the final exam",
+            "B": "To invite classmates to join a study group before the final",
+            "C": "To announce a change in the final exam date",
+            "D": "To request a new classroom for a course"
+          },
+          "correct_answer": "B",
+          "explanation": "The email invites recipients to join a study group being formed ahead of the microeconomics final."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "The recreation center will unveil a full set of new cardio and strength equipment starting this Monday, October 20. We've replaced all the treadmills and added six new functional training stations on the second floor. Because the equipment requires a brief orientation, staff will be running short walkthroughs every hour between 9 AM and 5 PM this week. Please note that the free weight area will be closed until Wednesday while the new stations are bolted into place. We're excited for everyone to try out the upgrades once the space reopens.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new fitness equipment at the recreation center",
+            "B": "To advertise a new personal training program",
+            "C": "To apologize for a facility closure with no explanation",
+            "D": "To recruit volunteers for equipment installation"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是宣布健身中心新增有氧和力量训练设备。B、D两项内容未被提及；C项虽提到关闭，但通知明确解释了原因，并非无解释的道歉。",
+          "distractor_types": { "B": "wrong_purpose", "C": "reversed_intent", "D": "wrong_purpose" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the free weight area?",
+          "options": {
+            "A": "It will remain closed for the rest of the semester",
+            "B": "It has been permanently removed from the center",
+            "C": "It will reopen once the new stations are installed",
+            "D": "It was never open to the public"
+          },
+          "answer": "C",
+          "explanation": "通知说该区域\"closed until Wednesday while the new stations are bolted into place\"，暗示安装完成后即会重新开放。A、B两项都与\"until Wednesday\"这一临时性表述相矛盾；D项无依据。",
+          "distractor_types": { "A": "over_inference", "B": "wrong_detail", "D": "unrelated_inference" }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "annual essay competition with faculty judges",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "This is a reminder that the annual Cross-Disciplinary Essay Competition is now accepting submissions through November 8. Any currently enrolled student may submit an essay on this year's theme, technology and inequality, regardless of major. A panel of faculty judges from five departments will review all entries and select three winners, who will each receive a $200 prize and publication in the spring journal. Essays should be submitted electronically through the student portal, and late entries unfortunately cannot be considered. We look forward to reading your work.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the winners of last year's competition",
+            "B": "To remind students of the essay competition submission deadline",
+            "C": "To explain how faculty judges are selected",
+            "D": "To recruit new faculty judges for the panel"
+          },
+          "answer": "B",
+          "explanation": "通知开篇即说明这是关于论文比赛截止日期的提醒。A项讲的是过去的获奖者，通知中未提及；C、D两项通知均未涉及。",
+          "distractor_types": { "A": "wrong_purpose", "C": "too_narrow", "D": "wrong_purpose" }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what will winners receive?",
+          "options": {
+            "A": "A scholarship for next semester",
+            "B": "An invitation to join the judging panel",
+            "C": "A trophy displayed in the library",
+            "D": "A cash prize and publication in the spring journal"
+          },
+          "answer": "D",
+          "explanation": "通知明确说明获胜者\"will each receive a $200 prize and publication in the spring journal\"。A、B、C三项通知均未提及。",
+          "distractor_types": { "A": "related_but_not_stated", "B": "related_but_not_stated", "C": "related_but_not_stated" }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "student lounge closing for pipe/ceiling repair",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "The third-floor study lounge in the library will close this Thursday through Friday for ceiling repairs following a water leak discovered last week. Students who normally use the space should plan to study in the reading room on the first floor or reserve one of the small group rooms instead. Maintenance crews will begin work at 7 AM each day and expect to finish by Friday evening. Please avoid propping open the stairwell doors near the lounge while repairs are underway, since dust barriers have been installed. We apologize for any inconvenience this causes during exam preparation.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce an expansion of the library's hours",
+            "B": "To advertise new group study rooms",
+            "C": "To inform students of a temporary lounge closure for repairs",
+            "D": "To explain new library borrowing policies"
+          },
+          "answer": "C",
+          "explanation": "通知的核心是告知学生三楼自习室因维修暂时关闭。A、D两项通知均未提及；B项只是提到替代场所，并非通知重点。",
+          "distractor_types": { "A": "wrong_purpose", "B": "too_narrow", "D": "wrong_purpose" }
+        },
+        {
+          "type": "detail",
+          "stem": "According to the announcement, why is the lounge closing?",
+          "options": {
+            "A": "Ceiling repairs are needed after a water leak",
+            "B": "New furniture is being installed",
+            "C": "The room is being converted into offices",
+            "D": "A pest control treatment is scheduled"
+          },
+          "answer": "A",
+          "explanation": "通知明确说明是因为\"a water leak discovered last week\"而需要进行天花板维修。B、C、D三项通知均未提及。",
+          "distractor_types": { "B": "related_but_not_stated", "C": "related_but_not_stated", "D": "related_but_not_stated" }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "visiting author reading and book signing event",
+      "speaker_role": "professor",
+      "difficulty": "hard",
+      "announcement": "I'm pleased to announce that award-winning novelist Elena Marsh will be visiting our department next Tuesday evening for a reading and book signing in the Humanities Auditorium. Marsh's most recent novel, which examines memory and displacement across three generations, was a finalist for a major national book prize this year, and she'll be discussing both her writing process and the research behind the book. Doors open at 6:30, with the reading beginning promptly at 7 PM, followed by a short question and answer session and a signing. Seating is limited, so I'd encourage you to arrive early if you'd like a seat near the front. Copies of her novel will be available for purchase at the door.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To review the plot of Elena Marsh's novel",
+            "B": "To announce a change in auditorium seating policy",
+            "C": "To promote a creative writing course",
+            "D": "To announce a visiting author's reading and book signing"
+          },
+          "answer": "D",
+          "explanation": "通知的核心是宣布一位来访作家的朗读会和签售活动。A项只是简单带过小说主题，并非通知重点；B、C两项通知均未提及。",
+          "distractor_types": { "A": "too_narrow", "B": "wrong_purpose", "C": "wrong_purpose" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about seating at the event?",
+          "options": {
+            "A": "Seats will be assigned in advance by department staff",
+            "B": "Arriving early will improve a student's chance of a good seat",
+            "C": "Only faculty members are permitted to attend",
+            "D": "The event will be moved outdoors if seating runs out"
+          },
+          "answer": "B",
+          "explanation": "教授说\"Seating is limited, so I'd encourage you to arrive early if you'd like a seat near the front\"，暗示提前到场能获得更好座位。A、C、D三项通知均未提及。",
+          "distractor_types": { "A": "over_inference", "C": "unrelated_inference", "D": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "We're excited to announce the annual outdoor movie night on the main lawn this Friday at 8 PM, featuring a classic comedy chosen by student vote. Bring your own blanket or low chair, since seating will be first-come, first-served starting at 7 PM. Free popcorn and lemonade will be available near the sound booth while supplies last. In case of rain, the screening will move indoors to the student union theater, and we'll post an update on the events page by 5 PM that day. We hope to see you there for a relaxed night under the stars.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the announcement, what should students bring?",
+          "options": {
+            "A": "Their own blanket or low chair",
+            "B": "Their own popcorn and drinks",
+            "C": "A student ID for entry",
+            "D": "A ticket purchased in advance"
+          },
+          "answer": "A",
+          "explanation": "通知明确说\"Bring your own blanket or low chair\"。B项与通知相反，爆米花和柠檬水是免费提供的；C、D两项通知均未提及。",
+          "distractor_types": { "B": "wrong_detail", "C": "related_but_not_stated", "D": "related_but_not_stated" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred if it rains on Friday?",
+          "options": {
+            "A": "The event will be canceled entirely",
+            "B": "Students will need to bring umbrellas",
+            "C": "The screening will be moved to an indoor location",
+            "D": "The movie will be rescheduled to the following week"
+          },
+          "answer": "C",
+          "explanation": "通知说明\"the screening will move indoors to the student union theater\"，说明下雨时会转移到室内而非取消或改期。A、D两项与此相矛盾；B项通知未提及。",
+          "distractor_types": { "A": "over_inference", "B": "unrelated_inference", "D": "over_inference" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,61 +1,40 @@
 {
-  "session_id": "routine-20260704-170301",
-  "completed_at": "2026-07-04T17:28:25Z",
-  "duration_minutes": 25,
+  "session_id": "routine-20260705-170307",
+  "completed_at": "2026-07-05T17:40:12Z",
+  "duration_minutes": 37,
   "model": "Claude Sonnet 5",
-  "highlight": "首次出现化学催化(AP)与人类学口述传统课题；BS 20题全过嵌入问题漂移带(仅3/20命中)",
+  "highlight": "新增\"安静请假\"社会学讨论题 + 杠杆原理物理听力题，BS 库通过难度冻结门(59 sets)",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 30,
-      "topics": [
-        "direct wh-question",
-        "indirect question",
-        "negation",
-        "relative clause",
-        "passive voice",
-        "reported feeling"
-      ],
+      "accepted": 20,
+      "topics": ["indirect/embedded question", "negation", "relative clause", "modal", "passive voice", "direct wh-question", "modal advice"],
       "favorite": {
-        "prompt": "Your favorite café just moved to a new location.",
-        "answer": "How far is it from the main campus?"
+        "prompt": "Did you finish moving into the new apartment?",
+        "answer": "The friend who helped me move canceled at the last minute."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "discussion": {
       "generated": 4,
-      "accepted": 6,
-      "topics": [
-        "environmental science",
-        "social studies",
-        "public policy",
-        "economics"
-      ],
+      "accepted": 4,
+      "topics": ["sociology", "business", "public policy", "computer science"],
       "favorite": {
-        "subtopic": "public policy",
-        "preview": "More and more coastal cities are considering laws that would require landlords to disclose a property's flood history"
+        "subtopic": "sociology",
+        "preview": "We've been discussing how digital tools are reshaping workplace norms this semester. A growing trend called"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "住宿",
-        "职场工作",
-        "社区生活",
-        "消费售后"
-      ],
+      "topics": ["服务与活动", "校园学业", "住宿", "职场工作"],
       "favorite": {
         "subtopic": "住宿",
-        "preview": "You have been renting a studio apartment for four months. Recently, the bathroom ceiling started leaking"
+        "preview": "You live in a university apartment complex, and the card reader on the laundry room door has stopped working"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,16 +42,10 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "chemistry/catalysis",
-        "anthropology/oral traditions",
-        "art/photography history",
-        "materials_science/polymer composites",
-        "business/market dynamics"
-      ],
+      "topics": ["technology/steam power", "art/cinema history", "geology/ice ages", "history/trade routes", "environmental_science/desertification"],
       "favorite": {
-        "subtopic": "chemistry/catalysis",
-        "preview": "Catalysis is the process by which a substance, known as a catalyst, accelerates a chemical reaction"
+        "subtopic": "environmental_science/desertification",
+        "preview": "Desertification is the gradual process by which productive, vegetated land deteriorates into arid, unproductive"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -80,17 +53,10 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/bioluminescence",
-        "environmental_science/urban heat islands",
-        "psychology/habit formation",
-        "history/maritime navigation",
-        "geology/geysers",
-        "astronomy/solar system"
-      ],
+      "topics": ["biology/plant biology", "environmental_science/conservation", "psychology/perception", "history/exploration", "geology/rock formation", "astronomy/nebulae"],
       "favorite": {
-        "subtopic": "biology/bioluminescence",
-        "preview": "Bioluminescence is a natural phenomenon in which living organisms create their own light through internal"
+        "subtopic": "psychology/perception",
+        "preview": "Perception is the process by which the brain organizes sensory information into a coherent picture of the"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -98,15 +64,10 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "social_media/free yoga class",
-        "flyer/used textbook sale",
-        "email/mailroom package pickup",
-        "flyer/campus cleanup volunteer signup"
-      ],
+      "topics": ["email/meal plan refund", "email/office hours change", "email/interlibrary loan", "email/office hours and fee"],
       "favorite": {
-        "subtopic": "social_media/free yoga class",
-        "preview": "Free yoga in the Quad this Saturday at 9:00 AM! Instructor Maya Torres leads the session"
+        "subtopic": "email/interlibrary loan",
+        "preview": "The interlibrary loan book you requested, Cognitive Maps in Urban Design, has arrived at the Circulation"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -114,13 +75,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "email/chem lab partner coordination",
-        "notice/dining hall allergen policy"
-      ],
+      "topics": ["email/flu shot appointment", "email/study group formation"],
       "favorite": {
-        "subtopic": "notice/dining hall allergen policy",
-        "preview": "Dining Services Notice: Updated Allergen Labeling Policy. Effective Monday, September 8, all food stations"
+        "subtopic": "email/study group formation",
+        "preview": "A few of us are putting together a study group for the microeconomics final on December 9, and we wanted"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -128,15 +86,10 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "music/nationalist compositions",
-        "biology/coral reef acidification",
-        "psychology/spacing effect",
-        "art_history/Impressionist plein air painting"
-      ],
+      "topics": ["biology/cleaner fish symbiosis", "music/recording technology", "physics/lever principle", "art_history/impressionist outdoor painting"],
       "favorite": {
-        "subtopic": "psychology/the spacing effect",
-        "preview": "Cramming the night before a test feels productive, but the spacing effect suggests it's only"
+        "subtopic": "physics/lever principle",
+        "preview": "A lever is a simple machine that multiplies an applied force by redistributing it across a rigid bar"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -144,16 +97,10 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "errands_service/day trip schedule",
-        "recommendations_opinions/new cafe pricing",
-        "plans_social/birthday surprise",
-        "campus_dorm_life/elective choice",
-        "recommendations_opinions/book club novel ending"
-      ],
+      "topics": ["plans_social/concert tickets", "campus_dorm_life/quiet hours", "plans_social/dinner party", "recommendations_opinions/podcast", "recommendations_opinions/restaurant"],
       "favorite": {
-        "subtopic": "recommendations_opinions/book club novel ending",
-        "preview": "What did you think of the ending of the novel for book club?"
+        "subtopic": "plans_social/concert tickets",
+        "preview": "Have you seen how fast tickets for the fall concert are selling? I keep debating whether to buy"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -161,16 +108,10 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "facility_change/bookstore move",
-        "career_services/mock interviews",
-        "campus_activity/food festival",
-        "academic_event/semester showcase",
-        "facility_change/fitness equipment"
-      ],
+      "topics": ["facility_change/fitness equipment", "academic_event/essay competition", "facility_change/lounge closure", "guest_speaker/author visit", "campus_activity/movie night"],
       "favorite": {
-        "subtopic": "facility_change/campus bookstore moving",
-        "preview": "Attention students, faculty, and staff. The campus bookstore will relocate from its current location"
+        "subtopic": "guest_speaker/author visit",
+        "preview": "I'm pleased to announce that award-winning novelist Elena Marsh will be visiting our department next Tuesday"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -178,19 +119,10 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "campus_daily/dorm maintenance",
-        "social/schedule conflict",
-        "campus_academic/lab report",
-        "campus_academic/group project deadline",
-        "campus_academic/course prerequisites",
-        "general_daily/store return",
-        "general_daily/directions",
-        "campus_academic/exam format"
-      ],
+      "topics": ["general_daily/bank hours", "general_daily/neighbor noise", "social/stress support", "general_daily/directions", "social/friend news", "campus_daily/dorm maintenance", "social/schedule conflict", "social/friend concern"],
       "favorite": {
-        "subtopic": "general_daily/store return",
-        "preview": "Where can I return this defective blender?"
+        "subtopic": "social/friend concern",
+        "preview": "I'm worried about my roommate, she's barely eating anything these days."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -198,19 +130,13 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "Chemistry Lab Safety",
-        "Watercolor Painting (how-to)",
-        "Student Health Center"
-      ],
+      "topics": ["IT Help Desk", "Recycling Center Tour", "Planetarium Visit"],
       "favorite": {
-        "subtopic": "Watercolor Painting (how-to)",
-        "preview": "Lastly, add fine details once your painting is completely dry, and step back to check the overall composition."
+        "subtopic": "Recycling Center Tour",
+        "preview": "Before you leave, check the posted schedule for special collection days, since some materials are only accepted"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_session_id": "routine-r2-20260704-193042",
-  "r2_completed_at": "2026-07-04T19:46:55Z"
+  }
 }

@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "The bookstore still has my textbook on hold.",
+      "answer": "You should pick up the book before closing.",
+      "chunks": ["you", "pick up", "the", "book", "before closing", "picking"],
+      "prefilled": ["should"],
+      "prefilled_positions": {"should": 1},
+      "distractor": "picking",
+      "has_question_mark": false,
+      "grammar_points": ["modal 'should'", "phrasal verb 'pick up'"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you check on the lab hours?",
+      "answer": "I found out whether the lab closed early on Fridays.",
+      "chunks": ["i", "whether", "the lab", "closed", "early on", "fridays", "finding"],
+      "prefilled": ["found out"],
+      "prefilled_positions": {"found out": 1},
+      "distractor": "finding",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "adverb 'early'"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Do you know if Emma's permit is still valid?",
+      "answer": "I could not recall if the permit had expired.",
+      "chunks": ["i", "recall", "if", "the permit", "had", "expired", "recalled"],
+      "prefilled": ["could not"],
+      "prefilled_positions": {"could not": 1},
+      "distractor": "recalled",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "past perfect 'had expired'"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "I still haven't started tonight's reading assignment.",
+      "answer": "You should not skip the reading assignment tonight.",
+      "chunks": ["you", "should not", "skip", "the", "reading assignment", "skipping"],
+      "prefilled": ["tonight"],
+      "prefilled_positions": {"tonight": 7},
+      "distractor": "skipping",
+      "has_question_mark": false,
+      "grammar_points": ["negation 'should not'", "time adverbial 'tonight'"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Did you hear about the group project delay?",
+      "answer": "The teammate who missed the group deadline finally apologized to everyone today.",
+      "chunks": ["the teammate", "who missed", "the group deadline", "apologized", "to everyone today", "missing"],
+      "prefilled": ["finally"],
+      "prefilled_positions": {"finally": 7},
+      "distractor": "missing",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause 'who'", "time adverbial 'finally'"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Did you talk to the housing office about the repair request?",
+      "answer": "I was unsure whether the maintenance team could visit.",
+      "chunks": ["i", "whether", "the maintenance team", "could", "visit", "visiting"],
+      "prefilled": ["was unsure"],
+      "prefilled_positions": {"was unsure": 1},
+      "distractor": "visiting",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "modal 'could'"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "I just switched my major to biology this semester.",
+      "answer": "Which advisor should I meet with about my new requirements?",
+      "chunks": ["which advisor", "should i", "about", "my new", "requirements", "did"],
+      "prefilled": ["meet with"],
+      "prefilled_positions": {"meet with": 4},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "modal 'should'"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "You seem relieved about something today.",
+      "answer": "I've finally submitted my thesis draft to my advisor.",
+      "chunks": ["finally submitted", "my", "thesis draft", "to my", "advisor", "submitting"],
+      "prefilled": ["i've"],
+      "prefilled_positions": {"i've": 0},
+      "distractor": "submitting",
+      "has_question_mark": false,
+      "grammar_points": ["contraction \"I've\"", "time adverbial 'finally'"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "Have you talked to your roommate about the lease renewal?",
+      "answer": "My roommate signed the new lease yesterday.",
+      "chunks": ["signed", "the", "new", "lease", "sign"],
+      "prefilled": ["my roommate", "yesterday"],
+      "prefilled_positions": {"my roommate": 0, "yesterday": 6},
+      "distractor": "sign",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "time adverbial 'yesterday'"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "Did you hear about the library renovation?",
+      "answer": "The reading room on the second floor was finally reopened to students this week.",
+      "chunks": ["the reading room", "was", "finally reopened", "to students", "this week", "reopening"],
+      "prefilled": ["on the second floor"],
+      "prefilled_positions": {"on the second floor": 3},
+      "distractor": "reopening",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice 'was reopened'", "time adverbial 'this week'"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "My presentation slides still need a lot of work.",
+      "answer": "You should finish your slides before tonight.",
+      "chunks": ["you", "should", "finish", "your", "slides", "before tonight", "finishing"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "finishing",
+      "has_question_mark": false,
+      "grammar_points": ["modal 'should'", "time adverbial 'before tonight'"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Did you check with the front desk about the parking pass?",
+      "answer": "I was unsure if the parking pass had arrived yet.",
+      "chunks": ["i", "if", "the parking", "pass", "had", "arrived yet", "arriving"],
+      "prefilled": ["was unsure"],
+      "prefilled_positions": {"was unsure": 1},
+      "distractor": "arriving",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "past perfect 'had arrived'"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Did you find out about the internship deadline?",
+      "answer": "I figured out whether the application had closed.",
+      "chunks": ["i", "whether", "the application", "had", "closed", "closing"],
+      "prefilled": ["figured out"],
+      "prefilled_positions": {"figured out": 1},
+      "distractor": "closing",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "past perfect 'had closed'"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Did you sign up for the ski trip?",
+      "answer": "I have not paid the trip deposit yet.",
+      "chunks": ["i", "have not", "paid", "the", "trip deposit", "paying"],
+      "prefilled": ["yet"],
+      "prefilled_positions": {"yet": 7},
+      "distractor": "paying",
+      "has_question_mark": false,
+      "grammar_points": ["negation 'have not'", "time adverbial 'yet'"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "Did you hear about the dining hall changes?",
+      "answer": "The salad bar on the first floor was finally reopened after the renovation.",
+      "chunks": ["the salad bar", "was", "finally reopened", "after the", "renovation", "reopening"],
+      "prefilled": ["on the first floor"],
+      "prefilled_positions": {"on the first floor": 3},
+      "distractor": "reopening",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice 'was reopened'", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "What did the coach say about practice today?",
+      "answer": "Practice moved to the indoor courts because of rain.",
+      "chunks": ["moved", "to the", "indoor courts", "rain", "moving"],
+      "prefilled": ["practice", "because of"],
+      "prefilled_positions": {"practice": 0, "because of": 6},
+      "distractor": "moving",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "causal phrase 'because of'"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "I've never been to the career fair before.",
+      "answer": "What should I bring to the career fair?",
+      "chunks": ["what", "should i", "bring", "career", "fair", "did"],
+      "prefilled": ["to the"],
+      "prefilled_positions": {"to the": 4},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "modal 'should'"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "Did you finish moving into the new apartment?",
+      "answer": "The friend who helped me move canceled at the last minute.",
+      "chunks": ["the friend", "who helped", "me", "move", "canceled", "helping"],
+      "prefilled": ["at the last minute"],
+      "prefilled_positions": {"at the last minute": 7},
+      "distractor": "helping",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause 'who'", "idiomatic phrase 'at the last minute'"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Did you finish your essay?",
+      "answer": "I submitted it right before the deadline.",
+      "chunks": ["submitted", "it", "right before", "the", "deadline", "submitting"],
+      "prefilled": ["i"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "submitting",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "time phrase 'before the deadline'"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Did you talk to Professor Cho about the extension?",
+      "answer": "I checked whether the final paper deadline could be moved to next week.",
+      "chunks": ["i", "whether", "the final", "paper deadline", "could be", "moved", "to next week", "checking"],
+      "prefilled": ["checked"],
+      "prefilled_positions": {"checked": 1},
+      "distractor": "checking",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question", "passive voice 'could be moved'"]
+    }
+  ]
+}

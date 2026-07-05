@@ -1,0 +1,152 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Jordan,\n\nYour meal plan balance closes out on May 20, and you currently have $42.75 remaining unused. Since you're graduating this semester, we'll refund that full amount directly to your student account within the next five business days.\n\nBest,\nDining Services",
+      "format_metadata": {
+        "from": "Dining Services",
+        "to": "Jordan",
+        "subject": "Meal plan balance refund"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how much money will be refunded?",
+          "options": {
+            "A": "$15.00",
+            "B": "$28.50",
+            "C": "$42.75",
+            "D": "$50.00"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states the student currently has \"$42.75 remaining unused,\" which will be refunded in full."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the student's enrollment status?",
+          "options": {
+            "A": "The student is transferring to another university.",
+            "B": "The student has an unpaid balance.",
+            "C": "The student registered for summer classes.",
+            "D": "The student is finishing their degree this semester."
+          },
+          "correct_answer": "D",
+          "explanation": "The email says \"since you're graduating this semester,\" implying the student is completing their degree."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Maria,\n\nJust a quick note: my office hours this week are moving to Wednesday, 1-3 PM in Baker Hall, Room 214, instead of my usual Tuesday afternoon slot. Please plan accordingly and let classmates know about the change.\n\nBest,\nDr. Ellison",
+      "format_metadata": {
+        "from": "Dr. Ellison",
+        "to": "Maria",
+        "subject": "Office hours change this week"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when are the advisor's office hours this week?",
+          "options": {
+            "A": "On Tuesday, 1-3 PM",
+            "B": "On Wednesday, 9-11 AM",
+            "C": "On Wednesday, 1-3 PM",
+            "D": "On Thursday, 1-3 PM"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states office hours are \"moving to Wednesday, 1-3 PM.\""
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"accordingly\" is closest in meaning to",
+          "options": {
+            "A": "randomly",
+            "B": "appropriately",
+            "C": "quickly",
+            "D": "reluctantly"
+          },
+          "correct_answer": "B",
+          "explanation": "\"Plan accordingly\" means to plan in a way that appropriately fits the new information."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Devon,\n\nThe interlibrary loan book you requested, Cognitive Maps in Urban Design, has arrived at the Circulation Desk this morning. Please pick it up by June 3, or the hold will be released to the next patron in line.\n\nThanks,\nInterlibrary Loan Office",
+      "format_metadata": {
+        "from": "Interlibrary Loan Office",
+        "to": "Devon",
+        "subject": "Your interlibrary loan book has arrived"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should the student pick up the book?",
+          "options": {
+            "A": "At the Circulation Desk",
+            "B": "At the Reference Desk",
+            "C": "At the Reserve Room",
+            "D": "At the Periodicals Desk"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the book \"has arrived at the Circulation Desk.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred if the student does not pick up the book by June 3?",
+          "options": {
+            "A": "The book will be returned to its original library.",
+            "B": "The student will be charged a late fee.",
+            "C": "The loan period will automatically extend.",
+            "D": "The hold will be given to another patron."
+          },
+          "correct_answer": "D",
+          "explanation": "The email warns that after June 3 \"the hold will be released to the next patron in line.\""
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Sam,\n\nMy office hours are shifting to Friday, 10 AM-12 PM in Lindt Hall this week only, due to a department meeting. Also, a reminder that the $5 printing fee for advising handouts is now due at the front desk.\n\nBest,\nDr. Whitmore",
+      "format_metadata": {
+        "from": "Dr. Whitmore",
+        "to": "Sam",
+        "subject": "Office hours change and printing fee reminder"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when are office hours held this week?",
+          "options": {
+            "A": "On Friday, 10 AM-12 PM",
+            "B": "On Monday, 10 AM-12 PM",
+            "C": "On Friday, 1-3 PM",
+            "D": "On Thursday, 10 AM-12 PM"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states office hours are \"shifting to Friday, 10 AM-12 PM.\""
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, how much is the printing fee?",
+          "options": {
+            "A": "$3",
+            "B": "$5",
+            "C": "$8",
+            "D": "$10"
+          },
+          "correct_answer": "B",
+          "explanation": "The email mentions \"the $5 printing fee for advising handouts.\""
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "items": [
+    {
+      "context": "plans_social",
+      "situation": "two friends deciding whether to buy concert tickets now or wait",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you seen how fast tickets for the fall concert are selling? I keep debating whether to buy now or wait for prices to drop." },
+        { "speaker": "Man", "text": "Honestly, prices for that venue almost never drop. The cheap seats sell out first and what's left gets pricier." },
+        { "speaker": "Woman", "text": "That's what I was afraid of. But I don't want to commit money I might need for textbooks." },
+        { "speaker": "Man", "text": "Fair point. Maybe just grab one ticket now instead of the whole group package." },
+        { "speaker": "Woman", "text": "That sounds like a reasonable compromise. I'll do that tonight before I talk myself out of it." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Whether to buy concert tickets now or wait",
+            "B": "Complaining about high textbook prices",
+            "C": "Planning a group trip to a concert venue",
+            "D": "Comparing seating options at different venues"
+          },
+          "answer": "A",
+          "explanation": "两人主要在讨论是现在就买演唱会门票，还是再等等看价格会不会下降。B项只是女生提到的次要顾虑；C项讲座未提及集体出行计划；D项对比座位选项范围过窄，非对话核心。",
+          "distractor_types": { "B": "too_narrow", "C": "wrong_topic", "D": "too_narrow" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Wait until prices drop before buying anything",
+            "B": "Buy the full group package immediately",
+            "C": "Buy a single ticket that same night",
+            "D": "Ask her parents for money to buy tickets"
+          },
+          "answer": "C",
+          "explanation": "女生说她当晚就会去买一张票，采纳了男生\"先买一张而非整套团购\"的建议。A项是她原本担心但被男生说服放弃的想法；B项与最终决定相反；D项对话中完全没有提及。",
+          "distractor_types": { "A": "rejected_option", "B": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair quiet-hours schedule",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Can we figure out quiet hours? I've got early classes and you're usually still up gaming at midnight." },
+        { "speaker": "Man", "text": "Sure, that's fair. What if I keep headphones on after ten and save the speaker for weekends?" },
+        { "speaker": "Woman", "text": "That would help a lot. I could also give you a heads-up on nights I have an actual early exam." },
+        { "speaker": "Man", "text": "Sounds good. Let's just check in with each other if the schedule ever stops working." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Deciding who pays for the room's electricity bill",
+            "B": "Working out a quiet-hours arrangement between roommates",
+            "C": "Complaining about a neighbor's loud music",
+            "D": "Planning to buy new gaming equipment"
+          },
+          "answer": "B",
+          "explanation": "两位室友在协商一个双方都能接受的安静时段安排。A、C两项对话完全未提及；D项只是提到耳机，并非购买新设备的计划。",
+          "distractor_types": { "A": "wrong_topic", "C": "wrong_topic", "D": "too_narrow" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the roommates' relationship?",
+          "options": {
+            "A": "They rarely speak to each other about problems",
+            "B": "They plan to request a room change soon",
+            "C": "They have had this same argument many times before",
+            "D": "They are willing to compromise to accommodate each other"
+          },
+          "answer": "D",
+          "explanation": "两人都主动提出让步方案（戴耳机、提前告知考试），说明彼此愿意为对方妥协。A项与对话中主动沟通的情形相反；B、C两项对话都没有依据。",
+          "distractor_types": { "A": "reversed_situation", "B": "unrelated_next_step", "C": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "For the dinner party, I was thinking we get a soft cheese, a hard one, and maybe some crackers to go with them." },
+        { "speaker": "Man", "text": "That works. Should we get a baguette too, or is that too much bread on top of the crackers?" },
+        { "speaker": "Woman", "text": "Let's skip the baguette then and grab some grapes instead, since they pair really well with cheese." },
+        { "speaker": "Man", "text": "Good call. I'll grab the grapes and crackers if you handle picking out the cheese." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the conversation, what will the man buy?",
+          "options": { "A": "A baguette and cheese", "B": "Only a soft cheese", "C": "Grapes and crackers", "D": "A hard cheese and grapes" },
+          "answer": "C",
+          "explanation": "男生明确说\"I'll grab the grapes and crackers\"，由女生负责挑选奶酪。",
+          "distractor_types": { "A": "wrong_detail", "B": "misattributed", "D": "wrong_detail" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the baguette?",
+          "options": {
+            "A": "They decided not to buy it",
+            "B": "The store does not sell it",
+            "C": "The man already bought it earlier",
+            "D": "It was the woman's favorite item"
+          },
+          "answer": "A",
+          "explanation": "两人商量后决定用葡萄代替法棍，即放弃购买法棍。B、C两项对话中没有依据；D项与决定放弃购买相矛盾。",
+          "distractor_types": { "B": "related_but_not_stated", "C": "wrong_detail", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a podcast to each other",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "You have to check out this podcast I just started, it's about unsolved historical mysteries from around the world." },
+        { "speaker": "Man", "text": "I've actually been looking for something new to listen to. Is it more storytelling or interview-based?" },
+        { "speaker": "Woman", "text": "Mostly storytelling, with a narrator walking you through the evidence of each case in a lot of detail." },
+        { "speaker": "Man", "text": "That sounds right up my alley. I'll download the first few episodes tonight and give it a try." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Reviewing a recent historical documentary",
+            "B": "Debating which podcast app is best",
+            "C": "Planning to attend a live podcast recording",
+            "D": "Recommending a podcast about historical mysteries"
+          },
+          "answer": "D",
+          "explanation": "女生向男生推荐一档讲述历史悬案的播客节目。A项对话未提及纪录片；B、C两项对话中都没有依据。",
+          "distractor_types": { "A": "wrong_topic", "B": "wrong_topic", "C": "unrelated_next_step" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Ask the woman to record an episode with him",
+            "B": "Download and listen to the podcast",
+            "C": "Suggest a different podcast instead",
+            "D": "Wait for the woman's opinion of later episodes"
+          },
+          "answer": "B",
+          "explanation": "男生明确说\"I'll download the first few episodes tonight and give it a try\"。A、D两项对话中没有依据；C项与男生表现出的兴趣相矛盾。",
+          "distractor_types": { "A": "unrelated_next_step", "C": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new restaurant downtown yet? Everyone keeps saying the noodle dish there is absolutely amazing." },
+        { "speaker": "Man", "text": "Not yet, but I heard from a coworker that their dumplings are actually even better than the noodles, so now I'm curious." },
+        { "speaker": "Woman", "text": "Really? I might just order both of those then and split everything with you so we can compare." },
+        { "speaker": "Man", "text": "Works for me. Let's go this weekend together before the place gets too crowded and we can't get a table." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the conversation, what have people said about the noodle dish?",
+          "options": { "A": "It is amazing", "B": "It is too spicy", "C": "It is overpriced", "D": "It is only available on weekends" },
+          "answer": "A",
+          "explanation": "女生说\"everyone keeps saying the noodle dish there is absolutely amazing\"。",
+          "distractor_types": { "B": "wrong_detail", "C": "related_but_not_stated", "D": "wrong_detail" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do this weekend?",
+          "options": {
+            "A": "Cook noodles at home together",
+            "B": "Avoid the restaurant due to crowds",
+            "C": "Visit the new restaurant downtown",
+            "D": "Order delivery instead of dining in"
+          },
+          "answer": "C",
+          "explanation": "男生提议\"Let's go this weekend together before the place gets too crowded\"，两人计划一起去这家新餐厅。A、D两项对话中没有依据；B项与他们打算尽早前往的计划相反。",
+          "distractor_types": { "A": "unrelated_next_step", "B": "reversed_situation", "D": "unrelated_next_step" }
+        }
+      ]
+    }
+  ]
+}

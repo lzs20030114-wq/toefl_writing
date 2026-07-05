@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How late is the bank open on Saturdays?",
+      "options": {
+        "A": "Actually, I think they close at noon on Saturdays.",
+        "B": "The bank across the street just got renovated.",
+        "C": "I need to deposit a check sometime this week.",
+        "D": "It's right next to the bookstore downtown."
+      },
+      "answer": "A",
+      "explanation": "说话人问银行周六开到多晚，A项以\"Actually\"开头给出具体关门时间，直接回应问题。B项借用\"bank\"一词却谈翻新，跑题；C项谈自己要存支票，答非所问；D项回答的是\"在哪\"而非\"开到几点\"，问错类型。",
+      "distractor_types": { "B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What time does your band usually stop practicing?",
+      "options": {
+        "A": "My roommate plays guitar too, actually.",
+        "B": "We usually wrap up by nine at night.",
+        "C": "I've been practicing for a recital next month.",
+        "D": "We practice in the basement studio."
+      },
+      "answer": "B",
+      "explanation": "说话人直接问乐队通常几点结束排练，B项直接给出具体时间，回应最贴切。A项答非所问，谈起室友弹吉他；C项借用\"practicing\"一词却谈个人独奏会；D项回答的是\"在哪排练\"而非\"几点结束\"，问错类型。",
+      "distractor_types": { "A": "off_topic", "C": "semantic_association_trap", "D": "wrong_question_type" }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you doing okay? You seem really stressed lately.",
+      "options": {
+        "A": "I heard the weather's supposed to be nice this weekend.",
+        "B": "Stress management workshops are offered every Friday.",
+        "C": "Actually, I could use someone to talk to.",
+        "D": "No, I haven't seen that movie yet."
+      },
+      "answer": "C",
+      "explanation": "对方关心地询问是否还好，C项以\"Actually\"开头坦诚回应，承认确实需要找人聊聊，最贴切。A项完全答非所问，谈天气；B项借用\"stressed\"一词却谈讲座活动；D项像是在回答一个关于电影的完全不同的问题。",
+      "distractor_types": { "A": "off_topic", "B": "semantic_association_trap", "D": "wrong_question_type" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where's the quickest way to get to the science building from here?",
+      "options": {
+        "A": "That building was renovated a few years ago.",
+        "B": "I left my umbrella in my last class.",
+        "C": "It usually takes about ten minutes to walk there.",
+        "D": "I'm headed that way now, so just follow me."
+      },
+      "answer": "D",
+      "explanation": "对方问最快去理科楼的路怎么走，D项没有直接描述路线，而是提议直接带路，从根本上解决了对方的需求，属于\"context_shift\"型正确答案。A项借用\"building\"一词却谈翻新历史；B项完全答非所问；C项回答的是\"要花多久\"而非\"怎么走\"，问错类型。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type" }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why do you seem so excited today?",
+      "options": {
+        "A": "I just got accepted into the study abroad program.",
+        "B": "The cafeteria added a new sandwich to the menu.",
+        "C": "Excitement can sometimes make it hard to focus.",
+        "D": "It happened earlier this morning, actually."
+      },
+      "answer": "A",
+      "explanation": "对方问为什么今天这么兴奋，A项直接说明了兴奋的原因（拿到留学项目录取），回应最贴切。B项完全答非所问，谈餐厅菜单；C项借用\"excited\"一词却泛泛而谈情绪本身；D项回答的是\"什么时候发生的\"而非\"为什么\"，问错类型。",
+      "distractor_types": { "B": "off_topic", "C": "semantic_association_trap", "D": "wrong_question_type" }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you know if maintenance fixed the heater in our room yet?",
+      "options": {
+        "A": "Heaters in older buildings tend to break down often.",
+        "B": "Actually, someone's supposed to come by this afternoon.",
+        "C": "My roommate switched to a different meal plan.",
+        "D": "The maintenance office is on the ground floor."
+      },
+      "answer": "B",
+      "explanation": "对方问维修人员是否已经修好暖气，B项以\"Actually\"开头说明维修人员下午会来，间接但贴切地回应了问题。A项借用\"heaters\"一词却泛泛而谈老楼通病；C项完全答非所问；D项回答的是\"维修办公室在哪\"而非\"修好了没\"，问错类型。",
+      "distractor_types": { "A": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I won't be able to make it to the meeting tonight.",
+      "options": {
+        "A": "The meeting room was recently repainted.",
+        "B": "I forgot to charge my phone this morning.",
+        "C": "No worries, I'll send you the notes afterward.",
+        "D": "Yes, it starts at seven o'clock."
+      },
+      "answer": "C",
+      "explanation": "对方说自己今晚开不了会，C项以\"No worries\"开头，体贴地表示会后补发笔记，回应最贴切。A项借用\"meeting\"一词却谈房间装修；B项完全答非所问；D项像是在回答一个关于几点开始的问题，而非回应对方缺席这件事。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I'm worried about my roommate, she's barely eating anything these days.",
+      "options": {
+        "A": "The dining hall changed its dinner menu recently.",
+        "B": "I've been meaning to try that new restaurant downtown.",
+        "C": "She'll probably be back to campus by Friday.",
+        "D": "Maybe we should both check in on her together."
+      },
+      "answer": "D",
+      "explanation": "说话人表达了对室友的担忧，D项没有停留在字面的\"吃饭\"话题上，而是提议一起去关心室友，从根本上回应了这份担忧，属于\"context_shift\"型正确答案。A项借用\"eating\"一词却谈餐厅菜单；B项完全答非所问；C项像是在回答一个关于室友何时返校的完全不同的问题。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type" }
+    }
+  ]
+}
