@@ -7,6 +7,8 @@ argument-hint: [--last N]
 
 # Build a Sentence — Quick Stats
 
+> **⚠️ 管线现状(2026-07-05)**：现行生产管线 = claude.ai 云端 routine 每晚生成 + `lib/gate/` 冻结门（`BS_GATE_ENFORCE` 默认开启，`mergeClaude`/`appendBSSets` 默认强制）。本 skill 描述的本地 DeepSeek 管线是**手动后备**。live 库 = `data/buildSentence/questions.json`（`question_sets` 键，约 534 题 = `cg_bs_*` 194 + `ets_*` 340，nightly 持续增长）。质量问题优先走 `/calibration-fix` 和 `lib/quality/scoreBatch` + `data/eval-profiles/`，不要按本文的旧硬编码比例目标修"假回归"。
+
 Show a concise overview of the question bank and pipeline status.
 
 ## Steps
@@ -21,7 +23,9 @@ Show a concise overview of the question bank and pipeline status.
    node scripts/review-bank.mjs --summary
    ```
 
-3. Check reserve pool and global hashes:
+3. ⚠️ `answer_hashes.json` / `reserve_pool.json` / `run_history.json` 是旧本地管线的产物，**停更于 2026-05-14**，读出来的数字不反映现在的 live 库（live 库靠 nightly routine + gate 增长，走的是完全不同的路径）。展示这些数字时要标注"来自旧管线，仅供参考"，不要拿来判断当前库健康度。
+
+   Check reserve pool and global hashes:
    ```bash
    node -e "
    const fs = require('fs');

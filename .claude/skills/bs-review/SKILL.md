@@ -8,6 +8,8 @@ argument-hint: [set N | question-id | --full]
 
 # Build a Sentence — Quality Review
 
+> **⚠️ 管线现状(2026-07-05)**：现行生产管线 = claude.ai 云端 routine 每晚生成 + `lib/gate/` 冻结门（`BS_GATE_ENFORCE` 默认开启，`mergeClaude`/`appendBSSets` 默认强制）。本 skill 描述的本地 DeepSeek 管线是**手动后备**。live 库 = `data/buildSentence/questions.json`（`question_sets` 键，约 534 题 = `cg_bs_*` 194 + `ets_*` 340，nightly 持续增长）。质量问题优先走 `/calibration-fix` 和 `lib/quality/scoreBatch` + `data/eval-profiles/`，不要按本文的旧硬编码比例目标修"假回归"。
+
 You are performing a deep quality review. This is READ-ONLY — do not modify files.
 
 ## Parse Arguments
@@ -104,7 +106,7 @@ Run: `node scripts/review-bank.mjs` (full output)
 Present in order:
 
 1. **Bank overview table** — one row per set with key stats
-2. **TPO compliance** — ratio comparison from summary.ratios
+2. **TPO compliance** — ratio comparison from summary.ratios, targets sourced from `data/eval-profiles/bs.json`（不要用记忆里的旧比例数字，如 embedded 63% 已被证实偏离真值 ≈45%，一律以 eval-profiles 当前内容为准）
 3. **Cross-set duplicates** — from summary.duplicates
 4. **Topic clusters** — from summary.topic_clusters (flag if too concentrated)
 5. **Weakest 5 questions** — from summary.weakest, with their issues

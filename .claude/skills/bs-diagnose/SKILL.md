@@ -8,6 +8,8 @@ argument-hint: [--last-run | --rejects | --circuit-breakers | --trend]
 
 # Build a Sentence — Pipeline Diagnostics
 
+> **⚠️ 管线现状(2026-07-05)**：现行生产管线 = claude.ai 云端 routine 每晚生成 + `lib/gate/` 冻结门（`BS_GATE_ENFORCE` 默认开启，`mergeClaude`/`appendBSSets` 默认强制）。本 skill 描述的本地 DeepSeek 管线是**手动后备**。live 库 = `data/buildSentence/questions.json`（`question_sets` 键，约 534 题 = `cg_bs_*` 194 + `ets_*` 340，nightly 持续增长）。质量问题优先走 `/calibration-fix` 和 `lib/quality/scoreBatch` + `data/eval-profiles/`，不要按本文的旧硬编码比例目标修"假回归"。
+
 You are diagnosing the question generation pipeline. Analyze logs, identify bottlenecks, and suggest fixes.
 
 ## Parse Arguments

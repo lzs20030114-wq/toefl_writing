@@ -8,6 +8,8 @@ argument-hint: [sets=6] [--append] [--dry-run] [--resume]
 
 # Build a Sentence — Production Pipeline
 
+> **⚠️ 管线现状(2026-07-05)**：现行生产管线 = claude.ai 云端 routine 每晚生成 + `lib/gate/` 冻结门（`BS_GATE_ENFORCE` 默认开启，`mergeClaude`/`appendBSSets` 默认强制）。本 skill 描述的本地 DeepSeek 管线是**手动后备**。live 库 = `data/buildSentence/questions.json`（`question_sets` 键，约 534 题 = `cg_bs_*` 194 + `ets_*` 340，nightly 持续增长）。质量问题优先走 `/calibration-fix` 和 `lib/quality/scoreBatch` + `data/eval-profiles/`，不要按本文的旧硬编码比例目标修"假回归"。
+
 You are managing the Build a Sentence question generation pipeline. Follow this workflow precisely.
 
 ## Parse Arguments
@@ -73,15 +75,16 @@ After generation completes (or for `--dry-run`, audit existing bank):
 
 ### Present Results
 
-Format the review-bank.mjs summary output as:
+**目标比例以 `data/eval-profiles/bs.json`（及 `bs-difficulty-standard.json`）为准，不要用下面模板里的数字当真值** —— 这些旧硬编码目标（如 embedded 63%）已被证实偏离真实值（embedded 真值 ≈ 45%），按旧数字改会做出"假回归"。先读 eval-profiles 拿当前真值，再填模板：
+
 ```
 Bank Summary (X sets, Y questions):
   TPO Compliance:
-    Question mark:  X% (target 8%)  [OK/DRIFT]
-    Embedded:       X% (target 63%) [OK/DRIFT]
-    Distractor:     X% (target 88%) [OK/DRIFT]
-    Negation:       X% (target 20%) [OK/DRIFT]
-    Prefilled:      X% (target 85%) [OK/DRIFT]
+    Question mark:  X% (target: 见 eval-profiles/bs.json)  [OK/DRIFT]
+    Embedded:       X% (target: 见 eval-profiles/bs.json)  [OK/DRIFT]
+    Distractor:     X% (target: 见 eval-profiles/bs.json)  [OK/DRIFT]
+    Negation:       X% (target: 见 eval-profiles/bs.json)  [OK/DRIFT]
+    Prefilled:      X% (target: 见 eval-profiles/bs.json)  [OK/DRIFT]
   Difficulty: easy X% / medium X% / hard X%
   Prompt diversity: ask X / report X / respond X / yesno X / statement X
   Quality: X fatal, Y warnings

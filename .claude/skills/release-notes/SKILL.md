@@ -105,6 +105,18 @@ node -e "const a=require('./data/announcements.json'); console.log('OK', a.lengt
 
 如果输出不是 `OK <N> entries...` 形式 → 修，不要 commit。
 
+### Step 5.5 — 发版前置条件核对
+
+在 commit + push 之前，核对本次要发布的内容是否有未满足的上线前置条件：
+
+1. 读 `docs/BACKLOG.md`（如果存在）和 `scripts/sql/MIGRATIONS.md`（如果存在）
+2. 对照本次发版涉及的 commit，检查：
+   - **未跑的迁移**：本次发版内容是否依赖某个 `scripts/sql/*.sql` 迁移？如果有，检查它在 `MIGRATIONS.md` 里是否登记为「已跑」。没登记或状态不是「已跑」→ 列出来
+   - **未翻的 feature flag**：本次发版内容是否依赖某个需要手动开启的开关（如 `BS_GATE_ENFORCE` 等环境变量开关）？如果代码路径要求 flag 开启才生效 → 列出来
+   - **未勾的 env var**：本次发版是否新增了需要在 Vercel 项目设置里补充的环境变量？→ 列出来
+3. 如果发现任何未满足的前置条件，**明确列出并等用户确认**后才继续到 Step 6。不要跳过这步直接发公告 —— 公告说"新功能上线"但迁移没跑/flag 没翻，用户看到的会是功能不生效或报错。
+4. 都满足（或本次发版本来就不涉及这些）→ 正常继续。
+
 ### Step 6 — Commit + push
 
 **两份文件用一个 commit**：
