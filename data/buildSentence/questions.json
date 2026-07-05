@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-07-05T17:22:28.391Z",
+  "generated_at": "2026-07-05T19:42:59.075Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -15215,6 +15215,267 @@
           "grammar_points": [
             "indirect/embedded question",
             "passive voice 'could be moved'"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 60,
+      "questions": [
+        {
+          "id": "ets_s60_q1",
+          "prompt": "Have you finished writing up the experiment?",
+          "answer": "I haven't finished my lab report yet.",
+          "chunks": [
+            "I",
+            "haven't",
+            "finished",
+            "my",
+            "lab report",
+            "did"
+          ],
+          "prefilled": [
+            "yet"
+          ],
+          "prefilled_positions": {
+            "yet": 6
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect",
+            "negation"
+          ]
+        },
+        {
+          "id": "ets_s60_q2",
+          "prompt": "I can't find the tickets for tonight's show.",
+          "answer": "Where did you leave the concert tickets?",
+          "chunks": [
+            "did",
+            "you",
+            "leave",
+            "the",
+            "concert tickets",
+            "were"
+          ],
+          "prefilled": [
+            "where"
+          ],
+          "prefilled_positions": {
+            "where": 0
+          },
+          "distractor": "were",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s60_q3",
+          "prompt": "Do you know if we can use the seminar room?",
+          "answer": "I asked Hector whether the seminar room was booked.",
+          "chunks": [
+            "I",
+            "asked",
+            "hector",
+            "the seminar room",
+            "was",
+            "booked",
+            "did"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "whether-clause"
+          ]
+        },
+        {
+          "id": "ets_s60_q4",
+          "prompt": "Did you see Margot at the library earlier?",
+          "answer": "I couldn't tell whether Margot had left already.",
+          "chunks": [
+            "I",
+            "couldn't",
+            "tell",
+            "margot",
+            "had",
+            "left already",
+            "did"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "whether-clause",
+            "negation"
+          ]
+        },
+        {
+          "id": "ets_s60_q5",
+          "prompt": "I thought Emma was coming to study with us.",
+          "answer": "You didn't invite Emma to the study session.",
+          "chunks": [
+            "you",
+            "didn't",
+            "invite",
+            "emma",
+            "study session",
+            "does"
+          ],
+          "prefilled": [
+            "to the"
+          ],
+          "prefilled_positions": {
+            "to the": 4
+          },
+          "distractor": "does",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s60_q6",
+          "prompt": "You mentioned trying out a new student group.",
+          "answer": "Olivia joined the club that meets on weekends.",
+          "chunks": [
+            "joined",
+            "the club",
+            "that",
+            "meets",
+            "on weekends",
+            "which"
+          ],
+          "prefilled": [
+            "Olivia"
+          ],
+          "prefilled_positions": {
+            "olivia": 0
+          },
+          "distractor": "which",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "present simple"
+          ]
+        },
+        {
+          "id": "ets_s60_q7",
+          "prompt": "Did you sort out your campus parking permit?",
+          "answer": "I've picked up my parking pass this week.",
+          "chunks": [
+            "I've",
+            "my",
+            "parking",
+            "pass",
+            "this week",
+            "will"
+          ],
+          "prefilled": [
+            "picked up"
+          ],
+          "prefilled_positions": {
+            "picked up": 1
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "phrasal verb",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s60_q8",
+          "prompt": "I finally met with my academic advisor today.",
+          "answer": "What did the advisor tell you about registration?",
+          "chunks": [
+            "what",
+            "did",
+            "the advisor",
+            "tell you",
+            "registration",
+            "does"
+          ],
+          "prefilled": [
+            "about"
+          ],
+          "prefilled_positions": {
+            "about": 6
+          },
+          "distractor": "does",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s60_q9",
+          "prompt": "You seemed curious about Mariana's project status.",
+          "answer": "I found out whether Mariana had already submitted the final report.",
+          "chunks": [
+            "I",
+            "whether",
+            "mariana",
+            "had already",
+            "submitted",
+            "the final",
+            "report",
+            "was"
+          ],
+          "prefilled": [
+            "found out"
+          ],
+          "prefilled_positions": {
+            "found out": 1
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "whether-clause",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s60_q10",
+          "prompt": "I just got feedback on my seminar essay.",
+          "answer": "The professor who taught the seminar praised my final research essay.",
+          "chunks": [
+            "the professor",
+            "who",
+            "taught",
+            "the seminar",
+            "my final",
+            "research essay"
+          ],
+          "prefilled": [
+            "praised"
+          ],
+          "prefilled_positions": {
+            "praised": 6
+          },
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "past simple"
           ]
         }
       ]

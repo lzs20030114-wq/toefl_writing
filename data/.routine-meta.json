@@ -8,19 +8,34 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": ["indirect/embedded question", "negation", "relative clause", "modal", "passive voice", "direct wh-question", "modal advice"],
+      "accepted": 30,
+      "topics": [
+        "indirect/embedded question",
+        "negation",
+        "relative clause",
+        "modal",
+        "passive voice",
+        "direct wh-question",
+        "modal advice"
+      ],
       "favorite": {
         "prompt": "Did you finish moving into the new apartment?",
         "answer": "The friend who helped me move canceled at the last minute."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["sociology", "business", "public policy", "computer science"],
+      "topics": [
+        "sociology",
+        "business",
+        "public policy",
+        "computer science"
+      ],
       "favorite": {
         "subtopic": "sociology",
         "preview": "We've been discussing how digital tools are reshaping workplace norms this semester. A growing trend called"
@@ -31,7 +46,12 @@
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["服务与活动", "校园学业", "住宿", "职场工作"],
+      "topics": [
+        "服务与活动",
+        "校园学业",
+        "住宿",
+        "职场工作"
+      ],
       "favorite": {
         "subtopic": "住宿",
         "preview": "You live in a university apartment complex, and the card reader on the laundry room door has stopped working"
@@ -42,7 +62,13 @@
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["technology/steam power", "art/cinema history", "geology/ice ages", "history/trade routes", "environmental_science/desertification"],
+      "topics": [
+        "technology/steam power",
+        "art/cinema history",
+        "geology/ice ages",
+        "history/trade routes",
+        "environmental_science/desertification"
+      ],
       "favorite": {
         "subtopic": "environmental_science/desertification",
         "preview": "Desertification is the gradual process by which productive, vegetated land deteriorates into arid, unproductive"
@@ -53,7 +79,14 @@
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": ["biology/plant biology", "environmental_science/conservation", "psychology/perception", "history/exploration", "geology/rock formation", "astronomy/nebulae"],
+      "topics": [
+        "biology/plant biology",
+        "environmental_science/conservation",
+        "psychology/perception",
+        "history/exploration",
+        "geology/rock formation",
+        "astronomy/nebulae"
+      ],
       "favorite": {
         "subtopic": "psychology/perception",
         "preview": "Perception is the process by which the brain organizes sensory information into a coherent picture of the"
@@ -64,7 +97,12 @@
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["email/meal plan refund", "email/office hours change", "email/interlibrary loan", "email/office hours and fee"],
+      "topics": [
+        "email/meal plan refund",
+        "email/office hours change",
+        "email/interlibrary loan",
+        "email/office hours and fee"
+      ],
       "favorite": {
         "subtopic": "email/interlibrary loan",
         "preview": "The interlibrary loan book you requested, Cognitive Maps in Urban Design, has arrived at the Circulation"
@@ -75,7 +113,10 @@
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": ["email/flu shot appointment", "email/study group formation"],
+      "topics": [
+        "email/flu shot appointment",
+        "email/study group formation"
+      ],
       "favorite": {
         "subtopic": "email/study group formation",
         "preview": "A few of us are putting together a study group for the microeconomics final on December 9, and we wanted"
@@ -86,7 +127,12 @@
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": ["biology/cleaner fish symbiosis", "music/recording technology", "physics/lever principle", "art_history/impressionist outdoor painting"],
+      "topics": [
+        "biology/cleaner fish symbiosis",
+        "music/recording technology",
+        "physics/lever principle",
+        "art_history/impressionist outdoor painting"
+      ],
       "favorite": {
         "subtopic": "physics/lever principle",
         "preview": "A lever is a simple machine that multiplies an applied force by redistributing it across a rigid bar"
@@ -97,7 +143,13 @@
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["plans_social/concert tickets", "campus_dorm_life/quiet hours", "plans_social/dinner party", "recommendations_opinions/podcast", "recommendations_opinions/restaurant"],
+      "topics": [
+        "plans_social/concert tickets",
+        "campus_dorm_life/quiet hours",
+        "plans_social/dinner party",
+        "recommendations_opinions/podcast",
+        "recommendations_opinions/restaurant"
+      ],
       "favorite": {
         "subtopic": "plans_social/concert tickets",
         "preview": "Have you seen how fast tickets for the fall concert are selling? I keep debating whether to buy"
@@ -108,7 +160,13 @@
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": ["facility_change/fitness equipment", "academic_event/essay competition", "facility_change/lounge closure", "guest_speaker/author visit", "campus_activity/movie night"],
+      "topics": [
+        "facility_change/fitness equipment",
+        "academic_event/essay competition",
+        "facility_change/lounge closure",
+        "guest_speaker/author visit",
+        "campus_activity/movie night"
+      ],
       "favorite": {
         "subtopic": "guest_speaker/author visit",
         "preview": "I'm pleased to announce that award-winning novelist Elena Marsh will be visiting our department next Tuesday"
@@ -119,7 +177,16 @@
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["general_daily/bank hours", "general_daily/neighbor noise", "social/stress support", "general_daily/directions", "social/friend news", "campus_daily/dorm maintenance", "social/schedule conflict", "social/friend concern"],
+      "topics": [
+        "general_daily/bank hours",
+        "general_daily/neighbor noise",
+        "social/stress support",
+        "general_daily/directions",
+        "social/friend news",
+        "campus_daily/dorm maintenance",
+        "social/schedule conflict",
+        "social/friend concern"
+      ],
       "favorite": {
         "subtopic": "social/friend concern",
         "preview": "I'm worried about my roommate, she's barely eating anything these days."
@@ -130,7 +197,11 @@
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": ["IT Help Desk", "Recycling Center Tour", "Planetarium Visit"],
+      "topics": [
+        "IT Help Desk",
+        "Recycling Center Tour",
+        "Planetarium Visit"
+      ],
       "favorite": {
         "subtopic": "Recycling Center Tour",
         "preview": "Before you leave, check the posted schedule for special collection days, since some materials are only accepted"
@@ -138,5 +209,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-05T19:44:36.078Z",
+  "r2_session_id": "routine-r2-20260705-193106"
 }
