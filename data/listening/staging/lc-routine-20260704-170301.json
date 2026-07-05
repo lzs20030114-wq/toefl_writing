@@ -1,0 +1,230 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip to Lakeside",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are we still doing that day trip to Lakeside on Saturday?" },
+        { "speaker": "Man", "text": "I just need to figure out the train times. There's one at eight and one at ten." },
+        { "speaker": "Woman", "text": "Eight's kind of early. Let's take the ten o'clock one instead." },
+        { "speaker": "Man", "text": "I checked, and the ten o'clock train doesn't stop at Lakeside on weekends." },
+        { "speaker": "Woman", "text": "Really? Then we're stuck with the early one, or we could drive instead." },
+        { "speaker": "Man", "text": "Driving works, but parking near the lake fills up fast on weekends." },
+        { "speaker": "Woman", "text": "Let's just catch the eight o'clock train and skip the parking hassle." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the man and woman mainly discussing?",
+          "options": {
+            "A": "How to get to Lakeside for their trip",
+            "B": "Whether to reschedule the trip for another weekend",
+            "C": "Why the ten o'clock train skips Lakeside",
+            "D": "Deciding to cancel their weekend trip entirely"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：对话主要讨论男女两人如何前往Lakeside进行周六的一日游（火车时间、是否开车等）。B错误：他们并没有讨论把行程改到别的周末，而是在解决交通方式的问题，这是不相关的话题（wrong_topic）。C错误：为什么十点的车不停靠Lakeside只是对话中的一个细节，并非整体主旨（too_narrow）。D错误：对话结尾两人决定坐八点的火车前往，而不是取消行程，这与对话内容相反（reversed_situation）。",
+          "distractor_types": { "B": "wrong_topic", "C": "too_narrow", "D": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred from the conversation?",
+          "options": {
+            "A": "They decided driving was the better option overall.",
+            "B": "The woman has taken this train trip many times before.",
+            "C": "They preferred the early train over dealing with parking.",
+            "D": "They plan to buy tickets online before Saturday."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生提到湖边周末停车位很快就满了，于是女生提议干脆坐八点的早班火车，避免停车的麻烦，因此可以推断他们更倾向于选择早班火车而不是应对停车问题。A错误：开车虽被提到，但最终因停车难而被放弃，并不是他们更倾向的选择（rejected_option）。B错误：对话中并未提及女生以前坐过这趟火车很多次，这超出了对话所支持的信息（over_inference）。D错误：提前在网上买票是合理的后续动作，但对话中并未提及，与对话内容无直接关联（unrelated_next_step）。",
+          "distractor_types": { "A": "rejected_option", "B": "over_inference", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe called Brew and Co. is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new cafe on Elm Street yet, Brew and Co.?" },
+        { "speaker": "Man", "text": "I went yesterday. The coffee was great, but wow, six dollars for a plain latte?" },
+        { "speaker": "Woman", "text": "I know, it's pricey. Did you get any food there?" },
+        { "speaker": "Man", "text": "I had a croissant too. It was fresh, but the whole thing came to almost twelve dollars." },
+        { "speaker": "Woman", "text": "Hmm, that does seem steep for breakfast. I think I'll just stick with the campus coffee shop." },
+        { "speaker": "Man", "text": "That's probably smarter. I might only go there for special occasions." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, how much did his coffee and croissant cost together?",
+          "options": {
+            "A": "Around six dollars, for just the latte.",
+            "B": "Almost twelve dollars, including the croissant.",
+            "C": "About fifteen dollars, including tax and tip.",
+            "D": "Ten dollars, according to the woman's estimate."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说他的咖啡加牛角包总共花了将近十二美元（\"the whole thing came to almost twelve dollars\"）。A错误：六美元只是普通拿铁单独的价格，并非包含牛角包的总价，属于偷换范围的错误细节（wrong_detail）。C错误：对话中并未提到十五美元或含税小费的说法，是凭空编造的细节（related_but_not_stated）。D错误：这个价格和说法被错误地安到了女生身上，实际上是男生提到的信息（misattributed）。",
+          "distractor_types": { "A": "wrong_detail", "C": "related_but_not_stated", "D": "misattributed" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman based on the conversation?",
+          "options": {
+            "A": "She has never liked coffee there at all.",
+            "B": "She plans to buy a croissant there herself.",
+            "C": "She will suggest Brew and Co. lower prices.",
+            "D": "She thinks the campus coffee shop is cheaper."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生听到价格后觉得偏贵，说自己还是会选择校园里的咖啡店（\"I think I'll just stick with the campus coffee shop\"），可以推断她认为校内咖啡店更实惠。A错误：女生只是觉得价格贵，并未表示完全不喜欢那里的咖啡，这超出了对话所支持的内容（over_inference）。B错误：女生并没有说要自己去买牛角包，反而选择了校内咖啡店，这是被她放弃的选项（rejected_option）。C错误：建议咖啡店降价是合理的后续想法，但对话中完全没有提到，与对话无关（unrelated_next_step）。",
+          "distractor_types": { "A": "over_inference", "B": "rejected_option", "C": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a birthday surprise party for their classmate Maria",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "For Maria's surprise party, are we still doing it at the student lounge on Friday?" },
+        { "speaker": "Man", "text": "I booked the room in the library instead. It's quieter and we can decorate more." },
+        { "speaker": "Woman", "text": "Oh, good call. What time should everyone show up?" },
+        { "speaker": "Man", "text": "Let's say six thirty, half an hour before Maria gets there at seven." },
+        { "speaker": "Woman", "text": "I'll bring the cake, and can you handle the balloons and snacks?" },
+        { "speaker": "Man", "text": "I'll grab everything from the store this afternoon." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the surprise party be held?",
+          "options": {
+            "A": "In the student lounge, as originally planned.",
+            "B": "In Maria's dorm room, decorated with balloons.",
+            "C": "In a room at the library.",
+            "D": "At the store, according to the woman."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说他把房间订在了图书馆里（\"I booked the room in the library instead\"），所以派对地点是图书馆的一个房间。A错误：学生休息室是最初的计划，后来被改到了图书馆，这是被更改的旧信息（wrong_detail）。B错误：对话中没有提到在Maria的宿舍举办派对，这是凭空编造的细节（related_but_not_stated）。D错误：这个说法被错误地安在了女生身上，实际上决定地点的是男生（misattributed）。",
+          "distractor_types": { "A": "wrong_detail", "B": "related_but_not_stated", "D": "misattributed" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man?",
+          "options": {
+            "A": "He is responsible for buying decorations and snacks.",
+            "B": "He has thrown surprise parties for Maria before.",
+            "C": "He originally wanted the party in the lounge.",
+            "D": "He will text everyone a reminder before Friday."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生说她会准备蛋糕，并问男生能否负责气球和零食，男生回答说今天下午就去店里买齐所有东西，由此可推断男生负责购买装饰和零食。B错误：对话中并未提及男生以前多次为Maria办过惊喜派对，这超出了对话所支持的内容（over_inference）。C错误：男生实际上把地点从休息室改到了图书馆，说明休息室是被他放弃的方案，而不是他仍然想要的（rejected_option）。D错误：提前发提醒短信是合理的后续步骤，但对话里完全没提到，与对话无关（unrelated_next_step）。",
+          "distractor_types": { "B": "over_inference", "C": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students deciding between a photography elective and a ceramics elective for next term",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you decided which elective to take next term? I'm stuck between photography and ceramics." },
+        { "speaker": "Man", "text": "I heard the photography class requires you to buy your own camera equipment." },
+        { "speaker": "Woman", "text": "That could get expensive. What about ceramics, do you know much about it?" },
+        { "speaker": "Man", "text": "My roommate took it last term. He said the studio provides all the tools, and the professor's really supportive." },
+        { "speaker": "Woman", "text": "Hmm, that sounds more practical then. No extra costs, and I get to try something new." },
+        { "speaker": "Man", "text": "I'd go with ceramics if I were you." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the man and woman mainly discussing?",
+          "options": {
+            "A": "Whether to switch dorm rooms next term.",
+            "B": "The cost of camera equipment for photography.",
+            "C": "Why the woman has already picked photography.",
+            "D": "Which elective class the woman should choose."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：对话主要围绕女生该选摄影课还是陶艺课作为下学期的选修课展开，最终男生建议她选陶艺。A错误：对话没有涉及更换宿舍的话题，是不相关的话题（wrong_topic）。B错误：摄影课需要自购相机设备只是对话中的一个细节，并不是整体讨论的主旨（too_narrow）。C错误：女生其实还在纠结没有决定，说她已经选定摄影课与对话内容相反（reversed_situation）。",
+          "distractor_types": { "A": "wrong_topic", "B": "too_narrow", "C": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman based on the conversation?",
+          "options": {
+            "A": "She has already taken a ceramics class before.",
+            "B": "She is now leaning toward the ceramics class.",
+            "C": "She decided photography was the more practical choice.",
+            "D": "She will ask her roommate for camera advice."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生听说陶艺工作室提供所有工具、不需要额外花费，且老师很支持，她说\"那这样听起来更实际\"，可以推断她现在更倾向于选择陶艺课。A错误：对话中并未提到女生以前上过陶艺课，这超出了对话所支持的内容（over_inference）。C错误：女生实际上认为摄影更贵、陶艺更实际，说明摄影才是被她排除、放弃的选项（rejected_option）。D错误：向室友请教相机建议是合理的后续动作，但对话中并未提及，与对话无关（unrelated_next_step）。",
+          "distractor_types": { "A": "over_inference", "C": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing notes on a mystery novel's ending for their book club",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "What did you think of the ending of the novel for book club?" },
+        { "speaker": "Man", "text": "I found it a bit rushed, honestly. The detective's motive barely gets explained." },
+        { "speaker": "Woman", "text": "I actually loved that ambiguity. I think the author wanted us to question the narrator's reliability the whole time." },
+        { "speaker": "Man", "text": "Hmm, maybe. But I still wanted more closure after two hundred pages of buildup." },
+        { "speaker": "Woman", "text": "We can bring up both views at the meeting tomorrow." },
+        { "speaker": "Man", "text": "It'll make for a livelier discussion than usual." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the man and woman mainly discussing?",
+          "options": {
+            "A": "Their differing opinions on the novel's ending.",
+            "B": "Whether to join the campus book club.",
+            "C": "The detective's unclear motive in the story.",
+            "D": "Why the man loved the novel's ending."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：对话主要围绕两人对小说结局的不同看法展开——男生觉得结局仓促、缺乏交代，女生则认为这种模糊感是作者刻意为之。B错误：对话没有讨论是否要加入读书俱乐部，两人显然已经是俱乐部成员，这是不相关的话题（wrong_topic）。C错误：侦探动机交代不清只是男生提到的一个细节，并非整体讨论的主旨（too_narrow）。D错误：实际上是女生喜欢这种模糊的结局，男生则想要更多交代，说男生喜欢结局与对话内容相反（reversed_situation）。",
+          "distractor_types": { "B": "wrong_topic", "C": "too_narrow", "D": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman?",
+          "options": {
+            "A": "She has read all the author's other novels.",
+            "B": "She agrees the ending clearly needed more closure.",
+            "C": "She clearly believes the ambiguous ending was intentional.",
+            "D": "She will write an online review of it."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生说她很喜欢这种模糊感，并认为作者是想让读者一直怀疑叙述者是否可靠，由此可推断她把小说结局的模糊性看作是作者有意为之的手法。A错误：对话中并未提到女生读过这位作者的所有其他小说，这超出了对话所支持的内容（over_inference）。B错误：实际上是男生认为结局需要更多交代，女生并不认同这一点，这是被她排除、不同意的观点（rejected_option）。D错误：在网上写书评是合理的后续行为，但对话中完全没有提到，与对话无关（unrelated_next_step）。",
+          "distractor_types": { "A": "over_inference", "B": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    }
+  ]
+}

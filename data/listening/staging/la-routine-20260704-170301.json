@@ -1,0 +1,179 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Attention students, faculty, and staff. The campus bookstore will relocate from Baxter Hall to the newly renovated Corwin Building on Elm Street, with the move beginning Monday, September 14th. Baxter Hall will close permanently at 5 p.m. this Friday, September 11th, so please finish any textbook rental returns there before closing time. The new Corwin Building store opens to customers at 9 a.m. on Wednesday, September 16th, though returns won't be accepted there until the following Monday. During the transition, students needing materials should place orders online for campus pickup. We appreciate everyone's patience while we complete this important move.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to return textbooks before the bookstore moves?",
+          "options": {
+            "A": "Return textbook rentals at Baxter Hall",
+            "B": "Return textbooks at the Corwin Building store",
+            "C": "Reserve a moving truck for personal belongings",
+            "D": "Place all online orders before Monday"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知明确要求学生在周五Baxter Hall关闭前把教材租赁归还处理完。B错（wrong_detail）：通知说明Corwin Building要到下周一才开始接受退还，并非现在就能在那里退还，篡改了关键事实。C错（related_but_not_stated）：预订搬家卡车看似合理，但通知全文没有提及此事。D错（misattributed_detail）：网上下单是给过渡期需要教材的学生用的，并不是关闭前必须完成的退还要求，张冠李戴。",
+          "distractor_types": {"B": "wrong_detail", "C": "related_but_not_stated", "D": "misattributed_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that returns won't be accepted at the new location until Monday?",
+          "options": {
+            "A": "To suggest Corwin Building lacks proper return equipment",
+            "B": "Because returns won't be accepted until Monday",
+            "C": "To encourage students to finish returns before Friday",
+            "D": "To explain why online orders require campus pickup"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：提到新店要到下周一才接受退还，可以推断说话人是想借此提醒学生尽量在周五关闭前完成退还，避免耽误。A错（over_inference）：通知并未暗示新店缺乏退还设备，这是过度推断，没有依据。B错（literal_restatement）：这只是把“下周一才接受退还”原句复述一遍，并非真正的推断。D错（unrelated_inference）：网上订单需到校园自取是另一件事，与退还时间的推断无关，属无关推断。",
+          "distractor_types": {"A": "over_inference", "B": "literal_restatement", "D": "unrelated_inference"}
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "mock interview sessions with alumni volunteers",
+      "speaker_role": "career_advisor",
+      "difficulty": "medium",
+      "announcement": "The Career Development Center will host a series of mock interview sessions with alumni volunteers on Thursday, October 8th, in the Alumni Hall conference rooms. Sessions run every thirty minutes between 10 a.m. and 4 p.m., and each one pairs a student with a professional from a related industry. Students must register online through the Career Center portal by Monday, October 5th, since space is limited to forty participants. Please bring a printed resume to your session, and business casual attire is recommended but not required. Volunteers will offer feedback on interview technique right afterward. We're grateful to our alumni for donating their time, and we encourage everyone to take advantage of this opportunity.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is required in order to participate in a mock interview session?",
+          "options": {
+            "A": "Submit a resume through the online portal",
+            "B": "Register through the Career Center portal",
+            "C": "Attend a mandatory interview preparation workshop",
+            "D": "Wear business attire to receive feedback"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通知要求学生在10月5日前通过职业发展中心的网站在线注册才能参加。A错（wrong_detail）：简历是要求学生本人带打印版到面试现场，而不是通过网上门户提交，篡改了关键事实。C错（related_but_not_stated）：强制性面试培训讲座听起来合理，但通知里完全没有提到。D错（misattributed_detail）：通知只说正装是建议而非强制，且反馈是面试后提供，把两个细节错误地合并成了参加条件。",
+          "distractor_types": {"A": "wrong_detail", "C": "related_but_not_stated", "D": "misattributed_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that space is limited to forty participants?",
+          "options": {
+            "A": "To suggest alumni volunteers dislike large groups",
+            "B": "To justify why business attire is optional",
+            "C": "Because only forty participants are allowed",
+            "D": "To motivate students to register soon"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：提到名额只有四十人，可以推断说话人是想借此说明学生应该尽快注册，以免错过机会。A错（over_inference）：通知没有任何依据表明校友志愿者不喜欢大规模活动，属过度推断。B错（unrelated_inference）：正装是否必需和名额限制是两回事，与推断的问题无关。C错（literal_restatement）：这只是把“名额限四十人”这句话原样复述，并非真正的推断。",
+          "distractor_types": {"A": "over_inference", "B": "unrelated_inference", "C": "literal_restatement"}
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "cultural food festival organized by international club",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone! The International Student Club is hosting its annual Taste of the World festival on Saturday, November 8th, in the Student Union Plaza from noon until 4 p.m. More than fifteen countries will be represented, with student groups serving dishes ranging from Ethiopian injera to Filipino lumpia. Admission is free, but each tasting requires one ticket, and every visitor receives five tickets at the entrance table. Please bring a reusable container if you'd like to take extra portions home, since disposable containers will be limited. Proceeds from optional donations will support the club's spring cultural exchange trip. We hope to see the whole campus community there!",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement about?",
+          "options": {
+            "A": "The specific tickets needed for food tasting",
+            "B": "A fundraising gala for international scholarships",
+            "C": "An international student club's food festival",
+            "D": "The cancellation of this year's food festival"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：通知整体介绍的是国际学生俱乐部举办的美食节活动，C准确概括了通知的主旨。A错（too_narrow）：品尝券的细节只是活动的一部分，并非通知想表达的整体目的，范围过窄。B错（wrong_purpose）：通知并非为国际奖学金筹款的活动，这是另一种看似合理但不符的目的。D错（reversed_intent）：通知是宣布美食节如期举行，而不是取消，与实际意图相反。",
+          "distractor_types": {"A": "too_narrow", "B": "wrong_purpose", "D": "reversed_intent"}
+        },
+        {
+          "type": "detail",
+          "stem": "How are tasting tickets distributed?",
+          "options": {
+            "A": "Visitors get five tickets at entry",
+            "B": "Tickets are sold in advance online",
+            "C": "Visitors purchase tickets for one dollar each",
+            "D": "Reusable containers are given out at entry"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知说明每位访客在入口处的桌子领取五张品尝券。B错（related_but_not_stated）：提前网上售票看似合理的做法，但通知里没有提到这种方式。C错（wrong_detail）：通知明确说入场免费，品尝券也不是花钱购买的，篡改了关键事实。D错（misattributed_detail）：可重复使用的容器是访客自己带来的，而不是入口处发放的东西，把两个细节搞混了。",
+          "distractor_types": {"B": "related_but_not_stated", "C": "wrong_detail", "D": "misattributed_detail"}
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "I'm pleased to announce that the Department of Biology will hold its End-of-Semester Academic Showcase on Friday, December 5th, in the Fenwick Auditorium starting at 3 p.m. Students will present short talks on their capstone research, followed by an awards ceremony recognizing outstanding projects in three categories. Light refreshments will be served in the lobby beginning at 2:30 p.m., so please arrive early if you'd like to browse the project displays beforehand. Each presenter is allotted eight minutes, with two minutes for questions afterward. Faculty judges will announce category winners at the end of the program, and all winners will receive a certificate and a book stipend. We hope you'll join us in celebrating our students' hard work.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose?",
+          "options": {
+            "A": "To describe the refreshments served beforehand",
+            "B": "To recruit judges for a science fair",
+            "C": "To cancel this semester's award ceremony",
+            "D": "To announce a showcase with awards"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：通知整体是宣布本学期末的学生学术展示和颁奖典礼，D准确概括了主旨。A错（too_narrow）：茶点安排只是活动的一个小细节，并非通知的整体目的，范围过窄。B错（wrong_purpose）：招募科学展评委是另一种看似合理但并非本通知的目的。C错（reversed_intent）：通知是宣布典礼照常举行，而不是取消，与实际意图相反。",
+          "distractor_types": {"A": "too_narrow", "B": "wrong_purpose", "C": "reversed_intent"}
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to do before the showcase begins?",
+          "options": {
+            "A": "Submit written reports to faculty judges",
+            "B": "Arrive early to view project displays",
+            "C": "Reserve a seat through an online form",
+            "D": "Prepare an eight-minute question and answer session"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：通知建议大家提前到场，好在活动正式开始前浏览项目展示。A错（wrong_detail）：通知没有要求学生向评委提交书面报告，这一细节被篡改了。C错（related_but_not_stated）：通过在线表格预留座位听起来合理，但通知全文没有提及。D错（misattributed_detail）：八分钟发言加两分钟提问是每位报告人的安排，而不是学生在活动开始前需要准备的事，把细节张冠李戴。",
+          "distractor_types": {"A": "wrong_detail", "C": "related_but_not_stated", "D": "misattributed_detail"}
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "Due to strong demand for strength training, the Campus Recreation Center will install twelve new squat racks and a turf sled-push lane in the ground-floor weight room beginning Monday, February 2nd. Contractors will need the entire weight room closed from 6 a.m. to 2 p.m. each day that week, though the cardio deck upstairs will remain open as usual. Once installation is complete, members must reserve a squat rack through the RecCenter app during peak hours between 4 and 7 p.m., since demand is expected to be high. The turf lane will be available on a first-come, first-served basis. We're aiming to wrap up the project by Friday, February 6th. Thanks for bearing with the noise and dust this week.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is true about the weight room during installation week?",
+          "options": {
+            "A": "It closes each morning until 2 p.m.",
+            "B": "Members can request a full refund",
+            "C": "It will be closed for the entire week",
+            "D": "The cardio deck will close for cleaning"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：通知说明整周每天上午到下午2点举重室都会因施工关闭。B错（related_but_not_stated）：会员申请全额退费听起来合理，但通知里没有提到这项安排。C错（wrong_detail）：举重室只是每天固定时段关闭，并非整周全天都不能使用，篡改了关键事实。D错（misattributed_detail）：关闭的是举重室而不是楼上的有氧器械区，有氧区照常开放，把地点细节搞混了。",
+          "distractor_types": {"B": "related_but_not_stated", "C": "wrong_detail", "D": "misattributed_detail"}
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about peak hours between 4 and 7 p.m.?",
+          "options": {
+            "A": "The center plans to buy more racks",
+            "B": "Demand is expected to be high",
+            "C": "Squat racks will see high demand",
+            "D": "The center recently upgraded other cardio machines"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：既然通知说这段时间需要预约深蹲架且预计需求很高，可以推断这段时间深蹲架会很抢手。A错（over_inference）：通知并未暗示中心计划再购买更多深蹲架，这是超出文本的过度推断。B错（literal_restatement）：这只是把“预计需求很高”这句话原样复述，并非真正的推断。D错（unrelated_inference）：有氧器械是否最近升级过是另一件事，与深蹲架高峰时段的推断无关。",
+          "distractor_types": {"A": "over_inference", "B": "literal_restatement", "D": "unrelated_inference"}
+        }
+      ]
+    }
+  ]
+}

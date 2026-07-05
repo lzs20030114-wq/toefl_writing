@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did anyone fix the faucet that's leaking in our bathroom?",
+      "options": {
+        "A": "I'm on it right now.",
+        "B": "The faucet in the kitchen is brand new.",
+        "C": "The concert tickets go on sale Friday.",
+        "D": "It happened around midnight."
+      },
+      "answer": "A",
+      "explanation": "正确答案A使用习语'I'm on it'（我正在处理）间接回应了'有没有人修好漏水的水龙头'这一问题，表示说话者本人正在处理，符合idiomatic应答范式。B项提到'厨房的水龙头是新的'，利用关键词'faucet'设置语义联想陷阱，但答非所问，没有回应卫生间水龙头是否被修好。C项讨论演唱会门票，与漏水问题完全无关，属于话题无关型干扰项。D项'大约在午夜发生的'像是在回答'什么时候发生'这类问题，而非回应'是否修好'的一般疑问句，属于问题类型错位干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How come you can't meet up this week?",
+      "options": {
+        "A": "I met her at the mall yesterday.",
+        "B": "Well, Thursday might work better for me.",
+        "C": "The bookstore closes at nine tonight.",
+        "D": "It's near the library."
+      },
+      "answer": "B",
+      "explanation": "正确答案B以话语标记词'Well'开头，间接提出另一个可行的时间（'周四对我可能更合适'），既承认了本周无法见面的事实，又提出解决方案，符合marker_led_indirect范式。A项利用'meet'这一关键词的重复（met her at the mall）设置语义联想陷阱，但描述的是过去与另一个人见面的事，与本题情境无关。C项讨论书店营业时间，属于完全无关的话题干扰项。D项'就在图书馆附近'回答的是地点（where）类问题，而说话者问的是时间安排冲突，属于问题类型错位干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I'm not sure the data section is complete.",
+      "options": {
+        "A": "The data was collected using an online survey.",
+        "B": "The gym opens early on Saturdays.",
+        "C": "Let's go over it together after class.",
+        "D": "Section 12B is near the exit."
+      },
+      "answer": "C",
+      "explanation": "正确答案C没有直接评判数据部分是否完整，而是提出解决方案——'下课后我们一起过一遍'，转移到解决根本需求上，符合context_shift范式，属于hard难度中常见的间接应答。A项利用关键词'data'编造了一句关于数据收集方式的话，属于语义联想陷阱，并未回应'是否完整'这一关切。B项谈论健身房营业时间，与实验报告完全无关，属于话题无关型干扰项。D项把'section'误读成了物理空间的'区/座位区'（如'12B区靠近出口'），而不是报告中的'数据部分'，属于一词多义/误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Have you finished your part of the project yet?",
+      "options": {
+        "A": "The project room is on the second floor.",
+        "B": "My sister just started a new job.",
+        "C": "Sarah is the one leading it.",
+        "D": "Actually, I just need one more hour."
+      },
+      "answer": "D",
+      "explanation": "正确答案D以话语标记词'Actually'开头，间接说明自己几乎完成、只需再多一小时，而不是简单地回答'是'或'否'，符合marker_led_indirect范式。A项利用'project'一词编造了'项目室在二楼'的语义联想陷阱，答非所问。B项讲述姐姐找到新工作，与本题情境毫无关联，属于话题无关型干扰项。C项回答的是'谁负责这个项目'（who），而非'你完成了没有'（yes/no问题），属于问题类型错位干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What are the prerequisites for this course?",
+      "options": {
+        "A": "Beats me — the syllabus should say.",
+        "B": "The course fee increased this semester.",
+        "C": "The weather turned cold overnight.",
+        "D": "It starts at 9 AM."
+      },
+      "answer": "A",
+      "explanation": "正确答案A使用习语表达'Beats me'（我也不知道），并建议查看教学大纲，属于自然的口语化应答，符合idiomatic范式，同时间接地把问题引向可靠信息来源。B项利用'course'一词编造了关于学费上涨的语义联想陷阱，与先修课程要求无关。C项谈论天气转冷，属于完全无关的话题干扰项。D项'9点开始'回答的是'什么时候开始'（when），而非'需要哪些先修课程'，属于问题类型错位干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where can I return this defective blender?",
+      "options": {
+        "A": "The blender comes in three colors.",
+        "B": "Do you have the receipt with you?",
+        "C": "The parking lot is under construction.",
+        "D": "We open at 8 AM on weekdays."
+      },
+      "answer": "B",
+      "explanation": "正确答案B是店员的自然反问——'你带小票了吗？'，用反问推进对话（顾客需要先出示小票才能办理退货），符合counter_question范式，间接而非直接回答'在哪里'。A项利用'blender'一词编造了关于颜色选择的语义联想陷阱，与退货地点无关。C项讨论停车场施工，属于完全无关的话题干扰项。D项'我们工作日早8点开门'回答的是营业时间（when），而非退货应去哪里（where），属于问题类型错位干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why can't I cut through the park to get there?",
+      "options": {
+        "A": "The park has a new fountain.",
+        "B": "My phone battery died this morning.",
+        "C": "Because the park closes at dusk.",
+        "D": "There are three entrances to the park."
+      },
+      "answer": "C",
+      "explanation": "正确答案C直接回答了'为什么'这一问题——'因为公园傍晚就关闭了'，属于direct_topical范式，在easy难度题目中适度使用直接作答。A项利用'park'一词编造了关于新喷泉的语义联想陷阱，答非所问。B项讲述手机没电，与公园通行问题完全无关，属于话题无关型干扰项。D项'公园有三个入口'回答的是'有多少个'（how many），而非'为什么不能穿过公园'，属于问题类型错位干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I don't know which chapters will be on the final exam.",
+      "options": {
+        "A": "The exam room is being repainted.",
+        "B": "The cafeteria added a new salad bar.",
+        "C": "Our club has chapters in three other cities.",
+        "D": "Let's ask the professor after class today."
+      },
+      "answer": "D",
+      "explanation": "正确答案D没有直接猜测考试范围，而是提出解决办法——'我们下课后去问教授'，转向解决根本的不确定性，符合context_shift范式。A项利用'exam'一词编造了关于考场重新粉刷的语义联想陷阱，与考试内容无关。B项讲述食堂新增沙拉吧，属于完全无关的话题干扰项。C项把'chapters'误读成社团的'分会/分部'（如某社团在其他城市设有分会），而非教材的'章节'，属于一词多义/误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}
