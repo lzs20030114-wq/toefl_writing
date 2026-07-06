@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
+      "accepted": 20,
       "topics": [
         "simple past statement",
         "direct wh-question",
@@ -24,7 +24,9 @@
         "answer": "She wanted to know whether I had already chosen my electives for fall."
       },
       "retried_after_fail": false,
-      "failure_reason": "10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry."
+      "failure_reason": "10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry.",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
@@ -208,5 +210,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-06T23:12:32Z",
+  "r2_session_id": "routine-r2-20260706-230754"
 }

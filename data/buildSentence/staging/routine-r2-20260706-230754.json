@@ -1,0 +1,501 @@
+{
+  "items": [
+    {
+      "id": "a1",
+      "prompt": "I heard you weren't in class earlier.",
+      "answer": "I missed the entire morning biology lecture.",
+      "chunks": [
+        "I",
+        "the",
+        "entire",
+        "morning",
+        "biology",
+        "lecture"
+      ],
+      "prefilled": [
+        "missed"
+      ],
+      "prefilled_positions": {
+        "missed": 1
+      },
+      "distractor": "attended",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple past statement"
+      ]
+    },
+    {
+      "id": "a2",
+      "prompt": "You looked like you needed something at the front desk.",
+      "answer": "I asked whether the gym stays open late tonight.",
+      "chunks": [
+        "I",
+        "the",
+        "gym",
+        "stays",
+        "open",
+        "late",
+        "tonight"
+      ],
+      "prefilled": [
+        "asked whether"
+      ],
+      "prefilled_positions": {
+        "asked whether": 1
+      },
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "whether-clause"
+      ]
+    },
+    {
+      "id": "a3",
+      "prompt": "Your roommate seemed worried about the printer.",
+      "answer": "She wanted to know if the printer was fixed.",
+      "chunks": [
+        "she",
+        "if",
+        "the",
+        "printer",
+        "was",
+        "fixed"
+      ],
+      "prefilled": [
+        "wanted to know"
+      ],
+      "prefilled_positions": {
+        "wanted to know": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "if-clause"
+      ]
+    },
+    {
+      "id": "a4",
+      "prompt": "The librarian says your account has a hold.",
+      "answer": "I haven't returned the overdue library books yet.",
+      "chunks": [
+        "I",
+        "the",
+        "overdue",
+        "yet"
+      ],
+      "prefilled": [
+        "haven't returned",
+        "library books"
+      ],
+      "prefilled_positions": {
+        "haven't returned": 1,
+        "library books": 5
+      },
+      "distractor": "returning",
+      "has_question_mark": false,
+      "grammar_points": [
+        "negation",
+        "present perfect"
+      ]
+    },
+    {
+      "id": "a5",
+      "prompt": "You mentioned the study group meeting moved.",
+      "answer": "The tutor who runs our study group rescheduled everything.",
+      "chunks": [
+        "the",
+        "tutor",
+        "our",
+        "study",
+        "group",
+        "rescheduled",
+        "everything"
+      ],
+      "prefilled": [
+        "who runs"
+      ],
+      "prefilled_positions": {
+        "who runs": 2
+      },
+      "distractor": "reschedules",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause"
+      ]
+    },
+    {
+      "id": "a6",
+      "prompt": "I just got back from returning our vehicle.",
+      "answer": "Where did you park the rental car?",
+      "chunks": [
+        "where",
+        "did",
+        "you",
+        "park"
+      ],
+      "prefilled": [
+        "the rental car"
+      ],
+      "prefilled_positions": {
+        "the rental car": 4
+      },
+      "distractor": "were",
+      "has_question_mark": true,
+      "grammar_points": [
+        "direct wh-question"
+      ]
+    },
+    {
+      "id": "a7",
+      "prompt": "You told me you got feedback on your paper.",
+      "answer": "My economics professor praised the detailed research paper that I submitted.",
+      "chunks": [
+        "my economics",
+        "professor",
+        "praised",
+        "the",
+        "detailed",
+        "research",
+        "paper",
+        "submitted"
+      ],
+      "prefilled": [
+        "that I"
+      ],
+      "prefilled_positions": {
+        "that i": 8
+      },
+      "distractor": "wrote",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause"
+      ]
+    },
+    {
+      "id": "a8",
+      "prompt": "You seem relieved about the parking situation.",
+      "answer": "I've finally picked up my new campus parking permit.",
+      "chunks": [
+        "I've finally",
+        "my",
+        "new",
+        "campus"
+      ],
+      "prefilled": [
+        "picked up",
+        "parking permit"
+      ],
+      "prefilled_positions": {
+        "picked up": 2,
+        "parking permit": 7
+      },
+      "distractor": "getting",
+      "has_question_mark": false,
+      "grammar_points": [
+        "present perfect",
+        "contraction"
+      ]
+    },
+    {
+      "id": "a9",
+      "prompt": "You noticed the second floor is open again.",
+      "answer": "The reading room on the second floor was finally reopened to students.",
+      "chunks": [
+        "the reading",
+        "room",
+        "second",
+        "floor",
+        "was finally",
+        "reopened",
+        "to",
+        "students"
+      ],
+      "prefilled": [
+        "on the"
+      ],
+      "prefilled_positions": {
+        "on the": 3
+      },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": [
+        "passive voice"
+      ]
+    },
+    {
+      "id": "a10",
+      "prompt": "Your advisor asked about the apartment lease.",
+      "answer": "I asked if my apartment lease was ready.",
+      "chunks": [
+        "I",
+        "my",
+        "apartment",
+        "lease",
+        "was",
+        "ready"
+      ],
+      "prefilled": [
+        "asked if"
+      ],
+      "prefilled_positions": {
+        "asked if": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "if-clause"
+      ]
+    },
+    {
+      "id": "b1",
+      "prompt": "I saw you running for the bus stop.",
+      "answer": "I caught the early shuttle to campus.",
+      "chunks": [
+        "I",
+        "the",
+        "early",
+        "shuttle",
+        "to",
+        "campus"
+      ],
+      "prefilled": [
+        "caught"
+      ],
+      "prefilled_positions": {
+        "caught": 1
+      },
+      "distractor": "took",
+      "has_question_mark": false,
+      "grammar_points": [
+        "simple past statement"
+      ]
+    },
+    {
+      "id": "b2",
+      "prompt": "You wanted to check something with the registrar.",
+      "answer": "I asked if the deadline had already passed.",
+      "chunks": [
+        "I",
+        "the",
+        "deadline",
+        "had already",
+        "passed"
+      ],
+      "prefilled": [
+        "asked if"
+      ],
+      "prefilled_positions": {
+        "asked if": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "if-clause"
+      ]
+    },
+    {
+      "id": "b3",
+      "prompt": "Your advisor seemed curious about your plans.",
+      "answer": "He wanted to know whether I had chosen a major.",
+      "chunks": [
+        "he",
+        "whether",
+        "I",
+        "had",
+        "chosen",
+        "a",
+        "major"
+      ],
+      "prefilled": [
+        "wanted to know"
+      ],
+      "prefilled_positions": {
+        "wanted to know": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "whether-clause"
+      ]
+    },
+    {
+      "id": "b4",
+      "prompt": "You mentioned the trip sign-up is filling up.",
+      "answer": "I have not paid the field trip deposit yet.",
+      "chunks": [
+        "I",
+        "the",
+        "deposit",
+        "yet"
+      ],
+      "prefilled": [
+        "have not paid",
+        "field trip"
+      ],
+      "prefilled_positions": {
+        "have not paid": 1,
+        "field trip": 5
+      },
+      "distractor": "never",
+      "has_question_mark": false,
+      "grammar_points": [
+        "negation",
+        "present perfect"
+      ]
+    },
+    {
+      "id": "b5",
+      "prompt": "You were talking to someone about the noise.",
+      "answer": "The neighbor who filed a noise complaint apologized quickly.",
+      "chunks": [
+        "the",
+        "neighbor",
+        "a",
+        "noise",
+        "complaint",
+        "apologized",
+        "quickly"
+      ],
+      "prefilled": [
+        "who filed"
+      ],
+      "prefilled_positions": {
+        "who filed": 2
+      },
+      "distractor": "filing",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause"
+      ]
+    },
+    {
+      "id": "b6",
+      "prompt": "I heard the workshop schedule changed this week.",
+      "answer": "When does your writing workshop start on Monday?",
+      "chunks": [
+        "when",
+        "does",
+        "start",
+        "on",
+        "Monday"
+      ],
+      "prefilled": [
+        "your writing workshop"
+      ],
+      "prefilled_positions": {
+        "your writing workshop": 2
+      },
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": [
+        "direct wh-question"
+      ]
+    },
+    {
+      "id": "b7",
+      "prompt": "You showed me your presentation diagram.",
+      "answer": "My biology instructor praised the well-labeled diagram that I created for class.",
+      "chunks": [
+        "my biology instructor",
+        "praised",
+        "the",
+        "well-labeled",
+        "diagram",
+        "created",
+        "for",
+        "class"
+      ],
+      "prefilled": [
+        "that I"
+      ],
+      "prefilled_positions": {
+        "that i": 7
+      },
+      "distractor": "drew",
+      "has_question_mark": false,
+      "grammar_points": [
+        "relative clause"
+      ]
+    },
+    {
+      "id": "b8",
+      "prompt": "You seem excited about the new equipment.",
+      "answer": "I've already tried the new rowing machine this week.",
+      "chunks": [
+        "I've already",
+        "the",
+        "new",
+        "this",
+        "week"
+      ],
+      "prefilled": [
+        "tried",
+        "rowing machine"
+      ],
+      "prefilled_positions": {
+        "tried": 2,
+        "rowing machine": 5
+      },
+      "distractor": "trying",
+      "has_question_mark": false,
+      "grammar_points": [
+        "present perfect",
+        "contraction"
+      ]
+    },
+    {
+      "id": "b9",
+      "prompt": "You noticed the cafeteria looks different.",
+      "answer": "The salad bar near my dorm was recently renovated.",
+      "chunks": [
+        "the",
+        "salad",
+        "bar",
+        "was recently",
+        "renovated"
+      ],
+      "prefilled": [
+        "near my dorm"
+      ],
+      "prefilled_positions": {
+        "near my dorm": 3
+      },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": [
+        "passive voice"
+      ]
+    },
+    {
+      "id": "b10",
+      "prompt": "You were waiting on news about your thesis.",
+      "answer": "I found out whether my thesis draft was approved.",
+      "chunks": [
+        "I",
+        "whether",
+        "my",
+        "thesis",
+        "draft",
+        "was",
+        "approved"
+      ],
+      "prefilled": [
+        "found out"
+      ],
+      "prefilled_positions": {
+        "found out": 1
+      },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": [
+        "embedded question",
+        "whether-clause"
+      ]
+    }
+  ]
+}
