@@ -1,57 +1,49 @@
 {
-  "session_id": "routine-20260706-170309",
-  "generated_at": "2026-07-06T17:15:32.593Z",
+  "session_id": "routine-20260706-190422",
+  "generated_at": "2026-07-06T19:29:22.798Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 96,
-    "quality": 96
+    "diversity": 93,
+    "quality": 95
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 0,
+      "diversity_score": 80,
       "diversity_threshold": 90,
-      "quality_score": 0,
+      "quality_score": 94,
       "quality_threshold": 95,
       "failures": [
-        "R1 accepted=0 (full failure)"
+        "多样性 80 < 90",
+        "质量 94 < 95"
       ],
       "diversity_breakdown": [
-        "R1 produced 0 valid items"
+        "角色名 3/20",
+        "场景 20/20",
+        "句型 4/5",
+        "开头 3/4",
+        "prefilled类型 5/4 (top:mid-noun-or-adj 9/20)",
+        "人物当prefilled 0/20 (0%, TPO~30%)",
+        "干扰词 11种 (top:did 30%)",
+        "chunk颗粒 6.8块/题 单词率92% (TPO~6块/77%)",
+        "题面对话化 17/20 (85% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry."
+        "块数 15/20",
+        "干扰词 20/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry.\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "角色名重复严重 (3/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
+        "质量校验有偏差: 块数 15/20, 干扰词 20/20, 答案长度 20/20, 重组正确 20/20 — recheck schema compliance"
       ],
-      "items_to_supplement": 20
-    },
-    {
-      "bank": "reading-rdl-short",
-      "diversity_score": 70,
-      "diversity_threshold": 80,
-      "quality_score": 100,
-      "quality_threshold": 85,
-      "failures": [
-        "多样性 70 < 80"
-      ],
-      "diversity_breakdown": [
-        "话题 4/4",
-        "notice 0 · email 3"
-      ],
-      "quality_breakdown": [
-        "词数 4/4"
-      ],
-      "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
-      ],
-      "items_to_supplement": 2
+      "items_to_supplement": 10
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 80,
+      "diversity_score": 100,
       "diversity_threshold": 70,
       "quality_score": 0,
       "quality_threshold": 85,
@@ -60,7 +52,7 @@
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 1"
+        "notice 1 · email 1"
       ],
       "quality_breakdown": [
         "词数 0/2"

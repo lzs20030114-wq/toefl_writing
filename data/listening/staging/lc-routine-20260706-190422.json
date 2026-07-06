@@ -1,0 +1,274 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a detective TV series to each other",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you started that new detective series everyone's talking about? I finished the whole first season last night." },
+        { "speaker": "Man", "text": "Not yet, honestly. I'm a little burned out on crime shows lately." },
+        { "speaker": "Woman", "text": "I get that, but this one's different. It's really about the two sisters, not the case." },
+        { "speaker": "Man", "text": "Huh, so it's more of a character drama?" },
+        { "speaker": "Woman", "text": "Exactly. The mystery's almost background — you'd probably love the writing." },
+        { "speaker": "Man", "text": "Okay, you've sold me." },
+        { "speaker": "Woman", "text": "Just don't read anything online first. That ending twist got spoiled for half my class." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the woman talking to the man?",
+          "options": {
+            "A": "To recommend a TV series to him",
+            "B": "To ask him about a crime novel she just finished",
+            "C": "To warn him about online spoilers",
+            "D": "To complain that a series disappointed her"
+          },
+          "answer": "A",
+          "explanation": "女生一直在向男生安利这部侦探剧，说它跟普通犯罪剧不同、写得好，是在推荐这部剧，故A正确。B错：对话谈的是一部电视剧而非小说（wrong_topic）。C错：提醒别看剧透只是结尾的次要一句，不是谈话主旨（too_narrow）。D错：她非常喜欢这部剧，并没有觉得失望，与事实相反（reversed_situation）。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Cancel all his other crime shows",
+            "B": "Avoid the series like other crime shows",
+            "C": "Start watching the series this weekend",
+            "D": "Lend the woman a detective novel"
+          },
+          "answer": "C",
+          "explanation": "男生说\"你说服我了\"，接受了女生的推荐，接下来最可能去看这部剧，故C正确。A错：对话没提到取消其他犯罪剧，属过度推断（over_inference）。B错：他本来因厌倦犯罪剧想回避，但已改变主意决定去看（rejected_option）。D错：借小说与对话无关，纯属无中生有（unrelated_next_step）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So are we still on for the beach this Saturday? I've looked forward to it all week." },
+        { "speaker": "Man", "text": "Definitely. Although the tide chart says high tide hits around noon, so the sand gets narrow then." },
+        { "speaker": "Woman", "text": "Oh no, really?" },
+        { "speaker": "Man", "text": "Yeah. We should head out early and claim a spot before the crowds arrive." },
+        { "speaker": "Woman", "text": "Good idea. If we leave by eight, we'll get parking near the north entrance too." },
+        { "speaker": "Man", "text": "Perfect. I'll bring the cooler and grab ice on the way." },
+        { "speaker": "Woman", "text": "And I'll pack sandwiches and the umbrella. Text me when you're leaving." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which beach they should visit this coming Saturday",
+            "B": "How to plan their Saturday beach trip",
+            "C": "When high tide will reach the beach",
+            "D": "Whether to cancel their beach trip"
+          },
+          "answer": "B",
+          "explanation": "两人围绕周六去海滩的安排展开：几点出发、停车、谁带什么，主题是筹划这次海滩之行，故B正确。A错：他们从没讨论去哪个海滩，地点是既定的（wrong_topic）。C错：涨潮时间只是决定早出发的一个细节，不是主旨（too_narrow）。D错：两人都在积极准备，并没有要取消，与事实相反（reversed_situation）。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do before leaving?",
+          "options": {
+            "A": "Reschedule the whole trip for Sunday morning",
+            "B": "Wait until noon to avoid the crowds",
+            "C": "Pack the sandwiches and beach umbrella himself",
+            "D": "Get ice on his way there"
+          },
+          "answer": "D",
+          "explanation": "男生说\"我带冰盒，路上买冰\"，所以出发前会顺路买冰，故D正确。A错：没人提改到周日，属过度推断（over_inference）。B错：他们决定要早出发避开人群，等到中午与之相反（rejected_option）。C错：带三明治和遮阳伞是女生的任务，张冠李戴（unrelated_next_step）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I'm so bored of my playlist. It's the same three pop singers on repeat." },
+        { "speaker": "Man", "text": "I know that feeling. Have you tried any indie folk? There's a band called River Lantern." },
+        { "speaker": "Woman", "text": "River Lantern?" },
+        { "speaker": "Man", "text": "Yeah. They're mellow, lots of acoustic guitar. Their second album is perfect for studying." },
+        { "speaker": "Woman", "text": "That actually sounds nice. Where can I listen to them?" },
+        { "speaker": "Man", "text": "They're on every streaming app. I'll send you the album link right now." },
+        { "speaker": "Woman", "text": "Great, thanks! I'll play it while I finish my essay tonight." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man recommend to the woman?",
+          "options": {
+            "A": "A famous pop singer's new album",
+            "B": "A playlist for late-night studying",
+            "C": "An indie folk band's album",
+            "D": "A live acoustic concert nearby"
+          },
+          "answer": "C",
+          "explanation": "男生推荐了一支叫River Lantern的独立民谣乐队，还夸他们的第二张专辑适合学习，故C正确。A错：女生正是厌倦了流行歌手，男生推荐的不是流行歌手（wrong_detail）。B错：对话没有推荐某个学习歌单，只是说专辑适合学习（related_but_not_stated）。D错：从未提到现场音乐会（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Play the album while she studies",
+            "B": "Replay her old pop playlist again",
+            "C": "Go see River Lantern perform live",
+            "D": "Start writing songs for her own band"
+          },
+          "answer": "A",
+          "explanation": "女生说\"我今晚写论文时放来听\"，所以接下来会边学习边听这张专辑，故A正确。B错：她已经厌倦了旧的流行歌单，不会再重复听（rejected_option）。C错：看现场演出对话中毫无依据（unrelated_next_step）。D错：自己组乐队写歌远超对话内容，属过度推断（over_inference）。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends deciding between joining the photography club and the intramural frisbee team",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally have time for something fun this semester. I'm torn between the photography club and intramural frisbee." },
+        { "speaker": "Man", "text": "Oh, nice. Does the photography club still meet on Thursday nights?" },
+        { "speaker": "Woman", "text": "Yeah, seven to nine in the arts building. But frisbee practice is the same slot." },
+        { "speaker": "Man", "text": "That's a tough clash." },
+        { "speaker": "Woman", "text": "I know. Though the frisbee league is pretty casual — more about getting outside than winning." },
+        { "speaker": "Man", "text": "Then start with photography, since you've wanted to learn editing for ages." },
+        { "speaker": "Woman", "text": "You're right. I can always try frisbee in the spring." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When does the photography club meet?",
+          "options": {
+            "A": "Every weekend afternoon in the sports hall",
+            "B": "Twice a week in the library",
+            "C": "Friday nights in the arts building",
+            "D": "Thursday nights in the arts building"
+          },
+          "answer": "D",
+          "explanation": "女生说摄影社周四晚七到九点在艺术楼活动，故D正确。A错：地点和时间都错，那更像运动项目（wrong_detail）。B错：对话没提每周两次或在图书馆（related_but_not_stated）。C错：把周四说成周五，改动了关键的日子（wrong_detail）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do this semester?",
+          "options": {
+            "A": "Quit both activities to focus on studies",
+            "B": "Join the photography club this semester",
+            "C": "Play on the frisbee team now",
+            "D": "Sign up for a weekend photography trip"
+          },
+          "answer": "B",
+          "explanation": "男生建议先参加摄影社，女生同意并说飞盘可以留到春季，所以本学期会先加入摄影社，故B正确。A错：她想找点乐子，不是放弃两者，属过度推断（over_inference）。C错：她明确把飞盘推迟到春季，现在不打（rejected_option）。D错：周末摄影出游对话从未提及（unrelated_next_step）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a pottery art class one of them took",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How was that pottery class you signed up for? I've been curious about it." },
+        { "speaker": "Man", "text": "Honestly, harder than I expected, but I loved it. We made our first bowls today." },
+        { "speaker": "Woman", "text": "Bowls already?" },
+        { "speaker": "Man", "text": "Well, they're pretty lopsided, but the instructor says that's totally normal at the start." },
+        { "speaker": "Woman", "text": "That's still impressive. Do you get to keep what you make?" },
+        { "speaker": "Man", "text": "Yeah, once they're fired in the kiln next week. You should join the next session." },
+        { "speaker": "Woman", "text": "Maybe I will. I'll check if there are any spots left." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man make in class today?",
+          "options": {
+            "A": "His first clay bowls",
+            "B": "A set of painted plates",
+            "C": "A large ceramic vase",
+            "D": "A small garden sculpture"
+          },
+          "answer": "A",
+          "explanation": "男生说他们今天做了第一批碗，故A正确。B错：他做的是碗不是彩绘盘子，改动了关键事物（wrong_detail）。C错：大花瓶对话中没有提到（related_but_not_stated）。D错：花园雕塑同样从未出现（related_but_not_stated）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Sign up for the advanced pottery course",
+            "B": "Decide the class isn't for her",
+            "C": "Check whether spots remain in the class",
+            "D": "Buy her own pottery wheel today"
+          },
+          "answer": "C",
+          "explanation": "女生说\"也许我会去，我去看看还有没有名额\"，所以接下来会去查是否还有空位，故C正确。A错：她是刚起步的新手，报高级班属过度推断（over_inference）。B错：她表现出兴趣，觉得课程不适合自己与之相反（rejected_option）。D错：买陶轮对话中毫无依据（unrelated_next_step）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}

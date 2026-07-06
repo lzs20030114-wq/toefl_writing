@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "There's loud music coming from upstairs again tonight.",
+      "options": {
+        "A": "Oh, was it keeping you up?",
+        "B": "I just bought a new speaker system.",
+        "C": "The recycling truck comes on Tuesdays.",
+        "D": "Thanks, I've been practicing guitar a lot."
+      },
+      "answer": "A",
+      "explanation": "邻居委婉地抱怨这几晚音乐太吵，暗示希望对方注意音量。正确答案A用反问'Oh, was it keeping you up?'回应，主动关心并推进对话，属于counter_question范式。B借'music'联想到买了新音响，属于语义联想陷阱，答非所问。C说回收车周二来，完全离题。D把邻居的抱怨误解成夸奖，回了句'谢谢，我最近常练吉他'，属于误解型干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Aren't you in the mood for some tacos?",
+      "options": {
+        "A": "That restaurant has great reviews online.",
+        "B": "Actually, I'm kind of craving pizza.",
+        "C": "My roommate is visiting her parents.",
+        "D": "It's about a ten-minute walk from here."
+      },
+      "answer": "B",
+      "explanation": "朋友问对方想不想吃塔可。正确答案B以话语标记'Actually'开头，委婉地提出自己更想吃披萨的替代方案，属于marker_led_indirect范式。A借'tacos'联想到餐厅评价，属于语义联想陷阱。C谈室友回家看父母，完全离题。D回答的是'有多远'而非'想吃什么'，属于答错问题类型的干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How much are tickets for the jazz night?",
+      "options": {
+        "A": "The jazz band rehearses in the hall every Thursday.",
+        "B": "I left my jacket back in the library.",
+        "C": "Don't worry, I've got a spare one.",
+        "D": "The concert hall seats about five hundred."
+      },
+      "answer": "C",
+      "explanation": "学生问爵士之夜的票价，背后的需求是想去看演出。正确答案C不直接报价，而是用'Don't worry, I've got a spare one'直接解决对方的需求——送一张多余的票，属于context_shift范式。A借'jazz'联想到乐队排练时间，属于语义联想陷阱。B说把外套落在图书馆，完全离题。D答的是'能坐多少人'而非票价，属于答错问题类型的干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where do you keep the old newspaper archives?",
+      "options": {
+        "A": "The newspaper club meets in room number twelve.",
+        "B": "My library card expired last month.",
+        "C": "They were digitized a few years ago.",
+        "D": "Are you looking for a specific date?"
+      },
+      "answer": "D",
+      "explanation": "学生问图书馆员旧报纸档案存放在哪里。正确答案D用反问'Are you looking for a specific date?'推进对话，先确认需求再指路，属于counter_question范式。A借'newspaper'联想到报社社团开会地点，属于语义联想陷阱。B说借书证上月过期，完全离题。C答的是'什么时候数字化的'而非'放在哪儿'，属于答错问题类型的干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why do we need to include raw data?",
+      "options": {
+        "A": "It's all about backing up your results.",
+        "B": "The data center is across campus.",
+        "C": "I finished my chemistry homework early.",
+        "D": "You can attach it all as an appendix."
+      },
+      "answer": "A",
+      "explanation": "学生问助教为什么实验报告里要附原始数据。正确答案A用地道口语'It's all about backing up your results'点明原因——是为了佐证结论，属于idiomatic范式。B借'data'联想到数据中心的位置，属于语义联想陷阱。C说自己早早写完化学作业，完全离题。D答的是'放在哪里/怎么放'（附在附录）而非'为什么'，属于答错问题类型的干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "We're starting a study group for the midterm.",
+      "options": {
+        "A": "The midterm covers the first five chapters.",
+        "B": "Sure, count me in for that.",
+        "C": "My bike got a flat tire today.",
+        "D": "Our tour group leaves at nine tomorrow."
+      },
+      "answer": "B",
+      "explanation": "朋友说要为期中考试组个学习小组，暗含邀请。正确答案B以话语标记'Sure'开头，爽快地答应加入，属于marker_led_indirect范式。A借'midterm'谈考试范围，属于语义联想陷阱，没回应邀请。C说自己自行车爆胎，完全离题。D把'group'误解成'旅行团'，说旅行团明早九点出发，属于一词多义误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Aren't they closing the gym pretty soon?",
+      "options": {
+        "A": "The gym just added new treadmills last week.",
+        "B": "I left my water bottle at home.",
+        "C": "Our dorm gym stays open all night.",
+        "D": "It's right next to the parking lot."
+      },
+      "answer": "C",
+      "explanation": "学生问健身房是不是快关门了，背后的需求是想找地方锻炼。正确答案C不纠结关门时间，而是提供替代方案'Our dorm gym stays open all night'，直接解决锻炼需求，属于context_shift范式。A借'gym'联想到新添的跑步机，属于语义联想陷阱。B说水杯落在家里，完全离题。D答的是'在哪里'（挨着停车场）而非'是否/何时关门'，属于答错问题类型的干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the best time for your checkup?",
+      "options": {
+        "A": "The clinic just hired a new dentist.",
+        "B": "My cousin moved to Chicago last spring.",
+        "C": "Yes, I've been feeling much better.",
+        "D": "Honestly, the sooner the better."
+      },
+      "answer": "D",
+      "explanation": "对方在帮忙约体检时间，问什么时段最合适。正确答案D用地道口语'Honestly, the sooner the better'表达越早越好，自然得体地回应，属于idiomatic范式。A借'checkup'联想到诊所新招了牙医，属于语义联想陷阱。B说表亲春天搬去芝加哥，完全离题。C把'checkup'误解成问身体状况，答'是的，我感觉好多了'，属于误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "misinterpretation"
+      }
+    }
+  ]
+}
