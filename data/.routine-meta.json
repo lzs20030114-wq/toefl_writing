@@ -1,44 +1,43 @@
 {
-  "session_id": "routine-20260705-170307",
-  "completed_at": "2026-07-05T17:40:12Z",
-  "duration_minutes": 37,
+  "session_id": "routine-20260706-170309",
+  "completed_at": "2026-07-06T17:14:24Z",
+  "duration_minutes": 11,
   "model": "Claude Sonnet 5",
-  "highlight": "新增\"安静请假\"社会学讨论题 + 杠杆原理物理听力题，BS 库通过难度冻结门(59 sets)",
+  "highlight": "BS 库因 givenSlots 重建失败 + 重复题被拒绝合库，其余 11 个题库正常产出",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 30,
+      "accepted": 0,
       "topics": [
+        "simple past statement",
+        "direct wh-question",
         "indirect/embedded question",
         "negation",
         "relative clause",
-        "modal",
         "passive voice",
-        "direct wh-question",
-        "modal advice"
+        "comparative",
+        "semi-modal 'used to'"
       ],
       "favorite": {
-        "prompt": "Did you finish moving into the new apartment?",
-        "answer": "The friend who helped me move canceled at the last minute."
+        "prompt": "What did the academic advisor ask you during registration?",
+        "answer": "She wanted to know whether I had already chosen my electives for fall."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": "10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry."
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "sociology",
-        "business",
-        "public policy",
-        "computer science"
+        "marine biology",
+        "political science",
+        "public health",
+        "education"
       ],
       "favorite": {
-        "subtopic": "sociology",
-        "preview": "We've been discussing how digital tools are reshaping workplace norms this semester. A growing trend called"
+        "subtopic": "marine biology",
+        "preview": "A number of coastal regions have begun sinking decommissioned ships and even old subway cars to create artificial reefs"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -49,12 +48,12 @@
       "topics": [
         "服务与活动",
         "校园学业",
-        "住宿",
-        "职场工作"
+        "消费售后",
+        "日常社交"
       ],
       "favorite": {
-        "subtopic": "住宿",
-        "preview": "You live in a university apartment complex, and the card reader on the laundry room door has stopped working"
+        "subtopic": "校园学业",
+        "preview": "You are a sophomore hoping to switch from the Tuesday discussion section of your psychology course to the Thursday section because your new part-time job now conflicts with Tuesday afternoons."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,15 +62,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "technology/steam power",
-        "art/cinema history",
-        "geology/ice ages",
-        "history/trade routes",
-        "environmental_science/desertification"
+        "anthropology/cultural rituals",
+        "psychology/motivation",
+        "environmental_science/wetlands",
+        "biology/camouflage",
+        "art/mosaic art"
       ],
       "favorite": {
-        "subtopic": "environmental_science/desertification",
-        "preview": "Desertification is the gradual process by which productive, vegetated land deteriorates into arid, unproductive"
+        "subtopic": "environmental_science/wetlands",
+        "preview": "Wetlands are transitional ecosystems in which the water table remains at or near the land surface for a"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -80,16 +79,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/plant biology",
-        "environmental_science/conservation",
-        "psychology/perception",
-        "history/exploration",
-        "geology/rock formation",
-        "astronomy/nebulae"
+        "technology/satellite navigation systems",
+        "anthropology/domestication of animals",
+        "art/stained glass windows",
+        "sociology/social capital",
+        "chemistry/fermentation chemistry",
+        "physics/thermal expansion"
       ],
       "favorite": {
-        "subtopic": "psychology/perception",
-        "preview": "Perception is the process by which the brain organizes sensory information into a coherent picture of the"
+        "subtopic": "sociology/social capital",
+        "preview": "Social capital refers to the networks of trust and mutual obligation that help communities function smoo"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -98,14 +97,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "email/meal plan refund",
-        "email/office hours change",
-        "email/interlibrary loan",
-        "email/office hours and fee"
+        "email/lab safety training",
+        "email/hiking club reschedule",
+        "flyer/photo contest",
+        "email/student ID replacement"
       ],
       "favorite": {
-        "subtopic": "email/interlibrary loan",
-        "preview": "The interlibrary loan book you requested, Cognitive Maps in Urban Design, has arrived at the Circulation"
+        "subtopic": "flyer",
+        "preview": "CAMPUS PHOTO CONTEST! Submit up to three photos on the theme \"Everyday Wonder\" by Friday, September 25, 11:59 PM."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -114,12 +113,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "email/flu shot appointment",
-        "email/study group formation"
+        "email/campus radio DJ recruitment",
+        "social_media/student flashcard app"
       ],
       "favorite": {
-        "subtopic": "email/study group formation",
-        "preview": "A few of us are putting together a study group for the microeconomics final on December 9, and we wanted"
+        "subtopic": "social_media",
+        "preview": "Just shipped the beta of StudyStack, the flashcard app I built for our intro chemistry class, and I honestly can't stop refreshing"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -128,14 +127,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "biology/cleaner fish symbiosis",
-        "music/recording technology",
-        "physics/lever principle",
-        "art_history/impressionist outdoor painting"
+        "linguistics/bouba-kiki effect",
+        "behavioral_economics/sunk cost fallacy",
+        "paleontology/trace fossils",
+        "meteorology/Coriolis effect"
       ],
       "favorite": {
-        "subtopic": "physics/lever principle",
-        "preview": "A lever is a simple machine that multiplies an applied force by redistributing it across a rigid bar"
+        "subtopic": "paleontology/how trace fossils reveal ancient animal behavior rather than anatomy",
+        "preview": "Trace fossils, sometimes called ichnofossils, record the activity of ancient organisms rather than preserving their actual"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -144,15 +143,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "plans_social/concert tickets",
-        "campus_dorm_life/quiet hours",
-        "plans_social/dinner party",
-        "recommendations_opinions/podcast",
-        "recommendations_opinions/restaurant"
+        "plans_social/rock-climbing vs kayaking trip",
+        "recommendations_opinions/board-game cafe",
+        "errands_service/mixed-up food delivery",
+        "campus_dorm_life/mini-fridge vs microwave",
+        "recommendations_opinions/study-focus apps"
       ],
       "favorite": {
-        "subtopic": "plans_social/concert tickets",
-        "preview": "Have you seen how fast tickets for the fall concert are selling? I keep debating whether to buy"
+        "subtopic": "recommendations_opinions/two students debating whether a newly opened board-game cafe is worth visiting for a study break",
+        "preview": "Have you tried that new board-game cafe near the quad? I keep hearing mixed things about the cover charge."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -161,15 +160,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "facility_change/fitness equipment",
-        "academic_event/essay competition",
-        "facility_change/lounge closure",
-        "guest_speaker/author visit",
-        "campus_activity/movie night"
+        "facility_change/game room and arcade lounge reopening",
+        "campus_activity/night market with food trucks",
+        "career_services/resume critique clinic",
+        "info_session/housing accessibility info session",
+        "info_session/counseling center walk-in hours"
       ],
       "favorite": {
-        "subtopic": "guest_speaker/author visit",
-        "preview": "I'm pleased to announce that award-winning novelist Elena Marsh will be visiting our department next Tuesday"
+        "subtopic": "campus_activity/night market with food trucks and student vendor booths",
+        "preview": "We're excited to announce the second annual Campus Night Market this Thursday from 6 to 9 p.m. on the East Quad."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -178,18 +177,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
+        "campus_academic/borrowing lecture notes",
+        "general_daily/arranging a ride or carpool",
         "general_daily/bank hours",
-        "general_daily/neighbor noise",
-        "social/stress support",
-        "general_daily/directions",
-        "social/friend news",
-        "campus_daily/dorm maintenance",
-        "social/schedule conflict",
-        "social/friend concern"
+        "campus_daily/shuttle or parking",
+        "campus_academic/writing center help",
+        "general_daily/store return or exchange",
+        "social/friend sharing news",
+        "social/offering help to a stressed friend"
       ],
       "favorite": {
-        "subtopic": "social/friend concern",
-        "preview": "I'm worried about my roommate, she's barely eating anything these days."
+        "subtopic": "general_daily/asking a store clerk about a return or exchange",
+        "preview": "Do I need the original packaging to return this?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -198,18 +197,16 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "IT Help Desk",
-        "Recycling Center Tour",
-        "Planetarium Visit"
+        "Campus Bookstore",
+        "Swimming Pool Orientation",
+        "Botanical Garden Tour"
       ],
       "favorite": {
-        "subtopic": "Recycling Center Tour",
-        "preview": "Before you leave, check the posted schedule for special collection days, since some materials are only accepted"
+        "prompt": "Botanical Garden Tour",
+        "answer": "Flower beds are arranged by season."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-05T19:44:36.078Z",
-  "r2_session_id": "routine-r2-20260705-193106"
+  }
 }

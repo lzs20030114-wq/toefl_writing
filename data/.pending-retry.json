@@ -1,56 +1,45 @@
 {
-  "session_id": "routine-20260705-170307",
-  "generated_at": "2026-07-05T17:42:30.307Z",
+  "session_id": "routine-20260706-170309",
+  "generated_at": "2026-07-06T17:15:32.593Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 89,
-    "quality": 97
+    "diversity": 96,
+    "quality": 96
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 78,
+      "diversity_score": 0,
       "diversity_threshold": 90,
-      "quality_score": 100,
+      "quality_score": 0,
       "quality_threshold": 95,
       "failures": [
-        "多样性 78 < 90"
+        "R1 accepted=0 (full failure)"
       ],
       "diversity_breakdown": [
-        "角色名 3/20",
-        "场景 20/20",
-        "句型 3/5",
-        "开头 3/4",
-        "prefilled类型 7/4 (top:verb-phrase 6/20)",
-        "人物当prefilled 1/20 (5%, TPO~30%)",
-        "干扰词 17种 (top:did 10%)",
-        "chunk颗粒 5.2块/题 单词率67% (TPO~6块/77%)",
-        "题面对话化 14/20 (70% 含you, TPO~72%)"
+        "R1 produced 0 valid items"
       ],
       "quality_breakdown": [
-        "块数 20/20",
-        "干扰词 20/20",
-        "答案长度 20/20",
-        "重组正确 20/20"
+        "10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry."
       ],
       "hints": [
-        "角色名重复严重 (3/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "R1 generated 20 items but all were rejected. Failure reason: \"10/20 items passed per-item validation, forming exactly one 10-question set; that set failed strict validation on 2 items (givenSlots/answerOrder mismatch on ets_s61_q6; ets_s61_q10 duplicated an existing bank question) so mergeClaude.mjs refused the merge and left the live bank untouched (60 sets, unchanged). Left for R2/pending-retry.\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
       ],
-      "items_to_supplement": 10
+      "items_to_supplement": 20
     },
     {
       "bank": "reading-rdl-short",
-      "diversity_score": 60,
+      "diversity_score": 70,
       "diversity_threshold": 80,
       "quality_score": 100,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 80"
+        "多样性 70 < 80"
       ],
       "diversity_breakdown": [
         "话题 4/4",
-        "notice 0 · email 4"
+        "notice 0 · email 3"
       ],
       "quality_breakdown": [
         "词数 4/4"
@@ -62,28 +51,24 @@
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 60,
+      "diversity_score": 80,
       "diversity_threshold": 70,
       "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70",
         "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 2"
+        "notice 0 · email 1"
       ],
       "quality_breakdown": [
         "词数 0/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
         "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
     }
-  ],
-  "resolved_at": "2026-07-05T19:44:36.078Z",
-  "resolution_status": "supplemented"
+  ]
 }

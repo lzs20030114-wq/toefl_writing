@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Why are you late to class?",
+      "answer": "I missed the morning bus.",
+      "chunks": ["i", "missed", "the", "morning", "bus"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "time noun phrase 'morning bus'"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "I just joined the outdoor club this week.",
+      "answer": "Where do we meet for the first hike?",
+      "chunks": ["do", "meet", "for the", "first hike", "did"],
+      "prefilled": ["where", "we"],
+      "prefilled_positions": {"where": 0, "we": 2},
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "subject-verb agreement 'do'"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Are you excited about the trip this weekend?",
+      "answer": "I already packed my hiking boots.",
+      "chunks": ["i", "packed", "my", "hiking boots", "packing"],
+      "prefilled": ["already"],
+      "prefilled_positions": {"already": 1},
+      "distractor": "packing",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "adverb 'already'"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "Have you picked a topic for your presentation?",
+      "answer": "I chose the water conservation project.",
+      "chunks": ["i", "chose", "the", "water conservation", "project"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "compound noun 'water conservation'"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "What did Professor Alvarez ask you after the presentation?",
+      "answer": "She wanted to know how I sourced my data.",
+      "chunks": ["she", "wanted to know", "i", "sourced", "my", "data", "did"],
+      "prefilled": ["how"],
+      "prefilled_positions": {"how": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with 'how'", "possessive 'my'"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "What did the barista tell you about the rewards app?",
+      "answer": "She asked whether the rewards app synced automatically.",
+      "chunks": ["she", "whether", "the", "rewards", "app", "synced"],
+      "prefilled": ["asked", "automatically"],
+      "prefilled_positions": {"asked": 1, "automatically": 7},
+      "distractor": "syncing",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question (whether-clause)", "adverb 'automatically'"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Why did you miss the study group meeting?",
+      "answer": "I wondered whether the meeting started later.",
+      "chunks": ["i", "whether", "the", "meeting", "started", "later"],
+      "prefilled": ["wondered"],
+      "prefilled_positions": {"wondered": 1},
+      "distractor": "wondering",
+      "has_question_mark": false,
+      "grammar_points": ["indirect/embedded question (whether-clause)", "adverb 'later'"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "Did you sign up for the campus 5K yet?",
+      "answer": "I haven't registered for the run this year.",
+      "chunks": ["i", "registered", "for the", "run", "this", "year"],
+      "prefilled": ["haven't"],
+      "prefilled_positions": {"haven't": 1},
+      "distractor": "registering",
+      "has_question_mark": false,
+      "grammar_points": ["negation \"haven't\"", "time adverbial 'this year'"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did Julian tell you about the group project slides?",
+      "answer": "He hasn't finished his half of the slides.",
+      "chunks": ["finished", "his", "half", "of", "the", "slides"],
+      "prefilled": ["he", "hasn't"],
+      "prefilled_positions": {"he": 0, "hasn't": 1},
+      "distractor": "finishing",
+      "has_question_mark": false,
+      "grammar_points": ["negation \"hasn't\"", "possessive 'his'"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "What did you think of the new gym trainer?",
+      "answer": "The trainer who redesigned our workout plan is excellent.",
+      "chunks": ["the trainer", "who redesigned", "our", "workout", "plan", "excellent"],
+      "prefilled": ["is"],
+      "prefilled_positions": {"is": 7},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause 'who'", "linking verb 'is'"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "What did the IT office tell you about the wifi outage?",
+      "answer": "The dorm's wifi was finally restored this afternoon.",
+      "chunks": ["the dorm's", "wifi", "finally", "restored", "this", "afternoon"],
+      "prefilled": ["was"],
+      "prefilled_positions": {"was": 3},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice 'was restored'", "time adverbial 'this afternoon'"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Matthew said the rec center added new equipment.",
+      "answer": "Which machines did they add this time?",
+      "chunks": ["which", "machines", "they", "add", "this", "time"],
+      "prefilled": ["did"],
+      "prefilled_positions": {"did": 2},
+      "distractor": "have",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "past tense 'did...add'"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Alison mentioned a new bakery opened downtown.",
+      "answer": "What time does it open on weekends?",
+      "chunks": ["what", "time", "it", "open", "on", "weekends"],
+      "prefilled": ["does"],
+      "prefilled_positions": {"does": 2},
+      "distractor": "is",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "subject-verb agreement 'does'"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "How is your new part-time job going?",
+      "answer": "This position pays better than my last one.",
+      "chunks": ["this", "position", "pays", "my", "last", "one"],
+      "prefilled": ["better than"],
+      "prefilled_positions": {"better than": 3},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["comparative 'better than'", "present tense statement"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "I heard the theater downtown is showing something new.",
+      "answer": "I bought two tickets and invited my roommate.",
+      "chunks": ["bought", "two", "tickets", "and", "invited", "my roommate"],
+      "prefilled": ["i"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "buying",
+      "has_question_mark": false,
+      "grammar_points": ["conjoined predicates", "compound object 'two tickets'"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Where did you end up eating dinner last night?",
+      "answer": "We tried the new noodle place near the stadium.",
+      "chunks": ["tried", "the", "new", "noodle", "place", "stadium"],
+      "prefilled": ["we", "near the"],
+      "prefilled_positions": {"we": 0, "near the": 6},
+      "distractor": "trying",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "prepositional phrase 'near the stadium'"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "What did the academic advisor ask you during registration?",
+      "answer": "She wanted to know whether I had already chosen my electives for fall.",
+      "chunks": ["she", "wanted to know", "i had", "already chosen", "my", "electives", "for fall"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 4},
+      "distractor": "choosing",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question (whether-clause)", "past perfect 'had chosen'"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "Why haven't you picked up your new ID from the office?",
+      "answer": "My replacement student ID was finally mailed to my dorm address.",
+      "chunks": ["my", "replacement", "student id", "finally", "mailed", "to my", "dorm address"],
+      "prefilled": ["was"],
+      "prefilled_positions": {"was": 4},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice 'was mailed'", "time adverbial 'finally'"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Have you met the new club advisor yet?",
+      "answer": "The advisor who runs the chess club used to teach math.",
+      "chunks": ["the", "advisor", "who runs", "the", "chess", "club", "teach", "math"],
+      "prefilled": ["used to"],
+      "prefilled_positions": {"used to": 7},
+      "distractor": "teaching",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause 'who'", "semi-modal 'used to'"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Angelina just got back from her study-abroad trip.",
+      "answer": "The professor who organized the semester trip finally praised everyone's final presentations.",
+      "chunks": ["the professor", "who organized", "the", "semester trip", "praised", "everyone's final", "presentations"],
+      "prefilled": ["finally"],
+      "prefilled_positions": {"finally": 7},
+      "distractor": "praising",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause 'who'", "possessive \"everyone's\""]
+    }
+  ]
+}

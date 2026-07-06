@@ -1,0 +1,148 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Priya,\n\nJust a reminder: the required lab safety training is this Thursday, March 12, at 3:00 PM in Chem Building Room 108. Bring your $5 safety goggles deposit in cash, since the equipment desk can't process cards that day.\n\nThanks,\nMr. Delgado",
+      "format_metadata": {
+        "from": "Mr. Delgado",
+        "to": "Priya",
+        "subject": "Lab safety training reminder"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when is the lab safety training scheduled?",
+          "options": {
+            "A": "On Tuesday, March 10, at 3:00 PM",
+            "B": "On Thursday, March 12, at 3:00 PM",
+            "C": "On Thursday, March 12, at 1:00 PM",
+            "D": "On Friday, March 13, at 3:00 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the training \"is this Thursday, March 12, at 3:00 PM,\" matching option B."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about paying for the safety goggles deposit?",
+          "options": {
+            "A": "Payment can be completed online in advance.",
+            "B": "Payment must be refunded before the session.",
+            "C": "Payment must be made in cash that day.",
+            "D": "Payment can be postponed until the following week."
+          },
+          "correct_answer": "C",
+          "explanation": "Since the equipment desk \"can't process cards that day,\" the $5 deposit must be paid in cash on-site."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus,\n\nQuick heads-up: this week's Hiking Club meeting has moved from Tuesday to Friday, April 17, at 6:00 PM in Founders Hall, Room 220, since the auditorium is booked. We're finalizing the Cedar Ridge trip route, so please try to attend if you can.\n\nBest,\nNora",
+      "format_metadata": {
+        "from": "Nora",
+        "to": "Marcus",
+        "subject": "Hiking Club meeting moved to Friday"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where and when will this week's Hiking Club meeting take place?",
+          "options": {
+            "A": "Tuesday, 6:00 PM, in Founders Hall, Room 220",
+            "B": "Friday, 6:00 PM, in the auditorium",
+            "C": "Friday, 4:00 PM, in Founders Hall, Room 220",
+            "D": "Friday, 6:00 PM, in Founders Hall, Room 220"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the meeting \"has moved from Tuesday to Friday, April 17, at 6:00 PM in Founders Hall, Room 220.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the reason for the schedule change?",
+          "options": {
+            "A": "The auditorium was already reserved that day.",
+            "B": "The club president resigned earlier this week.",
+            "C": "Too few members signed up on Tuesday.",
+            "D": "The Cedar Ridge trip was fully canceled."
+          },
+          "correct_answer": "A",
+          "explanation": "The email explains the move happened \"since the auditorium is booked,\" implying the usual space was already reserved."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "flyer",
+      "variant": "short",
+      "text": "CAMPUS PHOTO CONTEST! Submit up to three photos on the theme \"Everyday Wonder\" by Friday, September 25, 11:59 PM. Entry form available at the Student Union, Room 150. First prize: a $200 gift card and a feature in the fall arts magazine. Open to all students!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the flyer, what does the first-place winner receive?",
+          "options": {
+            "A": "A $150 gift card and a magazine feature",
+            "B": "A $200 gift card and a website mention",
+            "C": "A $200 certificate and a magazine feature",
+            "D": "A $200 gift card and a magazine feature"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states first prize is \"a $200 gift card and a feature in the fall arts magazine.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about participating in the contest?",
+          "options": {
+            "A": "Students must obtain an entry form first.",
+            "B": "Students must pay a fee to enter.",
+            "C": "Students must attend an orientation session.",
+            "D": "Students must major in photography courses."
+          },
+          "correct_answer": "A",
+          "explanation": "Since the flyer notes the \"entry form available at the Student Union, Room 150,\" students must get that form before submitting photos."
+        }
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Owen,\n\nYour replacement student ID is ready for pickup at the Registrar's Office, Room 105, before 4:30 PM on Wednesday, October 8. Please bring a $10 processing fee in exact cash, as the office can't issue change.\n\nThanks,\nMs. Ferraro",
+      "format_metadata": {
+        "from": "Ms. Ferraro",
+        "to": "Owen",
+        "subject": "Replacement student ID ready for pickup"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, by when must Owen pick up his replacement ID?",
+          "options": {
+            "A": "Before 4:30 PM on Tuesday, October 7",
+            "B": "Before 4:30 PM on Wednesday, October 8",
+            "C": "Before 5:00 PM on Wednesday, October 8",
+            "D": "Before 4:30 PM on Thursday, October 9"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states the ID is ready for pickup \"before 4:30 PM on Wednesday, October 8.\""
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about paying the $10 processing fee?",
+          "options": {
+            "A": "Payment can be made with a credit card.",
+            "B": "Payment can be deferred until next week.",
+            "C": "Payment must be exact cash, no change.",
+            "D": "Payment must be made online in advance."
+          },
+          "correct_answer": "C",
+          "explanation": "Since the office \"can't issue change,\" Owen must bring exact cash for the $10 fee."
+        }
+      ],
+      "difficulty": "easy"
+    }
+  ]
+}

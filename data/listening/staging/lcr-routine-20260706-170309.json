@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I didn't catch all of today's lecture notes.",
+      "options": {
+        "A": "Sure, I'll drop them by your place tonight.",
+        "B": "The lecture hall got new seats last week.",
+        "C": "My sister just adopted a puppy this week.",
+        "D": "I've never been great at reading sheet music notes."
+      },
+      "answer": "A",
+      "explanation": "说话人说自己没听全今天的讲座笔记，暗示希望能借到笔记。正确答案A以话语标记'Sure'开头，直接而热情地答应今晚就把笔记送过去，符合marker_led_indirect范式。B项借用'lecture'一词，却谈教室换了新座椅，属于语义联想陷阱，答非所问。C项完全离题，说起妹妹领养小狗的事，与借笔记无关。D项把'notes'误解成乐谱上的'音符'，而非'课堂笔记'，属于一词多义误解型干扰项。",
+      "distractor_types": { "B": "semantic_association_trap", "C": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why can't we all fit in your car?",
+      "options": {
+        "A": "My car just got a brand new paint job.",
+        "B": "Because the back seat only fits two people.",
+        "C": "The bakery downtown has amazing cinnamon rolls.",
+        "D": "We're planning to leave around eight sharp."
+      },
+      "answer": "B",
+      "explanation": "说话人问为什么大家挤不进车里。正确答案B直接说明原因——后座只能坐两个人，属于direct_topical范式，在easy难度题中适度直接作答。A项借用'car'一词，却谈车子刚喷了新漆，属于语义联想陷阱。C项完全离题，谈市中心面包店的肉桂卷。D项回答的是'什么时候出发'而非'为什么坐不下'，属于答错问题类型。",
+      "distractor_types": { "A": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How early does the post office open on Mondays?",
+      "options": {
+        "A": "The weather's supposed to clear up by noon.",
+        "B": "The post office just repainted their lobby.",
+        "C": "Do you need to mail something first thing?",
+        "D": "It's right next to the grocery store."
+      },
+      "answer": "C",
+      "explanation": "说话人问邮局周一几点开门。正确答案C用反问推进对话——先弄清对方是不是一早就要寄东西，再决定怎么回应，符合counter_question范式。A项完全离题，谈天气转晴。B项借用'post office'一词，却谈大厅重新粉刷，属于语义联想陷阱。D项回答的是'邮局在哪'而非'几点开门'，属于答错问题类型。",
+      "distractor_types": { "A": "off_topic", "B": "semantic_association_trap", "D": "wrong_question_type" }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can I still park in the visitor lot after five?",
+      "options": {
+        "A": "The visitor lot got repaved last spring.",
+        "B": "My roommate just switched her meal plan.",
+        "C": "It's the lot right behind the gym.",
+        "D": "Actually, parking's open to everyone after five."
+      },
+      "answer": "D",
+      "explanation": "说话人问五点后是否还能停在访客停车场。正确答案D以话语标记'Actually'开头，说明五点后停车场对所有人开放，间接回应了可以停车这一事实，符合marker_led_indirect范式。A项借用'lot'一词，却谈停车场重新铺了路面，属于语义联想陷阱。B项完全离题，说室友换了餐饮套餐。C项回答的是'停车场在哪'而非'能不能停'，属于答错问题类型。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type" }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I don't think my introduction is strong enough.",
+      "options": {
+        "A": "Want to read your intro out loud together?",
+        "B": "The introduction is usually the shortest section.",
+        "C": "The cafeteria just started serving breakfast burritos.",
+        "D": "Yes, it's due sometime early next Monday."
+      },
+      "answer": "A",
+      "explanation": "说话人说自己觉得引言部分不够有力，向写作中心的人求助。正确答案A用反问提议一起大声朗读引言部分，先诊断问题再进一步指导，符合counter_question范式。B项借用'introduction'一词，泛泛而谈'引言通常是最短的部分'，没有回应对方引言不够有力的具体困扰，属于语义联想陷阱。C项完全离题，说起食堂新推出的早餐卷饼。D项回答的是'什么时候截止'而非引言写得好不好，属于答错问题类型。",
+      "distractor_types": { "B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do I need the original packaging to return this?",
+      "options": {
+        "A": "The packaging on these products changed recently.",
+        "B": "Let's just go ahead and process the exchange now.",
+        "C": "The fitting rooms are being cleaned right now.",
+        "D": "I'll return your book to you by tomorrow."
+      },
+      "answer": "B",
+      "explanation": "顾客问退货是否需要原包装。正确答案B没有纠结包装问题，而是直接说现在就来办理换货，从根本上解决顾客的诉求，符合context_shift范式。A项借用'packaging'一词，却谈这些商品的包装最近改版了，属于语义联想陷阱。C项完全离题，说试衣间正在打扫。D项把'return'误解成'归还（借来的东西）'，而非'退货'，属于一词多义误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "C": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where'd you find such a great apartment on short notice?",
+      "options": {
+        "A": "The apartment has hardwood floors throughout.",
+        "B": "My brother's starting college this fall.",
+        "C": "I'll text you the listing if you're interested.",
+        "D": "I find it hard to believe summer's already over."
+      },
+      "answer": "C",
+      "explanation": "朋友好奇地问对方是怎么在这么短时间内找到这么好的公寓的。正确答案C没有直接回答'在哪找到的'，而是主动提出把房源信息发给对方，从根本上回应了对方可能也想找房的潜在需求，符合context_shift范式。A项借用'apartment'一词，却谈公寓有实木地板，属于语义联想陷阱。B项完全离题，说弟弟今年秋天要上大学。D项把'find'理解成'认为/觉得'而非'找到'，属于一词多义误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's been stressing you out so much lately?",
+      "options": {
+        "A": "Stress can really affect your sleep schedule.",
+        "B": "The gym just added new stationary bikes.",
+        "C": "It started sometime around Tuesday, I think.",
+        "D": "I'm all ears whenever you're ready to talk."
+      },
+      "answer": "D",
+      "explanation": "朋友关心地问最近是什么让对方压力这么大。正确答案D使用习语'I'm all ears'（洗耳恭听），表示随时愿意倾听，语气温暖自然，符合idiomatic范式。A项借用'stress'一词，泛泛而谈压力会影响睡眠这一事实，没有回应对方本人的情况，属于语义联想陷阱。B项完全离题，说健身房新添了动感单车。C项回答的是'什么时候开始的'而非'是什么原因'，属于答错问题类型。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "wrong_question_type" }
+    }
+  ]
+}

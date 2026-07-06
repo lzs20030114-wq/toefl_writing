@@ -1,0 +1,230 @@
+{
+  "items": [
+    {
+      "context": "plans_social",
+      "situation": "two friends deciding between a rock-climbing gym trip and a kayaking trip this weekend",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I can't decide what to do this weekend, the climbing gym downtown, or that kayaking trip Sam mentioned." },
+        { "speaker": "Man", "text": "Kayaking sounds fun, but there's a thunderstorm forecast for both days." },
+        { "speaker": "Woman", "text": "Oh no, really? I hadn't checked that." },
+        { "speaker": "Man", "text": "Yeah, I saw it this morning. The climbing gym might be the safer bet anyway." },
+        { "speaker": "Woman", "text": "True, and they've got beginner walls too, so we wouldn't need any real experience." },
+        { "speaker": "Man", "text": "That settles it, then. I'll book us two beginner slots online before they fill up." },
+        { "speaker": "Woman", "text": "Perfect, text me once it's confirmed and I'll grab snacks for afterward." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Choosing between a climbing gym and a kayaking trip for the weekend",
+            "B": "Complaining about frequent storms in the area",
+            "C": "Planning to buy new climbing equipment",
+            "D": "Debating whether to cancel weekend plans entirely"
+          },
+          "answer": "A",
+          "explanation": "两人主要讨论的是这个周末是去攀岩馆还是划皮划艇，最终因为天气原因选择了攀岩馆。B项对话中虽提到暴风雨预报，但只是次要原因，并非讨论主题；C项范围过窄，对话并未详细讨论购买装备；D项与两人计划继续出行的情况相反，他们并未取消周末计划。",
+          "distractor_types": { "B": "wrong_topic", "C": "too_narrow", "D": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two friends most likely do this weekend?",
+          "options": {
+            "A": "Go kayaking as originally planned",
+            "B": "Cancel their plans until next weekend",
+            "C": "Book beginner climbing slots at the gym",
+            "D": "Ask Sam to join them at the climbing gym"
+          },
+          "answer": "C",
+          "explanation": "男生说\"I'll book us two beginner slots online\"，说明两人会去预订攀岩馆的初学者名额。A项是他们因暴风雨预报而放弃的选项；B项对话中没有依据，两人已经做出决定而非等待；D项对话中从未提到邀请Sam一起去，纯属无中生有。",
+          "distractor_types": { "A": "rejected_option", "B": "over_inference", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students debating whether a newly opened board-game cafe is worth visiting for a study break",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new board-game cafe near the quad? I keep hearing mixed things about the cover charge." },
+        { "speaker": "Man", "text": "I went last week. It's not bad, the charge covers unlimited games and free refills, so it evens out." },
+        { "speaker": "Woman", "text": "Oh, that's good to know. I assumed it'd be more like an arcade, paying per game." },
+        { "speaker": "Man", "text": "Not at all. Popular games get reserved fast, so you'll want to arrive right at opening." },
+        { "speaker": "Woman", "text": "Got it. Should we go together after our exam Thursday, before the evening rush?" },
+        { "speaker": "Man", "text": "Works for me. I'll grab a table around five and text you the room number." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the conversation?",
+          "options": {
+            "A": "Comparing dessert menus at two campus cafes",
+            "B": "Deciding whether the new board-game cafe is worth visiting",
+            "C": "Finding out when the board-game cafe opens",
+            "D": "Agreeing the cafe is not worth the cost"
+          },
+          "answer": "B",
+          "explanation": "两人主要讨论的是这家新开的桌游咖啡馆是否值得去，男生的亲身经验打消了女生对收费的顾虑，最终两人决定一起去。A项对话未提及甜点菜单；C项只是提到咖啡馆开门时间这一细节，并非讨论重点；D项与两人最终决定一起去的结论相反。",
+          "distractor_types": { "A": "wrong_topic", "C": "too_narrow", "D": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two students most likely do on Thursday?",
+          "options": {
+            "A": "Arrive after the evening rush to avoid crowds",
+            "B": "Order dessert before playing any games",
+            "C": "Skip the cafe and go somewhere quieter instead",
+            "D": "Get to the cafe early enough to reserve a popular game"
+          },
+          "answer": "D",
+          "explanation": "男生提到热门桌游很快就被预订完，建议一开门就到，而女生也提议周四考试后趁晚高峰前一起去，因此可以推断两人会尽早到店以确保能玩到热门游戏。A项与他们计划避开晚高峰、提早前往的安排相反；B项对话中完全没有提到点甜点；C项与两人已经决定一起去的计划相矛盾，属于过度推断。",
+          "distractor_types": { "A": "rejected_option", "B": "unrelated_next_step", "C": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students sorting out a mixed-up food delivery order sent to the wrong dorm room",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hey, did you order Thai food tonight? A delivery driver just dropped a bag at my door with your name on the receipt." },
+        { "speaker": "Man", "text": "That's mine! I ordered from that new place on Fifth Street and I've been waiting almost forty minutes." },
+        { "speaker": "Woman", "text": "The driver must've mixed up our room numbers. I'm just down the hall in 214, not 212." },
+        { "speaker": "Man", "text": "That makes sense. I'll come grab it right now before the noodles get cold." },
+        { "speaker": "Woman", "text": "You should probably call the restaurant and complain about the mix-up." },
+        { "speaker": "Man", "text": "Nah, it's not worth the hassle. I'll just add my room number to the delivery app note instead." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the delivery end up at the wrong door?",
+          "options": {
+            "A": "The woman ordered the wrong dish",
+            "B": "The delivery app charged the wrong room automatically",
+            "C": "The driver mixed up the two students' room numbers",
+            "D": "The man gave the wrong address when ordering"
+          },
+          "answer": "C",
+          "explanation": "女生说\"送餐员一定是把我们的房间号搞混了，我就在214，不是212\"，说明送错门是因为送餐员搞混了房间号。A项对话中并未提及女生点错菜；B项对话没有说是配送软件自动扣错房间的费用；D项对话中没有说是男生自己填错了地址，而是送餐员搞混的。",
+          "distractor_types": { "A": "wrong_detail", "B": "related_but_not_stated", "D": "misattributed" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do to prevent this in the future?",
+          "options": {
+            "A": "Add his room number to the delivery app notes",
+            "B": "Call the restaurant to file a complaint",
+            "C": "Order from a different restaurant next time",
+            "D": "Ask the front desk to hold his deliveries"
+          },
+          "answer": "A",
+          "explanation": "男生说\"不值得那么麻烦，我以后就在配送软件备注里加上房间号\"，说明他打算在备注中注明房间号以避免再次出错。B项是女生建议但被男生以\"不值得麻烦\"为由拒绝的选项；C项对话中没有提到要换餐厅；D项对话中完全没有提及前台代收包裹这件事，属于过度推断。",
+          "distractor_types": { "B": "rejected_option", "C": "unrelated_next_step", "D": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates deciding whether to get a mini-fridge or a shared microwave for their room",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Our room budget for shared stuff came through. Should we get a mini-fridge or a microwave first?" },
+        { "speaker": "Man", "text": "Honestly, I use the dining hall microwave enough already. A fridge would save more trips downstairs." },
+        { "speaker": "Woman", "text": "True, especially for leftovers and cold drinks. But fridges pull a lot of power, will that trip the outlet?" },
+        { "speaker": "Man", "text": "I already checked the room's limit, it's fine unless we run the space heater too." },
+        { "speaker": "Woman", "text": "Good, that settles it. I'll order the fridge tonight and we can revisit the microwave next semester." },
+        { "speaker": "Man", "text": "Sounds good. Let's just measure first, so it actually fits under the loft bed." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man already check before agreeing to the mini-fridge?",
+          "options": {
+            "A": "Whether the dining hall microwave was available",
+            "B": "The store's return policy for fridges",
+            "C": "Whether the woman preferred a fridge over a microwave",
+            "D": "The room's electrical power limit"
+          },
+          "answer": "D",
+          "explanation": "男生说\"我已经查过房间的电力上限了，没问题\"，说明他事先确认的是房间的电力承载限度。A项对话中没有提到检查食堂微波炉是否可用；B项对话完全没有提到退货政策；C项对话中并没有说男生特意确认女生的偏好，两人是共同讨论决定的。",
+          "distractor_types": { "A": "wrong_detail", "B": "related_but_not_stated", "C": "misattributed" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two roommates most likely do before the fridge arrives?",
+          "options": {
+            "A": "Return the fridge if it doesn't fit under the bed",
+            "B": "Measure the space under the loft bed",
+            "C": "Buy a microwave as a backup instead",
+            "D": "Ask maintenance to install an additional outlet"
+          },
+          "answer": "B",
+          "explanation": "男生最后说\"我们得先量一下尺寸，确保它能放到阁楼床下面\"，说明两人在冰箱送到前会先测量空间。A项对话没有依据说明他们会因为尺寸问题退货，属于过度推断；C项对话中没有提到买微波炉作为备用，反而决定下学期再讨论微波炉；D项对话中完全没有提及联系维修部门加装插座。",
+          "distractor_types": { "A": "over_inference", "C": "unrelated_next_step", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students recommending study-focus apps to each other before exam week",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Exam week is coming up and I can't focus at all. Do you use any study apps?" },
+        { "speaker": "Man", "text": "Yeah, I use an app called Forest, it grows a tree while you study, and the tree dies if you check your phone." },
+        { "speaker": "Woman", "text": "That's kind of genius. Does it stop you from getting distracted, or is it just a reminder?" },
+        { "speaker": "Man", "text": "It's mostly a reminder, but not wanting to kill a virtual tree works better than I expected." },
+        { "speaker": "Woman", "text": "I'll definitely download it tonight. Maybe we can compare our study streaks after the first week." },
+        { "speaker": "Man", "text": "Deal. Let's check in Friday and see whose tree survived longest." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what happens if he checks his phone while using the Forest app?",
+          "options": {
+            "A": "The virtual tree he is growing dies",
+            "B": "The app sends him a warning notification",
+            "C": "The app locks his phone automatically",
+            "D": "His study streak resets to zero"
+          },
+          "answer": "A",
+          "explanation": "男生说\"如果你看手机，树就会死\"，说明查看手机的后果是虚拟树死亡。B项对话中没有提到应用会发送警告通知；C项对话没有说应用会自动锁住手机；D项提到的\"学习连胜\"是他们打算之后互相比较的内容，并非查看手机的直接后果。",
+          "distractor_types": { "B": "wrong_detail", "C": "related_but_not_stated", "D": "wrong_detail" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two students most likely do on Friday?",
+          "options": {
+            "A": "Give up on the app if it doesn't help by then",
+            "B": "Meet in person to quiz each other on course material",
+            "C": "Compare how long their virtual trees survived",
+            "D": "Ask their professor to extend the exam date"
+          },
+          "answer": "C",
+          "explanation": "女生提议\"周五对比一下我们的学习连胜\"，男生回应\"看看谁的树活得更久\"，说明周五他们会比较各自虚拟树存活的时间。A项对话中没有依据说明他们会放弃这个应用，属于过度推断；B项对话中没有提到要面对面一起学习；D项对话中完全没有提到向教授申请延长考试时间，明显超出对话内容范围。",
+          "distractor_types": { "A": "over_inference", "B": "unrelated_next_step", "D": "over_inference" }
+        }
+      ]
+    }
+  ]
+}
