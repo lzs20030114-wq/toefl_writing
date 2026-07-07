@@ -35396,6 +35396,406 @@
       ],
       "id": "lc_mqzndtyk_3",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mqzndtyk_3.mp3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that new cafe on Elm Street yet? The one with the fancy lattes?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I went once. The coffee's good, but honestly, six dollars for a latte feels steep on a student budget."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Six dollars? Wow, that's almost double what the campus cart charges."
+        },
+        {
+          "speaker": "Man",
+          "text": "Exactly. The atmosphere's nice, sure, but I can't justify paying that every single morning."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, maybe it's more of a once-in-a-while treat than a daily spot."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. I'll stick with the cart on weekdays and save Elm Street for special occasions."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does a latte cost at the new cafe?",
+          "options": {
+            "A": "About six dollars each",
+            "B": "About three dollars each",
+            "C": "Around ten dollars each",
+            "D": "The same as the campus cart"
+          },
+          "answer": "A",
+          "explanation": "男士明确说新咖啡馆的拿铁要六美元，所以A正确。B项三美元大约是校园咖啡车的价格，属于改动关键数字的错误细节；C项十美元是凭空编造的错误数字；D项说和校园咖啡车价格一样，但对话里女士说新咖啡馆几乎是咖啡车的两倍，属于信息误用。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Stop buying coffee to save money entirely",
+            "B": "Buy a latte from the new cafe every morning",
+            "C": "Visit the new cafe only for special occasions",
+            "D": "Ask the cafe to lower its prices"
+          },
+          "answer": "C",
+          "explanation": "男士说平时喝校园咖啡车的咖啡，只在特殊场合去Elm Street，可推断他只会偶尔光顾新咖啡馆，故C正确。A项完全戒掉咖啡属于过度推断；B项每天早上买拿铁正是他明确拒绝的做法；D项要求咖啡馆降价与对话内容无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrba2qu7_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends recommending a new detective TV series to each other",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "You have to watch that new detective series everyone's talking about, Harbor Lines. I finished it in two nights."
+        },
+        {
+          "speaker": "Man",
+          "text": "Two nights? That good, huh? I've been looking for something to watch over the break."
+        },
+        {
+          "speaker": "Woman",
+          "text": "It's brilliant. Each episode is only thirty minutes, so it never drags, and the ending completely surprised me."
+        },
+        {
+          "speaker": "Man",
+          "text": "I usually avoid long shows because I lose interest halfway through."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Then this is perfect for you. Short episodes, tight plot. Just don't read anything online first, you'll spoil the twist."
+        },
+        {
+          "speaker": "Man",
+          "text": "Got it, no spoilers. I'll start it tonight after I finish this assignment."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to finish assignments before the break",
+            "B": "A TV series the woman recommends to the man",
+            "C": "Why the man dislikes long television shows",
+            "D": "A show the man convinces the woman to watch"
+          },
+          "answer": "B",
+          "explanation": "整段对话是女士向男士推荐一部她刚看完的侦探剧，故B正确。A项完成作业只在结尾一带而过，不是主题，属于错误话题；C项男士不喜欢长剧只是他接受推荐的一个原因，范围过窄；D项方向相反，是女士向男士推荐，而非男士说服女士。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Recommend the show to his entire class",
+            "B": "Read reviews online before he watches it",
+            "C": "Cancel his break plans to watch television",
+            "D": "Begin the series without looking up spoilers"
+          },
+          "answer": "D",
+          "explanation": "男士说今晚做完作业就开始看，并回应了女士别看剧透的建议，可推断他会在不查剧透的情况下开始看剧，故D正确。A项向全班推荐属于过度推断；B项看剧透正是女士警告、男士答应避免的做法，属于被拒绝的选项；C项取消假期计划与对话无关。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrba2qu7_1"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a pottery class one of them took",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How was that pottery class you signed up for at the community center?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Honestly, it was messier than I expected, but I loved it. We learned to use the pottery wheel."
+        },
+        {
+          "speaker": "Woman",
+          "text": "The wheel? That sounds hard. Did anything actually survive?"
+        },
+        {
+          "speaker": "Man",
+          "text": "My first bowl collapsed completely. But the second one came out great, and the instructor's firing it in the kiln this week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's exciting. So when do you get to pick it up?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Friday. I'm already thinking about signing up for the next level."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man learn to use in the class?",
+          "options": {
+            "A": "A painting easel",
+            "B": "A sewing machine",
+            "C": "A pottery wheel",
+            "D": "A kiln for glass"
+          },
+          "answer": "C",
+          "explanation": "男士明确说这门课学的是使用陶艺转盘（pottery wheel），故C正确。A项画架和B项缝纫机都与陶艺课无关，属于错误细节或未提及的内容；D项虽然对话里提到窑（kiln），但那是老师用来烧制成品的，并不是男士学着操作的东西，属于信息误用。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Sign up for a more advanced pottery class",
+            "B": "Open his own pottery business someday",
+            "C": "Buy a pottery wheel for his room",
+            "D": "Switch to a painting class instead"
+          },
+          "answer": "A",
+          "explanation": "男士说他已经在考虑报名下一个级别的课程，可推断他会继续报更进阶的陶艺课，故A正确。B项自己开陶艺公司属于过度推断；C项给房间买转盘、D项改上绘画课都与他表达的意图无关，属于无关的后续动作。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrba2qu7_2"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So, are we still on for the beach on Saturday? I've been looking forward to it all week."
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely. But the parking lot near the pier fills up fast, so we should leave early."
+        },
+        {
+          "speaker": "Woman",
+          "text": "How early are we talking?"
+        },
+        {
+          "speaker": "Man",
+          "text": "If we're out the door by seven, we'll beat the crowd and get a good spot on the sand."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Seven it is. Should I bring the cooler and drinks?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. I'll grab the umbrella and towels, and I'll drive us there."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time do the friends plan to leave?",
+          "options": {
+            "A": "At six in the morning",
+            "B": "Around eight o'clock",
+            "C": "As soon as the lot opens",
+            "D": "By seven in the morning"
+          },
+          "answer": "D",
+          "explanation": "男士说如果七点前出门，就能避开人群并占到好位置，所以计划七点前出发，故D正确。A项六点和B项八点都是被改动的错误时间；C项停车场一开门就走在对话中没有提到，属于貌似合理但未陈述的内容。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely bring to the beach?",
+          "options": {
+            "A": "The umbrella and the towels",
+            "B": "A cooler and some drinks",
+            "C": "Nothing, since the man is driving",
+            "D": "Beach chairs and sunscreen"
+          },
+          "answer": "B",
+          "explanation": "女士主动提出带冷藏箱和饮料，男士也答应了，可推断她会带这些，故B正确。A项遮阳伞和毛巾是男士负责带的，属于信息误用；C项因为男士开车就什么都不带属于过度推断；D项沙滩椅和防晒霜对话中从未提及。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "lc_mrba2qu7_3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends planning a surprise birthday party for a classmate",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Okay, so Dan's birthday is next Thursday. I really want to throw him a surprise party."
+        },
+        {
+          "speaker": "Man",
+          "text": "Love it. The tricky part is keeping it secret, he always figures these things out."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I know. That's why I'm thinking we tell him we're just studying at the library, then bring him to Maria's place instead."
+        },
+        {
+          "speaker": "Man",
+          "text": "Clever. So he thinks it's an ordinary study night. But how do we get everyone there before him?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "We ask them to arrive by six, and I'll stall Dan with coffee until six-thirty."
+        },
+        {
+          "speaker": "Man",
+          "text": "Nice. I'll message the group chat tonight, but I'll leave Dan out of it, obviously."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly planning?",
+          "options": {
+            "A": "A surprise birthday party for their friend",
+            "B": "A study session at the library before an exam",
+            "C": "How to invite people to a coffee meetup",
+            "D": "A birthday party they want Dan to organize"
+          },
+          "answer": "A",
+          "explanation": "两人整段都在策划如何给Dan办一场惊喜生日会，故A正确。B项去图书馆学习只是他们用来骗Dan的幌子，并非真正的主题，属于错误话题；C项约人喝咖啡只是拖住Dan的一个细节，范围过窄；D项方向相反，派对是为Dan办的，不是让Dan来组织。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Book a venue and order a cake tonight",
+            "B": "Invite Dan to the group chat directly",
+            "C": "Text the others but keep Dan uninformed",
+            "D": "Ask Maria to cancel the whole party"
+          },
+          "answer": "C",
+          "explanation": "男士说今晚会在群里通知大家，但会把Dan排除在外，可推断他会联系其他人却不告诉Dan，故C正确。A项订场地和蛋糕对话中没提到，属于过度推断；B项直接把Dan拉进群正是他明确说要避免的做法，属于被拒绝的选项；D项让Maria取消派对与计划完全相反、毫无依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "rejected_option",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrba2qu7_4"
     }
   ]
 }
