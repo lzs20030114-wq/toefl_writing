@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-07-07T17:24:29.369Z",
+  "generated_at": "2026-07-07T23:08:24.642Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -16481,6 +16481,277 @@
           "grammar_points": [
             "indirect question",
             "past tense"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 65,
+      "questions": [
+        {
+          "id": "ets_s65_q1",
+          "prompt": "Have you seen my notebook anywhere?",
+          "answer": "I left my notebook in Harold's office.",
+          "chunks": [
+            "I",
+            "left",
+            "my",
+            "notebook",
+            "in",
+            "office",
+            "leaves"
+          ],
+          "prefilled": [
+            "Harold's"
+          ],
+          "prefilled_positions": {
+            "harold's": 5
+          },
+          "distractor": "leaves",
+          "has_question_mark": false,
+          "grammar_points": [
+            "simple past tense",
+            "statement"
+          ]
+        },
+        {
+          "id": "ets_s65_q2",
+          "prompt": "You weren't at the review meeting.",
+          "answer": "Why did you skip Hector's study session?",
+          "chunks": [
+            "why",
+            "did",
+            "you",
+            "hector's",
+            "study session",
+            "were"
+          ],
+          "prefilled": [
+            "skip"
+          ],
+          "prefilled_positions": {
+            "skip": 3
+          },
+          "distractor": "were",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question",
+            "wh-question"
+          ]
+        },
+        {
+          "id": "ets_s65_q3",
+          "prompt": "Do you know if Diane is in our group?",
+          "answer": "I asked whether Diane had joined our study group.",
+          "chunks": [
+            "asked",
+            "diane",
+            "had",
+            "joined",
+            "our",
+            "study group",
+            "has"
+          ],
+          "prefilled": [
+            "I",
+            "whether"
+          ],
+          "prefilled_positions": {
+            "i": 0,
+            "whether": 2
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "indirect question with whether"
+          ]
+        },
+        {
+          "id": "ets_s65_q4",
+          "prompt": "Did you talk to Julian today?",
+          "answer": "You asked whether Julian had finished the group project.",
+          "chunks": [
+            "you",
+            "asked",
+            "julian",
+            "had",
+            "finished",
+            "the group",
+            "project",
+            "has"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 2
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "past perfect in indirect question"
+          ]
+        },
+        {
+          "id": "ets_s65_q5",
+          "prompt": "You still have Matthew's microscope.",
+          "answer": "I have not returned Matthew's borrowed microscope yet.",
+          "chunks": [
+            "I",
+            "have not",
+            "returned",
+            "borrowed",
+            "microscope",
+            "yet",
+            "had"
+          ],
+          "prefilled": [
+            "Matthew's"
+          ],
+          "prefilled_positions": {
+            "matthew's": 4
+          },
+          "distractor": "had",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect negative"
+          ]
+        },
+        {
+          "id": "ets_s65_q6",
+          "prompt": "Didn't you owe Naomi some money?",
+          "answer": "You have not paid Naomi back for lunch yet.",
+          "chunks": [
+            "have not",
+            "paid",
+            "naomi",
+            "back",
+            "yet",
+            "did"
+          ],
+          "prefilled": [
+            "You",
+            "for lunch"
+          ],
+          "prefilled_positions": {
+            "you": 0,
+            "for lunch": 6
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation",
+            "present perfect negative"
+          ]
+        },
+        {
+          "id": "ets_s65_q7",
+          "prompt": "You mentioned our study session moved.",
+          "answer": "The tutor who helped Alison rescheduled our study session.",
+          "chunks": [
+            "who",
+            "helped",
+            "alison",
+            "rescheduled",
+            "our",
+            "study session",
+            "was"
+          ],
+          "prefilled": [
+            "The tutor"
+          ],
+          "prefilled_positions": {
+            "the tutor": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "subject relative who"
+          ]
+        },
+        {
+          "id": "ets_s65_q8",
+          "prompt": "You saw Juan earlier today.",
+          "answer": "When did you first meet Juan for coffee?",
+          "chunks": [
+            "when",
+            "did",
+            "you",
+            "first",
+            "juan",
+            "for",
+            "coffee",
+            "have"
+          ],
+          "prefilled": [
+            "meet"
+          ],
+          "prefilled_positions": {
+            "meet": 4
+          },
+          "distractor": "have",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question",
+            "wh-question"
+          ]
+        },
+        {
+          "id": "ets_s65_q9",
+          "prompt": "Did you hear what the professor said about Margot's report?",
+          "answer": "The economics professor warmly praised the detailed research report that Margot submitted.",
+          "chunks": [
+            "professor",
+            "warmly praised",
+            "the detailed",
+            "research report",
+            "that",
+            "margot",
+            "submitted",
+            "was"
+          ],
+          "prefilled": [
+            "The economics"
+          ],
+          "prefilled_positions": {
+            "the economics": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause",
+            "object relative that"
+          ]
+        },
+        {
+          "id": "ets_s65_q10",
+          "prompt": "Did you find out anything about the guest lecture?",
+          "answer": "Angelina wanted to know whether the guest lecture would still be held.",
+          "chunks": [
+            "angelina",
+            "wanted to",
+            "know",
+            "the guest",
+            "lecture",
+            "would still",
+            "be held",
+            "will"
+          ],
+          "prefilled": [
+            "whether"
+          ],
+          "prefilled_positions": {
+            "whether": 4
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question",
+            "modal in indirect question"
           ]
         }
       ]
