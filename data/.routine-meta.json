@@ -8,77 +8,208 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
-      "topics": ["dorm parties", "seminars/electives", "library & tutoring center", "campus gym hours", "scholarship/workshop signups", "exam schedules & posted grades", "borrowed club equipment"],
-      "favorite": { "prompt": "What did Julian ask you earlier?", "answer": "He asked whether you had registered for the spring field trip." },
+      "accepted": 20,
+      "topics": [
+        "dorm parties",
+        "seminars/electives",
+        "library & tutoring center",
+        "campus gym hours",
+        "scholarship/workshop signups",
+        "exam schedules & posted grades",
+        "borrowed club equipment"
+      ],
+      "favorite": {
+        "prompt": "What did Julian ask you earlier?",
+        "answer": "He asked whether you had registered for the spring field trip."
+      },
       "retried_after_fail": false,
-      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试"
+      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
-      "generated": 4, "accepted": 4,
-      "topics": ["political science", "history and culture", "computer science", "social studies"],
-      "favorite": { "subtopic": "political science", "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 4,
+      "accepted": 4,
+      "topics": [
+        "political science",
+        "history and culture",
+        "computer science",
+        "social studies"
+      ],
+      "favorite": {
+        "subtopic": "political science",
+        "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "email": {
-      "generated": 4, "accepted": 4,
-      "topics": ["服务与活动", "消费售后", "住宿", "日常社交"],
-      "favorite": { "subtopic": "消费售后", "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 4,
+      "accepted": 4,
+      "topics": [
+        "服务与活动",
+        "消费售后",
+        "住宿",
+        "日常社交"
+      ],
+      "favorite": {
+        "subtopic": "消费售后",
+        "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "reading-ap": {
-      "generated": 5, "accepted": 5,
-      "topics": ["environmental_science/conservation", "psychology/placebo effect", "astronomy/planetary atmospheres", "chemistry/corrosion", "history/silk road"],
-      "favorite": { "subtopic": "astronomy/planetary atmospheres", "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..." },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 5,
+      "accepted": 5,
+      "topics": [
+        "environmental_science/conservation",
+        "psychology/placebo effect",
+        "astronomy/planetary atmospheres",
+        "chemistry/corrosion",
+        "history/silk road"
+      ],
+      "favorite": {
+        "subtopic": "astronomy/planetary atmospheres",
+        "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "reading-ctw": {
-      "generated": 6, "accepted": 6,
-      "topics": ["biology/whale communication", "environmental_science/green roofs", "psychology/confirmation bias", "history/the spice trade", "geology/volcanic mountain formation", "astronomy/Mars rovers"],
-      "favorite": { "subtopic": "biology/whale communication", "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes." },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 6,
+      "accepted": 6,
+      "topics": [
+        "biology/whale communication",
+        "environmental_science/green roofs",
+        "psychology/confirmation bias",
+        "history/the spice trade",
+        "geology/volcanic mountain formation",
+        "astronomy/Mars rovers"
+      ],
+      "favorite": {
+        "subtopic": "biology/whale communication",
+        "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "reading-rdl-short": {
-      "generated": 4, "accepted": 4,
-      "topics": ["email/lab safety training reminder", "email/student ID replacement fee", "notice/campus Wi-Fi maintenance", "notice/water-fountain repair closure"],
-      "favorite": { "subtopic": "notice/wifi-maintenance", "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM." },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 4,
+      "accepted": 4,
+      "topics": [
+        "email/lab safety training reminder",
+        "email/student ID replacement fee",
+        "notice/campus Wi-Fi maintenance",
+        "notice/water-fountain repair closure"
+      ],
+      "favorite": {
+        "subtopic": "notice/wifi-maintenance",
+        "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "reading-rdl-long": {
-      "generated": 2, "accepted": 2,
-      "topics": ["social_media/dorm DIY woodworking project", "email/commuter parking permit renewal"],
-      "favorite": { "subtopic": "social_media/dorm DIY woodworking project", "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 2,
+      "accepted": 2,
+      "topics": [
+        "social_media/dorm DIY woodworking project",
+        "email/commuter parking permit renewal"
+      ],
+      "favorite": {
+        "subtopic": "social_media/dorm DIY woodworking project",
+        "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "listening-lat": {
-      "generated": 4, "accepted": 4,
-      "topics": ["physics/Doppler effect", "history/coffee houses in the Enlightenment", "linguistics/pidgin to creole", "ecology/biological magnification"],
-      "favorite": { "subtopic": "the process of pidgin languages developing into creoles", "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 4,
+      "accepted": 4,
+      "topics": [
+        "physics/Doppler effect",
+        "history/coffee houses in the Enlightenment",
+        "linguistics/pidgin to creole",
+        "ecology/biological magnification"
+      ],
+      "favorite": {
+        "subtopic": "the process of pidgin languages developing into creoles",
+        "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "listening-lc": {
-      "generated": 5, "accepted": 5,
-      "topics": ["plans_social", "recommendations_opinions (cafe)", "recommendations_opinions (Thai restaurant)", "campus_dorm_life", "errands_service (bus schedule)"],
-      "favorite": { "subtopic": "两人争论新咖啡馆是否值那个价", "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars." },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 5,
+      "accepted": 5,
+      "topics": [
+        "plans_social",
+        "recommendations_opinions (cafe)",
+        "recommendations_opinions (Thai restaurant)",
+        "campus_dorm_life",
+        "errands_service (bus schedule)"
+      ],
+      "favorite": {
+        "subtopic": "两人争论新咖啡馆是否值那个价",
+        "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "listening-la": {
-      "generated": 5, "accepted": 5,
-      "topics": ["academic_event/conference call for papers", "facility_change/performance hall reopening", "logistics/garage closure + shuttle", "facility_change/computer lab relocation", "campus_activity/outdoor movie night"],
-      "favorite": { "subtopic": "Interdisciplinary Crossroads Conference call for papers", "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 5,
+      "accepted": 5,
+      "topics": [
+        "academic_event/conference call for papers",
+        "facility_change/performance hall reopening",
+        "logistics/garage closure + shuttle",
+        "facility_change/computer lab relocation",
+        "campus_activity/outdoor movie night"
+      ],
+      "favorite": {
+        "subtopic": "Interdisciplinary Crossroads Conference call for papers",
+        "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "listening-lcr": {
-      "generated": 8, "accepted": 8,
-      "topics": ["campus_daily/study-group transport", "social/dinner invitation", "campus_daily/gym schedule", "general_daily/laundry room noise", "campus_academic/writing center", "campus_academic/exam format", "campus_academic/reading list", "campus_daily/lost umbrella"],
-      "favorite": { "subtopic": "asking a neighbor why the shared laundry room is noisy", "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'" },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 8,
+      "accepted": 8,
+      "topics": [
+        "campus_daily/study-group transport",
+        "social/dinner invitation",
+        "campus_daily/gym schedule",
+        "general_daily/laundry room noise",
+        "campus_academic/writing center",
+        "campus_academic/exam format",
+        "campus_academic/reading list",
+        "campus_daily/lost umbrella"
+      ],
+      "favorite": {
+        "subtopic": "asking a neighbor why the shared laundry room is noisy",
+        "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "speaking-repeat": {
-      "generated": 3, "accepted": 3,
-      "topics": ["Dining Hall Tour", "Career Services Workshop", "Car Rental Agency"],
-      "favorite": { "subtopic": "Dining Hall Tour", "preview": "Trays are stacked near the entrance." },
-      "retried_after_fail": false, "failure_reason": ""
+      "generated": 3,
+      "accepted": 3,
+      "topics": [
+        "Dining Hall Tour",
+        "Career Services Workshop",
+        "Car Rental Agency"
+      ],
+      "favorite": {
+        "subtopic": "Dining Hall Tour",
+        "preview": "Trays are stacked near the entrance."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-08T22:55:58.785Z",
+  "r2_session_id": "routine-r2-20260708-224120"
 }
