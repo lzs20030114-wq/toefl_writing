@@ -5,6 +5,7 @@
 
 ## 需用户决策
 
+- [高] 盲审 routine 停摆：阅读/听力/口语 9 库自 2026-06-30 停止合库，388 条积压 staging；trigger 台账仅剩 R1（07-03 重建时盲审/R2 未建回）。需拍板重建独立 trigger 还是并回 R1。出处：QUESTION-PIPELINE-REVIEW-2026-07-07。
 - [高] 认证模型改造：6位码 bearer 可爆破（`app/api/auth/verify-code` 限流是内存滑动窗口，Vercel 多实例不全局生效）+ legacy 码自助升级仍在（同文件自动 upsert `legacy=pro`）。出处：PROJECT-REVIEW-2026-06-17，2026-07-05 复核仍在，未修复。
 - [中] v1.11.0 线上冒烟未做（12 题型导入→练习全链路，重点 edge-tts 首次 Vercel 真实环境跑通）+ `DASHSCOPE_API_KEY` 是否已在 Vercel Production 环境勾选未确认。
 - [中] 语音全库切换 gpt-4o-mini-tts 的 go/no-go：成本报价已出（全库一次性 ¥117，增量满勤 ¥50/月，2026-07-05 实测），只差 `/admin-voice-vote` 票数；lat/la/lcr persona 推广、音色定稿后重新生成听力库均挂在此决策之后。
@@ -21,7 +22,9 @@
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。
-- [低] `data/buildSentence/answer_hashes.json` 重生（停更于 2026-05-14，当前 590 hash vs. live 题库 534 题，已脱节）。详见下方"调查 B"结论与建议命令。
+- [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。
+- [中] admin「部署到正式题库」按钮接入 validator+gate（当前零校验旁路，同题不同判）。出处：QUESTION-PIPELINE-REVIEW-2026-07-07 §2.3。
+- [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、听力 auditor 接线、LCR 范式配比、监控加固等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7。
 - [低] 仓库卫生：
   - 5 个已合并 worktree + 孤儿目录 `cranky-lehmann` 清理
   - 已合并分支清理
@@ -76,6 +79,7 @@
 
 ## Done
 
+- 2026-07-07 出题去重全链路（分支 claude/question-pipeline-review-6p2bpt，待合 main）：合库层内容去重挂全题型 + 生成端排除改 bank∪staging（修 LAT 排除空转、RDL 补 exclude）+ 清除 8 库存量重复 1472 条（3083→1611，复测归零）+ `answer_hashes.json` 重建（590→612；原「重生」待办一并完成，旧台账与现库零重叠早已失效）。
 - 2026-07-05 XorPay 金额对账（按分对账无容差，不符 403 拒发权益）+ webhook 顺序改"先授予后标 processed"（原顺序会致付钱不发货）——已合 main，jest 581 全过。
 - 2026-07-05 五处升级按钮 `open-upgrade-modal` 死 no-op 修复（HomePageClient 全局监听 + speaking-exam 自持 modal）——已合 main。
 - 2026-07-05 CTW 填词防呆修复（灰底锁定 chip + 键盘导航）cherry-pick 2b3f96c 合入 main（分支上过时的 v1.9.4 发版提交已丢弃）。

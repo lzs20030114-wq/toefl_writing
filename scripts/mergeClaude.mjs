@@ -29,6 +29,8 @@ const ROOT = resolve(__dirname, "..");
 
 const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
 const { validateAllSets } = require("./validate-bank.js");
+// 合库层通用内容去重（exact 指纹 + jaccard 近重复）。
+const { createDedupIndex, checkDuplicate, addToIndex } = require("../lib/gen/contentDedup.js");
 
 // NEWBANK_ROOT (optional): when set (e.g. NEWBANK_ROOT=data/newBank), validated items are
 // appended to the NEW bank under that root instead of the live bank, so a fresh bank can be
@@ -85,6 +87,36 @@ function mergeBS(stagingPath) {
     console.log("  rejection samples:");
     rejected.slice(0, 5).forEach((r) => console.log(`    - id=${r.id} fatal=${(r.fatal || []).join("|")} format=${(r.format || []).join("|")}`));
   }
+
+  // ── Answer content dedup (exact fingerprint + jaccard ≥ 0.75) ─────────────
+  // mergeBS previously did NO answer dedup (only the GENERATION path in
+  // generateBSQuestions.mjs deduped answers) — a routine could ship a set that
+  // duplicates a live-bank sentence or repeats itself. We drop near/exact-dup
+  // answers INDIVIDUALLY (mirroring the per-item validation-reject semantics
+  // above), then compose sets from the survivors. Seeded from live-bank answers
+  // and grown per accepted item so within-batch repeats are caught too.
+  let bankAnswerItems = [];
+  try {
+    const existingBank = readJSON(bankFilePath("buildSentence/questions.json"));
+    bankAnswerItems = (existingBank.question_sets || []).flatMap((s) => s.questions || []);
+  } catch (_) { bankAnswerItems = []; } // fail-open: unreadable bank → no dedup (never blocks merge)
+  const bsIndex = createDedupIndex(bankAnswerItems, "bs");
+  const deduped = [];
+  let bsContentDup = 0;
+  for (const q of accepted) {
+    const dup = checkDuplicate(bsIndex, q, "bs"); // threshold defaults to 0.75 for bs
+    if (dup.dup) {
+      bsContentDup++;
+      console.log(`  skip content-dup answer ${q.id || "(no-id)"} ~= ${dup.matchId} (${dup.reason})`);
+      continue;
+    }
+    addToIndex(bsIndex, q, "bs");
+    deduped.push(q);
+  }
+  if (bsContentDup > 0) console.log(`BS: ${bsContentDup} near/exact-duplicate answer(s) dropped (content dedup); ${deduped.length} remain`);
+  accepted.length = 0;
+  accepted.push(...deduped);
+
   if (accepted.length < 10) {
     console.log(`Not enough valid items to form a 10-question set. Skipping merge.`);
     process.exit(2);
@@ -192,9 +224,15 @@ function mergeDisc(stagingPath) {
     ? Math.max(...(prod || []).map((q) => Number((q.id || "").replace(/^ad/, "")) || 0)) + 1
     : 1;
 
+  // Content dedup on professor text: exact fingerprint + near jaccard (0.8). Seeded from
+  // the live bank and grown per accepted item — so it also catches within-batch repeats,
+  // which the exact `.find(prod)` below never did (it only compared against the live bank).
+  const discIndex = createDedupIndex(prod || [], "discussion");
+
   const accepted = [];
   const rejected = [];
   let counter = nextN;
+  let contentDupCount = 0;
   for (const q of items) {
     const norm = normalizeDiscItem(q);
     if (!norm) {
@@ -207,10 +245,19 @@ function mergeDisc(stagingPath) {
       rejected.push({ reason: "duplicate_text", id: dup.id });
       continue;
     }
-    accepted.push({ id: `ad${counter}`, ...norm });
+    // Fuzzy + within-batch dedup on professor text.
+    const cdup = checkDuplicate(discIndex, norm, "discussion");
+    if (cdup.dup) {
+      contentDupCount++;
+      rejected.push({ reason: `content_dup_${cdup.reason}`, id: cdup.matchId });
+      continue;
+    }
+    const accItem = { id: `ad${counter}`, ...norm };
+    addToIndex(discIndex, accItem, "discussion");
+    accepted.push(accItem);
     counter += 1;
   }
-  console.log(`Discussion: ${accepted.length}/${items.length} items accepted`);
+  console.log(`Discussion: ${accepted.length}/${items.length} items accepted${contentDupCount ? ` (${contentDupCount} content-dup skipped)` : ""}`);
   rejected.slice(0, 5).forEach((r) => console.log(`  - rejected: ${r.reason}`));
   if (accepted.length === 0) process.exit(2);
 
@@ -258,9 +305,15 @@ function mergeEmail(stagingPath) {
     ? Math.max(...(prod || []).map((q) => Number((q.id || "").replace(/^em/, "")) || 0)) + 1
     : 1;
 
+  // Content dedup on scenario: exact fingerprint + near jaccard (0.8). Seeded from the live
+  // bank and grown per accepted item — also catches within-batch repeats, which the exact
+  // `.find(prod)` below never did.
+  const emailIndex = createDedupIndex(prod || [], "email");
+
   const accepted = [];
   const rejected = [];
   let counter = nextN;
+  let contentDupCount = 0;
   for (const q of items) {
     const norm = normalizeEmailItem(q);
     if (!norm) {
@@ -273,10 +326,19 @@ function mergeEmail(stagingPath) {
       rejected.push({ reason: "duplicate_scenario", id: dup.id });
       continue;
     }
-    accepted.push({ id: `em${counter}`, ...norm });
+    // Fuzzy + within-batch dedup on scenario.
+    const cdup = checkDuplicate(emailIndex, norm, "email");
+    if (cdup.dup) {
+      contentDupCount++;
+      rejected.push({ reason: `content_dup_${cdup.reason}`, id: cdup.matchId });
+      continue;
+    }
+    const accItem = { id: `em${counter}`, ...norm };
+    addToIndex(emailIndex, accItem, "email");
+    accepted.push(accItem);
     counter += 1;
   }
-  console.log(`Email: ${accepted.length}/${items.length} items accepted`);
+  console.log(`Email: ${accepted.length}/${items.length} items accepted${contentDupCount ? ` (${contentDupCount} content-dup skipped)` : ""}`);
   rejected.slice(0, 5).forEach((r) => console.log(`  - rejected: ${r.reason}`));
   if (accepted.length === 0) process.exit(2);
 
