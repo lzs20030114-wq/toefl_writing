@@ -1,48 +1,43 @@
 {
-  "session_id": "routine-20260707-170236",
-  "completed_at": "2026-07-07T17:27:00Z",
-  "duration_minutes": 25,
-  "model": "Claude Sonnet 5",
-  "highlight": "12 题库本轮全部一次性通过合库/产出(70/70)，BS 经三轮内部自校准后满分合入无需 R2 补救",
+  "session_id": "routine-20260707-190431",
+  "completed_at": "2026-07-07T19:18:47.625Z",
+  "duration_minutes": 14,
+  "model": "Claude Opus 4.8",
+  "highlight": "12 库全数生成 50/70 过 PASS1；disc/email 全过，reading/listening/speaking 已入 staging 待审计路由；BS 因第一人称占比 0.691 微超冻结带(0.69)被拒合，留 R2 重试。",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 0,
       "topics": [
-        "simple past",
-        "prepositional phrase",
-        "direct question",
-        "modal can",
-        "indirect question",
-        "past tense",
-        "present perfect",
-        "negation",
-        "relative clause",
-        "compound predicate",
-        "passive voice",
-        "phrasal verb",
-        "present tense"
+        "gym/fitness",
+        "career fair",
+        "housing/dorm",
+        "library & readings",
+        "advisor/registration",
+        "lab & equipment",
+        "shuttle/transit",
+        "grades & professors"
       ],
       "favorite": {
-        "prompt": "What did Emma ask you about the concert?",
-        "answer": "She wanted to know if the tickets sold out."
+        "prompt": "You mentioned a professor for the recommendation.",
+        "answer": "The professor who leads the research lab agreed to help me."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "merge gate FAIL: register.first_person 0.691 > band ceiling 0.69 (marginal); 9/20 items also failed per-item (6-word answers, floating adverb, background-only prompt). live bank untouched — left for R2."
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
+        "psychology",
         "environmental science",
-        "social studies",
-        "history and culture",
-        "economics"
+        "business",
+        "public health"
       ],
       "favorite": {
-        "subtopic": "social studies",
-        "preview": "Urban planners have recently revived an old idea: the \"fifteen-minute city,\" where groceries, schools"
+        "subtopic": "environmental science",
+        "preview": "For this week's discussion, let's think about how cities cope with rising summer temperatures. Several municipalities have recently begun painting rooftops and pavement with reflective white coatings"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -51,14 +46,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "消费售后",
-        "住宿",
-        "职场工作",
-        "社区生活"
+        "服务与活动",
+        "校园学业",
+        "服务与活动",
+        "日常社交"
       ],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You joined a weekend reading program at your local community center where volunteers help children practice, but the room is too small and often runs out of books."
+        "subtopic": "服务与活动",
+        "preview": "You recently joined the campus fitness center on a semester membership, but the climbing wall you signed up to use has been closed."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -67,15 +62,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "technology/steam power",
-        "biology/pollination",
-        "geology/river deltas",
-        "art/music theory",
-        "sociology/globalization"
+        "sociology",
+        "business",
+        "geology",
+        "psychology",
+        "chemistry"
       ],
       "favorite": {
-        "subtopic": "geology/river deltas",
-        "preview": "A river delta is a landform that develops where a river deposits its sediment upon entering a calmer body of water"
+        "subtopic": "sociology/globalization",
+        "preview": "Globalization is the growing interdependence of the world's economies, cultures, and societies, produced by the movement of goods and ideas."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -84,16 +79,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/coral reefs",
-        "environmental_science/ocean acidification",
-        "psychology/creativity",
-        "history/ancient civilizations",
-        "geology/rock formation",
-        "astronomy/exoplanets"
+        "biology/photosynthesis",
+        "environmental_science/urban heat islands",
+        "psychology/color perception",
+        "history/the Industrial Revolution",
+        "geology/fossils",
+        "astronomy/dwarf planets"
       ],
       "favorite": {
-        "subtopic": "biology/coral reefs",
-        "preview": "Coral reefs are vast underwater structures built by tiny animals called polyps over thousands of years."
+        "subtopic": "environmental_science/urban heat islands",
+        "preview": "Cities often feel noticeably warmer than the surrounding countryside, a phenomenon called the urban heat island."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -102,14 +97,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "email/student ID replacement fee",
-        "email/career services resume review",
-        "notice/water fountain maintenance closure",
-        "social_media/campus garden spring hours"
+        "email",
+        "notice",
+        "notice",
+        "notice"
       ],
       "favorite": {
-        "subtopic": "social_media",
-        "preview": "So excited the campus community garden reopens for spring! Open plots are up for grabs starting Sat"
+        "subtopic": "email/interlibrary-loan-arrival",
+        "preview": "Dear Nora, The book you requested through interlibrary loan, 'Coastal Ecology,' has arrived at the Reference Desk in Miller Library."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -118,12 +113,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "syllabus/intro biology lab grading",
-        "email/roommate apartment plumber repair"
+        "email",
+        "email"
       ],
       "favorite": {
-        "subtopic": "syllabus",
-        "preview": "BIO 101: Introduction to Biology — Laboratory Component. The laboratory portion of BIO 101 is worth 30% of your final grade"
+        "subtopic": "email/student-organization event invitation",
+        "preview": "Subject: You're Invited: International Food Night — The Global Cultures Club is excited to invite you to our annual celebration."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -132,14 +127,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "cognitive_psychology/how chunking improves working memory capacity",
-        "music/how folk melodies were absorbed into nationalist compositions",
-        "anthropology/the anthropology of food taboos across societies",
-        "linguistics/how language shapes the way we perceive color"
+        "anthropology/oral traditions",
+        "psychology/peak-end rule",
+        "ecology/wetlands flood prevention",
+        "art_history/rediscovery of perspective"
       ],
       "favorite": {
-        "subtopic": "anthropology/the anthropology of food taboos across societies",
-        "preview": "Every human society draws a line between what counts as food and what does not. A substance that one"
+        "subtopic": "ecology/wetlands flood prevention",
+        "preview": "When a river swells after heavy rain, we often picture concrete dams and levees holding the water back. But some of the most effective flood defenses aren't built by engineers at all."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -148,15 +143,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "recommendations_opinions/two friends debating whether a new cafe is worth the price",
-        "recommendations_opinions/two friends recommending a new detective TV series to each other",
-        "errands_service/two students chatting about a pottery class one of them took",
-        "plans_social/two friends coordinating a weekend beach trip",
-        "plans_social/two friends planning a surprise birthday party for a classmate"
+        "music_recommendations",
+        "elective_choice",
+        "potluck_dish",
+        "dorm_housing_singles",
+        "tailor_hem_pants"
       ],
       "favorite": {
-        "subtopic": "plans_social/two friends planning a surprise birthday party for a classmate",
-        "preview": "Okay, so Dan's birthday is next Thursday. I really want to throw him a surprise party."
+        "subtopic": "tailor_hem_pants",
+        "preview": "Hi, I bought these dress pants for an interview, but they're a few inches too long. Can you hem them?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -165,15 +160,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "campus_activity/winter gear swap with voucher system",
-        "academic_event/honors thesis oral defense schedule announcement",
-        "academic_event/senior capstone presentation schedule",
-        "facility_change/campus bookstore moving to a new building",
-        "career_services/career fair preparation workshop with resume review"
+        "spring ethics symposium",
+        "community garden cleanup",
+        "rec center summer hours",
+        "grad school info session",
+        "new student orientation"
       ],
       "favorite": {
-        "subtopic": "facility_change/campus bookstore moving to a new building",
-        "preview": "Due to the expansion of the Student Services Center, the campus bookstore will be relocating to Kemper Hall"
+        "subtopic": "facility_change/rec center reduced summer hours",
+        "preview": "Due to lower attendance over the summer term, the Rec Center will move to reduced hours beginning next Monday, June 15th."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -182,18 +177,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "social/responding to an invitation or suggestion",
-        "general_daily/making or rescheduling an appointment",
-        "campus_daily/student asking about campus shuttle or parking",
-        "social/acknowledging someone's unavailability or schedule conflict",
-        "campus_daily/student asking about dorm maintenance issue",
-        "social/offering help to someone who seems stressed",
-        "general_daily/asking a store clerk about a return or exchange",
-        "social/expressing concern about a friend's situation"
+        "business hours phone call",
+        "gym closing time",
+        "library geology journals",
+        "final essay length",
+        "boots return without receipt",
+        "jazz concert location",
+        "borrowing lecture notes",
+        "offering help"
       ],
       "favorite": {
-        "subtopic": "social/responding to an invitation or suggestion",
-        "preview": "What can I bring that won't be a hassle?"
+        "subtopic": "borrowing lecture notes",
+        "preview": "Why don't you just borrow my notes? — correct response uses the idiom 'You're a lifesaver, thanks so much!'"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -202,13 +197,13 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Campus Gym Induction",
-        "Theater Rehearsal",
+        "Chemistry Lab Safety",
+        "Hardware Store Help",
         "Planetarium Visit"
       ],
       "favorite": {
-        "prompt": "Planetarium Visit",
-        "answer": "When the presentation ends, check the star chart near the exit to find this season's visible constellations."
+        "subtopic": "Chemistry Lab Safety",
+        "preview": "Safety goggles are stored by the sink."
       },
       "retried_after_fail": false,
       "failure_reason": ""
