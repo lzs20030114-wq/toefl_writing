@@ -7728,6 +7728,150 @@
       ],
       "question_count": 2,
       "difficulty": "easy"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nYour request for a replacement student ID has been received. Please stop by the ID Center in Whitmore Hall, Room 12, on Monday, February 9, before 3:30 PM. A $10 replacement fee applies, payable by card only.\n\nBest,\nMs. Okafor",
+      "format_metadata": {
+        "from": "Ms. Okafor",
+        "to": "Daniel",
+        "subject": "Replacement student ID request received"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, by when must Daniel pick up the new ID?",
+          "options": {
+            "A": "By 3:30 PM on Monday, February 2",
+            "B": "By 3:00 PM on Monday, February 9",
+            "C": "By 3:30 PM on Tuesday, February 10",
+            "D": "By 3:30 PM on Monday, February 9"
+          },
+          "correct_answer": "D",
+          "explanation": "The email says to stop by \"on Monday, February 9, before 3:30 PM,\" matching option D."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about paying the replacement fee?",
+          "options": {
+            "A": "Payment can be made in cash on arrival.",
+            "B": "Payment must be completed with a card.",
+            "C": "Payment can be waived for first requests.",
+            "D": "Payment must be mailed to the office."
+          },
+          "correct_answer": "B",
+          "explanation": "Since the $10 fee is \"payable by card only,\" Daniel must pay with a card."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrba2qsj_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Aisha,\n\nYour resume review with Career Services is confirmed for Thursday, October 22, at 11:00 AM in Bradley Hall, Room 300. Please email a current copy of your resume to us by Wednesday so the advisor can prepare notes.\n\nRegards,\nCareer Services Team",
+      "format_metadata": {
+        "from": "Career Services Team",
+        "to": "Aisha",
+        "subject": "Resume review appointment confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when is Aisha's resume review scheduled?",
+          "options": {
+            "A": "On Thursday, October 22, at 1:00 PM",
+            "B": "On Thursday, October 22, at 11:00 AM",
+            "C": "On Wednesday, October 21, at 11:00 AM",
+            "D": "On Thursday, October 29, at 11:00 AM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email confirms the review \"for Thursday, October 22, at 11:00 AM,\" matching option B."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Aisha do before the appointment?",
+          "options": {
+            "A": "Send a printed resume to the front desk",
+            "B": "Bring two references to the meeting room",
+            "C": "Email a current resume copy by Wednesday",
+            "D": "Call the advisor to confirm the time"
+          },
+          "correct_answer": "C",
+          "explanation": "The email asks her to \"email a current copy of your resume to us by Wednesday,\" matching option C."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrba2qsj_1"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "NOTICE: The water fountains on the third floor of Lambert Library will be shut off for maintenance from Monday, June 15, through Wednesday, June 17. Bottled water will be available at the first-floor help desk. Please use the second-floor fountains during this period.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, which fountains will be unavailable?",
+          "options": {
+            "A": "The fountains on floor one",
+            "B": "The fountains beside the help desk",
+            "C": "The fountains on floor three",
+            "D": "The fountains on floor two"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states the fountains \"on the third floor of Lambert Library will be shut off,\" matching option C."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about staying hydrated during the closure?",
+          "options": {
+            "A": "Students can get bottled water downstairs.",
+            "B": "Students must bring water from home.",
+            "C": "Students can use the third-floor sink instead.",
+            "D": "Students must wait until maintenance ends."
+          },
+          "correct_answer": "A",
+          "explanation": "Since bottled water is offered at the first-floor help desk, students can obtain it downstairs."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrba2qsj_2"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "So excited the campus community garden reopens for spring! Open plots are up for grabs starting Saturday, April 4, from 9 AM to 2 PM behind Merton Hall. Grab a plot for just $5 a semester — cheapest hobby on campus, honestly!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, how much does a garden plot cost?",
+          "options": {
+            "A": "$5 per month",
+            "B": "$15 each semester",
+            "C": "$5 per week",
+            "D": "$5 each semester"
+          },
+          "correct_answer": "D",
+          "explanation": "The post advertises a plot \"for just $5 a semester,\" matching option D."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the writer's opinion of the garden?",
+          "options": {
+            "A": "The writer thinks it offers great value.",
+            "B": "The writer believes plots are overpriced.",
+            "C": "The writer prefers indoor hobbies instead.",
+            "D": "The writer plans to skip gardening this year."
+          },
+          "correct_answer": "A",
+          "explanation": "Calling it the \"cheapest hobby on campus\" suggests the writer sees the garden as great value."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrba2qsj_3"
     }
   ]
 }

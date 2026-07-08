@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What can I bring that won't be a hassle?",
+      "options": {
+        "A": "Honestly, don't bring a thing — it's covered.",
+        "B": "The party store downtown has great decorations.",
+        "C": "I finally finished painting my bedroom.",
+        "D": "It starts around seven in the evening."
+      },
+      "answer": "A",
+      "explanation": "说话人问带什么东西来才不会太麻烦，暗示想帮忙分担。正确答案A没有纠结'带什么'这个字面问题，而是直接说什么都不用带、全都准备好了，从根本上打消了对方的顾虑，符合context_shift范式。B项借用'bring/party'的联想，谈起市中心派对用品店的装饰，属于语义联想陷阱，答非所问。C项完全离题，说自己刚粉刷完卧室。D项回答的是'几点开始'而非'带什么'，属于答错问题类型。",
+      "distractor_types": { "B": "semantic_association_trap", "C": "off_topic", "D": "wrong_question_type" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's the office to reschedule my checkup?",
+      "options": {
+        "A": "My schedule's been packed all month.",
+        "B": "You've come to the right place, actually.",
+        "C": "Sometime early next week works best.",
+        "D": "I still need to renew my parking permit."
+      },
+      "answer": "B",
+      "explanation": "说话人问去哪个办公室改约体检时间。正确答案B使用习惯性表达'You've come to the right place'（你问对地方/人了），既自然又暗示对方现在就能在这里帮忙办理，符合idiomatic范式。A项借用'reschedule'联想到'schedule'，却谈自己这个月日程很满，属于语义联想陷阱。C项回答的是'什么时候改约'而非'去哪里'，答错了问题类型。D项完全离题，说自己还得去续办停车证。",
+      "distractor_types": { "A": "semantic_association_trap", "C": "wrong_question_type", "D": "off_topic" }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't ever figure out the shuttle schedule.",
+      "options": {
+        "A": "The shuttle got a fresh coat of paint.",
+        "B": "I left my umbrella in the library again.",
+        "C": "Actually, an app tracks it live now.",
+        "D": "The new figures came out in the report."
+      },
+      "answer": "C",
+      "explanation": "说话人抱怨自己老是搞不懂校车时刻表。正确答案C以话语标记'Actually'开头，间接给出解决办法——现在有个App能实时追踪校车，符合marker_led_indirect范式。A项借用'shuttle'一词，却谈校车重新喷了漆，属于语义联想陷阱。B项完全离题，说自己又把伞落在图书馆了。D项把'figure'（弄明白）误当成'figures'（数字/数据），谈报告里出了新数据，属于一词多义误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I won't be able to make it Friday night.",
+      "options": {
+        "A": "Friday's forecast looks pretty stormy.",
+        "B": "I just repotted all my plants yesterday.",
+        "C": "Great, I'll see you there then!",
+        "D": "Oh, we'll catch you next time then."
+      },
+      "answer": "D",
+      "explanation": "说话人告知自己周五晚上来不了。正确答案D以话语标记'Oh'开头，温暖地表示没关系、下次再聚，得体地回应了对方的爽约，符合marker_led_indirect范式。A项借用'Friday'一词，却谈周五天气预报有暴风雨，属于语义联想陷阱。B项完全离题，说自己昨天给植物换了盆。C项把对方的话误解成'会到场'，回复'太好了到时见'，与对方明说来不了正好相反，属于误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "misinterpretation" }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How do I report a heater that's broken?",
+      "options": {
+        "A": "Just give the front desk a shout.",
+        "B": "The heater in the lounge is really loud.",
+        "C": "I signed up for the cooking club today.",
+        "D": "My lab report is due this Friday."
+      },
+      "answer": "A",
+      "explanation": "说话人问宿舍暖气坏了该怎么报修。正确答案A使用口语习惯表达'give the front desk a shout'（跟前台说一声），自然地给出了报修的办法，符合idiomatic范式。B项借用'heater'一词，却谈休息室的暖气很吵，属于语义联想陷阱。C项完全离题，说自己今天报名了烹饪社团。D项把'report'（报修）误当成'lab report'（实验报告），属于一词多义误解型干扰项。",
+      "distractor_types": { "B": "semantic_association_trap", "C": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why are you carrying all those boxes yourself?",
+      "options": {
+        "A": "Those boxes are made of recycled cardboard.",
+        "B": "Here, let me grab a couple.",
+        "C": "I watched a great documentary last night.",
+        "D": "No, I don't need any more boxes."
+      },
+      "answer": "B",
+      "explanation": "说话人看到对方独自搬一堆箱子，语气里带着关切和想帮忙的意思。正确答案B以'Here'开头，直接伸手接过几个箱子，用行动回应了帮忙的意图，符合marker_led_indirect范式。A项借用'boxes'一词，却谈箱子是再生纸板做的，属于语义联想陷阱。C项完全离题，说自己昨晚看了部好纪录片。D项把对方的关心误解成'要给我更多箱子'，回答'不用了'，属于误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "C": "off_topic", "D": "misinterpretation" }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can't I exchange this shirt for a bigger size?",
+      "options": {
+        "A": "That shirt comes in three other colors.",
+        "B": "The parking meter only takes coins.",
+        "C": "Sure, the bigger sizes are right over here.",
+        "D": "We had a nice exchange about the weather."
+      },
+      "answer": "C",
+      "explanation": "顾客问能不能把这件衬衫换成大一号的。正确答案C以话语标记'Sure'开头，答应可以换，并指出大码就在旁边，符合marker_led_indirect范式。A项借用'shirt'一词，却谈这件衬衫还有另外三种颜色，属于语义联想陷阱。B项完全离题，说停车计时器只收硬币。D项把'exchange'（换货）误当成'exchange'（交谈），说'我们聊了聊天气'，属于一词多义误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "D": "polysemy_misinterpretation" }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Haven't you slept at all this week?",
+      "options": {
+        "A": "This mattress is great for deep sleep.",
+        "B": "The bus was surprisingly empty today.",
+        "C": "No, I haven't seen your keys anywhere.",
+        "D": "I'm getting by, thanks for checking in."
+      },
+      "answer": "D",
+      "explanation": "说话人担心地问朋友这周是不是根本没怎么睡。正确答案D使用口语习惯表达'getting by'（还撑得住）并加上'thanks for checking in'（谢谢你关心），语气温暖自然，符合idiomatic范式。A项借用'sleep'的联想，却谈床垫有助于深度睡眠，属于语义联想陷阱。B项完全离题，说今天公交车意外地空。C项把'Haven't you...'误解成在问有没有见过钥匙，答非所问，属于误解型干扰项。",
+      "distractor_types": { "A": "semantic_association_trap", "B": "off_topic", "C": "misinterpretation" }
+    }
+  ]
+}
