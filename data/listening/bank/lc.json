@@ -14884,6 +14884,386 @@
       ],
       "id": "lc_mrba2qu7_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mrba2qu7_4.mp3"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm so bored of the same pop singers on every playlist lately. Can you recommend something completely different?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely. Have you tried that indie folk band, River and Stone? Their new album is really mellow and great for studying."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that sounds nice. I've never heard of them. Are they on the usual streaming apps?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, they're everywhere. Start with the track called 'Harbor Lights' — that one hooked me right away."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll queue it up during my study session tonight."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man recommend the woman listen to?",
+          "options": {
+            "A": "A new album by an indie folk band",
+            "B": "A pop singer's latest single",
+            "C": "A playlist of classical study music",
+            "D": "A live concert happening this weekend"
+          },
+          "answer": "A",
+          "explanation": "男生明确推荐独立民谣乐队 River and Stone 的新专辑。B项与女生厌倦流行歌手的心情相反，是错误细节；C项对话未提及古典乐单；D项现场演唱会对话中完全没有提到。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "unrelated_next_step"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tonight?",
+          "options": {
+            "A": "Delete all of her old pop playlists",
+            "B": "Buy tickets to see the band live",
+            "C": "Listen to the recommended track while studying",
+            "D": "Ask the man for even more suggestions"
+          },
+          "answer": "C",
+          "explanation": "女生说她今晚学习时会把这首歌加入播放队列，采纳了男生的推荐。A项属过度推断，她只是厌倦流行乐并未说要删歌单；B、D两项对话中都没有依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrckqvwi_0"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you decided which elective you're taking next term? I'm torn between photography and film studies."
+        },
+        {
+          "speaker": "Man",
+          "text": "I already signed up for the photography one. Professor Nguyen teaches it, and everyone says her feedback is amazing."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, that's good to know. Does it meet in the morning or afternoon? My mornings are packed."
+        },
+        {
+          "speaker": "Man",
+          "text": "It's Tuesday and Thursday afternoons, so you'd be fine. There were only a couple of spots left when I checked, though."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Then I'd better register today before they fill up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the photography elective?",
+          "options": {
+            "A": "It is already fully booked",
+            "B": "Professor Nguyen gives great feedback",
+            "C": "It meets on Monday mornings",
+            "D": "It requires an expensive camera"
+          },
+          "answer": "B",
+          "explanation": "男生说大家都说 Nguyen 教授的反馈很棒。A项错误，他说只剩几个名额而非满员；C项错误，课在周二周四下午；D项关于昂贵相机对话未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Switch to a morning film studies class",
+            "B": "Ask the professor for permission to join",
+            "C": "Wait until next term to decide",
+            "D": "Register for the class right away"
+          },
+          "answer": "D",
+          "explanation": "女生说趁名额没满今天就去注册，说明她会立刻报名。A项与她想避开满课的清晨相反且属她放弃的选项；B项对话没有依据；C项与她急着报名的态度相反。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "reversed_situation"
+          }
+        }
+      ],
+      "id": "lc_mrckqvwj_1"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students figuring out what dish to bring to a department potluck",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So for the department potluck, what should the two of us actually bring? I don't want us both showing up with dessert."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right. The sign-up sheet already has tons of desserts and chips. What's really missing is anything with substance."
+        },
+        {
+          "speaker": "Woman",
+          "text": "True. Maybe a big pasta salad? It travels well and we could make it the night before."
+        },
+        {
+          "speaker": "Man",
+          "text": "That works, but half the class is vegetarian, so let's skip the versions with meat in them."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good thinking. I'll draft a simple recipe and send it over so we can split the shopping."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Whether to attend the potluck at all",
+            "B": "How to split the cost of groceries",
+            "C": "What dish to bring to the potluck",
+            "D": "Which classmates have dietary restrictions"
+          },
+          "answer": "C",
+          "explanation": "两人整段都在商量给系里聚餐带哪道菜。A项与他们已经计划参加相反；B项分摊费用只是结尾一句次要提及；D项素食者只是决定菜品时的一个考量，均非对话主旨。",
+          "distractor_types": {
+            "A": "reversed_situation",
+            "B": "too_narrow",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the pasta salad they plan to make?",
+          "options": {
+            "A": "It will not contain any meat",
+            "B": "It will be bought ready-made from a store",
+            "C": "It will be the only savory dish there",
+            "D": "It will be prepared at the party itself"
+          },
+          "answer": "A",
+          "explanation": "因为一半同学吃素，两人决定跳过含肉的版本，可推断这道意面沙拉不放肉。B项与他们打算自己前一晚做相反；C项属过度推断；D项错误，他们说是前一晚在家做好。",
+          "distractor_types": {
+            "B": "reversed_situation",
+            "C": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "lc_mrckqvwk_2"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends deciding whether to keep their shared room or apply for singles next year",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you thought about housing for next year? I can't decide if we should keep this room or apply for singles."
+        },
+        {
+          "speaker": "Man",
+          "text": "I've been going back and forth too. The double is cheaper, but honestly the noise from the lounge next door drives me crazy."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Same here. A single would be quieter, but the application deadline is this Friday, which is really soon."
+        },
+        {
+          "speaker": "Man",
+          "text": "Wait, this Friday? I thought we had until the end of the month."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Nope, they moved it up this year. We should talk it through tonight so we don't miss it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the woman, what is true about the singles application?",
+          "options": {
+            "A": "It costs less than a double room",
+            "B": "It has already closed for the year",
+            "C": "It needs a roommate's signature",
+            "D": "Its deadline is this coming Friday"
+          },
+          "answer": "D",
+          "explanation": "女生说单人间的申请截止日提前到了本周五。A项张冠李戴，是双人间更便宜；B项错误，截止日尚未到；C项关于室友签名对话未提及。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do tonight?",
+          "options": {
+            "A": "Submit the singles application immediately",
+            "B": "Discuss their housing decision together",
+            "C": "Complain to the residence office about noise",
+            "D": "Move their belongings to a new room"
+          },
+          "answer": "B",
+          "explanation": "女生提议今晚把这件事谈清楚，两人尚未做出决定，所以最可能的是一起商量。A项属过度推断，他们还没决定；C、D两项对话中都没有依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mrckqvwk_3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "a customer asking a tailor shop to hem dress pants before an interview",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "customer",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "shop_staff",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hi, I bought these dress pants for an interview, but they're a few inches too long. Can you hem them?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Of course. For a simple hem like this, it's twelve dollars, and we can have them ready by Thursday."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Thursday? Oh no, my interview is Wednesday morning. Is there any way to get them sooner?"
+        },
+        {
+          "speaker": "Man",
+          "text": "We do offer a rush service for an extra eight dollars. If you leave them now, they'll be done tomorrow afternoon."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That would be a lifesaver. Let's do the rush option, then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman want the shop to do?",
+          "options": {
+            "A": "Shorten the length of her pants",
+            "B": "Replace a broken zipper on her pants",
+            "C": "Remove a stain from her dress pants",
+            "D": "Take in the waist of her pants"
+          },
+          "answer": "A",
+          "explanation": "女生说裤子长了几英寸，想让店里改短，也就是缝边。B项换拉链、C项去污渍对话都未提及；D项收腰是错误细节，她说的是长度不是腰围。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Pick up the pants on Thursday as first offered",
+            "B": "Look for another tailor nearby",
+            "C": "Pay extra for the rush service",
+            "D": "Wear different pants to her interview"
+          },
+          "answer": "C",
+          "explanation": "女生说\"Let's do the rush option\"，即愿意多付钱用加急服务。A项是她因面试在周三而放弃的选项；B、D两项对话中都没有依据。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrckqvwl_4"
     }
   ]
 }
