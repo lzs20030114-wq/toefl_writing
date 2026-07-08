@@ -8,7 +8,7 @@
  * item without audio_url, writes the .mp3, and sets audio_url. Idempotent — items that
  * already have audio_url are skipped, so it can run after every routine / on a cron.
  *
- * Usage: node scripts/backfill-tts.mjs [--limit N] [--only lat,lc,la,lcr,repeat]
+ * Usage: node scripts/backfill-tts.mjs [--limit N] [--only lat,lc,la,lcr,repeat,interview]
  */
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
@@ -115,6 +115,35 @@ async function backfillRepeat(bankPath) {
   console.log(`repeat.json: +${sents} sentence-audio across ${sets} sets (${fail} failed)`);
 }
 
+// Interview (Speaking Task 2): each set holds .questions; voice the interviewer's
+// question with a steady professional voice. Mirrors backfillRepeat (per-question
+// audio_url, keyed by question id) so the app plays a real MP3 instead of relying
+// on the browser's Web Speech API, which is silent on much of mainland mobile.
+async function backfillInterview(bankPath) {
+  if (!existsSync(resolve(ROOT, bankPath))) return;
+  const b = load(bankPath); let sets = 0, qs = 0, fail = 0;
+  for (const set of (b.items || [])) {
+    const qq = set.questions || [];
+    if (!qq.length) continue;
+    if (qq.every(q => q.audio_url)) continue;
+    if (budget <= 0) break;
+    let any = false;
+    for (const q of qq) {
+      if (q.audio_url || !q.question) continue;
+      if (budget <= 0) break;
+      try {
+        const buf = await generateSpeech(q.question, { preset: 'lcr_staff_female', format: 'mp3' });
+        const qid = q.id || `${set.id}_${qq.indexOf(q) + 1}`;
+        const { url } = await uploadChecked(`speaking/interview/${qid}.mp3`, buf);
+        q.audio_url = url; qs++; any = true; budget--;
+      } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${set.id}: ${e.message.slice(0, 80)}`); }
+    }
+    if (any) sets++;
+  }
+  save(bankPath, b);
+  console.log(`interview.json: +${qs} question-audio across ${sets} sets (${fail} failed)`);
+}
+
 const want = (k) => !ONLY_SET || ONLY_SET.has(k);
 
 (async () => {
@@ -140,6 +169,7 @@ const want = (k) => !ONLY_SET || ONLY_SET.has(k);
     if (want('lcr')) await backfillSingle('data/listening/bank/lcr.json', it => it.speaker || it.prompt, 'choose-response', 'lcr_staff_male');
     if (want('lc')) await backfillConversation('data/listening/bank/lc.json', 'conversation');
     if (want('repeat')) await backfillRepeat('data/speaking/bank/repeat.json');
+    if (want('interview')) await backfillInterview('data/speaking/bank/interview.json');
   } catch (e) {
     if (e.fatal) { console.error(`\n✗ Aborting: ${e.message}`); process.exit(1); }
     throw e;

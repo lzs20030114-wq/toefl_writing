@@ -6,6 +6,7 @@ import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
+import { sameOriginAudio } from "../../lib/listening/audioSrc";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -61,6 +62,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
   const recorderStopRef = useRef(null);
+  // Current pre-rendered MP3 <Audio> instance for the question prompt (preferred
+  // over Web Speech). Held so we can stop it on advance / unmount.
+  const audioElRef = useRef(null);
   // AbortController per question — used by forceFinish to cancel in-flight
   // transcribe uploads when the user gives up on the deferred-finish wait.
   const transcribeAbortRef = useRef([]);
@@ -79,6 +83,14 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   useEffect(() => {
     if (typeof window === "undefined") return;
     setTtsSupported("speechSynthesis" in window);
+  }, []);
+
+  // Stop any in-flight MP3 / utterance when the component unmounts.
+  useEffect(() => {
+    return () => {
+      if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
+      if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    };
   }, []);
 
   // (STT runs server-side now; no browser capability check needed.)
@@ -107,53 +119,95 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [phase, current, recordingStarted]);
 
+  // Play the interviewer's question. Prefer a pre-rendered MP3 (served through
+  // our same-origin /api/audio proxy — reachable in mainland China and on devices
+  // with no English speech engine); fall back to the Web Speech API when there's
+  // no clip or it fails. The question text stays on screen throughout, so even a
+  // total audio failure never blocks the user (unlike Listen & Repeat).
   const playQuestion = useCallback(() => {
-    if (!ttsSupported || !question) return;
+    if (!question) return;
+
+    // Stop anything currently sounding.
+    if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+
+    const advance = () => { setAutoRecordReady(true); setPhase("answer"); };
+
     // Safari's getVoices() returns [] until voiceschanged fires — speaking
     // synchronously can fall back to the system default voice (Chinese on a
     // macOS-CN setup), so wait for the voice list with a 600ms hard timeout.
-    function speakWithVoices(voices) {
-      window.speechSynthesis.cancel();
-      const utt = new SpeechSynthesisUtterance(question.question);
-      utt.lang = "en-US";
-      utt.rate = 0.85;
-      const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
-      let enVoice = null;
-      for (const name of PREFERRED) {
-        enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
-        if (enVoice) break;
-      }
-      if (!enVoice) enVoice = voices.find((v) => v.lang.startsWith("en-"));
-      if (enVoice) utt.voice = enVoice;
+    function playViaTTS() {
+      // No speech engine and no MP3: leave prep in place — the UI shows a manual
+      // "Start Recording" button so we don't auto-start recording unexpectedly.
+      if (!ttsSupported) return;
+      function speakWithVoices(voices) {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(question.question);
+        utt.lang = "en-US";
+        utt.rate = 0.85;
+        const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
+        let enVoice = null;
+        for (const name of PREFERRED) {
+          enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
+          if (enVoice) break;
+        }
+        if (!enVoice) enVoice = voices.find((v) => v.lang.startsWith("en-"));
+        if (enVoice) utt.voice = enVoice;
 
-      utt.onend = () => {
-        setAutoRecordReady(true);
-        setPhase("answer");
+        utt.onend = advance;
+        utt.onerror = advance;
+        window.speechSynthesis.speak(utt);
+      }
+
+      const synth = window.speechSynthesis;
+      const initial = synth.getVoices();
+      if (initial && initial.length > 0) { speakWithVoices(initial); return; }
+      let fired = false;
+      const onVoicesChanged = () => {
+        if (fired) return;
+        fired = true;
+        synth.removeEventListener("voiceschanged", onVoicesChanged);
+        speakWithVoices(synth.getVoices());
       };
-      utt.onerror = () => {
-        setAutoRecordReady(true);
-        setPhase("answer");
-      };
-      window.speechSynthesis.speak(utt);
+      synth.addEventListener("voiceschanged", onVoicesChanged);
+      setTimeout(() => {
+        if (fired) return;
+        fired = true;
+        synth.removeEventListener("voiceschanged", onVoicesChanged);
+        speakWithVoices(synth.getVoices());
+      }, 600);
     }
 
-    const synth = window.speechSynthesis;
-    const initial = synth.getVoices();
-    if (initial && initial.length > 0) { speakWithVoices(initial); return; }
-    let fired = false;
-    const onVoicesChanged = () => {
-      if (fired) return;
-      fired = true;
-      synth.removeEventListener("voiceschanged", onVoicesChanged);
-      speakWithVoices(synth.getVoices());
-    };
-    synth.addEventListener("voiceschanged", onVoicesChanged);
-    setTimeout(() => {
-      if (fired) return;
-      fired = true;
-      synth.removeEventListener("voiceschanged", onVoicesChanged);
-      speakWithVoices(synth.getVoices());
-    }, 600);
+    const src = sameOriginAudio(question.audio_url);
+    if (src) {
+      const audio = new Audio(src);
+      audioElRef.current = audio;
+      audio.onended = () => {
+        if (audioElRef.current !== audio) return;
+        audioElRef.current = null;
+        advance();
+      };
+      // Unreachable clip / decode error → rescue with Web Speech, or advance
+      // straight to the answer phase when there's no speech engine (the question
+      // is on screen, so the user can still answer — never leave them stuck).
+      audio.onerror = () => {
+        if (audioElRef.current !== audio) return;
+        audioElRef.current = null;
+        if (ttsSupported) playViaTTS(); else advance();
+      };
+      const pr = audio.play();
+      if (pr && typeof pr.catch === "function") {
+        // Autoplay blocked → advance to the answer phase anyway (the question is
+        // on screen); the user records their answer, no audio needed to proceed.
+        pr.catch(() => {
+          if (audioElRef.current !== audio) return;
+          audioElRef.current = null;
+          advance();
+        });
+      }
+      return;
+    }
+    playViaTTS();
   }, [ttsSupported, question]);
 
   // Auto-play question on prep phase
@@ -635,7 +689,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
               <div style={{ fontSize: 14, color: C.t3 }}>
                 Listening to the question... Recording starts after.
               </div>
-              {!ttsSupported && (
+              {/* Manual fallback only when there's neither an MP3 nor a speech
+                  engine — otherwise the audio plays and auto-advances. */}
+              {!ttsSupported && !question.audio_url && (
                 <Btn
                   onClick={() => { setAutoRecordReady(true); setPhase("answer"); }}
                   style={{ marginTop: 16, background: SPK.color, borderColor: SPK.color }}

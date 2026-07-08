@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name "audio-backfill[bot]"
           git config user.email "audio-backfill[bot]@users.noreply.github.com"
-          git add data/listening data/speaking/bank/repeat.json
+          git add data/listening data/speaking/bank/repeat.json data/speaking/bank/interview.json
           if git diff --cached --quiet; then
             echo "No audio changes — all items already have audio."
             exit 0

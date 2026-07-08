@@ -6,8 +6,38 @@ import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
+import { sameOriginAudio } from "../../lib/listening/audioSrc";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
+
+// Shared single playback slot for the "Original" replays on the review / summary
+// screens. Prefer the pre-rendered MP3 (served through our same-origin /api/audio
+// proxy so it loads where supabase.co is blocked AND where the device has no
+// English speech engine); fall back to the Web Speech API only when there's no
+// clip or it fails. Module-level so tapping one replay stops any other sounding.
+let currentOriginalAudio = null;
+function playOriginalSentence(sentence) {
+  if (!sentence) return;
+  if (currentOriginalAudio) { try { currentOriginalAudio.pause(); } catch {} currentOriginalAudio = null; }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+
+  const speakTTS = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const u = new SpeechSynthesisUtterance(sentence.sentence);
+    u.lang = "en-US";
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  };
+
+  const src = sameOriginAudio(sentence.audio_url);
+  if (!src) { speakTTS(); return; }
+  const audio = new Audio(src);
+  currentOriginalAudio = audio;
+  audio.onended = () => { if (currentOriginalAudio === audio) currentOriginalAudio = null; };
+  audio.onerror = () => { if (currentOriginalAudio === audio) { currentOriginalAudio = null; speakTTS(); } };
+  const pr = audio.play();
+  if (pr && typeof pr.catch === "function") pr.catch(() => {});
+}
 
 /**
  * Listen and Repeat — Task 1 of TOEFL 2026 Speaking.
@@ -60,6 +90,9 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
 
   const elapsedRef = useRef(null);
   const utteranceRef = useRef(null);
+  // Current pre-rendered MP3 <Audio> instance (preferred over Web Speech). Held
+  // so we can stop it when replaying, advancing, or unmounting.
+  const audioElRef = useRef(null);
   // AbortController per question index — used to cancel an in-flight
   // transcribe when the user clicks Re-record (otherwise we pay for a
   // transcript they're about to discard).
@@ -84,66 +117,112 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     setTtsSupported("speechSynthesis" in window);
   }, []);
 
+  // Stop any in-flight MP3 / utterance (incl. an "Original" replay) on unmount.
+  useEffect(() => {
+    return () => {
+      if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
+      if (currentOriginalAudio) { try { currentOriginalAudio.pause(); } catch {} currentOriginalAudio = null; }
+      if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    };
+  }, []);
+
   // (STT runs server-side now; no browser capability check needed.)
 
+  // Play the current sentence. Prefer the pre-rendered MP3 (a real TTS voice,
+  // served through our same-origin /api/audio proxy) — it loads where supabase.co
+  // is blocked AND where the device has no English speech engine, which covers
+  // most mainland mobile browsers / WeChat WebView. Only fall back to the Web
+  // Speech API when there's no clip or the MP3 fails to load.
   const playSentence = useCallback(() => {
-    if (!ttsSupported || !sentence) return;
+    if (!sentence) return;
 
-    // Safari's getVoices() returns [] on first synchronous call and populates
-    // after a `voiceschanged` event. If we don't wait, voice selection falls
-    // back to the system default (often Chinese on macOS-CN) and English
-    // sentences come out garbled. Wait up to ~600ms for voices, then proceed
-    // with whatever we have (system will use a default voice if none picked).
-    function speakWithVoices(voices) {
-      window.speechSynthesis.cancel();
-      const utt = new SpeechSynthesisUtterance(sentence.sentence);
-      utt.lang = "en-US";
-      utt.rate = 0.9;
-      utt.pitch = 1;
+    // Stop anything currently sounding (a previous MP3 or a queued utterance).
+    if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
 
-      // Prefer high-quality English voices: Samantha (macOS), Microsoft Aria
-      // (Windows), Google US English (Chrome). Otherwise any en-* voice.
-      const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
-      let enVoice = null;
-      for (const name of PREFERRED) {
-        enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
-        if (enVoice) break;
+    const advance = () => { setTtsPlaying(false); setPhase("record"); };
+
+    // Web Speech fallback. Safari's getVoices() returns [] on the first
+    // synchronous call and populates after a `voiceschanged` event; if we don't
+    // wait, voice selection falls back to the system default (often Chinese on
+    // macOS-CN) and English comes out garbled. Wait up to ~600ms for voices.
+    function playViaTTS() {
+      if (!ttsSupported) return; // no speech engine and no MP3 → UI shows the text box
+      function speakWithVoices(voices) {
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(sentence.sentence);
+        utt.lang = "en-US";
+        utt.rate = 0.9;
+        utt.pitch = 1;
+
+        // Prefer high-quality English voices: Samantha (macOS), Microsoft Aria
+        // (Windows), Google US English (Chrome). Otherwise any en-* voice.
+        const PREFERRED = ["Samantha", "Aria", "Google US English", "Alex", "Karen"];
+        let enVoice = null;
+        for (const name of PREFERRED) {
+          enVoice = voices.find((v) => v.lang.startsWith("en-") && v.name.includes(name));
+          if (enVoice) break;
+        }
+        if (!enVoice) {
+          enVoice = voices.find((v) => v.lang.startsWith("en-") && /female/i.test(v.name))
+            || voices.find((v) => v.lang.startsWith("en-"));
+        }
+        if (enVoice) utt.voice = enVoice;
+
+        utt.onstart = () => setTtsPlaying(true);
+        utt.onend = advance;
+        utt.onerror = advance;
+
+        utteranceRef.current = utt;
+        window.speechSynthesis.speak(utt);
       }
-      if (!enVoice) {
-        enVoice = voices.find((v) => v.lang.startsWith("en-") && /female/i.test(v.name))
-          || voices.find((v) => v.lang.startsWith("en-"));
-      }
-      if (enVoice) utt.voice = enVoice;
 
-      utt.onstart = () => setTtsPlaying(true);
-      utt.onend = () => { setTtsPlaying(false); setPhase("record"); };
-      utt.onerror = () => { setTtsPlaying(false); setPhase("record"); };
-
-      utteranceRef.current = utt;
-      window.speechSynthesis.speak(utt);
+      const synth = window.speechSynthesis;
+      const initial = synth.getVoices();
+      if (initial && initial.length > 0) { speakWithVoices(initial); return; }
+      // Safari: subscribe to voiceschanged, with a hard 600ms timeout fallback.
+      let fired = false;
+      const onVoicesChanged = () => {
+        if (fired) return;
+        fired = true;
+        synth.removeEventListener("voiceschanged", onVoicesChanged);
+        speakWithVoices(synth.getVoices());
+      };
+      synth.addEventListener("voiceschanged", onVoicesChanged);
+      setTimeout(() => {
+        if (fired) return;
+        fired = true;
+        synth.removeEventListener("voiceschanged", onVoicesChanged);
+        speakWithVoices(synth.getVoices());
+      }, 600);
     }
 
-    const synth = window.speechSynthesis;
-    const initial = synth.getVoices();
-    if (initial && initial.length > 0) {
-      speakWithVoices(initial);
+    const src = sameOriginAudio(sentence.audio_url);
+    if (src) {
+      const audio = new Audio(src);
+      audioElRef.current = audio;
+      audio.onplay = () => setTtsPlaying(true);
+      audio.onended = () => {
+        if (audioElRef.current !== audio) return;
+        audioElRef.current = null;
+        advance();
+      };
+      // Unreachable clip / decode error → rescue with Web Speech so the listen
+      // phase still completes instead of dead-ending.
+      audio.onerror = () => {
+        if (audioElRef.current !== audio) return;
+        audioElRef.current = null;
+        playViaTTS();
+      };
+      const pr = audio.play();
+      if (pr && typeof pr.catch === "function") {
+        // Autoplay blocked (needs a user gesture). Don't advance or rescue —
+        // leave the play button enabled so a tap (a fresh gesture) replays it.
+        pr.catch(() => { if (audioElRef.current === audio) setTtsPlaying(false); });
+      }
       return;
     }
-    // Safari: subscribe to voiceschanged, with a hard 600ms timeout fallback.
-    let fired = false;
-    const onVoicesChanged = () => {
-      if (fired) return;
-      fired = true;
-      synth.removeEventListener("voiceschanged", onVoicesChanged);
-      speakWithVoices(synth.getVoices());
-    };
-    synth.addEventListener("voiceschanged", onVoicesChanged);
-    setTimeout(() => {
-      if (fired) return;
-      fired = true;
-      synth.removeEventListener("voiceschanged", onVoicesChanged);
-      speakWithVoices(synth.getVoices());
-    }, 600);
+    playViaTTS();
   }, [ttsSupported, sentence]);
 
   // Auto-play on new sentence
@@ -509,12 +588,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                             {sc.accuracy}% Accuracy
                           </span>
                         )}
-                        <ReplayButton label="Original" onPlay={() => {
-                          window.speechSynthesis.cancel();
-                          const u = new SpeechSynthesisUtterance(item.sentence);
-                          u.lang = "en-US"; u.rate = 0.9;
-                          window.speechSynthesis.speak(u);
-                        }} />
+                        <ReplayButton label="Original" onPlay={() => playOriginalSentence(item)} />
                         {recordings[i] && (
                           <ReplayButton label="My Recording" blobUrl={recordings[i]} />
                         )}
@@ -587,7 +661,10 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
                   Play Again
                 </Btn>
               )}
-              {!ttsSupported && (
+              {/* No MP3 AND no speech engine — the only case where we must reveal
+                  the text so the user isn't stuck with silence. When an MP3 exists
+                  it plays regardless of Web Speech support, so keep it hidden. */}
+              {!ttsSupported && !sentence.audio_url && (
                 <div style={{
                   marginTop: 16, padding: "12px 16px", background: SPK.soft,
                   borderRadius: 10, border: "1px solid #FDE68A",
@@ -651,12 +728,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               </div>
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 24 }}>
-                <ReplayButton label="Original" onPlay={() => {
-                  window.speechSynthesis.cancel();
-                  const u = new SpeechSynthesisUtterance(sentence.sentence);
-                  u.lang = "en-US"; u.rate = 0.9;
-                  window.speechSynthesis.speak(u);
-                }} />
+                <ReplayButton label="Original" onPlay={() => playOriginalSentence(sentence)} />
                 {recordings[current] && (
                   <ReplayButton label="My Recording" blobUrl={recordings[current]} />
                 )}
