@@ -29,6 +29,15 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 
 import { join, basename, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
+// 合库层通用内容去重（id 去重之外再拦「同/近内容不同 id」）。CJS 默认导入再解构。
+import contentDedup from '../lib/gen/contentDedup.js';
+const { createDedupIndex, checkDuplicate, addToIndex } = contentDedup;
+
+// bankFile → contentDedup 题型名（extractText 用）：rdl-long/rdl-short 归一为 rdl，其余取文件名主干。
+function dedupTypeForBankFile(bankFile) {
+  const stem = String(bankFile).replace(/\.json$/, '');
+  return stem.startsWith('rdl') ? 'rdl' : stem;
+}
 
 // 2026-06-01 FIX: merge-staging previously merged reading/listening/speaking items
 // with NO per-item validation (only dedup-by-id). That shipped broken items — most
@@ -307,8 +316,15 @@ for (const section of SECTIONS) {
     const existingIds = new Set(bank.items.map(i => i.id));
     const before = bank.items.length;
 
+    // Content-dedup index seeded from the live bank. id-dedup alone let identical content
+    // ship twice (different minted ids); this catches same/near content regardless of id,
+    // AND — because we addToIndex each accepted item below — dedups within this batch too.
+    const dedupType = dedupTypeForBankFile(bankFile);
+    const dedupIndex = createDedupIndex(bank.items, dedupType);
+
     let added = 0;
     let duplicates = 0;
+    let contentDup = 0;
     for (const item of newItems) {
       // Mint an id for id-less items. Generators sometimes omit `id` (it isn't a quality
       // signal), and without this EVERY id-less item collapses to a single "duplicate"
@@ -322,20 +338,32 @@ for (const section of SECTIONS) {
         duplicates++;
         continue;
       }
+      // Content-level dedup (exact fingerprint O(1), then near jaccard). id-novel items
+      // that duplicate existing/earlier content are skipped here.
+      const dup = checkDuplicate(dedupIndex, item, dedupType);
+      if (dup.dup) {
+        contentDup++;
+        console.log(`    skip content-dup ${item.id} ~= ${dup.matchId} (${dup.reason})`);
+        continue;
+      }
       existingIds.add(item.id);
+      addToIndex(dedupIndex, item, dedupType);
       bank.items.push(item);
       added++;
     }
 
     writeJSON(bankPath, bank);
-    allSummary.push({ section: section.name, bankFile, before, added, duplicates, after: bank.items.length });
-    console.log(`  ${bankFile}: ${before} → ${bank.items.length} (+${added} new, ${duplicates} duplicates skipped)`);
+    allSummary.push({ section: section.name, bankFile, before, added, duplicates, contentDup, after: bank.items.length });
+    console.log(`  ${bankFile}: ${before} → ${bank.items.length} (+${added} new, ${duplicates} id-dup, ${contentDup} content-dup skipped)`);
     grandTotal += added;
   }
 }
 
 console.log('\n--- Summary ---');
+let grandContentDup = 0;
 for (const s of allSummary) {
-  console.log(`  ${s.bankFile}: ${s.before} → ${s.after}  (+${s.added})`);
+  grandContentDup += s.contentDup || 0;
+  const cd = s.contentDup ? `, ${s.contentDup} content-dup` : '';
+  console.log(`  ${s.bankFile}: ${s.before} → ${s.after}  (+${s.added}${cd})`);
 }
-console.log(`\nTotal items added: ${grandTotal}`);
+console.log(`\nTotal items added: ${grandTotal}  (content-dups skipped: ${grandContentDup})`);
