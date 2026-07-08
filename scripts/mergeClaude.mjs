@@ -31,6 +31,8 @@ const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/b
 const { validateAllSets } = require("./validate-bank.js");
 // 合库层通用内容去重（exact 指纹 + jaccard 近重复）。
 const { createDedupIndex, checkDuplicate, addToIndex } = require("../lib/gen/contentDedup.js");
+// Disc/Email schema normalizer 的唯一出处（admin deploy 与本脚本共用，防两处手工同步漂移）。
+const { normalizeDiscItem, normalizeEmailItem } = require("../lib/gen/deployGate.js");
 
 // NEWBANK_ROOT (optional): when set (e.g. NEWBANK_ROOT=data/newBank), validated items are
 // appended to the NEW bank under that root instead of the live bank, so a fresh bank can be
@@ -199,19 +201,7 @@ function mergeBS(stagingPath) {
 }
 
 // ── Discussion merge ─────────────────────────────────────────────────
-function normalizeDiscItem(q) {
-  if (!q || typeof q !== "object") return null;
-  const professorText = String(q?.professor?.text || "").trim();
-  const students = Array.isArray(q.students) ? q.students.filter((s) => s && s.name && s.text) : [];
-  if (!professorText || students.length < 2) return null;
-  const course = String(q.course || "").trim();
-  if (!course) return null;
-  return {
-    course,
-    professor: { name: String(q.professor.name || "Professor").trim(), text: professorText },
-    students: students.slice(0, 2).map((s) => ({ name: String(s.name).trim(), text: String(s.text).trim() })),
-  };
-}
+// normalizeDiscItem 来自 lib/gen/deployGate.js（与 admin deploy 同源，勿在此重新定义）。
 
 function mergeDisc(stagingPath) {
   const staging = readJSON(stagingPath);
@@ -268,32 +258,7 @@ function mergeDisc(stagingPath) {
 }
 
 // ── Email merge ──────────────────────────────────────────────────────
-const EMAIL_TOPIC_NORM = {
-  "職場工作": "职场工作",
-  "社區生活": "社区生活",
-  "消費售後": "消费售后",
-};
-function normalizeEmailItem(q) {
-  if (!q || typeof q !== "object") return null;
-  const scenario = String(q.scenario || "").trim();
-  const direction = String(q.direction || "").trim();
-  const goals = Array.isArray(q.goals)
-    ? q.goals.map((g) => String(g || "").trim()).filter(Boolean).slice(0, 3)
-    : [];
-  if (!scenario || !direction || goals.length !== 3) return null;
-  const to = String(q.to || "").trim();
-  const subject = String(q.subject || "").trim();
-  const topic = String(q.topic || "").trim();
-  if (!to || !subject || !topic) return null;
-  return {
-    topic: EMAIL_TOPIC_NORM[topic] || topic,
-    scenario,
-    direction,
-    goals,
-    to,
-    subject,
-  };
-}
+// normalizeEmailItem / EMAIL_TOPIC_NORM 来自 lib/gen/deployGate.js（与 admin deploy 同源）。
 
 function mergeEmail(stagingPath) {
   const staging = readJSON(stagingPath);

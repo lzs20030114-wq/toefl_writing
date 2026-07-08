@@ -74,7 +74,14 @@ function vet(prefix, item) {
       return v.pass ? { ok: true, item: blanked } : { ok: false, reason: (v.errors || []).join('; ') };
     }
     const fn = VALIDATORS[prefix];
-    if (!fn) return { ok: true, item }; // no validator (e.g. interview) → pass through
+    if (!fn) {
+      // FAIL-CLOSED: a prefix with no validator mapping (e.g. interview — never wired into
+      // the automated pipeline) used to pass straight through UNVETTED. That is the same
+      // "admin bypass" class of hole as the deploy button: content shipped to the live bank
+      // with zero structural checks. Reject instead so an unvetted type can never merge
+      // silently. See QUESTION-PIPELINE-REVIEW-2026-07-07 §7 P1-11.
+      return { ok: false, reason: `no validator mapped for prefix "${prefix}" — fail-closed (未接入自动化校验, see QUESTION-PIPELINE-REVIEW-2026-07-07 §7 P1-11)` };
+    }
     const r = fn(item) || {};
     const bad = r.pass === false || r.valid === false;
     return bad ? { ok: false, reason: (r.errors || []).join('; ') } : { ok: true, item };
