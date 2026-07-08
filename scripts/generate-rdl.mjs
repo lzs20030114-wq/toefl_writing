@@ -21,8 +21,10 @@ const require = createRequire(import.meta.url);
 const { buildRDLPrompt, buildShortRDLPrompt } = require("../lib/readingGen/rdlPromptBuilder.js");
 const { validateRDLItem, validateRDLBatch } = require("../lib/readingGen/rdlValidator.js");
 const { auditRDLItem } = require("../lib/readingGen/answerAuditor.js");
+const { computeRdlExcludes } = require("../lib/gen/promptExcludes.js");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, "..");
 const STAGING_DIR = join(__dirname, "..", "data", "reading", "staging");
 
 // ── Parse CLI args ──
@@ -127,9 +129,13 @@ async function main() {
   // Step 1: Build prompt
   console.log("1. Building prompt...");
   const genres = GENRE ? [GENRE] : [];
+  // Cross-batch dedup: exclude subjects already in the live bank + un-merged staging
+  // (each item summarized to the first 8 content words of its text, staging prioritized).
+  const excludeSubjects = computeRdlExcludes(ROOT, VARIANT, 25);
+  console.log(`   Excluding ${excludeSubjects.length} already-used subjects (bank + staging)`);
   const prompt = VARIANT === "short"
-    ? buildShortRDLPrompt(COUNT, { genres })
-    : buildRDLPrompt(COUNT, { genres });
+    ? buildShortRDLPrompt(COUNT, { genres, excludeSubjects })
+    : buildRDLPrompt(COUNT, { genres, excludeSubjects });
 
   if (DRY_RUN) {
     console.log("\n── PROMPT ──\n");

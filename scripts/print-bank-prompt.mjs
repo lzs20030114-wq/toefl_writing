@@ -42,6 +42,26 @@ const { buildLCPrompt } = require("../lib/listeningGen/lcPromptBuilder.js");
 const { buildLAPrompt } = require("../lib/listeningGen/laPromptBuilder.js");
 const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
 const { buildRepeatPrompt } = require("../lib/speakingGen/repeatPromptBuilder.js");
+// Shared anti-duplication helpers — see task "generation-side dedup exclusion".
+const {
+  loadStagingItems,
+  loadBSStagingAnswers,
+  firstContentWords,
+  orderedExcludes,
+  computeRdlExcludes,
+} = require("../lib/gen/promptExcludes.js");
+
+// Staging directories holding "already generated, not yet merged" content. The
+// old exclusion lists only saw the live bank, so this backlog was invisible and
+// got regenerated. Each handler now unions bank + the matching staging files.
+const STAGING = {
+  reading: resolve(ROOT, "data/reading/staging"),
+  listening: resolve(ROOT, "data/listening/staging"),
+  speaking: resolve(ROOT, "data/speaking/staging"),
+  bs: resolve(ROOT, "data/buildSentence/staging"),
+  disc: resolve(ROOT, "data/academicWriting/staging"),
+  email: resolve(ROOT, "data/emailWriting/staging"),
+};
 
 function readJSON(rel) {
   return JSON.parse(readFileSync(resolve(ROOT, rel), "utf8"));
@@ -96,16 +116,22 @@ function loadBSExistingAnswers(limit = 100) {
   }
 }
 
+// Discussion dedup fingerprint: course + first 8 content words of the professor post.
+function discSummary(it) {
+  const course = String((it && it.course) || "").trim();
+  const gist = firstContentWords(it && it.professor && it.professor.text, 8);
+  return [course, gist].filter(Boolean).join(" — ");
+}
 function loadADExistingTopics(limit = 40) {
+  let bankItems = [];
   try {
-    const items = readJSONMerged("data/academicWriting/prompts.json");
-    return (items || []).slice(-limit).map((q) => {
-      const text = String(q?.professor?.text || "").trim();
-      return text.slice(0, 80);
-    }).filter(Boolean);
-  } catch {
-    return [];
-  }
+    const j = readJSONMerged("data/academicWriting/prompts.json");
+    bankItems = Array.isArray(j) ? j : [];
+  } catch {}
+  const bankSummaries = bankItems.slice(-limit).map(discSummary).filter(Boolean);
+  const stagingSummaries = loadStagingItems(STAGING.disc).map(discSummary).filter(Boolean);
+  // staging prioritized (freshest, highest dup risk), then bank tail, capped
+  return orderedExcludes(stagingSummaries, bankSummaries, limit);
 }
 
 function loadEmailRecentNames(limit = 40) {
@@ -138,11 +164,17 @@ function loadEmailRecentVerbs(limit = 20) {
   }
 }
 
+// AP/CTW subject fingerprint — must match loadReadingExcludeSubjects' format so
+// bank and staging entries de-duplicate against each other.
+function apCtwSubject(it) {
+  const s = `${(it && it.topic) || ""}/${(it && it.subtopic) || ""}`.trim();
+  return s === "/" ? "" : s;
+}
 function loadReadingExcludeSubjects(file, limit = 30) {
   try {
     const j = readJSONMerged(file);
     const items = j.items || [];
-    return items.slice(-limit).map((it) => `${it.topic}/${it.subtopic || ""}`.trim()).filter(Boolean);
+    return items.slice(-limit).map(apCtwSubject).filter(Boolean);
   } catch {
     return [];
   }
@@ -153,7 +185,10 @@ function loadReadingExcludeSubjects(file, limit = 30) {
 const bank = String(process.argv[2] || "").trim();
 
 function printBS() {
-  const existing = loadBSExistingAnswers(100);
+  // bank tail (100) + ALL un-merged staging answers, staging prioritized, capped 150.
+  const bankAnswers = loadBSExistingAnswers(100);
+  const stagingAnswers = loadBSStagingAnswers(STAGING.bs);
+  const existing = orderedExcludes(stagingAnswers, bankAnswers, 150);
   console.log(bsGenPrompt(1, existing));
 }
 
@@ -178,7 +213,7 @@ function printDisc() {
   for (const o of DISC_OPENING_STYLES) {
     console.log(`- weight=${o.weight}  style=${o.style}: ${o.instruction}`);
   }
-  console.log("\n# ===== RECENT PROFESSOR-POST PREFIXES (avoid topic overlap) =====\n");
+  console.log("\n# ===== RECENT DISCUSSION SUBJECTS — bank + un-merged staging (avoid topic overlap) =====\n");
   for (const t of loadADExistingTopics(30)) console.log(`- ${t}`);
   console.log("\n# ===== INSTRUCTION =====\n");
   console.log("Generate N Discussion items (caller will tell you N). For EACH item:");
@@ -192,10 +227,17 @@ function printDisc() {
 }
 
 function printEmail() {
+  // Union bank + un-merged staging. buildEmailGenPrompt renders names in full but
+  // subjects via .slice(-5) and verbs via .slice(-3) (TAIL) — so for those two we
+  // put the freshest (staging) values at the tail via .reverse() so they survive.
+  const stagingItems = loadStagingItems(STAGING.email);
+  const nameOf = (q) => String((q && q.to) || "").trim();
+  const subjOf = (q) => String((q && q.subject) || "").trim();
+  const verbsOf = (q) => ((q && q.goals) || []).map((g) => String(g || "").trim().split(/\s+/)[0]).filter(Boolean);
   const avoid = {
-    names: loadEmailRecentNames(15),
-    subjects: loadEmailRecentSubjects(10),
-    verbPatterns: loadEmailRecentVerbs(15),
+    names: orderedExcludes(stagingItems.map(nameOf), loadEmailRecentNames(15), 15),
+    subjects: orderedExcludes(stagingItems.map(subjOf), loadEmailRecentSubjects(15), 30).reverse(),
+    verbPatterns: orderedExcludes(stagingItems.flatMap(verbsOf), loadEmailRecentVerbs(15), 20).reverse(),
   };
   console.log("# ===== EMAIL CATEGORIES (pick across the batch, weighted) =====\n");
   for (const cat of EMAIL_CATEGORIES) {
@@ -216,21 +258,25 @@ function printEmail() {
 }
 
 function printAP() {
-  const excludeSubjects = loadReadingExcludeSubjects("data/reading/bank/ap.json", 30);
+  const stagingSubjects = loadStagingItems(STAGING.reading, "ap-").map(apCtwSubject).filter(Boolean);
+  const bankSubjects = loadReadingExcludeSubjects("data/reading/bank/ap.json", 30);
+  const excludeSubjects = orderedExcludes(stagingSubjects, bankSubjects, 40);
   console.log(buildAPPrompt(5, { excludeSubjects }));
 }
 
 function printCTW() {
-  const excludeSubjects = loadReadingExcludeSubjects("data/reading/bank/ctw.json", 30);
+  const stagingSubjects = loadStagingItems(STAGING.reading, "ctw-").map(apCtwSubject).filter(Boolean);
+  const bankSubjects = loadReadingExcludeSubjects("data/reading/bank/ctw.json", 30);
+  const excludeSubjects = orderedExcludes(stagingSubjects, bankSubjects, 40);
   console.log(buildCTWPrompt(6, { excludeSubjects }));
 }
 
 function printRDLShort() {
-  console.log(buildShortRDLPrompt(4, {}));
+  console.log(buildShortRDLPrompt(4, { excludeSubjects: computeRdlExcludes(ROOT, "short", 25) }));
 }
 
 function printRDLLong() {
-  console.log(buildRDLPrompt(2, {}));
+  console.log(buildRDLPrompt(2, { excludeSubjects: computeRdlExcludes(ROOT, "long", 25) }));
 }
 
 // Listening + Speaking — print the recalibrated builder so the Claude routine generates
@@ -245,12 +291,40 @@ function loadBankField(file, key, limit = 20) {
     return Array.from(new Set(arr.slice(-limit).map((it) => String(it?.[key] || "").trim()).filter(Boolean)));
   } catch { return []; }
 }
-function printLAT() { console.log(buildLATPrompt(4, { excludeTopics: loadBankField("data/listening/bank/lat.json", "subtopic", 30) })); }
-function printLC() { console.log(buildLCPrompt(5, { excludeSituations: loadBankField("data/listening/bank/lc.json", "situation", 20) })); }
-function printLA() { console.log(buildLAPrompt(5, { excludeAnnouncements: loadBankField("data/listening/bank/la.json", "situation", 20) })); }
-function printLCR() { console.log(buildLCRPrompt(8, { excludeSpeakers: loadBankField("data/listening/bank/lcr.json", "speaker", 20) })); }
+// Map staging items to a single field's trimmed values (bank + staging union helper).
+function stagingField(dir, prefix, key) {
+  return loadStagingItems(dir, prefix).map((it) => String((it && it[key]) || "").trim()).filter(Boolean);
+}
+function printLAT() {
+  // BUG FIX: lat items have `topic`/`subject`, NOT `subtopic` — the old
+  // loadBankField(..., "subtopic", ...) read a non-existent field and always
+  // returned [], so the exclusion list was permanently empty.
+  const staging = stagingField(STAGING.listening, "lat-", "topic");
+  const bank = loadBankField("data/listening/bank/lat.json", "topic", 30);
+  console.log(buildLATPrompt(4, { excludeTopics: orderedExcludes(staging, bank, 40) }));
+}
+function printLC() {
+  const staging = stagingField(STAGING.listening, "lc-", "situation");
+  const bank = loadBankField("data/listening/bank/lc.json", "situation", 20);
+  console.log(buildLCPrompt(5, { excludeSituations: orderedExcludes(staging, bank, 40) }));
+}
+function printLA() {
+  const staging = stagingField(STAGING.listening, "la-", "situation");
+  const bank = loadBankField("data/listening/bank/la.json", "situation", 20);
+  console.log(buildLAPrompt(5, { excludeAnnouncements: orderedExcludes(staging, bank, 40) }));
+}
+function printLCR() {
+  const staging = stagingField(STAGING.listening, "lcr-", "speaker");
+  const bank = loadBankField("data/listening/bank/lcr.json", "speaker", 20);
+  console.log(buildLCRPrompt(8, { excludeSpeakers: orderedExcludes(staging, bank, 40) }));
+}
 function printRepeat() {
-  const { prompt } = buildRepeatPrompt(3, { excludeScenarios: loadBankField("data/speaking/bank/repeat.json", "scenario", 20) });
+  // Repeat draws sentences from a FIXED ~26-scenario pool; the builder removes
+  // excluded scenarios from that pool, so excluding too many would empty it.
+  // Cap low (18) to always leave scenarios for the batch to pick from.
+  const staging = stagingField(STAGING.speaking, "repeat-", "scenario");
+  const bank = loadBankField("data/speaking/bank/repeat.json", "scenario", 20);
+  const { prompt } = buildRepeatPrompt(3, { excludeScenarios: orderedExcludes(staging, bank, 18) });
   console.log(prompt);
 }
 
