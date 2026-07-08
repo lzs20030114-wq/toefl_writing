@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-08 — v1.11.1
+
+- **口语音频改用预生成 MP3**（`ef6a897`）：`RepeatTask` / `InterviewTask` 此前只用浏览器 `window.speechSynthesis` 朗读句子/问题，而国内安卓常无英文 TTS 引擎、微信/QQ WebView 对 speechSynthesis 支持残缺 → 静音；Repeat 尤其致命（句子故意不显示，静音=整题做不了）。`repeat.json` 672 句 100% 早有 `audio_url` MP3 却被忽略。现改为对齐听力 `AudioPlayer` 的做法：`playSentence`/`playQuestion` 优先播 `audio_url` 的 MP3（经 `sameOriginAudio` 同源代理 `/api/audio`，国内可达）+ MP3 报错/缺失回退 speechSynthesis；仅当既无 MP3 又无语音引擎时才显示句子文本兜底。`backfill-tts.mjs` 新增 `backfillInterview`（`speaking/interview/<qid>.mp3`），`backfill-audio.yml` 提交步骤补上 `interview.json`（interview 音频需手动 workflow_dispatch 生成一次）。
+- **题库三层去重 + 存量清理**（PR #6：`10c8c4d` / `80f017a` / `15dd09b`）：夜间 routine 给相同 passage/transcript 每次铸新 id，而 merge 仅按 id 去重，导致 8 个阅读/听力库累计 1472 条逐字重复副本（约 30%）。生成端排除（bank+staging 并集）+ 合库层内容指纹/近重复拦截 + 一次性清除存量 1472 条（ctw 564→349、ap 323→172、rdl-short 389→221、rdl-long 212→134、lcr 620→302、lc 434→180、la 319→159、lat 261→133）。
+- **CTW 单词补全防呆**（`2d119bb`）：锁定已给前缀 + 键盘导航，避免误改/误删自动挖空的答案位。
+- **升级入口修复 + 支付可靠性**（`4bce969` / `5c3c6e3`）：「升级 Pro」按钮此前点击无反应（全局事件无监听者）→ 补监听恢复；XorPay webhook 金额对账 + 发权益顺序改为先授予后标记（注：线上支付走爱发电，XorPay 非当前路径）。
+
 ## 2026-07-04 — v1.11.0
 
 - **「我的题库」全题型扩展**（`feat/user-bank-phase1` 六棒经 `6a511ef` 合入；实施全部由 Opus 4.8 subagent 完成、Fable 规划/验收；研究依据 `data/claudeGen/reports/USER-BANK-ALL-TYPES-RESEARCH-2026-07-04.md` 6-agent 调研）：12 题型全部可导入可练习。DB 前置：`scripts/sql/user-question-banks-widen-types.sql`（一次性把 `user_question_banks.type` CHECK 放宽到全 12 类，已在 Supabase 手动执行）。
