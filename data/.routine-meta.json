@@ -1,212 +1,84 @@
 {
-  "session_id": "routine-20260707-190431",
-  "completed_at": "2026-07-07T19:18:47.625Z",
-  "duration_minutes": 14,
+  "session_id": "routine-20260708-221453",
+  "completed_at": "2026-07-08T22:27:30Z",
+  "duration_minutes": 12,
   "model": "Claude Opus 4.8",
-  "highlight": "12 库全数生成 50/70 过 PASS1；disc/email 全过，reading/listening/speaking 已入 staging 待审计路由；BS 因第一人称占比 0.691 微超冻结带(0.69)被拒合，留 R2 重试。",
+  "highlight": "12 题库全生成 70/70；disc+email 已合库，阅读/听力/口语入 staging 待审计路由；BS 难度分档未过回归门，交 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 0,
-      "topics": [
-        "gym/fitness",
-        "career fair",
-        "housing/dorm",
-        "library & readings",
-        "advisor/registration",
-        "lab & equipment",
-        "shuttle/transit",
-        "grades & professors"
-      ],
-      "favorite": {
-        "prompt": "You mentioned a professor for the recommendation.",
-        "answer": "The professor who leads the research lab agreed to help me."
-      },
+      "topics": ["dorm parties", "seminars/electives", "library & tutoring center", "campus gym hours", "scholarship/workshop signups", "exam schedules & posted grades", "borrowed club equipment"],
+      "favorite": { "prompt": "What did Julian ask you earlier?", "answer": "He asked whether you had registered for the spring field trip." },
       "retried_after_fail": false,
-      "failure_reason": "merge gate FAIL: register.first_person 0.691 > band ceiling 0.69 (marginal); 9/20 items also failed per-item (6-word answers, floating adverb, background-only prompt). live bank untouched — left for R2."
+      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试"
     },
     "discussion": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "psychology",
-        "environmental science",
-        "business",
-        "public health"
-      ],
-      "favorite": {
-        "subtopic": "environmental science",
-        "preview": "For this week's discussion, let's think about how cities cope with rising summer temperatures. Several municipalities have recently begun painting rooftops and pavement with reflective white coatings"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 4, "accepted": 4,
+      "topics": ["political science", "history and culture", "computer science", "social studies"],
+      "favorite": { "subtopic": "political science", "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "email": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "服务与活动",
-        "校园学业",
-        "服务与活动",
-        "日常社交"
-      ],
-      "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "You recently joined the campus fitness center on a semester membership, but the climbing wall you signed up to use has been closed."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 4, "accepted": 4,
+      "topics": ["服务与活动", "消费售后", "住宿", "日常社交"],
+      "favorite": { "subtopic": "消费售后", "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "reading-ap": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "sociology",
-        "business",
-        "geology",
-        "psychology",
-        "chemistry"
-      ],
-      "favorite": {
-        "subtopic": "sociology/globalization",
-        "preview": "Globalization is the growing interdependence of the world's economies, cultures, and societies, produced by the movement of goods and ideas."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 5, "accepted": 5,
+      "topics": ["environmental_science/conservation", "psychology/placebo effect", "astronomy/planetary atmospheres", "chemistry/corrosion", "history/silk road"],
+      "favorite": { "subtopic": "astronomy/planetary atmospheres", "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..." },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "reading-ctw": {
-      "generated": 6,
-      "accepted": 6,
-      "topics": [
-        "biology/photosynthesis",
-        "environmental_science/urban heat islands",
-        "psychology/color perception",
-        "history/the Industrial Revolution",
-        "geology/fossils",
-        "astronomy/dwarf planets"
-      ],
-      "favorite": {
-        "subtopic": "environmental_science/urban heat islands",
-        "preview": "Cities often feel noticeably warmer than the surrounding countryside, a phenomenon called the urban heat island."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 6, "accepted": 6,
+      "topics": ["biology/whale communication", "environmental_science/green roofs", "psychology/confirmation bias", "history/the spice trade", "geology/volcanic mountain formation", "astronomy/Mars rovers"],
+      "favorite": { "subtopic": "biology/whale communication", "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes." },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "reading-rdl-short": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "email",
-        "notice",
-        "notice",
-        "notice"
-      ],
-      "favorite": {
-        "subtopic": "email/interlibrary-loan-arrival",
-        "preview": "Dear Nora, The book you requested through interlibrary loan, 'Coastal Ecology,' has arrived at the Reference Desk in Miller Library."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 4, "accepted": 4,
+      "topics": ["email/lab safety training reminder", "email/student ID replacement fee", "notice/campus Wi-Fi maintenance", "notice/water-fountain repair closure"],
+      "favorite": { "subtopic": "notice/wifi-maintenance", "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM." },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "reading-rdl-long": {
-      "generated": 2,
-      "accepted": 2,
-      "topics": [
-        "email",
-        "email"
-      ],
-      "favorite": {
-        "subtopic": "email/student-organization event invitation",
-        "preview": "Subject: You're Invited: International Food Night — The Global Cultures Club is excited to invite you to our annual celebration."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 2, "accepted": 2,
+      "topics": ["social_media/dorm DIY woodworking project", "email/commuter parking permit renewal"],
+      "favorite": { "subtopic": "social_media/dorm DIY woodworking project", "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "listening-lat": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "anthropology/oral traditions",
-        "psychology/peak-end rule",
-        "ecology/wetlands flood prevention",
-        "art_history/rediscovery of perspective"
-      ],
-      "favorite": {
-        "subtopic": "ecology/wetlands flood prevention",
-        "preview": "When a river swells after heavy rain, we often picture concrete dams and levees holding the water back. But some of the most effective flood defenses aren't built by engineers at all."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 4, "accepted": 4,
+      "topics": ["physics/Doppler effect", "history/coffee houses in the Enlightenment", "linguistics/pidgin to creole", "ecology/biological magnification"],
+      "favorite": { "subtopic": "the process of pidgin languages developing into creoles", "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "listening-lc": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "music_recommendations",
-        "elective_choice",
-        "potluck_dish",
-        "dorm_housing_singles",
-        "tailor_hem_pants"
-      ],
-      "favorite": {
-        "subtopic": "tailor_hem_pants",
-        "preview": "Hi, I bought these dress pants for an interview, but they're a few inches too long. Can you hem them?"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 5, "accepted": 5,
+      "topics": ["plans_social", "recommendations_opinions (cafe)", "recommendations_opinions (Thai restaurant)", "campus_dorm_life", "errands_service (bus schedule)"],
+      "favorite": { "subtopic": "两人争论新咖啡馆是否值那个价", "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars." },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "listening-la": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "spring ethics symposium",
-        "community garden cleanup",
-        "rec center summer hours",
-        "grad school info session",
-        "new student orientation"
-      ],
-      "favorite": {
-        "subtopic": "facility_change/rec center reduced summer hours",
-        "preview": "Due to lower attendance over the summer term, the Rec Center will move to reduced hours beginning next Monday, June 15th."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 5, "accepted": 5,
+      "topics": ["academic_event/conference call for papers", "facility_change/performance hall reopening", "logistics/garage closure + shuttle", "facility_change/computer lab relocation", "campus_activity/outdoor movie night"],
+      "favorite": { "subtopic": "Interdisciplinary Crossroads Conference call for papers", "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "listening-lcr": {
-      "generated": 8,
-      "accepted": 8,
-      "topics": [
-        "business hours phone call",
-        "gym closing time",
-        "library geology journals",
-        "final essay length",
-        "boots return without receipt",
-        "jazz concert location",
-        "borrowing lecture notes",
-        "offering help"
-      ],
-      "favorite": {
-        "subtopic": "borrowing lecture notes",
-        "preview": "Why don't you just borrow my notes? — correct response uses the idiom 'You're a lifesaver, thanks so much!'"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 8, "accepted": 8,
+      "topics": ["campus_daily/study-group transport", "social/dinner invitation", "campus_daily/gym schedule", "general_daily/laundry room noise", "campus_academic/writing center", "campus_academic/exam format", "campus_academic/reading list", "campus_daily/lost umbrella"],
+      "favorite": { "subtopic": "asking a neighbor why the shared laundry room is noisy", "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'" },
+      "retried_after_fail": false, "failure_reason": ""
     },
     "speaking-repeat": {
-      "generated": 3,
-      "accepted": 3,
-      "topics": [
-        "Chemistry Lab Safety",
-        "Hardware Store Help",
-        "Planetarium Visit"
-      ],
-      "favorite": {
-        "subtopic": "Chemistry Lab Safety",
-        "preview": "Safety goggles are stored by the sink."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "generated": 3, "accepted": 3,
+      "topics": ["Dining Hall Tour", "Career Services Workshop", "Car Rental Agency"],
+      "favorite": { "subtopic": "Dining Hall Tour", "preview": "Trays are stacked near the entrance." },
+      "retried_after_fail": false, "failure_reason": ""
     }
   }
 }

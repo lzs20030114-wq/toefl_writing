@@ -1,10 +1,10 @@
 {
-  "session_id": "routine-20260707-190431",
-  "generated_at": "2026-07-08T16:02:29.484Z",
+  "session_id": "routine-20260708-221453",
+  "generated_at": "2026-07-08T22:28:30.871Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 95,
-    "quality": 96
+    "diversity": 98,
+    "quality": 98
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
@@ -21,33 +21,31 @@
         "R1 produced 0 valid items"
       ],
       "quality_breakdown": [
-        "merge gate FAIL: register.first_person 0.691 > band ceiling 0.69 (marginal); 9/20 items also failed per-item (6-word answers, floating adverb, background-only prompt). live bank untouched — left for R2."
+        "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"merge gate FAIL: register.first_person 0.691 > band ceiling 0.69 (marginal); 9/20 items also failed per-item (6-word answers, floating adverb, background-only prompt). live bank untouched — left for R2.\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "R1 generated 20 items but all were rejected. Failure reason: \"BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
       ],
       "items_to_supplement": 20
     },
     {
       "bank": "reading-rdl-long",
-      "diversity_score": 60,
+      "diversity_score": 80,
       "diversity_threshold": 70,
-      "quality_score": 0,
+      "quality_score": 50,
       "quality_threshold": 85,
       "failures": [
-        "多样性 60 < 70",
-        "质量 0 < 85"
+        "质量 50 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 2"
+        "notice 0 · email 1"
       ],
       "quality_breakdown": [
-        "词数 0/2"
+        "词数 1/2"
       ],
       "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice",
-        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
+        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
     }
