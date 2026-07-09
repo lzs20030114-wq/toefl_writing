@@ -1,0 +1,56 @@
+# L1.5 嫌疑复审明细（FULL-AUDIT 收尾）— 手动触发。
+# 只复审 L1 嫌疑清单(182 条)，保留完整逐题明细供 L3 人审；约 10-20 分钟, DeepSeek ≈¥2-4。
+# 断点续跑：再次 Run workflow 即从断点继续（Branch 选本 workflow 所在分支）。
+name: full-audit-l1-detail
+
+on:
+  workflow_dispatch:
+    inputs:
+      banks:
+        description: "逗号分隔库名(ap,rdl-long,ctw,lat,la,lcr)；留空=全部嫌疑"
+        required: false
+        default: ""
+      max_minutes:
+        description: "本轮时间预算(分钟)"
+        required: false
+        default: "120"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-audit-l1-detail
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run L1 suspect detail re-audit
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          MAX_MINUTES: ${{ inputs.max_minutes }}
+        run: |
+          ARGS=""
+          [ -n "${{ inputs.banks }}" ] && ARGS="$ARGS --banks=${{ inputs.banks }}"
+          node scripts/audit/run-l1-detail.mjs $ARGS
+
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "audit-bot"
+          git config user.email "audit-bot@users.noreply.github.com"
+          git add data/claudeGen/reports/FULL-AUDIT-*/
+          git diff --cached --quiet && echo "no changes" && exit 0
+          git commit -m "bot(audit): L1 suspect detail re-audit [skip ci]"
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push origin HEAD:${{ github.ref_name }}
