@@ -15,6 +15,7 @@
 | `analytics-schema.sql` | 2026-03-16 | 历史迁移,状态未知(建库早期) | 页面访问事件追踪 + 管理后台分析表 |
 | `cohort-retention.sql` | 2026-06-30 | 无需跑 | 留存分析 SQL 已被 `/api/admin/retention` 的 JS 直读重写架空,不需要单独执行 |
 | `daily-usage-quota.sql` | 2026-06-04 | 历史迁移,状态未知(建库早期) | `/api/ai` 服务端每日 AI 用量计数 |
+| `feature-engagement.sql` | 2026-07-09 | 已跑 | 留存分析改版「做题量/功能吸引力」(PR #4):`session_item_count()` 题目数口径函数 + `feature_sessions`/`feature_engagement_totals`/`feature_first_touch`/`feature_stickiness`/`feature_weekly` 只读视图(仅 service role 可读)。注意:改视图列序时 `CREATE OR REPLACE` 会报 42P16,需先 DROP 全部 5 个视图再重跑本文件 |
 | `feedback-status-migration.sql` | 2026-03-01 | 历史迁移,状态未知(建库早期) | 反馈状态追踪 + 管理员回复系统 |
 | `iap-schema.sql` | 2026-02-28 | 历史迁移,状态未知(建库早期) | IAP 支付相关表(entitlements/webhook_events 等) |
 | `login-code-management.sql` | 2026-02-19 | 历史迁移,状态未知(建库早期) | 管理员可管理的登录码 + 登录流程加固 |
