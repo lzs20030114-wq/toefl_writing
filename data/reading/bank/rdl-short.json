@@ -8028,6 +8028,142 @@
       ],
       "difficulty": "easy",
       "word_count": 45
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Deborah, This is a reminder that your chemistry lab safety training is scheduled for Monday, October 5, at 3:00 PM in Kepler Hall, Room 118. Please purchase approved goggles ($5) from the stockroom beforehand and arrive on time. Thanks, Lab Coordinator",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Deborah do before the training?",
+          "options": {
+            "A": "Reserve a seat in Room 118",
+            "B": "Email the coordinator for approval",
+            "C": "Complete an online safety quiz",
+            "D": "Buy goggles at the stockroom"
+          },
+          "correct_answer": "D",
+          "explanation": "The email asks Deborah to purchase approved goggles from the stockroom beforehand, which paraphrases to buying goggles at the stockroom before the session."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the training session?",
+          "options": {
+            "A": "It is optional for lab students",
+            "B": "It requires students to wear goggles",
+            "C": "It occurs several times each week",
+            "D": "It includes a written final exam"
+          },
+          "correct_answer": "B",
+          "explanation": "Because participants must obtain approved goggles beforehand, it can be inferred the training requires students to wear protective eyewear."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrdxr0jx_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Olivia, We received your request for a replacement student ID card. Please visit the Campus Card Office in Sherman Hall by Friday, November 13, to pay the $10 fee and collect your new card. Bring a photo ID. Best, Card Services",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Olivia bring to the Card Office?",
+          "options": {
+            "A": "Her course schedule",
+            "B": "A payment receipt",
+            "C": "Photo identification",
+            "D": "Her expired ID card"
+          },
+          "correct_answer": "C",
+          "explanation": "The email instructs Olivia to bring a photo ID, which the option restates as photo identification."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the email?",
+          "options": {
+            "A": "The office charges no service fee",
+            "B": "The old card remains fully valid",
+            "C": "The new card is delivered by mail",
+            "D": "The pickup has a deadline"
+          },
+          "correct_answer": "D",
+          "explanation": "Because Olivia must collect the card by Friday, November 13, it can be inferred that the pickup has a firm deadline."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrdxr0jx_1"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM. The three-hour interruption is required for scheduled network upgrades. Wired connections in the library will remain active during this period.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the wireless service be unavailable?",
+          "options": {
+            "A": "From 1:00 AM to 4:00 AM Thursday",
+            "B": "From 4:00 AM to 7:00 AM Thursday",
+            "C": "From 1:00 PM to 4:00 PM Thursday",
+            "D": "From 1:00 AM to 4:00 AM Friday"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the outage runs from 1:00 AM to 4:00 AM on Thursday, September 24."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred from the notice?",
+          "options": {
+            "A": "All internet access on campus stops",
+            "B": "Library visitors keep internet access",
+            "C": "The upgrade increases network speed",
+            "D": "Residence halls lose all power"
+          },
+          "correct_answer": "B",
+          "explanation": "Since wired connections in the library will remain active, it can be inferred that library visitors keep internet access during the outage."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrdxr0jx_2"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The drinking fountains on the second floor of Whitman Hall will be closed for repairs from Monday to Wednesday, October 12-14. Bottled water is available from the first-floor vending machine for $1.50. Please use the fountains on other floors during this period.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how much does bottled water from the vending machine cost?",
+          "options": {
+            "A": "$1.00",
+            "B": "$1.25",
+            "C": "$1.50",
+            "D": "$2.00"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that bottled water is available from the first-floor vending machine for $1.50."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, which floor's fountains will be closed?",
+          "options": {
+            "A": "The second floor",
+            "B": "The first floor",
+            "C": "The third floor",
+            "D": "The ground floor"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice specifies that the drinking fountains on the second floor of Whitman Hall will be closed for repairs."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mrdxr0jy_3"
     }
   ]
 }

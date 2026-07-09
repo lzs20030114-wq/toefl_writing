@@ -15269,6 +15269,402 @@
       ],
       "id": "lc_mrckqvwl_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/conversation/lc_mrckqvwl_4.mp3"
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students arranging to study together before a final exam",
+      "difficulty": "hard",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, are you free to review for the statistics final together this weekend? I'm completely lost on the probability chapter."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'd love to, but I'm working both days at the campus store. Could we do a video call on Sunday night instead?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Actually, a call might be tricky with all the formulas. What if I record my questions and send them, then we meet Monday morning before the exam?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Hmm, Monday's cutting it close, but okay. Let's grab the group room at eight so we've got two hours to work through everything."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect. I'll book it right now."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why is the woman talking to the man?",
+          "options": {
+            "A": "To plan when they can study for the final together",
+            "B": "To ask him to explain the probability chapter right now",
+            "C": "To reschedule his weekend work shifts",
+            "D": "To cancel studying together entirely"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生开口就说想约周末一起复习统计学期末，整段都在敲定时间，这是对话主旨。B错在“太窄”：概率章节只是她说自己没学懂的一个细节，不是她找对方的目的，而且她要的是约时间而非现在讲解。C错在“话题错误”：男生要上班是他提出的约束，女生并没有要帮他调班。D错在“情境相反”：她是在积极安排一起复习，而不是取消。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Call the man on Sunday night",
+            "B": "Skip the probability chapter entirely",
+            "C": "Reserve the group study room",
+            "D": "Email the professor for extra time"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生最后说“I'll book it right now”，指的就是预订两人约定八点使用的小组自习室。A错在“已被否决”：女生明确说打电话对着一堆公式不方便，两人改成周一见面。B错在“过度推断”：她正是因为概率没懂才要复习，绝不会直接跳过。D错在“无关的下一步”：对话里从未提到向教授申请额外时间。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrdxr0mx_0"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it."
+        },
+        {
+          "speaker": "Man",
+          "text": "I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars. That's double what we pay at the campus coffee cart."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Six dollars? Wow. Is the atmosphere at least nice enough to study there?"
+        },
+        {
+          "speaker": "Man",
+          "text": "That's the thing — it's gorgeous, tons of natural light and comfy chairs, but it gets really loud in the afternoons."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm. So great coffee, bad for studying. I think I'll just go once as a treat."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, that's probably the smart move."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the cafe's coffee?",
+          "options": {
+            "A": "It tastes worse than the campus cart's coffee",
+            "B": "It is excellent but expensive",
+            "C": "It is cheaper than he expected",
+            "D": "It is only served in large sizes"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说拿铁“amazing”但要将近六美元，是校园咖啡车的两倍——味道好但贵，正好对应。A错在“改了关键事实”：他夸咖啡好喝，没有说更难喝。C错在“改了关键事实”：他强调价格贵、是两倍，不是比预期便宜。D错在“对话未提及”：从没说过只有大杯。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's attitude toward the cafe?",
+          "options": {
+            "A": "She will visit the cafe daily for coffee",
+            "B": "She plans to study there despite the noise",
+            "C": "She intends to ask for a student discount",
+            "D": "She views it as an occasional treat rather than a regular stop"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：女生听到又贵又吵后说“I'll just go once as a treat”，说明她把它当偶尔的享受，而非常去的地方。A错在“过度推断”：她明说只去一次，不可能天天去。B错在“过度推断”：男生说下午很吵不适合学习，她也认同“bad for studying”，不会去那学习。C错在“无关的下一步”：对话里根本没提学生折扣。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "over_inference",
+            "C": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrdxr0mx_1"
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new downtown restaurant and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "So I finally checked out that new Thai place downtown. The reviews weren't kidding."
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh nice! What did you order? I've been wanting to go, but I can never decide."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I got the green curry, which was good, but honestly my roommate's mango sticky rice stole the show. You have to try the dessert."
+        },
+        {
+          "speaker": "Man",
+          "text": "Really? I usually skip dessert. Was it too sweet?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Not at all — perfectly balanced. Skip the appetizers, though; they were overpriced and pretty small."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good to know. I'll definitely save room for that dessert."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman recommend the man try?",
+          "options": {
+            "A": "The green curry",
+            "B": "The appetizers",
+            "C": "The mango sticky rice dessert",
+            "D": "A Thai iced tea"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生说室友的芒果糯米饭“stole the show”，还直接说“You have to try the dessert”，明确推荐这道甜点。A错在“改了关键事实”：绿咖喱她只说“good”，并没推荐，抢镜的是甜点。B错在“改了关键事实”：她让男生跳过开胃菜，因为又贵又小。D错在“对话未提及”：泰式冰茶从没被提到。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do when he goes to the restaurant?",
+          "options": {
+            "A": "Make sure to order the dessert",
+            "B": "Order several of the appetizers",
+            "C": "Ask the woman to come along with him",
+            "D": "Complain to the staff about the prices"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生虽然平时不吃甜点，但听完推荐后说“I'll definitely save room for that dessert”，可推断他会特意点甜点。B错在“已被否决”：女生提醒跳过开胃菜，他不太可能反而多点。C错在“无关的下一步”：对话没提约女生一起去。D错在“过度推断”：他只是了解到价格，从未表示要投诉。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mrdxr0my_2"
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two roommates working out a fair chore and quiet-hours schedule",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Hey, can we figure out a cleaning schedule? The kitchen's been a mess all week."
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, sorry about that. How about I take the dishes and trash, and you handle the bathroom and vacuuming?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That works. Let's just swap every two weeks so it stays fair."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good call. Oh, and can we set quiet hours? I've got an early class and you're up pretty late."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure. How about no loud music after eleven?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Perfect. I'll write it all on the whiteboard."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to their agreement, what will the man be responsible for?",
+          "options": {
+            "A": "Vacuuming the apartment",
+            "B": "Cleaning the bathroom",
+            "C": "Doing the grocery shopping",
+            "D": "Washing the dishes and taking out the trash"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生主动提出“I take the dishes and trash”，即负责洗碗和倒垃圾。A错在“改了关键事实”：吸尘是女生的任务。B错在“张冠李戴”：打扫卫生间也分给了女生。C错在“对话未提及”：两人从没谈到买菜采购。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Go buy new cleaning supplies",
+            "B": "Write the schedule on the whiteboard",
+            "C": "Move his early class to a later time",
+            "D": "Look for a different roommate"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生最后说“I'll write it all on the whiteboard”，会把清洁分工和安静时段写到白板上。A错在“无关的下一步”：对话没提去买清洁用品。C错在“过度推断”：他只是想设安静时段，没说要改课，本来也改不了排课。D错在“过度推断”：两人是在友好协商分工，完全没有要换室友的意思。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "lc_mrdxr0my_3"
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus schedule for a day trip to the coast",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "If we want to reach the coast by noon, which bus should we catch on Saturday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The express leaves at nine and gets there in about two hours. The local one takes almost four."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Nine's fine. Wait, does the express even run on weekends? Some routes only go on weekdays."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good point. Let me check the app... yeah, it runs Saturdays, but not Sundays."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Great, so Saturday it is. Should we buy tickets ahead of time?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Definitely. I'll book them online tonight before they sell out."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How long does the express bus take to reach the coast?",
+          "options": {
+            "A": "About two hours",
+            "B": "Almost four hours",
+            "C": "Just under an hour",
+            "D": "It depends on the traffic"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生说快车九点发车，约两小时到，正好对应。B错在“张冠李戴”：将近四小时是慢车（the local one）的时间，不是快车。C错在“改了关键事实”：没有“不到一小时”这种说法。D错在“对话未提及”：两人没谈到路况会影响时长。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Take the local bus instead of the express",
+            "B": "Cancel the trip to the coast",
+            "C": "Purchase the tickets online",
+            "D": "Check the weather forecast for Saturday"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说“I'll book them online tonight before they sell out”，今晚就会在网上买票。A错在“已被否决”：两人选的是九点的快车，慢车更慢，没被采用。B错在“过度推断”：他们已确定周六出行，没有取消之意。D错在“无关的下一步”：对话里从没提到查天气。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ],
+      "id": "lc_mrdxr0my_4"
     }
   ]
 }

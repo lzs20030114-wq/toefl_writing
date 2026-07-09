@@ -6879,6 +6879,174 @@
       },
       "id": "lcr_mrckqvxq_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxq_7.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend asking another how they'll get to a study group",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How're you getting to the study group tonight?",
+      "options": {
+        "A": "Don't worry, I'll drive us both.",
+        "B": "The group finished the project last week.",
+        "C": "It's supposed to rain all weekend.",
+        "D": "Around seven, right after dinner."
+      },
+      "answer": "A",
+      "explanation": "A 正确：没有直接回答「怎么去」，而是解决背后的真实需求——直接提出开车带对方一起，属于 context_shift（转向解决问题）。B 错：抓住「study group」联想到小组做项目，是语义联想陷阱，答非所问。C 错：谈天气下雨，语法通顺但与本对话毫无关系，是离题干扰。D 错：说明「时间」是几点，但问题问的是「方式」，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrdxr0ne_0"
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation to join others for dinner",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Don't you want to join us for dinner?",
+      "options": {
+        "A": "That new restaurant is pretty pricey.",
+        "B": "Count me in, absolutely!",
+        "C": "She just moved into a new place.",
+        "D": "I finally joined the gym yesterday."
+      },
+      "answer": "B",
+      "explanation": "B 正确：「Count me in」是习惯表达，意为「算我一个」，自然地接受了邀请，属于 idiomatic。A 错：抓住「dinner」联想到餐厅贵不贵，是语义联想陷阱，没有回应邀请。C 错：谈别人搬家，语法正确但完全离题。D 错：利用「join」的另一层含义（加入健身房 = 报名注册），是一词多义陷阱，误读了原句意图。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      },
+      "id": "lcr_mrdxr0nf_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking where the gym schedule is posted",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's the gym schedule usually posted?",
+      "options": {
+        "A": "It opens at six every morning.",
+        "B": "The gym just added new treadmills.",
+        "C": "Look no further—it's on the door.",
+        "D": "I forgot my water bottle again."
+      },
+      "answer": "C",
+      "explanation": "C 正确：「Look no further」是习惯表达，意为「不用再找了」，随后指出就在门上，自然又有用，属于 idiomatic。A 错：说明「几点开门」是时间信息，但问题问的是「在哪里张贴」，答错了问题类型。B 错：抓住「gym」联想到新添跑步机，是语义联想陷阱。D 错：说自己忘带水壶，语法通顺但离题。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_mrdxr0nf_2"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor why the shared laundry room is noisy",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why's the laundry room always so loud?",
+      "options": {
+        "A": "I ran out of detergent again.",
+        "B": "The mail usually comes around noon.",
+        "C": "It's right down the hall.",
+        "D": "Have you tried the one upstairs?"
+      },
+      "answer": "D",
+      "explanation": "D 正确：用一个反问推进对话——建议对方去楼上那间，间接回应了噪音问题，属于 counter_question。A 错：抓住「laundry」联想到洗衣液用完，是语义联想陷阱。B 错：谈收信时间，语法正确但完全离题。C 错：说明「位置」在走廊尽头，但问题问的是「为什么吵」，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mrdxr0ng_3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help with an essay at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the best way to fix my essay?",
+      "options": {
+        "A": "Well, let's start with your thesis.",
+        "B": "The essay contest deadline is Friday.",
+        "C": "The printers on this floor broke.",
+        "D": "Yes, I'm free until noon."
+      },
+      "answer": "A",
+      "explanation": "A 正确：以话语标记「Well」开头，随后间接地从论点入手给出方向，属于 marker_led_indirect。B 错：抓住「essay」联想到征文比赛截止日期，是语义联想陷阱。C 错：谈打印机坏了，语法通顺但离题。D 错：用「是的，我到中午前有空」回答了「是否有空」这类是非问，但原句问的是「怎么修改」，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrdxr0ng_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about the format of the final exam",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Aren't the exam questions all multiple choice?",
+      "options": {
+        "A": "The exam hall is on the third floor.",
+        "B": "Didn't the professor post a review sheet?",
+        "C": "I left my calculator at home.",
+        "D": "It's really your choice to make."
+      },
+      "answer": "B",
+      "explanation": "B 正确：用反问推进对话——提示对方教授贴过复习提纲，从那里能得到答案，属于 counter_question。A 错：抓住「exam」联想到考场在几楼，是语义联想陷阱。C 错：说自己把计算器落家里了，语法正确但离题。D 错：利用「choice」的另一层含义（选择/决定权，而非选择题），是一词多义陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      },
+      "id": "lcr_mrdxr0ng_5"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student unsure which books are on the course reading list",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'm not sure which books are on the reading list.",
+      "options": {
+        "A": "The reading room closes at nine.",
+        "B": "My roommate borrowed my laptop again.",
+        "C": "They're all listed on the syllabus.",
+        "D": "You should read a bit slower."
+      },
+      "answer": "C",
+      "explanation": "C 正确：直接给出事实信息——书目都列在教学大纲上，属于 direct_topical。A 错：抓住「reading」联想到阅览室几点关门，是语义联想陷阱。B 错：谈室友借走笔记本电脑，语法通顺但离题。D 错：利用「read」的字面意思，把「reading list（书单）」误读成「读书速度」，是误解/一词多义陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy"
+      },
+      "id": "lcr_mrdxr0ng_6"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking the front desk for a lost umbrella",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I think I've left my umbrella here somewhere.",
+      "options": {
+        "A": "It's been raining all week.",
+        "B": "The cafeteria closes early on Fridays.",
+        "C": "Yes, turn left past the hallway.",
+        "D": "Actually, check that bin over there."
+      },
+      "answer": "D",
+      "explanation": "D 正确：以话语标记「Actually」开头，随后间接地指引对方去那个箱子找，属于 marker_led_indirect。A 错：抓住「umbrella」联想到下雨，是语义联想陷阱。B 错：谈食堂周五提前关门，语法正确但离题。C 错：利用「left」的另一层含义（方向「左」而非「落下」），是一词多义陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy"
+      },
+      "id": "lcr_mrdxr0nh_7"
     }
   ]
 }
