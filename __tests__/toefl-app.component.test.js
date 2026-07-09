@@ -41,6 +41,19 @@ function makeBuildQ(i) {
   };
 }
 
+// 真实考试只有拖拽，没有点击自动填充 — 测试一律用 drag & drop 作答。
+function dragChunkToSlot(chunkEl, slotIdx) {
+  const dataTransfer = { setData: () => {}, getData: () => "", effectAllowed: "", dropEffect: "" };
+  fireEvent.dragStart(chunkEl, { dataTransfer });
+  fireEvent.drop(screen.getByTestId(`slot-${slotIdx}`), { dataTransfer });
+}
+
+function fillByDrag(chunkNames) {
+  chunkNames.forEach((name, i) => {
+    dragChunkToSlot(screen.getByRole("button", { name }), i);
+  });
+}
+
 describe("ToeflApp navigation", () => {
   afterEach(() => {
     jest.useRealTimers();
@@ -89,9 +102,19 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("given-token-1").textContent.trim()).toBe("you");
 
     // Filling slot-0 capitalizes the first word; the mid-sentence given is untouched.
-    fireEvent.click(screen.getByRole("button", { name: "could" }));
+    dragChunkToSlot(screen.getByRole("button", { name: "could" }), 0);
     expect(screen.getByTestId("slot-0")).toHaveTextContent("Could");
     expect(screen.getByTestId("given-token-1").textContent.trim()).toBe("you");
+  });
+
+  test("clicking a bank chunk does NOT auto-fill (real exam is drag-only)", () => {
+    render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
+    fireEvent.click(screen.getByTestId("build-start"));
+
+    fireEvent.click(screen.getByRole("button", { name: "could" }));
+    // Slot stays empty (shows its position number) and the chunk stays in the bank.
+    expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
+    expect(screen.getByRole("button", { name: "could" })).toBeInTheDocument();
   });
 
   test("build directions are readable and match iBT wording", () => {
@@ -109,9 +132,7 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    ["could", "send", "the", "slides", "after", "class", "today", "please"].forEach((chunk) => {
-      fireEvent.click(screen.getByRole("button", { name: chunk }));
-    });
+    fillByDrag(["could", "send", "the", "slides", "after", "class", "today", "please"]);
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
@@ -127,7 +148,7 @@ describe("ToeflApp navigation", () => {
     // Free navigation: the user may skip ahead without filling every slot.
     const submit = screen.getByTestId("build-submit");
     expect(submit).not.toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "send" }));
+    dragChunkToSlot(screen.getByRole("button", { name: "send" }), 0);
     expect(submit).not.toBeDisabled();
   });
 
@@ -144,7 +165,7 @@ describe("ToeflApp navigation", () => {
     // Go back to Q1 via the Back button and answer it now.
     fireEvent.click(screen.getByRole("button", { name: "上一题" }));
     expect(screen.getByText(BUILD_TEST_Q.prompt)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "could" }));
+    dragChunkToSlot(screen.getByRole("button", { name: "could" }), 0);
     expect(screen.getByTestId("slot-0")).toHaveTextContent("Could");
   });
 
@@ -152,7 +173,7 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    fireEvent.click(screen.getByRole("button", { name: "send" }));
+    dragChunkToSlot(screen.getByRole("button", { name: "send" }), 0);
     // First token of the sentence is auto-capitalized for display (slot-0).
     expect(screen.getByTestId("slot-0")).toHaveTextContent("Send");
 
@@ -160,10 +181,8 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("slot-0")).toHaveTextContent("1");
     expect(screen.getByRole("button", { name: "send" })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "send" }));
-    const dragData = { setData: () => {}, getData: () => "x" };
-    fireEvent.dragStart(screen.getByRole("button", { name: "the" }), { dataTransfer: dragData });
-    fireEvent.drop(screen.getByTestId("slot-0"), { dataTransfer: dragData });
+    dragChunkToSlot(screen.getByRole("button", { name: "send" }), 0);
+    dragChunkToSlot(screen.getByRole("button", { name: "the" }), 0);
 
     // slot-0 is the sentence's first token, so its display is auto-capitalized.
     expect(screen.getByTestId("slot-0")).toHaveTextContent("The");
@@ -174,9 +193,7 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    [...["could", "send", "the", "slides", "after", "class", "today", "please"]].reverse().forEach((chunk) => {
-      fireEvent.click(screen.getByRole("button", { name: chunk }));
-    });
+    fillByDrag([...["could", "send", "the", "slides", "after", "class", "today", "please"]].reverse());
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
@@ -192,9 +209,7 @@ describe("ToeflApp navigation", () => {
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_ALT_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
 
-    ["upload", "the", "file", "please", "tonight", "now", "could"].forEach((chunk) => {
-      fireEvent.click(screen.getByRole("button", { name: chunk }));
-    });
+    fillByDrag(["upload", "the", "file", "please", "tonight", "now", "could"]);
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
@@ -213,7 +228,7 @@ describe("ToeflApp navigation", () => {
       while (true) {
         const bankButtons = screen.queryAllByTestId(/bank-chunk-/);
         if (bankButtons.length === 0) break;
-        fireEvent.click(bankButtons[0]);
+        dragChunkToSlot(bankButtons[0], guard);
         guard += 1;
         if (guard > 50) throw new Error("bank did not drain as expected");
       }
@@ -397,9 +412,7 @@ describe("ToeflApp navigation", () => {
 
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
-    ["could", "send", "the", "slides", "after", "class", "today", "please"].forEach((chunk) => {
-      fireEvent.click(screen.getByRole("button", { name: chunk }));
-    });
+    fillByDrag(["could", "send", "the", "slides", "after", "class", "today", "please"]);
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(confirmSpy).toHaveBeenCalled();

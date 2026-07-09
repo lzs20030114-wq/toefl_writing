@@ -577,7 +577,6 @@ export function BuildSentenceTask({
             onDragStart={!isMobile ? (e) => onDragStartBank(e, chunk) : undefined}
             onDragEnd={!isMobile ? onDragEnd : undefined}
             onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
-            onClick={() => { if (suppressClick.current) return; handlePickChunk(chunk); }}
             style={{
               background: compact ? "#fff" : "#f8f9fa",
               color: C.t1,
@@ -586,7 +585,7 @@ export function BuildSentenceTask({
               padding: compact ? "7px 12px" : "6px 14px",
               fontSize: compact ? 14 : 14,
               fontWeight: compact ? 500 : 400,
-              cursor: "pointer",
+              cursor: "grab",
               fontFamily: FONT,
               userSelect: "none",
               touchAction: isMobile ? "none" : undefined,
@@ -618,7 +617,7 @@ export function BuildSentenceTask({
           <div style={{ background: C.card, border: "1px solid " + C.bdr, borderRadius: 10, padding: "10px 12px", flexShrink: 0, boxShadow: C.shadow }}>
             {embedded && <div style={{ fontSize: 11, fontWeight: 700, color: C.nav, marginBottom: 4 }}>第 {idx + 1} / {qs.length} 题</div>}
             <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.4, marginBottom: 6 }}>{q.prompt}</div>
-            <div style={{ fontSize: 10, color: C.t3, marginBottom: 4 }}>拖动或点击词块 · 可能含干扰项</div>
+            <div style={{ fontSize: 10, color: C.t3, marginBottom: 4 }}>拖动词块到空位 · 可能含干扰项</div>
             {slotsJSX}
           </div>
           {/* 词块区 — 填充剩余空间 */}
