@@ -25,7 +25,8 @@
 - [低] 清理残留的 `cleanup-orphan-audio` Edge Function（一次性删音频用，已完成使命；Supabase Dashboard → Edge Functions → 删除即可，或下次连 Supabase MCP 时由 agent 替换为失效桩）。
 - [低] 休眠 fallback 直写路径防重补齐：`nightly-generate-bs.yml`→appendBSSets.mjs 只有精确 answer-key 去重（无模糊近重复）；`nightly-generate-disc/email.yml`→generateDisc/EmailQuestions.mjs 直写 prompts.json 仅 prompt 软提示避重（= §7 P1-8 残项）。三者均为手动触发的休眠后备，且有 quality-monitor CONTENT_DUP 兜底探测；接 contentDedup 或明确退役二选一。
 - [中] R1 trigger 配置加 speaking-interview 行（repo 侧 07-09 已全接好：print-bank-prompt/merge/scoreBatch/gate/eval-spec；trigger prompt 在远程配置里，加行当晚即生效，见 docs/quality-pipeline.md ⚠ 注）。
-- [中] 全库质量监测（计划已批准待执行）：四层漏斗 L0 确定性全扫→L1 DeepSeek 答案二审(≈¥15-40, 顺手接听力 auditor=P1-9)→L2 拟真度抽样走夜间 routine→L3 人工复核；方案见 data/claudeGen/reports/FULL-QUALITY-AUDIT-PLAN-2026-07-09.md。
+- [中] R3 修订清单（评价标准审查产出，L2 前必修 P0×3）：①scoreBatch AP 段落数检测改格式无关 ②rdl-long 词数带复核（真锚覆盖仅 42%，顺带 ctw 60-95 复核）③L2 弃用 spec 的 Current 列；P1：BS 常量重锁×2（negationRatio/multiSegmentRatio）、关键锚落 data/realExam2026（AD 教授贴/AP 题型分布/listening 答案位）、库级形态检查进 L0 与 monitor、判别力病例库 data/eval-profiles/cases/、9 份 spec 补锚时效脚注；P2：解析质量等五盲区立项。详见 reports/R3-verdicts-2026-07-09.md。
+- [中] 全库质量监测（计划已批准待执行；R 前置阶段 07-09 已完成：标准体系总体可信 78/80 复算通过，逐份裁决=可用4/修后可用3/仅monitor2，P0 修订后 L2 可开跑）：四层漏斗 L0 确定性全扫→L1 DeepSeek 答案二审(≈¥15-40, 顺手接听力 auditor=P1-9)→L2 拟真度抽样走夜间 routine→L3 人工复核；方案见 data/claudeGen/reports/FULL-QUALITY-AUDIT-PLAN-2026-07-09.md。
 - [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、听力 auditor 接线、LCR 范式配比等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7（监控加固已于 07-08 完成并移出）。
 - [低] 仓库卫生：
   - 5 个已合并 worktree + 孤儿目录 `cranky-lehmann` 清理
