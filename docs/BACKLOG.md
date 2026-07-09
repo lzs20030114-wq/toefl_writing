@@ -15,7 +15,7 @@
 
 ## 进行中
 
-（暂无）
+- [中] 全库质量监测 L1 答案二审：GitHub Actions `full-audit-l1` 全量运行中（~1665 条，DeepSeek ≈¥15-40）；冒烟已验证（19 ok/5 suspect）。**交接手册（含续跑操作）= data/claudeGen/reports/FULL-AUDIT-2026-07-09/HANDOFF.md**。L2/L3 待启动，前置全部就绪。
 
 ## 可派工
 
