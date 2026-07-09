@@ -1,0 +1,95 @@
+# L3 人审拍板包 — 全库质量审计收尾（2026-07-09）
+
+> 本文件是 L0/L1/L1.5 三层机器审计的最终汇总，按「人需要做什么决策」组织。
+> 明细索引见文末；fail-closed 原则贯穿全程：机器只出嫌疑，删/修/留全部由人拍板。
+
+## 审计漏斗总览
+
+| 层 | 范围 | 结果 |
+|---|---|---|
+| L0 确定性全扫 | 全库 2855 题 13 库 | validator/形态/难度/音频全干净；唯一嫌疑 = **BS 题级重复 11 条** |
+| L1 答案二审（DeepSeek 独立作答） | 客观题 1689 条 8 库 | **177 suspect + 5 ambiguous**（lc、rdl-short 零嫌疑） |
+| L1.5 嫌疑复审（同款 auditor 二轮 + 完整明细） | 上述 182 条 | **164 复现 / 14 未复现 / 4 多解** — 复现率 90%，嫌疑是真分歧不是模型噪声 |
+
+需要人处理的全部集中在下面 4 个决策块；预计总人工时间 **1.5~2.5 小时**。
+
+---
+
+## 决策块 A — BS 题级重复 11 条（删/留，约 10 分钟）
+
+L0 contentDedup 检出（4 exact + 7 near）。全文如下，**建议：每对删除左列（后生成者），保留右列**；near 对若认为语境差异足够可改留。
+
+| # | 判定 | 待决 id | 撞 id | 待决题 | 被撞题 |
+|---|---|---|---|---|---|
+| 1 | near | ets_s37_q6 | ets_s25_q8 | Are you ready for your big presentation? → I have not rehearsed the closing slides yet. | Are you ready for tomorrow's class presentation? → No, I have not rehearsed my slides yet. |
+| 2 | near | ets_s43_q4 | cg_bs_s1_q3 | Are you ready to hand in the assignment? → I haven't finished the final lab report yet. | Why do you look so stressed today? → I haven't finished my lab report yet. |
+| 3 | near | ets_s44_q8 | ets_s42_q6 | Did you find out the gym schedule? → I asked whether the new gym opens before eight. | Did Emma tell you the gym hours? → I asked if the new gym opens before eight. |
+| 4 | exact | ets_s44_q9 | ets_s34_q5 | I can't find the textbook on the shelves. → I wonder if the bookstore still has the textbook. | Have you bought all your course books? → I wonder if the bookstore still has my textbook. |
+| 5 | exact | ets_s46_q5 | ets_s40_q6 | Did you figure out the lab hours? → He asked if the lab opens before nine. | Did Emma tell you when the lab opens? → I asked if the lab opens before nine. |
+| 6 | exact | ets_s60_q1 | cg_bs_s1_q3 | Have you finished writing up the experiment? → I haven't finished my lab report yet. | Why do you look so stressed today? → I haven't finished my lab report yet. |
+| 7 | near | ets_s61_q4 | ets_s34_q4 | The librarian says your account has a hold. → I haven't returned the overdue library books yet. | Have you taken those books back? → I haven't returned the library books yet. |
+| 8 | near | ets_s61_q7 | ets_s57_q9 | You told me you got feedback on your paper. → My economics professor praised the detailed research paper that I submitted. | Did Julian mention how the paper went? → …that I submitted last week. |
+| 9 | near | ets_s61_q9 | ets_s58_q10 | You noticed the second floor is open again. → The reading room on the second floor was finally reopened to students. | Did you hear about the library renovation? → …reopened to students this week. |
+| 10 | exact | ets_s62_q2 | ets_s57_q5 | You wanted to check something with the registrar. → I asked if the deadline had already passed. | Does Mariana know the exact deadline? → I asked if the deadline had already passed. |
+| 11 | near | ets_s62_q4 | ets_s59_q4 | You mentioned the trip sign-up is filling up. → I have not paid the field trip deposit yet. | Did you sign up for the ski trip? → I have not paid the trip deposit yet. |
+
+---
+
+## 决策块 B — 选择题疑似错键（逐条人审，~59 条，约 1~1.5 小时）
+
+两轮独立作答均不同意答案键（复现）或评出多个可行选项（多解）。**逐条明细（题干+选项+AI 答案+理由）全部在 `L1-suspect-details.md` 对应节**，人审只需判断「AI 对还是键对」：
+
+| 库 | 条数 | 集中模式 |
+|---|---|---|
+| ap | 26 | **23/26 集中在 insert_text（选句插入 Q5）**；其余 inference 2 / vocab 1 / reference 1 |
+| lat | 21 (+1 多解) | 分散，主旨/细节题为主 |
+| lcr | 6 (+2 多解) | 分散 |
+| rdl-long | 1 | — |
+| la | 1 (+1 多解) | — |
+
+**族群级建议（先拍这个再逐条）**：ap 的 insert_text 高度集中说明「生成器的插句键」和「AI 判插句」至少有一方系统性偏弱。建议人先盲解其中 5 条（不看键不看 AI 答案），若人解与键一致率 ≥4/5 → 判 auditor 弱，其余 18 条降级为抽查；若 ≤2/5 → 判生成器插句键弱，立项修 ap 生成 prompt 的插句规则，26 条全修。
+
+**逐条处理规约**：AI 对 → 改键（或直接删题）；键对 → 在题上标 `audit_keep`（进 auditor 已知误报清单，后续跑批不再报）。
+
+---
+
+## 决策块 C — ctw 多解空（**族群决策，勿逐题人审**：109 题 / 129 个 critical 空）
+
+C-test 空的「AI 填词吻合词首碎片但≠原词」= 该空可能多解。129 个空聚类后**根因是规则问题，不是 109 道题各自的问题**：
+
+| 类 | 空数 | 例 | 性质 |
+|---|---|---|---|
+| 碎片 ≤2 字母的功能词 | **76** | `o:on/of`、`th:this/the`、`Th:This/The`、`ha:hard/have`、`f:far/from` | 碎片太短根本锁不住唯一解——**生成规则缺陷** |
+| 屈折变体 | **40** | `swells/swell`、`sugars/sugar`、`provides/provide`、`fungal/fungi` | 语法多数能锁定，但若判分只认原词则边缘用户吃亏——**判分宽容度问题** |
+| 内容词近义 | **13** | `fertile/ferrous`、`quietly/quickly`、`harmful/hardy` | 真·逐空人审（只 13 个，10 分钟） |
+
+**建议立项（替代逐题人审）**：
+1. 生成器 + validator 加规则：禁止对功能词挖空、碎片最短 3 字母（存量重挖空或换词）；
+2. 核对 ctw 判分逻辑是否只认原词——若是，对屈折变体类考虑接受语法等价形式或重挖空；
+3. 13 个内容词近义空逐个看语境是否锁定唯一解，锁不住的重挖空。
+4. 修复后重跑 `full-audit-l1`（banks=ctw）验证归零。
+
+---
+
+## 决策块 D — 复审未复现 14 条：降级观察，不动
+
+两轮结论不一致（L1 报嫌疑、L1.5 干净）= 模型边缘噪声。**建议不处理**，留观后续夜间 quality-monitor：
+ap_rt_20260608_1 · rdl-long_mpvr2ny1_0 · ctw×5（见明细 JSON）· lat×5 · la×2。
+
+---
+
+## 产物索引与续跑
+
+| 文件 | 内容 |
+|---|---|
+| `../L1-report.md` / `../L1-suspects.json` / `../L1-state.json` | L1 全量二审（在 `claude/recent-work-visibility-yg5ma4` 分支，1689/1689 全部审完） |
+| `suspect-input.json` | L1 嫌疑快照（本包输入，182 条） |
+| `L1-suspect-details.md` / `.json` | L1.5 复审逐条明细（人审 B/C 块对着它看） |
+| `L1-detail-state.json` | L1.5 断点状态 |
+| `../L0-report.md` / `../L0-suspects.json` | L0 全扫（工作分支） |
+
+**续跑/复跑**：Actions → `full-audit-l1` → Run workflow → Branch 选本分支，`script` 填 `detail`（复审明细）或留 `full`（全量二审）。断点续跑不重复计费；要全新一轮先删对应 state 文件。
+
+**审计脚本**：`scripts/audit/run-l1.mjs`（L1 全量）· `scripts/audit/run-l1-detail.mjs`（L1.5 复审）· `scripts/audit/run-l0.mjs` + `measure-anchors.mjs`（工作分支，L0/量尺）。
+
+**分支说明**：本包与 L1.5 产物在 `claude/l1-audit-handoff-p7h3e0`（基于 main）；L0/L1 报告与本轮其余代码工作在 `claude/recent-work-visibility-yg5ma4`（未合 main，合并走 /ship）。两分支文件路径无冲突，可先后合并。
