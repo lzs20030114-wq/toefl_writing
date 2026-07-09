@@ -16,17 +16,24 @@ describe("ctwUniqueness — pure helpers", () => {
     expect(matchesFragment("clean", "mu")).toBe(false);
   });
 
-  test("isInflectionalVariant: 单复数/时态算变体，近义词不算", () => {
+  test("isInflectionalVariant: 只认已知屈折后缀，功能词confusable不算", () => {
     expect(isInflectionalVariant("sugar", "sugars")).toBe(true);
     expect(isInflectionalVariant("provide", "provides")).toBe(true);
+    expect(isInflectionalVariant("study", "studies")).toBe(true);  // y→ies
     expect(isInflectionalVariant("murky", "muddy")).toBe(false);
     expect(isInflectionalVariant("on", "of")).toBe(false);
+    // 关键回归：the/these 共享前缀但差 "se"(非屈折后缀) → 不是变体, 不能进判分白名单
+    expect(isInflectionalVariant("the", "these")).toBe(false);
+    expect(isInflectionalVariant("the", "their")).toBe(false);
+    expect(isInflectionalVariant("fungal", "fungi")).toBe(false);
   });
 
   test("classify: 屈折/功能词/内容三分", () => {
     expect(classify("sug", "sugars", "sugar")).toBe("inflection");
     expect(classify("o", "on", "of")).toBe("function");
     expect(classify("mu", "murky", "muddy")).toBe("content");
+    // the/these 不再被误判 inflection（原 heuristic 的 bug）
+    expect(classify("th", "these", "the")).toBe("function");
   });
 
   test("analyzeBlank: 过滤不合碎片与原词本身", () => {

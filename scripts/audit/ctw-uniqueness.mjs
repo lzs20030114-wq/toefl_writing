@@ -30,7 +30,7 @@ const LIMIT = args.limit ? Number(args.limit) : Infinity;
 const MAX_MS = (Number(process.env.MAX_MINUTES) || 90) * 60000;
 const T0 = Date.now();
 
-const { checkItemUniqueness } = require("../../lib/readingGen/ctwUniqueness.js");
+const { checkItemUniqueness, classify } = require("../../lib/readingGen/ctwUniqueness.js");
 
 async function callAI(prompt, maxTokens = 2000) {
   const { callDeepSeekViaCurl } = require("../../lib/ai/deepseekHttp.js");
@@ -94,11 +94,13 @@ for (const item of allItems) {
   itemsWithMulti++;
   const lines = [`### ${item.id} — ${item.topic}/${item.subtopic}`];
   for (const b of r.multi) {
-    for (const alt of b.alternatives) kindCount[alt.kind] = (kindCount[alt.kind] || 0) + 1;
-    const kinds = b.alternatives.map((a) => `${a.word}(${a.kind})`).join(", ");
-    lines.push(`- 空 ${b.index + 1} 碎片\`${b.fragment}\` 原词 **${b.original}** ← 第二解: ${kinds}`);
+    // 重算 kind：不信 state 里旧的（旧 isInflectionalVariant 会把 the/these 误判 inflection），
+    // 用当前(修严后)的 classify 现算，这样存量 state 无需重跑 AI 即享修复。
+    const alts = b.alternatives.map((a) => ({ word: a.word, kind: classify(b.fragment, b.original, a.word) }));
+    for (const alt of alts) kindCount[alt.kind] = (kindCount[alt.kind] || 0) + 1;
+    lines.push(`- 空 ${b.index + 1} 碎片\`${b.fragment}\` 原词 **${b.original}** ← 第二解: ${alts.map((a) => `${a.word}(${a.kind})`).join(", ")}`);
     // 补丁：只把「屈折变体」列进自动可落项（最安全）；function/content 仅标记待人/待重挖
-    const inflOnly = b.alternatives.filter((a) => a.kind === "inflection").map((a) => a.word);
+    const inflOnly = alts.filter((a) => a.kind === "inflection").map((a) => a.word);
     if (inflOnly.length) (patch[item.id] ||= []).push({ blankIndex: b.index, original: b.original, add: inflOnly });
   }
   perItemLines.push(lines.join("\n"));
