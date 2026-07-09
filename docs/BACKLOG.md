@@ -81,6 +81,7 @@
 
 ## Done
 
+- 2026-07-09 RDL 拟真度标准沉淀（docs/eval-spec/rdl.md）：把 rdlDeepFlavor/rdlGapAnalysis/rdlPitfallAnalysis 三个分析文件（04-09 实测）整理成 11 维标准；确认 samples/readInDailyLife 含 ETS 官方 6 组（金层）+ 备考商 51 组（银层）参照语料——「RDL 零锚」实为「有锚未登记」。至此 13/13 题型全部有成文标准。后续：官方 6 组归档 realExam2026、易加检测器×4 并入 P1-7（见 spec 末节）。
 - 2026-07-09 interview 纳入自动化（§7 P1-11 方案A，分支 claude/recent-work-visibility-yg5ma4）：print-bank-prompt interview 档 + merge-staging validateInterviewSet fail-closed + scoreBatch/quality-gates(70/80) + eval-spec（真题锚差距「4 问产品设计 vs 回忆中位 6-7 问」记录在案，字数维度 monitor-only）。剩 R1 trigger 配置加行（转可派工）。
 - 2026-07-08 出题管线审查 P0 收尾包（分支 claude/recent-work-visibility-yg5ma4，待合 main）：①监控加固 4 项（bank git 时间戳 >48h 告警 / staging 积压 7 日增量判警 / live 库内容重复旁路探测 / null 指标升硬告警，实测即抓到 repeat.json 停更 212h）②封 admin「部署到正式题库」零校验旁路（lib/gen/deployGate.js 与夜间 mergeClaude 同判：validator+去重 0.75/0.8+strict 门；merge-staging 对 interview fail-closed）③email em224-227 占位符修复。全量 jest 639 过 + next build 过。
 - 2026-07-08 孤儿听力音频清理落地：删 740 / 留 120（被练习历史引用），走一次性 Edge Function + SQL Editor 执行（scripts/sql/2026-07-08-cleanup-orphan-audio.sql，用户确认跑完）；全清单存档 reports/orphan-audio-cleanup-2026-07-08.json；台账已登记。
