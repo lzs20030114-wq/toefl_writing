@@ -6703,6 +6703,182 @@
       },
       "id": "lcr_mrba2quq_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrba2quq_7.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you open this Sunday morning?",
+      "options": {
+        "A": "Well, we don't open till noon Sundays.",
+        "B": "Sunday brunch is our most popular menu.",
+        "C": "The delivery truck comes on Tuesdays.",
+        "D": "We're right across from the bank."
+      },
+      "answer": "A",
+      "explanation": "打电话的人问周日上午是否营业。正确答案A以话语标记'Well'开头，间接告知周日要到中午才开门，既回应了是否营业，又给出了具体时间，符合marker_led_indirect范式。B项借用'Sunday'一词，却谈周日早午餐菜单最受欢迎，属于语义联想陷阱。C项完全离题，说送货车周二来。D项回答的是'店在哪里'（在银行对面）而非'是否/几点营业'，属于答错问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrckqvxl_0",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxl_0.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't ever tell when the gym closes.",
+      "options": {
+        "A": "The gym just added new treadmills.",
+        "B": "Actually, it stays open till midnight.",
+        "C": "My roommate joined a pottery class.",
+        "D": "The gym is close to the dining hall."
+      },
+      "answer": "B",
+      "explanation": "说话人抱怨自己老搞不清健身房几点关门。正确答案B以话语标记'Actually'开头，间接给出解决办法——现在开到午夜，符合marker_led_indirect范式。A项借用'gym'一词，却谈健身房新添了跑步机，属于语义联想陷阱。C项完全离题，说自己室友报名了陶艺课。D项把'closes'（关门）误当成'close'（近），说健身房离食堂很近，属于一词多义误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrckqvxm_1",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxm_1.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's the section with geology journals?",
+      "options": {
+        "A": "The geology final is next Tuesday.",
+        "B": "The café upstairs closes at five.",
+        "C": "Are you after print or digital?",
+        "D": "The head librarian ordered them last spring."
+      },
+      "answer": "C",
+      "explanation": "学生问图书馆员地质学期刊在哪个区。正确答案C用一个反问'你要纸质版还是电子版？'来推进对话、锁定需求，符合counter_question范式，是图书馆员自然的回应。A项借用'geology'一词，却谈地质学期末考试在下周二，属于语义联想陷阱。B项完全离题，说楼上咖啡馆五点关门。D项回答的是'谁/什么时候订的这些期刊'而非'在哪个区'，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrckqvxn_2",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxn_2.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How long's the final essay supposed to be?",
+      "options": {
+        "A": "The essay contest deadline passed already.",
+        "B": "The third-floor printer is broken again.",
+        "C": "It's due at the end of the month.",
+        "D": "Well, aim for around ten pages."
+      },
+      "answer": "D",
+      "explanation": "学生问教授期末论文应该写多长。正确答案D以话语标记'Well'开头，间接给出建议——大概写十页左右，符合marker_led_indirect范式。A项借用'essay'一词，却谈论文比赛截止日期已过，属于语义联想陷阱。B项完全离题，说三楼打印机又坏了。C项回答的是'什么时候交'（月底）而非'写多长'，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mrckqvxo_3",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxo_3.mp3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Can't I return these boots without a receipt?",
+      "options": {
+        "A": "Yes, store credit works without one.",
+        "B": "Those boots come in black too.",
+        "C": "The mall closes early on holidays.",
+        "D": "I'll return around three today."
+      },
+      "answer": "A",
+      "explanation": "顾客问没有小票能不能退这双靴子。正确答案A直接给出事实回答——可以，没有小票会以购物积分形式退，符合direct_topical范式。B项借用'boots'一词，却谈这双靴子还有黑色，属于语义联想陷阱。C项完全离题，说商场节假日提早关门。D项把'return'（退货）误当成'return'（返回），说自己今天三点左右回来，属于一词多义误解型干扰项。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrckqvxo_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxo_4.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where's the jazz concert being held tonight?",
+      "options": {
+        "A": "The jazz band added three new members.",
+        "B": "It's in the main auditorium.",
+        "C": "I still owe on my meal plan.",
+        "D": "Doors open at eight sharp."
+      },
+      "answer": "B",
+      "explanation": "说话人问今晚爵士音乐会在哪里举办。正确答案B直接给出地点——在主礼堂，符合direct_topical范式。A项借用'jazz'一词，却谈爵士乐队新加了三名成员，属于语义联想陷阱。C项完全离题，说自己还欠着餐费。D项回答的是'什么时候开场'（八点准时开门）而非'在哪里'，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrckqvxp_5",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxp_5.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why don't you just borrow my notes?",
+      "options": {
+        "A": "My notebook is almost totally full.",
+        "B": "The vending machine ate my dollar.",
+        "C": "You're a lifesaver, thanks so much!",
+        "D": "Because I overslept this morning."
+      },
+      "answer": "C",
+      "explanation": "同学主动提议'你何不借我的笔记'。正确答案C使用习惯表达'You're a lifesaver'（你真是救星）加上道谢，自然地接受了好意，符合idiomatic范式。A项借用'notes/notebook'的联想，却谈自己的笔记本快写满了，属于语义联想陷阱。B项完全离题，说自动售货机吞了自己一块钱。D项把这句提议当成字面质问，回答'因为我今早睡过头了'，答非所问且不合逻辑，属于答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrckqvxq_6",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxq_6.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "You're really swamped with all this work.",
+      "options": {
+        "A": "These papers are stacked way too high.",
+        "B": "The weather's finally warming up outside.",
+        "C": "The swamp trail was muddy yesterday.",
+        "D": "Honestly, I could use a hand."
+      },
+      "answer": "D",
+      "explanation": "说话人看出对方被一堆活儿压得喘不过气，语气里带着想帮忙的意思。正确答案D以话语标记'Honestly'开头，使用习惯表达'could use a hand'（正需要人搭把手），坦然接受帮助，符合idiomatic范式。A项借用'work'的联想，却谈这些文件堆得太高，属于语义联想陷阱。B项完全离题，说外面天气终于回暖了。C项把'swamped'（忙得不可开交）误当成'swamp'（沼泽），说沼泽小径昨天很泥泞，属于一词多义误解型干扰项。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrckqvxq_7",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrckqvxq_7.mp3"
     }
   ]
 }

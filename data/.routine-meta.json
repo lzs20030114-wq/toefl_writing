@@ -1,48 +1,44 @@
 {
-  "session_id": "routine-20260707-170236",
-  "completed_at": "2026-07-07T17:27:00Z",
-  "duration_minutes": 25,
-  "model": "Claude Sonnet 5",
-  "highlight": "12 题库本轮全部一次性通过合库/产出(70/70)，BS 经三轮内部自校准后满分合入无需 R2 补救",
+  "session_id": "routine-20260708-221453",
+  "completed_at": "2026-07-08T22:27:30Z",
+  "duration_minutes": 12,
+  "model": "Claude Opus 4.8",
+  "highlight": "12 题库全生成 70/70；disc+email 已合库，阅读/听力/口语入 staging 待审计路由；BS 难度分档未过回归门，交 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "simple past",
-        "prepositional phrase",
-        "direct question",
-        "modal can",
-        "indirect question",
-        "past tense",
-        "present perfect",
-        "negation",
-        "relative clause",
-        "compound predicate",
-        "passive voice",
-        "phrasal verb",
-        "present tense"
+        "dorm parties",
+        "seminars/electives",
+        "library & tutoring center",
+        "campus gym hours",
+        "scholarship/workshop signups",
+        "exam schedules & posted grades",
+        "borrowed club equipment"
       ],
       "favorite": {
-        "prompt": "What did Emma ask you about the concert?",
-        "answer": "She wanted to know if the tickets sold out."
+        "prompt": "What did Julian ask you earlier?",
+        "answer": "He asked whether you had registered for the spring field trip."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "environmental science",
-        "social studies",
+        "political science",
         "history and culture",
-        "economics"
+        "computer science",
+        "social studies"
       ],
       "favorite": {
-        "subtopic": "social studies",
-        "preview": "Urban planners have recently revived an old idea: the \"fifteen-minute city,\" where groceries, schools"
+        "subtopic": "political science",
+        "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -51,14 +47,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
+        "服务与活动",
         "消费售后",
         "住宿",
-        "职场工作",
-        "社区生活"
+        "日常社交"
       ],
       "favorite": {
-        "subtopic": "社区生活",
-        "preview": "You joined a weekend reading program at your local community center where volunteers help children practice, but the room is too small and often runs out of books."
+        "subtopic": "消费售后",
+        "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -67,15 +63,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "technology/steam power",
-        "biology/pollination",
-        "geology/river deltas",
-        "art/music theory",
-        "sociology/globalization"
+        "environmental_science/conservation",
+        "psychology/placebo effect",
+        "astronomy/planetary atmospheres",
+        "chemistry/corrosion",
+        "history/silk road"
       ],
       "favorite": {
-        "subtopic": "geology/river deltas",
-        "preview": "A river delta is a landform that develops where a river deposits its sediment upon entering a calmer body of water"
+        "subtopic": "astronomy/planetary atmospheres",
+        "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -84,16 +80,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/coral reefs",
-        "environmental_science/ocean acidification",
-        "psychology/creativity",
-        "history/ancient civilizations",
-        "geology/rock formation",
-        "astronomy/exoplanets"
+        "biology/whale communication",
+        "environmental_science/green roofs",
+        "psychology/confirmation bias",
+        "history/the spice trade",
+        "geology/volcanic mountain formation",
+        "astronomy/Mars rovers"
       ],
       "favorite": {
-        "subtopic": "biology/coral reefs",
-        "preview": "Coral reefs are vast underwater structures built by tiny animals called polyps over thousands of years."
+        "subtopic": "biology/whale communication",
+        "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -102,14 +98,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
+        "email/lab safety training reminder",
         "email/student ID replacement fee",
-        "email/career services resume review",
-        "notice/water fountain maintenance closure",
-        "social_media/campus garden spring hours"
+        "notice/campus Wi-Fi maintenance",
+        "notice/water-fountain repair closure"
       ],
       "favorite": {
-        "subtopic": "social_media",
-        "preview": "So excited the campus community garden reopens for spring! Open plots are up for grabs starting Sat"
+        "subtopic": "notice/wifi-maintenance",
+        "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -118,12 +114,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "syllabus/intro biology lab grading",
-        "email/roommate apartment plumber repair"
+        "social_media/dorm DIY woodworking project",
+        "email/commuter parking permit renewal"
       ],
       "favorite": {
-        "subtopic": "syllabus",
-        "preview": "BIO 101: Introduction to Biology — Laboratory Component. The laboratory portion of BIO 101 is worth 30% of your final grade"
+        "subtopic": "social_media/dorm DIY woodworking project",
+        "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -132,14 +128,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "cognitive_psychology/how chunking improves working memory capacity",
-        "music/how folk melodies were absorbed into nationalist compositions",
-        "anthropology/the anthropology of food taboos across societies",
-        "linguistics/how language shapes the way we perceive color"
+        "physics/Doppler effect",
+        "history/coffee houses in the Enlightenment",
+        "linguistics/pidgin to creole",
+        "ecology/biological magnification"
       ],
       "favorite": {
-        "subtopic": "anthropology/the anthropology of food taboos across societies",
-        "preview": "Every human society draws a line between what counts as food and what does not. A substance that one"
+        "subtopic": "the process of pidgin languages developing into creoles",
+        "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -148,15 +144,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "recommendations_opinions/two friends debating whether a new cafe is worth the price",
-        "recommendations_opinions/two friends recommending a new detective TV series to each other",
-        "errands_service/two students chatting about a pottery class one of them took",
-        "plans_social/two friends coordinating a weekend beach trip",
-        "plans_social/two friends planning a surprise birthday party for a classmate"
+        "plans_social",
+        "recommendations_opinions (cafe)",
+        "recommendations_opinions (Thai restaurant)",
+        "campus_dorm_life",
+        "errands_service (bus schedule)"
       ],
       "favorite": {
-        "subtopic": "plans_social/two friends planning a surprise birthday party for a classmate",
-        "preview": "Okay, so Dan's birthday is next Thursday. I really want to throw him a surprise party."
+        "subtopic": "两人争论新咖啡馆是否值那个价",
+        "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -165,15 +161,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "campus_activity/winter gear swap with voucher system",
-        "academic_event/honors thesis oral defense schedule announcement",
-        "academic_event/senior capstone presentation schedule",
-        "facility_change/campus bookstore moving to a new building",
-        "career_services/career fair preparation workshop with resume review"
+        "academic_event/conference call for papers",
+        "facility_change/performance hall reopening",
+        "logistics/garage closure + shuttle",
+        "facility_change/computer lab relocation",
+        "campus_activity/outdoor movie night"
       ],
       "favorite": {
-        "subtopic": "facility_change/campus bookstore moving to a new building",
-        "preview": "Due to the expansion of the Student Services Center, the campus bookstore will be relocating to Kemper Hall"
+        "subtopic": "Interdisciplinary Crossroads Conference call for papers",
+        "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -182,18 +178,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "social/responding to an invitation or suggestion",
-        "general_daily/making or rescheduling an appointment",
-        "campus_daily/student asking about campus shuttle or parking",
-        "social/acknowledging someone's unavailability or schedule conflict",
-        "campus_daily/student asking about dorm maintenance issue",
-        "social/offering help to someone who seems stressed",
-        "general_daily/asking a store clerk about a return or exchange",
-        "social/expressing concern about a friend's situation"
+        "campus_daily/study-group transport",
+        "social/dinner invitation",
+        "campus_daily/gym schedule",
+        "general_daily/laundry room noise",
+        "campus_academic/writing center",
+        "campus_academic/exam format",
+        "campus_academic/reading list",
+        "campus_daily/lost umbrella"
       ],
       "favorite": {
-        "subtopic": "social/responding to an invitation or suggestion",
-        "preview": "What can I bring that won't be a hassle?"
+        "subtopic": "asking a neighbor why the shared laundry room is noisy",
+        "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -202,16 +198,18 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Campus Gym Induction",
-        "Theater Rehearsal",
-        "Planetarium Visit"
+        "Dining Hall Tour",
+        "Career Services Workshop",
+        "Car Rental Agency"
       ],
       "favorite": {
-        "prompt": "Planetarium Visit",
-        "answer": "When the presentation ends, check the star chart near the exit to find this season's visible constellations."
+        "subtopic": "Dining Hall Tour",
+        "preview": "Trays are stacked near the entrance."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-08T22:55:58.785Z",
+  "r2_session_id": "routine-r2-20260708-224120"
 }

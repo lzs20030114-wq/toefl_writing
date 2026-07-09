@@ -7872,6 +7872,162 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mrba2qsj_3"
+    },
+    {
+      "id": "rdl_routine-20260707-190431_short_1",
+      "variant": "short",
+      "genre": "email",
+      "subtopic": "email/interlibrary-loan-arrival",
+      "text": "Dear Nora, The book you requested through interlibrary loan, 'Coastal Ecology,' has arrived at the Reference Desk in Miller Library. Please pick it up by Thursday, April 18, and bring the $3 processing fee. Unclaimed items are returned after five days. Best, Circulation Staff",
+      "format_metadata": {
+        "from": "Circulation Staff",
+        "to": "Nora",
+        "subject": "Interlibrary Loan Book Has Arrived"
+      },
+      "questions": [
+        {
+          "qid": "rdl_routine-20260707-190431_short_1_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what must Nora bring when she picks up the book?",
+          "options": {
+            "A": "A current student ID card",
+            "B": "A three-dollar processing fee",
+            "C": "A completed request form",
+            "D": "A signed loan agreement"
+          },
+          "correct_answer": "B",
+          "explanation": "The email asks Nora to bring the $3 processing fee when she collects the book."
+        },
+        {
+          "qid": "rdl_routine-20260707-190431_short_1_q2",
+          "question_type": "detail",
+          "stem": "According to the email, what happens to books that are not picked up in time?",
+          "options": {
+            "A": "They are sent back to the lending library",
+            "B": "They are held for two additional weeks",
+            "C": "They are moved to the main book stacks",
+            "D": "They are offered to other waiting students"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states that unclaimed items are returned after five days, meaning they go back to the lender."
+        }
+      ],
+      "difficulty": "easy",
+      "word_count": 44
+    },
+    {
+      "id": "rdl_routine-20260707-190431_short_2",
+      "variant": "short",
+      "genre": "notice",
+      "subtopic": "notice/water-fountain-maintenance",
+      "text": "Notice: The water fountains on the third floor of Hale Science Building will be shut off for pipe maintenance from Monday, June 2, through Wednesday, June 4. Fountains on the first and second floors remain available. Please plan accordingly and report any leaks to Facilities.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_routine-20260707-190431_short_2_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, which floor's fountains will be shut off?",
+          "options": {
+            "A": "The third floor of the building",
+            "B": "The first floor of the building",
+            "C": "The second floor of the building",
+            "D": "The ground floor of the building"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice specifies that the fountains on the third floor of Hale Science Building will be shut off."
+        },
+        {
+          "qid": "rdl_routine-20260707-190431_short_2_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about people on the third floor during the maintenance?",
+          "options": {
+            "A": "They will pay a small usage fee",
+            "B": "They will lose access to the building",
+            "C": "They will need to bring their own tools",
+            "D": "They will use fountains on lower floors"
+          },
+          "correct_answer": "D",
+          "explanation": "Since third-floor fountains are off but the first and second floors remain available, people would use fountains on lower floors."
+        }
+      ],
+      "difficulty": "easy",
+      "word_count": 45
+    },
+    {
+      "id": "rdl_routine-20260707-190431_short_3",
+      "variant": "short",
+      "genre": "notice",
+      "subtopic": "notice/shuttle-route-detour",
+      "text": "Notice: Because of road construction on Elm Street, the Blue Line shuttle will follow a detour from Tuesday, September 9, to Friday, September 12. Temporary stops will be added at Foster Gym and Lot D. The regular Elm Street stop will not be served during this period.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_routine-20260707-190431_short_3_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when does the shuttle detour begin?",
+          "options": {
+            "A": "On Monday, September 8",
+            "B": "On Tuesday, September 9",
+            "C": "On Thursday, September 11",
+            "D": "On Friday, September 12"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states the detour runs from Tuesday, September 9, to Friday, September 12, so it begins on September 9."
+        },
+        {
+          "qid": "rdl_routine-20260707-190431_short_3_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the regular Elm Street stop during the detour?",
+          "options": {
+            "A": "Riders must pay an extra fare there",
+            "B": "Riders will board there as usual",
+            "C": "Riders should arrive earlier than normal",
+            "D": "Riders cannot be picked up there"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice says the regular Elm Street stop will not be served, so riders cannot be picked up there."
+        }
+      ],
+      "difficulty": "easy",
+      "word_count": 47
+    },
+    {
+      "id": "rdl_routine-20260707-190431_short_4",
+      "variant": "short",
+      "genre": "notice",
+      "subtopic": "notice/elevator-out-of-service",
+      "text": "Notice: The east elevator in Bradley Hall will be out of service for repairs from March 3 to March 7. Please use the west elevator or the main stairs. Staff-assisted transport of heavy items may be arranged at the front desk for a $10 fee.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_routine-20260707-190431_short_4_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is available for a $10 fee at the front desk?",
+          "options": {
+            "A": "Extended repair-hour scheduling service",
+            "B": "Priority access to the west elevator",
+            "C": "Staff help moving heavy items",
+            "D": "A temporary parking permit nearby"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that staff-assisted transport of heavy items may be arranged at the front desk for a $10 fee."
+        },
+        {
+          "qid": "rdl_routine-20260707-190431_short_4_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about people needing to reach upper floors during the repairs?",
+          "options": {
+            "A": "They must wait until March 7 to go up",
+            "B": "They will be charged a small access fee",
+            "C": "They can use the west elevator instead",
+            "D": "They should avoid Bradley Hall entirely"
+          },
+          "correct_answer": "C",
+          "explanation": "Because only the east elevator is out of service and the west elevator remains open, people can use the west elevator instead."
+        }
+      ],
+      "difficulty": "easy",
+      "word_count": 45
     }
   ]
 }
