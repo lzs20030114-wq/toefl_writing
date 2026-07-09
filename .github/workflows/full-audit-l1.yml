@@ -1,0 +1,62 @@
+# L1 答案正确性全量二审（FULL-QUALITY-AUDIT-PLAN-2026-07-09 第二层）— 手动触发。
+# 阅读 4 库走 answerAuditor、听力 4 库首次接线 *Auditor(P1-9)，DeepSeek 独立作答比对。
+# 断点续跑：runner 内置时间预算(到点优雅收尾)，state 随报告提交回分支；
+# 若一轮没跑完，再次 Run workflow 即从断点继续。
+name: full-audit-l1
+
+on:
+  workflow_dispatch:
+    inputs:
+      banks:
+        description: "逗号分隔库名(ap,rdl-short,rdl-long,ctw,lat,lc,la,lcr)；留空=全部"
+        required: false
+        default: ""
+      limit:
+        description: "每库条数上限(冒烟测试用)；留空=全量"
+        required: false
+        default: ""
+      max_minutes:
+        description: "本轮时间预算(分钟)"
+        required: false
+        default: "300"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-audit-l1
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run L1 answer audit
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          MAX_MINUTES: ${{ inputs.max_minutes }}
+        run: |
+          ARGS=""
+          [ -n "${{ inputs.banks }}" ] && ARGS="$ARGS --banks=${{ inputs.banks }}"
+          [ -n "${{ inputs.limit }}" ] && ARGS="$ARGS --limit=${{ inputs.limit }}"
+          node scripts/audit/run-l1.mjs $ARGS
+
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name "audit-bot"
+          git config user.email "audit-bot@users.noreply.github.com"
+          git add data/claudeGen/reports/FULL-AUDIT-*/
+          git diff --cached --quiet && echo "no changes" && exit 0
+          git commit -m "bot(audit): L1 answer-audit results [skip ci]"
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push origin HEAD:${{ github.ref_name }}
