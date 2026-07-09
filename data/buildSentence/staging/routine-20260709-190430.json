@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "How did you prepare for today's seminar?",
+      "answer": "I finished the reading before class.",
+      "chunks": ["I", "finished", "the", "before", "class", "read"],
+      "prefilled": ["reading"],
+      "prefilled_positions": {"reading": 3},
+      "distractor": "read",
+      "has_question_mark": false,
+      "grammar_points": ["past simple"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "I heard you're switching dorms next month.",
+      "answer": "Which building did you move into?",
+      "chunks": ["building", "did", "you", "move", "into", "do"],
+      "prefilled": ["Which"],
+      "prefilled_positions": {"which": 0},
+      "distractor": "do",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Emma's been hoping to get into that pottery workshop.",
+      "answer": "She wondered whether the workshop still had openings.",
+      "chunks": ["she", "whether", "the workshop", "still", "had", "openings", "did"],
+      "prefilled": ["wondered"],
+      "prefilled_positions": {"wondered": 1},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "How are you feeling about tomorrow's presentation?",
+      "answer": "I did not finish the group slides tonight.",
+      "chunks": ["did", "not", "finish", "the", "group", "slides", "no"],
+      "prefilled": ["I", "tonight"],
+      "prefilled_positions": {"i": 0, "tonight": 7},
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "I've got two extra tickets for the concert.",
+      "answer": "Could you set one aside for me too?",
+      "chunks": ["could", "you", "set", "one aside", "for me", "too", "can"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "can",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "modal"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "What clubs did you sign up for this term?",
+      "answer": "I joined the study group that meets in the library on Thursdays.",
+      "chunks": ["I", "joined", "the study group", "that", "meets", "in", "the library", "meeting"],
+      "prefilled": ["on Thursdays"],
+      "prefilled_positions": {"on thursdays": 10},
+      "distractor": "meeting",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Julian mentioned the timetable changed again.",
+      "answer": "He asked me whether the new schedule worked for the whole team.",
+      "chunks": ["he", "asked", "me", "the new schedule", "worked", "for", "the whole team", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 3},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "What did you hear about the faculty changes?",
+      "answer": "The professor who taught statistics moved to a smaller regional campus.",
+      "chunks": ["the professor", "taught", "statistics", "moved", "to", "a smaller", "regional campus", "teaches"],
+      "prefilled": ["who"],
+      "prefilled_positions": {"who": 2},
+      "distractor": "teaches",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did you sort out during registration?",
+      "answer": "I dropped off the forms at the registrar this morning.",
+      "chunks": ["dropped", "off", "the forms", "at", "the registrar"],
+      "prefilled": ["I", "this morning"],
+      "prefilled_positions": {"i": 0, "this morning": 8},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "What are you doing this afternoon?",
+      "answer": "I'm meeting my advisor right after lunch today.",
+      "chunks": ["I'm", "my advisor", "right", "after", "lunch", "today", "met"],
+      "prefilled": ["meeting"],
+      "prefilled_positions": {"meeting": 1},
+      "distractor": "met",
+      "has_question_mark": false,
+      "grammar_points": ["present continuous"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Were you planning to work out this Sunday?",
+      "answer": "The campus gym closes early on holiday weekends.",
+      "chunks": ["the campus gym", "closes", "early", "on", "holiday", "weekends", "closed"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "closed",
+      "has_question_mark": false,
+      "grammar_points": ["present simple"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "What did you learn about the shuttle schedule?",
+      "answer": "I found out the shuttle stops running at ten.",
+      "chunks": ["I", "found", "out", "the shuttle", "stops", "running", "did"],
+      "prefilled": ["at ten"],
+      "prefilled_positions": {"at ten": 7},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["reported speech"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "What did you do about your paper?",
+      "answer": "I emailed the professor and attached my draft.",
+      "chunks": ["emailed", "the professor", "attached", "my", "draft", "emailing"],
+      "prefilled": ["I", "and"],
+      "prefilled_positions": {"i": 0, "and": 4},
+      "distractor": "emailing",
+      "has_question_mark": false,
+      "grammar_points": ["conjoined predicate"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "How do you like your new room?",
+      "answer": "This dorm feels quieter than my old apartment.",
+      "chunks": ["this dorm", "feels", "than", "my", "old apartment"],
+      "prefilled": ["quieter"],
+      "prefilled_positions": {"quieter": 3},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["comparative"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "Could you use the lecture hall tonight?",
+      "answer": "The largest lecture hall was booked for the evening dance rehearsal.",
+      "chunks": ["the largest", "lecture hall", "was", "booked", "the evening", "dance", "rehearsal", "had"],
+      "prefilled": ["for"],
+      "prefilled_positions": {"for": 6},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["passive"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "I finally got approved for the exchange program.",
+      "answer": "When do you leave for the semester abroad?",
+      "chunks": ["when", "do", "you", "leave", "the semester", "abroad", "will"],
+      "prefilled": ["for"],
+      "prefilled_positions": {"for": 4},
+      "distractor": "will",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "How do you get to campus these days?",
+      "answer": "I no longer take the shuttle to campus.",
+      "chunks": ["I", "no longer", "the", "shuttle", "to", "campus", "don't"],
+      "prefilled": ["take"],
+      "prefilled_positions": {"take": 3},
+      "distractor": "don't",
+      "has_question_mark": false,
+      "grammar_points": ["negation"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "Did you lose something after class?",
+      "answer": "I left my umbrella in the hall.",
+      "chunks": ["I", "left", "in", "the", "hall", "leaving"],
+      "prefilled": ["my umbrella"],
+      "prefilled_positions": {"my umbrella": 2},
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["past simple"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "I baked way too many cookies again.",
+      "answer": "Can I take some home?",
+      "chunks": ["can", "I", "take", "some", "home", "could"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "could",
+      "has_question_mark": true,
+      "grammar_points": ["direct question"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "What did you find out about the tutoring center?",
+      "answer": "I asked when the tutoring center usually opens.",
+      "chunks": ["when", "the", "tutoring", "center", "usually", "opens", "does"],
+      "prefilled": ["I", "asked"],
+      "prefilled_positions": {"i": 0, "asked": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question"]
+    }
+  ]
+}

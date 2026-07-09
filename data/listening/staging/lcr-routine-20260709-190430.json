@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you feel like grabbing a bite at the new café?",
+      "options": {
+        "A": "Sure, I'm always up for that.",
+        "B": "Their sandwiches are named after cities.",
+        "C": "She moved into the dorms last week.",
+        "D": "It's right across from the library."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用口语惯用表达 \"I'm always up for that\"（我一向乐意）自然地接受了午餐邀请，符合 idiomatic 范式。B 只是在描述这家咖啡馆（三明治用城市命名），属于语义联想陷阱，没有回应邀请。C 讲的是另一个人搬进宿舍，与话题完全无关，是离题干扰项。D 回答的是咖啡馆的位置，而说话人问的是\"你想不想去\"，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "My flight lands around six tomorrow evening.",
+      "options": {
+        "A": "The plane has really comfortable seats.",
+        "B": "Okay, I'll be waiting at arrivals.",
+        "C": "I finished painting the kitchen today.",
+        "D": "Sure, dinner at six sounds great."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 以话语标记 \"Okay\" 开头，间接承诺去接机（在到达口等你），符合 marker_led_indirect 范式，直接解决了接机的需求。A 只是描述飞机座位舒适，是从 flight/plane 联想出的语义陷阱。C 说自己刷了厨房，与接机完全无关，是离题干扰项。D 把 \"six\"（六点降落）误解成六点吃晚饭的邀约，属于误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure what the lab report needs.",
+      "options": {
+        "A": "The lab has brand-new microscopes now.",
+        "B": "I turned in my essay this morning.",
+        "C": "Well, it just needs your methods and results.",
+        "D": "Yes, the lab is open until nine."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 \"Well\" 开头，间接而明确地告诉学生报告只需包含方法和结果，符合 marker_led_indirect 范式。A 描述实验室新添了显微镜，是从 lab 联想出的语义陷阱，没回答内容要求。B 说自己交了论文，与实验报告的要求无关，是离题干扰项。D 回答的是实验室开放到几点，答的是错误的方面（开放时间而非报告内容）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why can't we just keep the original appointment?",
+      "options": {
+        "A": "The office has moved to a new building.",
+        "B": "I planted some tomatoes over the weekend.",
+        "C": "It's scheduled for ten in the morning.",
+        "D": "Well, the doctor's out of town that day."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记 \"Well\" 开头，间接给出无法保留原预约的原因（医生那天出差），符合 marker_led_indirect 范式，正面回应了\"为什么\"。A 描述办公室搬了新楼，是从 appointment/office 联想出的语义陷阱，没解释原因。B 说自己周末种了番茄，完全离题。C 回答的是预约在上午十点（时间），而说话人问的是\"为什么\"，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's housing situation",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where are you staying since the move fell through?",
+      "options": {
+        "A": "Honestly, I've landed on my feet.",
+        "B": "The moving boxes are still in the hallway.",
+        "C": "I caught a great movie last night.",
+        "D": "I'm staying for the whole show."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用惯用语 \"landed on my feet\"（安顿得很好、化险为夷）来宽慰对方，回应了朋友的关心，符合 idiomatic 范式。B 描述搬家纸箱还在走廊，是从 move 联想出的语义陷阱，没回答现在住哪。C 说昨晚看了场好电影，完全离题。D 把 \"staying\"（住在哪里）误用成\"留下来看完整场演出\"，是一词多义/误解陷阱，尤其容易迷惑。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Did you report the broken heater to maintenance yet?",
+      "options": {
+        "A": "The heater is a pretty old model.",
+        "B": "Should I call them, or will you?",
+        "C": "I signed up for the cooking class.",
+        "D": "It's down in the basement somewhere."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用一个反问 \"Should I call them, or will you?\" 推进对话、厘清由谁去报修，符合 counter_question 范式。A 描述暖气是个旧型号，是从 heater 联想出的语义陷阱，没回应是否报修。C 说自己报了烹饪课，完全离题。D 回答的是暖气/维修室在地下室某处（地点），而问题是\"报修了没有\"，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the best time to catch you this week?",
+      "options": {
+        "A": "My office just got a fresh coat of paint.",
+        "B": "The lecture ran a bit long today.",
+        "C": "My door's always open in the afternoons.",
+        "D": "It's on the third floor of Hale."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用惯用表达 \"My door's always open\"（我随时欢迎你来）间接告诉学生下午都可以，符合 idiomatic 范式。A 描述办公室刚粉刷过，是从 office 联想出的语义陷阱，没回答时间。B 说今天讲课拖堂了，与\"什么时候方便\"无关，属离题。D 回答的是办公室在 Hale 楼三层（地点），而学生问的是\"最佳时间\"，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news about a job interview",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How did the whole interview thing turn out?",
+      "options": {
+        "A": "The questions were printed on blue cards.",
+        "B": "I repainted my bike over the weekend.",
+        "C": "It was over at the downtown office.",
+        "D": "Actually, they offered me the position."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记 \"Actually\" 开头，间接分享了面试结果（对方给了 offer），符合 marker_led_indirect 范式，正面回应了\"怎么样\"。A 描述面试题印在蓝卡上，是从 interview 联想出的语义陷阱，没说结果。B 说自己周末给自行车重新喷漆了，完全离题。C 回答的是面试在市中心办公室举行（地点），而问题是\"结果如何\"，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

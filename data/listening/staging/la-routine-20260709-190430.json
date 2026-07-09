@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Good evening, everyone. The Honors Society is thrilled to invite you to our End-of-Semester Research Showcase this Thursday at 6 p.m. in the Kingsley Commons. Members from every department will present their semester projects, and we'll be handing out awards for the three most outstanding presentations. Light refreshments will be served throughout the evening, so come hungry. If you'd like to attend, please reserve a free seat through the society's online calendar by Wednesday night. We can't wait to celebrate everyone's hard work with you.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to a research showcase",
+            "B": "To advertise free refreshments at an event",
+            "C": "To recruit new members for the society",
+            "D": "To cancel this semester's research presentations"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：通篇是邀请大家参加荣誉学会的期末研究展示会（并颁奖），这就是核心目的。B 只抓住“提供茶点”这一细节，too_narrow，不是整体目的。C 说招募新会员，公告完全没提，wrong_purpose。D 说取消展示，与公告“邀请参加”意思相反，reversed_intent。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the showcase?",
+          "options": {
+            "A": "Present a completed project to the society",
+            "B": "Pay a small admission fee online",
+            "C": "Reserve a seat through the online calendar",
+            "D": "Bring their own refreshments to share"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告明确要求“please reserve a free seat through the society's online calendar by Wednesday night”，即通过线上日历预约座位。A 把“展示项目”这一属于成员presenter的动作错安到普通听众身上，wrong_detail。B 说付入场费，公告说的是“free seat”，无此内容，related_but_not_stated。D 说自带茶点，公告是学会提供茶点，misattributed_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Attention all residents. Starting next Monday, June 15th, the Riverside Dining Hall will switch to its reduced summer schedule. It'll now serve meals from 8 a.m. to 6 p.m. on weekdays and stay closed entirely on weekends. Because fewer students remain on campus over the summer, only the ground-floor seating area will be open. If you need a meal outside these hours, you'll want to visit the convenience store in the Student Union, which stays open until midnight. We appreciate your patience as we adjust our services for the season.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What change to the dining hall's schedule is being announced?",
+          "options": {
+            "A": "It will open earlier on weekday mornings",
+            "B": "It will close on weekends during summer",
+            "C": "It will offer discounted summer meal plans",
+            "D": "It will move to the Student Union building"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告说夏季新作息“stay closed entirely on weekends”，即周末完全不营业。A 说工作日更早开门，公告是 8 a.m. 到 6 p.m.，并未提前开门，wrong_detail。C 说提供打折餐费套餐，公告完全没提，related_but_not_stated。D 说食堂搬到学生活动中心，实际搬去那里的是便利店选项，把细节张冠李戴，misattributed_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the decision to open only the ground-floor seating?",
+          "options": {
+            "A": "The upper floors are being permanently removed",
+            "B": "Weekend meals will be served there instead",
+            "C": "The dining hall is hiring more summer staff",
+            "D": "Fewer diners are expected during the summer"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：公告说“Because fewer students remain on campus over the summer, only the ground-floor seating area will be open”，可推断夏季用餐人数减少，故只开一层。A 说楼上被永久拆除，超出信息、过度推断，over_inference。B 说周末在那供餐，但公告说周末完全关闭，wrong_detail。C 说增聘暑期员工，公告毫无依据，unrelated_inference。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "C": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "visiting author reading and book signing event",
+      "speaker_role": "professor",
+      "difficulty": "medium",
+      "announcement": "I'm delighted to let you know that the novelist Elena Marsh will be visiting our campus this Friday afternoon. She'll be giving a public reading from her latest book at 3 p.m. in the Fairfield Library auditorium, followed by a question-and-answer session. Afterward, she'll sign copies of her novels near the entrance, and the campus bookstore will have them available for purchase. I strongly encourage everyone in this seminar to attend, since we'll be discussing her work next week. There's no need to register, so just show up a few minutes early to find a seat.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To assign a novel for next week's seminar",
+            "B": "To promote sales at the campus bookstore",
+            "C": "To invite students to an author's reading event",
+            "D": "To postpone a scheduled author visit"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：整段是通知并鼓励大家参加来访作家 Elena Marsh 的公开朗读会，这是主旨。A 只抓“下周研讨要讨论她的作品”这一附带细节，too_narrow。B 说为书店促销，只是顺带一句，并非目的，wrong_purpose。D 说推迟作家来访，与公告“本周五到访”相反，reversed_intent。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where will the author sign copies of her books?",
+          "options": {
+            "A": "Near the entrance of the library",
+            "B": "Inside the campus bookstore's main hall",
+            "C": "At a reception in the faculty lounge",
+            "D": "In the auditorium after the reading"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：公告说“she'll sign copies of her novels near the entrance”，即在入口附近签售。B 说在书店大厅签售，书店只是负责卖书，wrong_detail。C 说在教师休息室的招待会上，公告完全没提，related_but_not_stated。D 说在礼堂朗读后签售，礼堂是朗读和问答的地点，签售不在那儿，misattributed_detail。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "career_advisor",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, students. This Wednesday, the Career Center is hosting a free LinkedIn Photo Day to help you build a polished professional presence online. A professional photographer will be set up in Room 210 from 10 a.m. to 4 p.m., and you'll receive a digital headshot the same day by email. We recommend dressing in business attire, since these photos are meant for job and internship applications. No appointment is needed, but there's a limited number of sittings, so we suggest arriving early. Bring your student ID to check in at the front desk.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how to check in",
+            "B": "To advertise a new photography course",
+            "C": "To announce a canceled career workshop",
+            "D": "To provide free professional headshots for applications"
+          },
+          "answer": "D",
+          "explanation": "正确答案 D：整段是通知就业中心举办免费的 LinkedIn 拍照日，为求职/实习申请提供专业头像，这是主旨。A 只抓“凭学生证在前台签到”这一操作细节，too_narrow。B 说宣传新的摄影课程，公告没有此意，wrong_purpose。C 说取消就业活动，与公告“举办活动”相反，reversed_intent。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend arriving early?",
+          "options": {
+            "A": "Because the event ends before lunchtime",
+            "B": "Because only a limited number can be photographed",
+            "C": "Because business attire is required for entry",
+            "D": "Because appointments fill up several days ahead"
+          },
+          "answer": "B",
+          "explanation": "正确答案 B：公告说“there's a limited number of sittings, so we suggest arriving early”，可推断名额有限、拍照人数受限，故建议早到。A 说活动午饭前就结束，但公告说开放到下午 4 点，与事实不符，wrong_detail。C 说必须穿正装才能进场，公告只是“recommend”着装、并非入场条件，unrelated_inference。D 说预约提前数天就满，但公告明说“No appointment is needed”，属过度/矛盾推断，over_inference。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "mock interview sessions with alumni volunteers",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention seniors. We're offering mock interview sessions next Tuesday to help you prepare for the job market. Alumni volunteers from a range of industries will conduct practice interviews and give you honest feedback afterward. Each session lasts about thirty minutes and takes place in the Weller Career Suite between 1 p.m. and 5 p.m. To take part, you'll need to sign up on the career office website by this Sunday, and slots tend to fill quickly. Please dress as you would for a real interview.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To help seniors practice job interviews",
+            "B": "To recruit alumni as career mentors",
+            "C": "To describe the new Weller Career Suite",
+            "D": "To cancel this year's interview workshops"
+          },
+          "answer": "A",
+          "explanation": "正确答案 A：整段是通知为毕业班学生提供模拟面试，帮助他们准备求职，这是主旨。B 说招募校友当导师，校友是来做面试官的志愿者，并非招募目标，wrong_purpose。C 只抓“Weller Career Suite”这一地点，too_narrow。D 说取消面试活动，与公告“提供模拟面试”相反，reversed_intent。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to participate?",
+          "options": {
+            "A": "Arrive at the office before 1 p.m.",
+            "B": "Submit a resume to an alumni volunteer",
+            "C": "Sign up on the career office website",
+            "D": "Bring a printed copy of the schedule"
+          },
+          "answer": "C",
+          "explanation": "正确答案 C：公告要求“To take part, you'll need to sign up on the career office website by this Sunday”，即在就业办网站上报名。A 说下午 1 点前到场，公告说的是活动时间 1–5 点，并非报名方式，wrong_detail。B 说向校友志愿者提交简历，公告没此要求，related_but_not_stated。D 说带打印的日程表，公告未提及，misattributed_detail。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

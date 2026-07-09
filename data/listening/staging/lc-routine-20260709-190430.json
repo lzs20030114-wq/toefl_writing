@@ -1,0 +1,225 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Honestly, I'm tired of my playlist. It's all the same pop singers I've been streaming for years, and everything sounds identical now." },
+        { "speaker": "Man", "text": "You should try some indie folk, then. There's this artist, well, she mixes acoustic guitar with these quiet electronic loops. Totally different from the radio stuff." },
+        { "speaker": "Woman", "text": "Hmm, I've never really given folk a chance. Isn't it kind of slow?" },
+        { "speaker": "Man", "text": "Some of it, sure, but her newer album is actually upbeat. And she's playing a small show downtown next month." },
+        { "speaker": "Woman", "text": "Wait, seriously? Maybe I'll listen to the album first and see if I like her before I commit to tickets." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the woman's main concern at the start of the conversation?",
+          "options": {
+            "A": "She is bored with the music she usually listens to",
+            "B": "She cannot afford concert tickets downtown",
+            "C": "She dislikes every kind of folk music",
+            "D": "She lost access to her streaming playlist"
+          },
+          "answer": "A",
+          "explanation": "开头女生说自己厌倦了播放列表，都是同样的流行歌手，听起来千篇一律，所以 A 正确。B 只是后面顺带提到的演唱会，不是她一开始的核心烦恼，属于以偏概全。C 与事实相反，她只是没接触过民谣、还问是不是很慢，并未讨厌所有民谣。D 完全是另一个话题，她并没有失去播放列表的访问权限。",
+          "distractor_types": { "B": "too_narrow", "C": "reversed_situation", "D": "wrong_topic" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Buy concert tickets right away",
+            "B": "Delete her old pop playlist",
+            "C": "Listen to the artist's album before deciding on tickets",
+            "D": "Ask the man to build her a new playlist"
+          },
+          "answer": "C",
+          "explanation": "女生明确说会先听专辑，看自己是否喜欢，再决定买不买票，所以 C 正确。A 是她明确拒绝的做法——她说要先听再决定，不会马上买票。B 属于过度推断，对话里从未提到要删掉旧歌单。D 与对话无关，她没有请男生帮她做歌单。",
+          "distractor_types": { "A": "rejected_option", "B": "over_inference", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you end up seeing that new mystery movie last night?" },
+        { "speaker": "Man", "text": "Yeah, I caught the late show. The plot twists were incredible, I honestly didn't see the ending coming at all." },
+        { "speaker": "Woman", "text": "Oh, nice! So you'd recommend it?" },
+        { "speaker": "Man", "text": "Mostly. My only complaint is that it dragged on. It was almost three hours, and the middle part felt really slow." },
+        { "speaker": "Woman", "text": "Three hours? Wow, I usually can't sit still that long." },
+        { "speaker": "Man", "text": "Then maybe wait for the streaming release. That way you can pause and take a break whenever you need to." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man dislike about the movie?",
+          "options": {
+            "A": "The plot twists were easy to predict",
+            "B": "It was too long",
+            "C": "The ending was disappointing",
+            "D": "The theater seats were uncomfortable"
+          },
+          "answer": "B",
+          "explanation": "男生说唯一的抱怨是电影太拖沓，将近三小时，中段很慢，所以 B 正确。A 与事实相反，他称赞反转很精彩、没猜到结局。C 也错，他说没料到结局，是褒义，不是失望。D 从未提及，属于合理但未出现的信息。",
+          "distractor_types": { "A": "wrong_detail", "C": "wrong_detail", "D": "related_but_not_stated" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "See the movie in theaters tonight",
+            "B": "Decide never to watch the movie",
+            "C": "Ask the man to watch it again with her",
+            "D": "Wait to watch the movie once it streams"
+          },
+          "answer": "D",
+          "explanation": "男生建议她等流媒体上线，这样能随时暂停休息，而女生说自己坐不住三小时，因此她很可能等流媒体，D 正确。A 与男生的建议相悖，属于被否定的选项。B 属于过度推断，她只是坐不住那么久，并没有说完全不看。C 与对话无关，没人提到再看一遍。",
+          "distractor_types": { "A": "rejected_option", "B": "over_inference", "C": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I really want to get more involved on campus this semester, but I can't decide between the photography club or the intramural volleyball team." },
+        { "speaker": "Man", "text": "Well, how much time can you actually spare? The volleyball team practices four evenings a week, so that's a big commitment." },
+        { "speaker": "Woman", "text": "Four evenings? Oh, that's a lot. I've got labs running late most nights already." },
+        { "speaker": "Man", "text": "Right. The photography club only meets on Saturdays, and you can skip a week if you're busy. It's way more flexible." },
+        { "speaker": "Woman", "text": "That sounds much more realistic for my schedule. I think I'll sign up for the club." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How often does the volleyball team practice?",
+          "options": {
+            "A": "Once a week on Saturdays",
+            "B": "Two evenings a week",
+            "C": "Four evenings a week",
+            "D": "Only on weekends"
+          },
+          "answer": "C",
+          "explanation": "男生明确说排球队一周练四个晚上，所以 C 正确。A 其实是摄影俱乐部的安排（周六），被错误地安到排球队头上。B 把数字改错了。D 也是错误细节，练习在晚上，不是只在周末。",
+          "distractor_types": { "A": "misattributed", "B": "wrong_detail", "D": "wrong_detail" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Join the photography club",
+            "B": "Try out for the volleyball team",
+            "C": "Quit her evening lab sessions",
+            "D": "Wait until next semester to decide"
+          },
+          "answer": "A",
+          "explanation": "女生说俱乐部更符合她的时间安排，并说打算报名俱乐部，所以 A 正确。B 是她放弃的选项，因为排球队占用太多晚上。C 属于过度推断，她只是说晚上要做实验，从没说要退掉实验。D 与对话相悖，她已经当场做了决定，不会拖到下学期。",
+          "distractor_types": { "B": "rejected_option", "C": "over_inference", "D": "unrelated_next_step" }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I always buy the same three vegetables. I want to cook something new this week, but I never know where to start." },
+        { "speaker": "Man", "text": "You know what helped me? Roasting. You just toss almost any vegetable with olive oil and salt, then bake it. It's really hard to mess up." },
+        { "speaker": "Woman", "text": "Really? That sounds way easier than the complicated recipes I keep failing at." },
+        { "speaker": "Man", "text": "Exactly. Start with something firm like sweet potatoes or carrots. Grab a few, and I'll text you the timing later." },
+        { "speaker": "Woman", "text": "That'd be great. Okay, let me throw some sweet potatoes in the cart." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which vegetables are the healthiest to eat",
+            "B": "How to grow vegetables at home",
+            "C": "How to follow a complicated recipe",
+            "D": "An easy way to cook new vegetables"
+          },
+          "answer": "D",
+          "explanation": "整段对话围绕女生想做点新菜、男生教她用烤的方法轻松烹饪蔬菜，所以 D 正确。A 是另一个话题，两人没有比较蔬菜营养。B 也无关，讨论的是烹饪不是种菜。C 与情境相反，女生正是想避开复杂食谱，改用简单方法。",
+          "distractor_types": { "A": "wrong_topic", "B": "wrong_topic", "C": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Sign up for a cooking class",
+            "B": "Buy sweet potatoes to roast at home",
+            "C": "Keep buying only her usual three vegetables",
+            "D": "Ask the man to cook dinner for her"
+          },
+          "answer": "B",
+          "explanation": "女生最后说要把红薯放进购物车，而男生刚推荐用烤红薯入门，所以她很可能买红薯回去烤，B 正确。A 与对话无关，没人提到烹饪课。C 与她的意图相反，她正是想尝试新东西、不再买老三样。D 属于过度推断，她只是请男生发时间给她，并没有让男生代做晚饭。",
+          "distractor_types": { "A": "unrelated_next_step", "C": "rejected_option", "D": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students figuring out a time to meet for a group project",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "We need to find a time for our whole group to work on the history presentation. Are you free tomorrow afternoon?" },
+        { "speaker": "Man", "text": "Tomorrow afternoon I've got my part-time shift at the café until five. Could we do the morning instead?" },
+        { "speaker": "Woman", "text": "Morning works for me. How about ten o'clock in the library?" },
+        { "speaker": "Man", "text": "Ten is perfect. Should I message the other two to make sure they can make it?" },
+        { "speaker": "Woman", "text": "Yes, please do. If they can't, we'll just have to find another slot." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When do the speakers agree to meet?",
+          "options": {
+            "A": "Tomorrow morning at ten",
+            "B": "Tomorrow afternoon at five",
+            "C": "Tomorrow at the café",
+            "D": "Tomorrow evening in the library"
+          },
+          "answer": "A",
+          "explanation": "男生下午要打工到五点，提议改早上，女生定在十点图书馆，男生说完美，所以 A 正确。B 把五点这个下班时间当成了见面时间，是错误细节。C 张冠李戴，咖啡馆是男生打工的地方，不是见面地点。D 也错，约的是上午不是晚上。",
+          "distractor_types": { "B": "wrong_detail", "C": "misattributed", "D": "wrong_detail" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Cancel his café shift",
+            "B": "Reschedule the meeting for the afternoon",
+            "C": "Contact the other two group members",
+            "D": "Start the presentation on his own"
+          },
+          "answer": "C",
+          "explanation": "男生主动问要不要通知另外两个人，女生说好，所以他接下来很可能去联系其他两名组员，C 正确。A 属于过度推断，他只是改约到早上，没说要取消打工。B 与结论相反，他们已经把时间从下午改成了早上。D 与对话无关，没人提到他要独自开始做展示。",
+          "distractor_types": { "A": "over_inference", "B": "rejected_option", "D": "unrelated_next_step" }
+        }
+      ]
+    }
+  ]
+}
