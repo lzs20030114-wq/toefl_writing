@@ -19,6 +19,10 @@ on:
         description: "本轮时间预算(分钟)"
         required: false
         default: "300"
+      script:
+        description: "跑批器(full=run-l1 全量二审 / detail=run-l1-detail 嫌疑复审明细)"
+        required: false
+        default: "full"
 
 permissions:
   contents: write
@@ -45,10 +49,12 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           MAX_MINUTES: ${{ inputs.max_minutes }}
         run: |
+          SCRIPT="scripts/audit/run-l1.mjs"
+          [ "${{ inputs.script }}" = "detail" ] && SCRIPT="scripts/audit/run-l1-detail.mjs"
           ARGS=""
           [ -n "${{ inputs.banks }}" ] && ARGS="$ARGS --banks=${{ inputs.banks }}"
           [ -n "${{ inputs.limit }}" ] && ARGS="$ARGS --limit=${{ inputs.limit }}"
-          node scripts/audit/run-l1.mjs $ARGS
+          node $SCRIPT $ARGS
 
       - name: Commit results
         if: always()
