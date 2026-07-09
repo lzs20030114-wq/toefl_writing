@@ -20,7 +20,7 @@ on:
         required: false
         default: "300"
       script:
-        description: "跑批器(full=run-l1 全量二审 / detail=run-l1-detail 嫌疑复审明细)"
+        description: "跑批器(full=run-l1 全量二审 / detail=run-l1-detail 嫌疑复审明细 / ctw-uniqueness=ctw 唯一解复核)"
         required: false
         default: "full"
 
@@ -51,6 +51,7 @@ jobs:
         run: |
           SCRIPT="scripts/audit/run-l1.mjs"
           [ "${{ inputs.script }}" = "detail" ] && SCRIPT="scripts/audit/run-l1-detail.mjs"
+          [ "${{ inputs.script }}" = "ctw-uniqueness" ] && SCRIPT="scripts/audit/ctw-uniqueness.mjs"
           ARGS=""
           [ -n "${{ inputs.banks }}" ] && ARGS="$ARGS --banks=${{ inputs.banks }}"
           [ -n "${{ inputs.limit }}" ] && ARGS="$ARGS --limit=${{ inputs.limit }}"

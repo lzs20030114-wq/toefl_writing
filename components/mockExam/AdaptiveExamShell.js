@@ -9,6 +9,7 @@ import { buildListeningModule1, routeModule2 as routeListeningM2, buildListening
 import { saveSess } from "../../lib/sessionStore";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
+import { isBlankCorrect } from "../../lib/reading/ctwScoring";
 import { fmt } from "../../lib/utils";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -114,15 +115,11 @@ function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
     if (submitted) return;
     setSubmitted(true);
     const results = item.blanks.map((blank, i) => {
-      const expected = blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
-      const fragment = blank.displayed_fragment.toLowerCase();
-      const userInput = answers[i] || "";
-      const userFull = (fragment + userInput).toLowerCase().replace(/[^a-z]/g, "");
       return {
         // Full user-typed word (fragment + their input). Captured so the
         // post-exam review can show "you typed: X" alongside the correct word.
-        userAnswer: blank.displayed_fragment + userInput,
-        isCorrect: userFull === expected,
+        userAnswer: blank.displayed_fragment + (answers[i] || ""),
+        isCorrect: isBlankCorrect(blank, answers[i] || ""),
       };
     });
     const correct = results.filter((r) => r.isCorrect).length;
@@ -141,9 +138,7 @@ function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
     if (blank) {
       const missingLen = blank.original_word.length - blank.displayed_fragment.length;
       const bi = blankIdx;
-      const isCorrect = submitted
-        ? (blank.displayed_fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")
-        : null;
+      const isCorrect = submitted ? isBlankCorrect(blank, answers[bi]) : null;
       rendered.push(
         <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline", margin: "2px 3px" }}>
           {/* Given prefix — shaded "locked" chip so users don't re-type it. */}

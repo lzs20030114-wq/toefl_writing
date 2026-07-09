@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { isBlankCorrect } from "../../lib/reading/ctwScoring";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
   const draftKey = buildDraftKey("ctw", item?.id || "");
@@ -85,21 +86,13 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     setSubmitted(true);
     clearDraft(draftKey);
     const results = item.blanks.map((blank, i) => {
-      const expected = blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
-      const fragment = blank.displayed_fragment.toLowerCase();
-      const userFull = (fragment + answers[i]).toLowerCase().replace(/[^a-z]/g, "");
-      return { blank, userAnswer: answers[i], fullWord: fragment + answers[i], isCorrect: userFull === expected };
+      return { blank, userAnswer: answers[i], fullWord: blank.displayed_fragment + answers[i], isCorrect: isBlankCorrect(blank, answers[i]) };
     });
     const correct = results.filter(r => r.isCorrect).length;
     if (onComplete) onComplete({ results, correct, total: item.blanks.length });
   }
 
-  const correct = submitted ? item.blanks.filter((b, i) => {
-    const expected = b.original_word.toLowerCase().replace(/[^a-z]/g, "");
-    const fragment = b.displayed_fragment.toLowerCase();
-    const userFull = (fragment + answers[i]).toLowerCase().replace(/[^a-z]/g, "");
-    return userFull === expected;
-  }).length : 0;
+  const correct = submitted ? item.blanks.filter((b, i) => isBlankCorrect(b, answers[i])).length : 0;
 
   // Build display text with inline inputs
   function renderPassage() {
@@ -122,7 +115,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
         // Strip trailing punctuation from the original word to check
         const trailingPunct = allWords[wi].match(/[.,;:!?]+$/)?.[0] || "";
 
-        const isCorrect = submitted && (fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
+        const isCorrect = submitted && isBlankCorrect(blank, answers[bi]);
         const isWrong = submitted && !isCorrect;
 
         elements.push(
