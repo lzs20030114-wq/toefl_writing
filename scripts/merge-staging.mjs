@@ -55,6 +55,9 @@ const VALIDATORS = {
   lcr:    (it) => require('../lib/listeningGen/lcrValidator.js').validateLCR(it),
   repeat: (it) => require('../lib/speakingGen/speakingValidator.js').validateRepeatSet(it),
   rpt:    (it) => require('../lib/speakingGen/speakingValidator.js').validateRepeatSet(it),
+  // 2026-07-09: interview wired into the automated pipeline (was the last unmapped type).
+  interview: (it) => require('../lib/speakingGen/speakingValidator.js').validateInterviewSet(it),
+  intv:      (it) => require('../lib/speakingGen/speakingValidator.js').validateInterviewSet(it),
 };
 
 // Vet one staging item for a prefix → { ok, item, reason }.
@@ -75,12 +78,12 @@ function vet(prefix, item) {
     }
     const fn = VALIDATORS[prefix];
     if (!fn) {
-      // FAIL-CLOSED: a prefix with no validator mapping (e.g. interview — never wired into
-      // the automated pipeline) used to pass straight through UNVETTED. That is the same
-      // "admin bypass" class of hole as the deploy button: content shipped to the live bank
-      // with zero structural checks. Reject instead so an unvetted type can never merge
-      // silently. See QUESTION-PIPELINE-REVIEW-2026-07-07 §7 P1-11.
-      return { ok: false, reason: `no validator mapped for prefix "${prefix}" — fail-closed (未接入自动化校验, see QUESTION-PIPELINE-REVIEW-2026-07-07 §7 P1-11)` };
+      // FAIL-CLOSED: a prefix with no validator mapping used to pass straight through
+      // UNVETTED — the same "admin bypass" class of hole as the deploy button: content
+      // shipped to the live bank with zero structural checks. Reject instead so any
+      // FUTURE unmapped type can never merge silently (every current type is mapped
+      // as of 2026-07-09, interview being the last). See QUESTION-PIPELINE-REVIEW §7 P0-4/P1-11.
+      return { ok: false, reason: `no validator mapped for prefix "${prefix}" — fail-closed (未接入自动化校验)` };
     }
     const r = fn(item) || {};
     const bad = r.pass === false || r.valid === false;

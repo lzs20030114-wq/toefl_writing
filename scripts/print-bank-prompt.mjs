@@ -5,7 +5,7 @@
 //
 // Usage:
 //   node scripts/print-bank-prompt.mjs <bank>
-//   <bank> ∈ { bs, disc, email, ap, ctw, rdl-short, rdl-long, lat, lc, la, lcr, repeat }
+//   <bank> ∈ { bs, disc, email, ap, ctw, rdl-short, rdl-long, lat, lc, la, lcr, repeat, interview }
 //
 // Each call returns a self-contained block of instructions for that bank.
 // All distribution rules, schema details, anti-duplication lists are baked in.
@@ -42,6 +42,7 @@ const { buildLCPrompt } = require("../lib/listeningGen/lcPromptBuilder.js");
 const { buildLAPrompt } = require("../lib/listeningGen/laPromptBuilder.js");
 const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
 const { buildRepeatPrompt } = require("../lib/speakingGen/repeatPromptBuilder.js");
+const { buildInterviewPrompt } = require("../lib/speakingGen/interviewPromptBuilder.js");
 // Shared anti-duplication helpers — see task "generation-side dedup exclusion".
 const {
   loadStagingItems,
@@ -327,6 +328,15 @@ function printRepeat() {
   const { prompt } = buildRepeatPrompt(3, { excludeScenarios: orderedExcludes(staging, bank, 18) });
   console.log(prompt);
 }
+function printInterview() {
+  // Interview draws from a FIXED 30-topic pool (same design as repeat's scenario
+  // pool); the builder removes excluded topics from that pool, so cap the
+  // exclusion list (20) to always leave topics for the batch to pick from.
+  const staging = stagingField(STAGING.speaking, "interview-", "topic");
+  const bank = loadBankField("data/speaking/bank/interview.json", "topic", 20);
+  const { prompt } = buildInterviewPrompt(2, { excludeTopics: orderedExcludes(staging, bank, 20) });
+  console.log(prompt);
+}
 
 const handlers = {
   bs: printBS,
@@ -341,6 +351,7 @@ const handlers = {
   la: printLA,
   lcr: printLCR,
   repeat: printRepeat,
+  interview: printInterview,
 };
 
 if (!bank || !handlers[bank]) {

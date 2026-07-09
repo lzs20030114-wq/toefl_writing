@@ -84,6 +84,7 @@ long-form length, so they moved to the Claude routine).
 | **listening-la** | `la` | `data/listening/staging/la-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
 | **listening-lcr** | `lcr` | `data/listening/staging/lcr-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
 | **speaking-repeat** | `repeat` | `data/speaking/staging/repeat-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
+| **speaking-interview** | `interview` | `data/speaking/staging/interview-$SESSION.json` | `MERGE_RUN_ID=$SESSION merge-staging.mjs` |
 
 (One `MERGE_RUN_ID=$SESSION merge-staging.mjs` run after all reading/listening/speaking
 staging is written merges them all — it scans all three section staging dirs.)
@@ -92,9 +93,16 @@ staging is written merges them all — it scans all three section staging dirs.)
 (not this repo). To finish wiring, add the 5 new rows above to the R1 loop. The repo side
 (print-bank-prompt handlers, merge-staging, gate, report, R2) is already done.
 
+**⚠ R1 trigger update required (2026-07-09, interview):** speaking-interview was wired
+repo-side (print-bank-prompt `interview` handler, merge-staging validator, scoreBatch,
+gate thresholds, eval-spec) per QUESTION-PIPELINE-REVIEW §7 P1-11 方案A. To finish, add
+the speaking-interview row to the R1 loop in the trigger config: generate 2 sets/night via
+`node scripts/print-bank-prompt.mjs interview`, write `data/speaking/staging/interview-$SESSION.json`
+(shape `{ "items": [ {id, topic, category, intro, questions[4]} ] }`), merge as above.
+
 ## Quality gate decision (`scripts/check-quality-gates.mjs`)
 
-Runs after R1 finishes generation. For each of 12 banks:
+Runs after R1 finishes generation. For each of 13 banks:
 - Loads the staging file
 - Runs `lib/quality/scoreBatch.mjs` → diversity + quality score (each 0-100)
 - Compares against per-bank thresholds:
@@ -113,6 +121,7 @@ Runs after R1 finishes generation. For each of 12 banks:
 | listening-la        | 72 | 80 |
 | listening-lcr       | 75 | 80 |
 | speaking-repeat     | 70 | 80 |
+| speaking-interview  | 70 | 80 |
 
 Lower per-bank thresholds for small-N banks reflect natural sampling variance.
 
