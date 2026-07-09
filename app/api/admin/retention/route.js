@@ -2,11 +2,48 @@ import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
 
-// Reads the cohort_retention_daily + engagement_stickiness views created by
-// scripts/sql/cohort-retention.sql. Computes percentages + cohort maturity in
-// JS (matches how the other admin analytics endpoints aggregate).
+// Reads the cohort_retention_daily + engagement_stickiness views (created by
+// scripts/sql/cohort-retention.sql) for legacy day-by-day cohort retention, AND
+// the feature_* views (scripts/sql/feature-engagement.sql) for the "做题量 /
+// 功能吸引力" analysis that is now the page's primary content. Percentages +
+// cohort maturity are computed in JS (matches the other admin analytics).
+//
+// The feature_* views are OPTIONAL: if they haven't been created yet the
+// endpoint still returns stickiness + legacy cohorts and flags
+// featuresAvailable=false so the page can prompt to run the migration.
 
 const MS_PER_DAY = 86400000;
+
+// Canonical feature (= sessions.type) order + 中文名. mock is its own feature
+// ("写作模考", 方案 A) — not split into build/email/discussion.
+const FEATURE_LABELS = {
+  bs: "造句",
+  discussion: "学术讨论",
+  email: "邮件写作",
+  reading: "阅读",
+  listening: "听力",
+  speaking: "口语",
+  mock: "写作模考",
+};
+const FEATURE_ORDER = ["bs", "discussion", "email", "reading", "listening", "speaking", "mock"];
+// AI-gated features hit /api/ai and are capped at 3/day for free users; the
+// rest are locally graded + unlimited. Surfaced so the reader never compares a
+// quota-capped feature's raw 做题量 against an uncapped one at face value.
+const FEATURE_AI_GATED = {
+  bs: false, reading: false, listening: false,
+  discussion: true, email: true, mock: true, speaking: true,
+};
+const featureLabel = (f) => FEATURE_LABELS[f] || f;
+const featureAiGated = (f) => FEATURE_AI_GATED[f] === true;
+const featureRank = (f) => {
+  const i = FEATURE_ORDER.indexOf(f);
+  return i === -1 ? FEATURE_ORDER.length : i;
+};
+
+const num = (v) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+};
 
 function pct(n, d) {
   if (!d || d <= 0) return null;
@@ -26,6 +63,89 @@ function isMature(age, window) {
   return Number.isFinite(age) && age > window;
 }
 
+const viewMissing = (e) =>
+  e && (e.code === "42P01" || e.code === "PGRST205" || /could not find the table|does not exist/i.test(e.message || ""));
+
+// Build the feature-engagement block from the four feature_* views. Returns
+// { available, features, firstTouch, weekly } — available=false when the views
+// don't exist yet (migration not run).
+//
+// Each feature carries raw counts in three segments (all / pro / free) so the
+// page can toggle away the free-tier paywall confound; derived rates (人均 /
+// 复练率 / 占比) are computed page-side per selected segment. Sorted by 触达
+// 用户 (all) — the comparable "attraction" signal — NOT by 题目数, whose unit
+// differs per feature and is only meaningful within a feature.
+function buildFeatures({ totals, firstTouch, sticky, weekly }) {
+  const totalsRows = totals || [];
+  const stickyByFeature = new Map((sticky || []).map((r) => [r.feature, r]));
+
+  const features = totalsRows
+    .map((r) => {
+      const s = stickyByFeature.get(r.feature);
+      const mature = s ? num(s.mature_users) : 0;
+      const returned = s ? num(s.returned_users) : 0;
+      return {
+        feature: r.feature,
+        label: featureLabel(r.feature),
+        aiGated: featureAiGated(r.feature),
+        active7d: num(r.active_7d),
+        active30d: num(r.active_30d),
+        stickinessMature: mature,
+        stickinessReturned: returned,
+        stickinessPct: pct(returned, mature),
+        // Raw counts per segment; page derives rates/shares from these.
+        segments: {
+          all: {
+            users: num(r.users),
+            sessions: num(r.sessions),
+            items: num(r.items),
+            repeat2: num(r.repeat_2plus),
+          },
+          pro: {
+            users: num(r.users_pro),
+            sessions: num(r.sessions_pro),
+            items: num(r.items_pro),
+            repeat2: num(r.repeat2_pro),
+          },
+          free: {
+            users: num(r.users_free),
+            sessions: num(r.sessions_free),
+            items: num(r.items_free),
+            repeat2: num(r.repeat2_free),
+          },
+        },
+      };
+    })
+    .sort((a, b) => b.segments.all.users - a.segments.all.users || featureRank(a.feature) - featureRank(b.feature));
+
+  const totalFirstTouch = (firstTouch || []).reduce((s, r) => s + num(r.users), 0);
+  const firstTouchOut = (firstTouch || [])
+    .map((r) => ({
+      feature: r.feature,
+      label: featureLabel(r.feature),
+      users: num(r.users),
+      share: pct(num(r.users), totalFirstTouch),
+    }))
+    .sort((a, b) => b.users - a.users || featureRank(a.feature) - featureRank(b.feature));
+
+  // Pivot weekly rows -> [{ week, byFeature: { <feature>: items } }] ascending.
+  const weekMap = new Map();
+  for (const r of weekly || []) {
+    const wk = r.week;
+    if (!weekMap.has(wk)) weekMap.set(wk, {});
+    weekMap.get(wk)[r.feature] = num(r.items);
+  }
+  const weeklyOut = [...weekMap.entries()]
+    .sort(([a], [b]) => String(a).localeCompare(String(b)))
+    .map(([week, byFeature]) => ({
+      week,
+      byFeature,
+      total: Object.values(byFeature).reduce((s, v) => s + v, 0),
+    }));
+
+  return { available: true, features, firstTouch: firstTouchOut, weekly: weeklyOut };
+}
+
 export async function GET(request) {
   try {
     if (!isAdminAuthorized(request)) return jsonError(401, "Unauthorized");
@@ -36,19 +156,28 @@ export async function GET(request) {
     const today = new Date().toISOString().slice(0, 10);
     const since = new Date(Date.now() - days * MS_PER_DAY).toISOString().slice(0, 10);
 
-    const [{ data: cohortRows, error: cohortErr }, { data: stickyRows, error: stickyErr }] =
-      await Promise.all([
-        supabaseAdmin
-          .from("cohort_retention_daily")
-          .select("cohort_day,cohort_size,activated,d1,d7,d30")
-          .gte("cohort_day", since)
-          .order("cohort_day", { ascending: false })
-          .limit(400),
-        supabaseAdmin.from("engagement_stickiness").select("dau,wau,mau").maybeSingle(),
-      ]);
+    const [
+      { data: cohortRows, error: cohortErr },
+      { data: stickyRows, error: stickyErr },
+      { data: totalsRows, error: totalsErr },
+      { data: firstTouchRows, error: firstTouchErr },
+      { data: featStickyRows, error: featStickyErr },
+      { data: weeklyRows, error: weeklyErr },
+    ] = await Promise.all([
+      supabaseAdmin
+        .from("cohort_retention_daily")
+        .select("cohort_day,cohort_size,activated,d1,d7,d30")
+        .gte("cohort_day", since)
+        .order("cohort_day", { ascending: false })
+        .limit(400),
+      supabaseAdmin.from("engagement_stickiness").select("dau,wau,mau").maybeSingle(),
+      supabaseAdmin.from("feature_engagement_totals").select("*"),
+      supabaseAdmin.from("feature_first_touch").select("*"),
+      supabaseAdmin.from("feature_stickiness").select("*"),
+      supabaseAdmin.from("feature_weekly").select("*").order("week", { ascending: true }).limit(2000),
+    ]);
 
-    const viewMissing = (e) =>
-      e && (e.code === "42P01" || e.code === "PGRST205" || /could not find the table|does not exist/i.test(e.message || ""));
+    // Legacy cohort + stickiness views are still required (core stickiness cards).
     if (viewMissing(cohortErr) || viewMissing(stickyErr)) {
       return jsonError(
         503,
@@ -57,6 +186,22 @@ export async function GET(request) {
     }
     if (cohortErr) return jsonError(400, cohortErr.message || "Load cohorts failed");
     if (stickyErr) return jsonError(400, stickyErr.message || "Load stickiness failed");
+
+    // Feature views are optional — degrade gracefully if the migration is unrun.
+    const featureErr = totalsErr || firstTouchErr || featStickyErr || weeklyErr;
+    let featureBlock;
+    if (viewMissing(featureErr)) {
+      featureBlock = { available: false, features: [], firstTouch: [], weekly: [] };
+    } else if (featureErr) {
+      return jsonError(400, featureErr.message || "Load feature engagement failed");
+    } else {
+      featureBlock = buildFeatures({
+        totals: totalsRows,
+        firstTouch: firstTouchRows,
+        sticky: featStickyRows,
+        weekly: weeklyRows,
+      });
+    }
 
     const cohorts = (cohortRows || []).map((r) => {
       const age = dayAge(today, r.cohort_day);
@@ -108,6 +253,10 @@ export async function GET(request) {
       days,
       generatedAt: new Date().toISOString(),
       stickiness: { dau, wau, mau, ratio: mau ? Math.round((dau / mau) * 1000) / 1000 : null },
+      featuresAvailable: featureBlock.available,
+      features: featureBlock.features,
+      firstTouch: featureBlock.firstTouch,
+      weekly: featureBlock.weekly,
       summary: {
         cohortCount: cohorts.length,
         totalUsers,
