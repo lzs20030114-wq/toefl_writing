@@ -12,6 +12,7 @@
 
 | 文件 | 日期 | 状态 | 作用 |
 |---|---|---|---|
+| `2026-07-08-cleanup-orphan-audio.sql` | 2026-07-08 | 已跑 | 一次性运维(非 schema 迁移):删除 listening_audio 桶 740 个孤儿配音(07-07 去重下架题的遗留),120 个被练习历史引用的保留;临时 http 扩展用完即卸;仓库版 token 为占位符,真 token 已随一次性 Edge Function 作废 |
 | `analytics-schema.sql` | 2026-03-16 | 历史迁移,状态未知(建库早期) | 页面访问事件追踪 + 管理后台分析表 |
 | `cohort-retention.sql` | 2026-06-30 | 无需跑 | 留存分析 SQL 已被 `/api/admin/retention` 的 JS 直读重写架空,不需要单独执行 |
 | `daily-usage-quota.sql` | 2026-06-04 | 历史迁移,状态未知(建库早期) | `/api/ai` 服务端每日 AI 用量计数 |

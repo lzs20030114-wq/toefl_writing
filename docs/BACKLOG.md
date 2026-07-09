@@ -22,9 +22,9 @@
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。
-- [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。
-- [中] admin「部署到正式题库」按钮接入 validator+gate（当前零校验旁路，同题不同判）。出处：QUESTION-PIPELINE-REVIEW-2026-07-07 §2.3。
-- [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、听力 auditor 接线、LCR 范式配比、监控加固等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7。
+- [低] 清理残留的 `cleanup-orphan-audio` Edge Function（一次性删音频用，已完成使命；Supabase Dashboard → Edge Functions → 删除即可，或下次连 Supabase MCP 时由 agent 替换为失效桩）。
+- [低] 休眠 fallback 直写路径防重补齐：`nightly-generate-bs.yml`→appendBSSets.mjs 只有精确 answer-key 去重（无模糊近重复）；`nightly-generate-disc/email.yml`→generateDisc/EmailQuestions.mjs 直写 prompts.json 仅 prompt 软提示避重（= §7 P1-8 残项）。三者均为手动触发的休眠后备，且有 quality-monitor CONTENT_DUP 兜底探测；接 contentDedup 或明确退役二选一。
+- [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、听力 auditor 接线、LCR 范式配比等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7（监控加固已于 07-08 完成并移出）。
 - [低] 仓库卫生：
   - 5 个已合并 worktree + 孤儿目录 `cranky-lehmann` 清理
   - 已合并分支清理
@@ -79,6 +79,8 @@
 
 ## Done
 
+- 2026-07-08 出题管线审查 P0 收尾包（分支 claude/recent-work-visibility-yg5ma4，待合 main）：①监控加固 4 项（bank git 时间戳 >48h 告警 / staging 积压 7 日增量判警 / live 库内容重复旁路探测 / null 指标升硬告警，实测即抓到 repeat.json 停更 212h）②封 admin「部署到正式题库」零校验旁路（lib/gen/deployGate.js 与夜间 mergeClaude 同判：validator+去重 0.75/0.8+strict 门；merge-staging 对 interview fail-closed）③email em224-227 占位符修复。全量 jest 639 过 + next build 过。
+- 2026-07-08 孤儿听力音频清理落地：删 740 / 留 120（被练习历史引用），走一次性 Edge Function + SQL Editor 执行（scripts/sql/2026-07-08-cleanup-orphan-audio.sql，用户确认跑完）；全清单存档 reports/orphan-audio-cleanup-2026-07-08.json；台账已登记。
 - 2026-07-07 出题去重全链路（分支 claude/question-pipeline-review-6p2bpt，待合 main）：合库层内容去重挂全题型 + 生成端排除改 bank∪staging（修 LAT 排除空转、RDL 补 exclude）+ 清除 8 库存量重复 1472 条（3083→1611，复测归零）+ `answer_hashes.json` 重建（590→612；原「重生」待办一并完成，旧台账与现库零重叠早已失效）。
 - 2026-07-05 XorPay 金额对账（按分对账无容差，不符 403 拒发权益）+ webhook 顺序改"先授予后标 processed"（原顺序会致付钱不发货）——已合 main，jest 581 全过。
 - 2026-07-05 五处升级按钮 `open-upgrade-modal` 死 no-op 修复（HomePageClient 全局监听 + speaking-exam 自持 modal）——已合 main。
