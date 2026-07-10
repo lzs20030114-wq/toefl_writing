@@ -163,6 +163,58 @@ describe("parseAnnotations", () => {
     expect(out.plainText.slice(out.annotations[1].start, out.annotations[1].end)).toBe("provide experience");
   });
 
+  test("keeps inline mark when the marked word repeats earlier in the sentence", () => {
+    // Real-world bug (2026-07 user report): the essay legitimately contained
+    // "inform you about a problem about the heating system"; the AI marked
+    // the SECOND "about" inline. The old trailing-echo heuristic saw "about"
+    // earlier on the line, swallowed the marked word from the rendered text
+    // and anchored the fix on the first (correct) "about".
+    const raw =
+      'I am writing to inform you about a problem ' +
+      '<r>about</r><n level="red" fix="将 \'about\' 改为 \'with\'">介词搭配错误，应为 a problem with。</n>' +
+      ' the heating system in my apartment.';
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toBe(
+      "I am writing to inform you about a problem about the heating system in my apartment."
+    );
+    expect(out.annotations).toHaveLength(1);
+    const mark = out.annotations[0];
+    expect(out.plainText.slice(mark.start, mark.end)).toBe("about");
+    // Must anchor on the SECOND "about" (after "problem "), not the first.
+    expect(mark.start).toBe("I am writing to inform you about a problem ".length);
+  });
+
+  test("keeps inline mark mid-line even when followed by more sentence text", () => {
+    // "on" also appears inside "attention" earlier on the line — the old
+    // heuristic swallowed the standalone "on" and highlighted the tail of
+    // "attention" instead.
+    const raw =
+      'Thank you for your attention <r>on</r><n level="red" fix="将 \'on\' 改为 \'to\'">介词错误。</n> this matter.';
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toBe("Thank you for your attention on this matter.");
+    expect(out.annotations).toHaveLength(1);
+    const mark = out.annotations[0];
+    expect(out.plainText.slice(mark.start, mark.end)).toBe("on");
+    expect(mark.start).toBe("Thank you for your attention ".length);
+  });
+
+  test("trailing echo anchors on a word boundary, not inside a longer word", () => {
+    // Genuine trailing echo (pair at end of line), but plain lastIndexOf
+    // would land inside "form" — the boundary-aware anchor must pick the
+    // standalone "for".
+    const raw =
+      'Thanks for the form. <r>for</r><n level="orange" fix="改为 regarding">介词建议。</n>';
+    const out = parseAnnotations(raw);
+
+    expect(out.plainText).toBe("Thanks for the form. ");
+    expect(out.annotations).toHaveLength(1);
+    const mark = out.annotations[0];
+    expect(out.plainText.slice(mark.start, mark.end)).toBe("for");
+    expect(mark.start).toBe("Thanks ".length);
+  });
+
   test("keeps orphan annotation when marked text has no earlier occurrence", () => {
     const raw = [
       "I think this policy is useful.",
