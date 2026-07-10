@@ -60,28 +60,26 @@ function saveData(data) {
 
 // ── Name selection (weighted toward Claire/Paul like real TOEFL) ───
 function pickStudentNames(rng) {
-  // 35% chance: Claire + Paul (like real TOEFL)
-  if (rng < 0.35) return ["Claire", "Paul"];
-
-  // Otherwise pick from diverse pool, avoiding duplicates
-  const pool = DISC_STUDENT_NAMES.filter(n => n !== "Claire" && n !== "Paul");
-  const shuffled = pool.sort(() => Math.random() - 0.5);
-  return [shuffled[0], shuffled[1]];
+  // RECALIBRATED 2026-07-10: real 2026改后 names come from EXACTLY the four-name
+  // pool (Claire/Paul/Andrew/Kelly, 99% of 100 real posts). 旧逻辑 65% 的情况会
+  // 主动排除 Claire/Paul 去挑 50 人池 — 与真题相反。
+  const pool = [...DISC_STUDENT_NAMES].sort(() => Math.random() - 0.5);
+  return [pool[0], pool[1]];
 }
 
 // ── Course distribution (broad coverage, weighted by tier) ──────────
+// 2026-07-10 重配:economics/psychology/marketing/education/anthropology/
+// business ethics 为真题高频;history-and-culture/public-health/CS/poli-sci 实测
+// 过采已降权。表外惰性条目(philosophy 等,从不被 pickCourseForBatch 遍历)已清。
 const COURSE_WEIGHTS = {
-  // Tier 1 — core social sciences
-  sociology: 8, "political science": 7, business: 7, education: 7, psychology: 7,
-  // Tier 2 — frequently tested
-  "history and culture": 5, "environmental science": 5, "social studies": 5, "public policy": 5,
-  // Tier 3 — regularly appear
-  economics: 4, philosophy: 4, communication: 4, "urban planning": 3,
-  "art and aesthetics": 3, "public health": 3, "law and justice": 3,
-  // Tier 4 — less frequent but valid
-  "technology and media": 2, "computer science": 2, "international relations": 2,
-  linguistics: 2, "agriculture and food": 2, "science and innovation": 2,
-  "sports and recreation": 2, ethics: 2,
+  // Tier 1 — real-exam signature courses
+  economics: 8, psychology: 8, education: 7, business: 6, sociology: 6,
+  marketing: 6, "business ethics": 6, anthropology: 5, "educational psychology": 5,
+  // Tier 2
+  "environmental science": 4, "social studies": 4, "public policy": 4,
+  // Tier 3 — 实测过采,降权
+  "history and culture": 2, "public health": 2, "technology and media": 2,
+  "computer science": 1, "political science": 2,
 };
 
 function pickCourseForBatch(existing, batchIdx, batchSize) {

@@ -207,7 +207,7 @@ function printDisc() {
   console.log(systemPrompt);
   console.log("\n# ===== ALLOWED COURSE LIST =====\n");
   console.log(DISC_COURSE_LIST.join(", "));
-  console.log("\n# ===== ALLOWED STUDENT NAMES (use Claire/Paul ~35%; rest from this pool) =====\n");
+  console.log("\n# ===== ALLOWED STUDENT NAMES (the ONLY four names real items use; pick 2 different per item) =====\n");
   console.log(DISC_STUDENT_NAMES.join(", "));
   console.log("\n# ===== OPENING STYLES (pick one per item, weighted) =====\n");
   for (const o of DISC_OPENING_STYLES) {
@@ -217,13 +217,13 @@ function printDisc() {
   for (const t of loadADExistingTopics(30)) console.log(`- ${t}`);
   console.log("\n# ===== INSTRUCTION =====\n");
   console.log("Generate N Discussion items (caller will tell you N). For EACH item:");
-  console.log("1. Pick a course (vary across the batch; bias toward under-represented from the bank-stats summary).");
-  console.log("2. Pick two student names from the allowed pool — different names per item.");
+  console.log("1. Pick a course — MUST be EXACTLY one string from the ALLOWED COURSE LIST above, verbatim. NEVER invent a course not on the list (past leak: 'marine biology' x9 entered the bank this way).");
+  console.log("2. Pick two DIFFERENT student names from the allowed pool (the pool is exactly Claire/Paul/Andrew/Kelly — real items use no other names).");
   console.log("3. Pick one opening style at random respecting the weights.");
-  console.log("4. Pick whether s2 references s1 by name (about 37% of real TPO does this).");
+  console.log("4. Student 2 must NOT reference Student 1 by name — real 2026改后 posts never do (0% on 50 items; the older-TPO 37% figure is obsolete).");
   console.log("5. Compose the full item following the SYSTEM PROMPT rules above.");
   console.log("6. Output a JSON array; each element matches:");
-  console.log('   {"course":"...","professor":{"name":"Professor","text":"..."},"students":[{"name":"...","text":"..."},{"name":"...","text":"..."}]}');
+  console.log('   {"course":"<from list>","professor":{"name":"Dr. <Gupta|Diaz|Achebe>","text":"..."},"students":[{"name":"...","text":"..."},{"name":"...","text":"..."}]}');
 }
 
 function printEmail() {
