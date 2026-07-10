@@ -1,0 +1,237 @@
+{
+  "saved_at": "2026-07-10T10:20:16.133Z",
+  "snapshot": {
+    "speaking_repeat": {
+      "gen": {
+        "sets": 81,
+        "question_rate": 0,
+        "punitive_rate": 0,
+        "welcome_opener_rate": 0,
+        "mean_words": 9.84,
+        "max_words": 22,
+        "you_rate": 0.2681,
+        "sig232_share": 0.0617,
+        "last_longest_share": 0.9877,
+        "wayfind_close_share": 0.5556
+      },
+      "real": {
+        "sets": 51,
+        "question_rate": 0,
+        "punitive_rate": 0,
+        "welcome_opener_rate": 0.1569,
+        "mean_words": 9.56,
+        "max_words": 17,
+        "you_rate": 0.3732,
+        "sig232_share": 0.0588,
+        "last_longest_share": 0.8824,
+        "wayfind_close_share": 0.3333
+      }
+    },
+    "reading_ap": {
+      "gen": {
+        "n": 88,
+        "mean_words": 185.25,
+        "last_sent_however_rate": 0,
+        "last_sent_limitation_rate": 0.2273,
+        "opener_copula_rate": 0.2955,
+        "para3_share": 0.9886,
+        "option_spread_mean": 1.7,
+        "insert_text_qshare": 0.0795,
+        "paragraph_rel_qshare": 0.0409,
+        "old_cohort": 0
+      },
+      "real": {
+        "n": 64,
+        "mean_words": 181.09,
+        "last_sent_however_rate": 0.0156,
+        "last_sent_limitation_rate": 0.0313,
+        "opener_copula_rate": 0.2344,
+        "para3_share": null,
+        "option_spread_mean": 2.63,
+        "insert_text_qshare": 0,
+        "paragraph_rel_qshare": 0,
+        "old_cohort": 0
+      }
+    },
+    "reading_ctw": {
+      "gen": {
+        "n": 305,
+        "mean_words": 72.28,
+        "first_sentence_words": 15.07,
+        "first_sentence_avg_wlen": 5.46,
+        "first_sentence_longword_share": 0.3205,
+        "blank_len_mean": 5.41,
+        "blank_ge8_share": 0.1852,
+        "old_cohort": 0
+      },
+      "real": {
+        "n": 75,
+        "mean_words": null,
+        "first_sentence_words": 16.71,
+        "first_sentence_avg_wlen": 5.81,
+        "first_sentence_longword_share": 0.3703,
+        "blank_len_mean": null,
+        "blank_ge8_share": null,
+        "old_cohort": 0
+      }
+    },
+    "reading_rdl_short": {
+      "gen": {
+        "n": 185,
+        "stem_infer_share": 0.3649,
+        "stem_top_prefix_share": 0.34,
+        "opener4_distinct_ratio": 0.85,
+        "old_cohort": 0
+      }
+    },
+    "reading_rdl_long": {
+      "gen": {
+        "n": 116,
+        "stem_infer_share": 0.3324,
+        "stem_top_prefix_share": 0.33,
+        "opener4_distinct_ratio": 0.9,
+        "old_cohort": 0
+      }
+    },
+    "listening_lc": {
+      "gen": {
+        "n": 64,
+        "median_words": 93,
+        "median_turns": 6,
+        "long_share_gt110": 0.0781,
+        "greeting_opener_rate": 0.3125,
+        "peer_topic_opener_rate": 0.0625,
+        "named_speaker_count": 0,
+        "old_cohort": 0
+      },
+      "real": {
+        "n": 155,
+        "median_words": 89,
+        "median_turns": 7,
+        "long_share_gt110": 0.0323,
+        "greeting_opener_rate": 0.1032,
+        "peer_topic_opener_rate": 0.1161,
+        "named_speaker_count": 0,
+        "old_cohort": 0
+      }
+    },
+    "listening_la": {
+      "gen": {
+        "n": 72,
+        "median_words": 98,
+        "salutation_opener_rate": 0.8889,
+        "direct_opener_rate": 0.1111,
+        "contractions_per_100w": 1.28,
+        "stock_reminder_that": 0,
+        "stock_light_refreshments": 0,
+        "stock_pleased_to_announce": 0,
+        "stock_excited_to": 0
+      },
+      "real": {
+        "n": 78,
+        "median_words": 84,
+        "salutation_opener_rate": 0.2051,
+        "direct_opener_rate": 0.7949,
+        "contractions_per_100w": 2.39,
+        "stock_reminder_that": 0,
+        "stock_light_refreshments": 0,
+        "stock_pleased_to_announce": 1,
+        "stock_excited_to": 0
+      }
+    },
+    "listening_lat": {
+      "gen": {
+        "n": 137,
+        "median_words": 256,
+        "you_address_opener_rate": 0.4672,
+        "recap_opener_rate": 0,
+        "rhetorical_q_opener_rate": 0.146
+      },
+      "real": {
+        "n": 113,
+        "median_words": 248,
+        "you_address_opener_rate": 0.4248,
+        "recap_opener_rate": 0.0885,
+        "rhetorical_q_opener_rate": 0.1858
+      }
+    },
+    "writing_ad": {
+      "gen": {
+        "n": 179,
+        "prof_dr_share": 1,
+        "prof_literal_professor": 0,
+        "prof_words_mean": 77.52,
+        "why_end_share": 0.1564,
+        "s1_ibelieve_share": 0.3575,
+        "s2_inmyopinion_share": 0,
+        "skeptic_opener_share": 0.0559,
+        "distinct_student_names": 50,
+        "four_pool_share": 0.095,
+        "marine_biology_count": 0
+      },
+      "real": {
+        "n": 50,
+        "prof_dr_share": 0.98,
+        "prof_literal_professor": 0,
+        "prof_words_mean": null,
+        "why_end_share": 0.32,
+        "s1_ibelieve_share": 0.74,
+        "s2_inmyopinion_share": 0.4,
+        "skeptic_opener_share": 0,
+        "distinct_student_names": 5,
+        "four_pool_share": 0.9895,
+        "marine_biology_count": 0
+      }
+    },
+    "writing_email": {
+      "gen": {
+        "n": 196,
+        "subject_words_mean": 6.74,
+        "subject_ge8_count": 50,
+        "opener_you_are": 0.3265,
+        "opener_you_recently": 0.1786,
+        "opener_your": 0.0816,
+        "opener_you_and_your": 0.0051,
+        "opener_you_other_verb": 0.3929,
+        "opener_third_person": 0.0153,
+        "verb_describe": 0.2126,
+        "verb_explain": 0.2279,
+        "verb_ask": 0.2449,
+        "verb_suggest": 0.1139,
+        "verb_request": 0.0714,
+        "verb_inquire": 0,
+        "verb_tell": 0.0238,
+        "verb_propose": 0,
+        "verb_recommend": 0,
+        "verbs_all_distinct_share": 1,
+        "recipient_title_share": 0.8469,
+        "recipient_bad_count": 0,
+        "scenario_words_mean": 38.92
+      },
+      "real": {
+        "n": 51,
+        "subject_words_mean": 4.14,
+        "subject_ge8_count": 0,
+        "opener_you_are": 0.4902,
+        "opener_you_recently": 0.3333,
+        "opener_your": 0.1373,
+        "opener_you_and_your": 0.0392,
+        "opener_you_other_verb": 0,
+        "opener_third_person": 0,
+        "verb_describe": 0.268,
+        "verb_explain": 0.2941,
+        "verb_ask": 0.1046,
+        "verb_suggest": 0.1111,
+        "verb_request": 0.0719,
+        "verb_inquire": 0.0588,
+        "verb_tell": 0,
+        "verb_propose": 0,
+        "verb_recommend": 0,
+        "verbs_all_distinct_share": 0.902,
+        "recipient_title_share": 0.8235,
+        "recipient_bad_count": 0,
+        "scenario_words_mean": 39.45
+      }
+    }
+  }
+}
