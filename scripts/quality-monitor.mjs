@@ -146,6 +146,38 @@ if (existsSync(TPO)) {
   reasons.push("MACHINERY: tpo_source.md missing — ground-truth calibration cannot be verified.");
 }
 
+// ── 3.5 RDL difficulty label sanity (collapse watchdog) ──────────────────
+// The pre-2026-07 failure mode: the RDL prompt's few-shot placeholder made
+// every generated item "easy" (207/229 of rdl-short), which silently gutted
+// the mock exam's upper/lower routing. Banks are append-ordered, so the last
+// 30 items ≈ the most recent generation runs. This can't live in the gate
+// registry (RDL has no real-exam corpus to derive targets from — registry
+// invariant forbids bank-derived standards), so it's watched here instead.
+const rdlDiffDists = {};
+for (const bankName of ["rdl-short", "rdl-long"]) {
+  const bank = readJSON(resolve(ROOT, `data/reading/bank/${bankName}.json`));
+  const items = bank?.items || [];
+  const full = { easy: 0, medium: 0, hard: 0, missing: 0 };
+  for (const it of items) full[["easy", "medium", "hard"].includes(it.difficulty) ? it.difficulty : "missing"]++;
+  rdlDiffDists[bankName] = full;
+
+  const recentItems = items.slice(-30);
+  if (recentItems.length >= 15) {
+    const recent = { easy: 0, medium: 0, hard: 0, missing: 0 };
+    for (const it of recentItems) recent[["easy", "medium", "hard"].includes(it.difficulty) ? it.difficulty : "missing"]++;
+    if (recent.missing / recentItems.length > 0.5) {
+      reasons.push(`RDL_DIFFICULTY_MISSING: ${recent.missing}/${recentItems.length} of the newest ${bankName} items have no valid difficulty label — the measured-label step (rdlDifficulty.js in generate-rdl.mjs / merge-staging.mjs) stopped running.`);
+    } else {
+      const [topTier, topCount] = Object.entries(recent)
+        .filter(([k]) => k !== "missing")
+        .sort((a, b) => b[1] - a[1])[0];
+      if (topCount / recentItems.length >= 0.9) {
+        reasons.push(`RDL_DIFFICULTY_COLLAPSE: ${Math.round(topCount / recentItems.length * 100)}% of the newest ${recentItems.length} ${bankName} items are "${topTier}" — generation difficulty tiers collapsed again (this gutted mock-exam upper/lower routing before 2026-07). Check the DIFFICULTY block in rdlPromptBuilder + the estimator wiring.`);
+      }
+    }
+  }
+}
+
 // ── 4. Append history row + trend analysis ───────────────────────────────
 const today = NOW.toISOString().slice(0, 10);
 // Only trust overall scores when BS staging was actually scored. If staging
@@ -228,6 +260,9 @@ lines.push(`- 完成于: ${completedAt || "(无)"} ${staleHours != null ? `(${st
 lines.push(`- 整体多样性: ${overallDiv ?? "—"}/100 · 整体质量: ${overallQual ?? "—"}/100`);
 lines.push(`- BS 人物当 prefilled: ${bsPersonFrac != null ? Math.round(bsPersonFrac * 100) + "%" : "—"} (闸 ${Math.round(PERSON_PREFILLED_GATE * 100)}%, TPO 30%)`);
 lines.push(`- TPO 校准自检: ${tpoRatio != null ? Math.round(tpoRatio * 100) + "% (应在 25-45%)" : "未能测量"}`);
+for (const [bankName, d] of Object.entries(rdlDiffDists)) {
+  lines.push(`- ${bankName} 难度分布: easy=${d.easy} medium=${d.medium} hard=${d.hard}${d.missing ? ` 缺失=${d.missing}` : ""}`);
+}
 lines.push("");
 if (regression) {
   lines.push("**问题清单**");

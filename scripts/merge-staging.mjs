@@ -67,17 +67,32 @@ function vet(prefix, item) {
     if (prefix === 'ctw') {
       const { processPassage } = require('../lib/readingGen/cTestBlanker.js');
       const { validateCTWItem } = require('../lib/readingGen/ctwValidator.js');
+      const { estimateDifficulty } = require('../lib/readingGen/ctwDifficulty.js');
       const id = item.id || ('ctw_' + Date.now() + '_' + Math.floor(Math.random() * 1e6));
       const { item: blanked, error } = processPassage(item, id);
       if (error) return { ok: false, reason: 'blank: ' + error };
       const v = validateCTWItem(blanked);
-      return v.pass ? { ok: true, item: blanked } : { ok: false, reason: (v.errors || []).join('; ') };
+      if (!v.pass) return { ok: false, reason: (v.errors || []).join('; ') };
+      // Measure difficulty from the actual blanks — the routine path used to
+      // ship the generator's declared label here, unlike generate-ctw.mjs.
+      blanked.difficulty = estimateDifficulty(blanked).difficulty;
+      return { ok: true, item: blanked };
     }
     const fn = VALIDATORS[prefix];
     if (!fn) return { ok: true, item }; // no validator (e.g. interview) → pass through
     const r = fn(item) || {};
     const bad = r.pass === false || r.valid === false;
-    return bad ? { ok: false, reason: (r.errors || []).join('; ') } : { ok: true, item };
+    if (bad) return { ok: false, reason: (r.errors || []).join('; ') };
+    if (prefix === 'rdl') {
+      // Merge chokepoint = last line of defense for the measured-label
+      // invariant: every RDL item gets its difficulty from the estimator here,
+      // regardless of which generation path produced it (generate-rdl.mjs
+      // already measures; the Claude routine path may not).
+      const { estimateRdlDifficulty } = require('../lib/readingGen/rdlDifficulty.js');
+      const variant = item.variant === 'short' || (item.word_count && item.word_count <= 75) ? 'short' : 'long';
+      item.difficulty = estimateRdlDifficulty({ ...item, variant }).difficulty;
+    }
+    return { ok: true, item };
   } catch (e) {
     // A validator throw means the item is malformed enough to crash validation — that is
     // per-item (well-formed items don't throw: verified across 8 types × hundreds of

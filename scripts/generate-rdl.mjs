@@ -3,12 +3,14 @@
 /**
  * Generate Read in Daily Life questions using DeepSeek.
  *
- * Usage: node scripts/generate-rdl.mjs [--count 5] [--genre email] [--variant short] [--dry-run]
+ * Usage: node scripts/generate-rdl.mjs [--count 5] [--genre email] [--variant short] [--difficulty hard] [--dry-run]
  *
  * Pipeline:
- *   1. Build prompt with genre specs + ETS flavor constraints
+ *   1. Build prompt with genre specs + ETS flavor constraints + difficulty tiers
  *   2. Call DeepSeek to generate text + questions
- *   3. Validate items individually + as batch
+ *   3. Validate items individually + as batch; MEASURE difficulty via
+ *      rdlDifficulty.js (the prompt tier only guides generation — the final
+ *      label is estimated from the finished item, same as CTW)
  *   4. Save accepted items to staging
  */
 
@@ -20,6 +22,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { buildRDLPrompt, buildShortRDLPrompt } = require("../lib/readingGen/rdlPromptBuilder.js");
 const { validateRDLItem, validateRDLBatch } = require("../lib/readingGen/rdlValidator.js");
+const { estimateRdlDifficulty } = require("../lib/readingGen/rdlDifficulty.js");
 const { auditRDLItem } = require("../lib/readingGen/answerAuditor.js");
 const { computeRdlExcludes } = require("../lib/gen/promptExcludes.js");
 
@@ -37,6 +40,7 @@ const MAX_BATCH = 10; // DeepSeek truncates JSON for large batches
 const COUNT = Math.min(parseInt(getArg("count", "5"), 10), MAX_BATCH);
 const GENRE = getArg("genre", "");
 const VARIANT = getArg("variant", "long"); // "short" (40-50w, 2Q) or "long" (100-150w, 3Q)
+const DIFFICULTY = getArg("difficulty", ""); // force all items to one tier (easy/medium/hard); default = tilted mix
 const DRY_RUN = args.includes("--dry-run");
 
 // ── Load env + DeepSeek ──
@@ -124,7 +128,7 @@ async function main() {
   console.log("╔══════════════════════════════════════════════════╗");
   console.log("║   Read in Daily Life — Generation Pipeline      ║");
   console.log("╚══════════════════════════════════════════════════╝\n");
-  console.log(`Count: ${COUNT}  Genre: ${GENRE || "(mixed)"}  Variant: ${VARIANT}  Dry-run: ${DRY_RUN}\n`);
+  console.log(`Count: ${COUNT}  Genre: ${GENRE || "(mixed)"}  Variant: ${VARIANT}  Difficulty: ${DIFFICULTY || "(tilted mix)"}  Dry-run: ${DRY_RUN}\n`);
 
   // Step 1: Build prompt
   console.log("1. Building prompt...");
@@ -133,9 +137,10 @@ async function main() {
   // (each item summarized to the first 8 content words of its text, staging prioritized).
   const excludeSubjects = computeRdlExcludes(ROOT, VARIANT, 25);
   console.log(`   Excluding ${excludeSubjects.length} already-used subjects (bank + staging)`);
+  const promptOpts = { genres, excludeSubjects, difficultyOverride: DIFFICULTY || null };
   const prompt = VARIANT === "short"
-    ? buildShortRDLPrompt(COUNT, { genres, excludeSubjects })
-    : buildRDLPrompt(COUNT, { genres, excludeSubjects });
+    ? buildShortRDLPrompt(COUNT, promptOpts)
+    : buildRDLPrompt(COUNT, promptOpts);
 
   if (DRY_RUN) {
     console.log("\n── PROMPT ──\n");
@@ -209,8 +214,17 @@ async function main() {
         explanation: q.explanation || "",
       })),
       question_count: (raw.questions || []).length,
-      difficulty: raw.difficulty || "easy",
+      difficulty: "medium", // placeholder — measured below (never trust the model's self-label)
     };
+
+    // Measure difficulty from the finished item (CTW architecture: the prompt
+    // tier guides generation, the estimator assigns the label).
+    const diffResult = estimateRdlDifficulty(item);
+    item.difficulty = diffResult.difficulty;
+    const declared = raw.difficulty && ["easy", "medium", "hard"].includes(raw.difficulty) ? raw.difficulty : null;
+    const diffTag = declared && declared !== diffResult.difficulty
+      ? `${diffResult.difficulty} ${diffResult.score} (declared ${declared})`
+      : `${diffResult.difficulty} ${diffResult.score}`;
 
     const validation = validateRDLItem(item);
 
@@ -221,10 +235,10 @@ async function main() {
     }
 
     if (validation.warnings.length > 0) {
-      console.log(`  ⚠ ${id} (${item.genre}, ${item.word_count}w): ${validation.warnings.length} warnings`);
+      console.log(`  ⚠ ${id} (${item.genre}, ${item.word_count}w) [${diffTag}]: ${validation.warnings.length} warnings`);
       validation.warnings.forEach(w => console.log(`      ${w}`));
     } else {
-      console.log(`  ✓ ${id} (${item.genre}, ${item.word_count}w): OK`);
+      console.log(`  ✓ ${id} (${item.genre}, ${item.word_count}w) [${diffTag}]: OK`);
     }
 
     accepted.push(item);
@@ -238,6 +252,7 @@ async function main() {
       batchResult.warnings.forEach(w => console.log(`    ⚠ ${w}`));
     }
     console.log(`  Answer distribution: A=${batchResult.answerDistribution.A} B=${batchResult.answerDistribution.B} C=${batchResult.answerDistribution.C} D=${batchResult.answerDistribution.D}`);
+    console.log(`  Difficulty distribution: ${Object.entries(batchResult.difficultyDist).map(([k, v]) => `${k}=${v}`).join(" ")}`);
   }
 
   console.log(`\n── Results ──`);
