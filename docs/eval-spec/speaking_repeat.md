@@ -1,11 +1,29 @@
 # Evaluation Spec — Speaking · Listen-and-Repeat (`speaking_repeat`)
 
 **Ground truth:** `data/realExam2026/speaking/repeat.json` — 51 sets / 351 sentences (recalled 2026改后, tier=recalled) + `data/realExam2026/speaking/repeat-from-audio.json` — 13 sets / 91 sentences (ASR, untruncated, with `setting`). Raw audio framing read from `.codex-tmp/asr/*Speaking*.txt`.
-**Current generated bank:** `data/speaking/bank/repeat.json` — 11 sets / 77 sentences.
+**Current generated bank:** `data/speaking/bank/repeat.json` — **84 sets / 588 sentences** (live node count 2026-07-10; the "11 sets / 77 sentences" cited historically was the pre-fix bank). Dimensional `Current:` values below are the **2026-07-10 postfix snapshot** (`speaking_repeat.gen`, measured at n=81 sets).
 **Generation profile/prompt:** `lib/speakingGen/repeatPromptBuilder.js` (the live builder; `lib/ai/prompts/speaking.js` is the *scoring* prompt for the Interview task only and does NOT generate Repeat). Validator: `lib/speakingGen/speakingValidator.js`. Legacy stat model: `data/speaking/profile/repeat-flavor-model.json`.
 **Reliability of inputs:** sentence text + length = solid (structured). Per-set `difficulty` labels in the real file are *auto-derived from word count* (length buckets, not hand-tagged structure) — treat them as length tiers, not syntactic difficulty. Speaker role + setting = partial (ASR-recovered for 13/51 sets only). Per-sentence timing budget = deferred (see below).
 
 > The task: the test-taker hears one sentence spoken by a staff/authority figure (or a how-to narrator), then repeats it once. Scoring is by word-match, not AI. So the item's job is to be a *naturally-spoken, hearable, repeatable* sentence at a controlled length — NOT to test reading or grammar knowledge.
+
+---
+
+## 2026-07-09/10 修复记录 (postfix)
+
+**权威快照:** `scripts/research/baselines/paradigm-2026-07-10-postfix.json`（`speaking_repeat.gen`, n=81 sets 当时；本文档所有 `Current:` 值取自该快照）。**本题型的库已按新范式整库重生成**——下面的 Current 都是修复后的实测值,不再是修复前的 11-set 旧库。
+
+**已闭合的 gap**（合成指纹全部归零 / 归位）:
+- **D3 rigid 2/3/2** → `sig232_share` **6.17%**（real 5.88%）。生成器不再固定 2/3/2,改为 `SIGNATURES` 加权轮换（`repeatPromptBuilder.js:157-162`, 2/3/2 权重压到 ~8%）。
+- **D7 yes/no 问句、D12 punitive 威胁、D5 Welcome 开头** → 全部 **0%**（问句/威胁 real 也是 0%；Welcome real 15.69%,gen 现为 0,属轻微过冲）。
+- **D9 direct-address** 53%→**26.81%**（real 37.3%,现略偏低）; **D4 last=longest** 82%→**98.77%**（real 88.24%,现略偏高）; **D13 wayfinding 收尾** 0%→**55.56%**（real 33.3%,现略偏高）。
+
+**新加的锁**（防再退化）:
+- **Prompt deck:** `repeatPromptBuilder.js` 的 `SIGNATURES`（长度签名轮换）、`welcomeSlot`（Welcome 开头仅 50% 概率且单句）、easy/medium/hard 三档 `constraints` 硬写「NEVER a yes/no question」「NEVER a punitive threat」「≤18 words」。
+- **Scorer:** `speakingValidator.js` 增 `question_mark` / `punitive_warning` / `difficulty_distribution`（medium≥3、hard≤2）三条 warning。
+- **CI:** `__tests__/repeat-paradigm.regression.test.js`（锁 flow 指派、Welcome 双侧 8-25% 带、18 词帽）。
+
+**仍需盯的过冲**（下一轮校准注意,是 over-correction 不是退化）: Welcome 0%（应 ~16%）、you 26.8%（应 ~37%）、wayfinding 55.6%（应 ~33%）、max 22 词（prompt 帽 18,个别越界）。
 
 ---
 
@@ -31,40 +49,40 @@ The single most important contrast: the generator produces a polished, uniform "
 ### D2 — Sentence length (words), overall · **solid**
 - **Real (n=351):** min 4, max 17, mean **9.56**, median **9**. Audio-clean (n=91, untruncated): mean 9.86, median 9, max 18.
 - **Detector:** whitespace word count per sentence; mean/median/min/max.
-- **Current (n=77):** mean 9.21, median 9, max 15. Close on center, but **truncated at the top** — real has a genuine 16–18-word tail that gen never reaches (gen hard max = 15).
+- **Current (postfix):** mean **9.84**, max **22**. Center matches (real 9.56); the old "truncated at 15" gap is closed — gen now *slightly overshoots* the tail (max 22 vs real 17; prompt caps at 18, a few items exceed it).
 - **Verbatim real long-tail:** "If you want to know what is being offered, just check the daily menu for special dishes" (17w); "When you are ready, simply select Print from your computer and retrieve your document." (14w); "before you leave the classroom, be sure you got all your tools back into the toolbox" (16w).
 - **Maps to:** `STRUCTURE_RULES.hard.word_range = [13,20]` (range is fine; gen under-fills it).
 
 ### D3 — Difficulty/length-tier MIX per set · **solid** · ⚠ BIGGEST GAP
 - **Real:** the 2/3/2 staircase the generator enforces is **rare — only 3/47 sets (6.4%)**. Dominant signatures (e/m/h by the file's own labels): `2/4/1` ×12, `3/3/1` ×10, `1/4/2` ×8, `1/5/1` ×6. Tier totals across 47 sets: easy 91 / medium 182 / hard 56 → **~26% / ~52% / ~16% (+ ~6% extra-easy)**. Audio-clean mix agrees (`2/4/1`,`1/4/2`,`3/3/1` lead; **no** `2/3/2`). **The real exam is medium-dominant with usually only ONE hard sentence; two-hard sets exist but are a minority.**
 - **Detector:** per-7-set count of easy/medium/hard; signature histogram. Hand-validated against full arrays of 3 sets — exact match.
-- **Current:** **11/11 sets = exactly 2/3/2 (100%)**. Over-rigid; over-produces hard (2 every set) and under-produces medium.
+- **Current (postfix):** exact 2/3/2 signature is now **6.17%** of sets (`sig232_share`, real 5.88%). **Gap closed** — `SIGNATURES` weighted rotation replaced the fixed 2/3/2; medium-dominant mix restored.
 - **Target:** medium ≈ 50–52% of sentences; easy ≈ 25–30%; hard ≈ 15–18%. At the *set* level, vary the signature — most sets should be `2/4/1`, `3/3/1`, `1/4/2`, or `1/5/1`; reserve exact `2/3/2` and any 2-hard set for a minority.
 - **Maps to:** `repeatPromptBuilder.js` "2 easy + 3 medium + 2 hard" (hard-coded in prompt AND in the OUTPUT FORMAT comment); validator warns when `easy!==2||medium!==3||hard!==2`. **Both should be loosened to a distribution, not a fixed 2/3/2.**
 
 ### D4 — Length progression within a set · **solid**
 - **Real:** strictly non-decreasing S1→S7 in only 9/49 (18%) — sentences do NOT climb monotonically. BUT the **last sentence is the longest (or tied) in 45/49 = 91.8%**. So the real signature is "**bumpy middle, long finish**", not a clean staircase. (E.g. `2026-01-21`: 5,7,8,10,12,9,14 — S6 dips before the long S7.)
 - **Detector:** monotonic-non-decreasing check; "is last == max length" check.
-- **Current:** monotonic 2/11 (18%) — matches; last=longest 9/11 (82%) — slightly low.
+- **Current (postfix):** last=longest **98.77%** (`last_longest_share`, real 88.24%) — the old "slightly low (82%)" is now *slightly high*; gen makes S7 the longest almost every set.
 - **Target:** do NOT enforce monotonic growth; DO make S7 the longest sentence (~92%).
 - **Maps to:** implicit in `repeatPromptBuilder` difficulty-by-position; no explicit rule — the "hard sentences are positions 6–7" assumption creates a cleaner staircase than reality.
 
 ### D5 — S1 opener type · **solid** · big gap
 - **Real (n=51):** "Welcome to…/Let's…" greeting = **8 (16%)**; bare **imperative** ("Check your inbox…", "Enter your name and student ID number", "begin by mixing the butter and sugar") = 14 (27%); bare **declarative locating/announcing** something ("Laptops are located in this aisle.", "The library books are located here.", "Soccer matches and practice take place here.", "This area shows early sailing ships.") = 27 (53%); "You can…" = 2.
 - **Detector:** regex-classify first sentence; hand-verified by reading all 51 S1 (listed in scratch run).
-- **Current (n=11):** "Welcome…" = **7 (64%)**, imperative = 4, bare declarative = **0**. Massively over-greets and never opens with a plain locating declarative.
+- **Current (postfix):** "Welcome…" opener = **0%** (`welcome_opener_rate`, real 15.69%). The old over-greeting (64%) is fixed — now *under* the real rate (gen never opens "Welcome" vs real 16%); bare-declarative/imperative openers dominate.
 - **Verbatim real S1:** `"Laptops are located in this aisle."` · `"The library books are located here."` · `"begin by mixing the butter and sugar"` · counter-example (greeting, the minority): `"Welcome to our campus tour."`
 - **Maps to:** prompt examples both open "Welcome to…" / "Please step inside…"; the OUTPUT FORMAT sample sentence is "Welcome to the campus fitness center." → anchors the model on greetings.
 
 ### D6 — Sentence mood mix · **solid**
 - **Real (n=351):** imperative ≈ **38.5%**, plain declarative ≈ **51%**, "you-can/we-have" statement ≈ 10.5%, question **0%**.
-- **Current:** imperative 35%, declarative 49%, you-stmt 10%, question **5.2%**. Mood balance is otherwise close; the only defect is the questions (see D7).
+- **Current (postfix):** question rate **0%** (`question_rate`). The old 5.2%-question defect is fully closed; mood balance otherwise close.
 - **Detector:** first-token + end-punctuation classifier.
 - **Maps to:** prompt "imperative mood common" + "direct address" — roughly right.
 
 ### D7 — Yes/no questions · **solid** · clear gap
 - **Real:** **0 / 351** sentences contain a question mark. None. The Repeat task never asks the test-taker to repeat a question.
-- **Current:** 4 / 77 (5.2%) are yes/no questions: `"Do you have your insurance card?"`, `"Are you here for math help?"`, `"Do you have a reservation?"`, `"Do you have your safety goggles?"`.
+- **Current (postfix):** **0%** (`question_rate` = 0). Closed — every easy/medium/hard `constraints` block now hard-forbids "a yes/no question", and the validator warns on any `?`.
 - **Detector:** `?`-ending or aux-verb-initial. Validated: 0 `?` anywhere in real.
 - **Target:** **0% questions.**
 - **Maps to:** prompt EXAMPLE SET 1 S2 = "Do you have your student ID?" and `STRUCTURE_RULES.easy.structures` lists "short yes/no question". **Remove yes/no questions from the easy structures and from both worked examples.**
@@ -77,7 +95,7 @@ The single most important contrast: the generator produces a polished, uniform "
 
 ### D9 — Direct address (you/your) rate · **solid**
 - **Real:** **37.3%** of sentences contain you/your. Audio-clean similar. Many sentences are about the *place/objects* ("The pond is a popular spot…", "Bread is freshly baked on site every day."), not the listener.
-- **Current:** **53.2%** — over-addresses the listener.
+- **Current (postfix):** **26.81%** (`you_rate`, real 37.3%). The old over-address (53%) is fixed — now *slightly under* the real rate.
 - **Detector:** `\byou(r)?\b` rate.
 - **Target:** ~37%, i.e. roughly 1 in 3 sentences, not every other one.
 - **Maps to:** prompt "Use direct address ('you','your') naturally" → model over-applies it; validator `natural_spoken_register` rewards `addrRate` (pushes it higher still).
@@ -97,14 +115,14 @@ The single most important contrast: the generator produces a polished, uniform "
 
 ### D12 — Punitive-warning trope · **solid** · clear gap (synthetic tell)
 - **Real:** **0 / 351**. There is no "violations will result in suspension of your privileges" register anywhere. (4 keyword hits are false positives: "free of **charge**", "**fine** details".) The closest real "rule" sentences are gentle: "We hope everyone will ensure that books are returned on time.", "Use only what is needed so that your supplies last all quarter."
-- **Current:** **8 / 77 (10.4%)**: "…will result in a rescheduled appointment and a possible fee.", "…temporary suspension of your tutoring privileges.", "If you return the car late, you will incur an extra daily charge.", "Overdue books will result in fines…". This is the strongest synthetic fingerprint.
+- **Current (postfix):** **0%** (`punitive_rate` = 0). Closed — the punitive S7 example was removed from the prompt, the hard `constraints` block forbids "a punitive 'will result in / suspension / penalty / fine' threat", and the validator flags any hit.
 - **Detector:** `/will result in|suspension|privileges|incur|penalt|violation/i`; validated by broad punitive grep on raw text.
 - **Target:** **~0%.** Replace consequence/threat sentences with neutral logistics or soft encouragement.
 - **Maps to:** `STRUCTURE_RULES.hard.structures` includes "result/consequence clause (e.g., 'Late returns will result in an extra daily charge…')" AND prompt example S7 = "Late equipment returns will result in a temporary suspension of your borrowing privileges." → **this seeded the trope directly. Remove it.**
 
 ### D13 — Closing-sentence "wayfinding" trope · **solid** (positive signature gen lacks)
 - **Real:** the last sentence references a **map / schedule / guide / directory / floor plan / catalog in 17/51 (33%)** ("If you need help getting around, check the map for specific areas and facilities", "…check the weekly schedule here", "…you can download the map for free"); another 20% close on help/staff/questions.
-- **Current:** **0 / 11** last sentences mention map/schedule/guide. Gen instead closes on punitive rules (D12).
+- **Current (postfix):** **55.56%** of sets close on a map/schedule/guide/help pointer (`wayfind_close_share`, real 33.33%). The old "0%" is fixed — now *over*-produced; the prompt closer rule should vary more (only ~1/3 of real sets use it).
 - **Detector:** keyword scan of final sentence per set.
 - **Target:** ~1/3 of orientation sets should end on a "check the map/schedule/directory" pointer.
 - **Maps to:** prompt SCENARIO COHERENCE rule 3 ("welcome → instructions → rules → warnings") — its "rules → warnings" ending is wrong; real endings are "→ wayfinding pointer / offer of help".
@@ -133,11 +151,13 @@ The single most important contrast: the generator produces a polished, uniform "
 
 ---
 
-## Biggest current-vs-real gaps (priority order)
+## Biggest current-vs-real gaps (priority order) — **2026-07-10 postfix: the three below are CLOSED**
 
-1. **Difficulty mix is rigidly 2/3/2 (D3)** — real is medium-dominant (~26/52/16) and varies set-to-set; exact 2/3/2 is only 6% of real sets and gen is 100%. Loosen the prompt and the validator from a fixed count to a distribution; cut hard from "always 2" to "usually 1".
-2. **Punitive-warning trope (D12)** — 10.4% in gen, 0% in real; seeded verbatim by the prompt's S7 example. Plus yes/no questions (D7) 5.2% vs 0%. Both are pure synthetic tells; delete the seeding example/structure lines.
-3. **Opener & address register (D5+D9)** — gen opens "Welcome…" 64% (real 16%) with 0 bare-declarative openers (real 53%) and addresses "you/your" 53% (real 37%). Plus gen lacks the **procedure/how-to set family and the map/schedule closer (D13)** entirely.
+The three gaps that dominated the pre-fix bank are now resolved (see 修复记录). What remains are mild *over-corrections*, not synthetic tells:
+
+1. ~~Difficulty mix rigidly 2/3/2 (D3)~~ — **CLOSED**: 2/3/2 now 6.17% (real 5.88%).
+2. ~~Punitive-warning trope (D12) + yes/no questions (D7)~~ — **CLOSED**: both 0%.
+3. ~~Over-Welcome (D5) + over-"you" (D9)~~ — **CLOSED / over-corrected**: Welcome 0% (real 16%), you 26.8% (real 37%). Watch these plus wayfinding 55.6% (real 33%) and last=longest 98.8% (real 88%) for slight over-correction next round. The **procedure/how-to set family** (D14/D15) remains the one substantive gap not covered by the postfix snapshot.
 
 ---
 

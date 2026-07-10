@@ -1,7 +1,7 @@
 # Evaluation Spec — Reading · Complete the Words (`ctw`)
 
 **Ground truth:** `data/realExam2026/reading/completeTheWords.json` — 75 cloze paragraphs (recalled 2026改后, tier=recalled, `source_kind=ocr`). 55 are unique by topic (20 are repeats of recurring passages across exam dates). Blanked words recovered from the answer keys in `.codex-tmp/exam_txt/*答案*.txt` / `*参考答案*.txt`: **48 unique passages with full clean 10-word blank lists = 481 real blanks** (3 OCR-garbled answer lists dropped; the rest of the 51 raw answer-key blocks were either fragment-OCR or duplicate passages).
-**Current generated bank:** `data/reading/bank/ctw.json` — 191 items (`passage`, `blanks[]`, `word_count`, `topic`, `subtopic`, `difficulty`, `blanked_text`). ⚠ 25/191 items are missing the `blanks[]` array entirely (data-integrity bug — see D11).
+**Current generated bank:** `data/reading/bank/ctw.json` — **257 items** (`passage`, `blanks[]`, `word_count`, `topic`, `subtopic`, `difficulty`, `blanked_text`; live node count 2026-07-10). ✅ The data-integrity bug is fixed: **0/257 items are missing/short on `blanks[]`** (every item now carries exactly 10 blanks — see D11). Dimensional `Current:` values below are the **2026-07-10 postfix snapshot** (`reading_ctw.gen`, measured at n=305 before the final short-item purge; live is now 257).
 **Generation profile/prompt:** `lib/readingGen/ctwPromptBuilder.js` (writes the passage only) + `lib/readingBank/readingEtsProfile.js` (`CTW_PROFILE` + `ETS_FLAVOR.ctwBlankProfile`). Blanker: `lib/readingGen/cTestBlanker.js` (mechanical). Difficulty: `lib/readingGen/ctwDifficulty.js`. Validator: `lib/readingGen/ctwValidator.js`.
 
 > **The task & where quality lives.** The test-taker reads a short passage in which the first sentence is intact, then every-other-word in the body has its second half deleted (a *C-test*); they type the missing letters. **Blanking is 100% mechanical and is already implemented correctly** (see D7 — the `floor(len/2)`-shown rule matches the real exam OCR 17/19 = 89%, the misses being OCR artifacts). Therefore the AI's *only* lever is the **passage text**: its length, sentence rhythm, and — above all — the lexical richness of the words that happen to fall in even (blanked) positions. Everything that makes a CTW item feel real or synthetic flows from the passage, not from the blank algorithm.
@@ -18,7 +18,9 @@ Every authentic CTW paragraph has the same three-part **shape**, dictated by the
 
 Traced precisely on Grasshoppers (`2026-03-16_ctw2`): S1 intact → S2 holds 4 blanks (have, ways, protect, against) → S3 holds 6 blanks (they, powerful, legs, allow, to, away) → S4+S5 fully intact. This **"10 blanks packed into sentences 2–3, intact bookends front and back"** is the signature. A 3-sentence / 56-word passage (the generator's center of mass) cannot produce it — it has no intact tail, so the blanks run to the very end and the item reads thinner than a real one.
 
-The single most important contrast: the generator was tuned to a "popular-science, CEFR A2–B1, average word length 4.5–5.5, no *fundamental*/*sophisticated*" target. **The real exam is markedly richer**: ~70–72 words (gen 56), first sentences averaging 5.89-char words with 39% long words (gen 5.09 / 25%), and blanks that routinely include B2–C1 academic vocabulary — *advantageous, characterized, conversely, systematically, redistribute, frequency, populations, eruptions, vegetation, encompass*. The current validator would **reject 9/48 (19%) and warn on 26/48 (54%) of real exam passages** as "too many rare blanks." The generator is calibrated easier than the test.
+The single most important contrast (pre-fix): the generator was tuned to a "popular-science, CEFR A2–B1, average word length 4.5–5.5" target and ran too plain. **The real exam is markedly richer** and the pre-fix bank fell short (~56 words, 12.9-word first sentences at 5.09 char / 25% long words).
+
+> **2026-07-10 postfix — the length/richness gap is largely closed.** Per `reading_ctw.gen`: passages now mean **72.28 words** (real ~70-72; was 56.3); first sentences now **15.07 words** at **5.46 char / 32.05% long words** (real 16.71 / 5.81 / 37.03%; was 12.9 / 5.09 / 25.5%); blanks now mean **5.41 char with 18.52% ≥8-char** (real 5.77 / 25.6%; was 5.13 / 15.2%). Old-cohort items purged (`old_cohort` = 0). Remaining softness is that the first sentence and long-blank density still sit a notch below the real ceiling — an *under-shoot*, no longer a synthetic tell. The historical note that the validator would "reject 9/48 / warn on 26/48 real passages" still flags a validator-too-strict risk (D8) worth re-checking against the richer bank.
 
 ---
 
@@ -36,7 +38,7 @@ The single most important contrast: the generator was tuned to a "popular-scienc
 - **Real:** OCR whitespace-token mean **69.3** (median 71, range 31–94, sd 12.7). OCR *undercounts* because it glues words ("totra", "fora", "incaves"); a glue-repair estimate puts the true mean at **~71.8** (worst cases +11 to +15 words). Treat **~70–72 words, 4–5 sentences** as the target; the bulk sit 60–85. The 31-word floor and a few <50 are truncated partial-recalls, not real short passages.
 - **Verbatim (intact, well-OCR'd):** Glaciers `2026-01-21_ctw2` (~78w); Crop rotation `2026-02-23_ctw1` (~68w); Tigers `2026-03-06_ctw2` (~62w).
 - **Detector:** `passage.trim().split(/\s+/).length`; for real, also a glue-repair estimate (split tokens >12 chars / internal-caps).
-- **Current (n=191):** mean **56.3**, median 57, range 45–80, sd 7.9. Distribution: 45–50 ×51, 50–60 ×74, 60–70 ×56, 70+ ×10. **Gap: generated runs ~15 words too short and never reaches the real 85–94 top.** The prompt itself flags this ("generator tends to UNDERSHOOT … averaged only 56 words"). The shortfall is what kills the intact-tail shape (D6).
+- **Current (postfix):** mean **72.28** (`mean_words`, real ~70-72). **Gap closed** — the ~15-word shortfall that killed the intact-tail shape (D6) is resolved; passages now sit in the real 60-85 band.
 - **Maps to:** `ctwPromptBuilder` "65–78 words, hard min 62"; `CTW_PROFILE.passageWordCount {min45,max100,target70}`; validator `wc < 45` error / `> 120` warn (so the validator does not actually enforce the 62-word floor — the prompt asks for it but nothing rejects a 50-word passage).
 
 ### D3 — Blank POS mix: function vs content words · **solid**
@@ -51,7 +53,7 @@ The single most important contrast: the generator was tuned to a "popular-scienc
 - **What:** character length of each blanked word (drives how much is shown and how hard it is to complete).
 - **Real:** mean **5.77**, median 5, range 2–14. Buckets: 2–3ch 23%, 4–5ch 28%, 6–7ch 23%, 8–9ch 14%, 10+ch 11%. **25.6% of blanks are ≥8 chars = 2.56 long blanks per passage.**
 - **Detector:** length of letters-only blank word; bucket histogram; count ≥8.
-- **Current:** mean **5.13**, median 5; **only 15.2% ≥8 chars = 1.32 long blanks per passage.** **Gap: generated blanks are ~0.6 chars shorter and have roughly half the long-word density of the real exam.** Direct consequence of the simpler passages (D8).
+- **Current (postfix):** mean **5.41** (`blank_len_mean`, real 5.77); **18.52% ≥8 chars** (`blank_ge8_share`, real 25.6%). **Gap narrowed** (was 5.13 / 15.2%) — richer passages lifted blank length; still a notch below the real long-blank density.
 - **Maps to:** `CTW_PROFILE.blankAvgLength {target 5.5}` & `ETS_FLAVOR.ctwBlankProfile.avgBlankWordLength = 5.5` (targets are ~right; the *generator* misses them low); validator `maxLongBlanks = 3` + warns at avg >7.5 (the cap is consistent with real, but combined with short passages it pushes generation toward the easy floor, not the 5.77 real mean).
 
 ### D5 — Fragment ratio (how much of the word is shown) · **solid** · *fully determined by D4 + the rule*
@@ -73,7 +75,7 @@ The single most important contrast: the generator was tuned to a "popular-scienc
 - **What:** the always-intact sentence 1 — length and lexical level. It is the reader's only fully-given context, so its register sets the passage's feel.
 - **Real (55 unique, intact → reliable):** mean **16.7 words**; avg word length **5.89**; **38.9% long words (≥7ch)**; ~4.0 abstract-noun-suffix words per 100. Often a formal definition: *"Human cognition refers to the mental processes involved in acquiring, processing, storing, and using knowledge."* / *"Oceanography is the study of the physical, chemical, and biological aspects of the ocean."*
 - **Detector:** sentence-1 word count; avg char length; ≥7-char share.
-- **Current:** mean **12.9 words**; avg word length **5.09**; **25.5% long words.** **Gap: generated topic sentences are ~4 words shorter and lexically a full register simpler.** The prompt's "average word length 4.5–5.5" instruction is **below** the real 5.89 and directly produces this gap.
+- **Current (postfix):** **15.07 words** (`first_sentence_words`, real 16.71); avg word length **5.46** (`first_sentence_avg_wlen`, real 5.81); **32.05% long words** (`first_sentence_longword_share`, real 37.03%). **Gap narrowed** (was 12.9 / 5.09 / 25.5%) — first sentences are richer and longer; still ~1.6 words / a small register step below real.
 - **Maps to:** prompt §"First sentence" ("interesting, clear topic sentence" — no length/richness floor) and §Register ("Average word length should be 4.5-5.5 characters" — **mis-calibrated low**; real is 5.7–5.9).
 
 ### D8 — Blank difficulty / vocabulary ceiling · **partial** (direction solid; absolute "rare" inflated by an incomplete word list)
@@ -100,7 +102,7 @@ The single most important contrast: the generator was tuned to a "popular-scienc
 ### D11 — Bank integrity: every item must carry its blanks · **solid** (generated-side defect)
 - **What:** each stored item should have a 10-element `blanks[]` array (so the app can render the cloze).
 - **Real:** N/A (ground truth).
-- **Current:** **25/191 items have `blanks` undefined / missing**, and `blank_count` is `undefined` for them. These cannot be served as cloze items. **Gap: ~13% of the bank is unusable.** Likely passages that failed `applyBlanking` (too few words / too many 1-letter words → fewer than 10 blanks) but were retained without blanks.
+- **Current (postfix):** **0/257 items missing or short on `blanks[]`** (every item carries exactly 10; live node check 2026-07-10). **Gap closed** — the ~13%-unusable defect is gone; the pipeline now drops passages that fail `applyBlanking` instead of storing them blank-less.
 - **Detector:** `Array.isArray(item.blanks) && item.blanks.length === 10`.
 - **Maps to:** `cTestBlanker.processPassage` (returns error when <10 blanks) — the pipeline should drop these, not store them.
 

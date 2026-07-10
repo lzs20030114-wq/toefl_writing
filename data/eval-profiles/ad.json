@@ -1,6 +1,7 @@
 {
   "type": "ad",
-  "n": { "real_items": 50, "real_items_with_2_students": 47, "real_student_posts": 96, "real_full_prof_posts_transcribed": 36, "generated_items": 144, "generated_student_posts": 288 },
+  "n": { "real_items": 50, "real_items_with_2_students": 47, "real_student_posts": 96, "real_full_prof_posts_transcribed": 36, "generated_items": 179, "generated_student_posts": 358 },
+  "postfix_2026_07_10": "SPLIT STATE. Current values from paradigm-2026-07-10-postfix.json (writing_ad.gen, n=179; live node count 179 items / 358 posts). CLOSED IN BANK: professor name prof_dr_share 1.0 / prof_literal_professor 0 (100% Dr.<Surname>), marine_biology_count 0. PROMPT FIXED BUT BANK NOT REGENERATED (do NOT read as a live regression): distinct_student_names 50 / four_pool_share 9.5% (prompt now {Claire,Paul,Andrew,Kelly}), s1_ibelieve_share 35.75% / s2_inmyopinion_share 0%, why_end_share 15.64%, prof_words_mean 77.52. These move only when the bank is regenerated against the fixed academicWriting.js.",
   "generated_at": null,
   "ground_truth": "data/realExam2026/writing/academicDiscussion.json (50 items; professor_question only) + scripts/research/ad_eval/prof_posts_real.json (36 FULL professor posts hand-transcribed from .codex-tmp/ocr/*写作*.txt)",
   "generated_bank": "data/academicWriting/prompts.json (144, ids ad61-ad204)",
@@ -16,8 +17,8 @@
       "distribution": { "real_structured": { "Dr. X": 49, "empty(OCR)": 1 }, "real_dr_pool": { "Dr. Gupta": 32, "Dr. Diaz": 9, "Dr. Achebe": 8 } },
       "detector": "regex /^Dr\\. /; tally distinct surnames",
       "examples": ["Dr. Gupta", "Dr. Achebe", "Dr. Diaz"],
-      "current": "144/144 = literal string \"Professor\" (0% Dr.X)",
-      "gap": "TOTAL MISMATCH. 2026改后 never shows the bare word 'Professor' as the name — it shows Dr. <Surname>, and 64% of the time it is Dr. Gupta. The prompt still hard-codes name:\"Professor\" and says '94% of real TPO uses this exact string' — true for OLD TPO, FALSE for 2026改后.",
+      "current": "postfix prof_dr_share 1.0 (real 0.98), prof_literal_professor 0 — bank now 100% Dr.<Surname>",
+      "gap": "CLOSED. maps_to: academicWriting.js:303-305 (prompt now uses Dr.<Surname> from ONLY {Gupta ~2/3, Diaz, Achebe}) and output-format :342 name:'Dr. <Surname>'. Old name:'Professor' / '94% of real TPO' instruction replaced.",
       "reliability": "solid"
     },
     {
@@ -32,8 +33,8 @@
         "This week, we have been exploring the effects of globalization on local economies.",
         "We often discuss the impact of government intervention in the economy."
       ],
-      "current": "gen: 'other (topic-first/factual)' 93/144 (65%), Today 26, As-we-discussed 15, Over-the-next-weeks 6; \"We've been discussing\" = 1/144 (0.7%)",
-      "gap": "BIGGEST STYLE GAP. The single signature opener of 2026改后 ('We've been discussing…', 61%) appears in <1% of the generated bank. The generator's 52%-weighted 'natural/other' bucket produces abstract factual leads ('Many countries have experienced…', 'In recent decades…') — the exact 'BAD' pattern the prompt itself warns against — while the real signature is a first-person-plural recap of what the class has been covering.",
+      "current": "PROMPT FIXED, BANK PENDING REGEN. DISC_OPENING_STYLES (academicWriting.js:376-390) recalibrated so 'We've been discussing <topic>.' is now the ~61% weighted opener; the live bank still shows the old abstract-factual leads until regenerated (opener share not re-measured in the postfix snapshot).",
+      "gap": "Fix is in-prompt. The single signature opener ('We've been discussing…', real 61%) now dominates DISC_OPENING_STYLES; bank reflects it only after regeneration.",
       "reliability": "solid"
     },
     {
@@ -88,8 +89,8 @@
       "distribution": { "real_transcribed_n36": { "has_why_tag": 19 } },
       "detector": "/Why(\\?| or why not\\?| do you think so\\?)|Explain your (views|reasoning)|Give reasons/i",
       "examples": ["... on local traditions? Why?", "... in shaping societal values? Why or why not?", "... mostly negative? Explain your views."],
-      "current": "gen 26/144 (18%)",
-      "gap": "Real appends a 'Why?'/'Why or why not?'/'Explain' tag to the question ~53% of the time; gen does so only 18%. Cheap, high-authenticity fix.",
+      "current": "postfix why_end_share 15.64% (real ~53%)",
+      "gap": "STILL LOW — bank pending regeneration (the opener/frame/Why-tag prompt fixes land only on regeneration).",
       "reliability": "solid"
     },
     {
@@ -116,8 +117,8 @@
       "distribution": { "real_transcribed_n36": { "mean": 65.5, "median": 71, "min": 46, "max": 80, "p25": 53, "p75": 77 }, "real_chars": { "mean": 450, "median": 472, "min": 322, "max": 650 } },
       "detector": "whitespace word count of full professor post",
       "examples": [],
-      "current": { "gen_words": { "mean": 73.4, "median": 73, "min": 36, "max": 108 }, "gen_chars": { "mean": 500, "median": 508, "max": 723 } },
-      "gap": "Gen runs ~8 words / 50 chars longer on average and has a long tail (up to 108w/723ch) the real bank never reaches (real hard cap ~80w/650ch). Tighten target to ~65 words (≈450 chars), max ~80w.",
+      "current": { "prof_words_mean": 77.52, "source": "postfix" },
+      "gap": "Postfix prof_words_mean 77.52 (real ~65) — still ~12w long, bank pending regeneration against the tightened target (~65w, hard-max ~80w).",
       "reliability": "solid"
     },
     {
@@ -183,8 +184,8 @@
         "In my opinion, certain information should be confidential to protect competitive advantages.",
         "Customer feedback is essential for product development. It helps companies understand customer needs ..."
       ],
-      "current": { "gen_n288": { "I believe/think": 93, "While/Although": 35, "other": 137, "I oppose/support": 19, "In my opinion": 2 } },
-      "gap": "Two issues: (1) gen barely uses 'In my opinion' (2/288 vs real 21%) — real S2 canonically opens 'In my opinion …'. (2) gen 'other' bucket (48%) is dominated by varied/creative openers ('In my view', 'Honestly', 'Actually', 'I strongly support', 'I hold a different view from <Name>') whereas real 'other' is the plain bare-thesis pattern. Real students are formulaic: ~77% are 'I believe/think' + 'In my opinion'.",
+      "current": { "s1_ibelieve_share": 0.3575, "s2_inmyopinion_share": 0.0, "source": "postfix" },
+      "gap": "STILL OFF — bank pending regeneration. Postfix s1_ibelieve 35.75% (real 74%), s2_inmyopinion 0% (real 40%). Real students are formulaic (~77% 'I believe/think' + 'In my opinion'); the bank has not shifted.",
       "reliability": "solid"
     },
     {
@@ -279,8 +280,8 @@
       "distribution": { "real_n94": { "Claire": 31, "Andrew": 25, "Paul": 21, "Kelly": 17, "from_pool": "94/94 = 100%" } },
       "detector": "tally student[].name; membership in {Claire,Paul,Andrew,Kelly}",
       "examples": ["Claire", "Paul", "Andrew", "Kelly"],
-      "current": "gen uses a 50-name diverse pool (Emily, Olivia, Ryan, Cameron, Sarah, Joe, Steve, Mia, David, ...); Claire/Paul present but diluted",
-      "gap": "STRONG, CHEAP authenticity tell. 100% of real 2026改后 student names come from exactly four: Claire, Paul, Andrew, Kelly. The generator's DISC_STUDENT_NAMES is a 50-name list (calibrated to old TPO diversity). For 2026改后, restrict to these four. (Note one real OCR artifact 'I think' as a name — ignore.)",
+      "current": "postfix distinct_student_names 50 / four_pool_share 9.5% (real 100% from four) — bank pending regeneration",
+      "gap": "STILL OFF — bank pending regen. maps_to: DISC_STUDENT_NAMES (academicWriting.js:236) is NOW ['Claire','Paul','Andrew','Kelly'] (was 50 names). Fix in-prompt; the old 50-name bank persists until regenerated.",
       "reliability": "solid"
     },
     {
@@ -294,8 +295,8 @@
         "Do you think globalization has a positive or negative impact on local economies? Why?  (recurs 4x: 3.21, 3.23, 4.1, 5.10)",
         "What is your perspective on the impact of cultural globalization on local traditions?  (recurs 5x)"
       ],
-      "current": "gen uses 66 distinct courses incl. many never seen in real (marine biology, robotics, paleontology, fashion design, veterinary science, game design, real estate, dance, forestry...) and forces topic UNIQUENESS via existingTopics avoidance",
-      "gap": "Two-way mismatch. (a) Course breadth: real 2026改后 stays in a narrow social-science/business/humanities band; gen sprawls into hard-science/vocational courses that never appear. (b) Recurrence: real RE-USES a small topic pool (only 66% unique, top topic appears 5x); gen maximizes novelty (existingTopics dedupe). For drilling realism, weighting toward the recurring real topics is MORE authentic than maximizing variety.",
+      "current": "postfix marine_biology_count 0 (the worst off-band course purged). Broader course sprawl (robotics, paleontology, fashion design…) not separately re-measured; likely persists until bank regenerated.",
+      "gap": "PARTIAL. (a) marine-biology leak CLOSED. (b) Course breadth + topic-recurrence not re-measured; DISC_COURSE_LIST fix takes effect on regeneration. Real re-uses a small topic pool (66% unique); gen still maximizes novelty via existingTopics dedupe.",
       "reliability": "solid"
     }
   ],

@@ -1,7 +1,7 @@
 # Evaluation Spec — Reading · Academic Passage (`ap`)
 
 **Ground truth:** `data/realExam2026/reading/academicPassage.json` — 64 items / 207 questions (recalled 2026改后, tier=recalled, OCR+DeepSeek). After dedup (A/B/C 卷 repeats) = **42 unique passages**; after excluding 3 RIDL-leakage items (a library-renovation notice, a film review, a software-update email) = **39 clean academic passages**. The structured JSON's PASSAGE TEXT is reliable; its QUESTIONS are **under-extracted** (mean 3.2/passage vs true 5). True question structure is **hand-coded from the raw 阅读 OCR** in `.codex-tmp/ocr/*阅读*.txt` (14 fully-read clusters = **70 questions**).
-**Current generated bank:** `data/reading/bank/ap.json` — 156 passages / 780 questions (`{version, items}`, 5 questions each).
+**Current generated bank:** `data/reading/bank/ap.json` — **89 passages / 445 questions** (`{version, items}`, 5 questions each; live node count 2026-07-10; the "156 passages / 780 questions" cited historically was the pre-fix bank). Dimensional `Current:` values below are the **2026-07-10 postfix snapshot** (`reading_ap.gen`, n=88).
 **Generation prompt/profile:** `lib/readingGen/apPromptBuilder.js` (`buildAPPrompt`, `TOPIC_POOL`, `RHETORICAL_PATTERNS`, `QUESTION_PLANS`) + `lib/readingBank/readingEtsProfile.js` (`AP_PROFILE`, `ETS_FLAVOR`).
 **Reliability of inputs:** passage text + length + lexis + paragraph-1 style = **solid** (clean structured text, hand-validated). Question-type mix + insert_text presence = **solid** (hand-coded from OCR, n=70). Paragraph count = **partial** (JSON lost the breaks; read from OCR). Distractor trap-logic + real answer-position bias = **deferred** (no answer key in the data).
 
@@ -19,7 +19,23 @@ So an "AP item" = **one ~190-word passage + a 5-question cluster.** Two numbers 
 - `apPromptBuilder` passage length "mean 317.5, target 280-360" → real 2026 is **~183 words (max ~210)**.
 - `ETS_FLAVOR.passageStructure.openingStrategies.received_wisdom_then_revision = 0.46` → real 2026 opens with a **direct topic/definition statement** (received-wisdom = 1/42).
 
-**The three biggest gaps:** (1) generator produces **zero insert_text** questions (real ≈ 11% of Qs, the last question of ~57% of clusters); (2) passages run **too long** (gen mean 210, 42/156 over the entire real range, max 322); (3) generator **over-produces paragraph_relationship** (13.6% vs real 2.9%) and **has no reference / sentence_select types**.
+**The three biggest gaps — 2026-07-10 postfix: all substantially CLOSED:** (1) ~~zero insert_text~~ → now **7.95%** of Qs (`insert_text_qshare`; placed as Q5 in 3/5 `QUESTION_PLANS`); (2) ~~passages too long (mean 210, max 322)~~ → now mean **185.25** (`mean_words`, real 181); (3) ~~over-produced paragraph_relationship (13.6%)~~ → now **4.09%** (`paragraph_rel_qshare`, real ~2.9%) and `reference` re-added to a plan.
+
+---
+
+## 2026-07-10 修复记录 (postfix, Batch 3)
+
+**权威快照:** `scripts/research/baselines/paradigm-2026-07-10-postfix.json` (`reading_ap.gen`, n=88)。`Current:` 值全部取自该快照。旧世代题目已清 (`old_cohort` = 0)。
+
+**已闭合的 gap:**
+- **passage 过长** → mean **185.25** (real 181.09)；长尾 322w 已消。
+- **insert_text 缺失** → `insert_text_qshare` **7.95%**；`QUESTION_PLANS` 现把 `insert_text` 排在 Q5（3/5 计划,≈60%,配 4 个 `[■]` 标记），并重新加回 `reference`。
+- **paragraph_relationship 过量** → **4.09%** (was 13.6%)。
+- **末句 However 收尾坍缩** (旧库 45.8%) → **`last_sent_however_rate` = 0%** (real 1.56%)。
+
+**新机制 — `ENDING_MOVES`（`apPromptBuilder.js:45-50`, 硬指派轮换 `:118-122`）:** 结尾不再强制 limitation,改为 5 亚型轮换（limitation / application / research / outlook / synthesis）,其中 4 个亚型明写「NO 'However' in the final sentence」。快照:`last_sent_limitation_rate` **22.73%**（限制式收尾仅 ~1/5,real 3.13%,现略偏高但已非坍缩）。
+
+**opener:** `opener_copula_rate` **29.55%**（real 23.44%）——直陈/定义式开头已到位,不再是 received-wisdom 模板。
 
 ---
 
@@ -46,7 +62,7 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
 - **Real (clean, n=39):** mean **182.5**, median **189**, min 71, max **209**, p10-p90 = 146-204. 74% fall in 180-220w; **nothing above ~210w**.
 - **Detector:** whitespace word count; RIDL-leakage excluded by header/receipt/review regex.
 - **Verbatim:** *Thinking Outside the Box* = 200w; *Value Theory* = 190w; *Augmented Reality for Training* = 175-203w.
-- **Current (n=156):** mean **210**, max **322**; **42/156 (27%) exceed the entire real range (>220w)**.
+- **Current (postfix):** mean **185.25** (`mean_words`, real 181.09). **Gap closed** — the 322w long tail is gone; passages now sit in the real 180-200w band. (Prompt/profile length targets were recalibrated off the stale "280-360".)
 - **Target:** **150-210 words, center ~190.** Do NOT exceed ~210.
 - **Maps to:** `buildAPPrompt` §1 Length ("Target 280-360 … Acceptable 200-440 … Do NOT cap at 250") and `AP_PROFILE.passageWordCount {min:150,max:400,target:250}` — **both must drop to ~150-210, target 190.** The "280-360" and "317.5 mean" comments are stale classic-TOEFL numbers.
 
@@ -71,9 +87,9 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
   - reference — *"What does \"its cautionary implications\" refer to in the passage?"*
   - negative_factual — *"Which of the following is NOT mentioned as a threat to coral reefs in the passage?"*
   - rhetorical_purpose — *"Why does the author mention the \"rarity and historical significance\" of natural diamonds?"*
-- **Current (gen, n=780):** factual_detail 21.9%, vocabulary 20.0%, inference 18.3%, rhetorical_purpose 14.1%, **paragraph_relationship 13.6%**, negative_factual 8.2%, main_idea 3.8%, **insert_text 0%, reference 0%, sentence_select 0%**.
-- **Gap:** (1) **insert_text 0% vs 11.4%** — entirely missing. (2) **reference 0% vs 4.3%** and **sentence_select 0% vs 1.4%** — missing. (3) **paragraph_relationship 4.7× over-produced** (13.6% vs 2.9%). (4) rhetorical_purpose slightly high.
-- **Maps to:** `QUESTION_PLANS` in `apPromptBuilder.js` — all 5 plans lack insert_text/reference/sentence_select; 4 of 5 include paragraph_relationship. **Add insert_text as a near-mandatory Q5, add reference, cut paragraph_relationship to ~1-in-5 clusters.** Also `AP_PROFILE.questionTypeTargets` (has no insert_text/reference) and `ETS_FLAVOR.distractorByQuestionType` (no insert_text/reference entries).
+- **Current (postfix):** **insert_text 7.95%** (`insert_text_qshare`, was 0%) and **paragraph_relationship 4.09%** (`paragraph_rel_qshare`, was 13.6%). **Both gaps closed.** (Full per-type mix not re-measured in the snapshot, but the two anchor defects are fixed.)
+- **Gap:** (1) ~~insert_text missing~~ — **CLOSED** (7.95%, real 11.4%; still a touch low). (2) ~~paragraph_relationship over-produced~~ — **CLOSED** (4.09%, real 2.9%). (3) `reference` re-added to a plan; `sentence_select` remains rare/absent (not a staple in real either).
+- **Maps to:** `QUESTION_PLANS` in `apPromptBuilder.js:63-65` — **now recalibrated**: `insert_text` is Q5 in 3 of 5 plans (≈60%), `reference` is in ≥1 plan, and `paragraph_relationship` was cut. Also `AP_PROFILE.questionTypeTargets` / `ETS_FLAVOR.distractorByQuestionType`.
 
 ### D6 — insert_text present & last · **solid** · ⚠ BIG GAP
 - **Real (n=14):** insert_text present in **8/14 (57%)**; **8/8 it is the LAST question (Q5).** (The 6 without may be OCR-truncated last screens — true rate is plausibly higher; see deferred.)
@@ -82,9 +98,9 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
   - *"And because of the controlled conditions in which they are produced, synthetic diamonds are actually preferred for industrial uses, such as in cutting tools and electronic devices."*
   - *"For example, Singapore's Intelligent Transport System incorporates artificial intelligence (AI) to predict real-time traffic conditions, effectively manage road congestion, and optimize routes."*
   - *"Imagine being able to change the appearance of your furnishings depending on your mood or the season."*
-- **Current:** **0** insert_text questions; passages carry no `[■]` markers.
+- **Current (postfix):** insert_text now present (`insert_text_qshare` **7.95%** of all Qs). **Capability shipped** — `QUESTION_PLANS` place `insert_text` as Q5 in 3/5 plans and the builder emits **4 `[■]` insertion markers** in those passages (`apPromptBuilder.js:140-156`).
 - **Target:** generate an insert_text Q5 in ~60% of clusters; this **co-requires** the passage to expose **4 insertion slots** at paragraph/clause boundaries and a removable concrete-elaboration sentence.
-- **Maps to:** nothing today — new capability for `apPromptBuilder` (passage scaffolding + Q5 type). See Correlation C2.
+- **Maps to:** `apPromptBuilder.js:63-65` (`QUESTION_PLANS` with `insert_text` Q5) + `:140-156` (Q5 slot-letter wiring + the "place exactly FOUR insertion markers `[■]`" passage rule). Was "new capability"; now implemented. See Correlation C2.
 
 ### D7 — Vocabulary per passage + option length · **solid**
 - **Real:** exactly **1 vocab Q in 12/14 clusters**; vocab answer options mean **1.5 words** (median 1, max 6) — overwhelmingly **single words**.
@@ -103,8 +119,8 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
 
 ### D10 — Option-length spread within a question · **solid** · gap (reverse direction)
 - **Real (n=205):** mean spread (max-min words) **2.6**, median **3**; only **69%** of questions have all four options within 3 words.
-- **Current (n=780):** mean spread **1.6**, median 1; **94%** within 3 words.
-- **Gap:** gen options are **TOO uniform**. The OPTION LENGTH RULE ("within 2 words of each other") over-corrected — real ETS tolerates a 3-4 word spread. Over-uniformity is a synthetic tell.
+- **Current (postfix):** mean spread **1.7** (`option_spread_mean`, real 2.63). **Still off** — gen options remain too uniform (this dimension was not part of the paradigm fix). Real ETS tolerates a 3-4 word spread.
+- **Gap:** gen options are **TOO uniform** (1.7 vs real 2.63). The OPTION LENGTH RULE ("within 2 words of each other") over-corrects — real tolerates 3-4 words. Over-uniformity is a synthetic tell. **Open — not addressed by the 2026-07-10 batch.**
 - **Maps to:** `apPromptBuilder` "All 4 options MUST be within 2 words" and `ETS_FLAVOR.optionRules.optionLengthVarianceMax = 1.5` — **loosen to ~3-4 word spread**; keep only the "correct must not be the unique longest" guard.
 
 ### D11 — Correct-is-uniquely-longest rate · **partial**
@@ -119,8 +135,8 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
 - **Real (unique, n=42):** **direct topic/definition statement dominant**; explicit definition openers (refers to / investigates / is a …) ≥9, plus ~32 direct topic statements; **received-wisdom-then-revision = 1/42**.
 - **Detector:** classify sentence 1 — definition markers vs received-wisdom openers (Traditionally / Historically / While early…).
 - **Verbatim:** *"Value theory investigates the nature of values and the principles that determine what is worth pursuing…"*; *"Urban green spaces, such as parks, gardens, and green roofs, provide numerous benefits to cities."*; *"Parallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time."*
-- **Current:** `ETS_FLAVOR.passageStructure.openingStrategies.received_wisdom_then_revision = 0.46`.
-- **Gap:** **cut received_wisdom to ~5%, raise direct topic/definition to ~90%.** The 46% is a stale classic-TOEFL value.
+- **Current (postfix):** `opener_copula_rate` **29.55%** (real 23.44%) — direct topic/definition openers ("X is a…", "X investigates…") are now in place; the received-wisdom template no longer dominates.
+- **Gap:** **largely closed** — gen now opens direct-topic/definition close to the real rate. (The stale `openingStrategies.received_wisdom_then_revision = 0.46` profile constant should still be verified/lowered so it can't seed a regression.)
 - **Maps to:** `ETS_FLAVOR.passageStructure.openingStrategies`; `apPromptBuilder` structure rules.
 
 ### D14 — First sentence defines the subject · **solid**
@@ -141,7 +157,7 @@ The passage itself: **3 paragraphs (mode), ~190 words**, opening by **naming and
 - **Detector:** count however/although/though/while/yet/despite/nevertheless/nonetheless/whereas/conversely.
 - **Verbatim real:** *"However, this theory faces objections."*; *"Despite these efforts, challenges remain."*
 - **Gap:** real has ONE strong pivot near the limitation move; gen sprinkles them.
-- **Maps to:** `apPromptBuilder` "Include 1-2 contrast transitions"; `ETS_FLAVOR.transitionsPerPassage = 8.5` (the 8.5 is a stale long-passage number).
+- **Maps to:** `apPromptBuilder` "Include 1-2 contrast transitions"; `ETS_FLAVOR.transitionsPerPassage = 8.5` (the 8.5 is a stale long-passage number). **Note (2026-07-10):** the *last-sentence* However-collapse (a separate, worse symptom) was fixed by `ENDING_MOVES` — `last_sent_however_rate` is now **0%** (real 1.56%); overall per-passage contrast density (2.29 vs 1.09) was not separately re-measured in the postfix snapshot.
 
 ### D17 — Passive-voice density · **solid** · small gap
 - **Real:** **0.10** passives/sentence. **Current:** **0.19** (~2×).

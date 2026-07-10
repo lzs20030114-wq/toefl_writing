@@ -1,7 +1,8 @@
 {
   "type": "ctw",
-  "n": { "real_paragraphs_total": 75, "real_paragraphs_unique": 55, "real_clean_blank_lists": 48, "real_blanks": 481, "generated_items": 191, "generated_items_with_blanks": 166, "generated_blanks": 1660 },
+  "n": { "real_paragraphs_total": 75, "real_paragraphs_unique": 55, "real_clean_blank_lists": 48, "real_blanks": 481, "generated_items": 257, "generated_items_with_blanks": 257, "generated_blanks": 2570 },
   "generated_at": null,
+  "postfix_2026_07_10": "Bank regenerated + richness recalibrated. Current values from paradigm-2026-07-10-postfix.json (reading_ctw.gen, n=305 before final short-item purge; live node count now 257 items, all 10 blanks). old_cohort=0. CLOSED: passage mean_words 72.28 (real ~70-72, was 56.3), blank-integrity 0/257 missing (was 25/191), first_sentence_words 15.07 (was 12.9). NARROWED (still a notch below real ceiling): first_sentence_avg_wlen 5.46 (real 5.81), first_sentence_longword_share 32.05% (real 37%), blank_len_mean 5.41 (real 5.77), blank_ge8_share 18.52% (real 25.6%). RE-CHECK: whether the ctwValidator rare-blank gate is still too strict against the now-richer bank (D8).",
   "ground_truth": "data/realExam2026/reading/completeTheWords.json (passages, OCR) + .codex-tmp/exam_txt/*答案*.txt (recovered blank words)",
   "generated_bank": "data/reading/bank/ctw.json",
   "maps_to_builder": "lib/readingGen/ctwPromptBuilder.js",
@@ -19,8 +20,8 @@
       "distribution": { "real": { "10": 48 }, "generated": { "10": 166, "missing": 25 } },
       "detector": "len(item.blanks); for real, numbered fill-tokens per answer-key passage segment",
       "examples": [],
-      "current": "166/191 = 10; 25/191 missing blanks[] entirely",
-      "gap": "data-integrity: 13% of generated bank has no blanks array (unusable as cloze)",
+      "current": "257/257 = 10; 0 missing (postfix, live node check)",
+      "gap": "CLOSED — data-integrity defect gone; pipeline now drops passages that fail applyBlanking instead of storing them blank-less",
       "reliability": "solid"
     },
     {
@@ -34,8 +35,8 @@
         "Glaciers are massive, slow-moving bodies of ice that form in areas where snow accumulates over time and compresses into ice. They can change landscapes through processes like erosion and deposition. As glaciers move, they cut out valleys and fjords, leaving behind distinct geological features. Scientists study glaciers to understand past climate conditions and predict future changes. Glaciers are of particular concern today because their melting contributes to rising sea levels, impacting coastal communities worldwide.",
         "Crop rotation is a farming technique that involves growing a series of different types of crops in the same area across a sequence of seasons. Different crops use different nutrients from the soil, so rotating them prevents the soil from becoming depleted. This method helps to reduce pests and diseases; it also decreases the need for chemical fertilizers, promoting sustainable agriculture. Farmers use this practice to improve crop yields and maintain healthy soil."
       ],
-      "current": { "mean": 56.3, "median": 57, "max": 80 },
-      "gap": "generated runs ~15 words too short and never reaches the real 85-94 top; prompt itself flags UNDERSHOOT. This shortfall destroys the intact-tail shape (D6).",
+      "current": { "mean": 72.28, "source": "postfix mean_words" },
+      "gap": "CLOSED — postfix mean 72.28 (real ~70-72, was 56.3). The ~15-word shortfall that killed the intact-tail shape (D6) is resolved.",
       "reliability": "solid"
     },
     {
@@ -63,8 +64,8 @@
       "examples": [
         "real >=8ch blanks: advantageous, characterized, conversely, systematically, redistribute, frequency, populations, eruptions, vegetation, encompass, geological, acquisition, perceive"
       ],
-      "current": { "mean": 5.13, "pct_ge_8": 0.152 },
-      "gap": "generated blanks ~0.6 chars shorter; ~half the long-word density of real (1.32 vs 2.56 per passage). Downstream of simpler passages.",
+      "current": { "mean": 5.41, "pct_ge_8": 0.1852, "source": "postfix" },
+      "gap": "NARROWED (was 5.13 / 0.152). Richer passages lifted blank length; still a notch below real long-blank density (5.77 / 0.256).",
       "reliability": "solid"
     },
     {
@@ -107,8 +108,8 @@
         "Oceanography is the study of the physical, chemical, and biological aspects of the ocean.",
         "The field of philosophy of mind delves into the nature of consciousness, thought processes, and the intricate relationship between the mind and body."
       ],
-      "current": { "words_mean": 12.9, "avg_word_len": 5.09, "long_word_pct": 25.5 },
-      "gap": "generated topic sentences ~4 words shorter and a full register simpler; prompt's 'avg word length 4.5-5.5' is BELOW real 5.89 and directly causes this",
+      "current": { "words_mean": 15.07, "avg_word_len": 5.46, "long_word_pct": 32.05, "source": "postfix" },
+      "gap": "NARROWED (was 12.9 / 5.09 / 25.5%). First sentences richer/longer; still ~1.6 words / a small register step below real (16.71 / 5.81 / 37%).",
       "reliability": "solid"
     },
     {

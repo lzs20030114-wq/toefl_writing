@@ -1,12 +1,16 @@
 # Evaluation Spec — Writing · Academic Discussion (`ad`)
 
 **Ground truth:** `data/realExam2026/writing/academicDiscussion.json` — 50 items (recalled 2026改后, tier=recalled). **Caveat:** this structured file only extracted `professor_question` (the final question), NOT the full professor post. The full posts (opener + two-sided framing + question) were hand-transcribed from the OCR image dumps in `.codex-tmp/ocr/*写作*.txt` into `scripts/research/ad_eval/prof_posts_real.json` (n=36 recoverable full posts) — this is the source for the highest-value style dimensions.
-**Current generated bank:** `data/academicWriting/prompts.json` — 144 items (ids ad61–ad204), 288 student posts.
+**Current generated bank:** `data/academicWriting/prompts.json` — **179 items / 358 student posts** (live node count 2026-07-10; "144 items / 288 posts" was the pre-fix count). Dimensional `Current:` values below are the **2026-07-10 postfix snapshot** (`writing_ad.gen`, n=179).
 **Generation profile/prompt:** `lib/ai/prompts/academicWriting.js` — `buildDiscGenSystemPrompt` / `buildDiscGenUserPrompt`, plus the exported pools `DISC_OPENING_STYLES`, `DISC_COURSE_LIST`, `DISC_STUDENT_NAMES`.
 **Measurer:** `scripts/research/ad_eval/measure.mjs` + `measure2.mjs`; detectors hand-validated in `validate.mjs` / `validate2.mjs`.
 **Reliability of inputs:** student text + length = solid (structured). Full professor post (opener/framing/contraction/name) = solid but n=36 (the 36 items with a recoverable full OCR post; the ~14 earliest Jan/Feb items had the post buried in noisy full-exam dumps). Per-item difficulty = deferred (no label; task is human-scored on the test-taker's essay).
 
 > **The task:** the test-taker sees a professor's discussion-board post (a mini-lecture that stages a two-sided debate and asks a question) and two classmates' short replies, then writes their own ≥100-word reply. The item's job is to read **exactly like a real ETS 2026改后 discussion board**: a `Dr. <Surname>` professor, a `We've been discussing…` opener, a balanced `Some… / Others…` frame, a `Why?`-tagged question, and two short, formulaic, cleanly-opposed student replies named from a four-name pool.
+
+> **2026-07-10 postfix — SPLIT STATE (read before calibrating).** The Discussion *prompt* levers (Batch 5) are all fixed, but the live *bank* was only partly regenerated:
+> - **Closed in the bank:** professor name — `prof_dr_share` **1.0** / `prof_literal_professor` **0** (100% `Dr. <Surname>`, bare "Professor" gone); **`marine_biology_count` 0** (the marine-biology leak is purged).
+> - **Prompt fixed, bank NOT yet regenerated (don't read as a live regression):** student name pool still `distinct_student_names` **50** / `four_pool_share` **9.5%** (prompt now restricts to {Claire,Paul,Andrew,Kelly}); student openers `s1_ibelieve_share` **35.75%** / `s2_inmyopinion_share` **0%**; `why_end_share` **15.64%**; `prof_words_mean` **77.52** (still long). These will only move once the bank is regenerated against the fixed `academicWriting.js`.
 
 ---
 
@@ -45,8 +49,8 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **Real:** `Dr. <Surname>`, 49/50 (the 1 blank is an OCR drop). The surname comes from a **three-name pool: Dr. Gupta ×32, Dr. Diaz ×9, Dr. Achebe ×8.**
 - **Detector:** `/^Dr\. /`; tally surnames.
 - **Verbatim:** `Dr. Gupta` · `Dr. Achebe` · `Dr. Diaz`.
-- **Current gap:** 144/144 = literal `"Professor"`, 0% `Dr. X`.
-- **Maps to:** `buildDiscGenSystemPrompt` "Use \"Professor\" as the name (94% of real TPO uses this exact string)" and the output-format `"name": "Professor"`. That 94% figure is **old TPO**; for 2026改后 it is wrong — emit `Dr. <Surname>` from {Gupta, Diaz, Achebe}.
+- **Current (postfix):** `prof_dr_share` **1.0** (real 0.98), `prof_literal_professor` **0**. **Gap closed** — the bank is now 100% `Dr. <Surname>`; bare "Professor" is gone.
+- **Maps to:** `academicWriting.js:303-305` (prompt now: "use \"Dr. <Surname>\" … use ONLY these three surnames: Dr. Gupta (~2/3), Dr. Diaz, Dr. Achebe") and output-format `:342` `"name": "Dr. <Surname>"`. The old `name:"Professor"` / "94% of real TPO" instruction was replaced.
 
 ### D2 — Professor opener style · **solid** · ⚠ BIGGEST STYLE GAP
 - **What:** the opening clause class.
@@ -54,7 +58,7 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **Detector:** regex on first clause (`profOpener`); hand-verified line-by-line across all 36.
 - **Verbatim:** `"We've been discussing the impact of cultural globalization on local traditions."` · `"This week, we have been exploring the effects of globalization on local economies."` · `"We often discuss the impact of government intervention in the economy."`
 - **Current gap:** gen `"We've been discussing"` = **1/144 (0.7%)**. Gen's biggest bucket is `other/topic-first` 93/144 (65%) — i.e. the abstract factual leads `"Many countries have experienced…"`, `"In recent decades…"`, `"The practice of tipping…"` — which is exactly the **BAD** opener the system prompt itself warns against. Plus `Today` 26, `As we discussed` 15, `Over the next few weeks` 6.
-- **Maps to:** `DISC_OPENING_STYLES` — the 52%-weighted `"natural"` bucket gives the model permission to write abstract openers, and **no template encodes the real signature `"We've been discussing <topic>."`** Add it as the dominant (~60%) opener.
+- **Maps to:** `DISC_OPENING_STYLES` (`academicWriting.js:376-390`) — **recalibrated 2026-07-10** so `"We've been discussing <topic>."` is now the dominant (~61%) weighted opener. (Fix is in-prompt; the bank shows it only after regeneration.)
 
 ### D3 — Professor two-sided framing · **solid** · ⚠ MAJOR
 - **What:** does the post lay out BOTH sides before asking?
@@ -87,7 +91,7 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **Real (n=36):** **53%**.
 - **Detector:** `/Why(\?| or why not\?| do you think so\?)|Explain your (views|reasoning)|Give reasons/i`.
 - **Verbatim:** `"…on local traditions? Why?"` · `"…in shaping societal values? Why or why not?"` · `"…mostly negative? Explain your views."`
-- **Current gap:** gen 18%. Cheap, high-authenticity fix — append a `Why?`/`Why or why not?` tag ~half the time.
+- **Current (postfix):** `why_end_share` **15.64%** (real ~53%). **Still low — bank pending regeneration** (the opener/frame/Why-tag prompt fixes land only when the bank is regenerated).
 
 ### D7 — Professor defines/glosses the key term · **partial**
 - **What:** share of posts that gloss the central term in a sentence.
@@ -100,7 +104,7 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **What:** length in words / chars.
 - **Real (n=36):** mean **65w / 450ch**, median 71w/472ch, range 46–80w (322–650ch), p25 53w, p75 77w.
 - **Detector:** whitespace word count of the full post.
-- **Current gap:** gen mean 73w/500ch, max 108w/723ch — ~8w longer on average with a long tail the real bank never reaches (real cap ~80w). Tighten target to ~65w (≈450ch), hard-max ~80w.
+- **Current (postfix):** `prof_words_mean` **77.52** (real ~65). Still ~12w long — bank pending regeneration against the tightened target (~65w, hard-max ~80w).
 - **Maps to:** `buildDiscGenSystemPrompt` "Target ~420 chars … do NOT artificially cap at 400" — the 420 target is fine; the issue is the long tail (cap it).
 
 ### D9 — Professor post sentences · **solid**
@@ -127,7 +131,7 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **Real (n=96):** `I believe/think` **54 (56%)** · `In my opinion` **20 (21%)** · bare-thesis (no I-frame) 17 (18%) · `While/Although` 3 · `Yes/No`/`I oppose` 2.
 - **Detector:** `openerClass()`; the 17 "other" hand-verified to be bare thesis statements.
 - **Verbatim:** `"I believe living alone is beneficial because…"` · `"In my opinion, certain information should be confidential…"` · bare-thesis: `"Customer feedback is essential for product development. It helps companies understand…"`
-- **Current gap:** gen barely uses `In my opinion` (2/288 vs real 21%); gen's 48% "other" bucket is varied/creative openers (`In my view`, `Honestly`, `Actually`, `I strongly support`, `I hold a different view from <Name>`) instead of the plain bare-thesis. Real students are **formulaic** — ~77% are `I believe/think` + `In my opinion`.
+- **Current (postfix):** `s1_ibelieve_share` **35.75%** (real 74%), `s2_inmyopinion_share` **0%** (real 40%). **Still off — bank pending regeneration.** Real students are formulaic (~77% `I believe/think` + `In my opinion`); the bank has not yet shifted.
 - **Maps to:** `buildDiscGenSystemPrompt` STUDENT VOICES "occasional filler phrases like 'I mean,', 'honestly,'" — this pushes the wrong way for 2026改后. Constrain S1→`I believe/think`, S2→`In my opinion` more often.
 
 ### D14 — Student canonical opener pairing · **solid**
@@ -168,14 +172,14 @@ Grouped: **Professor post** (D1–D9) · **Student posts** (D10–D18) · **Pool
 - **What:** share of student names from the 2026改后 closed pool.
 - **Real (n=94):** **100% from exactly four names — Claire ×31, Andrew ×25, Paul ×21, Kelly ×17.** (One OCR artifact `"I think"` as a name — ignore.)
 - **Detector:** tally `student[].name`; membership in {Claire, Paul, Andrew, Kelly}.
-- **Current gap:** gen uses a 50-name diverse pool (Emily, Olivia, Ryan, Cameron, Sarah, Joe, Steve, Mia, David…); Claire/Paul present but diluted.
-- **Maps to:** `DISC_STUDENT_NAMES` (50 names, old-TPO diversity). For 2026改后 restrict to {Claire, Paul, Andrew, Kelly}.
+- **Current (postfix):** `distinct_student_names` **50** / `four_pool_share` **9.5%** (real 100% from four). **Still off — bank pending regeneration.** The prompt is already restricted to the four names; the old 50-name bank persists until regenerated.
+- **Maps to:** `DISC_STUDENT_NAMES` (`academicWriting.js:236`) — **now `["Claire", "Paul", "Andrew", "Kelly"]`** (was 50 names). Fix in-prompt; bank pending regen.
 
 ### D20 — Course area pool · **solid**
 - **What:** course-area distribution.
 - **Real (n=50):** narrow social-science/business/humanities band — economics 6, psychology 5, marketing 5, education 5, anthropology 5, business ethics 4, sociology 4, educational psychology 3, literature 2, then single instances (international relations, ethics, business management, technology, advertising, social psychology, history, art history, communications, life skills).
 - **Detector:** course tally (lowercased).
-- **Current gap:** gen uses **66 distinct courses**, many never seen in real (marine biology, robotics, paleontology, fashion design, veterinary science, game design, real estate, dance, forestry, oceanography, pharmacy…). The `DISC_COURSE_LIST` was trimmed to 13 to match old TPO, but the live bank predates that trim and still contains the sprawl. Real 2026改后 stays in the band above.
+- **Current (postfix):** **`marine_biology_count` 0** — the marine-biology leak (the worst off-band course) is purged. The broader course sprawl (robotics, paleontology, fashion design…) was not separately re-measured and likely persists until the bank is regenerated against `DISC_COURSE_LIST`.
 - **Maps to:** `DISC_COURSE_LIST` (13 entries — already closer; the live bank needs regenerating against it, and even it could be re-weighted toward economics/psychology/marketing/education/anthropology).
 
 ### D21 — Topic recurrence · **solid**
