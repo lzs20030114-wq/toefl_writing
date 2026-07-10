@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-09 — v1.11.2
+
+- **造句题移除点击填充，作答只保留拖拽**（`03b2d00`）：真实考试的 Build a Sentence 只有拖拽、没有点击词块自动填入空位。`BuildSentenceTask` 词块按钮删掉 onClick 自动填充，保留桌面 HTML5 拖拽与手机触摸拖拽；点击已填槽位退回词块的行为不变；cursor 改 grab、手机端提示文案改「拖动词块到空位」。组件测试改用 drag & drop 作答，新增「点击词块不填充」回归测试。
+- **L1 答案二审跑批器 + 手动触发 workflow**（`e948d8b`）：`scripts/audit/run-l1.mjs` 覆盖阅读 4 库（answerAuditor 合库同款）+ 听力 4 库（latAuditor/lcAuditor/laAuditor/lcrAuditor 首次接线，清 QUESTION-PIPELINE-REVIEW-2026-07-07 §7 P1-9），DeepSeek 独立作答比对，verdict 归一 ok/suspect/ambiguous/error；断点续跑（L1-state.json 每 10 条落盘、error 自动重试）+ MAX_MINUTES 时间预算优雅收尾；fail-closed 只出嫌疑清单不自动删题。`.github/workflows/full-audit-l1.yml` workflow_dispatch 手动触发（banks/limit/max_minutes 入参），用仓库 secret `DEEPSEEK_API_KEY`，结果自动提交回触发分支。**注：全量二审尚未跑，需手动 dispatch。**
+- **后台留存分析改版：做题量 / 功能吸引力**（PR #4：`b0f3f38` + `3dd43f7`，迁移 `feature-engagement.sql` 已跑并登记于 `bc7274a`）：`admin-retention` 主视角从留存率矩阵改为「做题量 / 功能吸引力」；功能吸引力采用可比口径（同题型会话数/人）并按付费墙分层（free/pro）剥离 Pro 专属科目的混淆。DB 侧新增 `session_item_count()` 题目数口径函数 + 5 个只读视图（`feature_sessions` 等，仅 service role 可读）。
+- **题库例行**：夜间 routine 合入造句 / 邮件新题（`bb97295` `6042834`），阅读 / 听力盲审二审后合库（`942a4d`），新听力题 TTS 配音回填（`f8dff25` `9d4ce1d`）。
+
 ## 2026-07-08 — v1.11.1
 
 - **口语音频改用预生成 MP3**（`ef6a897`）：`RepeatTask` / `InterviewTask` 此前只用浏览器 `window.speechSynthesis` 朗读句子/问题，而国内安卓常无英文 TTS 引擎、微信/QQ WebView 对 speechSynthesis 支持残缺 → 静音；Repeat 尤其致命（句子故意不显示，静音=整题做不了）。`repeat.json` 672 句 100% 早有 `audio_url` MP3 却被忽略。现改为对齐听力 `AudioPlayer` 的做法：`playSentence`/`playQuestion` 优先播 `audio_url` 的 MP3（经 `sameOriginAudio` 同源代理 `/api/audio`，国内可达）+ MP3 报错/缺失回退 speechSynthesis；仅当既无 MP3 又无语音引擎时才显示句子文本兜底。`backfill-tts.mjs` 新增 `backfillInterview`（`speaking/interview/<qid>.mp3`），`backfill-audio.yml` 提交步骤补上 `interview.json`（interview 音频需手动 workflow_dispatch 生成一次）。

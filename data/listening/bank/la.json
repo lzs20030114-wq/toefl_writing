@@ -3255,6 +3255,141 @@
       ],
       "id": "la_mrckqvti_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mrckqvti_4.mp3"
+    },
+    {
+      "context": "logistics",
+      "situation": "parking lot closure for alumni weekend with shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. Due to this year's Homecoming Alumni Weekend, the North Campus parking garage will be closed to regular permit holders from Friday, October 10th, through Sunday evening. During that time, the garage is reserved for registered alumni guests only. To make up for the lost spaces, we'll be running a free shuttle every fifteen minutes between the Riverside overflow lot and the main quad, from 7 a.m. until 11 p.m. Any permit vehicles left in the garage after Thursday at midnight may be ticketed. We appreciate your patience during this busy weekend.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to Homecoming alumni events",
+            "B": "To announce a permanent change to parking permits",
+            "C": "To inform about a temporary parking closure and shuttle",
+            "D": "To describe the shuttle's new route around campus"
+          },
+          "answer": "C",
+          "explanation": "C 正确：通告告知因校友周末车库暂时关闭，并提供免费班车作为替代，这是整段主旨。A 错(wrong_purpose)：通告没有邀请学生参加校友活动，只是说明停车安排。B 错(reversed_intent)：关闭只从周五到周日，是临时性的，说成永久改动与事实相反。D 错(too_narrow)：班车线路只是解决方案中的一个细节，不能概括全段。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must permit holders do to avoid being ticketed?",
+          "options": {
+            "A": "Remove their vehicles before Thursday at midnight",
+            "B": "Sign up for a permit on the parking website",
+            "C": "Move their cars into the North Campus garage",
+            "D": "Purchase a special weekend parking pass"
+          },
+          "answer": "A",
+          "explanation": "A 正确：通告说周四午夜后仍留在车库的持证车辆可能被开罚单，因此需在此前把车开走。B 错(related_but_not_stated)：网上注册停车许可听起来合理，但通告并未提及。C 错(reversed_intent)：北校区车库正是被关闭的地方，把车开进去恰恰相反。D 错(wrong_detail)：通告未提任何周末停车付费票，属编造的事实。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "reversed_intent",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mrdxr0l4_2",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mrdxr0l4_2.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "computer lab relocating to a different floor",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good afternoon. Please be aware that the main computer lab in the library is moving from the third floor to the newly renovated first floor, effective Monday, November 3rd. The new space offers forty additional workstations, a dedicated printing area, and extended hours until 2 a.m. during exam weeks. While the move is underway this weekend, all third-floor machines will be unavailable, so we recommend saving any files you need to personal or cloud storage beforehand. Staff will be on hand near the first-floor entrance to help you locate the new lab. Your library card will still be required to log in.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the computer lab be located after the move?",
+          "options": {
+            "A": "On the third floor of the library",
+            "B": "In a separate building near the quad",
+            "C": "Beside the printing area on the second floor",
+            "D": "On the renovated first floor of the library"
+          },
+          "answer": "D",
+          "explanation": "D 正确：通告明确说机房从三楼迁到翻修一新的一楼。A 错(wrong_detail)：三楼是搬迁前的旧址，不是新位置。B 错(related_but_not_stated)：搬到另一栋楼听似合理，但通告只说在图书馆内部换楼层。C 错(misattributed_detail)：打印区是一楼新空间的配置，把它说成二楼是错误拼接。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker recommend saving files beforehand?",
+          "options": {
+            "A": "Because personal storage is now required for all students",
+            "B": "Because the machines will be inaccessible during the move",
+            "C": "Because library cards will stop working over the weekend",
+            "D": "Because printing will be unavailable on the first floor"
+          },
+          "answer": "B",
+          "explanation": "B 正确：通告说搬迁期间三楼所有机器都不能用，因此建议提前把文件存到个人或云端，可推断是为了应对机器暂时无法访问。A 错(over_inference)：只是建议保存文件，并未规定所有学生都必须使用个人存储，属过度推断。C 错(unrelated_inference)：通告说图书馆卡照旧用来登录，并未说周末失效。D 错(misattributed_detail)：一楼新增了专门打印区，说一楼不能打印与通告相悖。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrdxr0l4_3",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mrdxr0l4_3.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "annual outdoor movie night with blanket seating",
+      "speaker_role": "club_leader",
+      "difficulty": "easy",
+      "announcement": "Attention students! The Film Society is thrilled to host our annual Outdoor Movie Night this Saturday, September 20th, on the Memorial Lawn behind the library. We'll be screening a classic adventure film on a giant inflatable screen, with the show starting at dusk, around 8 p.m. Seating is on the grass, so please bring a blanket or a low lawn chair to stay comfortable. Free popcorn and hot cider will be handed out near the entrance while supplies last. In case of rain, we'll move the event indoors to Foster Auditorium. No tickets are needed, so just show up and enjoy!",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To invite students to an outdoor film screening",
+            "B": "To recruit new members for the Film Society",
+            "C": "To cancel this year's movie night because of rain",
+            "D": "To describe the history of a classic adventure film"
+          },
+          "answer": "A",
+          "explanation": "A 正确：通告的核心是邀请学生参加电影社的年度户外电影之夜。B 错(wrong_purpose)：通告没有招募社员的内容，只是在宣传活动。C 错(reversed_intent)：下雨只是改到室内 Foster Auditorium，而非取消活动，与事实相反。D 错(too_narrow)：只提到会放一部经典冒险片，并未介绍其历史，且这不是整段目的。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring to the event?",
+          "options": {
+            "A": "Their own popcorn and drinks",
+            "B": "A ticket purchased in advance",
+            "C": "A blanket or a low lawn chair",
+            "D": "An umbrella in case of rain"
+          },
+          "answer": "C",
+          "explanation": "C 正确：通告说座位在草地上，请自带毯子或矮脚椅以便舒适入座。A 错(misattributed_detail)：爆米花和热苹果酒是现场免费发放的，不需要自带。B 错(wrong_detail)：通告明说无需门票，直接来即可。D 错(related_but_not_stated)：下雨的安排是移到室内，通告从未让学生带伞。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mrdxr0l5_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mrdxr0l5_4.mp3"
     }
   ]
 }

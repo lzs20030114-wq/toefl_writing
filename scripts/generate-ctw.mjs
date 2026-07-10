@@ -34,8 +34,18 @@ function getArg(name, def) {
   return i >= 0 && args[i + 1] ? args[i + 1] : def;
 }
 const COUNT = parseInt(getArg("count", "10"), 10);
-// Difficulty is now calculated post-hoc from blank words — prompt always uses "medium"
-const DIFFICULTY = "medium";
+// The final label is calculated post-hoc from blank words (estimateDifficulty),
+// but the prompt's difficulty target steers WHAT gets generated. Always asking
+// for "medium" left the bank 78% medium with only ~11% hard — too thin for the
+// mock exam's upper path. Default now tilts toward hard until the pool thickens;
+// --difficulty easy|medium|hard forces a tier.
+function pickTiltedDifficulty() {
+  const r = Math.random();
+  if (r < 0.45) return "hard";
+  if (r < 0.85) return "medium";
+  return "easy";
+}
+const DIFFICULTY = getArg("difficulty", "") || pickTiltedDifficulty();
 const DRY_RUN = args.includes("--dry-run");
 
 // ── DeepSeek caller ──
