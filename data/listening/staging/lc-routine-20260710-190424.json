@@ -1,0 +1,269 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "two friends figuring out a bus or train schedule for a day trip",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you figure out how we're getting to the coast on Saturday? I keep going back and forth between the bus and the train." },
+        { "speaker": "Man", "text": "I checked this morning. The train's faster, only about an hour, but the first one doesn't leave until nine." },
+        { "speaker": "Woman", "text": "Nine? That's too late. I wanted to be at the beach by mid-morning." },
+        { "speaker": "Man", "text": "Then the bus is better. It leaves at seven-thirty, though it takes almost two hours." },
+        { "speaker": "Woman", "text": "Two hours is fine if we're on our way early. Let's just grab the seven-thirty bus." },
+        { "speaker": "Man", "text": "Sounds good. I'll book the tickets online tonight so we don't have to line up." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what is the drawback of taking the train?",
+          "options": {
+            "A": "Its earliest departure is at nine o'clock",
+            "B": "It costs more than the bus does",
+            "C": "It takes them almost two hours",
+            "D": "It only runs on the weekdays"
+          },
+          "answer": "A",
+          "explanation": "男生说火车虽然快（约一小时），但第一班要到九点才发车，这正是它的缺点，故A正确。B（比公交贵）对话中从未提及，属于相关但未陈述。C（要将近两小时）是公交车的特征，被错误地安到了火车上，属于张冠李戴。D（只在工作日运行）与对话事实不符，是被篡改的细节。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do tonight?",
+          "options": {
+            "A": "Take the train to the coast",
+            "B": "Wake up before seven-thirty",
+            "C": "Purchase the tickets on the internet",
+            "D": "Cancel the trip to the beach"
+          },
+          "answer": "C",
+          "explanation": "男生在最后明确说今晚会在网上订票，以免排队，因此可推断他今晚会上网买票，C正确。A（坐火车去海岸）是两人已经否决的方案，他们选了公交车，属于被否决选项。B（七点半前起床）是出行当天的事，与今晚要做的动作无关。D（取消去海滩）与对话积极筹划的语气完全相反，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you thought about what cheeses we should get for Friday's dinner party? I want a good spread." },
+        { "speaker": "Man", "text": "Definitely something soft, like brie, and maybe a sharp cheddar for people who don't like the fancy stuff." },
+        { "speaker": "Woman", "text": "Good call. Oh, and we'll need crackers and some grapes to go with them." },
+        { "speaker": "Man", "text": "Right. I can pick up the crackers and fruit on my way home tomorrow." },
+        { "speaker": "Woman", "text": "Perfect. I'll handle the cheeses then, since the shop by my place has a huge selection." },
+        { "speaker": "Man", "text": "Great. Let's just keep it simple so we're not cooking all afternoon." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man offer to bring to the party?",
+          "options": {
+            "A": "A selection of soft cheeses",
+            "B": "Crackers and some fresh fruit",
+            "C": "Several bottles of red wine",
+            "D": "Paper plates and some napkins"
+          },
+          "answer": "B",
+          "explanation": "男生说他明天回家路上可以顺便买饼干和水果，故B正确。A（各种软奶酪）其实是女生揽下的任务，被错误地安到了男生头上，属于张冠李戴。C（几瓶红酒）对话中从未提及，属于相关但未陈述。D（纸盘和餐巾）同样没有被提到，也属于相关但未陈述。",
+          "distractor_types": {
+            "A": "misattributed",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do before the party?",
+          "options": {
+            "A": "Bake a dessert for the guests",
+            "B": "Cancel the whole dinner party",
+            "C": "Ask the man to buy the cheese",
+            "D": "Buy the cheeses near her home"
+          },
+          "answer": "D",
+          "explanation": "女生说她来负责奶酪，因为她家附近的店选择很多，因此可推断她会在自家附近买奶酪，D正确。A（烤甜点）对话完全没有涉及，属于无关的后续动作。B（取消聚会）与两人积极筹备的情境相反，属于过度推断。C（让男生去买奶酪）与她主动揽下奶酪任务相矛盾，属于被否决选项。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "B": "over_inference",
+            "C": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend hiking or beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are you still up for hiking Ridgeline Trail this weekend, or should we push it to next week?" },
+        { "speaker": "Man", "text": "I'm definitely in for Saturday. The forecast looks clear and warm all morning." },
+        { "speaker": "Woman", "text": "Nice. Should we start early? I heard the parking lot fills up fast on sunny days." },
+        { "speaker": "Man", "text": "Yeah, let's meet at the trailhead by eight. That way we beat the crowds and the heat." },
+        { "speaker": "Woman", "text": "Sounds great. I'll bring extra water and some snacks for both of us." },
+        { "speaker": "Man", "text": "And I'll drive, so you won't have to worry about finding a second parking spot." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why does the woman suggest starting early?",
+          "options": {
+            "A": "The trail closes in the afternoon",
+            "B": "It is expected to rain later on",
+            "C": "The parking lot fills up quickly",
+            "D": "The man has plans that evening"
+          },
+          "answer": "C",
+          "explanation": "女生说她听说晴天时停车场很快就满，所以建议早点出发，故C正确。A（步道下午关闭）对话未提及，属于相关但未陈述。B（晚些会下雨）与男生所说天气晴朗温暖的预报相矛盾，属于被篡改的细节。D（男生晚上有安排）对话中没有依据，属于相关但未陈述。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about how they will get to the trail?",
+          "options": {
+            "A": "They will travel together in the man's car",
+            "B": "They will each drive there separately",
+            "C": "They will take a bus to the trailhead",
+            "D": "They will cancel because of the weather"
+          },
+          "answer": "A",
+          "explanation": "男生说他来开车，这样女生就不用再操心找第二个停车位，由此可推断两人会一起坐男生的车前往，A正确。B（各自开车）与男生提出的只开一辆车相矛盾，属于被否决选项。C（坐公交去）对话从未提及，属于无关的后续动作。D（因天气取消）与预报晴朗、两人积极约定相反，属于过度推断。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Wait, you're buying dried basil? For your pasta sauce, fresh basil makes a huge difference." },
+        { "speaker": "Man", "text": "Really? I always just grab the jar. I figured they taste basically the same." },
+        { "speaker": "Woman", "text": "Not even close. Add the fresh leaves at the very end, off the heat, so they don't turn bitter." },
+        { "speaker": "Man", "text": "Off the heat, got it. What about the garlic? Mine always ends up burnt and harsh." },
+        { "speaker": "Woman", "text": "Lower the flame and cook it slowly. Burnt garlic is what ruins most homemade sauces." },
+        { "speaker": "Man", "text": "Wow, I've been doing everything wrong. I'll grab the fresh basil and try your way tonight." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Choosing which store has the freshest produce",
+            "B": "Deciding what to cook for a dinner party",
+            "C": "Comparing the prices of fresh and dried herbs",
+            "D": "Tips for making a better pasta sauce"
+          },
+          "answer": "D",
+          "explanation": "整段对话中女生在教男生怎样把意面酱做得更好——用新鲜罗勒、离火再加叶子、小火慢煎大蒜，主旨就是做酱的技巧，故D正确。A（挑哪家店食材最新鲜）是另一个校园话题，对话并未讨论，属于跑题。B（决定为晚宴做什么菜）同样未涉及，属于跑题。C（比较新鲜与干香草的价格）只抓住了新鲜与干罗勒这一细节，且把重点误读为价格，格局太窄。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "wrong_topic",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Keep using dried basil as before",
+            "B": "Put fresh basil into his cart",
+            "C": "Ask the woman to cook for him",
+            "D": "Give up making pasta sauce entirely"
+          },
+          "answer": "B",
+          "explanation": "男生最后说他会去拿新鲜罗勒，今晚照女生的方法试试，因此可推断他会把新鲜罗勒放进购物车，B正确。A（继续用干罗勒）与他打算改用新鲜罗勒相矛盾，属于被否决选项。C（让女生替他做饭）对话没有任何依据，属于无关的后续动作。D（彻底放弃做意面酱）与他跃跃欲试的态度相反，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Honestly, I'm so tired of the same pop singers on every playlist. Everything sounds identical lately." },
+        { "speaker": "Man", "text": "Then you should check out this indie folk band, River and Stone. Totally different, really mellow guitar stuff." },
+        { "speaker": "Woman", "text": "Hmm, folk isn't usually my thing. Is it slow and sleepy?" },
+        { "speaker": "Man", "text": "Not at all. Their newer album has an upbeat, almost jazzy feel. Start with the track 'Paper Boats.'" },
+        { "speaker": "Woman", "text": "Okay, that actually sounds interesting. I'll give that one a listen on the walk home." },
+        { "speaker": "Man", "text": "Trust me, by next week you'll have their whole album on repeat." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How does the man describe the band's newer album?",
+          "options": {
+            "A": "Upbeat and somewhat jazzy sounding",
+            "B": "Slow, quiet and very relaxing",
+            "C": "Loud and energetic like pop",
+            "D": "Sad and deeply emotional throughout"
+          },
+          "answer": "A",
+          "explanation": "男生说他们较新的专辑轻快、几乎带点爵士味，故A正确。B（缓慢安静又放松）是女生担心的那种沉闷风格，被男生直接否定，属于被篡改的细节。C（像流行乐一样吵闹有劲）与专辑轻快带爵士味的描述不符，属于被篡改的细节。D（悲伤而深情）对话中从未提及，属于相关但未陈述。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on her way home?",
+          "options": {
+            "A": "Delete all of her pop playlists",
+            "B": "Buy tickets to the band's concert",
+            "C": "Listen to the song the man suggested",
+            "D": "Keep replaying the same pop singers"
+          },
+          "answer": "C",
+          "explanation": "女生说这听起来挺有意思，回家路上会听一下男生推荐的那首歌，故C正确。A（删掉所有流行歌单）比她表达的只是想换换口味走得太远，属于过度推断。B（买乐队的演唱会门票）对话没有依据，属于无关的后续动作。D（继续反复听那些流行歌手）与她已厌倦并愿意尝试新风格相矛盾，属于被否决选项。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "D": "rejected_option"
+          }
+        }
+      ]
+    }
+  ]
+}

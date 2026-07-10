@@ -1,10 +1,10 @@
 {
-  "session_id": "routine-20260708-221453",
-  "generated_at": "2026-07-08T22:28:30.871Z",
+  "session_id": "routine-20260710-190424",
+  "generated_at": "2026-07-10T19:19:59.324Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 98,
-    "quality": 98
+    "diversity": 96,
+    "quality": 93
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
@@ -21,35 +21,82 @@
         "R1 produced 0 valid items"
       ],
       "quality_breakdown": [
-        "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试"
+        "merge skipped: only 9/20 items passed per-item validation (11 rejected for background-only prompts / 6-word answers), short of a full 10-question set; flagged to pending-retry for R2"
       ],
       "hints": [
-        "R1 generated 20 items but all were rejected. Failure reason: \"BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
+        "R1 generated 20 items but all were rejected. Failure reason: \"merge skipped: only 9/20 items passed per-item validation (11 rejected for background-only prompts / 6-word answers), short of a full 10-question set; flagged to pending-retry for R2\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
       ],
       "items_to_supplement": 20
     },
     {
+      "bank": "discussion",
+      "diversity_score": 70,
+      "diversity_threshold": 80,
+      "quality_score": 100,
+      "quality_threshold": 90,
+      "failures": [
+        "多样性 70 < 80"
+      ],
+      "diversity_breakdown": [
+        "课程 4/4",
+        "学生名 4/8",
+        "开头 1/4",
+        "主题 4/4"
+      ],
+      "quality_breakdown": [
+        "教授段长 4/4",
+        "学生1长 4/4",
+        "学生2长 4/4"
+      ],
+      "hints": [
+        "多样性 < gate — vary courses, opening styles, and student name pools more aggressively"
+      ],
+      "items_to_supplement": 2
+    },
+    {
+      "bank": "email",
+      "diversity_score": 100,
+      "diversity_threshold": 80,
+      "quality_score": 67,
+      "quality_threshold": 90,
+      "failures": [
+        "质量 67 < 90"
+      ],
+      "diversity_breakdown": [
+        "类别 4/4",
+        "收件人 4/4",
+        "主题 4/4"
+      ],
+      "quality_breakdown": [
+        "场景词数 4/4",
+        "3 个不同动词 0/4",
+        "格式 4/4"
+      ],
+      "hints": [
+        "质量校验有偏差: 场景词数 4/4, 3 个不同动词 0/4, 格式 4/4 — recheck schema compliance"
+      ],
+      "items_to_supplement": 2
+    },
+    {
       "bank": "reading-rdl-long",
-      "diversity_score": 80,
+      "diversity_score": 100,
       "diversity_threshold": 70,
-      "quality_score": 50,
+      "quality_score": 0,
       "quality_threshold": 85,
       "failures": [
-        "质量 50 < 85"
+        "质量 0 < 85"
       ],
       "diversity_breakdown": [
         "话题 2/2",
-        "notice 0 · email 1"
+        "notice 1 · email 1"
       ],
       "quality_breakdown": [
-        "词数 1/2"
+        "词数 0/2"
       ],
       "hints": [
-        "质量校验有偏差: 词数 1/2 — recheck schema compliance"
+        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
       ],
       "items_to_supplement": 1
     }
-  ],
-  "resolved_at": "2026-07-08T22:55:58.785Z",
-  "resolution_status": "supplemented"
+  ]
 }

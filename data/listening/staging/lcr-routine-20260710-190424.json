@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Didn't you hear that noise upstairs last night?",
+      "options": {
+        "A": "Was that keeping you up too?",
+        "B": "The upstairs apartment has hardwood floors.",
+        "C": "I'm painting my kitchen this weekend.",
+        "D": "Yes, you're allowed to have guests over."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用一个反问推进对话，暗示自己也被吵到并确认对方的处境，是自然的口语回应。B 抓住 upstairs 这个词去描述楼上公寓的地板，答非所问（语义联想陷阱）。C 是一句完全无关、换个场景才成立的正常英语（跑题）。D 语法正确但回答的是'能不能带客人'这类许可问题，和是否听到噪音毫无关系（答错问题类型）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What'd I miss during today's lecture?",
+      "options": {
+        "A": "The lecture hall was completely packed.",
+        "B": "No worries, I've got you covered.",
+        "C": "I'll meet you at the café later.",
+        "D": "Class starts at nine tomorrow."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用习惯表达 'I've got you covered'（我罩着你/我帮你搞定）自然地表示愿意把笔记给对方，符合借笔记的语境。A 抓住 lecture 去描述教室有多挤，没有回应'错过了什么'（语义联想陷阱）。C 是换个场景才成立的无关句子（跑题）。D 回答的是上课时间（when），而对方问的是错过的内容（what），答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How do I reschedule my appointment for Friday?",
+      "options": {
+        "A": "Your appointment reminder came by text yesterday.",
+        "B": "My car's been making a strange sound.",
+        "C": "Don't worry, I'll call and reschedule it.",
+        "D": "The clinic's right next to the pharmacy."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 不去解释'怎么改'，而是直接替对方解决底层需求——我来打电话改（语境转移）。A 抓住 appointment 去说提醒短信，没告诉对方怎么改（语义联想陷阱）。B 是完全无关、换个对话才成立的句子（跑题）。D 回答的是诊所在哪（where），而对方问的是怎么改约（how），答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where can I find your holiday hours listed?",
+      "options": {
+        "A": "Our busiest hours are in the morning.",
+        "B": "I really enjoyed that sandwich yesterday.",
+        "C": "Yes, we're hiring part-time staff now.",
+        "D": "Actually, they're posted on our front door."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 以话语标记 'Actually' 开头，间接地告诉对方去哪儿看假日营业时间——贴在前门上，切题且自然。A 抓住 hours 去说最忙的时段，没回答'在哪能看到'（语义联想陷阱）。B 是换个场景才成立的无关句子（跑题）。C 语法正确但回答的是'你们招不招人'这类问题，和查营业时间无关（答错问题类型）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure when your office hours are.",
+      "options": {
+        "A": "Well, I'm usually free after three.",
+        "B": "My office is on the fourth floor.",
+        "C": "The cafeteria changed its menu today.",
+        "D": "Yes, the syllabus is posted online."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 以话语标记 'Well' 开头，间接给出可以来找我的时间（三点后有空），正面回应了'不确定答疑时间'。B 抓住 office 去说办公室在几楼，回答的是地点而非时间（语义联想陷阱）。C 是换个场景才成立的无关句子（跑题）。D 语法正确但回答的是'教学大纲在不在网上'这类不同的是非问题，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "We should all grab dinner after the show.",
+      "options": {
+        "A": "The restaurant added a new dessert menu.",
+        "B": "Count me in for that.",
+        "C": "My phone battery died this afternoon.",
+        "D": "I already saw that show twice."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用习惯表达 'Count me in'（算我一个）热情地接受晚餐邀请，是自然的口语回应。A 抓住 dinner/restaurant 去描述餐厅新增甜点，没有回应邀请（语义联想陷阱）。C 是换个场景才成立的无关句子（跑题）。D 把 show 误当成'看过的一部剧'，其实这里指演出/活动，是词义误解陷阱，且没回应一起吃饭的提议。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why isn't the reading list posted online yet?",
+      "options": {
+        "A": "That reading was really long last week.",
+        "B": "I left my laptop in the library.",
+        "C": "Actually, the professor's still finalizing it.",
+        "D": "It's on the second shelf over there."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 以话语标记 'Actually' 开头，间接给出原因——教授还在定稿，正面回答了'为什么还没发'。A 抓住 reading 去评价上周阅读量大，答非所问（语义联想陷阱）。B 是换个场景才成立的无关句子（跑题）。D 回答的是书在哪个书架（where），而对方问的是为什么（why），答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Can't someone help me revise my thesis?",
+      "options": {
+        "A": "The writing center has new computers.",
+        "B": "I'm meeting my advisor at noon.",
+        "C": "It's down the hall on your right.",
+        "D": "Have you brought a draft with you?"
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用一个反问推进对话——你带草稿了吗，这是写作中心接待时自然的下一步。A 抓住 writing center 去说有新电脑，没有回应求助（语义联想陷阱）。B 是换个场景才成立的无关句子（跑题）。C 回答的是地点（往走廊右边走），而对方问的是能不能帮忙，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    }
+  ]
+}

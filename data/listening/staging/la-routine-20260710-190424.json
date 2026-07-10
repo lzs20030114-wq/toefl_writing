@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. Our department's end-of-semester Research Showcase will be held next Thursday at 3 p.m. in the Hutchins Gallery. Each senior will present a poster summarizing their capstone project, and a faculty panel will award three prizes for the strongest work. To be considered for a prize, you must upload your poster file to the department portal by this Friday. We'll announce the winners at a short reception afterward, with tea and lemon cake in the atrium.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to be considered for a prize?",
+          "options": {
+            "A": "Upload their poster file by Friday",
+            "B": "Attend a mandatory rehearsal beforehand",
+            "C": "Reserve a spot at the reception",
+            "D": "Submit their capstone paper in person"
+          },
+          "answer": "A",
+          "explanation": "公告明确说 To be considered for a prize, you must upload your poster file to the department portal by this Friday，所以 A 正确。B 提到的强制彩排公告从未出现，属于合理但未提及。C 把结尾的招待会细节错接成参赛条件，属于张冠李戴。D 说要当面提交论文，与公告中通过门户上传海报文件的方式相反，属于篡改细节。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the prizes?",
+          "options": {
+            "A": "Winners receive a full tuition waiver",
+            "B": "Every participant will receive an award",
+            "C": "Only a few projects will be recognized",
+            "D": "Judging is decided by student vote"
+          },
+          "answer": "C",
+          "explanation": "公告说只设三个奖项、由教师评审团颁给最强的作品，可推断只有少数项目会被表彰，故 C 正确。A 说获奖者拿全额学费减免，公告毫无依据，属于过度推断。B 说人人有奖，与只有三个奖项矛盾，属于篡改细节。D 说由学生投票评选，公告写明是 faculty panel 评审，属于无关推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "professional wardrobe pop-up and free headshot clinic",
+      "speaker_role": "career_advisor",
+      "difficulty": "hard",
+      "announcement": "Before we wrap up, I want to mention something the Career Center's running next week that's genuinely useful. On Tuesday, from 10 a.m. to 4 p.m. in the Baldwin Center lobby, there's a professional wardrobe pop-up where you can borrow a blazer or dress shirt for interviews, free of charge. A photographer will also be there taking free headshots for your LinkedIn profiles. You'll need to bring your student ID to borrow anything, and I'd get there early — the good sizes go fast.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to borrow clothing at the pop-up?",
+          "options": {
+            "A": "Reserve an item online in advance",
+            "B": "Bring their student ID card",
+            "C": "Schedule a headshot appointment first",
+            "D": "Pay a small rental deposit"
+          },
+          "answer": "B",
+          "explanation": "公告说 You'll need to bring your student ID to borrow anything，因此 B 正确。A 说需提前在线预订，公告未提，属于合理但未提及。C 把单独的免费头像拍摄错接成借衣服的前提，属于张冠李戴。D 说要付押金，公告明确说 free of charge，与之相反，属于篡改细节。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the advisor recommend arriving early?",
+          "options": {
+            "A": "The event may be canceled without notice",
+            "B": "Parking near Baldwin Center is limited",
+            "C": "Headshot sessions require lengthy setup",
+            "D": "Popular clothing sizes may run out quickly"
+          },
+          "answer": "D",
+          "explanation": "顾问说 the good sizes go fast，暗示热门尺码会很快被借光，所以早到才有选择，故 D 正确。A 说活动可能无预警取消，公告毫无依据，属于过度推断。B 说停车位有限，公告只字未提，属于无关推断。C 说拍头像需要长时间布置，与公告内容无关且未提及，属于篡改细节。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "The Department of Environmental Studies is now accepting paper proposals for its interdisciplinary conference on climate and society this April. We especially welcome submissions that bridge the sciences and the humanities, so economists, historians, and biologists are all encouraged to apply. Proposals should be no longer than 300 words and must be submitted through the conference website by March 20th. Accepted presenters will each be given a fifteen-minute speaking slot. If you've never presented before, don't worry — a mentoring session will help you prepare.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain the fifteen-minute presentation format",
+            "B": "To introduce the conference's keynote speakers",
+            "C": "To invite proposals for an interdisciplinary conference",
+            "D": "To report findings from a past conference"
+          },
+          "answer": "C",
+          "explanation": "整段核心是系里正在征集跨学科会议的论文提案并说明要求，故 C 正确。A 只抓住十五分钟发言这一个细节，以偏概全，属于范围太窄。B 说介绍主讲嘉宾，公告根本没提，属于目的错误。D 说汇报往届会议成果，与征稿的方向相反，属于意图颠倒。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the proposal requirements?",
+          "options": {
+            "A": "Proposals must stay within 300 words",
+            "B": "Only science majors may submit proposals",
+            "C": "A faculty recommendation letter is required",
+            "D": "Proposals are due in mid-April"
+          },
+          "answer": "A",
+          "explanation": "公告说 Proposals should be no longer than 300 words，故 A 正确。B 说只有理科生能投稿，与公告欢迎人文社科（经济学家、历史学家）恰好相反，属于篡改细节。C 说要教师推荐信，公告未提，属于合理但未提及。D 说四月中旬截止，实际截稿是 March 20th，四月是会议召开时间，属于张冠李戴。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "campus sustainability cleanup day",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Office of Sustainability is hosting our annual Campus Cleanup Day this Saturday to clear litter from the riverside trails behind the athletic fields. We'll meet at 9 a.m. by the boathouse, and gloves and trash bags will be handed out on site. Please wear closed-toe shoes and dress for muddy conditions. No sign-up is needed — just show up ready to help. Everyone who joins gets a free reusable water bottle at the end.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To describe the campus recycling policy",
+            "B": "To announce repairs to the riverside trails",
+            "C": "To warn students to stay off the trails",
+            "D": "To recruit volunteers for a cleanup event"
+          },
+          "answer": "D",
+          "explanation": "公告号召学生周六来河边步道清理垃圾，核心是招募清理活动的志愿者，故 D 正确。A 说讲解校园回收政策，公告没提，属于范围太窄的错扣。B 说通知修缮步道，公告是清垃圾不是修路，属于目的错误。C 说警告学生远离步道，与邀请大家来帮忙相反，属于意图颠倒。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are participants asked to wear?",
+          "options": {
+            "A": "Their own trash bags and gloves",
+            "B": "Closed-toe shoes for muddy ground",
+            "C": "A signed permission form",
+            "D": "A reusable bottle to refill"
+          },
+          "answer": "B",
+          "explanation": "公告说 Please wear closed-toe shoes and dress for muddy conditions，故 B 正确。A 说自带垃圾袋和手套，但公告说这些会现场发放，与之相反，属于篡改细节。C 说要签字许可表，公告说无需报名，属于合理但未提及。D 把结尾赠送的水瓶错当成要穿戴携带的东西，属于张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "visiting author reading and book signing event",
+      "speaker_role": "professor",
+      "difficulty": "easy",
+      "announcement": "Since the main auditorium is booked for rehearsals, this Thursday's reading by award-winning novelist Elena Marsh will now take place in the Rare Books Room on the library's third floor. Ms. Marsh will read from her new novel at 5 p.m. and take questions from the audience afterward. A book signing will follow, and copies of her work will be sold at the door. Seating is limited to sixty, so please arrive a few minutes early.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a visiting author's reading event",
+            "B": "To promote a new creative writing course",
+            "C": "To explain why the auditorium is unavailable",
+            "D": "To cancel a scheduled book signing"
+          },
+          "answer": "A",
+          "explanation": "公告主要是通知作家 Elena Marsh 的朗读活动及其时间地点，故 A 正确。B 说宣传写作课，公告没提，属于目的错误。C 只讲了礼堂被占这一句起因，以偏概全，属于范围太窄。D 说取消签售，公告说签售照常进行，属于意图颠倒。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen after the reading?",
+          "options": {
+            "A": "Free copies will be handed out",
+            "B": "The auditorium rehearsal will begin",
+            "C": "She will sign copies of her book",
+            "D": "A film adaptation will be screened"
+          },
+          "answer": "C",
+          "explanation": "公告说朗读后 A book signing will follow，故 C 正确。A 说免费发书，公告说书是在门口出售的，与之相反，属于篡改细节。B 把礼堂彩排这一起因错接成朗读后的环节，属于张冠李戴。D 说放映电影改编版，公告完全没提，属于合理但未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "What did you turn in this morning?",
+      "answer": "I submitted my final essay this morning.",
+      "chunks": ["i", "submitted", "my", "final", "essay", "did"],
+      "prefilled": ["this morning"],
+      "prefilled_positions": {"this morning": 5},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["simple past tense", "time adverbial"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "I just transferred here this term.",
+      "answer": "Where do I buy my parking pass?",
+      "chunks": ["do", "i", "buy", "my", "parking pass", "buying"],
+      "prefilled": ["Where"],
+      "prefilled_positions": {"where": 0},
+      "distractor": "buying",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "present simple inversion"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "What did you lose in the library?",
+      "answer": "I lost my library card yesterday.",
+      "chunks": ["lost", "my", "library card", "yesterday", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["simple past tense", "possessive determiner"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "How late does the library stay open?",
+      "answer": "The library closes at midnight tonight.",
+      "chunks": ["the", "library", "closes", "tonight"],
+      "prefilled": ["at midnight"],
+      "prefilled_positions": {"at midnight": 3},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["present simple", "prepositional phrase of time"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "When does the campus shuttle run on weekends?",
+      "answer": "I was wondering if the shuttle runs on Sundays.",
+      "chunks": ["i", "if", "the shuttle", "runs", "on", "sundays", "does"],
+      "prefilled": ["was wondering"],
+      "prefilled_positions": {"was wondering": 1},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["embedded/indirect question (if)", "declarative word order"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "What did you consider when choosing a roommate?",
+      "answer": "I picked the roommate who studies late at night.",
+      "chunks": ["i", "picked", "the roommate", "studies", "late", "at night", "studying"],
+      "prefilled": ["who"],
+      "prefilled_positions": {"who": 4},
+      "distractor": "studying",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause (subject)", "restrictive clause"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "What did you still need for class?",
+      "answer": "I haven't picked up my ordered textbooks yet.",
+      "chunks": ["haven't", "picked up", "my", "ordered", "textbooks", "did"],
+      "prefilled": ["I", "yet"],
+      "prefilled_positions": {"i": 0, "yet": 7},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "contraction"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "The library extended its weekend hours.",
+      "answer": "Can I reserve a study room on Saturdays?",
+      "chunks": ["can", "i", "reserve", "a", "study room", "will"],
+      "prefilled": ["on Saturdays"],
+      "prefilled_positions": {"on saturdays": 6},
+      "distractor": "will",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes/no question", "modal verb"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did the fair coordinator ask you?",
+      "answer": "He wanted to know whether our booth was approved.",
+      "chunks": ["he", "whether", "our", "booth", "was", "approved", "is"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": {"wanted to know": 1},
+      "distractor": "is",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (whether)", "past passive in clause"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "You should get money back for the room change.",
+      "answer": "Which office handles my housing refund?",
+      "chunks": ["which", "office", "my", "housing refund", "does"],
+      "prefilled": ["handles"],
+      "prefilled_positions": {"handles": 2},
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question (subject wh)", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Where did you end up sitting in the lab?",
+      "answer": "The seat that I reserved faces the whiteboard.",
+      "chunks": ["the seat", "that", "i", "reserved", "faces", "was"],
+      "prefilled": ["the whiteboard"],
+      "prefilled_positions": {"the whiteboard": 6},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause (object)", "restrictive clause"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Why didn't you get into your classes?",
+      "answer": "I never received the confirmation email for registration.",
+      "chunks": ["never", "received", "the", "confirmation email", "for", "registration", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"i": 0},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["negation with never", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "What did you have to check about the paper?",
+      "answer": "I needed to know when the deadline was extended.",
+      "chunks": ["i", "when", "the deadline", "was", "extended", "had"],
+      "prefilled": ["needed to know"],
+      "prefilled_positions": {"needed to know": 1},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (when)", "past passive in clause"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Have you looked over the final's topics?",
+      "answer": "The final exam covers all six chapters.",
+      "chunks": ["the", "final", "exam", "covers", "all", "six", "chapters", "will"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["subject-verb agreement", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "What does your professor do after you submit essays?",
+      "answer": "The professor grades all the midterm essays.",
+      "chunks": ["the", "professor", "grades", "all", "the", "midterm", "essays", "has"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["subject-verb agreement", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "I need something quick to eat before class.",
+      "answer": "The campus cafe sells cheap breakfast sandwiches.",
+      "chunks": ["the", "campus", "cafe", "sells", "cheap", "breakfast", "sandwiches", "does"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["subject-verb agreement", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "Did your classmate find any tutoring help?",
+      "answer": "She asked me whether the writing center still offered evening appointments.",
+      "chunks": ["she", "asked", "me", "the", "writing center", "still", "offered", "evening appointments", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": {"whether": 3},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question (whether)", "declarative word order", "past tense in clause"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "Did you have to pay that late charge?",
+      "answer": "The overdue library fine was quietly waived by the front desk.",
+      "chunks": ["library", "fine", "was", "waived", "by", "the", "front desk"],
+      "prefilled": ["The overdue", "quietly"],
+      "prefilled_positions": {"the overdue": 0, "quietly": 5},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["passive voice (agentive)", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "How did your new schedule turn out?",
+      "answer": "The elective that I just added conflicts with my lab section.",
+      "chunks": ["the elective", "i", "just", "added", "conflicts", "with", "my lab section", "would"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 2},
+      "distractor": "would",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause (object)", "present simple main verb"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "Are you worried about getting to class?",
+      "answer": "If the late bus doesn't arrive, I will walk to campus.",
+      "chunks": ["the", "late", "bus", "doesn't", "arrive", "i", "walk", "to campus"],
+      "prefilled": ["If", "will"],
+      "prefilled_positions": {"if": 0, "will": 7},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["first conditional", "subordinate + main clause"]
+    }
+  ]
+}

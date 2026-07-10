@@ -1,215 +1,106 @@
 {
-  "session_id": "routine-20260708-221453",
-  "completed_at": "2026-07-08T22:27:30Z",
-  "duration_minutes": 12,
+  "session_id": "routine-20260710-190424",
+  "completed_at": "2026-07-10T19:18:58Z",
+  "duration_minutes": 14,
   "model": "Claude Opus 4.8",
-  "highlight": "12 题库全生成 70/70；disc+email 已合库，阅读/听力/口语入 staging 待审计路由；BS 难度分档未过回归门，交 R2 重试",
+  "highlight": "全12库共产出70题；写作讨论/邮件满额入库，阅读+听力+口语52题已暂存待审计路由；BS仅9/20过校验未成套，交R2重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
-      "topics": [
-        "dorm parties",
-        "seminars/electives",
-        "library & tutoring center",
-        "campus gym hours",
-        "scholarship/workshop signups",
-        "exam schedules & posted grades",
-        "borrowed club equipment"
-      ],
-      "favorite": {
-        "prompt": "What did Julian ask you earlier?",
-        "answer": "He asked whether you had registered for the spring field trip."
-      },
+      "accepted": 0,
+      "topics": ["embedded question", "relative clause", "passive voice", "first conditional", "direct wh-question", "negation"],
+      "favorite": {"prompt": "Did you have to pay that late charge?", "answer": "The overdue library fine was quietly waived by the front desk."},
       "retried_after_fail": false,
-      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试",
-      "r2_supplemented": true,
-      "r2_items_added": 20
+      "failure_reason": "merge skipped: only 9/20 items passed per-item validation (11 rejected for background-only prompts / 6-word answers), short of a full 10-question set; flagged to pending-retry for R2"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "political science",
-        "history and culture",
-        "computer science",
-        "social studies"
-      ],
-      "favorite": {
-        "subtopic": "political science",
-        "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c"
-      },
+      "topics": ["anthropology", "business ethics", "marketing", "educational psychology"],
+      "favorite": {"subtopic": "business ethics", "preview": "Consider the smartphone in your pocket. Many manufacturers design products with a limited lifespan"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "服务与活动",
-        "消费售后",
-        "住宿",
-        "日常社交"
-      ],
-      "favorite": {
-        "subtopic": "消费售后",
-        "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri"
-      },
+      "topics": ["服务与活动", "校园学业", "消费售后", "日常社交"],
+      "favorite": {"subtopic": "消费售后", "preview": "You recently booked a flight through an online travel agency for a family visit; the confirmation shows the wrong departure date, a day earlier than you chose."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ap": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "environmental_science/conservation",
-        "psychology/placebo effect",
-        "astronomy/planetary atmospheres",
-        "chemistry/corrosion",
-        "history/silk road"
-      ],
-      "favorite": {
-        "subtopic": "astronomy/planetary atmospheres",
-        "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..."
-      },
+      "topics": ["art/theater history", "astronomy/comets", "history/maritime navigation", "psychology/sleep psychology", "anthropology/early agriculture"],
+      "favorite": {"subtopic": "history/maritime navigation", "preview": "Dead reckoning is a navigational method that estimates a ship's present position by applying its measured speed"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-ctw": {
       "generated": 6,
       "accepted": 6,
-      "topics": [
-        "biology/whale communication",
-        "environmental_science/green roofs",
-        "psychology/confirmation bias",
-        "history/the spice trade",
-        "geology/volcanic mountain formation",
-        "astronomy/Mars rovers"
-      ],
-      "favorite": {
-        "subtopic": "biology/whale communication",
-        "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes."
-      },
+      "topics": ["biology/immune system", "environmental_science/permafrost melting", "psychology/conformity", "history/ancient Egyptian medicine", "geology/limestone cave formation", "astronomy/black holes"],
+      "favorite": {"subtopic": "geology/limestone cave formation", "preview": "Limestone caves form slowly as slightly acidic rainwater dissolves the solid rock deep beneath the surface."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-short": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "email/lab safety training reminder",
-        "email/student ID replacement fee",
-        "notice/campus Wi-Fi maintenance",
-        "notice/water-fountain repair closure"
-      ],
-      "favorite": {
-        "subtopic": "notice/wifi-maintenance",
-        "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM."
-      },
+      "topics": ["social_media", "email"],
+      "favorite": {"subtopic": "email/parking-permit pickup", "preview": "Dear Ms. Alvarez, Your parking permit is ready for pickup at the Transportation Office, Room 118, before Friday, March 6."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "reading-rdl-long": {
       "generated": 2,
       "accepted": 2,
-      "topics": [
-        "social_media/dorm DIY woodworking project",
-        "email/commuter parking permit renewal"
-      ],
-      "favorite": {
-        "subtopic": "social_media/dorm DIY woodworking project",
-        "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine"
-      },
+      "topics": ["email/shift-swap request", "notice/elevator-maintenance schedule"],
+      "favorite": {"subtopic": "notice/elevator-maintenance-schedule", "preview": "Notice: Scheduled Elevator Maintenance — Kingsley Residence Hall. Residents are advised that both passenger elevators will be taken out of service"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lat": {
       "generated": 4,
       "accepted": 4,
-      "topics": [
-        "physics/Doppler effect",
-        "history/coffee houses in the Enlightenment",
-        "linguistics/pidgin to creole",
-        "ecology/biological magnification"
-      ],
-      "favorite": {
-        "subtopic": "the process of pidgin languages developing into creoles",
-        "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages"
-      },
+      "topics": ["mirror neurons & empathy", "light refraction / rainbows", "bystander effect", "tardigrade cryptobiosis"],
+      "favorite": {"subtopic": "the bystander effect in emergency situations", "preview": "Imagine someone collapses on a busy city sidewalk. You'd think that the more people who are around, the more likely"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lc": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "plans_social",
-        "recommendations_opinions (cafe)",
-        "recommendations_opinions (Thai restaurant)",
-        "campus_dorm_life",
-        "errands_service (bus schedule)"
-      ],
-      "favorite": {
-        "subtopic": "两人争论新咖啡馆是否值那个价",
-        "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars."
-      },
+      "topics": ["coast day-trip schedule", "cheese dinner-party shopping", "Ridgeline hiking trip", "pasta sauce cooking tips", "indie-folk music recommendation"],
+      "favorite": {"subtopic": "cooking tips while grocery shopping", "preview": "Wait, you're buying dried basil? For your pasta sauce, fresh basil makes a huge difference."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
       "generated": 5,
       "accepted": 5,
-      "topics": [
-        "academic_event/conference call for papers",
-        "facility_change/performance hall reopening",
-        "logistics/garage closure + shuttle",
-        "facility_change/computer lab relocation",
-        "campus_activity/outdoor movie night"
-      ],
-      "favorite": {
-        "subtopic": "Interdisciplinary Crossroads Conference call for papers",
-        "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference"
-      },
+      "topics": ["research showcase awards", "career wardrobe pop-up + headshots", "environmental studies CFP", "campus cleanup day", "visiting novelist reading"],
+      "favorite": {"subtopic": "professional wardrobe pop-up and free headshot clinic", "preview": "Before we wrap up, I want to mention something the Career Center's running next week that's genuinely useful."},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-lcr": {
       "generated": 8,
       "accepted": 8,
-      "topics": [
-        "campus_daily/study-group transport",
-        "social/dinner invitation",
-        "campus_daily/gym schedule",
-        "general_daily/laundry room noise",
-        "campus_academic/writing center",
-        "campus_academic/exam format",
-        "campus_academic/reading list",
-        "campus_daily/lost umbrella"
-      ],
-      "favorite": {
-        "subtopic": "asking a neighbor why the shared laundry room is noisy",
-        "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'"
-      },
+      "topics": ["neighbor noise", "borrowing lecture notes", "rescheduling appointment", "holiday business hours", "professor office hours", "dinner invitation", "reading-list posting", "writing-center thesis help"],
+      "favorite": {"subtopic": "rescheduling an appointment", "preview": "How do I reschedule my appointment for Friday?"},
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "speaking-repeat": {
       "generated": 3,
       "accepted": 3,
-      "topics": [
-        "Dining Hall Tour",
-        "Career Services Workshop",
-        "Car Rental Agency"
-      ],
-      "favorite": {
-        "subtopic": "Dining Hall Tour",
-        "preview": "Trays are stacked near the entrance."
-      },
+      "topics": ["Library Orientation", "Cookie Baking (how-to)", "Art Gallery Opening"],
+      "favorite": {"subtopic": "Library Orientation", "preview": "If you cannot find a particular book, check the floor guide posted beside the elevator."},
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-08T22:55:58.785Z",
-  "r2_session_id": "routine-r2-20260708-224120"
+  }
 }
