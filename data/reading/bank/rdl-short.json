@@ -6753,6 +6753,174 @@
       ],
       "difficulty": "easy",
       "id": "rdl-short_mrdxr0jy_3"
+    },
+    {
+      "id": "rdl_gen_29125146352-short_001",
+      "variant": "short",
+      "text": "Donate Blood, Save Lives! Campus Blood Drive – Tuesday, March 18, 9:00 AM – 4:00 PM in Student Union Ballroom. All donors receive a free T-shirt and a $5 meal voucher. Walk-ins welcome. Bring your student ID.",
+      "word_count": 37,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_29125146352-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do donors receive?",
+          "options": {
+            "A": "A $5 meal voucher and a free water bottle",
+            "B": "A free T-shirt and a $10 gift card",
+            "C": "A $5 meal voucher and a free gym pass",
+            "D": "A free T-shirt and a $5 meal voucher"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer states that all donors receive a free T-shirt and a $5 meal voucher."
+        },
+        {
+          "qid": "rdl_gen_29125146352-short_001_q2",
+          "question_type": "detail",
+          "stem": "What must donors bring to the blood drive?",
+          "options": {
+            "A": "A completed health form",
+            "B": "A signed permission slip",
+            "C": "A meal voucher",
+            "D": "A student ID"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer says 'Bring your student ID.'"
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_29125146352-short_002",
+      "variant": "short",
+      "text": "Notice: Campus Shuttle Detour. Due to construction on Elm Street, the Blue Line shuttle will follow an alternate route from March 3 to March 7. Temporary stops are located at South Lot B and Anderson Hall. Regular service resumes March 8.",
+      "word_count": 41,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_29125146352-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where are the temporary shuttle stops located?",
+          "options": {
+            "A": "Elm Street and the main campus entrance",
+            "B": "South Lot B and the Student Union",
+            "C": "South Lot B and Anderson Hall",
+            "D": "Anderson Hall and the library"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that temporary stops are at South Lot B and Anderson Hall."
+        },
+        {
+          "qid": "rdl_gen_29125146352-short_002_q2",
+          "question_type": "detail",
+          "stem": "When will the regular shuttle schedule be restored?",
+          "options": {
+            "A": "March 8",
+            "B": "March 3",
+            "C": "March 7",
+            "D": "March 5"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice indicates that regular service resumes on March 8."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_29125146352-short_003",
+      "variant": "short",
+      "text": "Dear James, this is a reminder that the mandatory lab safety training for Chemistry 101 is this Thursday, March 20, at 2:00 PM in Room 204 of the Science Center. Please arrive 10 minutes early. Best, Dr. Park",
+      "word_count": 38,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_29125146352-short_003_q1",
+          "question_type": "detail",
+          "stem": "What time is the lab safety training scheduled to start?",
+          "options": {
+            "A": "1:50 PM",
+            "B": "2:00 PM",
+            "C": "2:10 PM",
+            "D": "1:30 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says the training is at 2:00 PM."
+        },
+        {
+          "qid": "rdl_gen_29125146352-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the training?",
+          "options": {
+            "A": "It is optional for chemistry students",
+            "B": "It will be held in a different building",
+            "C": "Attendance is required for the course",
+            "D": "It has been rescheduled to a later date"
+          },
+          "correct_answer": "C",
+          "explanation": "The email describes it as 'mandatory lab safety training for Chemistry 101,' so attendance is required."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_29125146352-short_004",
+      "variant": "short",
+      "text": "Dear Maria, your resume review appointment with Career Services is confirmed for Friday, April 11, at 10:30 AM in Johnson Hall, Room 205. Bring a printed copy. There is a $5 fee payable by credit card upon arrival. Best, Career Services",
+      "word_count": 41,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_29125146352-short_004_q1",
+          "question_type": "detail",
+          "stem": "How must the $5 fee for the appointment be paid?",
+          "options": {
+            "A": "By cash or check",
+            "B": "By credit card",
+            "C": "By online transfer",
+            "D": "By debit card only"
+          },
+          "correct_answer": "B",
+          "explanation": "The email specifies that the fee is payable by credit card upon arrival."
+        },
+        {
+          "qid": "rdl_gen_29125146352-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the resume review appointment?",
+          "options": {
+            "A": "It requires the student to bring a physical copy",
+            "B": "It is free of charge for all students",
+            "C": "It can be rescheduled to another day",
+            "D": "It will last for two hours"
+          },
+          "correct_answer": "A",
+          "explanation": "The email asks to 'Bring a printed copy,' so the student must bring a physical copy."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
