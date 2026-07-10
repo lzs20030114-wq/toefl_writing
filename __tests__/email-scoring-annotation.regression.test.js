@@ -39,8 +39,10 @@ test("e2e: Lisa heating-system email — about/about kept, dims 0.5, score ~4.5"
   expect(out.calibration.adjusted).toBe(false);
   expect(out.score).toBe(4.5);
 
-  // 2) both "about" survive in rendered text; mark sits on the second one
+  // 2) the rendered text IS the user's submitted text, byte for byte —
+  //    the AI's (partial) echo must never replace what the user wrote
   const pt = out.annotationParsed.plainText;
+  expect(pt).toBe(ESSAY);
   expect(pt).toContain("about a problem about the heating system");
   const aboutMark = out.annotationParsed.annotations.find(
     (a) => pt.slice(a.start, a.end) === "about"

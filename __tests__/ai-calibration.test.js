@@ -61,6 +61,95 @@ describe("calibrateDiscussion (signal-driven)", () => {
   });
 });
 
+describe("email goals-based guardrails", () => {
+  // >50 words, service/leisure register, deliberately full of the polite
+  // phrases the OLD hard-coded caps used to punish ("really enjoyed",
+  // "thank you for your time", ...).
+  const HOTEL_FEEDBACK_EMAIL =
+    "Dear Mr. Rodriguez,\n" +
+    "I recently stayed at your hotel and I really enjoyed the breakfast and the friendly staff, which left a strong impression on me. " +
+    "However, the air conditioner in my room was very loud at night, so I could not sleep well during my three-night stay. " +
+    "I would like to ask if you could have it inspected, and I would suggest offering guests earplugs at the front desk in the meantime. " +
+    "Thank you for your time and attention.\n" +
+    "Sincerely,\nLisa";
+
+  const rubric = (task, org, lang) => ({
+    dimensions: {
+      task_fulfillment: { score: task },
+      organization_coherence: { score: org },
+      language_use: { score: lang },
+    },
+  });
+
+  const goalList = (...statuses) =>
+    statuses.map((status, i) => ({ index: i + 1, status, reason: "" }));
+
+  test("well-written email with polite template phrases is NOT capped (old phrase-list regression)", () => {
+    const result = {
+      score: 4.5,
+      rubric: rubric(5, 4.5, 4),
+      goals: goalList("OK", "OK", "OK"),
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("email", result, HOTEL_FEEDBACK_EMAIL);
+    expect(out.calibration.adjusted).toBe(false);
+    expect(out.score).toBe(4.5);
+  });
+
+  test("a MISSING goal caps the score at 3", () => {
+    const result = {
+      score: 4.5,
+      rubric: rubric(5, 5, 4),
+      goals: goalList("OK", "MISSING", "OK"),
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("email", result, HOTEL_FEEDBACK_EMAIL);
+    expect(out.score).toBeLessThanOrEqual(3);
+    expect(out.calibration.reasons).toContain("email_goal_missing_cap");
+  });
+
+  test("two PARTIAL goals cap the score at 3", () => {
+    const result = {
+      score: 4.5,
+      rubric: rubric(5, 5, 4),
+      goals: goalList("OK", "PARTIAL", "PARTIAL"),
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("email", result, HOTEL_FEEDBACK_EMAIL);
+    expect(out.score).toBeLessThanOrEqual(3);
+    expect(out.calibration.reasons).toContain("email_goals_partial_cap");
+  });
+
+  test("one PARTIAL goal caps the score at 4", () => {
+    const result = {
+      score: 5,
+      rubric: rubric(5, 5, 4.5),
+      goals: goalList("OK", "PARTIAL", "OK"),
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("email", result, HOTEL_FEEDBACK_EMAIL);
+    expect(out.score).toBeLessThanOrEqual(4);
+    expect(out.calibration.reasons).toContain("email_goal_partial_cap");
+  });
+
+  test("thin response still caps at 3", () => {
+    const result = {
+      score: 4.5,
+      rubric: rubric(5, 5, 4),
+      goals: goalList("OK", "OK", "OK"),
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("email", result, "Dear Sir, please fix my heater soon. Thanks, Lisa");
+    expect(out.score).toBeLessThanOrEqual(3);
+    expect(out.calibration.reasons).toContain("email_thin_response_cap");
+  });
+});
+
 describe("calibrateScoreReport", () => {
   test("near-top response keeps high score and includes blue annotation", () => {
     const result = {

@@ -1,4 +1,4 @@
-import { countAnnotations, parseAnnotations } from "../lib/annotations/parseAnnotations";
+import { countAnnotations, parseAnnotations, reanchorToSource } from "../lib/annotations/parseAnnotations";
 
 describe("parseAnnotations", () => {
   test("parses attributes wrapped in Chinese curly quotes (DeepSeek mojibake)", () => {
@@ -229,5 +229,74 @@ describe("parseAnnotations", () => {
     // from a legitimate inline annotation occupying a full line.
     expect(out.annotations).toHaveLength(1);
     expect(out.annotations[0].level).toBe("orange");
+  });
+});
+
+describe("reanchorToSource", () => {
+  function ann(plainText, frag, from = 0, extra = {}) {
+    const start = plainText.indexOf(frag, from);
+    return { level: "red", message: "m", fix: "f", start, end: start + frag.length, ...extra };
+  }
+
+  test("returns parsed unchanged when echo already equals the source", () => {
+    const src = "The radiators is still cold.";
+    const parsed = { plainText: src, annotations: [ann(src, "is")] };
+    expect(reanchorToSource(parsed, src)).toBe(parsed);
+  });
+
+  test("restores the user's exact layout when the echo lost line breaks", () => {
+    const src = "Dear Mr. Harris,\nSince last week, the heater has completely stop working.\nThe radiators is still cold.";
+    const echo = "Dear Mr. Harris, Since last week, the heater has completely stop working. The radiators is still cold.";
+    const parsed = {
+      plainText: echo,
+      annotations: [ann(echo, "stop"), ann(echo, "is", echo.indexOf("radiators"))],
+    };
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(2);
+    expect(src.slice(out.annotations[0].start, out.annotations[0].end)).toBe("stop");
+    // "is" must land after "radiators", not inside "Harris"
+    expect(src.slice(out.annotations[1].start, out.annotations[1].end)).toBe("is");
+    expect(out.annotations[1].start).toBeGreaterThan(src.indexOf("radiators"));
+  });
+
+  test("disambiguates a repeated fragment by its surrounding context", () => {
+    const src = "I am writing to inform you about a problem about the heating system in my apartment.";
+    // Echo dropped the greeting but kept both "about"s; the mark is on the SECOND.
+    const echo = "I am writing to inform you about a problem about the heating system in my apartment. ";
+    const secondAbout = echo.indexOf("about", echo.indexOf("problem"));
+    const parsed = {
+      plainText: echo,
+      annotations: [{ level: "red", message: "m", fix: "f", start: secondAbout, end: secondAbout + 5 }],
+    };
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(1);
+    const mark = out.annotations[0];
+    expect(src.slice(mark.start, mark.end)).toBe("about");
+    expect(mark.start).toBe(src.indexOf("about", src.indexOf("problem")));
+  });
+
+  test("drops marks on text the user never wrote, keeps the rest", () => {
+    const src = "The heater has stop working since last week.";
+    const echo = "The heater has stop working since last month."; // echo rewrote "week"→"month"
+    const parsed = {
+      plainText: echo,
+      annotations: [ann(echo, "stop"), ann(echo, "month")],
+    };
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(1);
+    expect(src.slice(out.annotations[0].start, out.annotations[0].end)).toBe("stop");
+  });
+
+  test("falls back to the parsed echo when nothing anchors", () => {
+    const src = "A completely different essay.";
+    const echo = "The heater has stop working.";
+    const parsed = { plainText: echo, annotations: [ann(echo, "stop")] };
+    expect(reanchorToSource(parsed, src)).toBe(parsed);
   });
 });
