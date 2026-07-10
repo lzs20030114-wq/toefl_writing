@@ -150,6 +150,76 @@ describe("email goals-based guardrails", () => {
   });
 });
 
+describe("holistic reconciliation (lift)", () => {
+  const rubric = (task, org, lang) => ({
+    dimensions: {
+      task_fulfillment: { score: task },
+      organization_coherence: { score: org },
+      language_use: { score: lang },
+    },
+  });
+
+  test("holistic above weighted lifts final by at most half a band", () => {
+    // weighted = 4.5*0.4 + 4*0.3 + 4*0.3 = 4.2; holistic 5 → min(5, 4.7) → 4.5
+    const result = {
+      score: 5,
+      rubric: rubric(4.5, 4, 4),
+      signals: { stance_clear: true, has_example: true, engages_discussion: true },
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("discussion", result, LONG_ENOUGH_TEXT);
+    expect(out.score).toBe(4.5);
+    expect(out.calibration.reasons).toContain("holistic_lift");
+  });
+
+  test("holistic below weighted never drags the score down", () => {
+    const result = {
+      score: 3,
+      rubric: rubric(4, 4, 4),
+      signals: { stance_clear: true, has_example: true, engages_discussion: true },
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("discussion", result, LONG_ENOUGH_TEXT);
+    expect(out.score).toBe(4);
+    expect(out.calibration.reasons).not.toContain("holistic_lift");
+  });
+
+  test("guardrail caps still beat the lift (discussion stance)", () => {
+    const result = {
+      score: 5,
+      rubric: rubric(4.5, 4, 4),
+      signals: { stance_clear: false, has_example: true, engages_discussion: true },
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport("discussion", result, LONG_ENOUGH_TEXT);
+    expect(out.score).toBeLessThanOrEqual(3);
+  });
+
+  test("guardrail caps still beat the lift (email missing goal)", () => {
+    const result = {
+      score: 5,
+      rubric: rubric(4.5, 4, 4),
+      goals: [
+        { index: 1, status: "OK", reason: "" },
+        { index: 2, status: "MISSING", reason: "" },
+        { index: 3, status: "OK", reason: "" },
+      ],
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport(
+      "email",
+      result,
+      "Dear Mr. Lee, I am writing about the gym schedule change that affected my training plan this month. The new opening hours conflict directly with my work schedule, so I can no longer train before my shift starts in the morning. I would like to ask whether an earlier opening time could be considered for weekdays, or whether members could receive a temporary discount. Thank you for your attention. Best regards, Lisa"
+    );
+    expect(out.score).toBeLessThanOrEqual(3);
+    expect(out.calibration.reasons).toContain("email_goal_missing_cap");
+  });
+});
+
 describe("calibrateScoreReport", () => {
   test("near-top response keeps high score and includes blue annotation", () => {
     const result = {

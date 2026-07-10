@@ -179,6 +179,10 @@ async function runOne(libs, sample, mode) {
     }
     const calibrated = libs.calibrateScoreReport(mode, parsed, sample.response);
     if (Number.isFinite(calibrated.score)) scores.push(calibrated.score);
+    // 诊断行：holistic=模型整体判档 weighted=三维加权 final=校准后最终分
+    console.log(
+      `    [${sample.id}] run${i + 1}: holistic=${parsed.score} weighted=${calibrated.calibration?.rawScore} final=${calibrated.score}${(calibrated.calibration?.reasons || []).length ? " (" + calibrated.calibration.reasons.join(",") + ")" : ""}`
+    );
     await new Promise((r) => setTimeout(r, 1000));
   }
 
