@@ -12,6 +12,8 @@
 //   Bash:        DEEPSEEK_API_KEY=sk-xxx npm run calibration:test
 
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp");
+// ETS 官方带分样文（金标锚点）：官方评分员给分 + 评语，来源见文件内 sources 字段。
+const ETS_GOLDEN = require("../data/writingScoring/etsGoldenSamples.json");
 
 const RUNS_PER_SAMPLE = 3;
 const TOLERANCE = 0.5;
@@ -73,10 +75,12 @@ const CALIBRATION_SAMPLES = {
   ],
   email: [
     {
-      // 满任务完成 + 十余处不影响理解的局部小错 → ETS 落 4-4.5 档。
-      // 真实用户案例（2026-07）：竞品评 5.1/6，本站曾只给 3.5（偏严）。
-      id: "cal-email-45-heating",
-      expectedScore: 4.5,
+      // 满任务完成 + 十余处「能力型」小错（动词形态/主谓一致/词性），全部不影响理解。
+      // 错误画像与官方 4 分样文（ets-disc-4-lightbulb：多处小错让读者分神但意思清楚）
+      // 同类 → 按官方梯子锚定 4.0。真实用户案例（2026-07）：竞品评 5.1/6（虚高），
+      // 本站曾只给 3.5（偏严）。
+      id: "cal-email-4-heating",
+      expectedScore: 4,
       promptData: {
         scenario:
           "Your apartment's heating system stopped working last week. You have already tried adjusting the thermostat, but the radiators remain cold.",
@@ -207,6 +211,16 @@ async function runCalibration() {
 
   console.log("=== Calibration Test (production pipeline) ===");
   const rows = [];
+
+  // 金标在前：ETS 官方样文（预期分 = 官方评分员给分）
+  for (const g of ETS_GOLDEN.items) {
+    const sample = { id: `GOLD-${g.id}`, expectedScore: g.officialScore, promptData: g.promptData, response: g.response };
+    const r = await runOne(libs, sample, g.task);
+    rows.push(r);
+    console.log(
+      `${r.pass ? "PASS" : "FAIL"} ${r.id} expected=${r.expectedScore} scores=${r.scores.join(",")} median=${r.median}`
+    );
+  }
 
   for (const s of CALIBRATION_SAMPLES.discussion) {
     const r = await runOne(libs, s, "discussion");

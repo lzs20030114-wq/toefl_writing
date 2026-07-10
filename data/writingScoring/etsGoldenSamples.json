@@ -1,0 +1,88 @@
+{
+  "version": "2026-07-10",
+  "note": "ETS 官方带分样文 — 评分校准的绝对锚点（金标）。来源为 ETS 免费公开备考材料，仅限内部校准使用，禁止在任何用户可见界面展示原文。expectedScore 即官方评分员给分，tolerance 建议 0.5。email 任务官方样文尚缺（待新版 Official Guide / TestReady 标注补充）。",
+  "sources": {
+    "practice-sets-pdf": "ETS TOEFL iBT Writing Practice Sets (ets.org/pdfs/toefl/toefl-ibt-writing-practice-sets.pdf, © 2023 ETS), Writing Practice Set 4 sample responses + score explanations",
+    "inside-the-toefl-video": "ETS 'Inside the TOEFL Test — Writing for an Academic Discussion' official video (© 2023 ETS), scored sample + rater commentary; 视频版题面人名为 Professor Henson/Paul N/Lena A，内容与 Practice Set 4 相同"
+  },
+  "items": [
+    {
+      "id": "ets-disc-5-airplane",
+      "task": "discussion",
+      "officialScore": 5,
+      "tolerance": 0.5,
+      "source": "inside-the-toefl-video",
+      "promptData": {
+        "professor": {
+          "name": "Dr. Achebe",
+          "text": "When people are asked about the most important discoveries or inventions made in the last two hundred years, they usually mention something very obvious, like the computer or the cell phone. But there are thousands of other discoveries or inventions that have had a huge impact on how we live today. What scientific discovery or technological invention from the last two hundred years—other than computers and cell phones—would you choose as being important? Why?"
+        },
+        "students": [
+          {
+            "name": "Paul",
+            "text": "I mean, we're so used to science and technology that we are not even aware of all the things we use in our daily lives. I would probably choose space satellites. This technology happened in the last hundred years, and it has become important for so many things. Just think about navigation, or telecommunications, or even the military."
+          },
+          {
+            "name": "Claire",
+            "text": "I am thinking about medical progress. Like, for example, when scientists discovered things about healthy nutrition. I am thinking of identifying all the vitamins we need to stay healthy. I am not sure exactly when the vitamin discoveries happened, but I know they are very important. Our health is much better than it was 200 years ago."
+          }
+        ]
+      },
+      "response": "For me, the invention of the airpline, by brazilian inventor Santos Dumont, is a good example of a important invention from the last two centuries.It made possible to connect different places even if they are thousand of miles away one from another.People can be in any place of the world within twenty four hours or less from the time they get inside an airplane.This is fantastic!Also, the world trade become more efficient. You can eat fresh lobsters from northeastern Brazil even if you are in Dubai!I think that is really interesting.Since the ancient Greece the man wanted to fly like the birds, and Mr Dumont made it possible.And I am partiullary proud of him because he was a brazilian citizen, just like me.So, thats my opinion, I could show you some of my admiration for this great man and his beautiful invention.",
+      "raterCommentary": "官方评语（视频）：response is relevant and clearly expressed with good elaboration。存在机械类错误（句号后未空格、brazilian 未大写）及少量介词/冠词错误（any place of the world、a important invention），但 these kinds of errors are to be expected from a competent writer under timed conditions —— 仍给满分 5。",
+      "calibrationLesson": "满分允许大量『限时写作噪声』（拼写滑误 airpline/partiullary、机械格式、个别冠词介词错）。按错误个数计数会把这篇误判成 3.5-4。"
+    },
+    {
+      "id": "ets-disc-5-vaccine",
+      "task": "discussion",
+      "officialScore": 5,
+      "tolerance": 0.5,
+      "source": "practice-sets-pdf",
+      "promptData": {
+        "professor": {
+          "name": "Dr. Achebe",
+          "text": "When people are asked about the most important discoveries or inventions made in the last two hundred years, they usually mention something very obvious, like the computer or the cell phone. But there are thousands of other discoveries or inventions that have had a huge impact on how we live today. What scientific discovery or technological invention from the last two hundred years—other than computers and cell phones—would you choose as being important? Why?"
+        },
+        "students": [
+          {
+            "name": "Paul",
+            "text": "I mean, we're so used to science and technology that we are not even aware of all the things we use in our daily lives. I would probably choose space satellites. This technology happened in the last hundred years, and it has become important for so many things. Just think about navigation, or telecommunications, or even the military."
+          },
+          {
+            "name": "Claire",
+            "text": "I am thinking about medical progress. Like, for example, when scientists discovered things about healthy nutrition. I am thinking of identifying all the vitamins we need to stay healthy. I am not sure exactly when the vitamin discoveries happened, but I know they are very important. Our health is much better than it was 200 years ago."
+          }
+        ]
+      },
+      "response": "In the past 200 years, tons of scientific discoveries or technological inventions have been shown to the world. If I had to choose one in particular it will probably be vaccine or antibiotics. With Pasteur's work and discoveries, the world changed in a way people couldn't imagine. So many people were dying really young because at that time life's conditions were not as good as the one we have now. With vaccine, we could now irradicate diseases that were killing millions of people, we learn so much about the immune system and ways our body was reacting to pathogens and the answers he could produce to defend us against it. Medicine evolved so much and keeps evolving every day because scientists are curious to understand how our body is working and how he is able to communicate with our environment. People aged 40 are now not that old and still have a really long life to live and enjoy when 2 centuries ago it was synonymous of 80% chance of dying.",
+      "raterCommentary": "官方评语（PDF）：fully successful；论证充分（前后对比 + 展开）。While there are almost no errors in grammar and word choice, there are a few minor ones that have little impact on meaning（如 life's conditions were not as good as the one we have、how he is able to communicate）——such errors might be expected when writing under timed conditions。复杂句式 + 较精确词汇 = 5 分水平。",
+      "calibrationLesson": "5 分不要求零错误：irradicate 拼错、代词误用（he 指 body）都在容忍范围，因为不影响理解且属限时噪声。"
+    },
+    {
+      "id": "ets-disc-4-lightbulb",
+      "task": "discussion",
+      "officialScore": 4,
+      "tolerance": 0.5,
+      "source": "practice-sets-pdf",
+      "promptData": {
+        "professor": {
+          "name": "Dr. Achebe",
+          "text": "When people are asked about the most important discoveries or inventions made in the last two hundred years, they usually mention something very obvious, like the computer or the cell phone. But there are thousands of other discoveries or inventions that have had a huge impact on how we live today. What scientific discovery or technological invention from the last two hundred years—other than computers and cell phones—would you choose as being important? Why?"
+        },
+        "students": [
+          {
+            "name": "Paul",
+            "text": "I mean, we're so used to science and technology that we are not even aware of all the things we use in our daily lives. I would probably choose space satellites. This technology happened in the last hundred years, and it has become important for so many things. Just think about navigation, or telecommunications, or even the military."
+          },
+          {
+            "name": "Claire",
+            "text": "I am thinking about medical progress. Like, for example, when scientists discovered things about healthy nutrition. I am thinking of identifying all the vitamins we need to stay healthy. I am not sure exactly when the vitamin discoveries happened, but I know they are very important. Our health is much better than it was 200 years ago."
+          }
+        ]
+      },
+      "response": "From my personal point of view, I think the most important invention is the light bulb. Before it was invented, people had have to use candles for illumination in the evening. It's performance is not very stable, and it is produce really high tempreture which would probably lead to a fire accident. Light bulbs, however, produce constant and bright lighting at nights. One light bulb could use for several years, which is quite convenient-people don't need to storage many bulbs. What's more, it is safer than past candles. This is a huge progress in technology, and I consider it as the most vital invention from the last 200 years.",
+      "raterCommentary": "官方评语（PDF）：generally successful；对比结构有效，但论证可更强（只说了比蜡烛好，没说为何是 200 年来最重要）。the number and type of errors in grammar and vocabulary prevent it from reaching the highest score level——Multiple small errors such as 'had have to use', 'it is produce', 'one light bulb could use for years', 'don't need to storage' are distracting for the reader even though the intended meaning is still usually clear。",
+      "calibrationLesson": "4 分与 5 分的官方分界：多处『能力型』小错（动词形态、词性误用）让读者分神但意思清楚 = 4 分。这也是 Lisa 暖气邮件的错误画像 → email 同类文应锚定 4.0 档。"
+    }
+  ]
+}
