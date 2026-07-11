@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
+      "accepted": 20,
       "topics": [
         "direct questions",
         "embedded/indirect questions",
@@ -23,11 +23,13 @@
         "answer": "She explained where the reference journals from the archive are usually stored."
       },
       "retried_after_fail": false,
-      "failure_reason": "merge skipped: only 8/20 passed per-item validation (answers <7 words / background-only prompts); <10 valid for a set"
+      "failure_reason": "merge skipped: only 8/20 passed per-item validation (answers <7 words / background-only prompts); <10 valid for a set",
+      "r2_supplemented": true,
+      "r2_items_added": 20
     },
     "discussion": {
       "generated": 4,
-      "accepted": 4,
+      "accepted": 6,
       "topics": [
         "anthropology",
         "marketing",
@@ -39,7 +41,9 @@
         "preview": "We've been discussing how many museums acquired their collections during periods of colonial expansion. Recently, several major institutions have"
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 2
     },
     "email": {
       "generated": 4,
@@ -207,5 +211,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-11T19:47:37Z",
+  "r2_session_id": "routine-r2-20260711-193039"
 }
