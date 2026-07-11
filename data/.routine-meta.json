@@ -1,44 +1,42 @@
 {
-  "session_id": "routine-20260708-221453",
-  "completed_at": "2026-07-08T22:27:30Z",
-  "duration_minutes": 12,
+  "session_id": "routine-20260711-190426",
+  "completed_at": "2026-07-11T19:12:29Z",
+  "duration_minutes": 8,
   "model": "Claude Opus 4.8",
-  "highlight": "12 题库全生成 70/70；disc+email 已合库，阅读/听力/口语入 staging 待审计路由；BS 难度分档未过回归门，交 R2 重试",
+  "highlight": "12 题库全生成 70/70；disc+email 合库，阅读/听力/口语入 staging 待审计路由；BS 8/20 过校验未成套，交 R2 重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 0,
       "topics": [
-        "dorm parties",
-        "seminars/electives",
-        "library & tutoring center",
-        "campus gym hours",
-        "scholarship/workshop signups",
-        "exam schedules & posted grades",
-        "borrowed club equipment"
+        "direct questions",
+        "embedded/indirect questions",
+        "negation",
+        "relative clause",
+        "passive",
+        "comparative",
+        "varied statements"
       ],
       "favorite": {
-        "prompt": "What did Julian ask you earlier?",
-        "answer": "He asked whether you had registered for the spring field trip."
+        "prompt": "What did the librarian tell you?",
+        "answer": "She explained where the reference journals from the archive are usually stored."
       },
       "retried_after_fail": false,
-      "failure_reason": "BS 回归门 FAIL：intra_set.mixed 存在 1 个单一难度档 set（12/20 通过单项校验，但聚合门 FAIL）；live 库未改动，待 R2 重试",
-      "r2_supplemented": true,
-      "r2_items_added": 20
+      "failure_reason": "merge skipped: only 8/20 passed per-item validation (answers <7 words / background-only prompts); <10 valid for a set"
     },
     "discussion": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "political science",
+        "anthropology",
+        "marketing",
         "history and culture",
-        "computer science",
-        "social studies"
+        "computer science"
       ],
       "favorite": {
-        "subtopic": "political science",
-        "preview": "We've been discussing new models of democratic participation this semester. Several cities, including Paris and Dublin, have started c"
+        "subtopic": "anthropology",
+        "preview": "We've been discussing how many museums acquired their collections during periods of colonial expansion. Recently, several major institutions have"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -53,8 +51,8 @@
         "日常社交"
       ],
       "favorite": {
-        "subtopic": "消费售后",
-        "preview": "You subscribed to a monthly meal-kit delivery service three months ago. This month's box arri"
+        "subtopic": "住宿",
+        "preview": "You are a tenant on the fourth floor of a small apartment building. The hot water has been shutting off every morning for the past week."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -63,15 +61,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "environmental_science/conservation",
-        "psychology/placebo effect",
-        "astronomy/planetary atmospheres",
-        "chemistry/corrosion",
-        "history/silk road"
+        "physics/radio wave propagation",
+        "environmental_science/deforestation",
+        "business/global supply chains",
+        "anthropology/plant domestication",
+        "art/stage design"
       ],
       "favorite": {
-        "subtopic": "astronomy/planetary atmospheres",
-        "preview": "A planetary atmosphere is the envelope of gases that a planet's gravity holds close to its surface. Mars presents a striking puzzle..."
+        "subtopic": "physics/radio wave propagation",
+        "preview": "Radio waves are a form of electromagnetic radiation occupying the longest-wavelength portion of the spectrum, stretching from a few millimeters to many kilometers."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -80,16 +78,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/whale communication",
-        "environmental_science/green roofs",
-        "psychology/confirmation bias",
-        "history/the spice trade",
-        "geology/volcanic mountain formation",
-        "astronomy/Mars rovers"
+        "biology/keystone species",
+        "environmental_science/light pollution",
+        "psychology/anchoring effect",
+        "history/transatlantic telegraph cable",
+        "geology/limestone cave formation",
+        "astronomy/supermassive black holes"
       ],
       "favorite": {
-        "subtopic": "biology/whale communication",
-        "preview": "Humpback whales produce some of the most complex songs in the animal kingdom, lasting for many minutes."
+        "subtopic": "biology/keystone species",
+        "preview": "Keystone species are organisms that exert an unusually strong influence on the structure of their ecosystems."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -98,14 +96,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "email/lab safety training reminder",
-        "email/student ID replacement fee",
-        "notice/campus Wi-Fi maintenance",
-        "notice/water-fountain repair closure"
+        "notice/fire alarm testing",
+        "notice/water fountain closure",
+        "email/parking permit pickup",
+        "notice/shuttle route detour"
       ],
       "favorite": {
-        "subtopic": "notice/wifi-maintenance",
-        "preview": "Notice: Campus wireless internet will be unavailable in all residence halls on Thursday, September 24, from 1:00 AM to 4:00 AM."
+        "subtopic": "notice/water-fountain-closure",
+        "preview": "NOTICE: The drinking fountains on the fourth floor of Kessler Hall will be shut off for pipe replacement from Monday, June 2"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -114,12 +112,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "social_media/dorm DIY woodworking project",
-        "email/commuter parking permit renewal"
+        "notice/residential package locker",
+        "email/health center flu shot"
       ],
       "favorite": {
-        "subtopic": "social_media/dorm DIY woodworking project",
-        "preview": "@craftycasey — Guys, I finally finished the floating bookshelf for my dorm room and I'm obsessed!! I've been saving scrap pine"
+        "subtopic": "notice/residential package pickup locker system",
+        "preview": "Notice: Residential Package Pickup Procedure Change — Effective Monday, March 2, all resident packages will be processed through the new automated locker system"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -128,14 +126,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "physics/Doppler effect",
-        "history/coffee houses in the Enlightenment",
-        "linguistics/pidgin to creole",
-        "ecology/biological magnification"
+        "camera obscura & Renaissance painting",
+        "wartime rationing & food innovation",
+        "bystander effect",
+        "improvisation in early jazz"
       ],
       "favorite": {
-        "subtopic": "the process of pidgin languages developing into creoles",
-        "preview": "Languages can be born in a single generation. That may sound impossible, but it is exactly what happens in the development of creole languages"
+        "subtopic": "how wartime rationing led to food innovation",
+        "preview": "Wartime rationing is usually remembered as a story of scarcity, of families making do with less. But rationing also became a surprising engine of food innovation."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -144,15 +142,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "plans_social",
-        "recommendations_opinions (cafe)",
-        "recommendations_opinions (Thai restaurant)",
-        "campus_dorm_life",
-        "errands_service (bus schedule)"
+        "intramural volleyball vs photography club",
+        "weekend beach trip",
+        "dinner party food shopping",
+        "new cafe worth the price",
+        "Intro to Film vs World Mythology elective"
       ],
       "favorite": {
-        "subtopic": "两人争论新咖啡馆是否值那个价",
-        "preview": "Have you tried that new cafe on Elm Street? Everyone keeps posting about it. — I went yesterday. Honestly, the latte was amazing, but it cost almost six dollars."
+        "subtopic": "choosing between Intro to Film and World Mythology electives",
+        "preview": "Have you decided on an elective for next term? I'm torn between Intro to Film and World Mythology."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -161,15 +159,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "academic_event/conference call for papers",
-        "facility_change/performance hall reopening",
-        "logistics/garage closure + shuttle",
-        "facility_change/computer lab relocation",
-        "campus_activity/outdoor movie night"
+        "LinkedIn headshot day",
+        "Psychology research showcase",
+        "health insurance open enrollment",
+        "art gallery reopening",
+        "outdoor student art market"
       ],
       "favorite": {
-        "subtopic": "Interdisciplinary Crossroads Conference call for papers",
-        "preview": "Good afternoon, everyone. As president of the Graduate Interdisciplinary Society, I'm pleased to open the call for papers for our fourth annual Crossroads Conference"
+        "subtopic": "student art market in the quad",
+        "preview": "Attention students. The Student Union is hosting its first outdoor Art Market this Saturday from eleven in the morning to four"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -178,18 +176,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "campus_daily/study-group transport",
-        "social/dinner invitation",
-        "campus_daily/gym schedule",
-        "general_daily/laundry room noise",
-        "campus_academic/writing center",
-        "campus_academic/exam format",
-        "campus_academic/reading list",
-        "campus_daily/lost umbrella"
+        "research-program news",
+        "lab color printer",
+        "offering help to friend",
+        "group meeting location",
+        "lost-and-found backpack",
+        "store size exchange",
+        "library checked-out book",
+        "assignment deadline"
       ],
       "favorite": {
-        "subtopic": "asking a neighbor why the shared laundry room is noisy",
-        "preview": "Why's the laundry room always so loud? — correct reply counters with 'Have you tried the one upstairs?'"
+        "subtopic": "lost-and-found backpack",
+        "preview": "Speaker: \"Didn't anyone turn in a blue backpack?\" — Correct: \"You're in luck, it's right here.\""
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -198,18 +196,16 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Dining Hall Tour",
-        "Career Services Workshop",
-        "Car Rental Agency"
+        "Photography Darkroom",
+        "Bike Tire Repair",
+        "Cookie Baking"
       ],
       "favorite": {
-        "subtopic": "Dining Hall Tour",
-        "preview": "Trays are stacked near the entrance."
+        "subtopic": "Photography Darkroom",
+        "preview": "When you are ready to finish, hang the negatives on the line and let them dry completely."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-08T22:55:58.785Z",
-  "r2_session_id": "routine-r2-20260708-224120"
+  }
 }

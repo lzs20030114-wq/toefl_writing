@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "career_advisor",
+      "difficulty": "medium",
+      "announcement": "Before we wrap up, I want to mention something the Career Center is running next Tuesday. We'll have a photographer in Room 204 from ten in the morning until three in the afternoon taking free professional headshots for your LinkedIn profiles. There's no charge, but you do need to reserve a slot on our website beforehand, since walk-in times fill up fast. Please dress the way you would for an actual interview, and you'll get your edited photo by email within a week.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To offer free headshots for LinkedIn profiles",
+            "B": "To explain the online reservation process",
+            "C": "To announce a paid photography service",
+            "D": "To describe the Career Center's job listings"
+          },
+          "answer": "A",
+          "explanation": "A正确：整段核心是职业中心下周二免费为学生拍LinkedIn职业头像。B错（too_narrow）：网上预约只是参与细节，不是整体目的。C错（reversed_intent）：广播明确说免费（no charge），与\"付费服务\"相反。D错（wrong_purpose）：完全没有提到职位招聘信息，是另一种可能的目的但非本条。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do in order to get a headshot?",
+          "options": {
+            "A": "Pay a small session fee",
+            "B": "Attend a resume workshop first",
+            "C": "Reserve a slot on the website",
+            "D": "Bring a printed photo to Room 204"
+          },
+          "answer": "C",
+          "explanation": "C正确：广播说需事先在网站预约名额（reserve a slot on our website beforehand）。A错（wrong_detail）：明确说免费，无需付费。B错（related_but_not_stated）：简历工作坊听起来合理，但广播未提及。D错（misattributed_detail）：拍的是新照片，不需要自带打印照片，把\"照片\"这个概念错误挪用。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "end-of-semester academic showcase with awards",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "Because so many families asked to attend this year, the Psychology Department is moving its end-of-semester Research Showcase to the larger Hartley Auditorium. The event runs next Thursday from four to six in the evening, and it'll close with a ceremony recognizing the three strongest undergraduate projects. If you're presenting, please upload your slides to the department portal by Wednesday at noon so we can load them in advance. Coffee and cookies will be available in the lobby afterward.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must presenters do before the event?",
+          "options": {
+            "A": "Reserve a seat in Hartley Auditorium",
+            "B": "Upload their slides by Wednesday noon",
+            "C": "Submit a written research abstract",
+            "D": "Invite their own families in advance"
+          },
+          "answer": "B",
+          "explanation": "B正确：广播要求发表者在周三中午前把幻灯片上传到系里门户。A错（wrong_detail）：换到更大礼堂是为容纳观众，未要求发表者订座位。C错（related_but_not_stated）：提交书面摘要在学术活动里常见，但本条未提。D错（misattributed_detail）：\"很多家庭想参加\"是换场地的原因，被错误挪用成对发表者的要求。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about this year's showcase?",
+          "options": {
+            "A": "The department plans to cancel future events",
+            "B": "Every participant will receive a prize",
+            "C": "The showcase will move online next year",
+            "D": "It has drawn more interest than usual"
+          },
+          "answer": "D",
+          "explanation": "D正确：因为\"很多家庭要求参加\"才换到更大的礼堂，可推断今年关注度比往常高。A错（unrelated_inference）：没有任何证据说要取消未来活动。B错（over_inference）：只表彰三个最强项目，并非人人有奖，属过度推断。C错（over_inference）：把线下扩容错推成线上，毫无依据。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "program_coordinator",
+      "difficulty": "hard",
+      "announcement": "Open enrollment for the student health insurance plan closes this Friday at five p.m., so Health Services is holding a walk-in information session tomorrow in Room 118 of the Wellness Center. Staff will explain the two coverage tiers and help you compare them against any plan you already have through a parent. If you're an international student, note that enrollment isn't automatic — you must actively confirm your choice online, or you'll be billed for the default plan. Bring your student ID and any existing insurance details.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To introduce a new insurance provider",
+            "B": "To remind students to visit Health Services",
+            "C": "To publicize a session about enrollment choices",
+            "D": "To advise students to cancel their coverage"
+          },
+          "answer": "C",
+          "explanation": "C正确：整段是宣传一个帮助学生理解并做出保险投保选择的信息说明会，并提醒截止日期。A错（wrong_purpose）：从未提到更换或新增保险公司。B错（too_narrow）：去健康服务处只是其中一步，未涵盖整体目的。D错（reversed_intent）：广播是帮助学生正确投保，而非劝人取消保险，意图相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about international students?",
+          "options": {
+            "A": "They risk being enrolled in a default plan",
+            "B": "They must attend tomorrow's walk-in session",
+            "C": "They receive a discount on their premiums",
+            "D": "They cannot use a parent's insurance plan"
+          },
+          "answer": "A",
+          "explanation": "A正确：广播说国际生若不主动在线确认，就会被按默认方案收费，可推断他们有被自动纳入默认方案的风险。B错（over_inference）：说明会是walk-in自愿参加，并未强制国际生出席。C错（unrelated_inference）：没有任何关于保费折扣的信息。D错（over_inference）：工作人员会帮学生把方案与父母的计划对比，反而暗示可以使用父母计划，此项与文意相悖属过度推断。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated art gallery",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "The Ashford Art Gallery reopens next Monday after six months of renovation. The redesigned space adds a second exhibition floor and much better lighting for the permanent collection. To celebrate, we're holding an opening reception on Monday evening at seven o'clock in the main lobby, with a short talk by the visiting curator. Admission is free for students who show their campus ID at the door. Regular gallery hours, ten to five on weekdays, resume the following day.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit student docents for the gallery",
+            "B": "To introduce the visiting curator's talk",
+            "C": "To announce the gallery's temporary closure",
+            "D": "To announce the gallery's reopening after renovation"
+          },
+          "answer": "D",
+          "explanation": "D正确：整段是宣布Ashford美术馆改造后于下周一重新开放并举办庆祝招待会。A错（wrong_purpose）：从未招募讲解志愿者。B错（too_narrow）：策展人讲座只是招待会的一个环节，非整体目的。C错（reversed_intent）：广播是重新开放，与\"临时关闭\"意思相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the reception for free?",
+          "options": {
+            "A": "Purchase a discounted ticket",
+            "B": "Show their campus ID at the door",
+            "C": "Register on the gallery's website",
+            "D": "Arrive before the curator's talk"
+          },
+          "answer": "B",
+          "explanation": "B正确：广播说学生在门口出示校园ID即可免费入场。A错（wrong_detail）：入场免费，不需要买票。C错（related_but_not_stated）：网上注册在活动中常见，但本条未提及。D错（misattributed_detail）：讲座是招待会内容，被错误挪用成免费入场的条件。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market in the quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students. The Student Union is hosting its first outdoor Art Market this Saturday from eleven in the morning to four in the afternoon on the Central Quad. More than thirty student artists will be selling handmade prints, ceramics, and jewelry, with all proceeds going straight to the creators. If you'd like a booth of your own, there's still space — email the events office by Thursday to claim one. Bring cash, since not every vendor can accept card payments.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To promote an outdoor student art market",
+            "B": "To explain how to reserve a vendor booth",
+            "C": "To advertise an art history lecture",
+            "D": "To announce the market's cancellation"
+          },
+          "answer": "A",
+          "explanation": "A正确：整段是宣传本周六在中央广场举办的学生手工艺集市。B错（too_narrow）：申请摊位只是给想摆摊者的一条细节，不是整体目的。C错（wrong_purpose）：与艺术史讲座毫无关系。D错（reversed_intent）：广播是宣布举办活动，与\"取消\"意思相反。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are attendees advised to bring?",
+          "options": {
+            "A": "A ticket bought in advance",
+            "B": "Their own artwork to sell",
+            "C": "Cash for their purchases",
+            "D": "A reusable shopping bag"
+          },
+          "answer": "C",
+          "explanation": "C正确：广播提醒带现金，因为不是每个摊主都能刷卡。A错（wrong_detail）：这是免费的户外集市，不需要门票。B错（misattributed_detail）：卖作品的是学生艺术家，把\"作品\"错误挪用到普通参观者身上。D错（related_but_not_stated）：自带购物袋听起来合理，但广播并未提及。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    }
+  ]
+}

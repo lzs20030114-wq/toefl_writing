@@ -1,0 +1,270 @@
+{
+  "items": [
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you heard they're starting an intramural volleyball team? Sign-ups close this Friday." },
+        { "speaker": "Man", "text": "I saw the flyer. But I've also been thinking about joining the photography club — they meet Thursday nights." },
+        { "speaker": "Woman", "text": "Both sound fun. The volleyball team only practices twice a week, though, so it wouldn't eat up all your time." },
+        { "speaker": "Man", "text": "That's true. My schedule's already packed with my chemistry lab. Photography meets every week, plus weekend shoots." },
+        { "speaker": "Woman", "text": "Then the team might fit better. And you'd get to know more people in the building." },
+        { "speaker": "Man", "text": "Good point. I think I'll go with the volleyball. I'll sign up before Friday." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When do sign-ups for the volleyball team close?",
+          "options": {
+            "A": "This Friday",
+            "B": "Thursday night",
+            "C": "This coming weekend",
+            "D": "At the end of the term"
+          },
+          "answer": "A",
+          "explanation": "女生开头就说排球队报名周五截止，所以A正确。B「周四晚」是摄影俱乐部的活动时间，被张冠李戴；C「这个周末」和D「学期末」对话里都没提到，属于似是而非的编造。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Join the photography club instead",
+            "B": "Drop his chemistry lab",
+            "C": "Sign up for the volleyball team",
+            "D": "Ask a friend for advice first"
+          },
+          "answer": "C",
+          "explanation": "男生最后明确说「I'll go with the volleyball. I'll sign up before Friday」，所以C正确。A是他考虑后放弃的选项；B「退掉化学实验课」是过度推断，他只说日程满，没打算退课；D「先问朋友」对话里毫无依据。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends coordinating a weekend beach trip",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Are you still up for the beach trip Saturday? The forecast says it'll be sunny all day." },
+        { "speaker": "Man", "text": "Definitely! Should we take the bus, or is someone driving?" },
+        { "speaker": "Woman", "text": "Jenna offered to drive, but her car only fits four, and there are six of us going now." },
+        { "speaker": "Man", "text": "Oh. Then maybe half of us take the early bus and meet the rest there?" },
+        { "speaker": "Woman", "text": "That works. The bus leaves the student center at nine sharp." },
+        { "speaker": "Man", "text": "Perfect. I'll set an alarm so I don't miss it. Should I bring snacks for everyone?" },
+        { "speaker": "Woman", "text": "Yeah, that'd be great. I'll pack the sunscreen and towels." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time does the bus leave the student center?",
+          "options": {
+            "A": "At eight o'clock",
+            "B": "At nine o'clock",
+            "C": "At ten o'clock",
+            "D": "Right after lunch"
+          },
+          "answer": "B",
+          "explanation": "女生说「The bus leaves the student center at nine sharp」，所以B正确。A「八点」和C「十点」都是改动了关键时间的干扰项；D「午饭后」对话里没提，属于似是而非的编造。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely bring on the trip?",
+          "options": {
+            "A": "Sunscreen and towels",
+            "B": "Extra bus tickets",
+            "C": "His own car",
+            "D": "Snacks for the group"
+          },
+          "answer": "D",
+          "explanation": "男生主动问「Should I bring snacks for everyone?」女生同意，所以D正确。A防晒和毛巾是女生负责带的，被张冠李戴；B「多余车票」对话没提；C「自己开车」与他们决定坐公交的情节相反。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "unrelated_next_step",
+            "C": "rejected_option"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students planning what cheese and food to buy for a dinner party",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So for Saturday's dinner party, I'm thinking a cheese board plus one warm dish. Does that sound like enough?" },
+        { "speaker": "Man", "text": "For eight people? We'll need at least three cheeses — something soft, something sharp, and a mild one everybody likes." },
+        { "speaker": "Woman", "text": "Good call. The cheese shop on Elm Street lets you taste samples before you buy." },
+        { "speaker": "Man", "text": "Perfect. But their prices are steep. Let's grab the crackers and fruit from the regular grocery store instead." },
+        { "speaker": "Woman", "text": "Smart. Let's split it — you handle the cheese, and I'll get everything else?" },
+        { "speaker": "Man", "text": "Deal. I'll head to Elm Street right after my afternoon class." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "Which restaurant to book for Saturday",
+            "B": "How to lower the price of the cheese",
+            "C": "What food to buy for their dinner party",
+            "D": "Whether they should cancel the party"
+          },
+          "answer": "C",
+          "explanation": "整段对话围绕周六晚宴要买什么奶酪和食物、如何分工采购，所以C概括最准确。A「订餐厅」偏题，他们是自己办party；B「压低奶酪价格」只是其中一个细节，太狭窄；D「取消聚会」与情节完全相反。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "too_narrow",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do after his afternoon class?",
+          "options": {
+            "A": "Go to the cheese shop on Elm Street",
+            "B": "Buy the crackers and fruit himself",
+            "C": "Cook the warm dish at home",
+            "D": "Call the guests to confirm"
+          },
+          "answer": "A",
+          "explanation": "男生负责买奶酪，并说「I'll head to Elm Street right after my afternoon class」，所以A正确。B买饼干水果是女生分到的任务；C「在家做热菜」对话没提，属于过度推断；D「打电话确认客人」对话里毫无依据。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends debating whether a new cafe is worth the price",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new cafe by the arts building? Everyone keeps raving about it." },
+        { "speaker": "Man", "text": "I went once. The lattes are amazing, honestly the best I've had. But a single one costs six dollars." },
+        { "speaker": "Woman", "text": "Six dollars? That's almost double what the campus coffee cart charges." },
+        { "speaker": "Man", "text": "Exactly. The drinks are great, but I really can't afford it more than once a week." },
+        { "speaker": "Woman", "text": "Hmm. Maybe I'll just go for a treat now and then, not every day." },
+        { "speaker": "Man", "text": "That's the way to do it. Save it for when you really need a pick-me-up." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much does a latte at the new cafe cost?",
+          "options": {
+            "A": "Two dollars",
+            "B": "Four dollars",
+            "C": "It is free with a sample",
+            "D": "Six dollars"
+          },
+          "answer": "D",
+          "explanation": "男生说「a single one costs six dollars」，所以D正确。A「两美元」和B「四美元」都是改动了关键价格的干扰项；C「凭样品免费」对话完全没提，属于编造。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do about the new cafe?",
+          "options": {
+            "A": "Stop drinking coffee altogether",
+            "B": "Visit it only occasionally",
+            "C": "Buy from the coffee cart every day",
+            "D": "Complain to the cafe about its prices"
+          },
+          "answer": "B",
+          "explanation": "女生说「Maybe I'll just go for a treat now and then, not every day」，即偶尔去一次，所以B正确。A「彻底戒咖啡」是过度推断；C「每天去咖啡车」对话没依据；D「向咖啡馆投诉价格」也毫无根据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you decided on an elective for next term? I'm torn between Intro to Film and World Mythology." },
+        { "speaker": "Man", "text": "I'm leaning toward the film class. A friend took it and said the professor screens a movie every week." },
+        { "speaker": "Woman", "text": "That sounds fun. But doesn't Film meet at eight in the morning? I'm useless before nine." },
+        { "speaker": "Man", "text": "Oh, right, it's an early one. Mythology's at two in the afternoon, though — much easier for you." },
+        { "speaker": "Woman", "text": "True. And I've always loved myths and legends. Maybe that's the better fit for my schedule." },
+        { "speaker": "Man", "text": "Sounds like your mind's basically made up. Go for the mythology one." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What time does the Intro to Film class meet?",
+          "options": {
+            "A": "At eight in the morning",
+            "B": "At nine in the morning",
+            "C": "At two in the afternoon",
+            "D": "In the evening"
+          },
+          "answer": "A",
+          "explanation": "女生说「doesn't Film meet at eight in the morning?」男生确认是早课，所以A正确。B「九点」是女生说自己九点前没精神，不是上课时间；C「下午两点」是神话课的时间，被张冠李戴；D「晚上」对话没提。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Which class will the woman most likely take?",
+          "options": {
+            "A": "Intro to Film",
+            "B": "Both classes",
+            "C": "World Mythology",
+            "D": "Neither class"
+          },
+          "answer": "C",
+          "explanation": "女生因为神话课时间合适又一向喜欢神话，说它「the better fit」，男生也劝她选神话，所以C正确。A电影课因为早八被她排除；B「两门都选」是过度推断；D「一门都不选」与她已倾向选课的情节相反。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "reversed_situation"
+          }
+        }
+      ]
+    }
+  ]
+}
