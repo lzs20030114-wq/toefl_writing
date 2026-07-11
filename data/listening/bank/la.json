@@ -3390,6 +3390,666 @@
       ],
       "id": "la_mrdxr0l5_4",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mrdxr0l5_4.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "community garden spring cleanup volunteer event",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "hard",
+      "announcement": "The Campus Green Team needs volunteers for the community garden's spring cleanup this Saturday, starting at 8 a.m. behind Merrill Hall. We'll be pulling winter weeds, turning the soil, and rebuilding the raised beds that collapsed over the break. Gloves and hand tools are provided, but you'll want boots you don't mind getting muddy. Anyone who stays through the full morning shift earns a plot in the summer growing program, which usually fills up fast. Sign up on the Green Team page by Thursday so we can plan the work crews.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit volunteers for a garden cleanup",
+            "B": "To announce the summer growing program results",
+            "C": "To explain new rules for the garden",
+            "D": "To cancel all of this weekend's outdoor events"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是招募志愿者参加社区花园的春季清理。B项讲的是夏季种植项目的结果，通知只提到名额，未公布结果；C项通知未涉及新规则；D项与通知的招募目的相反，活动照常举行。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the summer growing program?",
+          "options": {
+            "A": "It runs only during the winter months",
+            "B": "It requires a separate application fee",
+            "C": "It is popular and fills quickly",
+            "D": "It replaces the garden cleanup event"
+          },
+          "answer": "C",
+          "explanation": "通知说完成整个上午班次的人可获得夏季种植项目的名额，且该项目\"usually fills up fast\"，可推断它很受欢迎、名额很快满员。A项与\"summer\"矛盾；B项报名费无依据；D项过度推断，两者是不同活动。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mrgat2hg_0"
+    },
+    {
+      "context": "facility_change",
+      "situation": "grand reopening of a renovated art gallery",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "The Hartley Art Gallery reopens next Tuesday after three months of renovations to its lighting and climate control. The first-floor exhibit space is now twice its old size, and we've added a print study room you can book by appointment. To celebrate, we're hosting a free reception in the main atrium next Tuesday at 6 p.m., with a short talk from the curator. Your student ID gets you in, and the first hundred guests receive a signed poster. Regular gallery hours resume Wednesday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To describe the gallery's renovation costs",
+            "B": "To announce the gallery's reopening and reception",
+            "C": "To advertise the curator's evening talk",
+            "D": "To extend the gallery's temporary closure"
+          },
+          "answer": "B",
+          "explanation": "通知宣布画廊重新开放并举办庆祝招待会，这是主旨。A项装修费用未提及；C项策展人讲座只是招待会的一个环节，太局限；D项与重新开放的事实相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will the first hundred guests receive?",
+          "options": {
+            "A": "A free print study room booking",
+            "B": "A guided tour with the curator",
+            "C": "Twice the usual exhibit space",
+            "D": "A signed exhibition poster"
+          },
+          "answer": "D",
+          "explanation": "通知明确说前一百名来宾会获得\"a signed poster\"。A项自习室是需要预约的，不是赠品；B项导览未提及；C项\"twice the size\"说的是展厅空间，与赠品无关，属张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hi_1"
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to road construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Starting next Monday, the Blue Line shuttle will skip the Library Circle stop while crews rebuild the road there. For the next three weeks, it'll detour along Fenwick Street and pick up riders at the temporary stop outside the Student Union instead. Buses run every fifteen minutes, though the detour adds about five minutes to each loop, so plan a little extra time for morning classes. The updated route map is posted at every shelter and on the transit app. We'll switch back to the normal route once paving is finished.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To add a completely new campus shuttle line",
+            "B": "To reduce the shuttle's daily service",
+            "C": "To explain a temporary shuttle route change",
+            "D": "To promote the new transit app"
+          },
+          "answer": "C",
+          "explanation": "通知说明因修路，蓝线班车临时改道并跳过某站，这是主旨。A项没有新增线路；B项班车仍正常运行、未减少班次，与事实相反；D项交通App只是查看地图的渠道，太局限。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where will the shuttle pick up riders during the detour?",
+          "options": {
+            "A": "Outside the Student Union building",
+            "B": "At the closed Library Circle stop",
+            "C": "Along the regular Blue Line",
+            "D": "Inside the campus transit office"
+          },
+          "answer": "A",
+          "explanation": "通知说改道期间在\"the temporary stop outside the Student Union\"上客。B项Library Circle正是被关闭的站；C项常规线路正在改道，不再走；D项交通办公室未作为上客点提及。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mrgat2hi_2"
+    },
+    {
+      "context": "facility_change",
+      "situation": "study lounge closing for pipe repair",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, students. The fourth-floor study lounge in Beckman Library will be closed all next week while plumbers replace a leaking pipe above the ceiling. Work begins Monday at 7 a.m., and it'll wrap up by Friday afternoon. If you usually study there, the quiet reading room on the second floor stays open until midnight, and the group rooms can be booked online. Please clear any personal belongings from the lounge lockers before Friday, since the crew needs full access to the space. We're sorry for the timing so close to midterms.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the new library opening hours",
+            "B": "To promote the second-floor reading room",
+            "C": "To reopen the fourth-floor lounge early",
+            "D": "To announce a temporary lounge closure"
+          },
+          "answer": "D",
+          "explanation": "通知宣布四楼自习室因修管道下周临时关闭，这是主旨。A项没有公布新的开放时间；B项二楼阅览室只是替代方案，太局限；C项与关闭的事实相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to do before Friday?",
+          "options": {
+            "A": "Book a plumber for the repair",
+            "B": "Remove their belongings from the lockers",
+            "C": "Reserve a seat in the reading room",
+            "D": "Report leaks to the library staff"
+          },
+          "answer": "B",
+          "explanation": "通知要求学生周五前\"clear any personal belongings from the lounge lockers\"。A项维修由学校安排，不需学生找水管工；C项阅览室无需预约座位；D项报告漏水张冠李戴，漏水已被发现并在修。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hj_3"
+    },
+    {
+      "context": "info_session",
+      "situation": "new student orientation schedule and requirements",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Attention new students. Fall orientation runs from Wednesday, August 27th through Friday the 29th, and attendance at the Wednesday morning session is required before you can register for classes. Check-in opens at 8 a.m. in Foster Hall, where you'll pick up your ID card and course packet. Thursday and Friday cover optional workshops on campus resources, from the writing center to student clubs. Bring a photo ID and your admission letter to check-in. If you miss the Wednesday session, you'll need to schedule a make-up meeting with your advisor.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain the orientation schedule and requirements",
+            "B": "To welcome families to campus",
+            "C": "To cancel the mandatory Wednesday morning orientation session",
+            "D": "To advertise the campus writing center"
+          },
+          "answer": "A",
+          "explanation": "通知介绍新生入学教育的日程和必到要求，这是主旨。B项对象是新生本人而非家属，且欢迎并非目的；C项周三场次不但没取消，还是必到的；D项写作中心只是周四周五工作坊之一，太局限。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the Wednesday morning session?",
+          "options": {
+            "A": "It is the least important session",
+            "B": "It is held in the writing center",
+            "C": "It must be attended to register",
+            "D": "It is open only to advisors"
+          },
+          "answer": "C",
+          "explanation": "通知说周三上午场次的出勤是选课注册的前提，可推断必须参加才能注册。A项它反而最关键、非最不重要；B项地点是Foster Hall而非写作中心；D项面向新生而非仅顾问。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mrgat2hj_4"
+    },
+    {
+      "context": "facility_change",
+      "situation": "new fitness equipment installation at recreation center",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "The Rowan Recreation Center's weight room will reopen this Thursday with a full lineup of new rowing machines and adjustable benches. Over the past two weeks, crews cleared out the old equipment and reinforced the floor to handle the heavier racks. Please note that staff will run quick fifteen-minute demos at the front desk every afternoon through Sunday. The upstairs cardio deck in the main gymnasium stayed open the whole time, so only the ground-floor weights were affected. Swing by after 10 a.m. Thursday to try the machines, and you'll find trainers on hand.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce reopening with new gym equipment",
+            "B": "To close the upstairs cardio deck for repairs",
+            "C": "To hire new personal trainers",
+            "D": "To explain the weight room's demo schedule"
+          },
+          "answer": "A",
+          "explanation": "通知宣布力量训练室配备新器械后重新开放，这是主旨。B项楼上有氧区一直开放、并未关闭，与事实相反；C项招聘教练未提及；D项演示时间只是细节，太局限。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the upstairs cardio deck?",
+          "options": {
+            "A": "It received all of the new equipment",
+            "B": "It will close for repairs Thursday",
+            "C": "It stayed usable during the renovation",
+            "D": "It is reserved for staff demos"
+          },
+          "answer": "C",
+          "explanation": "通知说\"the upstairs cardio deck stayed open the whole time\"，可推断改造期间它一直可用。A项新器械是放在楼下力量区；B项它没有关闭；D项它并非专供演示。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ],
+      "id": "la_mrgat2hk_5"
+    },
+    {
+      "context": "career_services",
+      "situation": "LinkedIn profile photo day at career center",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "The Career Center is offering free professional headshots this Wednesday from 11 a.m. to 3 p.m. in the second-floor conference room. A photographer will take LinkedIn-ready portraits, and you'll get the edited files by email within two days. Slots are limited, so reserve a time on the Career Center website before Tuesday night; walk-ins are welcome only if space allows. Dress as you would for an interview, since the photos are meant for job applications. There's no cost, but please cancel online if your plans change so someone else can take the spot.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How can students reserve a headshot slot?",
+          "options": {
+            "A": "By emailing the photographer directly",
+            "B": "By reserving online before Tuesday night",
+            "C": "By visiting the conference room in person",
+            "D": "By signing up during the interview"
+          },
+          "answer": "B",
+          "explanation": "通知说在\"the Career Center website before Tuesday night\"预约名额。A项直接联系摄影师未提及；C项走进会议室是活动地点、非预约方式，属张冠李戴；D项面试与本活动无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker ask students to cancel online if plans change?",
+          "options": {
+            "A": "To avoid a cancellation fee",
+            "B": "To reschedule the appointment for next week",
+            "C": "To get the edited photos faster",
+            "D": "So another student takes the slot"
+          },
+          "answer": "D",
+          "explanation": "通知强调名额有限，并请无法赴约者线上取消\"so someone else can take the spot\"，可推断目的是把名额让给其他学生。A项活动免费、无取消费；B项改期未提及；C项取消与更快拿到照片无关，属张冠李戴。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hl_6"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus dining hall switching to summer hours",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. Starting Monday, May 12th, the Commons dining hall shifts to its summer schedule. Breakfast will run from 8 to 10 a.m., and dinner service ends an hour earlier, at 7 p.m. The weekend brunch line stays the same, but the late-night grill closes for the season. These hours hold through the end of August, when the fall schedule returns. If you're on a meal plan, your swipes carry over as usual, so there's nothing you need to do. Check the posted signs at each entrance for the full timetable.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To close the campus dining hall permanently",
+            "B": "To promote the weekend brunch line",
+            "C": "To announce the summer dining schedule",
+            "D": "To introduce a new meal plan"
+          },
+          "answer": "C",
+          "explanation": "通知宣布餐厅切换到夏季营业时间，这是主旨。A项餐厅只是调整时间、并非永久关闭，与事实相反；B项周末早午餐只是一个细节，太局限；D项没有推出新的膳食计划。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What change happens to dinner service?",
+          "options": {
+            "A": "It ends an hour earlier",
+            "B": "It moves to weekend service only",
+            "C": "It now begins at breakfast time",
+            "D": "It is replaced by the grill"
+          },
+          "answer": "A",
+          "explanation": "通知说晚餐服务\"ends an hour earlier, at 7 p.m.\"。B项晚餐并未改为只在周末；C项早上8点是早餐时间，属张冠李戴；D项深夜烧烤档反而是关闭的，非取代晚餐。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mrgat2hl_7"
+    },
+    {
+      "context": "career_services",
+      "situation": "career fair preparation workshop with resume review",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "With the fall career fair only two weeks away, the Career Center is hosting a resume review workshop this Thursday at 4 p.m. in Danforth Hall, Room 210. An advisor will walk through how to tailor your resume to specific employers, and you'll leave with concrete edits to make. Bring a printed copy of your current resume and a list of companies you hope to meet. Space is capped at thirty students, so sign up on the Career Center portal by Wednesday. Drop-ins can't be guaranteed a seat once the room fills.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the fall career fair date",
+            "B": "To recruit advisors for the Career Center",
+            "C": "To cancel this week's resume workshop",
+            "D": "To promote a resume review workshop"
+          },
+          "answer": "D",
+          "explanation": "通知宣传本周四的简历修改工作坊，这是主旨。A项招聘会日期只是背景，太局限；B项招募顾问未提及；C项工作坊照常举行，与取消相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "wrong_purpose",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students told to bring to the workshop?",
+          "options": {
+            "A": "A list of interview questions",
+            "B": "A printed copy of their resume",
+            "C": "A signed letter from an advisor",
+            "D": "Their student ID and portal login details"
+          },
+          "answer": "B",
+          "explanation": "通知要求带\"a printed copy of your current resume\"及目标公司清单。A项面试问题清单未提及；C项顾问签字信无依据；D项报名走门户网站，但入场并未要求带学生证登录信息，属张冠李戴。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hm_8"
+    },
+    {
+      "context": "academic_event",
+      "situation": "spring academic symposium with limited seats and prerequisites",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Attention students and faculty. The Philosophy Department's spring symposium on the ethics of artificial intelligence takes place Friday, April 3rd, in the Whitcomb Seminar Room. Seating is limited to forty, and priority goes to those who've completed the assigned reading, which is posted on the department site. Registration closes Wednesday at noon, and you'll need to confirm you've done the reading when you sign up. The keynote runs from 2 to 4 p.m., followed by a small reception. Because the room is small, we can't admit anyone who hasn't reserved a seat in advance.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a symposium and its requirements",
+            "B": "To assign new philosophy course readings",
+            "C": "To open the seminar room to the public",
+            "D": "To recruit speakers for the symposium"
+          },
+          "answer": "A",
+          "explanation": "通知宣布春季研讨会并说明报名条件（读物、限座、截止），这是主旨。B项指定读物只是报名前提，并非布置课程作业；C项研讨会限座、不对公众开放，与事实相反；D项招募发言人未提及，太局限。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who skip the assigned reading?",
+          "options": {
+            "A": "They will be charged a small penalty fee",
+            "B": "They must present their own research paper",
+            "C": "They may not get a seat",
+            "D": "They must sit in the reception area"
+          },
+          "answer": "C",
+          "explanation": "通知说座位限四十、优先给完成读物者，可推断没读的人抢到座位的可能性较低。A项罚款无依据；B项无需做报告；D项在招待会区就座属张冠李戴。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hm_9"
+    },
+    {
+      "context": "facility_change",
+      "situation": "campus bookstore moving to a new building",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Before you head out, I want to let you know the campus bookstore is moving. Starting Monday, we're relocating from the basement of Kerr Hall to the ground floor of the new Student Commons, right by the main entrance. The old location closes this Friday at 5 p.m., and we'll reopen in the new spot the following Wednesday. During the move, you can still order textbooks online and pick them up at the library help desk. The new store's got more space, a café counter, and longer evening hours.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the bookstore's move",
+            "B": "To advertise the new café counter",
+            "C": "To close the bookstore for good",
+            "D": "To explain a change in textbook prices"
+          },
+          "answer": "A",
+          "explanation": "通知告知书店搬迁到新楼，这是主旨。B项咖啡台只是新店的一个特色，太局限；C项书店是搬迁而非永久关闭，与事实相反；D项教材价格变化未提及。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students get textbooks during the move?",
+          "options": {
+            "A": "By visiting the old Kerr Hall basement",
+            "B": "By waiting until the Wednesday reopening",
+            "C": "By ordering online for library pickup",
+            "D": "By emailing the bookstore staff directly"
+          },
+          "answer": "C",
+          "explanation": "通知说搬迁期间可\"order textbooks online and pick them up at the library help desk\"。A项旧址周五就关了；B项无需一直等到重开；D项直接发邮件给店员未提及，属张冠李戴。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hn_10"
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary conference call for papers",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Submissions are now open for the annual Interdisciplinary Research Conference, held this year on Saturday, October 18th in Lindley Hall. We invite abstracts from any department; the theme is how communities adapt to change. Send a 300-word abstract through the conference portal by September 30th, and selected presenters will be notified in early October. Accepted work can be shown as either a talk or a poster, so mention your preference when you submit. Presenting here's a great way to get feedback before you submit to a larger journal.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce the conference's winning papers",
+            "B": "To invite abstracts for the conference",
+            "C": "To describe the poster and talk formats",
+            "D": "To postpone this year's research conference"
+          },
+          "answer": "B",
+          "explanation": "通知开放年度跨学科会议的摘要投稿，这是主旨。A项没有公布获奖论文；C项报告与海报两种形式只是细节，太局限；D项会议照常举办，与推迟相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must presenters include when they submit?",
+          "options": {
+            "A": "A completed conference registration fee",
+            "B": "A full draft of the finished paper",
+            "C": "A letter from their department head",
+            "D": "Their format preference, talk or poster"
+          },
+          "answer": "D",
+          "explanation": "通知要求投稿时\"mention your preference\"，即说明想做报告还是海报。A项报名费未提及；B项只需300词摘要、非完整论文，与事实相反；C项系主任推荐信无依据，属张冠李戴。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hn_11"
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "alumnus sharing research experience at a public talk",
+      "speaker_role": "professor",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. This Thursday at 5 p.m., the Biology Department welcomes back alumna Dr. Elena Marsh for a public talk in Harmon Auditorium. She graduated from our program a decade ago and now leads a marine research lab studying coral recovery. She'll walk through how her undergraduate fieldwork here shaped her career, then take questions from students. The talk is free and open to everyone, no registration needed. If you're thinking about graduate school in the sciences, this is a great chance to hear how one path unfolded.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To recruit students for a marine research lab",
+            "B": "To cancel a scheduled department talk",
+            "C": "To announce a talk by an alumna",
+            "D": "To explain coral recovery research methods"
+          },
+          "answer": "C",
+          "explanation": "通知宣布本周四校友回校做公开讲座，这是主旨。A项招募实验室成员未提及；B项讲座照常、并未取消，与事实相反；D项珊瑚研究方法只是讲者背景，太局限。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required to attend the talk?",
+          "options": {
+            "A": "No registration is required",
+            "B": "A ticket from the Biology Department",
+            "C": "Advance sign-up on the department site",
+            "D": "A student ID for entry"
+          },
+          "answer": "A",
+          "explanation": "通知说讲座\"free and open to everyone, no registration needed\"，无需任何手续。B项门票未提及；C项提前网上报名与\"no registration\"矛盾；D项凭学生证入场属张冠李戴，讲座对所有人开放。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2hn_12"
+    },
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to bridge construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "The Green Route shuttle will run on a shortened loop beginning Wednesday while the bridge near the east gate is repaired. Until the work finishes in about a month, it'll turn around at the Health Center rather than crossing to the east dorms. Please note that students living east of the gate should catch the express van, which leaves the Health Center every twenty minutes from 7 a.m. to 11 p.m. Signs at each stop show the revised timing, and we'll restore the full loop once the bridge reopens.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a permanent new shuttle route",
+            "B": "To promote the campus express van service",
+            "C": "To recruit workers for a repair crew",
+            "D": "To explain a temporary shuttle change"
+          },
+          "answer": "D",
+          "explanation": "通知说明因修桥班车临时缩短环线，这是主旨。A项改动是临时的、非永久新线路，与事实相反；B项快线小巴只是替代方案，太局限；C项招募维修工人并非通知目的。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "too_narrow",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students living east of the gate?",
+          "options": {
+            "A": "They must move to new campus dorms",
+            "B": "They need an alternative to the shuttle",
+            "C": "They receive free express van passes",
+            "D": "Their dorms will be closed for a month"
+          },
+          "answer": "B",
+          "explanation": "班车不再驶往东侧宿舍，通知让东门以东的学生改乘快线小巴，可推断他们需要班车之外的替代交通。A项搬宿舍无依据；C项免费乘车券未提及；D项宿舍关闭属张冠李戴，关闭的是桥而非宿舍。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2ho_13"
+    },
+    {
+      "context": "facility_change",
+      "situation": "climbing wall resurfacing at recreation center",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "The climbing wall and bouldering area on the recreation center's lower level will be offline from Monday through Thursday for a full resurfacing of the holds and safety mats. During those four days, certified staff will inspect and re-tension every rope before the wall reopens Friday morning. Please note that anyone with a climbing pass can book a free refresher belay session that afternoon, since the anchor points have shifted slightly. The upper gym and pool stay open as usual, so you'll still have room to train. Reservations open Wednesday at noon on the rec center app.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How long will the climbing wall be closed?",
+          "options": {
+            "A": "From Monday through Thursday",
+            "B": "For the rest of the semester",
+            "C": "Only on Friday morning",
+            "D": "Until the swimming pool reopens"
+          },
+          "answer": "A",
+          "explanation": "通知说攀岩墙\"offline from Monday through Thursday\"，周五上午重开。B项关闭只有四天、非整学期；C项周五上午恰是重开时间，属张冠李戴；D项泳池全程正常开放，与关闭无关。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why can pass holders book a free refresher belay session?",
+          "options": {
+            "A": "Because the wall will be permanently closed",
+            "B": "Because staff need help testing the ropes",
+            "C": "Because the anchor points have moved",
+            "D": "Because the upper gym is closed"
+          },
+          "answer": "C",
+          "explanation": "通知说提供免费复训保护课\"since the anchor points have shifted slightly\"，可推断因锚点位置变动、攀岩者需重新熟悉。A项墙只是临时关闭；B项测试绳索由持证员工负责、不需学生帮忙；D项楼上健身房照常开放，属张冠李戴。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "misattributed_detail"
+          }
+        }
+      ],
+      "id": "la_mrgat2ho_14"
     }
   ]
 }
