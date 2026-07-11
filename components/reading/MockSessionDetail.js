@@ -299,6 +299,11 @@ function McqTaskBody({ task, explainHook }) {
                   })}
                 </div>
               )}
+              {selected == null && (
+                <div style={{ marginLeft: 25, marginTop: 6, fontSize: 11.5, color: C.textDim, fontStyle: "italic" }}>
+                  未作答
+                </div>
+              )}
               {q.explanation && (
                 <div
                   style={{
@@ -412,6 +417,22 @@ function TaskItemCard({ task, index, defaultOpen, explainHook }) {
               }}
             >
               {moduleBadge}
+            </span>
+          )}
+          {task.timedOut && (
+            <span
+              title="因超时未提交，未作答按错误计入"
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                padding: "1px 7px",
+                borderRadius: 999,
+                background: C.amberSoft,
+                color: C.amber,
+                border: `1px solid ${C.amber}35`,
+              }}
+            >
+              ⏱ 超时
             </span>
           )}
           {task.topic && (

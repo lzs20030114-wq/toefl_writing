@@ -502,6 +502,9 @@ export function ReadingProgressView({ onBack }) {
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
+  // Consume a `?mock=latest` deep link exactly once (from the post-exam
+  // ResultsCard "查看本次逐题解析" button) so re-renders don't re-open it.
+  const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => {
     try { setCurrentUser(getSavedCode() || ""); } catch {}
@@ -535,6 +538,24 @@ export function ReadingProgressView({ onBack }) {
     () => entries.filter((e) => e.session.details?.subtype === "mock"),
     [entries],
   );
+
+  // Deep link: when arriving via `?mock=latest`, auto-open the newest mock
+  // (mockEntries is date-desc, so [0] is latest) and strip the param from the
+  // URL so closing/re-rendering doesn't reopen it. Read window once (no
+  // useSearchParams — the page has no Suspense boundary and it would break build).
+  useEffect(() => {
+    if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
+    if (mockEntries.length === 0) return;
+    const params = new URLSearchParams(window.location.search);
+    mockDeepLinkConsumed.current = true;
+    if (params.get("mock") !== "latest") return;
+    setActiveMockSrcIdx(mockEntries[0].sourceIndex);
+    try {
+      params.delete("mock");
+      const qs = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    } catch {}
+  }, [mockEntries]);
   const practiceEntries = useMemo(
     () => entries.filter((e) => e.session.details?.subtype !== "mock"),
     [entries],

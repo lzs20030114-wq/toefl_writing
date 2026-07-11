@@ -242,6 +242,7 @@ function MockTaskCard({ task, index }) {
           {m.label}
           <span style={{ fontSize: 10, color: P.textDim, fontWeight: 500 }}>#{index + 1}</span>
           {task.module ? <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: `${ACCENT.color}12`, color: ACCENT.color }}>M{task.module}</span> : null}
+          {task.timedOut ? <span title="因超时未提交，未作答按错误计入" style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: "#FFFBEB", color: "#D97706", border: "1px solid #D9770635" }}>⏱ 超时</span> : null}
           {task.topic ? <span style={{ fontSize: 10, color: P.textDim, fontWeight: 400 }}>{task.topic}</span> : null}
         </span>
         <span style={{ fontSize: 11, fontWeight: 700, color: statusColor, background: `${statusColor}12`, padding: "2px 8px", borderRadius: 999, fontVariantNumeric: "tabular-nums" }}>{c}/{t}</span>
@@ -534,6 +535,9 @@ export function ListeningProgressView({ onBack }) {
   const [filter, setFilter] = useState("all");
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  // Consume a `?mock=latest` deep link exactly once (from the post-exam
+  // ResultsCard "查看本次逐题解析" button) so re-renders don't re-open it.
+  const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => {
     try { setCurrentUser(getSavedCode() || ""); } catch {}
@@ -559,6 +563,28 @@ export function ListeningProgressView({ onBack }) {
     if (filter === "all") return sessions;
     return sessions.filter(s => s.details?.subtype === filter);
   }, [sessions, filter]);
+
+  // Deep link: arriving via `?mock=latest` auto-expands the newest mock record
+  // (sessions is date-desc, so the first mock is the latest) and strips the
+  // param so re-renders don't re-trigger. Mocks render inline in the session
+  // list keyed by their index in `filtered`; at mount filter is "all" so
+  // filtered === sessions and the index lines up. No useSearchParams (the page
+  // has no Suspense boundary — it would break the build).
+  useEffect(() => {
+    if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
+    if (!sessions || sessions.length === 0) return;
+    const latestMockIdx = sessions.findIndex((s) => s.details?.subtype === "mock");
+    if (latestMockIdx < 0) return; // no mock records yet — nothing to open
+    const params = new URLSearchParams(window.location.search);
+    mockDeepLinkConsumed.current = true;
+    if (params.get("mock") !== "latest") return;
+    setExpandedIdx(latestMockIdx);
+    try {
+      params.delete("mock");
+      const qs = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    } catch {}
+  }, [sessions]);
 
   const lcrSessions = sessions.filter(s => s.details?.subtype === "lcr");
   const laSessions = sessions.filter(s => s.details?.subtype === "la");

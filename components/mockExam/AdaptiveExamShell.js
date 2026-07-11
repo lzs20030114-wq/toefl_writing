@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { AudioPlayer } from "../listening/AudioPlayer";
 import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
 import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule2 } from "../../lib/mockExam/readingPlanner";
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
+import { finalizeTimedOutResults } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess } from "../../lib/sessionStore";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
@@ -73,10 +75,43 @@ const LEVEL_LABELS = {
  * CTW Inline — fill-in-the-blanks within a passage.
  * Each blank shows the displayed_fragment + input for the missing letters.
  */
-function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
+function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }) {
   const [answers, setAnswers] = useState(() => item.blanks.map(() => ""));
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
+  // Mirror the live answers into a ref so the timeout collector reads the
+  // latest input without a stale closure (registered once on mount).
+  const answersRef = useRef(answers);
+  answersRef.current = answers;
+
+  // Register a partial-answer collector for the module timeout. Scoring here
+  // mirrors handleSubmit exactly; only userAnswer differs — an unfilled blank
+  // reports null (so the review shows "(未填)") instead of the bare fragment.
+  useEffect(() => {
+    if (!collectorRef) return;
+    collectorRef.current = {
+      itemId: item.id,
+      collect: () => {
+        const cur = answersRef.current || [];
+        let unanswered = 0;
+        const results = item.blanks.map((blank, i) => {
+          const input = cur[i] || "";
+          const expected = blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
+          const fragment = blank.displayed_fragment.toLowerCase();
+          const userFull = (fragment + input).toLowerCase().replace(/[^a-z]/g, "");
+          const filled = input.length > 0;
+          if (!filled) unanswered++;
+          return {
+            userAnswer: filled ? blank.displayed_fragment + input : null,
+            isCorrect: userFull === expected,
+          };
+        });
+        const correct = results.filter((r) => r.isCorrect).length;
+        return { itemId: item.id, correct, total: item.blanks.length, results, unanswered };
+      },
+    };
+    return () => { collectorRef.current = null; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function focusBlank(idx) {
     if (idx >= 0 && idx < item.blanks.length && inputRefs.current[idx]) {
@@ -213,7 +248,7 @@ function CTWInlineTask({ item, onComplete, revealAnswers = false }) {
  * MCQ Inline — generic multiple-choice for RDL, AP, LA, LC, LAT.
  * Shows passage/text, then one question at a time with A/B/C/D buttons.
  */
-function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
+function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false }) {
   const questions = item.questions || [];
   const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
   const answerSeconds = listeningSecondsForType(taskType);
@@ -221,6 +256,31 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
   const [selections, setSelections] = useState(() => questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
   const [answerTimeLeft, setAnswerTimeLeft] = useState(answerSeconds);
+  // Mirror live selections so the timeout collector isn't stuck on a stale closure.
+  const selectionsRef = useRef(selections);
+  selectionsRef.current = selections;
+
+  // Register a partial-answer collector for the module timeout — same scoring
+  // as handleSubmit, with unanswered = count of questions still unselected.
+  useEffect(() => {
+    if (!collectorRef) return;
+    collectorRef.current = {
+      itemId: item.id,
+      collect: () => {
+        const cur = selectionsRef.current || [];
+        const correctAnswer = (q) => q.correct_answer || q.answer;
+        let unanswered = 0;
+        const results = questions.map((q, i) => {
+          const sel = cur[i] ?? null;
+          if (sel == null) unanswered++;
+          return { selected: sel, correct: correctAnswer(q), isCorrect: sel === correctAnswer(q) };
+        });
+        const correct = results.filter((r) => r.isCorrect).length;
+        return { itemId: item.id, correct, total: questions.length, results, unanswered };
+      },
+    };
+    return () => { collectorRef.current = null; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   // Listening tasks play their audio first; the answer timer must not start
   // until playback ends (real TOEFL runs the clock only while you answer, never
   // during audio). Reading tasks have no audio, so they begin answering at once.
@@ -503,11 +563,34 @@ function MCQInlineTask({ item, taskType, onComplete, revealAnswers = false }) {
 /**
  * LCR Inline — listen and choose a response (single question per item).
  */
-function LCRInlineTask({ item, onComplete, revealAnswers = false }) {
+function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [answerTimeLeft, setAnswerTimeLeft] = useState(LCR_SECONDS_PER_ITEM);
+  // Mirror the live selection so the timeout collector reads the latest value.
+  const selectedRef = useRef(selected);
+  selectedRef.current = selected;
+
+  // Register a partial-answer collector for the module timeout.
+  useEffect(() => {
+    if (!collectorRef) return;
+    collectorRef.current = {
+      itemId: item.id,
+      collect: () => {
+        const sel = selectedRef.current ?? null;
+        const isCorrect = sel === item.answer;
+        return {
+          itemId: item.id,
+          correct: isCorrect ? 1 : 0,
+          total: 1,
+          results: [{ selected: sel, correct: item.answer, isCorrect }],
+          unanswered: sel == null ? 1 : 0,
+        };
+      },
+    };
+    return () => { collectorRef.current = null; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleAudioEnded() {
     setPhase("choose");
@@ -651,34 +734,22 @@ function LCRInlineTask({ item, onComplete, revealAnswers = false }) {
 /**
  * Routes to the correct inline renderer based on taskType.
  */
-function AdaptiveTaskRenderer({ item, onComplete, accent }) {
+function AdaptiveTaskRenderer({ item, onComplete, accent, collectorRef }) {
   if (!item) return null;
 
   if (item.taskType === "ctw") {
-    return <CTWInlineTask item={item} onComplete={onComplete} />;
+    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} />;
   }
   if (item.taskType === "lcr") {
-    return <LCRInlineTask item={item} onComplete={onComplete} />;
+    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} />;
   }
   // RDL, AP, LA, LC, LAT all use MCQ
-  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} />;
+  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} />;
 }
 
-// ------ Helper: count total scorable items ------
-
-function countTotalScorableItems(items) {
-  let total = 0;
-  for (const item of items) {
-    if (item.taskType === "ctw") {
-      total += (item.blanks || []).length;
-    } else if (item.taskType === "lcr") {
-      total += 1;
-    } else {
-      total += (item.questions || []).length;
-    }
-  }
-  return total;
-}
+// ------ Helper: aggregate module results ------
+// (Per-item scorable counting now lives in lib/mockExam/timeoutFinalize.js so
+// the timeout scoring invariant can be unit-tested without the DOM.)
 
 function sumCorrectFromResults(results) {
   let total = 0;
@@ -735,6 +806,10 @@ function buildTaskSnapshots(results) {
       correct: r.correct ?? 0,
       total: r.total ?? 0,
       results: Array.isArray(r.results) ? r.results : [],
+      // Timeout provenance — flags tasks the student never submitted (auto-
+      // scored as wrong) so the review can badge them + count未作答 questions.
+      timedOut: !!r.timedOut,
+      unanswered: r.unanswered || 0,
     };
   });
 }
@@ -767,6 +842,9 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   const [timeLeft, setTimeLeft] = useState(config.module1TimeSeconds);
   const timerRef = useRef(null);
   const autoFinishedRef = useRef(false);
+  // Points at the currently-mounted task's partial-answer collector (see the
+  // inline task components). Read at timeout to score the in-progress task.
+  const partialCollectorRef = useRef(null);
   // Latest timeLeft for the checkpoint, read without making the save-effect a
   // per-second writer (we checkpoint on progress milestones, not every tick).
   const timeLeftRef = useRef(timeLeft);
@@ -809,14 +887,25 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [phase]);
 
-  // Auto-finish on timeout
+  // Auto-finish on timeout. Unlike a normal finish, we don't discard the
+  // in-progress + not-yet-reached tasks: finalizeTimedOutResults folds in the
+  // current task's partially-selected answers and marks every remaining
+  // question wrong, so each module's scored total always equals its planned
+  // total (未作答 = 错, matching real ETS). setM*Results must run first because
+  // handleM2Complete reads m1Results from state when it settles the band.
   useEffect(() => {
     if (timeLeft === 0 && !autoFinishedRef.current && (phase === "module1" || phase === "module2")) {
       autoFinishedRef.current = true;
+      const items = phase === "module1" ? m1Items : m2Items;
+      const existing = phase === "module1" ? m1Results : m2Results;
+      const collect = partialCollectorRef.current && partialCollectorRef.current.collect;
+      const finalResults = finalizeTimedOutResults(items || [], existing, collect);
       if (phase === "module1") {
-        handleM1Complete();
+        setM1Results(finalResults);
+        handleM1Complete(finalResults);
       } else {
-        handleM2Complete();
+        setM2Results(finalResults);
+        handleM2Complete(finalResults);
       }
     }
   }, [timeLeft, phase]);
@@ -875,6 +964,13 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   }
 
   function handleItemComplete(result) {
+    // Timeout guard: a task's onComplete is fired from an 800/1200ms setTimeout
+    // (submit animation). If the module already timed out, that delayed callback
+    // still holds a stale closure — accepting it would double-append a result
+    // and re-run handleM2Complete (a duplicate saveSess → duplicate history).
+    // autoFinishedRef is reset to false on start/resume/entering M2, so the
+    // normal (non-timeout) flow is unaffected.
+    if (autoFinishedRef.current) return;
     // Attach the item to the result so the post-exam review can render the
     // original passage/questions alongside the user's answers. Without this,
     // results are just aggregated correctness — no way to show the test back.
@@ -1077,6 +1173,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
               item={currentItem}
               onComplete={handleItemComplete}
               accent={accent}
+              collectorRef={partialCollectorRef}
             />
           </SurfaceCard>
         )}
@@ -1093,6 +1190,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
             m1Results={m1Results}
             m2Results={m2Results}
             config={config}
+            section={section}
             onRestart={handleRestart}
             onExit={onExit}
           />
@@ -1106,9 +1204,14 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
 
 function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit }) {
   const isReading = config.label === "Reading";
-  const m1Count = isReading ? "16 项 (10 CTW + 5 RDL + 1 AP)" : "12 项 (10 LCR + 1 LA + 1 LC)";
-  const m2UpperCount = isReading ? "8 项 (5 CTW + 2 RDL + 1 AP)" : "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
-  const m2LowerCount = isReading ? "9 项 (5 CTW + 3 RDL + 1 AP)" : "8 项 (5 LCR + 2 LA + 1 LC)";
+  // Reading: Module 1 = 20 scored questions, Module 2 = 30. Upper/Lower share
+  // the SAME structure (只题目难度不同), so reading shows one Module 2 box.
+  // Listening's Upper/Lower composition genuinely differs (LAT only on Upper;
+  // 2×LA on Lower), so listening keeps its two separate boxes.
+  const m1Count = isReading ? "20 题 (CTW 10空 + RDL 5题 + AP 5题)" : "12 项 (10 LCR + 1 LA + 1 LC)";
+  const m2ReadingCount = "30 题 (CTW 20空 + RDL 5题 + AP 5题)";
+  const m2UpperCount = "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
+  const m2LowerCount = "8 项 (5 LCR + 2 LA + 1 LC)";
   const m1Time = Math.round(config.module1TimeSeconds / 60);
   const m2Time = Math.round(config.module2TimeSeconds / 60);
   const totalTime = m1Time + m2Time;
@@ -1142,8 +1245,14 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
           accentSoft={accentSoft}
         />
         <InfoBox label="Module 1 题量" value={m1Count} accent={accent} accentSoft={accentSoft} />
-        <InfoBox label="M2 Upper" value={m2UpperCount} accent={accent} accentSoft={accentSoft} />
-        <InfoBox label="M2 Lower" value={m2LowerCount} accent={accent} accentSoft={accentSoft} />
+        {isReading ? (
+          <InfoBox label="Module 2 题量" value={m2ReadingCount} accent={accent} accentSoft={accentSoft} />
+        ) : (
+          <>
+            <InfoBox label="M2 Upper" value={m2UpperCount} accent={accent} accentSoft={accentSoft} />
+            <InfoBox label="M2 Lower" value={m2LowerCount} accent={accent} accentSoft={accentSoft} />
+          </>
+        )}
         <InfoBox
           label="总计"
           value={`约 ${totalTime} 分钟`}
@@ -1160,6 +1269,7 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
       }}>
         <strong style={{ color: accent }}>自适应机制:</strong> Module 1 正确率 &ge; 60% 进入 Upper 路径 (更难, 最高 6.0 Band),
         否则进入 Lower 路径 (较易, 最高 4.0 Band)。
+        {isReading && " Upper 与 Lower 路径题量完全相同，仅题目难度不同。"}
       </div>
 
       {/* Timer rule — matches real ETS behavior */}
@@ -1255,13 +1365,19 @@ function RoutingTransition({ path, accent, accentSoft }) {
   );
 }
 
-function ResultsCard({ score, m1Results, m2Results, config, onRestart, onExit }) {
+function ResultsCard({ score, m1Results, m2Results, config, section, onRestart, onExit }) {
+  const router = useRouter();
   const palette = BAND_COLORS[score.color] || BAND_COLORS.blue;
   const levelLabel = LEVEL_LABELS[score.color] || "";
   const m1Correct = sumCorrectFromResults(m1Results);
   const m1Total = sumTotalFromResults(m1Results);
   const m2Correct = sumCorrectFromResults(m2Results);
   const m2Total = sumTotalFromResults(m2Results);
+  // Total questions auto-scored wrong because the module clock ran out before
+  // the student answered them (surfaced so the band doesn't look unexplained).
+  const unanswered = [...m1Results, ...m2Results].reduce((s, r) => s + (r.unanswered || 0), 0);
+  // Deep-link into this section's practice records, auto-opening the latest mock.
+  const reviewHref = `/${section === "listening" ? "listening" : "reading"}/progress?mock=latest`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1349,17 +1465,39 @@ function ResultsCard({ score, m1Results, m2Results, config, onRestart, onExit })
         </div>
       </SurfaceCard>
 
+      {/* Timeout transparency — questions the clock cut off are scored as wrong,
+          so tell the student explicitly (mirrors the amber timer-rule box). */}
+      {unanswered > 0 && (
+        <div style={{
+          display: "flex", alignItems: "flex-start", gap: 8,
+          background: "#FFFBEB", border: "1px solid #FDE68A",
+          borderRadius: 8, padding: "11px 14px",
+          fontSize: 13, color: "#92400e", lineHeight: 1.6,
+        }}>
+          <span style={{ fontSize: 15, flexShrink: 0 }}>{"⏱"}</span>
+          <span>因超时，有 <strong>{unanswered}</strong> 道题未作答，已按错误计入成绩。</span>
+        </div>
+      )}
+
       {/* Review hint — the completion screen shows only the band; the
           per-question review (right/wrong + AI explanation) lives in the
-          practice records, so point users there before they leave. */}
+          practice records, so send users straight there before they leave. */}
       <div style={{
-        display: "flex", alignItems: "flex-start", gap: 8,
+        display: "flex", flexDirection: "column", gap: 10,
         background: config.accentSoft, border: `1px solid ${config.accent}33`,
-        borderRadius: 8, padding: "11px 14px",
+        borderRadius: 8, padding: "12px 14px",
         fontSize: 13, color: C.t2, lineHeight: 1.6,
       }}>
-        <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
-        <span>想回看每道题的作答与解析？可在首页 <strong style={{ color: config.accent }}>{config.labelZh}练习记录</strong> 中查看本次模考详情。</span>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+          <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
+          <span>想回看每道题的作答与解析？点击下方按钮进入 <strong style={{ color: config.accent }}>{config.labelZh}练习记录</strong>，将自动展开本次模考详情。</span>
+        </div>
+        <Btn
+          onClick={() => router.push(reviewHref)}
+          style={{ alignSelf: "flex-start", background: config.accent, borderColor: config.accent, fontSize: 13 }}
+        >
+          查看本次逐题解析
+        </Btn>
       </div>
 
       {/* Actions */}
