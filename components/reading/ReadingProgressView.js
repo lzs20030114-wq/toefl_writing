@@ -502,8 +502,12 @@ export function ReadingProgressView({ onBack }) {
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
-  // Consume a `?mock=latest` deep link exactly once (from the post-exam
-  // ResultsCard "查看本次逐题解析" button) so re-renders don't re-open it.
+  // Set when a `?mock=<date>` deep link points at a record we can't find (e.g.
+  // the exam's cloud save silently failed) — surfaced as an amber notice so the
+  // user isn't shown a stale mock without explanation.
+  const [mockNotFound, setMockNotFound] = useState(false);
+  // Consume a `?mock=...` deep link exactly once (from the post-exam ResultsCard
+  // "查看本次逐题解析" button) so re-renders don't re-open it.
   const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => {
@@ -539,17 +543,28 @@ export function ReadingProgressView({ onBack }) {
     [entries],
   );
 
-  // Deep link: when arriving via `?mock=latest`, auto-open the newest mock
-  // (mockEntries is date-desc, so [0] is latest) and strip the param from the
-  // URL so closing/re-rendering doesn't reopen it. Read window once (no
-  // useSearchParams — the page has no Suspense boundary and it would break build).
+  // Deep link: the post-exam ResultsCard sends `?mock=<sessionDate>` (its exact
+  // save identity) — or legacy `?mock=latest`. "latest" opens the newest mock
+  // (mockEntries is date-desc, so [0] is latest); an identity link opens THAT
+  // record by date, and if it isn't present (e.g. a cloud save that silently
+  // failed) we flag it rather than opening a stale previous mock. Strip the
+  // param afterward so closing/re-rendering doesn't reopen it. Read window once
+  // (no useSearchParams — the page has no Suspense boundary and it would break
+  // the build).
   useEffect(() => {
     if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
-    if (mockEntries.length === 0) return;
+    if (mockEntries.length === 0) return; // wait for records (cloud sync)
     const params = new URLSearchParams(window.location.search);
+    const val = params.get("mock");
     mockDeepLinkConsumed.current = true;
-    if (params.get("mock") !== "latest") return;
-    setActiveMockSrcIdx(mockEntries[0].sourceIndex);
+    if (val === "latest") {
+      setActiveMockSrcIdx(mockEntries[0].sourceIndex);
+    } else if (val != null) {
+      // params.get() already returns the decoded value — no extra decodeURIComponent.
+      const target = mockEntries.find((e) => e.session.date === val);
+      if (target) setActiveMockSrcIdx(target.sourceIndex);
+      else setMockNotFound(true);
+    }
     try {
       params.delete("mock");
       const qs = params.toString();
@@ -675,6 +690,13 @@ export function ReadingProgressView({ onBack }) {
               </p>
             </div>
             {mockEntries.length > 0 && <LatestMockCard session={mockEntries[0].session} />}
+            {/* Deep-linked mock record missing (likely a failed save) — explain
+                why the requested mock isn't shown before the mock list. */}
+            {mockNotFound && (
+              <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10, padding: "10px 14px", marginBottom: 14, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+                未找到本次模考的记录（可能保存失败），以下为历史记录。
+              </div>
+            )}
             <MockListSidebar
               entries={mockEntries}
               activeIdx={activeMockSrcIdx}

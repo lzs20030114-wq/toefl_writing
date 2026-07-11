@@ -830,6 +830,10 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   const [finalScore, setFinalScore] = useState(null);
   const [usedIds, setUsedIds] = useState(new Set());
   const [error, setError] = useState(null);
+  // ISO date this exam was saved under — used as the session's identity so the
+  // results screen deep-links into THIS exact record, not just "the latest mock"
+  // (which would surface a previous exam if this save silently failed to sync).
+  const [savedSessionDate, setSavedSessionDate] = useState(null);
 
   // Resume support: load any in-progress checkpoint for this section once, so
   // the intro can offer "continue where you left off". Restored on demand via
@@ -1040,6 +1044,11 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     const score = calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
     setFinalScore(score);
 
+    // Stamp this exam's save identity once, reused for both the saved record's
+    // `date` and the results-screen deep link, so the two always agree.
+    const sessionDate = new Date().toISOString();
+    setSavedSessionDate(sessionDate);
+
     // Save to history. Use the canonical section type ("reading"/"listening")
     // with details.subtype="mock" so ReadingProgressView / ListeningProgressView
     // pick these up alongside practice records. The old "adaptive-{section}"
@@ -1053,7 +1062,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
       saveSess({
         type: section,
         mode: "mock",
-        date: new Date().toISOString(),
+        date: sessionDate,
         correct: m1Correct + m2Correct,
         total: m1Total + m2Total,
         band: score.band,
@@ -1093,6 +1102,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
     setCurrentItemIndex(0);
     setRoutePath(null);
     setFinalScore(null);
+    setSavedSessionDate(null);
     setUsedIds(new Set());
     setError(null);
     autoFinishedRef.current = false;
@@ -1191,6 +1201,7 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
             m2Results={m2Results}
             config={config}
             section={section}
+            sessionDate={savedSessionDate}
             onRestart={handleRestart}
             onExit={onExit}
           />
@@ -1365,7 +1376,7 @@ function RoutingTransition({ path, accent, accentSoft }) {
   );
 }
 
-function ResultsCard({ score, m1Results, m2Results, config, section, onRestart, onExit }) {
+function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate, onRestart, onExit }) {
   const router = useRouter();
   const palette = BAND_COLORS[score.color] || BAND_COLORS.blue;
   const levelLabel = LEVEL_LABELS[score.color] || "";
@@ -1376,8 +1387,13 @@ function ResultsCard({ score, m1Results, m2Results, config, section, onRestart, 
   // Total questions auto-scored wrong because the module clock ran out before
   // the student answered them (surfaced so the band doesn't look unexplained).
   const unanswered = [...m1Results, ...m2Results].reduce((s, r) => s + (r.unanswered || 0), 0);
-  // Deep-link into this section's practice records, auto-opening the latest mock.
-  const reviewHref = `/${section === "listening" ? "listening" : "reading"}/progress?mock=latest`;
+  // Deep-link into this section's practice records, auto-opening THIS exam by
+  // its save identity (session date). Falls back to `mock=latest` only if the
+  // date is somehow missing, so an older link shape still works.
+  const reviewBase = `/${section === "listening" ? "listening" : "reading"}/progress`;
+  const reviewHref = sessionDate
+    ? `${reviewBase}?mock=${encodeURIComponent(sessionDate)}`
+    : `${reviewBase}?mock=latest`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

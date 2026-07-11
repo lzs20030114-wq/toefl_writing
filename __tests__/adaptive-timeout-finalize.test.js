@@ -156,6 +156,30 @@ describe("finalizeTimedOutResults", () => {
     expect(final[1].item).toBe(items[1]);
   });
 
+  test("(f) collector reports a fully-answered task — scored but NOT flagged timedOut", () => {
+    const items = [mcqItem()]; // 3-question MCQ, every question answered before 0
+    const collect = () => ({
+      itemId: "mcq1",
+      correct: 2,
+      total: 3,
+      unanswered: 0,
+      results: [
+        { selected: "A", correct: "A", isCorrect: true },
+        { selected: "C", correct: "B", isCorrect: false },
+        { selected: "C", correct: "C", isCorrect: true },
+      ],
+    });
+    const final = finalizeTimedOutResults(items, [], collect);
+
+    expect(final).toHaveLength(1);
+    // Fully answered → no "⏱ 超时" badge, but still scored + carries item.
+    expect(final[0].timedOut).toBe(false);
+    expect(final[0]).toMatchObject({ correct: 2, total: 3, unanswered: 0 });
+    expect(final[0].item).toBe(items[0]);
+    // Still contributes to the module's planned total.
+    expect(final.reduce((s, r) => s + r.total, 0)).toBe(plannedTotal(items));
+  });
+
   test("total invariant holds even when collector supplies a mismatched total", () => {
     const items = [mcqItem()];
     // Collector claims total=5 (inconsistent) → rejected, unattempted total=3.

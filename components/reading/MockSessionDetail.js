@@ -477,6 +477,12 @@ function OverviewContent({ allTasks, m1, m2 }) {
   const byType = {};
   for (const t of allTasks) {
     if (!t.taskType) continue;
+    // Skip tasks the clock cut off before the student ever reached them (scored
+    // 0/N all-wrong). Unreached tasks carry no skill signal — don't let a
+    // timeout misdiagnose a task type as weak (e.g. "AP 弱项 0%" = 没时间做到,
+    // not 不会). Legacy snapshots without `unanswered` (undefined→0) are kept.
+    const fullyUnattempted = (t.unanswered || 0) > 0 && t.unanswered === t.total;
+    if (fullyUnattempted) continue;
     if (!byType[t.taskType]) byType[t.taskType] = { c: 0, t: 0 };
     byType[t.taskType].c += t.correct || 0;
     byType[t.taskType].t += t.total || 0;
