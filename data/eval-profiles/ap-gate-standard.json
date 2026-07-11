@@ -1,0 +1,35 @@
+{
+  "type": "ap",
+  "derived_from": "data/realExam2026/reading/academicPassage.json",
+  "n": 64,
+  "dimensions": {
+    "last_sent_however_share": {
+      "policy": "hard",
+      "target": 0.015625,
+      "detector_precision": 1,
+      "band": [
+        -0.064375,
+        0.095625
+      ]
+    },
+    "passage_word_count": {
+      "policy": "drift",
+      "target": 181.09375,
+      "detector_precision": 1,
+      "band": [
+        162.984375,
+        199.20312500000003
+      ]
+    },
+    "opener_copula_share": {
+      "policy": "monitor",
+      "target": 0.234375,
+      "detector_precision": 0.85
+    },
+    "option_spread_mean": {
+      "policy": "monitor",
+      "target": 2.5708333333333337,
+      "detector_precision": 1
+    }
+  }
+}

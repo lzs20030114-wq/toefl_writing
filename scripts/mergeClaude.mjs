@@ -29,6 +29,11 @@ const ROOT = resolve(__dirname, "..");
 
 const { validateQuestion, validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
 const { validateAllSets } = require("./validate-bank.js");
+// 2026-07-11 范式硬拒白名单(实弹证明散文规则约束不住模型:em300 裸机构收件人、
+// marine biology 课程泄漏)。全部为精度 1.0 的确定性检查,不合格拒题交 R2 重试。
+const { DISC_COURSE_LIST, DISC_STUDENT_NAMES } = await import("../lib/ai/prompts/academicWriting.js");
+const EMAIL_RECIPIENT_OK = (to) => /^(Mr|Ms|Mrs|Dr|Prof(essor)?)\.?\s+[A-Z][a-zA-Z'-]+$/.test(to) || /^[A-Z][a-z]+$/.test(to);
+const DISC_PROF_OK = (name) => /^Dr\. (Gupta|Diaz|Achebe)$/.test(String(name || ""));
 // 合库层通用内容去重（exact 指纹 + jaccard 近重复）。
 const { createDedupIndex, checkDuplicate, addToIndex } = require("../lib/gen/contentDedup.js");
 
@@ -239,6 +244,19 @@ function mergeDisc(stagingPath) {
       rejected.push({ reason: "schema_invalid", q });
       continue;
     }
+    // 范式硬拒:课程白名单 / 四人名字池 / 三教授姓氏(真题实测的封闭集合)
+    if (!DISC_COURSE_LIST.includes(String(norm.course || ""))) {
+      rejected.push({ reason: "course_not_in_whitelist", course: norm.course });
+      continue;
+    }
+    if (!(norm.students || []).every((s) => DISC_STUDENT_NAMES.includes(s.name))) {
+      rejected.push({ reason: "student_name_not_in_pool", names: (norm.students || []).map((s) => s.name) });
+      continue;
+    }
+    if (!DISC_PROF_OK(norm.professor?.name)) {
+      rejected.push({ reason: "professor_name_not_in_pool", name: norm.professor?.name });
+      continue;
+    }
     // Dedup by exact professor text match (within an existing item)
     const dup = (prod || []).find((p) => String(p?.professor?.text || "").trim() === norm.professor.text);
     if (dup) {
@@ -318,6 +336,11 @@ function mergeEmail(stagingPath) {
     const norm = normalizeEmailItem(q);
     if (!norm) {
       rejected.push({ reason: "schema_invalid" });
+      continue;
+    }
+    // 范式硬拒:收件人只允许 Title+Surname 或朋友 first name(真题仅此两式)
+    if (!EMAIL_RECIPIENT_OK(String(norm.to || ""))) {
+      rejected.push({ reason: "recipient_form", to: norm.to });
       continue;
     }
     // Dedup by scenario match

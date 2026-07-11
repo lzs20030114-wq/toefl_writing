@@ -69,6 +69,14 @@ describe("Email goal-verb and subject rules", () => {
   });
 });
 
+describe("merge-path hard reject (production layer)", () => {
+  test("mergeClaude rejects bad recipient forms at accept time", () => {
+    const src = fs.readFileSync(path.join(ROOT, "scripts/mergeClaude.mjs"), "utf8");
+    expect(src).toMatch(/recipient_form/);
+    expect(src).toMatch(/EMAIL_RECIPIENT_OK/);
+  });
+});
+
 describe("bank hygiene", () => {
   test("no bare-organization recipients remain in the live bank", () => {
     const list = JSON.parse(fs.readFileSync(path.join(ROOT, "data/emailWriting/prompts.json"), "utf8"));

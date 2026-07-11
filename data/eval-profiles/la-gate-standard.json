@@ -1,0 +1,34 @@
+{
+  "type": "la",
+  "derived_from": "data/realExam2026/listening/announcements.json",
+  "n": 78,
+  "dimensions": {
+    "salutation_opener_share": {
+      "policy": "hard",
+      "target": 0.20512820512820512,
+      "detector_precision": 1,
+      "band": [
+        0.05512820512820513,
+        0.3551282051282051
+      ]
+    },
+    "stock_phrase_share": {
+      "policy": "hard",
+      "target": 0.01282051282051282,
+      "detector_precision": 1,
+      "band": [
+        -0.04717948717948718,
+        0.07282051282051281
+      ]
+    },
+    "announcement_word_count": {
+      "policy": "hard",
+      "target": 98.17948717948718,
+      "detector_precision": 1,
+      "band": [
+        83.17948717948718,
+        113.17948717948718
+      ]
+    }
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "note": "2026-07-11: 真实退化样本(Batch2前旧库):8条全salutation开场,3条含定式短语,词数均值>113 — 聚合层面同时击穿三个hard带",
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "senior capstone presentation schedule",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "Attention senior students. The Engineering Department has finalized the schedule for this year's capstone presentations, which will take place over three days, from Tuesday through Thursday next week, in the Patterson Building. Each team has been assigned a forty-minute slot, and the full schedule is now posted outside the department office and on the course portal. Please note that while attendance at your own session is mandatory, you are also expected to attend at least two other teams' presentations as part of your participation grade. Faculty evaluators will arrive promptly, so teams should set up their equipment fifteen minutes before their assigned time. A brief reception with light refreshments will follow on Thursday afternoon.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are seniors required to do besides presenting their own project?",
+          "options": {
+            "A": "Attend at least two other teams' presentations",
+            "B": "Submit a written report to faculty evaluators",
+            "C": "Sign up for a forty-minute presentation slot",
+            "D": "Help organize the Thursday reception"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告说除了自己的展示必须出席外，作为参与成绩的一部分，还要至少观看另外两个团队的展示。B错误（related_but_not_stated）：公告提到有教师评委，但从未要求提交书面报告。C错误（wrong_detail）：四十分钟的时段是已经分配好的，学生不需要自己报名选时段。D错误（misattributed_detail）：周四确有招待会，但公告没有要求学生帮忙筹办。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that faculty evaluators will arrive promptly?",
+          "options": {
+            "A": "To explain why the schedule was posted late",
+            "B": "To warn that presentations may run overtime",
+            "C": "To stress that teams should set up in advance",
+            "D": "To suggest that evaluators are very strict graders"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。提到评委会准时到场，紧接着要求团队提前十五分钟布置设备，可推断这是在强调团队需提前准备好以免耽误。A错误（unrelated_inference）：公告没有说日程发布得晚，也未把准时与发布时间联系起来。B错误（over_inference）：公告并未暗示展示会超时，反而是要求按时开始。D错误（over_inference）：从准时到场推不出评委打分严格，属过度推断。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpw0aj50_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpw0aj50_4.mp3"
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share station locations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good morning, students. We're excited to announce that the campus bike-share program is expanding with three brand-new docking stations opening next Monday. You'll find them outside the Library, near the South Dining Hall, and beside the Engineering Building. Each station holds twenty bikes, and unlocking one still works through the same mobile app you already use. Please note that the old station behind the gymnasium is being retired, so any bikes left there after Sunday evening will be relocated automatically. To celebrate the launch, the first thirty minutes of every ride will be free during opening week. Be sure to update the app before Monday so the new stations appear on your map.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce new bike-share station locations",
+            "B": "To explain how to download the app",
+            "C": "To apologize for a gymnasium closure",
+            "D": "To discourage students from cycling"
+          },
+          "answer": "A",
+          "explanation": "正确答案A。公告的核心是宣布下周一新增三个共享单车停靠站，并说明位置和优惠。B只是其中一个细节（更新app），过于狭隘，不是主要目的。C错误，公告并未为体育馆关闭道歉，旧站只是退役。D与公告意图相反，公告是在鼓励而非劝阻骑行。",
+          "distractor_types": {
+            "B": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the station behind the gymnasium?",
+          "options": {
+            "A": "It will hold twenty additional bikes",
+            "B": "It offers the longest free rides",
+            "C": "It will no longer be in service",
+            "D": "It is the busiest station on campus"
+          },
+          "answer": "C",
+          "explanation": "正确答案C。公告说体育馆后的旧站正在被retired（退役），周日后留在那里的车会被自动转移，可推断它将停止运营。A错误，二十辆是新站的容量，与旧站无关。B错误，免费时长是针对开业周的所有骑行，并非该站特有。D无任何依据，公告从未提及它最繁忙。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mqsic4on_0",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mqsic4on_0.mp3"
+    },
+    {
+      "context": "info_session",
+      "situation": "health insurance enrollment information session",
+      "speaker_role": "advisor",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. This is a reminder that the Student Health Office will hold an information session on enrolling in the university health insurance plan this Wednesday at 3 p.m. in the Wellness Center lobby. An advisor will walk you through the coverage options, explain how to waive the plan if you already have insurance, and answer your questions. To complete the waiver, you'll need to bring proof of your existing coverage, such as an insurance card or a letter from your provider. The enrollment deadline is September 30th, and students who miss it will be automatically enrolled in the standard plan. Feel free to drop by; no appointment is necessary.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a change to the health insurance plan",
+            "B": "To remind students to visit the Wellness Center",
+            "C": "To explain why the standard plan is the best choice",
+            "D": "To inform students about a health insurance session"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告主旨是告知学生本周三将举办关于大学医保计划报名的信息说明会。A错误（wrong_purpose）：公告没有说医保计划本身有任何变动。B错误（too_narrow）：去健康中心只是地点，不是公告目的。C错误（wrong_purpose）：公告只是中立介绍各选项，并未论证标准计划最好。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What do students need to bring in order to waive the plan?",
+          "options": {
+            "A": "A completed enrollment form",
+            "B": "Proof of their existing coverage",
+            "C": "A payment for the standard plan",
+            "D": "A signed letter from an advisor"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告明确说要办理豁免，需要带上现有保险的证明，如保险卡或保险公司的证明信。A错误（related_but_not_stated）：公告没有提到要带填好的报名表。C错误（misattributed_detail）：标准计划是错过截止日期后被自动加入的，不涉及现场付款。D错误（wrong_detail）：需要的是保险公司出具的信，而不是顾问签字的信。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpw0aj50_3",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpw0aj50_3.mp3"
+    },
+    {
+      "context": "facility_change",
+      "situation": "main library third floor closed for HVAC repair",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, students. Please be aware that the third floor of the main library will be closed starting this Wednesday for emergency repairs to the heating and cooling system. The closure is expected to last through Friday afternoon, so we ask that you plan your study sessions accordingly. During this time, the group study rooms on the third floor will be unavailable, but you're welcome to reserve the rooms on the second floor instead. All books normally shelved on the third floor have been temporarily moved to the basement level. If you need help locating a specific title, please ask a librarian at the front desk. We appreciate your patience while we keep the building comfortable for everyone.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To advertise newly renovated study rooms",
+            "B": "To inform students about a temporary floor closure",
+            "C": "To announce permanent changes to library hours",
+            "D": "To recruit volunteers for a book relocation",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告核心是告知三楼因供暖制冷系统维修将临时关闭，并说明相关安排。A错（too_narrow）：二楼房间只是替代方案的一个细节，并非整体目的，且房间是“可预约”而非“新装修”。C错（wrong_purpose）：关闭是临时的（周三到周五），不是永久改变开放时间。D错（reversed_intent）：书籍已被搬走，公告并未招募搬书志愿者，方向相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where have the third-floor books been moved?",
+          "options": {
+            "A": "To the second-floor study rooms",
+            "B": "To the basement level",
+            "C": "To the front desk for pickup",
+            "D": "To another campus library",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告明确说三楼原本上架的书已临时搬到地下室（basement level）。A错（misattributed_detail）：二楼是用来预约自习室的，不是放书的地方。C错（wrong_detail）：前台是询问图书位置的地方，书籍本身并未搬到前台供取阅。D错（related_but_not_stated）：公告从未提到把书转移到校园其他图书馆。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_0",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpvfq0rz_0.mp3"
+    },
+    {
+      "context": "deadline",
+      "situation": "deadline to return library textbooks before summer",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Attention students. As the semester comes to a close, the library would like to remind you that all borrowed textbooks and reserve materials are due back by Friday, May tenth. Items returned after this date will accrue a late fee of one dollar per day, up to the full replacement cost of the book. You can drop off your books at the main circulation desk or use the outdoor return bin near the east entrance, which is available around the clock. Graduating seniors, please note that any outstanding library balance must be cleared before your diploma can be released. If you'd like to renew a book for summer research, you can do so once through your online account.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce extended library hours for finals",
+            "B": "To remind students to return borrowed books by a deadline",
+            "C": "To introduce a new online renewal system",
+            "D": "To advertise a used-textbook sale at the library",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告主要提醒学生在5月10日前归还借阅的教材和指定参考资料，并说明逾期后果。A错（wrong_purpose）：公告完全没提期末延长开放时间。C错（too_narrow）：在线续借只是结尾提到的一个细节选项，并非整体目的，且系统并非“新推出”。D错（wrong_purpose）：公告没有任何二手教材义卖的内容。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about returning books after May tenth?",
+          "options": {
+            "A": "Returns are no longer accepted at all",
+            "B": "A late fee of one dollar per day applies",
+            "C": "Books can only be returned at the east entrance",
+            "D": "A flat replacement fee is charged immediately",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告说5月10日之后归还的书每天收取1美元滞纳金，上限为整本书的赔偿价。A错（reversed_intent）：逾期仍可归还，只是要交滞纳金，并非完全不接受归还。C错（wrong_detail）：东门外的还书箱只是其中一个归还点，主流通台也可归还，并非唯一渠道。D错（wrong_detail）：滞纳金是按天累计、最高才到赔偿价，而非一逾期就立即收取固定赔偿费。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_8",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpvfq0rz_8.mp3"
+    },
+    {
+      "context": "campus_activity",
+      "situation": "international food festival on the main quad",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Hello everyone, the International Students Association is thrilled to invite you to our annual Global Food Festival this Saturday on the Main Quad. From noon until 4 p.m., student groups from more than twenty countries will be serving traditional dishes from their home regions. Tickets are not required, but you'll need to purchase food tokens at the entrance booth, with all proceeds going toward our scholarship fund for international students. There will also be live music and cultural performances on the central stage throughout the afternoon. In case of rain, the festival will move indoors to the Student Union ballroom. We can't wait to share our cultures with you, so bring your friends and an empty stomach.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To request volunteers to cook traditional dishes",
+            "B": "To announce a fundraising scholarship application",
+            "C": "To invite students to an international food festival",
+            "D": "To explain a new policy on campus food vendors"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。通告主旨是邀请大家参加本周六在主广场举办的国际美食节，品尝各国传统菜肴并欣赏文化表演。A错误（wrong_purpose）：负责做菜的是来自各国的学生团体，通告并非在招募做菜志愿者。B错误（too_narrow）：购买餐券的收益用于国际学生奖学金基金，但这只是细节，通告不是在宣布奖学金申请。D错误（wrong_purpose）：通告完全没有涉及校园餐饮供应商的任何政策，这不是内容。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will happen to the festival if it rains?",
+          "options": {
+            "A": "It will move indoors to the Student Union ballroom",
+            "B": "It will be postponed to the following Saturday",
+            "C": "It will continue under tents on the Main Quad",
+            "D": "It will be cancelled and tokens refunded"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告明确说如遇下雨，美食节将移至室内的Student Union宴会厅举行。B错误（related_but_not_stated）：通告说的是改到室内而非改期，延后到下周六属文中未述。C错误（wrong_detail）：下雨时是转移到室内，而非在主广场搭帐篷继续，与原文相反。D错误（over_inference）：通告给出的应对是移至室内，并未提到取消或退还餐券，属过度推断。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "over_inference"
+          }
+        }
+      ],
+      "id": "la_mpw14a7s_9",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpw14a7s_9.mp3"
+    },
+    {
+      "context": "policy_update",
+      "situation": "new lab safety certification requirement",
+      "speaker_role": "department_staff",
+      "difficulty": "hard",
+      "announcement": "Attention all chemistry students. Starting this semester, the department is implementing a new safety requirement for anyone using the research laboratories. Before you can be granted lab access, you must complete the online safety certification module and pass the accompanying quiz with a score of at least eighty percent. The module covers proper handling of chemicals, emergency procedures, and waste disposal, and it takes roughly two hours to finish. You must complete this certification by the end of the second week of classes; students who miss this deadline will have their lab swipe access temporarily suspended until they comply. The link to the module has been posted on the department portal under the announcements tab.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a new safety certification required for lab access",
+            "B": "To describe recent renovations to the research laboratories",
+            "C": "To remind students of an upcoming chemistry exam",
+            "D": "To advertise an optional workshop on chemical safety"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。通告主旨是宣布本学期起使用研究实验室必须先完成在线安全认证这一新要求。B错误（wrong_purpose）：通告完全没有提到实验室翻修，这不是内容。C错误（wrong_purpose）：通告提到认证模块附带一个测验，但那不是某门化学课程的考试，且重点是认证要求而非考试提醒。D错误（reversed_intent）：该认证是强制性的、缺席会被暂停实验室门禁，而非一个可选的研讨会，意思相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What happens to students who miss the certification deadline?",
+          "options": {
+            "A": "They must retake the quiz in person at the office",
+            "B": "Their lab swipe access is temporarily suspended",
+            "C": "They are removed from the chemistry program",
+            "D": "They receive a failing grade on their coursework"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。通告明确说错过截止期限的学生其实验室刷卡门禁会被临时暂停，直到完成认证为止。A错误（misattributed_detail）：测验是在线完成的，通告没有说要去办公室当面重考，张冠井戴。C错误（over_inference）：通告只说暂停门禁，远未到将学生开除出化学专业的程度，属过度推断。D错误（related_but_not_stated）：通告完全没有提到课程成绩或不及格，这是文中未述的合理猜测。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "over_inference",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpw14a7s_8",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpw14a7s_8.mp3"
+    },
+    {
+      "context": "event",
+      "situation": "campus blood drive hosted by the health center",
+      "speaker_role": "department_staff",
+      "difficulty": "easy",
+      "announcement": "Good afternoon, everyone. The Campus Health Center is excited to announce that our annual blood drive will take place next Tuesday in Memorial Hall from 9 a.m. to 4 p.m. The regional blood bank will be on site, and every donation can help save up to three lives in our local community. To donate, you must be at least seventeen years old and bring a photo ID. We recommend eating a full meal and drinking plenty of water beforehand so you feel your best. Walk-ins are welcome, but to skip the line, you can reserve a time slot on the health center's website. Everyone who donates will receive a free t-shirt as a thank-you.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A free health screening for new students",
+            "B": "An upcoming campus blood donation event",
+            "C": "A fundraising sale of charity t-shirts",
+            "D": "A first-aid training course in Memorial Hall",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告整体是宣布健康中心一年一度的献血活动及相关安排。A错（wrong_purpose）：这是献血活动，不是为新生做健康筛查。C错（too_narrow）：免费T恤只是献血者的小礼物，不是义卖募捐，把细节夸大成主题。D错（misattributed_detail）：Memorial Hall是献血地点，公告并未提供任何急救培训课程。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are donors recommended to do beforehand?",
+          "options": {
+            "A": "Bring a friend to donate with them",
+            "B": "Eat a full meal and drink water",
+            "C": "Pay a small registration fee",
+            "D": "Complete an online health survey",
+            "E": ""
+          },
+          "answer": "B",
+          "explanation": "正确答案B：公告建议献血前吃一顿正餐并多喝水，以保持良好状态。A错（related_but_not_stated）：公告没有建议带朋友一起来，纯属未提内容。C错（wrong_detail）：献血是免费的，从未提到任何报名费。D错（related_but_not_stated）：网站只用于预约时间段，公告并未要求填写在线健康问卷。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ],
+      "id": "la_mpvfq0rz_4",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/announcement/la_mpvfq0rz_4.mp3"
+    }
+  ]
+}
