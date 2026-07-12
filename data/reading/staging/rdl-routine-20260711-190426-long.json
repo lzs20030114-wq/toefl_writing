@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "genre": "notice",
+      "text": "Notice: Residential Package Pickup Procedure Change\n\nEffective Monday, March 2, all resident packages will be processed through the new automated locker system on the ground floor of Whitman Center, replacing the service counter formerly located in Hollis Hall.\n\nWhen a parcel arrives, the resident will be sent an email containing a six-digit pickup code. This code must be entered at the locker kiosk to release the item. Please observe the following:\n\n- Lockers may be accessed between 7:00 AM and 11:00 PM daily.\n- Packages must be collected within 3 business days of the notification email.\n- Parcels left beyond this window will be relocated to the overflow room, and a $4.00 handling fee will be charged before release.\n- Oversized items that do not fit the lockers will be held at the Whitman Center front desk and require a photo ID for collection.\n\nResidents are reminded that pickup codes may not be shared with others. Questions should be directed to mailservices@campus.edu or the front desk at (555) 204-1187.",
+      "format_metadata": {
+        "from": "Central Mail Services",
+        "to": "Whitman Center Residents",
+        "subject": "Residential Package Pickup Procedure Change"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what happens to packages that are not collected within three business days?",
+          "options": {
+            "A": "They will be held at the front desk for pickup.",
+            "B": "They will be released only with a photo ID.",
+            "C": "They will be returned to the sender after one week.",
+            "D": "They will be moved to overflow and charged a fee."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states parcels left beyond the three-business-day window will be relocated to the overflow room, and a $4.00 handling fee will be charged before release. The front desk and photo ID rules apply only to oversized items, not to late parcels."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the new automated locker system?",
+          "options": {
+            "A": "It is meant for use by the intended recipient alone.",
+            "B": "It stays open to residents at every hour of the day.",
+            "C": "It adds a delivery charge to each incoming parcel.",
+            "D": "It has taken over every mail task on the campus."
+          },
+          "correct_answer": "A",
+          "explanation": "Because each resident receives a private six-digit code that may not be shared, it can be inferred the system is designed for the intended recipient alone. The lockers close overnight (7:00 AM to 11:00 PM), the fee applies only to late parcels, and only the Hollis Hall counter was replaced."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a resident who is notified of a package on a Friday?",
+          "options": {
+            "A": "The resident must collect the parcel before the weekend.",
+            "B": "The resident has until midweek to retrieve the package.",
+            "C": "The resident will owe a handling fee by Saturday.",
+            "D": "The resident may leave the package in the locker."
+          },
+          "correct_answer": "B",
+          "explanation": "The collection window is three business days, which excludes the weekend. Counting from Friday, the three business days fall on Monday, Tuesday, and Wednesday, so the resident has until midweek. A fee is only charged after that window passes, not the next day."
+        }
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Your Flu Shot Appointment Is Confirmed\n\nDear Ms. Alvarez,\n\nThank you for scheduling your seasonal flu vaccination through the Student Health Portal. Your appointment is confirmed for Thursday, October 9, at 2:15 PM in Room 118 of the Health Sciences Building.\n\nPlease arrive ten minutes early to complete a brief health questionnaire. Bring your student ID card and, if you have one, your insurance information. The vaccine itself is free for all enrolled students, though a $10 fee applies if you miss your appointment without cancelling at least 24 hours in advance.\n\nWe recommend wearing a short-sleeved shirt to make the injection easier. You're welcome to rest in our waiting area for a few minutes afterward if you'd like. Most students return to their normal activities right away.\n\nIf you need to reschedule, please log in to the portal or call us at (555) 331-0942 before Wednesday evening.\n\nBest regards,\nNurse Daniel Ortega\nCampus Health Center",
+      "format_metadata": {
+        "from": "Campus Health Center",
+        "to": "Ms. Alvarez",
+        "subject": "Your Flu Shot Appointment Is Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Ms. Alvarez bring to her appointment?",
+          "options": {
+            "A": "A health questionnaire completed beforehand.",
+            "B": "A short-sleeved shirt and a payment.",
+            "C": "Her student ID and insurance information.",
+            "D": "Her portal login and appointment code."
+          },
+          "correct_answer": "C",
+          "explanation": "The email asks her to bring her student ID card and, if she has one, her insurance information. The questionnaire is completed on arrival rather than beforehand, the short-sleeved shirt is only recommended to wear, and the vaccine is free, so no payment is required."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the $10 fee mentioned in the email?",
+          "options": {
+            "A": "It is charged to every student who is vaccinated.",
+            "B": "It can be avoided by cancelling far enough ahead.",
+            "C": "It covers the cost of the flu vaccine itself.",
+            "D": "It must be paid at the time of booking."
+          },
+          "correct_answer": "B",
+          "explanation": "The fee applies only when a student misses the appointment without cancelling at least 24 hours in advance, so cancelling early enough avoids it. The vaccine is free for enrolled students, so the fee neither applies to everyone nor covers the vaccine, and it is not collected at booking."
+        },
+        {
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "To remind students to enroll in a health insurance plan.",
+            "B": "To announce new operating hours for the health center.",
+            "C": "To confirm the details of a scheduled vaccination appointment.",
+            "D": "To warn students about the risks of seasonal influenza."
+          },
+          "correct_answer": "C",
+          "explanation": "The email opens by confirming the appointment and then lists its time, location, and preparation instructions, so its main purpose is to confirm the details of a scheduled vaccination. Insurance, hours, and flu risks are not the focus."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

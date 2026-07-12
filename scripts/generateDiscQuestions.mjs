@@ -181,7 +181,7 @@ async function generateOne({ course, studentNames, questionType, existingTopics,
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: process.env.DEEPSEEK_PROXY_URL || process.env.HTTPS_PROXY || "",
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },

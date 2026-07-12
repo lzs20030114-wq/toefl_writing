@@ -98,7 +98,7 @@ async function callDeepSeek(prompt) {
     : "You are an ETS-caliber TOEFL content writer specializing in interview questions. Create progressive, open-ended questions. Return only valid JSON, no markdown fencing.";
 
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     messages: [
       { role: "system", content: systemMsg },
       { role: "user", content: prompt },

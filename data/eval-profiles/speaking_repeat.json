@@ -1,7 +1,8 @@
 {
   "type": "speaking_repeat",
-  "n": { "real_sets": 51, "real_sentences": 351, "audio_clean_sets": 13, "audio_clean_sentences": 91, "generated_sets": 11, "generated_sentences": 77 },
+  "n": { "real_sets": 51, "real_sentences": 351, "audio_clean_sets": 13, "audio_clean_sentences": 91, "generated_sets": 84, "generated_sentences": 588 },
   "generated_at": null,
+  "postfix_2026_07_10": "Bank fully regenerated to the new paradigm. Current values from scripts/research/baselines/paradigm-2026-07-10-postfix.json (speaking_repeat.gen, n=81 at snapshot; live node count now 84 sets / 588 sentences). CLOSED: 2/3/2 rigidity (sig232 6.17% vs real 5.88%), yes/no questions 0%, punitive 0%, Welcome opener 0%. OVER-CORRECTED (watch next round, not regressions): you 26.81% (real 37%), wayfinding-close 55.56% (real 33%), last=longest 98.77% (real 88%), max_words 22 (prompt cap 18). Locks added: repeatPromptBuilder SIGNATURES/welcomeSlot/constraints, speakingValidator question_mark+punitive_warning+difficulty_distribution, __tests__/repeat-paradigm.regression.test.js (CI).",
   "ground_truth": "data/realExam2026/speaking/repeat.json + repeat-from-audio.json",
   "generated_bank": "data/speaking/bank/repeat.json",
   "maps_to_builder": "lib/speakingGen/repeatPromptBuilder.js",
@@ -16,7 +17,7 @@
       "distribution": { "real": { "7": 47, "6": 1, "8": 1, "4": 2 } },
       "detector": "len(set.sentences)",
       "examples": [],
-      "current": "11/11 sets = 7",
+      "current": "84/84 sets = 7 (postfix)",
       "gap": "none",
       "reliability": "solid"
     },
@@ -31,8 +32,8 @@
         "If you want to know what is being offered, just check the daily menu for special dishes",
         "before you leave the classroom, be sure you got all your tools back into the toolbox"
       ],
-      "current": { "mean": 9.21, "median": 9, "max": 15 },
-      "gap": "center matches; gen truncates the long tail (gen max 15 vs real 17-18)",
+      "current": { "mean": 9.84, "max": 22, "source": "postfix" },
+      "gap": "center matches (real 9.56); old truncation closed — gen now slightly OVERSHOOTS the tail (max 22 vs real 17; prompt caps 18)",
       "reliability": "solid"
     },
     {
@@ -47,8 +48,8 @@
         "2026-03-18_repeat = 0/5/2",
         "2026-04-29_repeat = 1/6/0 (all-medium-dominant)"
       ],
-      "current": "11/11 sets = exactly 2/3/2 (100%); real 2/3/2 = only 3/47 (6.4%)",
-      "gap": "BIGGEST GAP. Gen is rigid 2/3/2; over-produces hard (2 every set), under-produces medium. Real is medium-dominant and varies.",
+      "current": "postfix sig232_share 6.17% (real 5.88%) — no longer rigid 2/3/2",
+      "gap": "CLOSED. SIGNATURES weighted rotation replaced fixed 2/3/2; medium-dominant mix restored.",
       "reliability": "solid"
     },
     {
@@ -59,8 +60,8 @@
       "distribution": { "real": { "monotonic": "9/49 = 18.4%", "last_is_longest": "45/49 = 91.8%" } },
       "detector": "monotonic non-decreasing check; last==max-length check",
       "examples": ["2026-01-21 lengths 5,7,8,10,12,9,14 — S6 dips, S7 longest"],
-      "current": { "monotonic": "2/11 = 18%", "last_is_longest": "9/11 = 82%" },
-      "gap": "monotonic matches; gen slightly low on 'S7 longest'. Real signature = bumpy middle, long finish (not a staircase).",
+      "current": { "last_is_longest": "98.77% (postfix last_longest_share)" },
+      "gap": "old 'slightly low' now slightly HIGH — gen makes S7 longest 98.77% vs real 88.24%. Mild over-correction, not a regression.",
       "reliability": "solid"
     },
     {
@@ -76,8 +77,8 @@
         "begin by mixing the butter and sugar",
         "Welcome to our campus tour."
       ],
-      "current": { "welcome_or_lets": 7, "imperative": 4, "you_can": 0, "bare_declarative": 0 },
-      "gap": "gen opens 'Welcome...' 64% (real 16%) and NEVER opens with a bare locating declarative (real 53%)",
+      "current": { "welcome_opener_rate": "0% (postfix)" },
+      "gap": "old over-greeting CLOSED — Welcome opener now 0% (real 15.69%), i.e. slightly UNDER; bare-declarative/imperative openers dominate.",
       "reliability": "solid"
     },
     {
@@ -88,8 +89,8 @@
       "distribution": { "real": { "imperative": 0.385, "declarative": 0.51, "you_statement": 0.105, "question": 0.0 } },
       "detector": "first-token + end-punctuation classifier",
       "examples": ["Check the bulletin board for information about guided tours.", "The pond is a popular spot for sitting and relaxing."],
-      "current": { "imperative": 0.351, "declarative": 0.494, "you_statement": 0.104, "question": 0.052 },
-      "gap": "balance close; only defect is the 5.2% questions (see yes_no_questions)",
+      "current": { "question": 0.0, "source": "postfix" },
+      "gap": "CLOSED — the 5.2%-question defect is gone (question_rate 0); mood balance otherwise close.",
       "reliability": "solid"
     },
     {
@@ -100,8 +101,8 @@
       "distribution": { "real": { "question_marks_in_351_sentences": 0 } },
       "detector": "?-ending or aux-initial; validated 0 '?' anywhere in real",
       "examples": [],
-      "current": "4/77 = 5.2%: 'Do you have your insurance card?', 'Are you here for math help?', 'Do you have a reservation?', 'Do you have your safety goggles?'",
-      "gap": "real has ZERO questions; gen invents yes/no Qs (seeded by prompt example 'Do you have your student ID?')",
+      "current": "0% (postfix question_rate = 0)",
+      "gap": "CLOSED — every easy/medium/hard constraints block now hard-forbids a yes/no question; validator warns on any '?'.",
       "reliability": "solid"
     },
     {
@@ -124,8 +125,8 @@
       "distribution": { "real": 0.373 },
       "detector": "\\byou(r)?\\b presence",
       "examples": ["The pond is a popular spot for sitting and relaxing.", "Bread is freshly baked on site every day."],
-      "current": 0.532,
-      "gap": "gen over-addresses listener (53% vs 37%); many real sentences describe the place/objects, not 'you'",
+      "current": 0.2681,
+      "gap": "old over-address (53%) CLOSED — postfix you_rate 0.2681, now slightly UNDER real 0.373. Mild over-correction.",
       "reliability": "solid"
     },
     {
@@ -160,8 +161,8 @@
       "distribution": { "real": "0/351 (4 keyword hits all false positives: 'free of charge', 'fine details')" },
       "detector": "/will result in|suspension|privileges|incur|penalt|violation/i; validated by broad punitive grep on raw text",
       "examples": [],
-      "current": "8/77 = 10.4%: '...will result in a temporary suspension of your tutoring privileges.', 'If you return the car late, you will incur an extra daily charge.', 'Overdue books will result in fines...'",
-      "gap": "STRONGEST synthetic fingerprint. 0% real vs 10.4% gen. Seeded verbatim by prompt S7 example. Real 'rules' are gentle ('We hope everyone will ensure that books are returned on time.')",
+      "current": "0% (postfix punitive_rate = 0)",
+      "gap": "CLOSED — punitive S7 example removed from prompt, hard constraints forbid 'will result in/suspension/penalty/fine', validator flags any hit.",
       "reliability": "solid"
     },
     {
@@ -172,8 +173,8 @@
       "distribution": { "real": "17/51 = 33% map/schedule/guide; +20% help/staff/questions" },
       "detector": "keyword scan of final sentence per set",
       "examples": ["If you need help getting around, check the map for specific areas and facilities", "you can check the weekly schedule here", "you can download the map for free"],
-      "current": "0/11 last sentences mention map/schedule/guide (gen closes on punitive rules instead)",
-      "gap": "positive real signature gen entirely lacks; ~1/3 of orientation sets should close on a 'check the map/schedule' pointer",
+      "current": "55.56% (postfix wayfind_close_share)",
+      "gap": "old '0%' CLOSED — now OVER-produced (55.56% vs real 33.33%). Closer rule should vary more next round. Not a regression.",
       "reliability": "solid"
     },
     {

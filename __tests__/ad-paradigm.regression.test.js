@@ -64,6 +64,13 @@ describe("generation-path hygiene (source locks)", () => {
     expect(src).not.toMatch(/about 37% of real TPO does this/);
   });
 
+  test("mergeClaude hard-rejects off-whitelist course/names/professor at accept time", () => {
+    const src = fs.readFileSync(path.join(ROOT, "scripts/mergeClaude.mjs"), "utf8");
+    expect(src).toMatch(/course_not_in_whitelist/);
+    expect(src).toMatch(/student_name_not_in_pool/);
+    expect(src).toMatch(/professor_name_not_in_pool/);
+  });
+
   test("bank contains no off-list marine biology items and no literal-Professor names", () => {
     const list = JSON.parse(fs.readFileSync(path.join(ROOT, "data/academicWriting/prompts.json"), "utf8"));
     expect(list.filter((i) => /marine/i.test(i.course || "")).length).toBe(0);

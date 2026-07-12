@@ -1,0 +1,164 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "friend sharing news that she got into a research program",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I've finally gotten into the summer research program.",
+      "options": {
+        "A": "When do you actually start?",
+        "B": "The program guide is on the website.",
+        "C": "I returned my library books this morning.",
+        "D": "Sorry to hear that."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用一个反问推进对话，对好消息表现出关心并询问细节，是自然的祝贺式回应。B 抓住'program'这个词转而描述项目手册的位置，属于语义联想陷阱，没有回应对方的兴奋。C 是一句语法正确但与话题完全无关的日常陈述，属离题干扰。D 把好消息误读成坏消息，语气完全不搭，属误解陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking a classmate whether the color printer in the lab is in use",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Are you using the color printer right now?",
+      "options": {
+        "A": "The color settings are in the menu.",
+        "B": "Go ahead, it's all yours.",
+        "C": "I mailed the package yesterday afternoon.",
+        "D": "Yes, the color looks great."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 没有机械回答'在不在用'，而是直接解决对方真正的需求——把打印机让出来，属于语境转移。A 抓住'color'转去谈设置菜单，是语义联想陷阱，没有让出打印机。C 是一句语法通顺但与打印无关的话，属离题干扰。D 把'color'误当成谈论颜色好看，属一词多义/误解陷阱，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to a stressed friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why don't you let me help you?",
+      "options": {
+        "A": "The help desk closes at five.",
+        "B": "I watered the plants this morning.",
+        "C": "Actually, that would really help.",
+        "D": "No thanks, I already ate."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 用话语标记'Actually'开头，间接而自然地接受了对方的帮助，符合标记引导的间接回应。A 抓住'help'转成'help desk（服务台）'，属语义联想陷阱。B 是与话题无关的日常陈述，属离题干扰。D 把'help（帮忙）'误读成请吃饭，属误解陷阱，语气也不搭。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to a group invitation by asking where to gather",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where's everyone planning to meet up?",
+      "options": {
+        "A": "The meeting ran way too long.",
+        "B": "I finished painting the fence today.",
+        "C": "At seven, right after class.",
+        "D": "How about the coffee shop?"
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 用反问提出一个具体地点，既回应了'在哪见面'又推进了对话，属反问式回应。A 把'meet'联想成'meeting（会议）'，属一词多义/语义联想陷阱。B 是与话题无关的日常陈述，属离题干扰。C 回答的是'什么时候'而不是'在哪里'，属答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking the lost-and-found desk for a backpack",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Didn't anyone turn in a blue backpack?",
+      "options": {
+        "A": "You're in luck, it's right here.",
+        "B": "The blue lockers are down the hall.",
+        "C": "The library closes early on Fridays.",
+        "D": "I turned in my essay already."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A 用惯用表达'You're in luck（你走运了）'自然回应，直接告知背包就在这里。B 抓住'blue'联想到'蓝色储物柜'，属语义联想陷阱。C 是与失物无关的开放时间信息，属离题干扰。D 把'turn in（上交失物）'误当成'交作业'，属一词多义陷阱，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk how to exchange an item for another size",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How do I exchange this for a different size?",
+      "options": {
+        "A": "That size sells out really fast.",
+        "B": "Do you have your receipt with you?",
+        "C": "The parking lot is behind the store.",
+        "D": "Yes, we're open until nine."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B 用反问询问是否带了收据，正是办理换货所需的下一步，推进了对话，属反问式回应。A 抓住'size'转而评论尺码好卖，属语义联想陷阱，不解决换货流程。C 是与换货无关的停车场信息，属离题干扰。D 用是非句回答营业时间，而问题问的是'怎么换'，属答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian what to do when a book is checked out",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What do I do if the book's checked out?",
+      "options": {
+        "A": "That book has great reviews online.",
+        "B": "The printers are on the second floor.",
+        "C": "I can request it from another branch.",
+        "D": "I checked out early today."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C 没有抽象讲流程，而是直接解决对方的真正需求——帮他从其他分馆调书，属语境转移。A 抓住'book'转去谈网上评价，属语义联想陷阱。B 谈打印机位置，与借书完全无关，属离题干扰。D 把'checked out（被借出）'误当成'下班离开'，属一词多义陷阱，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student telling a professor she wants to ask about the assignment deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I've been meaning to ask about the assignment deadline.",
+      "options": {
+        "A": "The assignment list is on the syllabus.",
+        "B": "My office is in the east wing.",
+        "C": "No, I haven't graded them yet.",
+        "D": "It's due next Friday at noon."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D 直接给出截止时间，正面回答了对方关心的问题，属直接作答（此题为简单题，适合直接回应）。A 抓住'assignment'转去指作业清单在教学大纲上，没给截止日期，属语义联想陷阱。B 谈办公室位置，与截止日期无关，属离题干扰。C 把问题误读成在问打分进度，属误解陷阱。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "misinterpretation"
+      }
+    }
+  ]
+}

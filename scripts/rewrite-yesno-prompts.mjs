@@ -97,7 +97,7 @@ async function rewriteBatch(items) {
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 120000,
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       temperature: 0.3,
       max_tokens: 8000,
       messages: [{ role: "user", content: prompt }],

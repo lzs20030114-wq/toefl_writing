@@ -149,8 +149,9 @@ async function callDeepSeek(systemPrompt, userMessage) {
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 150000,
     payload: {
-      model: "deepseek-chat",
-      max_tokens: 2600,
+      model: "deepseek-v4-flash",
+      // 判分锚 v3 输出(含 ===ERRORS=== 推理段)实测需 3.1-3.9K tokens，与 writingEval 同预算
+      max_tokens: 4000,
       temperature: 0.3,
       stream: false,
       messages: [

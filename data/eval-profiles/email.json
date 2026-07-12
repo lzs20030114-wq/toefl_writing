@@ -1,6 +1,7 @@
 {
   "type": "email",
-  "n": { "real": 51, "real_unique_scenarios": 33, "generated": 139, "real_tier": "recalled (2026改后机经, OCR+DeepSeek)", "real_verified_against": ".codex-tmp/ocr/*写作.txt (bullets verbatim-faithful)" },
+  "n": { "real": 51, "real_unique_scenarios": 33, "generated": 196, "real_tier": "recalled (2026改后机经, OCR+DeepSeek)", "real_verified_against": ".codex-tmp/ocr/*写作.txt (bullets verbatim-faithful)" },
+  "postfix_2026_07_10": "SPLIT STATE. Current values from paradigm-2026-07-10-postfix.json (writing_email.gen, n=196; live node count 196 items). CLOSED IN BANK: recipient_title_share 84.69% (real 82.35%) + recipient_bad_count 0 (no more 'First Last' / bare-org addressees); scenario_words_mean 38.92 (real 39.45). PROMPT FIXED BUT BANK NOT REGENERATED (do NOT read as a live regression): subject_words_mean 6.74 / subject_ge8_count 50 (real 4.14 / 0), opener_you_other_verb 39.29% (real 0), verb_ask 24.49% (real 10%) / verb_inquire 0 (real 5.9%), verbs_all_distinct_share 1.0 (real 0.90). These move only when the bank is regenerated against the fixed emailWriting.js.",
   "generated_at": null,
   "ground_truth": "data/realExam2026/writing/email.json",
   "generated_bank": "data/emailWriting/prompts.json",
@@ -36,8 +37,8 @@
         "Explain how conditions negatively affect your studies.",
         "Request that he make arrangements to address these issues soon."
       ],
-      "current": { "Describe": 0.223, "Ask": 0.192, "Explain": 0.182, "Suggest": 0.146 },
-      "gap": "Verb SET roughly overlaps but SHAPE differs: real is dominated by Explain(29%)+Describe(27%) — over half of all bullets — with Inquire a genuine real verb (6%); gen flattens this (Describe 22 / Ask 19 / Explain 18) and over-uses Ask (19% vs real 10%) while barely using Explain. Gen also introduces 12 off-distribution verbs absent or near-absent from real (Tell, Express, Identify, Report, Point out, Argue, Detail, Acknowledge, Emphasize) = 14 bullets the real exam essentially never uses to open a goal.",
+      "current": { "verb_ask": 0.2449, "verb_inquire": 0.0, "verb_explain": 0.2279, "verb_describe": 0.2126, "source": "postfix" },
+      "gap": "STILL OFF — bank pending regeneration. Ask still over-used (24.49% vs real 10%), Inquire still 0 (real 5.9%). maps_to: emailWriting.js:245 SLOT3_VERBS = ['Suggest','Suggest','Request','Request','Inquire','Ask'] now adds Inquire and demotes Ask; takes effect on regeneration.",
       "reliability": "solid"
     },
     {
@@ -69,8 +70,8 @@
         "ALLOWED repeat (real): 2026-01-27 = Describe / Describe / Explain — TWO 'Describe' bullets is authentic (5/51 real items repeat a verb).",
         "2026-02-28 = Explain / Describe / Suggest (all distinct)"
       ],
-      "current": "100% all-distinct",
-      "gap": "Gen enforces all-distinct rigidly (100%); real allows a repeated verb ~10% of the time (esp. Describe/Describe). The current prompt rule 'each starting with a DIFFERENT verb' is slightly too strict.",
+      "current": "postfix verbs_all_distinct_share 1.0 (real 0.90) — still rigidly all-distinct, bank pending regen",
+      "gap": "Minor. Gen enforces all-distinct 100%; real allows a repeated verb ~10% (esp. Describe/Describe). Prompt rule 'each starting with a DIFFERENT verb' is slightly too strict.",
       "reliability": "solid"
     },
     {
@@ -107,8 +108,8 @@
         "first-name-only (18%): 'Julia', 'Jasmine', 'Alex', 'Maria', 'John', 'Jessica'",
         "COUNTER (never in real): full first+last name like gen's 'Linda Chen' / 'Marcus Rivera' / 'Gloria Vance'; bare org like gen's 'Customer Service' / 'Parks and Recreation Department' / 'IT Help Desk'"
       ],
-      "current": { "title+surname": 0.51, "role/org": 0.216, "first-name-only": 0.165, "full-name (first+last)": 0.101 },
-      "gap": "TOP-3 GAP. Real recipients are ONLY two forms: 'Title Surname' (82%) or a bare first name (18%). Gen invents two forms the real exam NEVER uses: (a) full 'First Last' names (14 items, 10%) and (b) bare role/org addressees ('Customer Service', 'Billing Department', 'Parks and Recreation Department') (30 items, 22%). 44/139 gen items (32%) use a non-existent recipient form.",
+      "current": { "recipient_title_share": 0.8469, "recipient_bad_count": 0, "source": "postfix" },
+      "gap": "CLOSED — postfix title+surname 84.69% (real 82.35%), recipient_bad_count 0. The invented 'First Last' names and bare-org addressees are gone. maps_to: emailWriting.js:290 (prompt now forbids 'First Last' and bare role/org). Reflected in the bank.",
       "reliability": "solid"
     },
     {
@@ -146,8 +147,8 @@
         "Your [person]… (14%): 'Your professor, Dr. Smith, recently assigned a group project due in two weeks.'",
         "You and your… (4%): 'You and your friend, Jasmine, are planning to host a fundraising event...'"
       ],
-      "current": { "You are…": 0.41, "You recently…": 0.295, "You [other verb]…": 0.194 },
-      "gap": "Real uses only FOUR openers; 96% are 'You are…' / 'You recently…' / 'Your…' / 'You and your…'. Gen leaks a 5th pattern 'You [other verb]…' (27 items, 19% — e.g. 'You enrolled…', 'You hired…', 'You booked…', 'You subscribed…', 'You work as…') that the real exam never uses to open. Real never opens 'You have…' either.",
+      "current": { "opener_you_are": 0.3265, "opener_you_recently": 0.1786, "opener_you_other_verb": 0.3929, "opener_your": 0.0816, "source": "postfix" },
+      "gap": "STILL LEAKS the 5th opener — bank pending regeneration. Postfix opener_you_other_verb 39.29% (real 0). maps_to: emailWriting.js:228-232 four-opener block (You are 0.49 / You recently 0.33 / Your 0.14 / You and your 0.04) now replaces the old allowances; takes effect on regeneration.",
       "reliability": "solid"
     },
     {
@@ -161,8 +162,8 @@
         "26w (short): 'Your professor, Dr. Smith, recently assigned a group project due in two weeks. You are frustrated because not all of your group members are contributing equally to the project.'",
         "39w (median): 'You recently joined a student organization at your university that focuses on environmental conservation. The group is planning an upcoming event to raise awareness about recycling and reducing waste. You have some ideas...'"
       ],
-      "current": { "mean": 42.4, "median": 43 },
-      "gap": "Gen runs ~3 words longer at the center and never goes as SHORT as real (gen min 30 vs real 26; gen p10 35 vs real 29). Real has more terse 2-sentence scenarios. Soft gap — partly an artifact of recalled-prose expansion.",
+      "current": { "mean": 38.92, "source": "postfix scenario_words_mean" },
+      "gap": "CLOSED — postfix mean 38.92 (real 39.45, was 42.4). Scenario length now matches real.",
       "reliability": "partial"
     },
     {
@@ -203,8 +204,8 @@
         "real subjects (short, plain): 'Damaged library book' (3w), 'Career Workshop' (2w), 'Resort Inquiry' (2w), 'Request for apartment repairs' (4w), 'Feedback on dining experience' (4w)",
         "COUNTER (gen, too long/specific): 'Question about MEDAR 610 Final Project Requirements' (6w + course code), 'Defective keys and short battery life on order #AP-90217' (9w + order #)"
       ],
-      "current": { "mean": 6.7, "median": 7, "max": 10 },
-      "gap": "TOP-3 GAP (tied). Real subjects are SHORT noun phrases (mean 4.1w, max 7); gen subjects are 60% longer (mean 6.7w, up to 10w) and stuff in order numbers ('#AP-90217'), course codes ('MEDAR 610'), and clause-like detail ('causing delivery security issues'). Gen subjects read like email-client subject lines; real ones are terse topic labels.",
+      "current": { "subject_words_mean": 6.74, "subject_ge8_count": 50, "source": "postfix" },
+      "gap": "STILL ~60% TOO LONG — bank pending regeneration. Postfix mean 6.74 (real 4.1), 50 items >=8 words (real 0). maps_to: emailWriting.js:295 (prompt now: subject = SHORT noun phrase of 2-5 words); takes effect on regeneration.",
       "reliability": "solid"
     },
     {
@@ -237,8 +238,8 @@
         "academic/campus-study (20%): group-project (Dr. Smith), missed-lecture notes, internship follow-up, study/advisor balance",
         "housing (only 4% — 2 items): apartment repairs (Mr. Thompson)"
       ],
-      "current": { "academic/campus-study": 0.20, "workplace/internship": 0.187, "community/civic": 0.18, "consumer/retail": 0.18, "events/services/leisure": 0.065 },
-      "gap": "BIGGEST GAP. Real is dominated by EVENTS/SERVICES/LEISURE settings (65% — gyms, hotels, restaurants, concerts, trips, parties, campus events). Gen produces almost NONE of this (6.5%) and instead spreads evenly across academic / workplace / community-civic / consumer (each ~18-20%). Gen invented a heavy 'workplace/internship' (corporate sprints, brand managers, sales territories) and 'community-civic' (city council, neighborhood association, parks dept) presence the real exam barely has. The real Email task lives in student-as-consumer-of-services life, not corporate or civic life.",
+      "current": "PROMPT FIXED, BANK PENDING REGEN. Topic-setting share not re-measured in the postfix snapshot; the pre-fix bank was 6.5% events/services vs real 65%.",
+      "gap": "maps_to: EMAIL_CATEGORIES (emailWriting.js:218) recalibrated 2026-07-10 — a dominant 'G' Services & Events category at weight 0.55 (gyms/hotels/restaurants/concerts/trips/parties/campus events) was added and Workplace/Community cut. Takes effect on regeneration.",
       "reliability": "partial"
     },
     {

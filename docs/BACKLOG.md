@@ -38,6 +38,22 @@
 - [低] 打卡三件套：树苗成长形态 / 移动端卡片 / goal 云同步（2026-06-12 flame v1 上线后无进展）。
 - [低] BS 疑难搁置项（2026-06-17"太难修了先搁置"，具体内容需会话考古确认后再细化条目）。
 
+## 自适应模考超时修复 review 遗留（2026-07-12）
+
+> 本次已修：误挂超时徽章 / 听力展开态位置下标 / 深链改带 session 身份 + 保存失败提示 / 弱项诊断排除全未答任务。以下为 review 确认但本次未修的余项。
+
+- [中] 听力回看渲染器（`LCRDetail`/`LADetail`/`LCDetail`）缺「未作答」标注，与阅读 `MockSessionDetail`（有 `selected == null → 未作答`）不一致；根因是听力未复用 `MockSessionDetail`。出处：`components/listening/ListeningProgressView.js`。
+- [中] checkpoint 中途退出仍丢当前题作答——collector 机制已在（`partialCollectorRef`），接进 `saveAdaptiveCheckpoint` 即可复用超时那套部分作答收集。出处：`components/mockExam/AdaptiveExamShell.js`（checkpoint effect）。
+- [低中] `IntroCard` 题量为手写魔法串（如「20 题 (CTW 10空 + RDL 5题 + AP 5题)」），应由 planner 导出构成常量派生，避免与真实出题结构漂移。出处：`components/mockExam/AdaptiveExamShell.js` ~1211 + `lib/mockExam/readingPlanner.js` / `listeningPlanner.js`。
+- [低] 阅读 `IntroCard` 5 盒奇数网格致「总计」盒孤儿半宽（视觉不齐）。出处：`components/mockExam/AdaptiveExamShell.js` ~1248，可给「总计」盒加 `gridColumn: "span 2"`。
+- [低中] 三个 collector 与各 `handleSubmit` 判分逻辑重复（MCQ 的 `correctAnswer = q.correct_answer || q.answer` 已 3 份），可提取纯判分函数进 `lib/mockExam/timeoutFinalize.js` 单一真源。出处：`components/mockExam/AdaptiveExamShell.js`。
+- [低] 深链消费 effect 与「⏱ 超时」徽章样式在阅读/听力两视图重复复制，可提取 `useMockDeepLink` hook + 共享徽章组件。出处：`components/reading/ReadingProgressView.js` + `components/listening/ListeningProgressView.js` + `components/reading/MockSessionDetail.js` / `MockTaskCard`。
+- [低] `ResultsCard` 的琥珀超时提示（含既有「计时规则」框）可改用 `components/shared/ui.js` 的 `InfoStrip(tone="warn")` 统一样式。出处：`components/mockExam/AdaptiveExamShell.js` `ResultsCard`。
+- [低中] `timeoutFinalize` 防御加固：`isValidPartial` 对 `item.id == null` 应 fail-closed（当前 `partial.itemId === item.id`，两侧同为 undefined 会误判通过）+ 交叉校验 `partial.correct === results.filter(isCorrect).length`。出处：`lib/mockExam/timeoutFinalize.js`。
+- [低] 超时结算 effect 依赖数组仅 `[timeLeft, phase]`，读取 `m1Items/m2Items/m1Results/...` 靠每秒 tick 触发的闭包新鲜度隐式成立，脆弱；补全依赖或加注释锁定不变量。出处：`components/mockExam/AdaptiveExamShell.js`（auto-finish on timeout effect）。
+- [低] collector 返回对象外层 `itemId` 为死字段（`finalizeTimedOutResults` 只读 `collect()` 返回的 `itemId`，外层 `collectorRef.current.itemId` 无人消费），三处可删。出处：`components/mockExam/AdaptiveExamShell.js`（CTW/MCQ/LCR 三个 collector）。
+- [低] `handleM1Complete`/`handleM2Complete` 无内部幂等守卫，仅靠 `autoFinishedRef` + 调用点保证单次；未来若新增第三条结束路径易重复 `saveSess`（重复历史）。出处：`components/mockExam/AdaptiveExamShell.js`。
+
 ---
 
 ## 调查结论

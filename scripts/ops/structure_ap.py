@@ -29,7 +29,7 @@ def call(text):
 
 def _call(text):
     import urllib.request
-    body = json.dumps({"model": "deepseek-chat",
+    body = json.dumps({"model": "deepseek-v4-flash",
         "messages": [{"role": "system", "content": AP_INSTR}, {"role": "user", "content": text[:13000]}],
         "response_format": {"type": "json_object"}, "temperature": 0, "stream": False}).encode("utf-8")
     req = urllib.request.Request(sd.URL, data=body, headers={"Authorization": f"Bearer {sd.KEY}", "Content-Type": "application/json"})

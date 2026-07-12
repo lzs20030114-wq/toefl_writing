@@ -12,6 +12,7 @@
   "ground_truth": "data/realExam2026/listening/{conversations,announcements,lectures,shortResponse}.json (tier=recalled, 2026改后); question stems/options recovered from .codex-tmp/exam_txt + .codex-tmp/ocr",
   "data_caveat": "Most JSON items are single-blob ASR transcripts (conversations 94/155, all announcements, all lectures) with no speaker labels and no questions. A minority are OCR'd module items with multi-turn structure + 2 questions. ASR also concatenates adjacent audio clips into one item (lectures >330w, conversations >150w, announcements >150w are merge artifacts) — these are excluded from length targets via clean filters.",
   "generated_at": null,
+  "postfix_2026_07_10": "Current values from paradigm-2026-07-10-postfix.json (listening_lc.gen n=64, listening_la.gen n=72, listening_lat.gen n=137). Live node counts: LC 69 / LA 75 / LAT 141 / LCR 318. CLOSED (bank regenerated): LC median 93 words / 6 turns / named_speaker_count 0; LAT median 256 words (was 167 — the old 'LARGEST GAP'), you_address_opener 46.72% (was 86%), rhetorical_q_opener 14.6% (was 43%). PARTIAL (prompt/mechanism fixed, bank pending regen — NOT a regression): LA salutation_opener_rate 88.89% (real 20.51%; stock_* all 0, OPENER_DECK not yet regenerated into bank), LC greeting_opener 31.25% / peer_topic_opener 6.25% (first-turn peer-opener guidance added, bank not shifted). DEAD-CODE maps_to fixes: (1) LA openers — OPENING_PATTERNS deleted (was never consumed), live lever is OPENER_DECK (laPromptBuilder.js:127) hard-assigned :423-424 + prompt :498; (2) LC length/turns — DIFFICULTY_TIERS:161-179 is dead for length (only used :345-363 for difficulty->Q type), live lever is prompt body :496-503.",
   "dimensions": [
     {
       "name": "conversation_length_words",
@@ -26,9 +27,9 @@
         "2026-02-10_m1_conversation2 (96w, peer): A: Did you end up seeing that movie yesterday with your friend? B: Yes... There were lots of unexpected twists, but it was too long. A: Should I see it? B: I'm not sure I'd pay money to see it in the theater. Just wait a few months and it will be out on streaming.",
         "BOUNDARY/COUNTER (ASR merge, EXCLUDE): 2026-03-20_audio_conversation8 (323w) = a chess-club conversation concatenated with an unrelated archaeology podcast — not a real single item."
       ],
-      "current": { "n": 23, "median": 138, "mean": 142, "min": 100, "max": 188 },
-      "gap": "Generated conversations are ~55% too long (median 138 vs 89). Generated MIN (100w) is above real MEDIAN. Root cause: lcPromptBuilder line 9 + lines 496 say '100-180 words' — real is 53-110, centered 89.",
-      "maps_to": "lcPromptBuilder.js:9 ('100-180 words'); :496 ('100-180 words total'); DIFFICULTY_TIERS:161-176 (80-200w bands)",
+      "current": { "median": 93, "source": "postfix median_words" },
+      "gap": "CLOSED — postfix median 93 (real 89, was 138). Bank regenerated to the real 68-102 band.",
+      "maps_to": "prompt body lcPromptBuilder.js:496-503 (RECALIBRATED 'median 89 words / 6 turns … 68-102 words total' — the live length lever). NOT DIFFICULTY_TIERS:161-179 — that is DEAD CODE (its 80-200w tier strings are only used :345-363 for difficulty->Q1/Q2 type assignment, never injected as a length spec; confirmed 2026-07-10).",
       "reliability": "solid"
     },
     {
@@ -44,9 +45,9 @@
         "2026-01-21_m2_conversation2: 5 turns (shortest observed in JSON)",
         "Real conversations are short: 2 speakers strictly alternate, no third speaker ever observed."
       ],
-      "current": { "n": 23, "median": 9, "mean": 9.1, "min": 7, "max": 10, "histogram": { "7": 1, "8": 4, "9": 10, "10": 8 } },
-      "gap": "Generated has too many turns (median 9 vs 6); generated MIN (7) sits at real p90. Prompt says '8-12 turns' — real is 3-7.",
-      "maps_to": "lcPromptBuilder.js:9 ('8-12 turns'); :494 ('8-12 turns total (each speaker gets 4-6 turns minimum)')",
+      "current": { "median": 6, "source": "postfix median_turns" },
+      "gap": "CLOSED — postfix median 6 (real 6, was 9).",
+      "maps_to": "prompt body lcPromptBuilder.js:496-503 ('4-7 turns total (each speaker ~2-4 turns)'). The old :494 '8-12 turns' string was replaced by this RECALIBRATED block; DIFFICULTY_TIERS turn counts are dead code (see conversation_length_words).",
       "reliability": "solid"
     },
     {
@@ -62,9 +63,9 @@
         "PEER: 2026-04-13_audio_conversation10 restaurant/vacation chat ('Have you checked out the new restaurant downtown? The sushi is made by an award-winning chef...')",
         "SERVICE (minority): 2026-01-21_m1_conversation1 sweater return at a store counter."
       ],
-      "current": { "n": 23, "service_transaction": "52%", "peer_social": "48%" },
-      "gap": "Generated is 52% service-transaction (student-to-staff: library/IT/transportation/dining/mail/security desks). Real is the OPPOSITE: ~78-97% casual peer-to-peer chats about everyday topics (food, music, hobbies, plans, dorm life). Biggest LC authenticity gap.",
-      "maps_to": "lcPromptBuilder.js:20-71 SCENARIO_POOL (library 0.25 + campus_services 0.25 are mostly student_staff service desks; only campus_life 0.30 is peer)",
+      "current": { "greeting_opener_rate": 0.3125, "peer_topic_opener_rate": 0.0625, "source": "postfix first-turn proxy (service/peer split not re-measured)" },
+      "gap": "PARTIALLY ADDRESSED. A RECALIBRATED 'First turn' block (lcPromptBuilder.js:505-513) now pushes peer openers, but the bank has not fully shifted — greeting_opener 31.25% (real 10.32%) still ~3x real; peer_topic_opener 6.25% (real 11.61%). Prompt-side fixed, bank pending regen — watch next round, not a regression.",
+      "maps_to": "lcPromptBuilder.js:20-71 SCENARIO_POOL + prompt body :505-513 (first-turn peer-opener rule)",
       "reliability": "solid"
     },
     {
@@ -114,8 +115,8 @@
         "2026-01-21_m1_announcement2 (classroom): 'I'm pleased to announce that we'll have a guest speaker next week as part of our unit on environmental policy. Dr. Maya Tan will join us on Thursday...'",
         "BOUNDARY (ASR merge, EXCLUDE): 2026-03-20_audio_announcement4 (249w) = two announcements glued."
       ],
-      "current": { "n": 31, "median": 92, "mean": 90, "min": 70, "max": 106 },
-      "gap": "Generated slightly long (median 92 vs 83) but the closest-matching length dimension of all four subtypes. Prompt's '80-120 words' overshoots; real is ~80-90.",
+      "current": { "median": 98, "source": "postfix median_words" },
+      "gap": "Postfix median 98 (real 84, was 92) — now runs slightly LONGER than real. Prompt's '80-120 words' overshoots; tighten toward ~84.",
       "maps_to": "laPromptBuilder.js:8 + :505 + :533 ('80-120 words, 5-7 sentences')",
       "reliability": "solid"
     },
@@ -132,9 +133,9 @@
         "Good morning (classroom): 'Good morning, students. Before we get started today...'",
         "Due to (radio): 'Due to yesterday's heavy rainstorms, a major leak has developed...'"
       ],
-      "current": { "n": 31, "Attention": "48%", "GoodMorning_Afternoon": "19%", "reminder": "10%" },
-      "gap": "Generated over-uses 'Attention' (48% vs real 21%) — the prompt's claimed '64% Attention' is FALSE against real 2026 data. Real openers are far more varied; first-person professor openers and 'Due to...' cause-openers are entirely missing from the generated bank.",
-      "maps_to": "laPromptBuilder.js:111-148 OPENING_PATTERNS (rate:64 attention); :516-520 ('64% start with Attention')",
+      "current": { "salutation_opener_rate": 0.8889, "direct_opener_rate": 0.1111, "stock_pleased_to_announce": 0, "stock_light_refreshments": 0, "stock_reminder_that": 0, "stock_excited_to": 0, "source": "postfix" },
+      "gap": "MECHANISM FIXED, BANK PENDING REGEN. Stock-phrase tropes are gone (all stock_* 0, real still has 1 'pleased to announce'), but salutation_opener_rate is still 88.89% (real 20.51%) because the bank was not yet regenerated with OPENER_DECK. Treat as stale bank, not a live regression.",
+      "maps_to": "DEAD-CODE FIX (2026-07-10): OPENING_PATTERNS (rate:64 Attention) was never consumed and has been DELETED. Live opener lever = laPromptBuilder.js:127 OPENER_DECK = ['direct','direct','direct','direct','cause','professor','attention','greeting'] (2/8 salutation => ~25% expected), hard-assigned in buildLAPrompt :423-424, plus prompt body :498 ('salutations are only ~1 in 4').",
       "reliability": "solid"
     },
     {
@@ -166,8 +167,8 @@
       "examples": [
         "'we'll have a guest speaker', 'we're proud of it', 'don't miss' — contractions present but sparse vs conversation."
       ],
-      "current": { "n": 31, "mean_per_100w": 0.40 },
-      "gap": "Generated announcements are TOO STIFF (0.40 vs 1.93/100w; ~5x too few contractions). Real campus announcements — especially classroom ones — use contractions naturally. Prompt says 'uses contractions occasionally' but bank under-delivers.",
+      "current": { "mean_per_100w": 1.28, "source": "postfix contractions_per_100w" },
+      "gap": "NARROWED — postfix 1.28/100w (real 1.93, was 0.40). No longer bureaucratic-stiff; still a touch under real.",
       "maps_to": "laPromptBuilder.js:531 ('NOT stiff bureaucratic -- uses contractions occasionally')",
       "reliability": "solid"
     },
@@ -184,9 +185,9 @@
         "2026-01-21_m1_lecture1 (249w, physics): 'We've been talking about the law of inertia... So how does a cyclist avoid this? The key is to lean in...'",
         "BOUNDARY (ASR merge, EXCLUDE): 2026-04-06_audio_talk7 (505w) = a history-podcast on Louis Latimer + an art-class lecture on Kandinsky + a glacier fragment."
       ],
-      "current": { "n": 14, "median": 167, "mean": 159, "min": 123, "max": 189 },
-      "gap": "LARGEST GAP. Every generated lecture (max 189w) is BELOW the real minimum (192w). Generated median 167 vs real 250 — generated lectures are ~33% too short. (Note: prompt header was updated 2026-05-31 to say '200-330 mean 258' but the May-14 bank predates the fix and must be regenerated.)",
-      "maps_to": "latPromptBuilder.js:8 ('~200-330 word lecture (realExam2026: mean 258)') — header now correct; bank stale",
+      "current": { "median": 256, "source": "postfix median_words" },
+      "gap": "CLOSED — the former 'LARGEST GAP' is resolved. Postfix median 256 (real 250, was 167); bank regenerated into the tight real 220-258 band. (A recap_opener subtype was added in Batch 6 but bank still shows recap_opener_rate 0% vs real 8.85% — minor, pending regen.)",
+      "maps_to": "latPromptBuilder.js:8 — header + bank now aligned",
       "reliability": "solid"
     },
     {
@@ -235,8 +236,8 @@
         "rhetorical hook: 'When you think of 19th century inventors, what comes to mind?'",
         "most real lectures open declaratively: 'Expressionism is an influential modernist art movement...' / 'Migratory birds travel vast distances...'"
       ],
-      "current": { "n": 14, "you_address_opener": "86%", "rhetorical_q_opener": "43%" },
-      "gap": "Generated lectures over-use direct address (86% vs 21%) and rhetorical-question openers (43% vs 14%). Combined with the contraction gap, generated lectures are systematically too chatty.",
+      "current": { "you_address_opener": "46.72%", "rhetorical_q_opener": "14.6%", "source": "postfix" },
+      "gap": "CLOSED — postfix you_address_opener 46.72% (real 42.48%, was 86%), rhetorical_q_opener 14.6% (real 18.58%, was 43%). Both now match real; no longer too chatty.",
       "maps_to": "latPromptBuilder.js:9 + reference-examples/structure ('hook -> concept')",
       "reliability": "solid"
     },
@@ -353,9 +354,9 @@
       "distribution": { "real_labels": ["Man", "Woman"] },
       "detector": "distinct speaker values in JSON multi-turn items + OCR (Man:/Woman: universally).",
       "examples": ["Man: / Woman: in every OCR conversation block and all 5 JSON multi-turn items."],
-      "current": { "labels": "first names (Casey, Sarah, Avery, Jordan, David, ...)" },
-      "gap": "Generated uses first names; real uses Man/Woman. Minor for TTS (two voices) but a transcript/format-convention mismatch; question stems also refer to 'the man'/'the woman', not names.",
-      "maps_to": "lcPromptBuilder.js:75-83 FEMALE_NAMES/MALE_NAMES; :493 ('2 speakers with first names and roles')",
+      "current": { "named_speaker_count": 0, "source": "postfix" },
+      "gap": "CLOSED — postfix named_speaker_count 0; bank now uses generic Man/Woman (was first names).",
+      "maps_to": "lcPromptBuilder.js:430-431 (transcript labelled 'Woman:'/'Man:') + prompt body :499 ('no first names; question stems refer to the man/the woman')",
       "reliability": "solid"
     }
   ],

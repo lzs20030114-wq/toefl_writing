@@ -27,6 +27,8 @@ import {
   DISC_OPENING_STYLES,
   DISC_COURSE_LIST,
   DISC_STUDENT_NAMES,
+  DISC_OPENER_COMBOS,
+  rollDiscOpeners,
   pickOpeningStyle,
 } from "../lib/ai/prompts/academicWriting.js";
 import { EMAIL_CATEGORIES, buildEmailGenPrompt } from "../lib/ai/prompts/emailWriting.js";
@@ -220,6 +222,11 @@ function printDisc() {
   console.log("1. Pick a course — MUST be EXACTLY one string from the ALLOWED COURSE LIST above, verbatim. NEVER invent a course not on the list (past leak: 'marine biology' x9 entered the bank this way).");
   console.log("2. Pick two DIFFERENT student names from the allowed pool (the pool is exactly Claire/Paul/Andrew/Kelly — real items use no other names).");
   console.log("3. Pick one opening style at random respecting the weights.");
+  console.log("3b. STUDENT OPENERS — use the pre-rolled assignment for item k (hard assignment; do NOT re-roll):");
+  {
+    const combos = rollDiscOpeners(8);
+    combos.forEach((c, k) => console.log(`    Item ${k + 1}: ${DISC_OPENER_COMBOS[c]}`));
+  }
   console.log("4. Student 2 must NOT reference Student 1 by name — real 2026改后 posts never do (0% on 50 items; the older-TPO 37% figure is obsolete).");
   console.log("5. Compose the full item following the SYSTEM PROMPT rules above.");
   console.log("6. Output a JSON array; each element matches:");

@@ -1,12 +1,16 @@
 # Evaluation Spec — Writing · Write an Email (`email`)
 
 **Ground truth:** `data/realExam2026/writing/email.json` — 51 items (33 unique scenarios; many dates re-use a prompt), tier = **recalled** (2026改后机经, OCR + DeepSeek-structured). Bullets/recipient/subject are **verbatim-faithful** to the live exam: OCR of the actual on-screen writing prompts (`.codex-tmp/ocr/{2.23,2.25,3.16,3.30,4.20} 写作.txt`) matches `email.json` bullets word-for-word. Scenario *prose* in the JSON is lightly expanded vs the terser on-screen text.
-**Current generated bank:** `data/emailWriting/prompts.json` — 139 items.
+**Current generated bank:** `data/emailWriting/prompts.json` — **196 items** (live node count 2026-07-10; "139 items" was the pre-fix count). Dimensional `Current:` values below are the **2026-07-10 postfix snapshot** (`writing_email.gen`, n=196).
 **Generation prompt/profile:** `lib/ai/prompts/emailWriting.js` → `buildEmailGenPrompt(category, avoid)` + `EMAIL_CATEGORIES` (the 6-category A–F weighting). Scoring prompt (separate concern): `EMAIL_SYS_BASE` + `inferPowerRelationship`.
 **Measurer:** `scripts/research/email_measure.mjs` — every detector below was hand-validated against the 51 real items; `--dump <dim>` prints per-item output. Iron rule applied: where a detector first disagreed with hand-reading (role on bakery/yoga/hotel cases; topic on gym/hotel/party cases; coherence false-positives on "moved-into-apartment + bought-product"; dangling on direction-established roles), the **detector was fixed**, not the number.
 **Reliability of inputs:** bullet text / verb / count / recipient form / subject = **solid** (structured + OCR-confirmed). Macro function + topic setting = **partial** (qualitative, ~2-3/51 fuzzy boundary calls). Scenario length = **partial** (recalled prose is expanded vs on-screen). Register-as-a-ratio = **deferred** (no email body in the prompt to measure).
 
 > **The task:** the test-taker reads a short scenario + a fixed recipient (To:) + subject + **exactly 3 bullet goals**, then writes one email. Direction is always *"Write an email to [recipient]. In your email, do the following:"* and the screen appends the fixed instruction *"Write as much as you can and in complete sentences."* The item's job is to set up a realistic everyday situation and three clear communicative goals at a controlled register.
+
+> **2026-07-10 postfix — SPLIT STATE (read before calibrating).** Batch 4 fixed the Email *prompt* levers; the live *bank* is partly caught up:
+> - **Closed in the bank:** recipient surface form — `recipient_title_share` **84.69%** (real 82.35%) and **`recipient_bad_count` 0** (the invented "First Last" names and bare-org addressees are gone); scenario length `scenario_words_mean` **38.92** (real 39.45).
+> - **Prompt fixed, bank NOT yet regenerated (don't read as a live regression):** subject `subject_words_mean` **6.74** / `subject_ge8_count` **50** (real 4.14 / 0); opener `opener_you_other_verb` **39.29%** (real 0); verbs `verb_ask` **24.49%** (real 10%) / `verb_inquire` **0** (real 5.9%); `verbs_all_distinct_share` **1.0** (real 0.90). These move only when the bank is regenerated against the fixed `emailWriting.js`.
 
 ---
 
@@ -36,9 +40,9 @@ The generated bank is recognizably the same task but drifts in five measurable w
 - **Real (n=153 bullets):** Explain **29.4%**, Describe **26.8%**, Suggest 11.1%, Ask 10.5%, Request 7.2%, **Inquire 5.9%**, Thank 3.3%, Provide 2%, Offer/Mention 1.3% each, Discuss/Reiterate 1 each. Explain+Describe = **56%** of all bullets.
 - **Detector:** first token → canonical verb (`VERB_MAP`); `--dump verb`.
 - **Verbatim real (the canonical triad):** `"Describe the issues you have encountered in the apartment." / "Explain how conditions negatively affect your studies." / "Request that he make arrangements to address these issues soon."`
-- **Current (n=417):** Describe 22.3%, **Ask 19.2%**, Explain 18.2%, Suggest 14.6%, Request 7.4%, Mention 4.6%. Plus **12 off-distribution verbs** (Tell, Express, Identify, Report, Point out, Argue, Detail, Acknowledge, Emphasize, Propose, Remind) = 14 bullets the real exam essentially never opens a goal with.
-- **Gap:** shape is flatter than real; gen **over-uses "Ask" (19% vs 10%)** and **under-uses "Explain"**, has **zero "Inquire"** (a genuine 6% real verb for booking/inquiry items), and leaks fancy verbs.
-- **Maps to:** prompt line *"Use simple verbs (frequency-ordered from real TPO): Describe, Explain, Suggest, Ask, Thank, Provide, Tell, Mention, Make, Offer, Give, Request"* — **add Inquire; demote Ask; the list omits Inquire and over-promotes Tell/Make.**
+- **Current (postfix):** Explain 22.8%, Ask **24.49%**, Describe 21.3%, Suggest 11.4%, Request 7.1%, **Inquire 0%**. **Still off — bank pending regeneration.** Ask is still over-used (24.5% vs real 10%) and Inquire is still 0 (real 5.9%).
+- **Gap:** shape flatter than real; over-uses "Ask", zero "Inquire". **Prompt fixed, bank pending.**
+- **Maps to:** `emailWriting.js:245` `SLOT3_VERBS = ["Suggest","Suggest","Request","Request","Inquire","Ask"]` — **now adds Inquire and demotes Ask** in the slot-3 action verb. Takes effect on regeneration.
 
 ### D3 — Bullet verb by slot (the arc) · **solid**
 - **Real:** slot1 = **Describe 29 / Explain 15** (+ a few Thank/Mention/Reiterate); slot2 = **Explain 23 / Describe 12 / Ask 11**; slot3 = **Suggest 17 / Request 10 / Inquire 9** (then Explain/Ask).
@@ -49,7 +53,7 @@ The generated bank is recognizably the same task but drifts in five measurable w
 ### D4 — Distinct-verbs-per-item · **solid**
 - **Real:** 3 distinct lead verbs in **46/51 (90.2%)** — **a repeated verb is authentic ~10% of the time** (e.g. `2026-01-27`: Describe / Describe / Explain).
 - **Detector:** `Set(3 verbs).size===3`; `--dump verb`.
-- **Current:** **100%** all-distinct (rigid).
+- **Current (postfix):** `verbs_all_distinct_share` **1.0** (real 0.90). Still rigidly 100% all-distinct — minor, bank pending regen.
 - **Gap:** the prompt rule *"each starting with a DIFFERENT verb"* is **slightly too strict** — allow ~1-in-10 items to repeat a verb (esp. Describe/Describe).
 - **Maps to:** `buildEmailGenPrompt` *"Exactly 3 goals, each starting with a DIFFERENT verb."*
 
@@ -67,10 +71,8 @@ The generated bank is recognizably the same task but drifts in five measurable w
 ### D6 — Recipient surface form · **solid** · ⚠ TOP-3 GAP
 - **Real (n=51):** only **two** forms — **Title + Surname 82.4%** ("Mr. Thompson", "Ms. Taylor", "Dr. Smith", "Professor Patel") and **first-name-only 17.6%** ("Julia", "Alex", "Maria", "John").
 - **Detector:** `recipientForm()`; `--dump form`.
-- **Current:** Title+Surname **51%**, **role/org-only 21.6%** ("Customer Service", "Billing Department", "Parks and Recreation Department"), first-name 16.5%, **full "First Last" name 10.1%** ("Linda Chen", "Marcus Rivera", "Gloria Vance"), other 0.7%.
-- **Counter-example (never in real):** full first+last names; bare org addressees.
-- **Gap:** **44/139 gen items (32%) use a recipient form the real exam NEVER uses.** Real recipients are a person you address by title+surname or a friend's first name — never "First Last", never a faceless department.
-- **Maps to:** `buildEmailGenPrompt` *"Recipient rules… Title + surname / First name only / Role"* — the **"Role" option is wrong** (real has no bare-role recipients except in the rare case where the scenario names no person), and the model is additionally inventing First+Last. Remove "Role"; forbid First+Last.
+- **Current (postfix):** `recipient_title_share` **84.69%** (real 82.35%), `recipient_bad_count` **0**. **Gap closed** — the invented "First Last" names and bare-org addressees are gone; the bank is now the two real forms only.
+- **Maps to:** `buildEmailGenPrompt` (`emailWriting.js:290`) — now: *"NEVER use forms the real exam does not use: NO full \"First Last\" names … NO bare role/org addressees"*. Fix landed and is reflected in the bank.
 
 ### D7 — Recipient role / power relationship · **solid** · gap
 - **Real (n=51):** **staff/service/authority 74.5%** (gym manager, landlord, hotel manager, sound engineer, librarian, catering manager, restaurant owner), **peer 17.6%** (friend, classmate, club leader), **professor/instructor only 7.8%** (just 4 items: Dr. Smith group-project ×, advisor Prof. Patel).
@@ -83,14 +85,13 @@ The generated bank is recognizably the same task but drifts in five measurable w
 - **Real (n=51):** four patterns only — **"You are…" 49%**, **"You recently…" 33.3%**, **"Your [person/thing]…" 13.7%**, **"You and your…" 3.9%**.
 - **Detector:** `opener()`; `--dump opener`.
 - **Verbatim real:** `"You are a university student who has recently moved into a new apartment."` · `"You recently attended a university orchestra concert."` · `"Your professor, Dr. Smith, recently assigned a group project…"` · `"You and your friend, Jasmine, are planning to host a fundraising event…"`
-- **Current:** "You are…" 41%, "You recently…" 29.5%, **"You [other verb]…" 19.4%** (e.g. "You enrolled…", "You hired…", "You booked…", "You subscribed…", "You work as…"), "Your…" 5.8%, "You have…" 2.2%.
-- **Gap:** real uses only four openers (96%); gen leaks a 5th ("You [other verb]…", 27 items) and a 6th ("You have…") that the real exam never opens with.
-- **Maps to:** prompt *"Open with one of these patterns… You are (46%) / You recently (23%) / Your [person] (15%) / You [other verb] (8%) / third-person (8%)"* — **the "You [other verb] 8%" and "third-person 8%" allowances are NOT supported by the recalled bank (0% third-person; "other verb" is essentially 0 in real). Tighten to the four real openers.** (The prompt's percentages cite an older 13-item TPO sample; this 51-item recalled bank supersedes them.)
+- **Current (postfix):** "You are…" 32.65%, "You recently…" 17.86%, **"You [other verb]…" 39.29%** (real 0), "Your…" 8.16%, third-person 1.53%. **Still leaks the 5th opener heavily — bank pending regeneration.**
+- **Gap:** real uses only four openers (96%); gen still over-produces "You [other verb]…" (39%). **Prompt fixed, bank pending.**
+- **Maps to:** `emailWriting.js:228-232` — the four-opener block (`"You are…" 0.49 / "You recently…" 0.33 / "Your…" 0.14 / "You and your…" 0.04`) now replaces the old "You [other verb] 8% / third-person 8%" allowances. Takes effect on regeneration.
 
 ### D9 — Scenario word count · **partial** (recalled prose expanded)
-- **Real:** min 26, max 58, mean **39.5**, median 39 (p10 29, p90 49). **Current:** min 30, max 55, mean **42.4**, median 43.
+- **Real:** min 26, max 58, mean **39.5**, median 39 (p10 29, p90 49). **Current (postfix):** mean **38.92** (`scenario_words_mean`) — **now matches real**; the old ~3w-long gap is closed.
 - **Detector:** whitespace word count.
-- **Gap:** gen runs ~3w longer at center and never gets as short as real (gen min 30 / p10 35 vs real 26 / 29). Soft — partly a recalled-prose-expansion artifact (see Deferred).
 
 ### D10 — Scenario sentence count · **partial**
 - **Real:** mean **3.4** sentences (3-sent ×22, 4-sent ×23 = 88% are 3-4 sentences). **Current:** mean **2.5** (mostly 2-3).
@@ -105,9 +106,9 @@ The generated bank is recognizably the same task but drifts in five measurable w
 - **Real:** min 2, max 7, mean **4.1**, median 4 (p10 3, p90 5). Short noun phrases.
 - **Detector:** whitespace word count of subject.
 - **Verbatim real:** `"Damaged library book"` (3w) · `"Resort Inquiry"` (2w) · `"Career Workshop"` (2w) · `"Request for apartment repairs"` (4w) · `"Feedback on dining experience"` (4w).
-- **Current:** min 3, max **10**, mean **6.7**, median 7 (p90 9). Counter-examples: `"Defective keys and short battery life on order #AP-90217"` (9w + order#), `"Question about MEDAR 610 Final Project Requirements"` (6w + course code).
-- **Gap:** gen subjects are **60% longer** and stuff in order numbers, course codes, and clause-like detail. Real subjects are terse topic labels.
-- **Maps to:** prompt *"'subject' must be a natural email subject line"* — **add: 2-5 words, a plain noun phrase, no order numbers / course codes / clauses.**
+- **Current (postfix):** mean **6.74** (`subject_words_mean`, real 4.1); **50 items ≥8 words** (`subject_ge8_count`, real 0). **Still 60% too long — bank pending regeneration.**
+- **Gap:** gen subjects are still ~60% longer and stuff in order numbers / course codes. **Prompt fixed, bank pending.**
+- **Maps to:** `emailWriting.js:295` — now: *"'subject' must be a SHORT noun phrase of 2-5 words, like a real inbox line"*. Takes effect on regeneration.
 
 ### D13 — Scenario specificity (named brand/venue) · **solid**
 - **Real:** **29.4%** of scenarios quote a brand/place ('Home Essentials', 'Coastal Retreat', 'Cozy Corner', Fitness Zone). All items include ≥1 concrete anchor (place/time/event/object). **Current:** 24.5%. **Gap: minor** — both banks like named anchors.
@@ -119,7 +120,7 @@ The generated bank is recognizably the same task but drifts in five measurable w
 - **Verbatim real exemplars:** *events/services* — gym equipment (Ms. Taylor), hotel-stay feedback (Mr. Rodriguez), restaurant feedback (Ms. Lee), concert sound (Mr. Bridges); *academic* — group project (Dr. Smith), missed-lecture notes (Maria); *housing* (rare) — apartment repairs (Mr. Thompson).
 - **Current:** academic 20.1%, **workplace/internship 18.7%**, **community/civic 18%**, consumer/retail 18%, housing 10.1%, **events/services/leisure only 6.5%**, peer/social 3.6%.
 - **Gap:** **THE defining gap.** Real is dominated by everyday services/leisure (65%); gen produces almost none (6.5%) and instead manufactures a heavy **corporate workplace** presence (sprints, brand managers, sales-territory handoffs, IT migrations) and a heavy **civic** presence (city council, neighborhood association, parks dept) that the real exam barely has. Gen also over-weights consumer/retail product complaints.
-- **Maps to:** `EMAIL_CATEGORIES` (A Academic .30 / B Workplace .20 / C Community .15 / D Peer .15 / E Consumer .10 / F Housing .10) — **this entire weighting is mis-shaped.** There is no "services/leisure/events" category at all, yet it's 65% of the real exam. Workplace 0.20 and Community 0.15 are far too high. **Add a dominant "Services & Events" category (gyms/hotels/restaurants/concerts/trips/parties/campus events) at ~0.55-0.65; cut Workplace and Community hard.**
+- **Maps to:** `EMAIL_CATEGORIES` (`emailWriting.js:218`) — **recalibrated 2026-07-10**: a dominant **"G" Services & Events** category at **weight 0.55** (gyms/hotels/restaurants/concerts/trips/parties/campus events) was added and Workplace/Community cut. (Topic-setting share was not re-measured in the postfix snapshot; the weighting fix is in-prompt and takes effect on regeneration.)
 
 ### D15 — Recipient↔topic coherence · **solid** · ⚠ HARD DEFECT
 - **Real:** **0/51** mismatches. **Current:** **5/139 (3.6%)** nonsensical recipients.

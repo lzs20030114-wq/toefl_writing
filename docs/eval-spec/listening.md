@@ -32,6 +32,24 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
 
 ---
 
+## 2026-07-10 修复记录 (postfix)
+
+**权威快照:** `scripts/research/baselines/paradigm-2026-07-10-postfix.json` (`listening_lc.gen` n=64, `listening_la.gen` n=72, `listening_lat.gen` n=137)。各 `Current` 值按此快照更新;live 库存 (node, 2026-07-10): LC **69** / LA **75** / LAT **141** / LCR **318**。
+
+**已闭合的 gap（库已重生成）:**
+- **LC 长度/轮数/说话人** — median **93 words**（was 138, real 89）、median **6 turns**（was 9）、`named_speaker_count` **0**（改用 Man/Woman, 不再首名）。
+- **LAT 长度**（旧「最大 gap」）— median **256 words**（was 167, real 250）；`you_address_opener` **46.72%**（was 86%, real 42.48%）、`rhetorical_q_opener` **14.6%**（was 43%, real 18.58%）。都到位。
+
+**部分修复（prompt/机制已改,库尚未整批重生成——下轮别把它当"退化"）:**
+- **LA 开场** — 死代码 `OPENING_PATTERNS`（rate=64 Attention）**已删**,改用硬指派 `OPENER_DECK`;stock 套话已禁（`stock_*` 全 0）。但快照 `salutation_opener_rate` 仍 **88.89%**（real 20.51%）——库还是旧 salutation 重的题,待用 OPENER_DECK 重生成。contractions 由 0.40 升到 **1.28/100w**（real 1.93）。
+- **LC 首轮 peer 开场** — prompt 已加「peer 抛话题」指引,但库 `greeting_opener_rate` 仍 31.25%（real 10.32%）、`peer_topic_opener_rate` 6.25%（real 11.61%）,待重生成。
+
+**关键引用修正（旧 maps_to 指向死代码,2026-07-10 确认）:**
+- **LA 开场杠杆** 不是 `OPENING_PATTERNS`（已删的死代码）→ 是 `laPromptBuilder.js:127` `OPENER_DECK` + `buildLAPrompt` 硬指派 `:423-424` + prompt 正文 `:498`（"salutations are only ~1 in 4"）。
+- **LC 长度/轮数杠杆** 不是 `DIFFICULTY_TIERS:161-179`（死代码——只在 `:345-363` 用于难度→Q1/Q2 题型指派,其 80-200w 长度串从不注入 prompt）→ 是 prompt 正文 `:496-503`（"median 89 words / 6 turns", "4-7 turns total, 68-102 words total"）。
+
+---
+
 ## A. Conversation (LC) dimensions
 
 ### A1. Conversation length — `solid`
@@ -43,18 +61,16 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
   - `2026-01-21_m1_conversation1` (71w): *"Man: Hi. I need to return this sweater. I bought it yesterday, but it's too small for me. Woman: Sure. Do you have the receipt? … Woman: No problem. I will get another in that color for you from our stock. Man: Thank you."*
   - `2026-02-10_m1_conversation2` (96w, peer): *"A: Did you end up seeing that movie yesterday…? B: …There were lots of unexpected twists, but it was too long. … B: I'm not sure I'd pay money to see it in the theater. Just wait a few months and it will be out on streaming."*
   - **Counter (EXCLUDE)**: `2026-03-20_audio_conversation8` (323w) — two unrelated audio clips merged by ASR.
-- **Current bank**: median **138**, mean 142, min 100, max 188 (n=23).
-- **Gap**: generated is ~55% too long; generated *minimum* (100w) exceeds the real *median*.
-- **Maps to**: `lcPromptBuilder.js:9` & `:496` ("100–180 words"); `DIFFICULTY_TIERS:161–176`.
+- **Current bank (postfix)**: median **93** (`median_words`, real 89; was 138). **Gap closed** — the bank was regenerated to the real 68-102 band.
+- **Maps to**: prompt body `lcPromptBuilder.js:496-503` (the RECALIBRATED "median 89 words / 6 turns … 4-7 turns total, 68-102 words total" block — this is the live length lever). **NOT `DIFFICULTY_TIERS:161-179`** — that is dead code: its 80-200w tier strings are only used at `:345-363` for difficulty→Q1/Q2 type assignment and are never injected into the prompt as a length spec (confirmed 2026-07-10).
 
 ### A2. Conversation turn count — `solid`
 - **What**: content turns (speaker exchanges), excluding the "Listen to a conversation" lead-in.
 - **Target**: median **6**, mean 5.6, band **4–7**. Histogram {3:1, 4:9, 5:14, 6:21, 7:14}, n=59. Exactly 2 speakers,
   strictly alternating; **no third speaker ever observed**.
 - **Detector**: count `Man:`/`Woman:` tags per OCR block minus 1 lead-in; cross-checked vs 5 JSON multi-turn items (5,6,7,7,7).
-- **Current bank**: median **9**, mean 9.1, max 10 (n=23); generated min (7) sits at real p90.
-- **Gap**: too many turns. Prompt says "8–12 turns"; real is 3–7.
-- **Maps to**: `lcPromptBuilder.js:9` & `:494` ("8–12 turns total").
+- **Current bank (postfix)**: median **6** (`median_turns`, real 6; was 9). **Gap closed.**
+- **Maps to**: prompt body `lcPromptBuilder.js:496-503` ("**4-7 turns total** (each speaker ~2-4 turns)"). The old `:494 "8-12 turns"` string was replaced by this RECALIBRATED block; `DIFFICULTY_TIERS` turn counts are dead code (see A1).
 
 ### A3. Conversation relationship — `solid`
 - **What**: peer/social vs service-transaction vs advising.
@@ -66,10 +82,9 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
   - PEER: `2026-01-27_m1_conversation1-B` — *"I've been thinking about getting a new couch for my dorm room. Do you have any recommendations?"*
   - PEER: `2026-04-13_audio_conversation10` — *"Have you checked out the new restaurant downtown? The sushi is made by an award-winning chef…"*
   - SERVICE (minority): `2026-01-21_m1_conversation1` — sweater return at a store counter.
-- **Current bank**: **52% service-transaction**, 48% peer (n=23).
-- **Gap**: **Biggest LC authenticity gap.** Generated leans on student↔staff service desks (library/IT/transport/
-  dining/mail/security). Real is the opposite — casual peer chats about food, music, hobbies, plans, dorm life.
-- **Maps to**: `lcPromptBuilder.js:20–71` `SCENARIO_POOL` (library .25 + campus_services .25 are mostly student_staff service).
+- **Current bank**: service/peer split not re-measured in the postfix snapshot; the *first-turn opener* proxy was: `greeting_opener_rate` **31.25%** (real 10.32%) and `peer_topic_opener_rate` **6.25%** (real 11.61%) — still greeting/service-leaning.
+- **Gap**: **partially addressed.** A RECALIBRATED "First turn" block (`lcPromptBuilder.js:505-513`, "real conversations open with a PEER tossing a topic … only ~1 in 10 open with Hi/Hey") now pushes peer openers, but the bank has not fully shifted — greeting openers are still ~3× the real rate. Watch this next round (the fix is in-prompt, the bank needs regeneration).
+- **Maps to**: `lcPromptBuilder.js:20–71` `SCENARIO_POOL` + prompt body `:505-513` (first-turn peer-opener rule).
 
 ### A4. Conversation topic domain — `partial`
 - **What**: topic realism.
@@ -91,9 +106,8 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
 ### A6. Speaker label convention — `solid`
 - **Target**: generic **`Man` / `Woman`** (exactly 2, alternating); no names, no roles in the transcript. Question
   stems refer to "the man"/"the woman".
-- **Current bank**: first names (Casey, Sarah, Avery…).
-- **Gap**: format/convention mismatch (minor for TTS, but stems should say "the man"/"the woman").
-- **Maps to**: `lcPromptBuilder.js:75–83` + `:493`.
+- **Current bank (postfix)**: `named_speaker_count` **0** — the bank now uses generic **Man / Woman** (was first names). **Gap closed.**
+- **Maps to**: `lcPromptBuilder.js:430-431` (transcript labelled "Woman:" / "Man:") + prompt body `:499` ("no first names; question stems refer to 'the man' / 'the woman'").
 
 ---
 
@@ -107,8 +121,8 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
   - Classroom: *"I'm pleased to announce that we'll have a guest speaker next week as part of our unit on
     environmental policy. Dr. Maya Tan will join us on Thursday…"*
   - **Counter (EXCLUDE)**: `2026-03-20_audio_announcement4` (249w) — two announcements glued.
-- **Current bank**: median **92**, mean 90 (n=31) — closest-matching length of all four subtypes; slightly long.
-- **Maps to**: `laPromptBuilder.js:8`, `:505`, `:533` ("80–120 words").
+- **Current bank (postfix)**: median **98** (`median_words`, real 84; was 92) — now runs slightly *longer* than real. Minor.
+- **Maps to**: `laPromptBuilder.js:8`, `:505`, `:533` ("80–120 words" — still overshoots; tighten toward ~84).
 
 ### B2. Announcement opener pattern — `solid`
 - **Target**: **Attention… 21%**; Good morning/afternoon… 17%; Direct statement ~12%; first-person professor
@@ -117,10 +131,9 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
 - **Detector**: strip `Man:/Woman:` AND embedded setting lead-in, classify first 45 chars (~10% residual noise).
 - **Verbatim real examples**: *"Attention students, faculty, and staff. Due to the upcoming Spring Alumni
   Weekend…"* · *"Good morning, students. Before we get started today…"* · *"Due to yesterday's heavy rainstorms…"*
-- **Current bank**: **Attention 48%**, Good morning 19%, reminder 10% (n=31).
-- **Gap**: generated over-uses "Attention" (48% vs 21%). **The prompt's "64% Attention" claim is FALSE** against
-  real 2026 data. First-person-professor and "Due to…" cause-openers are entirely missing from the bank.
-- **Maps to**: `laPromptBuilder.js:111–148` `OPENING_PATTERNS` (rate:64); `:516–520`.
+- **Current bank (postfix)**: `salutation_opener_rate` **88.89%** / `direct_opener_rate` **11.11%** (real 20.51% / 79.49%). Still salutation-heavy — the bank was NOT yet regenerated with the new opener mechanism. But the stock-phrase tropes are gone: `stock_pleased_to_announce` / `stock_light_refreshments` / `stock_reminder_that` / `stock_excited_to` all **0** (real still has 1 "pleased to announce").
+- **Gap**: **mechanism fixed, bank pending regen.** The old `OPENING_PATTERNS` (rate:64 "Attention") was **dead code that was never consumed** and has been **deleted** (it misled two calibration rounds). Openers are now hard-assigned per item by `OPENER_DECK`. Until the bank is regenerated with it, `salutation_opener_rate` stays high — treat that as *stale bank*, not a live regression.
+- **Maps to** (旧引用是死代码,2026-07-10 确认): the live opener lever is **`laPromptBuilder.js:127` `OPENER_DECK`** = `["direct","direct","direct","direct","cause","professor","attention","greeting"]` (2 of 8 = salutation ⇒ ~25% expected), hard-assigned in `buildLAPrompt` at **`:423-424`**, plus prompt body **`:498`** ("with no greeting or attention-getter (real exam: salutations are only ~1 in 4)"). **NOT `OPENING_PATTERNS` (deleted).**
 
 ### B3. Announcement context / purpose — `solid`
 - **Target**: **classroom/course 36%** (professor: guest speaker, syllabus, assignment); campus_event/activity 29%;
@@ -135,8 +148,7 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
 
 ### B4. Announcement register (contractions) — `solid`
 - **Target**: **~1.9 / 100w**, 71% contain ≥1 — semi-formal, lightly contracted.
-- **Current bank**: **0.40 / 100w** — ~5× too few; reads bureaucratic.
-- **Gap**: generated announcements are too stiff; real ones (esp. classroom) contract naturally ("we'll", "we're").
+- **Current bank (postfix)**: **1.28 / 100w** (`contractions_per_100w`, real 1.93; was 0.40). **Gap narrowed** — no longer bureaucratic-stiff; still a touch under the real rate.
 - **Maps to**: `laPromptBuilder.js:531`.
 
 ---
@@ -153,11 +165,8 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
   - `2026-01-21_m1_lecture1` (249w, physics): *"We've been talking about the law of inertia… The key is to lean in.
     Weight needs to shift in the direction of the turn…"*
   - **Counter (EXCLUDE)**: `2026-04-06_audio_talk7` (505w) — three clips concatenated.
-- **Current bank**: median **167**, mean 159, min 123, **max 189** (n=14).
-- **Gap**: **LARGEST GAP.** Every generated lecture (max 189) is *below* the real *minimum* (192). ~33% too short.
-  (The prompt header was corrected 2026-05-31 to "200–330 mean 258", but the May-14 bank predates the fix and must
-  be regenerated.)
-- **Maps to**: `latPromptBuilder.js:8` (header now correct; bank stale).
+- **Current bank (postfix)**: median **256** (`median_words`, real 250; was 167). **Gap closed** — the former "LARGEST GAP" is resolved; the bank was regenerated into the tight real 220-258 band. (A `recap_opener` subtype was also added to the prompt in Batch 6, though the bank still shows `recap_opener_rate` 0% vs real 8.85% — minor, pending regen.)
+- **Maps to**: `latPromptBuilder.js:8` (header + bank now aligned).
 
 ### C2. Lecture academic domain — `solid`
 - **Target**: **arts_humanities 30%** (art/art-history/music/architecture/literature/creative-writing);
@@ -185,7 +194,7 @@ Reliability of the 20 dimensions: **18 solid, 1 partial, 1 deferred.**
 - **Target**: "you/your" in opener ~**21%**; rhetorical-question opener ~**14%** — occasional hooks, not the default.
   Most real lectures open declaratively ("Expressionism is…", "Migratory birds travel…").
 - **Verbatim real hook**: *"When you think of 19th century inventors, what comes to mind?"*
-- **Current bank**: you-address **86%**, rhetorical-Q opener **43%** (n=14) — systematically too chatty.
+- **Current bank (postfix)**: you-address opener **46.72%** (`you_address_opener_rate`, real 42.48%; was 86%), rhetorical-Q opener **14.6%** (`rhetorical_q_opener_rate`, real 18.58%; was 43%). **Gap closed** — both now match real; no longer too chatty.
 - **Maps to**: `latPromptBuilder.js:9` + structure/reference examples.
 
 ### C5. Lecture question count — `solid`

@@ -72,7 +72,7 @@ async function callDeepSeek(prompt) {
   }
 
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     messages: [
       { role: "system", content: "You are a TOEFL academic passage writer. Return only valid JSON, no markdown fencing." },
       { role: "user", content: prompt },

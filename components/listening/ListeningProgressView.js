@@ -30,6 +30,14 @@ function getSubtypeInfo(subtype) {
   return SUBTYPE_META[subtype] || SUBTYPE_META.lcr;
 }
 
+// Stable identity for a session row's expanded state. Cloud rows carry a numeric
+// id; local/legacy records fall back to their (unique) ISO date string. Using a
+// key instead of a filtered-list index keeps the right row expanded when the
+// filter tab changes or HISTORY_UPDATED re-sorts the list.
+function sessionKey(s) {
+  return s?.id != null ? String(s.id) : s?.date;
+}
+
 // Older mock-exam sessions were stored with type "adaptive-listening" and a
 // flat shape (band/m1/m2 at top level) that no view ever filtered for.
 // Re-shape them to the unified format on read so legacy history records
@@ -242,6 +250,7 @@ function MockTaskCard({ task, index }) {
           {m.label}
           <span style={{ fontSize: 10, color: P.textDim, fontWeight: 500 }}>#{index + 1}</span>
           {task.module ? <span style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: `${ACCENT.color}12`, color: ACCENT.color }}>M{task.module}</span> : null}
+          {task.timedOut ? <span title="因超时未提交，未作答按错误计入" style={{ fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 999, background: "#FFFBEB", color: "#D97706", border: "1px solid #D9770635" }}>⏱ 超时</span> : null}
           {task.topic ? <span style={{ fontSize: 10, color: P.textDim, fontWeight: 400 }}>{task.topic}</span> : null}
         </span>
         <span style={{ fontSize: 11, fontWeight: 700, color: statusColor, background: `${statusColor}12`, padding: "2px 8px", borderRadius: 999, fontVariantNumeric: "tabular-nums" }}>{c}/{t}</span>
@@ -532,8 +541,15 @@ function LCDetail({ session }) {
 export function ListeningProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [expandedIdx, setExpandedIdx] = useState(null);
+  const [expandedKey, setExpandedKey] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  // Set when a `?mock=<date>` deep link points at a record we can't find (e.g.
+  // the exam's cloud save silently failed) — surfaced as an amber notice so the
+  // user isn't shown a stale mock without explanation.
+  const [mockNotFound, setMockNotFound] = useState(false);
+  // Consume a `?mock=...` deep link exactly once (from the post-exam ResultsCard
+  // "查看本次逐题解析" button) so re-renders don't re-open it.
+  const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => {
     try { setCurrentUser(getSavedCode() || ""); } catch {}
@@ -559,6 +575,39 @@ export function ListeningProgressView({ onBack }) {
     if (filter === "all") return sessions;
     return sessions.filter(s => s.details?.subtype === filter);
   }, [sessions, filter]);
+
+  // Deep link: the post-exam ResultsCard sends `?mock=<sessionDate>` (its exact
+  // save identity) — or legacy `?mock=latest`. "latest" opens the newest mock
+  // record (sessions is date-desc); an identity link opens THAT record by date,
+  // and if it isn't present (e.g. a cloud save that silently failed) we flag it
+  // rather than opening a stale previous mock. Rows are keyed by sessionKey, so
+  // the expanded row survives filter changes / re-sorts. No useSearchParams (the
+  // page has no Suspense boundary — it would break the build).
+  useEffect(() => {
+    if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
+    if (!sessions || sessions.length === 0) return; // wait for records (cloud sync)
+    const params = new URLSearchParams(window.location.search);
+    const val = params.get("mock");
+    if (val == null) { mockDeepLinkConsumed.current = true; return; }
+    const latestMockIdx = sessions.findIndex((s) => s.details?.subtype === "mock");
+    if (latestMockIdx < 0) return; // no mock records yet — keep waiting for sync
+    mockDeepLinkConsumed.current = true;
+    if (val === "latest") {
+      setExpandedKey(sessionKey(sessions[latestMockIdx]));
+    } else {
+      // params.get() already returns the decoded value — no extra decodeURIComponent.
+      const target = sessions.find(
+        (s) => s.date === val && s.details?.subtype === "mock",
+      );
+      if (target) setExpandedKey(sessionKey(target));
+      else setMockNotFound(true);
+    }
+    try {
+      params.delete("mock");
+      const qs = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    } catch {}
+  }, [sessions]);
 
   const lcrSessions = sessions.filter(s => s.details?.subtype === "lcr");
   const laSessions = sessions.filter(s => s.details?.subtype === "la");
@@ -593,7 +642,7 @@ export function ListeningProgressView({ onBack }) {
   function handleDelete(sourceIndex) {
     deleteSession(sourceIndex);
     setHist(loadHist());
-    setExpandedIdx(null);
+    setExpandedKey(null);
   }
 
   function confirmClearAll() {
@@ -654,6 +703,14 @@ export function ListeningProgressView({ onBack }) {
               </div>
             </div>
 
+            {/* Deep-linked mock record missing (likely a failed save) — explain
+                why the requested mock isn't shown before the history list. */}
+            {mockNotFound && (
+              <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10, padding: "10px 14px", marginBottom: 14, fontSize: 12, color: "#92400e", lineHeight: 1.6 }}>
+                未找到本次模考的记录（可能保存失败），以下为历史记录。
+              </div>
+            )}
+
             {/* Session list with date grouping */}
             <div style={{ background: P.surface, borderRadius: 16, border: `1px solid ${P.borderSubtle}`, overflow: "hidden", animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 200ms both" }}>
               <div style={{ padding: "14px 18px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -680,8 +737,8 @@ export function ListeningProgressView({ onBack }) {
                         )}
                         <SessionRow
                           session={s}
-                          expanded={expandedIdx === i}
-                          onToggle={() => setExpandedIdx(expandedIdx === i ? null : i)}
+                          expanded={expandedKey === sessionKey(s)}
+                          onToggle={() => setExpandedKey(expandedKey === sessionKey(s) ? null : sessionKey(s))}
                           onDelete={() => handleDelete(sourceIdx)}
                         />
                       </React.Fragment>

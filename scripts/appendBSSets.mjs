@@ -143,7 +143,7 @@ async function callModel(prompt) {
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 120000,
-    payload: { model: "deepseek-chat", temperature: 0.35, max_tokens: 5000, messages: [{ role: "user", content: prompt }] },
+    payload: { model: "deepseek-v4-flash", temperature: 0.35, max_tokens: 5000, messages: [{ role: "user", content: prompt }] },
   });
 }
 

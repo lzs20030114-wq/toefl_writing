@@ -308,7 +308,7 @@ function extractJson(raw) {
 
 async function callDeepSeek(userText) {
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     temperature: 0.1,
     max_tokens: 4096,
     stream: false,

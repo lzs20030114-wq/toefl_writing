@@ -7,10 +7,11 @@
     "real_questions_structured_json": 207,
     "real_questions_handcoded": 70,
     "real_handcoded_passages": 14,
-    "generated_passages": 156,
-    "generated_questions": 780
+    "generated_passages": 89,
+    "generated_questions": 445
   },
   "generated_at": null,
+  "postfix_2026_07_10": "Bank regenerated (Batch 3). Current values from paradigm-2026-07-10-postfix.json (reading_ap.gen, n=88; live node count 89 passages / 445 questions). old_cohort=0. CLOSED: passage length mean 185.25 (real 181, was 210/max322), insert_text_qshare 7.95% (was 0%), paragraph_rel_qshare 4.09% (was 13.6%), last_sent_however_rate 0% (was 45.8% collapse). NEW MECHANISM: ENDING_MOVES (apPromptBuilder.js:45-50, hard-rotation :118-122) — 5 ending subtypes (limitation/application/research/outlook/synthesis), 4 of 5 forbid final-sentence 'However'; last_sent_limitation_rate 22.73% (real 3.13%, slightly high). QUESTION_PLANS (:63-65) now put insert_text as Q5 in 3/5 plans + re-add reference. STILL OPEN (not in this batch): option_length_spread 1.7 (real 2.63, too uniform).",
   "ground_truth": "data/realExam2026/reading/academicPassage.json (passage text reliable; questions UNDER-extracted ~3.2/passage) + hand-coded question clusters from .codex-tmp/ocr/*阅读*.txt (true structure)",
   "generated_bank": "data/reading/bank/ap.json",
   "maps_to_builder": "lib/readingGen/apPromptBuilder.js",
@@ -29,7 +30,7 @@
         "Synthetic Diamonds: Q31-35 (5)",
         "Space Debris: Q11-15 (5, Module 2)"
       ],
-      "current": "156/156 passages = exactly 5",
+      "current": "89/89 passages = exactly 5 (postfix)",
       "gap": "none (count matches); the gap is in the TYPE mix, not the count",
       "reliability": "solid"
     },
@@ -48,8 +49,8 @@
         "Value Theory = 190w",
         "Augmented Reality for Training = 175-203w"
       ],
-      "current": { "mean": 210, "over_250w": "42/156 (27%)", "max": 322 },
-      "gap": "BIG GAP. Gen is ~15% longer on average and has a long tail to 322w that does NOT exist in real (real hard ceiling ~210w). 42/156 gen passages exceed the entire real range. apPromptBuilder targets 280-360 (acceptable 200-440) — this is the OLD classic-TOEFL number and is ~70-90% too long for 2026改后.",
+      "current": { "mean": 185.25, "source": "postfix mean_words" },
+      "gap": "CLOSED. Postfix mean 185.25 (real 181.09); the 322w long tail is gone. Prompt/profile length targets recalibrated off the stale 280-360.",
       "reliability": "solid"
     },
     {
@@ -107,8 +108,8 @@
         "reference: 'What does \"its cautionary implications\" refer to in the passage?'",
         "negative_factual: 'Which of the following is NOT mentioned as a threat to coral reefs in the passage?'"
       ],
-      "current": "gen has 0% insert_text, 0% reference, 0% sentence_select; over-produces paragraph_relationship (13.6% vs 2.9%) and vocabulary (20% vs 17%).",
-      "gap": "BIGGEST GAP. (1) insert_text (real 11.4%, gen 0%) is entirely missing — it is the single most consistent slot in a real cluster. (2) reference (real 4.3%, gen 0%) and sentence_select (real 1.4%, gen 0%) missing. (3) paragraph_relationship is 4.7x over-produced. The current QUESTION_PLANS in apPromptBuilder.js have no insert_text/reference/sentence_select and use paragraph_relationship in 4 of 5 plans.",
+      "current": "postfix: insert_text_qshare 7.95% (was 0%), paragraph_rel_qshare 4.09% (was 13.6%). Full per-type mix not re-measured in snapshot; the two anchor defects are fixed.",
+      "gap": "CLOSED. (1) insert_text now 7.95% (real 11.4%, still a touch low). (2) paragraph_relationship 4.09% (real 2.9%). (3) reference re-added to a plan; sentence_select still rare/absent (rare in real too). QUESTION_PLANS (apPromptBuilder.js:63-65) now put insert_text as Q5 in 3/5 plans and cut paragraph_relationship.",
       "reliability": "solid"
     },
     {
@@ -123,8 +124,8 @@
         "Smart Textiles Q30 (last): 'Imagine being able to change the appearance of your furnishings depending on your mood or the season.'",
         "Urban Resilience Q35 (last): 'For example, Singapore's Intelligent Transport System incorporates artificial intelligence (AI) to predict real-time traffic conditions...'"
       ],
-      "current": "0 insert_text questions in the entire generated bank; passages carry no [■] insertion markers",
-      "gap": "BIG GAP. ~57% of real AP clusters end with an insert_text Q (always the LAST question, requiring 4 [■] markers placed at paragraph/sentence boundaries in the passage). Generator produces neither the markers nor the question type. Requires passage to expose 4 insertion slots.",
+      "current": "postfix: insert_text now present (insert_text_qshare 7.95% of all Qs). Capability shipped — QUESTION_PLANS place insert_text as Q5 in 3/5 plans and the builder emits 4 [■] markers (apPromptBuilder.js:140-156).",
+      "gap": "CLOSED (capability). insert_text Q5 + 4 [■] insertion markers are now generated. maps_to: apPromptBuilder.js:63-65 (plans) + :140-156 (Q5 wiring + FOUR-marker passage rule). Was 'new capability'; now implemented.",
       "reliability": "solid"
     },
     {
@@ -177,8 +178,8 @@
       "distribution": { "real_n205": { "mean_spread": 2.6, "median_spread": 3, "balanced_rate": 0.69 }, "gen_n780": { "mean_spread": 1.6, "median_spread": 1, "balanced_rate": 0.94 } },
       "detector": "per-question (max option words - min option words); rate where spread <= 3",
       "examples": [],
-      "current": { "mean_spread": 1.6, "balanced_rate": 0.94 },
-      "gap": "moderate (reverse direction). Gen options are TOO uniform (spread 1.6, 94% within 3w) vs real (spread 2.6, only 69% within 3w). The OPTION LENGTH RULE in apPromptBuilder ('within 2 words of each other') over-corrected; real ETS tolerates a 3-4 word spread. Over-uniformity is itself a synthetic tell.",
+      "current": { "mean_spread": 1.7, "source": "postfix option_spread_mean" },
+      "gap": "STILL OPEN (not in the 2026-07-10 batch). Gen options too uniform (spread 1.7 vs real 2.63). The OPTION LENGTH RULE ('within 2 words') over-corrects; real tolerates 3-4 words. Over-uniformity is a synthetic tell.",
       "reliability": "solid"
     },
     {
@@ -232,8 +233,8 @@
         "'Urban green spaces, such as parks, gardens, and green roofs, provide numerous benefits to cities.'",
         "'Parallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts...'"
       ],
-      "current": "apPromptBuilder/ETS_FLAVOR prescribe openingStrategies received_wisdom_then_revision=0.46 ('Historically...', 'While early theories...')",
-      "gap": "BIG GAP (wrong target inherited). Real 2026 AP almost never opens with 'received wisdom then revision' (1/42). It opens with a DIRECT topic/definition statement, frequently naming+defining the subject in sentence 1. The 46% received-wisdom target should be cut to ~5% and direct-definition raised to ~90%.",
+      "current": "postfix opener_copula_rate 29.55% (real 23.44%) — direct topic/definition openers now in place; received-wisdom template no longer dominates.",
+      "gap": "LARGELY CLOSED — gen now opens direct-topic/definition close to real. The stale openingStrategies.received_wisdom_then_revision=0.46 profile constant should still be verified/lowered so it can't seed a regression.",
       "reliability": "solid"
     },
     {
