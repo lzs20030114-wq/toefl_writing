@@ -14,7 +14,9 @@ const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../../lib/ai/deepse
 const MAX_BODY_BYTES = 120000;
 const MAX_SYSTEM_CHARS = 12000;
 const MAX_MESSAGE_CHARS = 40000;
-const MAX_TOKENS = 3000;
+// 2026-07-12: 3000→4096。判分锚改造后评分输出(含 ===ERRORS=== 推理段)实测需
+// 3.1-3.9K tokens;writingEval.js 现请求 4000,上限需容纳它。
+const MAX_TOKENS = 4096;
 
 const limiter = createRateLimiter("ai", { max: 45 });
 
