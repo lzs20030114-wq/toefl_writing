@@ -203,7 +203,7 @@ async function callDeepSeek(systemPrompt, userMessage) {
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 70000,
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       max_tokens: 2400,
       temperature: 0.3,
       stream: false,

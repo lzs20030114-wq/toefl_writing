@@ -118,7 +118,7 @@ async function callDeepSeek(apiKey, prompt) {
     apiKey,
     proxyUrl: process.env.DEEPSEEK_PROXY_URL || process.env.HTTPS_PROXY || "",
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       messages: [{ role: "user", content: prompt }],
       temperature: 1.0,
       max_tokens: 600,

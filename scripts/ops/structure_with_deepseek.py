@@ -52,7 +52,7 @@ SCHEMA_INSTR = (
 
 def call_deepseek(text):
     body = json.dumps({
-        "model": "deepseek-chat",
+        "model": "deepseek-v4-flash",
         "messages": [
             {"role": "system", "content": SCHEMA_INSTR},
             {"role": "user", "content": text[:9000]},

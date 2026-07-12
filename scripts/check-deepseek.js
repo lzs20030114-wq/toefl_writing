@@ -38,7 +38,7 @@ async function main() {
       proxyUrl: proxy,
       timeoutMs: 15000,
       payload: {
-        model: "deepseek-chat",
+        model: "deepseek-v4-flash",
         max_tokens: 32,
         temperature: 0,
         stream: false,

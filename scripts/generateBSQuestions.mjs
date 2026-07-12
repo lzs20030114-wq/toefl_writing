@@ -2064,19 +2064,19 @@ async function callRelayChain({ userPrompt, temperature, maxTokens, timeoutMs, p
 }
 
 async function callModelCreative(userPrompt) {
-  // Generator: always DeepSeek V3.2 — empirically better at structured BS question
+  // Generator: DeepSeek V4 Flash (deepseek-chat 于 2026-07-24 下线后的官方后继) — V3.2 era note: empirically better at structured BS question
   // generation (fewer prompt/answer mismatches, better chunk design).
   // Claude relay is reserved for the reviewer role (callModelDeterministic).
   if (!process.env.DEEPSEEK_API_KEY) {
     throw new Error("DEEPSEEK_API_KEY required for generator (callModelCreative)");
   }
-  console.log("  [creative] using DeepSeek V3.2 (deepseek-chat)");
+  console.log("  [creative] using DeepSeek V4 Flash (deepseek-v4-flash)");
   return callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 180000,
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       temperature: 0.7,
       max_tokens: 8000,
       messages: [{ role: "user", content: userPrompt }],
@@ -2086,7 +2086,7 @@ async function callModelCreative(userPrompt) {
 
 async function callModelDeterministic(userPrompt) {
   // Reviewer: Claude Sonnet via relay (best English grammar judgment for cross-model review).
-  // Fallback: DeepSeek V3.2 if all relays are down.
+  // Fallback: DeepSeek (v4-flash) if all relays are down.
   if (getActiveRelayCount() > 0) {
     try {
       return await callRelayChain({
@@ -2109,7 +2109,7 @@ async function callModelDeterministic(userPrompt) {
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 120000,
     payload: {
-      model: "deepseek-chat",
+      model: "deepseek-v4-flash",
       temperature: 0,
       max_tokens: 5000,
       messages: [{ role: "user", content: userPrompt }],
@@ -3441,7 +3441,7 @@ async function rewriteSetPrompts(sets) {
         proxyUrl: resolveProxyUrl(),
         timeoutMs: 120000,
         payload: {
-          model: "deepseek-chat",
+          model: "deepseek-v4-flash",
           temperature: 0,
           max_tokens: 5000,
           messages: [{ role: "user", content: prompt }],
@@ -3629,7 +3629,7 @@ async function rewriteHighOverlapPrompts(sets) {
         proxyUrl: resolveProxyUrl(),
         timeoutMs: 120000,
         payload: {
-          model: "deepseek-chat",
+          model: "deepseek-v4-flash",
           temperature: 0.3,
           max_tokens: 8000,
           messages: [{ role: "user", content: prompt }],
@@ -3718,7 +3718,7 @@ async function main() {
   console.log("Build Sentence Robust Generator");
   console.log("==============================");
   console.log(`Target sets: ${TARGET_SET_COUNT}`);
-  console.log(`Generator: DeepSeek V3.2 (deepseek-chat)`);
+  console.log(`Generator: DeepSeek V4 Flash (deepseek-v4-flash)`);
   console.log(`Reviewer: ${hasRelay ? `Claude relay → ${process.env.CLAUDE_GENERATOR_MODEL || "claude-sonnet-4-6"} (${getRelayConfigs().map((x) => x.baseUrl).join(", ")})` : "DeepSeek (no relay configured)"}`);
   console.log(`Reviewer fallback: ${hasRelay && hasDeepSeek ? "DeepSeek enabled" : "none"}`);
   console.log(`Proxy: ${resolveProxyUrl() || "(direct)"}`);

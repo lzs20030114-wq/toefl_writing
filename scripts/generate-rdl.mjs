@@ -66,7 +66,7 @@ async function callDeepSeek(prompt) {
   if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
 
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     messages: [
       { role: "system", content: "You are a TOEFL reading question writer specializing in daily-life campus scenarios. Return only valid JSON, no markdown fencing." },
       { role: "user", content: prompt },

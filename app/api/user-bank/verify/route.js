@@ -66,7 +66,7 @@ function isOriginAllowed(request) {
 // Vercel 运行时不保证有 curl。
 async function verifyCallAI(prompt, maxTokens = 2000) {
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     temperature: 0.1, // 与 answerAuditor.js:42 对齐——低温才有确定性答案
     max_tokens: maxTokens,
     stream: false,

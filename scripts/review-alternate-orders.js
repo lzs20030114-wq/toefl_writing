@@ -141,7 +141,7 @@ Rules:
       const response = await callDeepSeekViaCurl({
         apiKey,
         payload: {
-          model: "deepseek-chat",
+          model: "deepseek-v4-flash",
           messages: [{ role: "user", content: prompt }],
           temperature: 0,
           max_tokens: 500,

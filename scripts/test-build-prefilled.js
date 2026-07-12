@@ -31,7 +31,7 @@ function extractJson(raw) {
 
 async function callDeepSeek(systemPrompt, userText) {
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     temperature: 0.1,
     max_tokens: 4096,
     stream: false,
@@ -316,7 +316,7 @@ async function main() {
   }
 
   console.log(`\nBuild sentence — prefilled position accuracy (full pipeline)`);
-  console.log(`Model: deepseek-chat  |  proxy: ${resolveProxyUrl() || "(direct)"}`);
+  console.log(`Model: deepseek-v4-flash  |  proxy: ${resolveProxyUrl() || "(direct)"}`);
   console.log(`Strategy: AI identifies prefilled values, server computes positions\n`);
 
   const sep = "─".repeat(80);

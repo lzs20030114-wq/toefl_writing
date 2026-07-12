@@ -247,7 +247,7 @@ export async function POST(request) {
         // wait never exceeds 150s but legitimate long evaluations get through.
         timeoutMs: 120000,
         payload: {
-          model: "deepseek-chat",
+          model: "deepseek-v4-flash",
           max_tokens: maxTokens,
           temperature,
           stream: false,
@@ -268,7 +268,7 @@ export async function POST(request) {
         Authorization: "Bearer " + process.env.DEEPSEEK_API_KEY,
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: "deepseek-v4-flash",
         max_tokens: maxTokens,
         temperature,
         stream: false,

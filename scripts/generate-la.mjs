@@ -70,7 +70,7 @@ async function callDeepSeek(prompt, opts = {}) {
   if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set. Add it to .env.local or export it.");
 
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     messages: [
       {
         role: "system",
@@ -298,7 +298,7 @@ async function main() {
       const { callDeepSeekViaCurl } = require("../lib/ai/deepseekHttp.js");
       const apiKey = process.env.DEEPSEEK_API_KEY;
       const payload = {
-        model: "deepseek-chat",
+        model: "deepseek-v4-flash",
         messages: [
           {
             role: "system",

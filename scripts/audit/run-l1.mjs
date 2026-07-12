@@ -32,13 +32,13 @@ const T0 = Date.now();
 
 const rd = (p) => JSON.parse(readFileSync(join(ROOT, p), "utf8"));
 
-// 听力审计器的注入式 callAI —— 与 answerAuditor 内置客户端同款(deepseek-chat, 低温)。
+// 听力审计器的注入式 callAI —— 与 answerAuditor 内置客户端同款(deepseek-v4-flash, 低温)。
 async function listeningCallAI(prompt, maxTokens = 2000) {
   const { callDeepSeekViaCurl } = require("../../lib/ai/deepseekHttp.js");
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
   const payload = {
-    model: "deepseek-chat",
+    model: "deepseek-v4-flash",
     messages: [
       { role: "system", content: "You are a TOEFL listening comprehension expert. Answer precisely and concisely. Return only valid JSON." },
       { role: "user", content: prompt },
