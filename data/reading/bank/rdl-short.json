@@ -6921,6 +6921,218 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The bike racks outside Weller Hall will be removed on Tuesday, June 9, for sidewalk repairs. Bicycles left after 8:00 AM will be relocated to South Lot. A $10 fee is charged to reclaim any impounded bicycle from Facilities.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, how much does reclaiming an impounded bicycle cost?",
+          "options": {
+            "A": "A refundable five-dollar deposit",
+            "B": "A monthly storage charge",
+            "C": "No charge for enrolled students",
+            "D": "A ten-dollar reclaiming fee"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that a $10 fee is charged to reclaim any impounded bicycle, which option D restates as a ten-dollar reclaiming fee."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a bicycle still parked at the racks at 9:00 AM on June 9?",
+          "options": {
+            "A": "It will remain safely in its original spot",
+            "B": "It will be moved to a different area",
+            "C": "It will be repaired along with the sidewalk",
+            "D": "It will be returned to its owner for free"
+          },
+          "correct_answer": "B",
+          "explanation": "Bicycles left after 8:00 AM are relocated to South Lot, so a bike still there at 9:00 AM would be moved elsewhere."
+        }
+      ],
+      "difficulty": "hard",
+      "id": "rdl-short_mri82hpg_0"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The recycling bins currently located in the Morrison Hall lobby will be moved to the loading dock behind the building on Monday, March 2. Residents are asked to deposit paper and plastic there beginning that day. Questions may be directed to Mr. Ellis.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, where will the recycling bins be placed?",
+          "options": {
+            "A": "At the rear loading dock",
+            "B": "In the main building lobby",
+            "C": "Beside the parking structure",
+            "D": "Inside a locked basement storage room"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says the bins will be moved to the loading dock behind the building, which option A restates as the rear loading dock."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about residents who currently recycle in the lobby?",
+          "options": {
+            "A": "They will no longer be permitted to recycle",
+            "B": "They will use a different drop-off point",
+            "C": "They will pay a small recycling fee",
+            "D": "They will sort their trash more carefully"
+          },
+          "correct_answer": "B",
+          "explanation": "Since the bins are relocating from the lobby to the loading dock, lobby recyclers will have to bring their materials to the new spot."
+        }
+      ],
+      "difficulty": "hard",
+      "id": "rdl-short_mri82hpg_1"
+    },
+    {
+      "genre": "notice",
+      "variant": "short",
+      "text": "Notice: The north elevator in Carver Hall will be out of service from Wednesday, April 8, through Friday, April 10, for scheduled maintenance. During this period, please use the south elevator or the main stairwell. We apologize for any inconvenience this may cause.",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, when will the north elevator be unavailable?",
+          "options": {
+            "A": "For a single day on April 8",
+            "B": "Every weekend during April",
+            "C": "From April 8 until April 10",
+            "D": "Throughout the entire month of April"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says the elevator will be out of service from April 8 through April 10, which option C restates as April 8 until April 10."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the notice, what should people use instead?",
+          "options": {
+            "A": "The staircase or the other elevator",
+            "B": "The freight elevator in the basement",
+            "C": "The elevator in the neighboring building",
+            "D": "The accessibility ramp near the rear entrance"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice directs people to use the south elevator or the main stairwell, which option A restates as the staircase or the other elevator."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mri82hpg_2"
+    },
+    {
+      "genre": "social_media",
+      "variant": "short",
+      "text": "PSA for finals week: the library basement is the quietest study spot on campus! Barely anyone knows about it. The vending machine down there sells coffee for just $1, and the study carrels stay open until 2 AM Sunday through Thursday. Bring a sweater!",
+      "format_metadata": {},
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the post, what does the vending machine offer?",
+          "options": {
+            "A": "Free hot beverages during finals week",
+            "B": "Snacks priced at several dollars each",
+            "C": "Tea and coffee for two dollars",
+            "D": "Coffee for just one dollar"
+          },
+          "correct_answer": "D",
+          "explanation": "The post says the vending machine sells coffee for just $1, which option D restates as coffee for one dollar."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about studying in the basement late on a Wednesday night?",
+          "options": {
+            "A": "You could stay only until the library closes",
+            "B": "You could run into crowds of students",
+            "C": "You could work there well past midnight",
+            "D": "You could owe a small entry fee"
+          },
+          "correct_answer": "C",
+          "explanation": "The carrels stay open until 2 AM Sunday through Thursday, and Wednesday falls in that range, so a student could keep working past midnight."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-short_mri82hpg_3"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Hi Marcus,\n\nYour resume review with Career Services is confirmed for Thursday, March 12, at 2:00 PM in Building C, Room 118. Please bring two printed copies. A $5 printing credit is available at the front desk if you still need copies made.\n\nBest,\nMs. Reyes",
+      "format_metadata": {
+        "from": "Ms. Reyes",
+        "to": "Marcus",
+        "subject": "Resume Review Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, when is Marcus's resume review scheduled?",
+          "options": {
+            "A": "On Thursday at two in the afternoon",
+            "B": "On Thursday at noon that same day",
+            "C": "On Friday at two in the afternoon",
+            "D": "On Wednesday at ten in the morning"
+          },
+          "correct_answer": "A",
+          "explanation": "The email sets the appointment for Thursday, March 12, at 2:00 PM, which option A restates as Thursday at two in the afternoon."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about students who still need printed copies?",
+          "options": {
+            "A": "They must cover a steep printing fee alone",
+            "B": "They cannot make any copies on campus",
+            "C": "They can offset the cost at the desk",
+            "D": "They should email the resume to reschedule"
+          },
+          "correct_answer": "C",
+          "explanation": "Because a $5 printing credit is offered at the front desk, a student needing copies can offset part of the cost there, supporting option C."
+        }
+      ],
+      "difficulty": "medium",
+      "id": "rdl-short_mri82k4y_0"
+    },
+    {
+      "genre": "email",
+      "variant": "short",
+      "text": "Dear Priya,\n\nThanks for signing up to volunteer as a campus tour guide. Your first shift is Saturday, April 5, from 10:00 AM to noon. Please arrive at the front steps of the Welcome Center about ten minutes early. Remember to wear the blue volunteer shirt.\n\nThanks,\nThe Dean's Office",
+      "format_metadata": {
+        "from": "The Dean's Office",
+        "to": "Priya",
+        "subject": "Tour Guide Shift Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, where should Priya go for her shift?",
+          "options": {
+            "A": "To the steps outside the main library",
+            "B": "To the steps at the Welcome Center",
+            "C": "To the entrance of the dining commons",
+            "D": "To the lobby inside the recreation building"
+          },
+          "correct_answer": "B",
+          "explanation": "The email tells Priya to arrive at the front steps of the Welcome Center, which is option B."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Priya wear for the shift?",
+          "options": {
+            "A": "A blue shirt worn by volunteers",
+            "B": "A formal business outfit for the tour",
+            "C": "A plain white shirt of her choosing",
+            "D": "A printed paper name tag and lanyard"
+          },
+          "correct_answer": "A",
+          "explanation": "The email asks Priya to wear the blue volunteer shirt, which option A paraphrases as a blue shirt marking her as a volunteer."
+        }
+      ],
+      "difficulty": "easy",
+      "id": "rdl-short_mri82k4z_1"
     }
   ]
 }

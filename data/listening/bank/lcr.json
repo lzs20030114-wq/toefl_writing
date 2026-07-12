@@ -7055,6 +7055,174 @@
       },
       "id": "lcr_mrdxr0nh_7",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrdxr0nh_7.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you heading home for the long weekend?",
+      "options": {
+        "A": "Actually, I'm staying to catch up on work.",
+        "B": "The weekend forecast looks pretty rainy.",
+        "C": "My sister just started a new job.",
+        "D": "By train, it's about three hours."
+      },
+      "answer": "A",
+      "explanation": "室友问对方长周末是否回家。正确答案A以话语标记词\"Actually\"开头，间接地表明\"不回，要留下来赶工作\"，既回应了是否回家的问题，又自然地解释了原因，是真实对话的口吻。B是语义联想陷阱：抓住\"weekend\"联想到周末天气预报，却完全没回答回不回家。C是离题项：谈姐姐找到新工作，与是否回家毫无关联，只是另一场对话里成立的正常句子。D是答错问题类型：\"By train, it's about three hours\"回答的是\"怎么回去/多远\"这类How问题，而对方问的是\"要不要回家\"这个是非问题，答非所问。只有A真正回应了行程决定。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mri82hv9_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why isn't the reading list posted online yet?",
+      "options": {
+        "A": "The reading room is on the second floor.",
+        "B": "Beats me — ask the professor.",
+        "C": "I finished the lab report last night.",
+        "D": "Just post it on the bulletin board."
+      },
+      "answer": "B",
+      "explanation": "学生问为什么课程阅读书单还没发到网上。正确答案B用地道口语\"Beats me\"（意为\"我也不知道\"）表达自己同样不清楚，并顺势建议去问教授，是对\"为什么\"这个问题最自然的间接回应。A是语义联想陷阱：抓住\"reading\"联想到\"阅览室在二楼\"，却和书单为何未发布无关。C是离题项：只说自己昨晚写完了实验报告，与书单毫无关系。D是词义误解陷阱：把\"posted\"（网上发布）误读成物理张贴，建议\"贴到公告板上\"，曲解了学生说的\"online posted\"的含义。只有B贴切地回应了这个Why问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mri82hva_1"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm looking for a book on Renaissance art.",
+      "options": {
+        "A": "That novel was made into a movie.",
+        "B": "The café upstairs closes at six.",
+        "C": "Well, I can look that up.",
+        "D": "You can renew it online anytime."
+      },
+      "answer": "C",
+      "explanation": "学生（对图书管理员）陈述自己想找一本关于文艺复兴艺术的书。正确答案C以话语标记词\"Well\"开头，间接地表示\"我帮你查一下\"，正是管理员面对这类请求最自然、最有帮助的回应。A是语义联想陷阱：抓住\"book\"联想到\"那本小说被拍成了电影\"，与帮忙找书无关。B是离题项：楼上咖啡馆六点关门，属于另一场对话，和找书毫无关系。D是词义误解陷阱：\"You can renew it online\"假定学生已经借到了这本书、要续借，但学生只是刚开始找书，误读了当前情境。只有C真正推进了\"帮你找到这本书\"这件事。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mri82hvb_2"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What time does the pool open on weekdays?",
+      "options": {
+        "A": "The pool was just repainted last month.",
+        "B": "I forgot my towel again today.",
+        "C": "It's next to the tennis courts.",
+        "D": "How early were you hoping to swim?"
+      },
+      "answer": "D",
+      "explanation": "学生问泳池工作日几点开门。正确答案D以反问\"你想多早去游泳？\"回应，通过一个推进对话的问题来了解对方需求，是counter_question范式下地道的回应方式。A是语义联想陷阱：抓住\"pool\"联想到\"泳池上个月刚重新粉刷\"，却没回答开门时间。B是离题项：说自己又忘带毛巾，属于另一情境的正常句子，与开门时间无关。C是答错问题类型：\"It's next to the tennis courts\"回答的是\"在哪里\"（Where），而对方问的是\"几点\"（What time），答非所问。只有D恰当地承接了关于开放时间的询问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mri82hvc_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "The heater in my room's been broken all week.",
+      "options": {
+        "A": "Actually, maintenance is coming by this afternoon.",
+        "B": "It's been unusually cold outside lately.",
+        "C": "I really need to do my laundry.",
+        "D": "Yes, I turned it off earlier."
+      },
+      "answer": "A",
+      "explanation": "学生陈述宿舍暖气坏了一整周。正确答案A以话语标记词\"Actually\"开头，间接地告知\"维修工今天下午就来\"，直接回应了暖气问题背后的需求（尽快修好），是自然贴心的回应。B是语义联想陷阱：抓住\"heater\"相关的冷暖概念，联想到\"最近外面特别冷\"，却没解决暖气坏了的问题。C是离题项：说自己得去洗衣服，与暖气毫无关联。D是词义误解陷阱：\"Yes, I turned it off earlier\"把暖气坏了误读成有人主动关掉了它，曲解了原意，且用\"Yes\"回应一句陈述句本就不搭。只有A真正回应并推进了暖气维修这件事。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mri82hvc_4"
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Aren't you tied up with rehearsals tonight?",
+      "options": {
+        "A": "The rehearsal hall is being renovated.",
+        "B": "Don't worry, we can meet tomorrow instead.",
+        "C": "My cousin is visiting from out of town.",
+        "D": "Yes, I already tied up the boxes."
+      },
+      "answer": "B",
+      "explanation": "说话人意识到对方今晚可能因排练而没空。正确答案B不纠结于\"是/不是\"，而是直接解决背后的问题——\"别担心，我们改到明天见\"，用context_shift的方式化解了时间冲突，是最得体的回应。A是语义联想陷阱：抓住\"rehearsals\"联想到\"排练厅在装修\"，却没处理时间安排。C是离题项：说表亲从外地来访，与今晚是否有空、如何安排无关。D是词义误解陷阱（一词多义）：把\"tied up\"（忙碌、抽不开身）误当成字面意思\"捆扎\"，回答\"我已经把箱子捆好了\"，完全曲解。只有B真正回应并解决了双方的时间冲突。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mri82hvd_5"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where's all that hammering coming from?",
+      "options": {
+        "A": "I just bought a new set of tools.",
+        "B": "The recycling bins were moved outside.",
+        "C": "Your guess is as good as mine.",
+        "D": "It started around eight this morning."
+      },
+      "answer": "C",
+      "explanation": "邻居问那阵敲打声是从哪儿传来的。正确答案C用地道习语\"Your guess is as good as mine\"（意为\"我也不知道，跟你一样猜不到\"）自然地表示自己同样不清楚声音来源，是idiomatic范式下贴切的回应。A是语义联想陷阱：抓住\"hammering\"联想到\"我刚买了一套新工具\"，却没说声音从哪来。B是离题项：谈回收桶被挪到了外面，与敲打声来源无关。D是答错问题类型：\"It started around eight this morning\"回答的是\"什么时候\"（When），而对方问的是\"从哪里\"（Where），答非所问。只有C恰当地回应了这个Where问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mri82hvd_6"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How do I sign up for your office hours?",
+      "options": {
+        "A": "My office is being repainted this week.",
+        "B": "The department picnic is next Friday.",
+        "C": "They're on Tuesdays and Thursdays.",
+        "D": "Just use the sign-up sheet on my door."
+      },
+      "answer": "D",
+      "explanation": "学生问怎样预约教授的答疑时间。正确答案D直接给出方法——\"用我门上的登记表\"，是direct_topical范式下对\"How\"问题最清楚的正面回答。A是语义联想陷阱：抓住\"office\"联想到\"我的办公室这周在重新粉刷\"，却没告诉学生怎么预约。B是离题项：说院系野餐在下周五，与预约方式无关。C是答错问题类型：\"They're on Tuesdays and Thursdays\"回答的是答疑时间在\"什么时候\"（When），而学生问的是\"怎样报名\"（How），并没有告诉预约的方法。只有D直接解答了如何登记预约。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mri82hve_7"
     }
   ]
 }
