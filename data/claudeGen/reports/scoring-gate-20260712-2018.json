@@ -1,0 +1,212 @@
+{
+  "generatedAt": "2026-07-12T12:18:14.189Z",
+  "mode": "quick",
+  "model": "deepseek-v4-flash",
+  "budget": 6000,
+  "samples": 3,
+  "temperature": 0.3,
+  "verdict": "QUICK SMOKE FAIL",
+  "verdictPass": false,
+  "acceptance": [
+    {
+      "key": "clean_anchor_hits",
+      "label": "① clean 锚命中 ≥ 8/10",
+      "status": "N/A",
+      "detail": "hits=2/2 (quick: 未跑全部 clean 锚)"
+    },
+    {
+      "key": "vaccine_ge_4.5",
+      "label": "② vaccine ≥ 4.5",
+      "status": "PASS",
+      "detail": "final=4.5"
+    },
+    {
+      "key": "p5_lte_3",
+      "label": "③ P5-email-missing-goal ≤ 3",
+      "status": "PASS",
+      "detail": "final=3"
+    },
+    {
+      "key": "p10_ge_4.5",
+      "label": "④ P10-official5-plus-3typos ≥ 4.5",
+      "status": "FAIL",
+      "detail": "final=4"
+    },
+    {
+      "key": "garbage_all_pass",
+      "label": "⑤ 垃圾探针全过 (P1/P2/P3/P6/P7/P8/P9)",
+      "status": "PASS",
+      "detail": "pass=2/2 (quick: 仅跑 P1-template-discussion/P9-copy-prompt)"
+    },
+    {
+      "key": "stability_le_0.5",
+      "label": "⑥ 稳定性两篇极差 ≤ 0.5",
+      "status": "PASS",
+      "detail": "vac=0.5 heat=0"
+    }
+  ],
+  "cleanBar": 8,
+  "cleanTolHits": 2,
+  "cleanTotal": 2,
+  "allCleanRan": false,
+  "stability": [
+    {
+      "id": "ets-disc-5-vaccine",
+      "runs": [
+        4.5,
+        4.5,
+        4
+      ],
+      "range": 0.5,
+      "stable": true
+    },
+    {
+      "id": "cal-email-4-heating",
+      "runs": [
+        4.5,
+        4.5,
+        4.5
+      ],
+      "range": 0,
+      "stable": true
+    }
+  ],
+  "formatFail": {
+    "samples": 0,
+    "totalCalls": 30,
+    "likelyBudget": 0,
+    "reasonDist": {}
+  },
+  "anchorRows": [
+    {
+      "id": "ets-disc-5-vaccine",
+      "task": "discussion",
+      "expected": 5,
+      "tol": 0.5,
+      "official": true,
+      "authorBuilt": false,
+      "leaked": false,
+      "stability": true,
+      "runs": [
+        4.5,
+        4.5,
+        4
+      ],
+      "samples": [
+        [
+          4.5,
+          4.5,
+          3.5
+        ],
+        [
+          4.5,
+          4.5,
+          4.5
+        ],
+        [
+          4,
+          4.5,
+          4
+        ]
+      ],
+      "final": 4.5,
+      "within": true
+    },
+    {
+      "id": "cal-email-4-heating",
+      "task": "email",
+      "expected": 4,
+      "tol": 0.5,
+      "official": false,
+      "authorBuilt": false,
+      "leaked": false,
+      "stability": true,
+      "runs": [
+        4.5,
+        4.5,
+        4.5
+      ],
+      "samples": [
+        [
+          4,
+          4.5,
+          4.5
+        ],
+        [
+          4.5,
+          4.5,
+          4
+        ],
+        [
+          4.5,
+          4.5,
+          4
+        ]
+      ],
+      "final": 4.5,
+      "within": true
+    }
+  ],
+  "probeRows": [
+    {
+      "id": "P1-template-discussion",
+      "task": "discussion",
+      "role": "garbage",
+      "expText": "≤3",
+      "final": 3,
+      "samples": [
+        3,
+        2.5,
+        3
+      ],
+      "nValid": 3,
+      "pass": true,
+      "formatFail": false
+    },
+    {
+      "id": "P5-email-missing-goal",
+      "task": "email",
+      "role": "line",
+      "expText": "≤3",
+      "final": 3,
+      "samples": [
+        3,
+        3,
+        3
+      ],
+      "nValid": 3,
+      "pass": true,
+      "formatFail": false
+    },
+    {
+      "id": "P9-copy-prompt",
+      "task": "discussion",
+      "role": "garbage",
+      "expText": "≤2",
+      "final": 1.5,
+      "samples": [
+        1.5,
+        1,
+        2.5
+      ],
+      "nValid": 3,
+      "pass": true,
+      "formatFail": false
+    },
+    {
+      "id": "P10-official5-plus-3typos",
+      "task": "discussion",
+      "role": "line",
+      "expText": "≥4.5 (限时噪声豁免;官方clean vaccine=4.0基线)",
+      "final": 4,
+      "samples": [
+        4.5,
+        4,
+        4
+      ],
+      "nValid": 3,
+      "pass": false,
+      "formatFail": false
+    }
+  ]
+}
