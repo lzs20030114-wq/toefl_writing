@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 0,
+      "accepted": 10,
       "topics": [
         "simple past",
         "phrasal verb",
@@ -31,12 +31,14 @@
         "prompt": "Why did you miss our usual seminar today?",
         "answer": "The evening seminar was relocated to the newly renovated east wing."
       },
-      "retried_after_fail": false,
-      "failure_reason": "strict merge blocked: duplicate question ets_s69_q6 (15/20 passed per-item validation); left for R2 retry"
+      "retried_after_fail": true,
+      "failure_reason": "strict merge blocked: duplicate question ets_s69_q6 (15/20 passed per-item validation); left for R2 retry",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "discussion": {
       "generated": 4,
-      "accepted": 4,
+      "accepted": 6,
       "topics": [
         "marketing",
         "educational psychology",
@@ -47,8 +49,10 @@
         "subtopic": "business ethics",
         "preview": "A hiring manager can now type an applicant's name into a search bar and scroll through years of personal posts before the two ever meet."
       },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "retried_after_fail": true,
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 2
     },
     "email": {
       "generated": 4,
@@ -216,5 +220,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-07-12T19:44:51Z",
+  "r2_session_id": "routine-r2-20260712-193100"
 }
