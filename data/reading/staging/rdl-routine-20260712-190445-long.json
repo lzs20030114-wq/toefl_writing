@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "genre": "email",
+      "text": "Subject: Introducing the Sawyer Instrument Lending Library\n\nDear Music Students,\n\nWe are pleased to announce the opening of the Sawyer Instrument Lending Library, a new resource housed in Room 108 of the Sawyer Music Building. Starting Monday, September 8, any enrolled student may borrow a violin, flute, or acoustic guitar for the semester at no rental cost.\n\nTo reserve an instrument, complete the online request form on the department portal by 5:00 PM the day before pickup. Each student may hold one instrument at a time. Although borrowing is free, a refundable $25 deposit is collected at pickup and returned once the instrument comes back undamaged. Any instrument not returned by December 12 will be treated as lost, and the deposit will not be refunded.\n\nWe rely on donated instruments, so gentle handling matters. If a string breaks or a pad wears out during normal use, just note it on the return slip — you won't be charged. Please don't attempt any repairs yourself.\n\nQuestions? Stop by Room 108 during staff hours, Tuesdays and Thursdays from 1:00 to 4:00 PM.\n\nBest regards,\nMs. Delgado\nInstrument Library Coordinator",
+      "format_metadata": {
+        "from": "Ms. Delgado, Instrument Library Coordinator",
+        "to": "Music Students",
+        "subject": "Introducing the Sawyer Instrument Lending Library"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what is required of a student when picking up a borrowed instrument?",
+          "options": {
+            "A": "Completing any needed repairs before the instrument is used",
+            "B": "Selecting an available instrument from Room 108 in person",
+            "C": "Providing a refundable deposit of twenty-five dollars",
+            "D": "Submitting the online request form on the day of pickup"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that although borrowing is free, a refundable $25 deposit is collected at pickup. Option D swaps the timing (the form is due the day before pickup, not the day of), and B contradicts the online reservation process."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about the instruments offered by the lending library?",
+          "options": {
+            "A": "They must be repaired by the borrower before they are returned",
+            "B": "They may already show some signs of earlier use",
+            "C": "They are offered mainly to graduate performance majors",
+            "D": "They can be kept for more than one semester at a time"
+          },
+          "correct_answer": "B",
+          "explanation": "Because the library relies on donated instruments and warns that strings or pads may wear out during normal use, the instruments are likely used and may show prior wear. A reverses the rule (students should not repair), and D contradicts the one-per-semester limit."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who returns an instrument with a pad worn out from normal use?",
+          "options": {
+            "A": "The student will forfeit the twenty-five-dollar deposit",
+            "B": "The student will not be held responsible for the wear",
+            "C": "The student must pay for a replacement pad first",
+            "D": "The student should repair the pad before returning it"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says that if a pad wears out during normal use, the student should simply note it and will not be charged, so the deposit is returned for such wear. A applies only to lost instruments, and D contradicts the instruction not to attempt repairs."
+        }
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "genre": "email",
+      "text": "Subject: Your Writing Center Appointment Is Confirmed\n\nDear Marcus,\n\nThank you for booking a session with the Ellsworth Writing Center. This email confirms your appointment with tutor Priya Nair on Wednesday, October 14, from 2:30 to 3:15 PM in Room 220 of Ellsworth Hall.\n\nPlease bring a printed copy of the assignment prompt along with any draft you'd like to review. Our tutors focus on organization, argument, and clarity rather than line-by-line proofreading, so come ready to discuss your ideas. Sessions last forty-five minutes, and we recommend arriving five minutes early to sign in at the front desk.\n\nIf you need to cancel, please do so through the online scheduler at least four hours in advance. Students who miss two appointments without notice lose booking privileges for the rest of the term. There's no charge for the session itself, but a $3 printing fee applies if you ask us to print your draft on-site.\n\nWe look forward to working with you.\n\nThanks,\nEllsworth Writing Center Staff",
+      "format_metadata": {
+        "from": "Ellsworth Writing Center Staff",
+        "to": "Marcus",
+        "subject": "Your Writing Center Appointment Is Confirmed"
+      },
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what should Marcus bring to his appointment?",
+          "options": {
+            "A": "A completed feedback form from a previous session",
+            "B": "A list of grammar errors found in his draft",
+            "C": "Payment for the forty-five-minute tutoring session",
+            "D": "A printout of the assignment plus a rough draft"
+          },
+          "correct_answer": "D",
+          "explanation": "The email asks Marcus to bring a printed copy of the assignment prompt along with any draft to review. B misrepresents the tutors' focus (they do not proofread grammar), and C contradicts the statement that the session is free."
+        },
+        {
+          "question_type": "detail",
+          "stem": "According to the email, what must Marcus do if he needs to cancel the appointment?",
+          "options": {
+            "A": "He must cancel through the scheduler no fewer than four hours before",
+            "B": "He must call the front desk before the session begins",
+            "C": "He must pay a three-dollar fee in order to reschedule",
+            "D": "He must find another student to take over his slot"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states that cancellations must be made through the online scheduler at least four hours in advance. B and C reuse details from the email (the front desk sign-in and the $3 printing fee) but attach them to the wrong situation."
+        },
+        {
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who repeatedly misses appointments without giving notice?",
+          "options": {
+            "A": "The student will be charged a fee for each missed session",
+            "B": "The student may lose the ability to book future sessions",
+            "C": "The student must attend a longer make-up session",
+            "D": "The student can still reschedule freely at any time"
+          },
+          "correct_answer": "B",
+          "explanation": "The email warns that missing two appointments without notice results in the loss of booking privileges, so a repeat no-show could be blocked from booking again. A introduces a charge the email never mentions, and D contradicts the loss of privileges."
+        }
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

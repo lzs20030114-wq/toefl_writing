@@ -1,62 +1,67 @@
 {
-  "session_id": "routine-20260711-190426",
-  "completed_at": "2026-07-11T19:12:29Z",
+  "session_id": "routine-20260712-190445",
+  "completed_at": "2026-07-12T19:14:43Z",
   "duration_minutes": 8,
   "model": "Claude Opus 4.8",
-  "highlight": "12 题库全生成 70/70；disc+email 合库，阅读/听力/口语入 staging 待审计路由；BS 8/20 过校验未成套，交 R2 重试",
+  "highlight": "全12库共70题：disc/email入库、阅读听力口语70题暂存待审计路由；BS因重复题合库失败，留待R2重试",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 0,
       "topics": [
-        "direct questions",
-        "embedded/indirect questions",
+        "simple past",
+        "phrasal verb",
+        "indirect question",
+        "past tense",
+        "prepositional phrase",
+        "direct question",
+        "wh-question",
         "negation",
+        "present perfect",
         "relative clause",
-        "passive",
-        "comparative",
-        "varied statements"
+        "present simple",
+        "passive voice",
+        "reported speech",
+        "compound predicate",
+        "subordinate clause",
+        "modal"
       ],
       "favorite": {
-        "prompt": "What did the librarian tell you?",
-        "answer": "She explained where the reference journals from the archive are usually stored."
+        "prompt": "Why did you miss our usual seminar today?",
+        "answer": "The evening seminar was relocated to the newly renovated east wing."
       },
       "retried_after_fail": false,
-      "failure_reason": "merge skipped: only 8/20 passed per-item validation (answers <7 words / background-only prompts); <10 valid for a set",
-      "r2_supplemented": true,
-      "r2_items_added": 20
+      "failure_reason": "strict merge blocked: duplicate question ets_s69_q6 (15/20 passed per-item validation); left for R2 retry"
     },
     "discussion": {
       "generated": 4,
-      "accepted": 6,
+      "accepted": 4,
       "topics": [
-        "anthropology",
         "marketing",
-        "history and culture",
-        "computer science"
+        "educational psychology",
+        "business ethics",
+        "anthropology"
       ],
       "favorite": {
-        "subtopic": "anthropology",
-        "preview": "We've been discussing how many museums acquired their collections during periods of colonial expansion. Recently, several major institutions have"
+        "subtopic": "business ethics",
+        "preview": "A hiring manager can now type an applicant's name into a search bar and scroll through years of personal posts before the two ever meet."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 2
+      "failure_reason": ""
     },
     "email": {
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "服务与活动",
-        "消费售后",
-        "住宿",
-        "日常社交"
+        "社区生活",
+        "职场工作",
+        "校园学业",
+        "服务与活动"
       ],
       "favorite": {
-        "subtopic": "住宿",
-        "preview": "You are a tenant on the fourth floor of a small apartment building. The hot water has been shutting off every morning for the past week."
+        "subtopic": "社区生活",
+        "preview": "You are a regular user of your neighborhood community center. Last month the center set up a new composting station in the lobby."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -65,15 +70,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "physics/radio wave propagation",
-        "environmental_science/deforestation",
-        "business/global supply chains",
-        "anthropology/plant domestication",
-        "art/stage design"
+        "psychology/perceptual constancy",
+        "technology/suspension bridge design",
+        "history/Roman aqueducts",
+        "astronomy/star-forming nebulae",
+        "chemistry/water treatment chemistry"
       ],
       "favorite": {
-        "subtopic": "physics/radio wave propagation",
-        "preview": "Radio waves are a form of electromagnetic radiation occupying the longest-wavelength portion of the spectrum, stretching from a few millimeters to many kilometers."
+        "subtopic": "psychology/perceptual constancy",
+        "preview": "Perceptual constancy is the tendency of the visual system to perceive objects as stable in size, shape, and color despite continual changes in the image cast upon the retina."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -82,16 +87,16 @@
       "generated": 6,
       "accepted": 6,
       "topics": [
-        "biology/keystone species",
-        "environmental_science/light pollution",
-        "psychology/anchoring effect",
-        "history/transatlantic telegraph cable",
-        "geology/limestone cave formation",
-        "astronomy/supermassive black holes"
+        "anthropology/rites of passage",
+        "chemistry/catalysts",
+        "physics/buoyancy",
+        "economics/division of labor",
+        "meteorology/cloud formation",
+        "materials_science/metal alloys"
       ],
       "favorite": {
-        "subtopic": "biology/keystone species",
-        "preview": "Keystone species are organisms that exert an unusually strong influence on the structure of their ecosystems."
+        "subtopic": "anthropology/rites of passage",
+        "preview": "Rites of passage are formal ceremonies that mark an individual's movement from one social stage to another."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -100,14 +105,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "notice/fire alarm testing",
-        "notice/water fountain closure",
-        "email/parking permit pickup",
-        "notice/shuttle route detour"
+        "notice",
+        "notice",
+        "notice",
+        "social_media"
       ],
       "favorite": {
-        "subtopic": "notice/water-fountain-closure",
-        "preview": "NOTICE: The drinking fountains on the fourth floor of Kessler Hall will be shut off for pipe replacement from Monday, June 2"
+        "subtopic": "social_media",
+        "preview": "PSA for finals week: the library basement is the quietest study spot on campus! Barely anyone knows about it."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -116,12 +121,12 @@
       "generated": 2,
       "accepted": 2,
       "topics": [
-        "notice/residential package locker",
-        "email/health center flu shot"
+        "email",
+        "email"
       ],
       "favorite": {
-        "subtopic": "notice/residential package pickup locker system",
-        "preview": "Notice: Residential Package Pickup Procedure Change — Effective Monday, March 2, all resident packages will be processed through the new automated locker system"
+        "subtopic": "email",
+        "preview": "Subject: Introducing the Sawyer Instrument Lending Library — We are pleased to announce the opening of a new resource in Room 108"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -130,14 +135,14 @@
       "generated": 4,
       "accepted": 4,
       "topics": [
-        "camera obscura & Renaissance painting",
-        "wartime rationing & food innovation",
-        "bystander effect",
-        "improvisation in early jazz"
+        "neuroplasticity and the brain's ability to rewire itself",
+        "how ice harvesting shaped nineteenth-century commerce",
+        "how mycorrhizal fungal networks let trees share resources underground",
+        "how sfumato created soft, hazy transitions in Renaissance painting"
       ],
       "favorite": {
-        "subtopic": "how wartime rationing led to food innovation",
-        "preview": "Wartime rationing is usually remembered as a story of scarcity, of families making do with less. But rationing also became a surprising engine of food innovation."
+        "subtopic": "how mycorrhizal fungal networks let trees share resources underground",
+        "preview": "When we look at a forest, we tend to see a collection of individual trees competing for light and water. But beneath the soil, something more cooperative is happening."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -146,15 +151,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "intramural volleyball vs photography club",
-        "weekend beach trip",
-        "dinner party food shopping",
-        "new cafe worth the price",
-        "Intro to Film vs World Mythology elective"
+        "choosing an elective (Film vs Environmental Science)",
+        "phone screen repair at a shop",
+        "swapping music recommendations (bored of pop)",
+        "photography club vs intramural soccer",
+        "a mystery movie with great twists but too long"
       ],
       "favorite": {
-        "subtopic": "choosing between Intro to Film and World Mythology electives",
-        "preview": "Have you decided on an elective for next term? I'm torn between Intro to Film and World Mythology."
+        "subtopic": "phone screen repair at a shop",
+        "preview": "Hi, my phone screen cracked when I dropped it this morning. Can you tell me if it's fixable?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -163,15 +168,15 @@
       "generated": 5,
       "accepted": 5,
       "topics": [
-        "LinkedIn headshot day",
-        "Psychology research showcase",
-        "health insurance open enrollment",
-        "art gallery reopening",
-        "outdoor student art market"
+        "mock interview sessions with alumni volunteers",
+        "undergraduate research poster session",
+        "campus bookstore relocating to the Commons",
+        "senior capstone presentation schedule",
+        "financial aid scholarship application workshop"
       ],
       "favorite": {
-        "subtopic": "student art market in the quad",
-        "preview": "Attention students. The Student Union is hosting its first outdoor Art Market this Saturday from eleven in the morning to four"
+        "subtopic": "mock interview sessions with alumni volunteers",
+        "preview": "Good afternoon, students. Next Wednesday the Career Center is running mock interview sessions in Dwyer Hall, where alumni volunteers"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -180,18 +185,18 @@
       "generated": 8,
       "accepted": 8,
       "topics": [
-        "research-program news",
-        "lab color printer",
-        "offering help to friend",
-        "group meeting location",
-        "lost-and-found backpack",
-        "store size exchange",
-        "library checked-out book",
-        "assignment deadline"
+        "roommate weekend plans",
+        "course reading list not posted",
+        "librarian book request",
+        "pool weekday hours",
+        "dorm heater broken",
+        "rehearsal schedule conflict",
+        "neighbor hammering noise",
+        "professor office-hours signup"
       ],
       "favorite": {
-        "subtopic": "lost-and-found backpack",
-        "preview": "Speaker: \"Didn't anyone turn in a blue backpack?\" — Correct: \"You're in luck, it's right here.\""
+        "subtopic": "neighbor hammering noise — idiomatic response",
+        "preview": "Where's all that hammering coming from? — correct reply uses the idiom 'Your guess is as good as mine.'"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -200,18 +205,16 @@
       "generated": 3,
       "accepted": 3,
       "topics": [
-        "Photography Darkroom",
-        "Bike Tire Repair",
-        "Cookie Baking"
+        "Campus Radio Station",
+        "Art Gallery Opening",
+        "Library Orientation"
       ],
       "favorite": {
-        "subtopic": "Photography Darkroom",
-        "preview": "When you are ready to finish, hang the negatives on the line and let them dry completely."
+        "subtopic": "Art Gallery Opening",
+        "preview": "When you are ready to leave, please drop your visitor tag in the basket by the exit."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-11T19:47:37Z",
-  "r2_session_id": "routine-r2-20260711-193039"
+  }
 }
