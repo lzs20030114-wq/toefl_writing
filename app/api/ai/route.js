@@ -17,6 +17,10 @@ const MAX_MESSAGE_CHARS = 40000;
 // 2026-07-12: 3000→4096。判分锚改造后评分输出(含 ===ERRORS=== 推理段)实测需
 // 3.1-3.9K tokens;writingEval.js 现请求 4000,上限需容纳它。
 const MAX_TOKENS = 4096;
+// 2026-07-12: 写作评分「三路取中位」上限。samples>1 时本请求会在服务端并行发 N 次
+// DeepSeek 调用(只扣 1 次用量)。上限 3 是成本护栏——防滥用者靠放大 samples 撑大
+// 我们的 DeepSeek 账单。缺省 1 时行为与旧版逐字等价。
+const MAX_SAMPLES = 3;
 
 const limiter = createRateLimiter("ai", { max: 45 });
 
@@ -80,6 +84,10 @@ function validateBody(body) {
   if (!Number.isFinite(temperatureRaw) || temperatureRaw < 0 || temperatureRaw > 2) {
     return "temperature must be between 0 and 2.";
   }
+  const samplesRaw = Number(body.samples ?? 1);
+  if (!Number.isInteger(samplesRaw) || samplesRaw < 1 || samplesRaw > MAX_SAMPLES) {
+    return `samples must be an integer between 1 and ${MAX_SAMPLES}.`;
+  }
   return "";
 }
 
@@ -90,6 +98,78 @@ function normalizeGenerationParams(body) {
     maxTokens: Math.trunc(maxTokensRaw),
     temperature: temperatureRaw,
   };
+}
+
+// samples 已在 validateBody 里校验为 1–3 的整数;这里再夹一次纯属防御,保证
+// 非法输入退化为单采样而不是放大调用。
+function normalizeSamples(body) {
+  const raw = Number(body?.samples ?? 1);
+  if (!Number.isInteger(raw)) return 1;
+  return Math.max(1, Math.min(MAX_SAMPLES, raw));
+}
+
+// 构造发往 DeepSeek 的统一 payload(单采样/多采样共用同一形状)。
+function buildUpstreamPayload({ system, message, maxTokens, temperature }) {
+  return {
+    model: "deepseek-v4-flash",
+    max_tokens: maxTokens,
+    temperature,
+    stream: false,
+    messages: [
+      { role: "system", content: system },
+      { role: "user", content: message },
+    ],
+  };
+}
+
+// 单次上游调用(proxy 路径)——沿用 deepseekHttp 的 120s 网络超时,成功返回
+// content 字符串,失败抛错(交由 allSettled / 外层 catch 处理)。
+function callViaCurlOnce(apiKey, proxyUrl, params) {
+  return callDeepSeekViaCurl({
+    apiKey,
+    proxyUrl,
+    // 120s server-side network timeout — matches deepseekHttp default.
+    // The client wraps this with a 150s outer race, so the user-visible
+    // wait never exceeds 150s but legitimate long evaluations get through.
+    timeoutMs: 120000,
+    payload: buildUpstreamPayload(params),
+  });
+}
+
+// 单次上游调用(直连路径)——成功返回 content 字符串;!res.ok 时抛出携带
+// { status, errText } 的错误,网络异常照原样抛出(无 status)。多采样模式下
+// 单发失败只算该采样失败,不会立刻拖垮整个请求。
+async function callDirectOnce(apiKey, params) {
+  const res = await fetch("https://api.deepseek.com/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + apiKey,
+    },
+    body: JSON.stringify(buildUpstreamPayload(params)),
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    const err = new Error(`DeepSeek ${res.status}`);
+    err.status = res.status;
+    err.errText = errText;
+    throw err;
+  }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || "";
+}
+
+// 从 allSettled 结果里挑出成功且非空的 content(保持采样顺序)。
+function collectContents(results) {
+  return results
+    .filter((r) => r.status === "fulfilled" && typeof r.value === "string" && r.value.trim())
+    .map((r) => r.value);
+}
+
+// 第一个失败采样的原因(用于 0 成功时的错误语义)。
+function firstRejectionReason(results) {
+  const rejected = results.find((r) => r.status === "rejected");
+  return rejected ? rejected.reason : null;
 }
 
 async function logApiFailure(meta) {
@@ -239,62 +319,70 @@ export async function POST(request) {
 
     const { system, message } = payload;
     const { maxTokens, temperature } = normalizeGenerationParams(payload);
+    const samples = normalizeSamples(payload);
+    const upstreamParams = { system, message, maxTokens, temperature };
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     const proxyUrl = resolveProxyUrl();
+
     if (proxyUrl) {
-      const content = await callDeepSeekViaCurl({
-        apiKey: process.env.DEEPSEEK_API_KEY,
-        proxyUrl,
-        // 120s server-side network timeout — matches deepseekHttp default.
-        // The client wraps this with a 150s outer race, so the user-visible
-        // wait never exceeds 150s but legitimate long evaluations get through.
-        timeoutMs: 120000,
-        payload: {
-          model: "deepseek-v4-flash",
-          max_tokens: maxTokens,
-          temperature,
-          stream: false,
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: message },
-          ],
-        },
-      });
+      if (samples > 1) {
+        // 服务端 fan-out：并行 N 发,收集成功的 content。用量只计 1 次。
+        const results = await Promise.allSettled(
+          Array.from({ length: samples }, () => callViaCurlOnce(apiKey, proxyUrl, upstreamParams)),
+        );
+        const contents = collectContents(results);
+        if (contents.length === 0) {
+          // 0 成功——与单采样 proxy 路径一致:抛错进外层 catch → 500。
+          throw firstRejectionReason(results) || new Error("AI service temporarily unavailable.");
+        }
+        await recordAiUsage(usageUserCode, usageCap, usageDay);
+        return Response.json({ content: contents[0], contents });
+      }
+      const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
 
-    const res = await fetch("https://api.deepseek.com/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + process.env.DEEPSEEK_API_KEY,
-      },
-      body: JSON.stringify({
-        model: "deepseek-v4-flash",
-        max_tokens: maxTokens,
-        temperature,
-        stream: false,
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: message },
-        ],
-      }),
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      // Log full upstream error for debugging, but don't expose details to client
-      return fail(
-        { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: errText },
-        res.status >= 500 ? 502 : res.status,
-        { error: "AI service temporarily unavailable. Please retry." },
+    if (samples > 1) {
+      // 直连路径 fan-out。单发失败(!res.ok 或网络异常)只算该采样失败。
+      const results = await Promise.allSettled(
+        Array.from({ length: samples }, () => callDirectOnce(apiKey, upstreamParams)),
       );
+      const contents = collectContents(results);
+      if (contents.length === 0) {
+        // 0 成功——走现有 fail() 语义,取第一个失败采样的上游错误文本做 errorDetail。
+        const reason = firstRejectionReason(results);
+        const upstreamStatus = Number(reason?.status);
+        const httpStatus = Number.isFinite(upstreamStatus) && upstreamStatus
+          ? (upstreamStatus >= 500 ? 502 : upstreamStatus)
+          : 502;
+        return fail(
+          { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: reason?.errText || reason?.message || "" },
+          httpStatus,
+          { error: "AI service temporarily unavailable. Please retry." },
+        );
+      }
+      await recordAiUsage(usageUserCode, usageCap, usageDay);
+      return Response.json({ content: contents[0], contents });
     }
 
-    const data = await res.json();
-    const content = data.choices?.[0]?.message?.content || "";
-    await recordAiUsage(usageUserCode, usageCap, usageDay);
-    return Response.json({ content });
+    // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
+    try {
+      const content = await callDirectOnce(apiKey, upstreamParams);
+      await recordAiUsage(usageUserCode, usageCap, usageDay);
+      return Response.json({ content });
+    } catch (err) {
+      const upstreamStatus = Number(err?.status);
+      if (Number.isFinite(upstreamStatus) && upstreamStatus) {
+        // Log full upstream error for debugging, but don't expose details to client
+        return fail(
+          { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: err.errText || "" },
+          upstreamStatus >= 500 ? 502 : upstreamStatus,
+          { error: "AI service temporarily unavailable. Please retry." },
+        );
+      }
+      throw err;
+    }
   } catch (e) {
     return fail(
       { ...requestMeta, stage: "server", errorType: "internal" },
