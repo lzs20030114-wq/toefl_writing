@@ -15,8 +15,10 @@ const MAX_BODY_BYTES = 120000;
 const MAX_SYSTEM_CHARS = 12000;
 const MAX_MESSAGE_CHARS = 40000;
 // 2026-07-12: 3000→4096。判分锚改造后评分输出(含 ===ERRORS=== 推理段)实测需
-// 3.1-3.9K tokens;writingEval.js 现请求 4000,上限需容纳它。
-const MAX_TOKENS = 4096;
+// 3.1-3.9K tokens。
+// 2026-07-12 再抬 4096→6144: v4-flash 推理 token 计入 completion 预算,4000 下
+// 约 10% 采样被推理吃光预算出空正文;writingEval.js 现请求 6000,上限需容纳它。
+const MAX_TOKENS = 6144;
 // 2026-07-12: 写作评分「三路取中位」上限。samples>1 时本请求会在服务端并行发 N 次
 // DeepSeek 调用(只扣 1 次用量)。上限 3 是成本护栏——防滥用者靠放大 samples 撑大
 // 我们的 DeepSeek 账单。缺省 1 时行为与旧版逐字等价。

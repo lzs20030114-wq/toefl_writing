@@ -150,8 +150,9 @@ async function callDeepSeek(systemPrompt, userMessage) {
     timeoutMs: 150000,
     payload: {
       model: "deepseek-v4-flash",
-      // 判分锚 v3 输出(含 ===ERRORS=== 推理段)实测需 3.1-3.9K tokens，与 writingEval 同预算
-      max_tokens: 4000,
+      // 与 writingEval 同预算:判分锚 v3 正文需 3.1-3.9K,v4-flash 推理 token 又计入
+      // completion 预算,6000 才能把推理饿死正文的采样死亡率压到 ~1/9
+      max_tokens: 6000,
       temperature: 0.3,
       stream: false,
       messages: [
