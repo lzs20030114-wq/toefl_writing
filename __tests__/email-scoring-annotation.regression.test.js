@@ -35,8 +35,11 @@ test("e2e: Lisa heating-system email — about/about kept, dims 0.5, score ~4.5"
   expect(parsed.error).toBe(false);
 
   const out = calibrateScoreReport("email", parsed, ESSAY);
-  // 1) weighted 5*0.4 + 4.5*0.3 + 3.5*0.3 = 4.4 → 4.5, and no guardrail cap fires
-  expect(out.calibration.adjusted).toBe(false);
+  // 1) weighted 5*0.4 + 4.5*0.3 + 3.5*0.3 = 4.4 → holistic 4.5 抬到 4.5,无任何
+  //    guardrail cap 介入。修2后 lift 改动了分数即视为 adjusted=true,这里改为
+  //    断言 reasons 里只有 holistic_lift(即没有任何 cap reason)。
+  expect(out.calibration.reasons).toEqual(["holistic_lift"]);
+  expect(out.calibration.adjusted).toBe(true);
   expect(out.score).toBe(4.5);
 
   // 2) the rendered text IS the user's submitted text, byte for byte —

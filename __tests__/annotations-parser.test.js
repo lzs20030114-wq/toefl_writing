@@ -293,10 +293,41 @@ describe("reanchorToSource", () => {
     expect(src.slice(out.annotations[0].start, out.annotations[0].end)).toBe("stop");
   });
 
-  test("falls back to the parsed echo when nothing anchors", () => {
+  test("rebuilds from the source when nothing anchors (never shows the alien echo)", () => {
+    // 旧行为是原样返回 parsed(把 AI 复述文当「原文」展示)——那正是修3要治的
+    // 不一致;现在与 valid.length===0 分支同形状:原文 + 空批注。
     const src = "A completely different essay.";
     const echo = "The heater has stop working.";
     const parsed = { plainText: echo, annotations: [ann(echo, "stop")] };
-    expect(reanchorToSource(parsed, src)).toBe(parsed);
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(0);
+  });
+
+  test("rebuilds from the source when the only mark fails to anchor", () => {
+    // 修3回归:echo 把被标注的词改写掉(stop→quit),该批注锚定不上被丢弃后,
+    // 回退必须展示用户原文,而不是 AI 篡改过的复述文。
+    const src = "The heater has stop working since last week.";
+    const echo = "The heater has quit working since last week.";
+    const parsed = { plainText: echo, annotations: [ann(echo, "quit")] };
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(0);
+  });
+
+  test("reanchors a mark whose apostrophe glyph drifted (curly vs straight)", () => {
+    // 修4回归:DeepSeek 在中文语境下会把直撇号漂成弯撇号 —— echo/fragment 是
+    // don’t(U+2019),用户原文是 don't(ASCII)。字形折叠前这里零候选,整条
+    // 批注被静默丢弃;折叠后必须成功重锚定。
+    const src = "I don't have enough time to finish the report.";
+    const echo = "I don’t have enough time to finish the report.";
+    const parsed = { plainText: echo, annotations: [ann(echo, "don’t have")] };
+    const out = reanchorToSource(parsed, src);
+
+    expect(out.plainText).toBe(src);
+    expect(out.annotations).toHaveLength(1);
+    expect(src.slice(out.annotations[0].start, out.annotations[0].end)).toBe("don't have");
   });
 });

@@ -33,6 +33,20 @@
   - （以上均为破坏性操作，需用户批准后再执行；本次任务未做任何删除）
   - `generate-bs.yml` / `generate-disc.yml` / `generate-email.yml` **不可删** — 见下方"调查 A"结论，仍被 `app/api/admin/generate-*/route.js` 通过 `lib/generateConfig.js` 主动 dispatch。
 
+## 写作评分大修 code-review 遗留（2026-07-12）
+
+> 本次已修（六连修，见 MEDIAN-SCORING-VERDICT-2026-07-12 与修复 commit）：短邮件封顶被
+> holistic_lift 旁路 / 批注空 remap 回退返回 AI 复述 / 引号字形漂移丢批注 / adjusted 标记
+> 不一致 / 多采样部分失败无日志 / 重复扫描。以下为 review 确认属实但有意推迟的清理项
+> （发版前不动刚验证过的结构；均无正确性影响）。
+
+- [低中] 模型名 `"deepseek-v4-flash"` 三处独立硬编码（`app/api/ai/route.js` / `scripts/scoring-gate.mjs` / `scripts/calibration-test.js`，另 generate-* 脚本群也有）——闸门号称跑生产本体但模型名是抄的，下次换模型只改 route 会让闸门静默测错模型。抽共享常量（CJS 可被 ESM 具名导入）。
+- [低中] 评分预算耦合仅靠注释：writingEval 请求 6000 ≤ route MAX_TOKENS 6144 无共享常量/断言，单边改动只会在运行时炸 400。与上一条同批抽进共享配置。
+- [低] `scripts/scoring-gate.mjs` 的 `loadEnvLocal()` 换用 `scripts/ops/_shared.mjs` 已有 `loadEnv()`（还白得 .env 回退）；median 助手与 calibration-test.js 重复（2 处）。
+- [低] `app/api/ai/route.js` POST 四分支（proxy/直连 × 单/多采样）可收敛为共享 fan-out helper——注意直连单采样路径有「与旧版逐字等价」的兼容承诺（有测试锚定），重构需保字节级行为。
+- [低] scoring-gate.mjs 锚/探针两个近重复循环可抽共享 runFlows；calibration-test.js 三个类别循环可并一。
+- [低] `lib/ai/writingEval.js` 等生产模块用无扩展名相对 import，裸 Node 不可解析，scoring-gate 靠 resolve hook 垫片（已在 eval-spec 实现注记记载）——长期解是给 lib/ai 内部 import 补 .js 扩展名。
+
 ## 低优先级排队
 
 - [低] 打卡三件套：树苗成长形态 / 移动端卡片 / goal 云同步（2026-06-12 flame v1 上线后无进展）。

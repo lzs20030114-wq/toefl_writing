@@ -171,6 +171,8 @@ describe("holistic reconciliation (lift)", () => {
     const out = calibrateScoreReport("discussion", result, LONG_ENOUGH_TEXT);
     expect(out.score).toBe(4.5);
     expect(out.calibration.reasons).toContain("holistic_lift");
+    // lift 动过分数,adjusted 必须为 true(修2:曾被 discussion 分支平覆盖打回 false)
+    expect(out.calibration.adjusted).toBe(true);
   });
 
   test("holistic below weighted never drags the score down", () => {
@@ -217,6 +219,31 @@ describe("holistic reconciliation (lift)", () => {
     );
     expect(out.score).toBeLessThanOrEqual(3);
     expect(out.calibration.reasons).toContain("email_goal_missing_cap");
+  });
+
+  test("guardrail caps still beat the lift (email thin response, rawScore below 4)", () => {
+    // 修1回归:weighted rawScore = 3.6,holistic 5 → lift 到 4.1。短文封顶若看
+    // rawScore(3.6 < 4)会被 holistic_lift 旁路,让 <50 词的短邮件以 4.0 逃逸;
+    // 必须按抬升后的 finalScore 判定 → 仍封到 ≤3。
+    const result = {
+      score: 5,
+      rubric: rubric(3.6, 3.6, 3.6),
+      goals: [
+        { index: 1, status: "OK", reason: "" },
+        { index: 2, status: "OK", reason: "" },
+        { index: 3, status: "OK", reason: "" },
+      ],
+      patterns: [],
+      annotationParsed: { plainText: "", annotations: [] },
+    };
+    const out = calibrateScoreReport(
+      "email",
+      result,
+      // 20 词 < 50,触发短文封顶
+      "Dear Sir, the heater in my room stopped working last night. Please send someone to fix it soon. Thanks, Lisa"
+    );
+    expect(out.score).toBeLessThanOrEqual(3);
+    expect(out.calibration.reasons).toContain("email_thin_response_cap");
   });
 });
 

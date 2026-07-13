@@ -194,6 +194,27 @@ async function logApiFailure(meta) {
   }
 }
 
+// 多采样 fan-out「部分失败」留痕:只要 ≥1 采样成功,请求就整体成功返回,但
+// rejected 采样的上游错误若不记录,间歇性上游失败(典型:三发里一发 DeepSeek
+// 500)对监控完全隐身 —— 旧单发路径每次上游失败都会写 api_error_feedback,
+// 这里补齐同等可观测性。logApiFailure 内部已吞错,不会拖垮成功响应。
+function logPartialSampleFailures(requestMeta, results) {
+  return Promise.all(
+    results
+      .filter((r) => r.status === "rejected")
+      .map((r) =>
+        logApiFailure({
+          ...requestMeta,
+          stage: "deepseek_partial",
+          errorType: "upstream_partial",
+          httpStatus: r.reason?.status,
+          errorMessage: r.reason?.message || "",
+          errorDetail: r.reason?.errText || "",
+        })
+      )
+  );
+}
+
 async function fail(meta, status, payload) {
   await logApiFailure({
     ...meta,
@@ -337,7 +358,11 @@ export async function POST(request) {
           // 0 成功——与单采样 proxy 路径一致:抛错进外层 catch → 500。
           throw firstRejectionReason(results) || new Error("AI service temporarily unavailable.");
         }
-        await recordAiUsage(usageUserCode, usageCap, usageDay);
+        // 部分失败也要留痕(见 logPartialSampleFailures),与计量一起 best-effort。
+        await Promise.all([
+          recordAiUsage(usageUserCode, usageCap, usageDay),
+          logPartialSampleFailures(requestMeta, results),
+        ]);
         return Response.json({ content: contents[0], contents });
       }
       const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
@@ -364,7 +389,11 @@ export async function POST(request) {
           { error: "AI service temporarily unavailable. Please retry." },
         );
       }
-      await recordAiUsage(usageUserCode, usageCap, usageDay);
+      // 部分失败也要留痕(见 logPartialSampleFailures),与计量一起 best-effort。
+      await Promise.all([
+        recordAiUsage(usageUserCode, usageCap, usageDay),
+        logPartialSampleFailures(requestMeta, results),
+      ]);
       return Response.json({ content: contents[0], contents });
     }
 

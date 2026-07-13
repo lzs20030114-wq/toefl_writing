@@ -2,6 +2,34 @@
  * @jest-environment node
  */
 
+// logApiFailure 只在 supabaseAdmin 已配置时才写 api_error_feedback,而本文件
+// 其余用例特意在「未配置」状态下跑(测试环境无 Supabase env,与真模块行为一致)。
+// 这里用 getter 做可切换的 mock:默认 false 保持全部既有用例行为不变;
+// 「partial-failure logging」describe 按需切到 true 以观测错误表插入。
+let mockSupabaseConfigured = false;
+let mockUsersRow = null;
+const mockInsertCalls = [];
+
+jest.mock("../lib/supabaseAdmin", () => ({
+  get isSupabaseAdminConfigured() { return mockSupabaseConfigured; },
+  supabaseAdmin: {
+    from(table) {
+      const selectFilter = {
+        eq() { return selectFilter; },
+        async maybeSingle() {
+          if (table === "users") return { data: mockUsersRow, error: null };
+          return { data: null, error: null }; // daily_usage → 今日无记录
+        },
+      };
+      return {
+        select() { return selectFilter; },
+        async insert(row) { mockInsertCalls.push({ table, row }); return { error: null }; },
+      };
+    },
+    async rpc() { return { data: 1, error: null }; },
+  },
+}));
+
 import { POST } from "../app/api/ai/route";
 
 describe("/api/ai route", () => {
@@ -206,6 +234,59 @@ describe("/api/ai route", () => {
 
       expect(res.status).toBe(502);
       expect(body.error).toMatch(/unavailable|retry/i);
+    });
+  });
+
+  // ── 修6:多采样部分失败留痕(stage=deepseek_partial)────────────
+  describe("partial-failure logging (deepseek_partial)", () => {
+    beforeEach(() => {
+      mockSupabaseConfigured = true;
+      mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };
+      mockInsertCalls.length = 0;
+    });
+    afterEach(() => {
+      mockSupabaseConfigured = false;
+      mockUsersRow = null;
+    });
+
+    function fanoutRequest() {
+      return new Request("http://localhost/api/ai", {
+        method: "POST",
+        body: JSON.stringify({ system: "s", message: "m", maxTokens: 100, samples: 3, userCode: "ABC123" }),
+      });
+    }
+
+    test("logs each rejected sample to api_error_feedback while the request still succeeds", async () => {
+      let n = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        n += 1;
+        if (n === 2) return { ok: false, status: 500, text: async () => "boom" };
+        return { ok: true, json: async () => ({ choices: [{ message: { content: `ok-${n}` } }] }) };
+      });
+
+      const res = await POST(fanoutRequest());
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body.contents).toHaveLength(2);
+      const errorLogs = mockInsertCalls.filter((c) => c.table === "api_error_feedback");
+      expect(errorLogs).toHaveLength(1);
+      expect(errorLogs[0].row.stage).toBe("deepseek_partial");
+      expect(errorLogs[0].row.error_type).toBe("upstream_partial");
+      expect(errorLogs[0].row.http_status).toBe(500);
+      expect(errorLogs[0].row.error_detail).toBe("boom");
+    });
+
+    test("does not log when all samples succeed", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: "ok" } }] }),
+      });
+
+      const res = await POST(fanoutRequest());
+
+      expect(res.status).toBe(200);
+      expect(mockInsertCalls.filter((c) => c.table === "api_error_feedback")).toHaveLength(0);
     });
   });
 });
