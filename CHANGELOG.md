@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-12 — v1.12.0
+
+- **写作评分大修：判分锚 v3**（`265b020`/`73443a6`/`c8c647b`/`dea43c7`/`eb384fa`/`8219aca`/`91e745a`，全程锚定 ETS 官方带分样文）：旧 prompt 把限时写作小错按个数扣分，官方 5 分样文被压到 3.5-4（线上 196 条 discussion 历史 0 条 >4.0）。改造：ETS 官方金标样文入库（`data/writingScoring/etsGoldenSamples.json`）+ 两步错误分类 + 官方带噪 few-shot 锚 + GOALS 佐证引文锚定 + 限时噪声豁免 + holistic-first 和解（`calibration.js` 允许 holistic 上抬至多半档、不下拖）+ 拆除违官方的「未互动≤3」硬门与短语命中护栏（GOALS MISSING/PARTIAL 语义护栏取代）+ 批注锚定吞词修复（`reanchorToSource` 以用户原文为唯一事实源）。验收：官方 5 分文 3.5→4.5-5，真实用户 12 篇 Δ+0.7~0.8，垃圾/注入探针 7/7 三轮零漏网。
+- **三路取中位 + 输出预算 6000**（`bfbbf21`/`89ab63b`）：v4-flash 在 4/5 边界单次调用方差达 ±1.5（同文三打 [5,3.5,4.5]），且推理型模型 reasoning_tokens 计入 completion 预算——4000 下约 10% 采样推理吃光预算出空正文（历史「评分失败请重试」根因）。现 `/api/ai` 支持 `samples` 1-3（服务端并行 fan-out、只扣 1 次用量、`MAX_SAMPLES=3` 成本护栏），`writingEval` 三采样各自 parse+calibrate 后 `pickMedianCandidate` 取中位（n=2 取低防垃圾侧漏），预算 4000→6000（route 上限 6144）后采样死亡 12/117→4/117，全部 35/35 测试单元出分。同文重交抖动收敛到 ±0.5。
+- **评分防退化门落库**（`ea4c75a`）：`scripts/scoring-gate.mjs` 直 import 生产 prompts/parse/calibration/pickMedianCandidate/deepseekHttp（非副本）跑 12 锚+11 探针，6 条验收线（硬线定病位：P10≥4.0、稳定性极差≤1.0；理想位 4.5/0.5 降预警），`--quick` 冒烟 8min/全量 30min~¥1；语料 `data/eval-profiles/writing-scoring-gate.json`，标准文档 `docs/eval-spec/writing-scoring.md`（含三轮复测基准表）。动评分 prompt/parse/calibration/中位/模型/预算前后必跑。
+- **code-review 六连修**（`71c2e53`，8 角度×单票对抗验证，6 确认 2 驳回）：短邮件封顶门 rawScore→finalScore（holistic_lift 旁路路径 3.6+0.5→4.1 逃逸）；`reanchorToSource` 空 remap 回退改返用户原文+空批注（原返 AI 复述文）；`foldGlyphs` 1:1 字形折叠（弯撇/弯引/长横→ASCII，治中文语境字形漂移丢批注）；holistic_lift 同步置 `adjusted`；fan-out 部分失败留痕 `stage=deepseek_partial`；重复扫描复用。jest 750/750。
+- **评分/生成模型统一切换 deepseek-chat → deepseek-v4-flash**（`f0e340a`，30 处）：DeepSeek 官方 7/24 下线 deepseek-chat 模型名，提前拆弹；判分锚 v3 及全部复测均在 v4-flash 上验收。
+- **自适应模考超时按 ETS 口径结算**（`16a66ea` + review 四修 `c030bdd`）：超时未作答=错、total 固定（修「upper 学术阅读不计分」）；答题记录支持看题目解析；徽章 unanswered>0 门控、听力展开态稳定键、深链 `?mock=<date>` 身份定位、弱项诊断排除全未答任务。
+- **题库补产与产线闸门**（`7f94a93`/`3618e46`/`5a68531`/`fe13a48`/`9d1771f`）：email/discussion/LA 各 10-15 条 Opus 手动补产（新范式全量达标）+ production hard-rejects 与 LA/AP registry gates 锁定 + em300 收件人修正。
+
 ## 2026-07-09 — v1.11.2
 
 - **造句题移除点击填充，作答只保留拖拽**（`03b2d00`）：真实考试的 Build a Sentence 只有拖拽、没有点击词块自动填入空位。`BuildSentenceTask` 词块按钮删掉 onClick 自动填充，保留桌面 HTML5 拖拽与手机触摸拖拽；点击已填槽位退回词块的行为不变；cursor 改 grab、手机端提示文案改「拖动词块到空位」。组件测试改用 drag & drop 作答，新增「点击词块不填充」回归测试。
