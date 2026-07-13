@@ -1,0 +1,266 @@
+{
+  "items": [
+    {
+      "context": "campus_dorm_life",
+      "situation": "two students talking about which elective class to take next term",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you figured out which elective you're taking next term? I'm stuck between Intro to Film and Environmental Science." },
+        { "speaker": "Man", "text": "I already signed up for Environmental Science. My roommate took it last year and said the weekend field trips are the best part." },
+        { "speaker": "Woman", "text": "Field trips? That actually sounds fun. Does it meet more than once a week, though? I've got a packed schedule." },
+        { "speaker": "Man", "text": "Just Tuesdays and Thursdays, plus one Saturday trip a month. It's really manageable." },
+        { "speaker": "Woman", "text": "Hmm, the Saturday thing might clash with my part-time job. Let me check my shifts before I decide." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what is the best part of the Environmental Science class?",
+          "options": {
+            "A": "The monthly weekend field trips",
+            "B": "The small class size",
+            "C": "The Tuesday and Thursday lectures",
+            "D": "The friendly professor"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生转述室友的话，说“the weekend field trips are the best part”，即周末的野外考察是最棒的部分。B选项错误，对话从未提到班级人数。C选项错误，周二和周四是上课时间，但男生并没有说这是最棒的部分。D选项错误，对话没有提到教授是否友好。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Enroll in Environmental Science immediately",
+            "B": "Quit her part-time job to free up Saturdays",
+            "C": "Check her work shifts before deciding",
+            "D": "Sign up for Intro to Film instead"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生最后说“Let me check my shifts before I decide”，明确表示要先查看自己的兼职排班再做决定。A选项错误，她还没有决定报名，属于过度推断。B选项错误，她只是担心周六可能冲突，从未打算辞掉兼职。D选项错误，对话没有任何信息支持她会转而选电影课。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student asking a shop about repairing a cracked phone screen",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "shop_staff", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, my phone screen cracked when I dropped it this morning. Can you tell me if it's fixable?" },
+        { "speaker": "Man", "text": "Let me take a look. Okay, the glass is cracked but the display underneath still works, so a screen replacement should do it." },
+        { "speaker": "Woman", "text": "Oh, good. How much will that run me, and how long does it take?" },
+        { "speaker": "Man", "text": "It's forty dollars, and we can usually finish within two hours. But we're out of the part for your model right now." },
+        { "speaker": "Woman", "text": "Out of stock? When will you have it?" },
+        { "speaker": "Man", "text": "A new shipment arrives tomorrow morning. If you drop it off then, it'll be ready by lunchtime." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "Why does the woman go to the shop?",
+          "options": {
+            "A": "To buy a brand-new phone",
+            "B": "To find out if her cracked screen can be repaired",
+            "C": "To complain that her display stopped working",
+            "D": "To ask for a refund on an earlier repair"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：女生开门见山说手机屏幕摔裂了，问“Can you tell me if it's fixable?”，主旨是想知道裂屏能否修复。A选项错误，她要修的是现有手机，不是买新机。C选项错误，男生检查后说屏幕下的显示仍然正常，属于对情况的反向误读。D选项错误，对话没有涉及退款。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Have her phone repaired later today",
+            "B": "Buy the part from another store",
+            "C": "Ask the staff for a discount on the repair",
+            "D": "Bring her phone back the next morning"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说配件现在缺货，明早到货，只要那时把手机送来，中午就能修好，所以女生最可能第二天早上再把手机拿来。A选项错误，配件缺货，今天无法修，属于被明确排除的选项。B选项错误，对话没有提到去别的店买配件。C选项错误，没有任何信息表明她会要求打折，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations because one is bored of the same pop singers",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Honestly, I'm so bored of my playlist. It's the same three pop singers on repeat and I need something new." },
+        { "speaker": "Man", "text": "You should check out this indie folk band I've been into lately. They've got these really mellow harmonies, totally different from mainstream pop." },
+        { "speaker": "Woman", "text": "Indie folk? I've never really listened to that. Is it easy to get into?" },
+        { "speaker": "Man", "text": "Definitely. I'll send you a link to their first album tonight. Start there and see what you think." },
+        { "speaker": "Woman", "text": "That'd be great. I'm always up for discovering something outside my usual bubble." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "How to build a better music playlist app",
+            "B": "A concert the two of them attended together",
+            "C": "Finding new music beyond the woman's usual pop",
+            "D": "The man's strong dislike of folk music"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生说厌倦了老听同样的流行歌手，想要新东西，男生随即推荐一支独立民谣乐队，整段对话围绕帮她发现流行乐之外的新音乐。A选项错误，对话没有谈论制作播放器应用。B选项错误，两人没有一起看过演唱会。D选项错误，男生恰恰喜欢并推荐民谣，属于对情况的反向误读。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Listen to the album the man recommends",
+            "B": "Delete her entire current playlist",
+            "C": "Start her own indie folk band",
+            "D": "Buy tickets to the band's concert"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：男生说今晚会把乐队第一张专辑的链接发给她，女生欣然答应并说愿意尝试新东西，所以她最可能去听男生推荐的专辑。B选项错误，她只是厌倦老歌单，从未说要删掉整个歌单，属于过度推断。C选项错误，组建自己的乐队远超对话内容。D选项错误，对话没有提到演唱会或买票。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_dorm_life",
+      "situation": "two friends discussing whether to join a campus club or intramural team",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you decided whether you're joining the photography club or the intramural soccer team? You can't do both, right?" },
+        { "speaker": "Man", "text": "Yeah, they both meet on Wednesday evenings, so I have to pick one. I'm leaning toward soccer for the exercise." },
+        { "speaker": "Woman", "text": "That makes sense. The photography club does sound cool, though. Don't they have that darkroom workshop?" },
+        { "speaker": "Man", "text": "They do, but honestly I've been sitting at a desk all semester. I really need to get moving more." },
+        { "speaker": "Woman", "text": "Fair enough. Sounds like your mind's basically made up." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why can't the man join both groups?",
+          "options": {
+            "A": "They both cost too much money",
+            "B": "He isn't skilled at either activity",
+            "C": "Both groups are already full",
+            "D": "They both meet on Wednesday evenings"
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生明确说“they both meet on Wednesday evenings, so I have to pick one”，因为时间冲突所以只能二选一。A选项错误，对话没有提到费用。B选项错误，男生没有说自己不擅长，只是想多运动，属于改动关键事实。C选项错误，对话没有提到名额已满。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Join the photography club",
+            "B": "Sign up for the intramural soccer team",
+            "C": "Attend the darkroom workshop",
+            "D": "Quit both groups to focus on studying"
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说自己整学期都坐在桌前，需要多运动，倾向于选足球，所以最可能报名校内足球队。A选项错误，他因为想运动而实际上放弃了摄影社，属于被排除的选项。C选项错误，暗房工作坊属于摄影社，也在他放弃之列。D选项错误，退出两者去学习没有任何依据，属于过度推断。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "rejected_option",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "I finally watched that new mystery everyone's raving about, 'Silent Harbor.' The twist at the end completely floored me." },
+        { "speaker": "Man", "text": "Oh, I've heard the ending's amazing. Worth checking out this weekend?" },
+        { "speaker": "Woman", "text": "For the writing, absolutely. But fair warning, it's nearly three hours, and the middle really drags." },
+        { "speaker": "Man", "text": "Three hours? I don't think I could sit still that long without a break." },
+        { "speaker": "Woman", "text": "Honestly, you might want to watch it at home so you can pause partway through." },
+        { "speaker": "Man", "text": "You know, that's not a bad idea. I'll just stream it once it's available online." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "A movie the woman found excellent but overly long",
+            "B": "The woman's plan to write a mystery novel",
+            "C": "Whether a theater ticket is worth the price",
+            "D": "A movie that both speakers strongly disliked"
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生盛赞这部悬疑片的剧本和结尾反转，但也提醒它将近三小时、中段拖沓，整段对话就是围绕这部“很好看但太长”的电影。B选项错误，女生只是看了悬疑片，并没有要写小说。C选项错误，对话没有讨论电影票价是否值得。D选项错误，女生其实很喜欢这部电影，属于对情况的反向误读。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "wrong_topic",
+            "D": "reversed_situation"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Watch the movie in the theater this weekend",
+            "B": "Read some reviews before deciding",
+            "C": "Wait and stream the movie at home",
+            "D": "Ask the woman to explain the twist"
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说三小时坐不住，采纳女生的建议，说“I'll just stream it once it's available online”，所以他会等上线后在家观看。A选项错误，他因为时长而明确放弃了去影院这周看，属于被排除的选项。B选项错误，对话没有提到看影评。D选项错误，让女生解释反转没有任何依据，也不符合他的下一步计划。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}

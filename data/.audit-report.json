@@ -1,13 +1,28 @@
 {
-  "session": "routine-20260708-221453",
-  "r2_session": "routine-r2-20260708-224120",
-  "audited_at": "2026-07-09T20:04:37.976Z",
-  "total_questions": 86,
-  "answered": 86,
-  "matched": 86,
-  "mismatched": 0,
+  "session": "routine-20260712-190445",
+  "r2_session": "routine-r2-20260712-193100",
+  "audited_at": "2026-07-12T20:04:31.910Z",
+  "total_questions": 90,
+  "answered": 90,
+  "matched": 89,
+  "mismatched": 1,
   "skipped": 0,
-  "items_dropped": 0,
-  "agreement_pct": 100,
-  "dropped": []
+  "items_dropped": 1,
+  "agreement_pct": 98.9,
+  "dropped": [
+    {
+      "file": "ap-routine-20260712-190445",
+      "item_index": 1,
+      "subtopic": "suspension bridge design",
+      "mismatches": [
+        {
+          "question_index": 4,
+          "key": "ap-routine-20260712-190445:1:4",
+          "stem_preview": "There are four locations [■] in the passage that indicate where the following se",
+          "marked": "A",
+          "mine": "B"
+        }
+      ]
+    }
+  ]
 }
