@@ -1,0 +1,270 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you heard about Saffron Kitchen, that new Thai place downtown? I tried it last night." },
+        { "speaker": "Man", "text": "Oh, I've been meaning to go! Everyone keeps raving about it online. Is it as good as they say?" },
+        { "speaker": "Woman", "text": "Honestly, better. But skip the pad thai — it's nothing special. The green curry with crab is what you want." },
+        { "speaker": "Man", "text": "Green curry, got it. I'm not great with spicy food, though. Should I be worried?" },
+        { "speaker": "Woman", "text": "You can ask them to make it mild. Just tell your server when you order — they're really flexible." },
+        { "speaker": "Man", "text": "Perfect. I'll head over Friday after my exam, then. Thanks for the tip!" }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "The woman is recommending a dish at a new restaurant.",
+            "B": "The man is complaining that the restaurant is too expensive.",
+            "C": "The woman is warning the man to avoid the restaurant.",
+            "D": "The man is describing a meal he cooked at home."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：对话核心是女生向男生推荐这家新泰餐厅，尤其推荐蟹肉青咖喱这道菜。B选项错误，男生没有抱怨价格，全程没提到贵。C选项错误，女生是在推荐而非警告他别去，她说这家店“比传闻还好”。D选项错误，对话谈的是餐厅点菜，男生并没有描述自己在家做的饭。",
+          "distractor_types": {
+            "B": "wrong_topic",
+            "C": "reversed_situation",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do when he goes to the restaurant?",
+          "options": {
+            "A": "Order the pad thai as his main dish.",
+            "B": "Avoid the restaurant because of the spice.",
+            "C": "Ask the server to make his dish less spicy.",
+            "D": "Invite the woman to come along on Friday."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：男生说自己不太能吃辣，女生建议他点菜时让服务员做成微辣，男生接受了建议，所以他很可能会请服务员减辣。A选项错误，女生明确说别点pad thai，男生也决定点青咖喱。B选项错误，男生并没有因怕辣而放弃去，反而计划周五去。D选项错误，对话没有提到他会邀女生同去，女生已经去过了。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students comparing notes on a novel they both read for a literature class",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you finish 'The Salt Path' for lit class? I couldn't put it down last weekend." },
+        { "speaker": "Man", "text": "I did! I read the whole thing in two sittings. The ending really surprised me, though." },
+        { "speaker": "Woman", "text": "Right? I did not expect the sister to be the narrator all along. So clever." },
+        { "speaker": "Man", "text": "Exactly. Although I found the middle section a little slow — all those long descriptions of the coast." },
+        { "speaker": "Woman", "text": "Fair. So are you going to write your essay on the ending twist, then?" },
+        { "speaker": "Man", "text": "I think so. It's the most interesting part to analyze. What about you?" },
+        { "speaker": "Woman", "text": "I'll probably focus on the setting. See you in seminar!" }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the man dislike about the novel?",
+          "options": {
+            "A": "The surprising ending.",
+            "B": "The slow middle section.",
+            "C": "The identity of the narrator.",
+            "D": "Its very short length."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：男生说他觉得中间部分有点慢，全是对海岸的冗长描写。A选项错误，男生喜欢那个出人意料的结尾，被它惊到。C选项错误，叙述者身份是女生盛赞“巧妙”的点，男生也没表示不满。D选项错误，男生没说小说太短，反而说是分两次读完的整本书。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely write his essay about?",
+          "options": {
+            "A": "The novel's coastal setting.",
+            "B": "The slow pacing of the book.",
+            "C": "The author's earlier novels.",
+            "D": "The twist at the end of the story."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说他打算写结尾的反转，因为那是最值得分析的部分。A选项错误，写海岸/背景的是女生。B选项错误，节奏慢是男生的抱怨点，但他没说要以此为题。C选项错误，对话完全没提到作者的其他作品。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "rejected_option",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students figuring out a time to meet for a history group project",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "We really need to nail down a time to meet for the history project. Are you free Thursday afternoon?" },
+        { "speaker": "Man", "text": "Thursday's tough — I've got my lab until four, and then I coach intramural soccer at five." },
+        { "speaker": "Woman", "text": "Okay. What about Wednesday, right after lunch? Say, one o'clock in the library?" },
+        { "speaker": "Man", "text": "Wednesday at one works for me. Should we book a group study room so we're not whispering?" },
+        { "speaker": "Woman", "text": "Good idea. I'll reserve room 204 online tonight. Can you bring the source notes?" },
+        { "speaker": "Man", "text": "Sure, I'll print them out beforehand. See you Wednesday." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "When do the students agree to meet?",
+          "options": {
+            "A": "Thursday afternoon.",
+            "B": "Thursday at five o'clock.",
+            "C": "Wednesday at one o'clock.",
+            "D": "Wednesday evening."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生提议周三午饭后一点在图书馆见，男生回答“Wednesday at one works for me”，两人达成一致。A选项错误，男生周四下午有实验课到四点。B选项错误，周四五点男生要带足球队。D选项错误，约的是周三一点，不是周三晚上。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do tonight?",
+          "options": {
+            "A": "Reserve a group study room.",
+            "B": "Print out the source notes.",
+            "C": "Cancel her Thursday lab class.",
+            "D": "Email the history professor."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生明确说“I'll reserve room 204 online tonight”，所以她今晚会在线预订小组自习室。B选项错误，打印资料是男生的任务。C选项错误，有实验课到四点的是男生，且没人要取消课。D选项错误，对话没有提到给教授发邮件。",
+          "distractor_types": {
+            "B": "misattributed",
+            "C": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two friends deciding whether to buy concert tickets now or wait",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "So, should we grab tickets for the indie festival now, or wait? They just went on sale this morning." },
+        { "speaker": "Man", "text": "I checked earlier — the lawn seats are already ninety dollars. That's steeper than last year." },
+        { "speaker": "Woman", "text": "Ninety? That's more than I expected. I heard prices sometimes drop closer to the date if it doesn't sell out." },
+        { "speaker": "Man", "text": "Maybe, but this lineup is huge. I'd bet it sells out by the weekend, honestly." },
+        { "speaker": "Woman", "text": "Yeah, you're probably right. I don't want to miss it to save twenty bucks." },
+        { "speaker": "Man", "text": "Same. Let's just buy them tonight before they're gone. I'll send you the link." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How much do the lawn seats currently cost?",
+          "options": {
+            "A": "Twenty dollars.",
+            "B": "The same as last year.",
+            "C": "Nineteen dollars.",
+            "D": "Ninety dollars."
+          },
+          "answer": "D",
+          "explanation": "正确答案D：男生说他查过了，草坪区座位已经要九十美元。A选项错误，二十美元是女生说的“不想为省二十块而错过”里的数字，不是票价。B选项错误，男生说今年比去年更贵，并非一样。C选项错误，是九十不是十九，属数字混淆。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the two friends most likely do?",
+          "options": {
+            "A": "Wait for the ticket prices to drop.",
+            "B": "Buy the tickets tonight.",
+            "C": "Choose seats other than the lawn.",
+            "D": "Attend a different festival instead."
+          },
+          "answer": "B",
+          "explanation": "正确答案B：两人担心演出会在周末前售罄，男生提议“今晚就买，趁还没卖完”，女生也同意，所以他们很可能今晚下单。A选项错误，他们讨论后否决了等降价的想法。C选项错误，对话没有提到换其他区域的座位。D选项错误，没人提议改去别的音乐节。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "a student returning a too-small sweater at a store counter",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "customer", "gender": "female" },
+        { "name": "Man", "role": "store_clerk", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Hi, I'd like to return this sweater. I bought it last week, but it turned out to be a size too small." },
+        { "speaker": "Man", "text": "No problem at all. Do you have your receipt with you?" },
+        { "speaker": "Woman", "text": "I do, right here. Can I get a refund back to my card?" },
+        { "speaker": "Man", "text": "Of course. Since it's within thirty days and unworn, I can refund the full amount to your original card." },
+        { "speaker": "Woman", "text": "Great. Actually, do you have this same sweater in a medium? I still really like it." },
+        { "speaker": "Man", "text": "Let me check the stockroom for you. One moment." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why does the woman want to return the sweater?",
+          "options": {
+            "A": "It is a size too small for her.",
+            "B": "It has a hole in the sleeve.",
+            "C": "She no longer likes the color.",
+            "D": "It was the wrong item entirely."
+          },
+          "answer": "A",
+          "explanation": "正确答案A：女生开头就说这件毛衣小了一码，所以要退。B选项错误，对话没提到毛衣破了。C选项错误，女生反而说她还很喜欢这款，想换中码。D选项错误，她要退的正是自己买的那件，只是尺码不合，不是拿错货。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "reversed_situation",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Refuse the return without a receipt.",
+            "B": "Charge her a restocking fee.",
+            "C": "Look for a medium in the stockroom.",
+            "D": "Send her to a different store branch."
+          },
+          "answer": "C",
+          "explanation": "正确答案C：女生问是否有中码，男生说“Let me check the stockroom for you”，所以他接下来会去库房找中码。A选项错误，女生已经出示了收据，不存在无收据拒退。B选项错误，男生说三十天内未穿可全额退款，没有提到收取任何手续费。D选项错误，对话没有让她去别的分店。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "over_inference",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    }
+  ]
+}
