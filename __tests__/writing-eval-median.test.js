@@ -18,7 +18,7 @@ jest.mock("../lib/ai/prompts/academicWriting", () => ({
 }));
 
 import { callAIMulti } from "../lib/ai/client";
-import { evaluateWritingResponse, pickMedianCandidate } from "../lib/ai/writingEval";
+import { evaluateWritingResponse, pickMedianCandidate, recoverCompleteComparison } from "../lib/ai/writingEval";
 
 // 一份合法 section-format 评分文本,三维与总分同值 → email/150词 校准后 final ≈ score。
 function rawWithScore(score) {
@@ -72,6 +72,36 @@ describe("pickMedianCandidate", () => {
   });
 });
 
+describe("recoverCompleteComparison", () => {
+  test("keeps the median score report but replaces its truncated comparison", () => {
+    const chosen = {
+      final: 4.5,
+      report: {
+        score: 4.5,
+        comparison: { modelEssay: "This essay was cut off", points: [] },
+        sample: "This essay was cut off",
+      },
+    };
+    const donor = {
+      final: 5,
+      report: {
+        score: 5,
+        comparison: {
+          modelEssay: "This is the complete model essay.",
+          points: [{ index: 1, title: "Content" }],
+        },
+      },
+    };
+
+    const recovered = recoverCompleteComparison(chosen, [chosen, donor]);
+
+    expect(recovered.score).toBe(4.5);
+    expect(recovered.comparison).toBe(donor.report.comparison);
+    expect(recovered.sample).toBe("This is the complete model essay.");
+    expect(recovered.comparisonRecovered).toBe(true);
+  });
+});
+
 describe("evaluateWritingResponse: 三路取中位集成", () => {
   const text = makeWords(150);
 
@@ -89,6 +119,7 @@ describe("evaluateWritingResponse: 三路取中位集成", () => {
     expect(report.scoreSamples).toEqual([5, 3.5, 4.5]);
     expect(report.scoreSampleCount).toBe(3);
     expect(report.reportLanguage).toBe("zh");
+    expect(callAIMulti).toHaveBeenCalledWith("SYS", "USER", 8000, 175000, 0.3, 3);
   });
 
   test("parse 失败位置放 null,其余取低(n=2)", async () => {

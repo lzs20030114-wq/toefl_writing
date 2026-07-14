@@ -116,6 +116,18 @@ describe("/api/ai route", () => {
     expect(body.error).toMatch(/too long/i);
   });
 
+  test("rejects token requests above the 8192-token writing-report ceiling", async () => {
+    const req = new Request("http://localhost/api/ai", {
+      method: "POST",
+      body: JSON.stringify({ system: "s", message: "m", maxTokens: 8193 }),
+    });
+    const res = await POST(req);
+    const body = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(body.error).toContain("8192");
+  });
+
   test("rejects cross-origin browser request", async () => {
     const req = new Request("http://localhost/api/ai", {
       method: "POST",
