@@ -19,6 +19,7 @@
 
 ## 可派工
 
+- [中] Interview 口语接入生产线：live 库仅 11 题（全题型最少），但 interview 不在 routine 12-bank 名单里（2026-05-31 校准时 deferred，无校准 prompt）——需先走校准流程（realExam2026 锚 + eval-spec）再入名单；按需出题 demand 文件会把它标为 `not_in_routine` 跳过。**前置依赖：上方「盲审 routine 停摆」拍板**（口语库合库通道本身停着）。出处：按需出题机制自审 2026-07-15。
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。

@@ -1,0 +1,62 @@
+name: On-demand generation signal
+
+# Computes data/.gen-demand.json — which of the 12 banks the nightly Claude
+# routine should generate tonight, and how many items each. Runs at 17:30 UTC
+# (= 01:30 Beijing), a buffer before the 03:00 routine so the file is fresh when
+# the routine reads it.
+#
+# Reads the Supabase sessions table (aggregate only — the committed file never
+# contains a user_code). Commits the file with [skip ci] only when it changed,
+# using the same rebase-retry push as the other data jobs.
+
+on:
+  schedule:
+    - cron: "30 17 * * *" # 17:30 UTC = 01:30 Beijing
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gen-demand
+  cancel-in-progress: false
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Compute demand signal
+        run: node scripts/compute-gen-demand.mjs
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Commit + push if changed
+        shell: bash
+        run: |
+          git config user.name "gen-demand[bot]"
+          git config user.email "gen-demand[bot]@users.noreply.github.com"
+          git add data/.gen-demand.json
+          if git diff --cached --quiet; then
+            echo "No demand change — nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore(gen-demand): refresh demand signal $(date -u +%Y-%m-%d) [skip ci]"
+          for i in 1 2 3 4; do
+            if git pull --rebase origin main && git push origin main; then break; fi
+            sleep 8
+          done
