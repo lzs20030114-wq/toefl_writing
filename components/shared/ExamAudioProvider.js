@@ -121,8 +121,26 @@ export function ExamAudioProvider({ children }) {
         setHoldTimers(false);
       }
     });
+
+    // First-interaction global unlock. Practice pages have no explicit
+    // "start exam" button, so the user's first tap anywhere on the page (pick
+    // a topic, choose an answer, hit play) is what completes the WebKit
+    // per-element autoplay unlock. Capture phase runs before any React bubble
+    // handler, and unlock() is idempotent, so the exam shells' own explicit
+    // unlock() calls (inside their start buttons) keep working unchanged.
+    const onFirstInteraction = () => {
+      const cc = controllerRef.current;
+      if (cc) cc.unlock();
+    };
+    document.addEventListener("click", onFirstInteraction, { capture: true, once: true });
+    document.addEventListener("touchend", onFirstInteraction, { capture: true, once: true });
+
     return () => {
       unsub();
+      // once:true auto-removes a listener after it fires, but an unmount before
+      // the first interaction still has to clean these up explicitly.
+      document.removeEventListener("click", onFirstInteraction, { capture: true });
+      document.removeEventListener("touchend", onFirstInteraction, { capture: true });
       // Defer one tick: a StrictMode remount cancels this; a real unmount
       // lets it tear down the element + document listeners.
       destroyTimerRef.current = setTimeout(() => {

@@ -9,6 +9,7 @@
  */
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { ExamAudioProvider, useExamAudio } from "../components/shared/ExamAudioProvider";
+import { AudioPlayer } from "../components/listening/AudioPlayer";
 
 let playMock;
 let audioEl; // the provider controller's detached element
@@ -104,4 +105,38 @@ test("kill switch NEXT_PUBLIC_EXAM_AUDIO_DISABLED=1 → useExamAudio() is null",
     </ExamAudioProvider>
   );
   expect(ref.ctx).toBeNull();
+});
+
+test("first document interaction unlocks the shared controller (WebKit per-element unlock)", () => {
+  const ref = {};
+  const Consumer = makeConsumer(ref);
+  render(
+    <ExamAudioProvider>
+      <Consumer />
+    </ExamAudioProvider>
+  );
+  expect(ref.ctx.controller).toBeTruthy();
+  // Practice pages have no "start exam" button, so the Provider arms a one-shot
+  // capture-phase listener on document: the user's first tap anywhere completes
+  // the unlock. Spy on the live controller and fire a click on the page body.
+  const unlockSpy = jest.spyOn(ref.ctx.controller, "unlock");
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalled();
+});
+
+test("an autoPlay AudioPlayer under the Provider plays through the shared element, not its own <audio>", async () => {
+  const { container } = render(
+    <ExamAudioProvider>
+      <AudioPlayer src="https://cdn.example/clip.mp3" text="hi" onEnded={jest.fn()} maxReplays={0} autoPlay />
+    </ExamAudioProvider>
+  );
+  // Let the autoplay play() promise settle.
+  await act(async () => { await Promise.resolve(); });
+
+  // In controller mode AudioPlayer renders NO <audio> of its own — the shared
+  // detached element (captured via the createElement spy) is what plays.
+  expect(container.querySelector("audio")).toBeNull();
+  expect(audioEl).toBeTruthy();
+  // The shared element received the clip src → playback was routed to it.
+  expect(audioEl.getAttribute("src")).toBe("https://cdn.example/clip.mp3");
 });

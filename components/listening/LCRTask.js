@@ -369,6 +369,8 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 maxReplays={isPractice ? 99 : 0}
                 isPractice={isPractice}
                 autoPlay
+                taskType="lcr"
+                itemId={currentItem.id}
               />
 
               {/* Manual advance — always available (not just practice). A blocked

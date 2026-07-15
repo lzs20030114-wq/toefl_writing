@@ -181,6 +181,8 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
             maxReplays={isPractice ? 99 : 0}
             isPractice={isPractice}
             autoPlay
+            taskType={taskType}
+            itemId={item.id}
           />
           {/* Manual advance — always available (not just practice) so a blocked
               autoplay or failed audio never traps a timed session. */}

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { TopicPicker } from "../../components/shared/TopicPicker";
+import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import { RepeatTask } from "../../components/speaking/RepeatTask";
 import { InterviewTask } from "../../components/speaking/InterviewTask";
 import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
@@ -230,9 +231,16 @@ function EmptyState({ type, onExit }) {
 }
 
 export default function SpeakingPage() {
+  // ExamAudioProvider wraps the whole client subtree (standard + practice, incl.
+  // the TopicPicker stage) so the persistent unlocked <audio> survives every 换题
+  // and the user's first tap — e.g. picking a topic — completes the WebKit
+  // per-element unlock. RepeatTask/InterviewTask are already context-aware, so
+  // they route through the shared controller once it's present.
   return (
     <Suspense fallback={null}>
-      <SpeakingPageClient />
+      <ExamAudioProvider>
+        <SpeakingPageClient />
+      </ExamAudioProvider>
     </Suspense>
   );
 }

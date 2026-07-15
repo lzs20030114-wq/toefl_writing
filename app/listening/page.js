@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { LCRTask } from "../../components/listening/LCRTask";
 import { ListeningMCQTask } from "../../components/listening/ListeningMCQTask";
 import { TopicPicker } from "../../components/shared/TopicPicker";
+import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import { getSavedTier } from "../../lib/AuthContext";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
@@ -396,9 +397,16 @@ function ListeningPageClient() {
 }
 
 export default function ListeningPage() {
+  // ExamAudioProvider wraps the whole client subtree so the persistent unlocked
+  // <audio> survives every 换题 (pickedItemId / sessionKey change never unmounts
+  // ListeningPageClient). It powers the same iOS Safari / WeChat autoplay-unlock
+  // the exam shells use; here the first tap anywhere completes the unlock since
+  // practice has no explicit "start exam" button.
   return (
     <Suspense fallback={null}>
-      <ListeningPageClient />
+      <ExamAudioProvider>
+        <ListeningPageClient />
+      </ExamAudioProvider>
     </Suspense>
   );
 }
