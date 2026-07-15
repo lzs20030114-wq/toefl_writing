@@ -65,13 +65,15 @@ export async function POST(request) {
       metadata: body?.metadata && typeof body.metadata === "object" ? body.metadata : null,
     };
 
-    // Fire-and-forget — don't block the response (and swallow "table does
-    // not exist" until the migration runs).
-    supabaseAdmin
-      .from("audio_events")
-      .insert(row)
-      .then(() => {})
-      .catch(() => {});
+    // MUST await: Vercel freezes the lambda the moment the response returns,
+    // so a dangling insert promise only flushes when a later request thaws
+    // the same instance — on this low-traffic route that means rows arrive
+    // minutes late or never (verified in prod 2026-07-15). The client fires
+    // keepalive and never waits, so the extra ~50ms here is invisible.
+    // Failures still swallowed: the table may lag the migration.
+    try {
+      await supabaseAdmin.from("audio_events").insert(row);
+    } catch { /* tracking must never break the exam flow */ }
 
     return silent();
   } catch {
