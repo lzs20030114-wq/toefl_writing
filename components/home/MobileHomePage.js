@@ -178,6 +178,18 @@ export function MobileHomePage({
           showLoginModal={showLoginModal} onUpgrade={() => setUpgradeOpen(true)}
           t1={t1} t2={t2}
         />
+      ) : activeSection === "listening" ? (
+        <MobileListeningSection
+          isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+          tier={tier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+          onUpgrade={() => setUpgradeOpen(true)} t1={t1} t2={t2}
+        />
+      ) : activeSection === "speaking" ? (
+        <MobileSpeakingSection
+          isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
+          tier={tier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+          onUpgrade={() => setUpgradeOpen(true)} t1={t1} t2={t2}
+        />
       ) : (
       <>
       {/* ── 标题 + 模式切换 ── */}
@@ -727,6 +739,222 @@ function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpg
         onRequireUpgrade={onUpgrade}
         onRequireLogin={showLoginModal}
       />
+    </>
+  );
+}
+
+/* ── Mobile Listening / Speaking shared pieces ── */
+
+// 二档模式切换条（Standard / Practice，无 Challenge）；选中态用本科目 accent
+function MobileSecModeSwitch({ mode, switchMode, accent, isChallenge, t2 }) {
+  return (
+    <div style={{
+      display: "flex", gap: 0,
+      background: isChallenge ? "rgba(255,255,255,0.05)" : T.card,
+      border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`,
+      borderRadius: 10, overflow: "hidden",
+    }}>
+      {[
+        { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+        { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+      ].map((opt) => {
+        const sel = mode === opt.value;
+        return (
+          <button key={opt.value} onClick={() => switchMode(opt.value)} style={{
+            flex: 1, border: "none", padding: "10px 0", fontSize: 13, fontWeight: 700,
+            cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s",
+            background: sel ? accent.color + "18" : "transparent",
+            color: sel ? accent.color : t2,
+          }}>
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// Pro 门禁横幅（听力/口语共用；subtext 区分科目）
+function MobileSecProGate({ isChallenge, isLoggedIn, showLoginModal, onUpgrade, accent, t1, t2, subtext }) {
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", gap: 12,
+      background: isChallenge ? "rgba(255,255,255,0.04)" : "#FFFBEB",
+      border: `1px solid ${isChallenge ? CH.cardBorder : "#FDE68A"}`,
+      borderRadius: 10, padding: "14px 16px", marginBottom: 14,
+    }}>
+      <span style={{ fontSize: 20, flexShrink: 0 }}>🔒</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>Pro 专属功能</div>
+        <div style={{ fontSize: 12, color: t2, marginTop: 2, lineHeight: 1.4 }}>{subtext}</div>
+      </div>
+      {!isLoggedIn ? (
+        <button onClick={showLoginModal} style={{
+          flexShrink: 0, padding: "8px 16px", borderRadius: 8, border: "none",
+          background: accent.color, color: "#fff", fontSize: 13, fontWeight: 600,
+          cursor: "pointer", fontFamily: HOME_FONT,
+        }}>登录</button>
+      ) : (
+        <button onClick={onUpgrade} style={{
+          flexShrink: 0, padding: "8px 16px", borderRadius: 8, border: "none",
+          background: accent.color, color: "#fff", fontSize: 13, fontWeight: 600,
+          cursor: "pointer", fontFamily: HOME_FONT,
+        }}>升级 Pro</button>
+      )}
+    </div>
+  );
+}
+
+// 单张任务卡（照 MobileReadingSection 的 Link 卡片；isMock 时边框加 accent 微染）
+function MobileSecTaskCard({ href, n, t, d, timeLabel, accent, isChallenge, isMock = false, t1, t2 }) {
+  return (
+    <Link href={href} style={{
+      display: "flex", alignItems: "center", gap: 12, padding: "14px 16px",
+      background: isChallenge ? CH.card : T.card,
+      border: `1px solid ${isMock ? accent.color + "40" : (isChallenge ? CH.cardBorder : T.bdr)}`,
+      borderRadius: 12, textDecoration: "none", color: "inherit", minHeight: 72,
+    }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: accent.color, minWidth: 48, textAlign: "center" }}>{timeLabel}</div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: accent.color }}>{n}</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>{t}</div>
+        <div style={{ fontSize: 12, color: t2 }}>{d}</div>
+      </div>
+      <span style={{ color: t2 }}>›</span>
+    </Link>
+  );
+}
+
+/* ── Mobile Listening Section ── */
+
+function MobileListeningSection({ isChallenge, isPractice, mode, switchMode, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
+  const accent = SECTION_ACCENTS.listening;
+  const isPro = tier === "pro" || tier === "legacy";
+  const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
+
+  const tasks = [
+    { n: "Task 1", t: "Choose a Response", type: "lcr", timeLabel: "5 min", d: "听一句话，选最合适的回应。" },
+    { n: "Task 2", t: "Announcement", type: "la", timeLabel: "3 min", d: "听校园公告并回答理解题。" },
+    { n: "Task 3", t: "Conversation", type: "lc", timeLabel: "5 min", d: "听一段校园对话并回答问题。" },
+    { n: "Task 4", t: "Academic Talk", type: "lat", timeLabel: "8 min", d: "听学术讲座并回答理解题。" },
+  ];
+
+  return (
+    <>
+      {/* 标题 + 模式切换 */}
+      <div style={{ marginBottom: 14 }}>
+        <h1 style={{ margin: "0 0 10px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>
+          Listening
+          <span style={{ fontSize: 12, fontWeight: 600, color: isChallenge ? CH.t2 : T.t3, marginLeft: 6 }}>（测试）</span>
+        </h1>
+        <MobileSecModeSwitch mode={mode} switchMode={switchMode} accent={accent} isChallenge={isChallenge} t2={t2} />
+      </div>
+
+      {/* Pro 门禁横幅 */}
+      {!isPro && (
+        <MobileSecProGate
+          isChallenge={isChallenge} isLoggedIn={isLoggedIn}
+          showLoginModal={showLoginModal} onUpgrade={onUpgrade}
+          accent={accent} t1={t1} t2={t2}
+          subtext="听力模块目前处于测试阶段，仅对 Pro 用户开放"
+        />
+      )}
+
+      {/* 任务卡列表（非 Pro 置灰禁点） */}
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 10, marginBottom: 14,
+        ...(isPro ? {} : { opacity: 0.45, pointerEvents: "none", filter: "grayscale(0.5)" }),
+      }}>
+        {tasks.map((task) => (
+          <MobileSecTaskCard
+            key={task.type}
+            href={`/listening?type=${task.type}&mode=${modeStr}`}
+            n={task.n} t={task.t}
+            d={isPractice ? "自选题目，不限时间。" : task.d}
+            timeLabel={isPractice ? "不限时" : task.timeLabel}
+            accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
+          />
+        ))}
+        {/* 模考卡（始终显示，含 practice 模式） */}
+        <MobileSecTaskCard
+          href="/listening-exam"
+          n="模考" t="听力自适应模考"
+          d="Module 1 + Module 2 自适应难度 · 30 题"
+          timeLabel="17 + 12 min"
+          accent={accent} isChallenge={isChallenge} isMock t1={t1} t2={t2}
+        />
+      </div>
+    </>
+  );
+}
+
+/* ── Mobile Speaking Section ── */
+
+function MobileSpeakingSection({ isChallenge, isPractice, mode, switchMode, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
+  const accent = SECTION_ACCENTS.speaking;
+  const isPro = tier === "pro" || tier === "legacy";
+  const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
+
+  const tasks = [
+    { n: "Task 1", t: "Listen & Repeat", type: "repeat", timeLabel: "3 min", d: "听 7 个句子并逐句复述。" },
+    { n: "Task 2", t: "Take an Interview", type: "interview", timeLabel: "4 min", d: "回答 4 道面试题，每题 45 秒。" },
+  ];
+
+  return (
+    <>
+      {/* 标题 + 模式切换 */}
+      <div style={{ marginBottom: 14 }}>
+        <h1 style={{ margin: "0 0 10px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>
+          Speaking
+          <span style={{ fontSize: 12, fontWeight: 600, color: isChallenge ? CH.t2 : T.t3, marginLeft: 6 }}>（测试）</span>
+        </h1>
+        <MobileSecModeSwitch mode={mode} switchMode={switchMode} accent={accent} isChallenge={isChallenge} t2={t2} />
+      </div>
+
+      {/* 麦克风提示横幅（桌面端也未做暗色适配，保持同底色） */}
+      <div style={{
+        background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10,
+        padding: "10px 14px", marginBottom: 14, fontSize: 12, color: "#92400E", lineHeight: 1.5,
+      }}>
+        🎙️ 口语练习需要麦克风权限。首次使用时浏览器会弹出授权提示，请点击「允许」。
+      </div>
+
+      {/* Pro 门禁横幅 */}
+      {!isPro && (
+        <MobileSecProGate
+          isChallenge={isChallenge} isLoggedIn={isLoggedIn}
+          showLoginModal={showLoginModal} onUpgrade={onUpgrade}
+          accent={accent} t1={t1} t2={t2}
+          subtext="口语模块目前处于测试阶段，仅对 Pro 用户开放"
+        />
+      )}
+
+      {/* 任务卡列表（非 Pro 置灰禁点） */}
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 10, marginBottom: 14,
+        ...(isPro ? {} : { opacity: 0.45, pointerEvents: "none", filter: "grayscale(0.5)" }),
+      }}>
+        {tasks.map((task) => (
+          <MobileSecTaskCard
+            key={task.type}
+            href={`/speaking?type=${task.type}&mode=${modeStr}`}
+            n={task.n} t={task.t}
+            d={isPractice ? "自选题目，不限时间。" : task.d}
+            timeLabel={isPractice ? "不限时" : task.timeLabel}
+            accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
+          />
+        ))}
+        {/* 模考卡（仅 !isPractice 时显示） */}
+        {!isPractice && (
+          <MobileSecTaskCard
+            href="/speaking-exam"
+            n="模考" t="口语模考"
+            d="复述 + 面试，完整口语测试 · 11 题"
+            timeLabel="8 min"
+            accent={accent} isChallenge={isChallenge} isMock t1={t1} t2={t2}
+          />
+        )}
+      </div>
     </>
   );
 }
