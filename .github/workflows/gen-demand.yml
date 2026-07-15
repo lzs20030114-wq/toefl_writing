@@ -60,3 +60,29 @@ jobs:
             if git pull --rebase origin main && git push origin main; then break; fi
             sleep 8
           done
+
+      # 每晚对账邮件：demand 为空的夜晚 routine 按设计不出题，从外面看和
+      # routine 挂了一模一样——这封邮件把两种情况区分开。它不依赖上面的
+      # commit 步骤（无变化时该步骤提前 exit 0），直接读 compute 步骤写盘的
+      # data/.gen-demand.json。
+      - name: Build reconciliation email
+        id: mail
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/build-gen-demand-email.mjs --out /tmp/gen-demand-email.txt | tee /tmp/mail.out
+          echo "subject=$(grep -E '^subject=' /tmp/mail.out | tail -1 | cut -d= -f2-)" >> "$GITHUB_OUTPUT"
+
+      # 邮件本身就是心跳：发不出去必须让 workflow 红掉（不加 continue-on-error）。
+      - name: Send reconciliation email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          from: ${{ secrets.GMAIL_USER }}
+          to: ${{ secrets.GMAIL_USER }}
+          subject: ${{ steps.mail.outputs.subject }}
+          body: file:///tmp/gen-demand-email.txt
