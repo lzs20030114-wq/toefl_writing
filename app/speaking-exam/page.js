@@ -3,6 +3,7 @@
 import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSavedTier, getSavedCode } from "../../lib/AuthContext";
+import { isSpeakingOpenBetaEnabled } from "../../lib/featureFlags";
 import { SpeakingExamShell } from "../../components/mockExam/SpeakingExamShell";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { C, FONT } from "../../components/shared/ui";
@@ -31,8 +32,8 @@ function SpeakingExamClient() {
   // Wait for tier check
   if (!checked) return null;
 
-  // Pro gate
-  if (!isPro) {
+  // Pro gate — bypassed while Speaking open-beta opens the exam to free users.
+  if (!isPro && !isSpeakingOpenBetaEnabled()) {
     return (
       <div
         style={{

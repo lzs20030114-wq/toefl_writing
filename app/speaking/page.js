@@ -3,11 +3,13 @@
 import { Suspense, useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSavedTier } from "../../lib/AuthContext";
+import { isSpeakingOpenBetaEnabled } from "../../lib/featureFlags";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import { RepeatTask } from "../../components/speaking/RepeatTask";
 import { InterviewTask } from "../../components/speaking/InterviewTask";
+import { SpeechAuthEntry } from "../../components/speaking/SpeechConsentManager";
 import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import REPEAT_DATA from "../../data/speaking/bank/repeat.json";
 import INTERVIEW_DATA from "../../data/speaking/bank/interview.json";
@@ -111,8 +113,8 @@ function SpeakingPageClient() {
 
   const onExit = () => router.push("/?section=speaking");
 
-  // Pro gate
-  if (!isPro) {
+  // Pro gate — bypassed while Speaking open-beta opens the section to free users.
+  if (!isPro && !isSpeakingOpenBetaEnabled()) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
         <div style={{ textAlign: "center", maxWidth: 360, padding: "0 20px" }}>
@@ -240,6 +242,11 @@ export default function SpeakingPage() {
     <Suspense fallback={null}>
       <ExamAudioProvider>
         <SpeakingPageClient />
+        {/* Page-bottom 「语音授权管理」entry. Self-gates to logged-in users who
+            have locally granted consent, so it stays hidden for everyone else.
+            A document-flow sibling below the task/picker content, so it sits at
+            the very bottom — discoverable by scrolling, never in the way. */}
+        <SpeechAuthEntry />
       </ExamAudioProvider>
     </Suspense>
   );

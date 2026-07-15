@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { C, FONT, Btn } from "../shared/ui";
 import { getSavedCode } from "../../lib/AuthContext";
+import { markSpeechConsent } from "./speechConsentState";
 
 /**
  * Modal asking the user to grant consent before we upload their audio
@@ -27,11 +28,12 @@ export function SpeechConsentModal({ open, onClose, onGranted }) {
     setSubmitting(true);
     setError("");
     try {
+      const code = (getSavedCode() || "").toUpperCase();
       const res = await fetch("/api/speech/consent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          user_code: (getSavedCode() || "").toUpperCase(),
+          user_code: code,
           action: "grant",
         }),
       });
@@ -41,6 +43,9 @@ export function SpeechConsentModal({ open, onClose, onGranted }) {
         setSubmitting(false);
         return;
       }
+      // Record a local marker so the 「语音授权管理」(revoke) entry surfaces.
+      // Authoritative consent still lives server-side; this only drives the UI.
+      markSpeechConsent(code);
       setSubmitting(false);
       if (onGranted) onGranted();
     } catch (e) {
@@ -78,11 +83,13 @@ export function SpeechConsentModal({ open, onClose, onGranted }) {
           </h2>
         </div>
 
-        {/* Body */}
+        {/* Body — consent v2: discloses cross-border third-party processing and
+            the test-window retention (≤90 天) that the retention feature relies on. */}
         <div style={{ padding: "0 24px", fontSize: 13.5, color: C.t1, lineHeight: 1.7 }}>
           <p style={{ marginTop: 0 }}>
-            为对你的口语回答进行自动识别和评分，我们需要将你的录音发送到
-            OpenAI Whisper 服务（位于美国）。
+            为了给你的口语作答提供 AI 评分，我们需要录制并处理你的语音。录音会上传至
+            服务器，并提交给第三方语音服务（如 OpenAI Whisper、Microsoft Azure）进行
+            转写与发音评估，相关服务器位于中国境外。
           </p>
           <div style={{
             background: "#F8FAFC", border: `1px solid ${C.bdr}`, borderRadius: 10,
@@ -91,15 +98,15 @@ export function SpeechConsentModal({ open, onClose, onGranted }) {
           }}>
             <div style={{ marginBottom: 6 }}>
               <span style={{ color: C.green, marginRight: 6 }}>✓</span>
-              录音仅用于即时识别，识别完成后立即丢弃。
+              录音会上传服务器，并提交给境外第三方（OpenAI Whisper / Microsoft Azure）转写与发音评估。
             </div>
             <div style={{ marginBottom: 6 }}>
               <span style={{ color: C.green, marginRight: 6 }}>✓</span>
-              我们的服务器不会保留你的音频副本。
+              测试期内，部分录音会被保存（最多 90 天），用于评分质量改进与校准实验。
             </div>
             <div>
               <span style={{ color: C.green, marginRight: 6 }}>✓</span>
-              你可以随时在「账号」中撤回本次授权。
+              你可以随时撤回同意；撤回后我们会停止保存并删除已留存的录音。
             </div>
           </div>
           <p style={{ fontSize: 12, color: C.t3, marginTop: 12, marginBottom: 16 }}>

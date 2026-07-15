@@ -68,6 +68,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   // after the user grants consent.
   const [needsConsent, setNeedsConsent] = useState(false);
   const pendingConsentJobsRef = useRef([]);
+  // Show the v2 re-consent prompt at most once per session for legacy v1
+  // consenters (their transcription still works; this only upgrades disclosure).
+  const consentRePromptedRef = useRef(false);
 
   const timerRef = useRef(null);
   const totalTimerRef = useRef(null);
@@ -344,6 +347,12 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
           return next;
         });
         runScoring(idx, transcript);
+        // Legacy v1 consenters: re-prompt onto the v2 disclosure once. Transcription
+        // already succeeded, so this never blocks — granting just enables retention.
+        if (result.consentVersion != null && result.consentVersion !== 2 && !consentRePromptedRef.current) {
+          consentRePromptedRef.current = true;
+          setNeedsConsent(true);
+        }
         return;
       }
 

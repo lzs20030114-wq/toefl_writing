@@ -30,6 +30,14 @@
 
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { createRateLimiter, getIp } from "../../../../lib/rateLimit";
+import { isSpeakingOpenBetaEnabled } from "../../../../lib/featureFlags";
+import {
+  evaluateSpeechEligibility,
+  shouldRetainRecording,
+  dailyCapSecondsForTier,
+  SPEECH_CONSENT_VERSION,
+  SPEECH_BUCKET,
+} from "../../../../lib/speech/retentionPolicy";
 import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 // Whisper-1 typically responds in 1-3s for ≤ 60s audio. Vercel hobby caps at
@@ -40,11 +48,9 @@ const MAX_AUDIO_BYTES = 2 * 1024 * 1024;   // 2 MB — covers 45s mp3 + headroom
 const MAX_DURATION_SECONDS = 65;            // 5s headroom over our 60s policy
 const ALLOWED_TASK_TYPES = new Set(["repeat", "interview", "mock"]);
 const ALLOWED_MIME_PREFIXES = ["audio/"];
-// Per-user daily seconds cap. Pro/legacy gets 60 min/day (≈80 questions),
-// which covers any realistic study session and stops Pro-trial abuse from
-// running up a bill. Set higher per-user via Supabase users.daily_speech_cap
-// if needed (column not added yet — wire later).
-const DEFAULT_DAILY_CAP_SECONDS = 60 * 60;
+// Per-user daily seconds cap is tier-layered and lives in lib/speech/retentionPolicy
+// (dailyCapSecondsForTier): Pro/legacy 60 min, free 15 min (open-beta only). Kept
+// there so the cap policy is unit-tested alongside the retention rules.
 
 // 60 req/min per IP. Our worst-case user does ~10-20 questions per session,
 // so 60/min is plenty. Lower than /api/ai's 45 would be okay too but STT
@@ -114,41 +120,106 @@ async function logApiFailure(meta) {
 /**
  * Verify user is allowed to call the STT endpoint:
  *   1. Has a valid account
- *   2. Currently Pro (or legacy)
+ *   2. Currently Pro/legacy — OR the Speaking open-beta flag is on (free allowed)
  *   3. Has granted speech consent and not since revoked it
  *
  * Returns specific codes so the client can render the right modal/upsell:
  *   - INVALID_USER   → unknown account
- *   - NOT_PRO        → free tier; show upgrade prompt
+ *   - NOT_PRO        → free tier while open-beta is off; show upgrade prompt
  *   - NEEDS_CONSENT  → missing/revoked; show consent modal
+ *
+ * On success also returns { tier, consentVersion } so the caller can pick the
+ * tier's daily budget and decide retention (retention needs consentVersion=2).
+ * The decision itself lives in the pure evaluateSpeechEligibility (unit-tested).
  */
 async function checkUserEligibility(userCode) {
   if (!isSupabaseAdminConfigured) {
     // Dev fallback: no Supabase = trust client. Production always has it.
-    return { ok: true, tier: "unknown" };
+    return { ok: true, tier: "unknown", consentVersion: null };
   }
-  const { data: user, error } = await supabaseAdmin
-    .from("users")
-    .select("tier, tier_expires_at, speech_consent_at, speech_consent_revoked_at")
-    .eq("code", userCode)
-    .maybeSingle();
+
+  // Read the consent version too, but tolerate its absence pre-migration: a
+  // "column does not exist" error means retention isn't provisioned yet, so we
+  // retry without it and treat the version as null (retention stays off).
+  const WITH_VERSION = "tier, tier_expires_at, speech_consent_at, speech_consent_revoked_at, speech_consent_version";
+  const WITHOUT_VERSION = "tier, tier_expires_at, speech_consent_at, speech_consent_revoked_at";
+  let { data: user, error } = await supabaseAdmin
+    .from("users").select(WITH_VERSION).eq("code", userCode).maybeSingle();
+  if (error && (/speech_consent_version/.test(error.message || "") || error.code === "42703")) {
+    ({ data: user, error } = await supabaseAdmin
+      .from("users").select(WITHOUT_VERSION).eq("code", userCode).maybeSingle());
+  }
   if (error) return { ok: false, code: "DB_ERROR", message: "无法验证账号" };
-  if (!user) return { ok: false, code: "INVALID_USER", message: "无效的用户码" };
 
-  const expired = user.tier_expires_at && new Date(user.tier_expires_at).getTime() <= Date.now();
-  const isPro = user.tier === "legacy" || (user.tier === "pro" && !expired);
-  if (!isPro) {
-    return { ok: false, code: "NOT_PRO", message: "语音识别为 Pro 专属功能" };
-  }
+  return evaluateSpeechEligibility(user, isSpeakingOpenBetaEnabled());
+}
 
-  // Consent: must have a grant time, and either no revoke time, or revoke < grant.
-  const grantedAt = user.speech_consent_at ? new Date(user.speech_consent_at).getTime() : 0;
-  const revokedAt = user.speech_consent_revoked_at ? new Date(user.speech_consent_revoked_at).getTime() : 0;
-  const consented = grantedAt > 0 && grantedAt > revokedAt;
-  if (!consented) {
-    return { ok: false, code: "NEEDS_CONSENT", message: "请先同意语音上传服务条款。" };
+/**
+ * Persist a recording for later scoring-quality work, but ONLY when compliant:
+ *   - user granted consent v2 (SPEECH_CONSENT_VERSION)
+ *   - fewer than the daily keep-count already stored today
+ *   - blob under the size cap
+ * Best-effort + fail-open: any failure (incl. missing table/bucket pre-migration)
+ * is logged and swallowed — retention must never affect the transcript we return.
+ *
+ * MUST be awaited by the caller: fire-and-forget on Vercel frozen instances gets
+ * dropped when the response resolves (see commit 9895eaf, audio telemetry).
+ */
+async function maybeRetainRecording({ userCode, taskType, questionId, consentVersion, audio, durationMs }) {
+  try {
+    if (!isSupabaseAdminConfigured) return;
+    const blobBytes = typeof audio.size === "number" ? audio.size : 0;
+    // Cheap pre-checks avoid a DB round-trip when clearly ineligible.
+    if (consentVersion !== SPEECH_CONSENT_VERSION) return;
+    if (!(blobBytes > 0) || blobBytes >= MAX_AUDIO_BYTES) return;
+
+    // Count today's retained rows for this user (UTC day).
+    const dayStart = new Date();
+    dayStart.setUTCHours(0, 0, 0, 0);
+    const { count, error: countErr } = await supabaseAdmin
+      .from("speech_recordings")
+      .select("id", { count: "exact", head: true })
+      .eq("user_code", userCode)
+      .gte("created_at", dayStart.toISOString());
+    if (countErr) {
+      // Missing table (pre-migration) or query failure → degrade, never throw.
+      console.warn("[/api/speech/transcribe] retention count skipped:", countErr.message);
+      return;
+    }
+
+    if (!shouldRetainRecording({ consentVersion, todayCount: count || 0, blobBytes })) return;
+
+    const uuid = globalThis.crypto?.randomUUID?.()
+      || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const day = new Date().toISOString().slice(0, 10); // yyyy-mm-dd
+    const storagePath = `${userCode}/${day}/${uuid}.webm`;
+    const buffer = Buffer.from(await audio.arrayBuffer());
+
+    const { error: upErr } = await supabaseAdmin.storage
+      .from(SPEECH_BUCKET)
+      .upload(storagePath, buffer, { contentType: audio.type || "audio/webm", upsert: false });
+    if (upErr) {
+      console.warn("[/api/speech/transcribe] retention upload skipped:", upErr.message);
+      return;
+    }
+
+    const { error: insErr } = await supabaseAdmin.from("speech_recordings").insert({
+      user_code: userCode,
+      task_type: taskType,
+      item_id: questionId || null,
+      storage_path: storagePath,
+      duration_ms: Number.isFinite(durationMs) && durationMs > 0 ? Math.round(durationMs) : null,
+      consent_version: consentVersion,
+    });
+    if (insErr) {
+      // Row failed after the object landed — reap the orphan so the bucket
+      // doesn't accumulate untracked files, then degrade.
+      console.warn("[/api/speech/transcribe] retention row insert failed:", insErr.message);
+      try { await supabaseAdmin.storage.from(SPEECH_BUCKET).remove([storagePath]); } catch { /* ignore */ }
+    }
+  } catch (e) {
+    console.warn("[/api/speech/transcribe] retention error (fail-open):", e?.message || e);
   }
-  return { ok: true, tier: user.tier };
 }
 
 /**
@@ -266,6 +337,7 @@ export async function POST(request) {
     const userCode = String(form.get("user_code") || "").toUpperCase().trim();
     const taskType = String(form.get("task_type") || "").trim();
     const durationMs = Number(form.get("duration_ms") || 0);
+    const questionId = String(form.get("question_id") || "").trim().slice(0, 120);
 
     if (!userCode || userCode.length !== 6) {
       return fail(403, "AUTH_REQUIRED", "需要登录后才能使用语音识别。");
@@ -304,8 +376,12 @@ export async function POST(request) {
     // (vs after) so a 429 racing with another concurrent call can't sneak past
     // the cap. If Whisper later errors, the seconds stay deducted — that's a
     // tiny goodwill cost we accept to keep the abuse-prevention simple.
+    // Tier-layered daily budget: Pro/legacy keep 60 min; free (only reachable
+    // when open-beta is on) gets 15 min. With the flag off, free users are already
+    // rejected as NOT_PRO above, so the effective cap is unchanged.
+    const dailyCapSeconds = dailyCapSecondsForTier(eligibility.tier);
     const audioSeconds = estimateAudioSeconds(durationMs);
-    const quotaResult = await incrementQuotaOrReject(userCode, audioSeconds, DEFAULT_DAILY_CAP_SECONDS);
+    const quotaResult = await incrementQuotaOrReject(userCode, audioSeconds, dailyCapSeconds);
     if (!quotaResult.ok) {
       return fail(429, quotaResult.code, quotaResult.message);
     }
@@ -339,6 +415,18 @@ export async function POST(request) {
     }
 
     const { json, latencyMs } = whisperRes;
+
+    // Compliance-gated retention (v2 consent only). Awaited but fail-open so it
+    // can never affect the transcript we return; see maybeRetainRecording.
+    await maybeRetainRecording({
+      userCode,
+      taskType,
+      questionId,
+      consentVersion: eligibility.consentVersion,
+      audio,
+      durationMs,
+    });
+
     return Response.json({
       ok: true,
       transcript: String(json.text || ""),
@@ -346,6 +434,9 @@ export async function POST(request) {
       words: Array.isArray(json.words) ? json.words : null,
       latency_ms: latencyMs,
       model: "whisper-1",
+      // Lets the client re-prompt legacy v1 consenters onto the v2 disclosure
+      // (non-blocking — transcription already succeeded regardless of version).
+      consent_version: eligibility.consentVersion,
     });
   } catch (e) {
     await logApiFailure({
