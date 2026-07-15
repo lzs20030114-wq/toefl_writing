@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation";
 import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { AudioPlayer } from "../listening/AudioPlayer";
+import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
+import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
 import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule2 } from "../../lib/mockExam/readingPlanner";
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
@@ -541,6 +543,8 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
             onEnded={handleAudioEnded}
             maxReplays={0}
             autoPlay
+            taskType={taskType}
+            itemId={item.id}
           />
         </div>
       )}
@@ -643,6 +647,8 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
           onEnded={handleAudioEnded}
           maxReplays={0}
           autoPlay
+          taskType="lcr"
+          itemId={item.id}
         />
       </div>
 
@@ -816,7 +822,21 @@ function buildTaskSnapshots(results) {
 
 // ------ Main Shell ------
 
-export function AdaptiveExamShell({ section = "reading", onExit }) {
+/**
+ * Outer export: mounts the ExamAudioProvider around the real shell so the
+ * persistent exam audio element (and its one-time gesture unlock) survives
+ * intro→module1→routing→module2→results without ever unmounting. Reading
+ * exams don't play audio — the Provider is inert there (no side effects).
+ */
+export function AdaptiveExamShell(props) {
+  return (
+    <ExamAudioProvider>
+      <AdaptiveExamShellInner {...props} />
+    </ExamAudioProvider>
+  );
+}
+
+function AdaptiveExamShellInner({ section = "reading", onExit }) {
   const invalidSection = !SECTION_CONFIG[section];
   const config = SECTION_CONFIG[section] || SECTION_CONFIG.reading;
 
@@ -839,6 +859,16 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   // the intro can offer "continue where you left off". Restored on demand via
   // handleResume (not auto-applied, so the user can also choose a fresh start).
   const [resumed] = useState(() => loadAdaptiveCheckpoint(section));
+
+  // Persistent exam audio (listening): unlocked once inside the start/resume
+  // click, then reused for every clip. Null when the Provider's kill switch
+  // is on — everything below degrades to the legacy per-element behavior.
+  const examAudio = useExamAudio();
+  const examController = examAudio ? examAudio.controller : null;
+  // Mirror holdTimers into a ref so the countdown interval (rebuilt only on
+  // phase changes) can read it without being torn down on every audio event.
+  const holdTimersRef = useRef(false);
+  holdTimersRef.current = !!(examAudio && examAudio.holdTimers);
 
   // Timer — each module has its own countdown. Real ETS resets the on-screen
   // clock when you enter Module 2, so the autoFinished ref is also keyed on
@@ -880,6 +910,10 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
       return;
     }
     timerRef.current = setInterval(() => {
+      // Freeze the countdown while exam audio is blocked/buffering (overlay
+      // up, nothing audible) — the student shouldn't bleed time to a browser
+      // pause. No-op when there's no exam audio provider (reading).
+      if (holdTimersRef.current) return;
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current);
@@ -917,6 +951,22 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   const currentItems = phase === "module1" ? m1Items : phase === "module2" ? m2Items : null;
   const currentItem = currentItems ? currentItems[currentItemIndex] : null;
 
+  // Warm the next clip (same module only) as soon as the current one ends —
+  // the shared element is idle between questions, so preloading there makes
+  // the next question's audio start instantly on slow mobile networks.
+  const preloadStateRef = useRef({ items: null, index: 0 });
+  preloadStateRef.current = { items: currentItems, index: currentItemIndex };
+  useEffect(() => {
+    if (!examController) return undefined;
+    const unsub = examController.subscribe((event) => {
+      if (event.type !== "ended") return;
+      const { items, index } = preloadStateRef.current;
+      const next = Array.isArray(items) ? items[index + 1] : null;
+      if (next && next.audio_url) examController.preload(sameOriginAudio(next.audio_url));
+    });
+    return unsub;
+  }, [examController]);
+
   const totalItemsInCurrentModule = currentItems ? currentItems.length : 0;
 
   // Reading passage tasks (RDL / AP) render as a wide two-column layout
@@ -927,6 +977,9 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   // ------ Phase transitions ------
 
   function handleStartExam() {
+    // Unlock the shared exam audio element synchronously inside this click —
+    // the one real user gesture WebKit will honor for the whole exam.
+    if (examController) examController.unlock();
     try {
       clearAdaptiveCheckpoint(section); // fresh start — drop any stale checkpoint
       const m1 = config.buildM1();
@@ -950,6 +1003,8 @@ export function AdaptiveExamShell({ section = "reading", onExit }) {
   // Resume an in-progress exam from the saved checkpoint (offered on the intro).
   function handleResume() {
     if (!resumed) return;
+    // Same in-gesture unlock as handleStartExam (resume is also a real click).
+    if (examController) examController.unlock();
     try {
       setM1Items(resumed.m1Items || null);
       setM2Items(resumed.m2Items || null);

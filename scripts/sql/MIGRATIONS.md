@@ -26,6 +26,7 @@
 | `referral-events.sql` | 2026-05-13 | 历史迁移,状态未知(建库早期) | 邀请增长循环 Phase 1 基础表 |
 | `referrals.sql` | 2026-05-13 | 历史迁移,状态未知(建库早期) | 邀请好友计划(邀请人+3天Pro) |
 | `speech-stt-schema.sql` | 2026-05-20 | 历史迁移,状态未知(建库早期) | 口语 PIPL 合规同意流程 + 每用户每日语音额度 |
+| `audio-events.sql` | 2026-07-15 | 已跑 | 考试音频持久播放器遥测表 `audio_events`(解锁/播放/被拦/兜底/覆盖层全生命周期,RLS 无公开策略,仅 service role 经 /api/analytics/audio 写入) |
 | `user-question-banks-widen-types.sql` | 2026-07-04 | 已跑 | 「我的题库」12 题型全量扩展:把 `user_question_banks.type` 的 CHECK 约束放宽到全部 12 类(见 CHANGELOG v1.11.0) |
 | `user-question-banks.sql` | 2026-06-27 | 历史迁移,状态未知(建库早期) | 「我的题库」P0:用户自助导入题目到个人库 + 视觉识别接入 |
 | `user-surveys-schema.sql` | 2026-05-26 | 历史迁移,状态未知(建库早期) | 新用户首套题完成度调研 + 管理后台统计页 |

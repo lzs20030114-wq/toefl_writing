@@ -6,6 +6,7 @@ import { RepeatTask } from "../speaking/RepeatTask";
 import { InterviewTask } from "../speaking/InterviewTask";
 import { buildSpeakingExam } from "../../lib/mockExam/speakingPlanner";
 import { saveSess } from "../../lib/sessionStore";
+import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 
 // ------ Constants ------
 
@@ -82,7 +83,21 @@ function getScoreColor(band) {
  *
  * NOT adaptive — it is a straight-through 2-task exam.
  */
-export function SpeakingExamShell({ onExit }) {
+export function SpeakingExamShell(props) {
+  // The Provider wraps the whole shell so the persistent exam audio element
+  // (unlocked once in the start-exam click) survives intro→repeat→transition
+  // →interview→results without ever unmounting.
+  return (
+    <ExamAudioProvider>
+      <SpeakingExamShellInner {...props} />
+    </ExamAudioProvider>
+  );
+}
+
+function SpeakingExamShellInner({ onExit }) {
+  // Shared exam audio controller (null when the kill switch disables it).
+  const examAudio = useExamAudio();
+  const examController = examAudio ? examAudio.controller : null;
   const [phase, setPhase] = useState("intro");
   const [exam, setExam] = useState(null);
   const [repeatResults, setRepeatResults] = useState(null);
@@ -111,6 +126,9 @@ export function SpeakingExamShell({ onExit }) {
   // ------ Phase transitions ------
 
   function handleStartExam() {
+    // Unlock the shared exam audio element synchronously inside this click —
+    // the one real user gesture WebKit will honor for the whole exam.
+    if (examController) examController.unlock();
     try {
       const built = buildSpeakingExam();
       if (!built.repeatSet || !built.interviewSet) {

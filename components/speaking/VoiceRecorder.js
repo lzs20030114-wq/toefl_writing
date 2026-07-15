@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { C, FONT } from "../shared/ui";
+import { useExamAudio } from "../shared/ExamAudioProvider";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -99,6 +100,9 @@ function describePermissionError(err) {
  *   disabled                      — prevent interaction
  */
 export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false }) {
+  // Exam-controller mode: silence the shared exam player before the mic opens
+  // (iOS routes audio exclusively — playback fighting the mic garbles both).
+  const examAudio = useExamAudio();
   const [state, setState] = useState("idle"); // idle | recording | playback
   const [blobUrl, setBlobUrl] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -140,6 +144,8 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
 
   const startRecording = useCallback(async () => {
     if (disabled) return;
+    // Stop the shared exam player before opening the mic (no-op in practice).
+    if (examAudio && examAudio.controller) examAudio.controller.stop();
     setPermError(null);
     setBlobUrl(null);
     setElapsed(0);
@@ -218,7 +224,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
       // keeps its timer paused and prompts a manual tap instead of stranding.
       if (autoStart && onAutoStartBlocked) onAutoStartBlocked();
     }
-  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked]);
+  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked, examAudio]);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {

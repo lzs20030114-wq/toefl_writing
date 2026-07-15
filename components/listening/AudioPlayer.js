@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { C, FONT } from "../shared/ui";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
+import { useExamAudio } from "../shared/ExamAudioProvider";
+import { trackAudioEvent } from "../../lib/analytics/audio";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
@@ -24,8 +26,19 @@ let activePlayerStop = null;
  *  - isPractice: if true, unlimited replays
  *  - autoPlay: if true, starts playback when mounted or when content changes
  *  - compact: if true, render a single inline replay pill (for review / results pages)
+ *  - taskType/itemId: telemetry labels, only used in exam-controller mode
+ *
+ * Exam-controller mode: when an ExamAudioProvider is mounted above (exam
+ * shells only) AND autoPlay is set, playback goes through the shared
+ * persistent exam <audio> element (unlocked once inside the start-exam
+ * gesture) instead of this component's own element — that's what survives
+ * iOS Safari / WeChat per-element autoplay rules. With no provider (all
+ * practice pages) every code path below is exactly the legacy one.
  */
-export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false }) {
+export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null }) {
+  const examAudio = useExamAudio();
+  const controller = examAudio ? examAudio.controller : null;
+  const controllerMode = !!(controller && autoPlay);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [replays, setReplays] = useState(0);
@@ -137,6 +150,60 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     };
   }, [src, onEnded]);
 
+  // Exam-controller mode: drive the same UI state machine off the shared
+  // element's events instead of a local <audio>. `blocked` is deliberately
+  // NOT handled beyond resetting the buttons — the Provider's overlay owns
+  // recovery, and the manual play button stays usable as a second escape.
+  useEffect(() => {
+    if (!controllerMode || !audioSrc) return;
+    const unsub = controller.subscribe((event) => {
+      // Strict src match: every playback event carries the clip's src, so a
+      // srcless event (e.g. the unlock silent-WAV's 'ended') never leaks in.
+      if (event.src !== audioSrc) return;
+      switch (event.type) {
+        case "loading":
+          setPlaying(true);
+          setBuffering(true);
+          break;
+        case "playing":
+          setPlaying(true);
+          setBuffering(false);
+          break;
+        case "buffering":
+          setBuffering(true);
+          break;
+        case "progress":
+          if (event.duration > 0) setProgress(event.currentTime / event.duration);
+          break;
+        case "ended":
+          setPlaying(false);
+          setBuffering(false);
+          setProgress(1);
+          setCompleted(true);
+          if (onEnded) onEnded();
+          break;
+        case "error":
+          // Same rescue as the legacy <audio> 'error' listener: speak the
+          // text so the listen phase completes (its onend fires onEnded).
+          setPlaying(false);
+          setBuffering(false);
+          trackAudioEvent("tts_fallback", {
+            section: "listening", taskType, itemId, audioPath: audioSrc,
+            errorName: event.errorName || null,
+          });
+          if (startTTSRef.current) startTTSRef.current();
+          break;
+        case "blocked":
+          setPlaying(false);
+          setBuffering(false);
+          break;
+        default:
+          break;
+      }
+    });
+    return unsub;
+  }, [controllerMode, controller, audioSrc, onEnded, taskType, itemId]);
+
   const animateTTSProgress = useCallback(() => {
     const elapsed = Date.now() - ttsStartRef.current;
     const dur = ttsDurationRef.current;
@@ -225,6 +292,15 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     // can't sound at once.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    // Exam-controller mode: route through the shared unlocked element. The
+    // controller emits loading/playing/ended/error/blocked — the subscription
+    // effect above maps those back onto this component's UI state.
+    if (controllerMode && src) {
+      setPlaying(true);
+      setBuffering(true);
+      controller.play(audioSrc, { section: "listening", taskType, itemId });
+      return;
+    }
     if (src && audioRef.current) {
       audioRef.current.currentTime = 0;
       setPlaying(true);
@@ -246,7 +322,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
     }
     // No audio src — speak the text directly.
     startTTS();
-  }, [src, startTTS, stopSelf]);
+  }, [src, startTTS, stopSelf, controllerMode, controller, audioSrc, taskType, itemId]);
 
   useEffect(() => {
     if (!autoPlay) return;
@@ -307,7 +383,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   if (compact) {
     return (
       <span style={{ display: "inline-flex" }}>
-        {src && <audio ref={audioRef} src={audioSrc} preload="none" />}
+        {src && !controllerMode && <audio ref={audioRef} src={audioSrc} preload="none" />}
         <button
           onClick={handleCompactToggle}
           onMouseEnter={() => setHover("compact")}
@@ -347,7 +423,9 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
         }
       `}</style>
 
-      {src && <audio ref={audioRef} src={audioSrc} preload="auto" />}
+      {/* Exam-controller mode plays through the shared persistent element —
+          rendering a second <audio> here would double-fetch the clip. */}
+      {src && !controllerMode && <audio ref={audioRef} src={audioSrc} preload="auto" />}
 
       {/* Play button */}
       <button

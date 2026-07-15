@@ -7,6 +7,8 @@ import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
+import { useExamAudio } from "../shared/ExamAudioProvider";
+import { trackAudioEvent } from "../../lib/analytics/audio";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -28,8 +30,16 @@ const ANSWER_DURATION = 45; // seconds per question
  *   isPractice  — if true, no auto-advance
  */
 export function InterviewTask({ items, onComplete, onExit, isPractice = false }) {
+  // Exam-controller mode (mock exam only): question prompts play through the
+  // shared persistent element unlocked in the start-exam gesture. Null on the
+  // practice page — every legacy code path below is untouched there.
+  const examAudio = useExamAudio();
+  const examController = examAudio ? examAudio.controller : null;
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("prep"); // prep | answer | review
+  // Exam-controller mode only: the clip errored AND no speech engine exists —
+  // show an explicit "start answering" button instead of silently advancing.
+  const [audioFailed, setAudioFailed] = useState(false);
   const [recordings, setRecordings] = useState([]); // blobUrl per index
   const [finished, setFinished] = useState(false);
   const [timeLeft, setTimeLeft] = useState(ANSWER_DURATION);
@@ -65,6 +75,9 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   // Current pre-rendered MP3 <Audio> instance for the question prompt (preferred
   // over Web Speech). Held so we can stop it on advance / unmount.
   const audioElRef = useRef(null);
+  // Exam-controller mode: exposes playQuestion's Web Speech fallback to the
+  // controller subscription (a media error rescues via TTS there too).
+  const playViaTTSRef = useRef(null);
   // AbortController per question — used by forceFinish to cancel in-flight
   // transcribe uploads when the user gives up on the deferred-finish wait.
   const transcribeAbortRef = useRef([]);
@@ -118,6 +131,36 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [phase, current, recordingStarted]);
+
+  // Exam-controller mode: map the shared element's events onto the phase
+  // machine. Crucially, `blocked` does NOT advance — the old per-instance
+  // path silently skipped into the answer phase when autoplay was rejected,
+  // so the student never heard the question. Now we stay in prep and let the
+  // Provider overlay recover (its retry → playing → ended → advance).
+  useEffect(() => {
+    if (!examController) return undefined;
+    const unsub = examController.subscribe((event) => {
+      const meta = event.meta || {};
+      if (meta.section !== "speaking" || meta.taskType !== "interview") return;
+      if (event.type === "ended") {
+        setAudioFailed(false);
+        setAutoRecordReady(true);
+        setPhase("answer");
+      } else if (event.type === "error") {
+        // Genuine media failure → rescue via Web Speech; if no speech engine
+        // either, surface an explicit button — never a silent skip.
+        trackAudioEvent("tts_fallback", {
+          section: "speaking", taskType: "interview",
+          itemId: meta.itemId, audioPath: event.src || null,
+          errorName: event.errorName || null,
+        });
+        if (ttsSupported && playViaTTSRef.current) playViaTTSRef.current();
+        else setAudioFailed(true);
+      }
+      // blocked: stay in prep — the overlay owns recovery.
+    });
+    return unsub;
+  }, [examController, ttsSupported]);
 
   // Play the interviewer's question. Prefer a pre-rendered MP3 (served through
   // our same-origin /api/audio proxy — reachable in mainland China and on devices
@@ -179,6 +222,14 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     }
 
     const src = sameOriginAudio(question.audio_url);
+    // Exam-controller mode: play on the shared unlocked element instead of a
+    // fresh Audio(). Ended/error/blocked handling lives in the controller
+    // subscription above (blocked no longer skips the question).
+    if (examController && src) {
+      playViaTTSRef.current = playViaTTS;
+      examController.play(src, { section: "speaking", taskType: "interview", itemId: question.id });
+      return;
+    }
     if (src) {
       const audio = new Audio(src);
       audioElRef.current = audio;
@@ -208,11 +259,18 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       return;
     }
     playViaTTS();
-  }, [ttsSupported, question]);
+  }, [ttsSupported, question, examController]);
 
   // Auto-play question on prep phase
   useEffect(() => {
     if (phase === "prep" && question && !finished) {
+      // Exam-controller mode: handleNext already started this question inside
+      // the click's gesture stack — don't double-play it from the timer.
+      if (examController) {
+        const src = sameOriginAudio(question.audio_url);
+        const st = examController.getState();
+        if (src && examController.getCurrentSrc() === src && (st === "loading" || st === "playing")) return;
+      }
       const t = setTimeout(playQuestion, 600);
       return () => clearTimeout(t);
     }
@@ -387,11 +445,20 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const handleNext = useCallback(() => {
     setScoringError(null);
     if (current < total - 1) {
+      // Exam-controller mode: kick the NEXT question's clip synchronously in
+      // this click (gesture-stack playback). The auto-play effect sees it and
+      // skips its timer.
+      if (examController) {
+        const next = items[current + 1];
+        const nextSrc = next ? sameOriginAudio(next.audio_url) : null;
+        if (nextSrc) examController.play(nextSrc, { section: "speaking", taskType: "interview", itemId: next.id });
+      }
       setCurrent(current + 1);
       setPhase("prep");
       setAutoRecordReady(false);
       setRecordingStarted(false);
       setAutoBlocked(false);
+      setAudioFailed(false);
       return;
     }
     // Last question — hold the finish call if anything's still in flight
@@ -403,7 +470,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       return;
     }
     finishSession();
-  }, [current, total, transcriptStatus, scoring, finishSession]);
+  }, [current, total, transcriptStatus, scoring, finishSession, examController, items]);
 
   // Escape hatch: aborts any in-flight uploads (no more billing) and fires
   // onComplete with whatever scores we have so far.
@@ -697,6 +764,17 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                   style={{ marginTop: 16, background: SPK.color, borderColor: SPK.color }}
                 >
                   Start Recording
+                </Btn>
+              )}
+              {/* Exam-controller mode: the clip failed AND there's no speech
+                  engine — an explicit user-gesture advance, never a silent
+                  skip into recording. */}
+              {audioFailed && (
+                <Btn
+                  onClick={() => { setAudioFailed(false); setAutoRecordReady(true); setPhase("answer"); }}
+                  style={{ marginTop: 16, background: SPK.color, borderColor: SPK.color }}
+                >
+                  音频无法播放，点击开始作答
                 </Btn>
               )}
             </div>

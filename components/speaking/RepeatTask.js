@@ -7,6 +7,8 @@ import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
+import { useExamAudio } from "../shared/ExamAudioProvider";
+import { trackAudioEvent } from "../../lib/analytics/audio";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -56,6 +58,12 @@ function playOriginalSentence(sentence) {
  *   isPractice  — if true, show elapsed instead of countdown
  */
 export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
+  // Exam-controller mode (mock exam only): the SpeakingExamShell mounts an
+  // ExamAudioProvider, so sentence clips play through the shared persistent
+  // element unlocked in the start-exam gesture. Null on the practice page —
+  // every legacy code path below is untouched there.
+  const examAudio = useExamAudio();
+  const examController = examAudio ? examAudio.controller : null;
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("listen"); // listen | record | review
   const [recordings, setRecordings] = useState([]); // blobUrl per index
@@ -93,6 +101,9 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // Current pre-rendered MP3 <Audio> instance (preferred over Web Speech). Held
   // so we can stop it when replaying, advancing, or unmounting.
   const audioElRef = useRef(null);
+  // Exam-controller mode: exposes playSentence's Web Speech fallback to the
+  // controller subscription (a media error must rescue via TTS there too).
+  const playViaTTSRef = useRef(null);
   // AbortController per question index — used to cancel an in-flight
   // transcribe when the user clicks Re-record (otherwise we pay for a
   // transcript they're about to discard).
@@ -127,6 +138,39 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   }, []);
 
   // (STT runs server-side now; no browser capability check needed.)
+
+  // Exam-controller mode: mirror the per-instance audio.onplay/onended/onerror
+  // semantics onto the shared element's events. `blocked` deliberately does
+  // NOT advance — the Play Again button stays usable (same as the legacy
+  // blocked-autoplay path) and the Provider overlay owns recovery.
+  useEffect(() => {
+    if (!examController) return undefined;
+    const unsub = examController.subscribe((event) => {
+      const meta = event.meta || {};
+      if (meta.section !== "speaking" || meta.taskType !== "repeat") return;
+      if (event.type === "playing") {
+        setTtsPlaying(true);
+      } else if (event.type === "ended") {
+        // advance(): listen phase → record. A record-phase replay lands here
+        // too — setPhase("record") is then a no-op.
+        setTtsPlaying(false);
+        setPhase("record");
+      } else if (event.type === "error") {
+        // Unreachable clip / decode error → rescue with Web Speech so the
+        // listen phase still completes instead of dead-ending.
+        setTtsPlaying(false);
+        trackAudioEvent("tts_fallback", {
+          section: "speaking", taskType: "repeat",
+          itemId: meta.itemId, audioPath: event.src || null,
+          errorName: event.errorName || null,
+        });
+        if (playViaTTSRef.current) playViaTTSRef.current();
+      } else if (event.type === "blocked") {
+        setTtsPlaying(false);
+      }
+    });
+    return unsub;
+  }, [examController]);
 
   // Play the current sentence. Prefer the pre-rendered MP3 (a real TTS voice,
   // served through our same-origin /api/audio proxy) — it loads where supabase.co
@@ -198,6 +242,14 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     }
 
     const src = sameOriginAudio(sentence.audio_url);
+    // Exam-controller mode: play on the shared unlocked element instead of a
+    // fresh Audio() (which iOS would block outside a gesture). Ended/error/
+    // blocked handling lives in the controller subscription above.
+    if (examController && src) {
+      playViaTTSRef.current = playViaTTS;
+      examController.play(src, { section: "speaking", taskType: "repeat", itemId: sentence.id });
+      return;
+    }
     if (src) {
       const audio = new Audio(src);
       audioElRef.current = audio;
@@ -223,11 +275,18 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
       return;
     }
     playViaTTS();
-  }, [ttsSupported, sentence]);
+  }, [ttsSupported, sentence, examController]);
 
   // Auto-play on new sentence
   useEffect(() => {
     if (!finished && phase === "listen" && sentence) {
+      // Exam-controller mode: handleNext already started this sentence inside
+      // the click's gesture stack — don't double-play it from the timer.
+      if (examController) {
+        const src = sameOriginAudio(sentence.audio_url);
+        const st = examController.getState();
+        if (src && examController.getCurrentSrc() === src && (st === "loading" || st === "playing")) return;
+      }
       // Small delay so the UI renders first
       const t = setTimeout(playSentence, 500);
       return () => clearTimeout(t);
@@ -422,6 +481,14 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
 
   const handleNext = useCallback(() => {
     if (current < total - 1) {
+      // Exam-controller mode: kick the NEXT sentence's clip synchronously in
+      // this click (gesture-stack playback — belt and braces on top of the
+      // unlocked element). The auto-play effect sees it and skips its timer.
+      if (examController) {
+        const next = items[current + 1];
+        const nextSrc = next ? sameOriginAudio(next.audio_url) : null;
+        if (nextSrc) examController.play(nextSrc, { section: "speaking", taskType: "repeat", itemId: next.id });
+      }
       setCurrent(current + 1);
       setPhase("listen");
       return;
@@ -435,7 +502,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
       return;
     }
     finishSession();
-  }, [current, total, transcriptStatus, finishSession]);
+  }, [current, total, transcriptStatus, finishSession, examController, items]);
 
   // Force-finish escape hatch: user-triggered or hard-cap expiry. Aborts any
   // still-in-flight uploads to stop billing, then fires onComplete with the
