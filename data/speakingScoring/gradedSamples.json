@@ -1,0 +1,235 @@
+{
+  "_meta": {
+    "version": "2026-07-15",
+    "author": "claude (AI-constructed)",
+    "status": "pending_human_review",
+    "warning": "本文件中 samples[] 的分档作答转写为 AI 依据 officialRubrics.json 各档位描述语构造的校准样本，尚未经人工核对。仅作评分器回归的『参考性』基准；每条 status 为 pending_human_review，人工核对通过后方可改为 confirmed 并作为冻结锚。请勿在未核对前把它当作官方金标使用。",
+    "purpose": "Take an Interview 评分器（三路取中位 + 护栏）的分档回归基准。检查评分器对不同档位作答给出单调、区间正确的分数。",
+    "rubricRef": "data/speakingScoring/officialRubrics.json → takeAnInterview.levels",
+    "transcriptStyle": "模拟 Whisper STT 输出：有标点大小写、自然 filler（um/uh/like），低档可含破碎句与语法错误。",
+    "structure": "2 套题（1 套官方 decision-making 场景 + 1 套 interview.json 题）。每套 × 每档 target 1/2/3/4 各 2 份自写（共 16 份）。满分档（5）不自写，直接引用 officialSamples.json 的 4 份官方样例 id（见 officialAnchors）。"
+  },
+  "officialAnchors": {
+    "setRef": "official-decision-making",
+    "targetScore": 5,
+    "source": "data/speakingScoring/officialSamples.json → takeAnInterviewSamples.samples",
+    "status": "confirmed",
+    "note": "满分（5）锚：直接引用官方样例 id，不在本文件重复存文本。gate 从 officialSamples.json 解析原文评分。",
+    "sampleIds": [
+      "og-interview-5-decide-quickly",
+      "og-interview-5-lunch-decision",
+      "og-interview-5-phone-advice",
+      "og-interview-5-independent-vs-advice"
+    ]
+  },
+  "sets": [
+    {
+      "setRef": "official-decision-making",
+      "source": "officialSamples.json → takeAnInterviewSamples.scenario (Track 44) + Tracks 45-48",
+      "intro": "You have volunteered for a research study at your university about how people make decisions in everyday life.",
+      "questions": [
+        {
+          "ref": "q1",
+          "text": "First, when you have a choice to make, do you usually decide quickly or take your time to think it over?"
+        },
+        {
+          "ref": "q2",
+          "text": "Can you tell me about a simple decision you made recently, such as choosing what to eat or what to wear? What factors did you consider before making your choice?"
+        },
+        {
+          "ref": "q3",
+          "text": "Can you describe a time when you asked someone for advice about a decision? What was the situation, and how did their advice help you?"
+        },
+        {
+          "ref": "q4",
+          "text": "Do you think people should make decisions on their own or seek the advice of others? Why? Please explain your viewpoint."
+        }
+      ]
+    },
+    {
+      "setRef": "intv_1738377600_001",
+      "source": "data/speaking/bank/interview.json → intv_1738377600_001 (Artificial Intelligence in Daily Life)",
+      "intro": "You have agreed to participate in a survey about artificial intelligence in daily life.",
+      "questions": [
+        {
+          "ref": "q1",
+          "text": "What types of AI tools or features do you use regularly, and how did you first start using them?"
+        },
+        {
+          "ref": "q2",
+          "text": "In your experience, what are the main differences between using AI for creative tasks, like writing, versus for practical tasks, like navigation or scheduling?"
+        },
+        {
+          "ref": "q3",
+          "text": "Some experts argue that relying on AI for daily tasks weakens our own problem-solving skills. What is your perspective on this claim?"
+        },
+        {
+          "ref": "q4",
+          "text": "Looking ahead, how do you think the integration of AI into common devices will change the way people manage their homes and personal lives over the next decade?"
+        }
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "id": "gs-A-q1-b1",
+      "setRef": "official-decision-making",
+      "questionRef": "q1",
+      "targetScore": 1,
+      "status": "pending_human_review",
+      "rationale": "对齐 1 档：只与题干语言隐约相关（decide/quick），内容为孤立词与破碎片段（isolated words or phrases），几乎不成句，无展开。",
+      "text": "Um... decide, yeah. Quick, sometimes. I don't... the choice, it's, uh, hard. Yeah. Quick, maybe. I don't know.",
+      "wordCount": 18
+    },
+    {
+      "id": "gs-A-q2-b1",
+      "setRef": "official-decision-making",
+      "questionRef": "q2",
+      "targetScore": 1,
+      "status": "pending_human_review",
+      "rationale": "对齐 1 档：仅有 food/clothes 等孤立词，vaguely connected，语句破碎不完整，无任何 factor 说明。",
+      "text": "Uh, decision, recently... food, yes. I choose, um. The factor, I don't, uh. Clothes maybe. Yeah, that's, I think.",
+      "wordCount": 19
+    },
+    {
+      "id": "gs-A-q3-b2",
+      "setRef": "official-decision-making",
+      "questionRef": "q3",
+      "targetScore": 2,
+      "status": "pending_human_review",
+      "rationale": "对齐 2 档：consists mainly of language from the question（几乎全部复读题干里的 asked for advice / situation / advice helped me），little or no relevant elaboration，无具体情境。",
+      "text": "I asked someone for advice about a decision. The situation was a decision, and their advice helped me. Yeah, the advice was good and it helped me decide. That is my situation.",
+      "wordCount": 32
+    },
+    {
+      "id": "gs-A-q4-b2",
+      "setRef": "official-decision-making",
+      "questionRef": "q4",
+      "targetScore": 2,
+      "status": "pending_human_review",
+      "rationale": "对齐 2 档：minimally connected，表了态但 no relevant elaboration（只是重复 advice is helpful），very limited range of grammar and vocabulary。",
+      "text": "I think people should seek the advice of others. Because it is good. Advice is helpful for people. So they should ask others. Yeah, that is my opinion. Others can help.",
+      "wordCount": 31
+    },
+    {
+      "id": "gs-A-q1-b3",
+      "setRef": "official-decision-making",
+      "questionRef": "q1",
+      "targetScore": 3,
+      "status": "pending_human_review",
+      "rationale": "对齐 3 档：generally on topic 但 elaboration relatively limited；filler 频繁、语法受限（it depend / make mistake / fast person），能表达但不精确。",
+      "text": "Um, for me it depend on the thing. Like, small things I decide quick, you know, like what to eat. But, uh, big things I take more time because, um, I don't want to make mistake. Sometimes I ask my friend but, like, mostly I think by myself. Yeah, I am, uh, not so fast person I guess.",
+      "wordCount": 58
+    },
+    {
+      "id": "gs-A-q3-b3",
+      "setRef": "official-decision-making",
+      "questionRef": "q3",
+      "targetScore": 3,
+      "status": "pending_human_review",
+      "rationale": "对齐 3 档：给了一个具体情境（选课）但展开浅、choppy，时态错误频繁（I ask / tell me / I follow / help me），语言精确度受限。",
+      "text": "Uh, one time I ask my roommate for advice. It was about, um, which class I should take next semester. She, like, tell me the teacher is good and the class is not too hard. So, uh, I follow her advice and I take that class. It was, um, okay I think. Her advice help me because I don't know much about it.",
+      "wordCount": 63
+    },
+    {
+      "id": "gs-A-q2-b4",
+      "setRef": "official-decision-making",
+      "questionRef": "q2",
+      "targetScore": 4,
+      "status": "pending_human_review",
+      "rationale": "对齐 4 档：on topic and elaborated（天气/预报/演讲/结果多细节），good pace with minor pausing，语法词汇 adequate；可能欠更高级连接词。",
+      "text": "So, um, yesterday I had to decide what to wear because the weather was kind of strange. It was cloudy but not really cold. I checked my phone for the forecast, and it said maybe rain in the afternoon. So I thought about that. I decided to wear a light jacket and bring a small umbrella, just in case. I also, uh, considered that I had a presentation, so I wanted to look a bit nice. In the end the jacket was a good choice because it did rain a little.",
+      "wordCount": 91
+    },
+    {
+      "id": "gs-A-q4-b4",
+      "setRef": "official-decision-making",
+      "questionRef": "q4",
+      "targetScore": 4,
+      "status": "pending_human_review",
+      "rationale": "对齐 4 档：on topic and elaborated（立场 + 选专业例子 + 大小决策区分），语言 adequate，个别 filler 不影响，属稳健但非满分的展开。",
+      "text": "I think it kind of depends, but generally I believe people should seek advice for important decisions. When you ask others, you get, um, different perspectives that you maybe didn't think about. For example, when I chose my major, I talked to a few older students and they told me about the workload, which really helped me. But for small daily things, like what to eat, I think deciding on your own is fine and faster. So my view is, use advice for the big decisions, but trust yourself for the small ones.",
+      "wordCount": 93
+    },
+    {
+      "id": "gs-B-q3-b1",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q3",
+      "targetScore": 1,
+      "status": "pending_human_review",
+      "rationale": "对齐 1 档：只与题干词 AI/problem/skill 隐约相关，isolated words，无立场无理由，mostly fragments。",
+      "text": "Uh, AI... problem, yeah. Weak, maybe. Brain, um. The skill, I don't. AI is, uh, problem. Hmm, I don't know.",
+      "wordCount": 20
+    },
+    {
+      "id": "gs-B-q4-b1",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q4",
+      "targetScore": 1,
+      "status": "pending_human_review",
+      "rationale": "对齐 1 档：future/home/device 等孤立词堆叠，vaguely connected，无任何预测性展开，破碎不成句。",
+      "text": "Um, future, AI, yes. Home, the device, uh. It will, change, maybe. I don't, um. Ten years, hmm. Everything AI, I think. Yeah.",
+      "wordCount": 23
+    },
+    {
+      "id": "gs-B-q1-b2",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q1",
+      "targetScore": 2,
+      "status": "pending_human_review",
+      "rationale": "对齐 2 档：consists mainly of language from the question（复读 AI tools regularly / first start using them），无实质内容，重复且 very limited grammar and vocabulary。",
+      "text": "I use AI tools regularly, yeah. The AI tools I use, um, I use them regularly. How I first start using them, I just start using them one day. It is helpful. I use AI features. Yeah.",
+      "wordCount": 37
+    },
+    {
+      "id": "gs-B-q2-b2",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q2",
+      "targetScore": 2,
+      "status": "pending_human_review",
+      "rationale": "对齐 2 档：minimally connected，只是把题干的 creative/practical 类别重述一遍（writing vs navigation），no relevant elaboration，词汇句式极有限。",
+      "text": "Um, creative task and practical task are different. Writing is creative and navigation is practical. They are not the same. One is for writing, one is for, uh, direction. So they are different. That is the difference.",
+      "wordCount": 37
+    },
+    {
+      "id": "gs-B-q2-b3",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q2",
+      "targetScore": 3,
+      "status": "pending_human_review",
+      "rationale": "对齐 3 档：generally on topic 且有初步对比，但 elaboration limited、filler 频繁、语法受限（it sound / it just tell），精确度不足。",
+      "text": "Uh, I think for creative task like writing, the AI, um, help you make ideas or, like, fix the grammar. But it's not always, you know, perfect, sometimes it sound strange. For practical task like map, it's more, uh, simple, it just tell you the way and it's usually correct. So I feel practical one is more reliable but creative one is more, um, fun to use I guess.",
+      "wordCount": 69
+    },
+    {
+      "id": "gs-B-q4-b3",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q4",
+      "targetScore": 3,
+      "status": "pending_human_review",
+      "rationale": "对齐 3 档：generally on topic（智能家居/隐私），但展开浅、choppy、filler 多，语法错误（more easy / it change），未深入预测。",
+      "text": "Um, in the future I think AI will be in many, like, home device. Maybe the fridge or the light, they will be smart and you can talk to them. It will make life more easy because you don't need to do everything by hand. But, uh, maybe some people worry about privacy, you know. So I think it change a lot but we need to be careful also. Yeah.",
+      "wordCount": 70
+    },
+    {
+      "id": "gs-B-q1-b4",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q1",
+      "targetScore": 4,
+      "status": "pending_human_review",
+      "rationale": "对齐 4 档：on topic and elaborated（具体工具 + 如何开始的小故事），good pace，语法词汇 adequate，个别 filler 不影响，属稳健展开。",
+      "text": "So, um, I use a few AI tools pretty regularly. The main one is a chatbot that I use for studying, like when I don't understand a concept, I ask it to explain in a simpler way. I also use the voice assistant on my phone for setting alarms and reminders. I first started using them, uh, last year when a classmate showed me how the chatbot could help summarize long articles. At first I was a bit skeptical, but after trying it a few times, it became part of my daily routine.",
+      "wordCount": 93
+    },
+    {
+      "id": "gs-B-q3-b4",
+      "setRef": "intv_1738377600_001",
+      "questionRef": "q3",
+      "targetScore": 4,
+      "status": "pending_human_review",
+      "rationale": "对齐 4 档：on topic and elaborated（表明部分同意 + 计算器例子 + 反面论证），语言 adequate 且较准确，有个人经验支撑，属稳健但非满分。",
+      "text": "Um, I partly agree with that claim, but I don't think it's completely true. It's true that if you rely on AI for everything, like, you might stop practicing some skills, for example doing math in your head. I've noticed I depend on the calculator app a lot. But on the other hand, AI can also, uh, free up your time so you can focus on harder problems that really need thinking. So I think it depends on how you use it. If you use it as a tool and still try to understand things, it's fine.",
+      "wordCount": 97
+    }
+  ]
+}

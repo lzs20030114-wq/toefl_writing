@@ -1,0 +1,137 @@
+{
+  "version": "2026-07-15",
+  "note": "新版 TOEFL 口语 section 的评分机制模型：任务/原始分结构、响应时限、官方评分引擎的『维度→可测特征』映射（Technical Manual Table 5/6）、人机与人人评分相关（Table 7）、原始分→1-6 band 换算方法。用作评分器架构设计与校准锚点。ETS 版权内容，禁止用户界面原文展示，仅限内部使用。",
+  "source": {
+    "primary": "ETS TOEFL iBT Technical Manual (TOEFL Research Report No. RR-106 / ETS Research Report No. RR-25-12, © 2025 ETS) — 存档于 .research/raw/ets-toefl-technical-manual-rr-25-12.pdf；提取文本 .research/raw/tech-manual.txt (Table 2/5/6/7/8, 行 909-1337)",
+    "secondary": "The Official Guide to the TOEFL iBT Test: Pocket Edition — 响应时限 (og.txt 行 8811-8813) + 分数体系 (og.txt 行 1048-1058)",
+    "extracted": "2026-07-15"
+  },
+  "sectionStructure": {
+    "section": "Speaking",
+    "tasks": [
+      {
+        "taskType": "repeat",
+        "taskName": "Listen and Repeat",
+        "numberOfQuestions": 7,
+        "perQuestionScoreRange": [0, 5],
+        "scoring": "holistic",
+        "description": "You repeat sentences in context, focusing on pronunciation and accuracy. Response times vary by sentence length."
+      },
+      {
+        "taskType": "interview",
+        "taskName": "Take an Interview",
+        "numberOfQuestions": 4,
+        "perQuestionScoreRange": [0, 5],
+        "scoring": "holistic",
+        "description": "You respond to 4 questions in a simulated interview, demonstrating your ability to communicate meaningfully and spontaneously. Questions progress in complexity from personal/factual to opinion/speculative/hypothetical."
+      }
+    ],
+    "totalQuestions": 11,
+    "rawScoreRange": [0, 55],
+    "rawScoreNote": "11 questions total (7 Listen and Repeat + 4 Take an Interview), each scored 0-5, summing to a Speaking raw score of 0-55 (Technical Manual Table 8: Speaking raw 0-55, band 1-6).",
+    "bandScoreRange": [1, 6]
+  },
+  "responseTiming": {
+    "listenAndRepeat": {
+      "prepTimeSeconds": 0,
+      "responseTimeSecondsBySentenceLength": { "short": 8, "medium": 10, "long": 12 },
+      "procedure": "After the sentence plays, a 2-second pause is followed by an audible beep; start speaking after the beep. Repeat only once. Partial credit is awarded for any part repeated accurately."
+    },
+    "takeAnInterview": {
+      "prepTimeSeconds": 0,
+      "responseTimeSeconds": 45,
+      "procedure": "No preparation time. After the interviewer finishes the question, the 45-second response window begins immediately; a timer shows time remaining. Partial credit is awarded."
+    }
+  },
+  "scoringEngineDimensions": {
+    "note": "Technical Manual Table 5/6 — 各任务评分引擎使用的主要 construct area（维度）及其可测语音特征（feature examples）。这是自动评分引擎的特征族，非人工 holistic rubric（后者见 officialRubrics.json）。",
+    "listenAndRepeat": {
+      "tableRef": "Table 5. Speaking Section—Listen and Repeat",
+      "dimensions": [
+        {
+          "name": "Fluency",
+          "features": [
+            "Speaking rate",
+            "Length of uninterrupted 'runs' (word sequences without pauses)",
+            "Number of pauses",
+            "Number of hesitations"
+          ]
+        },
+        {
+          "name": "Intelligibility",
+          "features": [
+            "Correctness of pronunciation",
+            "Naturalness of speech rhythm",
+            "Naturalness of prosody (e.g., syllable stress)"
+          ]
+        },
+        {
+          "name": "Repeat accuracy",
+          "features": [
+            "Correctly repeated words",
+            "Similarity to prompt"
+          ]
+        }
+      ]
+    },
+    "takeAnInterview": {
+      "tableRef": "Table 6. Speaking Section—Take an Interview",
+      "dimensions": [
+        {
+          "name": "Fluency",
+          "features": [
+            "Speaking rate",
+            "Length of uninterrupted runs (word sequences without pauses)",
+            "Number of pauses",
+            "Number of hesitations"
+          ]
+        },
+        {
+          "name": "Intelligibility",
+          "features": [
+            "Correctness of pronunciation",
+            "Naturalness of speech rhythm",
+            "Naturalness of prosody (e.g., syllable stress)"
+          ]
+        },
+        {
+          "name": "Language Use: Vocabulary and Grammar",
+          "features": [
+            "Vocabulary diversity (using a wide range of words that are distinct from one another)",
+            "Vocabulary richness (use of words which are less common)",
+            "Grammaticality",
+            "Grammatical accuracy (few grammar errors)"
+          ]
+        },
+        {
+          "name": "Organization",
+          "features": [
+            "Discourse coherence",
+            "Use of discourse connectives"
+          ]
+        }
+      ]
+    }
+  },
+  "scoreReliability": {
+    "tableRef": "Table 7. Correlation of Writing and Speaking Sections by Scoring Method",
+    "note": "Pearson r。Human–Machine = 平均人工评分 vs 自动评分；Human–Human = 单份作答两名人工评分间相关。样本：Speaking N=1,521（Writing N=1,914）。",
+    "speaking": { "humanMachine": 0.89, "humanHuman": 0.96 },
+    "writing": { "humanMachine": 0.86, "humanHuman": 0.85 }
+  },
+  "rawToBandConversion": {
+    "method": "weighted equipercentile linking",
+    "citation": "Haberman, S. J. (2015). Pseudo-equivalent groups and linking.",
+    "description": "The total Speaking raw score points (0-55) are converted to a scaled 1-6 band score (half-point increments) through innovative weighted equipercentile linking procedures that account for minor variations in difficulty among the different test versions. This ensures that a given scaled score reflects the same level of language ability regardless of the test form. Reported scaled scores are NOT equal to the number or percentage of raw points earned.",
+    "note": "本项目自建评分器无法复刻 ETS 官方 linking 表；工程上以单任务 0-5 holistic 判分为主锚（officialRubrics.json），band 换算仅作近似映射（bandDescriptors.json 的 CEFR 对照可作定性参照）。"
+  },
+  "humanMachineScoringWorkflow": {
+    "note": "官方评分流程（Technical Manual 'Evaluation of Machine Scores' / 'Human Rater Training and Monitoring'）——供理解官方口径，非本项目实现。",
+    "points": [
+      "Both Speaking tasks are digitally recorded and sent to ETS; each question is scored holistically 0-5 by the automated scoring engine.",
+      "Automated scoring is monitored in real time. For responses where the automated scoring lacks confidence or encounters difficulty, certified human raters step in to provide scores.",
+      "A random sample of responses is regularly reviewed by certified human raters to ensure quality and inform model updates.",
+      "The Listen and Repeat task requires accurate repetition; the Take an Interview task does not demand a perfect response — even high-scoring responses may contain occasional errors and minor problems in any scored area."
+    ]
+  }
+}

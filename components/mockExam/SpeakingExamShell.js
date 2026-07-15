@@ -5,6 +5,7 @@ import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { RepeatTask } from "../speaking/RepeatTask";
 import { InterviewTask } from "../speaking/InterviewTask";
 import { buildSpeakingExam } from "../../lib/mockExam/speakingPlanner";
+import { calculateSpeakingBand } from "../../lib/mockExam/speakingBand";
 import { saveSess } from "../../lib/sessionStore";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 
@@ -30,33 +31,11 @@ const LEVEL_LABELS = {
 };
 
 // ------ Scoring helpers ------
-
-/**
- * Map repeat accuracy (0-100) to a 0-5 score.
- */
-function accuracyToScore(accuracy) {
-  if (accuracy == null || accuracy < 0) return 0;
-  // Linear map: 100% -> 5, 0% -> 0
-  return Math.round((accuracy / 100) * 5 * 2) / 2; // round to nearest 0.5
-}
-
-/**
- * Calculate the speaking exam band (1-6).
- *
- * repeatScore: 0-5 (from accuracy)
- * interviewScore: 0-5 (average of AI dimension scores)
- * Weight: repeat 40%, interview 60%
- * Map to 1-6 band
- */
-function calculateSpeakingBand(repeatScore, interviewScore) {
-  const safeRepeat = typeof repeatScore === "number" ? repeatScore : 0;
-  const safeInterview = typeof interviewScore === "number" ? interviewScore : 0;
-  const weighted = safeRepeat * 0.4 + safeInterview * 0.6;
-  // Map 0-5 weighted score to 1-6 band
-  const rawBand = (weighted / 5) * 6;
-  const band = Math.max(1.0, Math.round(rawBand * 2) / 2);
-  return Math.min(6.0, band);
-}
+//
+// Band is computed on the ETS raw-score structure (repeat 0-35 + interview 0-20 =
+// 0-55 → 1-6), see lib/mockExam/speakingBand.js. The previous 40/60 weighted-average
+// of two 0-5 means did not reflect the official raw structure and inverted the
+// task weighting (repeat is 35/55 of the raw points, not 40%).
 
 function bandToCEFR(band) {
   if (band >= 5.5) return "C1+";
@@ -162,24 +141,36 @@ function SpeakingExamShellInner({ onExit }) {
   }
 
   function computeScore(rptResults, intvResults) {
-    // Extract repeat score from accuracy
+    // Repeat: use the per-sentence official 0-5 level (repeatScorer.officialLevel),
+    // falling back to `score` for older result shapes.
     const rptItems = rptResults?.items || [];
-    const validRptScores = rptItems.filter((s) => s.score);
-    const avgRepeatAccuracy = validRptScores.length
-      ? validRptScores.reduce((sum, s) => sum + s.score.accuracy, 0) / validRptScores.length
+    const scoredRpt = rptItems.filter((s) => s.score);
+    const repeatLevels = scoredRpt
+      .map((s) => (Number.isFinite(s.score.officialLevel) ? s.score.officialLevel : s.score.score))
+      .filter((v) => Number.isFinite(v));
+    const avgRepeatLevel = repeatLevels.length
+      ? repeatLevels.reduce((a, b) => a + b, 0) / repeatLevels.length
       : 0;
-    const repeatScore = accuracyToScore(avgRepeatAccuracy);
+    const repeatScore = Math.round(avgRepeatLevel * 2) / 2;
+    const avgRepeatAccuracy = scoredRpt.length
+      ? scoredRpt.reduce((sum, s) => sum + (s.score.accuracy || 0), 0) / scoredRpt.length
+      : 0;
 
-    // Extract interview score from AI scores
+    // Interview: AI 0-5 per answered question.
     const intvItems = intvResults?.items || [];
     const validIntvScores = intvItems.filter((s) => s.aiScore && !s.aiScore.error);
-    const interviewScore = validIntvScores.length
-      ? Math.round(
-          (validIntvScores.reduce((sum, s) => sum + s.aiScore.score, 0) / validIntvScores.length) * 2
-        ) / 2
+    const interviewScores = validIntvScores
+      .map((s) => s.aiScore.score)
+      .filter((v) => Number.isFinite(v));
+    const interviewScore = interviewScores.length
+      ? Math.round((interviewScores.reduce((a, b) => a + b, 0) / interviewScores.length) * 2) / 2
       : 0;
 
-    const band = calculateSpeakingBand(repeatScore, interviewScore);
+    // Band on the ETS raw structure (repeat 0-35 + interview 0-20 = 0-55 → 1-6).
+    const { band, rawTotal, repeatRaw, interviewRaw } = calculateSpeakingBand(
+      repeatLevels,
+      interviewScores,
+    );
     const cefr = bandToCEFR(band);
     const color = getScoreColor(band);
 
@@ -190,6 +181,9 @@ function SpeakingExamShellInner({ onExit }) {
       repeatScore,
       interviewScore,
       avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
+      rawTotal: Math.round(rawTotal * 10) / 10,
+      repeatRaw: Math.round(repeatRaw * 10) / 10,
+      interviewRaw: Math.round(interviewRaw * 10) / 10,
       repeatItems: rptItems,
       interviewItems: intvItems,
     };
@@ -213,6 +207,7 @@ function SpeakingExamShellInner({ onExit }) {
           repeatScore,
           interviewScore,
           avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
+          rawTotal: Math.round(rawTotal * 10) / 10,
           repeatSetId: exam?.repeatSet?.id,
           interviewSetId: exam?.interviewSet?.id,
           elapsed,
@@ -381,7 +376,7 @@ function IntroCard({ onStart, onExit }) {
         }}
       >
         <strong style={{ color: ACCENT }}>{"\u8BC4\u5206\u89C4\u5219:"}</strong>{" "}
-        {"\u590D\u8FF0\u90E8\u5206\u6839\u636E\u8BED\u97F3\u8BC6\u522B\u7CBE\u51C6\u5EA6\u8BC4\u5206 (40%)\uFF0C\u9762\u8BD5\u90E8\u5206\u7531 AI \u8BC4\u5206 (60%)\u3002\u7EFC\u5408\u5F97\u5206\u8F6C\u6362\u4E3A 1-6 Band\u3002"}
+        {"\u590D\u8FF0\u6309 ETS \u5B98\u65B9 0-5 \u6863\u9010\u53E5\u8BC4\u5206\uFF08\u6EE1\u5206 35\uFF09\uFF0C\u9762\u8BD5\u7531 AI \u8BC4 0-5 \u5206\uFF08\u6EE1\u5206 20\uFF09\uFF0C\u539F\u59CB\u5206\u5408\u8BA1 55 \u5206\u6362\u7B97\u4E3A 1-6 Band\u3002"}
       </div>
 
       {/* Mic notice */}
@@ -643,7 +638,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
                 Task 1: Listen & Repeat
               </div>
               <div style={{ fontSize: 11, color: C.t3, marginTop: 2 }}>
-                {"\u6743\u91CD: 40%"}
+                {"\u539F\u59CB\u5206 "}{score.repeatRaw != null ? score.repeatRaw : "\u2014"}/35
               </div>
             </div>
             <div style={{ textAlign: "right" }}>
@@ -693,7 +688,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
                 Task 2: Take an Interview
               </div>
               <div style={{ fontSize: 11, color: C.t3, marginTop: 2 }}>
-                {"\u6743\u91CD: 60%"}
+                {"\u539F\u59CB\u5206 "}{score.interviewRaw != null ? score.interviewRaw : "\u2014"}/20
               </div>
             </div>
             <div style={{ textAlign: "right" }}>

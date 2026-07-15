@@ -1,0 +1,147 @@
+{
+  "version": "2026-07-15",
+  "note": "新版 TOEFL iBT（2026 改革版）口语两任务 0-5 holistic 官方评分档位（Scoring Guide）。descriptor 为 ETS 官方英文原文锚点，仅做噪声剔除与断行合并，未翻译/未改写，禁止在任何用户可见界面原文展示，仅限服务端评分 prompt 与内部校准使用。档位对齐已核对：OG（水印排版会把 Score 数字列错位）与 ETS 公开 speaking-rubrics.pdf 一致，本文件以公开 PDF 干净文本为准。",
+  "source": {
+    "primary": "ETS TOEFL Speaking Scoring Guide (ets.org/content/dam/ets-org/pdfs/toefl/speaking-rubrics.pdf, © 2025 ETS) — 存档于 .research/raw/ets-speaking-rubrics-2026.pdf",
+    "secondary": "The Official Guide to the TOEFL iBT Test: Pocket Edition — Listen and Repeat Task Scoring Guide (p.232 附近) + Take an Interview Task Scoring Guide (p.240 附近)",
+    "extracted": "2026-07-15"
+  },
+  "listenAndRepeat": {
+    "taskName": "Listen and Repeat",
+    "internalType": "repeat",
+    "scale": [0, 5],
+    "scoring": "holistic",
+    "levels": [
+      {
+        "score": 5,
+        "label": "The response exactly repeats the prompt.",
+        "descriptors": [
+          "The response is fully intelligible and is an exact repetition of the prompt."
+        ]
+      },
+      {
+        "score": 4,
+        "label": "The response captures the meaning expressed in the prompt, but it is not an exact repetition.",
+        "descriptors": [
+          "Minor changes in words or grammar are present that do not substantially change the meaning of the prompt. For example: one or two function words may be missing or changed, a content word may be missing (in longer stimuli) or replaced with a related word, markers of tense/aspect/number may be missing or incorrect, or two words may be transposed.",
+          "One or two content words may be ambiguous because of imprecise pronunciation. The speaker may self-correct, but successfully completes the response."
+        ]
+      },
+      {
+        "score": 3,
+        "label": "The response is essentially full, but it does not accurately capture the original meaning.",
+        "descriptors": [
+          "The response contains a majority of the content words or ideas in the prompt. Multiple function words may be changed or missing; one or more content words may be missing or substantively changed.",
+          "The response is a full sentence.",
+          "In some cases, intelligibility issues cause occasional difficulty in understanding meaning. The speaker may struggle over a word or phrase or run words together, reducing intelligibility."
+        ]
+      },
+      {
+        "score": 2,
+        "label": "The response is missing a significant part of the prompt and/or is highly inaccurate.",
+        "descriptors": [
+          "A large portion of the prompt is missing, and important original meaning is left out. The speaker may repeat the first part of the sentence. Then the speaker may stop or fill with inaccurate content and/or include the last few words.",
+          "The response is not a self-standing sentence; meaning is fragmentary.",
+          "Intelligibility is low; the response would be difficult to understand for a listener unfamiliar with the prompt."
+        ]
+      },
+      {
+        "score": 1,
+        "label": "The response captures very little of the prompt or is largely unintelligible.",
+        "descriptors": [
+          "A minimal response of a few words is made; most of the prompt is missing.",
+          "The response is recognizable as an attempt to repeat the prompt, but it is mostly unintelligible."
+        ]
+      },
+      {
+        "score": 0,
+        "label": "No response OR the response is entirely unintelligible OR there is no English in the response OR the content is entirely unconnected to the prompt (or consists only of phrases such as \"I don't know\").",
+        "descriptors": []
+      }
+    ]
+  },
+  "takeAnInterview": {
+    "taskName": "Take an Interview",
+    "internalType": "interview",
+    "scale": [0, 5],
+    "scoring": "holistic",
+    "dimensions": [
+      {
+        "name": "Relevance",
+        "definition": "How well your response addresses the interviewer's question."
+      },
+      {
+        "name": "Elaboration",
+        "definition": "How clearly and thoroughly you support your ideas."
+      },
+      {
+        "name": "Delivery",
+        "definition": "How natural and fluent your speaking pace is, including pauses and rhythm."
+      },
+      {
+        "name": "Language use",
+        "definition": "How accurately and effectively you use grammar and vocabulary."
+      }
+    ],
+    "levels": [
+      {
+        "score": 5,
+        "label": "A fully successful response",
+        "summary": "The response fully addresses the question, and it is clear and fluent.",
+        "descriptors": [
+          "The response is on topic and well elaborated.",
+          "Good conversational speaking pace is maintained with appropriate and natural use of pauses.",
+          "Pronunciation is easily intelligible; rhythm and intonation effectively convey meaning.",
+          "A range of accurate grammar and vocabulary allows clear expression of precise meanings."
+        ]
+      },
+      {
+        "score": 4,
+        "label": "A generally successful response",
+        "summary": "The response addresses the question, and it is reasonably clear.",
+        "descriptors": [
+          "The response is on topic and elaborated, but it may lack effective sentence-level connectors.",
+          "Good speaking pace is generally maintained, with some pausing that may minimally affect flow.",
+          "Intelligibility and meaning are not impeded by pronunciation, rhythm and intonation, although occasional words/phrases may require minor effort to understand.",
+          "Grammar and vocabulary are adequate to express general meanings most of the time."
+        ]
+      },
+      {
+        "score": 3,
+        "label": "A partially successful response",
+        "summary": "The response addresses the question but with limited elaboration and/or clarity.",
+        "descriptors": [
+          "The response is generally on topic, but elaboration may be relatively limited.",
+          "Frequent or lengthy pauses result in a choppy pace; filler words are frequent.",
+          "Intelligibility is sometimes affected by inaccuracies in word-level pronunciation or stress/rhythm.",
+          "Limited range and accuracy of grammar and vocabulary noticeably restrict the precision and clarity of meanings."
+        ]
+      },
+      {
+        "score": 2,
+        "label": "A mostly unsuccessful response",
+        "summary": "The response reflects an attempt to address the question, but it is not supported in a meaningful and/or intelligible way.",
+        "descriptors": [
+          "The response is minimally connected to the interviewer's question, but it has little or no relevant elaboration or consists mainly of language from the question.",
+          "Intelligibility is limited; the speaker's intended meaning is often difficult to discern.",
+          "The response shows a very limited range of grammar and vocabulary."
+        ]
+      },
+      {
+        "score": 1,
+        "label": "An unsuccessful response",
+        "summary": "The response minimally addresses the question, and it may demonstrate very limited control of language.",
+        "descriptors": [
+          "The response is only vaguely connected to language in the interviewer's question.",
+          "The response is mostly unintelligible.",
+          "The response consists mainly of isolated words or phrases."
+        ]
+      },
+      {
+        "score": 0,
+        "label": "No response OR the response is entirely unintelligible OR there is no English in the response OR the content is entirely unconnected to the prompt (or consists only of phrases such as \"I don't know\").",
+        "descriptors": []
+      }
+    ]
+  }
+}

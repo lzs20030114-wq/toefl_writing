@@ -1,0 +1,121 @@
+{
+  "version": "2026-07-15",
+  "note": "新版 TOEFL 口语官方带解释样例 — 评分校准的绝对锚点（金标）。takeAnInterviewSamples 为 4 份官方判定『fully successful (score 5)』的采访作答，含题目 transcript + 作答 transcript + 官方逐条解释。listenAndRepeatPromptExamples 为官方 Listen and Repeat 示例句（Track 37-43）及其句式设计解释（音节数/句法分层），用作出题长度与复杂度锚点。作答 transcript 与官方原文逐字一致（仅剔除水印噪声行、合并断行）。ETS 版权文本，禁止用户界面原文展示，仅限服务端 prompt/内部校准。",
+  "source": {
+    "primary": "The Official Guide to the TOEFL iBT Test: Pocket Edition — CHAPTER 5 SPEAKING SECTION, Take an Interview 'Transcripts, Sample Responses, and Explanations' (pages 238-239 example task; 作答样例 Track 49-52) + Listen and Repeat 'Transcripts and Explanations' (Track 37-43)",
+    "extracted": "2026-07-15",
+    "extractionNote": "由 og.txt（pdftotext -layout 全文，13130 行）抽取；行号 8566-8683（interview 样例）、8307-8350（L&R 句式解释）"
+  },
+  "takeAnInterviewSamples": {
+    "taskType": "interview",
+    "officialScore": 5,
+    "scoreLabel": "A fully successful response",
+    "tolerance": 0.5,
+    "scenario": {
+      "introTrack": "Track 44",
+      "text": "You have volunteered for a research study at your university about how people make decisions in everyday life. You will have a short online interview with a researcher. The researcher will ask you some questions."
+    },
+    "responseTimeSeconds": 45,
+    "samples": [
+      {
+        "id": "og-interview-5-decide-quickly",
+        "sequence": 1,
+        "questionTrack": "Track 45",
+        "responseTrack": "Track 49",
+        "questionType": "Talk About Personal Preferences or Interests",
+        "question": "Thank you for taking the time to speak with me today. I'd like to ask you some questions about decision-making in daily life. First, when you have a choice to make, do you usually decide quickly or take your time to think it over?",
+        "response": "Um... I think it depends on the situation, but most of the time, I take my time to think before I decide. Like, if it's something small, I might just choose quickly, but for bigger things, I need to, uh, consider more options. Sometimes I feel a bit... rushed, but I try not to make decisions too fast. For example, when I have to choose a history course to take, I, I ask classmates before I choose. But if it's just, like, picking a snack, I decide fast. I guess I am not very good at making quick decisions for important things... I prefer to think it over, so I don't regret later. Uh, yeah, that's how I usually do.",
+        "explanation": "This response fully addresses the question by clearly explaining the speaker's approach to decision-making, distinguishing between quick choices for minor matters and more thoughtful consideration for important ones. The answer is well elaborated, providing specific examples such as selecting a course to take versus picking a snack, which demonstrates the speaker's ability to express precise meanings. The conversational pace is natural, with appropriate pauses and fillers that reflect authentic spoken English. Pronunciation is easily intelligible throughout, and the rhythm and intonation help convey the speaker's intent. The grammar and vocabulary used are varied and accurate, with minor slips that are typical of a C1-level speaker and which do not impede understanding. Overall, the response is clear, fluent, and demonstrates a full and thoughtful engagement with the prompt."
+      },
+      {
+        "id": "og-interview-5-lunch-decision",
+        "sequence": 2,
+        "questionTrack": "Track 46",
+        "responseTrack": "Track 50",
+        "questionType": "Talk About Personal Experiences",
+        "question": "Thank you for sharing that. Can you tell me about a simple decision you made recently, such as choosing what to eat or what to wear? What factors did you consider before making your choice?",
+        "response": "Let me think... um, yesterday I had to decide what to eat for lunch. I was... I mean, I was feeling kind of hungry but also tired. So I thought about what was easy to make and also healthy. I looked in the fridge and saw some vegetables and eggs that my suitemate had bought for us, so I made an omelet. I considered, like, how much time I had, because I needed to go out afterward, so I didn't want to eat something too heavy. Sometimes I just order food, but yesterday I wanted to save money. I am not on the university's meal plan anymore. So, yeah, I chose omelet because it was quick, healthy, and cheap... That's how I decided.",
+        "explanation": "The response is fully successful because it is on topic and well elaborated, describing a recent decision about what to eat for lunch. The speaker considers multiple factors -- hunger, tiredness, time, health, and cost -- showing a nuanced thought process. The answer includes specific details about the choice and the reasoning behind it, which adds depth and clarity. The conversational pace is maintained with natural pauses and fillers, and the speaker's pronunciation is clear, with minor self-corrections that do not affect intelligibility. The speaker also adds some context about university life to orient the listener to the scenario being described. Grammar and vocabulary are sufficiently varied to express the speaker's ideas precisely, and the response flows smoothly, reflecting a realistic and spontaneous speaking style. These features align with the criteria for a top-scoring response."
+      },
+      {
+        "id": "og-interview-5-phone-advice",
+        "sequence": 3,
+        "questionTrack": "Track 47",
+        "responseTrack": "Track 51",
+        "questionType": "Talk About Personal Experiences",
+        "question": "OK, good. Moving on, sometimes people ask others for advice before making a decision. Can you describe a time when you asked someone for advice about a decision? What was the situation, and how did their advice help you?",
+        "response": "Uh, yeah, I remember last month I had to choose a new phone. There were so many options, and I didn't know which one was best for me. I asked my classmate, he's... uh, he is really good with technology. I told him my budget and what I needed, like good camera and battery. He suggested a model that I didn't think about before. He explained why it was better for my needs and, um, showed me some reviews online. After talking to him, I felt more sure about my choice. I went to the campus computer store and bought the phone he recommended, and I'm happy with it... So, his advice really helped me make a good decision.",
+        "explanation": "This response meets the criteria for a fully successful answer by thoroughly addressing the question and providing a detailed account of a time the speaker sought advice about buying a new phone. The speaker explains the situation, the advice received, and the outcome, demonstrating clear elaboration and relevance. The pace is conversational, with natural fillers and pauses, and the pronunciation is easily intelligible, supported by effective rhythm and intonation. The grammar and vocabulary are varied and accurate, allowing the speaker to convey their experience and reasoning clearly. Minor errors and self-corrections are present but do not impede understanding, and the response remains fluent and well organized throughout."
+      },
+      {
+        "id": "og-interview-5-independent-vs-advice",
+        "sequence": 4,
+        "questionTrack": "Track 48",
+        "responseTrack": "Track 52",
+        "questionType": "Share Opinions on Current Topics or Trends",
+        "question": "Interesting -- thank you. Some people believe that making decisions independently helps build confidence, while others think it's better to consult with others to avoid mistakes. Do you think people should make decisions on their own or seek the advice of others? Why? Please explain your viewpoint.",
+        "response": "I think both approaches are valuable, but seeking advice is better for important decisions. For example, when I decide alone, sometimes I make mistakes. But if I ask others, like my family or friends, I get different opinions and, uh, more information. When I was choosing my university, I talked to my parents and teachers. They gave me advice about the programs. It helped me feel more confident. But for small things, I decide by myself, like what to wear or what to eat. I think asking advice is very useful because people can share their experience... But also, people need to learn how to trust themselves, and they can start with the easy decisions. So, yeah, overall, I agree more with seeking advice, but I think both ways are important.",
+        "explanation": "The response is fully successful because it directly addresses the question, clearly stating the speaker's preference for seeking advice and providing reasons and examples to support this viewpoint. The speaker moves effectively between making general claims about people and using personal experience as a supporting example. The answer is well elaborated, discussing both the benefits of consulting others and the value of making independent decisions, which shows a balanced and thoughtful perspective. The conversational pace is natural, with appropriate pauses, fillers, and varied sentence structures that reflect authentic speech. Pronunciation is clear and easily intelligible, and the speaker uses a range of grammar and vocabulary to express their ideas precisely. Minor slips are present but do not affect the overall clarity or fluency of the response, which remains engaging and relevant to the prompt."
+      }
+    ]
+  },
+  "listenAndRepeatPromptExamples": {
+    "taskType": "repeat",
+    "note": "官方 Listen and Repeat 示例任务的句子及句式设计解释。用作出题时的长度/复杂度分层锚点：short（~10-11 音节，单独立分句）、medium（~14-17 音节，独立分句+介词短语/修饰）、long（~22 音节，多分句+从句嵌套）。",
+    "scenario": {
+      "introTrack": "Track 36",
+      "text": "You are working at the registrar's office. You are being trained to help students request official transcripts for graduate school applications. Listen to your trainer and repeat what he says. Repeat only once."
+    },
+    "items": [
+      {
+        "track": "Track 37",
+        "sentence": "Fill out the form to request your transcript.",
+        "length": "short",
+        "syllables": 10,
+        "explanation": "This is a short sentence that has 10 syllables. It has one independent clause with no modifiers or dependent clauses."
+      },
+      {
+        "track": "Track 38",
+        "sentence": "Log into the portal and check your records.",
+        "length": "short",
+        "syllables": 11,
+        "explanation": "This is a short sentence that has 11 syllables. This is a relatively simple sentence with a compound verb phrase joined by \"and.\""
+      },
+      {
+        "track": "Track 39",
+        "sentence": "Ensure your name on the form matches the records before submitting.",
+        "length": "medium",
+        "syllables": 17,
+        "explanation": "This is a medium-length sentence that has 17 syllables. It contains both an independent clause and 2 short prepositional phrases (\"on the form\" and \"before submitting\"), which add detail and sequencing."
+      },
+      {
+        "track": "Track 40",
+        "sentence": "We will stamp your transcript with our seal before mailing it.",
+        "length": "medium",
+        "syllables": 14,
+        "explanation": "This is a medium-length sentence that has 14 syllables. It contains an independent clause and 2 prepositional phrases (\"with our seal\" and \"before mailing it\"), making it slightly more layered than short sentences."
+      },
+      {
+        "track": "Track 41",
+        "sentence": "Your transcript will be mailed directly to your selected schools.",
+        "length": "medium",
+        "syllables": 15,
+        "explanation": "This is a medium-length sentence that has 15 syllables. It contains an independent clause with an adverb (\"directly\") and a prepositional phrase (\"to your selected schools\"), making it a moderate length with modifiers for precision."
+      },
+      {
+        "track": "Track 42",
+        "sentence": "If you need an unofficial transcript, which you can keep for your own records, check this box.",
+        "length": "long",
+        "syllables": 22,
+        "explanation": "This is a long sentence that has 22 syllables. It has multiple clauses and modifiers, including a conditional clause (\"If you need...\") plus a relative clause (\"which you can keep...\") and a main clause (\"check this box\")."
+      },
+      {
+        "track": "Track 43",
+        "sentence": "Email the registrar's office to resolve issues, such as missing courses, right away.",
+        "length": "long",
+        "syllables": 22,
+        "explanation": "This is a long sentence that has 22 syllables. It is an imperative that includes an embedded explanatory phrase (\"such as missing courses\") and an adverbial phrase (\"right away\")."
+      }
+    ]
+  }
+}

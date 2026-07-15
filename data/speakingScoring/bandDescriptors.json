@@ -1,0 +1,94 @@
+{
+  "version": "2026-07-15",
+  "note": "新版 TOEFL iBT Speaking Section 官方 1-6 band 分档描述（Performance Descriptors）+ CEFR 对照 + 总分/换算规则。band 描述为 ETS 官方英文原文（『typically can...』列表），仅做噪声剔除与断行合并；Advice for Improvement 段按需求未入库。ETS 版权文本，禁止用户界面原文展示，仅限内部校准/评分 prompt 使用。注意：band 是『整个口语 section』的 1-6 分档，与单任务 0-5 holistic Scoring Guide（见 officialRubrics.json）是两套刻度——两个 0-5 任务的原始分经统计换算才得到 section 的 1-6 band。",
+  "source": {
+    "primary": "The Official Guide to the TOEFL iBT Test: Pocket Edition — APPENDIX: PERFORMANCE FEEDBACK FOR TEST TAKERS, 'Speaking Section Performance Descriptors' (og.txt 行 12892-13102)",
+    "secondary": "OG 分数体系与 CEFR 对照 (og.txt 行 1006-1024); ETS TOEFL iBT Technical Manual RR-25-12 Table 8/Table 9",
+    "extracted": "2026-07-15"
+  },
+  "scale": {
+    "range": [1, 6],
+    "increment": 0.5,
+    "appliesTo": "TOEFL section score (Reading / Listening / Writing / Speaking) and Overall",
+    "effectiveDate": "2026-01-21",
+    "reportingNote": "Starting January 21, 2026, TOEFL iBT scores are reported on a 1-6 scale in half-point increments. Higher scores indicate more advanced English proficiency."
+  },
+  "overallScoreRule": {
+    "formula": "Overall score = average of the 4 section scores (Reading, Listening, Writing, Speaking), rounded to the nearest half band.",
+    "example": "If your section scores average to 5.25, your overall score will be reported as 5.5.",
+    "dualScoreReporting": "During the transition period, score reports also include a comparable overall score on the 0-120 scale, plus MyBest scores (highest section scores within the past 2 years)."
+  },
+  "cefrMapping": [
+    { "band": "6",      "cefr": "C2" },
+    { "band": "5-5.5",  "cefr": "C1" },
+    { "band": "4-4.5",  "cefr": "B2" },
+    { "band": "3-3.5",  "cefr": "B1" },
+    { "band": "2-2.5",  "cefr": "A2" },
+    { "band": "1-1.5",  "cefr": "A1" }
+  ],
+  "bands": [
+    {
+      "band": "6",
+      "cefr": "C2",
+      "summary": "Test takers who receive a score of 6 for the Speaking section can communicate fluently, precisely, and effectively and can likely speak on a wide range of complex and abstract topics, adapting their language with ease to suit different academic and professional contexts. Their speech features sophisticated vocabulary; complex grammatical structures; and subtle distinctions of style, tone, and meaning.",
+      "typicallyCan": [
+        "can express themselves at length with a natural, effortless, smooth flow, pausing only to reflect on precisely the right words or find an appropriate example",
+        "can demonstrate a full and reliable mastery of a broad range of language to formulate thoughts precisely, give emphasis and differentiate, and eliminate ambiguity, with no signs of having to restrict what they want to say",
+        "can provide clear, smoothly flowing, elaborate, and often memorable descriptions"
+      ]
+    },
+    {
+      "band": "5-5.5",
+      "cefr": "C1",
+      "summary": "Individuals who receive a score of 5-5.5 for the Speaking section typically are able to communicate fluently and effectively on a wide range of topics with little difficulty.",
+      "typicallyCan": [
+        "can express themselves fluently and spontaneously, almost effortlessly, and only a difficult subject can hinder a smooth flow of language",
+        "can use a broad range of complex grammatical structures and less common vocabulary appropriately",
+        "can use the full range of phonological features in English with sufficient control to ensure intelligibility"
+      ]
+    },
+    {
+      "band": "4-4.5",
+      "cefr": "B2",
+      "summary": "Test takers who receive a score of 4-4.5 for the Speaking section are typically able to communicate effectively on most general or familiar topics and to make themselves understood when discussing more complex or academic topics.",
+      "typicallyCan": [
+        "can produce stretches of language with an even tempo but can be hesitant while searching for patterns and expressions, producing few noticeably long pauses",
+        "show a fairly high degree of grammatical control and do not make mistakes that lead to misunderstanding; their speech is intelligible throughout, despite a few systematic mispronunciations",
+        "can explain a viewpoint on a topical issue, giving the pros and cons of various options",
+        "can develop a clear description or narrative, expanding and supporting main points with relevant detail and examples"
+      ]
+    },
+    {
+      "band": "3-3.5",
+      "cefr": "B1",
+      "summary": "Test takers who receive a score of 3-3.5 for the Speaking section are typically able to talk about general or familiar topics with relative ease.",
+      "typicallyCan": [
+        "can speak comprehensibly, even though pausing for grammatical and lexical planning and repair is very evident, especially in longer stretches of free production",
+        "can express a main point comprehensibly and are generally intelligible, despite regular mispronunciation of individual sounds and less familiar words",
+        "can give brief explanations for opinions, plans, and actions",
+        "have sufficient vocabulary to express themselves with some circumlocutions on most topics relevant to everyday life, like family, hobbies and interests, work, travel, and current events"
+      ]
+    },
+    {
+      "band": "2-2.5",
+      "cefr": "A2",
+      "summary": "Test takers who receive a score of 2-2.5 for the Speaking section are typically able to communicate limited information about familiar, everyday topics, using mostly short utterances.",
+      "typicallyCan": [
+        "can construct phrases on familiar topics with enough ease to handle short exchanges, despite noticeable hesitation and false starts",
+        "have pronunciation that is generally intelligible when communicating in simple everyday situations",
+        "can give short, basic descriptions of events and activities",
+        "can explain likes or dislikes about something and why they prefer one thing over another, making simple, direct comparisons"
+      ]
+    },
+    {
+      "band": "1-1.5",
+      "cefr": "A1",
+      "summary": "Test takers who receive a score of 1-1.5 for the Speaking section typically communicate using isolated words, memorized phrases, and simple expressions related to immediate needs or familiar topics.",
+      "typicallyCan": [
+        "can manage very short, isolated, mainly prepackaged utterances, with much pausing to search for expressions, to articulate less familiar words, and to repair communication",
+        "have a very basic range of simple expressions about personal details and needs of a concrete type",
+        "use pronunciation of a very limited repertoire of learned words and phrases that can be understood with some effort by those used to dealing with speakers of the language group"
+      ]
+    }
+  ]
+}

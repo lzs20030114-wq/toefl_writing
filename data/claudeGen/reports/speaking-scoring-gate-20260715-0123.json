@@ -1,0 +1,230 @@
+{
+  "generatedAt": "2026-07-14T17:23:44.185Z",
+  "model": "deepseek-v4-flash",
+  "budget": 2500,
+  "samples": 3,
+  "mode": "live-samples3",
+  "structPass": true,
+  "structIssues": [],
+  "wiringOk": true,
+  "wiringNotes": [],
+  "live": {
+    "officialRows": [
+      {
+        "id": "og-interview-5-decide-quickly",
+        "target": 5,
+        "final": 5,
+        "pass": true,
+        "guardrails": [],
+        "overallRaw": 5
+      },
+      {
+        "id": "og-interview-5-lunch-decision",
+        "target": 5,
+        "final": 5,
+        "pass": true,
+        "guardrails": [],
+        "overallRaw": 5
+      },
+      {
+        "id": "og-interview-5-phone-advice",
+        "target": 5,
+        "final": 4.5,
+        "pass": true,
+        "guardrails": [],
+        "overallRaw": 4.5
+      },
+      {
+        "id": "og-interview-5-independent-vs-advice",
+        "target": 5,
+        "final": 4,
+        "pass": false,
+        "guardrails": [],
+        "overallRaw": 4
+      }
+    ],
+    "gradedRows": [
+      {
+        "id": "gs-A-q1-b1",
+        "setRef": "official-decision-making",
+        "target": 1,
+        "final": 2,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 2,
+        "wordCount": 18
+      },
+      {
+        "id": "gs-A-q2-b1",
+        "setRef": "official-decision-making",
+        "target": 1,
+        "final": 1,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 1,
+        "wordCount": 19
+      },
+      {
+        "id": "gs-A-q3-b2",
+        "setRef": "official-decision-making",
+        "target": 2,
+        "final": 2,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 2,
+        "wordCount": 32
+      },
+      {
+        "id": "gs-A-q4-b2",
+        "setRef": "official-decision-making",
+        "target": 2,
+        "final": 3,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 3,
+        "wordCount": 31
+      },
+      {
+        "id": "gs-A-q1-b3",
+        "setRef": "official-decision-making",
+        "target": 3,
+        "final": 4,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 4,
+        "wordCount": 58
+      },
+      {
+        "id": "gs-A-q3-b3",
+        "setRef": "official-decision-making",
+        "target": 3,
+        "final": 4,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 4,
+        "wordCount": 63
+      },
+      {
+        "id": "gs-A-q2-b4",
+        "setRef": "official-decision-making",
+        "target": 4,
+        "final": 5,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 5,
+        "wordCount": 91
+      },
+      {
+        "id": "gs-A-q4-b4",
+        "setRef": "official-decision-making",
+        "target": 4,
+        "final": 4,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 4,
+        "wordCount": 93
+      },
+      {
+        "id": "gs-B-q3-b1",
+        "setRef": "intv_1738377600_001",
+        "target": 1,
+        "final": 1,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 1,
+        "wordCount": 20
+      },
+      {
+        "id": "gs-B-q4-b1",
+        "setRef": "intv_1738377600_001",
+        "target": 1,
+        "final": 1,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 1,
+        "wordCount": 23
+      },
+      {
+        "id": "gs-B-q1-b2",
+        "setRef": "intv_1738377600_001",
+        "target": 2,
+        "final": 2,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 2,
+        "wordCount": 37
+      },
+      {
+        "id": "gs-B-q2-b2",
+        "setRef": "intv_1738377600_001",
+        "target": 2,
+        "final": 2,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 2,
+        "wordCount": 37
+      },
+      {
+        "id": "gs-B-q2-b3",
+        "setRef": "intv_1738377600_001",
+        "target": 3,
+        "final": 3.5,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 3.5,
+        "wordCount": 69
+      },
+      {
+        "id": "gs-B-q4-b3",
+        "setRef": "intv_1738377600_001",
+        "target": 3,
+        "final": 3.5,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 3.5,
+        "wordCount": 70
+      },
+      {
+        "id": "gs-B-q1-b4",
+        "setRef": "intv_1738377600_001",
+        "target": 4,
+        "final": 5,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 5,
+        "wordCount": 93
+      },
+      {
+        "id": "gs-B-q3-b4",
+        "setRef": "intv_1738377600_001",
+        "target": 4,
+        "final": 4,
+        "hit": true,
+        "guardrails": [],
+        "overallRaw": 4,
+        "wordCount": 97
+      }
+    ],
+    "bandMeans": {
+      "1": 1.25,
+      "2": 2.25,
+      "3": 3.75,
+      "4": 4.5,
+      "5": 4.625
+    },
+    "bandHitRate": {
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 0.75
+    },
+    "orderIssues": [
+      "band 5 与 band 4 差 0.13 < 0.5"
+    ],
+    "officialAllPass": false,
+    "overallHitRate": 1,
+    "totalCalls": 60,
+    "verdictPass": false
+  }
+}
