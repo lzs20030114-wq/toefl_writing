@@ -1,81 +1,11 @@
 {
-  "session_id": "routine-20260713-190423",
-  "generated_at": "2026-07-13T19:17:44.540Z",
-  "needs_retry": true,
+  "session_id": "routine-20260715-201554",
+  "generated_at": "2026-07-15T20:21:34.114Z",
+  "needs_retry": false,
   "overall_scores": {
     "diversity": 93,
-    "quality": 96
+    "quality": 100
   },
   "bs_difficulty_gate": "PASS",
-  "retry_banks": [
-    {
-      "bank": "discussion",
-      "diversity_score": 70,
-      "diversity_threshold": 80,
-      "quality_score": 100,
-      "quality_threshold": 90,
-      "failures": [
-        "多样性 70 < 80"
-      ],
-      "diversity_breakdown": [
-        "课程 4/4",
-        "学生名 4/8",
-        "开头 1/4",
-        "主题 4/4"
-      ],
-      "quality_breakdown": [
-        "教授段长 4/4",
-        "学生1长 4/4",
-        "学生2长 4/4"
-      ],
-      "hints": [
-        "多样性 < gate — vary courses, opening styles, and student name pools more aggressively"
-      ],
-      "items_to_supplement": 2
-    },
-    {
-      "bank": "reading-rdl-short",
-      "diversity_score": 70,
-      "diversity_threshold": 80,
-      "quality_score": 100,
-      "quality_threshold": 85,
-      "failures": [
-        "多样性 70 < 80"
-      ],
-      "diversity_breakdown": [
-        "话题 4/4",
-        "notice 3 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 4/4"
-      ],
-      "hints": [
-        "多样性 < gate — choose distinct topic/subtopic combos; avoid same discipline twice"
-      ],
-      "items_to_supplement": 2
-    },
-    {
-      "bank": "reading-rdl-long",
-      "diversity_score": 80,
-      "diversity_threshold": 70,
-      "quality_score": 0,
-      "quality_threshold": 85,
-      "failures": [
-        "质量 0 < 85"
-      ],
-      "diversity_breakdown": [
-        "话题 2/2",
-        "notice 1 · email 0"
-      ],
-      "quality_breakdown": [
-        "词数 0/2"
-      ],
-      "hints": [
-        "质量校验有偏差: 词数 0/2 — recheck schema compliance"
-      ],
-      "items_to_supplement": 1
-    }
-  ],
-  "resolved_at": "2026-07-13T19:38:05Z",
-  "resolution_status": "supplemented"
+  "retry_banks": []
 }

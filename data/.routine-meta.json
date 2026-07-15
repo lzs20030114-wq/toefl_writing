@@ -1,217 +1,42 @@
 {
-  "session_id": "routine-20260713-190423",
-  "completed_at": "2026-07-13T19:17:40.501Z",
-  "duration_minutes": 13,
+  "session_id": "routine-20260715-201554",
+  "completed_at": "2026-07-15T20:21:04Z",
+  "duration_minutes": 6,
   "model": "Claude Opus 4.8",
-  "highlight": "全12题型齐出，PASS1 60/70；BS开头去同质(yes-no压到3/20)，阅读薄弱题材(化学/物理/悬索桥)补齐",
+  "highlight": "按需信号: 今晚仅补 CTW 阅读 20 题，横跨 17 个学科（生物/社会学/工程/材料科学等），全部 73-77 词 5 句达真题长度锚。",
   "commit_sha": "",
   "results": {
-    "bs": {
-      "generated": 20,
-      "accepted": 10,
-      "topics": [
-        "indirect/embedded questions",
-        "relative clauses",
-        "passive voice",
-        "negation",
-        "comparative",
-        "direct questions",
-        "phrasal verbs",
-        "compound predicate",
-        "past perfect"
-      ],
-      "favorite": {
-        "prompt": "You need a signed form for the excursion.",
-        "answer": "Where do you turn in the permission slip?"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "discussion": {
-      "generated": 4,
-      "accepted": 6,
-      "topics": [
-        "educational psychology",
-        "public health",
-        "economics",
-        "marketing"
-      ],
-      "favorite": {
-        "subtopic": "public health",
-        "preview": "A growing number of companies now pay employees cash bonuses or reduced insurance premiums for hitting fitness targets—logging gym visits, walking a set number of steps, or joining smoking-cessation programs."
-      },
-      "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 2
-    },
-    "email": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "服务与活动",
-        "校园学业",
-        "日常社交",
-        "消费售后"
-      ],
-      "favorite": {
-        "subtopic": "服务与活动",
-        "preview": "全日巴士历史小镇游导游很棒但发车晚了近一小时，老港口游览时间被压缩，写信要补偿"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "reading-ap": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "geology/geysers",
-        "physics/magnetism",
-        "art/impressionism",
-        "technology/suspension bridges",
-        "chemistry/catalysis"
-      ],
-      "favorite": {
-        "subtopic": "technology/suspension bridges",
-        "preview": "A suspension bridge is a structure whose roadway hangs from steel cables draped between two tall towers."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
     "reading-ctw": {
-      "generated": 6,
-      "accepted": 6,
+      "generated": 20,
+      "accepted": 20,
       "topics": [
-        "chemistry/soap and surfactants",
-        "physics/refraction and prisms",
-        "technology/hydroelectric power",
-        "economics/origins of coined money",
-        "art/the craft of mosaics",
-        "meteorology/how fog forms"
+        "biology/hibernation",
+        "environmental_science/crop rotation",
+        "sociology/group dynamics",
+        "history/Silk Road trade routes",
+        "geology/meteor impacts",
+        "astronomy/gravitational waves",
+        "zoology/echolocation",
+        "physics/echoes and acoustics",
+        "chemistry/fermentation",
+        "technology/the printing press",
+        "geology/earthquakes",
+        "astronomy/comets",
+        "botany/pollination",
+        "engineering/wind energy",
+        "psychology/memory and forgetting",
+        "history/Roman aqueducts",
+        "materials_science/glass making",
+        "meteorology/thunderstorms and lightning",
+        "economics/supply and demand",
+        "anthropology/domestication of dogs"
       ],
       "favorite": {
-        "subtopic": "economics/origins of coined money",
-        "preview": "The first coins appeared thousands of years ago when busy merchants needed a reliable way to measure value."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "reading-rdl-short": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "social_media",
-        "notice",
-        "notice",
-        "notice"
-      ],
-      "favorite": {
-        "subtopic": "social_media/campus-community-garden",
-        "preview": "So excited the Campus Community Garden reopens for spring! Open Tuesdays and Thursdays, 3:00–6:00 PM, behind Lowell Hall."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "reading-rdl-long": {
-      "generated": 2,
-      "accepted": 2,
-      "topics": [
-        "social_media",
-        "notice"
-      ],
-      "favorite": {
-        "subtopic": "social_media/campus event recommendation",
-        "preview": "@maya_stargazer Okay, I have to tell you all about last night! I went to the Stargazers Society's Autumn Sky Party"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "listening-lat": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "how sleep consolidates memories in the brain",
-        "how dual-process theory explains fast and slow thinking",
-        "why a spinning object stays balanced through angular momentum",
-        "how ancient amphitheaters were designed for natural acoustics"
-      ],
-      "favorite": {
-        "subtopic": "how sleep consolidates memories in the brain",
-        "preview": "Sleep does a lot more than just rest your body. One of its most important jobs is helping the brain lock in what you learned"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "listening-lc": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "new downtown restaurant / which dish",
-        "comparing notes on a class novel",
-        "scheduling a group project meeting",
-        "buy concert tickets now or wait",
-        "returning a too-small sweater"
-      ],
-      "favorite": {
-        "subtopic": "new downtown restaurant / which dish",
-        "preview": "Have you heard about Saffron Kitchen, that new Thai place downtown? I tried it last night."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "listening-la": {
-      "generated": 5,
-      "accepted": 5,
-      "topics": [
-        "career fair prep workshop with resume review",
-        "senior capstone presentation schedule",
-        "undergraduate research symposium abstract deadline (video-format twist)",
-        "student art market in the quad",
-        "reopening of renovated recital hall (professor invites class)"
-      ],
-      "favorite": {
-        "subtopic": "undergraduate research symposium abstract submission deadline",
-        "preview": "Abstracts for the Fall Undergraduate Research Symposium are due by 11:59 p.m. next Friday, and late entries won't be considered."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "listening-lcr": {
-      "generated": 8,
-      "accepted": 8,
-      "topics": [
-        "writing center thesis help",
-        "carpool/ride arranging",
-        "concert tickets",
-        "schedule conflict catch-up",
-        "lost-and-found umbrella",
-        "borrowing lecture notes",
-        "dorm hot water outage",
-        "sister's wedding update"
-      ],
-      "favorite": {
-        "subtopic": "borrowing lecture notes",
-        "preview": "I didn't catch a word of today's lecture. — classmate hints they need notes; correct reply offers them idiomatically with 'Feel free to'."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
-    "speaking-repeat": {
-      "generated": 3,
-      "accepted": 3,
-      "topics": [
-        "Student Health Center service walkthrough",
-        "Residence Hall Move-In orientation tour",
-        "Tutoring Center orientation tour"
-      ],
-      "favorite": {
-        "subtopic": "Student Health Center service walkthrough",
-        "preview": "When you are ready to be seen, please have a seat in the waiting area to your left."
+        "subtopic": "astronomy/gravitational waves",
+        "preview": "Gravitational waves are tiny ripples in space itself, produced by some of the most violent cosmic events."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-07-13T19:38:05Z",
-  "r2_session_id": "routine-r2-20260713-193106"
+  }
 }
