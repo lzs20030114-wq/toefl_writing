@@ -247,7 +247,7 @@ function SpeakingExamShellInner({ onExit }) {
       {(phase === "intro" || phase === "transition" || phase === "results") && (
         <TopBar
           title={topBarTitle}
-          section="Speaking | \u6A21\u8003\u6A21\u5F0F"
+          section="Speaking | 模考模式"
           elapsedTime={phase !== "intro" ? elapsed : undefined}
           onExit={onExit}
         />
@@ -355,10 +355,10 @@ function IntroCard({ onStart, onExit }) {
           margin: "0 auto 24px",
         }}
       >
-        <InfoBox label="Task 1" value="Listen & Repeat (7\u53E5)" />
-        <InfoBox label="Task 2" value="Interview (4\u9898)" />
-        <InfoBox label="\u603B\u65F6\u957F" value="\u7EA6 8 \u5206\u949F" />
-        <InfoBox label="\u8BC4\u5206" value="Band 1-6" />
+        <InfoBox label="Task 1" value="Listen & Repeat (7句)" />
+        <InfoBox label="Task 2" value="Interview (4题)" />
+        <InfoBox label="总时长" value="约 8 分钟" />
+        <InfoBox label="评分" value="Band 1-6" />
       </div>
 
       {/* Explanation */}
@@ -375,8 +375,8 @@ function IntroCard({ onStart, onExit }) {
           textAlign: "left",
         }}
       >
-        <strong style={{ color: ACCENT }}>{"\u8BC4\u5206\u89C4\u5219:"}</strong>{" "}
-        {"\u590D\u8FF0\u6309 ETS \u5B98\u65B9 0-5 \u6863\u9010\u53E5\u8BC4\u5206\uFF08\u6EE1\u5206 35\uFF09\uFF0C\u9762\u8BD5\u7531 AI \u8BC4 0-5 \u5206\uFF08\u6EE1\u5206 20\uFF09\uFF0C\u539F\u59CB\u5206\u5408\u8BA1 55 \u5206\u6362\u7B97\u4E3A 1-6 Band\u3002"}
+        <strong style={{ color: ACCENT }}>{"评分\u89C4\u5219:"}</strong>{" "}
+        {"\u590D\u8FF0\u6309 ETS \u5B98\u65B9 0-5 \u6863\u9010\u53E5评分\uFF08\u6EE1\u5206 35\uFF09\uFF0C\u9762\u8BD5\u7531 AI \u8BC4 0-5 \u5206\uFF08\u6EE1\u5206 20\uFF09\uFF0C\u539F\u59CB\u5206\u5408\u8BA1 55 \u5206\u6362\u7B97\u4E3A 1-6 Band\u3002"}
       </div>
 
       {/* Mic notice */}
