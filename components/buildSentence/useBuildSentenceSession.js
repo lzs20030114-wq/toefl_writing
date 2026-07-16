@@ -19,6 +19,12 @@ function getUserChunks(slotsArr) {
   return slotsArr.filter((s) => s !== null).map((s) => s.text);
 }
 
+// Order-sensitive fingerprint of a question list; drafts saved against one
+// ordering must not be resumed against another (results map by index).
+function bsQuestionSig(qs) {
+  return (qs || []).map((q) => q?.id).join(",");
+}
+
 function readBsResumeDraft(currentQs) {
   const draft = loadDraft(BS_RESUME_KEY);
   if (!draft || typeof draft !== "object") return null;
@@ -30,6 +36,12 @@ function readBsResumeDraft(currentQs) {
   const currentSetId = currentQs?.[0]?.__sourceSetId;
   if (!currentSetId || currentSetId !== draft.setId) {
     // Set rotated (e.g. user marked some sets done elsewhere) — discard stale draft.
+    clearDraft(BS_RESUME_KEY);
+    return null;
+  }
+  if (draft.qsig !== bsQuestionSig(currentQs)) {
+    // Same set id but different within-set order/content (e.g. a bank reorder
+    // shipped) — index-based results would re-attach to the wrong questions.
     clearDraft(BS_RESUME_KEY);
     return null;
   }
@@ -214,6 +226,7 @@ export function useBuildSentenceSession(questions, options = {}) {
     const t = setTimeout(() => {
       saveDraft(BS_RESUME_KEY, {
         setId,
+        qsig: bsQuestionSig(qs),
         idx,
         // Strip the (heavy) q reference; it's reconstructed on resume.
         results: (results || []).map((r) =>

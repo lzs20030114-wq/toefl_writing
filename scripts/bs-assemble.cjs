@@ -16,6 +16,7 @@
  */
 const { readFileSync, writeFileSync } = require("fs");
 const { validateQuestionSet } = require("../lib/questionBank/buildSentenceSchema.js");
+const { shuffleSetQuestions } = require("../lib/gen/setOrder.js");
 
 const FLOATING_ADVERBS = new Set(["yesterday","tomorrow","today","recently","finally","usually","always","often","sometimes","already","probably","certainly","definitely","suddenly","immediately","eventually","perhaps","apparently","afterwards","meanwhile","generally","occasionally"]);
 const PROPER = new Set(["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","January","February","March","April","May","June","July","August","September","October","November","December"]);
@@ -208,7 +209,9 @@ if (require.main !== module) return;
 const [, , inF, outF] = process.argv;
 if (!inF || !outF) { console.log("usage: node scripts/bs-assemble.cjs <content.json> <out.json>"); process.exit(1); }
 const content = JSON.parse(readFileSync(inF, "utf8"));
-const question_sets = content.sets.map(s => { const setUsed = new Map(); return { set_id: s.set_id, questions: s.items.map((it, i) => assembleItem(it, s.set_id, i, setUsed)) }; });
+// Sets ship SCRAMBLED: authored content is easy-first, real papers aren't (see lib/gen/setOrder.js).
+// Shuffle after assembly so ANCHOR_PLAN/distractor rotation still follows authoring order.
+const question_sets = content.sets.map(s => { const setUsed = new Map(); return { set_id: s.set_id, questions: shuffleSetQuestions(s.items.map((it, i) => assembleItem(it, s.set_id, i, setUsed)), `s${s.set_id}`) }; });
 writeFileSync(outF, JSON.stringify({ version: "claudeGen-bs", question_sets }, null, 1));
 
 // RENDER-INTEGRITY GATE: every non-distractor tile must be a CONTIGUOUS span of the answer that

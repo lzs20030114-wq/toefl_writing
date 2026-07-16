@@ -36,6 +36,8 @@ const EMAIL_RECIPIENT_OK = (to) => /^(Mr|Ms|Mrs|Dr|Prof(essor)?)\.?\s+[A-Z][a-zA
 const DISC_PROF_OK = (name) => /^Dr\. (Gupta|Diaz|Achebe)$/.test(String(name || ""));
 // 合库层通用内容去重（exact 指纹 + jaccard 近重复）。
 const { createDedupIndex, checkDuplicate, addToIndex } = require("../lib/gen/contentDedup.js");
+// 套内乱序：真题无易→难递进，routine 产出是易先难后，切套时必须打乱（见 lib/gen/setOrder.js）。
+const { shuffleSetQuestions } = require("../lib/gen/setOrder.js");
 
 // NEWBANK_ROOT (optional): when set (e.g. NEWBANK_ROOT=data/newBank), validated items are
 // appended to the NEW bank under that root instead of the live bank, so a fresh bank can be
@@ -136,7 +138,8 @@ function mergeBS(stagingPath) {
   const newSets = [];
   for (let i = 0; i + 10 <= accepted.length; i += 10) {
     const setId = nextSetId + newSets.length;
-    const setItems = accepted.slice(i, i + 10).map((q, qi) => ({ ...q, id: `ets_s${setId}_q${qi + 1}` }));
+    const setItems = shuffleSetQuestions(accepted.slice(i, i + 10), `s${setId}`)
+      .map((q, qi) => ({ ...q, id: `ets_s${setId}_q${qi + 1}` }));
     const set = { set_id: setId, questions: setItems };
     const v = validateQuestionSet(set);
     if (!v.ok) {
