@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { RepeatTask } from "../speaking/RepeatTask";
 import { InterviewTask } from "../speaking/InterviewTask";
@@ -174,6 +175,10 @@ function SpeakingExamShellInner({ onExit }) {
     const cefr = bandToCEFR(band);
     const color = getScoreColor(band);
 
+    // One save identity, shared by the stored `date` and the results-page deep
+    // link (`?mock=<sessionDate>`) into the full diagnostic report.
+    const sessionDate = new Date().toISOString();
+
     const score = {
       band,
       cefr,
@@ -186,6 +191,7 @@ function SpeakingExamShellInner({ onExit }) {
       interviewRaw: Math.round(interviewRaw * 10) / 10,
       repeatItems: rptItems,
       interviewItems: intvItems,
+      sessionDate,
     };
 
     setFinalScore(score);
@@ -193,12 +199,13 @@ function SpeakingExamShellInner({ onExit }) {
     // Save session under the unified "speaking" type so SpeakingProgressView
     // + the section-page link card surface it like a practice record. The
     // previous "speaking-exam" type was a write-only orphan (mirrors the
-    // listening/reading adaptive bug fixed in f531a90).
+    // listening/reading adaptive bug fixed in f531a90). Now also persists the
+    // per-question items so the progress page can render a full diagnostic.
     try {
       saveSess({
         type: "speaking",
         mode: "mock",
-        date: new Date().toISOString(),
+        date: sessionDate,
         band,
         details: {
           subtype: "mock",
@@ -211,6 +218,8 @@ function SpeakingExamShellInner({ onExit }) {
           repeatSetId: exam?.repeatSet?.id,
           interviewSetId: exam?.interviewSet?.id,
           elapsed,
+          repeatItems: rptItems,
+          interviewItems: intvItems,
         },
       });
     } catch {}
@@ -801,16 +810,30 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
         </div>
       </SurfaceCard>
 
-      {/* Review hint — speaking mocks save a score summary (no per-question
-          answer key, unlike reading/listening), so word this as "回看成绩". */}
+      {/* Deep link into the full diagnostic report — the saved session now
+          carries per-question items, so link straight to it on the progress page. */}
       <div style={{
-        display: "flex", alignItems: "flex-start", gap: 8,
+        display: "flex", flexDirection: "column", gap: 10,
         background: "#FFF7ED", border: "1px solid #FED7AA",
-        borderRadius: 8, padding: "11px 14px",
-        fontSize: 13, color: C.t2, lineHeight: 1.6,
+        borderRadius: 8, padding: "12px 14px",
       }}>
-        <span style={{ fontSize: 15, flexShrink: 0 }}>{"💡"}</span>
-        <span>{"本次模考成绩已保存，可在首页 "}<strong style={{ color: ACCENT }}>{"口语练习记录"}</strong>{" 中回看。"}</span>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: C.t2, lineHeight: 1.6 }}>
+          <span style={{ fontSize: 15, flexShrink: 0 }}>{"💡"}</span>
+          <span>{"本次模考成绩与逐题详情已保存。"}</span>
+        </div>
+        <Link
+          href={score.sessionDate ? `/speaking/progress?mock=${encodeURIComponent(score.sessionDate)}` : "/speaking/progress?mock=latest"}
+          style={{
+            alignSelf: "flex-start",
+            display: "inline-flex", alignItems: "center", gap: 6,
+            background: ACCENT, color: "#fff", border: `1px solid ${ACCENT}`,
+            padding: "10px 18px", borderRadius: 10,
+            fontSize: 14, fontWeight: 700, textDecoration: "none",
+            boxShadow: C.shadow, fontFamily: FONT,
+          }}
+        >
+          {"查看完整诊断报告 →"}
+        </Link>
       </div>
 
       {/* Actions */}
