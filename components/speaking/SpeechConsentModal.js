@@ -104,6 +104,10 @@ export function SpeechConsentModal({ open, onClose, onGranted }) {
               <span style={{ color: C.green, marginRight: 6 }}>✓</span>
               测试期内，部分录音会被保存（最多 90 天），用于评分质量改进与校准实验。
             </div>
+            <div style={{ marginBottom: 6 }}>
+              <span style={{ color: C.green, marginRight: 6 }}>✓</span>
+              测试期内，你的答题结果（转写文本与评分数据）可能用于评分模型的调整与优化。
+            </div>
             <div>
               <span style={{ color: C.green, marginRight: 6 }}>✓</span>
               你可以随时撤回同意；撤回后我们会停止保存并删除已留存的录音。

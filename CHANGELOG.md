@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-16 — v1.13.0
+
+- **口语评分系统官方锚定重构**（`b838ffd`，全程锚定 ETS 官方 Scoring Guide）：官方锚点落库 `data/speakingScoring/`（OG 逐档 rubric + 4 份官方满分样例 + 1-6 band Performance Descriptors/CEFR 表 + Technical Manual 维度→特征映射 + 16 份分档校准样本[待人工核对]）。`repeatScorer` 从 LCS 线性百分比重写为官方 0-5 档位判定：虚词/内容词分桶计错 + 相邻换序算 1 次操作 + 缩略/数词归一（it's≡it is、twenty≡20 不再误扣），输出 `officialLevel`+`errorBreakdown`、UI 逐词高亮向后兼容。`interviewScorer` 升级：prompt 嵌官方 holistic rubric+满分样例 few-shot、三路取中位（`callAIMulti` samples=3 复用写作模式）、新增 `lib/speakingEval/calibration.js` 纯函数护栏（词数封顶 <10→1/<25→2.5/<45→3.5、跑题/复读题干 cap 2.0、维度-总分一致性收缩）。模考口语 band 改官方 raw 口径（repeat 35 : interview 20，旧 40/60 权重方向反了），抽出 `lib/mockExam/speakingBand.js`。防退化门 `scripts/speaking-scoring-gate.mjs` 直跑生产本体：官方满分样例 4/4 判 5（硬线 ≥4.5）、分档命中率 100%、档间均分单调。
+- **口语录音留存合规基建 + 测试期全员开放**（`a252093`，迁移 `speech-recording-retention.sql` 已跑并登记）：PIPL 同意 v2（境外第三方处理 + 测试期留存 ≤90 天 + 答题结果用于模型调优 + 可撤回即删）版本化落库 `users.speech_consent_version`，v1 老用户软性复弹；`speech_recordings` 私有桶 + 元数据表（RLS 无 policy 仅 service role）；转写成功后采样留存（v2 同意 + 每人每日 ≤2 段 + <2MB，await 防 Vercel 冻结吞单，全链路 fail-open）；撤回入口（口语页底部「语音授权管理」→二次确认→联动删桶删表，PURGE_FAILED 如实报错）；90 天清理脚本 `scripts/ops/cleanup-speech-recordings.mjs`（dry-run 默认）。`NEXT_PUBLIC_SPEAKING_OPEN_BETA=1` 开放 free 用户口语练习/模考，STT 配额 free 15 分钟/天、pro 60，未设=Pro 专属现状。
+- **Azure 发音评测 spike 验证通过**（`a252093`）：`scripts/azure-pa-spike.mjs` 真跑 26/26（eastasia F0 免费层）。结论：webm/opus 容器 Azure REST 解不出音频（全 0 分）→ 生产需服务端转 16k WAV（mpg123-decoder 纯 WASM + wavTools 已趟通）；ReferenceText 留空 unscripted 在 REST 完全可用；故意漏词/换词/插词全部精准检出（Omission/Mispronunciation/Insertion + Completeness 同步下降）。方案调研报告 `RESEARCH-speaking-pronunciation-scoring-2026-07-15.md`（音频 LLM 直听打分被多篇论文一致否定，Azure PA 性价比第一）。
+- **考试音频统一持久播放器**（`8f6e956`/`20dcc36`/`9895eaf`，另会话）：单一解锁 audio 元素 + 手势编排治 iOS/微信自动播放被拦，扩展到听力/口语练习页；音频遥测插入改 await（Vercel 冻结实例吞 fire-and-forget）。kill switch=`NEXT_PUBLIC_EXAM_AUDIO_DISABLED`。
+- **移动端首页补听力/口语板块内容分支**（`fb41718`，另会话）。
+
 ## 2026-07-12 — v1.12.0
 
 - **写作评分大修：判分锚 v3**（`265b020`/`73443a6`/`c8c647b`/`dea43c7`/`eb384fa`/`8219aca`/`91e745a`，全程锚定 ETS 官方带分样文）：旧 prompt 把限时写作小错按个数扣分，官方 5 分样文被压到 3.5-4（线上 196 条 discussion 历史 0 条 >4.0）。改造：ETS 官方金标样文入库（`data/writingScoring/etsGoldenSamples.json`）+ 两步错误分类 + 官方带噪 few-shot 锚 + GOALS 佐证引文锚定 + 限时噪声豁免 + holistic-first 和解（`calibration.js` 允许 holistic 上抬至多半档、不下拖）+ 拆除违官方的「未互动≤3」硬门与短语命中护栏（GOALS MISSING/PARTIAL 语义护栏取代）+ 批注锚定吞词修复（`reanchorToSource` 以用户原文为唯一事实源）。验收：官方 5 分文 3.5→4.5-5，真实用户 12 篇 Δ+0.7~0.8，垃圾/注入探针 7/7 三轮零漏网。
