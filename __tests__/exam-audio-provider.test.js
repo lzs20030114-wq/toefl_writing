@@ -116,12 +116,65 @@ test("first document interaction unlocks the shared controller (WebKit per-eleme
     </ExamAudioProvider>
   );
   expect(ref.ctx.controller).toBeTruthy();
-  // Practice pages have no "start exam" button, so the Provider arms a one-shot
+  // Practice pages have no "start exam" button, so the Provider arms a
   // capture-phase listener on document: the user's first tap anywhere completes
   // the unlock. Spy on the live controller and fire a click on the page body.
   const unlockSpy = jest.spyOn(ref.ctx.controller, "unlock");
   fireEvent.click(document.body);
   expect(unlockSpy).toHaveBeenCalled();
+});
+
+test("first-interaction listener is removed once unlock succeeds (returns true)", () => {
+  const ref = {};
+  const Consumer = makeConsumer(ref);
+  render(
+    <ExamAudioProvider>
+      <Consumer />
+    </ExamAudioProvider>
+  );
+  const controller = ref.ctx.controller;
+  const unlockSpy = jest.spyOn(controller, "unlock");
+  // Idle controller → unlock executes and returns true → listeners torn down.
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(1);
+  // A second gesture must NOT re-invoke unlock (both listeners already removed).
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(1);
+});
+
+test("first-interaction listener is RETAINED when unlock is skipped mid-playback, retries on next gesture", async () => {
+  const ref = {};
+  const Consumer = makeConsumer(ref);
+  render(
+    <ExamAudioProvider>
+      <Consumer />
+    </ExamAudioProvider>
+  );
+  const controller = ref.ctx.controller;
+
+  // Drive the controller into 'playing' so a first tap would be gated.
+  await act(async () => {
+    controller.play("https://cdn.example/clip.mp3", { section: "listening" });
+  });
+  await act(async () => {
+    audioEl.dispatchEvent(new Event("playing"));
+  });
+  expect(controller.getState()).toBe("playing");
+
+  const unlockSpy = jest.spyOn(controller, "unlock");
+  // First gesture lands mid-playback → unlock skipped (false) → listener stays.
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(1);
+  expect(controller.isUnlocked()).toBe(false);
+
+  // Playback ends → state leaves 'playing'.
+  await act(async () => {
+    audioEl.dispatchEvent(new Event("ended"));
+  });
+
+  // Second gesture: listener still attached, so unlock fires again — now it runs.
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(2);
 });
 
 test("an autoPlay AudioPlayer under the Provider plays through the shared element, not its own <audio>", async () => {

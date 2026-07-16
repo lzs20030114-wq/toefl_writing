@@ -30,9 +30,10 @@ const ANSWER_DURATION = 45; // seconds per question
  *   isPractice  — if true, no auto-advance
  */
 export function InterviewTask({ items, onComplete, onExit, isPractice = false }) {
-  // Exam-controller mode (mock exam only): question prompts play through the
-  // shared persistent element unlocked in the start-exam gesture. Null on the
-  // practice page — every legacy code path below is untouched there.
+  // Exam-controller mode: the mock-exam shell AND (since 20dcc36) the speaking
+  // practice page both mount an ExamAudioProvider, so question prompts play
+  // through the shared persistent element. examController is non-null in practice
+  // too — the legacy per-<Audio> paths below only run with no Provider mounted.
   const examAudio = useExamAudio();
   const examController = examAudio ? examAudio.controller : null;
   const [current, setCurrent] = useState(0);
@@ -799,6 +800,16 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
                 onRecordingStart={() => setRecordingStarted(true)}
                 onStopRef={recorderStopRef}
                 onAutoStartBlocked={() => setAutoBlocked(true)}
+                // Belt-and-braces: VoiceRecorder already stops the exam controller
+                // + Web Speech at record start; kill this task's legacy <Audio>
+                // prompt too so it can't leak into the mic if the user抢跑 before
+                // the question finished (auto-record normally starts only on end).
+                onRecordingStateChange={(recording) => {
+                  if (recording && audioElRef.current) {
+                    try { audioElRef.current.pause(); } catch {}
+                    audioElRef.current = null;
+                  }
+                }}
               />
 
               {/* Timer bar */}

@@ -58,14 +58,19 @@ function playOriginalSentence(sentence) {
  *   isPractice  — if true, show elapsed instead of countdown
  */
 export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
-  // Exam-controller mode (mock exam only): the SpeakingExamShell mounts an
-  // ExamAudioProvider, so sentence clips play through the shared persistent
-  // element unlocked in the start-exam gesture. Null on the practice page —
-  // every legacy code path below is untouched there.
+  // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
+  // practice page both mount an ExamAudioProvider, so sentence clips play through
+  // the shared persistent element unlocked on the first gesture. examController
+  // is therefore non-null in practice too — the legacy per-<Audio> paths below
+  // only run when no Provider is mounted (or the kill switch is on).
   const examAudio = useExamAudio();
   const examController = examAudio ? examAudio.controller : null;
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("listen"); // listen | record | review
+  // True from the instant a recording attempt begins until it ends — drives the
+  // replay-button lockout + the playSentence() guard so the reference audio can
+  // never sound (and leak into the mic / STT) while the user is recording.
+  const [isRecording, setIsRecording] = useState(false);
   const [recordings, setRecordings] = useState([]); // blobUrl per index
   const [finished, setFinished] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState(false);
@@ -140,6 +145,21 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     };
   }, []);
 
+  // Silence this component's own legacy playback paths (the exam controller is
+  // stopped by VoiceRecorder itself). Called the instant recording starts.
+  const stopLocalPlayback = useCallback(() => {
+    if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
+    if (currentOriginalAudio) { try { currentOriginalAudio.pause(); } catch {} currentOriginalAudio = null; }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  }, []);
+
+  // VoiceRecorder reports its record-intent here. Mirror it into state (locks
+  // the replay button) and, on start, kill any reference audio still sounding.
+  const handleRecordingStateChange = useCallback((recording) => {
+    setIsRecording(recording);
+    if (recording) stopLocalPlayback();
+  }, [stopLocalPlayback]);
+
   // (STT runs server-side now; no browser capability check needed.)
 
   // Exam-controller mode: mirror the per-instance audio.onplay/onended/onerror
@@ -182,6 +202,12 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // Speech API when there's no clip or the MP3 fails to load.
   const playSentence = useCallback(() => {
     if (!sentence) return;
+    // Defensive闸: never play the reference sentence while recording — a stray
+    // caller (or a not-yet-disabled button) must not leak the original into the
+    // mic / STT. The record phase is the only time this can fire; auto-play runs
+    // in the listen phase (isRecording false) and handleNext prewarm bypasses
+    // playSentence entirely, so neither is affected.
+    if (isRecording) return;
 
     // Stop anything currently sounding (a previous MP3 or a queued utterance).
     if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
@@ -278,7 +304,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
       return;
     }
     playViaTTS();
-  }, [ttsSupported, sentence, examController]);
+  }, [ttsSupported, sentence, examController, isRecording]);
 
   // Auto-play on new sentence
   useEffect(() => {
@@ -773,19 +799,29 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
               </div>
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
+                onRecordingStateChange={handleRecordingStateChange}
                 maxDuration={30}
               />
               <div style={{ marginTop: 20 }}>
                 <button
                   onClick={() => playSentence()}
+                  disabled={isRecording}
+                  title={isRecording ? "录音中不可重放（避免原句被录进麦克风）" : undefined}
                   style={{
-                    background: "none", border: "none", cursor: "pointer",
-                    fontSize: 13, color: SPK.color, fontWeight: 600, fontFamily: FONT,
-                    textDecoration: "underline",
+                    background: "none", border: "none",
+                    cursor: isRecording ? "not-allowed" : "pointer",
+                    fontSize: 13, color: isRecording ? C.t3 : SPK.color, fontWeight: 600, fontFamily: FONT,
+                    textDecoration: isRecording ? "none" : "underline",
+                    opacity: isRecording ? 0.6 : 1,
                   }}
                 >
                   Replay original sentence
                 </button>
+                {isRecording && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: C.t3 }}>
+                    录音中不可重放
+                  </div>
+                )}
               </div>
             </div>
           )}

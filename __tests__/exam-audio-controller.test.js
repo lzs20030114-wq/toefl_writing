@@ -196,3 +196,70 @@ test("onTelemetry receives lifecycle events", async () => {
   expect(types).toContain("loading");
   expect(types).toContain("playing");
 });
+
+// ── unlock() anti-interrupt gate ───────────────────────────────────────────
+// The gate skips ONLY while a clip is loading/playing (a mid-playback unlock
+// would swap in SILENT_WAV and 腰斩 the题干); every other state unlocks and
+// returns true so a first-interaction listener knows to stop retrying.
+
+test("unlock is skipped (returns false) while a clip is loading", () => {
+  const { c } = makeController();
+  c.play(SRC_A); // state → loading (no 'playing' event yet)
+  expect(c.getState()).toBe("loading");
+  expect(c.unlock()).toBe(false);
+  expect(c.isUnlocked()).toBe(false);
+  c.destroy(); // clear the armed silence watchdog
+});
+
+test("unlock is skipped (returns false) while a clip is playing", async () => {
+  const { c } = makeController();
+  c.play(SRC_A);
+  await flush();
+  audioEl.dispatchEvent(new Event("playing"));
+  expect(c.getState()).toBe("playing");
+  expect(c.unlock()).toBe(false);
+  expect(c.isUnlocked()).toBe(false);
+});
+
+test("unlock executes (returns true) from idle", () => {
+  const { c } = makeController();
+  expect(c.getState()).toBe("idle");
+  expect(c.unlock()).toBe(true);
+});
+
+test("unlock executes (returns true) from ended", async () => {
+  const { c } = makeController();
+  c.play(SRC_A);
+  await flush();
+  audioEl.dispatchEvent(new Event("ended"));
+  expect(c.getState()).toBe("ended");
+  expect(c.unlock()).toBe(true);
+});
+
+test("unlock executes (returns true) from blocked — iOS autoplay-block stays unlockable (no persistent-player regression)", async () => {
+  playMock.mockRejectedValueOnce(new DOMException("denied", "NotAllowedError"));
+  const { c } = makeController();
+  c.play(SRC_A);
+  await flush();
+  expect(c.getState()).toBe("blocked");
+  expect(c.unlock()).toBe(true);
+});
+
+test("unlock executes (returns true) from error", async () => {
+  const { c } = makeController();
+  c.play(SRC_A);
+  await flush();
+  audioEl.dispatchEvent(new Event("error"));
+  expect(c.getState()).toBe("error");
+  expect(c.unlock()).toBe(true);
+});
+
+test("unlock returns true when already unlocked (idempotent, no second play)", async () => {
+  const { c } = makeController();
+  c.unlock();
+  await flush();
+  expect(c.isUnlocked()).toBe(true);
+  const calls = playMock.mock.calls.length;
+  expect(c.unlock()).toBe(true);
+  expect(playMock.mock.calls.length).toBe(calls);
+});

@@ -10,9 +10,11 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
  * ExamAudioProvider — mounts ONE persistent exam audio controller for a whole
  * exam session (intro → modules → results) and owns the recovery overlay.
  *
- * Only the exam shells mount this Provider. Practice pages never do, so
- * useExamAudio() returns null there and every component falls back to its
- * pre-existing per-element audio path — practice behavior is untouched.
+ * Mounted by the exam shells AND (since 20dcc36) by the listening/speaking
+ * practice pages, so useExamAudio() is non-null there too and those pages route
+ * playback through the shared unlocked element. Pages that do NOT mount this
+ * Provider still get null from useExamAudio() and fall back to their per-element
+ * audio path. Kill switch (below) also reverts everyone to that legacy path.
  *
  * Kill switch: NEXT_PUBLIC_EXAM_AUDIO_DISABLED=1 renders children without a
  * context, reverting the exam flows to the old behavior with no code change
@@ -128,19 +130,28 @@ export function ExamAudioProvider({ children }) {
     // per-element autoplay unlock. Capture phase runs before any React bubble
     // handler, and unlock() is idempotent, so the exam shells' own explicit
     // unlock() calls (inside their start buttons) keep working unchanged.
+    //
+    // NOT {once:true}: unlock() now refuses to run while a clip is loading/
+    // playing (it would 腰斩 an auto-playing sentence). A tap that lands then
+    // returns false, so we keep the listeners and retry on the next gesture;
+    // only a real unlock (returns true) tears them down.
+    const removeFirstInteraction = () => {
+      document.removeEventListener("click", onFirstInteraction, { capture: true });
+      document.removeEventListener("touchend", onFirstInteraction, { capture: true });
+    };
     const onFirstInteraction = () => {
       const cc = controllerRef.current;
-      if (cc) cc.unlock();
+      if (!cc) return;
+      if (cc.unlock()) removeFirstInteraction();
     };
-    document.addEventListener("click", onFirstInteraction, { capture: true, once: true });
-    document.addEventListener("touchend", onFirstInteraction, { capture: true, once: true });
+    document.addEventListener("click", onFirstInteraction, { capture: true });
+    document.addEventListener("touchend", onFirstInteraction, { capture: true });
 
     return () => {
       unsub();
-      // once:true auto-removes a listener after it fires, but an unmount before
-      // the first interaction still has to clean these up explicitly.
-      document.removeEventListener("click", onFirstInteraction, { capture: true });
-      document.removeEventListener("touchend", onFirstInteraction, { capture: true });
+      // Listeners persist until an unlock actually lands, so an unmount before
+      // that (or after) still has to clean both of them up explicitly.
+      removeFirstInteraction();
       // Defer one tick: a StrictMode remount cancels this; a real unmount
       // lets it tear down the element + document listeners.
       destroyTimerRef.current = setTimeout(() => {

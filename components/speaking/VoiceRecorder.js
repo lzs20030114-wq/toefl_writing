@@ -95,11 +95,19 @@ function describePermissionError(err) {
  *                                          Existing callers that only consume
  *                                          earlier args stay compatible.
  *   onRecordingStart()            — called when recording actually starts (after mic permission)
+ *   onRecordingStateChange(bool)  — OPTIONAL. Fires true the instant a record
+ *                                   attempt begins (synchronously, BEFORE the
+ *                                   getUserMedia await) and false on every exit
+ *                                   path (stop, auto-stop, permission error,
+ *                                   recorder error, unmount). Lets the parent
+ *                                   mute/disable other sound sources so the
+ *                                   reference audio can't leak into the mic /
+ *                                   STT. Callers that omit it are unaffected.
  *   maxDuration                   — auto-stop after N seconds (0 = no limit)
  *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
  *   disabled                      — prevent interaction
  */
-export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false }) {
+export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordingStateChange, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false }) {
   // Exam-controller mode: silence the shared exam player before the mic opens
   // (iOS routes audio exclusively — playback fighting the mic garbles both).
   const examAudio = useExamAudio();
@@ -121,6 +129,21 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
   // recording duration (ms) for per-user quota tracking on the server.
   const startTimeRef = useRef(0);
 
+  // Latest onRecordingStateChange kept in a ref so signalRecording (and the
+  // unmount cleanup) can stay dependency-stable — otherwise a new inline
+  // callback each render would re-run the stop-everything cleanup.
+  const onRecordingStateChangeRef = useRef(onRecordingStateChange);
+  useEffect(() => { onRecordingStateChangeRef.current = onRecordingStateChange; }, [onRecordingStateChange]);
+  // Current record-intent, so we only emit on real transitions (idempotent —
+  // safe to call from every exit path, incl. cleanup, without double-firing).
+  const recordingIntentRef = useRef(false);
+  const signalRecording = useCallback((isRecording) => {
+    if (recordingIntentRef.current === isRecording) return;
+    recordingIntentRef.current = isRecording;
+    const cb = onRecordingStateChangeRef.current;
+    if (cb) cb(isRecording);
+  }, []);
+
   useEffect(() => {
     mountedRef.current = true;
     return () => { mountedRef.current = false; };
@@ -138,14 +161,26 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
       streamRef.current.getTracks().forEach(t => t.stop());
       streamRef.current = null;
     }
-  }, []);
+    // Unmounting mid-record (e.g. phase flips before onstop fires) must still
+    // release the parent's record-intent so its replay guard re-opens.
+    signalRecording(false);
+  }, [signalRecording]);
 
   useEffect(() => { return cleanup; }, [cleanup]);
 
   const startRecording = useCallback(async () => {
     if (disabled) return;
-    // Stop the shared exam player before opening the mic (no-op in practice).
+    // Signal record-intent SYNCHRONOUSLY, before any await — the whole point is
+    // to silence other sound sources the instant the user commits to recording,
+    // not after getUserMedia resolves (a window in which the reference audio
+    // could still be sounding and leak into the mic / STT). Idempotent.
+    signalRecording(true);
+    // Three-path stop, all synchronous, so nothing is audible when the mic opens
+    // (iOS routes audio exclusively — playback fighting the mic garbles both):
+    //  1) shared exam player  2) Web Speech  3) the parent's legacy <Audio>
+    //     paths (handled by the parent via onRecordingStateChange(true)).
     if (examAudio && examAudio.controller) examAudio.controller.stop();
+    try { window.speechSynthesis?.cancel(); } catch {}
     setPermError(null);
     setBlobUrl(null);
     setElapsed(0);
@@ -156,17 +191,19 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
     if (typeof navigator === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       setPermError("当前浏览器不支持麦克风访问，请使用最新版 Chrome / Safari / Edge，并通过 HTTPS 打开本站。");
       setState("idle");
+      signalRecording(false);
       return;
     }
     if (typeof MediaRecorder === "undefined") {
       setPermError("当前浏览器不支持录音（MediaRecorder API 缺失）。建议使用 Chrome 或最新版 Safari。");
       setState("idle");
+      signalRecording(false);
       return;
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (!mountedRef.current) { stream.getTracks().forEach(t => t.stop()); return; }
+      if (!mountedRef.current) { stream.getTracks().forEach(t => t.stop()); signalRecording(false); return; }
       streamRef.current = stream;
 
       const mimeType = pickMimeType();
@@ -182,6 +219,10 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
       };
 
       recorder.onstop = () => {
+        // Recording ended (manual stop OR maxDuration auto-stop both land here)
+        // — release record-intent so the parent re-enables replay. Do this even
+        // if unmounted; signalRecording is idempotent and cleanup covers it too.
+        signalRecording(false);
         if (!mountedRef.current) return;
         const blob = new Blob(chunksRef.current, { type: actualMimeRef.current });
         const url = URL.createObjectURL(blob);
@@ -196,6 +237,19 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
           streamRef.current.getTracks().forEach(t => t.stop());
           streamRef.current = null;
         }
+      };
+
+      // MediaRecorder failure mid-record → release record-intent and drop back
+      // to idle so the user (and the parent's replay guard) aren't left stuck.
+      recorder.onerror = () => {
+        signalRecording(false);
+        if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(t => t.stop());
+          streamRef.current = null;
+        }
+        if (!mountedRef.current) return;
+        setState("idle");
       };
 
       mediaRecorderRef.current = recorder;
@@ -216,6 +270,9 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
         }
       }, 250);
     } catch (err) {
+      // getUserMedia rejected (permission denied / no device / etc.) — recording
+      // never started, so release record-intent before bailing.
+      signalRecording(false);
       if (!mountedRef.current) return;
       setPermError(describePermissionError(err));
       setState("idle");
@@ -224,7 +281,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onStopRef
       // keeps its timer paused and prompts a manual tap instead of stranding.
       if (autoStart && onAutoStartBlocked) onAutoStartBlocked();
     }
-  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked, examAudio]);
+  }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked, examAudio, signalRecording]);
 
   const stopRecording = useCallback(() => {
     if (timerRef.current) {
