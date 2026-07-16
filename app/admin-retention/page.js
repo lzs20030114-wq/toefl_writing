@@ -52,13 +52,14 @@ function Card({ title, hint, right, children }) {
   );
 }
 
-// Amber notice shown in the feature sections when the feature_* views haven't
-// been created yet (migration unrun).
-function MigrationNotice() {
+// Amber notice shown in the feature sections when the backing views haven't
+// been created yet (migration unrun). `sql` names which migration to run —
+// 整科视图缺失指向 feature-engagement.sql，小题型视图缺失指向 -subtype.sql。
+function MigrationNotice({ sql = "scripts/sql/feature-engagement.sql" }) {
   return (
     <div style={{ padding: 16, fontSize: 12.5, color: "#9a3412", background: "#fff7ed", lineHeight: 1.6 }}>
       功能分析视图尚未创建。请在 Supabase SQL Editor 运行{" "}
-      <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>scripts/sql/feature-engagement.sql</code>
+      <code style={{ background: "#fef3c7", padding: "1px 5px", borderRadius: 4 }}>{sql}</code>
       {" "}后刷新本页。
     </div>
   );
@@ -122,7 +123,7 @@ function FeatureRanking({ features, segment }) {
             const repeatRate = pctOf(s.repeat2, s.users);
             const itemShare = pctOf(s.items, totalItems);
             return (
-              <tr key={f.feature} style={{ opacity: dim ? 0.45 : 1 }}>
+              <tr key={f.feature + "/" + (f.subtype || "")} style={{ opacity: dim ? 0.45 : 1 }}>
                 <td style={{ ...td, textAlign: "left", paddingLeft: 16 }}>
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                     <span style={{ width: 9, height: 9, borderRadius: 2, background: featureColor(f.feature), flexShrink: 0 }} />
@@ -172,7 +173,7 @@ function FeatureStickiness({ features }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12, padding: 16 }}>
       {rows.map((f) => (
-        <div key={f.feature} style={{ border: "1px solid " + C.bdr, borderRadius: 8, padding: "12px 12px", background: C.bg }}>
+        <div key={f.feature + "/" + (f.subtype || "")} style={{ border: "1px solid " + C.bdr, borderRadius: 8, padding: "12px 12px", background: C.bg }}>
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8 }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: featureColor(f.feature) }} />
             <span style={{ fontSize: 12.5, fontWeight: 700, color: C.t1 }}>{f.label}</span>
@@ -305,6 +306,7 @@ export default function AdminRetentionPage() {
   const [days, setDays] = useState(60);
   const [legacyOpen, setLegacyOpen] = useState(false);
   const [segment, setSegment] = useState("all"); // all | pro | free
+  const [grain, setGrain] = useState("feature"); // feature（按科目）| subtype（按小题型）
 
   async function fetchData(d) {
     setLoading(true);
@@ -333,6 +335,10 @@ export default function AdminRetentionPage() {
   const st = data?.stickiness;
   const features = data?.features || [];
   const featuresAvailable = data?.featuresAvailable;
+  // 排行 + 功能级留存两卡跟随 grain：subtype 用 subFeatures，各有独立可用性与迁移指引。
+  const grainRows = grain === "subtype" ? (data?.subFeatures || []) : features;
+  const grainAvailable = grain === "subtype" ? data?.subFeaturesAvailable : featuresAvailable;
+  const grainSql = grain === "subtype" ? "scripts/sql/feature-engagement-subtype.sql" : "scripts/sql/feature-engagement.sql";
   const pending = loading && !data;
   const skeleton = <div style={{ height: 140, background: "#f8f8f8" }} />;
 
@@ -373,27 +379,50 @@ export default function AdminRetentionPage() {
         {/* ① 功能吸引力排行 — 页面重心 */}
         <Card
           title="功能吸引力排行"
-          hint="按「触达用户」排序——它和复练率才是可跨功能比的吸引力信号。题目数各功能单位不同（不可比），已降为灰色投入量参考。全部历史。"
+          hint="按「触达用户」排序——它和复练率才是可跨功能比的吸引力信号。题目数各功能单位不同（不可比），已降为灰色投入量参考。支持按科目/按小题型两档粒度。全部历史。"
           right={
-            <div style={{ display: "flex", gap: 4 }}>
-              {[
-                { k: "all", label: "全部" },
-                { k: "pro", label: "Pro·无限额" },
-                { k: "free", label: "免费" },
-              ].map(({ k, label }) => (
-                <button
-                  key={k}
-                  onClick={() => setSegment(k)}
-                  style={{
-                    padding: "4px 10px", borderRadius: 6, fontSize: 11.5, fontWeight: segment === k ? 700 : 500,
-                    border: "1px solid " + (segment === k ? C.blue : C.bdr),
-                    background: segment === k ? C.blue : "#fff",
-                    color: segment === k ? "#fff" : C.t2, cursor: "pointer",
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {/* 粒度：按科目 / 按小题型 */}
+              <div style={{ display: "flex", gap: 4 }}>
+                {[
+                  { k: "feature", label: "按科目" },
+                  { k: "subtype", label: "按小题型" },
+                ].map(({ k, label }) => (
+                  <button
+                    key={k}
+                    onClick={() => setGrain(k)}
+                    style={{
+                      padding: "4px 10px", borderRadius: 6, fontSize: 11.5, fontWeight: grain === k ? 700 : 500,
+                      border: "1px solid " + (grain === k ? C.blue : C.bdr),
+                      background: grain === k ? C.blue : "#fff",
+                      color: grain === k ? "#fff" : C.t2, cursor: "pointer",
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+              {/* 分段：全部 / Pro / 免费 */}
+              <div style={{ display: "flex", gap: 4 }}>
+                {[
+                  { k: "all", label: "全部" },
+                  { k: "pro", label: "Pro·无限额" },
+                  { k: "free", label: "免费" },
+                ].map(({ k, label }) => (
+                  <button
+                    key={k}
+                    onClick={() => setSegment(k)}
+                    style={{
+                      padding: "4px 10px", borderRadius: 6, fontSize: 11.5, fontWeight: segment === k ? 700 : 500,
+                      border: "1px solid " + (segment === k ? C.blue : C.bdr),
+                      background: segment === k ? C.blue : "#fff",
+                      color: segment === k ? "#fff" : C.t2, cursor: "pointer",
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
             </div>
           }
         >
@@ -402,15 +431,15 @@ export default function AdminRetentionPage() {
               ⚠️ 「全部」口径下，<b>AI·限额</b>功能（写作/模考/口语）的做题量被免费 3 次/天卡住，和免费无限功能不可比。想公平比吸引力，切到 <b>Pro·无限额</b> 段看——那里没有额度墙。
             </div>
           ) : null}
-          {featuresAvailable === false ? <MigrationNotice /> : pending ? skeleton : <FeatureRanking features={features} segment={segment} />}
+          {grainAvailable === false ? <MigrationNotice sql={grainSql} /> : pending ? skeleton : <FeatureRanking features={grainRows} segment={segment} />}
         </Card>
 
-        {/* ② 功能级留存 — 替代按天激活 */}
+        {/* ② 功能级留存 — 替代按天激活（跟随 grain） */}
         <Card
           title="功能级留存（用了还回来）"
           hint="首次使用某功能 ≥7 天前的成熟用户里，之后又回来用同一功能的比例 · 替代「注册后第N天有没有登录」· 全部用户口径"
         >
-          {featuresAvailable === false ? <MigrationNotice /> : pending ? skeleton : <FeatureStickiness features={features} />}
+          {grainAvailable === false ? <MigrationNotice sql={grainSql} /> : pending ? skeleton : <FeatureStickiness features={grainRows} />}
         </Card>
 
         {/* ③ 首触功能 + ④ 周趋势 */}

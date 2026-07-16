@@ -40,6 +40,37 @@ const featureRank = (f) => {
   return i === -1 ? FEATURE_ORDER.length : i;
 };
 
+// 小题型完整展示名。只有多题型科目（阅读/听力/口语）才有真正的小题型；单一题型
+// 科目（bs/discussion/email/mock）的 subtype 恒等于 feature，直接沿用 FEATURE_LABELS。
+const SUBTYPE_LABELS = {
+  reading: {
+    ctw: "阅读 · 补全单词 CTW",
+    rdl: "阅读 · 生活场景 RDL",
+    ap: "阅读 · 学术短文 AP",
+    mock: "阅读 · 自适应模考",
+  },
+  listening: {
+    lcr: "听力 · 选择回应 LCR",
+    la: "听力 · 公告 LA",
+    lc: "听力 · 对话 LC",
+    lat: "听力 · 学术讲座 LAT",
+    mock: "听力 · 自适应模考",
+  },
+  speaking: {
+    repeat: "口语 · 跟读 Repeat",
+    interview: "口语 · 面试问答 Interview",
+    mock: "口语 · 模考",
+  },
+};
+function subtypeLabel(feature, subtype) {
+  const map = SUBTYPE_LABELS[feature];
+  // 单一题型科目：subtype === feature，用整科名（造句/学术讨论/邮件写作/写作模考）。
+  if (!map) return featureLabel(feature);
+  if (map[subtype]) return map[subtype];
+  // 多题型科目但 subtype 回退等于 feature = 缺标旧数据；其他值 = 未知原始值。
+  return subtype === feature ? `${featureLabel(feature)} · 未标注` : `${featureLabel(feature)} · ${subtype}`;
+}
+
 const num = (v) => {
   const n = Number(v);
   return Number.isFinite(n) ? n : 0;
@@ -75,47 +106,57 @@ const viewMissing = (e) =>
 // 复练率 / 占比) are computed page-side per selected segment. Sorted by 触达
 // 用户 (all) — the comparable "attraction" signal — NOT by 题目数, whose unit
 // differs per feature and is only meaningful within a feature.
+// 把一行 totals（+ 对应的 stickiness 行）映射成排行/留存卡共用的功能对象形状。
+// label / feature / aiGated 由调用方传入——整科粒度与小题型粒度各不相同。
+function toFeatureItem(totalsRow, stickyRow, { feature, label, aiGated }) {
+  const r = totalsRow;
+  const mature = stickyRow ? num(stickyRow.mature_users) : 0;
+  const returned = stickyRow ? num(stickyRow.returned_users) : 0;
+  return {
+    feature,
+    label,
+    aiGated,
+    active7d: num(r.active_7d),
+    active30d: num(r.active_30d),
+    stickinessMature: mature,
+    stickinessReturned: returned,
+    stickinessPct: pct(returned, mature),
+    // Raw counts per segment; page derives rates/shares from these.
+    segments: {
+      all: {
+        users: num(r.users),
+        sessions: num(r.sessions),
+        items: num(r.items),
+        repeat2: num(r.repeat_2plus),
+      },
+      pro: {
+        users: num(r.users_pro),
+        sessions: num(r.sessions_pro),
+        items: num(r.items_pro),
+        repeat2: num(r.repeat2_pro),
+      },
+      free: {
+        users: num(r.users_free),
+        sessions: num(r.sessions_free),
+        items: num(r.items_free),
+        repeat2: num(r.repeat2_free),
+      },
+    },
+  };
+}
+
 function buildFeatures({ totals, firstTouch, sticky, weekly }) {
   const totalsRows = totals || [];
   const stickyByFeature = new Map((sticky || []).map((r) => [r.feature, r]));
 
   const features = totalsRows
-    .map((r) => {
-      const s = stickyByFeature.get(r.feature);
-      const mature = s ? num(s.mature_users) : 0;
-      const returned = s ? num(s.returned_users) : 0;
-      return {
+    .map((r) =>
+      toFeatureItem(r, stickyByFeature.get(r.feature), {
         feature: r.feature,
         label: featureLabel(r.feature),
         aiGated: featureAiGated(r.feature),
-        active7d: num(r.active_7d),
-        active30d: num(r.active_30d),
-        stickinessMature: mature,
-        stickinessReturned: returned,
-        stickinessPct: pct(returned, mature),
-        // Raw counts per segment; page derives rates/shares from these.
-        segments: {
-          all: {
-            users: num(r.users),
-            sessions: num(r.sessions),
-            items: num(r.items),
-            repeat2: num(r.repeat_2plus),
-          },
-          pro: {
-            users: num(r.users_pro),
-            sessions: num(r.sessions_pro),
-            items: num(r.items_pro),
-            repeat2: num(r.repeat2_pro),
-          },
-          free: {
-            users: num(r.users_free),
-            sessions: num(r.sessions_free),
-            items: num(r.items_free),
-            repeat2: num(r.repeat2_free),
-          },
-        },
-      };
-    })
+      })
+    )
     .sort((a, b) => b.segments.all.users - a.segments.all.users || featureRank(a.feature) - featureRank(b.feature));
 
   const totalFirstTouch = (firstTouch || []).reduce((s, r) => s + num(r.users), 0);
@@ -146,6 +187,26 @@ function buildFeatures({ totals, firstTouch, sticky, weekly }) {
   return { available: true, features, firstTouch: firstTouchOut, weekly: weeklyOut };
 }
 
+// Build the 小题型 ranking rows from feature_subtype_totals / _stickiness. Each
+// row shares the feature-object shape above plus a `subtype` field; `feature` is
+// the parent subject (小题型继承所属科目的颜色/AI 门/排序权重). Sorted by 触达用户
+// (all)，与整科粒度一致。
+function buildSubFeatures({ totals, sticky }) {
+  const totalsRows = totals || [];
+  const stickyByKey = new Map((sticky || []).map((r) => [`${r.feature}/${r.subtype}`, r]));
+  return totalsRows
+    .map((r) => {
+      const item = toFeatureItem(r, stickyByKey.get(`${r.feature}/${r.subtype}`), {
+        feature: r.feature,
+        label: subtypeLabel(r.feature, r.subtype),
+        aiGated: featureAiGated(r.feature),
+      });
+      item.subtype = r.subtype;
+      return item;
+    })
+    .sort((a, b) => b.segments.all.users - a.segments.all.users || featureRank(a.feature) - featureRank(b.feature));
+}
+
 export async function GET(request) {
   try {
     if (!isAdminAuthorized(request)) return jsonError(401, "Unauthorized");
@@ -163,6 +224,8 @@ export async function GET(request) {
       { data: firstTouchRows, error: firstTouchErr },
       { data: featStickyRows, error: featStickyErr },
       { data: weeklyRows, error: weeklyErr },
+      { data: subTotalsRows, error: subTotalsErr },
+      { data: subStickyRows, error: subStickyErr },
     ] = await Promise.all([
       supabaseAdmin
         .from("cohort_retention_daily")
@@ -175,6 +238,8 @@ export async function GET(request) {
       supabaseAdmin.from("feature_first_touch").select("*"),
       supabaseAdmin.from("feature_stickiness").select("*"),
       supabaseAdmin.from("feature_weekly").select("*").order("week", { ascending: true }).limit(2000),
+      supabaseAdmin.from("feature_subtype_totals").select("*"),
+      supabaseAdmin.from("feature_subtype_stickiness").select("*"),
     ]);
 
     // Legacy cohort + stickiness views are still required (core stickiness cards).
@@ -201,6 +266,21 @@ export async function GET(request) {
         sticky: featStickyRows,
         weekly: weeklyRows,
       });
+    }
+
+    // 小题型视图独立可用性：可能整科视图已建、这个后建的迁移还没跑，故单独判定，
+    // 不影响 featuresAvailable。任一 viewMissing → 优雅降级；其他错误照旧 400。
+    const subFeatureErr = subTotalsErr || subStickyErr;
+    let subFeaturesAvailable;
+    let subFeatures;
+    if (viewMissing(subFeatureErr)) {
+      subFeaturesAvailable = false;
+      subFeatures = [];
+    } else if (subFeatureErr) {
+      return jsonError(400, subFeatureErr.message || "Load subtype engagement failed");
+    } else {
+      subFeaturesAvailable = true;
+      subFeatures = buildSubFeatures({ totals: subTotalsRows, sticky: subStickyRows });
     }
 
     const cohorts = (cohortRows || []).map((r) => {
@@ -257,6 +337,8 @@ export async function GET(request) {
       features: featureBlock.features,
       firstTouch: featureBlock.firstTouch,
       weekly: featureBlock.weekly,
+      subFeaturesAvailable,
+      subFeatures,
       summary: {
         cohortCount: cohorts.length,
         totalUsers,
