@@ -21,7 +21,9 @@ const ANSWER_DURATION = 45; // seconds per question
  *   1. Show question text + play TTS
  *   2. 45-second countdown timer, auto-record starts
  *   3. Auto-stop when timer hits 0 (or user stops early)
- *   4. After 4 questions: summary with replay for each
+ *   4. Advance immediately — STT + AI scoring run in the background
+ *   5. After 4 questions: summary with replay + AI analysis for each
+ *      (a deferred-finish wait holds the summary until in-flight work lands)
  *
  * Props:
  *   items       — array of { id, question, category, difficulty } (4 items)
@@ -55,8 +57,11 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const [transcriptError, setTranscriptError] = useState([]); // server error code per index when "failed"
   const [notPro, setNotPro] = useState(false); // sticky: once NOT_PRO, skip further uploads
   const [aiScores, setAiScores] = useState([]); // AI score result per index
-  const [scoring, setScoring] = useState(false); // AI scoring (DeepSeek) in progress
-  const [scoringError, setScoringError] = useState(null);
+  // Per-question AI scoring lifecycle: null | "processing" | "done" | "failed".
+  // Per-index (not a single boolean) because the user advances without waiting,
+  // so several questions can be scoring concurrently.
+  const [scoringStatus, setScoringStatus] = useState([]);
+  const [scoringErrors, setScoringErrors] = useState([]); // error message per index when "failed"
   const [expandedQ, setExpandedQ] = useState(null); // expanded question in summary
   // Hold the onComplete call when the user finishes while transcribes or AI
   // scoring are still in flight — otherwise the parent (mock exam shell)
@@ -284,15 +289,34 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   // Run AI scoring once we have a transcript. Takes transcript as a parameter
   // so we don't race against state updates from the transcribe step.
   const runScoring = useCallback(async (questionIdx, transcript) => {
-    setScoring(true);
-    setScoringError(null);
+    if (!transcript) {
+      setScoringStatus(prev => {
+        const next = [...prev];
+        next[questionIdx] = "failed";
+        return next;
+      });
+      setScoringErrors(prev => {
+        const next = [...prev];
+        next[questionIdx] = "未检测到语音内容，跳过评分";
+        return next;
+      });
+      return;
+    }
+    // Mark "processing" synchronously (before the await) — the deferred-finish
+    // wait in handleNext reads this array, and any gap between the transcript
+    // landing and this flag would let a fast Finish click slip past the wait.
+    setScoringStatus(prev => {
+      const next = [...prev];
+      next[questionIdx] = "processing";
+      return next;
+    });
+    setScoringErrors(prev => {
+      const next = [...prev];
+      next[questionIdx] = null;
+      return next;
+    });
     try {
       const q = items[questionIdx];
-      if (!transcript) {
-        setScoringError("未检测到语音内容，跳过评分");
-        setScoring(false);
-        return;
-      }
       const result = await scoreInterview({
         question: q.question,
         transcript,
@@ -302,10 +326,23 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
         next[questionIdx] = result;
         return next;
       });
+      setScoringStatus(prev => {
+        const next = [...prev];
+        next[questionIdx] = "done";
+        return next;
+      });
     } catch (err) {
-      setScoringError("评分失败: " + (err.message || "未知错误"));
+      setScoringErrors(prev => {
+        const next = [...prev];
+        next[questionIdx] = "评分失败: " + (err.message || "未知错误");
+        return next;
+      });
+      setScoringStatus(prev => {
+        const next = [...prev];
+        next[questionIdx] = "failed";
+        return next;
+      });
     }
-    setScoring(false);
   }, [items]);
 
   // Upload + handle a single blob. Pulled out of handleRecordingComplete so
@@ -453,7 +490,6 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const SUBMIT_WAIT_CAP_SEC = 60;
 
   const handleNext = useCallback(() => {
-    setScoringError(null);
     if (current < total - 1) {
       // Exam-controller mode: kick the NEXT question's clip synchronously in
       // this click (gesture-stack playback). The auto-play effect sees it and
@@ -472,15 +508,17 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       return;
     }
     // Last question — hold the finish call if anything's still in flight
-    // (server STT transcript OR DeepSeek AI scoring).
-    const pending = transcriptStatus.some(s => s === "processing") || scoring;
+    // (server STT transcript OR DeepSeek AI scoring, on ANY question: the user
+    // advances without waiting, so earlier questions may still be processing).
+    const pending = transcriptStatus.some(s => s === "processing")
+      || scoringStatus.some(s => s === "processing");
     if (pending) {
       setSubmitting(true);
       setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
       return;
     }
     finishSession();
-  }, [current, total, transcriptStatus, scoring, finishSession, examController, items]);
+  }, [current, total, transcriptStatus, scoringStatus, finishSession, examController, items]);
 
   // Escape hatch: aborts any in-flight uploads (no more billing) and fires
   // onComplete with whatever scores we have so far.
@@ -496,11 +534,11 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   useEffect(() => {
     if (!submitting) return;
     if (transcriptStatus.some(s => s === "processing")) return;
-    if (scoring) return;
+    if (scoringStatus.some(s => s === "processing")) return;
     setSubmitting(false);
     setSubmitWaitSeconds(0);
     finishSession();
-  }, [submitting, transcriptStatus, scoring, finishSession]);
+  }, [submitting, transcriptStatus, scoringStatus, finishSession]);
 
   // Countdown for the hard cap.
   useEffect(() => {
@@ -834,138 +872,93 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
             </div>
           )}
 
-          {/* Phase: Review */}
+          {/* Phase: Review — never blocks on STT / AI scoring. Those run in the
+              background (per-index status arrays) while the user moves on; the
+              full AI analysis for every question shows together on the summary
+              screen, same pattern as Listen & Repeat. */}
           {phase === "review" && (
-            <div>
-              {/* Step 1: server STT is still working — show before AI scoring starts */}
-              {transcriptStatus[current] === "processing" && (
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <div style={{
-                    width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
-                    background: "#F0F9FF", border: "2px solid #BAE6FD",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ fontSize: 22, animation: "spk-timer-pulse 1s ease-in-out infinite" }}>🎙</span>
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
-                    识别中...
-                  </div>
-                  <div style={{ fontSize: 12, color: C.t3 }}>
-                    正在转写录音，完成后会自动进入 AI 评分
-                  </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{
+                width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
+                background: "#DCFCE7", display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <span style={{ fontSize: 26 }}>✓</span>
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 12 }}>
+                Answer recorded
+              </div>
+
+              {/* Background work hint */}
+              {(transcriptStatus[current] === "processing" || scoringStatus[current] === "processing") && (
+                <div style={{
+                  margin: "0 auto 16px", padding: "10px 14px", maxWidth: 360,
+                  background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
+                  fontSize: 13, color: C.t2, lineHeight: 1.6,
+                }}>
+                  <span style={{ display: "inline-block", marginRight: 8 }}>⏳</span>
+                  正在识别与评分…（可以继续下一题，AI 解析会在完成后统一显示）
                 </div>
               )}
 
-              {/* Step 1 (failure): Pro gate */}
+              {/* STT failure: Pro gate */}
               {transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <div style={{ fontSize: 32, marginBottom: 8 }}>🔒</div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: "#92400E", marginBottom: 6 }}>
-                    语音识别为 Pro 专属
-                  </div>
-                  <div style={{ fontSize: 12, color: C.t2, marginBottom: 12, padding: "0 10px" }}>
-                    录音已保存。升级 Pro 后可解锁自动识别和 AI 评分。
-                  </div>
+                <div style={{
+                  margin: "0 auto 16px", padding: "12px 16px", maxWidth: 360,
+                  background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
+                  fontSize: 13, color: "#92400E", lineHeight: 1.6, textAlign: "left",
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
+                  录音已保存。升级 Pro 后可解锁自动识别和 AI 评分。
                 </div>
               )}
 
-              {/* Step 1 (failure): other errors */}
+              {/* STT failure: other errors */}
               {transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
                 <div style={{
-                  margin: "0 auto 16px", padding: "10px 14px",
+                  margin: "0 auto 16px", padding: "10px 14px", maxWidth: 360,
                   background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
-                  fontSize: 12, color: "#991B1B", lineHeight: 1.6, maxWidth: 360,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
                 }}>
                   识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可继续下一题。
                 </div>
               )}
 
-              {/* Step 2: AI scoring in progress (after transcribe finished) */}
-              {transcriptStatus[current] !== "processing" && scoring && (
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <div style={{
-                    width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
-                    background: SPK.soft, border: "2px solid #FDE68A",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ fontSize: 24, animation: "spk-timer-pulse 1s ease-in-out infinite" }}>AI</span>
-                  </div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
-                    评分中...
-                  </div>
-                  <div style={{ fontSize: 12, color: C.t3 }}>
-                    AI 正在分析您的回答
-                  </div>
+              {/* AI scoring failure */}
+              {scoringStatus[current] === "failed" && scoringErrors[current] && (
+                <div style={{
+                  margin: "0 auto 16px", padding: "8px 14px", maxWidth: 360,
+                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
+                }}>
+                  {scoringErrors[current]}
                 </div>
               )}
 
-              {/* Step 3: score / done-check (transcribe finished AND AI scoring done) */}
-              {transcriptStatus[current] !== "processing" && !scoring && (
-                <div style={{ textAlign: "center" }}>
-                  {aiScores[current] && !aiScores[current].error ? (
-                    <DimensionScoreCard score={aiScores[current]} />
-                  ) : (
-                    <div>
-                      <div style={{
-                        width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
-                        background: "#DCFCE7", display: "flex", alignItems: "center", justifyContent: "center",
-                      }}>
-                        <span style={{ fontSize: 26 }}>✓</span>
-                      </div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 8 }}>
-                        Answer recorded
-                      </div>
-                      {scoringError && (
-                        <div style={{
-                          padding: "8px 14px", background: "#FEF2F2", border: "1px solid #FECACA",
-                          borderRadius: 10, fontSize: 12, color: "#991B1B", marginBottom: 12,
-                        }}>
-                          {scoringError}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Transcript */}
-                  {transcripts[current] && (
-                    <div style={{
-                      marginTop: 12, padding: "10px 14px", background: "#F9FAFB",
-                      border: "1px solid " + C.bdr, borderRadius: 10,
-                      fontSize: 13, color: C.t2, lineHeight: 1.6, textAlign: "left",
-                      maxHeight: 100, overflowY: "auto",
-                    }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: C.t3, textTransform: "uppercase", marginBottom: 4 }}>Transcript</div>
-                      {transcripts[current]}
-                    </div>
-                  )}
-
-                  {recordings[current] && (
-                    <div style={{ marginTop: 16, marginBottom: 16 }}>
-                      <SummaryReplayButton blobUrl={recordings[current]} />
-                    </div>
-                  )}
-                  <Btn
-                    onClick={handleNext}
-                    disabled={submitting}
-                    style={{ background: SPK.color, borderColor: SPK.color }}
+              {recordings[current] && (
+                <div style={{ marginBottom: 16 }}>
+                  <SummaryReplayButton blobUrl={recordings[current]} />
+                </div>
+              )}
+              <Btn
+                onClick={handleNext}
+                disabled={submitting}
+                style={{ background: SPK.color, borderColor: SPK.color }}
+              >
+                {submitting
+                  ? `正在完成识别与评分… (${submitWaitSeconds}s)`
+                  : current < total - 1 ? "Next Question" : "Finish Interview"}
+              </Btn>
+              {submitting && (
+                <div style={{ marginTop: 8 }}>
+                  <button
+                    onClick={forceFinish}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      fontSize: 11, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                    }}
                   >
-                    {submitting
-                      ? `正在完成识别与评分… (${submitWaitSeconds}s)`
-                      : current < total - 1 ? "Next Question" : "Finish Interview"}
-                  </Btn>
-                  {submitting && (
-                    <div style={{ marginTop: 8 }}>
-                      <button
-                        onClick={forceFinish}
-                        style={{
-                          background: "none", border: "none", cursor: "pointer",
-                          fontSize: 11, color: C.t3, textDecoration: "underline", fontFamily: FONT,
-                        }}
-                      >
-                        跳过等待，直接完成（未识别的题目不计分）
-                      </button>
-                    </div>
-                  )}
+                    跳过等待，直接完成（未识别的题目不计分）
+                  </button>
                 </div>
               )}
             </div>
