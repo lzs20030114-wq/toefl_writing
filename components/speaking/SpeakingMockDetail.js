@@ -20,16 +20,23 @@ const C = {
   surface: "#ffffff",
   bg: "#f8faf9",
   bgSoft: "#f4f7f5",
-  correct: "#059669",
-  wrong: "#dc2626",
   purple: "#7C3AED",
   purpleSoft: "#f5f3ff",
-  shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
   shadowLg: "0 10px 40px rgba(10,40,25,0.08), 0 2px 10px rgba(10,40,25,0.04)",
 };
 
 const REPEAT_COLOR = "#F59E0B";
 const INTERVIEW_COLOR = "#EF4444";
+
+// Mini-bar color for the per-question overview strips. A genuine 0 is a real
+// score (red) — only "never recorded" and "recorded but unscored" (e.g. STT
+// failed) are gray.
+function miniBarColor(recorded, score, hi, mid) {
+  if (!recorded || score == null) return "#e2e8f0";
+  if (score >= hi) return "#22c55e";
+  if (score >= mid) return "#eab308";
+  return "#ef4444";
+}
 
 export function SpeakingMockDetail({ session, onClose, onDelete, accent = "#F59E0B" }) {
   const d = session?.details || {};
@@ -136,9 +143,9 @@ export function SpeakingMockDetail({ session, onClose, onDelete, accent = "#F59E
             </div>
             <div style={{ display: "flex", gap: 4 }}>
               {repeatItems.map((item, i) => {
-                const acc = item.score?.accuracy || 0;
-                const bg = !item.recorded ? "#e2e8f0" : acc >= 80 ? "#22c55e" : acc >= 60 ? "#eab308" : acc > 0 ? "#ef4444" : "#e2e8f0";
-                return <div key={i} title={`S${i + 1}: ${acc}%`} style={{ flex: 1, height: 8, borderRadius: 4, background: bg }} />;
+                const acc = item.score?.accuracy ?? null;
+                const label = !item.recorded ? "未录制" : acc == null ? "未评分" : `${acc}%`;
+                return <div key={i} title={`S${i + 1}: ${label}`} style={{ flex: 1, height: 8, borderRadius: 4, background: miniBarColor(item.recorded, acc, 80, 60) }} />;
               })}
             </div>
           </div>
@@ -150,9 +157,9 @@ export function SpeakingMockDetail({ session, onClose, onDelete, accent = "#F59E
             </div>
             <div style={{ display: "flex", gap: 4 }}>
               {interviewItems.map((item, i) => {
-                const sc = item.aiScore?.score || 0;
-                const bg = !item.recorded ? "#e2e8f0" : sc >= 4 ? "#22c55e" : sc >= 3 ? "#eab308" : sc > 0 ? "#ef4444" : "#e2e8f0";
-                return <div key={i} title={`Q${i + 1}: ${sc}/5`} style={{ flex: 1, height: 8, borderRadius: 4, background: bg }} />;
+                const sc = item.aiScore && !item.aiScore.error ? item.aiScore.score ?? null : null;
+                const label = !item.recorded ? "已跳过" : sc == null ? "未评分" : `${sc}/5`;
+                return <div key={i} title={`Q${i + 1}: ${label}`} style={{ flex: 1, height: 8, borderRadius: 4, background: miniBarColor(item.recorded, sc, 4, 3) }} />;
               })}
             </div>
           </div>

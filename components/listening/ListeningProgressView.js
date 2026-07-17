@@ -596,8 +596,12 @@ export function ListeningProgressView({ onBack }) {
       setExpandedKey(sessionKey(sessions[latestMockIdx]));
     } else {
       // params.get() already returns the decoded value — no extra decodeURIComponent.
+      // Match by millisecond timestamp, not string equality: the cloud roundtrip
+      // rewrites session.date from toISOString()'s "…Z" into timestamptz's
+      // "…+00:00", so the strings never compare equal for synced rows.
+      const targetTs = Number(new Date(val));
       const target = sessions.find(
-        (s) => s.date === val && s.details?.subtype === "mock",
+        (s) => Number(new Date(s.date)) === targetTs && s.details?.subtype === "mock",
       );
       if (target) setExpandedKey(sessionKey(target));
       else setMockNotFound(true);

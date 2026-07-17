@@ -561,7 +561,11 @@ export function ReadingProgressView({ onBack }) {
       setActiveMockSrcIdx(mockEntries[0].sourceIndex);
     } else if (val != null) {
       // params.get() already returns the decoded value — no extra decodeURIComponent.
-      const target = mockEntries.find((e) => e.session.date === val);
+      // Match by millisecond timestamp, not string equality: the cloud roundtrip
+      // rewrites session.date from toISOString()'s "…Z" into timestamptz's
+      // "…+00:00", so the strings never compare equal for synced rows.
+      const targetTs = Number(new Date(val));
+      const target = mockEntries.find((e) => Number(new Date(e.session.date)) === targetTs);
       if (target) setActiveMockSrcIdx(target.sourceIndex);
       else setMockNotFound(true);
     }

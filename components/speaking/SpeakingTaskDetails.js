@@ -11,6 +11,10 @@ import { NEUTRAL } from "../shared/ui";
 const ACCENT = { color: "#F59E0B", soft: "#FFFBEB" };
 const P = { ...NEUTRAL };
 
+// NOTE: deliberately not lib/utils.js `fmt` — that one zero-pads minutes
+// ("05:30"), this page's established display is "5:30".
+const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+
 // -- Repeat Detail --
 
 export function RepeatDetail({ session }) {
@@ -22,8 +26,6 @@ export function RepeatDetail({ session }) {
   if (items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细练习数据</div>;
   }
-
-  const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -167,8 +169,6 @@ export function InterviewDetail({ session }) {
   if (items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细练习数据</div>;
   }
-
-  const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

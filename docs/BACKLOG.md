@@ -6,7 +6,7 @@
 ## 需用户决策
 
 - [高] 盲审 routine 停摆：阅读/听力/口语 9 库自 2026-06-30 停止合库，388 条积压 staging；trigger 台账仅剩 R1（07-03 重建时盲审/R2 未建回）。需拍板重建独立 trigger 还是并回 R1。出处：QUESTION-PIPELINE-REVIEW-2026-07-07。
-- [高] 认证模型改造：6位码 bearer 可爆破（`app/api/auth/verify-code` 限流是内存滑动窗口，Vercel 多实例不全局生效）+ legacy 码自助升级仍在（同文件自动 upsert `legacy=pro`）。出处：PROJECT-REVIEW-2026-06-17，2026-07-05 复核仍在，未修复。
+- [高] 认证模型改造：6位码 bearer 可爆破（`app/api/auth/verify-code` 限流是内存滑动窗口，Vercel 多实例不全局生效）+ legacy 码自助升级仍在（同文件自动 upsert `legacy=pro`）。出处：PROJECT-REVIEW-2026-06-17，2026-07-05 复核仍在，未修复。另 2026-07-17 口语记录页 review 证实 `sessions` 表 RLS 为 `FOR ALL USING(true)`（login-code-management.sql），任意匿名客户端可跨用户删/改行——客户端 `deleteSessionCloud` 已补 `user_code` 过滤兜底，服务端策略仍需随本项一并收紧。
 - [中] v1.11.0 线上冒烟未做（12 题型导入→练习全链路，重点 edge-tts 首次 Vercel 真实环境跑通）+ `DASHSCOPE_API_KEY` 是否已在 Vercel Production 环境勾选未确认。
 - [中] 语音全库切换 gpt-4o-mini-tts 的 go/no-go：成本报价已出（全库一次性 ¥117，增量满勤 ¥50/月，2026-07-05 实测），只差 `/admin-voice-vote` 票数；lat/la/lcr persona 推广、音色定稿后重新生成听力库均挂在此决策之后。
 - [中] 插入题专属 UI 立项与否：2026-07-05 复测确认数据面已清零（154/154 恰 4 个 ■ 标记+双重校验兜底），但渲染复用通用选择题壳（■ 是普通字符，肉眼数方块选 ABCD），无"点方块插入"原生交互。接受现状 or 立项做专属组件。
@@ -21,6 +21,7 @@
 
 - [中] Interview 口语接入生产线：live 库仅 11 题（全题型最少），但 interview 不在 routine 12-bank 名单里（2026-05-31 校准时 deferred，无校准 prompt）——需先走校准流程（realExam2026 锚 + eval-spec）再入名单；按需出题 demand 文件会把它标为 `not_in_routine` 跳过。**前置依赖：上方「盲审 routine 停摆」拍板**（口语库合库通道本身停着）。出处：按需出题机制自审 2026-07-15。
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
+- [中] 记录页跨科共享化（2026-07-17 口语 review 遗留）：①`?mock=` 深链消费 effect 与 entries+sourceIndex 模式已是三科拷贝，应提 `lib/history/` 共享 hook（原有阅读/听力两处的登记项升级为三处）；②阅读/听力 `confirmClearAll` 仍逐条 `deleteSession`——阅读升序删在本地模式有下标位移误删隐患、听力还在用 normalize 后失效的 `indexOf`，应接入新的 `sessionStore.deleteSessions`（口语页已接）；③`AdaptiveExamShell` 与 `SpeakingExamShell` 的 reviewHref 构造重复，可抽共享 builder；④阅读页 activeMockSrcIdx 仍按 sourceIndex 锚定，乐观条目云同步翻转 id 时已开报告会自动收起（口语页已改按时间戳锚定，同法可移植）。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。
 - [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。

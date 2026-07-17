@@ -4,9 +4,10 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { FONT, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
-import { loadHist, deleteSession, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
+import { loadHist, deleteSession, deleteSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
+import { buildHistoryEntries } from "../../lib/history/viewModel";
 import { buildDailyAveragePoints, getSpeakingAverageScore } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
 import { getBandColor } from "../../lib/history/bandColor";
@@ -23,7 +24,6 @@ const P = {
 const SUBTYPE_META = {
   repeat:    { label: "听后复述", short: "复述", color: "#F59E0B", soft: "#FFFBEB", icon: "🔁" },
   interview: { label: "模拟面试", short: "面试", color: "#EF4444", soft: "#FEF2F2", icon: "🎤" },
-  mock:      { label: "口语模考", short: "模考", color: "#DC2626", soft: "#FEF2F2", icon: "🎯" },
 };
 
 function getSubtypeInfo(subtype) {
@@ -35,15 +35,21 @@ function getSubtypeInfo(subtype) {
 // the new unified "speaking" + subtype "mock" records.
 function normalizeSpeakingSession(s) {
   if (s?.type === "speaking-exam") {
+    // band/cefr may live at either level depending on where the record came
+    // from: localStorage keeps the original top-level fields, while the cloud
+    // roundtrip (buildScoreObj's default branch) drops them and only what was
+    // inside details survives. Read both.
+    const band = s.band ?? s.details?.band;
+    const cefr = s.cefr ?? s.details?.cefr;
     return {
       ...s,
       type: "speaking",
       mode: "mock",
-      band: s.band,
+      band,
       details: {
         subtype: "mock",
-        band: s.band,
-        cefr: s.cefr,
+        band,
+        cefr,
         repeatScore: s.details?.repeatScore,
         interviewScore: s.details?.interviewScore,
         avgRepeatAccuracy: s.details?.avgRepeatAccuracy,
@@ -106,16 +112,20 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
         </div>
         <span style={{ fontVariantNumeric: "tabular-nums", fontSize: 14, fontWeight: 750, color: scoreColor, background: `${scoreColor}0C`, padding: "3px 10px", borderRadius: 8 }}>{scoreDisplay}</span>
         <ChevronIcon open={expanded} color={P.textDim} />
-        <span role="button" tabIndex={0} title="删除"
-          onClick={e => { e.stopPropagation(); if (onDelete) onDelete(); }}
-          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: 6, color: P.textDim, cursor: "pointer", transition: "all 0.15s", flexShrink: 0 }}
-          onMouseEnter={e => { e.currentTarget.style.color = "#dc2626"; e.currentTarget.style.background = "#dc262612"; }}
-          onMouseLeave={e => { e.currentTarget.style.color = P.textDim; e.currentTarget.style.background = "transparent"; }}
-        >
-          <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-            <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
-          </svg>
-        </span>
+        {/* No onDelete = not deletable yet (a just-saved entry waiting on its
+            first cloud sync) — hide the affordance instead of no-opping. */}
+        {onDelete && (
+          <span role="button" tabIndex={0} title="删除"
+            onClick={e => { e.stopPropagation(); onDelete(); }}
+            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: 6, color: P.textDim, cursor: "pointer", transition: "all 0.15s", flexShrink: 0 }}
+            onMouseEnter={e => { e.currentTarget.style.color = "#dc2626"; e.currentTarget.style.background = "#dc262612"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = P.textDim; e.currentTarget.style.background = "transparent"; }}
+          >
+            <svg viewBox="0 0 16 16" width={13} height={13} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+              <path d="M2.5 4.5h11M5.5 4.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v1.5M6.5 7v4.5M9.5 7v4.5M3.5 4.5l.5 8.5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l.5-8.5" />
+            </svg>
+          </span>
+        )}
       </button>
       {/* Practice list only — mock entries render via the sidebar →
           right-pane SpeakingMockDetail flow, so no mock branch here. */}
@@ -205,7 +215,7 @@ function LatestMockCard({ session }) {
 
 // -- Mock list (sidebar) --
 
-function MockListSidebar({ entries, activeIdx, onSelect }) {
+function MockListSidebar({ entries, activeTs, onSelect }) {
   const [open, setOpen] = useState(true);
   return (
     <div
@@ -257,13 +267,13 @@ function MockListSidebar({ entries, activeIdx, onSelect }) {
               const bc = getBandColor(band);
               const rpt = s.details?.repeatScore;
               const intv = s.details?.interviewScore;
-              const isActive = activeIdx === entry.sourceIndex;
+              const isActive = activeTs === entry.ts;
               const date = new Date(s.date);
               const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
               return (
                 <button
-                  key={entry.sourceIndex}
-                  onClick={() => onSelect(isActive ? null : entry.sourceIndex)}
+                  key={entry.ts}
+                  onClick={() => onSelect(isActive ? null : entry.ts)}
                   style={{
                     padding: "10px 14px",
                     display: "flex",
@@ -335,9 +345,13 @@ function MockListSidebar({ entries, activeIdx, onSelect }) {
 export function SpeakingProgressView({ onBack }) {
   const [hist, setHist] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [expandedIdx, setExpandedIdx] = useState(null);
+  const [expandedTs, setExpandedTs] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [activeMockSrcIdx, setActiveMockSrcIdx] = useState(null);
+  const [activeMockTs, setActiveMockTs] = useState(null);
+  // True once the first cloud sync landed (or immediately for logged-out
+  // users): lets the deep-link effect fail loudly on a record that will never
+  // arrive instead of waiting forever. Mirrors ProgressView's synced guard.
+  const [synced, setSynced] = useState(false);
   // Set when a `?mock=<date>` deep link points at a record we can't find (e.g.
   // the exam's cloud save silently failed) — surfaced as an amber notice.
   const [mockNotFound, setMockNotFound] = useState(false);
@@ -349,30 +363,47 @@ export function SpeakingProgressView({ onBack }) {
     try { setCurrentUser(getSavedCode() || ""); } catch {}
     const refresh = () => setHist(loadHist());
     refresh();
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+    if (!getSavedCode()) setSynced(true);
+    const markSynced = () => setSynced(true);
+    const onUpdate = () => { refresh(); markSynced(); };
+    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
     window.addEventListener("storage", refresh);
+    const safety = setTimeout(markSynced, 1500);
     return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
+      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
       window.removeEventListener("storage", refresh);
+      clearTimeout(safety);
     };
   }, []);
 
-  // Build entries up-front so sourceIndex survives normalization (legacy
-  // speaking-exam records produce a new object ref, breaking indexOf lookups
-  // later). Prefer cloud row id when present.
+  // Entries come from the shared viewModel builder (row-id-first sourceIndex,
+  // same rule as the writing page), then get a numeric `ts` identity. UI state
+  // (active mock, expanded row, React keys) anchors on ts — NOT sourceIndex or
+  // the date string: when the cloud sync replaces a just-saved optimistic
+  // entry with the real row, sourceIndex flips from array index to row id and
+  // the date string flips format (toISOString "…Z" → timestamptz "…+00:00"),
+  // but the millisecond value survives both.
   const entries = useMemo(() => {
     if (!hist?.sessions) return [];
-    return hist.sessions
-      .map((s, i) => ({
-        original: s,
-        sourceIndex: Number.isFinite(Number(s?.id)) ? Number(s.id) : i,
+    const list = buildHistoryEntries(hist)
+      .filter((e) => e.session.type === "speaking" || e.session.type === "speaking-exam")
+      .map((e) => ({
+        session: normalizeSpeakingSession(e.session),
+        sourceIndex: e.sourceIndex,
+        ts: Number(new Date(e.session.date)),
       }))
-      .filter((e) => e.original.type === "speaking" || e.original.type === "speaking-exam")
-      .map((e) => ({ session: normalizeSpeakingSession(e.original), sourceIndex: e.sourceIndex }))
-      .sort((a, b) => new Date(b.session.date) - new Date(a.session.date));
+      .sort((a, b) => b.ts - a.ts);
+    // In cloud mode a just-saved entry has no row id yet; its array-index
+    // fallback sourceIndex must not reach deleteSession, which would read it
+    // as a row id. "Some entry has a row id" identifies cloud mode without
+    // poking sessionStore internals.
+    const cloud = list.some((e) => Number.isFinite(Number(e.session.id)));
+    return list.map((e) => ({
+      ...e,
+      deletable: !cloud || Number.isFinite(Number(e.session.id)),
+    }));
   }, [hist]);
 
-  const sessions = useMemo(() => entries.map((e) => e.session), [entries]);
   const mockEntries = useMemo(
     () => entries.filter((e) => e.session.details?.subtype === "mock"),
     [entries],
@@ -383,23 +414,26 @@ export function SpeakingProgressView({ onBack }) {
   );
 
   // Deep link: the post-exam ResultsCard sends `?mock=<sessionDate>` (its exact
-  // save identity) — or legacy `?mock=latest`. "latest" opens the newest mock
-  // (mockEntries is date-desc, so [0] is latest); an identity link opens THAT
-  // record by date, and if it isn't present (e.g. a cloud save that silently
-  // failed) we flag it. Strip the param afterward. Read window once (no
-  // useSearchParams — the page has no Suspense boundary and it would break the
-  // build).
+  // save identity) — or legacy `?mock=latest`. Match by millisecond timestamp,
+  // not string equality (see the entries comment). Wait for records while the
+  // cloud sync is in flight, but once `synced` is set resolve even with zero
+  // mocks so a failed save surfaces the notice instead of stalling with ?mock=
+  // stuck in the URL. Read window once (no useSearchParams — the page has no
+  // Suspense boundary and it would break the build).
   useEffect(() => {
     if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
-    if (mockEntries.length === 0) return; // wait for records (cloud sync)
     const params = new URLSearchParams(window.location.search);
     const val = params.get("mock");
+    if (val == null) { mockDeepLinkConsumed.current = true; return; }
+    if (mockEntries.length === 0 && !synced) return;
     mockDeepLinkConsumed.current = true;
     if (val === "latest") {
-      setActiveMockSrcIdx(mockEntries[0].sourceIndex);
-    } else if (val != null) {
-      const target = mockEntries.find((e) => e.session.date === val);
-      if (target) setActiveMockSrcIdx(target.sourceIndex);
+      if (mockEntries.length > 0) setActiveMockTs(mockEntries[0].ts);
+      else setMockNotFound(true);
+    } else {
+      const targetTs = Number(new Date(val));
+      const target = mockEntries.find((e) => e.ts === targetTs);
+      if (target) setActiveMockTs(target.ts);
       else setMockNotFound(true);
     }
     try {
@@ -407,7 +441,7 @@ export function SpeakingProgressView({ onBack }) {
       const qs = params.toString();
       window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
     } catch {}
-  }, [mockEntries]);
+  }, [mockEntries, synced]);
 
   const filteredPractice = useMemo(() => {
     if (filter === "all") return practiceEntries;
@@ -438,26 +472,26 @@ export function SpeakingProgressView({ onBack }) {
     { key: "interview", icon: SUBTYPE_META.interview.icon, short: SUBTYPE_META.interview.short, count: interviewSessions.length, color: SUBTYPE_META.interview.color, avg: interviewAvg !== null ? `平均 ${interviewAvg}/5` : "暂无" },
   ];
 
-  const activeMockEntry = mockEntries.find((e) => e.sourceIndex === activeMockSrcIdx) || null;
+  const activeMockEntry = mockEntries.find((e) => e.ts === activeMockTs) || null;
 
-  function handleDelete(sourceIndex) {
-    deleteSession(sourceIndex);
+  function handleDelete(entry) {
+    if (!entry?.deletable) return;
+    deleteSession(entry.sourceIndex);
     setHist(loadHist());
-    setExpandedIdx(null);
-    if (activeMockSrcIdx === sourceIndex) setActiveMockSrcIdx(null);
+    setExpandedTs(null);
+    if (activeMockTs === entry.ts) setActiveMockTs(null);
   }
 
   function confirmClearAll() {
     setShowClearConfirm(false);
-    // Delete speaking entries one-by-one to avoid wiping non-speaking history.
-    // Descending sourceIndex order: in local (logged-out) mode sourceIndex is an
-    // array index, and deleting low indices first would shift later ones onto
-    // the wrong (possibly non-speaking) records. Cloud row ids don't care.
-    [...entries]
-      .sort((a, b) => b.sourceIndex - a.sourceIndex)
-      .forEach((e) => deleteSession(e.sourceIndex));
+    // Batch-delete just the speaking entries (other subjects' history stays).
+    // deleteSessions does one cloud round trip + one resync, and handles the
+    // local-mode descending-index ordering itself. Entries still waiting on
+    // their first sync (not deletable) are skipped — the next sync surfaces
+    // them again for a retry.
+    deleteSessions(entries.filter((e) => e.deletable).map((e) => e.sourceIndex));
     setHist(loadHist());
-    setActiveMockSrcIdx(null);
+    setActiveMockTs(null);
   }
 
   if (!hist) {
@@ -485,7 +519,7 @@ export function SpeakingProgressView({ onBack }) {
 
       <TopBar title="口语练习记录" section="Speaking" onExit={onBack} accentColor={ACCENT.color} />
 
-      {sessions.length === 0 ? (
+      {entries.length === 0 ? (
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px" }}>
           <SurfaceCard style={{ padding: 40, textAlign: "center" }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginBottom: 8 }}>暂无口语练习记录</div>
@@ -533,8 +567,8 @@ export function SpeakingProgressView({ onBack }) {
             )}
             <MockListSidebar
               entries={mockEntries}
-              activeIdx={activeMockSrcIdx}
-              onSelect={(idx) => setActiveMockSrcIdx(idx)}
+              activeTs={activeMockTs}
+              onSelect={(ts) => setActiveMockTs(ts)}
             />
           </aside>
 
@@ -542,11 +576,11 @@ export function SpeakingProgressView({ onBack }) {
           <main style={{ flex: 1, minWidth: 0, animation: "fadeUp 0.5s cubic-bezier(0.25,1,0.5,1) 120ms both" }}>
             {activeMockEntry ? (
               <SpeakingMockDetail
-                key={activeMockEntry.sourceIndex}
+                key={activeMockEntry.ts}
                 session={activeMockEntry.session}
                 accent={ACCENT.color}
-                onClose={() => setActiveMockSrcIdx(null)}
-                onDelete={() => handleDelete(activeMockEntry.sourceIndex)}
+                onClose={() => setActiveMockTs(null)}
+                onDelete={activeMockEntry.deletable ? () => handleDelete(activeMockEntry) : null}
               />
             ) : (
               <div key="overview" style={{ animation: "slideInLeft 0.35s cubic-bezier(0.16,1,0.3,1)" }}>
@@ -561,11 +595,17 @@ export function SpeakingProgressView({ onBack }) {
                   }}
                 >
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, flex: "0 0 52%" }}>
-                    {statItems.map(({ key, ...rest }) => (
-                      <div key={key} style={{ display: "grid", ...(key === "all" ? { gridColumn: "1 / -1" } : {}) }}>
-                        <StatCard {...rest} avgMax={5} active={filter === key} onClick={() => setFilter(key)} />
-                      </div>
-                    ))}
+                    {statItems.map(({ key, ...rest }) =>
+                      key === "all" ? (
+                        // Only the full-width card needs a wrapper (StatCard
+                        // takes no style prop, so gridColumn goes on a shell).
+                        <div key={key} style={{ gridColumn: "1 / -1", display: "grid" }}>
+                          <StatCard {...rest} avgMax={5} active={filter === key} onClick={() => setFilter(key)} />
+                        </div>
+                      ) : (
+                        <StatCard key={key} {...rest} avgMax={5} active={filter === key} onClick={() => setFilter(key)} />
+                      )
+                    )}
                   </div>
                   <div
                     style={{
@@ -636,7 +676,7 @@ export function SpeakingProgressView({ onBack }) {
                         const showHeader = label !== lastLabel;
                         lastLabel = label;
                         return (
-                          <React.Fragment key={entry.sourceIndex}>
+                          <React.Fragment key={entry.ts}>
                             {showHeader && (
                               <div
                                 style={{
@@ -654,11 +694,11 @@ export function SpeakingProgressView({ onBack }) {
                             )}
                             <SessionRow
                               session={s}
-                              expanded={expandedIdx === entry.sourceIndex}
+                              expanded={expandedTs === entry.ts}
                               onToggle={() =>
-                                setExpandedIdx(expandedIdx === entry.sourceIndex ? null : entry.sourceIndex)
+                                setExpandedTs(expandedTs === entry.ts ? null : entry.ts)
                               }
-                              onDelete={() => handleDelete(entry.sourceIndex)}
+                              onDelete={entry.deletable ? () => handleDelete(entry) : null}
                             />
                           </React.Fragment>
                         );
