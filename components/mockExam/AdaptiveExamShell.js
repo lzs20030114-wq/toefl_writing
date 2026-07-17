@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
+import { C, FONT, READING_FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { AudioPlayer } from "../listening/AudioPlayer";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
@@ -205,7 +205,7 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
               borderBottom: `2px solid ${submitted ? (revealAnswers ? (isCorrect ? "#22c55e" : "#ef4444") : "#cbd5e1") : "#94a3b8"}`,
               background: submitted ? (revealAnswers ? (isCorrect ? "#f0fdf4" : "#fef2f2") : "#f1f5f9") : "#f8fafc",
               fontSize: 14,
-              fontFamily: FONT,
+              fontFamily: READING_FONT,
               padding: "2px 4px",
               outline: "none",
               color: C.t1,
@@ -231,7 +231,7 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
       <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>
         Complete the Words
       </div>
-      <div style={{ fontSize: 14, lineHeight: 2.0, color: C.t1, marginBottom: 16 }}>{rendered}</div>
+      <div style={{ fontSize: 14, lineHeight: 2.0, color: C.t1, marginBottom: 16, fontFamily: READING_FONT }}>{rendered}</div>
       {!submitted && (
         <Btn onClick={handleSubmit} style={{ fontSize: 13 }}>
           提交
@@ -398,7 +398,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
       <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>
         Question {currentQ + 1} of {questions.length}
       </div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 14 }}>
+      <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 14, fontFamily: READING_FONT }}>
         {getStem(question)}
       </div>
 
@@ -436,7 +436,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
                 borderRadius: 10,
                 cursor: submitted ? "default" : "pointer",
                 textAlign: "left",
-                fontFamily: FONT,
+                fontFamily: READING_FONT,
                 fontSize: 13,
                 color: C.t1,
                 lineHeight: 1.5,
@@ -505,7 +505,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
         >
           {/* LEFT — passage (scrolls independently) */}
           <div className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", paddingRight: 22, borderRight: `1px solid ${C.bdr}` }}>
-            <div style={{ fontSize: 14, lineHeight: 1.8, color: C.t1, whiteSpace: "pre-wrap" }}>
+            <div style={{ fontSize: 14, lineHeight: 1.8, color: C.t1, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
               {vocabWord
                 ? splitForHighlight(passage, vocabWord).map((seg, i) =>
                     seg.hit

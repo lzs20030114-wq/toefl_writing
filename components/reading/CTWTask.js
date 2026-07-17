@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { C, FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
+import { C, FONT, READING_FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
@@ -220,7 +220,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
         {/* Passage with blanks */}
         <SurfaceCard style={{ padding: "24px 28px", marginBottom: 20, lineHeight: 2.2 }}>
-          <div style={{ fontFamily: "'Georgia', 'Noto Serif SC', serif", fontSize: 15, color: C.t1, lineHeight: 2.2 }}>
+          <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>
             {renderPassage()}
           </div>
         </SurfaceCard>

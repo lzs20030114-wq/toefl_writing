@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { C, FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
+import { C, FONT, READING_FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 
@@ -146,7 +146,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
       <div className="tp-shell-inner" style={{ maxWidth: 1180, margin: "0 auto", padding: "20px 24px 40px" }}>
         {/* Centered passage heading — real-exam style */}
-        <h1 className="tp-reading-title" style={{ textAlign: "center", fontSize: 22, fontWeight: 700, color: C.t1, margin: "4px 0 18px", lineHeight: 1.3 }}>
+        <h1 className="tp-reading-title" style={{ textAlign: "center", fontSize: 22, fontWeight: 700, color: C.t1, margin: "4px 0 18px", lineHeight: 1.3, fontFamily: READING_FONT }}>
           {heading}
         </h1>
 
@@ -191,7 +191,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {item.genre}
             </div>
             {/* Passage */}
-            <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: FONT }}>
+            <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
               {vocabWord
                 ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
                     seg.hit
@@ -253,7 +253,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 第 {currentQ + 1} 题 / 共 {questions.length} 题
                 <span style={{ marginLeft: 8, color: accent.color }}>({question.question_type})</span>
               </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
                 {question.stem}
               </div>
 
@@ -286,7 +286,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                         padding: "11px 14px", borderRadius: 8,
                         background: bg, border: `1.5px solid ${border}`,
                         cursor: submitted ? "default" : "pointer",
-                        textAlign: "left", fontFamily: FONT, fontSize: 14, color,
+                        textAlign: "left", fontFamily: READING_FONT, fontSize: 14, color,
                         transition: "all 0.12s",
                       }}
                     >

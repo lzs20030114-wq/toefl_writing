@@ -22,6 +22,9 @@ export const C = {
   shadow: "0 1px 3px rgba(10,40,25,0.04), 0 1px 2px rgba(10,40,25,0.02)",
 };
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
+// 真题阅读字体：ETS 2026 考试界面实测为 Open Sans（换行度量 + 字形比对锁定，
+// 自托管声明在 app/fonts.css）。阅读/听力题面统一用它以贴近真实考试观感。
+export const READING_FONT = "'Open Sans','Noto Sans SC','Segoe UI',sans-serif";
 
 // Neutral design tokens shared by the per-skill progress views' local `P` palettes.
 // Each view spreads NEUTRAL and adds its own area accent, e.g.

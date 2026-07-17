@@ -1,4 +1,5 @@
 import "./mobile.css";
+import "./fonts.css";
 import ClientBootstrap from "../components/ClientBootstrap";
 import FirstSetSurveyTrigger from "../components/FirstSetSurveyTrigger";
 import VoiceUpgradeVoteTrigger from "../components/VoiceUpgradeVoteTrigger";
