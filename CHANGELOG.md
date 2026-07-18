@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-18 — v1.15.0
+
+- **口语引入屏——真题逐字范式开场 + 模考任务级旁白**（`3995523`，范式依据 `data/claudeGen/reports/SPEAKING-INTRO-PARADIGM-2026-07-16.md`，13 套跟读+14 套采访 ASR 逐字归纳）：跟读/采访每套题作答前新增场景句+指令句引入屏（`lib/speakingGen/introTemplates.js`：manager 场景名词重复不用代词、未点名场景按 set id 确定性哈希在 trainer/speaker × he/she 分流；`SpeakingIntroScreen` 含 Web Speech 朗读）；口语模考新增 repeatNarration/interviewNarration 任务级旁白屏（逐字真题旁白，不占考试计时）。组件测试 2 文件，线上冒烟三范式全命中。
+- **采访题不再阻塞等待 AI 解析**（`2ae7492`）：录完即进下一题，解析在结算页统一显示。
+- **阅读/听力 Pro 锁定屏补升级入口**（`19f3fb6`）：两独立页此前只有「返回首页」、无升级按钮（付费转化断头路）。补「升级 Pro」主按钮 + 页内自持 UpgradeModal——独立路由不在 HomePageClient 树下吃不到全局 open-upgrade-modal 事件（历史死按钮根源）；全项目 3 处 dispatch 复核均在监听树内。回归测试 2 例（`reading-listening-upgrade.component.test.js`），线上 free 码实测弹窗→支付跳转全链路通。
+- **AI 点数基建（零接线，用户零感知）**（`69bd75c`/`a2c78f9`/`79d7fcd`）：`lib/credits/`（catalog/service/repository/errors）双余额钱包——订阅/购买分桶、订阅点先耗、周期防重、跨周期退款自动转长期点；`credits-schema.sql` 幂等原子 RPC（refresh/grant/consume/refund，RLS 锁 service role，迁移已跑并登记）；`/api/credits/config` 双开关未开=404 不泄露候选价。三开关 `CREDITS_ENABLED`/`CREDITS_ENFORCEMENT_ENABLED`/`NEXT_PUBLIC_CREDITS_ENABLED` 全 false（Vercel 已显式置 false），评分/转写/支付现网零改动。`/pricing-preview` 内部预览页（noindex、无站内入口）：新价格表+点数规则+调价公告文案；**14 天旧价窗口拍板（2026-07-18）**——提价公告发布后 14 天内可按原价购买/续费，`NEW_PRICE_EFFECTIVE_DATE` 常量发公告时按「发布日+14 天」定稿。PGlite 真库行为测试（devDependency，jest 993→995）。
+- **积压收录**（已在 main）：阅读题面 Open Sans 自托管接入对齐真题（`115d493`）；BS 套内题目顺序打乱——live 库一次性重排+产线出厂即乱序（`d379500`）；口语模考介绍页 5 处中文乱码修复——JSX 属性里 \uXXXX 转义不解析（`777674f`）；留存后台按小题型粒度统计（`960f5be`，迁移 `feature-engagement-subtype.sql` 已跑登记）；留存分析框架指南文档入库（`2dd1c7e`）。
+
 ## 2026-07-18 — v1.14.0
 
 - **听力音频统一升级：edge-tts → gpt-4o-mini-tts persona 全库切换**（`/admin-voice-vote` 开票 78 票 67.9% 支持后执行；实施 Opus 子代理、Fable 规划/验收）：
