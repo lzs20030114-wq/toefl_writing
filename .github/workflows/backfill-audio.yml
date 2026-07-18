@@ -42,8 +42,11 @@ jobs:
       - name: Install deps
         run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 
-      - name: Backfill TTS audio (edge-tts, free)
-        run: node scripts/backfill-tts.mjs
+      - name: Backfill TTS audio (gpt-4o-mini-tts persona for listening; edge for speaking)
+        # Listening (lat/lc/la/lcr) renders with the gpt-4o-mini-tts persona voice → MP3 at
+        # new `.p1.mp3` paths; speaking (repeat/interview) always stays on edge-tts. openai
+        # mode hard-fails without OPENAI_API_KEY (no silent edge fallback).
+        run: node scripts/backfill-tts.mjs --tts-provider=openai
         env:
           # Required. Without these, lib/tts/storage.js falls back to writing local
           # /listening-audio/* paths into the bank — files that are .gitignored, never
@@ -51,6 +54,9 @@ jobs:
           # missing, so the job will fail loudly rather than write broken audio_urls.
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Required for --tts-provider=openai. Add repo secret OPENAI_API_KEY (user-configured).
+          # If absent, the backfill step fails loudly rather than downgrading to edge audio.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Commit + push any new audio
         shell: bash

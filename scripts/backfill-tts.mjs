@@ -18,6 +18,9 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { generateSpeech, generateConversation } = require('../lib/tts/edgeTts.js');
 const { uploadAudio } = require('../lib/tts/storage.js');
+// Persona render path — used ONLY in --tts-provider=openai mode, listening types only.
+const { renderSingleSpeaker, renderConversation } = require('../lib/tts/renderListening.js');
+const { encodeWavToMp3 } = require('../lib/tts/mp3Encode.js');
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 const argv = process.argv.slice(2);
@@ -25,6 +28,10 @@ const LIMIT_RAW = (argv.find(a => a.startsWith('--limit=')) || '').split('=')[1]
 const LIMIT = (LIMIT_RAW == null || LIMIT_RAW === '') ? Infinity : (parseInt(LIMIT_RAW, 10) || 0);
 const ONLY = (argv.find(a => a.startsWith('--only=')) || '').split('=')[1];
 const ONLY_SET = ONLY ? new Set(ONLY.split(',')) : null;
+// Provider switch: default edge (unchanged). openai = gpt-4o-mini-tts persona render → MP3,
+// LISTENING types only; speaking always stays edge (see backfillRepeat/backfillInterview).
+const PROVIDER = ((argv.find(a => a.startsWith('--tts-provider=')) || '').split('=')[1] || 'edge').trim();
+const OPENAI = PROVIDER === 'openai';
 
 const CONV_VOICE = { Woman: 'lcr_staff_female', Man: 'lcr_staff_male' };
 let budget = LIMIT;
@@ -52,7 +59,7 @@ async function uploadChecked(storagePath, buffer) {
   return res;
 }
 
-async function backfillSingle(bankPath, textFn, prefix, preset) {
+async function backfillSingle(bankPath, textFn, prefix, preset, type) {
   if (!existsSync(resolve(ROOT, bankPath))) return;
   const b = load(bankPath); let done = 0, fail = 0, skip = 0;
   for (const it of (b.items || [])) {
@@ -61,8 +68,17 @@ async function backfillSingle(bankPath, textFn, prefix, preset) {
     const text = textFn(it);
     if (!text || !it.id) { fail++; continue; }
     try {
-      const buf = await generateSpeech(String(text), { preset, format: 'mp3' });
-      const { url } = await uploadChecked(`${prefix}/${it.id}.mp3`, buf);
+      let buf, storagePath;
+      if (OPENAI) {
+        // Persona render → MP3 at a NEW .p1.mp3 path (never overwrites the old edge file).
+        const wav = await renderSingleSpeaker(it, type);
+        buf = await encodeWavToMp3(wav);
+        storagePath = `${prefix}/${it.id}.p1.mp3`;
+      } else {
+        buf = await generateSpeech(String(text), { preset, format: 'mp3' });
+        storagePath = `${prefix}/${it.id}.mp3`;
+      }
+      const { url } = await uploadChecked(storagePath, buf);
       it.audio_url = url; done++; budget--;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
@@ -79,9 +95,18 @@ async function backfillConversation(bankPath, prefix) {
     const turns = it.conversation || it.turns || [];
     if (!turns.length || !it.id) { fail++; continue; }
     try {
-      const segments = turns.map(t => ({ text: t.text, preset: CONV_VOICE[t.speaker] || 'lcr_staff_female' }));
-      const buf = await generateConversation(segments, { format: 'mp3' });
-      const { url } = await uploadChecked(`${prefix}/${it.id}.mp3`, buf);
+      let buf, storagePath;
+      if (OPENAI) {
+        // Persona multi-voice render → MP3 at a NEW .p1.mp3 path.
+        const wav = await renderConversation(it);
+        buf = await encodeWavToMp3(wav);
+        storagePath = `${prefix}/${it.id}.p1.mp3`;
+      } else {
+        const segments = turns.map(t => ({ text: t.text, preset: CONV_VOICE[t.speaker] || 'lcr_staff_female' }));
+        buf = await generateConversation(segments, { format: 'mp3' });
+        storagePath = `${prefix}/${it.id}.mp3`;
+      }
+      const { url } = await uploadChecked(storagePath, buf);
       it.audio_url = url; done++; budget--;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
@@ -147,7 +172,17 @@ async function backfillInterview(bankPath) {
 const want = (k) => !ONLY_SET || ONLY_SET.has(k);
 
 (async () => {
-  console.log(`TTS backfill (edge-tts) — limit ${LIMIT === Infinity ? '∞' : LIMIT}${ONLY ? ', only ' + ONLY : ''}\n`);
+  console.log(`TTS backfill (${PROVIDER}) — limit ${LIMIT === Infinity ? '∞' : LIMIT}${ONLY ? ', only ' + ONLY : ''}\n`);
+
+  // Preflight: openai mode MUST have a key. Never silently fall back to edge — that would
+  // let the upgrade quietly no-op and re-write edge audio while claiming to be persona.
+  if (OPENAI && !process.env.OPENAI_API_KEY) {
+    console.error(
+      '✗ --tts-provider=openai requires OPENAI_API_KEY. Refusing to fall back to edge-tts\n' +
+      '  (a silent fallback would make the persona upgrade a no-op). Set OPENAI_API_KEY and retry.'
+    );
+    process.exit(1);
+  }
 
   // Preflight: without Supabase creds every upload falls back to a local path that
   // 404s in production and is never committed. Fail fast with an actionable message
@@ -164,10 +199,11 @@ const want = (k) => !ONLY_SET || ONLY_SET.has(k);
   }
 
   try {
-    if (want('lat')) await backfillSingle('data/listening/bank/lat.json', it => it.transcript || it.lecture, 'lecture', 'lecture_male');
-    if (want('la')) await backfillSingle('data/listening/bank/la.json', it => it.announcement || it.transcript, 'announcement', 'lecture_female');
-    if (want('lcr')) await backfillSingle('data/listening/bank/lcr.json', it => it.speaker || it.prompt, 'choose-response', 'lcr_staff_male');
+    if (want('lat')) await backfillSingle('data/listening/bank/lat.json', it => it.transcript || it.lecture, 'lecture', 'lecture_male', 'lat');
+    if (want('la')) await backfillSingle('data/listening/bank/la.json', it => it.announcement || it.transcript, 'announcement', 'lecture_female', 'la');
+    if (want('lcr')) await backfillSingle('data/listening/bank/lcr.json', it => it.speaker || it.prompt, 'choose-response', 'lcr_staff_male', 'lcr');
     if (want('lc')) await backfillConversation('data/listening/bank/lc.json', 'conversation');
+    // Speaking ALWAYS stays on edge — this persona upgrade excludes口语 (repeat/interview).
     if (want('repeat')) await backfillRepeat('data/speaking/bank/repeat.json');
     if (want('interview')) await backfillInterview('data/speaking/bank/interview.json');
   } catch (e) {

@@ -187,11 +187,15 @@ async function generateTTS(item, id) {
     if (TTS_PROVIDER === "openai") {
       // Deterministic persona render: derivePersona (safe voices, 2 speakers always
       // distinct — fixes the marin/cedar 400 + named-speaker collapse), per-sentence
-      // split (no question-intonation bleed), loudness-normalized WAV concat.
+      // split (no question-intonation bleed), loudness-normalized WAV concat — then
+      // MP3-encoded (the WAV would be ~15x larger). `.p1.mp3` = a NEW storage path so the
+      // old edge .mp3 is never overwritten (CDN/cache safety); rollback = revert bank JSON.
       const { renderConversation } = require("../lib/tts/renderListening.js");
-      buffer = await renderConversation(item);
-      ext = "wav";
-      contentType = "audio/wav";
+      const { encodeWavToMp3 } = require("../lib/tts/mp3Encode.js");
+      const wav = await renderConversation(item);
+      buffer = await encodeWavToMp3(wav);
+      ext = "p1.mp3";
+      contentType = "audio/mpeg";
     } else {
       // Edge path unchanged (tone-blind, fast, default).
       const voiceMap = pickVoicePresets(item);

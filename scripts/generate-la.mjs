@@ -162,21 +162,28 @@ function pickVoicePreset(item) {
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
   try {
-    const preset = pickVoicePreset(item);
-    let buffer;
+    let buffer, storagePath;
 
     if (TTS_PROVIDER === "openai") {
-      const { generateSpeech } = require("../lib/tts/openaiTts.js");
-      buffer = await generateSpeech(item.announcement, { preset, format: "mp3" });
+      // Persona render (gpt-4o-mini-tts) → MP3. `.p1` = new path so the old edge .mp3 is
+      // never overwritten (CDN/cache safety); rollback = revert the bank JSON's audio_url.
+      const { renderSingleSpeaker } = require("../lib/tts/renderListening.js");
+      const { encodeWavToMp3 } = require("../lib/tts/mp3Encode.js");
+      const wav = await renderSingleSpeaker(item, "la");
+      buffer = await encodeWavToMp3(wav);
+      storagePath = `announcement/${id}.p1.mp3`;
     } else {
+      // Edge path unchanged: keyword-picked announcement preset.
+      const preset = pickVoicePreset(item);
       const { generateSpeech } = require("../lib/tts/edgeTts.js");
       buffer = await generateSpeech(item.announcement, { preset, format: "mp3" });
+      storagePath = `announcement/${id}.mp3`;
     }
 
-    console.log(`   [TTS ${TTS_PROVIDER}/${preset}] ${buffer.length} bytes`);
+    console.log(`   [TTS ${TTS_PROVIDER}] ${buffer.length} bytes -> ${storagePath}`);
 
     const { uploadAudio } = require("../lib/tts/storage.js");
-    const result = await uploadAudio(`announcement/${id}.mp3`, buffer);
+    const result = await uploadAudio(storagePath, buffer, "audio/mpeg");
     return result.url;
   } catch (err) {
     console.log(`   TTS failed for ${id}: ${err.message}`);

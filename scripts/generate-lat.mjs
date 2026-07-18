@@ -144,23 +144,30 @@ function collectExistingTopics() {
 async function generateTTS(item, id) {
   if (!WITH_TTS) return null;
   try {
-    // Alternate between lecture_male and lecture_female
-    const presetIndex = parseInt(id.split("_").pop(), 10) || 0;
-    const preset = presetIndex % 2 === 0 ? "lecture_male" : "lecture_female";
-
-    let buffer;
+    let buffer, storagePath;
     if (TTS_PROVIDER === "openai") {
-      const { generateSpeech } = require("../lib/tts/openaiTts.js");
-      buffer = await generateSpeech(item.transcript, { preset, format: "mp3" });
+      // Deterministic persona render (gpt-4o-mini-tts, gender-locked safe voice) → MP3.
+      // The `.p1` suffix writes to a NEW storage path instead of overwriting the old edge
+      // .mp3: CDN/browser caches keep serving the old file until the bank JSON's audio_url
+      // flips, and rollback is just `git revert` of the bank JSON (old files stay in place).
+      const { renderSingleSpeaker } = require("../lib/tts/renderListening.js");
+      const { encodeWavToMp3 } = require("../lib/tts/mp3Encode.js");
+      const wav = await renderSingleSpeaker(item, "lat");
+      buffer = await encodeWavToMp3(wav);
+      storagePath = `lecture/${id}.p1.mp3`;
     } else {
+      // Edge path unchanged: alternate lecture_male / lecture_female.
+      const presetIndex = parseInt(id.split("_").pop(), 10) || 0;
+      const preset = presetIndex % 2 === 0 ? "lecture_male" : "lecture_female";
       const { generateSpeech } = require("../lib/tts/edgeTts.js");
       buffer = await generateSpeech(item.transcript, { preset, format: "mp3" });
+      storagePath = `lecture/${id}.mp3`;
     }
 
-    console.log(`   [TTS ${TTS_PROVIDER}] ${buffer.length} bytes, preset: ${preset}`);
+    console.log(`   [TTS ${TTS_PROVIDER}] ${buffer.length} bytes -> ${storagePath}`);
 
     const { uploadAudio } = require("../lib/tts/storage.js");
-    const result = await uploadAudio(`lecture/${id}.mp3`, buffer);
+    const result = await uploadAudio(storagePath, buffer, "audio/mpeg");
     return result.url;
   } catch (err) {
     console.log(`   TTS failed for ${id}: ${err.message}`);
