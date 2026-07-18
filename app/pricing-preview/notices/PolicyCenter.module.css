@@ -1,0 +1,67 @@
+.page {
+  --ink: #17231e;
+  --muted: #617168;
+  --green: #087355;
+  min-height: 100vh;
+  padding: 42px 24px 80px;
+  color: var(--ink);
+  background: #f5f7f6;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans SC', 'Segoe UI', sans-serif;
+}
+.page * { box-sizing: border-box; }
+.header, .layout { width: min(1040px, 100%); margin: 0 auto; }
+.back { display: inline-block; margin-bottom: 30px; color: var(--muted); font-size: 12px; text-decoration: none; }
+.back:hover { color: var(--green); }
+.titleRow { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.eyebrow { color: var(--green); font-size: 9px; font-weight: 800; letter-spacing: 1.2px; }
+.titleRow h1 { margin: 7px 0 8px; font-size: 30px; letter-spacing: -.8px; }
+.titleRow p { margin: 0; color: var(--muted); font-size: 13px; }
+.version { padding: 9px 11px; color: #708078; background: #edf2ef; border: 1px solid #dbe5df; border-radius: 9px; font-size: 9px; line-height: 1.6; text-align: right; }
+.draftNotice { margin-top: 24px; padding: 13px 15px; color: #76521f; background: #fff7e8; border: 1px solid #f0debd; border-radius: 11px; font-size: 10px; line-height: 1.7; }
+.layout { display: grid; grid-template-columns: 180px 1fr; gap: 36px; margin-top: 38px; }
+.sidebar { position: sticky; top: 22px; align-self: start; display: grid; gap: 5px; }
+.sidebar > span { margin-bottom: 7px; color: #98a59e; font-size: 9px; font-weight: 700; }
+.sidebar a { padding: 8px 10px; color: var(--muted); border-radius: 8px; font-size: 10px; text-decoration: none; }
+.sidebar a:hover { color: var(--green); background: #eaf4ee; }
+.content { min-width: 0; }
+.content section { scroll-margin-top: 24px; padding: 28px 30px; background: #fff; border: 1px solid #dbe5df; border-radius: 17px; box-shadow: 0 8px 26px rgba(25,66,48,.045); }
+.content section + section { margin-top: 16px; }
+.sectionHeader { display: flex; gap: 13px; padding-bottom: 19px; margin-bottom: 20px; border-bottom: 1px solid #e6ece8; }
+.sectionHeader > span { width: 30px; height: 30px; flex: 0 0 auto; display: grid; place-items: center; color: var(--green); background: #e8f7f0; border-radius: 9px; font-size: 9px; font-weight: 800; }
+.sectionHeader h2 { margin: 0; font-size: 18px; }
+.sectionHeader p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+.content h3 { margin: 21px 0 8px; font-size: 12px; }
+.content h3:first-of-type { margin-top: 0; }
+.content p, .content li { color: #53635b; font-size: 11px; line-height: 1.8; }
+.content p { margin: 0; }
+.content ul { margin: 0; padding-left: 19px; }
+.content li + li { margin-top: 6px; }
+.definitionGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.definitionGrid > div { padding: 14px; background: #f7faf8; border: 1px solid #e2eae5; border-radius: 11px; }
+.definitionGrid strong { font-size: 11px; }
+.definitionGrid p { margin-top: 5px; font-size: 10px; }
+.responsibilityTable { overflow: hidden; border: 1px solid #dfe8e2; border-radius: 12px; }
+.responsibilityTable > div { display: grid; grid-template-columns: 100px 1fr 1fr; }
+.responsibilityTable > div + div { border-top: 1px solid #e7ede9; }
+.responsibilityTable span, .responsibilityTable strong { padding: 11px 13px; font-size: 9px; line-height: 1.6; }
+.responsibilityTable span + span { border-left: 1px solid #edf1ee; }
+.responsibilityTable strong { background: #f8faf9; }
+.tableHead { color: var(--muted); background: #f1f6f3; font-weight: 800; }
+.tableHead span + span { border-left-color: #e0e8e3; }
+.boundaryNote { margin-top: 14px; padding: 12px 14px; color: #53635b; background: #eff8f3; border: 1px solid #d5e9dd; border-radius: 11px; font-size: 10px; line-height: 1.7; }
+@media (max-width: 720px) {
+  .page { padding: 28px 15px 55px; }
+  .titleRow { display: block; }
+  .version { display: inline-block; margin-top: 16px; text-align: left; }
+  .layout { grid-template-columns: 1fr; gap: 18px; margin-top: 24px; }
+  .sidebar { position: static; display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .sidebar > span { display: none; }
+  .sidebar a { white-space: nowrap; background: #edf2ef; }
+  .content section { padding: 21px 19px; border-radius: 14px; }
+  .definitionGrid { grid-template-columns: 1fr; }
+  .responsibilityTable { overflow-x: auto; }
+  .responsibilityTable > div { min-width: 620px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page * { scroll-behavior: auto !important; }
+}
