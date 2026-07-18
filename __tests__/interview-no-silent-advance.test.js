@@ -53,6 +53,13 @@ test("blocked question audio keeps the prep phase and shows the overlay (no sile
     </ExamAudioProvider>
   );
 
+  // The task now opens on the setting/intro screen — tap 开始 to begin Q1.
+  await act(async () => {
+    screen.getByText("开始").click();
+    await Promise.resolve();
+    await Promise.resolve();
+  });
+
   // Prep phase on Q1.
   expect(screen.getByText(/Listening to the question/)).toBeInTheDocument();
 
@@ -82,13 +89,22 @@ test("recovered playback (retry → playing → ended) advances to the answer ph
     return el;
   });
 
-  playMock.mockRejectedValueOnce(new DOMException("denied", "NotAllowedError"));
+  // Persistent block through the intro-unlock + first question play, so the
+  // question lands on the recovery overlay (the 开始 unlock consumes a play()).
+  playMock.mockRejectedValue(new DOMException("denied", "NotAllowedError"));
 
   render(
     <ExamAudioProvider>
       <InterviewTask items={ITEMS} onComplete={jest.fn()} onExit={jest.fn()} isPractice={false} />
     </ExamAudioProvider>
   );
+
+  // Tap 开始 on the setting/intro screen to begin Q1.
+  await act(async () => {
+    screen.getByText("开始").click();
+    await Promise.resolve();
+    await Promise.resolve();
+  });
 
   await act(async () => {
     jest.advanceTimersByTime(600);
@@ -97,7 +113,8 @@ test("recovered playback (retry → playing → ended) advances to the answer ph
   });
   expect(screen.getByText("音频播放被浏览器暂停")).toBeInTheDocument();
 
-  // User taps 继续考试 (fresh gesture) → retry succeeds → clip plays → ends.
+  // From here play() succeeds — the user taps 继续考试 (fresh gesture) → retry.
+  playMock.mockResolvedValue(undefined);
   await act(async () => {
     screen.getByText("继续考试").click();
     await Promise.resolve();

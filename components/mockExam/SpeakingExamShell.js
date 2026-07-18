@@ -8,6 +8,8 @@ import { buildSpeakingExam } from "../../lib/mockExam/speakingPlanner";
 import { calculateSpeakingBand } from "../../lib/mockExam/speakingBand";
 import { saveSess } from "../../lib/sessionStore";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
+import { useNarration } from "../speaking/SpeakingIntroScreen";
+import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
 
 // ------ Constants ------
 
@@ -58,7 +60,13 @@ function getScoreColor(band) {
 /**
  * SpeakingExamShell — orchestrates a speaking mock exam.
  *
- * Phases: intro -> repeat -> transition -> interview -> results
+ * Phases: intro -> repeatNarration -> repeat -> interviewNarration -> interview
+ *         -> results
+ *
+ * The two *Narration phases play the verbatim real-exam task-level narration
+ * ("Speaking section…" before Task 1, "Take an interview…" before Task 2) —
+ * separate from each task's own per-set setting intro (rendered inside
+ * RepeatTask / InterviewTask). Neither narration phase runs the exam stopwatch.
  *
  * NOT adaptive — it is a straight-through 2-task exam.
  */
@@ -120,7 +128,7 @@ function SpeakingExamShellInner({ onExit }) {
       setFinalScore(null);
       setElapsed(0);
       setError(null);
-      setPhase("repeat");
+      setPhase("repeatNarration");
     } catch (e) {
       setError("\u521D\u59CB\u5316\u8003\u8BD5\u5931\u8D25: " + (e.message || "unknown error"));
     }
@@ -128,11 +136,18 @@ function SpeakingExamShellInner({ onExit }) {
 
   function handleRepeatComplete(result) {
     setRepeatResults(result);
-    setPhase("transition");
-    // Auto-advance after 2 seconds
-    setTimeout(() => {
-      setPhase("interview");
-    }, 2000);
+    setPhase("interviewNarration");
+  }
+
+  // Task-level narration screens → the corresponding task. The exam audio is
+  // already unlocked (start-exam click), and the narration itself is read via
+  // the browser's Web Speech API, so no controller gesture is needed here.
+  function handleRepeatNarrationContinue() {
+    setPhase("repeat");
+  }
+
+  function handleInterviewNarrationContinue() {
+    setPhase("interview");
   }
 
   function handleInterviewComplete(result) {
@@ -235,16 +250,18 @@ function SpeakingExamShellInner({ onExit }) {
       ? "Task 1 \u00B7 Listen & Repeat"
       : phase === "interview"
         ? "Task 2 \u00B7 Take an Interview"
-        : phase === "transition"
-          ? "\u51C6\u5907\u4E0B\u4E00\u9898..."
-          : phase === "results"
+        : phase === "repeatNarration"
+          ? "Speaking Section"
+          : phase === "interviewNarration"
+            ? "Task 2 \u00B7 Take an Interview"
+            : phase === "results"
             ? "\u8003\u8BD5\u7ED3\u679C"
             : "\u53E3\u8BED\u6A21\u8003";
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {/* Top bar — only show on intro, transition, and results */}
-      {(phase === "intro" || phase === "transition" || phase === "results") && (
+      {(phase === "intro" || phase === "repeatNarration" || phase === "interviewNarration" || phase === "results") && (
         <TopBar
           title={topBarTitle}
           section="Speaking | 模考模式"
@@ -273,20 +290,36 @@ function SpeakingExamShellInner({ onExit }) {
         </div>
       )}
 
+      {/* Task-level narration before Task 1 (verbatim real-exam "Speaking section…") */}
+      {phase === "repeatNarration" && (
+        <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
+          <NarrationCard
+            title="Speaking Section"
+            body={SPEAKING_SECTION_NARRATION}
+            onContinue={handleRepeatNarrationContinue}
+          />
+        </div>
+      )}
+
       {/* Repeat Phase — embed RepeatTask full-screen */}
       {phase === "repeat" && exam?.repeatSet && (
         <RepeatTask
           items={exam.repeatSet.sentences || []}
+          setInfo={exam.repeatSet}
           onComplete={handleRepeatComplete}
           onExit={onExit}
           isPractice={false}
         />
       )}
 
-      {/* Transition Phase */}
-      {phase === "transition" && (
+      {/* Task-level narration before Task 2 (verbatim real-exam "Take an interview…") */}
+      {phase === "interviewNarration" && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
-          <TransitionCard />
+          <NarrationCard
+            title="Take an Interview"
+            body={INTERVIEW_TASK_NARRATION}
+            onContinue={handleInterviewNarrationContinue}
+          />
         </div>
       )}
 
@@ -294,6 +327,7 @@ function SpeakingExamShellInner({ onExit }) {
       {phase === "interview" && exam?.interviewSet && (
         <InterviewTask
           items={exam.interviewSet.questions || []}
+          setInfo={exam.interviewSet}
           onComplete={handleInterviewComplete}
           onExit={onExit}
           isPractice={false}
@@ -442,52 +476,36 @@ function InfoBox({ label, value }) {
   );
 }
 
-function TransitionCard() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const start = Date.now();
-    const duration = 1800;
-    function tick() {
-      const elapsed = Date.now() - start;
-      const p = Math.min(1, elapsed / duration);
-      setProgress(p);
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }, []);
+/**
+ * Task-level narration screen \u2014 reads the verbatim real-exam section/task
+ * narration aloud (best-effort Web Speech) while the same text is on screen,
+ * then advances on an explicit \u7EE7\u7EED gesture. Not counted in the exam stopwatch.
+ */
+function NarrationCard({ title, body, onContinue }) {
+  useNarration(body);
 
   return (
-    <SurfaceCard style={{ padding: "48px 28px", textAlign: "center" }}>
-      <div style={{ fontSize: 40, marginBottom: 16 }}>{"\uD83C\uDFA4"}</div>
-      <h3 style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 12 }}>
-        {"\u63A5\u4E0B\u6765\u662F\u6A21\u62DF\u9762\u8BD5\u73AF\u8282..."}
-      </h3>
-      <p style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>
-        {"\u4F60\u5C06\u56DE\u7B54 4 \u9053\u9762\u8BD5\u95EE\u9898\uFF0C\u6BCF\u9898 45 \u79D2"}
-      </p>
-
-      {/* Progress bar */}
-      <div
+    <SurfaceCard style={{ padding: "36px 28px", textAlign: "center" }}>
+      <div style={{ fontSize: 40, marginBottom: 16 }}>{"\uD83D\uDD0A"}</div>
+      <h3 style={{ fontSize: 18, fontWeight: 800, color: C.t1, marginBottom: 16 }}>{title}</h3>
+      <p
         style={{
-          maxWidth: 300,
-          margin: "0 auto",
-          height: 6,
-          background: "#e2e8f0",
-          borderRadius: 3,
-          overflow: "hidden",
+          fontSize: 15,
+          color: C.t2,
+          lineHeight: 1.8,
+          textAlign: "left",
+          maxWidth: 560,
+          margin: "0 auto 26px",
         }}
       >
-        <div
-          style={{
-            width: `${progress * 100}%`,
-            height: "100%",
-            background: ACCENT,
-            borderRadius: 3,
-            transition: "width 50ms linear",
-          }}
-        />
-      </div>
+        {body}
+      </p>
+      <Btn
+        onClick={onContinue}
+        style={{ background: ACCENT, borderColor: ACCENT, padding: "12px 40px", fontSize: 15 }}
+      >
+        {"\u7EE7\u7EED"}
+      </Btn>
     </SurfaceCard>
   );
 }

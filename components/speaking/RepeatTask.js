@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
+import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
+import { buildRepeatIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
@@ -53,11 +55,12 @@ function playOriginalSentence(sentence) {
  *
  * Props:
  *   items       — array of { id, sentence, difficulty } (7 items)
+ *   setInfo     — { id, scenario, speaker_role } for the intro/setting narration
  *   onComplete  — called with session summary
  *   onExit      — back navigation
  *   isPractice  — if true, show elapsed instead of countdown
  */
-export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
+export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
   // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so sentence clips play through
   // the shared persistent element unlocked on the first gesture. examController
@@ -65,6 +68,12 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   // only run when no Provider is mounted (or the kill switch is on).
   const examAudio = useExamAudio();
   const examController = examAudio ? examAudio.controller : null;
+  // Intro/setting screen gate: the task shows the real-exam setting narration
+  // (scenario + "Listen to … Repeat only once.") and only begins the first
+  // sentence after the user taps 开始 — which is also where we explicitly unlock
+  // the shared exam audio element (a real gesture that roots out the zero-click
+  // autoplay unlock race on practice pages).
+  const [started, setStarted] = useState(false);
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("listen"); // listen | record | review
   // True from the instant a recording attempt begins until it ends — drives the
@@ -120,15 +129,16 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
   const total = items.length;
   const sentence = items[current];
 
-  // Elapsed timer
+  // Elapsed timer — only runs once the task has actually started (past the
+  // intro screen), so the reading time on the setting screen isn't counted.
   useEffect(() => {
-    if (finished) {
+    if (finished || !started) {
       if (elapsedRef.current) clearInterval(elapsedRef.current);
       return;
     }
     elapsedRef.current = setInterval(() => setElapsed(p => p + 1), 1000);
     return () => { if (elapsedRef.current) clearInterval(elapsedRef.current); };
-  }, [finished]);
+  }, [finished, started]);
 
   // Check TTS support
   useEffect(() => {
@@ -306,9 +316,10 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     playViaTTS();
   }, [ttsSupported, sentence, examController, isRecording]);
 
-  // Auto-play on new sentence
+  // Auto-play on new sentence — gated on `started` so nothing sounds until the
+  // user taps 开始 on the intro screen (its gesture unlocks the exam audio).
   useEffect(() => {
-    if (!finished && phase === "listen" && sentence) {
+    if (started && !finished && phase === "listen" && sentence) {
       // Exam-controller mode: handleNext already started this sentence inside
       // the click's gesture stack — don't double-play it from the timer.
       if (examController) {
@@ -320,7 +331,7 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
       const t = setTimeout(playSentence, 500);
       return () => clearTimeout(t);
     }
-  }, [current, phase, finished]);
+  }, [current, phase, finished, started]);
 
   // Upload a single blob to the STT endpoint and reflect the result into the
   // per-question state. Pulled out of handleRecordingComplete so we can also
@@ -575,6 +586,23 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
     handleNext();
   }, [handleNext]);
 
+  // Real-exam setting narration for the intro screen (deterministic per set).
+  const intro = useMemo(
+    () => buildRepeatIntro({
+      id: setInfo?.id,
+      scenario: setInfo?.scenario,
+      speaker_role: setInfo?.speaker_role,
+    }),
+    [setInfo?.id, setInfo?.scenario, setInfo?.speaker_role],
+  );
+
+  // 开始: unlock the shared exam audio element inside this real gesture (idempotent;
+  // examController may be null under the kill switch — guard it), then begin.
+  const handleStart = useCallback(() => {
+    if (examController) examController.unlock();
+    setStarted(true);
+  }, [examController]);
+
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   const difficultyBadge = (diff) => {
@@ -708,6 +736,19 @@ export function RepeatTask({ items, onComplete, onExit, isPractice = false }) {
           </div>
         </PageShell>
       </div>
+    );
+  }
+
+  // ── Intro / setting screen (before the first sentence) ──
+  if (!started) {
+    return (
+      <SpeakingIntroScreen
+        title="Listen & Repeat"
+        section="Speaking | Task 1"
+        lines={[intro.settingText, intro.instructionText]}
+        onStart={handleStart}
+        onExit={onExit}
+      />
     );
   }
 

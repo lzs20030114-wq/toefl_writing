@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
+import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
+import { buildInterviewIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
@@ -27,17 +29,22 @@ const ANSWER_DURATION = 45; // seconds per question
  *
  * Props:
  *   items       — array of { id, question, category, difficulty } (4 items)
+ *   setInfo     — { intro } for the setting/logistics intro narration
  *   onComplete  — called with session summary
  *   onExit      — back navigation
  *   isPractice  — if true, no auto-advance
  */
-export function InterviewTask({ items, onComplete, onExit, isPractice = false }) {
+export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
   // Exam-controller mode: the mock-exam shell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so question prompts play
   // through the shared persistent element. examController is non-null in practice
   // too — the legacy per-<Audio> paths below only run with no Provider mounted.
   const examAudio = useExamAudio();
   const examController = examAudio ? examAudio.controller : null;
+  // Intro/setting screen gate: show the real-exam setting + logistics narration
+  // and only start question 1 after the user taps 开始 — that gesture is where we
+  // unlock the shared exam audio element.
+  const [started, setStarted] = useState(false);
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("prep"); // prep | answer | review
   // Exam-controller mode only: the clip errored AND no speech engine exists —
@@ -94,12 +101,13 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
   const total = items.length;
   const question = items[current];
 
-  // Global elapsed
+  // Global elapsed — only runs once the task has started (past the intro screen),
+  // so reading the setting screen isn't counted as answering time.
   useEffect(() => {
-    if (finished) { if (totalTimerRef.current) clearInterval(totalTimerRef.current); return; }
+    if (finished || !started) { if (totalTimerRef.current) clearInterval(totalTimerRef.current); return; }
     totalTimerRef.current = setInterval(() => setTotalElapsed(p => p + 1), 1000);
     return () => { if (totalTimerRef.current) clearInterval(totalTimerRef.current); };
-  }, [finished]);
+  }, [finished, started]);
 
   // Check TTS support
   useEffect(() => {
@@ -189,9 +197,12 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     // synchronously can fall back to the system default voice (Chinese on a
     // macOS-CN setup), so wait for the voice list with a 600ms hard timeout.
     function playViaTTS() {
-      // No speech engine and no MP3: leave prep in place — the UI shows a manual
-      // "Start Recording" button so we don't auto-start recording unexpectedly.
-      if (!ttsSupported) return;
+      // No speech engine and no MP3 (or the clip errored): there is no way to
+      // deliver the question audibly, and the question text stays hidden — so
+      // surface the explicit error/retry/skip screen instead of a silent
+      // dead-end. (Reading the question aloud is the middle rung of the failure
+      // chain; this is the terminal rung.)
+      if (!ttsSupported) { setAudioFailed(true); return; }
       function speakWithVoices(voices) {
         window.speechSynthesis.cancel();
         const utt = new SpeechSynthesisUtterance(question.question);
@@ -247,22 +258,24 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
         audioElRef.current = null;
         advance();
       };
-      // Unreachable clip / decode error → rescue with Web Speech, or advance
-      // straight to the answer phase when there's no speech engine (the question
-      // is on screen, so the user can still answer — never leave them stuck).
+      // Unreachable clip / decode error → rescue with Web Speech (reads the
+      // question aloud); if there's no speech engine either, surface the
+      // error/retry/skip screen — the question text is hidden, so we must never
+      // drop the user into recording without them ever hearing it.
       audio.onerror = () => {
         if (audioElRef.current !== audio) return;
         audioElRef.current = null;
-        if (ttsSupported) playViaTTS(); else advance();
+        if (ttsSupported) playViaTTS(); else setAudioFailed(true);
       };
       const pr = audio.play();
       if (pr && typeof pr.catch === "function") {
-        // Autoplay blocked → advance to the answer phase anyway (the question is
-        // on screen); the user records their answer, no audio needed to proceed.
+        // Autoplay blocked (legacy no-Provider / kill-switch path only). The
+        // question is hidden, so we can't silently start answering — surface the
+        // error/retry screen; a retry tap is a fresh gesture that will play.
         pr.catch(() => {
           if (audioElRef.current !== audio) return;
           audioElRef.current = null;
-          advance();
+          setAudioFailed(true);
         });
       }
       return;
@@ -270,9 +283,10 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     playViaTTS();
   }, [ttsSupported, question, examController]);
 
-  // Auto-play question on prep phase
+  // Auto-play question on prep phase — gated on `started` so nothing sounds
+  // until the user taps 开始 on the intro screen (its gesture unlocks the audio).
   useEffect(() => {
-    if (phase === "prep" && question && !finished) {
+    if (started && phase === "prep" && question && !finished) {
       // Exam-controller mode: handleNext already started this question inside
       // the click's gesture stack — don't double-play it from the timer.
       if (examController) {
@@ -283,7 +297,7 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
       const t = setTimeout(playQuestion, 600);
       return () => clearTimeout(t);
     }
-  }, [current, phase, finished]);
+  }, [current, phase, finished, started]);
 
   // Start STT when recording begins
   // Run AI scoring once we have a transcript. Takes transcript as a parameter
@@ -551,6 +565,22 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     return () => clearTimeout(t);
   }, [submitting, submitWaitSeconds, forceFinish]);
 
+  // Real-exam setting + logistics narration for the intro screen.
+  const intro = useMemo(() => buildInterviewIntro({ intro: setInfo?.intro }), [setInfo?.intro]);
+
+  // 开始: unlock the shared exam audio element inside this real gesture, then begin.
+  const handleStart = useCallback(() => {
+    if (examController) examController.unlock();
+    setStarted(true);
+  }, [examController]);
+
+  // Failure-chain retry: re-attempt the question audio inside this fresh gesture
+  // (so a blocked clip can play). Never reveals the question text.
+  const retryPlay = useCallback(() => {
+    setAudioFailed(false);
+    playQuestion();
+  }, [playQuestion]);
+
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   const categoryBadge = (cat) => {
@@ -725,6 +755,19 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
     );
   }
 
+  // ── Intro / setting screen (before question 1) ──
+  if (!started) {
+    return (
+      <SpeakingIntroScreen
+        title="Interview"
+        section="Speaking | Task 2"
+        lines={[intro.settingText, intro.logisticsText]}
+        onStart={handleStart}
+        onExit={onExit}
+      />
+    );
+  }
+
   // ── Active question screen ──
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -783,47 +826,65 @@ export function InterviewTask({ items, onComplete, onExit, isPractice = false })
             )}
           </div>
 
-          {/* Question text */}
-          <div style={{
-            fontSize: 18, fontWeight: 700, color: C.t1, lineHeight: 1.7,
-            marginBottom: 28, textAlign: "center", padding: "0 12px",
-          }}>
-            {question.question}
-          </div>
+          {/* Question面 — HIDDEN during prep/answer (real exam plays the question
+              as audio only, never on screen). A neutral placeholder stands in;
+              the actual question is revealed only after answering (review) and
+              in the summary/feedback. The question text is still sent to scoring. */}
+          {phase === "review" ? (
+            <div style={{
+              fontSize: 18, fontWeight: 700, color: C.t1, lineHeight: 1.7,
+              marginBottom: 28, textAlign: "center", padding: "0 12px",
+            }}>
+              {question.question}
+            </div>
+          ) : (
+            <div style={{
+              fontSize: 16, fontWeight: 600, color: C.t2, lineHeight: 1.7,
+              marginBottom: 28, textAlign: "center", padding: "0 12px",
+            }}>
+              Please answer the interviewer's question.
+            </div>
+          )}
 
           {/* Phase: Prep */}
           {phase === "prep" && (
             <div style={{ textAlign: "center" }}>
-              <div style={{
-                width: 64, height: 64, borderRadius: "50%", margin: "0 auto 16px",
-                background: SPK.soft, border: "2px solid #FDE68A",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <span style={{ fontSize: 28 }}>🔊</span>
-              </div>
-              <div style={{ fontSize: 14, color: C.t3 }}>
-                Listening to the question... Recording starts after.
-              </div>
-              {/* Manual fallback only when there's neither an MP3 nor a speech
-                  engine — otherwise the audio plays and auto-advances. */}
-              {!ttsSupported && !question.audio_url && (
-                <Btn
-                  onClick={() => { setAutoRecordReady(true); setPhase("answer"); }}
-                  style={{ marginTop: 16, background: SPK.color, borderColor: SPK.color }}
-                >
-                  Start Recording
-                </Btn>
-              )}
-              {/* Exam-controller mode: the clip failed AND there's no speech
-                  engine — an explicit user-gesture advance, never a silent
-                  skip into recording. */}
-              {audioFailed && (
-                <Btn
-                  onClick={() => { setAudioFailed(false); setAutoRecordReady(true); setPhase("answer"); }}
-                  style={{ marginTop: 16, background: SPK.color, borderColor: SPK.color }}
-                >
-                  音频无法播放，点击开始作答
-                </Btn>
+              {audioFailed ? (
+                /* Terminal rung of the failure chain: the clip couldn't play AND
+                   Web Speech couldn't read the question aloud. The question text
+                   stays hidden — offer an explicit retry (fresh gesture) or a skip
+                   (records nothing → 0, advances), never a silent start. */
+                <div>
+                  <div style={{ fontSize: 32, marginBottom: 10 }}>🔇</div>
+                  <div style={{
+                    display: "inline-block", padding: "10px 16px", marginBottom: 18,
+                    background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
+                    fontSize: 14, fontWeight: 700, color: "#991B1B",
+                  }}>
+                    问题音频无法播放
+                  </div>
+                  <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+                    <Btn onClick={retryPlay} style={{ background: SPK.color, borderColor: SPK.color }}>
+                      重试播放
+                    </Btn>
+                    <Btn variant="secondary" onClick={handleNext}>
+                      跳过本题
+                    </Btn>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: "50%", margin: "0 auto 16px",
+                    background: SPK.soft, border: "2px solid #FDE68A",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 28 }}>🔊</span>
+                  </div>
+                  <div style={{ fontSize: 14, color: C.t3 }}>
+                    Listening to the question... Recording starts after.
+                  </div>
+                </>
               )}
             </div>
           )}

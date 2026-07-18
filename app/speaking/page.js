@@ -195,6 +195,7 @@ function SpeakingPageClient() {
     return (
       <InterviewTask
         items={questions}
+        setInfo={{ intro: activeSet.intro }}
         onComplete={saveSpeakingSession}
         onExit={taskOnExit}
         isPractice={isPractice}
@@ -208,6 +209,7 @@ function SpeakingPageClient() {
   return (
     <RepeatTask
       items={sentences}
+      setInfo={{ id: activeSet.id, scenario: activeSet.scenario, speaker_role: activeSet.speaker_role }}
       onComplete={saveSpeakingSession}
       onExit={taskOnExit}
       isPractice={isPractice}

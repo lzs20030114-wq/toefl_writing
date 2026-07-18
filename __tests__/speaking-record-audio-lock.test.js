@@ -119,6 +119,9 @@ test("RepeatTask: recording locks the 'Replay original sentence' button + shows 
   const items = [{ id: "s1", sentence: "The quick brown fox jumps over.", difficulty: "easy" }];
   render(<RepeatTask items={items} onComplete={jest.fn()} onExit={jest.fn()} isPractice />);
 
+  // New: the task opens on the setting/intro screen — tap 开始 to reach the task.
+  act(() => { fireEvent.click(screen.getByText("开始")); });
+
   act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
 
   const replayBtn = screen.getByText("Replay original sentence").closest("button");
