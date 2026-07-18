@@ -1,6 +1,17 @@
 # Changelog
 
-## 2026-07-16 — v1.13.0
+## 2026-07-18 — v1.14.0
+
+- **听力音频统一升级：edge-tts → gpt-4o-mini-tts persona 全库切换**（`/admin-voice-vote` 开票 78 票 67.9% 支持后执行；实施 Opus 子代理、Fable 规划/验收）：
+  - **persona 渲染推广到全部四题型**：新增 `lib/tts/speakerMeta.js`（单人题型 lat/la/lcr 的 `{gender, role}` 推导——id 字符码哈希奇偶定性别、确定性跨运行不变、LAT 恒教授）+ `renderSingleSpeaker`（`lib/tts/renderListening.js`，逐句渲染+响度归一化拼接，与 lc 的 `renderConversation` 同机）。`generate-lat/la/lcr.mjs` openai 分支弃旧 `VOICE_PRESETS` 裸调改接 persona 链路。
+  - **MP3 转码**：新增 `lib/tts/mp3Encode.js`（`@breezystack/lamejs` 纯 JS,无 ffmpeg 依赖;24kHz 原生零重采样;56kbps mono,WAV 缩 ~7 倍——LAT 讲座 WAV 单条 20MB 不可存）。加载 hack:该包 require 导出为空 IIFE,用 vm-eval 捕获 `lamejs` 绑定(jest/Node 双通)。
+  - **新存储路径 `{prefix}/{id}.p1.mp3`**：不覆盖旧文件→CDN/浏览器缓存不串味,回滚=revert bank JSON 即可(旧 662 个 `.mp3` 成孤儿,并入既有清理任务)。
+  - **听测定案(2026-07-18 人工 A/B,部分推翻 06-23 probe)**：①LA 通知「onyx+official/measured」太低沉→`bright-announcer` temperament+删 `voiceFor` 的 onyx-pa 特例(onyx 仅存 LC 双男声第二声);②**逐句问句升调指令有效**(V2 强指令可闻;06-23「contour 指令无效」结论被 wh 句污染)——`instructionsForSentence` 对非 wh 问句追加 `QUESTION_RISE_CLAUSE`,wh 疑问句保持自然降调(句首话语标记 so/well 先剥再判)。情绪/重读/年龄仍不可控,persona-only 该部分结论不变。
+  - **全库 662 条重渲染完成**(LAT149/LA100/LCR334/LC79,≈¥40):新增 `scripts/rerender-listening-audio.mjs`(断点续跑:`.p1.mp3` 即跳过、每 10 条 checkpoint 落盘、并发 2+429/5xx/fetch-failed 指数退避、`--only/--limit/--dry-run`)。中途 OpenAI 配额耗尽暂停一次(同账户 Whisper STT 连带,已充值恢复)。
+  - **增量出题切新引擎**:`backfill-tts.mjs` 加 `--tts-provider=edge|openai`(默认 edge 零变化;openai 仅听力四型,口语 repeat/interview 锁 edge;缺 `OPENAI_API_KEY` exit 1 拒绝静默回落),`backfill-audio.yml` 切 `--tts-provider=openai`(**需仓库 secret `OPENAI_API_KEY`**)。
+  - **多样性防退化门**:`__tests__/tts-persona-diversity.test.js` 跑在 live bank 上(性别少数方≥30%、音色≥2、题面 the man/woman 指涉与配音矛盾=0[当前 583 条审计仅 1 条指涉且一致]、LC 双声必不同)。新增 TTS 测试 5 文件,jest 120 套/993 全绿。
+- **投票弹窗下线**：`VoiceUpgradeVoteTrigger` 从 `app/layout.js` 摘除(组件/投票 API/后台统计页保留存档)。
+- **积压收录**（已在 main）：跟读录音期间题干重放+录音污染评分修复(`22edd35`)；首页公告栏拖拽调整大小(`34300e3`)。
 
 - **口语评分系统官方锚定重构**（`b838ffd`，全程锚定 ETS 官方 Scoring Guide）：官方锚点落库 `data/speakingScoring/`（OG 逐档 rubric + 4 份官方满分样例 + 1-6 band Performance Descriptors/CEFR 表 + Technical Manual 维度→特征映射 + 16 份分档校准样本[待人工核对]）。`repeatScorer` 从 LCS 线性百分比重写为官方 0-5 档位判定：虚词/内容词分桶计错 + 相邻换序算 1 次操作 + 缩略/数词归一（it's≡it is、twenty≡20 不再误扣），输出 `officialLevel`+`errorBreakdown`、UI 逐词高亮向后兼容。`interviewScorer` 升级：prompt 嵌官方 holistic rubric+满分样例 few-shot、三路取中位（`callAIMulti` samples=3 复用写作模式）、新增 `lib/speakingEval/calibration.js` 纯函数护栏（词数封顶 <10→1/<25→2.5/<45→3.5、跑题/复读题干 cap 2.0、维度-总分一致性收缩）。模考口语 band 改官方 raw 口径（repeat 35 : interview 20，旧 40/60 权重方向反了），抽出 `lib/mockExam/speakingBand.js`。防退化门 `scripts/speaking-scoring-gate.mjs` 直跑生产本体：官方满分样例 4/4 判 5（硬线 ≥4.5）、分档命中率 100%、档间均分单调。
 - **口语录音留存合规基建 + 测试期全员开放**（`a252093`，迁移 `speech-recording-retention.sql` 已跑并登记）：PIPL 同意 v2（境外第三方处理 + 测试期留存 ≤90 天 + 答题结果用于模型调优 + 可撤回即删）版本化落库 `users.speech_consent_version`，v1 老用户软性复弹；`speech_recordings` 私有桶 + 元数据表（RLS 无 policy 仅 service role）；转写成功后采样留存（v2 同意 + 每人每日 ≤2 段 + <2MB，await 防 Vercel 冻结吞单，全链路 fail-open）；撤回入口（口语页底部「语音授权管理」→二次确认→联动删桶删表，PURGE_FAILED 如实报错）；90 天清理脚本 `scripts/ops/cleanup-speech-recordings.mjs`（dry-run 默认）。`NEXT_PUBLIC_SPEAKING_OPEN_BETA=1` 开放 free 用户口语练习/模考，STT 配额 free 15 分钟/天、pro 60，未设=Pro 专属现状。
