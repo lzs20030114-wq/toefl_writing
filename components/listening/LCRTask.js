@@ -67,15 +67,26 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     if (phase !== "choose") return;
 
     const newAnswer = { itemId: currentItem.id, selected: answerValue || null };
-    const updatedAnswers = [...answers, newAnswer];
+    // Write by index (not append). The array fills in order — you can only
+    // reach index n after answering 0..n-1 — so this never leaves holes, and
+    // re-answering after a 回退 overwrites the slot in place.
+    const updatedAnswers = [...answers];
+    updatedAnswers[qIndex] = newAnswer;
     setAnswers(updatedAnswers);
 
     const nextIndex = qIndex + 1;
     if (nextIndex < items.length) {
       // Move to next question — no result shown
       setQIndex(nextIndex);
-      setPhase("listen");
-      setSelected(null);
+      if (updatedAnswers[nextIndex]) {
+        // Already answered (user went back then forward) — restore their pick
+        // instead of forcing a re-listen.
+        setPhase("choose");
+        setSelected(updatedAnswers[nextIndex].selected);
+      } else {
+        setPhase("listen");
+        setSelected(null);
+      }
       setHoverOption(null);
       setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
       audioPlayedRef.current = false;
@@ -100,6 +111,26 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     if (!selected || phase !== "choose") return;
     completeCurrentAnswer(selected);
   }, [selected, phase, completeCurrentAnswer]);
+
+  // Practice-only back navigation. Preserves an unsubmitted choice on the
+  // current question, then restores the previous question's (already-made)
+  // selection in the choose phase.
+  const handlePrev = useCallback(() => {
+    if (qIndex === 0) return;
+
+    let workingAnswers = answers;
+    if (phase === "choose" && selected) {
+      workingAnswers = [...answers];
+      workingAnswers[qIndex] = { itemId: currentItem.id, selected };
+      setAnswers(workingAnswers);
+    }
+
+    const prevIndex = qIndex - 1;
+    setQIndex(prevIndex);
+    setPhase("choose");
+    setSelected(workingAnswers[prevIndex]?.selected ?? null);
+    setHoverOption(null);
+  }, [qIndex, phase, selected, answers, currentItem]);
 
   useEffect(() => {
     if (!isTimed || phase !== "choose" || finished) return;
@@ -393,6 +424,14 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                   {isPractice ? "I'm ready — show options" : "开始答题"}
                 </button>
               </div>
+
+              {/* Practice back-nav: let the user return to an earlier question
+                  even before finishing the current audio. */}
+              {isPractice && qIndex > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <Btn onClick={handlePrev} variant="secondary">上一题</Btn>
+                </div>
+              )}
             </div>
           )}
 
@@ -459,8 +498,11 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                 })}
               </div>
 
-              {/* Submit button */}
-              <div style={{ display: "flex", justifyContent: "center", marginTop: 24 }}>
+              {/* Submit + practice-only prev nav */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: isPractice ? "space-between" : "center", marginTop: 24 }}>
+                {isPractice && (
+                  <Btn onClick={handlePrev} variant="secondary" disabled={qIndex === 0}>上一题</Btn>
+                )}
                 <Btn
                   onClick={handleSubmit}
                   disabled={!selected}
@@ -481,7 +523,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
         {isBatch && (
           <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 20 }}>
             {items.map((_, i) => {
-              const done = i < answers.length;
+              const done = !!answers[i];
               const current = i === qIndex;
               let bg = C.bdr;
               if (done) bg = ACCENT.color;
