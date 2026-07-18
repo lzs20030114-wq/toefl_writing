@@ -2,6 +2,7 @@ import "./mobile.css";
 import "./fonts.css";
 import ClientBootstrap from "../components/ClientBootstrap";
 import FirstSetSurveyTrigger from "../components/FirstSetSurveyTrigger";
+import PricingNoticeModal from "../components/pricing/PricingNoticeModal";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://treepractice.com";
 
@@ -88,6 +89,7 @@ export default function RootLayout({ children }) {
         <ClientBootstrap />
         {children}
         <FirstSetSurveyTrigger />
+        <PricingNoticeModal />
       </body>
     </html>
   );
