@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CTWTask } from "../../components/reading/CTWTask";
 import { RDLTask } from "../../components/reading/RDLTask";
 import { TopicPicker } from "../../components/shared/TopicPicker";
-import { getSavedTier } from "../../lib/AuthContext";
+import { getSavedTier, getSavedCode } from "../../lib/AuthContext";
+import UpgradeModal from "../../components/shared/UpgradeModal";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
@@ -130,9 +131,16 @@ function ReadingPageClient() {
   const timeLimit = isPractice ? 0 : (READING_TIME_LIMITS[type]?.[mode] || 300);
 
   const [isPro, setIsPro] = useState(false);
+  // 此页是独立路由，不在 HomePageClient 树下，全局 open-upgrade-modal 事件监听者到不了这里，
+  // 所以锁定屏自持 UpgradeModal（仿 app/speaking-exam/page.js）。
+  const [userCode, setUserCode] = useState("");
+  const [userTier, setUserTier] = useState("free");
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
   useEffect(() => {
     const t = getSavedTier();
     setIsPro(t === "pro" || t === "legacy");
+    setUserTier(t || "free");
+    setUserCode(getSavedCode() || "");
   }, []);
 
   // Practice mode: topic picker state
@@ -187,15 +195,28 @@ function ReadingPageClient() {
   if (!isPro) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui", background: "#F4F7F5" }}>
+        {upgradeOpen && (
+          <UpgradeModal
+            userCode={userCode}
+            currentTier={userTier}
+            onClose={() => setUpgradeOpen(false)}
+            onUpgraded={() => window.location.reload()}
+          />
+        )}
         <div style={{ textAlign: "center", maxWidth: 360, padding: "0 20px" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
           <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pro 专属功能</div>
           <div style={{ fontSize: 14, color: "#666", marginBottom: 20, lineHeight: 1.6 }}>
             阅读理解模块目前处于测试阶段，仅对 Pro 用户开放。升级 Pro 即可解锁。
           </div>
-          <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: 14 }}>
-            返回首页
-          </button>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+            <button onClick={() => setUpgradeOpen(true)} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "#F59E0B", color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14 }}>
+              升级 Pro
+            </button>
+            <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #ddd", background: "#fff", cursor: "pointer", fontSize: 14 }}>
+              返回首页
+            </button>
+          </div>
         </div>
       </div>
     );
