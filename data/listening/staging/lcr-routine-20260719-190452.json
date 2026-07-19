@@ -1,0 +1,239 @@
+{
+  "type": "listenChooseResponse",
+  "generated_at": "2026-07-19T19:13:06.000Z",
+  "total_generated": 10,
+  "total_accepted": 10,
+  "acceptance_rate": 1,
+  "batch_stats": {
+    "avg_flavor": 0.91,
+    "answer_distribution": {
+      "A": 3,
+      "B": 3,
+      "C": 2,
+      "D": 2
+    }
+  },
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why are we redoing the whole slide deck again?",
+      "options": {
+        "A": "Beats me — nobody told me either.",
+        "B": "The library closes at nine tonight.",
+        "C": "The slides look really colorful.",
+        "D": "Sometime after the meeting, I think."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问“为什么”重做幻灯片，A用习语“Beats me”（我也不知道）自然回应并表示同样困惑，属 idiomatic。B是 off_topic，只谈图书馆关门时间，与问题无关。C是 semantic_association_trap，由“slide deck”联想到幻灯片好看，却没回答为什么。D是 wrong_question_type，回答的是“什么时候”而非“为什么”。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_001",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I still can't find the reading list anywhere.",
+      "options": {
+        "A": "That novel was a great read.",
+        "B": "Actually, it's pinned on the course website.",
+        "C": "The cafeteria stops serving at eight.",
+        "D": "No, I haven't returned it yet."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人抱怨找不到阅读清单，B用话语标记“Actually”开头，间接告知它就在课程网站上，属 marker_led_indirect。A是 semantic_association_trap，由“reading”联想到小说。C是 off_topic，谈食堂时间，毫无关联。D是 wrong_question_type，回答的是“是否归还”而非“在哪里找”。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_002",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service is open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How late's the post office open today?",
+      "options": {
+        "A": "It's just past the bank.",
+        "B": "I need to mail a package.",
+        "C": "Well, they usually close around five.",
+        "D": "My cousin works downtown now."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。说话人问邮局开到多晚，C用“Well”开头间接给出大自五点关门，属 marker_led_indirect。A是 wrong_question_type，回答的是“在哪里”而非“开到多晚”。B是 semantic_association_trap，由“post office”联想到寄包裹。D是 off_topic，谈表弟工作，无关。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      },
+      "id": "lcr_v2_routine20260719190452_003",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Didn't the drilling next door keep you up?",
+      "options": {
+        "A": "The recycling goes out on Tuesdays.",
+        "B": "They're putting up a new fence.",
+        "C": "It's coming from the third floor.",
+        "D": "Honestly, I slept right through it."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。说话人问钻孔声是否吵得邻居睡不着，D用“Honestly”开头，间接表示自己一觉到天亮（含义“没被吵到”），属 marker_led_indirect。A是 off_topic，谈回收日程。B是 semantic_association_trap，由“drilling next door”联想到施工建围栏。C是 wrong_question_type，回答的是“声音从哪来”而非“是否吵到你”。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_004",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with a classmate about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where am I supposed to submit the lab report?",
+      "options": {
+        "A": "Your guess is as good as mine.",
+        "B": "The lab has new microscopes.",
+        "C": "Practice starts at six tonight.",
+        "D": "By Friday at the latest."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人问实验报告交到哪里，A用习语“Your guess is as good as mine”（我也不清楚）自然回应，属 idiomatic。B是 semantic_association_trap，由“lab report”联想到实验室设备。C是 off_topic，谈训练时间。D是 wrong_question_type，回答的是“什么时候交”而非“交到哪里”。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_005",
+      "flavor_score": 0.83
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Aren't you open for another hour or so?",
+      "options": {
+        "A": "We sell mostly office supplies.",
+        "B": "Actually, we're closing in ten minutes.",
+        "C": "The parking lot is being repaved.",
+        "D": "It's about a fifteen-minute drive."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人问是否还开一个小时，B用“Actually”开头，间接告知十分钟后就关门（含义“开不了那么久”），属 marker_led_indirect。A是 semantic_association_trap，由商店联想到卖什么。C是 off_topic，谈停车场重铺。D是 wrong_question_type，回答的是“开车多久”而非“是否还开着”。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_006",
+      "flavor_score": 0.95
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with a partner",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's a good topic for our presentation?",
+      "options": {
+        "A": "The projector in that room is broken.",
+        "B": "I finally returned those library books.",
+        "C": "How about renewable energy in cities?",
+        "D": "Sometime next week, probably."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。说话人问该选什么选题，C用反问“How about...?”提出具体选题并推进对话，属 counter_question。A是 semantic_association_trap，由“presentation”联想到投影仪。B是 off_topic，谈归还图书。D是 wrong_question_type，回答的是“什么时候”而非“选什么题”。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_007",
+      "flavor_score": 1
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm trying to find the nearest pharmacy.",
+      "options": {
+        "A": "The weather turned cold this morning.",
+        "B": "I take that same medicine too.",
+        "C": "Yes, it opens at nine.",
+        "D": "Are you okay with a short walk?"
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。说话人说想找最近的药店，D用反问“Are you okay with a short walk?”推进对话、准备指路，属 counter_question。A是 off_topic，谈天气。B是 semantic_association_trap，由“pharmacy”联想到自己也吃同样的药。C是 wrong_question_type，回答的是“几点开门”而非“在哪里”。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_008",
+      "flavor_score": 0.92
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a classmate about a midterm exam",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When's the midterm actually starting on Monday?",
+      "options": {
+        "A": "The exam covers the first five chapters.",
+        "B": "Well, the email said nine sharp.",
+        "C": "My roommate adopted a kitten yesterday.",
+        "D": "In the big lecture hall, I think."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。说话人问期中考周一几点开始，B用“Well”开头，间接引用邮件告知九点整，属 marker_led_indirect。A是 semantic_association_trap，由“midterm”联想到考试范围。C是 off_topic，谈室友领养小猫。D是 wrong_question_type，回答的是“在哪里考”而非“几点考”。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_009",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "general_daily",
+      "situation": "someone struggling to open a jar in the kitchen",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "I can't get this jar to open.",
+      "options": {
+        "A": "Here, let me give it a try.",
+        "B": "That jam is really tasty.",
+        "C": "The bus was late again today.",
+        "D": "Yes, I bought it yesterday."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人抱怨杆子拧不开，A不去回答字面问题而直接上手帮忙解决困难，属 context_shift。B是 semantic_association_trap，由“jar”联想到果酱好吃。C是 off_topic，谈公交车晚点。D是 wrong_question_type，回答的是“是否买了”而非帮忙开盖。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_v2_routine20260719190452_010",
+      "flavor_score": 0.92
+    }
+  ],
+  "rejected": []
+}

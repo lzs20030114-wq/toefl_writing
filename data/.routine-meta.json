@@ -1,39 +1,53 @@
 {
-  "session_id": "routine-20260718-190442",
-  "completed_at": "2026-07-18T19:08:42Z",
-  "duration_minutes": 4,
+  "session_id": "routine-20260719-190452",
+  "completed_at": "2026-07-19T19:13:30.000Z",
+  "duration_minutes": 9,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号仅点名 CTW（最快用户约 4 天刷穿）：补 20 题，20 个全新话题横跨 12 个学科，长度 76.6 词 / 5 句全部达标。",
+  "highlight": "按需信号驱动：仅补 CTW 阅读 20 题 + LCR 听力 10 题；CTW 难度 5易/8中/7难全新话题，LCR 平均 flavor 0.91、答案分布均衡。",
   "commit_sha": "",
   "results": {
     "reading-ctw": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "biology/plant defenses against insects",
-        "biology/how bees communicate",
-        "zoology/sea turtle navigation",
-        "physiology/the human sense of smell",
-        "environmental_science/rainwater harvesting",
-        "botany/reforestation projects",
-        "psychology/the anchoring effect",
-        "psychology/first impressions",
-        "history/early lighthouses",
-        "history/the ancient Olympic Games",
-        "geology/hot springs and geothermal energy",
-        "geology/limestone cave formation",
-        "astronomy/the solar wind",
-        "astronomy/the structure of the Milky Way",
-        "anthropology/the domestication of dogs",
-        "technology/the invention of the battery",
-        "chemistry/rust and corrosion",
-        "physics/friction",
-        "meteorology/how snowflakes form",
-        "art/the art of calligraphy"
+        "biology/animal migration",
+        "environmental_science/mangrove forests",
+        "psychology/spaced repetition",
+        "history/the printing press",
+        "geology/soil composition",
+        "astronomy/lunar craters",
+        "zoology/bat echolocation",
+        "botany/seed dispersal",
+        "chemistry/fermentation",
+        "physics/how sound travels",
+        "meteorology/thunderstorms",
+        "anthropology/the development of writing",
+        "environmental_science/coral reefs",
+        "biology/photosynthesis",
+        "geology/volcanic islands",
+        "astronomy/comets",
+        "history/the Silk Road",
+        "technology/the magnetic compass",
+        "art/pottery",
+        "psychology/the bystander effect"
       ],
       "favorite": {
-        "subtopic": "biology/how bees communicate",
-        "preview": "Honeybees share the location of food through an elaborate movement known to scientists as the waggle dance."
+        "subtopic": "biology/animal migration",
+        "preview": "Arctic terns undertake the longest yearly migration of any bird, traveling between the Arctic and Antarctic regions."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    },
+    "listening-lcr": {
+      "generated": 10,
+      "accepted": 10,
+      "topics": [
+        "campus_academic",
+        "general_daily"
+      ],
+      "favorite": {
+        "subtopic": "campus_academic",
+        "preview": "Where am I supposed to submit the lab report? → 「Your guess is as good as mine.」(idiomatic)"
       },
       "retried_after_fail": false,
       "failure_reason": ""
