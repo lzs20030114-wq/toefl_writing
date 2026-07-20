@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking where to find practice exams",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where can I find last year's practice exams?",
+      "options": {
+        "A": "Have you checked the professor's course page?",
+        "B": "The exam mostly covers the first five chapters.",
+        "C": "I finished my history essay last night.",
+        "D": "Yes, the format is multiple choice."
+      },
+      "answer": "A",
+      "explanation": "说话人问“在哪里能找到去年的模拟卷”。A 用反问引导对方去课程主页，正好把地点信息推进给对方，是自然的口语应答，因此正确。B 只谈考试内容范围，答非所问（关键词 exam 陷阱）。C 说自己写完了历史作业，与话题完全无关。D 回答的是考试题型，而不是“在哪里找”，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking why a service is closed",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why is the post office closed today?",
+      "options": {
+        "A": "I mailed my package there yesterday.",
+        "B": "Oh, it's a national holiday today.",
+        "C": "The line there is always too long.",
+        "D": "She works at the bank downtown."
+      },
+      "answer": "B",
+      "explanation": "说话人问“邮局今天为什么关门”。B 直接给出原因——今天是国定假日，是对 why 问题的正确回答。A 说昨天在那里寄过包裹，是借用 post office 联想的关键词陷阱，没解释原因。C 抱怨排队太长，答非所问。D 说她在市中心银行上班，与话题无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling a shop to check if it is still open",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I wasn't sure if you're still open tonight.",
+      "options": {
+        "A": "The jar was really hard to open.",
+        "B": "Thanks, I had a great weekend.",
+        "C": "We'll stay open until nine for you.",
+        "D": "No, I've never been there before."
+      },
+      "answer": "C",
+      "explanation": "说话人其实想知道店铺今晚是否还营业。C 没有简单回答“开着”，而是直接解决其真正需求——告诉对方营业到九点，属于 context_shift，因此正确。A 里的 open 指打开罐子，是一词多义陷阱。B 谈周末过得愉快，答非所问。D 否认自己去过，误解了说话人的意图。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "We're really cutting it close on this deadline.",
+      "options": {
+        "A": "Please close the window; it's cold.",
+        "B": "The cafeteria ran out of coffee again.",
+        "C": "Yes, I locked the classroom door.",
+        "D": "Let's buckle down and finish it."
+      },
+      "answer": "D",
+      "explanation": "说话人感叹快赶不上截止时间了。D 用习惯表达 buckle down（沉下心来）回应，提议一起加把劲完成，最自然，因此正确。A 里的 close 指关窗，是一词多义陷阱。B 说食堂又没咖啡了，与话题无关。C 说锁了教室门，误解并答非所问。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "off_topic",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking how often the shuttle runs",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How often does the campus shuttle come?",
+      "options": {
+        "A": "Every fifteen minutes or so.",
+        "B": "I left my bag on the shuttle.",
+        "C": "It stops right outside the library.",
+        "D": "The parking lot is completely full today."
+      },
+      "answer": "A",
+      "explanation": "说话人问“校车多久来一趟”。A 直接给出频率——大约每十五分钟一趟，正确回答了 how often。B 说把包落在了车上，是借用 shuttle 的关键词陷阱。C 回答的是停靠地点，而不是间隔时间，答错了问题类型。D 说停车场满了，与话题无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation despite a schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Are you free to meet up this Friday?",
+      "options": {
+        "A": "Yes, the tickets were free yesterday.",
+        "B": "Sorry, my plate is full then.",
+        "C": "The restaurant serves breakfast until noon.",
+        "D": "It's just around the corner."
+      },
+      "answer": "B",
+      "explanation": "说话人邀请对方周五见面。B 用习惯表达 my plate is full（我那时忙不过来）委婉拒绝，是自然应答，因此正确。A 里的 free 指票免费，是一词多义陷阱。C 说餐厅供应早餐到中午，答非所问。D 回答的是地点，答错了问题类型。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you want to join our study group tonight?",
+      "options": {
+        "A": "The group project is due next week.",
+        "B": "The weather looks nice this evening.",
+        "C": "I'll bring my notes and snacks.",
+        "D": "No, I don't have their number."
+      },
+      "answer": "C",
+      "explanation": "说话人邀请对方今晚参加学习小组。C 没有简单答“好”，而是承诺带笔记和零食一起来，实际推进了对话，属于 context_shift，因此正确。A 谈小组作业下周才交，是借用 group 的关键词陷阱。B 说今晚天气不错，答非所问。D 说没有他们的电话，误解了邀请的意思。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking what was missed in lecture",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What did I miss in today's lecture?",
+      "options": {
+        "A": "The lecture hall was freezing cold.",
+        "B": "My laptop battery died at lunch.",
+        "C": "It ended around three o'clock.",
+        "D": "Actually, I skipped it too."
+      },
+      "answer": "D",
+      "explanation": "说话人问“今天的课我错过了什么”。D 以话语标记 Actually 开头，间接说明自己也没去，因此帮不上忙——是自然且贴切的应答，正确。A 说教室很冷，是借用 lecture 的关键词陷阱。B 说笔记本电脑没电了，答非所问。C 回答的是下课时间，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "neighbor mentioning a car problem",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "My car won't start again this morning.",
+      "options": {
+        "A": "Want me to give you a ride?",
+        "B": "I just washed my car yesterday.",
+        "C": "The bakery on Main Street closed.",
+        "D": "No, I already returned the keys."
+      },
+      "answer": "A",
+      "explanation": "说话人抱怨车又打不着火了。A 用反问主动提出捎对方一程，直接解决其困境，是自然应答，因此正确。B 说昨天刚洗过车，是借用 car 的关键词陷阱。C 说主街的面包店关门了，与话题无关。D 说已经还了钥匙，误解了对方的意思。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking reassurance about a presentation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you think my slides look okay?",
+      "options": {
+        "A": "The slide broke at the playground.",
+        "B": "Honestly, they look really polished to me.",
+        "C": "I need to buy more coffee later.",
+        "D": "Yes, the projector is in room five."
+      },
+      "answer": "B",
+      "explanation": "说话人想确认幻灯片做得好不好。B 以话语标记 Honestly 开头给出肯定评价，是自然、贴切的应答，因此正确。A 里的 slide 指滑梯，是一词多义陷阱。C 说自己要去买咖啡，答非所问。D 谈投影仪在几号教室，答错了问题类型。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}

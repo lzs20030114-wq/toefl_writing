@@ -1,39 +1,18 @@
 {
-  "session_id": "routine-20260719-190452",
-  "completed_at": "2026-07-19T19:13:30.000Z",
-  "duration_minutes": 9,
+  "session_id": "routine-20260720-201752",
+  "completed_at": "2026-07-20T20:23:31Z",
+  "duration_minutes": 6,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号驱动：仅补 CTW 阅读 20 题 + LCR 听力 10 题；CTW 难度 5易/8中/7难全新话题，LCR 平均 flavor 0.91、答案分布均衡。",
+  "highlight": "按需信号只点名两库：CTW 补 20 题（头号用户已刷 70%，剩约4天刷穿）、LCR 补 10 题，均为全新题材，答案分布 ABCDABCDAB 均衡。",
   "commit_sha": "",
   "results": {
     "reading-ctw": {
       "generated": 20,
       "accepted": 20,
-      "topics": [
-        "biology/animal migration",
-        "environmental_science/mangrove forests",
-        "psychology/spaced repetition",
-        "history/the printing press",
-        "geology/soil composition",
-        "astronomy/lunar craters",
-        "zoology/bat echolocation",
-        "botany/seed dispersal",
-        "chemistry/fermentation",
-        "physics/how sound travels",
-        "meteorology/thunderstorms",
-        "anthropology/the development of writing",
-        "environmental_science/coral reefs",
-        "biology/photosynthesis",
-        "geology/volcanic islands",
-        "astronomy/comets",
-        "history/the Silk Road",
-        "technology/the magnetic compass",
-        "art/pottery",
-        "psychology/the bystander effect"
-      ],
+      "topics": ["biology/evolution", "environmental_science/sustainable agriculture", "psychology/attention", "history/telegraph history", "geology/fossils", "astronomy/Mars exploration", "biology/cellular respiration", "physics/optics and lenses", "anthropology/rock art traditions", "oceanography/the ocean twilight zone", "materials_science/self-healing materials", "technology/the development of radar", "meteorology/how hail forms", "botany/carnivorous plants", "zoology/the life of ant colonies", "economics/the origins of banking", "linguistics/sign languages", "art/the invention of perspective", "sociology/social networks", "astronomy/binary star systems"],
       "favorite": {
-        "subtopic": "biology/animal migration",
-        "preview": "Arctic terns undertake the longest yearly migration of any bird, traveling between the Arctic and Antarctic regions."
+        "subtopic": "materials_science/self-healing materials",
+        "preview": "Self-healing materials are remarkable substances specially designed to repair their own damage without any human help."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -41,13 +20,10 @@
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
-      "topics": [
-        "campus_academic",
-        "general_daily"
-      ],
+      "topics": ["campus_academic/practice exams", "general_daily/service closed", "general_daily/business hours", "campus_academic/project deadline", "campus_daily/shuttle schedule", "social/schedule conflict", "campus_daily/study group invite", "campus_academic/missed lecture", "general_daily/car trouble", "campus_academic/presentation feedback"],
       "favorite": {
-        "subtopic": "campus_academic",
-        "preview": "Where am I supposed to submit the lab report? → 「Your guess is as good as mine.」(idiomatic)"
+        "subtopic": "general_daily/business hours",
+        "preview": "Speaker: \"I wasn't sure if you're still open tonight.\" 正确答案用 context_shift 直接给出营业到九点，而非机械回答开着。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
