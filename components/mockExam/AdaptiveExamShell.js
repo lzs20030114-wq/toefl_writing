@@ -10,7 +10,8 @@ import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/moc
 import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule2 } from "../../lib/mockExam/readingPlanner";
 import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
 import { finalizeTimedOutResults } from "../../lib/mockExam/timeoutFinalize";
-import { saveSess } from "../../lib/sessionStore";
+import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { fmt } from "../../lib/utils";
@@ -36,6 +37,14 @@ const SECTION_CONFIG = {
     routeM2: routeReadingM2,
     buildM2: buildReadingModule2,
     sessionType: "adaptive-reading",
+    // taskType → practice done-key. Shared with practice mode so a mock never
+    // serves a passage the user already did (and completing a mock marks its
+    // items done for practice too). RDL short+long both map to READING_RDL.
+    taskDoneKeys: {
+      ctw: DONE_STORAGE_KEYS.READING_CTW,
+      rdl: DONE_STORAGE_KEYS.READING_RDL,
+      ap: DONE_STORAGE_KEYS.READING_AP,
+    },
   },
   listening: {
     label: "Listening",
@@ -52,6 +61,12 @@ const SECTION_CONFIG = {
     routeM2: routeListeningM2,
     buildM2: buildListeningModule2,
     sessionType: "adaptive-listening",
+    taskDoneKeys: {
+      lcr: DONE_STORAGE_KEYS.LISTENING_LCR,
+      la: DONE_STORAGE_KEYS.LISTENING_LA,
+      lc: DONE_STORAGE_KEYS.LISTENING_LC,
+      lat: DONE_STORAGE_KEYS.LISTENING_LAT,
+    },
   },
 };
 
@@ -820,6 +835,42 @@ function buildTaskSnapshots(results) {
   });
 }
 
+// ------ Done-set helpers (shared with practice-mode picker) ------
+
+/**
+ * Load the union of practice done-ids for every task type in this section.
+ * All bank ids are globally unique strings (distinct type prefixes), so a
+ * single merged Set can never mis-match an id across banks. localStorage-only
+ * (loadDoneIds guards SSR) — only ever called from click / completion handlers.
+ */
+function loadSectionDoneIds(config) {
+  const merged = new Set();
+  for (const key of new Set(Object.values(config.taskDoneKeys || {}))) {
+    for (const id of loadDoneIds(key)) merged.add(id);
+  }
+  return merged;
+}
+
+/**
+ * Write every completed item's id back to its task-type done-key, so a finished
+ * module (normal OR timeout) counts toward "already practised". Each result
+ * carries `.item` (handleItemComplete enriches; finalizeTimedOutResults attaches
+ * one too), so this covers both completion paths. Set semantics make re-adds a
+ * no-op, so resuming/re-recording is harmless.
+ */
+function recordSectionDone(config, results) {
+  const byKey = new Map();
+  for (const r of results || []) {
+    const item = r?.item;
+    const id = item?.id;
+    const key = item && config.taskDoneKeys?.[item.taskType];
+    if (!id || !key) continue;
+    if (!byKey.has(key)) byKey.set(key, []);
+    byKey.get(key).push(id);
+  }
+  for (const [key, ids] of byKey) addDoneIds(key, ids);
+}
+
 // ------ Main Shell ------
 
 /**
@@ -982,7 +1033,9 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     if (examController) examController.unlock();
     try {
       clearAdaptiveCheckpoint(section); // fresh start — drop any stale checkpoint
-      const m1 = config.buildM1();
+      // Prefer items the user hasn't practised yet (shared done-set with
+      // practice mode); planner falls back to done items once the bank runs out.
+      const m1 = config.buildM1(loadSectionDoneIds(config));
       if (!m1.items || m1.items.length === 0) {
         setError("题库数据不足，无法开始考试。请稍后再试。");
         return;
@@ -1059,6 +1112,8 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
 
   function handleM1Complete(resultsOverride) {
     const results = resultsOverride || m1Results;
+    // Mark Module 1's items done (covers normal + timeout finalize paths).
+    recordSectionDone(config, results);
     const m1Correct = sumCorrectFromResults(results);
     const m1Total = sumTotalFromResults(results);
     const accuracy = m1Total > 0 ? m1Correct / m1Total : 0;
@@ -1069,7 +1124,7 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     // Build M2 after animation delay
     setTimeout(() => {
       try {
-        const m2 = config.buildM2(path, usedIds);
+        const m2 = config.buildM2(path, usedIds, loadSectionDoneIds(config));
         if (!m2.items || m2.items.length === 0) {
           setError("题库数据不足，无法构建 Module 2。");
           return;
@@ -1092,6 +1147,8 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
   function handleM2Complete(resultsOverride) {
     const m1Res = m1Results;
     const m2Res = resultsOverride || m2Results;
+    // Mark Module 2's items done (covers normal + timeout finalize paths).
+    recordSectionDone(config, m2Res);
     const m1Correct = sumCorrectFromResults(m1Res);
     const m1Total = sumTotalFromResults(m1Res);
     const m2Correct = sumCorrectFromResults(m2Res);

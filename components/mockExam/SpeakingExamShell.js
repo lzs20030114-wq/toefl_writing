@@ -6,7 +6,8 @@ import { RepeatTask } from "../speaking/RepeatTask";
 import { InterviewTask } from "../speaking/InterviewTask";
 import { buildSpeakingExam } from "../../lib/mockExam/speakingPlanner";
 import { calculateSpeakingBand } from "../../lib/mockExam/speakingBand";
-import { saveSess } from "../../lib/sessionStore";
+import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
@@ -117,7 +118,15 @@ function SpeakingExamShellInner({ onExit }) {
     // the one real user gesture WebKit will honor for the whole exam.
     if (examController) examController.unlock();
     try {
-      const built = buildSpeakingExam();
+      // Prefer sets the user hasn't practised yet (shared done-set with practice
+      // mode). repeat ids (rpt_*) and interview ids (intv_*) never collide, so a
+      // single merged Set is safe; the planner's pickSet still falls back to the
+      // full pool when everything's been seen (Interview has only ~11 sets).
+      const doneIds = new Set([
+        ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT),
+        ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW),
+      ]);
+      const built = buildSpeakingExam(doneIds);
       if (!built.repeatSet || !built.interviewSet) {
         setError("\u9898\u5E93\u6570\u636E\u4E0D\u8DB3\uFF0C\u65E0\u6CD5\u5F00\u59CB\u8003\u8BD5\u3002\u8BF7\u7A0D\u540E\u518D\u8BD5\u3002");
         return;
@@ -228,6 +237,14 @@ function SpeakingExamShellInner({ onExit }) {
           elapsed,
         },
       });
+    } catch {}
+
+    // Mark this exam's sets done so future mocks (and practice) prefer unseen
+    // ones. Speaking mock always runs straight through to here, so this is the
+    // single completion point (no timeout/partial path like reading/listening).
+    try {
+      if (exam?.repeatSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT, [exam.repeatSet.id]);
+      if (exam?.interviewSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW, [exam.interviewSet.id]);
     } catch {}
 
     setPhase("results");

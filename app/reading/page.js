@@ -224,7 +224,7 @@ function ReadingPageClient() {
 
   // ── Practice mode: show TopicPicker when no item selected ──
   if (isPractice && !pickedItemId) {
-    const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
+    const doneKey = type === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : type === "ap" ? DONE_STORAGE_KEYS.READING_AP : DONE_STORAGE_KEYS.READING_RDL;
     const doneIds = loadDoneIds(doneKey);
     // 个人题（「我的」标签）排最前（rdl/ap/ctw 均支持；ctw 无 variant 分池，personalForPicker=personalRaw）。
     const staticItems = type === "ctw" ? buildCTWTopics() : type === "ap" ? buildAPTopics() : buildRDLTopics(variant);
@@ -318,7 +318,7 @@ function ReadingPageClient() {
     });
 
     // Mark item as done for TopicPicker tracking
-    const doneKey = subtype === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : subtype === "ap" ? (DONE_STORAGE_KEYS.READING_AP || "toefl-reading-ap-done") : DONE_STORAGE_KEYS.READING_RDL;
+    const doneKey = subtype === "ctw" ? DONE_STORAGE_KEYS.READING_CTW : subtype === "ap" ? DONE_STORAGE_KEYS.READING_AP : DONE_STORAGE_KEYS.READING_RDL;
     addDoneIds(doneKey, [itemData.id]);
   }
 
