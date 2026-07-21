@@ -1,0 +1,254 @@
+{
+  "type": "listenChooseResponse",
+  "version": 2,
+  "generated_at": "2026-07-21T19:11:01.272Z",
+  "total_generated": 10,
+  "total_accepted": 10,
+  "acceptance_rate": 1,
+  "tts_generated": false,
+  "batch_quality": {
+    "avg_flavor": 0.91,
+    "answer_distribution": {
+      "A": 3,
+      "B": 3,
+      "C": 2,
+      "D": 2
+    },
+    "balanced": true,
+    "contraction_rate": 30,
+    "dm_rate": 40,
+    "paradigm_distribution": {
+      "marker_led_indirect": 4,
+      "idiomatic": 4,
+      "counter_question": 2
+    },
+    "difficulty_distribution": {
+      "medium": 5,
+      "easy": 3,
+      "hard": 2
+    }
+  },
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How detailed does the report need to be?",
+      "options": {
+        "A": "Well, just cover the main results clearly.",
+        "B": "The lab closes at six on weekdays.",
+        "C": "I returned my library books this morning.",
+        "D": "It's due next Thursday afternoon."
+      },
+      "answer": "A",
+      "explanation": "说话人问“报告需要写多详细”。A 以话语标记 Well 开头，间接给出“把主要结果讲清楚就行”的建议，正好回应了详细程度，因此正确。B 谈实验室关门时间，抓住 lab 关键词答非所问（语义联想陷阱）。C 说自己还了图书馆的书，与话题完全无关（离题）。D 回答的是截止日期，而不是“多详细”，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_001",
+      "flavor_score": 0.86
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why's the gym closed so early tonight?",
+      "options": {
+        "A": "The new treadmills are on the second floor.",
+        "B": "Beats me, maybe a staff shortage.",
+        "C": "I already finished my chemistry homework.",
+        "D": "Yes, you can bring a guest."
+      },
+      "answer": "B",
+      "explanation": "说话人问“健身房今晚为什么这么早关门”。B 用习惯表达 Beats me（我也不知道）承认不清楚并猜测可能人手不足，是自然的口语应答，因此正确。A 只介绍跑步机在几楼，抓住 gym 关键词答非所问（语义联想陷阱）。C 说自己写完了化学作业，与话题无关（离题）。D 回答的是能否带客人，属于是非问，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_002",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where's the campus shuttle stopping now?",
+      "options": {
+        "A": "I usually just walk to class anyway.",
+        "B": "The shuttle was pretty crowded this morning.",
+        "C": "Actually, right outside the main library.",
+        "D": "Every fifteen minutes or so."
+      },
+      "answer": "C",
+      "explanation": "说话人问“校车现在停在哪里”。C 以话语标记 Actually 开头，直接给出地点“主图书馆门口”，因此正确。A 说自己一般走路上学，回避了地点信息（离题）。B 谈校车今早很挤，抓住 shuttle 关键词却没答停靠点（语义联想陷阱）。D 回答的是发车频率，而不是地点，答错了问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_003",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time's everyone meeting for the study group?",
+      "options": {
+        "A": "I lost my umbrella somewhere yesterday.",
+        "B": "That course has a really heavy workload.",
+        "C": "In the study room on the third floor.",
+        "D": "Maybe check the group chat."
+      },
+      "answer": "D",
+      "explanation": "说话人问“大家几点集合学习”。D 以 Maybe 开头，间接建议“去群里看看”，把找到时间的办法给了对方，因此正确。A 说自己丢了伞，与话题无关（离题）。B 谈课程作业量大，抓住 study 关键词答非所问（语义联想陷阱）。C 回答的是集合地点（三楼自习室），而不是时间，答错了问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_004",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "The heater in my room isn't working again.",
+      "options": {
+        "A": "Have you told the front desk yet?",
+        "B": "My room gets plenty of sunlight actually.",
+        "C": "The cafeteria changed its menu this week.",
+        "D": "No, I don't have a spare key."
+      },
+      "answer": "A",
+      "explanation": "说话人抱怨“房间暖气又坏了”。A 用反问“你跟前台说了吗”推动解决问题，是自然的口语回应，因此正确。B 说自己房间阳光充足，抓住 room 关键词却没回应暖气问题（语义联想陷阱）。C 谈食堂换了菜单，与话题完全无关（离题）。D 回答的是有没有备用钥匙，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_005",
+      "flavor_score": 0.92
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can't we still finish the project by Friday?",
+      "options": {
+        "A": "I left my charger at home today.",
+        "B": "We'll pull it off, no problem.",
+        "C": "The project is about renewable energy.",
+        "D": "Over in the engineering building, usually."
+      },
+      "answer": "B",
+      "explanation": "说话人问“我们还能在周五前做完项目吗”。B 用习惯表达 pull it off（搞定它）给出肯定的安慰，推动对话，因此正确。A 说自己把充电器落在家里，与话题无关（离题）。C 谈项目主题是可再生能源，抓住 project 关键词却没回答能否完成（语义联想陷阱）。D 回答的是地点（工程楼），答错了问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_006",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "You've seemed really stressed out these past few days.",
+      "options": {
+        "A": "The weather's been nice this whole weekend.",
+        "B": "Stress is a big topic in psychology class.",
+        "C": "Yeah, midterms have been rough lately.",
+        "D": "No, I've never actually been there."
+      },
+      "answer": "C",
+      "explanation": "说话人关切地说“你这几天看起来压力很大”。C 以 Yeah 承认并解释“最近期中考很折磨”，是自然的口语回应，因此正确。A 谈天气不错，回避了对方的关心（离题）。B 把 stress 变成心理学课上的话题，抓住关键词答非所问（语义联想陷阱）。D 回答的是“没去过某地”，与语境完全不符，答错了问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_007",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Couldn't you turn the music down a bit?",
+      "options": {
+        "A": "That song is really popular right now.",
+        "B": "I'm repainting my apartment this weekend.",
+        "C": "The new speakers have amazing sound quality.",
+        "D": "Sure thing, my bad."
+      },
+      "answer": "D",
+      "explanation": "说话人请求“你能把音乐调小点吗”。D 用习惯表达 Sure thing（当然）和 my bad（我的错）表示配合致歉，是自然回应，因此正确。A 说这首歌现在很火，抓住 music 关键词却没配合（语义联想陷阱）。B 说自己周末要重新粉刷公寓，与话题无关（离题）。C 夸新音箱音质好，同样是抓住声音相关词答非所问（语义联想陷阱）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "semantic_association_trap"
+      },
+      "id": "lcr_gen_routine20260721190420_008",
+      "flavor_score": 1
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "When are your office hours this semester?",
+      "options": {
+        "A": "What day works best for you?",
+        "B": "Right next to the main lecture hall.",
+        "C": "I really enjoyed today's lecture.",
+        "D": "The library keeps longer hours now."
+      },
+      "answer": "A",
+      "explanation": "说话人问“这学期您的答疑时间是什么时候”。A 用反问“你哪天方便”推动约定时间，是自然的口语回应，因此正确。B 回答的是办公室位置（在大讲堂旁边），答错了问题类型。C 说自己喜欢今天的课，与提问无关（离题）。D 谈图书馆延长了开放时间，抓住 hours 关键词答非所问（语义联想陷阱）。",
+      "distractor_types": {
+        "B": "wrong_question_type",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_gen_routine20260721190420_009",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student commenting on the dining hall line",
+      "difficulty": "easy",
+      "answer_paradigm": "idiomatic",
+      "speaker": "This line for the dining hall's massive.",
+      "options": {
+        "A": "I finished my whole essay last night.",
+        "B": "Tell me about it.",
+        "C": "The dining hall added a new salad bar.",
+        "D": "No, I haven't eaten there before."
+      },
+      "answer": "B",
+      "explanation": "说话人感叹“食堂这队排得好长”。B 用习惯表达 Tell me about it（可不是嘛）表示强烈认同，是自然的口语回应，因此正确。A 说自己昨晚写完了论文，与话题无关（离题）。C 说食堂新增了沙拉吧，抓住 dining hall 关键词却没回应排队问题（语义联想陷阱）。D 回答“没在那吃过”，属于是非问，答错了问题类型。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_gen_routine20260721190420_010",
+      "flavor_score": 0.88
+    }
+  ],
+  "rejected": []
+}
