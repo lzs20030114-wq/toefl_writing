@@ -24,7 +24,7 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
 const ExamAudioContext = createContext(null);
 
 // 弹窗底部诊断行的版本戳:截图里看不到这一行 = 用户跑的还是旧前端。
-const DIAG_TAG = "c0722";
+const DIAG_TAG = "d0722";
 
 export function useExamAudio() {
   return useContext(ExamAudioContext);
@@ -152,6 +152,7 @@ export function ExamAudioProvider({ children }) {
             rdy: event.readyState,
             src: event.src || null,
             unlocked: c.isUnlocked(),
+            via: event.via || null,
           },
         });
         setHoldTimers(true);
@@ -242,6 +243,7 @@ export function ExamAudioProvider({ children }) {
             <div style={{ marginTop: 14, fontSize: 10, color: "#9CA3AF", lineHeight: 1.6, wordBreak: "break-all", textAlign: "left" }}>
               诊断 {DIAG_TAG} · reason={overlay.reason}
               {overlay.diag ? ` · net=${overlay.diag.net} rdy=${overlay.diag.rdy} · unlocked=${String(overlay.diag.unlocked)}` : ""}
+              {overlay.diag && overlay.diag.via ? ` · via=${overlay.diag.via}` : ""}
               {` · retry×${resumeCountRef.current}`}
               {overlay.diag && overlay.diag.src ? <br /> : null}
               {overlay.diag && overlay.diag.src ? `src=…${String(overlay.diag.src).slice(-52)}` : null}

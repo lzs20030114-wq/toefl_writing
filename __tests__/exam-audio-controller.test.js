@@ -39,6 +39,9 @@ beforeEach(() => {
 afterEach(() => {
   jest.restoreAllMocks();
   jest.useRealTimers();
+  delete global.fetch;
+  delete URL.createObjectURL;
+  delete URL.revokeObjectURL;
 });
 
 function makeController(opts) {
@@ -352,6 +355,48 @@ test("safety valve: a hung unlock promise still flushes the queued play after 1s
   jest.advanceTimersByTime(UNLOCK_SAFETY_MS);
   expect(audioEl.src).toBe(SRC_A); // 排队的播放没有被永久卡死
   c.destroy();
+});
+
+// ── blob 兜底通道:媒体进程 0 字节死等时用页面 fetch 通道喂本地数据 ─────────
+
+function installBlobEnv() {
+  global.fetch = jest.fn(async () => ({ ok: true, blob: async () => new Blob(["mp3"], { type: "audio/mpeg" }) }));
+  URL.createObjectURL = jest.fn(() => "blob:mock-1");
+  URL.revokeObjectURL = jest.fn();
+}
+
+const deepFlush = async () => { for (let i = 0; i < 6; i++) await Promise.resolve(); };
+
+test("流式路径 0 字节死等 → blob 一到自动换源重播", async () => {
+  installBlobEnv();
+  const { c, events } = makeController();
+  c.play(SRC_A); // readyState 默认 0,state=loading — 正是真机的死等形态
+  await deepFlush();
+  expect(global.fetch).toHaveBeenCalledWith(SRC_A);
+  expect(audioEl.src).toBe("blob:mock-1"); // 已换到本地数据源
+  expect(playMock.mock.calls.length).toBe(2); // 直连一次 + blob 重播一次
+  expect(events.filter((e) => e.type === "loading").length).toBe(2);
+  c.destroy();
+});
+
+test("retry/重播命中 blob 缓存 → 手势内同步直接喂本地数据", async () => {
+  installBlobEnv();
+  const { c } = makeController();
+  c.play(SRC_A);
+  await deepFlush(); // blob 已入缓存
+  c.stop();
+  c.play(SRC_A); // 第二次播放(如「继续考试」重试)
+  expect(audioEl.src).toBe("blob:mock-1"); // 同步命中缓存,无任何网络环节
+  c.destroy();
+});
+
+test("destroy 回收全部 blob objectURL", async () => {
+  installBlobEnv();
+  const { c } = makeController();
+  c.play(SRC_A);
+  await deepFlush();
+  c.destroy();
+  expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:mock-1");
 });
 
 test("stop() clears a queued play (mic must not fight a late flush)", async () => {
