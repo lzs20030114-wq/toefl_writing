@@ -83,6 +83,9 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
   const [recordings, setRecordings] = useState([]); // blobUrl per index
   const [finished, setFinished] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState(false);
+  // Legacy (no-Provider) path only: autoplay rejected by the browser → show an
+  // explicit "tap Play Again" hint instead of failing silently (iOS Safari).
+  const [playBlocked, setPlayBlocked] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [ttsSupported, setTtsSupported] = useState(true);
   const [transcripts, setTranscripts] = useState([]); // STT transcript per index
@@ -218,6 +221,7 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
     // in the listen phase (isRecording false) and handleNext prewarm bypasses
     // playSentence entirely, so neither is affected.
     if (isRecording) return;
+    setPlayBlocked(false);
 
     // Stop anything currently sounding (a previous MP3 or a queued utterance).
     if (audioElRef.current) { try { audioElRef.current.pause(); } catch {} audioElRef.current = null; }
@@ -308,8 +312,13 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
       const pr = audio.play();
       if (pr && typeof pr.catch === "function") {
         // Autoplay blocked (needs a user gesture). Don't advance or rescue —
-        // leave the play button enabled so a tap (a fresh gesture) replays it.
-        pr.catch(() => { if (audioElRef.current === audio) setTtsPlaying(false); });
+        // surface the hint and leave the play button enabled so a tap (a fresh
+        // gesture) replays it.
+        pr.catch(() => {
+          if (audioElRef.current !== audio) return;
+          setTtsPlaying(false);
+          setPlayBlocked(true);
+        });
       }
       return;
     }
@@ -799,6 +808,15 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 20 }}>
                 The sentence will play automatically. Listen and prepare to repeat.
               </div>
+              {playBlocked && !ttsPlaying && (
+                <div style={{
+                  margin: "0 auto 14px", maxWidth: 340, padding: "10px 14px",
+                  background: SPK.soft, border: "1px solid #FDE68A", borderRadius: 10,
+                  fontSize: 13, color: "#92400E", lineHeight: 1.6,
+                }}>
+                  浏览器拦截了自动播放，请点击下方按钮手动播放
+                </div>
+              )}
               {!ttsPlaying && (
                 <Btn onClick={playSentence} style={{ background: SPK.color, borderColor: SPK.color }}>
                   Play Again

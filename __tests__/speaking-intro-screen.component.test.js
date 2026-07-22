@@ -19,6 +19,7 @@ jest.mock("../components/shared/ExamAudioProvider", () => ({
 
 import { RepeatTask } from "../components/speaking/RepeatTask";
 import { InterviewTask } from "../components/speaking/InterviewTask";
+import { SpeakingIntroScreen } from "../components/speaking/SpeakingIntroScreen";
 
 function makeController() {
   return {
@@ -149,4 +150,82 @@ test("InterviewTask failure chain middle rung: the question is READ ALOUD via TT
   expect(spokenTexts).toContain("What is your favorite hobby, and why?");
   // … but never rendered on screen.
   expect(screen.queryByText(/favorite hobby/)).toBeNull();
+});
+
+// ── Intro narration: iOS zero-gesture drop → re-speak inside the next tap ──
+
+function installSpeechMock({ startsOnSpeak }) {
+  const synth = {
+    speaking: false,
+    pending: false,
+    cancel: jest.fn(() => { synth.speaking = false; synth.pending = false; }),
+    getVoices: () => [],
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+  };
+  synth.speak = jest.fn(() => { if (startsOnSpeak) synth.speaking = true; });
+  window.speechSynthesis = synth;
+  global.SpeechSynthesisUtterance = class {
+    constructor(text) { this.text = text; this.lang = ""; this.rate = 1; }
+  };
+  return synth;
+}
+
+test("intro 旁白被零手势静默丢弃时，在下一次点击的手势内重读", () => {
+  // iOS 情形：mount 时 speak() 被丢弃（speaking 一直是 false）。
+  const synth = installSpeechMock({ startsOnSpeak: false });
+
+  render(<SpeakingIntroScreen title="t" lines={["Hello there."]} onStart={jest.fn()} onExit={jest.fn()} />);
+  expect(synth.speak).toHaveBeenCalledTimes(1); // mount 照常尝试
+
+  act(() => { jest.advanceTimersByTime(600); }); // 探测：没开口 → 挂手势监听
+  act(() => { fireEvent.click(document.body); }); // 用户第一次触屏（真实手势）
+  expect(synth.speak).toHaveBeenCalledTimes(2); // 手势内重读
+
+  // 一次性监听：后续点击不再重复朗读。
+  act(() => { fireEvent.click(document.body); });
+  expect(synth.speak).toHaveBeenCalledTimes(2);
+});
+
+test("intro 旁白正常开口时，探测与后续点击都不打断它", () => {
+  const synth = installSpeechMock({ startsOnSpeak: true });
+
+  render(<SpeakingIntroScreen title="t" lines={["Hello there."]} onStart={jest.fn()} onExit={jest.fn()} />);
+  expect(synth.speak).toHaveBeenCalledTimes(1);
+
+  act(() => { jest.advanceTimersByTime(600); });
+  act(() => { fireEvent.click(document.body); });
+  expect(synth.speak).toHaveBeenCalledTimes(1); // 没有多余的重读
+});
+
+// ── RepeatTask legacy path: autoplay blocked → visible manual-play hint ──
+
+test("RepeatTask 无 Provider 路径 autoplay 被拒时给出手动播放提示", async () => {
+  mockExamAudioHolder.value = null; // legacy per-Audio path
+  window.HTMLMediaElement.prototype.play = jest.fn(() =>
+    Promise.reject(Object.assign(new Error("blocked"), { name: "NotAllowedError" })),
+  );
+
+  const items = [{
+    id: "s1",
+    sentence: "Printers are near the entrance.",
+    audio_url: "https://xyz.supabase.co/storage/v1/object/public/listening_audio/x.mp3",
+    difficulty: "easy",
+  }];
+  render(
+    <RepeatTask
+      items={items}
+      setInfo={{ id: "rpt_x", scenario: "Library Orientation", speaker_role: "librarian" }}
+      onComplete={jest.fn()}
+      onExit={jest.fn()}
+      isPractice
+    />,
+  );
+
+  act(() => { fireEvent.click(screen.getByText("开始")); });
+  // 500ms 自动播放计时器 → play() 被拒 → 提示出现，Play Again 仍可点。
+  await act(async () => { jest.advanceTimersByTime(500); });
+
+  expect(screen.getByText(/浏览器拦截了自动播放/)).toBeInTheDocument();
+  expect(screen.getByText("Play Again")).toBeInTheDocument();
 });

@@ -33,11 +33,41 @@ export function stopNarration() {
   }
 }
 
-/** Speak `text` once on mount; cancel it on unmount / text change. */
+/**
+ * Speak `text` once on mount; cancel it on unmount / text change.
+ *
+ * iOS/WebKit（以及 Chrome 的 autoplay 策略）会静默丢弃「本文档还没发生过任何
+ * 用户手势」时的 speak() 调用——从首页任务卡直接跳进 /speaking 正是这种情况
+ * （那次点击落在上一个文档上）。所以 mount 先照常尝试；~600ms 后若引擎并没有
+ * 真的开口（speaking 仍为 false），就挂一次性的捕获监听，在用户下一次触屏的
+ * 手势内重读一遍（speakNarration 自带 cancel()，顺带清掉被卡住的队列）。
+ * 引擎正常开口的平台（桌面、已有手势的页面）探测不命中，行为不变。
+ */
 export function useNarration(text) {
   useEffect(() => {
     speakNarration(text);
-    return () => stopNarration();
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return undefined;
+
+    const removeListeners = () => {
+      document.removeEventListener("click", onGesture, true);
+      document.removeEventListener("touchend", onGesture, true);
+    };
+    const onGesture = () => {
+      removeListeners();
+      if (window.speechSynthesis.speaking) return; // 探测后自己开口了，别打断
+      speakNarration(text);
+    };
+    const probe = setTimeout(() => {
+      if (window.speechSynthesis.speaking) return; // 正常开口 → 不需要兜底
+      document.addEventListener("click", onGesture, true);
+      document.addEventListener("touchend", onGesture, true);
+    }, 600);
+
+    return () => {
+      clearTimeout(probe);
+      removeListeners();
+      stopNarration();
+    };
   }, [text]);
 }
 

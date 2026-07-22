@@ -23,7 +23,8 @@ import { NextResponse } from "next/server";
  *   img-src 'self' data: blob:        — 图片：同源 + data URI + blob (QR code)
  *   font-src 'self' fonts.gstatic.com — 字体：同源 + Google Fonts CDN
  *   connect-src 'self' ...            — API 连接白名单
- *   media-src 'self' blob: *.supabase.co — 音频播放 (TTS + 用户录音 blob + Supabase 听力 mp3)
+ *   media-src 'self' data: blob: *.supabase.co — 音频播放 (TTS + 用户录音 blob + Supabase 听力 mp3
+ *                               + 考试音频手势解锁的 data: 静音 WAV)
  *   frame-ancestors 'none'            — 等同 X-Frame-Options: DENY
  *   base-uri 'self'                   — 防止 <base> 标签劫持
  *   form-action 'self'                — 表单只能提交到同源
@@ -35,7 +36,10 @@ const CSP_DIRECTIVES = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' https://fonts.gstatic.com",
   "connect-src 'self' https://*.supabase.co https://api.deepseek.com https://xorpay.com https://afdian.com https://ifdian.net",
-  "media-src 'self' blob: https://*.supabase.co",
+  // data: 不能删 — lib/audio/examAudioController.js 的 SILENT_WAV(data:audio/wav) 靠它
+  // 在「开始」手势内解锁共享 audio 元素；拦掉它 = iOS 全场自动播放失效（曾真实发生）。
+  // 有 jest 用例锁定（__tests__/middleware-csp-media.test.js）。
+  "media-src 'self' data: blob: https://*.supabase.co",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
