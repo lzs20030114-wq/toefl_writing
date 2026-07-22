@@ -1,0 +1,245 @@
+{
+  "type": "lcr",
+  "version": "v2",
+  "generated_at": "2026-07-22T19:11:51.122Z",
+  "total_generated": 10,
+  "total_accepted": 10,
+  "acceptance_rate": 1,
+  "tts_generated": 0,
+  "batch_quality": {
+    "avg_flavor_score": 0.87
+  },
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student telling a librarian they cannot find a reserved book",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've looked everywhere for that reserved textbook.",
+      "options": {
+        "A": "Let me look into that for you.",
+        "B": "The reading room is on the third floor.",
+        "C": "The printers are out of paper again.",
+        "D": "Yes, you can reserve a study room."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。图书管理员用一句习惯性的帮助用语'Let me look into that for you'主动帮学生查找，回应了'找不到书'的诉求，属于idiomatic。B是semantic_association_trap，由'textbook'联想到'reading room/floor'，答非所问。C是off_topic，谈打印机缺纸，与找书无关。D是misinterpretation，把'reserved（预留的书）'误解成'预约自习室'。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "A": "Let me look into that for you.",
+      "id": "lcr_v2_20260722190426_001",
+      "flavor_score": 0.97
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about an assignment deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why's this essay due so early?",
+      "options": {
+        "A": "The essay should be about five pages.",
+        "B": "Would an extension actually help you?",
+        "C": "The library closes at nine tonight.",
+        "D": "You're welcome to rewrite it later."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。教授没有直接解释原因，而是用反问'Would an extension actually help you?'把对话推进到解决方案，属于counter_question。A是semantic_association_trap，由'essay'联想到页数，答错了方面。C是off_topic，谈图书馆关门时间。D是misinterpretation，提到可以重写，没有回应'为什么这么早截止'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "B": "Would an extension actually help you?",
+      "id": "lcr_v2_20260722190426_002",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging a friend's schedule conflict and proposing another time",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What time's good for you then?",
+      "options": {
+        "A": "It's already half past three now.",
+        "B": "She really enjoyed the concert last night.",
+        "C": "How about sometime early next week?",
+        "D": "The meeting room was fully booked."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。对方问什么时间方便，C用反问'How about sometime early next week?'提出具体替代时段，推进了安排，属于counter_question。A是misinterpretation，抓住'time'去报当前时刻。B是off_topic，谈别人看演唱会。D是off_topic，谈会议室被订满，与约时间无关。",
+      "distractor_types": {
+        "A": "misinterpretation",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "C": "How about sometime early next week?",
+      "id": "lcr_v2_20260722190426_003",
+      "flavor_score": 0.71
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking whether the campus shuttle stops near the dorms",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Does the shuttle stop near the dorms?",
+      "options": {
+        "A": "The shuttle got a new paint job.",
+        "B": "Parking permits went up in price.",
+        "C": "Every twenty minutes on weekdays.",
+        "D": "Hop on, I'm heading that way."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。对方没有正面回答是否停靠，而是用口语化的'Hop on, I'm heading that way'直接解决了学生的出行需求，属于idiomatic。A是semantic_association_trap，由'shuttle'联想到重新喷漆。B是off_topic，谈停车证涨价。C是wrong_question_type，回答的是'多久一班'而非'是否在宿舍附近停'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "D": "Hop on, I'm heading that way.",
+      "id": "lcr_v2_20260722190426_004",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing how much time is left before a deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How much time's left before Friday?",
+      "options": {
+        "A": "We've got about three days left.",
+        "B": "The cafeteria changed its menu today.",
+        "C": "The project room smells like fresh paint.",
+        "D": "Yes, we're allowed to work together."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。对方问离周五还有多少时间，A直接给出'about three days left'，属于direct_topical。B是off_topic，谈食堂换菜单。C是semantic_association_trap，由'project'联想到项目室的油漆味。D是wrong_question_type，用是/否回答了'能否一起做'，答非所问。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "A": "We've got about three days left.",
+      "id": "lcr_v2_20260722190426_005",
+      "flavor_score": 0.63
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a passerby for directions to the nearest pharmacy",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm trying to find the nearest pharmacy.",
+      "options": {
+        "A": "The weather turned quite cold this afternoon.",
+        "B": "Actually, it's just around the corner.",
+        "C": "That pharmacy hired several new workers.",
+        "D": "Yes, it opens at eight tomorrow."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。对方在找最近的药店，B以话语标记'Actually'开头，间接指路'just around the corner'，属于marker_led_indirect。A是off_topic，谈天气变冷。C是semantic_association_trap，由'pharmacy'联想到药店招人。D是wrong_question_type，回答的是'几点开门'而非'在哪里'。",
+      "distractor_types": {
+        "A": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      },
+      "B": "Actually, it's just around the corner.",
+      "id": "lcr_v2_20260722190426_006",
+      "flavor_score": 1
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with a TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do we need to include raw data?",
+      "options": {
+        "A": "The data lab closes at six.",
+        "B": "The printer ran out of toner.",
+        "C": "I'll email you the full template.",
+        "D": "Section three was really quite difficult this week."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。助教没有正面回答是否要附原始数据，而是用'I'll email you the full template'从根本上解决问题——模板里已写明要求，属于context_shift。A是semantic_association_trap，由'data'联想到数据实验室的关门时间。B是off_topic，谈打印机没墨。D是off_topic，谈第三部分很难，与报告要求无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "C": "I'll email you the full template.",
+      "id": "lcr_v2_20260722190426_007",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking where to sign up for a course",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where do I sign up for chemistry?",
+      "options": {
+        "A": "Chemistry is required for every science major.",
+        "B": "The bookstore is having a big sale.",
+        "C": "Enrollment opens first thing on Monday.",
+        "D": "Right this way, I'll show you."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。对方问在哪里报名，D用习惯用语'Right this way, I'll show you'带对方过去，直接解决问题，属于idiomatic。A是semantic_association_trap，由'chemistry'联想到它是必修课。B是off_topic，谈书店打折。C是wrong_question_type，回答的是'什么时候开放选课'而非'在哪里报名'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "D": "Right this way, I'll show you.",
+      "id": "lcr_v2_20260722190426_008",
+      "flavor_score": 0.91
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmates coordinating when the study group meets",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "When's the study group usually meeting?",
+      "options": {
+        "A": "The study lounge got new chairs.",
+        "B": "Are you free this Thursday evening?",
+        "C": "My roommate adopted a small kitten.",
+        "D": "I haven't met the new tutor yet."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。对方问学习小组通常什么时候聚，B用反问'Are you free this Thursday evening?'把安排往前推进，属于counter_question。A是semantic_association_trap，由'study group'联想到自习室换了新椅子。C是off_topic，谈室友养猫。D是misinterpretation，把'meet（聚会）'误当成'见到（某人）'。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "B": "Are you free this Thursday evening?",
+      "id": "lcr_v2_20260722190426_009",
+      "flavor_score": 0.88
+    },
+    {
+      "context": "social",
+      "situation": "declining an evening invitation and suggesting another time",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure I can make it tonight.",
+      "options": {
+        "A": "Maybe we can reschedule for the weekend.",
+        "B": "The bus was late yet again this morning.",
+        "C": "I'll make you a sandwich instead.",
+        "D": "Yes, the tickets were fairly expensive."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。对方表示今晚可能来不了，A以标记词'Maybe'开头，间接提出'reschedule for the weekend'，属于marker_led_indirect。B是off_topic，谈公交又迟到。C是misinterpretation，抓住'make it'里的'make'去说做三明治。D是off_topic，谈门票贵，与是否赴约无关。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "misinterpretation",
+        "D": "off_topic"
+      },
+      "A": "Maybe we can reschedule for the weekend.",
+      "id": "lcr_v2_20260722190426_010",
+      "flavor_score": 1
+    }
+  ],
+  "rejected": []
+}
