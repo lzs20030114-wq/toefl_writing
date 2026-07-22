@@ -24,7 +24,7 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
 const ExamAudioContext = createContext(null);
 
 // 弹窗底部诊断行的版本戳:截图里看不到这一行 = 用户跑的还是旧前端。
-const DIAG_TAG = "b0722";
+const DIAG_TAG = "c0722";
 
 export function useExamAudio() {
   return useContext(ExamAudioContext);
@@ -79,6 +79,8 @@ export function ExamAudioProvider({ children }) {
   // playing. holdTimers additionally covers buffering (listening shell uses
   // it to freeze the module countdown while nothing is audible).
   const [overlay, setOverlay] = useState(null);
+  // 弹窗是否可见的同步镜像(给 document 捕获监听用,不吃 React 渲染时序)。
+  const overlayOpenRef = useRef(false);
   const [holdTimers, setHoldTimers] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
 
@@ -129,6 +131,10 @@ export function ExamAudioProvider({ children }) {
       document.removeEventListener("touchend", onFirstInteraction, { capture: true });
     };
     const onFirstInteraction = () => {
+      // 恢复弹窗开着时全局解锁必须让路:iOS 一次手势只祝福一次媒体播放,这里
+      // 抢跑播静音片会把「继续考试」按钮的手势耗光,正片又沦为无手势加载——
+      // 真机实锤的按钮失效根因之一。弹窗期间唯一有意义的点击就是恢复按钮。
+      if (overlayOpenRef.current) return;
       const cc = controllerRef.current;
       if (!cc) return;
       if (cc.isUnlocked()) { removeFirstInteraction(); return; }
@@ -137,6 +143,7 @@ export function ExamAudioProvider({ children }) {
 
     const unsub = c.subscribe((event) => {
       if (event.type === "blocked") {
+        overlayOpenRef.current = true;
         setOverlay({
           reason: event.reason,
           // 线上远程排障用的诊断快照,渲染在弹窗底部(用户截图即是现场)。
@@ -152,6 +159,7 @@ export function ExamAudioProvider({ children }) {
       } else if (event.type === "buffering") {
         setHoldTimers(true);
       } else if (event.type === "playing") {
+        overlayOpenRef.current = false;
         setOverlay(null);
         setHoldTimers(false);
         removeFirstInteraction(); // 真出声 = 元素已可程序化播放,解锁使命完成

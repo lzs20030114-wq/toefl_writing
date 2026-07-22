@@ -62,7 +62,7 @@ test("blocked play → overlay appears → 继续考试 calls controller.retry()
   expect(screen.getByText("音频播放被浏览器暂停")).toBeInTheDocument();
   expect(ref.ctx.holdTimers).toBe(true);
   // 远程排障诊断行随弹窗渲染(用户截图即现场)。
-  expect(screen.getByText(/诊断 b0722/)).toBeInTheDocument();
+  expect(screen.getByText(/诊断 c0722/)).toBeInTheDocument();
   expect(screen.getByText(/reason=not-allowed/)).toBeInTheDocument();
 
   const retrySpy = jest.spyOn(ref.ctx.controller, "retry");
@@ -178,6 +178,35 @@ test("first-interaction listener is RETAINED while a clip is loading (unlock gat
   // Second gesture: listener still attached, so unlock fires again — now it runs.
   fireEvent.click(document.body);
   expect(unlockSpy).toHaveBeenCalledTimes(2);
+});
+
+test("恢复弹窗开着时,全局首次交互监听让路 — 手势整支留给「继续考试」", async () => {
+  // iOS 一次手势只祝福一次播放:弹窗期间若捕获监听抢跑播解锁静音片,恢复按钮
+  // 的正片播放就又沦为无手势调用(真机实锤的按钮失效根因)。
+  playMock.mockRejectedValueOnce(new DOMException("denied", "NotAllowedError"));
+  const ref = {};
+  const Consumer = makeConsumer(ref);
+  render(
+    <ExamAudioProvider>
+      <Consumer />
+    </ExamAudioProvider>
+  );
+  const controller = ref.ctx.controller;
+  await act(async () => {
+    controller.play("https://cdn.example/clip.mp3", { section: "listening" });
+  });
+  expect(screen.getByText("音频播放被浏览器暂停")).toBeInTheDocument();
+
+  const unlockSpy = jest.spyOn(controller, "unlock");
+  const retrySpy = jest.spyOn(controller, "retry");
+  await act(async () => {
+    fireEvent.click(screen.getByText("继续考试"));
+  });
+  expect(unlockSpy).not.toHaveBeenCalled(); // 捕获监听让路,没有静音片抢跑
+  expect(retrySpy).toHaveBeenCalledTimes(1); // 手势进了恢复按钮
+  // 元素 src 从未被解锁静音片(data:)污染 — 正片保持在位,play 直接发生在手势内。
+  expect(audioEl.src.startsWith("data:")).toBe(false);
+  expect(audioEl.src).toBe("https://cdn.example/clip.mp3");
 });
 
 test("a clip reaching 'playing' unlocks the element and tears the listener down without any unlock() call", async () => {

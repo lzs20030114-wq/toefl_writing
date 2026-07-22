@@ -56,6 +56,13 @@ function setReadyState(value) {
   Object.defineProperty(audioEl, "readyState", { value, configurable: true });
 }
 
+test("the shared element lives in the DOM and is removed on destroy (iOS 对游离 audio 假加载)", () => {
+  const { c } = makeController();
+  expect(document.body.contains(audioEl)).toBe(true);
+  c.destroy();
+  expect(document.body.contains(audioEl)).toBe(false);
+});
+
 test("unlock success → 'unlocked' event, idempotent (no second play)", async () => {
   const { c, events } = makeController();
   expect(c.isUnlocked()).toBe(false);
