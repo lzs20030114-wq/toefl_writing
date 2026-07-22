@@ -109,6 +109,29 @@ export function ExamAudioProvider({ children }) {
     }
     const c = controllerRef.current;
     if (!c) return undefined;
+    // First-interaction global unlock. Practice pages have no explicit
+    // "start exam" button, so the user's first tap anywhere on the page (pick
+    // a topic, choose an answer, hit play) is what completes the WebKit
+    // per-element autoplay unlock. Capture phase runs before any React bubble
+    // handler, and unlock() is idempotent, so the exam shells' own explicit
+    // unlock() calls (inside their start buttons) keep working unchanged.
+    //
+    // 监听器只在「解锁确实完成」后拆除(unlocked/playing 事件,或下次手势时
+    // isUnlocked() 已为真),不能在 unlock() 一返回就拆:解锁是异步落定的,
+    // 同一次点击若顺手触发了播放,旧逻辑会在解锁被腰斩后再也不重试,iOS 上
+    // 整页从此全靠运气。unlock() 返回 false(正片 loading/playing 中被门控)
+    // 时同样保留监听,等下一次手势再试。
+    const removeFirstInteraction = () => {
+      document.removeEventListener("click", onFirstInteraction, { capture: true });
+      document.removeEventListener("touchend", onFirstInteraction, { capture: true });
+    };
+    const onFirstInteraction = () => {
+      const cc = controllerRef.current;
+      if (!cc) return;
+      if (cc.isUnlocked()) { removeFirstInteraction(); return; }
+      cc.unlock();
+    };
+
     const unsub = c.subscribe((event) => {
       if (event.type === "blocked") {
         setOverlay({ reason: event.reason });
@@ -119,31 +142,14 @@ export function ExamAudioProvider({ children }) {
       } else if (event.type === "playing") {
         setOverlay(null);
         setHoldTimers(false);
+        removeFirstInteraction(); // 真出声 = 元素已可程序化播放,解锁使命完成
       } else if (event.type === "ended") {
         setHoldTimers(false);
+      } else if (event.type === "unlocked") {
+        removeFirstInteraction();
       }
     });
 
-    // First-interaction global unlock. Practice pages have no explicit
-    // "start exam" button, so the user's first tap anywhere on the page (pick
-    // a topic, choose an answer, hit play) is what completes the WebKit
-    // per-element autoplay unlock. Capture phase runs before any React bubble
-    // handler, and unlock() is idempotent, so the exam shells' own explicit
-    // unlock() calls (inside their start buttons) keep working unchanged.
-    //
-    // NOT {once:true}: unlock() now refuses to run while a clip is loading/
-    // playing (it would 腰斩 an auto-playing sentence). A tap that lands then
-    // returns false, so we keep the listeners and retry on the next gesture;
-    // only a real unlock (returns true) tears them down.
-    const removeFirstInteraction = () => {
-      document.removeEventListener("click", onFirstInteraction, { capture: true });
-      document.removeEventListener("touchend", onFirstInteraction, { capture: true });
-    };
-    const onFirstInteraction = () => {
-      const cc = controllerRef.current;
-      if (!cc) return;
-      if (cc.unlock()) removeFirstInteraction();
-    };
     document.addEventListener("click", onFirstInteraction, { capture: true });
     document.addEventListener("touchend", onFirstInteraction, { capture: true });
 

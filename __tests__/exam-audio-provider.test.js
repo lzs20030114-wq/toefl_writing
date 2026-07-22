@@ -124,7 +124,7 @@ test("first document interaction unlocks the shared controller (WebKit per-eleme
   expect(unlockSpy).toHaveBeenCalled();
 });
 
-test("first-interaction listener is removed once unlock succeeds (returns true)", () => {
+test("first-interaction listener is removed only after the unlock ACTUALLY lands", async () => {
   const ref = {};
   const Consumer = makeConsumer(ref);
   render(
@@ -134,15 +134,18 @@ test("first-interaction listener is removed once unlock succeeds (returns true)"
   );
   const controller = ref.ctx.controller;
   const unlockSpy = jest.spyOn(controller, "unlock");
-  // Idle controller → unlock executes and returns true → listeners torn down.
+  // Idle controller → unlock starts on the first tap…
   fireEvent.click(document.body);
   expect(unlockSpy).toHaveBeenCalledTimes(1);
-  // A second gesture must NOT re-invoke unlock (both listeners already removed).
+  // …but listeners survive until the 'unlocked' event (async settle). 解锁被
+  // 同 tick 播放腰斩时旧逻辑就地拆监听、再也不重试——所以拆除必须等真成功。
+  await act(async () => {}); // unlock promise resolves → 'unlocked' → teardown
+  expect(controller.isUnlocked()).toBe(true);
   fireEvent.click(document.body);
-  expect(unlockSpy).toHaveBeenCalledTimes(1);
+  expect(unlockSpy).toHaveBeenCalledTimes(1); // removed — no re-invoke
 });
 
-test("first-interaction listener is RETAINED when unlock is skipped mid-playback, retries on next gesture", async () => {
+test("first-interaction listener is RETAINED while a clip is loading (unlock gated), retries on next gesture", async () => {
   const ref = {};
   const Consumer = makeConsumer(ref);
   render(
@@ -152,29 +155,50 @@ test("first-interaction listener is RETAINED when unlock is skipped mid-playback
   );
   const controller = ref.ctx.controller;
 
-  // Drive the controller into 'playing' so a first tap would be gated.
+  // Drive the controller into 'loading' (no 'playing' yet) so a tap is gated.
+  await act(async () => {
+    controller.play("https://cdn.example/clip.mp3", { section: "listening" });
+  });
+  expect(controller.getState()).toBe("loading");
+
+  const unlockSpy = jest.spyOn(controller, "unlock");
+  // First gesture lands mid-load → unlock skipped (false) → listener stays.
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(1);
+  expect(controller.isUnlocked()).toBe(false);
+
+  // The clip errors out → state leaves 'loading'.
+  await act(async () => {
+    audioEl.dispatchEvent(new Event("error"));
+  });
+
+  // Second gesture: listener still attached, so unlock fires again — now it runs.
+  fireEvent.click(document.body);
+  expect(unlockSpy).toHaveBeenCalledTimes(2);
+});
+
+test("a clip reaching 'playing' unlocks the element and tears the listener down without any unlock() call", async () => {
+  // 用户第一下点的就是播放键:手势直接花在正片上,SILENT_WAV 从未播过。真出声
+  // 即视为解锁完成,后续点击不得再去动共享元素。
+  const ref = {};
+  const Consumer = makeConsumer(ref);
+  render(
+    <ExamAudioProvider>
+      <Consumer />
+    </ExamAudioProvider>
+  );
+  const controller = ref.ctx.controller;
   await act(async () => {
     controller.play("https://cdn.example/clip.mp3", { section: "listening" });
   });
   await act(async () => {
     audioEl.dispatchEvent(new Event("playing"));
   });
-  expect(controller.getState()).toBe("playing");
+  expect(controller.isUnlocked()).toBe(true);
 
   const unlockSpy = jest.spyOn(controller, "unlock");
-  // First gesture lands mid-playback → unlock skipped (false) → listener stays.
   fireEvent.click(document.body);
-  expect(unlockSpy).toHaveBeenCalledTimes(1);
-  expect(controller.isUnlocked()).toBe(false);
-
-  // Playback ends → state leaves 'playing'.
-  await act(async () => {
-    audioEl.dispatchEvent(new Event("ended"));
-  });
-
-  // Second gesture: listener still attached, so unlock fires again — now it runs.
-  fireEvent.click(document.body);
-  expect(unlockSpy).toHaveBeenCalledTimes(2);
+  expect(unlockSpy).not.toHaveBeenCalled(); // listener already removed on 'playing'
 });
 
 test("an autoPlay AudioPlayer under the Provider plays through the shared element, not its own <audio>", async () => {
