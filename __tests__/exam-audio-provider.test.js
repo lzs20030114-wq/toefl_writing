@@ -62,7 +62,7 @@ test("blocked play → overlay appears → 继续考试 calls controller.retry()
   expect(screen.getByText("音频播放被浏览器暂停")).toBeInTheDocument();
   expect(ref.ctx.holdTimers).toBe(true);
   // 远程排障诊断行随弹窗渲染(用户截图即现场)。
-  expect(screen.getByText(/诊断 a0722/)).toBeInTheDocument();
+  expect(screen.getByText(/诊断 b0722/)).toBeInTheDocument();
   expect(screen.getByText(/reason=not-allowed/)).toBeInTheDocument();
 
   const retrySpy = jest.spyOn(ref.ctx.controller, "retry");

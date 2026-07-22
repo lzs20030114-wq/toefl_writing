@@ -24,7 +24,7 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
 const ExamAudioContext = createContext(null);
 
 // 弹窗底部诊断行的版本戳:截图里看不到这一行 = 用户跑的还是旧前端。
-const DIAG_TAG = "a0722";
+const DIAG_TAG = "b0722";
 
 export function useExamAudio() {
   return useContext(ExamAudioContext);
