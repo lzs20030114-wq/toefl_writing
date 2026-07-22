@@ -95,6 +95,9 @@ test("play rejected with NotAllowedError → blocked(not-allowed)", async () => 
   const blocked = events.find((e) => e.type === "blocked");
   expect(blocked).toBeTruthy();
   expect(blocked.reason).toBe("not-allowed");
+  // 排障诊断字段(弹窗诊断行 + 遥测用)。
+  expect(blocked).toHaveProperty("networkState");
+  expect(blocked).toHaveProperty("readyState");
   expect(c.getState()).toBe("blocked");
 });
 

@@ -23,6 +23,9 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
 
 const ExamAudioContext = createContext(null);
 
+// 弹窗底部诊断行的版本戳:截图里看不到这一行 = 用户跑的还是旧前端。
+const DIAG_TAG = "a0722";
+
 export function useExamAudio() {
   return useContext(ExamAudioContext);
 }
@@ -134,7 +137,16 @@ export function ExamAudioProvider({ children }) {
 
     const unsub = c.subscribe((event) => {
       if (event.type === "blocked") {
-        setOverlay({ reason: event.reason });
+        setOverlay({
+          reason: event.reason,
+          // 线上远程排障用的诊断快照,渲染在弹窗底部(用户截图即是现场)。
+          diag: {
+            net: event.networkState,
+            rdy: event.readyState,
+            src: event.src || null,
+            unlocked: c.isUnlocked(),
+          },
+        });
         setHoldTimers(true);
         trackAudioEvent("overlay_shown", { reason: event.reason, audioPath: event.src || null });
       } else if (event.type === "buffering") {
@@ -169,7 +181,9 @@ export function ExamAudioProvider({ children }) {
 
   // Overlay button — MUST call retry() synchronously in the click handler so
   // the play() lands inside the fresh user-gesture stack.
+  const resumeCountRef = useRef(0);
   const handleResume = useCallback(() => {
+    resumeCountRef.current += 1;
     trackAudioEvent("overlay_resume", { reason: overlay ? overlay.reason : null });
     const c = controllerRef.current;
     if (c) c.retry();
@@ -216,6 +230,14 @@ export function ExamAudioProvider({ children }) {
             >
               继续考试
             </button>
+            {/* 远程排障诊断行:用户一张截图 = 完整现场(原因/网络态/解锁态/音频源)。 */}
+            <div style={{ marginTop: 14, fontSize: 10, color: "#9CA3AF", lineHeight: 1.6, wordBreak: "break-all", textAlign: "left" }}>
+              诊断 {DIAG_TAG} · reason={overlay.reason}
+              {overlay.diag ? ` · net=${overlay.diag.net} rdy=${overlay.diag.rdy} · unlocked=${String(overlay.diag.unlocked)}` : ""}
+              {` · retry×${resumeCountRef.current}`}
+              {overlay.diag && overlay.diag.src ? <br /> : null}
+              {overlay.diag && overlay.diag.src ? `src=…${String(overlay.diag.src).slice(-52)}` : null}
+            </div>
           </div>
         </div>,
         document.body
