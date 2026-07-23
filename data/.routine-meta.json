@@ -1,39 +1,39 @@
 {
-  "session_id": "routine-20260721-190420",
-  "completed_at": "2026-07-21T19:11:33.135Z",
+  "session_id": "routine-20260723-190411",
+  "completed_at": "2026-07-23T19:11:37.333Z",
   "duration_minutes": 7,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号命中 ctw+lcr：CTW 20 题多学科(蜂群/成岩/星辰) 全过，LCR 10 题平均 flavor 0.91",
+  "highlight": "按需补题: CTW 补 20 题(20 个主题零重复) + LCR 补 10 题(含 context_shift/counter_question 硬题范式)",
   "commit_sha": "",
   "results": {
     "reading-ctw": {
       "generated": 20,
       "accepted": 20,
       "topics": [
-        "biology/honeybee communication",
-        "environmental_science/river plastic pollution",
-        "psychology/habit formation",
-        "history/the ancient Silk Road",
-        "geology/volcanic island formation",
-        "astronomy/comet tails",
-        "biology/spider web construction",
-        "environmental_science/wind energy",
-        "psychology/childhood memory development",
-        "history/the Egyptian pyramids",
-        "geology/earthquakes and faults",
-        "astronomy/the life cycle of stars",
-        "zoology/how penguins survive cold",
-        "botany/tree rings",
-        "chemistry/how soap cleans",
-        "physics/why the sky is blue",
-        "meteorology/how fog forms",
-        "anthropology/early stone tools",
-        "oceanography/deep ocean currents",
-        "technology/the magnetic compass"
+        "pollination",
+        "deforestation",
+        "sleep psychology",
+        "Roman engineering",
+        "meteor impacts",
+        "exoplanets",
+        "coral reefs",
+        "ocean acidification",
+        "sound waves",
+        "the printing press",
+        "cave formation",
+        "black holes",
+        "seed dispersal",
+        "bird migration",
+        "rust and corrosion",
+        "thunderstorms",
+        "tides",
+        "the domestication of dogs",
+        "the steam engine",
+        "glass making"
       ],
       "favorite": {
-        "subtopic": "biology/honeybee communication",
-        "preview": "Honeybees communicate the location of distant flowers through an elaborate movement known as the waggle dance."
+        "subtopic": "astronomy/black holes",
+        "preview": "Black holes are mysterious regions of space where gravity pulls so strongly that nothing can escape."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -42,20 +42,14 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "campus_academic/student checking with TA about lab report requirements",
-        "campus_daily/student asking about gym or sports facility hours",
-        "campus_daily/student checking bus or shuttle schedule",
-        "campus_daily/friend inviting another to a study group or social event",
-        "campus_daily/student asking about dorm maintenance issue",
-        "campus_academic/two classmates discussing a group project deadline",
-        "social/expressing concern about a friend's situation",
-        "general_daily/asking a neighbor about noise or shared space",
-        "campus_academic/student asking a professor about office hours",
-        "campus_daily/student commenting on the dining hall line"
+        "campus_daily",
+        "general_daily",
+        "social",
+        "campus_academic"
       ],
       "favorite": {
-        "subtopic": "campus_academic/two classmates discussing a group project deadline",
-        "preview": "Speaker: \"Can't we still finish the project by Friday?\" 正确答案用 idiomatic 应答。"
+        "subtopic": "campus_academic",
+        "preview": "What are we going to do about Friday's deadline?"
       },
       "retried_after_fail": false,
       "failure_reason": ""
