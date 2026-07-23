@@ -7867,6 +7867,216 @@
       "id": "lcr_gen_routine20260721190420_010",
       "flavor_score": 0.88,
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_gen_routine20260721190420_010.p1.mp3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "We're all meeting at the library tonight to study.",
+      "options": {
+        "A": "Actually, I might swing by after dinner.",
+        "B": "The exam covers only the first three chapters.",
+        "C": "My sister is visiting from out of town.",
+        "D": "I'll bring the meeting agenda then."
+      },
+      "answer": "A",
+      "explanation": "说话人是在间接邀请对方今晚去图书馆学习。A 用话语标记 Actually 开头，表示自己可能晚饭后过去，自然地回应了邀请并推进对话，是正确答案。B 抓住 study 联想到考试范围，只是陈述事实，没有回应邀请，属语义联想干扰。C 与话题完全无关，属离题干扰。D 把 meeting（碰面）误解成正式会议，回答带议程，属一词多义误解干扰。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrxxvfrs_0"
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't make our appointment on Thursday afternoon.",
+      "options": {
+        "A": "The doctor's office is near the pharmacy.",
+        "B": "Well, how about early next week instead?",
+        "C": "I painted the spare bedroom last weekend.",
+        "D": "I'll make enough for everyone to share."
+      },
+      "answer": "B",
+      "explanation": "说话人表示周四下午无法赴约，隐含需要改期。B 用 Well 开头并提议下周初，间接地推进了改期安排，是正确答案。A 由 appointment 联想到看医生的地点，只描述诊所位置，没有回应改期，属语义联想干扰。C 完全离题。D 把 make（赴约）误解成 make（做/准备食物），属一词多义误解干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrxxvfrt_1"
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you want some help carrying those boxes?",
+      "options": {
+        "A": "The boxes arrived earlier than expected.",
+        "B": "Every hour on the half hour.",
+        "C": "Actually, that would be a huge relief.",
+        "D": "I bought that jacket on sale."
+      },
+      "answer": "C",
+      "explanation": "说话人主动提出帮忙搬箱子。C 用 Actually 开头，表示那会是极大的解脱，自然接受了帮助，是正确答案。A 抓住 boxes 只谈箱子到得早，没有回应帮忙的好意，属语义联想干扰。B 回答的是频率（多久一次），答非所问，属问错问题类型干扰。D 与话题无关，属离题干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mrxxvfrt_2"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where do professors post the study guides?",
+      "options": {
+        "A": "The library closes at midnight tonight.",
+        "B": "I finished my history essay this morning.",
+        "C": "They're due at the end of the week.",
+        "D": "Actually, they're all on the course website."
+      },
+      "answer": "D",
+      "explanation": "说话人问复习资料发布在哪里（问地点）。D 用 Actually 开头，指出资料都在课程网站上，直接回应了地点问题，是正确答案。A 由 study 联想到图书馆，只说闭馆时间，答非所问，属语义联想干扰。B 完全离题。C 回答的是截止时间（问何时），而说话人问的是地点，属问错问题类型干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfru_3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why won't the store accept my return?",
+      "options": {
+        "A": "Well, the receipt is over thirty days old.",
+        "B": "The store opens at nine tomorrow morning.",
+        "C": "My neighbor just adopted a puppy.",
+        "D": "It's in the aisle by the entrance."
+      },
+      "answer": "A",
+      "explanation": "说话人问为什么商店不接受退货（问原因）。A 用 Well 开头，说明小票已超过三十天，正好解释了原因，是正确答案。B 抓住 store 只谈营业时间，没有回应原因，属语义联想干扰。C 与话题无关，属离题干扰。D 回答的是位置（在哪个货架），答非所问，属问错问题类型干扰。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfru_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What are we going to do about Friday's deadline?",
+      "options": {
+        "A": "Friday is the last day of the month.",
+        "B": "Don't worry, I already asked for an extension.",
+        "C": "The printer in the lab is broken again.",
+        "D": "Yes, the project counts for half our grade."
+      },
+      "answer": "B",
+      "explanation": "说话人为周五的截止日期发愁。B 没有直接回答问题，而是解决了背后的难题——已经申请了延期，属于 context_shift，是正确答案。A 抓住 Friday 只谈它是月末，没有解决问题，属语义联想干扰。C 完全离题。D 用 Yes 回答，但说的是项目占分，答非所问，属问错问题类型干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfru_5"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How am I supposed to get concert tickets?",
+      "options": {
+        "A": "The band is releasing a new album.",
+        "B": "I left my umbrella in the classroom.",
+        "C": "Don't worry, I can grab an extra one.",
+        "D": "The doors open around seven tonight."
+      },
+      "answer": "C",
+      "explanation": "说话人苦恼于怎么弄到演唱会门票。C 没有解释流程，而是直接解决了需求——我可以多拿一张给你，属于 context_shift，是正确答案。A 由 concert 联想到乐队出新专辑，没有帮上忙，属语义联想干扰。B 完全离题。D 回答的是开场时间（问何时），而说话人问的是怎么弄到票，属问错问题类型干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfrv_6"
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can you give me a lift on Saturday?",
+      "options": {
+        "A": "The car needs an oil change soon.",
+        "B": "That movie was longer than I expected.",
+        "C": "It's parked behind the grocery store.",
+        "D": "Sure, I'll swing by around nine."
+      },
+      "answer": "D",
+      "explanation": "说话人问周六能不能搭个车。D 用 Sure 答应，并说九点左右过去接，自然地回应了请求，是正确答案。A 抓住 lift 联想到车需要换机油，没有答应搭车，属语义联想干扰。B 完全离题。C 回答的是车停在哪里（问地点），而说话人问的是能否搭车，属问错问题类型干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfrv_7"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a classmate about lecture content",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What did the professor say about the essay?",
+      "options": {
+        "A": "Honestly, I zoned out for most of it.",
+        "B": "The essay should be double-spaced.",
+        "C": "I ran into your roommate at lunch.",
+        "D": "It's not due until next Wednesday."
+      },
+      "answer": "A",
+      "explanation": "说话人问教授关于论文说了什么。A 用口语习语 zoned out（走神）坦白自己大半没听进去，是自然真实的回应，属 idiomatic，是正确答案。B 抓住 essay 只谈格式要求，没有回应教授说了什么，属语义联想干扰。C 完全离题。D 回答的是截止时间（问何时），而说话人问的是内容，属问错问题类型干扰。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrxxvfrw_8"
+    },
+    {
+      "context": "general_daily",
+      "situation": "a neighbor asking to borrow a tool",
+      "difficulty": "easy",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you have a ladder I could borrow?",
+      "options": {
+        "A": "The hardware store sells sturdy ladders.",
+        "B": "Sure, how tall does it need to be?",
+        "C": "I watered the plants this morning.",
+        "D": "I already returned the drill you lent me."
+      },
+      "answer": "B",
+      "explanation": "说话人问能不能借个梯子。B 用 Sure 答应后反问需要多高，用反问推进对话，属 counter_question，是正确答案。A 抓住 ladder 联想到五金店有卖，没有回应借的请求，属语义联想干扰。C 完全离题。D 把 borrow（借）误解成归还别的工具，答非所问，属一词多义误解干扰。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrxxvfrw_9"
     }
   ]
 }
