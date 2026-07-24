@@ -1,39 +1,33 @@
 {
-  "session_id": "routine-20260723-190411",
-  "completed_at": "2026-07-23T19:11:37.333Z",
+  "session_id": "routine-20260724-190442",
+  "completed_at": "2026-07-24T19:11:22.000Z",
   "duration_minutes": 7,
   "model": "Claude Opus 4.8",
-  "highlight": "按需补题: CTW 补 20 题(20 个主题零重复) + LCR 补 10 题(含 context_shift/counter_question 硬题范式)",
+  "highlight": "按需信号触发：CTW 补 14 题、LCR 补 10 题；阅读/听力入库前留存等待审核 routine 盲审后合并。",
   "commit_sha": "",
   "results": {
     "reading-ctw": {
-      "generated": 20,
-      "accepted": 20,
+      "generated": 14,
+      "accepted": 14,
       "topics": [
-        "pollination",
-        "deforestation",
-        "sleep psychology",
-        "Roman engineering",
-        "meteor impacts",
-        "exoplanets",
-        "coral reefs",
-        "ocean acidification",
-        "sound waves",
-        "the printing press",
-        "cave formation",
-        "black holes",
-        "seed dispersal",
-        "bird migration",
-        "rust and corrosion",
-        "thunderstorms",
-        "tides",
-        "the domestication of dogs",
-        "the steam engine",
-        "glass making"
+        "biology/symbiosis",
+        "environmental_science/climate change",
+        "psychology/cognitive bias",
+        "history/cultural exchange",
+        "geology/river deltas",
+        "astronomy/satellite technology",
+        "oceanography/marine food webs",
+        "botany/carnivorous plants",
+        "zoology/sea turtle navigation",
+        "physics/how lenses focus light",
+        "technology/early telephone systems",
+        "anthropology/the spread of early languages",
+        "meteorology/how hail forms",
+        "chemistry/how antacids neutralize acid"
       ],
       "favorite": {
-        "subtopic": "astronomy/black holes",
-        "preview": "Black holes are mysterious regions of space where gravity pulls so strongly that nothing can escape."
+        "subtopic": "zoology/sea turtle navigation",
+        "preview": "Sea turtles are remarkable travelers that migrate thousands of miles across open, featureless stretches of ocean."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -42,14 +36,20 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "campus_daily",
-        "general_daily",
-        "social",
-        "campus_academic"
+        "social/schedule conflict",
+        "campus_academic/missing library resource",
+        "social/concern for a friend",
+        "general_daily/asking directions",
+        "campus_academic/splitting a presentation",
+        "general_daily/post office hours",
+        "general_daily/ride to the airport",
+        "social/dinner invitation",
+        "campus_academic/project deadline",
+        "general_daily/grocery bag about to rip"
       ],
       "favorite": {
-        "subtopic": "campus_academic",
-        "preview": "What are we going to do about Friday's deadline?"
+        "subtopic": "general_daily/grocery bag about to rip",
+        "preview": "This grocery bag is about to rip."
       },
       "retried_after_fail": false,
       "failure_reason": ""
