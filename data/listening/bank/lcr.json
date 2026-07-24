@@ -8087,6 +8087,216 @@
       },
       "id": "lcr_mrxxvfrw_9",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrxxvfrw_9.p1.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging a schedule conflict when a room is unavailable",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where are we supposed to meet if the room's booked?",
+      "options": {
+        "A": "Actually, the lounge is free downstairs.",
+        "B": "The room has a brand-new projector.",
+        "C": "She finished her essay last night.",
+        "D": "Not until three o'clock."
+      },
+      "answer": "A",
+      "explanation": "说话人在问“如果教室被占了我们改到哪里碰面”，A 用话语标记“Actually”给出一个可用的替代地点，直接解决了见面地点问题，最贴切。B 只是描述那间教室的投影仪，属于抓住关键词“room”做文章的语义联想陷阱，没回答去哪。C 讲她昨晚写完了论文，与地点完全无关，是离题干扰。D “要到三点”回答的是“什么时候”，答错了问题类型（问地点却答时间）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sy_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "a student asking a librarian why a resource is missing",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why isn't this journal showing up in the catalog?",
+      "options": {
+        "A": "The catalog was redesigned last spring.",
+        "B": "Well, it might still be processing.",
+        "C": "I returned my books this morning.",
+        "D": "It's on the second floor."
+      },
+      "answer": "B",
+      "explanation": "说话人问“为什么这本期刊在目录里搜不到”，B 用话语标记“Well”间接给出原因——可能还在入库处理中，正好回应了“为什么找不到”。A 只说目录去年春天改版过，是围绕关键词“catalog”的语义联想陷阱，没解释期刊为何不显示。C 说自己早上还了书，与问题无关，属离题。D “在二楼”回答的是“在哪儿”，答错了问题类型（问原因却答地点）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sy_1"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend who had a rough day",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Are you sure you're okay after yesterday?",
+      "options": {
+        "A": "Yesterday was a national holiday.",
+        "B": "The bus was late this morning.",
+        "C": "Don't worry, I'm back on my feet.",
+        "D": "Yes, I locked the door."
+      },
+      "answer": "C",
+      "explanation": "说话人在关心朋友“昨天之后你真的没事吗”，C 用习语“back on my feet”（重新振作、恢复过来）自然地打消对方的担心，是最地道的回应。A 说昨天是国定假日，抓住关键词“yesterday”却答非所问，是语义联想陷阱。B 讲早上公交迟到，与关心内容无关，属离题。D “我锁了门”虽然是 Yes 开头，却回应了完全不同的是非问题，属答错语境。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sz_2"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a passerby for directions to a nearby station",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the fastest way to the train station?",
+      "options": {
+        "A": "The station added a new coffee stand.",
+        "B": "I love taking long train rides.",
+        "C": "It leaves every twenty minutes.",
+        "D": "Your best bet is down Elm Street."
+      },
+      "answer": "D",
+      "explanation": "说话人问“去火车站最快怎么走”，D 用习语“Your best bet is…”给出一条最优路线，直接指路，最合适。A 说车站新开了咖啡摊，抓“station”做文章却没指路，是语义联想陷阱。B 说自己爱坐长途火车，复用了“train”但纯属离题的个人感受。C “每二十分钟一班”回答的是发车频率（什么时候），答错了问题类型（问怎么走却答时刻）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sz_3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two partners deciding how to divide a presentation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How should we split up the presentation slides?",
+      "options": {
+        "A": "I'm happy to take the lead.",
+        "B": "The slides have a nice blue theme.",
+        "C": "My laptop battery died last night.",
+        "D": "Sometime after Thursday's class."
+      },
+      "answer": "A",
+      "explanation": "说话人在商量“幻灯片怎么分工”，A 用习语“take the lead”（我来牵头）主动认领任务，直接推进分工，最贴切。B 说幻灯片配色好看，抓住关键词“slides”却答非所问，是语义联想陷阱。C 讲昨晚笔记本没电，与分工无关，属离题。D “周四课后某个时间”回答的是“什么时候”，答错了问题类型（问怎么分却答时间）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sz_4"
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking whether the post office is still open",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I need to mail this package before five.",
+      "options": {
+        "A": "The package looks pretty heavy.",
+        "B": "Actually, the post office closes at four today.",
+        "C": "I already paid the electric bill.",
+        "D": "No, I haven't seen your keys."
+      },
+      "answer": "B",
+      "explanation": "说话人说“我得五点前把包裹寄出去”，其实关心邮局是否还开门；B 用话语标记“Actually”提醒对方邮局今天四点就关，间接而恰当地解决了潜在问题。A 只说包裹看着挺重，抓“package”做文章，是语义联想陷阱。C 说自己交了电费，与寄件无关，属离题。D “没见到你的钥匙”回应的是完全不同的语境，属答错语境。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sz_5"
+    },
+    {
+      "context": "general_daily",
+      "situation": "a friend worrying about getting to the airport",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm not sure how I'll get to the airport.",
+      "options": {
+        "A": "The airport parking is really expensive.",
+        "B": "I finally finished packing last night.",
+        "C": "Don't sweat it, I'll drive you.",
+        "D": "Yes, the flight was pretty smooth."
+      },
+      "answer": "C",
+      "explanation": "说话人在发愁“不知道怎么去机场”，C 用习语“Don't sweat it”（别担心）并主动提出开车送对方，直接解决了对方的难题，最地道。A 说机场停车很贵，抓“airport”却没帮上忙，是语义联想陷阱。B 说自己昨晚终于收拾好行李，与怎么去机场无关，属离题。D “航班很平稳”把话题误读成飞行体验，答错了语境。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1sz_6"
+    },
+    {
+      "context": "social",
+      "situation": "responding to a dinner invitation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you want to join us for dinner?",
+      "options": {
+        "A": "Dinner was delicious at that place.",
+        "B": "The train arrives around eight.",
+        "C": "I'll join the gym next week.",
+        "D": "Count me in, that sounds great."
+      },
+      "answer": "D",
+      "explanation": "说话人发出邀请“要不要一起吃晚饭”，D 用习语“Count me in”（算我一个）欣然接受，是最自然的回应。A 说那家店的晚饭很好吃，抓“dinner”做文章却没回应邀请，是语义联想陷阱。B 说火车八点左右到，与邀请无关，属离题。C “下周我要加入健身房”把“join”误用成“加入健身房”的另一层意思，属一词多义误解。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      },
+      "id": "lcr_mrzda1t0_7"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates confirming a project deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "When is the group project actually due?",
+      "options": {
+        "A": "The project needs three more sections.",
+        "B": "Didn't the professor push it to Monday?",
+        "C": "I left my notebook in the lab.",
+        "D": "In the main lecture hall."
+      },
+      "answer": "B",
+      "explanation": "说话人问“小组项目到底什么时候交”，B 以反问“教授不是推到周一了吗”推进对话并给出时间线索，是地道的 counter_question 回应。A 说项目还差三个部分，抓“project”做文章却没答时间，是语义联想陷阱。C 说把笔记本落在实验室了，与截止日期无关，属离题。D “在主讲堂”回答的是“在哪儿”，答错了问题类型（问时间却答地点）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1t0_8"
+    },
+    {
+      "context": "general_daily",
+      "situation": "reacting when a grocery bag is about to break",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "This grocery bag is about to rip.",
+      "options": {
+        "A": "Here, let me grab that side.",
+        "B": "The grocery store restocked this week.",
+        "C": "I watered the plants this morning.",
+        "D": "No, the receipt's in my pocket."
+      },
+      "answer": "A",
+      "explanation": "说话人说“这个购物袋快破了”，其实是在暗示需要帮忙；A 不纠结字面，直接上手“我来托着那一边”，解决了眼前的问题，是典型的 context_shift 正确回应。B 说超市这周补货了，抓“grocery”做文章却没帮忙，是语义联想陷阱。C 说自己早上浇了花，与袋子无关，属离题。D “不，小票在我兜里”回应的是完全不同的语境，答错了语境。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mrzda1t0_9"
     }
   ]
 }
