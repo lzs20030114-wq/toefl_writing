@@ -1,0 +1,136 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-07-26T21:27:37.550Z",
+  "total_generated": 4,
+  "total_accepted": 3,
+  "acceptance_rate": 0.75,
+  "items": [
+    {
+      "id": "rdl_gen_30221067817-short_002",
+      "variant": "short",
+      "text": "Notice: Due to road construction on College Avenue, the campus shuttle will follow a detour from March 3 to March 7. The temporary route will stop at the Student Center, the Gymnasium, and the Library. Regular service resumes on March 8.",
+      "word_count": 41,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when does the shuttle detour begin?",
+          "options": {
+            "A": "On March 8",
+            "B": "On March 5",
+            "C": "On March 1",
+            "D": "On March 3"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that the detour occurs from March 3 to March 7, so it begins on March 3."
+        },
+        {
+          "qid": "rdl_gen_30221067817-short_002_q2",
+          "question_type": "detail",
+          "stem": "According to the notice, which stops are included on the temporary route?",
+          "options": {
+            "A": "The Student Center, the Gymnasium, and the Library",
+            "B": "The Student Center, the College Avenue, and the Library",
+            "C": "The Gymnasium, the Library, and the Bookstore",
+            "D": "The Student Center, the Bookstore, and the Gymnasium"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice lists the Student Center, the Gymnasium, and the Library as the temporary stops."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_30221067817-short_003",
+      "variant": "short",
+      "text": "Notice: The heating and cooling system in Owens Hall will undergo maintenance on February 15-16. Temperatures may fluctuate between 55 and 85 degrees Fahrenheit during this period. Please dress accordingly. All windows must remain closed to prevent equipment damage.",
+      "word_count": 39,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is expected about temperatures in Owens Hall during the maintenance?",
+          "options": {
+            "A": "They will remain at a constant 70 degrees",
+            "B": "They will drop below 50 degrees",
+            "C": "They may vary from 55 to 85 degrees",
+            "D": "They will rise above 90 degrees"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice explicitly states that temperatures may fluctuate between 55 and 85 degrees Fahrenheit."
+        },
+        {
+          "qid": "rdl_gen_30221067817-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the maintenance work?",
+          "options": {
+            "A": "It requires the building's windows to stay shut",
+            "B": "It will cause the building to be completely closed",
+            "C": "It is scheduled to last only one day",
+            "D": "It will be performed by an outside company"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice instructs that all windows must remain closed to prevent equipment damage, indicating closing windows is a required condition for the maintenance."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_30221067817-short_004",
+      "variant": "short",
+      "text": "Save Lives – Donate Blood! Thursday, April 12, 10 AM – 4 PM, University Union Room 101. All donors receive a free T-shirt and a $5 gift card. Walk-ins welcome. Bring your student ID. Sign up online at blooddrive.university.edu.",
+      "word_count": 39,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what do all blood donors receive?",
+          "options": {
+            "A": "A free campus parking pass",
+            "B": "A free T-shirt and a $5 gift card",
+            "C": "A $10 discount at the bookstore",
+            "D": "An extra meal plan credit"
+          },
+          "correct_answer": "B",
+          "explanation": "The flyer states that all donors will receive a free T-shirt and a $5 gift card."
+        },
+        {
+          "qid": "rdl_gen_30221067817-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred from the flyer?",
+          "options": {
+            "A": "Donors must make an appointment in advance",
+            "B": "The blood drive will be held outdoors",
+            "C": "Walk-in donors are permitted at the event",
+            "D": "Only students with a university ID may attend"
+          },
+          "correct_answer": "C",
+          "explanation": "The flyer says 'Walk-ins welcome,' which implies that advance registration is not required and people can simply come."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
