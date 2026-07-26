@@ -6623,6 +6623,242 @@
       ],
       "question_count": 3,
       "difficulty": "medium"
+    },
+    {
+      "id": "rdl_gen_30221067817-long_001",
+      "variant": "long",
+      "text": "Subject: Overdue Library Book Notice\n\nDear Student,\n\nWe hope you're doing well. Our records show that you currently have an overdue book: \"The Great Gatsby\" by F. Scott Fitzgerald (call number PS3511.I9 G7). It was due on March 10. As of today, you've accrued a late fee of $2.50 ($0.50 per day). To avoid additional charges, please return the book by March 15. After that date, a $5.00 processing fee will be applied. If the book is not returned by March 20, it will be considered lost, and a $15.00 replacement fee will be charged.\n\nYou can return the book to the circulation desk at Anderson Library during regular hours (8:00 AM – 10:00 PM) or use the external book drop near the main entrance at any time. If you have any questions, please contact Library Circulation at libcirc@university.edu or call 555-0198.\n\nThank you for your prompt attention to this matter.\n\nBest regards,\nLibrary Circulation Services",
+      "word_count": 156,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Library Circulation Services",
+        "to": "Student",
+        "subject": "Overdue Library Book Notice"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-long_001_q1",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "The email is intended to inform the student about a replacement fee.",
+            "B": "The email is intended to explain the library's late fee policy in detail.",
+            "C": "The email is intended to request prompt return of an overdue book and outline consequences.",
+            "D": "The email is intended to remind students to check their library accounts."
+          },
+          "correct_answer": "C",
+          "explanation": "The email primarily asks the student to return the overdue book and details the fees and deadlines, making option C the correct main purpose."
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_001_q2",
+          "question_type": "detail",
+          "stem": "According to the email, what must the student do to avoid the $5.00 processing fee?",
+          "options": {
+            "A": "To return the book by March 20.",
+            "B": "To pay the $2.50 late fee.",
+            "C": "To return the book by March 15.",
+            "D": "To contact Library Circulation via email."
+          },
+          "correct_answer": "C",
+          "explanation": "The email states: 'To avoid additional charges, please return the book by March 15. After that date, a $5.00 processing fee will be applied.'"
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the book drop?",
+          "options": {
+            "A": "The book drop is located inside the library near the entrance.",
+            "B": "The book drop is available for use at any time of day or night.",
+            "C": "The book drop is only for books that are not overdue.",
+            "D": "The book drop is reserved for students who have paid their fines."
+          },
+          "correct_answer": "B",
+          "explanation": "The email mentions 'the external book drop near the main entrance at any time,' implying it is accessible 24/7."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_30221067817-long_002",
+      "variant": "long",
+      "text": "Subject: Shift Swap Request – Friday Library Desk\n\nHi Alex,\n\nI'm writing to see if you'd be willing to swap shifts with me this week. I'm scheduled for Friday from 5:00 PM to 8:00 PM at the library front desk, but I have a study session for my biology exam. I see you're scheduled for Tuesday from 10:00 AM to 12:00 PM at the same desk. Could you take my Friday shift? I can cover your Tuesday one. The pay rate is $12.50 per hour.\n\nI've already checked with our supervisor, Ms. Parker, and she said a swap is okay as long as we both agree and submit the online form through the employee portal by Wednesday at 5:00 PM. Also, I can share my study notes for Dr. Chen's class if you'd like.\n\nLet me know by tomorrow evening. Thanks!\n\nBest,\nJamie",
+      "word_count": 143,
+      "genre": "email",
+      "format_metadata": {
+        "from": "Jamie",
+        "to": "Alex",
+        "subject": "Shift Swap Request – Friday Library Desk"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-long_002_q1",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "The main purpose is to inform about a supervisor's approval.",
+            "B": "The main purpose is to request a shift swap with a coworker.",
+            "C": "The main purpose is to provide study notes for a biology exam.",
+            "D": "The main purpose is to explain the employee portal procedure."
+          },
+          "correct_answer": "B",
+          "explanation": "Jamie explicitly asks Alex to swap shifts, making the main purpose a shift swap request."
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_002_q2",
+          "question_type": "detail",
+          "stem": "According to the email, what must Jamie and Alex do to complete the shift swap?",
+          "options": {
+            "A": "They must contact Ms. Parker directly.",
+            "B": "They must submit an online form by Wednesday.",
+            "C": "They must inform Dr. Chen about the change.",
+            "D": "They must schedule a meeting with the supervisor."
+          },
+          "correct_answer": "B",
+          "explanation": "Jamie writes: 'we both agree and submit the online form through the employee portal by Wednesday at 5:00 PM.'"
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_002_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about Jamie's Tuesday schedule?",
+          "options": {
+            "A": "Jamie is available to work on Tuesday.",
+            "B": "Jamie is unavailable on Tuesday.",
+            "C": "Jamie is required to attend a study session on Tuesday.",
+            "D": "Jamie is meeting with Ms. Parker on Tuesday."
+          },
+          "correct_answer": "A",
+          "explanation": "Jamie proposes to cover Alex's Tuesday shift, implying Jamie is free at that time."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_30221067817-long_003",
+      "variant": "long",
+      "text": "Notice: E-Waste Recycling Drive\n\nThe University Facilities Office, in collaboration with GreenTech Recycling, is pleased to announce our annual e-waste recycling drive. It will be held on Saturday, April 22, from 9:00 AM to 3:00 PM in Parking Lot B behind Anderson Hall (enter via Maple Drive).\n\nAccepted items include:\n• Computers, laptops, and monitors (CRT monitors subject to a $5.00 fee)\n• Printers, scanners, and keyboards\n• Mice, cables, phones, and tablets\n• Small appliances (e.g., toasters, fans)\n\nItems not accepted: refrigerators, air conditioners, batteries, and hazardous materials.\n\nParticipants are requested to arrive with items already removed from their vehicles. Volunteers will be available to assist with unloading. Please note: The university cannot guarantee data destruction; it is the responsibility of the participant to erase all personal data prior to drop-off. E-waste from off-campus sources will not be accepted.\n\nThis event is free for all items except CRT monitors. For inquiries, contact the Office of Sustainability at sustainability@univ.edu or call 555-0223. Thank you for contributing to a greener campus.",
+      "word_count": 170,
+      "genre": "notice",
+      "format_metadata": {
+        "from": "University Facilities Office",
+        "to": "Campus Community",
+        "subject": "E-Waste Recycling Drive"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-long_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what items are NOT accepted at the e-waste drive?",
+          "options": {
+            "A": "computers and laptops",
+            "B": "printers and scanners",
+            "C": "refrigerators and batteries",
+            "D": "phones and tablets"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice explicitly lists refrigerators and batteries as items not accepted."
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_003_q2",
+          "question_type": "detail",
+          "stem": "What must participants do before dropping off their electronics?",
+          "options": {
+            "A": "pay a $5.00 fee for each item",
+            "B": "schedule a drop-off time",
+            "C": "bring identification from the university",
+            "D": "erase all personal data from devices"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states: 'it is the responsibility of the participant to erase all personal data prior to drop-off.'"
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_003_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this notice?",
+          "options": {
+            "A": "to announce a fee increase for CRT monitors",
+            "B": "to inform the campus community about an e-waste recycling opportunity",
+            "C": "to request volunteers for the recycling event",
+            "D": "to explain data security policies for electronic devices"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice primarily provides details about the upcoming e-waste recycling drive, encouraging participation."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_30221067817-long_004",
+      "variant": "long",
+      "text": "Subject: Volunteer for WUCR 88.5 FM – Spring Semester Openings\n\nDear Students,\n\nAre you interested in radio broadcasting? WUCR 88.5 FM is now recruiting volunteers for the spring semester. We're looking for on-air hosts, news reporters, music directors, and production assistants. No previous experience is required—we'll train you. Benefits include practical broadcasting experience, a professional demo reel, and a $10 per hour stipend for on-air shifts.\n\nVolunteers must commit at least 3 hours per week. Training sessions will be held the week of March 6. There will be an info session on Thursday, March 2, at 6:00 PM in the Student Union, Room 203. If you cannot attend, you can apply online at wucr.edu/volunteer by March 1. On-air hosts must complete a separate technical orientation.\n\nFor more information, contact Maria, recruitment coordinator, at maria@wucr.edu. We can't wait to hear your voice on the air!\n\nBest wishes,\nThe WUCR Team",
+      "word_count": 149,
+      "genre": "email",
+      "format_metadata": {
+        "from": "The WUCR Team",
+        "to": "Students",
+        "subject": "Volunteer for WUCR 88.5 FM – Spring Semester Openings"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_30221067817-long_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what is required for on-air hosts?",
+          "options": {
+            "A": "prior experience in broadcasting",
+            "B": "completion of a technical orientation",
+            "C": "attendance at the March 1 application deadline",
+            "D": "submission of a demo reel"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states: 'On-air hosts must complete a separate technical orientation.'"
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the volunteer recruitment process?",
+          "options": {
+            "A": "Applicants are interviewed for all positions.",
+            "B": "The station accepts only experienced volunteers.",
+            "C": "The application deadline is before the information session.",
+            "D": "The training is conducted only online."
+          },
+          "correct_answer": "C",
+          "explanation": "The application deadline is March 1, and the info session is March 2, implying the deadline comes first."
+        },
+        {
+          "qid": "rdl_gen_30221067817-long_004_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this email?",
+          "options": {
+            "A": "to inform about the $10 per hour stipend",
+            "B": "to recruit student volunteers for a campus radio station",
+            "C": "to announce the schedule for training sessions",
+            "D": "to promote the March 1 application deadline"
+          },
+          "correct_answer": "B",
+          "explanation": "The email's primary goal is to attract volunteers to join WUCR, detailing opportunities and requirements."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
     }
   ]
 }
