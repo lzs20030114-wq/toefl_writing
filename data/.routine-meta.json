@@ -1,55 +1,29 @@
 {
-  "session_id": "routine-20260724-190442",
-  "completed_at": "2026-07-24T19:11:22.000Z",
-  "duration_minutes": 7,
+  "session_id": "routine-20260727-190517",
+  "completed_at": "2026-07-27T19:10:00.000Z",
+  "duration_minutes": 5,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号触发：CTW 补 14 题、LCR 补 10 题；阅读/听力入库前留存等待审核 routine 盲审后合并。",
+  "highlight": "按需信号：仅 LCR 补 10 题（最快用户约 12 天刷穿）；已入 staging 等审核 routine 盲审后合并，avgFlavor 0.91。",
   "commit_sha": "",
   "results": {
-    "reading-ctw": {
-      "generated": 14,
-      "accepted": 14,
-      "topics": [
-        "biology/symbiosis",
-        "environmental_science/climate change",
-        "psychology/cognitive bias",
-        "history/cultural exchange",
-        "geology/river deltas",
-        "astronomy/satellite technology",
-        "oceanography/marine food webs",
-        "botany/carnivorous plants",
-        "zoology/sea turtle navigation",
-        "physics/how lenses focus light",
-        "technology/early telephone systems",
-        "anthropology/the spread of early languages",
-        "meteorology/how hail forms",
-        "chemistry/how antacids neutralize acid"
-      ],
-      "favorite": {
-        "subtopic": "zoology/sea turtle navigation",
-        "preview": "Sea turtles are remarkable travelers that migrate thousands of miles across open, featureless stretches of ocean."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "social/schedule conflict",
-        "campus_academic/missing library resource",
-        "social/concern for a friend",
-        "general_daily/asking directions",
-        "campus_academic/splitting a presentation",
-        "general_daily/post office hours",
-        "general_daily/ride to the airport",
-        "social/dinner invitation",
-        "campus_academic/project deadline",
-        "general_daily/grocery bag about to rip"
+        "campus_academic/lab report requirements",
+        "campus_daily/gym hours",
+        "campus_daily/weekend plans",
+        "campus_academic/writing center help",
+        "campus_daily/where to get lunch",
+        "campus_academic/group project deadline",
+        "campus_daily/lost-and-found",
+        "campus_academic/professor office hours",
+        "campus_daily/campus shuttle delay",
+        "campus_academic/borrow lecture notes"
       ],
       "favorite": {
-        "subtopic": "general_daily/grocery bag about to rip",
-        "preview": "This grocery bag is about to rip."
+        "subtopic": "campus_academic/borrow lecture notes",
+        "preview": "When can I get your notes from Tuesday? — 正确答案用语境转移，直接答应今晚发邮件，而非纠结具体时间，是本批难度最高的 hard 题。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
