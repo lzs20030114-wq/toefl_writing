@@ -8307,6 +8307,216 @@
       },
       "id": "lcr_mrzda1t0_9",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrzda1t0_9.p1.mp3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure what goes in the lab report.",
+      "options": {
+        "A": "Well, just summarize your results and method.",
+        "B": "The report cards come out next week.",
+        "C": "I already returned the library book.",
+        "D": "Yes, the lab is on the second floor."
+      },
+      "answer": "A",
+      "explanation": "说话者对实验报告该写什么感到困惑。A 以话语标记 Well 开头，直接给出实用建议（写结果和方法），是自然的间接回应，正确。B 复用了 report 一词但指向完全不同的“成绩单”，属语义联想陷阱。C 是语法正确但与话题无关的句子（还图书馆的书）。D 用 Yes 回答了一个并非是非问的陈述，且只说实验室位置，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzl7_0"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Don't they keep the gym open pretty late?",
+      "options": {
+        "A": "The gym got new treadmills last week.",
+        "B": "Actually, it closes at ten on weekdays.",
+        "C": "I left my umbrella at home.",
+        "D": "It's right next to the dining hall."
+      },
+      "answer": "B",
+      "explanation": "说话者想知道健身房这么晚是否还开着。B 以 Actually 开头，间接给出关门时间，实际回答了对方的关切，正确。A 复用 gym 却在描述器材，没回答是否开门，属语义联想陷阱。C 是与语境无关的正常句子（把伞落家里了）。D 只回答了位置（在哪儿），而非是否营业，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzl8_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm thinking about going home this weekend.",
+      "options": {
+        "A": "Home games are always on Saturdays.",
+        "B": "The printer ran out of paper again.",
+        "C": "Oh, when will you be back?",
+        "D": "Yes, the weather looks nice today."
+      },
+      "answer": "C",
+      "explanation": "室友说打算周末回家。C 用一个反问（你什么时候回来？）推进对话，是自然回应，正确。A 复用 home 但指向“主场比赛”，属语义联想陷阱。B 是与语境无关的句子（打印机没纸了）。D 用 Yes 回应一个非是非的陈述，且转向天气，属答非所问/误解。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzl9_2"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you think you've got time for my intro?",
+      "options": {
+        "A": "We were never properly introduced.",
+        "B": "The cafeteria closes early on Fridays.",
+        "C": "It's on the third floor, actually.",
+        "D": "Sure, which draft is this one?"
+      },
+      "answer": "D",
+      "explanation": "说话者在写作中心请人帮看引言。D 先答应（Sure），再用反问确认是哪一稿，推进对话，正确。A 复用 intro/introduce 但指向“互相介绍”，属语义联想陷阱。B 是与语境无关的句子（食堂周五早关门）。C 只给了地点（三楼），并未回应帮看的请求，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzla_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where do you want to grab lunch today?",
+      "options": {
+        "A": "Let's try that new taco place.",
+        "B": "The lunch specials are on the menu.",
+        "C": "My phone battery is almost dead.",
+        "D": "Around noon, if that works for you."
+      },
+      "answer": "A",
+      "explanation": "说话者问在哪儿吃午饭。A 直接给出地点（那家新墨西哥卷店），正确。B 复用 lunch 却在说菜单特价，没回答去哪儿，属语义联想陷阱。C 是与语境无关的句子（手机快没电了）。D 回答的是时间（大约中午），而问的是地点，属答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzla_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How are we finishing this if it's due Monday?",
+      "options": {
+        "A": "Mondays are always so busy for me.",
+        "B": "Don't worry, I'll take the last section.",
+        "C": "It started raining right after class.",
+        "D": "Yes, we should definitely finish it soon."
+      },
+      "answer": "B",
+      "explanation": "说话者担心项目周一前做不完。B 不直接回答“怎么做”，而是承担最后一部分来解决根本问题，属语境转移，正确。A 复用 Monday 却在抱怨周一忙，属语义联想陷阱。C 是与语境无关的句子（下课后下雨了）。D 用 Yes 回应了一个 How 问句，只是重申目标却没说“怎么做”，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzlb_5"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why hasn't anyone turned in my backpack yet?",
+      "options": {
+        "A": "The straps on that backpack look sturdy.",
+        "B": "I'm meeting my advisor at three.",
+        "C": "These things usually turn up.",
+        "D": "Yes, the desk closes at six."
+      },
+      "answer": "C",
+      "explanation": "说话者抱怨背包还没被交到失物招领处。C 用习惯性安慰语（这类东西一般都会出现的）自然回应，正确。A 复用 backpack 却在评价背包带子，属语义联想陷阱。B 是与语境无关的句子（三点见导师）。D 用 Yes 回应一个 Why 问句，只给了关门时间，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzlb_6"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Don't you usually have office hours on Fridays?",
+      "options": {
+        "A": "The office supplies are in that closet.",
+        "B": "The elevator's been broken all week.",
+        "C": "It's due next Friday at noon.",
+        "D": "Of course, stop by anytime."
+      },
+      "answer": "D",
+      "explanation": "说话者确认教授周五是否有答疑时间。D 用习惯性欢迎语（当然，随时来）热情回应，正确。A 复用 office 却指“办公用品”，属语义联想陷阱。B 是与语境无关的句子（电梯坏了一周）。C 复用 Friday 却回答某作业的截止时间，并非是否有答疑，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzlc_7"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What's the deal with the shuttle being so late?",
+      "options": {
+        "A": "Your guess is as good as mine.",
+        "B": "The shuttle has comfortable new seats.",
+        "C": "I forgot to charge my laptop.",
+        "D": "It stops right by the gym."
+      },
+      "answer": "A",
+      "explanation": "说话者抱怨校车为何这么晚。A 用习惯用语（我也不清楚）自然回应，正确。B 复用 shuttle 却在夸座椅，没回应晚点，属语义联想陷阱。C 是与语境无关的句子（忘给笔记本充电）。D 回答的是校车停靠地点，而非晚点原因，属答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzlc_8"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "When can I get your notes from Tuesday?",
+      "options": {
+        "A": "The notes on the piano sounded off.",
+        "B": "I'll just email them to you tonight.",
+        "C": "My roommate adopted a cat last week.",
+        "D": "In the lecture hall, usually."
+      },
+      "answer": "B",
+      "explanation": "说话者问什么时候能拿到周二的笔记。B 不纠结于具体时间，而是直接提出今晚发邮件把笔记发过去，解决根本需求，属语境转移，正确。A 复用 notes 却指“钢琴音符”，属语义联想陷阱。C 是与语境无关的句子（室友领养了猫）。D 回答的是地点（教室里），而问的是时间，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms3nlzlc_9"
     }
   ]
 }
