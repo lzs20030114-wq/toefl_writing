@@ -1,0 +1,47 @@
+name: Cohort retention report
+
+# 手动触发的用户留存 cohort 分析。在 GitHub 服务器上连 Supabase(用仓库已有的
+# NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY secret)跑
+# scripts/analytics/cohort-retention-report.mjs,把生成的 HTML 报告作为 artifact
+# 上传,供有 GitHub 权限、但没有本地环境的人直接下载查看。
+#
+# 用法:仓库 → Actions → "Cohort retention report" → Run workflow → 选分支 → Run。
+# 跑完(约 1 分钟)进入该次运行页,下载 "cohort-report" artifact(zip 内是 HTML)。
+#
+# 报告只含聚合数字(留存率/人数/走平判定),不含任何 user_code / 邮箱等个人信息。
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Generate cohort report
+        run: node scripts/analytics/cohort-retention-report.mjs cohort-report.html
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cohort-report
+          path: cohort-report.html
+          if-no-files-found: error
+          retention-days: 14
