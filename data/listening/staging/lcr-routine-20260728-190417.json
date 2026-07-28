@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "friend sharing news about a classmate transferring",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where'd you hear that Mia's transferring?",
+      "options": {
+        "A": "Oh, word travels fast.",
+        "B": "Transfer applications are due in March.",
+        "C": "I need to return these library books.",
+        "D": "Just a couple of days ago."
+      },
+      "answer": "A",
+      "explanation": "朋友惊讶地问「你从哪儿听说Mia要转学的」。正确答案A用惯用语「word travels fast」（消息传得快）自然地回应，含蓄承认消息已经传开，是地道的口语反应。B是语义联想陷阱：抓住「transfer」联想到转学申请截止日期，却答非所问。C完全离题，是另一段对话里才成立的话。D是问题类型错误：说话人问的是「在哪儿（where）听说的」，这句却回答了「什么时候（when）」。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a review session",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you coming to the review session tonight?",
+      "options": {
+        "A": "The session room's on the second floor.",
+        "B": "Actually, I've got a shift then.",
+        "C": "I finally fixed my bike yesterday.",
+        "D": "No, I've never been good at chemistry."
+      },
+      "answer": "B",
+      "explanation": "朋友邀请对方今晚来复习课。正确答案B以话语标记词「Actually」开头，间接地用「我那时候要上班」委婉说明来不了，既回应又推进对话。A是语义联想陷阱：抓住「session」联想到教室楼层，却没回应邀请。C完全离题。D虽然带「No」，但理由（我从来不擅长化学）与「今晚是否来」毫无关系，属于错误语境。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about the reading list for a course",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Do you know the reading list yet?",
+      "options": {
+        "A": "I love reading before bed.",
+        "B": "The parking lot's completely full today.",
+        "C": "Well, it's posted on the course page.",
+        "D": "Yes, I know a few people in that class."
+      },
+      "answer": "C",
+      "explanation": "同学问「你知道阅读书单了吗」。正确答案C以话语标记词「Well」开头，间接地指出书单已发布在课程页面，正面解决了对方的信息需求。A是语义联想陷阱：抓住「reading」联想到睡前阅读的个人爱好，答非所问。B完全离题。D利用了「know」的多义性——这里的「know」是「认识几个人」而非「知道书单」，是典型的多义词误导，且没有给出任何书单信息。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend suggesting they get dinner together",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Why don't we grab dinner this weekend?",
+      "options": {
+        "A": "Dinner's usually cheaper on weekdays.",
+        "B": "My phone's been acting up lately.",
+        "C": "Yes, I finished the assignment.",
+        "D": "Sure, Saturday works for me."
+      },
+      "answer": "D",
+      "explanation": "朋友用「Why don't we...」提出周末一起吃饭的建议。正确答案D直接答应并给出具体时间「周六可以」，是对建议最自然的正面回应。A是语义联想陷阱：抓住「dinner」联想到工作日更便宜，却没回应建议。B完全离题。C是问题类型错误：对方是在约饭，这句却回答了「作业是否做完」这种完全不同的问题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "rescheduling an appointment with a receptionist",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can we push my appointment to Friday?",
+      "options": {
+        "A": "I'll check the calendar and text you.",
+        "B": "Fridays are always so busy here.",
+        "C": "The coffee machine broke again.",
+        "D": "I can't push the door open."
+      },
+      "answer": "A",
+      "explanation": "对方问能否把预约改到周五。正确答案A没有生硬地回答「行/不行」，而是转向解决底层需求——「我查一下日程再发消息给你」，这正是context_shift范式。B是语义联想陷阱：抓住「Friday」谈周五有多忙，回避了改期请求。C完全离题。D利用「push」的多义性——把「push（改期）my appointment」误读成「push（推）the door」，是多义词误导。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating an airport pickup with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've still gotta get from the airport Sunday.",
+      "options": {
+        "A": "The airport added a new terminal.",
+        "B": "Say no more, I've got you.",
+        "C": "I finally finished my history essay.",
+        "D": "I can't get the jar open."
+      },
+      "answer": "B",
+      "explanation": "朋友说周日还得想办法从机场回来。正确答案B用惯用语「Say no more, I've got you」（不用多说，包在我身上）主动揽下接机，是地道又贴心的回应。A是语义联想陷阱：抓住「airport」谈机场新航站楼，却没帮上忙。C完全离题。D利用「get」的多义性——把「get（回来）from the airport」误接成「get（拧开）the jar」，是多义词误导。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling a shop to check its business hours",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How late are you open on Sundays?",
+      "options": {
+        "A": "The window won't stay open.",
+        "B": "My car wouldn't start this morning.",
+        "C": "Actually, we're open around the clock.",
+        "D": "We're right next to the bank."
+      },
+      "answer": "C",
+      "explanation": "顾客打电话问周日营业到多晚。正确答案C以「Actually」开头，用惯用语「around the clock」（全天候）间接告知全天营业，自然又切题。A利用「open」的多义性——把「open（营业）」误读成「open（打开）the window」，是多义词误导。B完全离题。D是问题类型错误：对方问的是「营业到多晚（时间）」，这句却回答了「在哪儿（位置）」。",
+      "distractor_types": {
+        "A": "misinterpretation",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "complaining to a neighbor about late-night noise",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "The music next door's kept me up again.",
+      "options": {
+        "A": "That band's new album is great.",
+        "B": "The recycling gets picked up Tuesdays.",
+        "C": "The door lock keeps getting stuck.",
+        "D": "I'll talk to them tonight."
+      },
+      "answer": "D",
+      "explanation": "邻居抱怨隔壁的音乐又害他没睡好。正确答案D没有停留在附和抱怨，而是转向解决问题——「我今晚去跟他们说说」，正是context_shift范式。A是语义联想陷阱：抓住「music」谈某乐队的新专辑，答非所问。B完全离题。C利用「door」的多义性——把「next door（隔壁）」误接成「the door lock（门锁）」，是多义词误导。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking the last shuttle time",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time's the last shuttle back tonight?",
+      "options": {
+        "A": "Actually, it stops running at ten.",
+        "B": "The shuttle got a new paint job.",
+        "C": "I lost my student ID somewhere.",
+        "D": "It leaves from the main gate."
+      },
+      "answer": "A",
+      "explanation": "学生问今晚末班校车是几点。正确答案A以话语标记词「Actually」开头，间接给出「十点停运」这一关键信息，切题又自然。B是语义联想陷阱：抓住「shuttle」谈校车重新喷漆，答非所问。C完全离题。D是问题类型错误：对方问的是「几点（时间）」，这句却回答了「从哪儿发车（地点）」。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "When's a good time to grab your lecture notes?",
+      "options": {
+        "A": "My notes are a total mess.",
+        "B": "You can grab them after class.",
+        "C": "The vending machine ate my money.",
+        "D": "They're in my blue binder."
+      },
+      "answer": "B",
+      "explanation": "同学问什么时候方便来拿讲义笔记。正确答案B直接给出时间「下课后就能拿」，是对「什么时候（when）」最自然的正面回答。A是语义联想陷阱：抓住「notes」谈自己的笔记很乱，没回答时间。C完全离题。D是问题类型错误：对方问的是「什么时候（时间）」，这句却回答了「在哪儿（笔记在蓝色文件夹里，即位置）」。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}

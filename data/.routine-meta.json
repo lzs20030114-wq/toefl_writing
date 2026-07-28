@@ -1,29 +1,29 @@
 {
-  "session_id": "routine-20260727-190517",
-  "completed_at": "2026-07-27T19:10:00.000Z",
-  "duration_minutes": 5,
+  "session_id": "routine-20260728-190417",
+  "completed_at": "2026-07-28T19:08:29Z",
+  "duration_minutes": 4,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号：仅 LCR 补 10 题（最快用户约 12 天刷穿）；已入 staging 等审核 routine 盲审后合并，avgFlavor 0.91。",
+  "highlight": "按需信号：今晚仅补 LCR 10 题（最快用户约 12 天刷穿）；已入 staging 等审核 routine 盲审后合并，WH 题型与多义词陷阱全覆盖。",
   "commit_sha": "",
   "results": {
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "campus_academic/lab report requirements",
-        "campus_daily/gym hours",
-        "campus_daily/weekend plans",
-        "campus_academic/writing center help",
-        "campus_daily/where to get lunch",
-        "campus_academic/group project deadline",
-        "campus_daily/lost-and-found",
-        "campus_academic/professor office hours",
-        "campus_daily/campus shuttle delay",
-        "campus_academic/borrow lecture notes"
+        "social/朋友分享转学消息",
+        "campus_daily/复习课邀约",
+        "campus_academic/课程阅读书单",
+        "social/约饭建议",
+        "general_daily/改预约时间",
+        "general_daily/机场接机协调",
+        "general_daily/询问营业时间",
+        "general_daily/邻里噪音",
+        "campus_daily/末班校车时间",
+        "campus_academic/借讲义笔记"
       ],
       "favorite": {
-        "subtopic": "campus_academic/borrow lecture notes",
-        "preview": "When can I get your notes from Tuesday? — 正确答案用语境转移，直接答应今晚发邮件，而非纠结具体时间，是本批难度最高的 hard 题。"
+        "subtopic": "general_daily/机场接机",
+        "preview": "I've still gotta get from the airport Sunday. — 正确答案用惯用语 \"Say no more, I've got you.\" 主动揽下接机，是 idiomatic 范式的 hard 题。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
