@@ -99,7 +99,7 @@ async function loadFromSupabase() {
   const sb = createClient(url, key, { auth: { persistSession: false } });
 
   // status='pending' = 预生成但从未激活的登录码,排除(与 SQL 视图一致)。NULL 保留。
-  const usersRaw = await fetchAll(sb, "users", "code,created_at,status,tier,tier_expires_at", "code");
+  const usersRaw = await fetchAll(sb, "users", "code,created_at,status,tier,tier_expires_at,exam_date", "code");
   const users = usersRaw.filter((u) => u.status !== "pending" && u.created_at);
 
   // details->>subtype 用 PostgREST 箭头选择,避免拉整个 details JSON。
@@ -128,7 +128,16 @@ function makeDemoData() {
       uid += 1;
       const code = `U${String(uid).padStart(4, "0")}`;
       const signup = mStart + (i % 28); // 摊到当月
-      users.push({ code, created_at: day(signup), status: "active", tier: "free" });
+      // 约 45% 的人填了考试日期(注册后 20–70 天),用于演示 #3 真图。
+      const hasExam = uid % 20 < 9;
+      const examOffsetFromSignup = 20 + (uid % 50);
+      users.push({
+        code,
+        created_at: day(signup),
+        status: "active",
+        tier: "free",
+        exam_date: hasExam ? day(signup + examOffsetFromSignup).slice(0, 10) : null,
+      });
 
       // 每人的活跃周:week0 几乎都活跃,之后按曲线掉;plateau 组尾部有地板。
       for (let w = 0; w <= MAX_WEEKS; w++) {
@@ -293,6 +302,34 @@ function buildActivation(firstPayByUser, fullMockUsers, activeDaysByUser, nowDay
   };
 }
 
+// ── 流失时点(#3 真图,当 exam_date 有数据时):最后活跃距「考试日期」天数分布 ──
+// delta = 最后活跃日 - 考试日。负数=考前就没影(真流失),正数=考后不再用(正常)。
+function buildExamChurn(examDateByUser, activeDaysByUser) {
+  const buckets = [
+    { label: "考前 15 天以上流失", lo: -Infinity, hi: -15 },
+    { label: "考前 8–14 天", lo: -14, hi: -8 },
+    { label: "考前 1 周内", lo: -7, hi: -1 },
+    { label: "考后 1 周内(考完即走)", lo: 0, hi: 7 },
+    { label: "考后 8–30 天", lo: 8, hi: 30 },
+    { label: "考后 30 天以上(仍在用/复考)", lo: 31, hi: Infinity },
+  ].map((b) => ({ ...b, count: 0 }));
+  let total = 0;
+  let preExam = 0;
+  let postExam = 0;
+  for (const [code, examStr] of examDateByUser) {
+    const days = activeDaysByUser.get(code);
+    if (!days || !days.size) continue;
+    const examN = dayNum(examStr);
+    const lastN = Math.max(...days);
+    const delta = lastN - examN;
+    total += 1;
+    if (delta < 0) preExam += 1; else postExam += 1;
+    const b = buckets.find((x) => delta >= x.lo && delta <= x.hi);
+    if (b) b.count += 1;
+  }
+  return { buckets, total, preExam, postExam };
+}
+
 // ── 流失时点(#3 替代图):最后活跃距今天数分布 ───────────────────────────────
 function buildChurnRecency(activeDaysByUser, nowDayN) {
   const buckets = [
@@ -435,7 +472,35 @@ function renderActivation(act) {
 }
 
 function renderReport(model) {
-  const { generatedAt, counts, regCohort, payCohort, regFlat, payFlat, activation, churn } = model;
+  const { generatedAt, counts, regCohort, payCohort, regFlat, payFlat, activation, churn, examChurn } = model;
+  const hasExam = examChurn && examChurn.total > 0;
+  const section3 = hasExam
+    ? `
+  <section>
+    <h2>3 · 流失时点分布(相对考试日期)</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="kn">${counts.withExamDate}</div><div class="kl">填了考试日期的用户</div></div>
+      <div class="kpi"><div class="kn">${examChurn.total ? Math.round((examChurn.preExam / examChurn.total) * 1000) / 10 : 0}%</div><div class="kl">考前就流失(最后活跃早于考试日)</div></div>
+      <div class="kpi"><div class="kn">${examChurn.total ? Math.round((examChurn.postExam / examChurn.total) * 1000) / 10 : 0}%</div><div class="kl">坚持到考后(正常毕业)</div></div>
+    </div>
+    ${renderBars(
+      "",
+      examChurn.buckets,
+      `横轴为每个用户「最后一次练习距离其考试日期多少天」(负=考前,正=考后),纵轴为人数。共 ${examChurn.total} 名填了考试日期且有练习的用户。<strong>左侧(考前)= 真流失</strong>:还没考就放弃了,是要救的人;<strong>右侧(考后)= 正常毕业</strong>:考完自然不再用。若大量堆在「考前 15 天以上流失」,说明产品没能陪用户走到考试。`,
+      { pctOfTotal: true, total: examChurn.total },
+    ).replace("<h2></h2>", "")}
+  </section>`
+    : `
+  <section>
+    <h2>3 · 流失时点分布(替代图)</h2>
+    <div class="warnbox">⚠ 「按考试日期分组的考前/考后流失」<strong>暂无数据</strong>:考试日期落库(study-plan-fields 迁移 + 前端写库)刚上线或迁移未跑,目前还没有用户的 <code>exam_date</code> 进库(历史数据补不回来,只统计上线后新填的)。下面先用「最后活跃距今天数」替代;等有用户填了考试日期,这里会自动切换成真正的考前/考后流失分布。</div>
+    ${renderBars(
+      "",
+      churn.buckets,
+      `横轴为每个活跃过的用户「最后一次练习距离今天多少天」,纵轴为人数。共 ${churn.total} 名活跃用户。堆在右侧(90 天以上)= 已实质流失;堆在左侧 = 近期仍活跃。`,
+      { pctOfTotal: true, total: churn.total },
+    ).replace("<h2></h2>", "")}
+  </section>`;
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>用户留存 Cohort 分析 — TreePractice</title>
@@ -508,16 +573,7 @@ function renderReport(model) {
 
   ${renderActivation(activation)}
 
-  <section>
-    <h2>3 · 流失时点分布(替代图)</h2>
-    <div class="warnbox">⚠ 你要的「按考试日期分组的考前/考后流失」<strong>无法从 Supabase 生成</strong>:考试日期(examDate)只存在用户浏览器 localStorage,<code>lib/studyPlan.js</code> 明确「先不落库」,云端没有这个字段。下面用「最后活跃距今天数」作为替代,反映用户在生命周期中何时掉队;若要真正做考前/考后流失,需先把 examDate 落库(我可另出一版迁移 + 前端改动)。</div>
-    ${renderBars(
-      "",
-      churn.buckets,
-      `横轴为每个活跃过的用户「最后一次练习距离今天多少天」,纵轴为人数。共 ${churn.total} 名活跃用户。堆在右侧(90 天以上)= 已实质流失;堆在左侧 = 近期仍活跃。`,
-      { pctOfTotal: true, total: churn.total },
-    ).replace("<h2></h2>", "")}
-  </section>
+  ${section3}
 
   <p class="sub" style="margin-top:8px">口径:UTC 日界;排除 <code>status='pending'</code> 的预生成未激活登录码;首次付费 = 每人 <code>iap_entitlements.granted_at</code> 最小值;「核心动作」= 一条 <code>sessions</code> 记录(每次练习/模考/AI 批改都会写一行)。合并曲线只纳入「整周时间已过」的成熟 cohort,避免最近未满周把留存算低。</p>
 </div></body></html>`;
@@ -551,6 +607,14 @@ function computeModel({ users, sessions, entitlements }) {
     if (s.type === "mock" || s.sub === "mock") fullMockUsers.add(s.user_code);
   }
 
+  // 考试日期(exam_date 有值的用户;迁移未跑/未填时该 Map 为空 → 用替代图)
+  const examDateByUser = new Map(); // code -> exam dayStr
+  for (const u of users) {
+    if (!validCodes.has(u.code) || !u.exam_date) continue;
+    const d = toUtcDayStr(u.exam_date);
+    if (d) examDateByUser.set(u.code, d);
+  }
+
   // 首次付费(每人最早 granted_at)
   const firstPayByUser = new Map(); // code -> firstPay dayStr
   for (const e of entitlements) {
@@ -567,16 +631,23 @@ function computeModel({ users, sessions, entitlements }) {
   const payFlat = analyzeFlatness(payCohort.pooled);
   const activation = buildActivation(firstPayByUser, fullMockUsers, activeDaysByUser, nowDayN);
   const churn = buildChurnRecency(activeDaysByUser, nowDayN);
+  const examChurn = buildExamChurn(examDateByUser, activeDaysByUser);
 
   return {
     generatedAt: new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC",
-    counts: { users: validCodes.size, sessions: sessions.filter((s) => validCodes.has(s.user_code)).length, payers: firstPayByUser.size },
+    counts: {
+      users: validCodes.size,
+      sessions: sessions.filter((s) => validCodes.has(s.user_code)).length,
+      payers: firstPayByUser.size,
+      withExamDate: examDateByUser.size,
+    },
     regCohort,
     payCohort,
     regFlat,
     payFlat,
     activation,
     churn,
+    examChurn,
   };
 }
 
