@@ -6,6 +6,10 @@ import { ScoringReport } from "../writing/ScoringReport";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
 import { buildRetryHref, startRetryFromHistory } from "../../lib/history/retry";
 import { isV1Session } from "../../lib/history/bankVersion";
+import { isFailedMockTask, rescoreMockHistorySession } from "../../lib/mockExam/service";
+import { evaluateWritingResponse } from "../../lib/ai/writingEval";
+import { mapScoringError } from "../../lib/ai/client";
+import { updateSess } from "../../lib/sessionStore";
 
 const MOCK_TASK_IDS = {
   BUILD: "build-sentence",
@@ -140,6 +144,54 @@ function Chip({ children, color = C.blue, bg = C.softBlue }) {
   return <span style={{ display: "inline-flex", alignItems: "center", padding: "1px 6px", borderRadius: 999, fontSize: 10, fontWeight: 700, color, background: bg, whiteSpace: "nowrap" }}>{children}</span>;
 }
 
+// Re-score a stored session whose AI scoring previously failed. `onRescore`
+// returns { ok, error }; the button manages its own loading/error state so a
+// re-score never blocks the rest of the history view.
+function RescoreButton({ onRescore, idleLabel = "重新评分" }) {
+  const [state, setState] = useState("idle"); // idle | loading | error
+  const [err, setErr] = useState("");
+  async function run() {
+    if (state === "loading") return;
+    setState("loading");
+    setErr("");
+    try {
+      const res = await onRescore();
+      if (res && res.ok) {
+        setState("idle");
+      } else {
+        setState("error");
+        setErr((res && res.error) || "重新评分失败，请稍后再试");
+      }
+    } catch (e) {
+      setState("error");
+      setErr(e?.message || "重新评分失败，请稍后再试");
+    }
+  }
+  const loading = state === "loading";
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <button
+        onClick={run}
+        disabled={loading}
+        style={{
+          border: "1px solid " + C.blue,
+          background: loading ? "#f1f5f9" : C.softBlue,
+          color: C.blue,
+          borderRadius: 999,
+          fontSize: 10.5,
+          fontWeight: 700,
+          padding: "4px 11px",
+          cursor: loading ? "default" : "pointer",
+          opacity: loading ? 0.7 : 1,
+        }}
+      >
+        {loading ? "正在重新评分…（约 30–90 秒）" : idleLabel}
+      </button>
+      {state === "error" ? <div style={{ fontSize: 10.5, color: C.red, marginTop: 5 }}>{err}</div> : null}
+    </div>
+  );
+}
+
 function OutlineButton({ children, onClick, active = false }) {
   return (
     <button
@@ -160,7 +212,7 @@ function OutlineButton({ children, onClick, active = false }) {
   );
 }
 
-function MockExamDetails({ session }) {
+function MockExamDetails({ session, sourceIndex }) {
   const [activeTab, setActiveTab] = useState(MOCK_TASK_IDS.BUILD);
   const [bsFilter, setBsFilter] = useState("all");
   const [bsQuery, setBsQuery] = useState("");
@@ -207,9 +259,22 @@ function MockExamDetails({ session }) {
     });
   }, [bsDetails, bsFilter, bsQuery]);
 
+  // Writing tasks whose AI scoring failed AND still carry a re-scoreable payload.
+  const rescorableTasks = tasks.filter(
+    (t) => isFailedMockTask(t) && (t?.meta?.retryPayload?.userText || t?.meta?.deferredPayload?.userText)
+  );
+
+  async function handleRescoreMock() {
+    const r = await rescoreMockHistorySession(session, { evaluateResponse: evaluateWritingResponse });
+    if (!r.changed) return { ok: false, error: r.error || "没有可重新评分的题目" };
+    updateSess(r.session, sourceIndex);
+    return r.error ? { ok: false, error: `部分题目仍失败：${r.error}` } : { ok: true };
+  }
+
   function taskChip(taskId, shortLabel) {
     const task = byId[taskId];
     if (!task) return <Chip key={taskId}>{shortLabel}：--</Chip>;
+    if (isFailedMockTask(task)) return <Chip key={taskId} color="#b45309" bg="#fef3c7">{shortLabel}：评分失败</Chip>;
     const score = Number.isFinite(task.score) ? task.score : "待定";
     return <Chip key={taskId}>{shortLabel}：{score}/{task.maxScore}</Chip>;
   }
@@ -333,6 +398,14 @@ function MockExamDetails({ session }) {
         {taskChip(MOCK_TASK_IDS.EMAIL, "邮件")}
         {taskChip(MOCK_TASK_IDS.DISC, "讨论")}
       </div>
+      {rescorableTasks.length > 0 ? (
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ fontSize: 11, color: "#b45309", marginBottom: 5 }}>
+            有 {rescorableTasks.length} 道写作题上次 AI 评分失败（未计入段位）。可点此重新评分。
+          </div>
+          <RescoreButton onRescore={handleRescoreMock} idleLabel="重新评分失败题目" />
+        </div>
+      ) : null}
       <div style={{ display: "flex", gap: 7, marginBottom: 8, flexWrap: "wrap" }}>
         {mockTabs.map((tab) => <OutlineButton key={tab.id} active={activeTab === tab.id} onClick={() => setActiveTab(tab.id)}>{tab.label}</OutlineButton>)}
       </div>
@@ -369,7 +442,43 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
   const mockEmail = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.EMAIL);
   const mockDisc = mockTasks.find((task) => task?.taskId === MOCK_TASK_IDS.DISC);
 
-  const mockChip = (label, task) => <Chip key={label}>{label} {Number.isFinite(task?.score) ? `${task.score}/${task.maxScore}` : `待定/${task?.maxScore || "--"}`}</Chip>;
+  const mockChip = (label, task) => {
+    if (isFailedMockTask(task)) return <Chip key={label} color="#b45309" bg="#fef3c7">{label} 评分失败</Chip>;
+    return <Chip key={label}>{label} {Number.isFinite(task?.score) ? `${task.score}/${task.maxScore}` : `待定/${task?.maxScore || "--"}`}</Chip>;
+  };
+
+  // Standalone email/discussion re-score: the failed session persisted the full
+  // promptData + userText, so we can re-run the evaluator without retyping.
+  const canRescoreWriting =
+    (session.type === "email" || session.type === "discussion") &&
+    isScoringFailed(session) &&
+    session?.details?.promptData &&
+    typeof session?.details?.userText === "string" &&
+    session.details.userText.trim().length > 0;
+
+  async function handleRescoreWriting() {
+    const pd = session?.details?.promptData;
+    const userText = session?.details?.userText;
+    if (!pd || !userText) return { ok: false, error: "缺少题目或作答数据，无法重新评分" };
+    const lang = session?.details?.feedback?.reportLanguage || session?.details?.reportLanguage || "zh";
+    try {
+      const r = await evaluateWritingResponse(session.type, pd, userText, lang);
+      updateSess(
+        {
+          ...session,
+          score: r.score,
+          band: r.band,
+          weaknesses: r.weaknesses,
+          next_steps: r.next_steps,
+          details: { ...session.details, feedback: r, scoringFailed: false, scoringError: "" },
+        },
+        sourceIndex
+      );
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: mapScoringError(e) };
+    }
+  }
 
   return (
     <div>
@@ -458,11 +567,19 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
         </SurfaceCard>
       ) : null}
 
-      {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} /> : null}
+      {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} sourceIndex={sourceIndex} /> : null}
 
       {isExpanded && session.details && (session.type === "email" || session.type === "discussion") ? (
         <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", boxShadow: "none" }}>
           {session.details.promptSummary ? <div style={{ fontSize: 11, color: C.t2, marginBottom: 7 }}>题目摘要：{session.details.promptSummary}</div> : null}
+          {canRescoreWriting ? (
+            <div style={{ marginBottom: 8 }}>
+              <div style={{ fontSize: 11, color: "#b45309", marginBottom: 5 }}>
+                上次 AI 评分失败。你的作答已保存，可直接重新评分（无需重写）。
+              </div>
+              <RescoreButton onRescore={handleRescoreWriting} />
+            </div>
+          ) : null}
           {retryHref ? (
             <div style={{ marginBottom: 8 }}>
               <OutlineButton onClick={() => startRetryFromHistory(session)}>再练一遍（同题）</OutlineButton>

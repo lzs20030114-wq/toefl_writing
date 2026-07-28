@@ -167,7 +167,10 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     const payload = buildPersistPayload(finalSession, { phase, error: err });
     saveMockExamSession(payload.sessionSnapshot);
     upsertMockSess(payload.historyPayload, payload.mockSessionId);
-    clearMockCheckpoint(); // session persisted, checkpoint no longer needed
+    // Keep the checkpoint when scoring errored so a reload/return still restores
+    // the session and its "重试 AI 评分" button (within the checkpoint TTL). On a
+    // clean finish there's nothing left to retry, so drop it.
+    if (phase !== "error") clearMockCheckpoint();
   }
 
   function doStartExam() {
@@ -261,7 +264,10 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     if (!session) return [];
     return session.blueprint.map((task) => {
       const a = session.attempts[task.taskId];
-      const scoreText = Number.isFinite(a?.score) ? `${a.score}/${a.maxScore}` : "pending";
+      const failed = a?.meta?.scoringFailed === true || (!!a?.meta?.error && !a?.meta?.feedback);
+      const scoreText = Number.isFinite(a?.score)
+        ? `${a.score}/${a.maxScore}`
+        : (failed ? "评分失败" : "pending");
       return {
         id: task.taskId,
         title: task.title,

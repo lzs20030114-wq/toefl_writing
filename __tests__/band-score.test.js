@@ -146,4 +146,32 @@ describe("calculateWritingBand — verification table", () => {
     expect(result.breakdown.writeAnEmail.score).toBe(0);
     expect(result.breakdown.academicDiscussion.score).toBe(5);
   });
+
+  test("excludes a null (unscored/failed) component from the mean", () => {
+    // Email failed to score. Band must reflect only BaS(8→mean 4) + Disc(4) = 4.0,
+    // NOT (4 + 0 + 4)/3 = 2.67 which would wrongly punish the user for a system fault.
+    const result = calculateWritingBand(8, null, 4);
+    expect(result.combinedMean).toBeCloseTo(4.0, 2);
+    expect(result.scaledScore).toBe(25);
+    expect(result.band).toBe(5.0);
+    expect(result.scoredCount).toBe(2);
+    expect(result.breakdown.writeAnEmail.scored).toBe(false);
+    expect(result.breakdown.writeAnEmail.score).toBeNull();
+  });
+
+  test("a real 0 stays in the mean (only null is excluded)", () => {
+    // A genuinely-scored 0 (blank/off-topic) is NOT a failure and must count.
+    const withZero = calculateWritingBand(8, 0, 4);
+    expect(withZero.scoredCount).toBe(3);
+    expect(withZero.combinedMean).toBeCloseTo((4 + 0 + 4) / 3, 2);
+    const withNull = calculateWritingBand(8, null, 4);
+    expect(withNull.combinedMean).toBeGreaterThan(withZero.combinedMean);
+  });
+
+  test("all components null → floor band, no crash", () => {
+    const result = calculateWritingBand(null, null, null);
+    expect(result.scoredCount).toBe(0);
+    expect(result.combinedMean).toBe(0);
+    expect(result.band).toBe(1.0);
+  });
 });

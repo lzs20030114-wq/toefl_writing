@@ -147,6 +147,33 @@ describe("/api/ai server-side usage metering", () => {
     expect(mockUpdateCalls).toHaveLength(0);
   });
 
+  test("does NOT consume a credit when the AI returns a broken (truncated) score report", async () => {
+    // DeepSeek replied, but the report is a section-format writing report whose
+    // ===SCORE=== was truncated away — the client will fail to parse it. Server
+    // must return the content (200) yet withhold the credit so a format failure
+    // can't silently burn the user's daily quota.
+    mockUsageRow = { usage_count: 1 };
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "===ANNOTATION===\nsome notes but the SCORE section got cut" } }] }),
+    });
+    const res = await POST(aiRequest());
+    expect(res.status).toBe(200);
+    expect(mockRpcCalls).toHaveLength(0);    // not metered
+    expect(mockUpdateCalls).toHaveLength(0);
+  });
+
+  test("DOES consume a credit for a valid section score report", async () => {
+    mockUsageRow = { usage_count: 1 };
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "===SCORE===\n分数: 4\n===ANNOTATION===\nok" } }] }),
+    });
+    const res = await POST(aiRequest());
+    expect(res.status).toBe(200);
+    expect(mockRpcCalls).toHaveLength(1);    // metered — real report
+  });
+
   test("falls back to a non-atomic upsert when the increment RPC is missing", async () => {
     mockUsageRow = { usage_count: 1 };
     mockRpcImpl = () => ({ data: null, error: { message: "function increment_daily_usage does not exist" } });

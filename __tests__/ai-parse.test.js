@@ -28,6 +28,24 @@ describe("parseReport", () => {
     expect(out.band).toBe(5);
   });
 
+  test.each([
+    ["null score", { score: null, summary: "x" }],
+    ["empty-string score", { score: "", summary: "x" }],
+    ["boolean score", { score: false, summary: "x" }],
+    ["array score", { score: [], summary: "x" }],
+  ])("rejects a non-numeric JSON score (%s) instead of coercing it to a phantom 0", (_label, body) => {
+    const out = parseReport(JSON.stringify(body));
+    // Must be treated as a parse FAILURE (retryable "评分失败"), not a valid 0.
+    expect(out.error).toBe(true);
+    expect(out.score).toBeNull();
+  });
+
+  test("clamps an out-of-range JSON score into 0-5", () => {
+    const out = parseReport(JSON.stringify({ score: 9, band: 6, summary: "x" }));
+    expect(out.error).toBeUndefined();
+    expect(out.score).toBe(5);
+  });
+
   test("parses sectioned report in new format", () => {
     const raw = `
 ===SCORE===

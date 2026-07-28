@@ -172,6 +172,10 @@ function collectFromMock(row, acc, summary, attemptLimit) {
       const response = t?.meta?.response || t?.meta?.deferredPayload || {};
       const score = safeNum(t?.score, NaN);
       const maxScore = safeNum(t?.maxScore, 5);
+      // A failed AI scoring is stored as score=null (+ meta.error / scoringFailed).
+      // Legacy rows wrote a genuine-looking 0 with an error — detect both so the
+      // dashboard shows "评分失败" instead of a phantom "0/5".
+      const scoringFailed = t?.scoringFailed === true || (!!t?.meta?.error && !t?.meta?.feedback);
       acc.push({
         ...buildAttemptBase(row, map.subtype, i),
         subject: "writing",
@@ -179,7 +183,9 @@ function collectFromMock(row, acc, summary, attemptLimit) {
         fromMock: true,
         prompt: String(response?.promptSummary || ""),
         answer: String(response?.userText || ""),
-        scoreText: Number.isFinite(score) ? `${score}/${maxScore}` : "pending",
+        scoreText: scoringFailed ? "评分失败" : (Number.isFinite(score) ? `${score}/${maxScore}` : "pending"),
+        scoringFailed,
+        scoringError: scoringFailed ? String(t?.meta?.error || "评分失败") : "",
       });
     }
     // Future: reading/listening tasks in mock would be handled here via map.subject.

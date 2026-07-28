@@ -170,6 +170,43 @@ function collectContents(results) {
     .map((r) => r.value);
 }
 
+// 一份 DeepSeek 输出是否为「损坏的评分报告」——用来决定是否扣用量。
+// 计费一直是「拿到任何文本就扣一次」,但格式校验(parse.js)在客户端跑;结果是
+// 写作评分被截断/推空正文时,服务端照扣次数,用户白扣、反复重试反复扣,最终额度
+// 耗尽变成「一直评分失败还不能重新评分」。这里在服务端加一道轻量闸:只有当输出
+// 明显是坏掉的评分报告时才「不扣」。判定保守——只在能确定损坏时返回 true,
+// 其余(口语面试 JSON、出题/审校等非评分调用、纯文本)一律当可计费,绝不误伤。
+function isBrokenScoreReport(raw) {
+  const text = String(raw || "").replace(/```json/gi, "").replace(/```/g, "").trim();
+  if (!text) return true; // 空内容 = 损坏
+  if (text.startsWith("{")) {
+    // JSON 形态(写作 JSON / 口语面试 JSON)。有 score 键但非数字 = 损坏;
+    // 没有 score 键(别的端点形状)或解析不了 → 不判损坏(保守,照扣)。
+    try {
+      const obj = JSON.parse(text);
+      if (!obj || typeof obj !== "object" || Array.isArray(obj)) return false;
+      if (!("score" in obj)) return false;
+      const s = typeof obj.score === "number"
+        ? obj.score
+        : (typeof obj.score === "string" && obj.score.trim() !== "" ? Number(obj.score) : NaN);
+      return !Number.isFinite(s);
+    } catch {
+      return false;
+    }
+  }
+  // Section 形态(写作评分报告)。有 ===XXX=== 标记才按评分报告判定:必须存在
+  // ===SCORE=== 且含合法 0-5 分数行,否则视为截断/损坏。非 section 输出不判损坏。
+  if (!/===[A-Z_]+===/.test(text)) return false;
+  const hasValidScore = /===SCORE===/.test(text) && /(?:score|分数)\s*[:：]\s*[0-5](?:\.\d+)?/i.test(text);
+  return !hasValidScore;
+}
+
+// 是否值得扣一次用量:只要有 ≥1 份内容不是「损坏评分报告」就扣。
+function shouldMeter(contents) {
+  const list = Array.isArray(contents) ? contents : [];
+  return list.some((c) => !isBrokenScoreReport(c));
+}
+
 // 第一个失败采样的原因(用于 0 成功时的错误语义)。
 function firstRejectionReason(results) {
   const rejected = results.find((r) => r.status === "rejected");
@@ -361,14 +398,15 @@ export async function POST(request) {
           throw firstRejectionReason(results) || new Error("AI service temporarily unavailable.");
         }
         // 部分失败也要留痕(见 logPartialSampleFailures),与计量一起 best-effort。
+        // 只有产出了可评分的内容才扣用量——避免格式失败(截断/空正文)白扣次数。
         await Promise.all([
-          recordAiUsage(usageUserCode, usageCap, usageDay),
+          shouldMeter(contents) ? recordAiUsage(usageUserCode, usageCap, usageDay) : Promise.resolve(),
           logPartialSampleFailures(requestMeta, results),
         ]);
         return Response.json({ content: contents[0], contents });
       }
       const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
-      await recordAiUsage(usageUserCode, usageCap, usageDay);
+      if (shouldMeter([content])) await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
 
@@ -392,8 +430,9 @@ export async function POST(request) {
         );
       }
       // 部分失败也要留痕(见 logPartialSampleFailures),与计量一起 best-effort。
+      // 只有产出了可评分的内容才扣用量——避免格式失败(截断/空正文)白扣次数。
       await Promise.all([
-        recordAiUsage(usageUserCode, usageCap, usageDay),
+        shouldMeter(contents) ? recordAiUsage(usageUserCode, usageCap, usageDay) : Promise.resolve(),
         logPartialSampleFailures(requestMeta, results),
       ]);
       return Response.json({ content: contents[0], contents });
@@ -402,7 +441,7 @@ export async function POST(request) {
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
     try {
       const content = await callDirectOnce(apiKey, upstreamParams);
-      await recordAiUsage(usageUserCode, usageCap, usageDay);
+      if (shouldMeter([content])) await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {
       const upstreamStatus = Number(err?.status);
