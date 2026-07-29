@@ -8747,6 +8747,216 @@
       },
       "id": "lcr_ms5337tx_9",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_ms5337tx_9.p1.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where has Sophie been all week?",
+      "options": {
+        "A": "Beats me — I haven't seen her.",
+        "B": "Her apartment's just past the library.",
+        "C": "The whole week just flew by.",
+        "D": "Yes, the test was really hard."
+      },
+      "answer": "A",
+      "explanation": "说话人担心整周没见到 Sophie。A 用习语 “Beats me”（我也不知道）自然回应“我也没见到她”，最贴切。B 只答她住哪，答非所问，属语义联想陷阱（Where→地点）；C 借用 week 但只感叹时间过得快，属离题；D 用 Yes 回答特殊疑问句，答非所问且内容无关。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms6lb7oa_0"
+    },
+    {
+      "context": "general_daily",
+      "situation": "making or rescheduling an appointment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How do I move my dentist appointment?",
+      "options": {
+        "A": "The dentist's office looks brand new.",
+        "B": "Don't worry, I'll call the office.",
+        "C": "How about pizza for dinner tonight?",
+        "D": "Yes, you should floss every day."
+      },
+      "answer": "B",
+      "explanation": "说话人问怎么改牙医预约。B 没有逐字解释步骤，而是直接帮忙解决——“我来打电话”，属情境转移，最自然。A 借 dentist 描述诊所外观，答非所问，属语义联想陷阱；C 完全跳到晚餐，属离题；D 用 Yes 回应特殊疑问句并谈护牙，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms6lb7ob_1"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm not sure what's on the final exam.",
+      "options": {
+        "A": "The exam room is on the third floor.",
+        "B": "I already turned in my lab report.",
+        "C": "Well, the professor posted a study guide.",
+        "D": "The vending machines are out of coffee."
+      },
+      "answer": "C",
+      "explanation": "说话人不确定期末考什么内容。C 以 “Well” 开头，间接指向解决办法——教授发了复习提纲，最贴切。A 借 exam 谈考场位置，答非所问，属语义联想陷阱；B 提交实验报告与考什么无关，属离题；D 谈自动贩卖机也完全离题。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_ms6lb7oc_2"
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When does the picnic start on Saturday?",
+      "options": {
+        "A": "The park has plenty of parking.",
+        "B": "I love picnics in the summer.",
+        "C": "Yes, please bring a dish to share.",
+        "D": "Actually, it kicks off around noon."
+      },
+      "answer": "D",
+      "explanation": "说话人问周六野餐几点开始。D 以 “Actually” 开头，间接给出时间“中午左右”，最贴切。A 借 picnic 联想到公园停车，答非所问，属语义联想陷阱；B 只是抒发对野餐的喜爱，属离题；C 用 Yes 回答特殊疑问句，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_ms6lb7od_3"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise or shared space",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can you turn the music down tonight?",
+      "options": {
+        "A": "Sure, I'll switch to my headphones.",
+        "B": "The music store downtown just reopened.",
+        "C": "No, I already ate before I came.",
+        "D": "Yes, the speakers were pretty expensive."
+      },
+      "answer": "A",
+      "explanation": "邻居请对方把音乐关小些。A 没有停留在字面，而是直接从根源解决——“我改用耳机”，属情境转移，最自然。B 借 music 谈唱片店，答非所问，属语义联想陷阱；C 谈吃饭完全离题；D 用 Yes 却去描述音箱价格，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "semantic_association_trap"
+      },
+      "id": "lcr_ms6lb7od_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't find the book for my class.",
+      "options": {
+        "A": "The library closes at nine tonight.",
+        "B": "Well, let me check the other branch.",
+        "C": "I read a great novel last weekend.",
+        "D": "Yes, reading really helps with writing."
+      },
+      "answer": "B",
+      "explanation": "说话人找不到上课要用的书。B 以 “Well” 开头，间接提出解决办法——去别的分馆查一下，最贴切。A 借 library 谈闭馆时间，答非所问，属语义联想陷阱；C 谈自己读的小说，属离题；D 对陈述句用 Yes 并泛谈阅读好处，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_ms6lb7og_5"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What did I miss in today's lecture?",
+      "options": {
+        "A": "The lecture hall was freezing today.",
+        "B": "I missed the bus this morning too.",
+        "C": "Do you want to copy my notes?",
+        "D": "Yes, attendance is worth ten percent."
+      },
+      "answer": "C",
+      "explanation": "同学问今天讲课错过了什么。C 用一个反问推进对话——“要不要抄我的笔记？”，直接帮上忙，最贴切。A 借 lecture 谈教室冷，答非所问，属语义联想陷阱；B 借 miss 谈错过公交，属离题；D 用 Yes 回答特殊疑问句，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms6lb7og_6"
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why don't we drive together on Monday?",
+      "options": {
+        "A": "The highway was packed this morning.",
+        "B": "Mondays are always so exhausting.",
+        "C": "Yes, my car is bright red.",
+        "D": "Sure, what time works for you?"
+      },
+      "answer": "D",
+      "explanation": "朋友提议周一拼车。D 以反问推进——“行啊，你几点方便？”，顺势敲定安排，最自然。A 借 drive 谈早上堵车，答非所问，属语义联想陷阱；B 只感叹周一累人，属离题；C 用 Yes 却去描述车的颜色，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_ms6lb7og_7"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at the computer lab",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I scan these pages here?",
+      "options": {
+        "A": "Go right ahead, it's all yours.",
+        "B": "The scanner's a brand-new model.",
+        "C": "No, I haven't eaten lunch yet.",
+        "D": "The library's on the second floor."
+      },
+      "answer": "A",
+      "explanation": "说话人问能不能在这里扫描。A 用习语 “Go right ahead”（尽管用）自然应允，最贴切。B 借 scanner 谈机器是新型号，答非所问，属语义联想陷阱；C 谈午饭完全离题；D 谈图书馆位置也离题。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_ms6lb7oh_8"
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or a personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Did you hear I got the internship?",
+      "options": {
+        "A": "The office building is quite tall.",
+        "B": "That's wonderful — congratulations to you!",
+        "C": "I didn't hear the alarm today.",
+        "D": "No, the printer is out of ink."
+      },
+      "answer": "B",
+      "explanation": "朋友分享拿到实习的好消息。B 直接回应并道贺，最自然贴切。A 借 internship 联想到办公楼，答非所问，属语义联想陷阱；C 借 hear 谈没听见闹钟，属离题；D 用 No 却去谈打印机没墨，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "off_topic"
+      },
+      "id": "lcr_ms6lb7oh_9"
     }
   ]
 }
