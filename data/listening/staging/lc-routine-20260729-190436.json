@@ -1,0 +1,188 @@
+{
+  "items": [
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students talking about a new restaurant downtown and which dish to try",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Have you tried that new Thai place that just opened downtown?" },
+        { "speaker": "Man", "text": "Not yet, but everyone on my floor keeps talking about it. Is it really worth going?" },
+        { "speaker": "Woman", "text": "Honestly, yeah. I went Friday and the green curry was incredible — and not too spicy." },
+        { "speaker": "Man", "text": "Oh, that's a relief. I'm honestly pretty terrible with spicy food." },
+        { "speaker": "Woman", "text": "Then the curry's perfect for you. Just ask them to make it mild." },
+        { "speaker": "Man", "text": "Good call." },
+        { "speaker": "Woman", "text": "You'll love it. Try to go this weekend, but get there early before the crowds." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "A new restaurant and what to try",
+            "B": "How to cook a spicy Thai curry",
+            "C": "Their plans for the weekend",
+            "D": "A cooking class they both attended"
+          },
+          "answer": "A",
+          "explanation": "对话围绕市中心新开的泰餐厅以及点哪道菜展开，所以 A 正确。B 错在他们没有讨论怎么做咖喱，只是在餐厅点菜；C 只提到男生周末会去，是次要细节而非主旨；D 完全没有出现烹饪课，属无关话题。",
+          "distractor_types": { "B": "wrong_topic", "C": "too_narrow", "D": "wrong_topic" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do?",
+          "options": {
+            "A": "Cook a curry at home this weekend",
+            "B": "Avoid the restaurant because of the spice",
+            "C": "Order the curry and ask for it mild",
+            "D": "Recommend the place to other friends"
+          },
+          "answer": "C",
+          "explanation": "女生建议他点咖喱并让店家做成微辣，男生说周末会去，所以最可能是 C。A 错在他要去餐厅吃而不是在家做；B 与对话相反，女生说微辣就没问题，他并没打算避开；D 属过度推断，对话没有任何他要推荐给别人的暗示。",
+          "distractor_types": { "A": "unrelated_next_step", "B": "rejected_option", "D": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two friends discussing a movie one just saw — good twists but too long",
+      "difficulty": "hard",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Did you end up seeing that new mystery film everyone's talking about?" },
+        { "speaker": "Man", "text": "I did, last night. The plot twists were absolutely brilliant, honestly." },
+        { "speaker": "Woman", "text": "Everyone's been raving about those twists. So you'd recommend it, then?" },
+        { "speaker": "Man", "text": "Well, sort of. The twists were great, but it dragged on for nearly three hours." },
+        { "speaker": "Woman", "text": "Three hours?" },
+        { "speaker": "Man", "text": "Right. By the end I kept checking the time. Great story, just way too long." },
+        { "speaker": "Woman", "text": "That's a shame. A tighter cut would've made it perfect." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the man's overall opinion of the film?",
+          "options": {
+            "A": "It was boring from start to finish",
+            "B": "It was excellent but far too long",
+            "C": "The twists were confusing and weak",
+            "D": "It was the best film he's seen"
+          },
+          "answer": "B",
+          "explanation": "男生反复说剧情反转很精彩，但片长近三小时太拖沓，所以整体评价是 B——很好但太长。A 与事实相反，他并不觉得全程无聊；C 也相反，他说反转很出色而非又弱又乱；D 属夸大，他没有说这是看过最好的电影。",
+          "distractor_types": { "A": "reversed_situation", "C": "reversed_situation", "D": "over_inference" }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man?",
+          "options": {
+            "A": "He fell asleep during the film",
+            "B": "He plans to watch it again soon",
+            "C": "He disliked the story overall",
+            "D": "He values a tighter, shorter edit"
+          },
+          "answer": "D",
+          "explanation": "男生抱怨影片太长、结尾频频看表，说明他更看重更紧凑更短的剪辑，故 D 正确。A 属过度推断，他只是看表并没说睡着；B 无依据，他没提要再看一遍；C 与事实相反，他明确说故事很棒。",
+          "distractor_types": { "A": "over_inference", "B": "unrelated_next_step", "C": "reversed_situation" }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends sharing cooking tips while grocery shopping",
+      "difficulty": "medium",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "Do you know how to pick a ripe avocado? Mine are always rock hard." },
+        { "speaker": "Man", "text": "Oh, easy — just press near the stem. If it gives a little, it's ready." },
+        { "speaker": "Woman", "text": "Huh, I never knew that." },
+        { "speaker": "Man", "text": "Yeah. And for tomatoes, go by smell — a ripe one smells sweet at the stem." },
+        { "speaker": "Woman", "text": "That's such a good trick. I usually just grab whatever looks reddest." },
+        { "speaker": "Man", "text": "Give the smell test a try. You'll notice the difference right away." },
+        { "speaker": "Woman", "text": "I definitely will. My salads have been so bland lately." }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the two friends mainly talking about?",
+          "options": {
+            "A": "Which grocery store has better prices",
+            "B": "A recipe they plan to cook together",
+            "C": "How to tell when produce is ripe",
+            "D": "Why the woman dislikes cooking"
+          },
+          "answer": "C",
+          "explanation": "两人一直在交流怎么判断牛油果和番茄是否成熟，所以主旨是 C。A 没有讨论哪家店更便宜；B 他们没有提到要一起做某道菜；D 与事实相反，女生并没有表示讨厌做饭，只是不会挑成熟的菜。",
+          "distractor_types": { "A": "wrong_topic", "B": "wrong_topic", "D": "reversed_situation" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Smell the tomatoes before choosing them",
+            "B": "Ask a store employee for help",
+            "C": "Buy only pre-packaged vegetables",
+            "D": "Stop buying avocados altogether"
+          },
+          "answer": "A",
+          "explanation": "男生教她靠闻气味挑番茄，女生觉得是个好办法，所以她最可能会 A——先闻一闻再选。B 无依据，她没有说要找店员；C 属无关推断，对话没提要买预包装菜；D 属过度推断，她并没打算再也不买牛油果。",
+          "distractor_types": { "B": "unrelated_next_step", "C": "unrelated_next_step", "D": "over_inference" }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two students chatting about a pottery class one just took",
+      "difficulty": "easy",
+      "speakers": [
+        { "name": "Woman", "role": "student", "gender": "female" },
+        { "name": "Man", "role": "student", "gender": "male" }
+      ],
+      "conversation": [
+        { "speaker": "Woman", "text": "How was that pottery class you signed up for last month?" },
+        { "speaker": "Man", "text": "Honestly, so much fun. We made bowls on the wheel the very first day." },
+        { "speaker": "Woman", "text": "Wait, already?" },
+        { "speaker": "Man", "text": "Yeah, hands on right away. The teacher walks around and helps everyone individually." },
+        { "speaker": "Woman", "text": "That sounds great. Is there still space left to join?" },
+        { "speaker": "Man", "text": "I think one spot's left. You should sign up tonight before it's gone." },
+        { "speaker": "Woman", "text": "Oh, I'd better hurry then. I've been wanting to try that." }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the students do on the first day of class?",
+          "options": {
+            "A": "They watched the teacher demonstrate techniques",
+            "B": "They painted a set of finished bowls",
+            "C": "They picked out their own clay tools",
+            "D": "They shaped bowls on the pottery wheel"
+          },
+          "answer": "D",
+          "explanation": "男生明确说第一天就在拉坯机上做碗，所以 D 正确。A 是女生的错误猜测，男生说其实第一天就动手了；B 把做碗错说成给成品上色，改变了关键事实；C 提到挑选工具，对话里并没有提及，属未提及的相关项。",
+          "distractor_types": { "A": "wrong_detail", "B": "wrong_detail", "C": "related_but_not_stated" }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do next?",
+          "options": {
+            "A": "Drop the class she is in",
+            "B": "Sign up for the pottery class",
+            "C": "Buy her own pottery wheel",
+            "D": "Wait until next semester to join"
+          },
+          "answer": "B",
+          "explanation": "女生问还有没有名额，男生说只剩一个位子、让她今晚就报，所以她最可能 B——去报名。A 无依据，没提她在上别的课；C 属过度推断，她没说要买拉坯机；D 与建议相反，男生催她今晚报名以免没位。",
+          "distractor_types": { "A": "unrelated_next_step", "C": "over_inference", "D": "rejected_option" }
+        }
+      ]
+    }
+  ]
+}
