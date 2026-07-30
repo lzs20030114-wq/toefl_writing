@@ -1,45 +1,29 @@
 {
-  "session_id": "routine-20260729-190436",
-  "completed_at": "2026-07-29T19:12:06Z",
-  "duration_minutes": 8,
+  "session_id": "routine-20260730-190408",
+  "completed_at": "2026-07-30T19:10:00Z",
+  "duration_minutes": 6,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号命中：今晚仅补听力 lc(4)+lcr(10) 共 14 题，全部通过校验；已入 staging 等审核 routine 盲审后合并。",
+  "highlight": "按需信号：仅 LCR 触发（T2，最快用户约 11 天刷穿），补短应答 10 题；批次 flavor 0.90、答案分布均衡、缩略/话语标记比例全达 ETS 目标，10/10 通过校验。",
   "commit_sha": "",
   "results": {
-    "listening-lc": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "recommendations_opinions/市中心新泰餐厅点哪道菜",
-        "recommendations_opinions/悬疑片反转精彩但太长",
-        "errands_service/超市里互相分享挑菜/做饭窍门",
-        "errands_service/聊刚上的陶艺课"
-      ],
-      "favorite": {
-        "subtopic": "errands_service/超市里分享挑菜窍门",
-        "preview": "Do you know how to pick a ripe avocado? Mine are always rock hard. — 全对话围绕如何判断果蔬成熟，推断题问女生接下来会闻番茄再挑。"
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "social/关心朋友近况",
-        "general_daily/改约牙医时间",
-        "campus_academic/期末考内容不确定",
-        "social/回应野餐邀约",
-        "general_daily/邻里噪音",
-        "campus_academic/图书馆找书",
-        "campus_academic/借讲义笔记",
-        "general_daily/拼车安排",
-        "campus_daily/机房扫描/打印",
-        "social/朋友分享拿到实习"
+        "social/朋友表达关切",
+        "campus_daily/班车时刻",
+        "campus_academic/小组作业截止",
+        "campus_daily/校园活动地点",
+        "general_daily/拼车搭乘",
+        "campus_academic/选课先修课",
+        "campus_academic/考试复习资料",
+        "social/日程冲突约见",
+        "campus_daily/宿舍暖气报修",
+        "campus_daily/周末计划"
       ],
       "favorite": {
-        "subtopic": "social/关心朋友近况",
-        "preview": "Where has Sophie been all week? — 正确答案用惯用语 \"Beats me — I haven't seen her.\" 回应，是 idiomatic 范式的 hard 题。"
+        "subtopic": "campus_daily/宿舍暖气报修",
+        "preview": "Speaker: “Can't someone fix the heater in my room?” 正确答用地道口语 idiom “Sure, I'll get right on it.” 应下并解决——flavor 满分 1.0 的 hard 题。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
