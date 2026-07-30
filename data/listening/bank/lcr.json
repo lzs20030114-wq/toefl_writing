@@ -8967,6 +8967,195 @@
       },
       "id": "lcr_ms6lb7oh_9",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_ms6lb7oh_9.p1.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why're you so stressed today?",
+      "options": {
+        "A": "Don't worry, it's under control.",
+        "B": "Stress can really mess up your sleep.",
+        "C": "The library closes at nine tonight.",
+        "D": "Since around noon, actually."
+      },
+      "answer": "A",
+      "explanation": "说话人在关心对方为什么显得紧张。正确答 A 没有直接解释原因，而是用 “Don't worry” 安抚、化解对方的担忧（context_shift，解决底层的“担心”而非逐字回答 why），语气自然温暖。B 抓住关键词 stress 谈论压力影响睡眠，只是就 stress 陈述事实、答非所问（语义联想陷阱）。C 说图书馆关门时间，与话题完全无关（离题但合语法）。D “从中午开始” 回答的是 “从什么时候起(When)” 而不是 “为什么(Why)”，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms7xy89f_0"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I don't think we'll finish the project by Friday.",
+      "options": {
+        "A": "The cafeteria changed its hours again.",
+        "B": "That project room is always booked.",
+        "C": "Well, let's just ask for an extension.",
+        "D": "No, Friday isn't a holiday."
+      },
+      "answer": "C",
+      "explanation": "说话人担心小组作业周五前做不完。正确答 C 以话语标记 “Well” 开头，间接给出解决办法——申请延期（marker_led_indirect），推动对话。A 说食堂又改了营业时间，与话题无关（离题）。B 抓住 project 谈 “项目室总被占”，只借关键词、不回应截止日期焦虑（语义联想陷阱）。D 把 Friday 误当成在问 “周五是不是假日”，理解错了说话人的意图（误解）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_ms7xy89g_1"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where's the jazz concert being held tonight?",
+      "options": {
+        "A": "The concert tickets sold out fast.",
+        "B": "I have practice until six tonight.",
+        "C": "It starts around eight, I think.",
+        "D": "Actually, it moved to the quad."
+      },
+      "answer": "D",
+      "explanation": "说话人问今晚爵士音乐会在哪里办。正确答 D 以话语标记 “Actually” 开头，间接给出地点信息——改到广场了（marker_led_indirect）。A 抓住 concert 谈门票很快售罄，只就音乐会陈述事实、不回答地点（语义联想陷阱）。B 说自己练习到六点，与提问无关（离题）。C “大概八点开始” 回答的是 “什么时候(when)” 而不是 “在哪里(where)”，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      },
+      "id": "lcr_ms7xy89h_2"
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'll give you a ride tomorrow morning.",
+      "options": {
+        "A": "That'd be great, thanks so much.",
+        "B": "The gym was packed this morning.",
+        "C": "That ride at the fair was scary.",
+        "D": "No, I don't have a car."
+      },
+      "answer": "A",
+      "explanation": "说话人主动提出明早捎对方一程。正确答 A 直接接受并道谢，是对好意最自然的回应（direct_topical）。B 说健身房今早人很多，与话题无关（离题）。C 抓住 ride 却把它当成 “游乐设施”，是同词异义的语义陷阱。D “不，我没有车” 误解了对方——是别人开车捎你，你有没有车并不相关（误解）。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_ms7xy89h_3"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Don't I need a prerequisite for this course?",
+      "options": {
+        "A": "The course covers three main topics.",
+        "B": "As far as I know, no.",
+        "C": "I left my laptop at home.",
+        "D": "Registration opens next Monday."
+      },
+      "answer": "B",
+      "explanation": "说话人问这门课要不要先修课。正确答 B 用地道口语套话 “As far as I know” 自然回应并给出否定答复（idiomatic）。A 抓住 course 谈课程涵盖三大主题，只描述课程内容、不回答是否需要先修（语义联想陷阱）。C 说自己把笔记本落家里了，与提问无关（离题）。D “下周一开放选课” 回答的是 “什么时候选课”，而非是否需要先修课，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms7xy89i_4"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "When are the exam study guides posted?",
+      "options": {
+        "A": "The exam room is on the third floor.",
+        "B": "I'm meeting my advisor at noon.",
+        "C": "Any day now, I'd guess.",
+        "D": "Yes, they're really detailed."
+      },
+      "answer": "C",
+      "explanation": "说话人问复习资料什么时候发布。正确答 C 用地道口语套话 “Any day now” 自然表达 “就这几天吧”（idiomatic），间接回答时间。A 抓住 exam 谈考场在三楼，只说地点、不回答发布时间（语义联想陷阱）。B 说自己中午要见导师，与提问无关（离题）。D “是的，它们很详细” 回答的是资料 “好不好(yes/no)”，而非 “什么时候发(when)”，答错了问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms7xy89j_5"
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How about we meet up later this week?",
+      "options": {
+        "A": "The movie was completely sold out.",
+        "B": "We met the new tutor yesterday.",
+        "C": "No, I haven't seen him lately.",
+        "D": "Would Thursday afternoon work for you?"
+      },
+      "answer": "D",
+      "explanation": "说话人提议这周晚些时候见面。正确答 D 用一个反问敲定具体时间——“周四下午行吗？”，推动对话往前走（counter_question）。A 说电影票全售罄，与约见无关（离题）。B 抓住 meet 变成 “met the new tutor”，借关键词说了件无关的事（语义联想陷阱）。C “没有，我最近没见过他” 把话误当成在问某个人，理解错了意图（误解）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "semantic_association_trap",
+        "C": "misinterpretation"
+      },
+      "id": "lcr_ms7xy89j_6"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can't someone fix the heater in my room?",
+      "options": {
+        "A": "Sure, I'll get right on it.",
+        "B": "The elevator's still being fixed.",
+        "C": "I'm heading to class in five minutes.",
+        "D": "The front desk is on the first floor."
+      },
+      "answer": "A",
+      "explanation": "说话人请求有人来修暖气。正确答 A 用地道口语套话 “I'll get right on it”（我马上处理）自然应下并解决问题（idiomatic）。B 抓住 fix 变成 “电梯还在修”，借关键词说了件无关的事、不回应暖气请求（语义联想陷阱）。C 说自己五分钟后要去上课，与请求无关（离题）。D “前台在一楼” 回答的是 “在哪里(where)”，而不是回应 “能不能修(yes/no 请求)”，答错了问题类型。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_ms7xy89j_7"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Aren't you doing anything this weekend?",
+      "options": {
+        "A": "The weekend forecast looks pretty rainy.",
+        "B": "Not really, I'm all yours.",
+        "C": "My laptop finally got repaired.",
+        "D": "Yes, it went by so fast."
+      },
+      "answer": "B",
+      "explanation": "室友问你这周末有没有安排。正确答 B 用地道口语 “I'm all yours”（我随你安排）自然回应，表示自己有空（idiomatic）。A 抓住 weekend 谈周末天气预报有雨，只借关键词、不回答有无安排（语义联想陷阱）。C 说笔记本终于修好了，与提问无关（离题）。D “是啊，过得真快” 把 weekend 误当成已经过去的周末，理解错了意图（误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_ms7xy89k_8"
     }
   ]
 }

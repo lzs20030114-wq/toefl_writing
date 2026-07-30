@@ -21,26 +21,6 @@
       }
     },
     {
-      "context": "campus_daily",
-      "situation": "student checking bus or shuttle schedule",
-      "difficulty": "hard",
-      "answer_paradigm": "context_shift",
-      "speaker": "What's the campus shuttle schedule like?",
-      "options": {
-        "A": "The shuttle got new seats last week.",
-        "B": "I'm headed that way — hop in.",
-        "C": "I finished my lab report early.",
-        "D": "Yes, it runs on weekends too."
-      },
-      "answer": "B",
-      "explanation": "说话人想知道班车几点来，本质是想搭车过去。正确答 B 不报时间，而是直接解决底层需求——“我正好去那边，上车吧”（context_shift）。A 抓住 shuttle 谈班车换了新座椅，只描述班车、不回答时间（语义联想陷阱）。C 说自己写完了实验报告，与话题无关（离题）。D “周末也发车” 回答的是 “是否运营(yes/no)” 而非 “几点来(when)”，答错了问题类型。",
-      "distractor_types": {
-        "A": "semantic_association_trap",
-        "C": "off_topic",
-        "D": "wrong_question_type"
-      }
-    },
-    {
       "context": "campus_academic",
       "situation": "two classmates discussing a group project deadline",
       "difficulty": "easy",
