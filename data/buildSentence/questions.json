@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-07-31T19:19:30.102Z",
+  "generated_at": "2026-07-31T19:44:14.161Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -18334,6 +18334,256 @@
           "grammar_points": [
             "direct question",
             "wh-question"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 72,
+      "questions": [
+        {
+          "id": "ets_s72_q1",
+          "prompt": "I might skip the review session tomorrow.",
+          "answer": "Are you bringing your notes to the session?",
+          "chunks": [
+            "are",
+            "you",
+            "bringing",
+            "your",
+            "notes",
+            "session"
+          ],
+          "prefilled": [
+            "to the"
+          ],
+          "prefilled_positions": {
+            "to the": 5
+          },
+          "distractor": null,
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question",
+            "present continuous"
+          ]
+        },
+        {
+          "id": "ets_s72_q2",
+          "prompt": "What did Mariana ask you about the study rooms?",
+          "answer": "I asked whether the study rooms need reservations.",
+          "chunks": [
+            "i",
+            "the",
+            "study rooms",
+            "need",
+            "reservations"
+          ],
+          "prefilled": [
+            "asked whether"
+          ],
+          "prefilled_positions": {
+            "asked whether": 1
+          },
+          "distractor": "room",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (whether)",
+            "present tense"
+          ]
+        },
+        {
+          "id": "ets_s72_q3",
+          "prompt": "What did Emma tell you about the pottery workshop?",
+          "answer": "I signed up for the pottery workshop last week.",
+          "chunks": [
+            "signed up",
+            "for",
+            "the",
+            "pottery",
+            "workshop"
+          ],
+          "prefilled": [
+            "I",
+            "last week"
+          ],
+          "prefilled_positions": {
+            "i": 0,
+            "last week": 7
+          },
+          "distractor": "has",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past tense",
+            "phrasal verb"
+          ]
+        },
+        {
+          "id": "ets_s72_q4",
+          "prompt": "Did Diane email you back about the trip?",
+          "answer": "You'll need to renew your parking pass soon.",
+          "chunks": [
+            "you'll",
+            "renew",
+            "your",
+            "parking pass",
+            "soon"
+          ],
+          "prefilled": [
+            "need to"
+          ],
+          "prefilled_positions": {
+            "need to": 1
+          },
+          "distractor": "will",
+          "has_question_mark": false,
+          "grammar_points": [
+            "modal (will)",
+            "future"
+          ]
+        },
+        {
+          "id": "ets_s72_q5",
+          "prompt": "Did Julian tell you if the lab reopened?",
+          "answer": "I found out that the lab reopened after the break.",
+          "chunks": [
+            "I",
+            "that",
+            "the",
+            "lab",
+            "reopened",
+            "after the",
+            "break"
+          ],
+          "prefilled": [
+            "found out"
+          ],
+          "prefilled_positions": {
+            "found out": 1
+          },
+          "distractor": "had",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (found out)",
+            "past tense"
+          ]
+        },
+        {
+          "id": "ets_s72_q6",
+          "prompt": "Did Hector send you the reading list?",
+          "answer": "I haven't seen the new syllabus yet.",
+          "chunks": [
+            "I",
+            "haven't",
+            "seen",
+            "the",
+            "new",
+            "syllabus",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation (have not)",
+            "present perfect"
+          ]
+        },
+        {
+          "id": "ets_s72_q7",
+          "prompt": "What did Margot tell you after the meeting?",
+          "answer": "I'm still waiting to hear whether my housing cleared.",
+          "chunks": [
+            "I'm",
+            "still",
+            "waiting",
+            "whether",
+            "my",
+            "housing",
+            "cleared"
+          ],
+          "prefilled": [
+            "to hear"
+          ],
+          "prefilled_positions": {
+            "to hear": 3
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question (whether)",
+            "present continuous"
+          ]
+        },
+        {
+          "id": "ets_s72_q8",
+          "prompt": "I still haven't turned in my registration.",
+          "answer": "Where should I drop off my registration form?",
+          "chunks": [
+            "where",
+            "should",
+            "I",
+            "my",
+            "registration form"
+          ],
+          "prefilled": [
+            "drop off"
+          ],
+          "prefilled_positions": {
+            "drop off": 3
+          },
+          "distractor": "do",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct question (where)",
+            "modal should"
+          ]
+        },
+        {
+          "id": "ets_s72_q9",
+          "prompt": "Does Naomi still cover the front desk?",
+          "answer": "Naomi no longer works at the front desk.",
+          "chunks": [
+            "no longer",
+            "works",
+            "at",
+            "the",
+            "front desk"
+          ],
+          "prefilled": [
+            "Naomi"
+          ],
+          "prefilled_positions": {
+            "naomi": 0
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation (no longer)",
+            "present tense"
+          ]
+        },
+        {
+          "id": "ets_s72_q10",
+          "prompt": "Did Harold ever find his charger?",
+          "answer": "Harold left his charger in the study lounge.",
+          "chunks": [
+            "left",
+            "his",
+            "charger",
+            "in the",
+            "study lounge"
+          ],
+          "prefilled": [
+            "Harold"
+          ],
+          "prefilled_positions": {
+            "harold": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past tense",
+            "prepositional phrase"
           ]
         }
       ]
