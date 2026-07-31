@@ -19,6 +19,8 @@
 
 ## 可派工
 
+- [高] 点数周期刷新机制（**开 CREDITS_ENFORCEMENT_ENABLED 前必须**）：①季/年卡每 30 天补发 100 点（webhook 只发首期）；②活跃周期内续费被跳过的点数补发（webhook 日志可 grep `active period, skip` 出欠账名单，iap_entitlements 是 ground truth）；③CREDITS_ENABLED 翻开前的购买补发。出处：2026-08-01 提价接线（commit 6804b146）。
+- [中] 加量包（50/150/400 点）定价按 deepseek-v4-flash 真实单次成本校准 + 购买链路接线——enforcement 开启后才需要上架。出处：PRICING-USAGE-PLAN-2026-07-13。
 - [中] Interview 口语接入生产线：live 库仅 11 题（全题型最少），但 interview 不在 routine 12-bank 名单里（2026-05-31 校准时 deferred，无校准 prompt）——需先走校准流程（realExam2026 锚 + eval-spec）再入名单；按需出题 demand 文件会把它标为 `not_in_routine` 跳过。**前置依赖：上方「盲审 routine 停摆」拍板**（口语库合库通道本身停着）。出处：按需出题机制自审 2026-07-15。
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
