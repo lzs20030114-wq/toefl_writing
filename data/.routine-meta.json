@@ -1,29 +1,26 @@
 {
-  "session_id": "routine-20260730-190408",
-  "completed_at": "2026-07-30T19:10:00Z",
-  "duration_minutes": 6,
+  "session_id": "routine-20260731-190410",
+  "completed_at": "2026-07-31T19:20:00Z",
+  "duration_minutes": 16,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号：仅 LCR 触发（T2，最快用户约 11 天刷穿），补短应答 10 题；批次 flavor 0.90、答案分布均衡、缩略/话语标记比例全达 ETS 目标，10/10 通过校验。",
+  "highlight": "按需信号：仅 BS 触发（T2，最快用户约 11 天刷穿），补造句 14 题、并库 1 套（10 题）；难度冻结门聚合 PASS——长度档 2易/6中/2难、三人称正式 0.169、缩略 0.183、开头三元组多样性 0.639。",
   "commit_sha": "",
   "results": {
-    "listening-lcr": {
-      "generated": 10,
+    "bs": {
+      "generated": 14,
       "accepted": 10,
       "topics": [
-        "social/朋友表达关切",
-        "campus_daily/班车时刻",
-        "campus_academic/小组作业截止",
-        "campus_daily/校园活动地点",
-        "general_daily/拼车搭乘",
-        "campus_academic/选课先修课",
-        "campus_academic/考试复习资料",
-        "social/日程冲突约见",
-        "campus_daily/宿舍暖气报修",
-        "campus_daily/周末计划"
+        "campus_academic/选课注册截止",
+        "campus_academic/候补名单查询",
+        "campus_daily/图书馆与自习",
+        "campus_daily/食堂就餐",
+        "campus_daily/健身房与班车",
+        "campus_academic/小组作业与选题",
+        "social/校园问路与活动"
       ],
       "favorite": {
-        "subtopic": "campus_daily/宿舍暖气报修",
-        "preview": "Speaker: “Can't someone fix the heater in my room?” 正确答用地道口语 idiom “Sure, I'll get right on it.” 应下并解决——flavor 满分 1.0 的 hard 题。"
+        "prompt": "What did you find out at the registrar's office?",
+        "answer": "I found out that the deadline to switch sections had already passed."
       },
       "retried_after_fail": false,
       "failure_reason": ""

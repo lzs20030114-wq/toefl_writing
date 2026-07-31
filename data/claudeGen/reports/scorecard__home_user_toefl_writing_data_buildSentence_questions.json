@@ -1,28 +1,28 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json",
-  "n": 694,
+  "n": 704,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
     {
       "name": "length_band.easy",
       "verdict": "PASS",
-      "detail": "got 0.251 want 0.246±0.05"
+      "detail": "got 0.25 want 0.246±0.05"
     },
     {
       "name": "length_band.med",
       "verdict": "PASS",
-      "detail": "got 0.627 want 0.595±0.05"
+      "detail": "got 0.626 want 0.595±0.05"
     },
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.122 want 0.159±0.05"
+      "detail": "got 0.124 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.686 band [0.55,0.69]"
+      "detail": "got 0.688 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
@@ -32,12 +32,12 @@
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.17 max 0.17"
+      "detail": "got 0.169 max 0.17"
     },
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.64 min 0.38"
+      "detail": "got 0.639 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
@@ -62,37 +62,37 @@
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.735 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.734 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
       "verdict": "PASS",
-      "detail": "got 0.889 band [0.68,0.97]"
+      "detail": "got 0.891 band [0.68,0.97]"
     },
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.086 max 0.45"
+      "detail": "got 0.085 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.086 band [0.08,0.45]"
+      "detail": "got 0.085 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.806 min 0.1"
+      "detail": "got 0.809 min 0.1"
     },
     {
       "name": "answer.signature_q(dir-only)",
       "verdict": "WARN",
-      "detail": "got 0.046 vs real 0.167"
+      "detail": "got 0.045 vs real 0.167"
     },
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/694 fail"
+      "detail": "0/704 fail"
     }
   ],
   "metrics": {
@@ -104,33 +104,33 @@
       "max": 14
     },
     "length_bands": {
-      "easy": 0.251,
-      "med": 0.627,
-      "hard": 0.122
+      "easy": 0.25,
+      "med": 0.626,
+      "hard": 0.124
     },
     "register": {
-      "first_person": 0.686,
+      "first_person": 0.688,
       "contraction": 0.183,
-      "casual_opener": 0.045,
-      "third_person_formal": 0.17
+      "casual_opener": 0.044,
+      "third_person_formal": 0.169
     },
     "structure": {
       "relative_clause": 0.169,
-      "passive": 0.081,
-      "embedded_question": 0.154,
+      "passive": 0.08,
+      "embedded_question": 0.155,
       "negation": 0.163,
       "modal": 0.092,
-      "subordinate": 0.108
+      "subordinate": 0.107
     },
     "diversity": {
-      "opening_trigram_diversity": 0.64,
+      "opening_trigram_diversity": 0.639,
       "exact_dup_rate": 0.003
     },
     "hard_band_profile": {
-      "n": 85,
-      "first_person": 0.765,
-      "relative_clause": 0.529,
-      "passive": 0.129
+      "n": 87,
+      "first_person": 0.77,
+      "relative_clause": 0.54,
+      "passive": 0.126
     }
   },
   "per_item_audit": [
@@ -15020,6 +15020,216 @@
         "relClause",
         "negation"
       ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I asked whether the printing quota resets every month.",
+      "setId": 71,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Your best bet is the stop behind the library.",
+      "setId": 71,
+      "W": 9,
+      "band": "med",
+      "index": 9,
+      "struct": [],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I didn't hear the announcement this morning.",
+      "setId": 71,
+      "W": 7,
+      "band": "easy",
+      "index": 8,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The umbrella is still hanging by the dining hall entrance.",
+      "setId": 71,
+      "W": 10,
+      "band": "med",
+      "index": 10,
+      "struct": [],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I finally picked the research topic that our whole group agreed on.",
+      "setId": 71,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I found out that the deadline to switch sections had already passed.",
+      "setId": 71,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I have a group meeting at noon.",
+      "setId": 71,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I still don't know whether my spot cleared.",
+      "setId": 71,
+      "W": 8,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ",
+        "negation"
+      ],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Can I still join if I missed the first one?",
+      "setId": 71,
+      "W": 10,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "modal"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where do I meet the campus tour guide?",
+      "setId": 71,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
       "register": [
         "firstPerson"
       ],
