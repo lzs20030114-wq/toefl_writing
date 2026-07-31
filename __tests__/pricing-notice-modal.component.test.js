@@ -27,8 +27,9 @@ jest.mock("../lib/AuthContext", () => ({
 import PricingNoticeModal from "../components/pricing/PricingNoticeModal";
 
 const DISMISS_KEY = "pricing_notice_20260801_dismissed";
-const IN_WINDOW = new Date("2026-07-20T10:00:00+08:00"); // 窗口内
-const AFTER_EXPIRY = new Date("2026-08-02T00:30:00+08:00"); // 过期后
+const IN_WINDOW = new Date("2026-07-20T10:00:00+08:00"); // 旧价窗口内
+// 新价 2026-08-01 生效，公告同日 00:00（北京时间）下线 —— 生效日当天起即视为过期。
+const AFTER_EXPIRY = new Date("2026-08-01T00:30:00+08:00"); // 过期后
 
 beforeEach(() => {
   localStorage.clear();
@@ -61,9 +62,19 @@ describe("PricingNoticeModal 展示逻辑", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  test("过期（2026-08-02 后）→ 不渲染", () => {
+  test("过期（新价生效日 2026-08-01 起）→ 不渲染", () => {
     render(<PricingNoticeModal now={AFTER_EXPIRY} />);
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  test("生效日 00:00 整（北京时间）→ 已过期，不渲染", () => {
+    render(<PricingNoticeModal now={new Date("2026-08-01T00:00:00+08:00")} />);
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  test("生效日前最后一刻（2026-07-31 23:59 北京时间）→ 仍渲染", () => {
+    render(<PricingNoticeModal now={new Date("2026-07-31T23:59:00+08:00")} />);
+    expect(screen.getByRole("dialog")).toBeTruthy();
   });
 
   test("未登录（getSavedCode 为空）→ 不显示「按现价购买 / 续费」次按钮", () => {

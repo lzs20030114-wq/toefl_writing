@@ -41,7 +41,7 @@ function md5(str) {
  * 签名口径：MD5(aoid + order_id + pay_price + pay_time + app_secret)
  * more 字段携带 userCode + productId（与 checkout 侧一致）。
  */
-function buildSignedXorpayBody({ aoid, orderId, payPrice, payTime = "2026-07-05 12:00:00", userCode, productId }) {
+function buildSignedXorpayBody({ aoid, orderId, payPrice, payTime = "2026-08-01 12:00:00", userCode, productId }) {
   const sign = md5(aoid + orderId + payPrice + payTime + APP_SECRET);
   const params = new URLSearchParams({
     aoid,
@@ -86,11 +86,11 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
 
   // ── 1. 金额对账 ──────────────────────────────────────────
 
-  test("正确金额（¥259.88 年卡）→ 授予权益", async () => {
+  test("正确金额（¥499.90 年卡）→ 授予权益", async () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_ok_year",
       orderId: "xp_ok_year",
-      payPrice: "259.88", // pro_yearly = 25988 cents
+      payPrice: "499.90", // pro_yearly = 49990 cents（2026-08-01 提价后）
       userCode: "USER01",
       productId: "pro_yearly",
     });
@@ -108,7 +108,7 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_underpay",
       orderId: "xp_underpay",
-      payPrice: "0.01", // way below pro_yearly 259.88
+      payPrice: "0.01", // way below pro_yearly 499.90
       userCode: "USER02",
       productId: "pro_yearly",
     });
@@ -122,11 +122,11 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     expect(await isWebhookEventProcessed("xorpay", "ao_underpay")).toBe(false);
   });
 
-  test("少付一分钱（¥259.87 vs ¥259.88）→ 拒绝（无折扣容差）", async () => {
+  test("少付一分钱（¥499.89 vs ¥499.90）→ 拒绝（无折扣容差）", async () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_short1",
       orderId: "xp_short1",
-      payPrice: "259.87",
+      payPrice: "499.89",
       userCode: "USER03",
       productId: "pro_yearly",
     });
@@ -136,11 +136,11 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     expect(ents).toHaveLength(0);
   });
 
-  test("多付（¥300 买年卡）→ 接受（用户吃亏，不拦）", async () => {
+  test("多付（¥600 买年卡）→ 接受（用户吃亏，不拦）", async () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_overpay",
       orderId: "xp_overpay",
-      payPrice: "300.00",
+      payPrice: "600.00",
       userCode: "USER04",
       productId: "pro_yearly",
     });
@@ -149,11 +149,11 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     expect(result.granted).toBe(true);
   });
 
-  test("拿便宜商品的钱套贵商品的天数（付月卡钱 ¥29.99 领年卡）→ 拒绝", async () => {
+  test("拿便宜商品的钱套贵商品的天数（付月卡钱 ¥59.90 领年卡）→ 拒绝", async () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_swap",
       orderId: "xp_swap",
-      payPrice: "29.99", // pro_monthly price
+      payPrice: "59.90", // pro_monthly price
       userCode: "USER05",
       productId: "pro_yearly", // but claims yearly
     });
@@ -172,7 +172,7 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_retry",
       orderId: "xp_retry",
-      payPrice: "29.99",
+      payPrice: "59.90",
       userCode: "USER06",
       productId: "pro_monthly",
     });
@@ -195,7 +195,7 @@ describe("XorPay webhook 金额对账 + 发权益顺序", () => {
     const rawBody = buildSignedXorpayBody({
       aoid: "ao_dup",
       orderId: "xp_dup",
-      payPrice: "9.99",
+      payPrice: "19.90",
       userCode: "USER07",
       productId: "pro_weekly",
     });

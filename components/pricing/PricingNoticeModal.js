@@ -20,8 +20,10 @@ const NEW_PRICE_EFFECTIVE_DATE = "8 月 1 日";
 // dismiss 键：本轮公告唯一。带日期后缀，下一轮公告换键即可重新触达。
 const DISMISS_KEY = "pricing_notice_20260801_dismissed";
 
-// 公告过期自动下线：8 月 1 日窗口结束，8 月 2 日 00:00（北京时间）起静默不再弹。
-const EXPIRE_AT = new Date("2026-08-02T00:00:00+08:00");
+// 公告过期自动下线：8 月 1 日 00:00（北京时间）起静默不再弹。
+// 提前一天下线的原因：8-01 新价已经生效，公告正文里「8 月 1 日前仍可按当前价格购买
+// 或续费」是旧价窗口文案，生效日当天再弹会把用户导向一个已经不存在的旧价，属于误导。
+const EXPIRE_AT = new Date("2026-08-01T00:00:00+08:00");
 
 function Icon({ name, size = 20 }) {
   const common = {

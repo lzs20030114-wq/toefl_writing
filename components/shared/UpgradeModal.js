@@ -6,11 +6,13 @@ import { C, FONT } from "./ui";
 
 const POLL_INTERVAL = 5000;
 
+// 2026-08-01 提价生效价 + 各档随附 AI 点数。价格与 lib/iap/catalog.js 的
+// XORPAY_PRODUCTS/AFDIAN_PRODUCTS、点数与 lib/credits/catalog.js 的 PLAN_ALLOWANCES 一致。
 const PLANS = [
-  { id: "pro_weekly", name: "体验卡", price: "¥9.99", duration: "7 天", tag: null },
-  { id: "pro_monthly", name: "月卡", price: "¥29.99", duration: "30 天", tag: "热门" },
-  { id: "pro_quarterly", name: "季卡", price: "¥69.97", duration: "90 天", tag: "推荐" },
-  { id: "pro_yearly", name: "年卡", price: "¥259.88", duration: "365 天", tag: "最划算" },
+  { id: "pro_weekly", name: "体验卡", price: "¥19.90", duration: "7 天", points: "含 30 点", tag: null },
+  { id: "pro_monthly", name: "月卡", price: "¥59.90", duration: "30 天", points: "含 100 点", tag: "热门" },
+  { id: "pro_quarterly", name: "季卡", price: "¥149.90", duration: "90 天", points: "每 30 天 100 点", tag: "推荐" },
+  { id: "pro_yearly", name: "年卡", price: "¥499.90", duration: "365 天", points: "每 30 天 100 点", tag: "最划算" },
 ];
 
 const AFDIAN_URL = "https://ifdian.net/a/treepractice";
@@ -263,6 +265,15 @@ export default function UpgradeModal({ userCode, currentTier, onClose, onUpgrade
               )}
               <span style={{ fontSize: 13, fontWeight: 600, color: C.t1 }}>{p.name}</span>
               {p.tag && <span style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 4, background: p.tag === "推荐" ? "#059669" : p.tag === "最划算" ? "#0891B2" : "#f59e0b", color: "#fff" }}>{p.tag}</span>}
+              {p.points && (
+                <span style={{
+                  fontSize: 10, fontWeight: 600, color: C.t3,
+                  border: "1px solid " + C.bdrSubtle, borderRadius: 4,
+                  padding: "1px 5px", whiteSpace: "nowrap",
+                }}>
+                  {p.points}
+                </span>
+              )}
             </div>
             <div style={{ textAlign: "right" }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>{p.price}</span>
