@@ -1,26 +1,25 @@
 {
-  "session_id": "routine-20260731-190410",
-  "completed_at": "2026-07-31T19:20:00Z",
-  "duration_minutes": 16,
+  "session_id": "routine-20260801-190449",
+  "completed_at": "2026-08-01T19:27:45Z",
+  "duration_minutes": 23,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号：仅 BS 触发（T2，最快用户约 11 天刷穿），补造句 14 题、并库 1 套（10 题）；难度冻结门聚合 PASS——长度档 2易/6中/2难、三人称正式 0.169、缩略 0.183、开头三元组多样性 0.639。",
+  "highlight": "按需信号只点名 BS（T2，最快用户约 10 天刷穿），补造句 20 题、并库 2 套（20 题）；难度冻结门聚合 PASS——长度档 2易/6中/2难、第一人称 0.688、三人称正式 0.169、缩略 0.184，一/二/三人称配比重校准回真题带内。",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 14,
-      "accepted": 10,
+      "generated": 20,
+      "accepted": 20,
       "topics": [
-        "campus_academic/选课注册截止",
-        "campus_academic/候补名单查询",
-        "campus_daily/图书馆与自习",
-        "campus_daily/食堂就餐",
+        "campus_academic/选课注册与截止",
+        "campus_academic/候补与改选",
+        "campus_daily/图书馆借还",
         "campus_daily/健身房与班车",
-        "campus_academic/小组作业与选题",
+        "campus_daily/停车与证件",
         "social/校园问路与活动"
       ],
       "favorite": {
-        "prompt": "What did you find out at the registrar's office?",
-        "answer": "I found out that the deadline to switch sections had already passed."
+        "prompt": "You said your roommate joined a club.",
+        "answer": "He finally emailed the professor who runs the new campus robotics club."
       },
       "retried_after_fail": false,
       "failure_reason": ""
