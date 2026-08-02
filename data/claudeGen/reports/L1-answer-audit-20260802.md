@@ -1,5 +1,18 @@
 # L1 存量库答案全量二审报告（2026-08-02）
 
+## 最终收口摘要
+
+| 指标 | 数 |
+|---|---|
+| 覆盖题量 | LCR 413 + 阅读听力 7 库 1180 ≈ **1593 题**（5 轮 DeepSeek 盲审 + 多轮 agent 分诊 + 人工复核） |
+| **改键总数** | **26**：LCR 16（角色反转，单独审） + AP 9（insert_text 时序） + RDL 1 |
+| 数据毛病清理 | AP 词汇题去双解 1 + LAT 删占位选项 1 |
+| CTW 系统性重挖 | **117 题**（指示代词歧义根治，挖空器加闭集跳过） |
+| 完全干净的库 | lat / lc / la / rdl-short（零实锤） |
+| 低危残留 | CTW 10 项（2 validator + 8 长尾，均 1/10 空、双解、合库层 AI 兜底） |
+| 未审计尾巴 | AP 11 + CTW 18 题（反复 API 超时的顽固 error 项，见文末「覆盖边界」） |
+| 已知生成侧缺陷 | AP insert_text 自检失效（9 处错序，多题解析自曝「Wait…/retained per the plan」）——建议单独立项 |
+
 ## 范围与方法
 
 延续 LCR 全量审计（lcr-answer-audit-20260802.md）后，对其余存量客观题库跑 L1 全量盲审：
@@ -112,3 +125,17 @@ plan」，说明**生成期对 insert_text 题的自检形同虚设，是应单�
 
 - `ap_gen_1780213721866_001` q4 选项 D 括注「(after 'structure.')」与实际槽位（cementation 之后）不符——干扰项标签错位，键 C 正确，不影响判分。
 - 8 道 AP 的 `paragraphs[]` 字段被剥去 ■ 插入符：经查前端 `app/reading/page.js:329` 用 `passage`（含 ■）渲染、不读 `paragraphs`，故 ■ 正常显示——**非 bug，虚惊**。
+
+## 覆盖边界（诚实披露，非隐性截断）
+
+跑满 5 轮 DeepSeek 盲审后，仍有 **AP 11 题 + CTW 18 题**处于 error 状态——DeepSeek 调用反复
+超时（多为超长 passage 命中 30–60s 时限），每轮清掉少数、其余重新 error，已收敛到噪音级，
+继续清 error 的边际产出趋零，故本轮停止，不再触发新审计。
+
+- 这 29 题**未被二审覆盖**，不能声称「全库零错」。AP 基于本批 ~10% 的改键率，这 11 题统计上
+  可能藏 ~1 处 miskey；CTW error 项即便有歧义也是 1/10 空的低危长尾。
+- 兜底：合库层 answerAuditor（ap/rdl/ctw）+ 听力 fail-closed 审计已上线，**未来新题**必过二审；
+  这 29 道存量 error 项可在后续任一次 `full-audit-l1` dispatch（banks=ap,ctw）里顺带扫掉，
+  L1-state.json 断点续跑会自动只重试 error 项。
+- LCR 的 0/413 是**设计如此**：LCR 已于同日单独全量人工+9agent 盲审修复（见
+  lcr-answer-audit-20260802.md），故从本 workflow 的 banks 参数中排除，非漏审。

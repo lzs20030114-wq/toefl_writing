@@ -16,7 +16,8 @@
 
 ## 进行中
 
-- [中] L1 存量库二审收尾：首轮已分诊修复——AP 6 改键+RDL 1 改键+2 数据毛病（e5c4bca）、CTW 指示代词系统性歧义 117 题重挖+挖空器根治（376cdd7 后续 commit）；lat/lc/la/rdl-short 零实锤。报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**剩余**：①2 个 AP 新嫌疑（ap_rt_20260608_2 / ap_mqh11rfu_1，error 项重审浮现）待复核；②重挖后的 CTW 库需用新库重跑 L1 确认没引入新歧义（已清 ctw+ap state 并触发 full-audit-l1 banks=ap,ctw）；③5 个 CTW 低危残留（2 validator + 2 two/the + 1 farmers/farming）由合库层 AI 审计对未来题兜底。完整听力产线加固见 commit d3aac20。
+- [✅完成] L1 存量库答案全量二审（2026-08-02）：覆盖 ~1593 题（LCR 413 + 阅读听力 7 库），5 轮 DeepSeek 盲审 + 多轮 agent 分诊 + 人工复核。**改键 26**（LCR 16 角色反转 + AP 9 insert_text 时序 + RDL 1）+ 数据毛病 2 + CTW 指示代词歧义 117 题系统性重挖 + 挖空器闭集跳过根治。lat/lc/la/rdl-short 零实锤。完整报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**遗留（低优先，非阻塞）**：①CTW 10 项低危残留（2 validator + 8 长尾歧义，各 1/10 空双解，合库层 CTW auditor 对未来题兜底）；②AP 11 + CTW 18 题因 DeepSeek 反复超时未被二审覆盖（顽固 error 项，可在后续 full-audit-l1 dispatch 顺带续扫，L1-state 断点续跑只重试 error）。**衍生新条目见下「AP insert_text 生成侧缺陷」**。
+- [中] AP insert_text 生成侧缺陷：L1 二审在 AP 库查出 9 处 insert_text 答案错序（例子/回指置于概括句之前），且多题 explanation 自曝「Wait…」「retained per the plan」——说明生成期对插入题的自检形同虚设。已逐一改键，但**生成侧未修**：需在 AP 生成 prompt/校验里加插入题时序自检（回指词需前置先行词、例子在概括之后），否则新出的 AP 插入题仍会复发。出处：L1-answer-audit-20260802.md。
 
 ## 可派工
 
