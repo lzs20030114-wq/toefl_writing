@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-02 — v1.16.0
+
+- **听力 LCR 答案全量审计：9 题改键/重写 + 7 题歧义收紧**（`ae9887e`/`067b1e8`，报告 `data/claudeGen/reports/lcr-answer-audit-20260802.md`）：起因用户报告 `lcr_mpvlbko3_4`（"You look completely wiped out today."）键答案给错。对 live 库 413 题全量盲审（9 并行 agent 只看 speaker+选项独立判定，人工复核全部不一致项），根因：context_shift/counter_question 范式没有约束键答案必须站在应答者角色，模型替提问方写出下一句（提供帮助/顾问建议）并设为键——「角色反转」；auditor 提示词同样无角色检查。修复全部不动 speaker 句（已配音频 100% 保留有效），新增 `role_inversion` 干扰项类型。防退化：`lcrPromptBuilder` 增 **ROLE CONSISTENCY (CRITICAL)** 规则、`lcrAuditor` 增 ROLE CHECK 且盲审 prompt 附带 situation 行（应答方角色常由 situation 决定，TA/顾问题此前等于蒙眼判角色）。对修复自身的对抗式 review 追补 3 处 situation 字段与新键的视角错位（其一会把考生引向干扰项）。
+- **2026-08-01 提价正式生效**（`6804b14`）：XorPay/Afdian catalog 四档提至 19.90/59.90/149.90/499.90；Afdian 金额分档同步（≥400 年 / ≥120 季 / ≥40 月，防新月卡 59.90 误判成季卡）；webhook 购买成功后发放订阅点数（fail-open——发放失败绝不影响 Pro 开通与 2xx 应答；活跃周期内续费跳过发放留待周期刷新机制）；UpgradeModal 新价 + 各档「含 X 点」标注；旧价窗口公告 8-01 下线。新增 `iap.credit-grant` 测试 16 例。
+- **备考计划落库（代码已上线，迁移待跑）**（`513ed7d`）：POST `/api/study-plan` 把 examDate/目标分/当前分 upsert 进 `users`（fail-open：迁移未跑列不存在时软失败 200+pending，用户保存计划体验不受影响）；`saveStudyPlan/clearStudyPlan` 加 fire-and-forget 写库影子，localStorage 仍是 UI 真源。cohort 报告 #3 在 `users.exam_date` 有数据后自动从「距今天数」切换为「考前/考后流失」分布。**前置条件：`scripts/sql/study-plan-fields.sql` 尚未跑、未登记进 MIGRATIONS.md——跑完迁移云同步自动开始生效，无需重部署；生效前不进用户公告**。顺带修复 em324 邮件题收件人错配（IT Help Desk → Ms. Reed）。
+- **cohort 留存报告手动触发 workflow**（`1ad7644`）：`.github/workflows/` 新增 analytics 报告的 workflow_dispatch 入口。
+
 ## 2026-07-18 — v1.15.0
 
 - **口语引入屏——真题逐字范式开场 + 模考任务级旁白**（`3995523`，范式依据 `data/claudeGen/reports/SPEAKING-INTRO-PARADIGM-2026-07-16.md`，13 套跟读+14 套采访 ASR 逐字归纳）：跟读/采访每套题作答前新增场景句+指令句引入屏（`lib/speakingGen/introTemplates.js`：manager 场景名词重复不用代词、未点名场景按 set id 确定性哈希在 trainer/speaker × he/she 分流；`SpeakingIntroScreen` 含 Web Speech 朗读）；口语模考新增 repeatNarration/interviewNarration 任务级旁白屏（逐字真题旁白，不占考试计时）。组件测试 2 文件，线上冒烟三范式全命中。
