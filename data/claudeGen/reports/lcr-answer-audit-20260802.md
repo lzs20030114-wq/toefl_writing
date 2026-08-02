@@ -73,3 +73,18 @@ valid / partially_valid / invalid，随后逐题人工复核所有不一致项�
 - `lcrValidator.validateLCR` 对 16 题全部通过（0 error / 0 warning）
 - 全量 jest：128 suites / 1071 tests 全绿
 - 所有改动不涉及 speaker 文本，`audio_url` 无需重配音
+
+## Review 追补（同日复查发现）
+
+对本次修复自身做对抗式 review，发现并修正 3 处遗留：
+
+1. **`lcr_mqiq4y26_1` 的 situation 字段没有随键切换**——表格里写了「改同学视角」，但实际只改了
+   options/explanation/paradigm，页面展示的 situation 仍是「student checking with TA」，与新键
+   C（同学台词「Yes, I graphed mine over the weekend.」）自相矛盾。已改为
+   "students comparing lab report requirements with each other"。
+2. **两道题的 situation 残留旧键视角**——`lcr_mpvlbko3_4` / `lcr_mrba2quq_5` 的 situation
+   「offering help to someone who seems stressed」是为旧的角色反转键写的；尤其前者会把考生
+   引向干扰项 A（正好是 offer of help）。均改为 "expressing concern..." 视角。
+3. **lcrAuditor 盲审不带 situation**——ROLE CHECK 需要知道谁是应答方，而应答方角色常由
+   situation 决定（TA/顾问/同学）。AUDIT_PROMPT 现在附带 Situation 行（缺失时自动省略），
+   并在 ROLE CHECK 中说明用它判定 addressee。
