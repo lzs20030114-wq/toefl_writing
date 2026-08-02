@@ -1,45 +1,43 @@
 {
-  "session_id": "routine-20260801-190449",
-  "generated_at": "2026-08-01T19:28:08.319Z",
+  "session_id": "routine-20260802-190424",
+  "generated_at": "2026-08-02T19:20:34.079Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 77,
+    "diversity": 84,
     "quality": 96
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 77,
+      "diversity_score": 84,
       "diversity_threshold": 90,
       "quality_score": 96,
       "quality_threshold": 95,
       "failures": [
-        "多样性 77 < 90"
+        "多样性 84 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 2/20",
-        "场景 20/20",
-        "句型 3/5",
+        "角色名 2/14",
+        "场景 14/14",
+        "句型 4/5",
         "开头 3/4",
-        "prefilled类型 5/4 (top:verb-phrase 11/20)",
-        "人物当prefilled 0/20 (0%, TPO~30%)",
-        "干扰词 14种 (top:did 12%)",
-        "chunk颗粒 6.0块/题 单词率82% (TPO~6块/77%)",
-        "题面对话化 20/20 (100% 含you, TPO~72%)"
+        "prefilled类型 6/4 (top:subject-pronoun 4/14)",
+        "人物当prefilled 4/14 (29%, TPO~30%)",
+        "干扰词 11种 (top:did 17%)",
+        "chunk颗粒 5.6块/题 单词率82% (TPO~6块/77%)",
+        "题面对话化 10/14 (71% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 20/20",
-        "干扰词 17/20",
-        "答案长度 20/20",
-        "重组正确 20/20"
+        "块数 14/14",
+        "干扰词 12/14",
+        "答案长度 14/14",
+        "重组正确 14/14"
       ],
       "hints": [
-        "角色名重复严重 (2/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (2/14 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     }
-  ],
-  "resolved_at": "2026-08-01T19:40:14Z",
-  "resolution_status": "supplemented"
+  ]
 }

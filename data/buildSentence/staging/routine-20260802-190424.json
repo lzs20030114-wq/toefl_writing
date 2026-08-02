@@ -1,0 +1,158 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Are you still looking for a study partner?",
+      "answer": "I joined a group at the library.",
+      "chunks": ["joined", "a", "group", "at the", "library"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"I": 0},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["past simple statement"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you finish the reading for today's class?",
+      "answer": "I read the first two chapters last night.",
+      "chunks": ["read", "the", "first", "two", "chapters", "last night", "chapter"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"I": 0},
+      "distractor": "chapter",
+      "has_question_mark": false,
+      "grammar_points": ["past simple statement"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "I might work out after dinner.",
+      "answer": "The fitness center closes at ten tonight.",
+      "chunks": ["the fitness", "center", "closes", "at ten", "tonight", "closed"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "closed",
+      "has_question_mark": false,
+      "grammar_points": ["present simple statement"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "I've been thinking about joining student organizations.",
+      "answer": "Which club did you decide to sign up for?",
+      "chunks": ["did", "you", "decide", "to", "sign", "up", "for", "will"],
+      "prefilled": ["which club"],
+      "prefilled_positions": {"which club": 0},
+      "distractor": "will",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "I'm heading into the workshop now.",
+      "answer": "Did you save two seats near the front?",
+      "chunks": ["did", "you", "save", "two", "seats", "front", "saved"],
+      "prefilled": ["near the"],
+      "prefilled_positions": {"near the": 5},
+      "distractor": "saved",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes/no question"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Why did you call the registrar's office?",
+      "answer": "I wanted to know when the semester begins.",
+      "chunks": ["i", "know", "the semester", "begins", "did"],
+      "prefilled": ["wanted to", "when"],
+      "prefilled_positions": {"wanted to": 1, "when": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "present tense"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "What did the front desk explain about the mailroom?",
+      "answer": "They explained how the package pickup works.",
+      "chunks": ["they", "how", "pickup", "works", "explains"],
+      "prefilled": ["explained", "the package"],
+      "prefilled_positions": {"explained": 1, "the package": 3},
+      "distractor": "explains",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "present tense"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "What did you find out about the trip?",
+      "answer": "I found out the bus leaves at dawn.",
+      "chunks": ["found out", "the", "bus", "leaves", "at", "dawn", "was"],
+      "prefilled": ["I"],
+      "prefilled_positions": {"I": 0},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "present tense"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "Have you turned in the lab report yet?",
+      "answer": "I have not finished the data analysis section.",
+      "chunks": ["have", "not", "finished", "analysis", "section", "no"],
+      "prefilled": ["I", "the data"],
+      "prefilled_positions": {"I": 0, "the data": 4},
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "Why did you pick that lab section?",
+      "answer": "I picked the section that meets on Fridays.",
+      "chunks": ["i", "picked", "the section", "meets", "on fridays"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 4},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "present tense"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Did you make progress at the writing center today?",
+      "answer": "I revised my thesis and added two sources.",
+      "chunks": ["i", "revised", "my thesis", "and", "added", "two", "sources", "adding"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "adding",
+      "has_question_mark": false,
+      "grammar_points": ["conjoined predicate", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Did you hear what happened to the seminar room?",
+      "answer": "The study room was reserved by the debate team all afternoon.",
+      "chunks": ["the study", "room", "by", "the debate", "team", "all afternoon", "were"],
+      "prefilled": ["was reserved"],
+      "prefilled_positions": {"was reserved": 3},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Why did you switch your elective this term?",
+      "answer": "I finally enrolled in the writing seminar that my roommate recommended.",
+      "chunks": ["i", "finally enrolled in", "the writing seminar", "my roommate", "recommended", "did"],
+      "prefilled": ["that"],
+      "prefilled_positions": {"that": 7},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "Did you sort out your schedule conflict?",
+      "answer": "I dropped the afternoon lab and added an evening seminar instead.",
+      "chunks": ["i", "afternoon", "lab", "and", "added", "an evening", "seminar", "dropping"],
+      "prefilled": ["dropped the", "instead"],
+      "prefilled_positions": {"dropped the": 1, "instead": 10},
+      "distractor": "dropping",
+      "has_question_mark": false,
+      "grammar_points": ["conjoined predicate", "past tense"]
+    }
+  ]
+}

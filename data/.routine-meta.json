@@ -1,32 +1,29 @@
 {
-  "session_id": "routine-20260801-190449",
-  "completed_at": "2026-08-01T19:27:45Z",
-  "duration_minutes": 23,
+  "session_id": "routine-20260802-190424",
+  "completed_at": "2026-08-02T19:20:06Z",
+  "duration_minutes": 16,
   "model": "Claude Opus 4.8",
-  "highlight": "按需信号只点名 BS（T2，最快用户约 10 天刷穿），补造句 20 题、并库 2 套（20 题）；难度冻结门聚合 PASS——长度档 2易/6中/2难、第一人称 0.688、三人称正式 0.169、缩略 0.184，一/二/三人称配比重校准回真题带内。",
+  "highlight": "按需信号今晚只点名 BS：生成 14 题、并库 1 套（取 10）；难度冻结门聚合 PASS，结构/语气漂移带全部在带内（embedded 2.50x 卡边过、multi_anchor 0.084 达标）。",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 20,
-      "accepted": 30,
+      "generated": 14,
+      "accepted": 10,
       "topics": [
-        "campus_academic/选课注册与截止",
-        "campus_academic/候补与改选",
-        "campus_daily/图书馆借还",
-        "campus_daily/健身房与班车",
-        "campus_daily/停车与证件",
-        "social/校园问路与活动"
+        "campus_academic/选课与退课",
+        "campus_academic/教务处与学期开始",
+        "campus_daily/图书馆学习小组",
+        "campus_daily/健身房闭馆",
+        "campus_daily/邮件收发室",
+        "campus_daily/实验报告进度",
+        "social/社团报名与研讨课调换"
       ],
       "favorite": {
-        "prompt": "You said your roommate joined a club.",
-        "answer": "He finally emailed the professor who runs the new campus robotics club."
+        "prompt": "Why did you call the registrar's office?",
+        "answer": "I wanted to know when the semester begins."
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-01T19:40:14Z",
-  "r2_session_id": "routine-r2-20260801-193055"
+  }
 }
