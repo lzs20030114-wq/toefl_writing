@@ -16,7 +16,7 @@
 
 ## 进行中
 
-- [高] L1 存量库答案全量二审：full-audit-l1 workflow 运行中（2026-08-02 触发，run 30757805669，范围 ap/rdl-short/rdl-long/ctw/lat/lc/la——LCR 413 题已于同日人工+9agent 盲审修复完毕）。跑完出 L1-suspects.json 需分诊修复。听力产线加固（角色反转 lint + LCR 3票审计 + fail-closed 合库 + 对话优先生成协议 + merge-listening-audited.yml）已上线，见 commit d3aac20。
+- [中] L1 存量库二审收尾：首轮已分诊修复——AP 6 改键+RDL 1 改键+2 数据毛病（e5c4bca）、CTW 指示代词系统性歧义 117 题重挖+挖空器根治（376cdd7 后续 commit）；lat/lc/la/rdl-short 零实锤。报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**剩余**：①2 个 AP 新嫌疑（ap_rt_20260608_2 / ap_mqh11rfu_1，error 项重审浮现）待复核；②重挖后的 CTW 库需用新库重跑 L1 确认没引入新歧义（已清 ctw+ap state 并触发 full-audit-l1 banks=ap,ctw）；③5 个 CTW 低危残留（2 validator + 2 two/the + 1 farmers/farming）由合库层 AI 审计对未来题兜底。完整听力产线加固见 commit d3aac20。
 
 ## 可派工
 
