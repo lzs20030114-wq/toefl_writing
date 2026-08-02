@@ -650,14 +650,14 @@
         "A": "The session lasted three hours.",
         "B": "You know what, I just might.",
         "C": "I don't know why it failed.",
-        "D": "Studying alone works for me."
+        "D": "The library opens at eight tomorrow."
       },
       "answer": "B",
-      "explanation": "正确答案B用口语习语\"You know what, I just might.\"（你别说，我还真可能去）以话语标记开头，表示被说动而欣然考虑加入，符合idiomatic范式。注意\"Why don't you...\"是邀请而非询问原因。A是语义联想陷阱，重复\"session\"一词，只陈述上次时长，没回应邀请。C误把\"Why\"当成真的问原因，答\"不知道为什么失败了\"，属于误解意图。D虽相关，却是间接拒绝（独自学习更适合我），但题目要求选\"接受\"的回应，D偏离了被邀请后顺势加入的自然走向，属于偏题干扰。",
+      "explanation": "正确答案 B 用口语习语「You know what, I just might.」（你别说，我还真可能去）回应邀请，表示被说动，符合 idiomatic 范式。注意「Why don't you...」是邀请而非询问原因。A 是语义联想陷阱（重复 session 只谈上次时长，没回应邀请）。C 误把 Why 当成真的问原因（答「不知道为什么失败了」）。D 是语义联想陷阱（study → 图书馆开放时间，没回应邀请）。",
       "distractor_types": {
         "A": "semantic_association_trap",
         "C": "misinterpretation",
-        "D": "off_topic"
+        "D": "semantic_association_trap"
       },
       "id": "lcr_mpvr2nye_5",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpvr2nye_5.p1.mp3"
@@ -1106,7 +1106,7 @@
       "context": "campus_academic",
       "situation": "advisor checking whether a student declared a major",
       "difficulty": "medium",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "Have you decided on a major yet?",
       "options": {
         "A": "The major requirements are posted online.",
@@ -1114,11 +1114,11 @@
         "C": "Yes, the deadline was last week.",
         "D": "No, I major in the morning classes."
       },
-      "answer": "B",
-      "explanation": "顾问问学生是否已决定专业，学生的潜在需求是拿不定主意。正确答案B不直接回答是否决定，而是解决潜在困难（我们一起来过一遍你的选择），属语境转移式回应。A是语义联想陷阱，借'major'联想到专业要求贴在网上，答非所问；C回答的是'截止日期'相关信息而非'你定了吗'，属错误问题类型；D是多义/误解陷阱，把'major'(专业)误用成动词搭配'major in the morning classes'，逻辑荒谬却语法尚通，属误解。",
+      "answer": "C",
+      "explanation": "顾问问学生「专业定了吗」。正确答案 C 用 Yes 直接作答，并补上原因——选专业的截止日期就在上周，所以已经定了。B 是角色反转陷阱：「我们一起过一遍你的选项」是顾问对拿不定主意的学生说的话，被问话的学生自己不会这样回答。A 是语义联想陷阱（major → 专业要求贴在网上，答非所问）。D 是多义误用陷阱（把 major 误用作动词说 major in the morning classes，语法尚通但逻辑荒谬）。",
       "distractor_types": {
         "A": "semantic_association_trap",
-        "C": "wrong_question_type",
+        "B": "role_inversion",
         "D": "polysemy_misinterpretation"
       },
       "id": "lcr_mpw0aj59_10",
@@ -1350,16 +1350,16 @@
       "context": "social",
       "situation": "expressing concern about a friend's situation",
       "difficulty": "hard",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "What are you going to do about your rent?",
       "options": {
         "A": "The apartment is on the fifth floor.",
-        "B": "I can lend you some money if you need.",
+        "B": "I'm picking up extra shifts to cover it.",
         "C": "Rent has gone up everywhere lately.",
         "D": "When did you sign the lease?"
       },
       "answer": "B",
-      "explanation": "说话人关切地问朋友\"房租怎么办\"，潜台词是担心对方付不起。正确答案B不直接答\"怎么办\"，而是主动提出借钱解决根本问题，属于context_shift。A是语义关联陷阱：抓住\"rent\"联想到公寓楼层，答非所问。C是语义关联陷阱兼离题：泛泛评论\"房租到处都涨\"，没回应对方的处境。D是错误问题类型：用反问\"何时签约\"转移话题，没解决当前困境。",
+      "explanation": "朋友关切地问「房租你打算怎么办」。正确答案 B 直接给出自己的解决办法——多排几个班，把房租挣出来。A 是语义联想陷阱（rent/apartment → 公寓在五楼，答非所问）。C 是泛泛而谈（「到处房租都在涨」没有回答自己的打算）。D 是反问跑题（「租约什么时候签的」没解决当前困境）。",
       "distractor_types": {
         "A": "semantic_association_trap",
         "C": "semantic_association_trap",
@@ -1482,7 +1482,7 @@
       "context": "social",
       "situation": "coach checking in with a tired team member",
       "difficulty": "medium",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "You seem pretty worn out after practice.",
       "options": {
         "A": "Maybe sit out the next drill and rest.",
@@ -1490,12 +1490,12 @@
         "C": "Practice starts at six tomorrow.",
         "D": "Yes, the field was muddy today."
       },
-      "answer": "A",
-      "explanation": "教练观察到队员练完很疲惫，潜台词是关心其状态。正确答案A不停留在表态，而是直接解决问题——建议休息一轮，属于context_shift。B是语义关联陷阱兼一词多义：复用\"worn out\"但理解成\"鞋子磨破了\"。C是语义关联陷阱：抓住\"practice\"去说明天训练时间，没回应疲惫。D是离题选项：附和\"场地很泥泞\"，没回应队员的状态。",
+      "answer": "D",
+      "explanation": "教练看到队员练完很疲惫。正确答案 D 先用 Yes 附和，再解释疲惫的原因——今天场地泥泞，练得格外费劲。A 是角色反转陷阱：「下一组训练歇一歇吧」是教练/旁观者对疲惫队员的建议，被关心的队员自己不会这样回应。B 是一词多义陷阱（worn out：人累坏了 vs 鞋磨破了）。C 是语义联想陷阱（抓住 practice 说明天训练时间，没回应当下状态）。",
       "distractor_types": {
+        "A": "role_inversion",
         "B": "polysemy_misinterpretation",
-        "C": "semantic_association_trap",
-        "D": "off_topic"
+        "C": "semantic_association_trap"
       },
       "id": "lcr_mpw0icjx_11",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpw0icjx_11.p1.mp3"
@@ -1990,16 +1990,16 @@
       "context": "social",
       "situation": "expressing concern about a friend who looks exhausted",
       "difficulty": "hard",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "marker_led_indirect",
       "speaker": "Have you been getting any sleep lately?",
       "options": {
         "A": "Sleep is important for memory.",
-        "B": "Let me cover your shift tonight.",
-        "C": "Yes, I bought a new pillow online.",
+        "B": "Honestly, barely four hours a night.",
+        "C": "I bought a new pillow online yesterday.",
         "D": "The store closes at nine tonight."
       },
       "answer": "B",
-      "explanation": "正确答案B用context_shift范式——不直接回答睡没睡，而是直接解决朋友疲惫的根源，主动提出帮忙顶班，让对方能休息。A是语义联想陷阱：抓住sleep泛谈睡眠对记忆的重要性，像背书，不回应关心。C是语义联想陷阱：抓住sleep扯到买枕头，且只答yes加无关细节。D是离题但合语法：说商店九点关门，与睡眠和关心毫无关联。",
+      "explanation": "朋友关切地问「你最近有没有睡够」。正确答案 B 用 Honestly 开头坦白作答——每晚勉强睡四个小时，等于承认几乎没睡好。A 是背书式泛谈（睡眠对记忆很重要，没回答自己睡得如何）。C 是语义联想陷阱（sleep → 枕头，买了新枕头不等于回答睡没睡好）。D 是离题选项（商店几点关门与睡眠无关）。",
       "distractor_types": {
         "A": "semantic_association_trap",
         "C": "semantic_association_trap",
@@ -2282,7 +2282,7 @@
         "A": "The airport parking is pricey lately.",
         "B": "Evening flights are often delayed.",
         "C": "I packed a heavy suitcase this time.",
-        "D": "Don't bother coming, I'll meet you home."
+        "D": "Don't bother coming — I'll meet you at home."
       },
       "answer": "D",
       "explanation": "正确答案D用context_shift范式——不报降落地点，而是直接解决接机这件事的核心：不用来了，我们家里见，免去对方跑机场。A是语义联想陷阱：抓住airport说停车费近来很贵，与降落地点无关。B是语义联想陷阱：抓住evening联想到晚间航班常延误，回避了'在哪降落'。C是离题但合语法：说这次行李很重，是无关的个人细节。",
@@ -2304,10 +2304,10 @@
         "A": "The break is two weeks long this year.",
         "B": "I broke my laptop screen last week.",
         "C": "Actually, you've got until the Monday after.",
-        "D": "Yes, I've already started writing mine."
+        "D": "I've already started writing mine."
       },
       "answer": "C",
-      "explanation": "正确答案C用话语标记词Actually开头，间接地告知截止时间在假期后的周一，直接回应了学生的疑问。A是语义联想陷阱（抓住break谈论假期长度，却没回答截止时间）；B是谐音/多义陷阱（break被误用为弄坏broke，且与作业无关）；D是自然回应陷阱式错误——它分享了说话者的处境（我也开始写了），这种共情式回答看似合理却没有提供截止信息，属于应避免的干扰项类型。",
+      "explanation": "正确答案 C 用话语标记 Actually 开头，告知截止时间其实在假期后的周一，直接回应了疑问。A 是语义联想陷阱（抓住 break 谈假期长度，没回答截止时间）。B 是一词多义陷阱（break 被偷换成 broke 弄坏屏幕）。D 只谈自己的写作进度，既没有回答是否在假期前交，也没有提供截止信息。",
       "distractor_types": {
         "A": "semantic_association_trap",
         "B": "polysemy_trap",
@@ -2320,7 +2320,7 @@
       "context": "campus_academic",
       "situation": "advisor asking student about course registration progress",
       "difficulty": "medium",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "Have you signed up for next semester's classes yet?",
       "options": {
         "A": "Don't worry, I'll walk you through it now.",
@@ -2328,13 +2328,12 @@
         "C": "Yes, the classroom is on the second floor.",
         "D": "No, I haven't seen the new schedule."
       },
-      "answer": "A",
-      "explanation": "正确答案A采用情境转移范式——顾问没有停留在是否注册的字面问题上，而是直接解决学生背后的需求（我现在带你一步步弄）。B是语义联想陷阱（抓住semester谈论开学时间）；C是语义联想陷阱（抓住classes/class联想到教室位置，答非所问）；D虽以No开头看似合理，但属于错误情境——它把问句当成你看没看新课表，回应了错误的问题。",
+      "answer": "D",
+      "explanation": "顾问问学生「下学期的课选好了吗」。正确答案 D 直接回答 No，并给出理由——还没看到新课表。A 是角色反转陷阱：「别担心，我现在带你一步步弄」是帮学生操作的顾问才会说的话，被问话的学生自己不会这样回答。B 是语义联想陷阱（semester → 九月初开学，没回答是否已选课）。C 是答非所问（Yes 后面接教室位置，与选课无关）。",
       "distractor_types": {
-        "A": "context_shift_solution",
+        "A": "role_inversion",
         "B": "semantic_association_trap",
-        "C": "semantic_association_trap",
-        "D": "wrong_question_type"
+        "C": "wrong_question_type"
       },
       "id": "lcr_mpw1ilch_1",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpw1ilch_1.p1.mp3"
@@ -3123,15 +3122,15 @@
       "answer_paradigm": "marker_led_indirect",
       "speaker": "Are you sure you can't make it on Friday?",
       "options": {
-        "A": "Yes, the project deadline is on Friday.",
+        "A": "My cousin visited me last Friday.",
         "B": "Friday is when the new store opens.",
         "C": "I usually go running on Friday evenings.",
         "D": "Actually, I might be able to swing by briefly."
       },
       "answer": "D",
-      "explanation": "正确答案 D 用 Actually 引出间接回应，表明可能可以短暂赴约。A 直接回答 yes 但增加无关信息；B 谈新店开张，与是否赴约无关；C 谈跑步习惯，与是否赴约无关。",
+      "explanation": "正确答案 D 用 Actually 引出转折，表明也许能短暂过去一下，间接修正了之前的「来不了」。A 是语义联想陷阱（Friday → 上周五表亲来访，与能否赴约无关）。B 谈新店开张，与是否赴约无关。C 谈跑步习惯，与是否赴约无关。",
       "distractor_types": {
-        "A": "wrong_question_type",
+        "A": "semantic_association_trap",
         "B": "semantic_association_trap",
         "C": "off_topic"
       },
@@ -3209,7 +3208,7 @@
       "context": "social",
       "situation": "offering help to someone who seems stressed",
       "difficulty": "medium",
-      "answer_paradigm": "counter_question",
+      "answer_paradigm": "direct_topical",
       "speaker": "You look completely wiped out today.",
       "options": {
         "A": "Want me to grab you a coffee?",
@@ -3217,10 +3216,15 @@
         "C": "I cleaned the whole kitchen last night.",
         "D": "No, that movie wasn't very good."
       },
-      "answer": "A",
-      "explanation": "正确答案 A 体现 counter_question 范式：不直接评论对方的状态，而是用一个体贴的反问主动提供帮助，自然推进对话。B 是语义联想陷阱（wiped → wipe/towel 抹布毛巾，利用一词多义）。C 是离题选项（说自己昨晚做了什么，与对方的疲惫无关）。D 是答错问题类型（说话人是关切的陈述，D 却用 no 回应一个根本没问的问题）。",
+      "answer": "C",
+      "explanation": "正确答案 C：面对「你今天看起来累坏了」这句关切，最自然的回应是解释自己疲惫的原因（昨晚把整个厨房打扫了一遍）。A 是角色反转陷阱——「要不要我给你带杯咖啡？」是看到别人疲惫的一方才会说的话，被关心的人自己不会反过来给对方递咖啡。B 是语义联想陷阱（wiped → wipe/towel 抹布毛巾，利用一词多义）。D 是答错问题类型（说话人是关切的陈述，D 却用 no 回应一个根本没问的问题）。",
       "id": "lcr_mpvlbko3_4",
-      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpvlbko3_4.p1.mp3"
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpvlbko3_4.p1.mp3",
+      "distractor_types": {
+        "A": "role_inversion",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
     },
     {
       "context": "social",
@@ -3324,17 +3328,17 @@
       "answer_paradigm": "idiomatic",
       "speaker": "Do you carry any books on Persian poetry?",
       "options": {
-        "A": "The poetry section is on the third floor.",
+        "A": "Persian was spoken across several ancient empires.",
         "B": "Persian literature is fascinating to read about.",
         "C": "Absolutely — let me show you the section.",
         "D": "You should also try the music collection."
       },
       "answer": "C",
-      "explanation": "C 是地道直接回应，'Absolutely' 表达肯定并主动带路。A 给位置但不回答是否有。B 离题评论。D 是错误推荐。",
+      "explanation": "正确答案 C 用 Absolutely 明确肯定「有」并主动带路，是地道热情的馆员回应。A 是语义联想陷阱（Persian → 谈波斯语的历史，没回答是否有这类书）。B 是离题评论（波斯文学很有意思，不回答有没有）。D 是答非所问的错误推荐（转去推荐音乐区）。",
       "distractor_types": {
-        "A": "off_topic",
-        "B": "semantic_association_trap",
-        "D": "wrong_topic"
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
       },
       "id": "lcr_mpx0wcrw_2",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mpx0wcrw_2.p1.mp3"
@@ -4190,12 +4194,12 @@
       "speaker": "I'm worried our presentation topic is too broad.",
       "options": {
         "A": "The presentation is next Tuesday.",
-        "B": "I think the professor likes broad topics.",
+        "B": "The presentation room seats fifty people.",
         "C": "Well, we could focus on just one aspect.",
         "D": "The topic was assigned by the professor."
       },
       "answer": "C",
-      "explanation": "正确答案是C。C以话语标记'Well'开头，提出缩小范围的实际建议，是marker_led_indirect。A选项是off_topic，只说了演示日期，没有回应担心。B选项是semantic_association_trap，由'presentation'和'professor'联想到教授喜好，但并非事实。D选项是off_topic，陈述话题来源，无助于解决问题。",
+      "explanation": "正确答案 C 以话语标记 Well 开头，提出「聚焦到一个方面」的实际建议，直接回应了「话题太宽」的担忧，是 marker_led_indirect。A 是离题选项（只说了展示日期，没有回应担心）。B 是语义联想陷阱（presentation → 教室能坐五十人，与担忧无关）。D 是离题选项（话题是谁定的，无助于解决问题）。",
       "distractor_types": {
         "A": "off_topic",
         "B": "semantic_association_trap",
@@ -4572,18 +4576,17 @@
       "context": "campus_academic",
       "situation": "advisor asking whether a student declared a major",
       "difficulty": "medium",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "Have you decided on a major yet?",
       "options": {
-        "A": "Let's look at your options together.",
+        "A": "Not yet — I'm torn between two programs.",
         "B": "The major requirements are listed online.",
         "C": "Yes, the building is across the quad.",
         "D": "No, I haven't met my roommate yet."
       },
       "answer": "A",
-      "explanation": "正确答案A采用情境转移范式——顾问不纠结于是否已决定的字面回答，而是直接帮学生解决选择难题（我们一起看看你的选项）。B是语义联想陷阱（抓住major谈论专业要求清单，没推进对话）；C是错误问题类型（用Yes回答后谈论建筑位置，答非所问）；D虽以No开头看似合理，却属于错误情境（把问句误解为是否见过室友），离题。",
+      "explanation": "顾问问学生「专业定了吗」。正确答案 A 直接回答还没定，并说明原因——还在两个项目之间纠结。B 是语义联想陷阱（major → 专业要求清单，没回答是否已决定）。C 是答非所问（Yes 后面接楼在哪，逻辑不通）。D 是离题选项（还没见到室友与选专业无关）。",
       "distractor_types": {
-        "A": "context_shift_solution",
         "B": "semantic_association_trap",
         "C": "wrong_question_type",
         "D": "off_topic"
@@ -5145,19 +5148,19 @@
       "context": "campus_academic",
       "situation": "student checking with TA about lab report requirements",
       "difficulty": "hard",
-      "answer_paradigm": "context_shift",
+      "answer_paradigm": "direct_topical",
       "speaker": "Do we need to graph the results in the lab report?",
       "options": {
         "A": "The lab is on the second floor of the science hall.",
-        "B": "I'll post a sample report on the course site tonight.",
+        "B": "I printed my report at the library.",
         "C": "Yes, I graphed mine over the weekend.",
         "D": "When is the report actually due?"
       },
-      "answer": "B",
-      "explanation": "正确答案是B。说话人不确定报告是否要画图，B没有直接回答是否，而是承诺发布一份样例报告，直接解决了'不知道格式要求'这个根本困惑，是context_shift。A选项是semantic_association_trap，由'lab'联想到实验室位置，但无关。C选项是bad pattern的反例规避后的off_topic，谈自己周末画图的经历，没有告诉对方要不要画。D选项是wrong_question_type，回答的是'什么时候交'，而问的是'要不要画图'。",
+      "answer": "C",
+      "explanation": "同学问「实验报告里需要把结果画成图吗」。正确答案 C 用 Yes 直接作答，并以自己周末已经画完作为佐证。A 是语义联想陷阱（lab → 实验室在科学楼二层，答非所问）。B 是语义联想陷阱（report → 在图书馆打印报告，没回答要不要画图）。D 是反问跑题（问什么时候交，回避了对方的问题）。",
       "distractor_types": {
         "A": "semantic_association_trap",
-        "C": "off_topic",
+        "B": "semantic_association_trap",
         "D": "wrong_question_type"
       },
       "id": "lcr_mqiq4y26_1",
@@ -6646,12 +6649,12 @@
       "speaker": "Why are you carrying all those boxes yourself?",
       "options": {
         "A": "Those boxes are made of recycled cardboard.",
-        "B": "Here, let me grab a couple.",
+        "B": "Well, everyone else left early.",
         "C": "I watched a great documentary last night.",
         "D": "No, I don't need any more boxes."
       },
       "answer": "B",
-      "explanation": "说话人看到对方独自搬一堆箱子，语气里带着关切和想帮忙的意思。正确答案B以'Here'开头，直接伸手接过几个箱子，用行动回应了帮忙的意图，符合marker_led_indirect范式。A项借用'boxes'一词，却谈箱子是再生纸板做的，属于语义联想陷阱。C项完全离题，说自己昨晚看了部好纪录片。D项把对方的关心误解成'要给我更多箱子'，回答'不用了'，属于误解型干扰项。",
+      "explanation": "说话人问「你怎么一个人搬这么多箱子」。正确答案 B 用 Well 开头解释原因——其他人都提前走了，只好自己搬。A 是语义联想陷阱（boxes → 纸箱是再生纸板做的，没回答为什么一个人搬）。C 是离题选项（昨晚看纪录片与搬箱子无关）。D 是答错问题类型（说话人问 why，D 却用 No 回应一个没被问的问题）。",
       "distractor_types": {
         "A": "semantic_association_trap",
         "C": "off_topic",
@@ -8052,16 +8055,16 @@
       "speaker": "What did the professor say about the essay?",
       "options": {
         "A": "Honestly, I zoned out for most of it.",
-        "B": "The essay should be double-spaced.",
+        "B": "The projector wasn't working again.",
         "C": "I ran into your roommate at lunch.",
-        "D": "It's not due until next Wednesday."
+        "D": "I usually write my essays late at night."
       },
       "answer": "A",
-      "explanation": "说话人问教授关于论文说了什么。A 用口语习语 zoned out（走神）坦白自己大半没听进去，是自然真实的回应，属 idiomatic，是正确答案。B 抓住 essay 只谈格式要求，没有回应教授说了什么，属语义联想干扰。C 完全离题。D 回答的是截止时间（问何时），而说话人问的是内容，属问错问题类型干扰。",
+      "explanation": "同学问「教授关于论文说了什么」。正确答案 A 用口语习语 zoned out（走神）坦白自己大半没听进去，是自然真实的回应，属 idiomatic。B 是课堂联想陷阱（投影仪又坏了，没回应教授说了什么）。C 完全离题（午饭时碰到你室友）。D 是语义联想陷阱（essay → 自己习惯晚上写论文，没回应教授说了什么）。",
       "distractor_types": {
         "B": "semantic_association_trap",
         "C": "off_topic",
-        "D": "wrong_question_type"
+        "D": "semantic_association_trap"
       },
       "id": "lcr_mrxxvfrw_8",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_mrxxvfrw_8.p1.mp3"
