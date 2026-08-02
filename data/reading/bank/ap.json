@@ -1253,8 +1253,8 @@
             "C": "Slot 3",
             "D": "Slot 4"
           },
-          "correct_answer": "B",
-          "explanation": "The sentence introduces the first link in the \"chain of feedback processes\" mentioned just before slot 2, before the ice-and-snow feedback is described."
+          "correct_answer": "A",
+          "explanation": "插入句「Imagine, for instance, the first stage: rising carbon dioxide directly warms the lower atmosphere」是反馈链的第一环，应紧接总起句「The sensitivity figure depends on a chain of feedback processes.」之后，即 Slot 1。放 Slot 2 会插在冰雪反照率反馈与「Warmer air also holds more water vapor」之间，既切断 also 承接的反馈序列，又把「第一阶段」排到了反馈之后，时序颠倒。"
         }
       ],
       "id": "ap_r1_routine-20260531-134653_2"
@@ -2117,8 +2117,8 @@
             "C": "They competed with crocodiles for the same prey species",
             "D": "They were the primary predators of cane toads in the Daly River area"
           },
-          "correct_answer": "D",
-          "explanation": "The dramatic ninety-percent collapse within five years implies northern quolls had no previous exposure to similar toxins, but the specifically supported inference is that they were unable to recognize the danger and continued attempting to eat the toads."
+          "correct_answer": "B",
+          "explanation": "五年内种群锐减九成，说明北方袋鼬此前从未接触过具类似化学防御的物种、毫无适应（B）；第三段「such adjustments require decades of selective pressure」佐证本地物种来不及演化出耐受。D「Daly River 地区甘蔗蟾蜍的主要捕食者」无据——原文 Daly River 只关联淡水鳄「freshwater crocodile counts in the Daly River fell sharply」，且全文未称袋鼬为主要捕食者。"
         },
         {
           "question_type": "rhetorical_purpose",
@@ -2437,8 +2437,8 @@
             "C": "[■] in paragraph 2, after the heart-rate sentence",
             "D": "[■] in paragraph 3, after the parasympathetic recovery sentence"
           },
-          "correct_answer": "A",
-          "explanation": "The example illustrates how quickly the coordinated reaction begins, which makes sense immediately after the opening definition of the stress response."
+          "correct_answer": "C",
+          "explanation": "插入句含指示回指「these changes」，需要前文先出现复数「变化」作先行词——只有「Heart rate rises, breathing quickens, and stored glucose is dumped into the bloodstream」提供了，故应放其后（Slot C）。放 Slot A（开篇定义之后）时 these changes 悬空前指；且插入句句尾「before the listener even identifies the source」与 Slot C 之后的「focusing on the source of threat」形成词汇衔接。"
         }
       ],
       "id": "ap_mpzvh9ag_2"
@@ -2487,8 +2487,8 @@
             "C": "Concrete reaches full chemical completion within a few hours",
             "D": "Sand grains continue to dissolve throughout the entire process"
           },
-          "correct_answer": "C",
-          "explanation": "Wait — that is incorrect. The paragraph states the chemistry never fully completes and most rapid change happens in the first hours; the strongest inference is B: strength gain slows after early densification. (The assigned answer C is retained per the plan; the actual best inference may differ at scoring.)"
+          "correct_answer": "B",
+          "explanation": "原文明确「it never fully completes the underlying chemistry」并「continues, at decreasing rates, for years afterward」，直接否定 C「几小时内完成全部化学反应」。由「the most rapid changes happening during the first few hours」加「at decreasing rates」可稳妥推出 B：早期致密网络形成后，强度增长随之放缓。"
         },
         {
           "question_type": "rhetorical_purpose",
@@ -3118,8 +3118,8 @@
             "C": "Slot 3",
             "D": "Slot 4"
           },
-          "correct_answer": "C",
-          "explanation": "Slot 3 follows the general statement about symbolic meaning and naturally introduces the Toraja example before the broader discussion of transitional states."
+          "correct_answer": "D",
+          "explanation": "插入句是 Toraja 对「the period between the first and second burial represents a transitional state」这一概括的举例，应放该概括句之后（Slot 4）。放 Slot 3 则特例先于概括出现，令随后的「In many cultures, the period between...」沦为多余复述，且「the period between burials」的定指在 Slot 3 处尚无先行文本。"
         }
       ],
       "id": "ap_mq45s7kl_0"
@@ -4244,13 +4244,13 @@
           "question_type": "vocabulary_in_context",
           "stem": "The word 'immune' in paragraph 2 is closest in meaning to",
           "options": {
-            "A": "resistant",
+            "A": "accustomed",
             "B": "exempt",
             "C": "vulnerable",
             "D": "aware"
           },
           "correct_answer": "B",
-          "explanation": "In context, 'not immune' means that even experts are not exempt from cognitive distortions, so 'exempt' is the closest synonym."
+          "explanation": "语境「even experts are not immune to these cognitive distortions」强调专家也不例外、不被豁免，故 immune 最贴近 exempt（B）。A「accustomed」（习惯于）、C「vulnerable」（易受影响，反义）、D「aware」（意识到）均不合。（原 A 选项为 resistant，与 exempt 同为 immune 的近义、构成双解，已替换为无歧义干扰项。）"
         }
       ],
       "question_count": 5
@@ -6095,8 +6095,8 @@
             "C": "Location 3",
             "D": "Location 4"
           },
-          "correct_answer": "C",
-          "explanation": "该句以水分子为例说明共享电子产生的几何形状，应紧接共价键介绍之后、形状解释之前，因此最适合位置 3。"
+          "correct_answer": "D",
+          "explanation": "插入句「the bent geometry of a water molecule arises directly from this shared electron arrangement」是对「These shared pairs produce directed, predictable angles between atoms, which is why molecules such as water have such well-defined shapes」的举例，应放其后（Location 4）。放 Location 3 则水分子例子先于「molecules such as water」的概括出现，构成倒序，并让后文重复引入水分子。"
         }
       ],
       "id": "ap_mqh11rfu_2"
