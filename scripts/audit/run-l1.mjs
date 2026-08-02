@@ -54,7 +54,7 @@ const { auditRDLItem, auditCTWItem } = require("../../lib/readingGen/answerAudit
 const { auditLATItem } = require("../../lib/listeningGen/latAuditor.js");
 const { auditLCItem } = require("../../lib/listeningGen/lcAuditor.js");
 const { auditLAItem } = require("../../lib/listeningGen/laAuditor.js");
-const { auditLCRItem } = require("../../lib/listeningGen/lcrAuditor.js");
+const { auditLCRItemMajority } = require("../../lib/listeningGen/lcrAuditor.js");
 
 // verdict 归一：ok / suspect(答案不一致) / ambiguous(多解嫌疑) / error(暂态, 重跑会重试)
 function fromReading(a) {
@@ -77,7 +77,7 @@ const BANKS = [
   { key: "lat", path: "data/listening/bank/lat.json", audit: async (it) => fromListening(await auditLATItem(it, listeningCallAI)) },
   { key: "lc", path: "data/listening/bank/lc.json", audit: async (it) => fromListening(await auditLCItem(it, listeningCallAI)) },
   { key: "la", path: "data/listening/bank/la.json", audit: async (it) => fromListening(await auditLAItem(it, listeningCallAI)) },
-  { key: "lcr", path: "data/listening/bank/lcr.json", audit: async (it) => fromListening(await auditLCRItem(it, listeningCallAI)) },
+  { key: "lcr", path: "data/listening/bank/lcr.json", audit: async (it) => fromListening(await auditLCRItemMajority(it, listeningCallAI)) },
 ];
 const pick = args.banks ? String(args.banks).split(",").map((s) => s.trim()) : null;
 const banks = pick ? BANKS.filter((b) => pick.includes(b.key)) : BANKS;

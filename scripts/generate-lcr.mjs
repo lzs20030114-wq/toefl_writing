@@ -25,7 +25,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { buildLCRPrompt } = require("../lib/listeningGen/lcrPromptBuilder.js");
 const { validateLCR, validateBatch, scoreFlavor } = require("../lib/listeningGen/lcrValidator.js");
-const { auditLCRBatch } = require("../lib/listeningGen/lcrAuditor.js");
+const { auditLCRBatchMajority } = require("../lib/listeningGen/lcrAuditor.js");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STAGING_DIR = join(__dirname, "..", "data", "listening", "staging");
@@ -297,7 +297,8 @@ async function main() {
       return typeof result === "string" ? result : (result?.choices?.[0]?.message?.content || JSON.stringify(result));
     }
 
-    const auditResult = await auditLCRBatch(accepted, auditCallAI);
+    // 3 独立票多数决；审计出错 fail-closed(进 flagged 不入库)
+    const auditResult = await auditLCRBatchMajority(accepted, auditCallAI, { votes: 3, failClosed: true });
 
     for (const f of auditResult.flagged) {
       const ar = f.audit_result;
@@ -310,7 +311,7 @@ async function main() {
       }
     }
     if (auditResult.errors > 0) {
-      console.log(`  ⚠ ${auditResult.errors} audit calls failed (items kept)`);
+      console.log(`  ⚠ ${auditResult.errors} audit calls failed (fail-closed: items flagged, NOT kept)`);
     }
 
     const beforeAudit = accepted.length;

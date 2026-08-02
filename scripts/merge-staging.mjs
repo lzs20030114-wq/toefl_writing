@@ -110,8 +110,13 @@ function vet(prefix, item) {
 //                                it is re-audited on the next run)
 // SKIPPED (NOT fail-closed) when the audit infra is unavailable — no DEEPSEEK_API_KEY, or
 // SKIP_AUDIT=1 — because failing closed on infra-absence would block ALL reading merges.
-// Only reading (ap/rdl/ctw) is wired: the listening auditors exist but have never run in
-// the pipeline and use a different interface, so they are intentionally not enabled yet.
+//
+// 2026-08-02: listening (lcr/la/lc/lat) is wired too — see auditListeningItems below.
+// Listening is STRICTLY fail-closed, including on missing key: after the LCR mis-key
+// incident (lcr-answer-audit-20260802.md) listening items may only merge where the
+// audit can actually run. The nightly Claude routine has no DeepSeek key, so its
+// listening staging is deliberately HELD there and merged by the audited workflow
+// (merge-staging.yml) instead. SKIP_AUDIT=1 remains the explicit operator break-glass.
 const AUDITABLE = new Set(['ap', 'rdl', 'ctw']);
 let auditDisabled = String(process.env.SKIP_AUDIT || '').trim() === '1';
 async function auditReadingItems(prefix, items) {
@@ -140,6 +145,80 @@ async function auditReadingItems(prefix, items) {
     if ((audit.criticalFlags || 0) > 0) {
       console.log(`    ✗ ${item.id || '?'}: ${audit.criticalFlags} critical answer mismatch(es) — rejected`);
       continue; // fail-closed: drop the mis-keyed item
+    }
+    kept.push(item);
+  }
+  return kept;
+}
+
+// ── Answer-correctness audit (LISTENING), strictly fail-closed ───────────────
+// LCR gets 3 independent blind votes (majority key agreement + any-vote ambiguity
+// veto — auditLCRItemMajority); la/lc/lat run their single auditors. Verdicts:
+//   - key mismatch / ambiguity → REJECT (never merged)
+//   - audit error              → HOLD (staging persists; re-audited next run)
+//   - DEEPSEEK_API_KEY missing → HOLD ALL (unlike reading there is no unaudited
+//     fallback; listening merges only where the audit infra exists)
+// SKIP_AUDIT=1 = explicit operator break-glass → merge on structural validation only.
+const LISTENING_AUDITABLE = new Set(['lcr', 'la', 'lc', 'lat']);
+
+async function listeningCallAI(prompt, maxTokens = 2000) {
+  const { callDeepSeekViaCurl } = require('../lib/ai/deepseekHttp.js');
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) throw new Error('DEEPSEEK_API_KEY not set');
+  const payload = {
+    model: 'deepseek-v4-flash',
+    messages: [
+      { role: 'system', content: 'You are a TOEFL listening comprehension expert. Answer precisely and concisely. Return only valid JSON.' },
+      { role: 'user', content: prompt },
+    ],
+    temperature: 0.1,
+    max_tokens: maxTokens,
+  };
+  const result = await callDeepSeekViaCurl({ apiKey, payload, timeoutMs: 60000 });
+  return typeof result === 'string' ? result : (result?.choices?.[0]?.message?.content || JSON.stringify(result));
+}
+
+async function auditListeningItems(prefix, items) {
+  if (!LISTENING_AUDITABLE.has(prefix) || items.length === 0) return items;
+  if (String(process.env.SKIP_AUDIT || '').trim() === '1') {
+    console.log(`  ⚠ SKIP_AUDIT=1 — listening ${prefix} merging on structural validation only (operator break-glass)`);
+    return items;
+  }
+  if (!process.env.DEEPSEEK_API_KEY) {
+    console.log(`  ⏸ listening ${prefix}: DEEPSEEK_API_KEY unavailable — ALL ${items.length} item(s) held (fail-closed; merged by the audited workflow instead)`);
+    return [];
+  }
+
+  const { auditLCRItemMajority } = require('../lib/listeningGen/lcrAuditor.js');
+  const { auditLAItem } = require('../lib/listeningGen/laAuditor.js');
+  const { auditLCItem } = require('../lib/listeningGen/lcAuditor.js');
+  const { auditLATItem } = require('../lib/listeningGen/latAuditor.js');
+  const AUDIT_FN = {
+    lcr: (it) => auditLCRItemMajority(it, listeningCallAI),
+    la: (it) => auditLAItem(it, listeningCallAI),
+    lc: (it) => auditLCItem(it, listeningCallAI),
+    lat: (it) => auditLATItem(it, listeningCallAI),
+  };
+
+  const kept = [];
+  for (const item of items) {
+    let a;
+    try {
+      a = await AUDIT_FN[prefix](item);
+    } catch (e) {
+      a = { error: true, errorMsg: String((e && e.message) || e) };
+    }
+    if (a && a.error) {
+      console.log(`    ⏸ ${item.id || '?'}: audit error — held for retry (${String(a.errorMsg || a.reasoning || 'audit error').slice(0, 100)})`);
+      continue; // fail-closed: transient error → don't merge this run
+    }
+    if (a && a.match === false) {
+      console.log(`    ✗ ${item.id || '?'}: key mismatch (AI: ${a.aiAnswer ?? '?'}, ours: ${item.answer ?? '?'}) — rejected`);
+      continue;
+    }
+    if (a && a.ambiguous === true) {
+      console.log(`    ✗ ${item.id || '?'}: ambiguous (second defensible option) — rejected`);
+      continue;
     }
     kept.push(item);
   }
@@ -291,8 +370,9 @@ for (const section of SECTIONS) {
     if (rejected) console.log(`  ${file}: ${rejected}/${rawItems.length} rejected by validator`);
     if (items.length === 0) { console.log(`  ${file}: 0 valid items after validation, skipping`); continue; }
 
-    // Answer-correctness audit (reading MCQ only), fail-closed — see auditReadingItems.
-    const audited = await auditReadingItems(prefix, items);
+    // Answer-correctness audits, fail-closed — reading: auditReadingItems; listening:
+    // auditListeningItems (prefix sets are disjoint, at most one runs per file).
+    const audited = await auditListeningItems(prefix, await auditReadingItems(prefix, items));
     const heldOrRejected = items.length - audited.length;
     if (heldOrRejected > 0) console.log(`  ${file}: ${heldOrRejected} item(s) held/rejected by answer-audit (fail-closed)`);
     if (audited.length === 0) { console.log(`  ${file}: 0 items after answer-audit, skipping`); continue; }

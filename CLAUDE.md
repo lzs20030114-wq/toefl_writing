@@ -126,11 +126,17 @@ UpgradeModal → XorPay(扫码/webhook) 或 Afdian(跳转 ifdian.net/webhook)
 ### 4. 题目生成 (Generation)
 
 ```
-【主链路】Claude 云端 routine (每晚 03:00 北京时间, trig_01SmJeXr8ySEZRo2dEoohzTP)
-  → 跑校准过的 prompt (lib/*Gen/) 生成 → Validator/Auditor 校验 →
-  → lib/gate 冻结防退化门 (BS_GATE_ENFORCE 默认=1, FAIL 即拒合) →
-  → 合进 data/**/bank/ live 库 → 直接 push
+【主链路】三段式 Claude 云端 routine (UTC；北京时间 +8):
+  R1 出题 19:00 (trig_01SmJeXr8ySEZRo2dEoohzTP): 校准 prompt (lib/*Gen/) 生成 →
+    bs/disc/email 直接合库；阅读/听力/口语只写 staging 不合库
+  R2 补产 19:30 (trig_016m6uqg…): 按 .pending-retry.json 补未达标库 → 同样只写 staging
+  R3 盲审 20:00 (trig_014NhSJe…): Claude 盲解 MCQ(第一票) → 不一致项从 staging 剔除 →
+    合并阅读/口语；听力被 merge-staging fail-closed HOLD(设计行为)
+  合听力 21:00 (merge-listening-audited.yml): DeepSeek 第二家族票
+    (LCR 3票多数+歧义一票否决; la/lc/lat 单票) → 过两票才进 live 库
+  lib/gate 冻结防退化门 (BS_GATE_ENFORCE 默认=1, FAIL 即拒合)。
   文本生成走 Claude 订阅(边际~¥0)；只有听力 TTS 配音按量掏钱。
+  R3 prompt 存档: docs/routine-prompts/audit-r3-v2.md (改 routine 先改这份再手动粘贴)。
 
 【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS。
 
