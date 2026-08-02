@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Olivia tell you after class?",
+      "answer": "She said I'd missed the quiz review.",
+      "chunks": ["she", "said", "I'd", "missed", "review", "did"],
+      "prefilled": ["the quiz"],
+      "prefilled_positions": {"the quiz": 4},
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["past tense"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Did Harold return your notebook yet?",
+      "answer": "I haven't found out whether it arrived yet.",
+      "chunks": ["I", "haven't", "whether", "it", "arrived", "yet", "has"],
+      "prefilled": ["found out"],
+      "prefilled_positions": {"found out": 2},
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "negation"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "What did Margot ask you about the studio?",
+      "answer": "I found out the studio was already booked.",
+      "chunks": ["I", "found out", "was", "already booked", "were"],
+      "prefilled": ["the studio"],
+      "prefilled_positions": {"the studio": 3},
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Did Emma remind you about the deadline?",
+      "answer": "I didn't remember the deadline until this morning.",
+      "chunks": ["I", "didn't", "remember", "the", "deadline", "until", "remembered"],
+      "prefilled": ["this morning"],
+      "prefilled_positions": {"this morning": 6},
+      "distractor": "remembered",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did Julian leave anything on your desk?",
+      "answer": "He left your lab goggles on the desk.",
+      "chunks": ["he", "left", "your", "lab goggles", "desk", "leaving"],
+      "prefilled": ["on the"],
+      "prefilled_positions": {"on the": 5},
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["past tense"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Did Matthew tell you where to register?",
+      "answer": "He didn't tell you which office to use.",
+      "chunks": ["he", "didn't", "tell", "you", "which", "office", "does"],
+      "prefilled": ["to use"],
+      "prefilled_positions": {"to use": 6},
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "past tense"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "What did Alison say to you this morning?",
+      "answer": "She told me she'd changed her topic.",
+      "chunks": ["she", "she'd", "changed", "her", "topic", "had"],
+      "prefilled": ["told me"],
+      "prefilled_positions": {"told me": 1},
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["past tense"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Did Juan find you a seat?",
+      "answer": "He saved you a seat near the front row.",
+      "chunks": ["he", "saved", "you", "a", "seat", "front row", "saving"],
+      "prefilled": ["near the"],
+      "prefilled_positions": {"near the": 5},
+      "distractor": "saving",
+      "has_question_mark": false,
+      "grammar_points": ["past tense"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did Hector reserve the room for you?",
+      "answer": "I finally found out that our study room had been moved upstairs.",
+      "chunks": ["I", "finally found", "out", "that", "our", "had been", "moved", "upstairs", "moving"],
+      "prefilled": ["study room"],
+      "prefilled_positions": {"study room": 6},
+      "distractor": "moving",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "embedded question"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did Mariana ask you about the deposit?",
+      "answer": "I still need to find out when the housing deposit is due.",
+      "chunks": ["I", "still", "need to", "when", "the housing", "deposit", "is", "due", "was"],
+      "prefilled": ["find out"],
+      "prefilled_positions": {"find out": 4},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "present tense"]
+    }
+  ]
+}
