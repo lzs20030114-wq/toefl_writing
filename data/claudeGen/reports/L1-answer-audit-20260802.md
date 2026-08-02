@@ -13,7 +13,7 @@
 
 | 库 | 已审 | ok | suspect | 人工复核后实锤 |
 |---|---|---|---|---|
-| ap | 101 | 75 | 8 | **6 改键 + 1 词汇去歧义**（另 1 clean） |
+| ap | 101 | 78 | 10 | **8 改键 + 1 词汇去歧义**（6 首批 + 2 error 项重审；均 insert_text 时序错序） |
 | rdl-short | 208 | 207 | 0 | 0（干净） |
 | rdl-long | 132 | 128 | 1 | **1 改键** |
 | ctw | 407 | 279 | 83 | **系统性：指示代词歧义，117 题重挖**（详见下） |
@@ -35,6 +35,13 @@
 | ap_mpzvh9ag_3 | 2 | C→B | 原文「never fully completes the underlying chemistry」直接否定 C；**原解析写着「that is incorrect... retained per the plan」——明知答案错仍入库** |
 | ap_mq45s7kl_0 | 4 | C→D | Toraja 例应在「transitional state」概括句之后（Slot 4），放 Slot 3 则例先于纲 |
 | ap_mqh11rfu_2 | 4 | C→D | 水分子几何例应在「shared pairs produce...shapes」概括之后（Location 4） |
+
+### AP 插入题（error 项重审后第二批，2 道，opus 复核 + 主线程原文确认）
+
+| id | q | 旧键→新键 | 依据 |
+|---|---|---|---|
+| ap_rt_20260608_2 | 4 | C→A | 「十岁未被分流」例证「推迟到十五岁分流」（Slot 1）；原键 Slot 3 是芬兰瑞典缩小差距的对比结论，与例句无关；解析留有「Wait—the assigned answer is slot 3...」犹疑 |
+| ap_mqh11rfu_1 | 4 | C→D | 「水进钢材几乎不透射」例证「阻抗差异大则反射为主」（Location 4）；原键 Location 3「阻抗相近大部分透射」与例句自相矛盾 |
 
 ### RDL（1 道）
 
