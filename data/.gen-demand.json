@@ -1,20 +1,18 @@
 {
-  "generated_at": "2026-08-02T18:29:06.009Z",
+  "generated_at": "2026-08-03T19:05:53.671Z",
   "window_days": 7,
   "active_users": 17,
   "banks": {
     "bs": {
-      "bank_size": 74,
-      "top_user_consumed": 29,
-      "top_user_pct": 0.392,
-      "burn_7d": 40,
-      "min_user_runway_days": 10.9,
-      "triggers": [
-        "T2"
-      ],
-      "generate": true,
-      "n": 14,
-      "reason": "最快用户按其近7天速度仅剩约 11 天刷穿（低于 14 天），建议补 14 题。"
+      "bank_size": 75,
+      "top_user_consumed": 30,
+      "top_user_pct": 0.4,
+      "burn_7d": 32,
+      "min_user_runway_days": 16.6,
+      "triggers": [],
+      "generate": false,
+      "n": 0,
+      "reason": "库存充足，当晚无需补题。"
     },
     "discussion": {
       "bank_size": 215,
@@ -29,10 +27,10 @@
     },
     "email": {
       "bank_size": 221,
-      "top_user_consumed": 21,
-      "top_user_pct": 0.095,
-      "burn_7d": 30,
-      "min_user_runway_days": 66.7,
+      "top_user_consumed": 38,
+      "top_user_pct": 0.172,
+      "burn_7d": 42,
+      "min_user_runway_days": 33.7,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -40,10 +38,10 @@
     },
     "reading-ap": {
       "bank_size": 101,
-      "top_user_consumed": 23,
-      "top_user_pct": 0.228,
-      "burn_7d": 19,
-      "min_user_runway_days": 45.5,
+      "top_user_consumed": 25,
+      "top_user_pct": 0.248,
+      "burn_7d": 15,
+      "min_user_runway_days": 44.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -53,8 +51,8 @@
       "bank_size": 407,
       "top_user_consumed": 70,
       "top_user_pct": 0.172,
-      "burn_7d": 109,
-      "min_user_runway_days": 45.4,
+      "burn_7d": 101,
+      "min_user_runway_days": 54.9,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -62,10 +60,10 @@
     },
     "rdl-short": {
       "bank_size": 208,
-      "top_user_consumed": 22,
-      "top_user_pct": 0.106,
-      "burn_7d": 18,
-      "min_user_runway_days": 130.2,
+      "top_user_consumed": 24,
+      "top_user_pct": 0.115,
+      "burn_7d": 14,
+      "min_user_runway_days": 128.8,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -73,10 +71,10 @@
     },
     "rdl-long": {
       "bank_size": 132,
-      "top_user_consumed": 22,
-      "top_user_pct": 0.167,
-      "burn_7d": 20,
-      "min_user_runway_days": 70.6,
+      "top_user_consumed": 39,
+      "top_user_pct": 0.295,
+      "burn_7d": 29,
+      "min_user_runway_days": 24.1,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -84,10 +82,10 @@
     },
     "listening-lat": {
       "bank_size": 149,
-      "top_user_consumed": 12,
-      "top_user_pct": 0.081,
-      "burn_7d": 9,
-      "min_user_runway_days": 159.8,
+      "top_user_consumed": 13,
+      "top_user_pct": 0.087,
+      "burn_7d": 8,
+      "min_user_runway_days": 158.7,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -95,10 +93,10 @@
     },
     "lc": {
       "bank_size": 83,
-      "top_user_consumed": 32,
-      "top_user_pct": 0.386,
-      "burn_7d": 16,
-      "min_user_runway_days": 32.5,
+      "top_user_consumed": 33,
+      "top_user_pct": 0.398,
+      "burn_7d": 15,
+      "min_user_runway_days": 31.8,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -106,10 +104,10 @@
     },
     "la": {
       "bank_size": 100,
-      "top_user_consumed": 33,
-      "top_user_pct": 0.33,
-      "burn_7d": 19,
-      "min_user_runway_days": 39.1,
+      "top_user_consumed": 35,
+      "top_user_pct": 0.35,
+      "burn_7d": 18,
+      "min_user_runway_days": 37.9,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -117,10 +115,10 @@
     },
     "lcr": {
       "bank_size": 413,
-      "top_user_consumed": 204,
-      "top_user_pct": 0.494,
-      "burn_7d": 219,
-      "min_user_runway_days": 17,
+      "top_user_consumed": 215,
+      "top_user_pct": 0.521,
+      "burn_7d": 210,
+      "min_user_runway_days": 16.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -153,7 +151,5 @@
       "not_in_routine": true
     }
   },
-  "routine_instructions": [
-    "Generate 14 bs sentence-building items"
-  ]
+  "routine_instructions": []
 }
