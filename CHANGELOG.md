@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-02 — v1.17.0
+
+- **阅读全库答案 L1 二审：AP 9 + RDL 1 改键 + CTW 指示代词歧义 117 题系统性重挖**（报告 `data/claudeGen/reports/L1-answer-audit-20260802.md`；改键 `e5c4bca`/`857e776`/`d2446be`，CTW 重挖 `0a2d480`）：延续 LCR 审计，对 ap/rdl/ctw/lat/lc/la 六库跑 DeepSeek 盲审（5 轮）+ 多轮 opus/sonnet agent 分诊 + 人工复核原文。
+  - **AP 9 处 insert_text 时序错序改键**：例子/回指句被键到概括句之前（如 `ap_mpzvh9ag_2` 的 these changes 需前置复数先行词、`ap_mq45s7kl_0` 的 Toraja 例应在 transitional state 之后）。**多题 explanation 自曝「Wait… that is incorrect」「retained per the plan」——生成期明知答案错仍入库**，暴露 AP 生成侧 insert_text 自检失效（已入 BACKLOG，生成 prompt 待加时序自检）。RDL 1 处（`rdl_long_rt_001` 邮件推断题）。
+  - **CTW 系统性歧义根治**：三批 agent 分诊结论一致——挖空的指示代词 this/that（`th`+4）、these/those（`th`+5）彼此同前缀同长度、都能回指前句实体、语境无法消歧。`cTestBlanker.js` 新增 `BLANK_SKIP_WORDS={this,that,these,those}`（像 1 字母词一样跳过、永不挖空），并对全部 119 个挖了指示代词的存量题用新挖空器整篇重挖（passage/id 不变，117 成功、2 触发 validator 保留）。冻结测试 `ctw-blanker-demonstrative-skip.test.js`。
+  - **数据毛病 2**：`ap_gen_26467805738_003` immune 词汇题去双解干扰项、`lat_mpw0p1fq_3` 删残留第五选项 `E:placeholder`。
+  - **干净库**：lat/lc/la/rdl-short 零实锤。**残留 10**（CTW，2 validator + 8 长尾内容词歧义，各 1/10 空双解）+ **未审计尾巴** AP 11 / CTW 18（DeepSeek 反复超时的顽固 error 项，可后续续扫）——报告「覆盖边界」章诚实披露。
+- **双模型盲审产线加固**（`d3aac20`）：起因 LCR 角色反转事故，从「Claude 审 Claude」升级为两个模型家族双票。
+  - `lcrValidator` 加确定性 role_inversion lint（speaker 把应答方放进问题主位 + 键是观察者句式即硬拒；旧 9 错题命中 8/9、413 题零误报，冻结测试 15 例）；`lcrAuditor` 单票→3 票多数盲审（键需多数一致、任一票发现第二 valid 选项即否决、可用票<2 算 error）；`lcrPromptBuilder` 生成协议改「对话优先」（先写双轮对话、应答句即键，角色反转结构上写不出）。
+  - `merge-staging.mjs` 听力接入答案审计且**严格 fail-closed**（键不符/歧义→拒、审计错→held、无 DEEPSEEK_API_KEY→整批 held）；新 workflow `merge-listening-audited.yml`（21:00 UTC）对 R3 Claude 盲审幸存的听力 staging 过 DeepSeek 第二家族票后合库。R3 routine prompt v2 存档 `docs/routine-prompts/audit-r3-v2.md`（http_api 创建的 routine 需手动粘贴）。CLAUDE.md 产线描述同步为三段式 + 合听力四步。
+  - 测试 131 套件 / 1096 用例全绿（+22）。
+
 ## 2026-08-02 — v1.16.0
 
 - **听力 LCR 答案全量审计：9 题改键/重写 + 7 题歧义收紧**（`ae9887e`/`067b1e8`，报告 `data/claudeGen/reports/lcr-answer-audit-20260802.md`）：起因用户报告 `lcr_mpvlbko3_4`（"You look completely wiped out today."）键答案给错。对 live 库 413 题全量盲审（9 并行 agent 只看 speaker+选项独立判定，人工复核全部不一致项），根因：context_shift/counter_question 范式没有约束键答案必须站在应答者角色，模型替提问方写出下一句（提供帮助/顾问建议）并设为键——「角色反转」；auditor 提示词同样无角色检查。修复全部不动 speaker 句（已配音频 100% 保留有效），新增 `role_inversion` 干扰项类型。防退化：`lcrPromptBuilder` 增 **ROLE CONSISTENCY (CRITICAL)** 规则、`lcrAuditor` 增 ROLE CHECK 且盲审 prompt 附带 situation 行（应答方角色常由 situation 决定，TA/顾问题此前等于蒙眼判角色）。对修复自身的对抗式 review 追补 3 处 situation 字段与新键的视角错位（其一会把考生引向干扰项）。
