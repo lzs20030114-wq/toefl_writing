@@ -1,9 +1,42 @@
 {
-  "session_id": "routine-20260804-190617",
-  "completed_at": "2026-08-04T19:06:41Z",
-  "duration_minutes": 1,
-  "model": "Claude Opus 4.8",
-  "highlight": "按需信号: 今晚无需出题（12 常规库库存均充足；interview 触发补题但 not_in_routine，交由专属 routine 处理）。",
+  "session_id": "routine-20260805-190529",
+  "completed_at": "2026-08-05T19:24:00Z",
+  "duration_minutes": 19,
+  "model": "Claude Opus 5",
+  "highlight": "按需信号只点名 BS：出 20 题凑满 2 整套合库（merge 按 10 题整套切分，n=18 会白丢 8 题），多样性 96/100（角色名 12/20、句型 5/5、开头 4/4），冻结门 PASS 且缩写率 0.181→0.186、三人称正式 0.167→0.166 双双回补边界。",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 20,
+      "accepted": 20,
+      "topics": [
+        "校园通勤/骑车",
+        "就业中心 resume workshop",
+        "攀岩墙入门课",
+        "收发室位置",
+        "画室采光",
+        "音乐会节目单印制",
+        "实验服归还",
+        "学习小组约时间",
+        "储物柜续租",
+        "陶艺窑炉课表",
+        "电影放映票",
+        "宿舍押金",
+        "校园广播报名",
+        "美术馆班车",
+        "志愿者集市",
+        "论文装订",
+        "温室植栽",
+        "球队选拔",
+        "管弦乐排练",
+        "琴房预约"
+      ],
+      "favorite": {
+        "prompt": "Did Olivia see the kiln schedule yet?",
+        "answer": "The instructor who runs the evening kiln sessions hasn't posted the schedule."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    }
+  }
 }

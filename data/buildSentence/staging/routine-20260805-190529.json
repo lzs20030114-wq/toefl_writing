@@ -1,0 +1,224 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "You look like you've been outside a while.",
+      "answer": "I biked here from the north campus.",
+      "chunks": ["i", "biked", "from", "the", "north campus", "rode"],
+      "prefilled": ["here"],
+      "prefilled_positions": { "here": 2 },
+      "distractor": "rode",
+      "has_question_mark": false,
+      "grammar_points": ["past tense", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did Margot see you at the career center today?",
+      "answer": "I asked whether the resume workshop still had openings.",
+      "chunks": ["i", "whether", "the resume", "workshop", "had", "openings", "did"],
+      "prefilled": ["asked", "still"],
+      "prefilled_positions": { "asked": 1, "still": 6 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Has Julian tried the new climbing wall with you?",
+      "answer": "I haven't booked an intro session for this month.",
+      "chunks": ["i", "haven't", "booked", "an intro", "session", "for this", "month", "have"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "I just picked up my new student ID.",
+      "answer": "Do you know where the mail room is?",
+      "chunks": ["do", "you", "know", "the mail", "room", "is", "did"],
+      "prefilled": ["where"],
+      "prefilled_positions": { "where": 3 },
+      "distractor": "did",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "embedded clause"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Did Emma ask you why you switched studios?",
+      "answer": "I wanted the studio that has better natural light.",
+      "chunks": ["i", "the studio", "has", "better", "natural light"],
+      "prefilled": ["wanted", "that"],
+      "prefilled_positions": { "wanted": 1, "that": 4 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Did Hector get you a copy of the recital program?",
+      "answer": "The recital programs were printed by the design club early last week.",
+      "chunks": ["programs", "were", "printed", "by the", "design club", "early last", "week", "was"],
+      "prefilled": ["the recital"],
+      "prefilled_positions": { "the recital": 0 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Where do I return this lab coat?",
+      "answer": "You can drop the coat in the return bin downstairs.",
+      "chunks": ["you", "can", "drop", "the coat", "return bin", "should"],
+      "prefilled": ["in the", "downstairs"],
+      "prefilled_positions": { "in the": 5, "downstairs": 9 },
+      "distractor": "should",
+      "has_question_mark": false,
+      "grammar_points": ["modal verb", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "You're up early for a Saturday.",
+      "answer": "I'm meeting my study group before noon.",
+      "chunks": ["I'm", "meeting", "my", "study group", "noon"],
+      "prefilled": ["before"],
+      "prefilled_positions": { "before": 5 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["present continuous", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did Angelina tell you about the lockers?",
+      "answer": "They found out my locker rental hadn't been renewed.",
+      "chunks": ["found out", "my", "locker", "rental", "hadn't", "been", "renewed", "did"],
+      "prefilled": ["they"],
+      "prefilled_positions": { "they": 0 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded clause", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "Did Olivia see the kiln schedule yet?",
+      "answer": "The instructor who runs the evening kiln sessions hasn't posted the schedule.",
+      "chunks": ["the instructor", "the evening", "kiln", "sessions", "hasn't", "posted", "the schedule", "has"],
+      "prefilled": ["who runs"],
+      "prefilled_positions": { "who runs": 2 },
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "negation"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Did Matthew save you a seat at the film screening?",
+      "answer": "I didn't get a ticket in time.",
+      "chunks": ["i", "didn't", "get", "a", "ticket", "did"],
+      "prefilled": ["in time"],
+      "prefilled_positions": { "in time": 5 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Why did Juan email the housing office for you?",
+      "answer": "I needed to know when the deposit clears.",
+      "chunks": ["i", "know", "the", "deposit", "clears", "did"],
+      "prefilled": ["needed to", "when"],
+      "prefilled_positions": { "needed to": 1, "when": 4 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "present tense"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "I want to join the campus radio show.",
+      "answer": "You should sign up at the station office.",
+      "chunks": ["you", "should", "sign", "up", "station", "office", "must"],
+      "prefilled": ["at the"],
+      "prefilled_positions": { "at the": 4 },
+      "distractor": "must",
+      "has_question_mark": false,
+      "grammar_points": ["modal verb", "phrasal verb"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "There's a shuttle to the art museum on Saturday.",
+      "answer": "Do you have to reserve a seat on the shuttle?",
+      "chunks": ["do", "you", "have", "a seat", "on the", "shuttle", "does"],
+      "prefilled": ["to reserve"],
+      "prefilled_positions": { "to reserve": 3 },
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes/no question", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "I heard you went to the volunteer fair.",
+      "answer": "I signed up for the group that cleans the riverbank.",
+      "chunks": ["signed", "up for", "the group", "cleans", "the riverbank"],
+      "prefilled": ["i", "that"],
+      "prefilled_positions": { "i": 0, "that": 6 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past tense"]
+    },
+    {
+      "id": "tmp_r1_q16",
+      "prompt": "Has Alison heard back about your thesis binding?",
+      "answer": "I found out my final chapters were sent before the holiday weekend.",
+      "chunks": ["i", "my final", "chapters", "were", "sent", "holiday weekend", "was"],
+      "prefilled": ["found out", "before the"],
+      "prefilled_positions": { "found out": 1, "before the": 8 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded clause", "passive voice"]
+    },
+    {
+      "id": "tmp_r1_q17",
+      "prompt": "I'm heading to the greenhouse now.",
+      "answer": "The seedlings need more water than usual.",
+      "chunks": ["the seedlings", "need", "more", "water", "than usual"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["comparative", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q18",
+      "prompt": "What did Naomi ask you about the tryouts?",
+      "answer": "She asked whether I'd ever played goalkeeper on a team.",
+      "chunks": ["asked whether", "I'd", "ever played", "goalkeeper", "on a", "team", "was"],
+      "prefilled": ["she"],
+      "prefilled_positions": { "she": 0 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q19",
+      "prompt": "Did Diane ask you about the orchestra rehearsal?",
+      "answer": "I don't play in the string section anymore.",
+      "chunks": ["i", "don't", "play", "string", "section", "anymore", "not"],
+      "prefilled": ["in the"],
+      "prefilled_positions": { "in the": 3 },
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q20",
+      "prompt": "I've been trying to reserve a practice room.",
+      "answer": "You can book the rooms that have pianos through the music office.",
+      "chunks": ["you", "can", "book", "the rooms", "have", "pianos", "music office", "could"],
+      "prefilled": ["that", "through the"],
+      "prefilled_positions": { "that": 5, "through the": 8 },
+      "distractor": "could",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "modal verb"]
+    }
+  ]
+}
