@@ -1,9 +1,29 @@
 {
-  "session_id": "routine-20260804-190617",
-  "completed_at": "2026-08-04T19:06:41Z",
-  "duration_minutes": 1,
-  "model": "Claude Opus 4.8",
-  "highlight": "按需信号: 今晚无需出题（12 常规库库存均充足；interview 触发补题但 not_in_routine，交由专属 routine 处理）。",
+  "session_id": "routine-20260806-190643",
+  "completed_at": "2026-08-06T19:21:00Z",
+  "duration_minutes": 15,
+  "model": "Claude Opus",
+  "highlight": "按需信号只点名 bs（T2 最快用户 9.3 天刷穿）；出 20 题合成 2 套。首轮被冻结门拒合：live 库 embedded_question 已顶到漂移带上限（0.1546 / 上限 0.155）、contraction 贴地板（0.181 / 下限 0.18），本批把 embedded 压到 1/20、contraction 提到 5/20，合库后拉回 0.152 / 0.183，两项都腾出余量。",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 20,
+      "accepted": 20,
+      "topics": [
+        "图书馆借还",
+        "实验报告与数据",
+        "选课与阅读材料",
+        "社团招新与体育队",
+        "宿舍与校园设施",
+        "实习与注册处",
+        "小组作业与演讲"
+      ],
+      "favorite": {
+        "prompt": "There is an opening in the recycling crew.",
+        "answer": "Do you know how many hours they need weekly?"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    }
+  }
 }
