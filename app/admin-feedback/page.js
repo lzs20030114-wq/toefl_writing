@@ -29,6 +29,9 @@ export default function AdminFeedbackPage() {
   const [busy, setBusy] = useState(false);
   const [replyInputs, setReplyInputs] = useState({});
   const [patchBusy, setPatchBusy] = useState({});
+  const [mailChecks, setMailChecks] = useState({});
+  const [emailStatus, setEmailStatus] = useState({});
+  const [mailConfigured, setMailConfigured] = useState(true);
 
   useEffect(() => {
     try {
@@ -66,17 +69,20 @@ export default function AdminFeedbackPage() {
     return body;
   }
 
-  async function patchFeedback(id, updates) {
+  async function patchFeedback(id, updates, opts = {}) {
     setPatchBusy((p) => ({ ...p, [id]: true }));
     try {
       const res = await fetch("/api/admin/feedback", {
         method: "PATCH",
         headers: { "Content-Type": "application/json", "x-admin-token": token.trim() },
-        body: JSON.stringify({ id, ...updates }),
+        body: JSON.stringify({ id, ...updates, ...(opts.sendEmail ? { sendEmail: true } : {}) }),
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
       setRows((prev) => prev.map((r) => r.id === id ? { ...r, ...updates } : r));
+      if (opts.sendEmail) {
+        setEmailStatus((p) => ({ ...p, [id]: body.email || { sent: false, error: "未返回发送结果" } }));
+      }
     } catch (e) {
       setMsg(String(e.message || e));
     } finally {
@@ -97,6 +103,7 @@ export default function AdminFeedbackPage() {
         callApi("/api/admin/codes?limit=500"),
       ]);
       setRows(Array.isArray(feedbackBody?.rows) ? feedbackBody.rows : []);
+      setMailConfigured(feedbackBody?.mailConfigured !== false);
       // 建立 code -> note 映射
       const map = {};
       (codesBody?.codes || []).forEach((c) => { if (c.code) map[c.code] = c.note || ""; });
@@ -172,10 +179,18 @@ export default function AdminFeedbackPage() {
                   const isResolved = r.status === "resolved";
                   const replyVal = replyInputs[r.id] ?? (r.admin_reply || "");
                   const patching = !!patchBusy[r.id];
+                  const canEmail = !!r.user_email && mailConfigured;
+                  const emailChecked = canEmail && (mailChecks[r.id] ?? true);
+                  const est = emailStatus[r.id];
+                  const unchanged = replyVal === (r.admin_reply || "");
+                  const sendDisabled = patching || (unchanged && !(emailChecked && replyVal.trim()));
                   return (
                     <tr key={r.id} style={{ background: isResolved ? "#f0fdf4" : "transparent" }}>
                       <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap", verticalAlign: "top" }}>{fmtDate(r.created_at)}</td>
-                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace", verticalAlign: "top" }}>{r.user_code || "-"}</td>
+                      <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace", verticalAlign: "top" }}>
+                        {r.user_code || "-"}
+                        {r.user_email && <div style={{ fontSize: 10, color: C.t2, fontFamily: "inherit", marginTop: 2, wordBreak: "break-all" }}>{r.user_email}</div>}
+                      </td>
                       <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: noteByCode[r.user_code] ? C.nav : C.t2, verticalAlign: "top" }}>{noteByCode[r.user_code] || "-"}</td>
                       <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", verticalAlign: "top" }} title={String(r.content || "")}>{clip(r.content, 200)}</td>
                       <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", verticalAlign: "top" }}>
@@ -197,13 +212,30 @@ export default function AdminFeedbackPage() {
                             style={{ flex: 1, fontSize: 11, padding: "4px 6px", border: "1px solid #cbd5e1", borderRadius: 6, resize: "vertical", fontFamily: "inherit", minWidth: 0 }}
                           />
                           <button
-                            onClick={() => patchFeedback(r.id, { admin_reply: replyVal || null }).then(() => setReplyInputs((p) => { const n = { ...p }; delete n[r.id]; return n; }))}
-                            disabled={patching || replyVal === (r.admin_reply || "")}
-                            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid " + C.blue, background: C.blue, color: "#fff", fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap", opacity: (patching || replyVal === (r.admin_reply || "")) ? 0.5 : 1 }}
+                            onClick={() => patchFeedback(r.id, { admin_reply: replyVal || null }, { sendEmail: emailChecked && !!replyVal.trim() }).then(() => setReplyInputs((p) => { const n = { ...p }; delete n[r.id]; return n; }))}
+                            disabled={sendDisabled}
+                            style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid " + C.blue, background: C.blue, color: "#fff", fontSize: 11, fontWeight: 700, cursor: sendDisabled ? "not-allowed" : "pointer", whiteSpace: "nowrap", opacity: sendDisabled ? 0.5 : 1 }}
                           >
-                            发送
+                            {emailChecked ? "发送+邮件" : "发送"}
                           </button>
                         </div>
+                        <label style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 4, fontSize: 10, color: canEmail ? C.t2 : "#b7c0ba", cursor: canEmail ? "pointer" : "default", userSelect: "none" }}>
+                          <input
+                            type="checkbox"
+                            disabled={!canEmail}
+                            checked={emailChecked}
+                            onChange={(e) => setMailChecks((p) => ({ ...p, [r.id]: e.target.checked }))}
+                            style={{ margin: 0 }}
+                          />
+                          {r.user_email
+                            ? (mailConfigured ? `同步发送到 ${r.user_email}` : "邮件服务未配置，无法同步发送")
+                            : "该用户未绑定邮箱，无法邮件通知"}
+                        </label>
+                        {est && (
+                          <div style={{ marginTop: 3, fontSize: 10, fontWeight: 700, color: est.sent ? "#15803d" : "#c2410c" }}>
+                            {est.sent ? `✉ 已发送至 ${est.to}` : `✉ 邮件发送失败：${est.error || "未知错误"}`}
+                          </div>
+                        )}
                         {r.admin_reply && replyInputs[r.id] === undefined && (
                           <div style={{ marginTop: 4, fontSize: 10, color: C.t2 }}>当前：{clip(r.admin_reply, 60)}</div>
                         )}
