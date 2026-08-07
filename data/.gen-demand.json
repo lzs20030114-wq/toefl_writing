@@ -1,25 +1,23 @@
 {
-  "generated_at": "2026-08-05T19:01:12.190Z",
+  "generated_at": "2026-08-07T18:10:34.414Z",
   "window_days": 7,
-  "active_users": 15,
+  "active_users": 13,
   "banks": {
     "bs": {
-      "bank_size": 75,
-      "top_user_consumed": 39,
-      "top_user_pct": 0.52,
-      "burn_7d": 55,
-      "min_user_runway_days": 9.3,
-      "triggers": [
-        "T2"
-      ],
-      "generate": true,
-      "n": 18,
-      "reason": "最快用户按其近7天速度仅剩约 9 天刷穿（低于 14 天），建议补 18 题。"
+      "bank_size": 78,
+      "top_user_consumed": 43,
+      "top_user_pct": 0.551,
+      "burn_7d": 49,
+      "min_user_runway_days": 16.3,
+      "triggers": [],
+      "generate": false,
+      "n": 0,
+      "reason": "库存充足，当晚无需补题。"
     },
     "discussion": {
       "bank_size": 215,
-      "top_user_consumed": 7,
-      "top_user_pct": 0.033,
+      "top_user_consumed": 1,
+      "top_user_pct": 0.005,
       "burn_7d": 1,
       "min_user_runway_days": 1498,
       "triggers": [],
@@ -29,10 +27,10 @@
     },
     "email": {
       "bank_size": 221,
-      "top_user_consumed": 39,
-      "top_user_pct": 0.176,
-      "burn_7d": 42,
-      "min_user_runway_days": 32.7,
+      "top_user_consumed": 40,
+      "top_user_pct": 0.181,
+      "burn_7d": 44,
+      "min_user_runway_days": 31.7,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -40,10 +38,10 @@
     },
     "reading-ap": {
       "bank_size": 101,
-      "top_user_consumed": 25,
-      "top_user_pct": 0.248,
-      "burn_7d": 8,
-      "min_user_runway_days": 66.5,
+      "top_user_consumed": 30,
+      "top_user_pct": 0.297,
+      "burn_7d": 14,
+      "min_user_runway_days": 49.7,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -51,10 +49,10 @@
     },
     "ctw": {
       "bank_size": 407,
-      "top_user_consumed": 55,
-      "top_user_pct": 0.135,
-      "burn_7d": 61,
-      "min_user_runway_days": 107.1,
+      "top_user_consumed": 64,
+      "top_user_pct": 0.157,
+      "burn_7d": 54,
+      "min_user_runway_days": 102.6,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -62,10 +60,10 @@
     },
     "rdl-short": {
       "bank_size": 208,
-      "top_user_consumed": 24,
-      "top_user_pct": 0.115,
-      "burn_7d": 6,
-      "min_user_runway_days": 214.7,
+      "top_user_consumed": 30,
+      "top_user_pct": 0.144,
+      "burn_7d": 12,
+      "min_user_runway_days": 124.6,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -73,10 +71,10 @@
     },
     "rdl-long": {
       "bank_size": 132,
-      "top_user_consumed": 39,
-      "top_user_pct": 0.295,
-      "burn_7d": 29,
-      "min_user_runway_days": 28.3,
+      "top_user_consumed": 45,
+      "top_user_pct": 0.341,
+      "burn_7d": 36,
+      "min_user_runway_days": 23.4,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -84,10 +82,10 @@
     },
     "listening-lat": {
       "bank_size": 149,
-      "top_user_consumed": 13,
-      "top_user_pct": 0.087,
-      "burn_7d": 5,
-      "min_user_runway_days": 317.3,
+      "top_user_consumed": 17,
+      "top_user_pct": 0.114,
+      "burn_7d": 8,
+      "min_user_runway_days": 132,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -95,10 +93,10 @@
     },
     "lc": {
       "bank_size": 83,
-      "top_user_consumed": 33,
-      "top_user_pct": 0.398,
-      "burn_7d": 11,
-      "min_user_runway_days": 58.3,
+      "top_user_consumed": 40,
+      "top_user_pct": 0.482,
+      "burn_7d": 14,
+      "min_user_runway_days": 25.1,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -106,32 +104,36 @@
     },
     "la": {
       "bank_size": 100,
-      "top_user_consumed": 35,
-      "top_user_pct": 0.35,
-      "burn_7d": 13,
-      "min_user_runway_days": 75.8,
-      "triggers": [],
-      "generate": false,
-      "n": 0,
-      "reason": "库存充足，当晚无需补题。"
+      "top_user_consumed": 53,
+      "top_user_pct": 0.53,
+      "burn_7d": 27,
+      "min_user_runway_days": 13.2,
+      "triggers": [
+        "T2"
+      ],
+      "generate": true,
+      "n": 4,
+      "reason": "最快用户按其近7天速度仅剩约 13 天刷穿（低于 14 天），建议补 4 题。"
     },
     "lcr": {
       "bank_size": 413,
-      "top_user_consumed": 215,
-      "top_user_pct": 0.521,
-      "burn_7d": 170,
-      "min_user_runway_days": 25.1,
-      "triggers": [],
-      "generate": false,
-      "n": 0,
-      "reason": "库存充足，当晚无需补题。"
+      "top_user_consumed": 270,
+      "top_user_pct": 0.654,
+      "burn_7d": 165,
+      "min_user_runway_days": 10.2,
+      "triggers": [
+        "T2"
+      ],
+      "generate": true,
+      "n": 10,
+      "reason": "最快用户按其近7天速度仅剩约 10 天刷穿（低于 14 天），建议补 10 题。"
     },
     "speaking-repeat": {
       "bank_size": 90,
       "top_user_consumed": 3,
       "top_user_pct": 0.033,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "burn_7d": 3,
+      "min_user_runway_days": 203,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -141,8 +143,8 @@
       "bank_size": 11,
       "top_user_consumed": 5,
       "top_user_pct": 0.455,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "burn_7d": 3,
+      "min_user_runway_days": 14,
       "triggers": [
         "T3"
       ],
@@ -153,6 +155,7 @@
     }
   },
   "routine_instructions": [
-    "Generate 18 bs sentence-building items"
+    "Generate 4 la listening items",
+    "Generate 10 lcr listening items"
   ]
 }
