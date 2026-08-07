@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where's the reading list for Tuesday posted?",
+      "options": {
+        "A": "Did you check the course site?",
+        "B": "The reading room closes at nine.",
+        "C": "Every Tuesday and Thursday morning.",
+        "D": "I left my umbrella in the lab."
+      },
+      "answer": "A",
+      "explanation": "同学问周二的阅读书单贴在哪里。正确答 A 用一个反问把对话往前推——先确认对方查没查课程网站（counter_question），是最自然的回应。B 抓住 reading 转去说自习室几点关门，只借词不答题（语义联想陷阱）。C 回答的是「什么时候」而不是「在哪里」，答非所问（问题类型错位）。D 说伞落在实验室，与提问毫无关系（离题）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why don't you come study with us tonight?",
+      "options": {
+        "A": "The study lounge was renovated last month.",
+        "B": "Actually, I could use the company.",
+        "C": "That printer jams almost every time.",
+        "D": "I already turned in that assignment."
+      },
+      "answer": "B",
+      "explanation": "朋友邀你晚上一起自习。正确答 B 以话语标记 Actually 开头，用「正好想找人做伴」间接答应（marker_led_indirect）。A 抓住 study 去讲自习室上个月翻新，只复用关键词不回应邀约（语义联想陷阱）。C 说打印机老卡纸，与邀请无关（离题）。D 把一起自习误解成某份作业的催交，理解偏了（误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus parking",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Can't I park behind the science building?",
+      "options": {
+        "A": "The science building has a new roof.",
+        "B": "The park closes at sunset.",
+        "C": "Only with a blue permit.",
+        "D": "I finally finished my laundry."
+      },
+      "answer": "C",
+      "explanation": "学生问能不能停在理科楼后面。正确答 C 直接给出条件——要有蓝色停车证（direct_topical）。A 抓住 science building 去描述楼换了新屋顶，答非所问（语义联想陷阱）。B 把动词 park（停车）当成名词 park（公园），一词多义误读（误解）。D 说自己洗完衣服了，与停车毫不相干（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How soon can I get a tutor here?",
+      "options": {
+        "A": "The writing center moved upstairs.",
+        "B": "My printer ran out of ink.",
+        "C": "In the basement of Ford Hall.",
+        "D": "How soon is your paper due?"
+      },
+      "answer": "D",
+      "explanation": "学生在写作中心问多久能排到辅导老师。正确答 D 反问论文什么时候交，据此判断轻重缓急，把对话推进一步（counter_question）。A 抓住 writing center 说中心搬到楼上，只借词不回答（语义联想陷阱）。B 说打印机没墨了，与提问无关（离题）。C 回答的是地点，而学生人已经在现场，问的是时间，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Didn't the professor say the exam's open-book?",
+      "options": {
+        "A": "Your guess is as good as mine.",
+        "B": "That book is on reserve upstairs.",
+        "C": "The cafeteria stops serving at eight.",
+        "D": "Yes, I opened the book already."
+      },
+      "answer": "A",
+      "explanation": "同学问教授是不是说过考试可以带书。正确答 A 用地道口语「我跟你一样不清楚」自然回应（idiomatic）。B 抓住 open-book 里的 book 转去说某本书在楼上闭架借阅，只复用词不回答（语义联想陷阱）。C 说食堂八点停止供餐，与考试无关（离题）。D 把 open-book（开卷）拆成字面的「把书打开」，一词多义误读（误解）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I still can't find that new bakery.",
+      "options": {
+        "A": "That bakery uses imported flour.",
+        "B": "Want me to walk you there?",
+        "C": "My phone died on the bus.",
+        "D": "Every morning except Sunday."
+      },
+      "answer": "B",
+      "explanation": "说话人抱怨一直找不到那家新面包店。正确答 B 用反问提出带对方走一趟，直接解决困难并推进对话（counter_question）。A 抓住 bakery 去讲面粉是进口的，只借词不帮忙（语义联想陷阱）。C 说手机在公交车上没电了，与找路无关（离题）。D 回答的是营业时间，而对方问的是位置，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking whether the post office is still open",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What time does the post office close today?",
+      "options": {
+        "A": "The post office hired new clerks.",
+        "B": "Right beside the credit union.",
+        "C": "I can drop it off for you.",
+        "D": "My car needs an oil change."
+      },
+      "answer": "C",
+      "explanation": "说话人问邮局今天几点关门，真正的需求是把东西寄出去。正确答 C 不答时间，直接提出替对方跑一趟，解决了背后的问题（context_shift）。A 抓住 post office 说邮局招了新柜员，只复用词（语义联想陷阱）。B 回答的是位置，而问的是时间，答非所问（问题类型错位）。D 说自己的车该换机油了，与邮局无关（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "This jacket doesn't fit my brother at all.",
+      "options": {
+        "A": "That jacket comes in three colors.",
+        "B": "The parking meter runs out soon.",
+        "C": "Yes, my brother works here too.",
+        "D": "Well, we can exchange it today."
+      },
+      "answer": "D",
+      "explanation": "顾客说这件夹克弟弟穿完全不合身，实际是想换货。正确答 D 以 Well 开头，间接给出解决办法——今天就能换（marker_led_indirect）。A 抓住 jacket 去讲这款有三种颜色，没有回应换货诉求（语义联想陷阱）。B 说停车计时器快到点了，与对话无关（离题）。C 把顾客口中的 brother 误当成店里的同事，理解偏了（误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student frustrated that a lab section is full",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why's the lab section already full?",
+      "options": {
+        "A": "The lab has twenty new microscopes.",
+        "B": "The cafeteria changed its hours again.",
+        "C": "I'll ask if they'll add seats.",
+        "D": "Yes, the room felt pretty crowded."
+      },
+      "answer": "C",
+      "explanation": "学生抱怨实验课名额怎么已经满了。正确答 C 不解释原因，而是提出去问问能不能加名额，直接处理背后的真正需求（context_shift）。A 抓住 lab 去讲实验室新添了二十台显微镜，只借词不解决问题（语义联想陷阱）。B 说食堂又改营业时间了，与选课无关（离题）。D 把 full（名额已满）误解成房间里人挤，一词理解错位（误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student mentioning a heavy workload to a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've got three papers due this week.",
+      "options": {
+        "A": "You've got your hands full.",
+        "B": "The paper store is on Main.",
+        "C": "My sister just got a puppy.",
+        "D": "Yes, I recycled all of them."
+      },
+      "answer": "A",
+      "explanation": "同学说这周有三篇论文要交。正确答 A 用地道口语「你可真够忙的」表达理解，是最自然的接话（idiomatic）。B 抓住 papers 转去说文具店在主街，只复用词不回应（语义联想陷阱）。C 说姐姐养了只小狗，与对方的处境无关（离题）。D 把 papers（论文）当成字面的纸张说都拿去回收了，一词多义误读（误解）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    }
+  ]
+}

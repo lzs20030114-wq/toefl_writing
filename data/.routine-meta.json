@@ -1,33 +1,48 @@
 {
-  "session_id": "routine-20260806-190643",
-  "completed_at": "2026-08-06T19:21:00Z",
-  "duration_minutes": 15,
-  "model": "Claude Opus",
-  "highlight": "按需信号只点名 bs（T2 最快用户 9.3 天刷穿）；出 20 题合成 2 套。首轮被冻结门拒合：live 库 embedded_question 已顶到漂移带上限（0.1546 / 上限 0.155）、contraction 贴地板（0.181 / 下限 0.18），本批把 embedded 压到 1/20、contraction 提到 5/20，合库后拉回 0.152 / 0.183，两项都腾出余量。",
+  "session_id": "routine-20260807-190545",
+  "completed_at": "2026-08-07T19:11:33.523Z",
+  "duration_minutes": 6,
+  "model": "Claude Opus 5",
+  "highlight": "按需信号只点名两库：LA 补 4 题（含班车改道硬题）、LCR 补 10 题，WH 疑问占 50% 贴合真题",
   "commit_sha": "",
   "results": {
-    "bs": {
-      "generated": 20,
-      "accepted": 30,
+    "listening-la": {
+      "generated": 4,
+      "accepted": 4,
       "topics": [
-        "图书馆借还",
-        "实验报告与数据",
-        "选课与阅读材料",
-        "社团招新与体育队",
-        "宿舍与校园设施",
-        "实习与注册处",
-        "小组作业与演讲"
+        "campus shuttle route change due to construction",
+        "campus sustainability cleanup day",
+        "recreation center extending hours during finals week",
+        "interdisciplinary graduate colloquium call for papers"
       ],
       "favorite": {
-        "prompt": "There is an opening in the recycling crew.",
-        "answer": "Do you know how many hours they need weekly?"
+        "subtopic": "logistics/campus shuttle route change due to construction",
+        "preview": "The Blue Line shuttle will follow a detour route beginning next Monday, since crews are tearing up Chapel Stre"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": ""
+    },
+    "listening-lcr": {
+      "generated": 10,
+      "accepted": 10,
+      "topics": [
+        "student asking about a reading list for a course",
+        "friend inviting another to a study group",
+        "student asking about campus parking",
+        "student seeking help at the writing center",
+        "student asking about exam format",
+        "asking for directions to a nearby location",
+        "checking whether the post office is still open",
+        "asking a store clerk about a return or exchange",
+        "student frustrated that a lab section is full",
+        "student mentioning a heavy workload to a friend"
+      ],
+      "favorite": {
+        "subtopic": "general_daily/checking whether the post office is still open",
+        "preview": "What time does the post office close today? -> I can drop it off for you."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-06T19:45:19Z",
-  "r2_session_id": "routine-r2-20260806-194140"
+  }
 }

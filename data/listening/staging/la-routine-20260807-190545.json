@@ -1,0 +1,176 @@
+{
+  "items": [
+    {
+      "context": "logistics",
+      "situation": "campus shuttle route change due to construction",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "The Blue Line shuttle will follow a detour route beginning next Monday, since crews are tearing up Chapel Street to replace a water main. For the next six weeks the shuttle won't stop at the Chapel Street shelter at all; instead it'll pull in behind the Wexler Library, on the loading dock side. That detour adds roughly seven minutes to each loop, so we've moved the first morning departure up to 7:05. Riders heading to the medical campus should check the revised timetable posted at every shelter before Monday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will the Blue Line shuttle stop during the detour?",
+          "options": {
+            "A": "Behind the Wexler Library",
+            "B": "At the Chapel Street shelter",
+            "C": "On the medical campus loop",
+            "D": "Beside the water main worksite"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知明确说改道期间班车改在Wexler图书馆后侧的装卸区停靠。B错（wrong_detail）：Chapel街站点在六周内完全不停，恰好说反了。C错（misattributed_detail）：医学院校区只是部分乘客的目的地，不是新增的停靠点。D错（related_but_not_stated）：施工点只是改道原因，通知从未说班车会在那里停车。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the 7:05 morning departure?",
+          "options": {
+            "A": "It replaces the Blue Line's last evening run",
+            "B": "It will remain in effect permanently",
+            "C": "It compensates for the longer detour loop",
+            "D": "It applies only to medical campus riders"
+          },
+          "answer": "C",
+          "explanation": "C正确：绕行使每圈多花约七分钟，把首班车提前到7:05正是为了抵消这段延时，属于合理推断。A错（unrelated_inference）：通知只谈早班发车，与末班车无关，没有任何依据。B错（over_inference）：改道只持续六周，推断成永久生效超出原文。D错（wrong_detail）：提前发车面向全体乘客，只有查看新时刻表的提醒才特别点到医学院方向。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "campus sustainability cleanup day",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "We're organizing a campus-wide cleanup day this Saturday, and we still need about thirty more volunteers to fill out the crews. Teams meet at nine in the morning at the flagpole outside Bryant Hall, and we'll work along the creek path and the athletic fields until about one. Rakes, bags, and work gloves are all provided, but you'll want long pants, since parts of the creek bank are thick with brambles. Sign up through the sustainability office by Thursday evening so we can size the crews properly.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain new rules for using the creek path",
+            "B": "To recruit volunteers for a campus cleanup day",
+            "C": "To thank students who joined last year's cleanup",
+            "D": "To warn students away from the athletic fields"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知开门见山说还差三十名志愿者，全篇都在为周六的清洁日招募人手。A错（too_narrow）：小溪步道只是作业地点之一，通知没有制定任何使用规定。C错（wrong_purpose）：全篇没有提到往年活动，更没有致谢。D错（reversed_intent）：运动场是号召大家去打扫的地方，不是劝人远离，与原意相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are volunteers advised to bring themselves?",
+          "options": {
+            "A": "A rake for clearing brush",
+            "B": "Their own heavy work gloves",
+            "C": "Trash bags for the creek path",
+            "D": "Long pants for the brambles"
+          },
+          "answer": "D",
+          "explanation": "D正确：耙子、袋子和手套都由主办方提供，唯独提醒志愿者自己穿长裤，因为溪岸荆棘丛生。A错（wrong_detail）：耙子属于提供的工具，不需自带。B错（wrong_detail）：手套同样由主办方提供，选项把提供的东西说成要自备。C错（misattributed_detail）：垃圾袋是提供的物资，通知只是提到溪边是作业区域，把地点和自备物品混在了一起。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "recreation center extending hours during finals week",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Attention students. The recreation center will stay open until two in the morning every night of finals week, starting Sunday the fourteenth. We know a lot of you study late, so the track, the weight room, and the climbing wall will all be running on the extended schedule. The pool is the one exception; it still closes at ten, because we can't staff lifeguards any later. After eleven at night you'll need to swipe your student ID at the north entrance, since the main doors lock automatically.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A new fee for using the climbing wall",
+            "B": "A shortage of lifeguards at the pool",
+            "C": "Repairs planned for the north entrance",
+            "D": "Longer recreation center hours during finals"
+          },
+          "answer": "D",
+          "explanation": "D正确：通知的核心是期末周娱乐中心延长开放到凌晨两点。A错（wrong_purpose）：攀岩墙只是随延长时段一并开放的设施，通知从未提到收费。B错（too_narrow）：救生员只是解释泳池为何例外的一句细节，不是整条通知的主题。C错（wrong_purpose）：北门只是深夜刷卡的入口，并没有说要维修。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to enter after eleven at night?",
+          "options": {
+            "A": "Reserve a time slot in advance",
+            "B": "Swipe a student ID at the north entrance",
+            "C": "Sign in with the lifeguard on duty",
+            "D": "Use the main doors on the pool side"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知说十一点后主门自动上锁，要在北门刷学生证进入。A错（related_but_not_stated）：预约时段在校园设施里很常见，但这条通知完全没提。C错（misattributed_detail）：救生员出现在解释泳池十点关门的语境里，与深夜进门登记无关。D错（wrong_detail）：主门恰恰是锁上的那扇，选项把它说成可用入口，正好说反。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "C": "misattributed_detail",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "interdisciplinary graduate colloquium call for papers",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "The Graduate Society is accepting paper proposals for our interdisciplinary colloquium, and the window closes on the twenty-second of this month. The theme this year is water, read as broadly as you like, so we're hoping for work from hydrology, history, poetry, public policy, anything that touches it. Send a title and a one-page description to the society address; you don't need a finished draft to be considered. Accepted speakers present for fifteen minutes in the Keller Center on the first weekend of April.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the primary purpose of this announcement?",
+          "options": {
+            "A": "To solicit paper proposals for a colloquium",
+            "B": "To announce the winners of a writing prize",
+            "C": "To describe research on local water quality",
+            "D": "To recruit new members for the society"
+          },
+          "answer": "A",
+          "explanation": "A正确：整条通知都在征集跨学科研讨会的论文提案并说明投稿方式和截止日期。B错（wrong_purpose）：通知处在征稿阶段，根本没有评奖或公布结果。C错（too_narrow）：水只是今年的主题词，通知并未介绍任何水质研究内容。D错（wrong_purpose）：研讨会向各学科开放，但通知招的是稿件不是会员。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is required in order to submit a proposal?",
+          "options": {
+            "A": "A completed fifteen-minute draft",
+            "B": "A faculty member's written endorsement",
+            "C": "A title and a one-page description",
+            "D": "Proof of enrollment in a science program"
+          },
+          "answer": "C",
+          "explanation": "C正确：通知明说只需把标题和一页说明发到学会邮箱。A错（wrong_detail）：十五分钟是入选后的发言时长，而且通知强调不需要完稿，选项两处都弄错了。B错（related_but_not_stated）：导师推荐信在学术征稿里很常见，但这条通知完全没有要求。D错（wrong_detail）：主题面向水文、历史、诗歌、公共政策等各领域，限定理科专业与原文相反。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    }
+  ]
+}
