@@ -1,0 +1,48 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "What did Mariana ask you after the meeting?",
+      "answer": "She wanted to know whether I had joined the committee.",
+      "chunks": ["she", "whether", "I", "had joined", "the committee", "did"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": { "wanted to know": 1 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you get your replacement card yet?",
+      "answer": "The new card arrived at the mailroom.",
+      "chunks": ["the new", "card", "arrived", "at the", "was"],
+      "prefilled": ["mailroom"],
+      "prefilled_positions": { "mailroom": 6 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "prepositional phrase of place"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "Where did your roommate find that reading lamp?",
+      "answer": "He borrowed the lamp that belongs to the student across the hall.",
+      "chunks": ["he", "borrowed", "the lamp", "that", "belongs to", "the student", "across the hall", "belonged"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "belonged",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that", "prepositional phrase of place"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "Harold said you have not turned in the lab report.",
+      "answer": "I did not receive the grading rubric for it.",
+      "chunks": ["did not", "receive", "the grading", "rubric", "for it", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["negation with did not", "prepositional phrase"]
+    }
+  ]
+}

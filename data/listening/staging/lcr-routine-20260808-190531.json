@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How late is the fitness center open tonight?",
+      "options": {
+        "A": "Actually, it closes early on Fridays.",
+        "B": "The new treadmills arrived last week.",
+        "C": "I left my keys in the car.",
+        "D": "Yes, you can bring a guest."
+      },
+      "answer": "A",
+      "explanation": "对方问健身房今晚开到几点。正确答 A 先用 Actually 这个话语标记，再间接给出关键信息——周五提前关门（marker_led_indirect），比直接报一个时间更自然。B 抓住 fitness center 转去说新跑步机到货，只借语境不回答问题（语义联想陷阱）。C 说钥匙落在车里，与提问毫无关系（离题）。D 用 Yes 回答，可问的是「开到几点」不是「能不能」，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's whereabouts",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where did Daniel disappear to after class?",
+      "options": {
+        "A": "He disappeared from the roster last term.",
+        "B": "Your guess is as good as mine.",
+        "C": "Around three o'clock, I think.",
+        "D": "I finally returned that library book."
+      },
+      "answer": "B",
+      "explanation": "对方问 Daniel 下课后跑哪去了。正确答 B 用地道口语「Your guess is as good as mine」表示「我也不知道」（idiomatic），是最自然的回应。A 把 disappear 换个意思说他上学期从名单上消失了，只借词不答题（语义联想陷阱）。C 回答的是时间，可人家问的是地点（问题类型错位）。D 说终于还了图书馆的书，完全跑题（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I think I left my umbrella here yesterday.",
+      "options": {
+        "A": "It's supposed to rain all weekend.",
+        "B": "No, I haven't seen that movie.",
+        "C": "Well, let's check the lost-and-found bin.",
+        "D": "Yes, the desk closes at six."
+      },
+      "answer": "C",
+      "explanation": "对方说自己昨天可能把伞落在这儿了。正确答 C 用 Well 起头再提出去失物箱找找（marker_led_indirect），既回应又推进对话。A 抓住 umbrella 联想到天气，说周末都下雨，没解决问题（语义联想陷阱）。B 说没看过那部电影，与伞毫无关系（离题）。D 用 Yes 报出前台关门时间，对方并没有问时间（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What time does the last shuttle leave campus?",
+      "options": {
+        "A": "The shuttle was pretty crowded this morning.",
+        "B": "It stops right outside the science building.",
+        "C": "I usually walk home after practice.",
+        "D": "Eleven thirty from the main gate."
+      },
+      "answer": "D",
+      "explanation": "对方问末班校车几点发。正确答 D 直接给出时间和发车点（direct_topical），信息到位。A 抓住 shuttle 说早上车很挤，只借词不答题（语义联想陷阱）。B 回答的是停靠地点，问的却是时间（问题类型错位）。C 说自己通常走回家，是个人习惯，没有回答问题（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Do you think we can finish the slides tonight?",
+      "options": {
+        "A": "Not a chance, honestly.",
+        "B": "The slides are in the shared folder.",
+        "C": "Yes, I finished my own presentation.",
+        "D": "Tuesday works better for me."
+      },
+      "answer": "A",
+      "explanation": "同伴问今晚能不能把小组幻灯片做完。正确答 A 用口语说法「Not a chance」直截了当表示做不完（idiomatic），语气自然。B 抓住 slides 说文件在共享文件夹里，只谈位置不回答能否完成（语义联想陷阱）。C 把「我们的小组任务」误当成「我自己的展示」，理解错了对象（误解）。D 说周二更方便，答的是约时间而不是今晚能否完成（离题）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why is the dining hall so packed today?",
+      "options": {
+        "A": "The dining hall opened three years ago.",
+        "B": "Beats me, I'd try the cafe instead.",
+        "C": "Around noon, usually.",
+        "D": "I dropped my chemistry section."
+      },
+      "answer": "B",
+      "explanation": "朋友问食堂今天怎么这么挤。正确答 B 用口语「Beats me」表示不清楚原因，再顺势建议改去咖啡馆（idiomatic），既回应又推进。A 抓住 dining hall 说它三年前开的，只借词不答原因（语义联想陷阱）。C 回答的是时间，问的却是原因（问题类型错位）。D 说自己退了化学课，与吃饭毫无关系（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can someone look at my thesis paragraph today?",
+      "options": {
+        "A": "The writing center moved to the library.",
+        "B": "Yes, I read that paragraph twice.",
+        "C": "I'll take you to the front desk.",
+        "D": "My thesis is due in April."
+      },
+      "answer": "C",
+      "explanation": "学生问今天有没有人能看一下自己的论文段落。正确答 C 不纠结「能不能」，而是直接带他去前台安排（context_shift），解决了真正的需求。A 抓住 writing center 说它搬到图书馆了，只给背景信息不解决问题（语义联想陷阱）。B 说自己读过那段两遍，把「帮我看」误当成「你读过吗」（误解）。D 说自己的论文四月截止，讲的是自己的事（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I still don't know what's on the midterm.",
+      "options": {
+        "A": "The midterm counts for thirty percent.",
+        "B": "I know a few people in that class.",
+        "C": "The bookstore ran out of notebooks.",
+        "D": "Just check the review sheet she posted."
+      },
+      "answer": "D",
+      "explanation": "对方说还不清楚期中考什么。正确答 D 用 Just 起头给出一个简短可行的办法——去看老师发的复习提纲（marker_led_indirect）。A 抓住 midterm 说它占三成分数，答的是权重不是内容（语义联想陷阱）。B 把 know 理解成「认识人」，用错了词义（误解）。C 说书店笔记本卖光了，与考试内容无关（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How do you feel about the concert Saturday?",
+      "options": {
+        "A": "The concert hall was renovated last spring.",
+        "B": "I feel much better today, thanks.",
+        "C": "Are there any tickets left?",
+        "D": "My cousin plays the violin well."
+      },
+      "answer": "C",
+      "explanation": "对方在试探你想不想去周六的音乐会。正确答 C 用一个反问把对话往前推——先问还有没有票（counter_question），既表达兴趣又推进安排。A 抓住 concert 说音乐厅去年春天翻修过，只借词不回应邀请（语义联想陷阱）。B 把 feel about 误当成问身体状况（误解）。D 说表哥小提琴拉得好，与去不去无关（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student who missed a lecture asking a classmate",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What did I miss in Tuesday's lecture?",
+      "options": {
+        "A": "Tuesday's lecture hall was almost full.",
+        "B": "About forty minutes, I think.",
+        "C": "I dropped my umbrella in the hall.",
+        "D": "I'll email you my notes tonight."
+      },
+      "answer": "D",
+      "explanation": "同学问自己周二的课错过了什么。正确答 D 不去复述内容，而是直接说今晚把笔记发过去（context_shift），解决了对方真正的需求。A 抓住 lecture 说教室几乎坐满，只讲场面不讲内容（语义联想陷阱）。B 回答的是时长，问的却是内容（问题类型错位）。C 说自己把伞落在走廊，与提问无关（离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    }
+  ]
+}
