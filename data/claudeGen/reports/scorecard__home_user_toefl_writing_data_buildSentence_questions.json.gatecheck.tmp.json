@@ -1,38 +1,38 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 784,
+  "n": 794,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
     {
       "name": "length_band.easy",
       "verdict": "PASS",
-      "detail": "got 0.246 want 0.246±0.05"
+      "detail": "got 0.248 want 0.246±0.05"
     },
     {
       "name": "length_band.med",
       "verdict": "PASS",
-      "detail": "got 0.628 want 0.595±0.05"
+      "detail": "got 0.625 want 0.595±0.05"
     },
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.126 want 0.159±0.05"
+      "detail": "got 0.127 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.686 band [0.55,0.69]"
+      "detail": "got 0.685 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.184 band [0.18,0.29]"
+      "detail": "got 0.185 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.17 max 0.17"
+      "detail": "got 0.168 max 0.17"
     },
     {
       "name": "diversity.opening",
@@ -57,12 +57,12 @@
     {
       "name": "prompt.ends_question",
       "verdict": "PASS",
-      "detail": "got 0.761 band [0.51,0.96] (real 0.705)"
+      "detail": "got 0.762 band [0.51,0.96] (real 0.705)"
     },
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.74 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.741 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
@@ -72,17 +72,17 @@
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.081 max 0.45"
+      "detail": "got 0.082 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.085 band [0.08,0.45]"
+      "detail": "got 0.087 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.815 min 0.1"
+      "detail": "got 0.814 min 0.1"
     },
     {
       "name": "answer.signature_q(dir-only)",
@@ -92,7 +92,7 @@
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/784 fail"
+      "detail": "0/794 fail"
     }
   ],
   "metrics": {
@@ -104,33 +104,33 @@
       "max": 14
     },
     "length_bands": {
-      "easy": 0.246,
-      "med": 0.628,
-      "hard": 0.126
+      "easy": 0.248,
+      "med": 0.625,
+      "hard": 0.127
     },
     "register": {
-      "first_person": 0.686,
-      "contraction": 0.184,
-      "casual_opener": 0.041,
-      "third_person_formal": 0.17
+      "first_person": 0.685,
+      "contraction": 0.185,
+      "casual_opener": 0.04,
+      "third_person_formal": 0.168
     },
     "structure": {
-      "relative_clause": 0.17,
-      "passive": 0.079,
-      "embedded_question": 0.152,
-      "negation": 0.161,
+      "relative_clause": 0.168,
+      "passive": 0.081,
+      "embedded_question": 0.154,
+      "negation": 0.16,
       "modal": 0.092,
-      "subordinate": 0.107
+      "subordinate": 0.106
     },
     "diversity": {
       "opening_trigram_diversity": 0.635,
       "exact_dup_rate": 0.003
     },
     "hard_band_profile": {
-      "n": 99,
-      "first_person": 0.737,
-      "relative_clause": 0.545,
-      "passive": 0.131
+      "n": 101,
+      "first_person": 0.743,
+      "relative_clause": 0.535,
+      "passive": 0.139
     }
   },
   "per_item_audit": [
@@ -16928,6 +16928,217 @@
       "register": [
         "firstPerson"
       ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Your copy was delivered by the mailroom staff.",
+      "setId": 80,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "passive"
+      ],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I asked if my membership had lapsed.",
+      "setId": 80,
+      "W": 7,
+      "band": "easy",
+      "index": 9,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Which office should I visit for my parking permit?",
+      "setId": 80,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "modal"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "He wanted to know whether you're joining the team.",
+      "setId": 80,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I think my revised poster reads much sharper than the original draft.",
+      "setId": 80,
+      "W": 12,
+      "band": "hard",
+      "index": 12,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I asked whether you'd finished with my seminar notes.",
+      "setId": 80,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She explained how the curve is applied to my final grade this term.",
+      "setId": 80,
+      "W": 13,
+      "band": "hard",
+      "index": 15,
+      "struct": [
+        "passive"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She's left your goggles in the cabinet.",
+      "setId": 80,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "We no longer meet in the library.",
+      "setId": 80,
+      "W": 7,
+      "band": "easy",
+      "index": 8,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where do you catch the late shuttle?",
+      "setId": 80,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [],
       "reconstructable": true,
       "flags": [
         "HAS_DISTRACTOR(真题=0)"
