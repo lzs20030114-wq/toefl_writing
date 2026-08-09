@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "dining hall switching to summer hours",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Ridgeway Dining Hall moves to its summer schedule starting Monday, May 18th. Breakfast will run from 8 to 10 a.m., and dinner service ends at 7 p.m. instead of 9. The Commons café next door stays open until eleven each night, so late meals are still possible there. Please note that meal plans carry over without any change, but you'll need to swipe your student ID at the side entrance facing the quad, since the main doors stay locked after seven. We'll keep summer hours through the second week of August.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain the dining hall's new summer hours",
+            "B": "To announce that meal plans are being discontinued entirely",
+            "C": "To advertise the café's new late-night menu",
+            "D": "To remind students to renew their student ID"
+          },
+          "answer": "A",
+          "explanation": "A正确：整段通知的核心是里奇韦餐厅从5月18日起改用夏季作息，早餐、晚餐时间都变了。B错（reversed_intent）：通知明确说 meal plans carry over without any change，餐卡计划照旧，并没有取消，与原意相反。C错（too_narrow）：Commons 咖啡厅开到十一点只是顺带提到的补充信息，不是通知目的，而且也没有宣传什么新菜单。D错（wrong_purpose）：学生证只是进侧门时要刷，通知从未要求补办或更新学生证。",
+          "distractor_types": {
+            "B": "reversed_intent",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to get in after seven?",
+          "options": {
+            "A": "Reserve a seat through the dining website",
+            "B": "Pay a small surcharge at the register",
+            "C": "Swipe their student ID at the side entrance",
+            "D": "Ask the café staff to unlock the main doors"
+          },
+          "answer": "C",
+          "explanation": "C正确：通知说七点后正门上锁，要在侧门刷学生证进入。A错（related_but_not_stated）：网上订座是校园里合理的做法，但这段通知完全没提。B错（wrong_detail）：通知说餐卡计划不变，没有任何附加费。D错（misattributed_detail）：咖啡厅只是另一个营业到十一点的地方，工作人员并不负责给餐厅正门开锁，把细节安到了错误的对象上。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "drop-in resume critique hours at the career center",
+      "speaker_role": "career_advisor",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. The Career Center is adding drop-in résumé critiques every Wednesday afternoon this term, from one to four, on the second floor in Rowan Hall. No appointment is needed, but please bring a printed copy — our advisors won't review drafts on a laptop screen. Sessions run about fifteen minutes each, so arrive early if you're hoping to be seen before three. Students applying to the fall engineering internships should come in before October 3rd, when most of those applications close.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce that the Career Center is relocating",
+            "B": "To introduce new walk-in résumé review sessions",
+            "C": "To describe the fall engineering internship program",
+            "D": "To require appointments for all advising visits"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知的核心是就业中心新增每周三下午的免预约简历修改服务。A错（wrong_purpose）：二楼会议室只是这项服务的地点，就业中心本身并没有搬家。C错（too_narrow）：秋季工程实习只是最后一句提到的适用人群，不是整段通知的目的。D错（reversed_intent）：通知说 No appointment is needed，恰恰是不需要预约，与选项说法相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring?",
+          "options": {
+            "A": "A laptop with their draft already open",
+            "B": "A completed appointment confirmation form",
+            "C": "A list of engineering employers",
+            "D": "A printed copy of their résumé"
+          },
+          "answer": "D",
+          "explanation": "D正确：通知明确要求带一份打印好的简历。A错（wrong_detail）：原文说顾问不会看笔记本屏幕上的草稿，正好相反。B错（related_but_not_stated）：既然免预约，就不存在什么预约确认单，通知也从未提到。C错（misattributed_detail）：工程实习只是提醒某类学生早点来的时间点，与要带的材料无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "graduate student teaching award nominations",
+      "speaker_role": "society_president",
+      "difficulty": "easy",
+      "announcement": "Nominations for the Whitfield Graduate Teaching Award open this Thursday and close on March 15th. Any undergraduate who has taken a course with a graduate instructor may submit a nomination, but please note that you can name only one. The form is short — you'll just write a paragraph explaining what made that person's teaching stand out. Paper forms are available outside the Graduate Society office in Baird Hall, though it's faster to file online. Winners are announced at the spring banquet in April.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Announcing the winners of this year's teaching award",
+            "B": "Asking instructors to nominate their own students",
+            "C": "Inviting students to nominate a graduate instructor",
+            "D": "Explaining changes to the spring banquet"
+          },
+          "answer": "C",
+          "explanation": "C正确：整段通知是在告诉本科生可以提名研究生助教参评惠特菲尔德教学奖，并说明截止时间和方式。A错（wrong_purpose）：获奖者要到四月的春季晚宴才公布，现在还在提名阶段。B错（reversed_intent）：提名人是上过课的本科生，被提名的才是研究生助教，选项把方向说反了。D错（too_narrow）：春季晚宴只在最后一句被提到，且通知并未说明它有任何变动。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about the nomination process?",
+          "options": {
+            "A": "Each student may nominate only one instructor",
+            "B": "Nominations must be delivered on paper",
+            "C": "Only graduate students may submit nominations",
+            "D": "A supporting letter from a professor is required"
+          },
+          "answer": "A",
+          "explanation": "A正确：原文说 you can name only one instructor，每人只能提名一位。B错（wrong_detail）：纸质表格只是可选项，通知还说网上提交更快。C错（misattributed_detail）：有资格提名的是上过研究生助教课的本科生，被提名的才是研究生，身份搞反了。D错（related_but_not_stated）：只要求写一段说明理由的话，从未提到需要教授推荐信。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "package pickup relocating during mail center renovation",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Before we wrap up, I want to mention something about your packages. The mail center closes for rewiring on Friday the 22nd, and everything shipped to campus after that goes to the loading bay behind Ellsworth Gym instead. It's open weekdays only, eight to five, so anything arriving over a weekend just sits until Monday. Please bring your ID — they won't hand over a package without it. I'd order early if you're expecting textbooks, because the gym bay has maybe half the shelf space the mail center does.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce that the gym is closing on Friday",
+            "B": "To advertise extended hours at the mail center",
+            "C": "To describe the rewiring work inside the mail center",
+            "D": "To explain where packages go during the renovation"
+          },
+          "answer": "D",
+          "explanation": "D正确：说话人的目的是告诉大家收发室停用期间包裹改到埃尔斯沃思体育馆后面的装卸区领取。A错（wrong_purpose）：关闭的是收发室，体育馆只是新的取件点，并没有关门。B错（reversed_intent）：收发室是要停用，而不是延长营业时间，与事实相反。C错（too_narrow）：重新布线只是停用的原因，一句带过，不是通知重点。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "C": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the loading bay pickup point?",
+          "options": {
+            "A": "It will permanently replace the mail center on campus",
+            "B": "It may become crowded during busy shipping weeks",
+            "C": "It is located behind Ellsworth Gym",
+            "D": "It is staffed by student volunteers"
+          },
+          "answer": "B",
+          "explanation": "B正确：说话人提到装卸区的货架空间大约只有收发室的一半，还建议大家早点下单，可以推断出取件点在包裹多的时候会很挤。A错（over_inference）：收发室只是临时停用做布线，说成永久替代属于过度推理。C错（literal_restatement）：位置在体育馆后面是原文直接说出来的事实，不是推断。D错（unrelated_inference）：通知只说取件要出示证件，完全没提是谁在那里值班。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "study abroad application info session",
+      "speaker_role": "advisor",
+      "difficulty": "easy",
+      "announcement": "Attention students. There's an information session on spring study abroad applications next Tuesday at four in Room 210 of the International Center. We'll walk through the application timeline, the language requirements for each partner university, and how course credits transfer back. Students who plan to apply for the Seville or Kyoto programs really should attend, since both have an extra essay. Bring a copy of your transcript if you'd like an advisor to look at your course plan afterward.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a session about study abroad applications",
+            "B": "To announce new language requirements for graduation",
+            "C": "To confirm the students accepted into the Kyoto program",
+            "D": "To announce that the spring programs are canceled"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知是在宣布下周二有一场关于春季交换项目申请的说明会。B错（wrong_purpose）：语言要求只是说明会上要讲的内容之一，而且是各合作院校的入学要求，不是毕业要求。C错（too_narrow）：京都项目只是被点名提醒的两个项目之一，通知也没有公布任何录取结果。D错（reversed_intent）：项目正在开放申请，谈不上取消，与原意相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students advised to bring to the session?",
+          "options": {
+            "A": "A completed application essay",
+            "B": "A letter from a partner university",
+            "C": "A copy of their transcript",
+            "D": "A signed course credit transfer form"
+          },
+          "answer": "C",
+          "explanation": "C正确：通知最后说，想让顾问看选课规划的同学要带一份成绩单。A错（wrong_detail）：附加文书是塞维利亚和京都项目申请时才需要的，说明会上并不要求交。B错（related_but_not_stated）：合作院校的信件听上去合理，但通知里完全没有提到。D错（misattributed_detail）：学分转换是说明会要讲解的话题，并不存在什么要签字带来的表格。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "building wing closure for asbestos removal",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The east wing of Marlowe Hall closes for asbestos removal beginning Monday, September 8th, and it'll stay closed for roughly three weeks. All classes normally held in rooms 120 through 145 move to the annex behind the Chemistry Building. Faculty offices in that wing are relocating to the third floor of the library, and they'll post their new office hours by Friday. The east stairwell and the loading entrance stay sealed for the whole period.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a temporary closure of one wing",
+            "B": "To announce that Marlowe Hall is being demolished soon",
+            "C": "To describe the library's new office space",
+            "D": "To cancel all classes for three weeks"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知说马洛楼东翼从9月8日起因清除石棉临时封闭约三周，并交代课程和办公室的临时安排。B错（wrong_purpose）：只是清除石棉后还要重新启用，不是拆楼。C错（too_narrow）：教师办公室搬到图书馆三楼只是其中一条安排，不是通知目的。D错（reversed_intent）：课程是改到化学楼后面的附楼继续上，并没有停课，与原意相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where will the affected classes meet?",
+          "options": {
+            "A": "On the third floor of the main library",
+            "B": "In the visitor center across campus",
+            "C": "In the annex behind the chemistry building",
+            "D": "In rooms 120 through 145 as usual"
+          },
+          "answer": "C",
+          "explanation": "C正确：原本在120到145教室的课全部改到化学楼后面的附楼。A错（misattributed_detail）：图书馆三楼是教师办公室的临时去处，不是上课地点，细节安错了对象。B错（related_but_not_stated）：访客中心听上去像个合理的替代场地，但通知里从未提到。D错（wrong_detail）：那几间教室正是被封闭的区域，不可能照常使用。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "winter gear swap with voucher system",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "The Outdoor Program's winter gear swap runs this Saturday from 10 a.m. to 3 p.m. in the Fieldhouse Atrium. Here's how it works: please bring in clean gear you no longer use, and you'll get a voucher for each item our staff accepts. Vouchers are spent the same day — one voucher, one item — so nothing carries over to next year's swap. We can't take ski boots or helmets this time, since we couldn't verify their condition. Everything left at three goes to the community shelter.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How do participants obtain vouchers?",
+          "options": {
+            "A": "By paying a fee at the door",
+            "B": "By donating used gear that staff accept",
+            "C": "By signing up on the Outdoor Program website",
+            "D": "By volunteering at the community shelter"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知说带来自己不再用的干净装备，工作人员每收下一件就给一张兑换券。A错（wrong_detail）：整场活动靠以物换物，从没提到任何入场费。C错（related_but_not_stated）：网上报名是校园活动常见做法，但这条通知里没有。D错（misattributed_detail）：社区收容所是活动结束后剩余装备的去向，与怎么拿到兑换券无关。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about vouchers that are not used?",
+          "options": {
+            "A": "They can be traded for ski boots",
+            "B": "They are funded by the athletics department",
+            "C": "They are given out for each accepted item",
+            "D": "They have no value after Saturday"
+          },
+          "answer": "D",
+          "explanation": "D正确：通知说兑换券当天用完、不能留到明年的活动，可以推断出周六一过它们就作废了。A错（over_inference）：这次根本不收滑雪靴和头盔，更谈不上用券去换。B错（unrelated_inference）：通知完全没有提到经费来自哪里，无从推断。C错（literal_restatement）：每收一件装备发一张券是原文直接说过的事实，而且答的不是「没用掉的券」这个问题。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "temporary road closure and detour instructions",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Chapel Street between the quad and the athletic fields closes to all traffic next Wednesday for storm drain work. Crews start at six in the morning, and they'll reopen the road by Thursday evening. Drivers should use Ferrier Avenue and turn in at the north gate instead; please be aware that the detour adds about ten minutes at peak times. Pedestrians can still cross at the marked walkway near the library, since that stretch of sidewalk isn't affected. The campus bus will skip the Chapel Street stop entirely that day.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a permanent change to all campus traffic",
+            "B": "To describe repairs to the library walkway",
+            "C": "To inform drivers about a temporary road closure",
+            "D": "To announce a new campus bus route"
+          },
+          "answer": "C",
+          "explanation": "C正确：通知的核心是下周三教堂街因排水管施工封闭，并给出绕行办法。A错（reversed_intent）：道路周四傍晚就恢复通行，是临时封闭而非永久改动。B错（too_narrow）：图书馆旁的人行道恰恰不受影响，只是顺带说明，更不是在修它。D错（wrong_purpose）：校车只是当天跳过教堂街那一站，并没有开通新线路。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are drivers advised to do?",
+          "options": {
+            "A": "Use Ferrier Avenue and the north gate",
+            "B": "Park at the athletic fields until Thursday evening",
+            "C": "Leave campus through the Chapel Street exit",
+            "D": "Follow the pedestrian route past the library"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知让开车的人改走费里尔大道，从北门进入校园。B错（related_but_not_stated）：运动场只是用来说明封闭路段的范围，通知没让任何人把车停在那里。C错（wrong_detail）：教堂街当天对所有车辆封闭，根本走不了。D错（misattributed_detail）：图书馆旁那条通道是留给行人的，不是给车辆绕行的路线。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "computer lab relocating to a different floor",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "The Kessler computer lab in Bevington Hall moves from the basement to the fourth floor over fall break. Machines come offline Thursday the 16th at noon, and the new lab opens the following Monday at eight. Anything you've saved to a lab desktop won't transfer, so please ensure your files are copied to your university drive before Thursday. The fourth-floor room has twelve more stations than the basement did, plus a scanner students can use without booking. Printing accounts stay exactly the same.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do before Thursday?",
+          "options": {
+            "A": "Reserve a station in the new fourth-floor lab",
+            "B": "Update their printing account information",
+            "C": "Return borrowed equipment to the basement",
+            "D": "Copy their files to the university drive"
+          },
+          "answer": "D",
+          "explanation": "D正确：通知说存在机房电脑上的文件不会迁移，周四之前要自己拷到学校网盘。A错（related_but_not_stated）：新机房的机位并不需要预约，通知也没提这回事。B错（wrong_detail）：原文明说打印账户完全不变，不需要更新。C错（misattributed_detail）：地下室只是机房原来的位置，通知从未要求归还任何设备。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the new fourth-floor lab?",
+          "options": {
+            "A": "It will require an appointment to enter",
+            "B": "It can serve more students at once",
+            "C": "It is located in a completely different building",
+            "D": "It offers twelve additional computer stations"
+          },
+          "answer": "B",
+          "explanation": "B正确：新机房比地下室多十二个机位，还多了一台免预约的扫描仪，可以推断它能同时容纳更多学生。A错（over_inference）：通知只说扫描仪不用预约，反而说明进机房本身也不需要预约。C错（unrelated_inference）：原文说是同一栋楼里从地下室搬到四楼，换楼的说法没有依据。D错（literal_restatement）：多十二个机位是原文直接给出的数字，属于复述而不是推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "industry professional speaking about career paths",
+      "speaker_role": "department_head",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, students. Renée Okonkwo, who has spent fifteen years designing water systems for coastal cities, speaks in Latham Auditorium next Thursday at five. She isn't giving a technical lecture — the talk is about how engineers move between consulting, public agencies, and nonprofit work, and what each path costs you early on. Seating is first come, first served, and we encourage you to arrive by four forty-five. She's staying afterward for a short question period.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To announce a talk about engineering career paths",
+            "B": "To describe a new water systems course",
+            "C": "To explain the speaker's earlier work on coastal cities",
+            "D": "To announce that the auditorium is closed Thursday"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知是在宣布下周四有一场关于工程师职业道路选择的讲座。B错（wrong_purpose）：讲的是职业发展，不是开设什么新课程。C错（too_narrow）：沿海城市供水系统只是介绍讲者背景的一句话，不是通知重点。D错（reversed_intent）：拉萨姆礼堂那天正是讲座场地，不是关闭，与原意相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Renée Okonkwo's talk?",
+          "options": {
+            "A": "It will focus on technical water design methods",
+            "B": "It is intended only for graduating seniors",
+            "C": "It will compare different kinds of employers",
+            "D": "It takes place in Latham Auditorium"
+          },
+          "answer": "C",
+          "explanation": "C正确：讲座要谈工程师如何在咨询公司、政府机构和非营利组织之间流动，以及每条路早期的代价，可以推断它会比较不同类型的雇主。A错（over_inference）：原文明说这不是一场技术讲座。B错（unrelated_inference）：通知面向全体学生，并没有限定只有毕业班能听。D错（literal_restatement）：地点在拉萨姆礼堂是原文直接说出的事实，属于复述而非推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "literal_restatement"
+          }
+        }
+      ]
+    }
+  ]
+}

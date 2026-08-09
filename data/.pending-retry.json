@@ -1,11 +1,43 @@
 {
-  "session_id": "routine-20260807-190545",
-  "generated_at": "2026-08-07T19:11:36.792Z",
-  "needs_retry": false,
+  "session_id": "routine-20260809-190439",
+  "generated_at": "2026-08-09T19:21:59.459Z",
+  "needs_retry": true,
   "overall_scores": {
-    "diversity": 100,
-    "quality": 100
+    "diversity": 96,
+    "quality": 99
   },
   "bs_difficulty_gate": "PASS",
-  "retry_banks": []
+  "retry_banks": [
+    {
+      "bank": "bs",
+      "diversity_score": 87,
+      "diversity_threshold": 90,
+      "quality_score": 98,
+      "quality_threshold": 95,
+      "failures": [
+        "多样性 87 < 90"
+      ],
+      "diversity_breakdown": [
+        "角色名 3/10",
+        "场景 10/10",
+        "句型 3/5",
+        "开头 4/4",
+        "prefilled类型 7/4 (top:conjunction-wh 3/10)",
+        "人物当prefilled 1/10 (10%, TPO~30%)",
+        "干扰词 8种 (top:did 22%)",
+        "chunk颗粒 6.0块/题 单词率90% (TPO~6块/77%)",
+        "题面对话化 7/10 (70% 含you, TPO~72%)"
+      ],
+      "quality_breakdown": [
+        "块数 10/10",
+        "干扰词 9/10",
+        "答案长度 10/10",
+        "重组正确 10/10"
+      ],
+      "hints": [
+        "角色名重复严重 (3/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+      ],
+      "items_to_supplement": 10
+    }
+  ]
 }
