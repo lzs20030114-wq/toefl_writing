@@ -1,45 +1,43 @@
 {
-  "session_id": "routine-20260809-190439",
-  "generated_at": "2026-08-09T19:21:59.459Z",
+  "session_id": "routine-20260810-190555",
+  "generated_at": "2026-08-10T19:23:58.117Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 96,
-    "quality": 99
+    "diversity": 93,
+    "quality": 100
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 87,
+      "diversity_score": 85,
       "diversity_threshold": 90,
-      "quality_score": 98,
+      "quality_score": 99,
       "quality_threshold": 95,
       "failures": [
-        "多样性 87 < 90"
+        "多样性 85 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 3/10",
-        "场景 10/10",
-        "句型 3/5",
+        "角色名 4/20",
+        "场景 20/20",
+        "句型 4/5",
         "开头 4/4",
-        "prefilled类型 7/4 (top:conjunction-wh 3/10)",
-        "人物当prefilled 1/10 (10%, TPO~30%)",
-        "干扰词 8种 (top:did 22%)",
-        "chunk颗粒 6.0块/题 单词率90% (TPO~6块/77%)",
-        "题面对话化 7/10 (70% 含you, TPO~72%)"
+        "prefilled类型 7/4 (top:verb-phrase 6/20)",
+        "人物当prefilled 1/20 (5%, TPO~30%)",
+        "干扰词 13种 (top:did 21%)",
+        "chunk颗粒 6.3块/题 单词率90% (TPO~6块/77%)",
+        "题面对话化 15/20 (75% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 10/10",
-        "干扰词 9/10",
-        "答案长度 10/10",
-        "重组正确 10/10"
+        "块数 20/20",
+        "干扰词 19/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
       ],
       "hints": [
-        "角色名重复严重 (3/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "角色名重复严重 (4/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     }
-  ],
-  "resolved_at": "2026-08-09T19:44:01Z",
-  "resolution_status": "supplemented"
+  ]
 }

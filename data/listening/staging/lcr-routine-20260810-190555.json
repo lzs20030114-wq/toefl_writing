@@ -1,0 +1,205 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "You've barely said a word since the meeting.",
+      "options": {
+        "A": "I'd rather not get into it.",
+        "B": "The meeting room was freezing today.",
+        "C": "She said a few words at lunch.",
+        "D": "Yes, I signed the attendance sheet."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。说话人关心地指出对方一直没出声，A用地道的口语说法委婉表示「不想谈这件事」，是自然的回应（idiomatic）。B是语义联想陷阱，抓住 meeting 转去说会议室很冷，答非所问（semantic_association_trap）。C换了主语说别人，与对方的沉默无关（off_topic）。D回答的是「有没有签到」这种完全不同的问题（wrong_question_type）。"
+      ,
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why's the post office closed on a Tuesday?",
+      "options": {
+        "A": "I mailed the package last week.",
+        "B": "Actually, they switched to winter hours.",
+        "C": "Yes, it's right across the street.",
+        "D": "The bank stays open until five."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。以话语标记 Actually 开头，间接给出原因——改成冬季营业时间了（marker_led_indirect）。A由 post office 联想到寄包裹，说的是上周自己的事，没有回答原因（semantic_association_trap）。C回答的是「在哪儿」而不是「为什么」（wrong_question_type）。D换成银行，是另一个话题（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "How much detail's needed in the summary?",
+      "options": {
+        "A": "The summary is due on Friday.",
+        "B": "Yes, detail matters a great deal.",
+        "C": "How long's your draft so far?",
+        "D": "I haven't printed the syllabus yet."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。老师用一个反问推进对话，先了解学生初稿的长度再给建议（counter_question）。A由 summary 联想到截止日期，回答的不是详略程度（semantic_association_trap）。B用 Yes 回答了一个本来就不是是非问的问题（wrong_question_type）。D说的是教学大纲打印，与提问无关（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "I can't find anywhere to buy tickets for the concert.",
+      "options": {
+        "A": "The concert starts at eight sharp.",
+        "B": "I bought that album last spring.",
+        "C": "No, I can't find my wallet.",
+        "D": "I've got a spare one."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。对方不去回答「哪里买票」，而是直接解决问题——我这儿多一张票给你（context_shift）。A由 concert 联想到开场时间，帮不上忙（semantic_association_trap）。B说的是买专辑，是另一个场景（off_topic）。C误解了 can't find，把找不到票听成找不到钱包（misinterpretation）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "misinterpretation"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Don't you want me to take the late shift?",
+      "options": {
+        "A": "Could you grab that box instead?",
+        "B": "The late shift ends around eleven.",
+        "C": "Yes, she took it last night.",
+        "D": "I don't want anything to eat."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。被关心的人不正面回答要不要人替班，而是说出真正需要的帮助，把话题转到眼下更要紧的事上（context_shift）。B由 late shift 联想到下班时间，只是陈述事实（semantic_association_trap）。C换了个人说昨晚的事，与眼下的提议无关（off_topic）。D误解了 want，当成想不想吃东西（misinterpretation）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the prerequisite for taking statistics?",
+      "options": {
+        "A": "Statistics meets in the science building.",
+        "B": "Well, the intro course covers that.",
+        "C": "Yes, you're allowed to enroll early.",
+        "D": "I finished my registration on Monday."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。以 Well 开头，间接告诉对方入门课就涵盖了所需的先修内容（marker_led_indirect）。A由 statistics 联想到上课地点，答非所问（semantic_association_trap）。C用 Yes 回答，且说的是能否提前选课这件另一回事（wrong_question_type）。D说的是自己已经选完课，没有回答先修要求（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where's the place to get essay help?",
+      "options": {
+        "A": "My essay is about coastal erosion.",
+        "B": "I go there almost every week.",
+        "C": "It's upstairs in the library.",
+        "D": "The deadline was moved to Monday."
+      },
+      "answer": "C",
+      "explanation": "正确答案是C。直接回答了地点这一事实性问题（direct_topical）。A由 essay 联想到论文主题，没有回答地点（semantic_association_trap）。B回答的是「你多久去一次」，不是「在哪里」（wrong_question_type）。D说的是截止日期，与问路无关（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Have you eaten at the new noodle place?",
+      "options": {
+        "A": "The noodles are made every morning.",
+        "B": "Yes, I ate breakfast already.",
+        "C": "She works there on weekends.",
+        "D": "Just once, and the line was long."
+      },
+      "answer": "D",
+      "explanation": "正确答案是D。以 Just 开头，既回应了「去过没有」，又补上排队很长这一有用信息（marker_led_indirect）。A由 noodles 联想到面条怎么做，绕开了问题（semantic_association_trap）。B答的是早饭吃没吃，问的却是有没有去过那家店（wrong_question_type）。C换成说别人在那里打工，是另一个话题（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Did you get into the seminar you wanted?",
+      "options": {
+        "A": "They're adding another section next week.",
+        "B": "The seminar room holds twenty students.",
+        "C": "Yes, I wanted the earlier bus.",
+        "D": "She teaches two courses this term."
+      },
+      "answer": "A",
+      "explanation": "正确答案是A。不直接答上没上成，而是给出更关键的消息——下周要加开一个班，等于把话题推到真正要紧的地方（context_shift）。B由 seminar 联想到教室容量，是无用信息（semantic_association_trap）。C误解了 wanted，把想选的课听成想赶的班车（misinterpretation）。D说的是老师带几门课，与是否选上无关（off_topic）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "misinterpretation",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I didn't realize the pool closes that early.",
+      "options": {
+        "A": "The pool is being cleaned tomorrow.",
+        "B": "How late did you show up?",
+        "C": "Yes, I swim on weekends.",
+        "D": "I left my towel in the locker."
+      },
+      "answer": "B",
+      "explanation": "正确答案是B。用一个反问推进对话，先弄清对方到底几点才到（counter_question）。A由 pool 联想到清洁安排，没有回应对方扑空这件事（semantic_association_trap）。C用 Yes 回答，且说的是自己周末游泳的习惯（wrong_question_type）。D说毛巾落在柜子里，是另一件事（off_topic）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    }
+  ]
+}

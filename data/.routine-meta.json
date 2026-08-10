@@ -1,53 +1,61 @@
 {
-  "session_id": "routine-20260809-190439",
-  "completed_at": "2026-08-09T19:38:00.000Z",
-  "duration_minutes": 34,
+  "session_id": "routine-20260810-190555",
+  "completed_at": "2026-08-10T20:02:00.000Z",
+  "duration_minutes": 56,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点名 bs/la/lcr 三库；BS 因合库最小单位是 10 题，实产 10 题补足一整套（set 79）",
+  "highlight": "按需信号点名 bs/la/lcr 三库；BS 20 题全数过门合成两整套（set 81-82），并把 casual_opener 与 third_person_formal 两个漂移维度推回真题带内",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 10,
+      "generated": 20,
       "accepted": 20,
       "topics": [
-        "career fair follow-up",
-        "lost umbrella",
-        "graduate housing mailbox",
-        "course waitlist timing",
-        "housing deposit refund",
-        "syllabus not posted",
-        "weekend study group",
-        "seminar handout delivery",
-        "shuttle schedule update",
-        "makeup session credit"
+        "career fair arrival time",
+        "dining hall soup line closing",
+        "mail center tracking number",
+        "volunteer trip bus departure",
+        "group presentation conclusion section",
+        "seminar section choice",
+        "dorm transfer room assignments",
+        "exam room relocation",
+        "scholarship essay late submissions",
+        "study room release timing",
+        "campus coffee cart location",
+        "chemistry lab end time",
+        "advisor asking about lab section",
+        "advisor asking about lease timing",
+        "debate club meeting frequency",
+        "reading packet at the office",
+        "orientation schedule posting",
+        "leaving the study group early",
+        "corner suite pricing",
+        "recital seats near the stage"
       ],
       "favorite": {
-        "prompt": "I just moved into the graduate housing.",
-        "answer": "Where do I pick up the mailbox key?"
+        "prompt": "I just signed up for the volunteer trip.",
+        "answer": "Where does the bus leave from on Saturday?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "dining hall switching to summer hours",
-        "drop-in resume critique hours at the career center",
-        "graduate student teaching award nominations",
-        "package pickup relocating during mail center renovation",
-        "study abroad application info session",
-        "building wing closure for asbestos removal",
-        "winter gear swap with voucher system",
-        "temporary road closure and detour instructions",
-        "computer lab relocating to a different floor",
-        "industry professional speaking about career paths"
+        "three-minute thesis competition sign-ups",
+        "large-format printing room moving to the design annex",
+        "conference travel-grant application deadline moved earlier",
+        "spring bird count volunteer morning at the campus wetland",
+        "faculty parking lot closed for repaving with temporary permit rules",
+        "visiting author reading and book signing event",
+        "elevator outage in the humanities tower with relocated classes",
+        "annual bicycle registration with removal of unregistered bikes",
+        "transfer student orientation schedule and requirements",
+        "visiting museum conservator joining a class session in the lab"
       ],
       "favorite": {
-        "subtopic": "logistics/package pickup relocating during mail center renovation",
-        "preview": "Before we wrap up, I want to mention something about your packages. The mail center closes for r"
+        "subtopic": "campus_activity/spring bird count volunteer morning at the campus wetland",
+        "preview": "The Naturalists' Club is running its spring bird count at the campus wetland this Saturday, starting at five forty-five in the morning."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -56,25 +64,23 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "two classmates discussing a group project deadline",
-        "student checking with a TA about lab report requirements",
-        "arranging a ride or carpool with a friend",
-        "student asking about printing or scanning at the computer lab",
-        "friend asking where the study group meets",
-        "asking for directions to a nearby location",
-        "student asking about the campus shuttle",
         "expressing concern about a friend's situation",
-        "roommate asking about weekend plans",
-        "coordinating an airport pickup with a friend"
+        "checking if a service (post office, bank) is open",
+        "student asking a professor about office hours or assignment",
+        "student asking about a campus event or concert",
+        "offering help to someone who seems stressed",
+        "student asking about course enrollment or prerequisites",
+        "student seeking help at the writing center",
+        "two friends deciding where to get lunch",
+        "student asking whether a seminar seat opened up",
+        "student asking about gym or sports facility hours"
       ],
       "favorite": {
-        "subtopic": "social/expressing concern about a friend's situation",
-        "preview": "Are you okay? You look really worn out. -> I'll catch up on sleep tonight."
+        "subtopic": "campus_daily/student asking about a campus event or concert",
+        "preview": "I can't find anywhere to buy tickets for the concert."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-09T19:44:01Z",
-  "r2_session_id": "routine-r2-20260809-193700"
+  }
 }

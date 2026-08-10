@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "academic_event",
+      "situation": "three-minute thesis competition sign-ups",
+      "speaker_role": "society_president",
+      "difficulty": "medium",
+      "announcement": "Attention students. Sign-ups for the campus Three-Minute Thesis competition close next Wednesday at 4 p.m. Anyone who has completed at least one semester of independent research may enter, including undergraduates working with a faculty mentor. You'll present a single slide and speak for three minutes — no notes, no props. Preliminary rounds run all day Friday the twentieth in Harlow Hall, room 210. Registration is through the Graduate Society portal, and you'll need your mentor's name at the time you sign up.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students provide when they register?",
+          "options": {
+            "A": "The name of their faculty mentor",
+            "B": "A written copy of their thesis",
+            "C": "Proof of one completed research course",
+            "D": "A signed form from the department office"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告最后一句明确说报名时需要提供导师的名字。B错误，参赛者只需一张幻灯片，不需要提交论文全文（wrong_detail）。C是张冠李戴，公告说的是「完成至少一个学期的独立研究」这一参赛资格，而不是一门已修课程的证明（misattributed_detail）。D在公告中完全没有提到，只是听起来合理的校园流程（related_but_not_stated）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the presentation format?",
+          "options": {
+            "A": "Presenters may bring supporting handouts",
+            "B": "Preliminary rounds last three minutes each",
+            "C": "Speakers must rely mainly on spoken explanation",
+            "D": "The competition is limited to graduate students"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。只允许一张幻灯片、不能用讲稿也不能用道具，由此可推断参赛者主要靠口头讲述来传达内容。A过度推断且与「no props」相矛盾（over_inference）。B只是把公告里已经直说的「speak for three minutes」换个说法，不构成推断（literal_restatement）。D与公告矛盾，公告明说本科生也可以参加（unrelated_inference）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "large-format printing room moving to the design annex",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Before we wrap up, I want to mention that the large-format printing room is moving. Starting Monday the ninth, the plotters will be in the Design Annex, ground floor, instead of the fourth floor of this building. Hours stay the same, eight to six on weekdays. One change, though: you'll need to swipe your student ID at the annex door, so don't leave it in your room. I'd print your final posters a day early that week, just in case.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To extend the printing room's daily hours",
+            "B": "To announce the plotters' new location",
+            "C": "To introduce a new poster design course",
+            "D": "To announce that the annex is closing"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。整段话的核心是大幅面打印室（绘图仪）搬到设计楼附楼一层。A与事实相反，公告说开放时间不变（reversed_intent）。C完全没有提到任何新课程（wrong_purpose）。D把方向说反了，附楼是新地点而不是要关闭（reversed_intent）。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will students need at the new location?",
+          "options": {
+            "A": "A printing account with added credit",
+            "B": "A reservation made a day ahead",
+            "C": "Approval from the department office",
+            "D": "Their student ID to enter"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告说在附楼门口需要刷学生证才能进入。A没有提到打印账户或充值（related_but_not_stated）。B是张冠李戴，「提前一天」说的是建议提前一天打印海报，而不是提前一天预约（misattributed_detail）。C公告中完全没有提到需要系里批准（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "conference travel-grant application deadline moved earlier",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Since the regional conference moved up its program date, the travel-grant deadline has shifted as well. Applications for conference travel support are now due Thursday, March fifth, at noon — that's a full two weeks earlier than the date on the department calendar. Submit the one-page budget and your acceptance letter to the graduate office in Keller 118. Awards are capped at six hundred dollars per student. We'll notify applicants by email the following Monday, so check your university account that week.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To raise the maximum travel award",
+            "B": "To describe the conference program",
+            "C": "To announce an earlier application deadline",
+            "D": "To remind students to check email"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。整段话的重点是差旅补助的申请截止日期提前了两周。A错误，公告只说了六百美元的上限，并没有提高额度（wrong_purpose）。B错误，会议本身的日程不是重点，只是截止日期变动的原因（wrong_purpose）。D只是最后一句的细节，不是整段的主旨（too_narrow）。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the department calendar?",
+          "options": {
+            "A": "It still lists the old deadline",
+            "B": "It is updated automatically each week",
+            "C": "It is printed and mailed to students",
+            "D": "It has been taken down entirely"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。说话人特意说新截止日期比「系里日历上的日期」早两周，说明日历上显示的仍是旧日期，否则没必要作此对比。B属于过度推断，公告没有任何关于日历更新机制的信息（over_inference）。C与话题无关，没有证据说明日历是纸质邮寄的（unrelated_inference）。D过度推断，日历仍然存在，只是日期过时（over_inference）。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "spring bird count volunteer morning at the campus wetland",
+      "speaker_role": "club_leader",
+      "difficulty": "hard",
+      "announcement": "The Naturalists' Club is running its spring bird count at the campus wetland this Saturday, starting at five forty-five in the morning. That's earlier than last year, because the songbirds we're tracking go quiet once the sun is fully up. Meet at the boardwalk gate behind the greenhouse; we'll hand out binoculars and tally sheets there. Wear boots you don't mind soaking, since the lower trail floods this time of year. Sign up by Thursday on the club page so we can borrow enough optics.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are volunteers asked to bring or wear?",
+          "options": {
+            "A": "Their own binoculars and tally sheets",
+            "B": "A printed copy of the trail map",
+            "C": "Warm gloves for the early hour",
+            "D": "Boots that can get wet"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告说要穿「不怕泡水的靴子」，因为下面那段步道这个季节会积水。A与事实相反，望远镜和记录表是俱乐部现场发放的（wrong_detail）。B公告没有提到任何步道地图（related_but_not_stated）。C虽然清晨很早听起来需要手套，但公告完全没提（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention the sunrise?",
+          "options": {
+            "A": "To explain why the trail floods",
+            "B": "To explain the unusually early start",
+            "C": "To warn about limited daylight",
+            "D": "To note when the boardwalk gate opens"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。说话人提到「太阳完全升起后鸣禽就安静了」，正是为了解释为什么今年集合时间比去年更早。A把因果关系接错了，步道积水是季节原因，与日出无关（unrelated_inference）。C推断方向相反，清晨出发反而是抢在鸟活跃的时段，公告并未担心光照不足（over_inference）。D公告没有说大门开放时间（over_inference）。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "faculty parking lot closed for repaving with temporary permit rules",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Lot F beside the engineering building will be repaved starting Monday the sixteenth and will stay closed for about ten days. Anyone with an F permit can park in Lot B or in the north garage during that period; your existing sticker is honored in both. There's no need to apply for a temporary permit. Overnight parking in Lot B isn't allowed, so plan to move your car before midnight. We'll post a reopening date on the transportation office page once paving is finished.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "A parking lot closing for repaving",
+            "B": "A new permit system for drivers",
+            "C": "The opening of a north garage",
+            "D": "A change to overnight parking rules"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。整段公告围绕 F 停车场重新铺路而关闭十天展开。B与事实相反，公告明确说不需要办临时许可，也没有新制度（wrong_purpose）。C错误，北车库只是替代停车点，不是新开放的设施（wrong_purpose）。D只是其中一条细节，不是主旨（too_narrow）。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must F-permit holders do during the closure?",
+          "options": {
+            "A": "Request a temporary parking permit",
+            "B": "Pay a daily rate at the garage",
+            "C": "Clear Lot B before midnight",
+            "D": "Register their vehicles with the office"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告说 B 停车场不允许过夜停车，所以要在午夜前把车开走。A与事实相反，公告明说不需要申请临时许可（wrong_detail）。B公告没有提到任何收费（related_but_not_stated）。D公告没有要求重新登记车辆，原有的车贴依然有效（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "visiting author reading and book signing event",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The novelist Adaeze Okoro will read from her new collection on Tuesday the eleventh at seven in the evening, in the Waldman Auditorium. She'll take questions for about twenty minutes afterward, and the campus bookstore will run a signing table in the lobby. Seating is first-come, so we'd suggest arriving by six forty-five. If your class is discussing her earlier work this term, bring your copy — she has agreed to sign books bought anywhere.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To publicize a visiting author's reading",
+            "B": "To advertise a bookstore sale",
+            "C": "To announce a change in auditorium seating",
+            "D": "To recruit students for a writing course"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。整段公告是在宣传来访作家的朗读会和随后的签售活动。B错误，书店只是设签售台，并没有促销（wrong_purpose）。C只是「先到先得」这一条细节，且并非座位安排的改动（too_narrow）。D完全没有提到任何课程招生（wrong_purpose）。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker say about books to be signed?",
+          "options": {
+            "A": "Only new copies from the bookstore qualify",
+            "B": "Books must be bought before the reading",
+            "C": "Copies purchased elsewhere may be signed",
+            "D": "Signed copies will be mailed later"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。公告最后说作家同意为任何地方买的书签名。A与事实相反，并不限于校园书店（wrong_detail）。B也与事实相反，公告还特意让上课在读旧作的同学把自己的书带来（wrong_detail）。D公告完全没有提到邮寄（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "elevator outage in the humanities tower with relocated classes",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Both elevators in the Humanities Tower will be out of service from Wednesday morning until Friday afternoon while the cables are replaced. Classes on floors three through eight will meet in Ferris Hall for those three days; you'll find the exact room on your course page. Anyone who needs step-free access to a faculty office should email the dean's assistant by Tuesday, and they'll meet you in the ground-floor conference room instead. The stairwells stay open and lit as usual.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where will affected classes meet during the repairs?",
+          "options": {
+            "A": "In the ground-floor conference room",
+            "B": "In classrooms in Ferris Hall",
+            "C": "On the lower floors of the tower",
+            "D": "In rooms assigned by the dean's office"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说三到八楼的课这三天改到 Ferris Hall 上。A是张冠李戴，一楼会议室是给需要无台阶通道去见老师的人准备的，不是上课地点（misattributed_detail）。C与事实不符，课并没有挪到塔楼低层（wrong_detail）。D公告说具体教室在课程页面查，不是由院长办公室分配（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention that the stairwells stay open?",
+          "options": {
+            "A": "To warn that the stairs may be crowded",
+            "B": "To explain why classes were relocated",
+            "C": "To announce a change to building hours",
+            "D": "To show the building is still usable"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。在通报两部电梯都停用之后特意补一句楼梯照常开放且有照明，是为了说明楼本身仍可正常进出使用。A属过度推断，公告没有提到拥挤问题（over_inference）。B因果接错，课程搬迁是因为电梯停用，与楼梯是否开放无关（unrelated_inference）。C与话题无关，公告没有说建筑开放时间有变（unrelated_inference）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "C": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "annual bicycle registration with removal of unregistered bikes",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. Bicycle registration for the new academic year opens this Monday and runs through Friday, October third. You can register at the public safety window in Ames Hall, or online with your student ID number — you'll need about five minutes either way. Registered bikes get a small sticker for the frame, and that sticker is what lets us return a bike if it's found. After the third, unregistered bikes left in campus racks will be tagged and removed to the storage yard.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "New rules for where bikes may be parked",
+            "B": "A safety inspection program for bicycles",
+            "C": "Annual bicycle registration and its deadline",
+            "D": "The opening of a new storage yard"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。整段公告讲的是新学年自行车登记的开放时间、办理方式和十月三日的截止日期。A错误，公告没有规定停放位置的新规则（wrong_purpose）。B完全没有提到安全检查（wrong_purpose）。D只是最后一句里未登记车辆的去处，不是主旨（too_narrow）。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "How can students register a bicycle?",
+          "options": {
+            "A": "At Ames Hall or online",
+            "B": "Only at the public safety window",
+            "C": "By mailing a form to public safety",
+            "D": "At any campus bike rack"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。公告说可以去 Ames Hall 的公共安全窗口办理，也可以用学号在线办理。B与事实不符，漏掉了线上这一条，「only」把范围说窄了（wrong_detail）。C公告没有提到邮寄表格（related_but_not_stated）。D是张冠李戴，车棚是停车的地方，不是登记点（misattributed_detail）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "transfer student orientation schedule and requirements",
+      "speaker_role": "advisor",
+      "difficulty": "medium",
+      "announcement": "Transfer student orientation runs Thursday and Friday of next week in the Student Union, room 240, from nine to three each day. Attendance on Thursday is required before you can register for spring courses; Friday's sessions on clubs and housing are optional. You'll want your placement test results with you, since advisors will use them to build your schedule that afternoon. Lunch is provided both days. If you have a class conflict on Thursday, email your advisor this week and we'll arrange a make-up session.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are students told to bring?",
+          "options": {
+            "A": "A printed copy of the spring catalog",
+            "B": "Their housing application forms",
+            "C": "A signed advising worksheet",
+            "D": "Their placement test results"
+          },
+          "answer": "D",
+          "explanation": "正确答案是D。公告说要带上分级考试成绩，因为顾问下午要据此排课表。A公告没有要求带课程目录（related_but_not_stated）。B是张冠李戴，住宿只是周五可选场次的主题，不是要携带的材料（misattributed_detail）。C公告完全没有提到什么选课表格（related_but_not_stated）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about Friday's sessions?",
+          "options": {
+            "A": "They are held in a different building",
+            "B": "Missing them will not block registration",
+            "C": "They are only for students in housing",
+            "D": "They will be repeated later in the term"
+          },
+          "answer": "B",
+          "explanation": "正确答案是B。公告说只有周四出席是选课的前提条件，周五的场次是自愿参加的，因此缺席周五不会影响注册选课。A过度推断，公告说两天都在学生活动中心 240 室（over_inference）。C过度推断，住宿只是话题之一，并未限定参加者（over_inference）。D过度推断，只有周四缺席才安排补场（over_inference）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "over_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "visiting museum conservator joining a class session in the lab",
+      "speaker_role": "professor",
+      "difficulty": "hard",
+      "announcement": "Before we wrap up — next Thursday's session won't be a normal lecture. Renata Vogel, a paper conservator at the city museum, is coming in to walk us through how she dates and stabilizes damaged manuscripts. We'll meet in the conservation lab in Bruckner 12, not our usual room, because she is bringing materials that can't leave a controlled space. I've put two short articles on the course site; skim them beforehand, since she would rather spend the hour on your questions than on background. No quiz that day.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the speaker mainly doing?",
+          "options": {
+            "A": "Previewing an unusual class session",
+            "B": "Assigning a research paper on manuscripts",
+            "C": "Reviewing material for an upcoming quiz",
+            "D": "Introducing a new required textbook"
+          },
+          "answer": "A",
+          "explanation": "正确答案是A。说话人是在提前说明下周四这节课的特殊安排：换地点、由来访的修复师主讲。B错误，两篇短文只是让大家提前浏览，没有布置论文（wrong_purpose）。C与事实相反，公告最后明确说那天没有小测（reversed_intent）。D完全没有提到教材（wrong_purpose）。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "reversed_intent",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention the two articles?",
+          "options": {
+            "A": "They replace the assigned textbook chapter",
+            "B": "They will be collected for a grade",
+            "C": "So class time can go to discussion",
+            "D": "They explain how the lab is used"
+          },
+          "answer": "C",
+          "explanation": "正确答案是C。说话人说来访者宁愿把这一小时用来回答提问而不是讲背景，所以让大家先读这两篇短文，目的就是把课堂时间留给交流。A过度推断，公告没有说这两篇文章替代任何教材内容（over_inference）。B与话题无关，没有提到要评分或收作业（unrelated_inference）。D与话题无关，换到修复实验室是因为材料不能离开受控环境，与文章内容无关（unrelated_inference）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    }
+  ]
+}
