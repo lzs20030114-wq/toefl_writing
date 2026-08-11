@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "facility_change",
+      "situation": "climbing wall closed for annual anchor inspection",
+      "speaker_role": "recreation_staff",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. The climbing wall in the Fieldhouse, on the west side of campus, will be closed all day this Thursday while an outside contractor inspects every anchor bolt. Please note that bouldering in the lower cave stays open, but you'll need to sign a new waiver at the front desk before you climb. The inspection happens once a year, and we can't reopen the wall until the contractor files a written report. If you've already booked a Thursday belay lesson, stop by the desk and we'll move you to Friday.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do before climbing this week?",
+          "options": {
+            "A": "Sign a new waiver at the desk",
+            "B": "Reserve a new belay lesson for Thursday afternoon",
+            "C": "Show the contractor's written report",
+            "D": "Complete an online safety course first"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知明确说攀爬前需先到前台签一份新的免责声明。B错（wrong_detail）：周四的保护课正被改到周五，不是攀爬的前置条件。C错（misattributed_detail）：书面报告是承包商提交给场馆的，不是学生要出示的东西。D错（related_but_not_stated）：线上安全课在校园里听起来合理，但通知从未提到。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the anchor inspection?",
+          "options": {
+            "A": "The inspection is required by the city",
+            "B": "The climbing wall closes all day Thursday",
+            "C": "The wall's reopening depends on paperwork",
+            "D": "Bouldering waivers expire after each year"
+          },
+          "answer": "C",
+          "explanation": "C正确：说话人说承包商提交书面报告之前墙不能重开，可推断重开取决于文书流程。A错（unrelated_inference）：通知没有任何关于市政要求的线索。B错（literal_restatement）：这是原文直接陈述的事实，不是推断。D错（over_inference）：一年一次说的是检查频率，不能推出免责声明每年失效。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "literal_restatement",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "language lab switching to a booth reservation system",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Before we wrap up, I want to mention that the language lab in Kirby Hall switches to a reservation system next Monday. You'll book a booth through the department portal instead of just walking in, and reservations open two weeks ahead. Each booking is capped at ninety minutes so more of you can get recording time before oral exams. Please note that walk-ins are still welcome, but only in the last hour of the day. I'd reserve your exam-week slots now — they went fast in the pilot.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How will students get lab time after Monday?",
+          "options": {
+            "A": "By signing in at the lab front door",
+            "B": "By booking a booth on the portal",
+            "C": "By emailing the department head directly",
+            "D": "By joining a ninety-minute group session"
+          },
+          "answer": "B",
+          "explanation": "B正确：周一起要通过院系门户网站预约录音间。A错（wrong_detail）：直接走进来签到的方式被取消，只在每天最后一小时保留。C错（related_but_not_stated）：发邮件给系主任听起来合理，但通知没提这个渠道。D错（misattributed_detail）：九十分钟是单次预约上限，不是什么小组课。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about exam-week reservations?",
+          "options": {
+            "A": "They are limited to graduate students",
+            "B": "Reservations open two weeks in advance",
+            "C": "The lab closes early every day during exam week",
+            "D": "They are likely to fill up quickly"
+          },
+          "answer": "D",
+          "explanation": "D正确：说话人建议现在就订考试周的时段，并说试运行期间订得很快，可推断考试周时段会被迅速订满。A错（unrelated_inference）：通知从未按学位层次限制使用。B错（literal_restatement）：提前两周开放是原文直接说的，不是推断。C错（over_inference）：只说走入使用限于每天最后一小时，推不出考试周提前关门。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "literal_restatement",
+            "C": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "info_session",
+      "situation": "advising workshop on choosing a minor",
+      "speaker_role": "advisor",
+      "difficulty": "easy",
+      "announcement": "Attention students. The advising office is holding a workshop on choosing a minor next Wednesday at 4 p.m. in Room 120 of the Advising Center. We'll walk through how a minor fits into your remaining credits and which ones can be finished in three semesters. Bring a printed copy of your degree audit so we can mark it up with you. Seats are limited to thirty, so email the advising office by Tuesday to hold one.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain new graduation credit rules",
+            "B": "To describe the degree audit form",
+            "C": "To publicize a workshop on minors",
+            "D": "To warn students against adding a minor"
+          },
+          "answer": "C",
+          "explanation": "C正确：整段都在宣传下周三关于如何选辅修的工作坊。A错（wrong_purpose）：通知没有讲任何新的毕业学分规定。B错（too_narrow）：学位审核单只是要带的材料，不是通知目的。D错（reversed_intent）：说话人是在帮助学生规划辅修，而非劝阻，与原意相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students asked to bring?",
+          "options": {
+            "A": "A printed copy of their degree audit",
+            "B": "A written list of three possible minor programs",
+            "C": "A completed minor declaration form",
+            "D": "An email confirmation from Tuesday"
+          },
+          "answer": "A",
+          "explanation": "A正确：通知要求带一份打印好的学位审核单，方便现场标注。B错（related_but_not_stated）：列三个候选辅修听起来合理，但通知没有要求。C错（wrong_detail）：这是讲怎么选辅修的工作坊，不需要先填申报表。D错（misattributed_detail）：周二发邮件是为了占座，不是要带到现场的东西。",
+          "distractor_types": {
+            "B": "related_but_not_stated",
+            "C": "wrong_detail",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "physics department undergraduate poster night",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "The physics department's undergraduate poster night takes place this Friday from 5 to 8 p.m. in the Whitmore Atrium. Fourteen students will present summer research on everything from muon detectors to solar cell coatings. You don't need to register, and you can drop in for as little as twenty minutes. Faculty will be circulating, so it's a good chance to talk to someone about a lab position for next term. Presenters must be at the atrium by 4:30 to set up their boards.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "Deadlines for summer research funding",
+            "B": "The setup time for poster presenters",
+            "C": "The cancellation of a research event",
+            "D": "An undergraduate research poster event"
+          },
+          "answer": "D",
+          "explanation": "D正确：通知整体是在介绍本周五的本科生科研海报之夜。A错（wrong_purpose）：暑期科研经费的截止日期完全没有提到。B错（too_narrow）：四点半到场只是给展示者的一条细节，不是全段主旨。C错（reversed_intent）：活动是要举办而不是取消，与原意相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "too_narrow",
+            "C": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What is true about attending the event?",
+          "options": {
+            "A": "Attendees must register in advance",
+            "B": "Visitors may come for a short time",
+            "C": "Only physics majors may attend",
+            "D": "Everyone must arrive by four-thirty"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知说不必注册，待二十分钟也可以，说明可以短暂停留。A错（wrong_detail）：原文明确说不需要注册，正好相反。C错（related_but_not_stated）：限定物理专业听起来合理，但通知没有这样限制。D错（misattributed_detail）：四点半到场的要求只针对展示者，不针对所有人。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "annual essay competition with faculty judges",
+      "speaker_role": "society_president",
+      "difficulty": "hard",
+      "announcement": "Since three of our faculty judges are on sabbatical this spring, the Literary Society is changing how the annual essay competition runs. Entries must be dropped off by March 15th at the society office in Cordell Hall, but each essay now goes to two graduate readers before a single faculty judge sees the finalists. That means we're capping submissions at one essay per student instead of two. The prize money hasn't changed, and winners will still read at the April banquet. If you were planning to enter twice, pick your stronger piece now.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain changes to the competition",
+            "B": "To announce the winners of this year's competition",
+            "C": "To describe the April banquet program",
+            "D": "To cancel the competition this spring"
+          },
+          "answer": "A",
+          "explanation": "A正确：因为三位教师评委休学术假，社团在说明征文比赛评审流程和投稿数量的变化。B错（wrong_purpose）：获奖名单还没产生，通知不是公布结果。C错（too_narrow）：四月晚宴只是顺带提到的一句，不是主旨。D错（reversed_intent）：比赛照常举行，只是流程调整，并未取消。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the judging process?",
+          "options": {
+            "A": "Graduate readers decide the final winners",
+            "B": "Essays are due on March 15th",
+            "C": "Fewer essays will reach faculty judges",
+            "D": "The prize money comes from alumni gifts"
+          },
+          "answer": "C",
+          "explanation": "C正确：研究生读者先筛选，只有入围作品才交给唯一一位教师评委，可推断到达教师评委手里的稿件变少了。A错（over_inference）：研究生只负责初筛，决定最终获奖者的推断超出原文。B错（literal_restatement）：3月15日截稿是原文直接说的，不是推断。D错（unrelated_inference）：奖金来源完全没有任何依据。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "printed job listings binder replaced by an online board",
+      "speaker_role": "program_coordinator",
+      "difficulty": "easy",
+      "announcement": "The career center's printed job listings binder retires this Friday, and everything moves to the new campus job board. You'll log in with your student account at the career center site, and you can filter listings by department, pay, and hours. We are keeping the binder in the lobby through Thursday if you'd rather browse on paper one last time. Staff will be in the lobby Wednesday afternoon to help anyone set up alerts for new postings.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To advertise several new campus jobs",
+            "B": "To announce a move to online listings",
+            "C": "To explain how to filter listings by pay",
+            "D": "To encourage students to keep using paper"
+          },
+          "answer": "B",
+          "explanation": "B正确：通知的核心是纸质招聘夹本周五停用，全部岗位信息迁到线上平台。A错（wrong_purpose）：没有具体推销任何一个岗位。C错（too_narrow）：按薪酬筛选只是新平台的一个功能细节。D错（reversed_intent）：纸质版正在被淘汰，鼓励继续用纸质与原意相反。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What will staff do on Wednesday afternoon?",
+          "options": {
+            "A": "Remove the binder from the lobby",
+            "B": "Review resumes for new postings",
+            "C": "Post the week's new job listings",
+            "D": "Help students set up posting alerts"
+          },
+          "answer": "D",
+          "explanation": "D正确：周三下午工作人员在大厅帮学生设置新岗位提醒。A错（misattributed_detail）：纸质夹要留到周四，周三并不撤走。B错（related_but_not_stated）：改简历是就业中心常见服务，但这条通知没提。C错（wrong_detail）：岗位由系统发布，工作人员周三做的是协助设置提醒。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "new bike-share dock locations replacing two old stations",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Four new bike-share stations open next Tuesday, and we are retiring two of the old ones. The new docks sit outside the Health Sciences Library, at the north bus loop, by the graduate housing gate, and behind Foster Hall near the recycling yard. The station by the old tennis courts closes the same day, so don't plan a return there. You'll use the same membership card at every dock, without any changes. A campus map with the updated locations goes up on the transportation page Monday night.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Where is one of the new bike docks?",
+          "options": {
+            "A": "Beside the old tennis courts",
+            "B": "Inside the transportation office lobby",
+            "C": "Outside the Health Sciences library",
+            "D": "At the main campus bus terminal"
+          },
+          "answer": "C",
+          "explanation": "C正确：新车桩之一就在健康科学图书馆外。A错（wrong_detail）：旧网球场旁的站点当天关闭，不是新增。B错（related_but_not_stated）：交通办公室大厅听起来合理，但通知没提。D错（misattributed_detail）：原文说的是北侧公交环线，不是主校区客运总站。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about membership cards?",
+          "options": {
+            "A": "Current cards need no replacement",
+            "B": "Cards must be renewed by Tuesday",
+            "C": "Existing cards work at every dock",
+            "D": "Cards are issued at the recycling yard"
+          },
+          "answer": "A",
+          "explanation": "A正确：既有会员卡在所有车桩都能用且无需变动，可推断现有卡不必更换。B错（over_inference）：通知从未提到任何续卡期限。C错（literal_restatement）：这是原文的直接陈述，不构成推断。D错（unrelated_inference）：回收场只是新车桩的位置参照，与发卡无关。",
+          "distractor_types": {
+            "B": "over_inference",
+            "C": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "documentary filmmaker screening with a question-and-answer session",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Documentary filmmaker Renata Sol screens her film on river restoration next Thursday at 7 p.m. in the Ellsworth Auditorium, with a question-and-answer session afterward. Please note that the screening is free, but the theater seats only two hundred, so tickets go out at the film studies office starting Monday morning. She's also teaching a short editing session on Friday, limited to twelve students who have already taken the production course. If you want the Friday session, put your name down when you pick up a ticket.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How can students get into the screening?",
+          "options": {
+            "A": "By reserving a seat online",
+            "B": "By showing a film studies course card",
+            "C": "By arriving at seven on Thursday night",
+            "D": "By picking up a ticket starting Monday"
+          },
+          "answer": "D",
+          "explanation": "D正确：周一上午起到电影研究办公室领票即可入场。A错（related_but_not_stated）：网上选座听起来合理，但通知说的是到办公室领票。B错（wrong_detail）：修过制作课是周五剪辑课的门槛，不是放映的入场凭证。C错（misattributed_detail）：七点是放映时间，光按时到场没有票也进不去。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the Friday editing session?",
+          "options": {
+            "A": "It is open to the general public",
+            "B": "Most students will not be eligible",
+            "C": "It is limited to twelve students",
+            "D": "It replaces the production course"
+          },
+          "answer": "B",
+          "explanation": "B正确：只收十二人且必须修过制作课，可推断大多数学生并不符合条件。A错（over_inference）：面向公众与两道限制条件矛盾。C错（literal_restatement）：限十二人是原文直接说的，不是推断。D错（unrelated_inference）：通知没有任何取代制作课的意思。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "ecology club spring migration bird-watching walk",
+      "speaker_role": "club_leader",
+      "difficulty": "hard",
+      "announcement": "Good afternoon, students. The Ecology Club's spring migration walk leaves from the Whitfield trailhead, at the north edge of campus, at 6 a.m. this Saturday, and we'll be out for about three hours. We have eight pairs of loaner binoculars, so the first eight people to sign up on our page get one — after that, bring your own. The trail past the second bridge is still muddy from last week's rain, so wear boots you don't mind ruining. We are keeping the group to twenty so the birds don't scatter, and we leave the trailhead on time whether or not everyone has arrived.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How do students get loaner binoculars?",
+          "options": {
+            "A": "By being among the first eight signups",
+            "B": "By bringing boots to the trailhead",
+            "C": "By joining the club before Saturday",
+            "D": "By arriving at the trailhead early"
+          },
+          "answer": "A",
+          "explanation": "A正确：只有在社团页面最先报名的八个人能借到望远镜。B错（misattributed_detail）：穿靴子是因为步道泥泞，与借望远镜无关。C错（related_but_not_stated）：先入社听起来合理，但通知没有这个条件。D错（wrong_detail）：决定因素是报名顺序，不是当天到得早。",
+          "distractor_types": {
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated",
+            "D": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about latecomers on Saturday?",
+          "options": {
+            "A": "They can catch the group past the bridge",
+            "B": "They will be given loaner binoculars",
+            "C": "They risk missing the walk entirely",
+            "D": "The group leaves the trailhead at six"
+          },
+          "answer": "C",
+          "explanation": "C正确：队伍不等人按时出发，可推断迟到者有可能整场都参加不了。A错（over_inference）：通知没说可以在中途追上队伍。B错（unrelated_inference）：望远镜按报名顺序发放，与迟到毫无关系。D错（literal_restatement）：六点出发是原文直接说的，不是推断。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "profile photo day for professional headshots",
+      "speaker_role": "career_advisor",
+      "difficulty": "hard",
+      "announcement": "Before you head out, I want to flag that we're running profile photo day at the career center in Ross Hall next Wednesday from 10 to 3. A photographer takes a headshot, you pick a frame on the spot, and the file lands in your inbox that evening — all free. Here's the part people miss: we only shoot against the gray backdrop, so a white or patterned shirt reads much better than gray. We are taking walk-ins, but the line after noon last fall ran close to an hour, so I'd come in the morning if your afternoon is tight.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain how to edit a headshot",
+            "B": "To publicize a free headshot session",
+            "C": "To describe the career center's backdrop",
+            "D": "To discourage walk-in appointments entirely"
+          },
+          "answer": "B",
+          "explanation": "B正确：说话人是在告知下周三就业中心免费拍职业头像的活动。A错（wrong_purpose）：通知讲的是拍摄安排，不是后期修图方法。C错（too_narrow）：灰色背景板只是穿衣建议的由来，不是主旨。D错（reversed_intent）：现场排队是接受的，只是建议上午来，并非劝人别来。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "Why does the speaker mention the gray backdrop?",
+          "options": {
+            "A": "To explain why the photos are free",
+            "B": "To show that gray shirts photograph well",
+            "C": "To note that only one backdrop is used",
+            "D": "To help students choose what to wear"
+          },
+          "answer": "D",
+          "explanation": "D正确：提到只有灰色背景板，是为了说明白色或有花纹的上衣比灰色更出效果，帮学生决定穿什么。A错（unrelated_inference）：免费与背景板颜色没有因果关系。B错（over_inference）：原文说灰色上衣效果反而不好，推断方向相反。C错（literal_restatement）：只用一块背景板是原文直接说的，不是提到它的用意。",
+          "distractor_types": {
+            "A": "unrelated_inference",
+            "B": "over_inference",
+            "C": "literal_restatement"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "I'm driving up to the lake on Saturday.",
+      "options": {
+        "A": "I hope the weather stays clear.",
+        "B": "The lake usually freezes over in January.",
+        "C": "I finished my laundry this morning.",
+        "D": "No, I don't have a license."
+      },
+      "answer": "A",
+      "explanation": "A正确：对方在说周末的出行计划，回应他此行顺利、盼天气好，是最自然的接话。B错（semantic_association_trap）：抓住\"lake\"改说结冰的季节，与周六出行无关。C错（off_topic）：洗衣服完全是另一个话题。D错（wrong_question_type）：对方是陈述而非提问，用\"No\"否认无从谈起。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Where are we supposed to upload the group slides?",
+      "options": {
+        "A": "The slides took us almost three whole days.",
+        "B": "Your guess is as good as mine.",
+        "C": "We should practice the timing more.",
+        "D": "Yes, the deadline is Friday."
+      },
+      "answer": "B",
+      "explanation": "B正确：\"Your guess is as good as mine\"是承认自己也不知道的固定说法，正好回应\"上传到哪里\"这个问题。A错（semantic_association_trap）：借\"slides\"转去讲做幻灯片花了多久，没回答地点。C错（off_topic）：练时间控制是另一件事，与上传位置无关。D错（wrong_question_type）：答的是截止时间，问的却是地点。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why didn't you tell me about the hospital visit?",
+      "options": {
+        "A": "The hospital is near the station.",
+        "B": "I visited my aunt last summer.",
+        "C": "Actually, it slipped my mind.",
+        "D": "No, I can't tell them apart."
+      },
+      "answer": "C",
+      "explanation": "C正确：\"it slipped my mind\"是\"一时忘了\"的惯用说法，直接解释了自己没说的原因。A错（semantic_association_trap）：抓住\"hospital\"改说医院位置，没回应对方的在意。B错（off_topic）：去年探望姑妈是另一件事。D错（polysemy_trap）：把\"tell\"误当成\"分辨\"，答的是分不清两者。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking shuttle service hours",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How come the shuttle doesn't run past midnight?",
+      "options": {
+        "A": "The shuttle stop moved there last term.",
+        "B": "Yes, it runs every twenty minutes.",
+        "C": "I usually walk home instead.",
+        "D": "Budget cuts, from what I hear."
+      },
+      "answer": "D",
+      "explanation": "D正确：\"from what I hear\"是\"我听说是这样\"的口语说法，给出了停运的原因又不越权断言。A错（semantic_association_trap）：借\"shuttle\"改讲站点搬迁，没解释原因。B错（wrong_question_type）：答的是发车频率，而且与\"午夜后不开\"矛盾。C错（off_topic）：自己走回家是个人做法，没回答为什么停运。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What are you in the mood for today?",
+      "options": {
+        "A": "Anything but the dining hall.",
+        "B": "I'll grab you a sandwich.",
+        "C": "The mood in there was tense.",
+        "D": "Yes, I ate at noon."
+      },
+      "answer": "A",
+      "explanation": "A正确：\"Anything but…\"是表达偏好的地道说法，回答了自己今天想吃什么（除了食堂都行）。B错（misinterpretation）：把\"grab\"理解成替对方买，可这是问对方想吃什么。C错（semantic_association_trap）：把\"mood\"当成气氛，答成别处的气氛紧张。D错（wrong_question_type）：问的是想吃什么，答的却是吃过没有。",
+      "distractor_types": {
+        "B": "misinterpretation",
+        "C": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about sports facility hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Is the weight room open this late?",
+      "options": {
+        "A": "The weight room has new mirrors.",
+        "B": "You've got about ten minutes.",
+        "C": "I forgot my membership card.",
+        "D": "It costs twenty dollars a month."
+      },
+      "answer": "B",
+      "explanation": "B正确：不直接说\"开\"，而用\"你还有十分钟\"含蓄告知快关门了，是最自然的回应。A错（semantic_association_trap）：借\"weight room\"改说新装的镜子，没回答开没开。C错（off_topic）：自己忘带卡是别人的事。D错（wrong_question_type）：答的是会员费，问的是开放时间。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a dorm maintenance issue",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Didn't anyone come look at the broken window?",
+      "options": {
+        "A": "The window faces the north parking lot.",
+        "B": "I broke my glasses last night.",
+        "C": "They're on their way up now.",
+        "D": "Every twenty minutes, probably."
+      },
+      "answer": "C",
+      "explanation": "C正确：\"on their way up\"告诉对方维修的人马上就到，正面接住了这句抱怨式提问。A错（semantic_association_trap）：抓住\"window\"改讲窗户朝向。B错（polysemy_trap）：把\"broken\"挪到眼镜上，答成自己弄坏了眼镜。D错（wrong_question_type）：答的是频率，问的是有没有人来过。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about noise from shared walls",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can't you hear the drilling from your side?",
+      "options": {
+        "A": "The drill belongs to the landlord.",
+        "B": "I moved in here just three weeks ago.",
+        "C": "It's on the second floor.",
+        "D": "Oh, that finally stopped an hour ago."
+      },
+      "answer": "D",
+      "explanation": "D正确：用\"Oh\"引出间接回应——那声音一小时前就停了，等于回答了\"你那边听得到吗\"。A错（semantic_association_trap）：抓住\"drill\"改说电钻归谁。B错（off_topic）：搬来多久与此刻听不听得到无关。C错（wrong_question_type）：答的是位置，问的是听不听得到。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with a TA about lab report requirements",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When do you want the lab reports turned in?",
+      "options": {
+        "A": "Well, anytime before Friday works.",
+        "B": "The lab has three new microscopes.",
+        "C": "I typed mine in the library.",
+        "D": "Yes, you can hand them in."
+      },
+      "answer": "A",
+      "explanation": "A正确：以\"Well\"开头给出一个宽松的时间范围，正是对\"什么时候交\"的自然回答。B错（semantic_association_trap）：借\"lab\"改讲实验室新设备。C错（off_topic）：自己在哪里打的报告与截止时间无关。D错（wrong_question_type）：问的是时间，答的却是可不可以交。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'll pick you up around seven then.",
+      "options": {
+        "A": "The car probably needs new tires soon.",
+        "B": "Maybe half past would work better.",
+        "C": "I picked up my package yesterday.",
+        "D": "Yes, seven people are coming."
+      },
+      "answer": "B",
+      "explanation": "B正确：用\"Maybe\"缓和地提出改到七点半，既接住了安排又推进了对话。A错（semantic_association_trap）：抓住开车的场景改说轮胎该换了。C错（polysemy_trap）：把\"pick up\"当成取快递。D错（misinterpretation）：把时间\"seven\"误当成人数七个人。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "misinterpretation"
+      }
+    }
+  ]
+}
