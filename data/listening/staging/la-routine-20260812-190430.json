@@ -1,0 +1,434 @@
+{
+  "items": [
+    {
+      "context": "guest_speaker",
+      "situation": "planetary scientist giving the annual departmental lecture",
+      "speaker_role": "department_head",
+      "difficulty": "medium",
+      "announcement": "Dr. Amara Osei will give this year's Kellerman Lecture next Thursday at four o'clock in Brandt Hall. Her team was the first to image ice plumes on one of Saturn's moons, and she'll show footage that hasn't been released publicly. The lecture is open to the whole university and no ticket is needed. Anyone hoping to attend the graduate reception afterward must be on the sign-up sheet in the physics office by Tuesday. Doors open half an hour early.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the reception?",
+          "options": {
+            "A": "Add their name to a sign-up sheet",
+            "B": "Buy a ticket at the physics office",
+            "C": "Email Dr. Osei before Tuesday",
+            "D": "Arrive thirty minutes early"
+          },
+          "answer": "A",
+          "explanation": "通知说想参加会后招待会的人必须在物理系办公室的登记表上签名，所以 A 正确。B 讲座本身明确说不需要票（细节错误）。C 给主讲人发邮件从未提及（相关但未提及）。D 提前半小时是开门时间，针对的是讲座本身而非招待会（张冠李戴）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the footage Dr. Osei will show?",
+          "options": {
+            "A": "It was filmed by students on campus",
+            "B": "It will be posted online after the talk",
+            "C": "Most of the audience has not seen it",
+            "D": "It shows one of Saturn's moons"
+          },
+          "answer": "C",
+          "explanation": "通知说这段影像尚未公开发布，因此现场绝大多数人此前没看过，C 是合理推断。A 影像由她的团队拍摄，不是学生（细节错误）。B 讲座后上传网络毫无依据（过度推理）。D 是原文直接说明的内容，属于复述而非推断（原文复述）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "D": "literal_restatement"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "sidewalk construction forcing a temporary entrance detour",
+      "speaker_role": "campus_admin",
+      "difficulty": "easy",
+      "announcement": "Before we wrap up, I want to mention that the sidewalk along the north entrance of the quad is being torn up starting next Monday. Crews will be there for about two weeks, so you'll need to come in through the courtyard doors instead. Please note that the courtyard gate locks at seven in the evening, and the side entrance by the greenhouse stays open later. I've posted a map on the course page. Give yourself an extra five minutes that morning.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of these remarks?",
+          "options": {
+            "A": "To announce a change in class times",
+            "B": "To explain a temporary change in access",
+            "C": "To warn about greenhouse renovations",
+            "D": "To ask students to arrive earlier all term"
+          },
+          "answer": "B",
+          "explanation": "整段都在说北门人行道施工、改走中庭门以及门禁时间，核心是入口通道的临时变化，B 正确。A 上课时间没有任何改动（目的错误）。C 温室只是被提到作为另一个入口，不是施工对象（以偏概全）。D 只要求周一早上多留五分钟，不是整学期都提早（意图相反）。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are students told about the courtyard gate?",
+          "options": {
+            "A": "It will be closed for the full two weeks",
+            "B": "It leads directly to the greenhouse",
+            "C": "It can only be used on Monday mornings",
+            "D": "It is locked in the evening"
+          },
+          "answer": "D",
+          "explanation": "通知明确说中庭门晚上七点上锁，所以 D 正确。A 关闭两周的是北门人行道，不是中庭门（细节错误）。B 温室旁的是另一个侧门，与中庭门不是一处（张冠李戴）。C 周一早上只是提醒多留时间，并非限定只能周一走（相关但未提及）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "misattributed_detail",
+            "C": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "reunion weekend parking closure with a shuttle alternative",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Lots F and G will be closed to student vehicles from this Friday evening through Sunday night for the alumni reunion. Cars left in either lot after six on Friday will be ticketed and then towed at the owner's expense. We will be running a shuttle every twelve minutes from the stadium overflow lot to the main quad during those three days. The shuttle is free, but it does not run after eleven at night. Plan your Friday accordingly.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To advertise the alumni reunion events",
+            "B": "To introduce a permanent shuttle route",
+            "C": "To explain a weekend parking closure",
+            "D": "To warn about ticketing on the main quad"
+          },
+          "answer": "C",
+          "explanation": "通知的核心是周末 F、G 两个停车场对学生关闭以及替代方案，C 正确。A 校友返校活动本身没有介绍（目的错误）。B 班车只在这三天运行，不是永久线路（意图相反）。D 开罚单针对的是滞留车辆，而且不在主广场，只是细枝末节（以偏概全）。",
+          "distractor_types": {
+            "A": "wrong_purpose",
+            "B": "reversed_intent",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who stay out past eleven?",
+          "options": {
+            "A": "They will need another way back",
+            "B": "They may park in Lot F overnight",
+            "C": "They can ride the shuttle for free",
+            "D": "They must register with campus security"
+          },
+          "answer": "A",
+          "explanation": "班车十一点后停运，所以那之后回校的人得另想办法，A 是合理推断。B 周末 F 场对学生关闭，过夜停车只会被拖走（细节错误）。C 班车免费是原文直接说的，且十一点后已停运，属复述（原文复述）。D 向校警登记完全没有依据（无关推断）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "literal_restatement",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "student art market returning to the main quad",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "medium",
+      "announcement": "Good morning, everyone. The student art market returns to the main quad this Saturday from ten until three, with about forty tables of prints, ceramics, and hand-bound books. Every seller is a current student, and half of what they earn goes back into the studio supply fund. Please bring cash if you can, since only a few tables will have card readers. If it rains, we will move the whole market into the Fielding Center lobby.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What are visitors asked to do?",
+          "options": {
+            "A": "Reserve a table in advance",
+            "B": "Donate to the studio supply fund",
+            "C": "Enter through the Fielding Center",
+            "D": "Bring cash to the market"
+          },
+          "answer": "D",
+          "explanation": "通知请大家尽量带现金，因为只有少数摊位能刷卡，所以 D 正确。A 预订摊位是卖家的事，参观者不需要（相关但未提及）。B 工作室基金来自卖家收入的一半，不是要观众捐款（张冠李戴）。C 只有下雨才改到费尔丁中心，不是常规入口（细节错误）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "misattributed_detail",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the sellers?",
+          "options": {
+            "A": "They are professional artists from town",
+            "B": "They do not keep all their earnings",
+            "C": "They set up inside the Fielding Center",
+            "D": "They sell mostly hand-bound books"
+          },
+          "answer": "B",
+          "explanation": "收入的一半要回到工作室材料基金，说明卖家拿不到全部所得，B 是合理推断。A 每个卖家都是在校学生而非职业艺术家（细节错误）。C 费尔丁中心只是雨天备用场地（张冠李戴）。D 手工装订书只是三类商品之一，不能推出占多数（过度推理）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "guest_speaker",
+      "situation": "alumna engineer speaking about careers in water infrastructure",
+      "speaker_role": "department_head",
+      "difficulty": "easy",
+      "announcement": "Attention students. Renee Kwan, who graduated from this department in two thousand nine, will talk about careers in water infrastructure next Wednesday at noon in Room 240. She has spent the last decade designing treatment systems for small towns, and she wants to hear what worries you about the job market. Bring your questions rather than your resume; this is a conversation, not an interview. Lunch is provided to anyone who signs up on the department board by Monday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To publicize a talk about career paths",
+            "B": "To recruit students for an internship",
+            "C": "To describe changes to the department",
+            "D": "To explain how to write a resume"
+          },
+          "answer": "A",
+          "explanation": "通知在宣传一场关于水务工程职业道路的校友讲座，A 正确。B 没有任何实习招募（目的错误）。C 系里的变动只字未提（目的错误）。D 简历只是被提到「不用带」，不是讲座主题（以偏概全）。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "wrong_purpose",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students do to receive lunch?",
+          "options": {
+            "A": "Arrive before noon on Wednesday",
+            "B": "Submit a resume in advance",
+            "C": "Sign up on the department board",
+            "D": "Email the department office directly"
+          },
+          "answer": "C",
+          "explanation": "通知说周一前在系里的公告板上登记就能获得午餐，C 正确。A 中午是讲座开始时间，与是否有午餐无关（张冠李戴）。B 通知恰恰说带问题而不是带简历（细节错误）。D 发邮件的方式没有提到（相关但未提及）。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "competition pool drained for tile resurfacing",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "The competition pool in the campus recreation center will be drained for tile resurfacing beginning next Monday and will stay closed for roughly three weeks. The smaller teaching pool on the lower level remains open, though lap swimming there is limited to two people per lane. Members of the swim team have reserved that pool from six to eight each morning, so open lap hours start at eight fifteen. Please note that locker room access is unaffected. We will post the reopening date once the tile has cured.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "New rules for the swim team",
+            "B": "A permanent change to pool hours",
+            "C": "Repairs to the locker rooms",
+            "D": "A pool closing for repairs"
+          },
+          "answer": "D",
+          "explanation": "通知的核心是比赛池要停用三周做瓷砖翻新，以及期间的替代安排，D 正确。A 校队时段只是其中一个细节（以偏概全）。B 变动是临时的，修好就恢复（意图相反）。C 更衣室明确说不受影响（目的错误）。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "B": "reversed_intent",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "When can other students swim laps?",
+          "options": {
+            "A": "From six to eight in the morning",
+            "B": "Starting at eight fifteen",
+            "C": "Only after the tile has cured",
+            "D": "Any time the locker rooms are open"
+          },
+          "answer": "B",
+          "explanation": "校队包场到早上八点，普通学生的自由泳道时间从八点十五分开始，B 正确。A 六点到八点是校队专用时段（张冠李戴）。C 教学池一直开放，不必等瓷砖养护完（细节错误）。D 更衣室开放时间与泳道安排无关（相关但未提及）。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "C": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "academic_event",
+      "situation": "call for submissions to an undergraduate poetry reading",
+      "speaker_role": "department_staff",
+      "difficulty": "medium",
+      "announcement": "I've posted the call for the undergraduate poetry reading, and submissions close on the 22nd. Send three poems as a single file to the English office; separate attachments will not be opened. You don't need to be an English major, and first-year students are welcome. Everyone selected reads for six minutes in the Hoyt Library reading room on the evening of April 4. Please note that we cap the program at twelve readers.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How must poems be submitted?",
+          "options": {
+            "A": "In person at the English office",
+            "B": "As three separate attachments",
+            "C": "As one file containing three poems",
+            "D": "Through the library's online portal"
+          },
+          "answer": "C",
+          "explanation": "通知要求把三首诗合成一个文件发到英语系办公室，C 正确。A 办公室是收件地址，但没说必须本人送达（张冠李戴）。B 分开的附件明确说不会被打开（细节错误）。D 图书馆的线上系统从未提及（相关但未提及）。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "wrong_detail",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the reading?",
+          "options": {
+            "A": "Not every submission will be selected",
+            "B": "It is open only to English majors",
+            "C": "First-year students are given priority",
+            "D": "Poems must be about the library"
+          },
+          "answer": "A",
+          "explanation": "节目只安排十二位朗读者，说明投稿会被筛选，A 是合理推断。B 通知明说不必是英语专业（细节错误）。C 只说欢迎大一学生，并没有优先录取（过度推理）。D 对诗歌题材没有任何限制（无关推断）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "over_inference",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "campus_activity",
+      "situation": "regional blood center running a two-day drive in the union",
+      "speaker_role": "activity_coordinator",
+      "difficulty": "easy",
+      "announcement": "Attention students, faculty, and staff. The regional blood center will set up in the Whitmore Center ballroom next Tuesday and Wednesday, from nine in the morning until four in the afternoon. Walk-ins are welcome, but the appointment slots on the center's website fill first and move much faster. Please bring a photo ID and eat a full meal beforehand; donors who skip breakfast are the ones we end up sending home. The whole process takes about forty minutes.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain why donors are turned away",
+            "B": "To invite people to donate blood",
+            "C": "To advertise a new campus clinic",
+            "D": "To recruit volunteers for the ballroom"
+          },
+          "answer": "B",
+          "explanation": "通知在宣传为期两天的献血活动并说明准备事项，B 正确。A 被劝回只是提醒吃饭的一个理由（以偏概全）。C 校内没有新诊所（目的错误）。D 招募的是献血者而不是场地志愿者（目的错误）。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What are donors told to do beforehand?",
+          "options": {
+            "A": "Eat a full meal",
+            "B": "Register at the union front desk",
+            "C": "Arrive forty minutes early",
+            "D": "Bring a signed medical form"
+          },
+          "answer": "A",
+          "explanation": "通知要求献血前吃饱一顿饭，否则会被劝回，A 正确。B 登记是在血液中心网站上预约，不是在活动中心前台（细节错误）。C 四十分钟是整个献血流程耗时，不是要提前到（张冠李戴）。D 需要带的是带照片的证件，不是医疗表格（相关但未提及）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "misattributed_detail",
+            "D": "related_but_not_stated"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "dining hall card readers replaced over one weekend",
+      "speaker_role": "campus_admin",
+      "difficulty": "hard",
+      "announcement": "Every dining hall card reader on campus is being replaced over the weekend of the 18th, which means Torrance and Bell will run on a manual list from Friday dinner through Sunday brunch. Staff at the door will check your name against a printed roster, so lines will be slower than usual. Guest meals and off-plan purchases can't be processed during that window at all. Please bring your student ID anyway, since the roster is organized by ID number. Normal service resumes Sunday evening.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What will happen at the dining hall doors that weekend?",
+          "options": {
+            "A": "Students will be issued a temporary card",
+            "B": "Meals will be paid for in cash",
+            "C": "Only guests will be checked in",
+            "D": "Names will be checked against a roster"
+          },
+          "answer": "D",
+          "explanation": "通知说门口工作人员会拿印好的名单核对姓名，D 正确。A 临时卡从未提及（相关但未提及）。B 现金付款没有出现，餐费仍走餐卡计划（细节错误）。C 恰恰相反，客餐在这段时间完全无法办理（张冠李戴）。",
+          "distractor_types": {
+            "A": "related_but_not_stated",
+            "B": "wrong_detail",
+            "C": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who want to bring a visitor?",
+          "options": {
+            "A": "They should arrive before Friday dinner",
+            "B": "They can pay in cash at the door",
+            "C": "They will have to wait until Sunday evening",
+            "D": "They must add the visitor to the roster"
+          },
+          "answer": "C",
+          "explanation": "客餐在周五晚餐到周日早午餐这段窗口完全无法办理，而正常服务周日傍晚恢复，所以想带客人只能等到那时，C 是合理推断。A 周五晚餐前到并不能解决问题，窗口正是从那时开始（过度推理）。B 现金付款没有提到（细节错误）。D 名单按学号排列，是给在校生用的，客人无法加入（无关推断）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "wrong_detail",
+            "D": "unrelated_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "library floor closed while compact shelving is installed",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Good afternoon, students. The third floor of Harker Library closes tomorrow at noon while new compact shelving is installed, and it won't reopen until the following Monday. Anything shelved up there has been moved to the annex behind the loading dock, which is staffed only between ten and four. If you need a third-floor volume outside those hours, request it the day before and we will hold it at the main desk in Harker Library. Please note that the quiet carrels on four are unaffected.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "To explain a temporary floor closure",
+            "B": "To introduce new library hours",
+            "C": "To ask students to use the annex",
+            "D": "To announce the closing of the carrels"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是三楼因安装密集书架临时关闭以及期间怎么借书，A 正确。B 图书馆整体开放时间没有改动（目的错误）。C 去附属库房只是应对措施之一（以偏概全）。D 四楼的安静自习区明确说不受影响（意图相反）。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the annex?",
+          "options": {
+            "A": "It is located inside Harker Library",
+            "B": "It will close permanently on Monday",
+            "C": "It holds the quiet study carrels",
+            "D": "It is not open in the evening"
+          },
+          "answer": "D",
+          "explanation": "附属库房只在上午十点到下午四点有人值守，所以晚上取不到书，D 是合理推断。A 它在装卸区后面，是独立场地（细节错误）。B 周一是三楼重新开放的日子，与库房永久关闭无关（过度推理）。C 安静自习区在四楼，不在库房（无关推断）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "over_inference",
+            "C": "unrelated_inference"
+          }
+        }
+      ]
+    }
+  ]
+}

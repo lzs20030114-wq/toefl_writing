@@ -1,63 +1,67 @@
 {
-  "session_id": "routine-20260811-190546",
-  "completed_at": "2026-08-11T19:25:00.000Z",
+  "session_id": "routine-20260812-190430",
+  "completed_at": "2026-08-12T19:24:36Z",
   "duration_minutes": 20,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点名 bs/la/lcr 三库；BS 首批 55% 三人称正式语域被冻结门拦下，改写语域后 20 题两整套过门合库（set 81-82），但多样性 82 分（角色名仅 4 种、人物当 prefilled 仅 5%）交 R2 补；la/lcr 各 10 题 flavor 0.82/0.92 零告警入 staging",
+  "highlight": "按需信号只点了 4 个库：BS 合库 1 套 10 题；听力 lc/la/lcr 共 24 题进 staging 等盲审。BS 冻结门先判 FAIL（第三人称正式语气 0.171>0.17、embedded 漂移 2.53x），改用「转述从句」替代内嵌疑问句并把答案改回第一人称后重跑 PASS。",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 20,
-      "accepted": 30,
+      "generated": 15,
+      "accepted": 10,
       "topics": [
-        "observatory telescope on the roof",
-        "student newspaper office relocation",
-        "tutoring center drop-in subjects",
-        "coffee cart shift apron",
-        "greenhouse volunteer form",
-        "pottery workshop time slot",
-        "choir risers moved to rehearsal hall",
-        "field trip bus seats",
-        "placement score and math course",
-        "annex practice room noise",
-        "ceramics kiln room locked",
-        "chess club exam-week break",
-        "campus radio host signup",
-        "box office student tickets",
-        "bike repair stand pump",
-        "herbarium tour missed",
-        "textbook exchange swap table",
-        "volunteer tutoring reading partner",
-        "museum internship archive training",
-        "swimming lessons rescheduled"
+        "停车证领取",
+        "自习地点",
+        "咖啡车搬迁",
+        "信箱钥匙过期",
+        "研讨课选课",
+        "小组展示排练",
+        "幻灯片上传",
+        "餐费计划办公室",
+        "校内排球报名",
+        "泳池自由泳时段"
       ],
       "favorite": {
-        "prompt": "I heard the campus radio station needs new hosts.",
-        "answer": "How do I sign up for a slot?"
+        "prompt": "There's an intramural signup table by the gym.",
+        "answer": "Can I still join the volleyball team this week?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
+      "failure_reason": ""
+    },
+    "listening-lc": {
+      "generated": 4,
+      "accepted": 4,
+      "topics": [
+        "陶艺课费用与烧窑费",
+        "民谣音乐推荐",
+        "早班火车取消改乘巴士",
+        "晚餐派对采购分工"
+      ],
+      "favorite": {
+        "subtopic": "errands_service / 陶艺课",
+        "preview": "Have you heard about the pottery class they added at the craft center? — 男生上过课，提醒黏土费含在学费里，但每件作品另收烧窑费。"
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
     },
     "listening-la": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "climbing wall closed for annual anchor inspection",
-        "language lab switching to a booth reservation system",
-        "advising workshop on choosing a minor",
-        "physics department undergraduate poster night",
-        "annual essay competition with faculty judges",
-        "printed job listings binder replaced by an online board",
-        "new bike-share dock locations replacing two old stations",
-        "documentary filmmaker screening with a question-and-answer session",
-        "ecology club spring migration bird-watching walk",
-        "profile photo day for professional headshots"
+        "土卫冰羽讲座",
+        "北门人行道施工绕行",
+        "校友返校周停车场关闭",
+        "学生艺术市集",
+        "校友工程师职业分享",
+        "比赛泳池瓷砖翻新",
+        "本科诗歌朗诵征稿",
+        "学生活动中心献血",
+        "食堂刷卡机更换",
+        "图书馆三楼装密集书架"
       ],
       "favorite": {
-        "subtopic": "academic_event/annual essay competition with faculty judges",
-        "preview": "Since three of our faculty judges are on sabbatical this spring, the Literary Society is changing"
+        "subtopic": "guest_speaker / 土卫冰羽讲座",
+        "preview": "Dr. Amara Osei will give this year's Kellerman Lecture next Thursday at four o'clock in Brandt Hall. 讲座免票，但会后招待会须提前登记。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -66,25 +70,23 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "roommate discussing weekend plans",
-        "two classmates discussing a group project deadline",
-        "expressing concern about a friend's situation",
-        "student checking shuttle service hours",
-        "two friends deciding where to get lunch",
-        "student asking about sports facility hours",
-        "student asking about a dorm maintenance issue",
-        "asking a neighbor about noise from shared walls",
-        "student checking with a TA about lab report requirements",
-        "arranging a ride with a friend"
+        "邻居吸尘噪音",
+        "课程阅读章节",
+        "实验报告投递处",
+        "新面馆午饭",
+        "打烊前赶到",
+        "失物招领保管期",
+        "校车不停北停车场",
+        "展示选题",
+        "包裹签收人",
+        "学习小组时间冲突"
       ],
       "favorite": {
-        "subtopic": "campus_academic/two classmates discussing a group project deadline",
-        "preview": "Where are we supposed to upload the group slides? -> Your guess is as good as mine."
+        "subtopic": "campus_academic / 学习小组时间冲突",
+        "preview": "Our study group always meets when I'm working. — 正确答用 context_shift 直接解决问题：I'll send you my notes instead."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-11T19:41:00Z",
-  "r2_session_id": "routine-r2-20260811-193041"
+  }
 }

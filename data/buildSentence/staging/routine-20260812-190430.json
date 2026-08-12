@@ -1,0 +1,169 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "When did you pick up your parking permit?",
+      "answer": "I picked up my permit this morning.",
+      "chunks": ["i", "picked up", "my", "permit", "this morning", "have"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "phrasal verb pick up"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Where do you usually study at night?",
+      "answer": "I study best in the quiet lounge.",
+      "chunks": ["i", "study", "best", "quiet", "lounge", "at"],
+      "prefilled": ["in the"],
+      "prefilled_positions": { "in the": 3 },
+      "distractor": "at",
+      "has_question_mark": false,
+      "grammar_points": ["present simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "That coffee cart isn't in the union anymore.",
+      "answer": "It opens beside my dorm every morning.",
+      "chunks": ["it", "opens", "dorm", "every", "morning"],
+      "prefilled": ["beside my"],
+      "prefilled_positions": { "beside my": 2 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["present simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "What did the front desk tell you?",
+      "answer": "The clerk explained that my mailbox key expired.",
+      "chunks": ["the", "clerk", "my", "mailbox key", "expired", "did"],
+      "prefilled": ["explained that"],
+      "prefilled_positions": { "explained that": 2 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect speech with that-clause", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Have you picked a seminar section yet?",
+      "answer": "She told me the Thursday section still has space.",
+      "chunks": ["she", "the", "thursday section", "still", "has", "space", "if"],
+      "prefilled": ["told me"],
+      "prefilled_positions": { "told me": 1 },
+      "distractor": "if",
+      "has_question_mark": false,
+      "grammar_points": ["indirect speech with that-clause", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Are you ready for tomorrow's presentation?",
+      "answer": "We haven't rehearsed the closing section at all yet.",
+      "chunks": ["we", "haven't", "rehearsed", "the", "closing", "section", "at all", "no"],
+      "prefilled": ["yet"],
+      "prefilled_positions": { "yet": 8 },
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "adverb yet"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "What did the professor tell you about the slides?",
+      "answer": "The final version was uploaded by my partner just before midnight.",
+      "chunks": ["was", "uploaded", "by", "my", "partner", "just before", "midnight", "were"],
+      "prefilled": ["The final version"],
+      "prefilled_positions": { "the final version": 0 },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "I just transferred here this semester.",
+      "answer": "Which office handles the meal plan changes here?",
+      "chunks": ["office", "handles", "the", "meal plan", "changes", "here", "what"],
+      "prefilled": ["Which"],
+      "prefilled_positions": { "which": 0 },
+      "distractor": "what",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "There's an intramural signup table by the gym.",
+      "answer": "Can I still join the volleyball team this week?",
+      "chunks": ["can", "i", "still", "join", "the", "volleyball team", "this week", "could"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "could",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes/no question", "modal can"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "What did your advisor say about the pool?",
+      "answer": "My advisor mentioned that lap swimming starts at six.",
+      "chunks": ["my", "advisor", "mentioned", "lap swimming", "starts", "at six", "does"],
+      "prefilled": ["that"],
+      "prefilled_positions": { "that": 3 },
+      "distractor": "does",
+      "has_question_mark": false,
+      "grammar_points": ["indirect speech with that-clause", "present simple"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Did you make it to the study session?",
+      "answer": "Honestly, I got there about twenty minutes late.",
+      "chunks": ["got", "there", "about", "twenty", "minutes", "late"],
+      "prefilled": ["Honestly,", "I"],
+      "prefilled_positions": { "honestly,": 0, "i": 1 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["sentence adverb", "past simple"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "Why did you skip the club fair?",
+      "answer": "I didn't hear about it until yesterday afternoon.",
+      "chunks": ["i", "didn't", "hear", "it", "until", "yesterday afternoon", "not"],
+      "prefilled": ["about"],
+      "prefilled_positions": { "about": 3 },
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": ["past simple negation", "contraction"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "What did the RA announce about the laundry room?",
+      "answer": "It's closed until the new dryers finally arrive.",
+      "chunks": ["it's", "closed", "the", "new", "dryers", "finally arrive", "will"],
+      "prefilled": ["until"],
+      "prefilled_positions": { "until": 2 },
+      "distractor": "will",
+      "has_question_mark": false,
+      "grammar_points": ["contraction", "until clause"]
+    },
+    {
+      "id": "tmp_r1_q14",
+      "prompt": "What did you find out at the registrar's office?",
+      "answer": "They confirmed that my transfer credits had already been approved last week.",
+      "chunks": ["they", "confirmed", "my", "transfer credits", "had already", "been", "approved", "last week", "was"],
+      "prefilled": ["that"],
+      "prefilled_positions": { "that": 2 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["reported speech with that", "past perfect passive"]
+    },
+    {
+      "id": "tmp_r1_q15",
+      "prompt": "Why did you request that dorm?",
+      "answer": "I requested the building that sits closest to the music hall.",
+      "chunks": ["i", "requested", "the", "building", "that", "sits", "the music hall", "which"],
+      "prefilled": ["closest to"],
+      "prefilled_positions": { "closest to": 6 },
+      "distractor": "which",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that", "superlative"]
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "asking a neighbor about shared-space noise",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's your usual time for running the vacuum?",
+      "options": {
+        "A": "Why, is it waking you up?",
+        "B": "The vacuum cleaner is fairly new.",
+        "C": "I'll pick up milk on the way home.",
+        "D": "Upstairs, in the corner closet."
+      },
+      "answer": "A",
+      "explanation": "邻居问你一般什么时候吸尘。正确答 A 不直接报时间，而是反问“怎么，吵到你了吗？”，把对话推进到对方真正关心的点（counter_question），这是真实口语中最自然的回应。B 抓住 vacuum 去描述吸尘器很新，只借关键词不回应问题（语义联想陷阱）。C 说顺路买牛奶，与话题完全无关（离题）。D “楼上角落的柜子里” 回答的是「放在哪」，答非所问——问的是时间不是地点（问题类型错配）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student unsure which chapters are on the reading list",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I can't tell which chapters are actually assigned.",
+      "options": {
+        "A": "The syllabus was printed on bright green paper.",
+        "B": "Your guess is as good as mine.",
+        "C": "I'll return your textbook tomorrow.",
+        "D": "I can never tell the twins apart."
+      },
+      "answer": "B",
+      "explanation": "对方抱怨搞不清哪几章是作业。正确答 B 用地道口语“Your guess is as good as mine”（我也不知道，跟你一样蒙），自然承接抱怨（idiomatic）。A 抓住 syllabus 去讲教学大纲印在绿纸上，只借关联词不回应（语义联想陷阱）。C 说明天还你课本，与话题无关（离题）。D 把 tell 理解成“分辨”，说分不清双胞胎，是同词不同义的陷阱（一词多义）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with a TA where lab reports go",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where's the drop box for the lab reports?",
+      "options": {
+        "A": "The lab reports are due Thursday.",
+        "B": "Reports should include the raw data.",
+        "C": "In the tray outside my office.",
+        "D": "The chemistry lab closes at six tonight."
+      },
+      "answer": "C",
+      "explanation": "学生问实验报告交到哪里。正确答 C 直接给出地点“我办公室外面的收件盘里”（direct_topical），是对 where 问句的正面回答。A 回答的是截止时间周四，问的是地点不是时间（问题类型错配）。B 讲报告要包含原始数据，抓住 reports 转去说内容要求（语义联想陷阱）。D 说化学实验室六点关门，借 lab 说了个不相干的信息（离题）。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you want to try that new noodle place?",
+      "options": {
+        "A": "The noodles there are handmade every morning.",
+        "B": "No, I didn't notice the sign.",
+        "C": "It's right beside the bookstore.",
+        "D": "I've only got fifteen minutes, honestly."
+      },
+      "answer": "D",
+      "explanation": "朋友提议去新开的面馆。正确答 D 不回答 yes/no，而是抛出真正的约束“我只有十五分钟”，把决策引向可行性（context_shift），这是真题最常见的间接回应。A 抓住 noodles 去夸面是手工现做，只谈食物不回应邀请（语义联想陷阱）。B 说“没有，我没注意到招牌”，虽有 No 但回答的是完全不同的问题（语境错误）。C 给出店铺位置“就在书店旁边”，问的是去不去而不是在哪（问题类型错配）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_context",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling a shop to check closing time",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm hoping to come by before you close.",
+      "options": {
+        "A": "How soon can you get here?",
+        "B": "The shop moved last spring.",
+        "C": "Closing time is always the busiest part.",
+        "D": "Sorry, I already closed my account."
+      },
+      "answer": "A",
+      "explanation": "顾客说想在打烊前赶过来。正确答 A 反问“你多快能到？”，把对话推进到能否赶上这个关键点（counter_question）。B 说店铺去年春天搬过家，是另一个话题（离题）。C 抓住 close 去感叹打烊前最忙，只借关键词不解决问题（语义联想陷阱）。D 把 close 理解成“注销账户”，同词不同义（一词多义）。",
+      "distractor_types": {
+        "B": "off_topic",
+        "C": "semantic_association_trap",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking the front desk about lost and found",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "How long do you keep lost items here?",
+      "options": {
+        "A": "The front desk opens at eight.",
+        "B": "About two weeks, then we donate them.",
+        "C": "Someone lost a blue umbrella yesterday.",
+        "D": "I keep my keys in my backpack pocket."
+      },
+      "answer": "B",
+      "explanation": "学生问失物保管多久。正确答 B 直接给出时长“大概两周，之后就捐掉”（direct_topical），正面回答 how long。A 说服务台八点开门，回答的是营业时间而非保管期限（问题类型错配）。C 抓住 lost 去讲昨天有人丢了把蓝伞，只借关键词（语义联想陷阱）。D 把 keep 理解成“把东西放在哪”，说钥匙放背包里，同词不同义（一词多义）。",
+      "distractor_types": {
+        "A": "wrong_question_type",
+        "C": "semantic_association_trap",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student puzzled by the shuttle route on weekends",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why doesn't the shuttle stop at the north lot?",
+      "options": {
+        "A": "The shuttle holds about thirty seated passengers.",
+        "B": "Because I missed the earlier one.",
+        "C": "Beats me, I just ride it.",
+        "D": "The stop is behind the gym."
+      },
+      "answer": "C",
+      "explanation": "学生不解校车为什么不停北停车场。正确答 C 用地道口语“Beats me”（我也不清楚），坦率承认不知道并说明自己只是乘客（idiomatic）。A 抓住 shuttle 去说车能坐三十人，只借关键词（语义联想陷阱）。B 虽然用了 Because，但解释的是“我错过了上一班”，主语从校车换成了自己，答非所问（误解）。D 给出站点位置“在体育馆后面”，问的是原因不是地点（问题类型错配）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with a partner",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Have you decided what our presentation should cover?",
+      "options": {
+        "A": "The presentation room seats about forty people total.",
+        "B": "No, the printer was out of paper.",
+        "C": "Our professor covers that during week nine.",
+        "D": "Well, I'd rather narrow it down first."
+      },
+      "answer": "D",
+      "explanation": "搭档问展示的内容定了没有。正确答 D 以话语标记 Well 开头，间接表示还没定、想先把范围缩小（marker_led_indirect）。A 抓住 presentation 去说教室能坐四十人，只借关键词（语义联想陷阱）。B 虽然说了 No，但理由是打印机没纸，与选题无关（语境错误）。C 把 cover 理解成“教授讲到”，同词不同义（一词多义）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_context",
+        "C": "polysemy"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a housemate about a delivered package",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Who signed for the package this morning?",
+      "options": {
+        "A": "Actually, nobody was home until noon.",
+        "B": "The package was fairly heavy and large.",
+        "C": "It should arrive by Thursday.",
+        "D": "I signed up for the newsletter."
+      },
+      "answer": "A",
+      "explanation": "室友问今早是谁签收的包裹。正确答 A 以 Actually 开头，间接说明“中午前家里没人”，等于回答了没人签收（marker_led_indirect）。B 抓住 package 去描述包裹又重又大，只借关键词（语义联想陷阱）。C 说包裹周四才会到，回答的是时间而非签收人（问题类型错配）。D 把 signed 理解成“注册订阅”，同词不同义（一词多义）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student whose shift clashes with the study group",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "Our study group always meets when I'm working.",
+      "options": {
+        "A": "The group meets in the library basement.",
+        "B": "I'll send you my notes instead.",
+        "C": "Studying alone is harder than it looks.",
+        "D": "That group project was graded last week."
+      },
+      "answer": "B",
+      "explanation": "对方说学习小组每次开会都撞上自己的班。正确答 B 不纠结时间冲突，直接解决根本问题“我把笔记发给你”（context_shift）。A 抓住 group meets 去说开会地点在图书馆地下室，答非所问（语义联想陷阱）。C 泛泛感慨一个人学更难，没有回应对方的困难（离题）。D 说小组作业上周已经打分了，是另一件事（语境错误）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_context"
+      }
+    }
+  ]
+}

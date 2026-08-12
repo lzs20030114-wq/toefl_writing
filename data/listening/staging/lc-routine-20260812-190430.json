@@ -1,0 +1,336 @@
+{
+  "items": [
+    {
+      "context": "errands_service",
+      "situation": "two students comparing notes on a pottery class at the craft center",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you heard about the pottery class they added at the craft center?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I finished it last term. The instructor lets you keep everything you make, which is honestly why I signed up."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Really? Nice."
+        },
+        {
+          "speaker": "Man",
+          "text": "The clay's included in the fee, but you pay a separate firing charge for each piece you want kept."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Hmm, that still seems fair. Is there space left for the spring session?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It filled up within a week last year, so I wouldn't wait too long."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good to know."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "According to the man, what must students pay for separately?",
+          "options": {
+            "A": "A firing charge for each piece",
+            "B": "The clay used in every project",
+            "C": "A membership at the craft center",
+            "D": "Tools borrowed from the instructor"
+          },
+          "answer": "A",
+          "explanation": "男生明确说黏土费用已含在学费里，但每件想烧制保留的作品要另付烧窑费，所以 A 正确。B 与原文相反，黏土是包含的（细节错误）。C 手工中心会员费全程没提（相关但未提及）。D 借用工具收费同样没有提到（相关但未提及）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "related_but_not_stated"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Wait and join the summer session instead",
+            "B": "Ask the instructor for a discount",
+            "C": "Put her name down for the class soon",
+            "D": "Borrow pottery tools from the man"
+          },
+          "answer": "C",
+          "explanation": "男生说去年一周就报满了，建议她周五前登记，女生也觉得条件合理，所以最可能尽快报名，C 正确。A 等到夏季班正是男生劝她不要做的（被否定的选项）。B 讨价还价全程没提（无关的下一步）。D 借工具没有任何依据（无关的下一步）。",
+          "distractor_types": {
+            "A": "rejected_option",
+            "B": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "recommendations_opinions",
+      "situation": "two students swapping music recommendations after one tires of mainstream pop",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm so tired of hearing the same three pop singers in every cafe on campus."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you'd probably like the folk stuff I've been streaming lately. It's nothing like what's on the radio."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Folk? I always thought that was all banjos and sad lyrics about the countryside."
+        },
+        {
+          "speaker": "Man",
+          "text": "Some of it is, honestly. But there's a newer group from Portland that mixes it with jazz drums."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Huh, really?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Their live session is only about twenty minutes. I'll text you the link tonight."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect, thanks."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What are the speakers mainly discussing?",
+          "options": {
+            "A": "A concert they both attended recently",
+            "B": "Finding music beyond mainstream pop",
+            "C": "Whether folk music relies on banjos",
+            "D": "The cost of a streaming subscription"
+          },
+          "answer": "B",
+          "explanation": "女生厌倦了千篇一律的流行歌，男生推荐自己在听的民谣新团，整段都在围绕「找主流之外的新音乐」，B 正确。A 两人没有一起看过演出（话题错误）。C 班卓琴只是女生的一句刻板印象，是细枝末节（以偏概全）。D 订阅费用全程没谈（话题错误）。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "C": "too_narrow",
+            "D": "wrong_topic"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Buy tickets for the group's next show",
+            "B": "Teach the woman to play the banjo",
+            "C": "Cancel his streaming subscription",
+            "D": "Send the woman a short recording"
+          },
+          "answer": "D",
+          "explanation": "男生最后说今晚把那场二十分钟的现场版发给她，所以下一步是发一段短录音，D 正确。A 买演出票超出了对话内容（过度推理）。B 教弹班卓琴没有任何依据（无关的下一步）。C 退订流媒体与他的表态相反（无关的下一步）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_next_step",
+            "C": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "errands_service",
+      "situation": "two friends reworking the travel plan for a day trip after a train is cancelled",
+      "difficulty": "medium",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Did you see that the early train out to the coast got cancelled for Saturday?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh no."
+        },
+        {
+          "speaker": "Woman",
+          "text": "There's still the nine-forty, but it stops at every single small station along the way."
+        },
+        {
+          "speaker": "Man",
+          "text": "So we'd lose almost two hours sitting on platforms. What about that express bus from the depot?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "It leaves at eight and goes straight through, and the tickets are cheaper too."
+        },
+        {
+          "speaker": "Man",
+          "text": "That settles it. Let's book the bus tonight, before the weekend seats are gone."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sounds good to me."
+        }
+      ],
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the conversation mainly about?",
+          "options": {
+            "A": "Complaining about rising ticket prices",
+            "B": "Deciding which coastal town to visit",
+            "C": "Choosing another way to travel Saturday",
+            "D": "Explaining why the early train was cancelled"
+          },
+          "answer": "C",
+          "explanation": "早班车取消后，两人比较慢车和长途巴士，最后决定改乘巴士，整段都在重新选择交通方式，C 正确。A 票价只是顺带提了一句更便宜，不是主题（话题错误）。B 去哪个海边小镇从未讨论（话题错误）。D 取消原因对话里根本没解释，只是起因（以偏概全）。",
+          "distractor_types": {
+            "A": "wrong_topic",
+            "B": "wrong_topic",
+            "D": "too_narrow"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speakers most likely do this evening?",
+          "options": {
+            "A": "Reserve seats on the bus",
+            "B": "Take the nine-forty train instead",
+            "C": "Postpone the trip until next weekend",
+            "D": "Drive to the coast in a borrowed car"
+          },
+          "answer": "A",
+          "explanation": "男生最后说趁周末座位没卖光今晚就订巴士，所以他们会在当晚订座，A 正确。B 九点四十的慢车正是两人算过会浪费两小时而放弃的（被否定的选项）。C 推迟行程没人提过（无关的下一步）。D 开车去海边完全没有依据（无关的下一步）。",
+          "distractor_types": {
+            "B": "rejected_option",
+            "C": "unrelated_next_step",
+            "D": "unrelated_next_step"
+          }
+        }
+      ]
+    },
+    {
+      "context": "plans_social",
+      "situation": "two students dividing up the shopping for a dinner party",
+      "difficulty": "easy",
+      "speakers": [
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        },
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you thought at all about what we're actually serving at Friday's dinner?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I was going to grab three kinds of cheese and a couple of loaves from the bakery."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Good call. But remember Daniel doesn't eat any dairy at all."
+        },
+        {
+          "speaker": "Man",
+          "text": "Right, I completely forgot. I'll add a big bowl of olives and some roasted peppers for him."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Perfect."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'll handle the rest at the market tomorrow morning, so you don't have to come along."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I'll grab the bread on my way back from the library."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say he will add to the menu?",
+          "options": {
+            "A": "A second loaf of fresh bread",
+            "B": "A dessert made without dairy",
+            "C": "Extra cheese for the guests",
+            "D": "Olives and roasted peppers"
+          },
+          "answer": "D",
+          "explanation": "男生想起 Daniel 不吃乳制品后，说要加一大碗橄榄和烤甜椒，所以 D 正确。A 面包由女生负责，不是他额外加的（张冠李戴）。B 甜点从头到尾没提（相关但未提及）。C 加更多奶酪与照顾不吃乳制品的朋友正好相反（细节错误）。",
+          "distractor_types": {
+            "A": "misattributed",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do on Friday?",
+          "options": {
+            "A": "Call Daniel about what he eats",
+            "B": "Stop for bread after leaving the library",
+            "C": "Meet the man at the market",
+            "D": "Roast the peppers in her own kitchen"
+          },
+          "answer": "B",
+          "explanation": "女生说从图书馆回来的路上顺手买面包，所以周五她会在离开图书馆后去买面包，B 正确。A 打电话问 Daniel 没有依据，他的忌口两人已经知道（无关的下一步）。C 男生说自己明早独自去市场采买（被否定的选项）。D 烤甜椒是男生负责的部分（张冠李戴）。",
+          "distractor_types": {
+            "A": "unrelated_next_step",
+            "C": "rejected_option",
+            "D": "misattributed"
+          }
+        }
+      ]
+    }
+  ]
+}
