@@ -1,6 +1,6 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 844,
+  "n": 854,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
@@ -17,22 +17,22 @@
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.127 want 0.159±0.05"
+      "detail": "got 0.128 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.688 band [0.55,0.69]"
+      "detail": "got 0.687 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.188 band [0.18,0.29]"
+      "detail": "got 0.189 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.167 max 0.17"
+      "detail": "got 0.17 max 0.17"
     },
     {
       "name": "diversity.opening",
@@ -72,17 +72,17 @@
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.081 max 0.45"
+      "detail": "got 0.08 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.092 band [0.08,0.45]"
+      "detail": "got 0.093 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
       "verdict": "PASS",
-      "detail": "got 0.81 min 0.1"
+      "detail": "got 0.813 min 0.1"
     },
     {
       "name": "answer.signature_q(dir-only)",
@@ -92,7 +92,7 @@
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/844 fail"
+      "detail": "0/854 fail"
     }
   ],
   "metrics": {
@@ -106,16 +106,16 @@
     "length_bands": {
       "easy": 0.245,
       "med": 0.628,
-      "hard": 0.127
+      "hard": 0.128
     },
     "register": {
-      "first_person": 0.688,
-      "contraction": 0.188,
-      "casual_opener": 0.044,
-      "third_person_formal": 0.167
+      "first_person": 0.687,
+      "contraction": 0.189,
+      "casual_opener": 0.043,
+      "third_person_formal": 0.17
     },
     "structure": {
-      "relative_clause": 0.167,
+      "relative_clause": 0.169,
       "passive": 0.082,
       "embedded_question": 0.152,
       "negation": 0.16,
@@ -127,10 +127,10 @@
       "exact_dup_rate": 0.002
     },
     "hard_band_profile": {
-      "n": 107,
-      "first_person": 0.748,
+      "n": 109,
+      "first_person": 0.752,
       "relative_clause": 0.523,
-      "passive": 0.14
+      "passive": 0.138
     }
   },
   "per_item_audit": [
@@ -18204,6 +18204,228 @@
       "W": 11,
       "band": "med",
       "index": 13,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The new card arrives on Thursday morning.",
+      "setId": 86,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I left the car in the overflow lot behind the tennis courts.",
+      "setId": 86,
+      "W": 12,
+      "band": "hard",
+      "index": 12,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She wanted to know when the recycling bins get emptied.",
+      "setId": 86,
+      "W": 10,
+      "band": "med",
+      "index": 14,
+      "struct": [
+        "embeddedQ",
+        "subord"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where should I check in for training?",
+      "setId": 86,
+      "W": 7,
+      "band": "easy",
+      "index": 8,
+      "struct": [
+        "modal"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "They haven't scheduled the boiler repair for this week.",
+      "setId": 86,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "contraction",
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The box that my parents mailed arrived without any damage last Friday.",
+      "setId": 86,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I found out that the session had moved to Monday.",
+      "setId": 86,
+      "W": 10,
+      "band": "med",
+      "index": 12,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I asked whether my deposit had been refunded.",
+      "setId": 86,
+      "W": 8,
+      "band": "med",
+      "index": 12,
+      "struct": [
+        "embeddedQ",
+        "passive"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The bus doesn't leave from the north gate anymore.",
+      "setId": 86,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "contraction",
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I took the one that has a piano.",
+      "setId": 86,
+      "W": 8,
+      "band": "med",
+      "index": 10,
       "struct": [
         "relClause"
       ],

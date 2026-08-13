@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How do I get feedback if I'm stuck?",
+      "options": {
+        "A": "Actually, there's a walk-in slot at three.",
+        "B": "The feedback form is online now.",
+        "C": "I turned in the lab report already.",
+        "D": "In the tutoring room by the stairs."
+      },
+      "answer": "A",
+      "explanation": "对方问「卡住了怎么拿到反馈」，A 用话语标记 Actually 开头，直接给出可行路径——三点有免预约名额，是最自然的推进（marker_led_indirect）。B 抓住 feedback 这个词转去讲「反馈表在线上」，只是词汇联想，没有回应「怎么拿到帮助」。C 说自己交了实验报告，完全另起话题。D 「在楼梯旁的辅导室」回答的是「在哪里」，问的却是「怎么办」，属于答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at the front desk",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the process for claiming a lost jacket?",
+      "options": {
+        "A": "That jacket looks warm enough for winter.",
+        "B": "Well, just describe it and sign the log.",
+        "C": "I need to mail a package today.",
+        "D": "Usually about two weeks in the bin."
+      },
+      "answer": "B",
+      "explanation": "问的是认领流程，B 以 Well 起头再给出两步做法（描述外套、登记签字），正好回应流程（marker_led_indirect）。A 借 jacket 这个词去评论外套暖不暖，是词汇联想陷阱。C 说自己要寄包裹，与问题毫无关系。D 「一般在箱子里放两周」回答的是「保存多久」，不是「怎么认领」，问题类型错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian whether an atlas can be checked out",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Doesn't this atlas circulate to students?",
+      "options": {
+        "A": "The air circulates better near the windows.",
+        "B": "I loved the maps in that atlas.",
+        "C": "Off the top of my head, yes.",
+        "D": "My study group meets on the fourth floor."
+      },
+      "answer": "C",
+      "explanation": "学生问这本地图册是否可以外借，C 用固定说法 off the top of my head（凭印象、没细查）给出肯定回答，既自然又留有余地（idiomatic）。A 把 circulate 当成「空气流通」的另一个义项，是一词多义陷阱。B 借 atlas 去抒发「我很喜欢里面的地图」，只谈感受不回答能不能借。D 说自己的学习小组在四楼碰面，完全离题。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "B": "semantic_association_trap",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student trying to get tickets for a campus concert",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I've been trying to get tickets for the spring concert.",
+      "options": {
+        "A": "That band's last album was really good.",
+        "B": "I dropped my keys somewhere near the gym.",
+        "C": "Yes, I'd love to come with you.",
+        "D": "Well, the box office opens again tomorrow."
+      },
+      "answer": "D",
+      "explanation": "对方在说自己一直抢不到票，D 以 Well 起头给出有用的下一步——售票处明天再开，正是这句话最想要的回应（marker_led_indirect）。A 顺着 concert 去夸乐队专辑，是词汇联想陷阱。B 说自己在健身房附近丢了钥匙，完全离题。C 把「我在抢票」误当成「邀请你一起去」，理解错了说话人的意图。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Don't you have class right after lunch?",
+      "options": {
+        "A": "Actually, I've only got twenty minutes.",
+        "B": "That class meets in the science building.",
+        "C": "My laundry should be done by now.",
+        "D": "In the courtyard behind the union."
+      },
+      "answer": "A",
+      "explanation": "朋友提醒「你午饭后不是有课吗」，A 以 Actually 起头，用「我只有二十分钟」间接确认并把话题推向「那就吃快的」（marker_led_indirect）。B 抓住 class 去说这门课在理科楼上，只借词不回应。C 说自己的衣服该洗好了，完全离题。D 「在学生中心后面的院子里」回答的是「在哪儿」，而对方问的是有没有课，问题类型错配。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student who has just missed the last shuttle",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I've just missed the last shuttle again.",
+      "options": {
+        "A": "The shuttle holds about thirty people.",
+        "B": "Can't you catch the city bus instead?",
+        "C": "I finished that assignment on Sunday night.",
+        "D": "Every twenty minutes until nine."
+      },
+      "answer": "B",
+      "explanation": "对方在诉苦「又没赶上末班车」，B 反问「那你能不能改坐市区公交」，用一个问句把对话推向解决办法，是最自然的接话（counter_question）。A 借 shuttle 去讲车能坐多少人，是词汇联想陷阱。C 说自己周日晚上写完了作业，完全离题。D 「每二十分钟一班，开到九点」回答的是发车频率，对方并没有问班次，问题类型错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating an airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why can't you get to the airport by five?",
+      "options": {
+        "A": "The airport parking garage was rebuilt.",
+        "B": "She left her sweater in my car.",
+        "C": "Well, the traffic gets bad after four.",
+        "D": "Around six, if the flight's on time."
+      },
+      "answer": "C",
+      "explanation": "问的是「为什么五点前到不了机场」，C 以 Well 起头给出原因——四点以后就开始堵车，间接但完整地回答了 why（marker_led_indirect）。A 借 airport 去讲停车楼翻新，是词汇联想陷阱。B 说她把毛衣落在车里，完全离题。D 「大概六点，如果航班准点」回答的是「几点到」，问的却是原因，问题类型错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend worrying aloud about finding somewhere to live",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Where do I look if I can't afford the dorms?",
+      "options": {
+        "A": "The dorms filled up back in April.",
+        "B": "The library extended its hours this month.",
+        "C": "Sometime before the lease deadline, probably.",
+        "D": "My cousin's subletting hers — I'll ask."
+      },
+      "answer": "D",
+      "explanation": "朋友其实是在为「住哪儿」发愁，D 不去列举该上哪些网站找房，而是直接给出一条真实门路——表姐正在转租，我帮你问，绕开字面问题解决了根本需求（context_shift）。A 借 dorms 去说宿舍四月就满了，只重复困境不帮忙。B 讲图书馆延长开放时间，完全离题。C 「大概在租约截止前吧」回答的是「什么时候」，问的却是「去哪儿找」，问题类型错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student stuck on the last item of a problem set",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "What if I can't finish problem four tonight?",
+      "options": {
+        "A": "That problem set was assigned last Tuesday.",
+        "B": "Come by later — I've got it worked out.",
+        "C": "The cafeteria stopped serving breakfast at ten.",
+        "D": "Yes, it was on the syllabus."
+      },
+      "answer": "B",
+      "explanation": "对方担心今晚做不完第四题，B 不去讨论「做不完会怎样」，而是直接解决问题——过来找我，我已经把这题做出来了（context_shift）。A 借 problem set 去说这套题上周二就布置了，只借词不帮忙。C 说食堂十点停供早餐，完全离题。D 「是的，大纲上写了」用是否作答，而对方问的是万一做不完该怎么办，问题类型错配。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate complaining about a delayed package",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've been waiting on that package all week.",
+      "options": {
+        "A": "That package looked pretty heavy earlier.",
+        "B": "I signed up for the pottery class.",
+        "C": "Tell me about it — mine's still stuck.",
+        "D": "No, I haven't ordered anything lately."
+      },
+      "answer": "C",
+      "explanation": "室友在抱怨包裹等了一周，C 用固定说法 Tell me about it（可不是嘛）表示感同身受，再补一句自己的也还没到，是口语里最自然的接话（idiomatic）。A 借 package 去说「那个包裹看着挺沉」，只借词不接情绪。B 说自己报了陶艺课，完全离题。D 「没有，我最近没网购」把对方的抱怨误当成在问自己有没有下单，理解错了意图。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    }
+  ]
+}

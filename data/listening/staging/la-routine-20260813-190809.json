@@ -1,0 +1,219 @@
+{
+  "items": [
+    {
+      "context": "info_session",
+      "situation": "study abroad information session with returned students",
+      "speaker_role": "program_coordinator",
+      "difficulty": "medium",
+      "announcement": "Applications for next spring's study abroad programs open Monday, and we're holding an information session this Thursday at 4 p.m. in Fenwick Hall, Room 210. Four students who spent last year in Lisbon and Seoul will talk about housing, coursework, and what they'd budget differently. Bring a copy of your unofficial transcript if you want an adviser to look at your credit plan afterward. We are capping the session at forty seats, so email the study abroad office by Wednesday to reserve one.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What must students do to attend the session?",
+          "options": {
+            "A": "Email the study abroad office by Wednesday",
+            "B": "Submit a program application before Monday",
+            "C": "Register in advance on the housing portal",
+            "D": "Collect an official transcript from the registrar"
+          },
+          "answer": "A",
+          "explanation": "通知结尾说座位限四十人，想去必须在周三前给留学办公室发邮件预留，所以 A 正确。B 把「申请周一开放」错记成参加信息会的前提，申请和听讲座是两回事（细节改错）。C 提到的住房门户网站根本没出现在通知里，只是听上去合理的校园动作（未提及）。D 通知说的是「非正式成绩单」，而且只在想让顾问看学分规划时才带，不是注册处开的正式成绩单，也不是参会条件（细节张冠李戴）。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the advising offered after the session?",
+          "options": {
+            "A": "It is required of every applicant",
+            "B": "It replaces the regular adviser appointment",
+            "C": "It happens only if students come prepared",
+            "D": "It is limited to the Lisbon program"
+          },
+          "answer": "C",
+          "explanation": "通知说「如果你想让顾问看学分规划，就带一份非正式成绩单来」，说明会后的顾问咨询是可选的，而且要先自己带材料，故 C 可推断。A 把「可选」推成「人人必须」，推得过头。B 说它取代常规顾问预约，通知完全没有这个意思，属于换了话题的推断。D 里斯本只是分享学生去过的地方之一（还有首尔），把它当成咨询范围是把细节记错了。",
+          "distractor_types": {
+            "A": "over_inference",
+            "B": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "career_services",
+      "situation": "professional wardrobe pop-up and free headshot clinic",
+      "speaker_role": "career_advisor",
+      "difficulty": "easy",
+      "announcement": "Good morning, everyone. The career center is running a professional wardrobe pop-up in Wexler Center, Room 120, next Tuesday and Wednesday, from ten until three. You can borrow a blazer, a dress shirt, or shoes for the fall interview season, and you'll return them once your interviews are over. There's also a photographer set up in the corner of the room taking free headshots for online profiles. Please bring your student ID to check any clothing out, and wear a plain shirt if you want the photo.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Explain how to book a headshot appointment",
+            "B": "Tell students about free interview clothing and photos",
+            "C": "Announce a permanent clothing shop on campus",
+            "D": "Ask students to donate professional clothing"
+          },
+          "answer": "B",
+          "explanation": "通知的核心是下周二、周三在 Wexler Center 可以免费借面试正装，同时拍免费职业头像，B 把两件事都概括了。A 只抓住拍照这一半，而且通知里也没有预约流程，属于以偏概全。C 说校园要开一家常设服装店，与「为期两天的快闪」不符（目的错）。D 把「借衣服给学生」反过来说成「向学生募集捐赠」，方向相反。",
+          "distractor_types": {
+            "A": "too_narrow",
+            "C": "wrong_purpose",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "What must students bring in order to borrow clothing?",
+          "options": {
+            "A": "A plain shirt for the photograph",
+            "B": "A copy of their interview schedule",
+            "C": "A blazer returned from last season",
+            "D": "Their student identification card"
+          },
+          "answer": "D",
+          "explanation": "最后一句明确说「带学生证才能借走衣服」，所以 D 正确。A 的素色衬衫是拍头像时的着装建议，被错误安到借衣服上（细节张冠李戴）。B 的面试日程表通知里从未提到，只是听着合理（未提及）。C 说要先还上一季借的西装外套，通知说的是本次面试结束后归还，属于把事实改掉（细节错）。",
+          "distractor_types": {
+            "A": "misattributed_detail",
+            "B": "related_but_not_stated",
+            "C": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "recreation center east wing closed for asbestos removal",
+      "speaker_role": "recreation_staff",
+      "difficulty": "hard",
+      "announcement": "The east wing of the recreation center closes this Friday at nine p.m. and stays closed through the end of the month while crews remove asbestos from the ceiling. That takes out the squash courts, the climbing wall, and the second-floor cardio room. Everything on the west side stays open, and we've added twenty treadmills to the main floor so the machines don't back up. Locker rentals in the east wing must be emptied by Thursday evening; anything left behind gets moved to the annex behind Draper Hall.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Announce the permanent removal of the squash courts",
+            "B": "Explain how to rent a locker in the annex",
+            "C": "Inform students about a month-long wing closure",
+            "D": "Recruit volunteers to help move gym equipment"
+          },
+          "answer": "C",
+          "explanation": "整段都在讲东翼从本周五起因清除石棉而关闭到月底，以及由此带来的安排，C 概括准确。A 把「临时关闭到月底」说成壁球场被永久拆掉，方向相反。B 只涉及储物柜这一处细节，而且附楼只是存放遗留物品的地方，不是租柜流程（以偏概全）。D 招募志愿者搬器材通知里完全没有，属于另一种通知的目的。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "too_narrow",
+            "D": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the main gym floor?",
+          "options": {
+            "A": "It will be busier than usual",
+            "B": "It will close along with the east wing",
+            "C": "It is where the asbestos was found",
+            "D": "It has exactly twenty treadmills"
+          },
+          "answer": "A",
+          "explanation": "通知说往主健身区加了二十台跑步机，为的是「so the machines don't back up」，暗示东翼关闭后人会涌向主健身区、比平时更挤，故 A 可推断。B 与「西侧一切照常开放」直接矛盾（细节错）。C 石棉在东翼天花板，把它安到主健身区是换了对象的推断。D 「加了二十台」不等于「总共只有二十台」，推得过头。",
+          "distractor_types": {
+            "B": "wrong_detail",
+            "C": "unrelated_inference",
+            "D": "over_inference"
+          }
+        }
+      ]
+    },
+    {
+      "context": "logistics",
+      "situation": "three new bike-share stations and a required app update",
+      "speaker_role": "campus_admin",
+      "difficulty": "medium",
+      "announcement": "Three new bike-share stations open next Monday: one behind Halloran Residence Hall, one at the north end of the athletic fields, and one beside the commuter lot on Grant Street. Each station holds twenty bikes, and the first thirty minutes of every ride stay free for students. You'll need the updated version of the transit app to unlock a bike at the new docks. Please note that the older release won't recognize them, so download the update from the university transportation page before Monday.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the announcement mainly about?",
+          "options": {
+            "A": "The closing of two older bike stations",
+            "B": "How the first thirty minutes are billed",
+            "C": "A search for students to test an app",
+            "D": "New stations and a required app update"
+          },
+          "answer": "D",
+          "explanation": "通知讲了两件事：下周一新开三个共享单车站点，以及必须更新交通 App 才能解锁，D 两点都覆盖。A 说关掉两个旧站点，通知从头到尾只讲新增，方向相反。B 免费三十分钟只是其中一句细节，撑不起整段（以偏概全）。C 把「下载更新版」曲解成招募测试员，是另一种通知的目的。",
+          "distractor_types": {
+            "A": "reversed_intent",
+            "B": "too_narrow",
+            "C": "wrong_purpose"
+          }
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about students who do not update the app?",
+          "options": {
+            "A": "They will be charged for every ride",
+            "B": "They cannot unlock bikes at the new docks",
+            "C": "They must register at the transportation office",
+            "D": "They can still use the Grant Street dock"
+          },
+          "answer": "B",
+          "explanation": "通知说旧版本 App「won't recognize」新站点，因此没更新的人在新站点解不开车，B 可直接推出。A 把「解不开锁」推成「每次骑行都要收费」，收费规则通知并没有改，推得过头。C 去交通办公室重新注册，通知只让在网页上下载更新，属于另起话题的推断。D 格兰特街那个恰恰是三个新站点之一，同样解不开（细节记反）。",
+          "distractor_types": {
+            "A": "over_inference",
+            "C": "unrelated_inference",
+            "D": "wrong_detail"
+          }
+        }
+      ]
+    },
+    {
+      "context": "facility_change",
+      "situation": "main dining hall switching to summer hours",
+      "speaker_role": "recreation_staff",
+      "difficulty": "easy",
+      "announcement": "The main dining hall switches to summer hours starting Monday, May 18. Breakfast runs from eight to ten, lunch from noon to two, and dinner from five to seven, with no late-night service until the fall term. The Garden Room in Prentiss Library stays open until nine if you need something later. Please note that meal plans carry over at the same rate, so there's nothing to sign up for. Post the new schedule somewhere if you're on an early shift.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main purpose of this announcement?",
+          "options": {
+            "A": "Announce a change to dining hall hours",
+            "B": "Explain how to renew a summer meal plan",
+            "C": "Advertise a new menu in the Garden Room",
+            "D": "Warn that the dining hall is closing permanently"
+          },
+          "answer": "A",
+          "explanation": "通知的核心是从 5 月 18 日起主餐厅改为暑期作息并列出三餐时间，A 正确。B 通知恰恰说「餐卡按原价自动延续，无需办理」，与「教你续办」相反（目的错）。C 花园厅只是一句补充说明去哪儿吃晚点的东西，通知里根本没介绍菜单（以偏概全）。D 说餐厅永久关闭，与「改时间照常营业」方向相反。",
+          "distractor_types": {
+            "B": "wrong_purpose",
+            "C": "too_narrow",
+            "D": "reversed_intent"
+          }
+        },
+        {
+          "type": "detail",
+          "stem": "Where can students get food after seven in the evening?",
+          "options": {
+            "A": "At the late-night service counter",
+            "B": "From a vending machine in the residence hall",
+            "C": "In the Garden Room at Prentiss Library",
+            "D": "Only on weekends during the summer"
+          },
+          "answer": "C",
+          "explanation": "主餐厅晚餐五点到七点就结束，通知说 Prentiss 图书馆的花园厅开到九点，所以七点后要吃东西去 C。A 的夜宵窗口通知明确说暑期取消、秋季学期才恢复，把已停的服务当成可选项（细节错）。B 宿舍自动售货机通知里从未出现，只是听着合理（未提及）。D 把「周末」这个限制凭空加上，通知的时间安排并不分平日和周末（张冠李戴）。",
+          "distractor_types": {
+            "A": "wrong_detail",
+            "B": "related_but_not_stated",
+            "D": "misattributed_detail"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,69 +1,46 @@
 {
-  "session_id": "routine-20260812-190430",
-  "completed_at": "2026-08-12T19:24:36Z",
-  "duration_minutes": 20,
+  "session_id": "routine-20260813-190809",
+  "completed_at": "2026-08-13T19:26:00Z",
+  "duration_minutes": 18,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点了 4 个库：BS 合库 1 套 10 题；听力 lc/la/lcr 共 24 题进 staging 等盲审。BS 冻结门先判 FAIL（第三人称正式语气 0.171>0.17、embedded 漂移 2.53x），改用「转述从句」替代内嵌疑问句并把答案改回第一人称后重跑 PASS。",
+  "highlight": "按需信号只点了 3 个库（bs/la/lcr，interview 标了 not_in_routine 跳过）。BS 按需 n=6 低于合库粒度（一套必须 10 题），故补产到 13 题、取 10 题合成第 86 套；期间冻结门先判 FAIL（整套全落 med 单一长度档），补了 2 道 7 词易档 + 2 道 12 词难档后重跑 PASS。听力 la 5 题 / lcr 10 题全部零 warning 进 staging 等盲审，lcr 平均 flavor 0.95、答案分布 A2/B3/C3/D2。",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 15,
-      "accepted": 20,
+      "generated": 13,
+      "accepted": 10,
       "topics": [
-        "停车证领取",
-        "自习地点",
-        "咖啡车搬迁",
-        "信箱钥匙过期",
-        "研讨课选课",
-        "小组展示排练",
-        "幻灯片上传",
-        "餐费计划办公室",
-        "校内排球报名",
-        "泳池自由泳时段"
+        "学生证补办",
+        "宿舍押金退还",
+        "琴房预订",
+        "家里寄来的包裹",
+        "志愿者集市报到",
+        "锅炉维修排期",
+        "实地考察班车",
+        "学习小组改期",
+        "停车位置",
+        "垃圾回收清运"
       ],
       "favorite": {
-        "prompt": "There's an intramural signup table by the gym.",
-        "answer": "Can I still join the volleyball team this week?"
-      },
-      "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
-    },
-    "listening-lc": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "陶艺课费用与烧窑费",
-        "民谣音乐推荐",
-        "早班火车取消改乘巴士",
-        "晚餐派对采购分工"
-      ],
-      "favorite": {
-        "subtopic": "errands_service / 陶艺课",
-        "preview": "Have you heard about the pottery class they added at the craft center? — 男生上过课，提醒黏土费含在学费里，但每件作品另收烧窑费。"
+        "prompt": "Your care package finally showed up.",
+        "answer": "The box that my parents mailed arrived without any damage last Friday."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
     "listening-la": {
-      "generated": 10,
-      "accepted": 10,
+      "generated": 5,
+      "accepted": 5,
       "topics": [
-        "土卫冰羽讲座",
-        "北门人行道施工绕行",
-        "校友返校周停车场关闭",
-        "学生艺术市集",
-        "校友工程师职业分享",
-        "比赛泳池瓷砖翻新",
-        "本科诗歌朗诵征稿",
-        "学生活动中心献血",
-        "食堂刷卡机更换",
-        "图书馆三楼装密集书架"
+        "留学项目信息会",
+        "职业正装快闪与免费职业照",
+        "健身中心东翼清除石棉停用",
+        "新增三处共享单车站点",
+        "主餐厅切换暑期作息"
       ],
       "favorite": {
-        "subtopic": "guest_speaker / 土卫冰羽讲座",
-        "preview": "Dr. Amara Osei will give this year's Kellerman Lecture next Thursday at four o'clock in Brandt Hall. 讲座免票，但会后招待会须提前登记。"
+        "subtopic": "facility_change / 健身中心东翼停用",
+        "preview": "The east wing of the recreation center closes this Friday at nine p.m. and stays closed through the end of the month while crews remove asbestos from the ceiling."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -72,25 +49,23 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "邻居吸尘噪音",
-        "课程阅读章节",
-        "实验报告投递处",
-        "新面馆午饭",
-        "打烊前赶到",
-        "失物招领保管期",
-        "校车不停北停车场",
-        "展示选题",
-        "包裹签收人",
-        "学习小组时间冲突"
+        "写作中心求助",
+        "失物招领认领流程",
+        "地图册能否外借",
+        "春季音乐会抢票",
+        "午饭前后有没有课",
+        "错过末班校车",
+        "接机时间安排",
+        "宿舍住不起找房",
+        "习题卡在第四题",
+        "包裹迟迟不到"
       ],
       "favorite": {
-        "subtopic": "campus_academic / 学习小组时间冲突",
-        "preview": "Our study group always meets when I'm working. — 正确答用 context_shift 直接解决问题：I'll send you my notes instead."
+        "subtopic": "social / 找房发愁",
+        "preview": "Where do I look if I can't afford the dorms? — 正解不去列网站，而是「My cousin's subletting hers — I'll ask.」直接解决根本需求 (context_shift)。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-12T19:42:05Z",
-  "r2_session_id": "routine-r2-20260812-193123"
+  }
 }
