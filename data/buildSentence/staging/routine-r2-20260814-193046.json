@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Mariana ask you after the studio session?",
+      "answer": "She wanted to know whether you'd booked the kiln.",
+      "chunks": ["she", "wanted to", "know", "you'd", "booked", "the kiln", "did"],
+      "prefilled": ["whether"],
+      "prefilled_positions": { "whether": 4 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question with whether", "declarative word order"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "What did Julian tell you about the shuttle schedule?",
+      "answer": "The route that runs past the stadium ends early.",
+      "chunks": ["that", "runs", "past", "the stadium", "ends", "early", "which"],
+      "prefilled": ["The route"],
+      "prefilled_positions": { "the route": 0 },
+      "distractor": "which",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that", "subject-verb agreement"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Where did Margot leave your borrowed notebook?",
+      "answer": "She has not dropped it off at your dorm yet.",
+      "chunks": ["she", "has not", "dropped", "it", "at your", "dorm", "no"],
+      "prefilled": ["off", "yet"],
+      "prefilled_positions": { "off": 5, "yet": 9 },
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "phrasal verb drop off"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Why does Hector keep changing the rehearsal room?",
+      "answer": "The stage was reserved by the drama club for their dress rehearsal.",
+      "chunks": ["the", "stage", "was", "reserved", "drama club", "for their", "dress rehearsal", "were"],
+      "prefilled": ["by the"],
+      "prefilled_positions": { "by the": 4 },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice with by-agent", "purpose prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Did Alison finish grading your midterm essays?",
+      "answer": "I found out where the grades were posted.",
+      "chunks": ["found out", "where", "the grades", "were", "posted", "was"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded wh-question with found out", "declarative word order"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Have you spoken with Professor Cho about the seminar?",
+      "answer": "I emailed her office earlier this week.",
+      "chunks": ["emailed", "her", "office", "earlier this week", "did"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement", "time adverbial phrase"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "I heard Harold has taken over the gear rental counter.",
+      "answer": "Do you know when the counter usually closes?",
+      "chunks": ["do", "you", "know", "when", "the counter", "usually closes", "is"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "is",
+      "has_question_mark": true,
+      "grammar_points": ["direct yes-no question with do", "embedded when-clause"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Diane was showing me the renovated practice rooms.",
+      "answer": "They're much quieter than the old basement studios.",
+      "chunks": ["they're", "quieter", "than", "the old", "basement studios", "more"],
+      "prefilled": ["much"],
+      "prefilled_positions": { "much": 1 },
+      "distractor": "more",
+      "has_question_mark": false,
+      "grammar_points": ["comparative with than", "contraction they're"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did Emma ask you during the advising appointment?",
+      "answer": "She wondered if I had registered for the writing workshop this term.",
+      "chunks": ["she", "wondered", "if", "I had", "registered", "writing workshop", "this term", "whether"],
+      "prefilled": ["for the"],
+      "prefilled_positions": { "for the": 6 },
+      "distractor": "whether",
+      "has_question_mark": false,
+      "grammar_points": ["embedded yes-no question with if", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Angelina was hoping you would join the ferry trip.",
+      "answer": "How much do I owe for tickets?",
+      "chunks": ["do", "I", "owe", "for", "tickets", "does"],
+      "prefilled": ["How much"],
+      "prefilled_positions": { "how much": 0 },
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["how much question", "present simple with do"]
+    }
+  ]
+}

@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 13,
-      "accepted": 10,
+      "accepted": 20,
       "topics": [
         "陶艺工作坊",
         "雨伞遗失",
@@ -25,8 +25,10 @@
         "prompt": "What did the librarian tell you at the counter?",
         "answer": "She wanted to know whether my card had expired."
       },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "retried_after_fail": true,
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "reading-ap": {
       "generated": 5,
@@ -67,5 +69,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-08-14T19:39:25Z",
+  "r2_session_id": "routine-r2-20260814-193046"
 }
