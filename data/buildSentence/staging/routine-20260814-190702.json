@@ -1,0 +1,147 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1_q1",
+      "prompt": "Did you enjoy the pottery workshop yesterday?",
+      "answer": "I loved every minute of the class.",
+      "chunks": ["loved", "every", "minute", "of", "the", "class", "have"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "quantifier phrase"]
+    },
+    {
+      "id": "tmp_r1_q2",
+      "prompt": "Did you leave your umbrella in the classroom?",
+      "answer": "I have not seen it since Tuesday.",
+      "chunks": ["i", "have", "not", "seen", "it", "tuesday", "no"],
+      "prefilled": ["since"],
+      "prefilled_positions": { "since": 5 },
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "time phrase"]
+    },
+    {
+      "id": "tmp_r1_q3",
+      "prompt": "What did the librarian tell you at the counter?",
+      "answer": "She wanted to know whether my card had expired.",
+      "chunks": ["she", "whether", "my", "card", "had", "expired", "did"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": { "wanted to know": 1 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question", "past perfect"]
+    },
+    {
+      "id": "tmp_r1_q4",
+      "prompt": "I just joined the debate club.",
+      "answer": "How often does the team meet each week?",
+      "chunks": ["how often", "does", "the", "team", "meet", "each week", "do"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "do",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "auxiliary do"]
+    },
+    {
+      "id": "tmp_r1_q5",
+      "prompt": "Why did you pick that particular laptop?",
+      "answer": "I chose the model that had longer battery life.",
+      "chunks": ["i", "chose", "the model", "had", "longer", "battery life"],
+      "prefilled": ["that"],
+      "prefilled_positions": { "that": 4 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "comparative adjective"]
+    },
+    {
+      "id": "tmp_r1_q6",
+      "prompt": "Have you heard back about your housing application?",
+      "answer": "The housing office has not replied to my message yet.",
+      "chunks": ["has", "not", "replied", "to", "my", "message", "no"],
+      "prefilled": ["The housing office", "yet"],
+      "prefilled_positions": { "the housing office": 0, "yet": 9 },
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation"]
+    },
+    {
+      "id": "tmp_r1_q7",
+      "prompt": "Do you know who handled the equipment for class?",
+      "answer": "The projector was set up by our teaching assistant.",
+      "chunks": ["the", "projector", "was", "set up", "teaching", "assistant", "were"],
+      "prefilled": ["by our"],
+      "prefilled_positions": { "by our": 5 },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "agent by-phrase"]
+    },
+    {
+      "id": "tmp_r1_q8",
+      "prompt": "Why did you stop by the advising office?",
+      "answer": "I needed to know if my credits transferred.",
+      "chunks": ["needed to", "know", "if", "my", "credits", "transferred", "whether"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "whether",
+      "has_question_mark": false,
+      "grammar_points": ["embedded if-clause", "simple past"]
+    },
+    {
+      "id": "tmp_r1_q9",
+      "prompt": "What did your advisor say about the summer program?",
+      "answer": "She explained why the department moved the application deadline to April.",
+      "chunks": ["she", "the department", "moved", "the", "application", "deadline", "to april", "was"],
+      "prefilled": ["explained why"],
+      "prefilled_positions": { "explained why": 1 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded wh-clause", "simple past"]
+    },
+    {
+      "id": "tmp_r1_q10",
+      "prompt": "There's a lot of paperwork before move-in.",
+      "answer": "I asked when the lease payments actually begin.",
+      "chunks": ["i", "the", "lease", "payments", "actually", "begin", "did"],
+      "prefilled": ["asked when"],
+      "prefilled_positions": { "asked when": 1 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded wh-clause", "simple present"]
+    },
+    {
+      "id": "tmp_r1_q11",
+      "prompt": "Are you going to the career fair?",
+      "answer": "Yes, I signed up online this morning.",
+      "chunks": ["yes,", "i", "signed", "up", "online", "this morning"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["simple past", "phrasal verb"]
+    },
+    {
+      "id": "tmp_r1_q12",
+      "prompt": "I finally decided to join the hiking club.",
+      "answer": "How much does the membership cost each term?",
+      "chunks": ["how much", "does", "the", "membership", "cost", "term", "is"],
+      "prefilled": ["each"],
+      "prefilled_positions": { "each": 6 },
+      "distractor": "is",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "auxiliary do"]
+    },
+    {
+      "id": "tmp_r1_q13",
+      "prompt": "Where did you get the idea for your paper?",
+      "answer": "I picked the subject that our professor recommended during the seminar.",
+      "chunks": ["picked", "the subject", "that", "our professor", "recommended", "during the", "seminar"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "simple past"]
+    }
+  ]
+}

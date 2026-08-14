@@ -1,69 +1,46 @@
 {
-  "session_id": "routine-20260812-190430",
-  "completed_at": "2026-08-12T19:24:36Z",
-  "duration_minutes": 20,
+  "session_id": "routine-20260814-190702",
+  "completed_at": "2026-08-14T19:38:00Z",
+  "duration_minutes": 31,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点了 4 个库：BS 合库 1 套 10 题；听力 lc/la/lcr 共 24 题进 staging 等盲审。BS 冻结门先判 FAIL（第三人称正式语气 0.171>0.17、embedded 漂移 2.53x），改用「转述从句」替代内嵌疑问句并把答案改回第一人称后重跑 PASS。",
+  "highlight": "按需信号只点了 3 个库：BS 合库 1 套 10 题，reading-ap 5 篇 + lcr 10 题进 staging 等盲审。BS 首轮被 merge 校验挡下（题面须命中 task-cue、答案须 7-15 词、每 10 题需 ≥3 内嵌问句 + ≥1 否定），重排题序并改写题面后重跑 PASS。",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 15,
-      "accepted": 20,
+      "generated": 13,
+      "accepted": 10,
       "topics": [
-        "停车证领取",
-        "自习地点",
-        "咖啡车搬迁",
-        "信箱钥匙过期",
-        "研讨课选课",
-        "小组展示排练",
-        "幻灯片上传",
-        "餐费计划办公室",
-        "校内排球报名",
-        "泳池自由泳时段"
+        "陶艺工作坊",
+        "雨伞遗失",
+        "图书馆借书证过期",
+        "辩论社训练频率",
+        "笔记本电脑续航选购",
+        "宿舍申请未回复",
+        "投影仪架设",
+        "学分转换咨询",
+        "暑期项目截止日变更",
+        "租约起租日"
       ],
       "favorite": {
-        "prompt": "There's an intramural signup table by the gym.",
-        "answer": "Can I still join the volleyball team this week?"
-      },
-      "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
-    },
-    "listening-lc": {
-      "generated": 4,
-      "accepted": 4,
-      "topics": [
-        "陶艺课费用与烧窑费",
-        "民谣音乐推荐",
-        "早班火车取消改乘巴士",
-        "晚餐派对采购分工"
-      ],
-      "favorite": {
-        "subtopic": "errands_service / 陶艺课",
-        "preview": "Have you heard about the pottery class they added at the craft center? — 男生上过课，提醒黏土费含在学费里，但每件作品另收烧窑费。"
+        "prompt": "What did the librarian tell you at the counter?",
+        "answer": "She wanted to know whether my card had expired."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     },
-    "listening-la": {
-      "generated": 10,
-      "accepted": 10,
+    "reading-ap": {
+      "generated": 5,
+      "accepted": 5,
       "topics": [
-        "土卫冰羽讲座",
-        "北门人行道施工绕行",
-        "校友返校周停车场关闭",
-        "学生艺术市集",
-        "校友工程师职业分享",
-        "比赛泳池瓷砖翻新",
-        "本科诗歌朗诵征稿",
-        "学生活动中心献血",
-        "食堂刷卡机更换",
-        "图书馆三楼装密集书架"
+        "书法修复的加固剂",
+        "溶洞形成与滴石记录",
+        "氢键与分子结构",
+        "习惯养成的线索控制",
+        "可再生能源弃电与储能时长"
       ],
       "favorite": {
-        "subtopic": "guest_speaker / 土卫冰羽讲座",
-        "preview": "Dr. Amara Osei will give this year's Kellerman Lecture next Thursday at four o'clock in Brandt Hall. 讲座免票，但会后招待会须提前登记。"
+        "subtopic": "art / calligraphy",
+        "preview": "Calligraphy conservation is the specialized practice of stabilizing brushed ink manuscripts so that their strokes remain legible over centuries."
       },
       "retried_after_fail": false,
       "failure_reason": ""
@@ -72,25 +49,23 @@
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "邻居吸尘噪音",
-        "课程阅读章节",
-        "实验报告投递处",
-        "新面馆午饭",
-        "打烊前赶到",
-        "失物招领保管期",
-        "校车不停北停车场",
-        "展示选题",
-        "包裹签收人",
-        "学习小组时间冲突"
+        "书单迟迟未发",
+        "朋友一周没露面",
+        "主动搭把手",
+        "宿舍暖气报修",
+        "排练缺席",
+        "接机时间",
+        "家人听到消息的反应",
+        "写作中心看初稿",
+        "末班校车",
+        "拖延看牙医"
       ],
       "favorite": {
-        "subtopic": "campus_academic / 学习小组时间冲突",
-        "preview": "Our study group always meets when I'm working. — 正确答用 context_shift 直接解决问题：I'll send you my notes instead."
+        "subtopic": "campus_academic / 书单迟迟未发",
+        "preview": "Why isn't the reading list posted yet? — 正确答不解释原因，而是直接把上学期的书单借给对方（context_shift）。"
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-12T19:42:05Z",
-  "r2_session_id": "routine-r2-20260812-193123"
+  }
 }

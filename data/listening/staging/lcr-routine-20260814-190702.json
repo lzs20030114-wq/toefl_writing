@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student asking about a reading list for a course",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why isn't the reading list posted yet?",
+      "options": {
+        "A": "I've got last term's copy if you want it.",
+        "B": "The reading room is on the second floor.",
+        "C": "I'm meeting my cousin for dinner tonight.",
+        "D": "Yes, three chapters and one article."
+      },
+      "answer": "A",
+      "explanation": "说话人抱怨书单还没发。正确答 A 不去解释「为什么没发」，而是直接解决对方真正的需求——把上学期的书单借给他（context_shift），这是真实口语里最自然的回应。B 借用 reading 一词跳到「阅览室在二楼」，只做词汇联想，不回应问题（语义联想陷阱）。C 说晚上和表亲吃饭，与话题毫无关系（完全离题）。D 回答的是「书单上有几篇」，答的是 what 而不是 why（答非所问）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where's Daniel been hiding all week?",
+      "options": {
+        "A": "He hid the spare key under the mat.",
+        "B": "Have you tried texting him yourself?",
+        "C": "Since Monday afternoon, I believe.",
+        "D": "The dining hall closes at eight now."
+      },
+      "answer": "B",
+      "explanation": "说话人关心 Daniel 一周没露面。正确答 B 用一个反问「你自己给他发消息了吗」把对话推进一步（counter_question），既回应了关心又给出可行动作。A 抓住 hiding 的字面义，说他把备用钥匙藏在垫子下，是同词不同义的曲解（语义联想/一词多义陷阱）。C 回答「从周一下午起」，答的是 when 而不是 where（答非所问）。D 说食堂八点关门，与话题无关（完全离题）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "You look like you could use a hand.",
+      "options": {
+        "A": "My hand still hurts from yesterday.",
+        "B": "The bus schedule changed again this month.",
+        "C": "Thanks, could you take this box?",
+        "D": "No, I've never used that machine."
+      },
+      "answer": "C",
+      "explanation": "说话人主动提出帮忙。正确答 C 直接接受帮助并指明要帮什么（direct_topical），是被搭话一方最自然的回应。A 把 a hand（帮把手）当成字面的「手」，说手还疼，是典型的一词多义陷阱。B 说公交时刻表又改了，与当下情境无关（完全离题）。D 说「我没用过那台机器」，答的是「你用过吗」这类问题，不是对提议的回应（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's taking maintenance so long with the heater?",
+      "options": {
+        "A": "The heater in the lounge is brand new.",
+        "B": "I signed up for the cooking class.",
+        "C": "In the basement, next to the laundry.",
+        "D": "Actually, they came by this morning."
+      },
+      "answer": "D",
+      "explanation": "说话人抱怨维修迟迟不来修暖气。正确答 D 以话语标记 Actually 开头，间接纠正对方的前提——其实他们今早已经来过了（marker_led_indirect）。A 借 heater 一词转去描述休息室那台是新的，答非本题（语义联想陷阱）。B 说自己报了烹饪课，与话题无关（完全离题）。C 回答「在地下室，洗衣房旁边」，答的是 where 而不是 what（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I can't make it to Thursday's rehearsal.",
+      "options": {
+        "A": "No worries, we'll fill you in.",
+        "B": "The rehearsal room has a new piano.",
+        "C": "She arrived on the earlier train.",
+        "D": "Sure, I'll make one for you too."
+      },
+      "answer": "A",
+      "explanation": "说话人说周四排练来不了。正确答 A 用两个口语套话 No worries 和 fill you in（回头把情况告诉你）轻松化解（idiomatic），语气自然温和。B 借 rehearsal 一词去说排练室换了新钢琴，只做词汇联想（语义联想陷阱）。C 说「她坐早一班车到的」，人物与时间都对不上（完全离题）。D 把 make it（赶到）误解成 make（做一个），是一词多义陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do you know when Priya's flight gets in?",
+      "options": {
+        "A": "She always books the aisle seat.",
+        "B": "Don't worry, I'll collect her myself.",
+        "C": "The parking garage raised its rates.",
+        "D": "At the terminal three arrivals gate."
+      },
+      "answer": "B",
+      "explanation": "说话人问航班几点到，背后的真实需求是「谁去接机」。正确答 B 不报时间，而是直接把接机这件事接过来（context_shift），正是真题最典型的间接应答。A 借 flight 联想到她总订靠走道的座位，与到达时间无关（语义联想陷阱）。C 说停车场涨价了，属于沾边但无用的信息（完全离题）。D 回答「在三号航站楼到达口」，答的是 where 而不是 when（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How's your sister taking the news?",
+      "options": {
+        "A": "I took the news magazine home.",
+        "B": "The bakery on Elm closed last month.",
+        "C": "She's over the moon, honestly.",
+        "D": "Late Friday night, I believe."
+      },
+      "answer": "C",
+      "explanation": "说话人问姐姐对这个消息反应如何。正确答 C 用习语 over the moon（欣喜若狂）直接描述她的反应（idiomatic），简短自然。A 把 taking the news 曲解成「把新闻杂志拿回家」，是同词不同义的陷阱（语义联想陷阱）。B 说榆树街的面包店上个月关了，与话题无关（完全离题）。D 回答「大概周五深夜」，答的是 when 而不是 how（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Can someone look at my draft before Friday?",
+      "options": {
+        "A": "The writing center moved upstairs last term.",
+        "B": "I finally replaced my bicycle tire.",
+        "C": "Because the deadline moved up a week.",
+        "D": "Well, we do have a morning slot open."
+      },
+      "answer": "D",
+      "explanation": "学生问周五前能否有人看他的初稿。正确答 D 以 Well 开头，间接地给出可行方案——上午还有空位（marker_led_indirect），既没直说 yes 也推进了对话。A 借 writing center 去说它上学期搬到楼上了，只谈位置不回应请求（语义联想陷阱）。B 说自己换了自行车轮胎，与话题无关（完全离题）。C 回答「因为截止日提前了一周」，答的是 why 而不是能不能（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about the last campus shuttle of the night",
+      "difficulty": "medium",
+      "answer_paradigm": "context_shift",
+      "speaker": "When's the last shuttle tonight?",
+      "options": {
+        "A": "I'm driving that way, hop in.",
+        "B": "The shuttle got a new paint job.",
+        "C": "My roommate adopted a cat last week.",
+        "D": "From the stop behind the gym."
+      },
+      "answer": "A",
+      "explanation": "说话人问末班校车几点，真正的需求是「怎么回去」。正确答 A 不报时间，而是直接提出捎他一程（context_shift）。B 借 shuttle 一词去说车重新喷了漆，与时间无关（语义联想陷阱）。C 说室友上周领养了猫，与话题毫无关系（完全离题）。D 回答「在体育馆后面那站」，答的是 where 而不是 when（答非所问）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "friend admitting they have been procrastinating",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I've been putting off that dentist appointment.",
+      "options": {
+        "A": "My dentist's office has a nice view.",
+        "B": "They repaved the road near the park.",
+        "C": "What's stopping you from calling today?",
+        "D": "Every six months, usually."
+      },
+      "answer": "C",
+      "explanation": "说话人承认一直拖着不去看牙医。正确答 C 用反问「今天打个电话有什么难的呢」把对话往前推（counter_question），既回应了对方的自嘲又给出行动方向。A 借 dentist 去夸诊所视野好，只做词汇联想（语义联想陷阱）。B 说公园旁边的路重铺了，与话题无关（完全离题）。D 回答「一般每六个月一次」，答的是「多久去一次」，不是对拖延这件事的回应（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}
