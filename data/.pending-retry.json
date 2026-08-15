@@ -1,43 +1,41 @@
 {
-  "session_id": "routine-20260814-190702",
-  "generated_at": "2026-08-14T19:21:16.892Z",
+  "session_id": "routine-20260815-190443",
+  "generated_at": "2026-08-15T19:23:36.992Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 93,
-    "quality": 97
+    "diversity": 91,
+    "quality": 98
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 85,
+      "diversity_score": 84,
       "diversity_threshold": 90,
-      "quality_score": 94,
+      "quality_score": 98,
       "quality_threshold": 95,
       "failures": [
-        "多样性 85 < 90",
-        "质量 94 < 95"
+        "多样性 84 < 90"
       ],
       "diversity_breakdown": [
-        "角色名 3/13",
-        "场景 13/13",
+        "角色名 4/10",
+        "场景 10/10",
         "句型 4/5",
         "开头 3/4",
-        "prefilled类型 7/4 (top:subject-pronoun 3/13)",
-        "人物当prefilled 3/13 (23%, TPO~30%)",
-        "干扰词 8种 (top:no 20%)",
-        "chunk颗粒 6.2块/题 单词率86% (TPO~6块/77%)",
-        "题面对话化 10/13 (77% 含you, TPO~72%)"
+        "prefilled类型 6/4 (top:verb-phrase 3/10)",
+        "人物当prefilled 0/10 (0%, TPO~30%)",
+        "干扰词 9种 (top:needed 11%)",
+        "chunk颗粒 6.0块/题 单词率83% (TPO~6块/77%)",
+        "题面对话化 6/10 (60% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
-        "块数 13/13",
-        "干扰词 10/13",
-        "答案长度 13/13",
-        "重组正确 13/13"
+        "块数 10/10",
+        "干扰词 9/10",
+        "答案长度 10/10",
+        "重组正确 10/10"
       ],
       "hints": [
-        "角色名重复严重 (3/13 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
-        "质量校验有偏差: 块数 13/13, 干扰词 10/13, 答案长度 13/13, 重组正确 13/13 — recheck schema compliance"
+        "角色名重复严重 (4/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
       ],
       "items_to_supplement": 10
     }

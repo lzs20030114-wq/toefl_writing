@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_daily",
+      "situation": "student asking where the pool schedule is posted",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where's the pool schedule usually posted?",
+      "options": {
+        "A": "It's on the board by the desk.",
+        "B": "The pool is heated all winter.",
+        "C": "I got a quick walk in after lunch.",
+        "D": "It costs thirty dollars a semester."
+      },
+      "answer": "A",
+      "explanation": "说话人问的是课表张贴的位置，A 直接给出位置「前台旁边的公告板」，是最自然的答复。B 抓住「pool」改说泳池水温，属语义联想陷阱，没有回答地点。C 是一句在别的对话里成立的闲聊，与本题完全无关。D 回答的是价格，答非所问（问 where 却答 how much）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking how the weekend shuttle schedule works",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How does the weekend shuttle work? I've never taken it.",
+      "options": {
+        "A": "I nearly missed the shuttle this morning.",
+        "B": "Your guess is as good as mine.",
+        "C": "The stop is behind the science building.",
+        "D": "She left her umbrella on the seat."
+      },
+      "answer": "B",
+      "explanation": "B 是习语「Your guess is as good as mine」，意思是「我也不清楚」，用地道口语承认自己同样不知道，是最自然的答复。A 重复「shuttle」但讲的是今早差点错过班车的往事，属语义联想陷阱。C 回答的是站点位置，问的却是周末班次怎么排，答非所问。D 与本对话毫无关联，只是一句语法正确的普通句子。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Don't you want to try the new deli?",
+      "options": {
+        "A": "The deli hired two more cooks.",
+        "B": "Yes, I finished the reading last night.",
+        "C": "Actually, I brought something from home.",
+        "D": "It's right across from the gym."
+      },
+      "answer": "C",
+      "explanation": "C 以话语标记「Actually」开头，不直接说「不去」，而是说明自己带了饭，属于间接婉拒，是最自然的答复。A 抓住「deli」转而陈述餐厅招人，属语义联想陷阱。B 虽以 Yes 开头，但接的是读书作业，跟午饭毫无关系，是离题项。D 回答的是餐厅位置，而对方问的是要不要去，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study session",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Aren't you coming to the study session tonight?",
+      "options": {
+        "A": "The session covers chapters four and five.",
+        "B": "I left my jacket in the car.",
+        "C": "In the basement of the union building.",
+        "D": "Can we make it a bit later?"
+      },
+      "answer": "D",
+      "explanation": "D 用反问推进对话，提出把时间往后挪，既回应了邀约又给出可行方案，是最自然的答复。A 重复「session」但转去描述复习范围，属语义联想陷阱。B 是一句放在别的对话里才成立的话，与邀约无关。C 回答的是地点，而对方问的是来不来，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student telling a professor about missing office hours",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've been missing you during office hours.",
+      "options": {
+        "A": "Let's find a time that works.",
+        "B": "Office hours are listed on the syllabus.",
+        "C": "My car wouldn't start again this morning.",
+        "D": "I missed the bus twice this week."
+      },
+      "answer": "A",
+      "explanation": "说话人在陈述自己的困难，作为被倾诉的一方，教授用「Let's find a time that works」提出一起另约时间，是最自然的解决式答复。B 只是把答疑时间指回教学大纲，回避了对方已经错过的事实，属语义联想陷阱。C 讲自己的车打不着火，与本对话无关。D 把「miss」误读成「错过交通工具」，属一词多义误解陷阱。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian why a journal cannot leave the room",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why can't I take this journal out of the room?",
+      "options": {
+        "A": "The reading room closes at nine.",
+        "B": "Well, it's the only copy we have.",
+        "C": "I ordered a coffee before coming in.",
+        "D": "On the second floor, near the stairs."
+      },
+      "answer": "B",
+      "explanation": "B 以话语标记「Well」开头，说明馆里只有这一本，间接解释了为何不外借，是最自然的答复。A 重复「reading room」却讲闭馆时间，属语义联想陷阱。C 与本对话毫无关联。D 回答的是位置，而对方问的是原因，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student unsure what the final exam covers",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I've got no idea what the final covers.",
+      "options": {
+        "A": "The final is worth forty percent.",
+        "B": "My cousin is visiting this weekend.",
+        "C": "Did you check the review sheet?",
+        "D": "Yes, it's in the main auditorium."
+      },
+      "answer": "C",
+      "explanation": "C 用反问把对话推向解决办法，提示对方去看复习提纲，是最自然的答复。A 重复「final」但讲的是分数占比，没有回应对方的困惑，属语义联想陷阱。B 与本对话无关。D 答的是考场地点，且对一句陈述句用「Yes」回应也不合适，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking when the post office closes",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What time does the post office close today?",
+      "options": {
+        "A": "I mailed the package last Tuesday.",
+        "B": "It's two blocks past the pharmacy.",
+        "C": "My phone battery died on the way.",
+        "D": "Just so you know, they close early Fridays."
+      },
+      "answer": "D",
+      "explanation": "D 以话语标记「Just so you know」开头，间接提醒对方周五提前打烊，实质上解决了对方的时间顾虑，是最自然的答复。A 重复「mail/package」这一联想语境却讲上周寄件，属语义联想陷阱。B 回答的是位置，而对方问的是时间，属答非所问。C 与本对话无关。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "C": "off_topic"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help booking a tutor at the writing center",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How do I book a tutor appointment?",
+      "options": {
+        "A": "Sure thing, let me walk you through it.",
+        "B": "The tutors are all graduate students.",
+        "C": "My appointment with the dentist is Thursday.",
+        "D": "Yes, the center is on the third floor."
+      },
+      "answer": "A",
+      "explanation": "A 用口语套话「Sure thing」应下来并表示带对方走一遍流程，是写作中心工作人员最自然的答复。B 抓住「tutor」转去介绍辅导员身份，属语义联想陷阱。C 借「appointment」讲牙医预约，属一词多义误解陷阱。D 答的是楼层位置，而对方问的是怎么预约，属答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates reacting to a group project deadline moving up",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Why did the deadline move up? I'm not ready.",
+      "options": {
+        "A": "The project counts for half our grade.",
+        "B": "I moved into a new apartment last week.",
+        "C": "Don't worry, I'll finish my part tonight.",
+        "D": "Next Monday at five in the afternoon."
+      },
+      "answer": "C",
+      "explanation": "C 不去解释原因，而是直接安抚对方并承诺今晚做完自己那部分，解决了对方真正担心的问题，属典型的 context_shift。A 重复「project」却讲分数权重，属语义联想陷阱。B 把「move」误读成「搬家」，属一词多义误解陷阱。D 答的是截止时间点，而对方问的是原因，属答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "polysemy_misinterpretation",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}
