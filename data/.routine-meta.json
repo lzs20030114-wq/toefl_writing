@@ -8,19 +8,41 @@
   "results": {
     "bs": {
       "generated": 10,
-      "accepted": 10,
-      "topics": ["bookstore", "writing center", "hiking club", "gym membership", "presentation slides", "study room", "lab report", "advising appointment", "section change", "career fair"],
+      "accepted": 20,
+      "topics": [
+        "bookstore",
+        "writing center",
+        "hiking club",
+        "gym membership",
+        "presentation slides",
+        "study room",
+        "lab report",
+        "advising appointment",
+        "section change",
+        "career fair"
+      ],
       "favorite": {
         "prompt": "I can never find a good place to study.",
         "answer": "You'd like the room that has better lighting."
       },
       "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     },
     "reading-ap": {
       "generated": 8,
       "accepted": 8,
-      "topics": ["technology/self-healing materials", "astronomy/black holes", "environmental_science/water purification", "biology/insect colonies", "physics/architectural acoustics", "physics/superconductivity", "technology/battery technology", "anthropology/migration patterns"],
+      "topics": [
+        "technology/self-healing materials",
+        "astronomy/black holes",
+        "environmental_science/water purification",
+        "biology/insect colonies",
+        "physics/architectural acoustics",
+        "physics/superconductivity",
+        "technology/battery technology",
+        "anthropology/migration patterns"
+      ],
       "favorite": {
         "subtopic": "physics/superconductivity",
         "preview": "Superconductivity is the complete disappearance of electrical resistance in certain materials cooled below a critical temperature."
@@ -31,7 +53,18 @@
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
-      "topics": ["pool schedule", "weekend shuttle", "new deli", "study session", "office hours", "library journal", "final exam scope", "post office hours", "writing center tutor", "project deadline"],
+      "topics": [
+        "pool schedule",
+        "weekend shuttle",
+        "new deli",
+        "study session",
+        "office hours",
+        "library journal",
+        "final exam scope",
+        "post office hours",
+        "writing center tutor",
+        "project deadline"
+      ],
       "favorite": {
         "subtopic": "campus_daily/weekend shuttle",
         "preview": "How does the weekend shuttle work? I've never taken it. → Your guess is as good as mine."
@@ -39,5 +72,7 @@
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  }
+  },
+  "r2_completed_at": "2026-08-15T19:38:20Z",
+  "r2_session_id": "routine-r2-20260815-193115"
 }
