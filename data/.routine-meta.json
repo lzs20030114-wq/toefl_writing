@@ -1,78 +1,54 @@
 {
-  "session_id": "routine-20260815-190443",
-  "completed_at": "2026-08-15T19:24:00Z",
-  "duration_minutes": 20,
+  "session_id": "routine-20260816-190420",
+  "completed_at": "2026-08-16T19:36:00Z",
+  "duration_minutes": 32,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点了 3 个库：BS 整套 10 题合库并过冻结门，AP 8 篇零告警，LCR flavor 0.91",
+  "highlight": "按需信号只点了 2 个库：LCR 10 题全过 flavor 0.97/多样性 100；BS 10 题质量 102/98 但被冻结难度门拦下（全库 embedded 已顶到 2.5x 上限）",
   "commit_sha": "",
   "results": {
     "bs": {
       "generated": 10,
-      "accepted": 20,
+      "accepted": 0,
       "topics": [
-        "bookstore",
-        "writing center",
-        "hiking club",
-        "gym membership",
-        "presentation slides",
-        "study room",
-        "lab report",
-        "advising appointment",
-        "section change",
-        "career fair"
+        "career fair",
+        "practice rooms",
+        "office hours",
+        "bike repair",
+        "team practice",
+        "returned notes",
+        "poster printing",
+        "health clinic",
+        "volunteer day",
+        "borrowed calculator"
       ],
       "favorite": {
-        "prompt": "I can never find a good place to study.",
-        "answer": "You'd like the room that has better lighting."
+        "prompt": "Your calculator was sitting on my desk.",
+        "answer": "Do you need it back before the weekend?"
       },
       "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
-    },
-    "reading-ap": {
-      "generated": 8,
-      "accepted": 8,
-      "topics": [
-        "technology/self-healing materials",
-        "astronomy/black holes",
-        "environmental_science/water purification",
-        "biology/insect colonies",
-        "physics/architectural acoustics",
-        "physics/superconductivity",
-        "technology/battery technology",
-        "anthropology/migration patterns"
-      ],
-      "favorite": {
-        "subtopic": "physics/superconductivity",
-        "preview": "Superconductivity is the complete disappearance of electrical resistance in certain materials cooled below a critical temperature."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "failure_reason": "两道冻结门规则互相冲突，非本批质量问题：本批 per-item 10/10 通过、diversity 102 / quality 98。ETS_STYLE_TARGETS.embeddedMin=3 要求每 10 题套至少 3 道 embedded(按 grammar_points 判定)，而 bs-difficulty-scorer 的 drift band 要求全库 embedded_question ≤ 2.5x 真题 0.062 = 0.155；live 库已是 135/874 = 0.1545 (2.49x)，任何合规套(+3)都会推到 0.156 (2.52x) → 合库被拒，live 库未改动。需人工走 /calibration-fix：要么按 realExam2026 重校 embeddedMin，要么先降全库 embedded 占比。staging 文件已保留。"
     },
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "pool schedule",
-        "weekend shuttle",
-        "new deli",
-        "study session",
-        "office hours",
-        "library journal",
-        "final exam scope",
-        "post office hours",
-        "writing center tutor",
-        "project deadline"
+        "lab report grading",
+        "writing center thesis",
+        "midterm scope",
+        "business hours",
+        "dinner cancellation",
+        "sunday shuttle",
+        "draft deadline",
+        "carpool pickup",
+        "document scanning",
+        "advance notice"
       ],
       "favorite": {
-        "subtopic": "campus_daily/weekend shuttle",
-        "preview": "How does the weekend shuttle work? I've never taken it. → Your guess is as good as mine."
+        "subtopic": "campus_academic/lab report grading",
+        "preview": "Why didn't I get full credit on the lab report? → Honestly, your data section came up short."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-15T19:38:20Z",
-  "r2_session_id": "routine-r2-20260815-193115"
+  }
 }

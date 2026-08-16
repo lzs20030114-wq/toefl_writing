@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why didn't I get full credit on the lab report?",
+      "options": {
+        "A": "Honestly, your data section came up short.",
+        "B": "The lab closes at six on Fridays.",
+        "C": "I usually get my best grades in seminars.",
+        "D": "About twenty pages, I think."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：助教用口语习惯表达 came up short（没达到要求）直接点出扣分原因，是被问方最自然的回应。B 是词汇陷阱，抓住 lab 转而说实验室开放时间，答非所问。C 完全离题，说自己在讨论课成绩好，与扣分原因无关。D 答错问题类型，回答的是篇幅长度而不是为什么扣分。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student seeking help at the writing center",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I can't get my thesis statement to sound convincing.",
+      "options": {
+        "A": "The statement of purpose is a different form.",
+        "B": "Let's take it from the top.",
+        "C": "My roommate finished her draft last night.",
+        "D": "About three pages, double-spaced."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：take it from the top 是口语习语「从头开始过一遍」，写作中心老师听到学生卡住时会这样提议，推进对话。A 是词汇陷阱，借 statement 转到完全另一种材料（个人陈述表格）。C 离题，说室友写完了初稿，对说话人的困难没有回应。D 答错问题类型，回答篇幅格式而不是论点是否有说服力。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I still don't know what's actually on the midterm.",
+      "options": {
+        "A": "The midterm room has forty seats.",
+        "B": "I got an A on the last one.",
+        "C": "Well, the review sheet covers everything.",
+        "D": "Yes, two hours in the main hall."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C：以话语标记 Well 开头，不直接罗列考点，而是指向复习提纲这个真正能解决问题的资源，属于间接但最有帮助的回应。A 是词汇陷阱，抓 midterm 说考场座位数。B 离题，炫耀自己上次的成绩，没有回应对方的困惑。D 答错问题类型，回答考试时长和地点，而不是考什么内容。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you open for another hour or so?",
+      "options": {
+        "A": "The bakery next door has great bread.",
+        "B": "It's on Third Street near the bank.",
+        "C": "Open the window, it's warm in here.",
+        "D": "Actually, we close in ten minutes."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D：用 Actually 引出与对方预期相反的信息——十分钟后就关门，既回应了营业时间又暗示对方要抓紧，是店员最自然的答复。A 离题，谈隔壁面包店。B 答错问题类型，回答的是位置而不是营业时间。C 是一词多义陷阱，把 open（营业）误当成 open（打开窗户）。",
+      "distractor_types": {
+        "A": "off_topic",
+        "B": "wrong_question_type",
+        "C": "polysemy_trap"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did you hear I can't make Thursday's dinner?",
+      "options": {
+        "A": "No worries, we'll catch up next week.",
+        "B": "Thursday's forecast calls for heavy rain all evening.",
+        "C": "My cousin is visiting from Chicago.",
+        "D": "Dinner is usually served at seven."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：No worries 和 catch up 都是口语习惯说法，先化解对方的歉意再提出改期，是听到爽约消息时最自然的回应。B 是词汇陷阱，抓住 Thursday 转去讲天气预报。C 离题，讲自己表亲来访，与对方缺席无关。D 答错问题类型，回答晚饭时间，而不是回应对方来不了这件事。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Do you know if the shuttle runs on Sundays?",
+      "options": {
+        "A": "The shuttle stop moved behind the gym.",
+        "B": "How about the city bus instead?",
+        "C": "I parked in the north lot yesterday.",
+        "D": "It costs two dollars each way."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：用反问 How about... 提出替代方案，绕开自己也不确定的班车时刻表，直接推进对话解决出行需求。A 是词汇陷阱，抓 shuttle 说站点搬迁，没有回答周日是否发车。C 离题，讲自己昨天停车的位置。D 答错问题类型，回答票价而不是运营日期。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How do I finish this draft when I'm still missing data?",
+      "options": {
+        "A": "The draft board meets on Mondays.",
+        "B": "Data science is a popular minor these days.",
+        "C": "Don't worry, we'll sort out the deadline.",
+        "D": "Yes, Monday works better for everyone."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C：Don't worry 加习语 sort out 是教授安抚学生并承诺调整截止时间的自然说法，解决了学生真正的困境而不是纠结数据本身。A 是一词多义陷阱，把 draft（初稿）当成 draft board（征兵委员会）。B 是词汇联想陷阱，抓 data 转去讲专业选择。D 答错问题类型，像在确认开会时间，与学生的写作困难无关。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "semantic_association_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "arranging a ride or carpool with a friend",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's the best time to pick you up?",
+      "options": {
+        "A": "Pick a spot near the main entrance.",
+        "B": "I usually take the downtown bus on weekends.",
+        "C": "It's about twenty minutes from campus.",
+        "D": "Actually, I'll just meet you there."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D：用 Actually 引出对原计划的修正——不用接了，直接在目的地碰面，间接但完整地回应了接送安排。A 是一词多义陷阱，把 pick up（接人）里的 pick 当成 pick a spot（挑地方）。B 离题，讲自己周末的通勤习惯。C 答错问题类型，回答路程时长而不是出发时间。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Where can I scan a document around here?",
+      "options": {
+        "A": "How about the library's front desk?",
+        "B": "The lab closes at nine on weekdays.",
+        "C": "I scanned my ID at the door.",
+        "D": "Printing costs ten cents a page."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：用 How about 反问提出一个更靠谱的去处，把对话往解决问题推进，是最自然的口语回应。B 是词汇陷阱，抓 lab 讲机房关门时间，没回答哪里能扫描。C 是一词多义陷阱，把 scan（扫描文件）当成刷卡的 scan。D 答错问题类型，回答打印价格而不是扫描地点。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "polysemy_trap",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How much notice do you need if I can't make it?",
+      "options": {
+        "A": "The notice board is by the mailroom.",
+        "B": "Just text me the night before.",
+        "C": "I sent the invitations out last week.",
+        "D": "The forms are due by the fifteenth."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：以 Just 开头给出一个轻松具体的做法（前一晚发条消息就行），间接回答了需要提前多久通知。A 是一词多义陷阱，把 notice（提前告知）当成 notice board（公告栏）。C 离题，讲自己上周寄请柬。D 答错问题类型，回答表格截止日期，与临时爽约的通知无关。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}

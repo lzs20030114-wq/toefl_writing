@@ -1,6 +1,6 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 874,
+  "n": 884,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
@@ -32,12 +32,12 @@
     {
       "name": "register.third_person_formal",
       "verdict": "PASS",
-      "detail": "got 0.169 max 0.17"
+      "detail": "got 0.17 max 0.17"
     },
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.632 min 0.38"
+      "detail": "got 0.63 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
@@ -62,22 +62,22 @@
     {
       "name": "prompt.addresses_you",
       "verdict": "PASS",
-      "detail": "got 0.741 band [0.45,0.83] (real 0.628)"
+      "detail": "got 0.743 band [0.45,0.83] (real 0.628)"
     },
     {
       "name": "prefilled.presence",
       "verdict": "PASS",
-      "detail": "got 0.892 band [0.68,0.97]"
+      "detail": "got 0.893 band [0.68,0.97]"
     },
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.085 max 0.45"
+      "detail": "got 0.086 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.091 band [0.08,0.45]"
+      "detail": "got 0.09 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
@@ -87,12 +87,12 @@
     {
       "name": "answer.signature_q(dir-only)",
       "verdict": "WARN",
-      "detail": "got 0.039 vs real 0.167"
+      "detail": "got 0.038 vs real 0.167"
     },
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/874 fail"
+      "detail": "0/884 fail"
     }
   ],
   "metrics": {
@@ -112,25 +112,25 @@
       "first_person": 0.686,
       "contraction": 0.188,
       "casual_opener": 0.042,
-      "third_person_formal": 0.169
+      "third_person_formal": 0.17
     },
     "structure": {
-      "relative_clause": 0.166,
+      "relative_clause": 0.165,
       "passive": 0.081,
-      "embedded_question": 0.154,
-      "negation": 0.159,
-      "modal": 0.088,
-      "subordinate": 0.109
+      "embedded_question": 0.156,
+      "negation": 0.158,
+      "modal": 0.089,
+      "subordinate": 0.11
     },
     "diversity": {
-      "opening_trigram_diversity": 0.632,
+      "opening_trigram_diversity": 0.63,
       "exact_dup_rate": 0.002
     },
     "hard_band_profile": {
-      "n": 108,
-      "first_person": 0.741,
-      "relative_clause": 0.519,
-      "passive": 0.148
+      "n": 110,
+      "first_person": 0.727,
+      "relative_clause": 0.518,
+      "passive": 0.145
     }
   },
   "per_item_audit": [
@@ -18851,6 +18851,222 @@
       "band": "easy",
       "index": 7,
       "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She left your lock with the attendant who repairs the rental bikes.",
+      "setId": 89,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "relClause"
+      ],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The coach finished sooner than we'd planned.",
+      "setId": 89,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Do you need it back before the weekend?",
+      "setId": 89,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "subord"
+      ],
+      "register": [],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I finished my form during lunch break.",
+      "setId": 89,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I asked whether the studio still opens at seven.",
+      "setId": 89,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "He wanted to know whether the printer could handle larger poster paper.",
+      "setId": 89,
+      "W": 12,
+      "band": "hard",
+      "index": 15,
+      "struct": [
+        "embeddedQ",
+        "modal"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I haven't heard back from her office yet.",
+      "setId": 89,
+      "W": 8,
+      "band": "med",
+      "index": 9,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Can I still join the volunteer team today?",
+      "setId": 89,
+      "W": 8,
+      "band": "med",
+      "index": 9,
+      "struct": [
+        "modal"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "They were returned by the department office yesterday.",
+      "setId": 89,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "passive"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She asked if I had visited the clinic before.",
+      "setId": 89,
+      "W": 9,
+      "band": "med",
+      "index": 13,
+      "struct": [
+        "embeddedQ",
+        "subord"
+      ],
       "register": [
         "firstPerson"
       ],

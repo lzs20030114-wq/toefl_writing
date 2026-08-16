@@ -1,45 +1,32 @@
 {
-  "session_id": "routine-20260815-190443",
-  "generated_at": "2026-08-15T19:23:36.992Z",
+  "session_id": "routine-20260816-190420",
+  "generated_at": "2026-08-16T19:18:49.147Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 91,
-    "quality": 98
+    "diversity": 100,
+    "quality": 100
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 84,
+      "diversity_score": 0,
       "diversity_threshold": 90,
-      "quality_score": 98,
+      "quality_score": 0,
       "quality_threshold": 95,
       "failures": [
-        "多样性 84 < 90"
+        "R1 accepted=0 (full failure)"
       ],
       "diversity_breakdown": [
-        "角色名 4/10",
-        "场景 10/10",
-        "句型 4/5",
-        "开头 3/4",
-        "prefilled类型 6/4 (top:verb-phrase 3/10)",
-        "人物当prefilled 0/10 (0%, TPO~30%)",
-        "干扰词 9种 (top:needed 11%)",
-        "chunk颗粒 6.0块/题 单词率83% (TPO~6块/77%)",
-        "题面对话化 6/10 (60% 含you, TPO~72%)"
+        "R1 produced 0 valid items"
       ],
       "quality_breakdown": [
-        "块数 10/10",
-        "干扰词 9/10",
-        "答案长度 10/10",
-        "重组正确 10/10"
+        "两道冻结门规则互相冲突，非本批质量问题：本批 per-item 10/10 通过、diversity 102 / quality 98。ETS_STYLE_TARGETS.embeddedMin=3 要求每 10 题套至少 3 道 embedded(按 grammar_points 判定)，而 bs-difficulty-scorer 的 drift band 要求全库 embedded_question ≤ 2.5x 真题 0.062 = 0.155；live 库已是 135/874 = 0.1545 (2.49x)，任何合规套(+3)都会推到 0.156 (2.52x) → 合库被拒，live 库未改动。需人工走 /calibration-fix：要么按 realExam2026 重校 embeddedMin，要么先降全库 embedded 占比。staging 文件已保留。"
       ],
       "hints": [
-        "角色名重复严重 (4/10 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane"
+        "R1 generated 10 items but all were rejected. Failure reason: \"两道冻结门规则互相冲突，非本批质量问题：本批 per-item 10/10 通过、diversity 102 / quality 98。ETS_STYLE_TARGETS.embeddedMin=3 要求每 10 题套至少 3 道 embedded(按 grammar_points 判定)，而 bs-difficulty-scorer 的 drift band 要求全库 embedded_question ≤ 2.5x 真题 0.062 = 0.155；live 库已是 135/874 = 0.1545 (2.49x)，任何合规套(+3)都会推到 0.156 (2.52x) → 合库被拒，live 库未改动。需人工走 /calibration-fix：要么按 realExam2026 重校 embeddedMin，要么先降全库 embedded 占比。staging 文件已保留。\". Generate fresh items strictly following the print-bank-prompt rules — pay extra attention to schema compliance."
       ],
-      "items_to_supplement": 10
+      "items_to_supplement": 20
     }
-  ],
-  "resolved_at": "2026-08-15T19:38:20Z",
-  "resolution_status": "supplemented"
+  ]
 }
