@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "classmate asking to borrow lecture notes",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can I grab your notes? I'm completely lost.",
+      "options": {
+        "A": "Be my guest, they're in my bag.",
+        "B": "I grabbed a coffee before class too.",
+        "C": "The parking lot was full again.",
+        "D": "Around forty pages, I think."
+      },
+      "answer": "A",
+      "explanation": "同学开口借笔记。正确答 A 用地道口语 \"Be my guest\"（你随便用）爽快应允，并顺带说明笔记在包里，是被请求方最自然的回应（idiomatic）。B 抓住 grab 换成 grabbed，讲自己课前买咖啡，只借关键词不回应请求（语义联想陷阱）。C 说停车场又满了，与借笔记毫无关系（离题）。D 回答\"大概四十页\"，答的是数量，而对方问的是能不能借（答非所问）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about a campus event or concert",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "How's the spring concert ticket line looking?",
+      "options": {
+        "A": "The concert hall seats two thousand people.",
+        "B": "Actually, it's already wrapped around the building.",
+        "C": "I've never learned to play an instrument.",
+        "D": "Yes, I bought two of them."
+      },
+      "answer": "B",
+      "explanation": "对方打听春季音乐会的排队情况。正确答 B 以话语标记 \"Actually\" 开头，不直接说\"长\"，而是用\"队伍已经绕楼一圈\"间接给出答案，口语中最自然（marker_led_indirect）。A 抓住 concert 转去讲音乐厅能坐两千人，说的是场馆而非队伍（语义联想陷阱）。C 说自己从没学过乐器，与排队情况无关（离题）。D 用\"是的，我买了两张\"回答，把 How 开头的问句当成是非问句来答（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where are we supposed to upload the project?",
+      "options": {
+        "A": "This project took way more time than expected.",
+        "B": "She's been out sick since Tuesday.",
+        "C": "Just drop it in the shared folder.",
+        "D": "Sometime before midnight on Friday."
+      },
+      "answer": "C",
+      "explanation": "小组成员问作业交到哪里。正确答 C 以话语标记 \"Just\" 开头，直接指路\"扔进共享文件夹\"，简短自然（marker_led_indirect）。A 抓住 project 感慨这次项目太费时间，只借关键词不回答地点（语义联想陷阱）。B 说她从周二起就病假，换了人也换了话题（离题）。D 回答\"周五午夜之前\"，答的是时间，而对方问的是地点（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about campus shuttle or parking",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Do I need a permit to park here?",
+      "options": {
+        "A": "Parking got much harder after the renovation.",
+        "B": "My roommate borrowed the car this morning.",
+        "C": "Every fifteen minutes until nine.",
+        "D": "Take my spot behind the gym instead."
+      },
+      "answer": "D",
+      "explanation": "对方问这里停车要不要许可证。正确答 D 不纠缠\"要不要证\"，而是直接解决背后的真实需求——把自己体育馆后面的车位让出来（context_shift，ETS 最典型的间接应答）。A 抓住 park 谈翻修后停车更难，只是评论现状、不解决问题（语义联想陷阱）。B 说室友早上把车开走了，与对方能否停车无关（离题）。C 回答\"每十五分钟一班，到九点\"，答的是班车频次，而对方问的是许可证（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why's the gym closing so early tonight?",
+      "options": {
+        "A": "Didn't you see the meet is tonight?",
+        "B": "The gym added new rowing machines.",
+        "C": "I finished my paper an hour ago.",
+        "D": "Yes, you can bring a guest."
+      },
+      "answer": "A",
+      "explanation": "对方疑惑体育馆今晚为什么早关。正确答 A 用一个反问\"你没看到今晚有比赛吗\"点明原因并推进对话，是口语中极自然的应答（counter_question）。B 抓住 gym 说新添了划船机，只借关键词、不解释原因（语义联想陷阱）。C 说自己一小时前写完论文了，与体育馆无关（离题）。D 用\"可以带一位客人\"作答，把 Why 问句当成是非问句（答非所问）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I still haven't gotten into the stats seminar.",
+      "options": {
+        "A": "Statistics has three sections this term.",
+        "B": "Well, the waitlist usually clears by Friday.",
+        "C": "My cousin is visiting over the weekend.",
+        "D": "In room 204, next to the lab."
+      },
+      "answer": "B",
+      "explanation": "对方抱怨还没选上统计研讨课。正确答 B 以 \"Well\" 起头，间接安抚并给出有用信息——候补名单一般周五就会放开（marker_led_indirect）。A 抓住 stats 说统计课本学期开了三个班，陈述事实却无视对方的焦虑（语义联想陷阱）。C 说表亲周末来访，完全另起话题（离题）。D 给出教室位置\"204 房间，实验室旁边\"，对方并没有问地点（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm landing around eleven Saturday night.",
+      "options": {
+        "A": "Saturday flights are usually the most crowded.",
+        "B": "The concert tickets sold out last week.",
+        "C": "Consider it covered, I'll be there.",
+        "D": "Yes, I've been to that airport."
+      },
+      "answer": "C",
+      "explanation": "朋友告知自己周六深夜落地，言下之意是希望有人来接。正确答 C 用地道说法 \"Consider it covered\"（这事包在我身上）承接并承诺到场，正是听话人一方最自然的回应（idiomatic）。A 抓住 Saturday 谈周六航班最挤，只借关键词、不接话（语义联想陷阱）。B 说演唱会门票上周就卖光了，与接机无关（离题）。D 用\"是的，我去过那个机场\"作答，对方并没有提问，是把陈述句当成是非问句（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "When's the last time a wallet turned up?",
+      "options": {
+        "A": "That wallet design is really popular now.",
+        "B": "The parking office moved to the annex.",
+        "C": "Right by the elevator on two.",
+        "D": "You're in luck, one came in today."
+      },
+      "answer": "D",
+      "explanation": "学生到前台问最近有没有钱包被送来。正确答 D 用地道口语 \"You're in luck\"（你走运了）自然接话，并告知今天正好收到一个（idiomatic）。A 抓住 wallet 评论钱包款式流行，只借关键词、不回答（语义联想陷阱）。B 说停车办公室搬到附楼了，与失物招领无关（离题）。C 回答\"就在二楼电梯旁\"，答的是地点，而对方问的是时间（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "What's worth bringing to office hours?",
+      "options": {
+        "A": "Just bring the draft you're stuck on.",
+        "B": "I brought my lunch to campus today.",
+        "C": "She defended her dissertation two years ago.",
+        "D": "Yes, you're allowed to record them."
+      },
+      "answer": "A",
+      "explanation": "学生问去答疑时间该带什么。正确答 A 以 \"Just\" 起头，把范围缩到一件事——带上写不下去的那份草稿，简洁而实用（marker_led_indirect）。B 把 bring 换成 brought，说自己今天带了午饭来学校，只借词形不回应问题（语义联想陷阱）。C 说她两年前答辩完博士论文，换了人也换了话题（离题）。D 用\"是的，可以录音\"作答，把 What 问句当成是非问句（答非所问）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Has anyone fixed the radiator? It's still freezing.",
+      "options": {
+        "A": "Radiators in this building are ancient.",
+        "B": "Don't hold your breath on that.",
+        "C": "I signed the lease back in June.",
+        "D": "Down the hall, second door."
+      },
+      "answer": "B",
+      "explanation": "室友问暖气修没修，屋里还是很冷。正确答 B 用地道口语 \"Don't hold your breath\"（别抱太大希望）自然承接，暗示维修短期内没指望（idiomatic）。A 抓住 radiator 感慨这楼的暖气片年久失修，只评论设备、不回答修没修（语义联想陷阱）。C 说自己六月就签了租约，与维修进度无关（离题）。D 回答\"走廊尽头第二个门\"，答的是位置，而对方问的是修没修（答非所问）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}

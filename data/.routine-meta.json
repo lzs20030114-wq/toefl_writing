@@ -1,78 +1,32 @@
 {
-  "session_id": "routine-20260815-190443",
-  "completed_at": "2026-08-15T19:24:00Z",
-  "duration_minutes": 20,
+  "session_id": "routine-20260817-190422",
+  "completed_at": "2026-08-17T19:09:30Z",
+  "duration_minutes": 5,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点了 3 个库：BS 整套 10 题合库并过冻结门，AP 8 篇零告警，LCR flavor 0.91",
+  "highlight": "按需信号今晚只点 LCR 一个库：10 题全过 schema+profile 校验、零告警，flavor 0.90，含 1 道 context_shift 硬题",
   "commit_sha": "",
   "results": {
-    "bs": {
-      "generated": 10,
-      "accepted": 20,
-      "topics": [
-        "bookstore",
-        "writing center",
-        "hiking club",
-        "gym membership",
-        "presentation slides",
-        "study room",
-        "lab report",
-        "advising appointment",
-        "section change",
-        "career fair"
-      ],
-      "favorite": {
-        "prompt": "I can never find a good place to study.",
-        "answer": "You'd like the room that has better lighting."
-      },
-      "retried_after_fail": false,
-      "failure_reason": "",
-      "r2_supplemented": true,
-      "r2_items_added": 10
-    },
-    "reading-ap": {
-      "generated": 8,
-      "accepted": 8,
-      "topics": [
-        "technology/self-healing materials",
-        "astronomy/black holes",
-        "environmental_science/water purification",
-        "biology/insect colonies",
-        "physics/architectural acoustics",
-        "physics/superconductivity",
-        "technology/battery technology",
-        "anthropology/migration patterns"
-      ],
-      "favorite": {
-        "subtopic": "physics/superconductivity",
-        "preview": "Superconductivity is the complete disappearance of electrical resistance in certain materials cooled below a critical temperature."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    },
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "pool schedule",
-        "weekend shuttle",
-        "new deli",
-        "study session",
-        "office hours",
-        "library journal",
-        "final exam scope",
-        "post office hours",
-        "writing center tutor",
-        "project deadline"
+        "borrowing lecture notes",
+        "spring concert ticket line",
+        "group project upload location",
+        "campus parking permit",
+        "gym closing early",
+        "stats seminar waitlist",
+        "airport pickup coordination",
+        "lost-and-found wallet",
+        "office hours preparation",
+        "dorm radiator repair"
       ],
       "favorite": {
-        "subtopic": "campus_daily/weekend shuttle",
-        "preview": "How does the weekend shuttle work? I've never taken it. → Your guess is as good as mine."
+        "subtopic": "campus_daily/campus parking permit",
+        "preview": "Do I need a permit to park here? → Take my spot behind the gym instead."
       },
       "retried_after_fail": false,
       "failure_reason": ""
     }
-  },
-  "r2_completed_at": "2026-08-15T19:38:20Z",
-  "r2_session_id": "routine-r2-20260815-193115"
+  }
 }
