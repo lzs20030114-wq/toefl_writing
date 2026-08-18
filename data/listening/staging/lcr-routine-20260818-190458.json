@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "What's still missing from our project draft?",
+      "options": {
+        "A": "Did you finish the data section yet?",
+        "B": "Our project got a high grade last time.",
+        "C": "She's meeting her advisor this afternoon.",
+        "D": "Sometime around six, I think."
+      },
+      "answer": "A",
+      "explanation": "同伴问草稿还缺什么。正确答 A 不直接罗列，而是反问对方数据部分做完没有，把话题往下一步推进，是最自然的合作式回应（counter_question）。B 抓住 project 一词，转去说上次拿了高分，只借关键词不回应当下的缺口（语义联想陷阱）。C 说她下午要见导师，换了人也换了事，与草稿无关（离题）。D 用时间点回答，但对方问的是\"缺什么\"而不是\"什么时候\"，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking bus or shuttle schedule",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why isn't the shuttle here yet?",
+      "options": {
+        "A": "The shuttle has new seats this year.",
+        "B": "Actually, it runs late on Fridays.",
+        "C": "I left my umbrella in the classroom.",
+        "D": "Right in front of the science building."
+      },
+      "answer": "B",
+      "explanation": "同学抱怨班车怎么还没来。正确答 B 以 Actually 起头，指出周五班次本来就晚，用话语标记引出间接解释，正好回应了对方的疑问（marker_led_indirect）。A 抓住 shuttle 一词转去讲今年换了新座椅，只谈车本身不解释晚点（语义联想陷阱）。C 说把伞落在教室，与班车毫无关系（离题）。D 报了个地点，可对方问的是\"为什么\"不是\"在哪儿\"，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "checking if a service (post office, bank) is open",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I'm not sure the bank's still open.",
+      "options": {
+        "A": "The bank hired three new tellers last month.",
+        "B": "I'll grab dinner after my class.",
+        "C": "Your guess is as good as mine.",
+        "D": "We walked along the bank yesterday."
+      },
+      "answer": "C",
+      "explanation": "说话人不确定银行还开不开门。正确答 C 用地道口语 \"Your guess is as good as mine\"（我跟你一样不知道）坦承同样没底，是被问方最自然的回应（idiomatic）。A 抓住 bank 一词转去讲银行上月招了三名柜员，只借关键词不回答营业与否（语义联想陷阱）。B 说下课后去吃晚饭，与银行是否营业无关（离题）。D 把 bank 当成\"河岸\"来用，说昨天沿岸散步，是同词异义的误解（一词多义陷阱）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When can I exchange these for a smaller size?",
+      "options": {
+        "A": "That size sold out really fast.",
+        "B": "The parking lot fills up pretty early.",
+        "C": "Yes, I've shopped here for years.",
+        "D": "Actually, any time before Sunday works."
+      },
+      "answer": "D",
+      "explanation": "顾客问什么时候能换小一号。正确答 D 以 Actually 起头，给出\"周日之前随时都行\"这一宽泛时限，是店员最自然的间接回应（marker_led_indirect）。A 抓住 size 一词说那个尺码卖得很快，绕开了换货时间（语义联想陷阱）。B 讲停车场很早就满，与换货毫无关系（离题）。C 回答\"我在这儿买了很多年\"，那是回应\"你常来吗\"这类问题，不是回答时间（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "calling to check business hours",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Are you folks still open? It's almost eight.",
+      "options": {
+        "A": "Well, we're closing in ten minutes.",
+        "B": "The new location opened last spring.",
+        "C": "I left my phone in the car.",
+        "D": "Two blocks past the traffic light."
+      },
+      "answer": "A",
+      "explanation": "打电话问店里是否还开着。正确答 A 以 Well 起头，不直接说\"开\"或\"不开\"，而是告诉对方十分钟后打烊，让人自己判断还来不来得及，是店员最自然的间接回应（marker_led_indirect）。B 把 open 换成 opened，转去讲新店去年春天开业，只借词形不答营业时间（语义联想陷阱）。C 说手机落在车上，与营业时间无关（离题）。D 报的是位置，可对方问的是还开不开门，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "two friends deciding where to get lunch",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "How's the noodle place across the street?",
+      "options": {
+        "A": "That place added a second floor.",
+        "B": "I could go for that.",
+        "C": "My roommate finally returned my charger.",
+        "D": "I go there on the bus."
+      },
+      "answer": "B",
+      "explanation": "朋友试探性地提议街对面那家面馆。正确答 B 用地道口语 \"I could go for that\"（我正想吃这个）表示欣然同意，把提议接了下来（idiomatic）。A 抓住 place 一词讲那家店加盖了二楼，只描述店面不表态（语义联想陷阱）。C 说室友终于还了充电器，与吃饭毫无关系（离题）。D 把 go for（想吃）里的 go 当成\"去、前往\"，答成坐公交去那儿，是同词异义的误解（一词多义陷阱）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about exam format or study materials",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where'd you find the old practice exams?",
+      "options": {
+        "A": "The exam counts for forty percent total.",
+        "B": "I'm meeting my sister for coffee.",
+        "C": "Actually, the professor emails them out.",
+        "D": "Right after the midterm, I think."
+      },
+      "answer": "C",
+      "explanation": "同学问往年的练习卷是从哪儿找到的。正确答 C 以 Actually 起头，不给地点而是点明\"教授会发邮件寄出来\"，用话语标记引出更有用的间接答案（marker_led_indirect）。A 抓住 exam 一词转去说考试占四成分数，只谈分值不谈来源（语义联想陷阱）。B 说要和姐姐去喝咖啡，与练习卷无关（离题）。D 给的是时间点，可对方问的是\"在哪儿\"，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Did you say we're including raw data?",
+      "options": {
+        "A": "The lab reports were graded last week.",
+        "B": "The elevator's been broken since Monday.",
+        "C": "About twelve pages, double-spaced.",
+        "D": "By all means, put it in."
+      },
+      "answer": "D",
+      "explanation": "学生向助教确认实验报告要不要附原始数据。正确答 D 用地道口语 \"By all means\"（当然可以）明确肯定，并顺势让对方放进去，是助教最自然的回应（idiomatic）。A 抓住 lab 一词转去说报告上周已批完，只借关键词不回答要求（语义联想陷阱）。B 讲电梯从周一起就坏了，与报告毫无关系（离题）。C 报的是篇幅，属于报告的另一个方面，并没有回答是否要附原始数据（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student discussing a presentation topic with partner",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Aren't we still deciding the presentation topic?",
+      "options": {
+        "A": "Well, I'm open to something else.",
+        "B": "The presentation room was booked twice.",
+        "C": "My laptop died in the middle of class.",
+        "D": "Next Thursday, right before lunch."
+      },
+      "answer": "A",
+      "explanation": "搭档确认展示题目是不是还没定。正确答 A 以 Well 起头，表态\"我可以换别的\"，不正面说定没定而是把余地留出来，推进商量（marker_led_indirect）。B 抓住 presentation 一词讲教室被重复预订，只谈场地不谈选题（语义联想陷阱）。C 说笔记本上课时没电了，与选题无关（离题）。D 报的是展示时间，可对方问的是选题定没定，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "expressing concern about a friend's situation",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "You've seemed pretty stressed out lately.",
+      "options": {
+        "A": "Want me to grab you a coffee?",
+        "B": "Is it that obvious?",
+        "C": "The concert tickets sold out already.",
+        "D": "I stressed the last syllable wrong."
+      },
+      "answer": "B",
+      "explanation": "朋友观察到对方最近压力很大。正确答 B 反问\"有那么明显吗\"，既承认了自己的状态又把话题接住，是被关心一方最自然的回应（counter_question）。A\"要我给你买杯咖啡吗\"是关心者一方才会说的话，被关心的人不会这样回，属于角色错位（role_inversion）。C 说演唱会门票已经售罄，与对方的关心毫无关系（离题）。D 把 stressed（有压力）当成\"重读\"，答成把最后一个音节读错了，是同词异义的误解（一词多义陷阱）。",
+      "distractor_types": {
+        "A": "role_inversion",
+        "C": "off_topic",
+        "D": "polysemy"
+      }
+    }
+  ]
+}

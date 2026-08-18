@@ -1,29 +1,29 @@
 {
-  "session_id": "routine-20260817-190422",
-  "completed_at": "2026-08-17T19:09:30Z",
-  "duration_minutes": 5,
+  "session_id": "routine-20260818-190458",
+  "completed_at": "2026-08-18T19:12:00Z",
+  "duration_minutes": 7,
   "model": "Claude Opus 5",
-  "highlight": "按需信号今晚只点 LCR 一个库：10 题全过 schema+profile 校验、零告警，flavor 0.90，含 1 道 context_shift 硬题",
+  "highlight": "按需信号今晚仍只点 LCR（头号用户已刷 352/413，85%）：10 题全过 schema+profile 校验、零告警，flavor 0.95，选项分布 3/3/2/2 均衡",
   "commit_sha": "",
   "results": {
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "borrowing lecture notes",
-        "spring concert ticket line",
-        "group project upload location",
-        "campus parking permit",
-        "gym closing early",
-        "stats seminar waitlist",
-        "airport pickup coordination",
-        "lost-and-found wallet",
-        "office hours preparation",
-        "dorm radiator repair"
+        "group project draft gaps",
+        "shuttle running late",
+        "bank still open",
+        "store size exchange",
+        "calling about closing time",
+        "noodle place for lunch",
+        "old practice exams",
+        "lab report raw data",
+        "presentation topic undecided",
+        "friend looking stressed"
       ],
       "favorite": {
-        "subtopic": "campus_daily/campus parking permit",
-        "preview": "Do I need a permit to park here? → Take my spot behind the gym instead."
+        "subtopic": "general_daily/checking if a service is open",
+        "preview": "I'm not sure the bank's still open. → Your guess is as good as mine.（干扰项把 bank 当河岸用，一词多义硬陷阱）"
       },
       "retried_after_fail": false,
       "failure_reason": ""
