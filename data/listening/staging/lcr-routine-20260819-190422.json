@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "What time's your flight actually getting in?",
+      "options": {
+        "A": "Beats me, the airline keeps changing it.",
+        "B": "The flight attendants were really friendly.",
+        "C": "I already returned the rental car keys yesterday.",
+        "D": "It's arriving at the international terminal."
+      },
+      "answer": "A",
+      "explanation": "朋友要来接机，问航班几点落地。正确答 A 用地道口语 \"Beats me\"（我也不知道）自然回应，并解释航空公司一直在改时间，是真人会说的答法（idiomatic）。B 抓住 flight 转去评价空乘态度，只借关键词不回答时间（语义联想陷阱）。C 说已经还了租车钥匙，换了完全无关的事（离题）。D 回答的是航站楼，即回答了\"在哪\"而不是\"几点\"，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Where's everyone going for the long weekend?",
+      "options": {
+        "A": "Weekend shuttles only run twice a day.",
+        "B": "Actually, I'm staying in this time.",
+        "C": "My sister finally sent the photos.",
+        "D": "About three hours, maybe a little more."
+      },
+      "answer": "B",
+      "explanation": "室友问大家长周末都去哪。正确答 B 以话语标记 \"Actually\" 开头，间接说自己这次不出门，自然承接话题（marker_led_indirect）。A 抓住 weekend 谈周末班车频次，只借关键词不回答去向（语义联想陷阱）。C 说姐姐终于把照片发来了，与周末去向无关（离题）。D 用\"大约三小时\"回答，对方问的是\"去哪\"而不是\"多久\"，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "Why don't you come to the potluck Friday?",
+      "options": {
+        "A": "I learned that recipe from my aunt.",
+        "B": "The parking garage closes at midnight.",
+        "C": "What should I bring for everybody?",
+        "D": "I already came by earlier today."
+      },
+      "answer": "C",
+      "explanation": "朋友用 \"Why don't you...\" 发出邀请。正确答 C 反问该带什么吃的，等于接受邀请并把安排往下推进（counter_question）。A 说这道菜的做法是跟姑妈学的，只顺着聚餐联想到菜谱，没有回应邀请（语义联想陷阱）。B 说停车楼半夜关门，与是否赴约无关（离题）。D 把 come 误解成\"来过\"，答成今天已经来过了，理解错了邀请的意思（误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "two classmates discussing a group project deadline",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "We still haven't picked who presents first tomorrow.",
+      "options": {
+        "A": "The presentation room has a broken projector.",
+        "B": "My laptop finally came back from repair.",
+        "C": "I still need to wrap her present.",
+        "D": "Well, I don't mind going first."
+      },
+      "answer": "D",
+      "explanation": "同伴说还没定明天谁先讲。正确答 D 以 \"Well\" 开头，主动表示自己先讲也行，直接化解了这个待办（marker_led_indirect）。A 抓住 presents 联想到教室投影仪坏了，只借关键词不解决顺序问题（语义联想陷阱）。B 说笔记本修好回来了，与分工无关（离题）。C 把 presents 当成\"礼物\"来理解，说还要包礼物，是一词多义陷阱（多义误解）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "polysemy_trap"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Aren't the tennis courts open past eight?",
+      "options": {
+        "A": "Actually, they close at ten now.",
+        "B": "The new gym equipment finally arrived.",
+        "C": "I left my water bottle in class.",
+        "D": "It's right behind the recreation center."
+      },
+      "answer": "A",
+      "explanation": "学生问网球场今晚八点后是否还开。正确答 A 用 \"Actually\" 引出实际关门时间，间接回应了对方真正关心的问题（marker_led_indirect）。B 抓住体育设施联想到健身房新器材到货，没有回答开放时间（语义联想陷阱）。C 说水杯落在教室了，与场馆无关（离题）。D 回答的是场地位置，而对方问的是时间，答的是错误维度（问题类型错位）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "friend inviting another to a study group or social event",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Do you want to join our study group? It's Thursdays.",
+      "options": {
+        "A": "That study room is always freezing cold.",
+        "B": "Sure, count me in for Thursday.",
+        "C": "The bookstore closes early on weekends.",
+        "D": "About six people, I think."
+      },
+      "answer": "B",
+      "explanation": "朋友邀请对方加入学习小组。正确答 B 直接答应并确认周四参加，是最直白自然的接受方式（direct_topical）。A 抓住 study 联想到自习室太冷，只评价场地不回应邀请（语义联想陷阱）。C 说书店周末关门早，与是否加入无关（离题）。D 回答的是小组有几个人，对方问的是你要不要来，答非所问（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I can't find the reserve copy for economics.",
+      "options": {
+        "A": "The copier on this floor takes coins.",
+        "B": "We're hiring students for the front desk.",
+        "C": "Which course is it assigned for?",
+        "D": "Could you check the catalog for me?"
+      },
+      "answer": "C",
+      "explanation": "学生告诉馆员找不到经济学的指定参考书。正确答 C 反问是哪门课指定的，用一个问题把查找往下推进，是馆员最自然的回应（counter_question）。A 把 copy 误当成\"复印\"，说这层的复印机要投币，是一词多义陷阱（多义误解）。B 说前台在招学生工，与找书无关（离题）。D 是请对方帮忙查目录，这是学生一方会说的话，馆员不会这样回应（角色错位）。",
+      "distractor_types": {
+        "A": "polysemy_trap",
+        "B": "off_topic",
+        "D": "role_inversion"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How's the return policy work on these boots?",
+      "options": {
+        "A": "Those boots come in three colors.",
+        "B": "The parking meter out front runs till four.",
+        "C": "They're about forty dollars with tax.",
+        "D": "I can start the exchange right now."
+      },
+      "answer": "D",
+      "explanation": "顾客问这双靴子的退货政策怎么算。正确答 D 不去背条款，而是直接说现在就能帮你办换货，解决了对方真正的需求（context_shift）。A 抓住 boots 谈这款有三个颜色，只借关键词不回应退换（语义联想陷阱）。B 说停车计时器四点到期，与退货无关（离题）。C 回答的是价格，而对方问的是政策，答的是错误维度（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking when a professor is available",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "When's the professor actually in her office?",
+      "options": {
+        "A": "The office moved to the third floor.",
+        "B": "My laptop battery died during lecture.",
+        "C": "I'd just email her instead.",
+        "D": "She teaches two sections this term."
+      },
+      "answer": "C",
+      "explanation": "学生问教授到底什么时候在办公室。正确答 C 不报时间，而是建议直接发邮件，绕开等人这一步解决真正的需求（context_shift）。A 说办公室搬到三楼了，回答的是地点而非时间，是错误维度的信息（语义联想陷阱）。B 说上课时笔记本没电了，与教授的时间无关（离题）。D 说她这学期带两个班，同样没有回答什么时候能找到人（问题类型错位）。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "classmate mentioning a heavy workload",
+      "difficulty": "medium",
+      "answer_paradigm": "idiomatic",
+      "speaker": "I've got three papers due this same week.",
+      "options": {
+        "A": "Hang in there, it'll be over soon.",
+        "B": "The printer jams on thick paper.",
+        "C": "They repainted the whole stairwell yesterday.",
+        "D": "The library fine is due by next Friday."
+      },
+      "answer": "A",
+      "explanation": "同学抱怨同一周要交三篇论文。正确答 A 用地道口语 \"Hang in there\"（撑住）给出安慰，是听到对方叫苦时最自然的回应（idiomatic）。B 抓住 papers 联想到打印机卡厚纸，只借关键词不回应情绪（语义联想陷阱）。C 说楼梯间昨天重新刷漆了，与对方处境无关（离题）。D 把 due 挪到图书馆罚款上，用同一个词讲了另一件事（多义误解）。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_trap"
+      }
+    }
+  ]
+}

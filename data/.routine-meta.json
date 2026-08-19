@@ -1,29 +1,29 @@
 {
-  "session_id": "routine-20260818-190458",
-  "completed_at": "2026-08-18T19:12:00Z",
-  "duration_minutes": 7,
+  "session_id": "routine-20260819-190422",
+  "completed_at": "2026-08-19T19:16:00Z",
+  "duration_minutes": 12,
   "model": "Claude Opus 5",
-  "highlight": "按需信号今晚仍只点 LCR（头号用户已刷 352/413，85%）：10 题全过 schema+profile 校验、零告警，flavor 0.95，选项分布 3/3/2/2 均衡",
+  "highlight": "按需信号仍只点 LCR（头号用户 352/413，85%）：10 题全过 validator 零告警，flavor 0.92，缩略语 60%/话语标记 40% 双双贴住真题基准（62.5%/37.5%），答案分布 3/2/3/2",
   "commit_sha": "",
   "results": {
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "group project draft gaps",
-        "shuttle running late",
-        "bank still open",
-        "store size exchange",
-        "calling about closing time",
-        "noodle place for lunch",
-        "old practice exams",
-        "lab report raw data",
-        "presentation topic undecided",
-        "friend looking stressed"
+        "airport pickup flight time",
+        "roommate long-weekend plans",
+        "potluck invitation",
+        "who presents first tomorrow",
+        "tennis court hours",
+        "study group invite",
+        "reserve copy missing at library",
+        "boot return policy",
+        "professor office availability",
+        "three papers due same week"
       ],
       "favorite": {
-        "subtopic": "general_daily/checking if a service is open",
-        "preview": "I'm not sure the bank's still open. → Your guess is as good as mine.（干扰项把 bank 当河岸用，一词多义硬陷阱）"
+        "subtopic": "campus_academic/student asking a librarian about a book",
+        "preview": "I can't find the reserve copy for economics. → Which course is it assigned for?（干扰项含 copy→copier 多义陷阱 + 学生一方口吻的角色错位项）"
       },
       "retried_after_fail": false,
       "failure_reason": ""
