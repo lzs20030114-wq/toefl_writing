@@ -1,29 +1,29 @@
 {
-  "session_id": "routine-20260819-190422",
-  "completed_at": "2026-08-19T19:16:00Z",
-  "duration_minutes": 12,
+  "session_id": "routine-20260820-190417",
+  "completed_at": "2026-08-20T19:07:00Z",
+  "duration_minutes": 3,
   "model": "Claude Opus 5",
-  "highlight": "按需信号仍只点 LCR（头号用户 352/413，85%）：10 题全过 validator 零告警，flavor 0.92，缩略语 60%/话语标记 40% 双双贴住真题基准（62.5%/37.5%），答案分布 3/2/3/2",
+  "highlight": "按需信号只点 LCR 10 题（头号用户 352/413=85% 逼近刷穿）：10 题全过 validator，flavor 0.83，话语标记率 60%（真题基准 37.5%，覆盖充足），答案位置分布 3/3/2/2 均衡；含 3 个 idiomatic（stone's throw / got it covered / got my hands full）+ 1 个 context_shift + 1 个 counter_question + 2 个 direct + 3 个 marker_led。",
   "commit_sha": "",
   "results": {
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "airport pickup flight time",
-        "roommate long-weekend plans",
-        "potluck invitation",
-        "who presents first tomorrow",
-        "tennis court hours",
-        "study group invite",
-        "reserve copy missing at library",
-        "boot return policy",
-        "professor office availability",
-        "three papers due same week"
+        "friend sharing driving-test news",
+        "lost-and-found clearance timing",
+        "librarian second-edition textbook",
+        "declining a study session invite",
+        "gym closing time uncertainty",
+        "shoe return deadline",
+        "airport pickup timing",
+        "asking directions to the station",
+        "worn-out from bad sleep",
+        "lab scanner location"
       ],
       "favorite": {
-        "subtopic": "campus_academic/student asking a librarian about a book",
-        "preview": "I can't find the reserve copy for economics. → Which course is it assigned for?（干扰项含 copy→copier 多义陷阱 + 学生一方口吻的角色错位项）"
+        "subtopic": "general_daily/asking for directions to a nearby location",
+        "preview": "directions — Speaker: 'Do you know how to get to the station from here?' Key uses idiom 'a stone's throw away'."
       },
       "retried_after_fail": false,
       "failure_reason": ""
