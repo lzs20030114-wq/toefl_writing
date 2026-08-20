@@ -9168,6 +9168,174 @@
       },
       "id": "lcr_ms7xy89k_8",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/choose-response/lcr_ms7xy89k_8.p1.mp3"
+    },
+    {
+      "context": "social",
+      "situation": "friend sharing news or personal update",
+      "difficulty": "easy",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I finally passed my driving test yesterday.",
+      "options": {
+        "A": "Actually, I knew you'd nail it.",
+        "B": "The test was really hard for me.",
+        "C": "I'm heading to the store later.",
+        "D": "You should renew your license soon."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：以话语标记「Actually」开头，随后间接地表达对好消息的祝贺与信任，是自然的口语回应（marker_led_indirect）。B 抓住「test」这个词，只谈自己考试很难，属语义联想陷阱，并未回应对方的好消息。C 完全跑题，谈自己去商店，与考驾照无关。D 误解语境，考完驾照并不需要「续期驾照」，逻辑颠倒。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mt21ilvw_0"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student checking lost-and-found at front desk",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When does the lost-and-found usually get cleared out?",
+      "options": {
+        "A": "I lost my phone here last week too.",
+        "B": "Actually, you'd better claim it before Friday.",
+        "C": "The cafeteria closes at nine tonight.",
+        "D": "It's the desk right by the entrance."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：以「Actually」开头，间接提醒对方在周五前认领，等于回答了「什么时候会被清空」这一时间关切（marker_led_indirect）。A 抓住「lost」谈自己也丢过手机，属语义联想陷阱，未回答时间。C 完全跑题，谈食堂关门时间。D 回答的是「在哪里」而非「什么时候」，答非所问。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      },
+      "id": "lcr_mt21ilvx_1"
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Do you have the second edition of this textbook?",
+      "options": {
+        "A": "The book club meets every Tuesday.",
+        "B": "It costs about forty dollars new.",
+        "C": "Yes, it's on the reserve shelf.",
+        "D": "I'm returning these by tomorrow."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C：直接肯定回答「有」，并告知在预留架上，是对是非问句的直接事实回应（direct_topical）。A 抓住「book」谈读书会，属语义联想陷阱。B 回答的是「多少钱」而非「有没有」，答错问题类型。D 完全跑题，谈自己要还书。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mt21ilvy_2"
+    },
+    {
+      "context": "social",
+      "situation": "acknowledging someone's unavailability or schedule conflict",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Can you make it to the study session tonight?",
+      "options": {
+        "A": "The session covered chapter five today.",
+        "B": "No, I've never been there before.",
+        "C": "My laptop charger stopped working again.",
+        "D": "I'm afraid I've got my hands full."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D：用习语「got my hands full」（忙得不可开交）委婉表示来不了，是地道的间接拒绝（idiomatic）。A 抓住「session」描述课程内容，属语义联想陷阱，未回应邀约。B 误解成「你去过那里吗」，答非所问。C 完全跑题，谈充电器坏了。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "misinterpretation",
+        "C": "off_topic"
+      },
+      "id": "lcr_mt21ilvz_3"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about gym or sports facility hours",
+      "difficulty": "medium",
+      "answer_paradigm": "counter_question",
+      "speaker": "I'm not sure when the gym closes tonight.",
+      "options": {
+        "A": "Why not just check the app for hours?",
+        "B": "The gym added new treadmills last month.",
+        "C": "I finished my essay this morning.",
+        "D": "No, I don't really like working out."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：用反问「不如查一下 app」来推进对话、解决对方不确定关门时间的问题（counter_question）。B 抓住「gym」谈新添跑步机，属语义联想陷阱。C 完全跑题，谈自己写完论文。D 误解语境，答成个人是否喜欢健身，答非所问。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "misinterpretation"
+      },
+      "id": "lcr_mt21ilw0_4"
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking a store clerk about a return or exchange",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "What's the deadline for returning these shoes?",
+      "options": {
+        "A": "Those shoes come in three colors.",
+        "B": "Just keep the receipt and you're fine.",
+        "C": "They're over on the second floor.",
+        "D": "I paid with my credit card earlier."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：不直接报出截止日期，而是点出「留着收据就没问题」，解决了对方退货的真实顾虑（context_shift）。A 抓住「shoes」谈鞋子有几种颜色，属语义联想陷阱。C 回答的是「在哪里」而非「截止日期」，答错问题类型。D 完全跑题，谈自己用信用卡付款。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mt21ilw0_5"
+    },
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Why do you look so worn out today?",
+      "options": {
+        "A": "Well, I barely slept a wink last night.",
+        "B": "These old sneakers are totally worn out.",
+        "C": "The meeting starts around noon today.",
+        "D": "Let me carry those heavy bags for you."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：以「Well」开头，作为被关心的一方间接解释自己疲惫的原因（几乎没睡），角色一致（marker_led_indirect）。B 利用「worn out」的多义，谈鞋子破旧，属语义/一词多义陷阱。C 完全跑题，谈会议时间。D 是提供帮助的一方（说话人一侧）才会说的话，角色颠倒（role_inversion），不能作为被问者的回答。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "role_inversion"
+      },
+      "id": "lcr_mt21ilw1_6"
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about printing or scanning at computer lab",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where can I scan my documents in the lab?",
+      "options": {
+        "A": "The documents were actually due last week.",
+        "B": "The scanner's over by the far window.",
+        "C": "It's free for all registered students.",
+        "D": "My laptop keeps freezing up lately."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：直接告知扫描仪的位置，是对「在哪里扫描」这一 WH 问句的直接事实回答（direct_topical）。A 抓住「documents」谈文件上周就该交，属语义联想陷阱。C 回答的是「要不要钱」而非「在哪里」，答错问题类型。D 完全跑题，谈自己笔记本老死机。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "wrong_question_type",
+        "D": "off_topic"
+      },
+      "id": "lcr_mt21ilw1_7"
     }
   ]
 }
