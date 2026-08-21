@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "context": "social",
+      "situation": "offering help to someone who seems stressed",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "What's got you so stressed this morning?",
+      "options": {
+        "A": "I've got two exams tomorrow.",
+        "B": "The morning classes are always crowded.",
+        "C": "I already returned that book yesterday.",
+        "D": "Yes, I'm heading over there now."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：直接说出让自己焦虑的原因（明天有两场考试），是对「什么让你这么紧张」这一 WH 问句的直接回答，且由被问的一方说明自己的情况，角色关系正确（direct_topical）。B 抓住「morning」这个词去谈早课人多，属语义联想陷阱，并没有回答对方的问题。C 完全跑题，谈还书的事，与压力来源无关。D 用「Yes」回应一个 WH 问句，答错了问题类型——对方问的是原因，不是要不要去某地。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "roommate discussing weekend plans",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I'm thinking about hiking this Saturday.",
+      "options": {
+        "A": "The hiking trail was built last year.",
+        "B": "Actually, they're calling for rain.",
+        "C": "My laptop charger stopped working again.",
+        "D": "It costs about fifteen dollars."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：以话语标记「Actually」开头，不直接说「别去」，而是提供一条会影响计划的关键信息（预报有雨），是典型的间接回应（marker_led_indirect）。A 抓住「hiking」谈步道是去年修的，属语义联想陷阱，对周末计划毫无帮助。C 完全跑题，谈自己的充电器坏了。D 回答的是「多少钱」这个根本没被问到的问题，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student checking with TA about lab report requirements",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "How long should the lab report be?",
+      "options": {
+        "A": "The lab closes at six on Fridays.",
+        "B": "My printer ran out of ink again.",
+        "C": "I'll email the rubric out tonight.",
+        "D": "Yes, you can work with a partner."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C：助教没有直接给出字数，而是承诺把评分细则发给大家——直接解决了对方「不知道要求」的根本需求，属于话题转移式回应（context_shift）。A 抓住「lab」这个词去说实验室几点关门，属语义联想陷阱。B 完全跑题，谈自己打印机没墨了。D 用「Yes」回应一个 How 问句，而且回答的是「能不能合作」这个没被问到的问题，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a librarian about a book or resource",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "I can't find this journal on the shelves.",
+      "options": {
+        "A": "That journal comes out four times a year.",
+        "B": "The copier on this floor takes coins.",
+        "C": "It costs twelve dollars to join.",
+        "D": "Well, that one's kept in storage."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D：以「Well」开头，间接说明找不到的原因——那本期刊放在库房而不在开架上，正好解答了对方的困惑（marker_led_indirect）。A 抓住「journal」谈它一年出四期，属语义联想陷阱，与「在哪儿」无关。B 完全跑题，谈这层楼的复印机要投币。C 回答的是「入会费多少」这个没被问到的问题，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "asking for directions to a nearby location",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Do you know if there's a pharmacy nearby?",
+      "options": {
+        "A": "Yes, right past the corner bakery.",
+        "B": "Those pills made me really drowsy.",
+        "C": "She moved out of the building.",
+        "D": "I don't know anyone around here."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：先确认有，再直接指出位置（拐角面包店过去一点），是对问路的直接事实回答（direct_topical）。B 抓住「pharmacy」联想到药，谈药吃了犯困，属语义联想陷阱，并没有告诉对方药店在哪。C 完全跑题，谈某人搬走了。D 把「know」从「知不知道某件事」偷换成「认不认识人」，答非所问，属一词多义误导。",
+      "distractor_types": {
+        "B": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "polysemy_misinterpretation"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking a professor about office hours or assignment",
+      "difficulty": "hard",
+      "answer_paradigm": "context_shift",
+      "speaker": "Can I get an extension? I'm really swamped.",
+      "options": {
+        "A": "The extension cord is behind the desk.",
+        "B": "Stop by my office this afternoon.",
+        "C": "The department moved to a new building.",
+        "D": "In the box outside room 204."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：教授没有当场答应或拒绝，而是让学生下午来办公室谈——绕开是非判断，直接处理学生的实际困难，属话题转移式回应（context_shift）；学生自述困境，由对方给出「来谈谈」的建议，角色关系正确。A 把「extension」偷换成「接线板」的意思，属一词多义误导。C 完全跑题，谈院系搬了新楼。D 回答的是「交到哪里」这个没被问到的问题，答错问题类型。",
+      "distractor_types": {
+        "A": "polysemy_misinterpretation",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "social",
+      "situation": "responding to an invitation or suggestion",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "When's movie night at your place?",
+      "options": {
+        "A": "That movie won three awards last year.",
+        "B": "My sister borrowed my car again.",
+        "C": "Well, whenever everyone finally shows up.",
+        "D": "In the lounge on the second floor."
+      },
+      "answer": "C",
+      "explanation": "正确答案 C：以「Well」开头，不给死时间，而是用「等人到齐就开始」这种随意的口语说法间接作答，符合朋友间的语域（marker_led_indirect）。A 抓住「movie」谈那部电影得过奖，属语义联想陷阱。B 完全跑题，谈姐姐又借走了车。D 回答的是「在哪儿」，可对方问的是「什么时候」，而且地点已经明说是在你家，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "D": "wrong_question_type"
+      }
+    },
+    {
+      "context": "campus_daily",
+      "situation": "student asking about dorm maintenance issue",
+      "difficulty": "easy",
+      "answer_paradigm": "direct_topical",
+      "speaker": "Where do I report a broken window?",
+      "options": {
+        "A": "The windows were replaced two years ago.",
+        "B": "I lost my student ID last week.",
+        "C": "Usually within two or three days.",
+        "D": "At the front desk downstairs."
+      },
+      "answer": "D",
+      "explanation": "正确答案 D：直接指出报修的地点（楼下前台），是对 Where 问句的直接事实回答（direct_topical）。A 抓住「window」谈窗户两年前换过，属语义联想陷阱，没有回答去哪里报修。B 完全跑题，谈自己丢了学生证。C 回答的是「多久能修好」，而对方问的是「去哪里报」，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "B": "off_topic",
+        "C": "wrong_question_type"
+      }
+    },
+    {
+      "context": "general_daily",
+      "situation": "coordinating airport pickup with a friend",
+      "difficulty": "medium",
+      "answer_paradigm": "marker_led_indirect",
+      "speaker": "Did you say you're free Sunday morning?",
+      "options": {
+        "A": "Actually, I'll be out of town.",
+        "B": "The shuttle is free for students.",
+        "C": "The tickets went on sale yesterday.",
+        "D": "No, I haven't finished packing yet."
+      },
+      "answer": "A",
+      "explanation": "正确答案 A：以「Actually」开头，不直说「不行」，而是用「我要出城」间接更正对方的预设，是自然的委婉回应（marker_led_indirect）。B 把「free」从「有空」偷换成「免费」，属一词多义误导。C 完全跑题，谈票昨天开售。D 角色颠倒——收拾行李的是要出行的人，也就是提问的一方，接机的人不会这么说。",
+      "distractor_types": {
+        "B": "polysemy_misinterpretation",
+        "C": "off_topic",
+        "D": "role_inversion"
+      }
+    },
+    {
+      "context": "campus_academic",
+      "situation": "student asking about course enrollment or prerequisites",
+      "difficulty": "hard",
+      "answer_paradigm": "idiomatic",
+      "speaker": "Why's that seminar already full?",
+      "options": {
+        "A": "The seminar meets in the old chapel.",
+        "B": "Your guess is as good as mine.",
+        "C": "I dropped my chemistry lab last term.",
+        "D": "Yes, I signed the form already."
+      },
+      "answer": "B",
+      "explanation": "正确答案 B：「Your guess is as good as mine.」是地道口语套话，意思是「我跟你一样不知道」，自然地回应了一个对方也答不上来的问题（idiomatic）。A 抓住「seminar」谈上课地点，属语义联想陷阱，没有解释为什么满员。C 完全跑题，谈自己上学期退了化学实验课。D 用「Yes」回应一个 Why 问句，答错问题类型。",
+      "distractor_types": {
+        "A": "semantic_association_trap",
+        "C": "off_topic",
+        "D": "wrong_question_type"
+      }
+    }
+  ]
+}

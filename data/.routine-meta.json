@@ -1,29 +1,29 @@
 {
-  "session_id": "routine-20260820-190417",
-  "completed_at": "2026-08-20T19:07:00Z",
-  "duration_minutes": 3,
+  "session_id": "routine-20260821-190443",
+  "completed_at": "2026-08-21T19:10:00Z",
+  "duration_minutes": 6,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点 LCR 10 题（头号用户 352/413=85% 逼近刷穿）：10 题全过 validator，flavor 0.83，话语标记率 60%（真题基准 37.5%，覆盖充足），答案位置分布 3/3/2/2 均衡；含 3 个 idiomatic（stone's throw / got it covered / got my hands full）+ 1 个 context_shift + 1 个 counter_question + 2 个 direct + 3 个 marker_led。",
+  "highlight": "按需信号仍只点 LCR 10 题（头号用户 352/421=84% 逼近刷穿）：10 题全过 validator 且零 warning，flavor 0.85，答案位置 3/3/2/2 均衡，缩读率 60%、话语标记率 40%（真题基准 37.5%）；WH 问句占 5/10（What/How/When/Where/Why 各一），贴住真题 ~49% 的 WH 主导形态。干扰项类型铺开到 6 种，新增 role_inversion（接机方不会说「我还没收拾行李」）与 3 处 polysemy（extension 接线板 / free 免费 / know 认识人）。",
   "commit_sha": "",
   "results": {
     "listening-lcr": {
       "generated": 10,
       "accepted": 10,
       "topics": [
-        "friend sharing driving-test news",
-        "lost-and-found clearance timing",
-        "librarian second-edition textbook",
-        "declining a study session invite",
-        "gym closing time uncertainty",
-        "shoe return deadline",
-        "airport pickup timing",
-        "asking directions to the station",
-        "worn-out from bad sleep",
-        "lab scanner location"
+        "asking a stressed friend what's wrong",
+        "roommate's weekend hiking plan",
+        "TA on lab report length",
+        "librarian on a missing journal",
+        "directions to a nearby pharmacy",
+        "asking a professor for an extension",
+        "movie night timing",
+        "reporting a broken dorm window",
+        "confirming a Sunday airport pickup",
+        "why a seminar is already full"
       ],
       "favorite": {
-        "subtopic": "general_daily/asking for directions to a nearby location",
-        "preview": "directions — Speaker: 'Do you know how to get to the station from here?' Key uses idiom 'a stone's throw away'."
+        "subtopic": "campus_academic/student asking about course enrollment or prerequisites",
+        "preview": "enrollment — Speaker: 'Why's that seminar already full?' Key is the idiom 'Your guess is as good as mine.' (我跟你一样不知道)."
       },
       "retried_after_fail": false,
       "failure_reason": ""
