@@ -1,32 +1,9 @@
 {
-  "session_id": "routine-20260821-190443",
-  "completed_at": "2026-08-21T19:10:00Z",
-  "duration_minutes": 6,
+  "session_id": "routine-20260822-190417",
+  "completed_at": "2026-08-22T19:06:00Z",
+  "duration_minutes": 2,
   "model": "Claude Opus 5",
-  "highlight": "按需信号仍只点 LCR 10 题（头号用户 352/421=84% 逼近刷穿）：10 题全过 validator 且零 warning，flavor 0.85，答案位置 3/3/2/2 均衡，缩读率 60%、话语标记率 40%（真题基准 37.5%）；WH 问句占 5/10（What/How/When/Where/Why 各一），贴住真题 ~49% 的 WH 主导形态。干扰项类型铺开到 6 种，新增 role_inversion（接机方不会说「我还没收拾行李」）与 3 处 polysemy（extension 接线板 / free 免费 / know 认识人）。",
+  "highlight": "按需信号: 今晚无需出题 —— 12 个常规库全部「库存充足」，最紧的三个 runway 分别是 BS 17.5 天（88 套 / 头号用户已刷 66%）、CTW 32.3 天（407 题 / 周消耗 72）、AP 47.4 天（101 题），均远高于补题红线；唯一告警的 interview（库存 11 < 红线 30，建议补 10 题）标了 not_in_routine，不归 R1 产线，故本轮零生成、零 staging，仅刷新 meta 与质量门。",
   "commit_sha": "",
-  "results": {
-    "listening-lcr": {
-      "generated": 10,
-      "accepted": 10,
-      "topics": [
-        "asking a stressed friend what's wrong",
-        "roommate's weekend hiking plan",
-        "TA on lab report length",
-        "librarian on a missing journal",
-        "directions to a nearby pharmacy",
-        "asking a professor for an extension",
-        "movie night timing",
-        "reporting a broken dorm window",
-        "confirming a Sunday airport pickup",
-        "why a seminar is already full"
-      ],
-      "favorite": {
-        "subtopic": "campus_academic/student asking about course enrollment or prerequisites",
-        "preview": "enrollment — Speaker: 'Why's that seminar already full?' Key is the idiom 'Your guess is as good as mine.' (我跟你一样不知道)."
-      },
-      "retried_after_fail": false,
-      "failure_reason": ""
-    }
-  }
+  "results": {}
 }
