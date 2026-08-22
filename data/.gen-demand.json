@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-21T17:56:12.202Z",
+  "generated_at": "2026-08-22T17:44:56.670Z",
   "window_days": 7,
   "active_users": 5,
   "banks": {
     "bs": {
       "bank_size": 88,
-      "top_user_consumed": 57,
-      "top_user_pct": 0.648,
-      "burn_7d": 17,
-      "min_user_runway_days": 16.7,
+      "top_user_consumed": 58,
+      "top_user_pct": 0.659,
+      "burn_7d": 16,
+      "min_user_runway_days": 17.5,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -16,10 +16,10 @@
     },
     "discussion": {
       "bank_size": 215,
-      "top_user_consumed": 9,
-      "top_user_pct": 0.042,
-      "burn_7d": 3,
-      "min_user_runway_days": 480.7,
+      "top_user_consumed": 10,
+      "top_user_pct": 0.047,
+      "burn_7d": 4,
+      "min_user_runway_days": 358.8,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -29,7 +29,7 @@
       "bank_size": 221,
       "top_user_consumed": 41,
       "top_user_pct": 0.186,
-      "burn_7d": 1,
+      "burn_7d": 2,
       "min_user_runway_days": 1260,
       "triggers": [],
       "generate": false,
@@ -38,9 +38,9 @@
     },
     "reading-ap": {
       "bank_size": 101,
-      "top_user_consumed": 57,
-      "top_user_pct": 0.564,
-      "burn_7d": 16,
+      "top_user_consumed": 16,
+      "top_user_pct": 0.158,
+      "burn_7d": 13,
       "min_user_runway_days": 47.4,
       "triggers": [],
       "generate": false,
@@ -49,10 +49,10 @@
     },
     "ctw": {
       "bank_size": 407,
-      "top_user_consumed": 97,
-      "top_user_pct": 0.238,
-      "burn_7d": 58,
-      "min_user_runway_days": 44.7,
+      "top_user_consumed": 79,
+      "top_user_pct": 0.194,
+      "burn_7d": 72,
+      "min_user_runway_days": 32.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -60,9 +60,9 @@
     },
     "rdl-short": {
       "bank_size": 208,
-      "top_user_consumed": 50,
-      "top_user_pct": 0.24,
-      "burn_7d": 12,
+      "top_user_consumed": 11,
+      "top_user_pct": 0.053,
+      "burn_7d": 10,
       "min_user_runway_days": 138.6,
       "triggers": [],
       "generate": false,
@@ -71,9 +71,9 @@
     },
     "rdl-long": {
       "bank_size": 132,
-      "top_user_consumed": 68,
-      "top_user_pct": 0.515,
-      "burn_7d": 12,
+      "top_user_consumed": 12,
+      "top_user_pct": 0.091,
+      "burn_7d": 10,
       "min_user_runway_days": 85.4,
       "triggers": [],
       "generate": false,
@@ -82,8 +82,8 @@
     },
     "listening-lat": {
       "bank_size": 149,
-      "top_user_consumed": 24,
-      "top_user_pct": 0.161,
+      "top_user_consumed": 4,
+      "top_user_pct": 0.027,
       "burn_7d": 1,
       "min_user_runway_days": 1015,
       "triggers": [],
@@ -93,8 +93,8 @@
     },
     "lc": {
       "bank_size": 83,
-      "top_user_consumed": 51,
-      "top_user_pct": 0.614,
+      "top_user_consumed": 5,
+      "top_user_pct": 0.06,
       "burn_7d": 2,
       "min_user_runway_days": 273,
       "triggers": [],
@@ -104,8 +104,8 @@
     },
     "la": {
       "bank_size": 100,
-      "top_user_consumed": 65,
-      "top_user_pct": 0.65,
+      "top_user_consumed": 10,
+      "top_user_pct": 0.1,
       "burn_7d": 2,
       "min_user_runway_days": 315,
       "triggers": [],
@@ -115,21 +115,19 @@
     },
     "lcr": {
       "bank_size": 421,
-      "top_user_consumed": 352,
-      "top_user_pct": 0.836,
+      "top_user_consumed": 90,
+      "top_user_pct": 0.214,
       "burn_7d": 15,
       "min_user_runway_days": 176.4,
-      "triggers": [
-        "T1"
-      ],
-      "generate": true,
-      "n": 10,
-      "reason": "头号活跃用户已做 352/421 题（84%），逼近刷穿，建议补 10 题。"
+      "triggers": [],
+      "generate": false,
+      "n": 0,
+      "reason": "库存充足，当晚无需补题。"
     },
     "speaking-repeat": {
       "bank_size": 90,
-      "top_user_consumed": 3,
-      "top_user_pct": 0.033,
+      "top_user_consumed": 2,
+      "top_user_pct": 0.022,
       "burn_7d": 2,
       "min_user_runway_days": 308,
       "triggers": [],
@@ -139,8 +137,8 @@
     },
     "interview": {
       "bank_size": 11,
-      "top_user_consumed": 5,
-      "top_user_pct": 0.455,
+      "top_user_consumed": 0,
+      "top_user_pct": 0,
       "burn_7d": 0,
       "min_user_runway_days": null,
       "triggers": [
@@ -152,7 +150,5 @@
       "not_in_routine": true
     }
   },
-  "routine_instructions": [
-    "Generate 10 lcr listening items"
-  ]
+  "routine_instructions": []
 }
