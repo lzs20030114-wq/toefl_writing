@@ -1,9 +1,42 @@
 {
-  "session_id": "routine-20260822-190417",
-  "completed_at": "2026-08-22T19:06:00Z",
-  "duration_minutes": 2,
+  "session_id": "routine-20260823-190408",
+  "completed_at": "2026-08-23T19:14:30Z",
+  "duration_minutes": 10,
   "model": "Claude Opus 5",
-  "highlight": "按需信号: 今晚无需出题 —— 12 个常规库全部「库存充足」，最紧的三个 runway 分别是 BS 17.5 天（88 套 / 头号用户已刷 66%）、CTW 32.3 天（407 题 / 周消耗 72）、AP 47.4 天（101 题），均远高于补题红线；唯一告警的 interview（库存 11 < 红线 30，建议补 10 题）标了 not_in_routine，不归 R1 产线，故本轮零生成、零 staging，仅刷新 meta 与质量门。",
+  "highlight": "按需信号只点名 BS（runway 13.5 天触发 T2），其余 11 个常规库库存充足全部跳过；需求 n=4 是「套」为单位、而合库粒度是 10 题 1 套，故按管线粒度出 20 题合成 2 套（set 89-90）。首轮被 BS 冻结门以 register.third_person_formal 0.177 > 0.17 拒合（活库本就贴在 0.169 边缘），把 7 道第三人称叙述改成含 you/my 的校园对话语域并补 2 处缩写后二次过门，20/20 全数合库。",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 20,
+      "accepted": 20,
+      "topics": [
+        "取票/票务",
+        "实地考察与博物馆参观",
+        "自习室插座与开放时间",
+        "宿舍洗衣房烘干机",
+        "共享自行车锁归还",
+        "攀岩社装备检查",
+        "教授评分标准",
+        "招聘会与模拟面试",
+        "研讨教室换场",
+        "校车路线与通勤",
+        "同学还笔记",
+        "音乐会彩排搭车",
+        "实验课搭档与小组",
+        "写作工作坊缺席",
+        "游泳馆新时段报名",
+        "餐饮计划与早餐花费",
+        "志愿者说明会名额",
+        "住宿押金退款",
+        "辩论社场地被预订",
+        "转学分与注册处"
+      ],
+      "favorite": {
+        "prompt": "Why did you miss the writing workshop?",
+        "answer": "The shuttle that runs past my dorm is not stopping here today."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    }
+  }
 }
