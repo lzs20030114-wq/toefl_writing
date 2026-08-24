@@ -1,39 +1,27 @@
 {
-  "session_id": "routine-20260823-190408",
-  "completed_at": "2026-08-23T19:14:30Z",
-  "duration_minutes": 10,
+  "session_id": "routine-20260824-190533",
+  "completed_at": "2026-08-24T19:14:10Z",
+  "duration_minutes": 9,
   "model": "Claude Opus 5",
-  "highlight": "按需信号只点名 BS（runway 13.5 天触发 T2），其余 11 个常规库库存充足全部跳过；需求 n=4 是「套」为单位、而合库粒度是 10 题 1 套，故按管线粒度出 20 题合成 2 套（set 89-90）。首轮被 BS 冻结门以 register.third_person_formal 0.177 > 0.17 拒合（活库本就贴在 0.169 边缘），把 7 道第三人称叙述改成含 you/my 的校园对话语域并补 2 处缩写后二次过门，20/20 全数合库。",
+  "highlight": "按需信号只点名 BS：出 17 题、合库 1 套 10 题（894→904），冻结门 PASS",
   "commit_sha": "",
   "results": {
     "bs": {
-      "generated": 20,
-      "accepted": 20,
+      "generated": 17,
+      "accepted": 10,
       "topics": [
-        "取票/票务",
-        "实地考察与博物馆参观",
-        "自习室插座与开放时间",
-        "宿舍洗衣房烘干机",
-        "共享自行车锁归还",
-        "攀岩社装备检查",
-        "教授评分标准",
-        "招聘会与模拟面试",
-        "研讨教室换场",
-        "校车路线与通勤",
-        "同学还笔记",
-        "音乐会彩排搭车",
-        "实验课搭档与小组",
-        "写作工作坊缺席",
-        "游泳馆新时段报名",
-        "餐饮计划与早餐花费",
-        "志愿者说明会名额",
-        "住宿押金退款",
-        "辩论社场地被预订",
-        "转学分与注册处"
+        "宿舍与住房",
+        "图书馆借阅",
+        "课程与作业",
+        "奖学金评审",
+        "食堂餐线",
+        "社团报名",
+        "校园通勤与出行",
+        "健身房与器材"
       ],
       "favorite": {
-        "prompt": "Why did you miss the writing workshop?",
-        "answer": "The shuttle that runs past my dorm is not stopping here today."
+        "prompt": "What did Julian ask you at the library?",
+        "answer": "He asked whether the reserve copies could stay out until Monday morning."
       },
       "retried_after_fail": false,
       "failure_reason": ""

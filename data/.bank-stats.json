@@ -1,89 +1,9 @@
 {
-  "generated_at": "2026-08-23T19:14:38.609Z",
+  "generated_at": "2026-08-24T19:14:10.805Z",
   "bs": {
-    "total_sets": 90,
-    "total_questions": 894,
+    "total_sets": 91,
+    "total_questions": 904,
     "recent_60_samples": [
-      {
-        "prompt": "I heard from Naomi that the darkroom reopened.",
-        "answer": "Do you know the new access code?",
-        "grammar": [
-          "direct yes/no question",
-          "auxiliary do"
-        ]
-      },
-      {
-        "prompt": "I left my ID card somewhere near the rec center.",
-        "answer": "Can you replace it at the front desk?",
-        "grammar": [
-          "direct question with modal can",
-          "prepositional phrase of place"
-        ]
-      },
-      {
-        "prompt": "Did you and Angelina get tickets for the winter concert?",
-        "answer": "Unfortunately, she told me the presale sold out instantly.",
-        "grammar": [
-          "indirect speech with that-clause",
-          "past simple"
-        ]
-      },
-      {
-        "prompt": "Did Alison remind you about the flu shot clinic today?",
-        "answer": "I can't get an appointment until the campus nurse returns my form.",
-        "grammar": [
-          "negative modal can't",
-          "time clause with until"
-        ]
-      },
-      {
-        "prompt": "What did Harold at the bookstore tell you about buyback?",
-        "answer": "He told me my old textbooks were accepted for store credit.",
-        "grammar": [
-          "indirect speech with that-clause",
-          "past passive"
-        ]
-      },
-      {
-        "prompt": "Has Mariana signed you up for the career fair yet?",
-        "answer": "No, I haven't picked an interview slot yet.",
-        "grammar": [
-          "present perfect negative",
-          "casual opener"
-        ]
-      },
-      {
-        "prompt": "What did Diane say about your printing quota?",
-        "answer": "Your printing quota doesn't reset until the spring term.",
-        "grammar": [
-          "present simple negative",
-          "time expression with until"
-        ]
-      },
-      {
-        "prompt": "Where did you and Julian catch the shuttle this morning?",
-        "answer": "I took the early shuttle that stops right beside the science library.",
-        "grammar": [
-          "relative clause with that",
-          "past simple"
-        ]
-      },
-      {
-        "prompt": "Did Hector finish fixing your bike at the repair station?",
-        "answer": "Actually, I'm picking it up tomorrow morning.",
-        "grammar": [
-          "present continuous for future arrangement",
-          "casual opener"
-        ]
-      },
-      {
-        "prompt": "Did Margot get back to you about the tutoring center?",
-        "answer": "She told me the tutor who handles lab reports is free.",
-        "grammar": [
-          "indirect speech with that-clause",
-          "relative clause with who"
-        ]
-      },
       {
         "prompt": "What did your advisor say about the summer program?",
         "answer": "She explained why the department moved the application deadline to April.",
@@ -482,21 +402,102 @@
           "passive voice with was",
           "past simple"
         ]
+      },
+      {
+        "prompt": "What did you tell the housing office?",
+        "answer": "We picked the apartment that includes a parking spot.",
+        "grammar": [
+          "relative clause"
+        ]
+      },
+      {
+        "prompt": "Why did you come back so quickly?",
+        "answer": "The lunch line moved faster than I'd expected.",
+        "grammar": [
+          "comparative",
+          "simple past"
+        ]
+      },
+      {
+        "prompt": "Why did you stop by the front desk?",
+        "answer": "I needed to know if the lab reopened on Sunday.",
+        "grammar": [
+          "embedded question",
+          "declarative word order"
+        ]
+      },
+      {
+        "prompt": "Where did you leave your gym bag?",
+        "answer": "I left it inside the front locker.",
+        "grammar": [
+          "simple past",
+          "prepositional phrase"
+        ]
+      },
+      {
+        "prompt": "Did you find your folder yet?",
+        "answer": "I left my folder in the auditorium.",
+        "grammar": [
+          "simple past",
+          "prepositional phrase"
+        ]
+      },
+      {
+        "prompt": "What did the scholarship office tell you?",
+        "answer": "The committee hasn't announced the winners yet.",
+        "grammar": [
+          "negation with contraction",
+          "present perfect"
+        ]
+      },
+      {
+        "prompt": "What did Julian ask you at the library?",
+        "answer": "He asked whether the reserve copies could stay out until Monday morning.",
+        "grammar": [
+          "embedded question",
+          "modal verb"
+        ]
+      },
+      {
+        "prompt": "What did you want to know after class?",
+        "answer": "I wondered how many revisions my essay required.",
+        "grammar": [
+          "embedded question",
+          "declarative word order"
+        ]
+      },
+      {
+        "prompt": "Did you hear what happened to the field trip?",
+        "answer": "Our trip to the observatory was cancelled because of the storm.",
+        "grammar": [
+          "passive voice",
+          "causal phrase"
+        ]
+      },
+      {
+        "prompt": "I just joined the debate club this week.",
+        "answer": "Where do I pick up my membership card?",
+        "grammar": [
+          "direct wh-question",
+          "subject-auxiliary inversion",
+          "phrasal verb"
+        ]
       }
     ],
     "opener_freq_recent60": {
-      "statement": 20,
+      "statement": 17,
+      "what did X": 16,
       "yes-no Q": 14,
-      "what did X": 14,
-      "wh-Q": 10,
-      "I-statement": 2
+      "wh-Q": 12,
+      "I-statement": 1
     },
     "sentence_type_freq_recent60": {
-      "other": 32,
-      "indirect-Q": 14,
-      "passive": 6,
+      "other": 28,
+      "indirect-Q": 16,
       "negation": 6,
-      "comparative": 2
+      "passive": 6,
+      "comparative": 3,
+      "relative-clause": 1
     }
   },
   "discussion": {
