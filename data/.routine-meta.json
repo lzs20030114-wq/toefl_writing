@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 17,
-      "accepted": 10,
+      "accepted": 20,
       "topics": [
         "宿舍与住房",
         "图书馆借阅",
@@ -23,8 +23,12 @@
         "prompt": "What did Julian ask you at the library?",
         "answer": "He asked whether the reserve copies could stay out until Monday morning."
       },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "retried_after_fail": true,
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     }
-  }
+  },
+  "r2_completed_at": "2026-08-24T19:40:54Z",
+  "r2_session_id": "routine-r2-20260824-193729"
 }
