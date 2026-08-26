@@ -1,18 +1,20 @@
 {
-  "generated_at": "2026-08-25T17:55:28.772Z",
+  "generated_at": "2026-08-26T19:24:26.181Z",
   "window_days": 7,
-  "active_users": 7,
+  "active_users": 6,
   "banks": {
     "bs": {
       "bank_size": 92,
-      "top_user_consumed": 64,
-      "top_user_pct": 0.696,
+      "top_user_consumed": 65,
+      "top_user_pct": 0.707,
       "burn_7d": 16,
-      "min_user_runway_days": 17.8,
-      "triggers": [],
-      "generate": false,
-      "n": 0,
-      "reason": "库存充足，当晚无需补题。"
+      "min_user_runway_days": 15.8,
+      "triggers": [
+        "T1"
+      ],
+      "generate": true,
+      "n": 17,
+      "reason": "头号活跃用户已做 65/92 题（71%），逼近刷穿，建议补 17 题。"
     },
     "discussion": {
       "bank_size": 215,
@@ -38,10 +40,10 @@
     },
     "reading-ap": {
       "bank_size": 101,
-      "top_user_consumed": 16,
-      "top_user_pct": 0.158,
-      "burn_7d": 2,
-      "min_user_runway_days": 301,
+      "top_user_consumed": 25,
+      "top_user_pct": 0.248,
+      "burn_7d": 12,
+      "min_user_runway_days": 44.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -49,10 +51,10 @@
     },
     "ctw": {
       "bank_size": 407,
-      "top_user_consumed": 85,
-      "top_user_pct": 0.209,
-      "burn_7d": 40,
-      "min_user_runway_days": 59.3,
+      "top_user_consumed": 109,
+      "top_user_pct": 0.268,
+      "burn_7d": 64,
+      "min_user_runway_days": 33.6,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -60,10 +62,10 @@
     },
     "rdl-short": {
       "bank_size": 208,
-      "top_user_consumed": 12,
-      "top_user_pct": 0.058,
-      "burn_7d": 2,
-      "min_user_runway_days": 686,
+      "top_user_consumed": 22,
+      "top_user_pct": 0.106,
+      "burn_7d": 12,
+      "min_user_runway_days": 108.5,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -71,10 +73,10 @@
     },
     "rdl-long": {
       "bank_size": 132,
-      "top_user_consumed": 12,
-      "top_user_pct": 0.091,
-      "burn_7d": 2,
-      "min_user_runway_days": 420,
+      "top_user_consumed": 22,
+      "top_user_pct": 0.167,
+      "burn_7d": 12,
+      "min_user_runway_days": 64.2,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -82,10 +84,10 @@
     },
     "listening-lat": {
       "bank_size": 149,
-      "top_user_consumed": 4,
-      "top_user_pct": 0.027,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "top_user_consumed": 5,
+      "top_user_pct": 0.034,
+      "burn_7d": 1,
+      "min_user_runway_days": 1008,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -93,10 +95,10 @@
     },
     "lc": {
       "bank_size": 83,
-      "top_user_consumed": 5,
-      "top_user_pct": 0.06,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "top_user_consumed": 7,
+      "top_user_pct": 0.084,
+      "burn_7d": 2,
+      "min_user_runway_days": 266,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -104,10 +106,10 @@
     },
     "la": {
       "bank_size": 100,
-      "top_user_consumed": 10,
-      "top_user_pct": 0.1,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "top_user_consumed": 12,
+      "top_user_pct": 0.12,
+      "burn_7d": 2,
+      "min_user_runway_days": 308,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -115,10 +117,10 @@
     },
     "lcr": {
       "bank_size": 421,
-      "top_user_consumed": 43,
-      "top_user_pct": 0.102,
-      "burn_7d": 0,
-      "min_user_runway_days": null,
+      "top_user_consumed": 58,
+      "top_user_pct": 0.138,
+      "burn_7d": 15,
+      "min_user_runway_days": 169.4,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -150,5 +152,7 @@
       "not_in_routine": true
     }
   },
-  "routine_instructions": []
+  "routine_instructions": [
+    "Generate 17 bs sentence-building items"
+  ]
 }
