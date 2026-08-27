@@ -1,9 +1,41 @@
 {
-  "session_id": "routine-20260826-190503",
-  "completed_at": "2026-08-26T19:06:00Z",
-  "duration_minutes": 1,
-  "model": "",
-  "highlight": "按需信号: 今晚无需出题（12 库库存全部充足；唯一告警库 interview 库存 11/红线 30，但标记 not_in_routine 已跳过）",
+  "session_id": "routine-20260827-190508",
+  "completed_at": "2026-08-27T19:17:45.000Z",
+  "duration_minutes": 13,
+  "model": "claude-opus-5",
+  "highlight": "按需信号只命中 BS（头号用户已刷 71%）：新增 20 题两套，难度冻结门 PASS，其余 11 库库存充足跳过。",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 20,
+      "accepted": 20,
+      "topics": [
+        "实习/导师面谈",
+        "图书馆座位",
+        "宿舍与住宿申请",
+        "社团与远足club",
+        "前台取件",
+        "实验报告提交",
+        "校园海报/开幕式",
+        "借书证遗失",
+        "转学分与选课改期",
+        "辅导/助教安排",
+        "讨论课分班",
+        "班车与复习课",
+        "海外交流宣讲",
+        "教授通知/海报展",
+        "停车证",
+        "健身房更衣柜",
+        "攀岩课报名",
+        "洗衣卡",
+        "宿舍暖气报修"
+      ],
+      "favorite": {
+        "prompt": "What did they say about the club posters?",
+        "answer": "All the new posters were taken down before the opening ceremony began."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    }
+  }
 }

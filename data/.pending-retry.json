@@ -1,11 +1,45 @@
 {
-  "session_id": "routine-20260826-190503",
-  "generated_at": "2026-08-26T19:05:26.932Z",
-  "needs_retry": false,
+  "session_id": "routine-20260827-190508",
+  "generated_at": "2026-08-27T19:17:57.066Z",
+  "needs_retry": true,
   "overall_scores": {
-    "diversity": 0,
-    "quality": 0
+    "diversity": 89,
+    "quality": 94
   },
   "bs_difficulty_gate": "PASS",
-  "retry_banks": []
+  "retry_banks": [
+    {
+      "bank": "bs",
+      "diversity_score": 89,
+      "diversity_threshold": 90,
+      "quality_score": 94,
+      "quality_threshold": 95,
+      "failures": [
+        "多样性 89 < 90",
+        "质量 94 < 95"
+      ],
+      "diversity_breakdown": [
+        "角色名 5/20",
+        "场景 20/20",
+        "句型 4/5",
+        "开头 4/4",
+        "prefilled类型 7/4 (top:verb-phrase 5/20)",
+        "人物当prefilled 2/20 (10%, TPO~30%)",
+        "干扰词 12种 (top:did 28%)",
+        "chunk颗粒 6.2块/题 单词率91% (TPO~6块/77%)",
+        "题面对话化 15/20 (75% 含you, TPO~72%)"
+      ],
+      "quality_breakdown": [
+        "块数 17/20",
+        "干扰词 18/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
+      ],
+      "hints": [
+        "角色名重复严重 (5/20 distinct) — use 15+ distinct character names from: Olivia, Harold, Mariana, Hector, Margot, Emma, Julian, Matthew, Alison, Juan, Angelina, Professor Cho, Naomi, Diane",
+        "质量校验有偏差: 块数 17/20, 干扰词 18/20, 答案长度 20/20, 重组正确 20/20 — recheck schema compliance"
+      ],
+      "items_to_supplement": 10
+    }
+  ]
 }
