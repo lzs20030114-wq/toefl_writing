@@ -8,7 +8,7 @@
   "results": {
     "bs": {
       "generated": 20,
-      "accepted": 20,
+      "accepted": 30,
       "topics": [
         "实习/导师面谈",
         "图书馆座位",
@@ -34,8 +34,12 @@
         "prompt": "What did they say about the club posters?",
         "answer": "All the new posters were taken down before the opening ceremony began."
       },
-      "retried_after_fail": false,
-      "failure_reason": ""
+      "retried_after_fail": true,
+      "failure_reason": "R1 diversity 89<90 / quality 94<95 (角色名 5/20, 干扰词 did 28%)",
+      "r2_supplemented": true,
+      "r2_items_added": 10
     }
-  }
+  },
+  "r2_completed_at": "2026-08-27T19:43:00Z",
+  "r2_session_id": "routine-r2-20260827-193106"
 }
