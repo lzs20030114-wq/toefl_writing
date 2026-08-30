@@ -1,9 +1,40 @@
 {
-  "session_id": "routine-20260829-190422",
-  "completed_at": "2026-08-29T19:04:43.322Z",
-  "duration_minutes": 2,
-  "model": "claude-opus-5",
-  "highlight": "按需信号: 今晚无需出题 — 12 个常规库存均充足（最短跑道 BS 约 21 天）；唯一告急的 interview 库（11 < 红线 30）不在 R1 常规产线，已跳过。",
+  "session_id": "routine-20260830-190440",
+  "completed_at": "2026-08-30T19:34:00Z",
+  "duration_minutes": 30,
+  "model": "Claude Opus 5",
+  "highlight": "按需信号只点名 BS（头号用户已刷 71%）：新增 2 套 20 题全部过冻结门，distractor 覆盖 did/was/had/not/does/which/have 等 9 个词，摆脱「did 一家独大」",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 21,
+      "accepted": 20,
+      "topics": [
+        "海报展/学术活动",
+        "注册处与成绩单",
+        "讨论课分组与选课",
+        "复习课与作业进度",
+        "校车与通勤路线",
+        "宿舍与信箱",
+        "写作工坊",
+        "彩排与场地变更",
+        "自习室对比",
+        "社团会费",
+        "停车许可",
+        "住宿办公室",
+        "健身房会员卡",
+        "周末辅导",
+        "辩论队选拔",
+        "实验课退课",
+        "社团装备采购",
+        "收发室包裹"
+      ],
+      "favorite": {
+        "prompt": "Did your advisor mention the lab sections?",
+        "answer": "She was wondering which discussion section still had open seats."
+      },
+      "retried_after_fail": false,
+      "failure_reason": ""
+    }
+  }
 }

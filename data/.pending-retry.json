@@ -1,11 +1,43 @@
 {
-  "session_id": "routine-20260829-190422",
-  "generated_at": "2026-08-29T19:04:43.708Z",
-  "needs_retry": false,
+  "session_id": "routine-20260830-190440",
+  "generated_at": "2026-08-30T19:11:17.685Z",
+  "needs_retry": true,
   "overall_scores": {
-    "diversity": 0,
-    "quality": 0
+    "diversity": 90,
+    "quality": 94
   },
   "bs_difficulty_gate": "PASS",
-  "retry_banks": []
+  "retry_banks": [
+    {
+      "bank": "bs",
+      "diversity_score": 90,
+      "diversity_threshold": 90,
+      "quality_score": 94,
+      "quality_threshold": 95,
+      "failures": [
+        "质量 94 < 95"
+      ],
+      "diversity_breakdown": [
+        "角色名 3/20",
+        "场景 20/20",
+        "句型 6/5",
+        "开头 4/4",
+        "prefilled类型 8/4 (top:verb-phrase 5/20)",
+        "人物当prefilled 4/20 (20%, TPO~30%)",
+        "干扰词 9种 (top:did 25%)",
+        "chunk颗粒 5.3块/题 单词率70% (TPO~6块/77%)",
+        "题面对话化 14/20 (70% 含you, TPO~72%)"
+      ],
+      "quality_breakdown": [
+        "块数 19/20",
+        "干扰词 16/20",
+        "答案长度 20/20",
+        "重组正确 20/20"
+      ],
+      "hints": [
+        "质量校验有偏差: 块数 19/20, 干扰词 16/20, 答案长度 20/20, 重组正确 20/20 — recheck schema compliance"
+      ],
+      "items_to_supplement": 10
+    }
+  ]
 }

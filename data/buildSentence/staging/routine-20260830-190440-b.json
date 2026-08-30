@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r1b_q1",
+      "prompt": "What did the housing office ask you at the counter?",
+      "answer": "They needed to know whether my new roommate had arrived yet.",
+      "chunks": ["they", "needed to", "know", "my new", "roommate", "had arrived", "yet"],
+      "prefilled": ["whether"],
+      "prefilled_positions": { "whether": 4 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "past perfect"]
+    },
+    {
+      "id": "tmp_r1b_q2",
+      "prompt": "I ran into Professor Cho after the seminar.",
+      "answer": "She asked if our group had picked a topic.",
+      "chunks": ["she", "our", "group", "had picked", "a topic"],
+      "prefilled": ["asked if"],
+      "prefilled_positions": { "asked if": 1 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "past perfect"]
+    },
+    {
+      "id": "tmp_r1b_q3",
+      "prompt": "Did the front desk get back to you about the printer?",
+      "answer": "I asked when the color cartridges would be replaced.",
+      "chunks": ["I", "asked", "the color", "cartridges", "would be", "replaced"],
+      "prefilled": ["when"],
+      "prefilled_positions": { "when": 2 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question", "modal passive"]
+    },
+    {
+      "id": "tmp_r1b_q4",
+      "prompt": "Why did you skip the gym this week?",
+      "answer": "My membership card has not been reactivated yet.",
+      "chunks": ["has", "not", "been", "reactivated", "yet"],
+      "prefilled": ["My membership card"],
+      "prefilled_positions": { "My membership card": 0 },
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "present perfect passive"]
+    },
+    {
+      "id": "tmp_r1b_q5",
+      "prompt": "Are you still tutoring on the weekends?",
+      "answer": "I never signed up for the spring sessions.",
+      "chunks": ["I", "signed up", "for", "the spring", "sessions"],
+      "prefilled": ["never"],
+      "prefilled_positions": { "never": 1 },
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": ["negation", "past simple"]
+    },
+    {
+      "id": "tmp_r1b_q6",
+      "prompt": "There is an opening on the debate team.",
+      "answer": "Do you know when the tryouts begin?",
+      "chunks": ["do", "you", "know", "the tryouts", "begin"],
+      "prefilled": ["when"],
+      "prefilled_positions": { "when": 3 },
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct question", "wh-clause"]
+    },
+    {
+      "id": "tmp_r1b_q7",
+      "prompt": "What did you tell the advisor about your schedule?",
+      "answer": "I dropped the lab that always ran past dinner.",
+      "chunks": ["I", "dropped", "the lab", "always ran", "past", "dinner"],
+      "prefilled": ["that"],
+      "prefilled_positions": { "that": 4 },
+      "distractor": "which",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause", "past simple"]
+    },
+    {
+      "id": "tmp_r1b_q8",
+      "prompt": "Did the club ever confirm the equipment order?",
+      "answer": "The new helmets were ordered by the treasurer.",
+      "chunks": ["the new", "helmets", "were", "ordered", "treasurer"],
+      "prefilled": ["by the"],
+      "prefilled_positions": { "by the": 5 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past simple"]
+    },
+    {
+      "id": "tmp_r1b_q9",
+      "prompt": "What did the mailroom clerk say to you?",
+      "answer": "My package will arrive at the front desk.",
+      "chunks": ["my", "package", "will", "arrive", "at the", "front desk"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["future simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r1b_q10",
+      "prompt": "I heard the shuttle route changed again.",
+      "answer": "We waited near the science building instead.",
+      "chunks": ["waited", "near", "the science", "building", "instead"],
+      "prefilled": ["We"],
+      "prefilled_positions": { "We": 0 },
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "prepositional phrase"]
+    }
+  ]
+}
