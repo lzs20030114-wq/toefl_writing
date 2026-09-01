@@ -1,0 +1,114 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "Did Mariana show you the new practice rooms?",
+      "answer": "She unlocked the practice room for me.",
+      "chunks": ["she", "unlocked", "the", "practice", "room", "for me", "was"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["past simple", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "Why did Harold call the recreation center?",
+      "answer": "He wanted to know whether I had renewed my pass.",
+      "chunks": ["he", "whether", "I", "had", "renewed", "my", "pass", "did"],
+      "prefilled": ["wanted to know"],
+      "prefilled_positions": { "wanted to know": 1 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with whether", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Did Olivia give you the reading list?",
+      "answer": "The article that she recommended helped me a lot.",
+      "chunks": ["the article", "that", "she", "recommended", "helped", "me", "a lot"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "I stopped by the equipment desk this morning.",
+      "answer": "Sorry, they haven't restocked the tennis rackets yet.",
+      "chunks": ["sorry,", "they", "haven't", "restocked", "the", "tennis", "rackets", "no"],
+      "prefilled": ["yet"],
+      "prefilled_positions": { "yet": 7 },
+      "distractor": "no",
+      "has_question_mark": false,
+      "grammar_points": ["negation with haven't", "present perfect"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "What did Julian tell you about the poster session?",
+      "answer": "Your final poster schedule was posted by the department office on Friday.",
+      "chunks": ["your final", "poster", "schedule", "was", "posted", "department", "office", "were"],
+      "prefilled": ["by the", "on Friday"],
+      "prefilled_positions": { "by the": 6, "on Friday": 10 },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Has Emma been to the north dining hall?",
+      "answer": "I found the lines shorter than downstairs.",
+      "chunks": ["I", "found", "the", "lines", "shorter", "downstairs", "are"],
+      "prefilled": ["than"],
+      "prefilled_positions": { "than": 5 },
+      "distractor": "are",
+      "has_question_mark": false,
+      "grammar_points": ["comparative with than", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "I want to try the darkroom this weekend.",
+      "answer": "How do I book a slot in the darkroom?",
+      "chunks": ["do", "I", "book", "a", "slot", "in the", "darkroom", "can"],
+      "prefilled": ["How"],
+      "prefilled_positions": { "How": 0 },
+      "distractor": "can",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question", "present simple"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "What did Hector ask you after the meeting?",
+      "answer": "He asked if I'd finished my part of the script.",
+      "chunks": ["he", "I'd", "finished", "my part", "of the", "script", "has"],
+      "prefilled": ["asked if"],
+      "prefilled_positions": { "asked if": 1 },
+      "distractor": "has",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with if", "past perfect"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "Did Margot pick up the concert wristbands?",
+      "answer": "She found out that the wristbands arrived on Tuesday.",
+      "chunks": ["found out", "that", "the", "wristbands", "arrived", "on", "Tuesday", "finds"],
+      "prefilled": ["She"],
+      "prefilled_positions": { "She": 0 },
+      "distractor": "finds",
+      "has_question_mark": false,
+      "grammar_points": ["reported speech with found out", "past simple"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Did Naomi mention the shuttle change to you?",
+      "answer": "Unfortunately, I have not seen the new schedule on the campus website.",
+      "chunks": ["have not", "seen", "the new", "schedule", "on the", "campus", "website", "had"],
+      "prefilled": ["Unfortunately, I"],
+      "prefilled_positions": { "Unfortunately, I": 0 },
+      "distractor": "had",
+      "has_question_mark": false,
+      "grammar_points": ["present perfect negation", "prepositional phrase"]
+    }
+  ]
+}
