@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "generated_at": "2026-08-31T19:12:06.843Z",
+  "generated_at": "2026-09-01T19:15:04.905Z",
   "question_sets": [
     {
       "set_id": 1,
@@ -25655,6 +25655,504 @@
           "grammar_points": [
             "embedded wh-clause",
             "present simple"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 100,
+      "questions": [
+        {
+          "id": "ets_s100_q1",
+          "prompt": "Why did you stop by the career center this afternoon?",
+          "answer": "I wanted to know whether the resume workshop still had open spots.",
+          "chunks": [
+            "I",
+            "whether",
+            "the resume",
+            "workshop",
+            "had",
+            "open",
+            "spots"
+          ],
+          "prefilled": [
+            "wanted to know",
+            "still"
+          ],
+          "prefilled_positions": {
+            "wanted to know": 1,
+            "still": 8
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s100_q2",
+          "prompt": "Did you get your student ID photo taken?",
+          "answer": "I've picked up my new photo card.",
+          "chunks": [
+            "picked up",
+            "my",
+            "new",
+            "photo",
+            "card"
+          ],
+          "prefilled": [
+            "I've"
+          ],
+          "prefilled_positions": {
+            "I've": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past simple",
+            "phrasal verb"
+          ]
+        },
+        {
+          "id": "ets_s100_q3",
+          "prompt": "I just joined the campus radio station.",
+          "answer": "How do I reserve time in the recording booth?",
+          "chunks": [
+            "how",
+            "do",
+            "I",
+            "reserve",
+            "time",
+            "recording booth"
+          ],
+          "prefilled": [
+            "in the"
+          ],
+          "prefilled_positions": {
+            "in the": 5
+          },
+          "distractor": "can",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct wh-question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s100_q4",
+          "prompt": "Are you signing up for any clubs this year?",
+          "answer": "I'm joining the film club this term.",
+          "chunks": [
+            "I'm",
+            "joining",
+            "the",
+            "film club"
+          ],
+          "prefilled": [
+            "this term"
+          ],
+          "prefilled_positions": {
+            "this term": 5
+          },
+          "distractor": "were",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present continuous",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s100_q5",
+          "prompt": "Did your bike permit ever show up?",
+          "answer": "The permit that I ordered has not arrived yet.",
+          "chunks": [
+            "the permit",
+            "that",
+            "I",
+            "ordered",
+            "has not",
+            "arrived",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "no",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with has not",
+            "relative clause with that"
+          ]
+        },
+        {
+          "id": "ets_s100_q6",
+          "prompt": "What did your advisor ask you at the career fair?",
+          "answer": "My advisor wondered how many internships I had applied for over the summer.",
+          "chunks": [
+            "my advisor",
+            "how many",
+            "internships",
+            "I",
+            "had applied",
+            "for",
+            "summer"
+          ],
+          "prefilled": [
+            "wondered",
+            "over the"
+          ],
+          "prefilled_positions": {
+            "wondered": 2,
+            "over the": 10
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded wh-question",
+            "past perfect"
+          ]
+        },
+        {
+          "id": "ets_s100_q7",
+          "prompt": "The poster shop you mentioned moved to the basement.",
+          "answer": "Do they still print large maps down there?",
+          "chunks": [
+            "do",
+            "they",
+            "print",
+            "large maps",
+            "down",
+            "there"
+          ],
+          "prefilled": [
+            "still"
+          ],
+          "prefilled_positions": {
+            "still": 2
+          },
+          "distractor": "does",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question",
+            "subject-auxiliary inversion"
+          ]
+        },
+        {
+          "id": "ets_s100_q8",
+          "prompt": "What did the studio assistant ask you?",
+          "answer": "She asked whether the kiln runs every Friday.",
+          "chunks": [
+            "she",
+            "asked",
+            "whether",
+            "the kiln",
+            "runs",
+            "every Friday"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded question with whether",
+            "present simple"
+          ]
+        },
+        {
+          "id": "ets_s100_q9",
+          "prompt": "Do you need a ticket for the observatory tonight?",
+          "answer": "Tickets are no longer sold at the door.",
+          "chunks": [
+            "are",
+            "no longer",
+            "sold",
+            "at the",
+            "door"
+          ],
+          "prefilled": [
+            "Tickets"
+          ],
+          "prefilled_positions": {
+            "Tickets": 0
+          },
+          "distractor": "not",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with no longer",
+            "passive voice"
+          ]
+        },
+        {
+          "id": "ets_s100_q10",
+          "prompt": "What did the front desk tell you about the health center?",
+          "answer": "The nurse said that you can walk in at nine.",
+          "chunks": [
+            "the nurse",
+            "you",
+            "can",
+            "walk in"
+          ],
+          "prefilled": [
+            "said that",
+            "at nine"
+          ],
+          "prefilled_positions": {
+            "said that": 2,
+            "at nine": 8
+          },
+          "distractor": "had",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded that-clause",
+            "present simple"
+          ]
+        }
+      ]
+    },
+    {
+      "set_id": 101,
+      "questions": [
+        {
+          "id": "ets_s101_q1",
+          "prompt": "Have you tried the language exchange table?",
+          "answer": "I've been going to the beginner table.",
+          "chunks": [
+            "been going",
+            "to the",
+            "beginner",
+            "table"
+          ],
+          "prefilled": [
+            "I've"
+          ],
+          "prefilled_positions": {
+            "I've": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "present perfect continuous",
+            "contraction"
+          ]
+        },
+        {
+          "id": "ets_s101_q2",
+          "prompt": "This week the observatory opens for public viewing nights.",
+          "answer": "Can you reserve a telescope for the evening?",
+          "chunks": [
+            "you",
+            "reserve",
+            "a telescope",
+            "evening"
+          ],
+          "prefilled": [
+            "Can",
+            "for the"
+          ],
+          "prefilled_positions": {
+            "Can": 0,
+            "for the": 5
+          },
+          "distractor": "does",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question",
+            "modal can"
+          ]
+        },
+        {
+          "id": "ets_s101_q3",
+          "prompt": "Did the math help desk sort out your question?",
+          "answer": "They explained how you can book a drop-in slot.",
+          "chunks": [
+            "they",
+            "explained",
+            "how",
+            "you can",
+            "book",
+            "a drop-in slot"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": null,
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded wh-clause",
+            "present simple"
+          ]
+        },
+        {
+          "id": "ets_s101_q4",
+          "prompt": "What did they tell you at the writing center?",
+          "answer": "The tutor explained why you should book early.",
+          "chunks": [
+            "the tutor",
+            "why",
+            "you",
+            "should",
+            "book"
+          ],
+          "prefilled": [
+            "explained",
+            "early"
+          ],
+          "prefilled_positions": {
+            "explained": 2,
+            "early": 7
+          },
+          "distractor": "is",
+          "has_question_mark": false,
+          "grammar_points": [
+            "embedded wh-clause",
+            "present simple"
+          ]
+        },
+        {
+          "id": "ets_s101_q5",
+          "prompt": "Why did you skip the cooking class?",
+          "answer": "I didn't get my name on the list.",
+          "chunks": [
+            "didn't",
+            "get",
+            "my name",
+            "on the",
+            "list"
+          ],
+          "prefilled": [
+            "I"
+          ],
+          "prefilled_positions": {
+            "I": 0
+          },
+          "distractor": "do",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with didn't",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s101_q6",
+          "prompt": "Why did you email the greenhouse office this morning?",
+          "answer": "I needed to know whether the greenhouse tour on Friday required tickets.",
+          "chunks": [
+            "I",
+            "needed to",
+            "know",
+            "whether",
+            "the greenhouse tour",
+            "required",
+            "tickets"
+          ],
+          "prefilled": [
+            "on Friday"
+          ],
+          "prefilled_positions": {
+            "on Friday": 8
+          },
+          "distractor": "did",
+          "has_question_mark": false,
+          "grammar_points": [
+            "indirect question with whether",
+            "past simple"
+          ]
+        },
+        {
+          "id": "ets_s101_q7",
+          "prompt": "Did you pick up your lost umbrella from the office?",
+          "answer": "The umbrella that you left hasn't turned up yet.",
+          "chunks": [
+            "the umbrella",
+            "that",
+            "you",
+            "left",
+            "hasn't",
+            "turned up",
+            "yet"
+          ],
+          "prefilled": [],
+          "prefilled_positions": {},
+          "distractor": "not",
+          "has_question_mark": false,
+          "grammar_points": [
+            "negation with hasn't",
+            "relative clause with that"
+          ]
+        },
+        {
+          "id": "ets_s101_q8",
+          "prompt": "Did you enjoy the campus museum trip?",
+          "answer": "The guided tour felt a little short.",
+          "chunks": [
+            "felt",
+            "a",
+            "little",
+            "short"
+          ],
+          "prefilled": [
+            "The guided tour"
+          ],
+          "prefilled_positions": {
+            "The guided tour": 0
+          },
+          "distractor": "was",
+          "has_question_mark": false,
+          "grammar_points": [
+            "past simple",
+            "degree modifier"
+          ]
+        },
+        {
+          "id": "ets_s101_q9",
+          "prompt": "They posted the audition list you were waiting for.",
+          "answer": "Did you see my name on the callback list?",
+          "chunks": [
+            "did",
+            "you",
+            "see",
+            "my",
+            "name",
+            "callback list"
+          ],
+          "prefilled": [
+            "on the"
+          ],
+          "prefilled_positions": {
+            "on the": 5
+          },
+          "distractor": "have",
+          "has_question_mark": true,
+          "grammar_points": [
+            "direct yes/no question",
+            "possessive"
+          ]
+        },
+        {
+          "id": "ets_s101_q10",
+          "prompt": "Did the coach give you a practice time?",
+          "answer": "I took the early practice slot that leaves my afternoons completely free.",
+          "chunks": [
+            "I",
+            "took",
+            "the early",
+            "practice slot",
+            "my",
+            "afternoons",
+            "free"
+          ],
+          "prefilled": [
+            "that leaves",
+            "completely"
+          ],
+          "prefilled_positions": {
+            "that leaves": 6,
+            "completely": 10
+          },
+          "distractor": "had",
+          "has_question_mark": false,
+          "grammar_points": [
+            "relative clause with that",
+            "past simple"
           ]
         }
       ]
