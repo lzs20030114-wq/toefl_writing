@@ -1,6 +1,6 @@
 {
   "file": "/home/user/toefl_writing/data/buildSentence/questions.json.gatecheck.tmp",
-  "n": 1024,
+  "n": 1034,
   "aggregateVerdict": "PASS",
   "forceWordAudit": true,
   "checks": [
@@ -12,22 +12,22 @@
     {
       "name": "length_band.med",
       "verdict": "PASS",
-      "detail": "got 0.636 want 0.595±0.05"
+      "detail": "got 0.635 want 0.595±0.05"
     },
     {
       "name": "length_band.hard",
       "verdict": "PASS",
-      "detail": "got 0.124 want 0.159±0.05"
+      "detail": "got 0.125 want 0.159±0.05"
     },
     {
       "name": "register.first_person",
       "verdict": "PASS",
-      "detail": "got 0.688 band [0.55,0.69]"
+      "detail": "got 0.689 band [0.55,0.69]"
     },
     {
       "name": "register.contraction",
       "verdict": "PASS",
-      "detail": "got 0.185 band [0.18,0.29]"
+      "detail": "got 0.184 band [0.18,0.29]"
     },
     {
       "name": "register.third_person_formal",
@@ -37,7 +37,7 @@
     {
       "name": "diversity.opening",
       "verdict": "PASS",
-      "detail": "got 0.63 min 0.38"
+      "detail": "got 0.631 min 0.38"
     },
     {
       "name": "diversity.exact_dup",
@@ -57,7 +57,7 @@
     {
       "name": "prompt.ends_question",
       "verdict": "PASS",
-      "detail": "got 0.765 band [0.51,0.96] (real 0.705)"
+      "detail": "got 0.764 band [0.51,0.96] (real 0.705)"
     },
     {
       "name": "prompt.addresses_you",
@@ -72,12 +72,12 @@
     {
       "name": "prefilled.bare_pronoun",
       "verdict": "PASS",
-      "detail": "got 0.083 max 0.45"
+      "detail": "got 0.084 max 0.45"
     },
     {
       "name": "prefilled.multi_anchor",
       "verdict": "PASS",
-      "detail": "got 0.094 band [0.08,0.45]"
+      "detail": "got 0.093 band [0.08,0.45]"
     },
     {
       "name": "prefilled.non_start_position",
@@ -92,7 +92,7 @@
     {
       "name": "correctness.reconstructable",
       "verdict": "PASS",
-      "detail": "0/1024 fail"
+      "detail": "0/1034 fail"
     }
   ],
   "metrics": {
@@ -105,32 +105,32 @@
     },
     "length_bands": {
       "easy": 0.24,
-      "med": 0.636,
-      "hard": 0.124
+      "med": 0.635,
+      "hard": 0.125
     },
     "register": {
-      "first_person": 0.688,
-      "contraction": 0.185,
+      "first_person": 0.689,
+      "contraction": 0.184,
       "casual_opener": 0.041,
       "third_person_formal": 0.169
     },
     "structure": {
-      "relative_clause": 0.166,
+      "relative_clause": 0.165,
       "passive": 0.083,
-      "embedded_question": 0.153,
+      "embedded_question": 0.154,
       "negation": 0.156,
       "modal": 0.09,
-      "subordinate": 0.106
+      "subordinate": 0.105
     },
     "diversity": {
-      "opening_trigram_diversity": 0.63,
+      "opening_trigram_diversity": 0.631,
       "exact_dup_rate": 0.002
     },
     "hard_band_profile": {
-      "n": 127,
-      "first_person": 0.732,
-      "relative_clause": 0.496,
-      "passive": 0.157
+      "n": 129,
+      "first_person": 0.729,
+      "relative_clause": 0.488,
+      "passive": 0.163
     }
   },
   "per_item_audit": [
@@ -22062,6 +22062,218 @@
       "reconstructable": true,
       "flags": [
         "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "The final recital program was approved by the new visiting music director.",
+      "setId": 104,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "passive"
+      ],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "He did not want to miss our lab shift.",
+      "setId": 104,
+      "W": 9,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "negation"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "This section fills up faster than I'd expected.",
+      "setId": 104,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
+      "register": [
+        "firstPerson",
+        "contraction"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Our first team practice starts on Monday.",
+      "setId": 104,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "How many sessions can I book each week?",
+      "setId": 104,
+      "W": 8,
+      "band": "med",
+      "index": 9,
+      "struct": [
+        "modal"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She asked whether my guest tickets were free.",
+      "setId": 104,
+      "W": 8,
+      "band": "med",
+      "index": 10,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "She asked me whether the writing lab opens early on Saturday mornings.",
+      "setId": 104,
+      "W": 12,
+      "band": "hard",
+      "index": 14,
+      "struct": [
+        "embeddedQ"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "I finally met the professor who teaches that seminar.",
+      "setId": 104,
+      "W": 9,
+      "band": "med",
+      "index": 11,
+      "struct": [
+        "relClause"
+      ],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "He was wondering if I had spare notes.",
+      "setId": 104,
+      "W": 8,
+      "band": "med",
+      "index": 8,
+      "struct": [],
+      "register": [
+        "firstPerson"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)"
+      ],
+      "needs_human": [
+        "语法正确?",
+        "排列唯一合理?",
+        "读着像真题口吻?"
+      ]
+    },
+    {
+      "answer": "Where does she hold her office hours?",
+      "setId": 104,
+      "W": 7,
+      "band": "easy",
+      "index": 7,
+      "struct": [],
+      "register": [
+        "thirdFormal"
+      ],
+      "reconstructable": true,
+      "flags": [
+        "HAS_DISTRACTOR(真题=0)",
+        "LOW_PROMPT_COHERENCE?"
       ],
       "needs_human": [
         "语法正确?",
