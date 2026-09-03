@@ -1,32 +1,32 @@
 {
-  "session_id": "routine-20260902-190436",
-  "generated_at": "2026-09-02T19:13:27.198Z",
+  "session_id": "routine-20260903-190429",
+  "generated_at": "2026-09-03T19:11:49.663Z",
   "needs_retry": true,
   "overall_scores": {
-    "diversity": 85,
+    "diversity": 88,
     "quality": 96
   },
   "bs_difficulty_gate": "PASS",
   "retry_banks": [
     {
       "bank": "bs",
-      "diversity_score": 85,
+      "diversity_score": 88,
       "diversity_threshold": 90,
       "quality_score": 96,
       "quality_threshold": 95,
       "failures": [
-        "多样性 85 < 90"
+        "多样性 88 < 90"
       ],
       "diversity_breakdown": [
         "角色名 3/20",
         "场景 20/20",
-        "句型 3/5",
+        "句型 4/5",
         "开头 4/4",
-        "prefilled类型 7/4 (top:subject-np 6/20)",
-        "人物当prefilled 3/20 (15%, TPO~30%)",
-        "干扰词 14种 (top:did 17%)",
-        "chunk颗粒 6.0块/题 单词率88% (TPO~6块/77%)",
-        "题面对话化 14/20 (70% 含you, TPO~72%)"
+        "prefilled类型 8/4 (top:verb-phrase 9/20)",
+        "人物当prefilled 2/20 (10%, TPO~30%)",
+        "干扰词 11种 (top:did 33%)",
+        "chunk颗粒 5.8块/题 单词率79% (TPO~6块/77%)",
+        "题面对话化 15/20 (75% 含you, TPO~72%)"
       ],
       "quality_breakdown": [
         "块数 19/20",
@@ -39,7 +39,5 @@
       ],
       "items_to_supplement": 10
     }
-  ],
-  "resolved_at": "2026-09-02T19:41:35Z",
-  "resolution_status": "supplemented"
+  ]
 }
