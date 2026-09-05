@@ -13,6 +13,10 @@ import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 import MyBankImporter from "../userBank/MyBankImporter";
+// 故意**不** import lib/realBank：那会把 238 KB 写作真题 JSON + 阅读三个题库打进首页
+// bundle（实测 `/` 的 First Load JS 255 kB → 318 kB）。阅读题量改读 build_bank 落库时
+// 顺手写的几十字节计数文件，只有 {ctw,rdl,ap} 三个数字。
+import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
 import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 
 /* ── 颜色工具 ── */
@@ -150,8 +154,9 @@ export function MobileHomePage({
                 whiteSpace: "nowrap",
               }}
             >
-              {/* emoji dropped on mobile to keep the 4 tabs from clipping (e.g. "Listening" at 320px); desktop NavSidebar keeps it */}
-              {sec.label}
+              {/* emoji dropped on mobile to keep the tabs from clipping (e.g. "Listening" at 320px); desktop NavSidebar keeps it.
+                  shortLabel 兜底同理：6 等分横排装不下 "Real Questions"。 */}
+              {sec.shortLabel || sec.label}
             </button>
           );
         })}
@@ -172,6 +177,12 @@ export function MobileHomePage({
         </div>
       ) : activeSection === "reading" ? (
         <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
+      ) : activeSection === "real-bank" ? (
+        <MobileRealExamSection
+          isChallenge={isChallenge}
+          tier={tier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+          onUpgrade={() => setUpgradeOpen(true)} t1={t1} t2={t2}
+        />
       ) : activeSection === "my-bank" ? (
         <MobileMyBankSection
           userCode={userCode} tier={tier} isLoggedIn={isLoggedIn}
@@ -739,6 +750,60 @@ function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpg
         onRequireUpgrade={onUpgrade}
         onRequireLogin={showLoginModal}
       />
+    </>
+  );
+}
+
+/* ── Mobile Real Questions Section（真题专区） ── */
+// 桌面端 RealExamSectionContent 的移动端平行实现（两条渲染链完全独立）。
+// 六张卡对应 /real-bank?type=discussion|email|bs|ctw|rdl|ap；非 Pro 时置灰禁点 + Pro 门禁横幅。
+function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
+  const accent = SECTION_ACCENTS["real-bank"];
+  const isPro = tier === "pro" || tier === "legacy";
+
+  // 阅读题量随 build_bank 产物变化，写死会过期 → 读 counts.json（不是 lib/realBank，见文件头 import 处的说明）；
+  // 写作三题型是冻结语料，保持写死。
+  const tasks = [
+    { type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", timeLabel: "125 题" },
+    { type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", timeLabel: "13 题" },
+    { type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", timeLabel: "20 题" },
+    { type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", timeLabel: `${REAL_READING_COUNTS.ctw} 篇` },
+    { type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", timeLabel: `${REAL_READING_COUNTS.rdl} 篇` },
+    { type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", timeLabel: `${REAL_READING_COUNTS.ap} 篇` },
+  ];
+
+  return (
+    <>
+      <div style={{ marginBottom: 14 }}>
+        <h1 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>真题专区</h1>
+        <div style={{ fontSize: 12, color: t2, lineHeight: 1.5 }}>
+          公开真题集中练，不限时间、自选题目。每题标注来源分档：ETS官方 / 回忆版 / 参考版（早期收集，来源未核验）。
+        </div>
+      </div>
+
+      {!isPro && (
+        <MobileSecProGate
+          isChallenge={isChallenge} isLoggedIn={isLoggedIn}
+          showLoginModal={showLoginModal} onUpgrade={onUpgrade}
+          accent={accent} t1={t1} t2={t2}
+          subtext="真题专区仅对 Pro 用户开放"
+        />
+      )}
+
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 10, marginBottom: 14,
+        ...(isPro ? {} : { opacity: 0.45, pointerEvents: "none", filter: "grayscale(0.5)" }),
+      }}>
+        {tasks.map((task) => (
+          <MobileSecTaskCard
+            key={task.type}
+            href={`/real-bank?type=${task.type}`}
+            n={task.n} t={task.t} d={task.d}
+            timeLabel={task.timeLabel}
+            accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
+          />
+        ))}
+      </div>
     </>
   );
 }

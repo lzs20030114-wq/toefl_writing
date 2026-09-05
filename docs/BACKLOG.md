@@ -17,10 +17,14 @@
 - [中] 2026-07-05 合并的支付修复 + CTW 防呆是否发版（用户可见变更：升级按钮修通 + CTW 灰底 chip；走 /release-notes）。
 - [低] 模考 6.4 残项：#13 邮件排版（等参考图）/ #2#3 全屏与顶栏（等定范围）/ #18 三科合考（用户已 defer）。
 
+- [中] 真题录入二期两项口径待拍板：①BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉（`data/realExam2026/writing/buildSentence.json` 363 条 `scrambled_ocr`），只能做成「真题句子 + 本站切块」，是否接受这种来源分档；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
+
 ## 进行中
 
 - [✅完成] L1 存量库答案全量二审（2026-08-02）：覆盖 ~1593 题（LCR 413 + 阅读听力 7 库），5 轮 DeepSeek 盲审 + 多轮 agent 分诊 + 人工复核。**改键 26**（LCR 16 角色反转 + AP 9 insert_text 时序 + RDL 1）+ 数据毛病 2 + CTW 指示代词歧义 117 题系统性重挖 + 挖空器闭集跳过根治。lat/lc/la/rdl-short 零实锤。完整报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**遗留（低优先，非阻塞）**：①CTW 10 项低危残留（2 validator + 8 长尾歧义，各 1/10 空双解，合库层 CTW auditor 对未来题兜底）；②AP 11 + CTW 18 题因 DeepSeek 反复超时未被二审覆盖（顽固 error 项，可在后续 full-audit-l1 dispatch 顺带续扫，L1-state 断点续跑只重试 error）。**衍生新条目见下「AP insert_text 生成侧缺陷」**。
 - [中] AP insert_text 生成侧缺陷：L1 二审在 AP 库查出 9 处 insert_text 答案错序（例子/回指置于概括句之前），且多题 explanation 自曝「Wait…」「retained per the plan」——说明生成期对插入题的自检形同虚设。已逐一改键，但**生成侧未修**：需在 AP 生成 prompt/校验里加插入题时序自检（回指词需前置先行词、例子在概括之后），否则新出的 AP 插入题仍会复发。出处：L1-answer-audit-20260802.md。
+
+- [中] 真题录入管线（二期，`scripts/realbank/`，2026-09-06 阅读一期首批落库）：四阶段 对齐(零token)→DeepSeek结构化→盲审→落库，答案来自机经卷自带答案 PDF（LLM 只转写不解题）。**已完成**：解析器修复后全库确定性配对 5577/5387 答案条目（+1011）；阅读 4 套试点盲审 92%（58/63）；`data/realBank/reading/` 首批 AP/RDL/CTW 已接进 `/real-bank?type=ctw|rdl|ap`；管线有余额预检 + 系统性失败不写文件 + 一代备份 + `--resume` + 跨卷 hash 去重。**待办**（按序）：①铺量 54 套 `run_pipeline.mjs --all --resume`，实测每套约 ¥1.26（结构化+盲审，reading+writing），全库约 ¥60–70，跑完再 `build_bank.mjs` 落库 + 发版公告；②盲审 <90% 的卷进人工复核队列（复核清单在 `.codex-tmp/realbank/<卷>.audit.json`）；③CTW 还原产率低（4 套 13 段仅 4 段过结构化，DeepSeek 对分栏 OCR 的填词还原失败率高）需改 prompt/分块；④听力**不能上线**：一屏两题 OCR 串栏导致选项错位（A/B 对照证实是数据坏不是审法），根治要改 OCR 切块；⑤口语 repeat 已零 token + 音频已切片（3.10 验证），可作二期首个音频题型；⑥`.codex-tmp/realbank/` 全部中间产物不在 git 里，无备份。出处：memory realbank-ingest-pipeline.md。
 
 ## 可派工
 

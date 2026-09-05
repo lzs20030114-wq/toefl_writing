@@ -10,6 +10,7 @@ import { ReadingSectionContent } from "./ReadingSectionContent";
 import { ListeningSectionContent } from "./ListeningSectionContent";
 import { SpeakingSectionContent } from "./SpeakingSectionContent";
 import { MyBankSectionContent } from "./MyBankSectionContent";
+import { RealExamSectionContent } from "./RealExamSectionContent";
 
 export function SectionContent({
   activeSection,
@@ -55,6 +56,16 @@ export function SectionContent({
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions}
+      />
+    );
+  }
+
+  if (activeSection === "real-bank") {
+    return (
+      <RealExamSectionContent
+        isChallenge={isChallenge} fadeIn={fadeIn}
+        hoverKey={hoverKey} setHoverKey={setHoverKey}
+        userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
       />
     );
   }

@@ -47,6 +47,19 @@ export const SECTIONS = [
     descriptionZh: "听后复述、模拟面试，TOEFL 2026 新题型",
   },
   {
+    id: "real-bank",
+    label: "Real Questions",
+    // 移动端 tab 是 6 等分横排（11.5px 字号，320px 屏也不能溢出），完整 label 会被挤爆，
+    // 所以移动端读 shortLabel（见 MobileHomePage 的 tab 渲染）。
+    shortLabel: "Real",
+    labelZh: "真题专区",
+    icon: "📜",
+    status: SECTION_STATUS.ACTIVE,
+    description: "Public real questions — Writing (Discussion · Email · Build a Sentence) + Reading",
+    // 阅读题量随 build_bank 产物持续变化，这里只说题型不写数字（写死会过期）。
+    descriptionZh: "公开真题集中练：写作（讨论 125 / 邮件 13 / 造句 20）+ 阅读填词、日常阅读、学术阅读",
+  },
+  {
     id: "my-bank",
     label: "My Bank",
     labelZh: "我的题库",
@@ -62,6 +75,9 @@ export const SECTION_ACCENTS = {
   reading: { color: "#3B82F6", soft: "#EFF6FF" },
   listening: { color: "#8B5CF6", soft: "#F5F3FF" },
   speaking: { color: "#F59E0B", soft: "#FFFBEB" },
+  // 金琥珀（amber-700）= 真题的权威感。与 speaking 的 amber-500 同色系但明度差一大截，
+  // 且导航里同一时刻只有 active 项显色（侧栏 3px accent bar / 移动端 tab 文字），不会并排撞色。
+  "real-bank": { color: "#B45309", soft: "#FFF7ED" },
   "my-bank": { color: "#E11D48", soft: "#FFF1F2" },
 };
 
