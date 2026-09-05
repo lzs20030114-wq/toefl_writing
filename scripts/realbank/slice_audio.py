@@ -69,7 +69,7 @@ def audio_files(setname, kind):
     out = []
     for root, _, names in os.walk(folder):
         for n in sorted(names):
-            if not n.lower().endswith((".mp3", ".m4a", ".wav")):
+            if not n.lower().endswith((".mp3", ".m4a", ".wav", ".mp4", ".mov")):
                 continue
             if "downloading" in n.lower():
                 continue

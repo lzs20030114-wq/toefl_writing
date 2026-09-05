@@ -31,7 +31,9 @@ from ingest_common import (
 SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
 OCR_CACHE = r"D:\toefl_writing\.codex-tmp\ocr"
 OUT = r"D:\toefl_writing\.codex-tmp\realbank"
-AUDIO_EXT = (".mp3", ".m4a", ".wav")
+# 口语音频源多为屏幕录制的 .mp4/.mov（15/43 个 2026-09-06 补料文件），
+# 音轨同样是 AAC，ffmpeg 可直接抽取；漏掉它们会把有音频的套判成「无音频」。
+AUDIO_EXT = (".mp3", ".m4a", ".wav", ".mp4", ".mov")
 TEXT_LAYER_MIN = 200  # 去水印后的正文总字符数，低于此判为图片 PDF
 # 只看总字数会漏判长篇图片 PDF：实测 `3.2新托福真题B卷/3.2 套二 阅读.pdf`（12 页 629 字）
 # 与 `4.20新托福真题/4.20  阅读.pdf`（18 页 703 字）是纯扫描件，只带页眉那一行文字层，

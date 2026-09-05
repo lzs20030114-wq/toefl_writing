@@ -100,6 +100,36 @@ describe("真题阅读：来源分档诚实", () => {
   });
 });
 
+describe("真题阅读：源料缺陷标记（source_flags）", () => {
+  // build_bank.mjs 从 data/realBank/source-flags.json 给每题写入所属套次的已知缺陷。
+  // 缺这个字段说明构建时没读到清单（loader 会退化成不打标），题就变成「看着干净其实没查过」。
+  test("每条都带 source_flags 数组（哪怕是空数组）", () => {
+    allReading.forEach((it) => {
+      expect(Array.isArray(it.source_flags)).toBe(true);
+    });
+  });
+
+  test("每个 flag 形状齐全，severity 只有 warn / blocking 两种", () => {
+    allReading.forEach((it) => {
+      it.source_flags.forEach((f) => {
+        expect(typeof f.code).toBe("string");
+        expect(f.code.length).toBeGreaterThan(0);
+        expect(["warn", "blocking"]).toContain(f.severity);
+        expect(typeof f.detail).toBe("string");
+      });
+    });
+  });
+
+  // 入库的题不该带 blocking —— blocking 的含义就是「这一科别入库」。
+  // 真出现了，是 build_bank 的过滤漏了，不是数据的正常状态。
+  test("已入库的题不带 blocking 级缺陷", () => {
+    const bad = allReading
+      .filter((it) => it.source_flags.some((f) => f.severity === "blocking"))
+      .map((it) => `${it.id}(${it.source})`);
+    expect(bad).toEqual([]);
+  });
+});
+
 describe("真题阅读：CTW 形状（CTWTask 硬契约）", () => {
   test("passage / first_sentence / blanks 齐全", () => {
     ctw.forEach((it) => {

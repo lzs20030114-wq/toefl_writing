@@ -35,6 +35,30 @@ const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
 const LETTERS = "ABCDEFGH";
 const TIER = "recalled";
+const FLAGS_FILE = path.join(process.cwd(), "data", "realBank", "source-flags.json");
+
+/**
+ * 逐套的已知源料缺陷（data/realBank/source-flags.json，由体检的 _source_audit.json 复算）。
+ * 入库时按科目过滤后写进每道题的 source_flags —— 铺量时不必回头翻体检报告，
+ * 前端/去重/人工复核都能直接看题上带的标记判断这题能不能信。
+ */
+const SOURCE_FLAGS = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(FLAGS_FILE, "utf8")).sets || {};
+  } catch {
+    // 清单缺失不该拦住入库：退化成「不打标」，但要让跑的人看见。
+    console.warn(`[build_bank] 读不到 ${FLAGS_FILE}，本次入库的题不带 source_flags`);
+    return {};
+  }
+})();
+
+/** 取某套在某科目下生效的 flag（sections 含 "*" 的是全科通用）。 */
+function flagsFor(setName, section) {
+  const all = SOURCE_FLAGS[setName] || [];
+  return all
+    .filter((f) => (f.sections || []).some((x) => x === "*" || x === section))
+    .map((f) => ({ code: f.code, severity: f.severity, detail: f.detail }));
+}
 
 /** 卷名 → 日期。文件夹名形如 "3.10新托福真题A卷"。 */
 function setDate(setname) {
@@ -144,6 +168,7 @@ function buildCtw(item, meta) {
     difficulty: "medium",  // 真题不自带难度标签，统一 medium，不编造分档
     real: true, tier: TIER, source: meta.set, date: meta.date,
     source_hash: meta.hash || null,
+    source_flags: flagsFor(meta.set, "reading"),
   };
 }
 
@@ -278,6 +303,7 @@ function buildMcqGroup(group, meta, stats) {
     difficulty: "medium",
     real: true, tier: TIER, source: meta.set, date: meta.date,
     source_hash: meta.hash || null,
+    source_flags: flagsFor(meta.set, "reading"),
   };
   if (isAp) {
     return {

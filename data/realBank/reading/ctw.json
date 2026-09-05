@@ -79,7 +79,8 @@
       "tier": "recalled",
       "source": "1.21新托福真题A卷",
       "date": "2026-01-21",
-      "source_hash": "fe6efa23535e"
+      "source_hash": "fe6efa23535e",
+      "source_flags": []
     },
     {
       "id": "real_ctw_121a_2_1",
@@ -157,7 +158,8 @@
       "tier": "recalled",
       "source": "1.21新托福真题A卷",
       "date": "2026-01-21",
-      "source_hash": "fe6efa23535e"
+      "source_hash": "fe6efa23535e",
+      "source_flags": []
     },
     {
       "id": "real_ctw_310_1_1",
@@ -235,7 +237,8 @@
       "tier": "recalled",
       "source": "3.10新托福真题",
       "date": "2026-03-10",
-      "source_hash": "27ab38ff78dc"
+      "source_hash": "27ab38ff78dc",
+      "source_flags": []
     },
     {
       "id": "real_ctw_415_1_11",
@@ -313,7 +316,14 @@
       "tier": "recalled",
       "source": "4.15新托福真题",
       "date": "2026-04-15",
-      "source_hash": "45190e10b70c"
+      "source_hash": "45190e10b70c",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.3新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
     }
   ]
 }
