@@ -8,6 +8,7 @@
 const fs = require("fs");
 const path = require("path");
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp");
+const { recordUsage } = require("../lib/ai/usageLedger");
 
 // ── Env loader ────────────────────────────────────────────────────────────────
 function loadEnv() {
@@ -339,6 +340,8 @@ async function callDeepSeek(userText) {
 
   if (!res.ok) throw new Error(`DeepSeek ${res.status}: ${await res.text()}`);
   const json = await res.json();
+  // 裸 fetch 回退路径也要进台账（.ops/deepseek-usage.jsonl）
+  recordUsage({ script: "verify-new-prompt.js", model: payload.model, usage: json.usage, ok: true });
   const content = json?.choices?.[0]?.message?.content;
   if (!content) throw new Error("empty content");
   return content;

@@ -7,6 +7,7 @@
 const fs = require("fs");
 const path = require("path");
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp");
+const { recordUsage } = require("../lib/ai/usageLedger");
 const { validateQuestion } = require("../lib/questionBank/buildSentenceSchema");
 
 function loadEnv() {
@@ -51,6 +52,8 @@ async function callDeepSeek(systemPrompt, userText) {
   });
   if (!res.ok) throw new Error(`DeepSeek ${res.status}`);
   const json = await res.json();
+  // 裸 fetch 回退路径也要进台账（.ops/deepseek-usage.jsonl）
+  recordUsage({ script: "test-build-prefilled.js", model: payload.model, usage: json.usage, ok: true });
   const c = json?.choices?.[0]?.message?.content;
   if (!c) throw new Error("empty content");
   return c;

@@ -216,6 +216,8 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 # AI (写作评分)
 DEEPSEEK_API_KEY=             # DeepSeek API 密钥
 # DEEPSEEK_PROXY_URL=         # 可选代理 (国内服务器访问)
+# DEEPSEEK_USAGE_LOG=         # 可选: 调用台账路径(默认 .ops/deepseek-usage.jsonl; 设 0 关闭)
+# DEEPSEEK_CNY_PER_MTOK=5.24  # 可选: 估价混合单价 ¥/M tokens(默认 9/1 账单实测)
 
 # OpenAI (口语 STT Whisper-1；Vercel 美区直连，本地调试用 HTTPS_PROXY)
 OPENAI_API_KEY=
@@ -259,6 +261,9 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **出题不许自由发挥**: 一切以 `data/realExam2026/` 真题为锚，改 prompt 前先看 `docs/eval-spec/` 对应文件
 - **安全**: middleware.js 设安全头, admin API 需 token, /api/ai 有限流 + origin 校验；
   个人题库 strip audio_url/白名单删桶；音频代理拒 `..`/反斜杠/非白名单扩展名
+- **DeepSeek 成本护栏**: 本地批量脚本的每次调用都记台账 `.ops/deepseek-usage.jsonl`（Node 走 `lib/ai/deepseekHttp` 自动记，
+  Python 走 `scripts/ops/_usage_ledger.py`），对账 `node scripts/ops/deepseek-usage-report.mjs`；真题结构化脚本先
+  `--dry-run` 看「将调用 N 次/预计 ¥X」再跑，超 `--max-calls`(默认 200) 须 `--yes`。详见 docs/deepseek-usage-ledger.md
 
 ## 协作约定 (Agent Conventions)
 

@@ -5,6 +5,9 @@
 
 ## 需用户决策
 
+- [中] `/api/ai` 线上成本护栏两处（出处：2026-09-05 DeepSeek 9/1 账单 ¥11.97 溯源，见 docs/deepseek-usage-ledger.md）：
+  ① 生产库缺 `increment_daily_usage` RPC——Supabase edge 日志 8/31 实证 `POST /rest/v1/rpc/increment_daily_usage → 404`，`scripts/sql/daily-usage-quota.sql` 台账状态「历史迁移,状态未知」即从未跑过；计量退化到 `fallbackIncrementUsage` 读-改-写，并发可击穿免费 3 次/天。走 /sql-migrate 补跑并登记。
+  ② `callAIMulti` 默认 `samples=3` + `maxTokens` 上限 8192，一次计量 = 3 次 DeepSeek 调用；Pro 日限 100 → 单人单日最多 300 次大 token 调用，无成本封顶。决策：按调用次数（而非提交次数）计量，或 Pro 日限按 samples 折算。
 - [高→已恢复,余手动一步] 盲审 routine：R2(19:30)/R3(20:00) trigger 已重建且每晚运行(2026-08-01 均有 fired 记录)，原「停摆」条目过时。**剩余动作：R3 prompt 需手动替换为 v2**（docs/routine-prompts/audit-r3-v2.md，agent 无权改 http_api 创建的 trigger）——v2 告知 R3「听力被 merge-staging fail-closed HOLD 是设计行为，21:00 的 merge-listening-audited.yml 负责第二票+合库」，不换 R3 也能安全跑但可能对 held 多折腾。旧积压 staging 可在 L1 修复后用 workflow 手动 dispatch run_id=all 全量扫尾（id/内容双去重防重复入库）。
 - [中] 备考计划云同步生效前置：`scripts/sql/study-plan-fields.sql` 迁移未跑未登记（代码 fail-open 已上线，跑完自动生效无需重部署；生效前不进用户公告）。出处：commit 513ed7d。
 - [高] 认证模型改造：6位码 bearer 可爆破（`app/api/auth/verify-code` 限流是内存滑动窗口，Vercel 多实例不全局生效）+ legacy 码自助升级仍在（同文件自动 upsert `legacy=pro`）。出处：PROJECT-REVIEW-2026-06-17，2026-07-05 复核仍在，未修复。

@@ -12,6 +12,7 @@
 const fs = require("fs");
 const path = require("path");
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../lib/ai/deepseekHttp");
+const { recordUsage } = require("../lib/ai/usageLedger");
 
 // ── Env loader ────────────────────────────────────────────────────────────────
 function loadEnv() {
@@ -64,6 +65,8 @@ async function callDeepSeek(prompt) {
   }
 
   const json = await res.json();
+  // 裸 fetch 回退路径也要进台账（.ops/deepseek-usage.jsonl）
+  recordUsage({ script: "fix-did-distractors.js", model: payload.model, usage: json.usage, ok: true });
   const content = json?.choices?.[0]?.message?.content;
   if (!content) throw new Error("DeepSeek returned empty content");
   return content.trim().toLowerCase().split(/\s+/)[0]; // keep only the first word
