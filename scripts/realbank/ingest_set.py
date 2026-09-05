@@ -24,8 +24,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
 
 import fitz  # PyMuPDF
 from ingest_common import (
-    SECTIONS, align, content_hash, detect_section, parse_answer_pdf_with_warnings,
-    segment, strip_watermark,
+    SECTIONS, align, content_hash, detect_section, find_anchors,
+    parse_answer_pdf_with_warnings, resolve_orphan_chains, segment, strip_watermark,
 )
 
 SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
@@ -41,8 +41,29 @@ TEXT_LAYER_MIN = 200  # 去水印后的正文总字符数，低于此判为图�
 TEXT_LAYER_MIN_PER_PAGE = 150
 
 
+RETRY_ZOOM = 4.5  # OCR 一无所获时的重试倍率（3.0 → 4.5）
+
+
+def _ocr_all(doc, zoom):
+    from ocr_common import ocr_page  # 只在真要现场 OCR 时才加载引擎
+    parts = []
+    for i in range(doc.page_count):
+        parts.append(f"===== PAGE {i + 1} =====")
+        parts.append(ocr_page(doc.load_page(i), zoom))
+    return "\n".join(parts)
+
+
+def _barren(text):
+    """一份 OCR 结果「一无所获」：既没有题号页眉，也解析不出成串答案。
+    这种文本对管线毫无价值，值得用更高倍率重扫一次。"""
+    from ingest_common import parse_answer_pdf
+    if find_anchors(text):
+        return False
+    return sum(len(m) for v in parse_answer_pdf(text).values() for m in v) < 10
+
+
 def pdf_text(path):
-    """返回 (文本, 来源)。来源 = text-layer / ocr-cache / ocr-live。"""
+    """返回 (文本, 来源)。来源 = text-layer / ocr-cache / ocr-live / ocr-live-4.5。"""
     doc = fitz.open(path)
     raw = "\n".join(doc.load_page(i).get_text() for i in range(doc.page_count))
     body = len(strip_watermark(raw).strip())
@@ -53,18 +74,29 @@ def pdf_text(path):
     setname = os.path.basename(os.path.dirname(path))
     base = os.path.splitext(os.path.basename(path))[0]
     cache = os.path.join(OCR_CACHE, f"{setname}__{base}.txt")
+    # 高倍率重扫的哨兵：重扫过一次就不再重扫，否则每次跑管线都要白烧一遍 OCR
+    sentinel = os.path.join(OCR_CACHE, f"{setname}__{base}.z{int(RETRY_ZOOM * 10)}")
+    cached = None
     if os.path.exists(cache) and os.path.getsize(cache) > 50:
-        return open(cache, encoding="utf-8").read(), "ocr-cache"
+        cached = open(cache, encoding="utf-8").read()
+        if not _barren(cached) or os.path.exists(sentinel):
+            return cached, "ocr-cache"
 
-    from ocr_common import ocr_page  # 只在真要现场 OCR 时才加载引擎
-    parts = []
-    for i in range(doc.page_count):
-        parts.append(f"===== PAGE {i + 1} =====")
-        parts.append(ocr_page(doc.load_page(i), 3.0))
-    text = "\n".join(parts)
     os.makedirs(OCR_CACHE, exist_ok=True)
-    open(cache, "w", encoding="utf-8").write(text)
-    return text, "ocr-live"
+    origin = "ocr-cache"
+    if cached is None:
+        cached, origin = _ocr_all(doc, 3.0), "ocr-live"
+        open(cache, "w", encoding="utf-8").write(cached)
+        if not _barren(cached):
+            return cached, origin
+    # 一无所获 → 换更高倍率再扫一次；**只有真的扫出东西才覆盖缓存**，
+    # 否则保留原结果（宁可不动，也不能用更差的结果盖掉原来的）。
+    retry = _ocr_all(doc, RETRY_ZOOM)
+    open(sentinel, "w", encoding="utf-8").write(f"retried at zoom={RETRY_ZOOM}\n")
+    if not _barren(retry):
+        open(cache, "w", encoding="utf-8").write(retry)
+        return retry, f"ocr-live-{RETRY_ZOOM}"
+    return cached, origin
 
 
 def scan_set(setname, do_ocr=True):
@@ -75,6 +107,7 @@ def scan_set(setname, do_ocr=True):
     files, audio, answers_from = [], [], None
     answer_modules = {s: [] for s in SECTIONS}
     all_blocks, blockers = [], []
+    orphan_chains, answer_entry = [], None
 
     for root, _, names in os.walk(folder):
         for name in sorted(names):
@@ -101,8 +134,11 @@ def scan_set(setname, do_ocr=True):
             sec, conf, counts = detect_section(text)
             blocks = segment(text)
             # 答案 PDF 的特征：几乎没有题号锚点，但能解析出成串的编号-答案对
-            parsed, ans_warnings = parse_answer_pdf_with_warnings(text)
+            parsed, ans_warnings, orphans = parse_answer_pdf_with_warnings(text)
             n_ans = sum(len(m) for v in parsed.values() for m in v)
+            # 无科目头的孤儿块也算进「这份是不是答案页」的证据，否则整段答案没头时
+            # 答案页会被判成题面（3.29 的听力段就占了这份 PDF 的 40%）
+            n_ans += sum(len(m) for ch in orphans for m in ch["modules"])
             is_answer_key = n_ans >= 10 and len(blocks) <= 2
 
             entry = {
@@ -114,9 +150,11 @@ def scan_set(setname, do_ocr=True):
                 entry["role"] = "answer-key"
                 entry["answers"] = {s: [len(m) for m in v] for s, v in parsed.items() if v}
                 answers_from = rel
+                answer_entry = entry
                 for s in SECTIONS:
                     if parsed[s]:
                         answer_modules[s] = parsed[s]
+                orphan_chains.extend((rel, ch) for ch in orphans)
                 # 答案页解析告警（无科目头的题号重启块等）直接进 blockers 见人
                 for w in ans_warnings:
                     blockers.append(f"[{rel}] {w['message']}")
@@ -133,7 +171,21 @@ def scan_set(setname, do_ocr=True):
             seen.setdefault(h, []).append(f["file"])
     dupes = [v for v in seen.values() if len(v) > 1]
 
+    # 无科目头的整块答案：按题号形状与「各科尚无答案的题块组」比对，唯一命中才采用，
+    # 采不采用都往 blockers 里写一条，让人能看见这里做过推断。
+    if orphan_chains:
+        for rel in dict.fromkeys(r for r, _c in orphan_chains):
+            for note in resolve_orphan_chains([c for r, c in orphan_chains if r == rel],
+                                              answer_modules, all_blocks):
+                blockers.append(f"[{rel}] {note['message']}")
+        if answer_entry is not None:
+            answer_entry["answers"] = {s: [len(m) for m in v]
+                                       for s, v in answer_modules.items() if v}
+
     alignment = {s: align(all_blocks, answer_modules[s], s) for s in SECTIONS}
+    for s in SECTIONS:
+        for msg in alignment[s].get("self_check", []):
+            blockers.append(f"[自检] {msg}")
     return {
         "set": setname, "answer_key": answers_from, "files": files, "audio": audio,
         "duplicate_files": dupes, "alignment": alignment, "blockers": blockers,
