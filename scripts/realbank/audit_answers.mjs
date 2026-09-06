@@ -103,7 +103,9 @@ async function solve(rec) {
   const material = String(rec.material || "").trim();
   const label = rec.materialSource === "音频转写"
     ? "【听力材料（整段音频转写，题目只涉及其中一部分，自己找）】"
-    : "【材料】";
+    : (rec.materialSource === "音频转写(逐题)"
+      ? "【听力材料（这道题所属那条音频的转写）】"
+      : "【材料】");
   const user = [
     material ? `${label}\n${material}` : "",
     `【题目】\n${item.stem}`,
@@ -146,8 +148,13 @@ async function runPool(items, worker, concurrency) {
 
 async function main() {
   loadEnv();
-  const setname = process.argv[2];
-  if (!setname) { console.error("用法: node scripts/realbank/audit_answers.mjs <卷名>"); process.exit(2); }
+  const args = process.argv.slice(2);
+  const setname = args.find((a) => !a.startsWith("--"));
+  // --section=listening：只审这一科，其余科目沿用**上一次**的审计明细（不重跑、不覆盖）。
+  // 听力是后补进来的（合流之后才有材料），阅读早就审完并已落库 —— 整卷重跑会让已上线的
+  // 阅读题因为模型抖动被翻案，凭空产生一批 diff。所以按科增量审、结果合并。
+  const onlySection = (args.find((a) => a.startsWith("--section=")) || "").split("=")[1] || null;
+  if (!setname) { console.error("用法: node scripts/realbank/audit_answers.mjs <卷名> [--section=listening]"); process.exit(2); }
   const p = path.join(OUT_DIR, `${setname}.structured.json`);
   if (!fs.existsSync(p)) { console.error(`缺少结构化产物: ${p}`); process.exit(2); }
   const data = JSON.parse(fs.readFileSync(p, "utf8"));
@@ -174,14 +181,21 @@ async function main() {
   const auditable = [], skipped = [];
   for (const r of data.results) {
     if (r.status !== "ok") continue;
+    if (onlySection && r.section !== onlySection) continue;
     for (const it of r.items || []) {
       if (!Array.isArray(it.options) || typeof it.answer_index !== "number") continue;
       const onScreen = String(it.material || "").trim();
-      const fromAudio = onScreen.length < 40 ? (transcripts[r.section] || "") : "";
+      // 逐题转写优先：merge_vendor_asr.py 合流后，每道听力题上都带 transcript_final
+      // （这道题对应的**那一条**音频的定稿文本）。它比整科整段转写短得多也准得多——
+      // 模型不必在 3000 词里找依据，盲审信噪比高一截。没有它才退回整科整段。
+      const perItem = String(it.transcript_final || "").trim();
+      const fromAudio = (!perItem && onScreen.length < 40) ? (transcripts[r.section] || "") : "";
+      const material = onScreen.length >= 40 ? onScreen : (perItem || fromAudio);
       const rec = {
         section: r.section, type: r.type, key: r.key, item: it,
-        materialSource: onScreen.length >= 40 ? "屏幕" : (fromAudio ? "音频转写" : "无"),
-        material: onScreen.length >= 40 ? onScreen : fromAudio,
+        materialSource: onScreen.length >= 40 ? "屏幕"
+          : (perItem ? "音频转写(逐题)" : (fromAudio ? "音频转写" : "无")),
+        material,
       };
       if (!rec.material) skipped.push(rec); else auditable.push(rec);
     }
@@ -231,7 +245,7 @@ async function main() {
   // `audited` 记录**每一道审过的题**（一致的也记），不只是不一致的那些。
   // 落库时的闸门需要区分「审过且一致」和「压根没审」——只给 disagree 列表的话，
   // 两者都表现为「不在列表里」，没审过的题会被当成通过悄悄放行。
-  const audited = auditable.map((r, i) => ({
+  let audited = auditable.map((r, i) => ({
     section: r.section, type: r.type, q: r.item.q_number,
     stamped: LETTERS[r.item.answer_index], model: picks[i] || null,
     agree: picks[i] === LETTERS[r.item.answer_index],
@@ -239,6 +253,17 @@ async function main() {
   }));
   const outPath = path.join(OUT_DIR, `${setname}.audit.json`);
   const prevPath = path.join(OUT_DIR, `${setname}.audit.prev.json`);
+  let carriedDisagree = [];
+  if (onlySection && fs.existsSync(outPath)) {
+    // 增量审：把**别的科目**上一次的明细原样带过来，只替换本科的。
+    try {
+      const old = JSON.parse(fs.readFileSync(outPath, "utf8"));
+      const keep = (old.audited || []).filter((a) => a.section !== onlySection);
+      carriedDisagree = (old.disagree || []).filter((d) => d.section !== onlySection);
+      audited = keep.concat(audited);
+      console.log(`增量审：沿用其他科目的旧明细 ${keep.length} 条`);
+    } catch { /* 旧文件坏了就当没有 */ }
+  }
   if (fs.existsSync(outPath)) {
     fs.copyFileSync(outPath, prevPath);   // 一代备份（只留一代，够回滚一次误跑）
     console.log(`已备份上一版 → ${prevPath}`);
@@ -246,10 +271,10 @@ async function main() {
   fs.writeFileSync(outPath, JSON.stringify({
     set: setname, model: MODEL, auditable: auditable.length, skipped: skipped.length,
     agree, nulls, audited,
-    disagree: disagree.map((d) => ({
+    disagree: carriedDisagree.concat(disagree.map((d) => ({
       section: d.section, type: d.type, q: d.item.q_number,
       stamped: d.stamped, model: d.model, stem: d.item.stem, options: d.item.options,
-    })),
+    }))),
   }, null, 2), "utf8");
   console.log(`\n复核清单 → ${outPath}`);
 }

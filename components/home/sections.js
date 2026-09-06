@@ -55,9 +55,9 @@ export const SECTIONS = [
     labelZh: "真题专区",
     icon: "📜",
     status: SECTION_STATUS.ACTIVE,
-    description: "Public real questions — Writing (Discussion · Email · Build a Sentence) + Reading",
+    description: "Public real questions — Writing (Discussion · Email · Build a Sentence) + Reading + Listening + Speaking",
     // 阅读题量随 build_bank 产物持续变化，这里只说题型不写数字（写死会过期）。
-    descriptionZh: "公开真题集中练：写作（讨论 125 / 邮件 13 / 造句 20）+ 阅读填词、日常阅读、学术阅读",
+    descriptionZh: "公开真题集中练：写作（讨论 125 / 邮件 13 / 造句 20）+ 阅读填词、日常阅读、学术阅读 + 听力四题型 + 口语跟读、访谈",
   },
   {
     id: "my-bank",

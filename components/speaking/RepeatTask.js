@@ -55,7 +55,9 @@ function playOriginalSentence(sentence) {
  *
  * Props:
  *   items       — array of { id, sentence, difficulty } (7 items)
- *   setInfo     — { id, scenario, speaker_role } for the intro/setting narration
+ *   setInfo     — { id, scenario, speaker_role } for the intro/setting narration;
+ *                 optional `settingText` overrides the generated setting line verbatim
+ *                 (真题专区 passes the exam's own prompt, which must not be re-templated)
  *   onComplete  — called with session summary
  *   onExit      — back navigation
  *   isPractice  — if true, show elapsed instead of countdown
@@ -596,13 +598,32 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
   }, [handleNext]);
 
   // Real-exam setting narration for the intro screen (deterministic per set).
+  //
+  // setInfo.settingText is an explicit override used by the 真题专区 (app/real-bank):
+  // a real set already carries the exam's own full setting prompt ("You are working at a
+  // university library. Your manager is training you to …"), whereas buildRepeatIntro
+  // expects `scenario` to be a short PLACE TAG ("IT Help Desk") and splices it into a
+  // template — feeding it the full prompt produced a garbled lower-cased run-on sentence.
+  // When the caller has the authentic wording, show that verbatim instead of rebuilding it.
   const intro = useMemo(
-    () => buildRepeatIntro({
-      id: setInfo?.id,
-      scenario: setInfo?.scenario,
-      speaker_role: setInfo?.speaker_role,
-    }),
-    [setInfo?.id, setInfo?.scenario, setInfo?.speaker_role],
+    () => {
+      const override = String(setInfo?.settingText || "").trim();
+      const built = buildRepeatIntro({
+        id: setInfo?.id,
+        scenario: setInfo?.scenario,
+        speaker_role: setInfo?.speaker_role,
+      });
+      if (!override) return built;
+      // 原卷提示语通常已经把「听谁说、重复几遍」写在里面了，再拼一句生成的指令就是重复。
+      // 所以 settingText 覆盖时，instructionText 也交给调用方决定（省略 = 不显示，
+      // SpeakingIntroScreen 用 lines.filter(Boolean) 天然吃掉空行）。
+      const instruction = setInfo?.instructionText;
+      return {
+        settingText: override,
+        instructionText: instruction === undefined ? built.instructionText : String(instruction || ""),
+      };
+    },
+    [setInfo?.id, setInfo?.scenario, setInfo?.speaker_role, setInfo?.settingText, setInfo?.instructionText],
   );
 
   // 开始: unlock the shared exam audio element inside this real gesture (idempotent;

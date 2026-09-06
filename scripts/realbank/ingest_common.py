@@ -239,7 +239,10 @@ SEC_HEADER = re.compile(
     # 尾巴单独捕成 rest：3.4 那种「表头+答案同一行」要把余下的部分当答案行接着解析，
     # 整行吞掉就丢 15 条；而「听力 q4-6 题目缺失」「写作A」这类尾巴过一遍 NUM_ANS
     # 抽不出任何答案，不会有副作用。
-    r"(?P<cn>阅读|听力|写作|口语|另一套加试|加试二|第二部分|第二部份|第二套|另一套|"
+    # 「答案」：5.18 卷答案页把阅读段表头直接写成文件标题「答案」（听力/写作/口语
+    # 段照常）。只在**尚未出现任何科目表头**时把它当阅读；其后再出现一律视作普通行，
+    # 避免正文里的「答案」字样误触发换科。
+    r"(?P<cn>阅读|听力|写作|口语|答案|另一套加试|加试二|第二部分|第二部份|第二套|另一套|"
     r"加试|附加|额外)\s*[:：]?\s*(?P<rest>\S.*)?"
     # 英文分支与光杆 Module 分支保持整行严格匹配（放宽会误伤正文里的英文行）
     r"|(?:(?P<en>Reading|Listening|Writing|Speaking)\s*[,，]?\s*(?:module\s*(?P<mod>\d+))?"
@@ -283,6 +286,7 @@ def _headers(text):
     科目 None 且非加试 = 不是表头行。rest 只有中文表头分支会给（英文分支保持整行
     严格匹配），用来接住「加试1a 2a 3b…」这种表头与答案挤在同一行的排版。
     """
+    seen_section = False
     for idx, raw in enumerate(strip_watermark(text).splitlines()):
         h = SEC_HEADER.match(raw.strip())
         if not h:
@@ -290,6 +294,13 @@ def _headers(text):
             continue
         cn, en, mod_only = h.group("cn"), h.group("en"), h.group("mod_only")
         rest = (h.group("rest") or "").strip() if cn else ""
+        if cn == "答案":
+            if seen_section:
+                yield idx, raw, None, False, ""
+                continue
+            cn = "阅读"
+        if cn or en:
+            seen_section = True
         if cn in EXTRA_MODULE:
             yield idx, raw, None, True, rest
         elif cn:

@@ -17,6 +17,9 @@ import MyBankImporter from "../userBank/MyBankImporter";
 // bundle（实测 `/` 的 First Load JS 255 kB → 318 kB）。阅读题量改读 build_bank 落库时
 // 顺手写的几十字节计数文件，只有 {ctw,rdl,ap} 三个数字。
 import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
+// 听力 / 口语（三期）同理，只读几十字节的 counts.json。
+import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
+import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
 import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 
 /* ── 颜色工具 ── */
@@ -756,7 +759,8 @@ function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpg
 
 /* ── Mobile Real Questions Section（真题专区） ── */
 // 桌面端 RealExamSectionContent 的移动端平行实现（两条渲染链完全独立）。
-// 六张卡对应 /real-bank?type=discussion|email|bs|ctw|rdl|ap；非 Pro 时置灰禁点 + Pro 门禁横幅。
+// 十二张卡对应 /real-bank?type=discussion|email|bs|ctw|rdl|ap|lcr|lc|la|lat|repeat|interview；
+// 按科目（写作 / 阅读 / 听力 / 口语）分段显示；非 Pro 时置灰禁点 + Pro 门禁横幅。
 function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
   const accent = SECTION_ACCENTS["real-bank"];
   const isPro = tier === "pro" || tier === "legacy";
@@ -764,13 +768,21 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
   // 阅读题量随 build_bank 产物变化，写死会过期 → 读 counts.json（不是 lib/realBank，见文件头 import 处的说明）；
   // 写作三题型是冻结语料，保持写死。
   const tasks = [
-    { type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", timeLabel: "125 题" },
-    { type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", timeLabel: "13 题" },
-    { type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", timeLabel: "20 题" },
-    { type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", timeLabel: `${REAL_READING_COUNTS.ctw} 篇` },
-    { type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", timeLabel: `${REAL_READING_COUNTS.rdl} 篇` },
-    { type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", timeLabel: `${REAL_READING_COUNTS.ap} 篇` },
+    { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", timeLabel: "125 题" },
+    { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", timeLabel: "13 题" },
+    { g: "写作", type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", timeLabel: "20 题" },
+    { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", timeLabel: `${REAL_READING_COUNTS.ctw} 篇` },
+    { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", timeLabel: `${REAL_READING_COUNTS.rdl} 篇` },
+    { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", timeLabel: `${REAL_READING_COUNTS.ap} 篇` },
+    { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，配真题录音", timeLabel: `${REAL_LISTENING_COUNTS.lcr} 题` },
+    { g: "听力", type: "lc", n: "Listening 2", t: "听力对话真题", d: "回忆版校园对话，一段多题", timeLabel: `${REAL_LISTENING_COUNTS.lc} 段` },
+    { g: "听力", type: "la", n: "Listening 3", t: "听力通知真题", d: "回忆版校园通知播报", timeLabel: `${REAL_LISTENING_COUNTS.la} 段` },
+    { g: "听力", type: "lat", n: "Listening 4", t: "听力讲座真题", d: "回忆版学术讲座，一段多题", timeLabel: `${REAL_LISTENING_COUNTS.lat} 段` },
+    { g: "口语", type: "repeat", n: "Speaking 1", t: "口语跟读真题", d: "回忆版跟读，录音 + AI 评分", timeLabel: `${REAL_SPEAKING_COUNTS.repeat} 套` },
+    { g: "口语", type: "interview", n: "Speaking 2", t: "口语访谈真题", d: "回忆版访谈，一套多问", timeLabel: `${REAL_SPEAKING_COUNTS.interview} 套` },
   ];
+  // 科目小标题：只在该科目第一张卡前插一行（12 张卡平铺在手机上根本找不着）。
+  const groupSeen = new Set();
 
   return (
     <>
@@ -794,15 +806,25 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
         display: "flex", flexDirection: "column", gap: 10, marginBottom: 14,
         ...(isPro ? {} : { opacity: 0.45, pointerEvents: "none", filter: "grayscale(0.5)" }),
       }}>
-        {tasks.map((task) => (
-          <MobileSecTaskCard
-            key={task.type}
-            href={`/real-bank?type=${task.type}`}
-            n={task.n} t={task.t} d={task.d}
-            timeLabel={task.timeLabel}
-            accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
-          />
-        ))}
+        {tasks.map((task) => {
+          const first = !groupSeen.has(task.g);
+          if (first) groupSeen.add(task.g);
+          return (
+            <div key={task.type} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {first && (
+                <div style={{ fontSize: 12, fontWeight: 700, color: t2, letterSpacing: 0.5, marginTop: 2 }}>
+                  {task.g}
+                </div>
+              )}
+              <MobileSecTaskCard
+                href={`/real-bank?type=${task.type}`}
+                n={task.n} t={task.t} d={task.d}
+                timeLabel={task.timeLabel}
+                accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
+              />
+            </div>
+          );
+        })}
       </div>
     </>
   );

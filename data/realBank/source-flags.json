@@ -6,7 +6,7 @@
     "blocking": "该科的题不应入库，或入库后必须人工复核",
     "warn": "可入库，但带已知风险，前端/去重需知情"
   },
-  "_note": "section_gap 的判据是配对题数距满分的缺口：≥3 记 warn、≥10 记 blocking；≤2 按体检报告口径算「能直接用」，不记 flag。",
+  "_note": "section_gap 的判据是配对题数距满分的缺口：≥3 记 warn、≥10 记 blocking；≤2 按体检报告口径算「能直接用」，不记 flag。 | 2026-09-06 追加第二来源「重排版」8 套（rf*），统一带 vendor_reformatted(warn)。",
   "sets": {
     "1.21新托福真题B卷": [
       {
@@ -1009,6 +1009,106 @@
         ],
         "detail": "[The Official Guide to the TOEFL iBT Test_ Pocket Edition (Limited Digital Release).pdf] 答案页第 7194 行出现无科目头的题号重启块（当前科目 writing），已忽略(fail-closed)：probably earn a score of just 1 or 2.",
         "action": "管线已拦，需补料或修解析器。"
+      }
+    ],
+    "rf0610": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0615": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0620": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0622": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0629": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0708": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0713": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "rf0716": [
+      {
+        "code": "vendor_reformatted",
+        "severity": "warn",
+        "sections": [
+          "*"
+        ],
+        "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。",
+        "action": "阅读选择题必须过 audit_answers 盲审才落库；写作靠解析器结构闸；tier 一律 recalled，不许标 official。"
+      }
+    ],
+    "5.20新托福真题": [
+      {
+        "code": "audit_low_agreement",
+        "severity": "blocking",
+        "sections": [
+          "reading"
+        ],
+        "detail": "5.20（5月第二来源）阅读盲审 7/13=54%：AP Q27/30/32/33 与 RDL Q21/26 与答案键不一致，疑似答案键整段错位；确定性阶段阅读只对上 24/50。整科扣下待人工核对。",
+        "action": "hold_reading",
+        "added": "2026-09-06"
       }
     ]
   }

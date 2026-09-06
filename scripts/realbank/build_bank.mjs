@@ -30,6 +30,10 @@
  */
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -60,16 +64,47 @@ function flagsFor(setName, section) {
     .map((f) => ({ code: f.code, severity: f.severity, detail: f.detail }));
 }
 
-/** 卷名 → 日期。文件夹名形如 "3.10新托福真题A卷"。 */
+/**
+ * 这一套的这一科是不是被源料体检**扣下**了。
+ *
+ * source-flags.json 里 severity=blocking 的含义就是「这一科别入库」（清单里还带
+ * action: "hold_reading" 这类字段说明扣哪一科）。以前 build_bank 只把 flag 抄到题上、
+ * 不据此拦人 —— 于是 5.20（阅读盲审 7/13=54%、疑似答案键整段错位）照样落了库，
+ * 只有 __tests__/real-bank-reading-data.test.js 的「已入库的题不带 blocking 级缺陷」
+ * 在事后发现。闸门补在这里：标了 blocking 就整科不收。
+ */
+function isHeld(setName, section) {
+  return (SOURCE_FLAGS[setName] || []).some(
+    (f) => f.severity === "blocking" && (f.sections || []).some((x) => x === "*" || x === section));
+}
+
+/**
+ * 卷名 → 日期。两套来源两种卷名：
+ *   旧源（截图 PDF）  "3.10新托福真题A卷"  → 2026-03-10
+ *   重排版源（文字 docx）"rf0610"          → 2026-06-10
+ * 认不出就退回 "2026"（只影响展示，不影响能不能落库）。
+ */
 function setDate(setname) {
+  const rf = String(setname).match(/^rf(\d{2})(\d{2})$/);
+  if (rf) return `2026-${rf[1]}-${rf[2]}`;
   const m = String(setname).match(/^(\d{1,2})[.．](\d{1,2})/);
   return m ? `2026-${String(+m[1]).padStart(2, "0")}-${String(+m[2]).padStart(2, "0")}` : "2026";
 }
+/**
+ * 卷名 → id 里的短标识。**必须跨来源唯一**：重排版源直接用 setkey（rf0610），
+ * 与旧源的 "310" / "121a" 天然不撞；认不出的退回 "x" 会让多卷共用同一个 id 前缀，
+ * 所以新来源接进来时一定要在这里给出确定的规则，不能靠兜底。
+ */
 function setSlug(setname) {
+  if (/^rf\d{4}$/.test(String(setname))) return String(setname);
   const m = String(setname).match(/^(\d{1,2})[.．](\d{1,2})/);
   const base = m ? `${m[1]}${m[2]}` : "x";
   const variant = String(setname).match(/([ABC])卷/);
-  return base + (variant ? variant[1].toLowerCase() : "");
+  // 同一天的重跑产物（"5.10新托福真题_v2"）必须带上后缀：不带的话它和 "5.10新托福真题"
+  // 共用 slug 510，两套里同题号的题会得到同一个 id（实测撞了 real_ap_510_1_31 / _2_11），
+  // 前端的 done-key / 历史记录会把两道不同的题当成同一道。
+  const rev = String(setname).match(/_v(\d+)$/);
+  return base + (variant ? variant[1].toLowerCase() : "") + (rev ? `v${rev[1]}` : "");
 }
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -249,7 +284,18 @@ function groupByMaterial(records, stats) {
  */
 function looksLikeInsertQuestion(it) {
   const probe = [String(it.stem || ""), ...(Array.isArray(it.options) ? it.options : []).map(String)].join(" ");
-  return /insert|slot\s*\d|■/i.test(probe);
+  return /insert|slot\s*\d|■|four locations|where would the following sentence/i.test(probe);
+}
+
+/**
+ * 材料里有没有能看见的插入位标记。
+ * 旧源（ETS 截图）用 ■；重排版源用 [A]-[D] 字母方括号，选项也直接写 "A. [A]" —— 两种都是
+ * 屏幕上真实可见的定位符，用户看得见就答得了。四个字母缺一个就不算（那是 OCR 掉了标记）。
+ */
+function hasInsertMarkers(material) {
+  const s = String(material || "");
+  if (/■/.test(s)) return true;
+  return ["[A]", "[B]", "[C]", "[D]"].every((x) => s.includes(x));
 }
 
 function buildMcqGroup(group, meta, stats) {
@@ -269,7 +315,7 @@ function buildMcqGroup(group, meta, stats) {
       stats.droppedBadOptions += 1;
       continue;
     }
-    if (looksLikeInsertQuestion(it) && !/■/.test(String(it.material || material))) {
+    if (looksLikeInsertQuestion(it) && !hasInsertMarkers(it.material || material)) {
       stats.droppedInsert += 1;
       continue;
     }
@@ -349,6 +395,404 @@ function readingSourceHashes(setname) {
   }
 }
 
+/* ── 写作（造句 / 邮件 / 学术讨论）─────────────────────────────────────────
+ *
+ * 写作真题不走盲审：三种题型都没有选项，"另一个模型不看答案做一遍"这套办法用不上
+ * （造句的答案就是答案页给的整句，邮件/讨论压根没有唯一答案）。所以这里的闸门是
+ * **结构闸**：解析器已经把「模板固定词能否对齐答案」「要求是不是 3 条」「学生贴是不是 2 条」
+ * 这些硬契约校验过并写进 status，落库只收 status=ok 的 result，缺字段的整条丢。
+ *
+ * 产物 data/realBank/writing/{bs,email,discussion}.json 的 item 形状对齐
+ * lib/realBank.js 的 mapBuildSentence / mapEmail / mapDiscussion 输入 —— 但**本期不接前端**，
+ * 只是把料备好。id 刻意不带 `real_` 前缀：realBank 的 realId() 会自己加，带了会变成 real_real_。
+ */
+const WRITING_DIR = path.join(process.cwd(), "data", "realBank", "writing");
+
+function writingSourceHashes(setname) {
+  const f = path.join(OUT_DIR, `${setname}.json`);
+  if (!fs.existsSync(f)) return null;
+  try {
+    const j = JSON.parse(fs.readFileSync(f, "utf8"));
+    const hs = (j.files || [])
+      .filter((x) => x.role === "questions" && x.hash
+        && (x.anchors ? x.anchors.writing > 0 : x.section === "writing"))
+      .map((x) => x.hash);
+    return hs.length ? hs : null;
+  } catch {
+    return null;
+  }
+}
+
+function buildWriting(files, stats) {
+  const out = { bs: [], email: [], discussion: [] };
+  const seenHash = new Map();
+  for (const f of files.sort()) {
+    const setname = f.replace(/\.structured\.json$/, "");
+    const st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
+    const hashes = writingSourceHashes(setname);
+    const dup = (hashes || []).find((h) => seenHash.has(h));
+    if (dup) {
+      console.warn(`跳过 ${setname} 写作：与 ${seenHash.get(dup)} 内容相同(hash ${dup})`);
+      stats.wDroppedDupSet += 1;
+      continue;
+    }
+    for (const h of hashes || []) seenHash.set(h, setname);
+    if (isHeld(setname, "writing")) {
+      console.warn(`跳过 ${setname} 写作：源料体检标了 blocking（整科扣下待人工核对）`);
+      stats.wDroppedHeld += 1;
+      continue;
+    }
+    const meta = {
+      real: true, tier: TIER, source: setname, date: setDate(setname),
+      source_hash: (hashes && hashes[0]) || null,
+      source_flags: flagsFor(setname, "writing"),
+    };
+    for (const r of st.results || []) {
+      if (r.section !== "writing" || r.status !== "ok") continue;
+      for (const it of r.items || []) {
+        if (!it || typeof it !== "object") continue;
+        if (r.type === "build") {
+          // 旧源的 build result 只有 {n, sentence}（答案句，没有模板/词库）—— 拼不出可练的题，跳过。
+          if (!it.blanks || !Array.isArray(it.chunks) || !it.chunks.length || !it.answer || !it.prompt) {
+            stats.wSkippedThin += 1;
+            continue;
+          }
+          out.bs.push({
+            id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
+            answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
+            source_label: `${setDate(setname)} 真题造句`, ...meta,
+          });
+        } else if (r.type === "email") {
+          if (!it.scenario || !Array.isArray(it.goals) || it.goals.length < 3) { stats.wSkippedThin += 1; continue; }
+          out.email.push({
+            id: it.id, to: it.to || "Professor", subject: it.subject || "",
+            scenario: it.scenario, direction: it.direction || "", goals: it.goals.slice(0, 3), ...meta,
+          });
+        } else if (r.type === "discussion") {
+          const students = Array.isArray(it.students) ? it.students.filter((s) => s && s.name && s.text) : [];
+          if (!it.professor?.text || students.length < 2) { stats.wSkippedThin += 1; continue; }
+          out.discussion.push({
+            id: it.id, course: it.course || "", professor: it.professor,
+            students: students.slice(0, 2), ...meta,
+          });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+/* ── 听力 / 口语 ────────────────────────────────────────────────────────────
+ *
+ * 料从哪来：`merge_vendor_asr.py` 把商家音频的 Whisper 逐字稿与文档转写合流后，
+ * 把 listening/speaking 的 result 从 deferred 推到 ok，并在每条上写了
+ * `transcript_final` / `turns` / `speakers` / `asr_similarity`。这里只做三件事：
+ *
+ *  1. **过闸**：听力客观题走与阅读同一套盲审闸（agree===true 才收，没审过不收）；
+ *     口语没有唯一答案，闸门是合流阶段的结构校验（status=ok）。
+ *  2. **对齐 App schema**：产物要能被 lib/listeningGen/*Validator.js 与
+ *     lib/speakingGen/speakingValidator.js 原样收下 —— 所以落库前**用真的 validator
+ *     跑一遍**，schema 报错的整条丢掉并记原因。库里不许躺着 App 渲染不了的题。
+ *  3. **音频留空**：`audio_url: null` + `audio_pending: true`。真音频由
+ *     scripts/realbank/render_real_audio.mjs 用自家 TTS 配好后回写 —— 商家的 mp3
+ *     内嵌作答静音、且不是我们能分发的素材，一律不直接用。
+ *
+ * 跨卷去重：听力/口语没有「题目文件哈希」可用（音频不是 ingest 的产物），
+ * 改用**内容哈希**：全卷 transcript_final 归一化后排序拼接取 sha1。
+ * 实测 6.22 与 6.29 两套的音频文件名与内容逐条相同，不去重会在真题专区连出两份。
+ */
+const LISTENING_DIR = path.join(process.cwd(), "data", "realBank", "listening");
+const SPEAKING_DIR = path.join(process.cwd(), "data", "realBank", "speaking");
+
+const V = {
+  lcr: require("../../lib/listeningGen/lcrValidator.js").validateLCR,
+  lc: require("../../lib/listeningGen/lcValidator.js").validateLC,
+  la: require("../../lib/listeningGen/laValidator.js").validateLA,
+  lat: require("../../lib/listeningGen/latValidator.js").validateLAT,
+};
+const SPV = require("../../lib/speakingGen/speakingValidator.js");
+
+const pad2 = (n) => String(n).padStart(2, "0");
+const sha1 = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 12);
+
+/** 题干 → 题型标签（validator 的 VALID_Q_TYPES）。真题不自带标签，从题干推。 */
+function questionType(stem) {
+  const s = String(stem || "").toLowerCase();
+  if (/(mainly about|main topic|main purpose|main idea|why does the (speaker|professor|man|woman) (give|discuss))/.test(s)) return "main_idea";
+  if (/(imply|infer|suggest|probably|most likely|what can be concluded)/.test(s)) return "inference";
+  return "detail";
+}
+
+/** 选项数组 → {A,B,C,D}；不是 4 个就返回 null（整题作废）。 */
+function optionsMap(arr) {
+  if (!Array.isArray(arr) || arr.length !== 4) return null;
+  const o = {};
+  arr.forEach((t, i) => { o[LETTERS[i]] = String(t || "").trim(); });
+  if (Object.values(o).some((x) => !x)) return null;
+  return o;
+}
+
+function buildQuestions(items, meta, stats) {
+  const qs = [];
+  for (const it of items) {
+    const opts = optionsMap(it.options);
+    if (!opts || it.answer_index == null || it.answer_index > 3) { stats.lDroppedBadOptions += 1; continue; }
+    qs.push({
+      type: questionType(it.stem),
+      stem: String(it.stem || "").trim(),
+      options: opts,
+      answer: LETTERS[it.answer_index],
+      explanation: "",
+      source_q: it.q_number,
+    });
+  }
+  return qs;
+}
+
+/**
+ * 口播内容的去重键。**逐条**去重而不是整卷去重：实测 6.22 与 6.29 是同一套料的两次
+ * 投放（音频文件名逐条相同、题目逐条相同），但两卷的 slug、个别文件名和校对后的
+ * 个别用词有差异，整卷哈希对不上。用户在真题专区连抽到两份一模一样的听力，
+ * 比少一套更伤信任，所以判据只能落在**内容**上。
+ */
+function spokenKey(item) {
+  const t = item.conversation
+    ? item.conversation.map((x) => x.text).join(" ")
+    : (item.announcement || item.transcript || item.speaker || "");
+  return String(t).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function speakingSetKey(set) {
+  const list = (set.sentences || []).map((s) => s.sentence)
+    .concat((set.questions || []).map((q) => q.question));
+  return sha1(list.join("|").toLowerCase().replace(/[^a-z0-9|]+/g, " ").trim());
+}
+
+const REPEAT_DIFF = (n) => (n <= 7 ? "easy" : n <= 12 ? "medium" : "hard");
+const IV_DIFF = ["personal", "descriptive", "analytical", "evaluative"];
+
+function buildListeningSpeaking(files, stats) {
+  const out = { lcr: [], lc: [], la: [], lat: [] };
+  const spk = { repeat: [], interview: [] };
+  const seenL = new Map();
+  const seenS = new Map();
+
+  for (const f of files.sort()) {
+    const setname = f.replace(/\.structured\.json$/, "");
+    const st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
+    if (!st.merged_asr) continue;                    // 没跑过合流的卷这期不收
+    if (isHeld(setname, "listening") && isHeld(setname, "speaking")) {
+      console.warn(`跳过 ${setname} 听力/口语：源料体检标了 blocking`);
+      stats.lDroppedHeld += 1;
+      continue;
+    }
+    const meta = {
+      real: true, tier: TIER, source: setname, date: setDate(setname),
+      source_flags: flagsFor(setname, "listening"),
+    };
+    const slug = setSlug(setname);
+
+    // 盲审闸（与阅读同一份 .audit.json）
+    const auditPath = path.join(OUT_DIR, `${setname}.audit.json`);
+    let passedKeys = null, auditedKeys = null;
+    if (fs.existsSync(auditPath)) {
+      const au = JSON.parse(fs.readFileSync(auditPath, "utf8"));
+      if (Array.isArray(au.audited)) {
+        passedKeys = new Set(au.audited.filter((a) => a.agree).map((a) => `${a.section}#${a.q}`));
+        auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
+      }
+    }
+    if (!passedKeys) {
+      console.warn(`跳过 ${setname} 听力：没有可用的盲审结果`);
+      stats.lDroppedNoAudit += 1;
+    }
+
+    // ── 听力 ──────────────────────────────────────────────────────────
+    if (passedKeys) {
+      for (const r of st.results || []) {
+        if (r.section !== "listening" || r.status !== "ok") continue;
+        if (!out[r.type]) continue;
+        const kept = [];
+        for (const it of r.items || []) {
+          const key = `listening#${it.q_number}`;
+          stats.lItemsSeen += 1;
+          if (!auditedKeys.has(key)) { stats.lDroppedNoAuditQ += 1; continue; }
+          if (!passedKeys.has(key)) { stats.lDroppedDisagree += 1; continue; }
+          stats.lKeptByAudit += 1;
+          kept.push(it);
+        }
+        if (!kept.length) continue;
+        const id = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
+        const questions = buildQuestions(kept, meta, stats);
+        if (!questions.length) continue;
+        const base = {
+          id, difficulty: "medium", audio_url: null, audio_pending: true,
+          asr_similarity: r.asr_similarity == null ? null : r.asr_similarity,
+          source_notes: (r.problems || []).filter((p) => /^[a-z_]+(:|$)/.test(p)),
+          ...meta,
+        };
+        let item = null;
+        if (r.type === "lcr") {
+          const q = questions[0];
+          item = { ...base, context: "campus_academic", situation: "",
+            speaker: String(r.transcript_final || "").trim(),
+            options: q.options, answer: q.answer, explanation: "", source_q: q.source_q };
+        } else if (r.type === "lc") {
+          item = { ...base, context: "campus_daily", situation: "",
+            speakers: r.speakers, conversation: r.turns || [], questions };
+        } else if (r.type === "la") {
+          item = { ...base, context: "announcement", situation: "", speaker_role: "staff",
+            announcement: String(r.transcript_final || "").trim(), questions };
+        } else if (r.type === "lat") {
+          item = { ...base, subject: "general", topic: "", transcript: String(r.transcript_final || "").trim(), questions };
+        }
+        const dk = `${r.type}#${spokenKey(item)}`;
+        if (seenL.has(dk)) {
+          console.warn(`跳过 ${setname} ${id}：口播内容与 ${seenL.get(dk)} 逐字相同`);
+          stats.lDroppedDupItem += 1;
+          continue;
+        }
+        seenL.set(dk, `${setname}/${id}`);
+        const res = V[r.type](item);
+        if (!res.valid) {
+          stats.lDroppedInvalid += 1;
+          stats.lInvalidReasons[res.errors[0]] = (stats.lInvalidReasons[res.errors[0]] || 0) + 1;
+          stats.lInvalidDetail.push({ set: setname, id, type: r.type, errors: res.errors });
+          continue;
+        }
+        out[r.type].push(item);
+      }
+    }
+
+    // ── 口语 ──────────────────────────────────────────────────────────
+    const sMeta = { ...meta, source_flags: flagsFor(setname, "speaking") };
+    for (const r of st.results || []) {
+      if (r.section !== "speaking" || r.status !== "ok") continue;
+      if (r.type === "repeat") {
+        const id = `real_repeat_${slug}_1`;
+        const sentences = (r.items || [])
+          .filter((it) => it.usable !== false && String(it.sentence_final || "").trim())
+          .map((it, i) => {
+            const text = String(it.sentence_final).trim();
+            const n = text.split(/\s+/).filter(Boolean).length;
+            return {
+              id: `${id}_s${i + 1}`, sentence: text, difficulty: REPEAT_DIFF(n),
+              word_count: n, structure: "", phonetic_focus: "",
+              timing_seconds: Math.max(8, Math.round(n * 0.9)),
+              audio_url: null, audio_pending: true,
+              from_asr: (it.problems || []).includes("sentence_from_asr"),
+            };
+          });
+        const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
+        const sk = `repeat#${speakingSetKey(set)}`;
+        if (seenS.has(sk)) {
+          console.warn(`跳过 ${setname} ${id}：复述内容与 ${seenS.get(sk)} 逐字相同`);
+          stats.sDroppedDupSet += 1;
+          continue;
+        }
+        seenS.set(sk, `${setname}/${id}`);
+        const v = SPV.validateRepeatSet(set);
+        if (!v.valid) {
+          stats.sDroppedInvalid += 1;
+          stats.sInvalidDetail.push({ set: setname, id, type: "repeat", errors: v.errors });
+          continue;
+        }
+        spk.repeat.push(set);
+      } else if (r.type === "interview") {
+        const id = `real_interview_${slug}_1`;
+        const questions = (r.items || [])
+          .filter((it) => it.usable !== false && String(it.stem_final || "").trim())
+          .map((it, i) => {
+            const text = String(it.stem_final).trim();
+            return {
+              id: `${id}_q${i + 1}`, position: `Q${i + 1}`, question: text,
+              difficulty: IV_DIFF[i] || "analytical",
+              word_count: text.split(/\s+/).filter(Boolean).length,
+              expected_response_topics: [],
+              reference_answer: String(it.reference_answer || ""),
+              audio_url: null, audio_pending: true,
+              from_asr: (it.problems || []).includes("stem_from_asr"),
+            };
+          });
+        const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
+        const sk = `interview#${speakingSetKey(set)}`;
+        if (seenS.has(sk)) {
+          console.warn(`跳过 ${setname} ${id}：面试内容与 ${seenS.get(sk)} 逐字相同`);
+          stats.sDroppedDupSet += 1;
+          continue;
+        }
+        seenS.set(sk, `${setname}/${id}`);
+        const v = SPV.validateInterviewSet(set);
+        if (!v.valid) {
+          stats.sDroppedInvalid += 1;
+          stats.sInvalidDetail.push({ set: setname, id, type: "interview", errors: v.errors });
+          continue;
+        }
+        spk.interview.push(set);
+      }
+    }
+  }
+  return { listening: out, speaking: spk };
+}
+
+/* ── 配音沿用 ───────────────────────────────────────────────────────────────
+ * build_bank 每次都是**全量重建**，条目对象是新造的（audio_url: null）。
+ * 直接落盘会把已经花过钱配好的 252 条音频全部作废、逼着重配一遍 ——
+ * 所以落盘前拿上一版的库比一次：**口播文本逐字没变**就把 audio_url 接过来，
+ * 变了的（或新增的）才留 audio_pending 给 render_real_audio.mjs 去配。
+ * 判据只看「会被念出来的那段文本」：选项、参考答案、难度标签改了不该重配音。
+ */
+function spokenText(kind, it) {
+  if (kind === "lcr") return String(it.speaker || "");
+  if (kind === "la") return String(it.announcement || "");
+  if (kind === "lat") return String(it.transcript || "");
+  if (kind === "lc") {
+    // 音色由 speakers[].gender 决定（toneDirector 锁声），所以性别也算进口播指纹
+    const roster = (it.speakers || []).map((s) => `${s.name}/${s.gender}`).join(",");
+    const lines = (it.conversation || []).map((t) => `${t.speaker}: ${t.text}`).join(" / ");
+    return roster + " || " + lines;
+  }
+  return "";
+}
+
+function carryAudioUrls(dir, bundle) {
+  let n = 0;
+  for (const [kind, list] of Object.entries(bundle)) {
+    const p = path.join(dir, `${kind}.json`);
+    if (!fs.existsSync(p)) continue;
+    let prev;
+    try { prev = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const old = new Map();
+    for (const it of prev.items || []) {
+      if (kind === "repeat" || kind === "interview") {
+        const units = kind === "repeat" ? (it.sentences || []) : (it.questions || []);
+        for (const u of units) {
+          const text = kind === "repeat" ? u.sentence : u.question;
+          if (u.audio_url) old.set(u.id, { url: u.audio_url, text: String(text || "") });
+        }
+      } else if (it.audio_url) {
+        old.set(it.id, { url: it.audio_url, text: spokenText(kind, it) });
+      }
+    }
+    for (const it of list) {
+      if (kind === "repeat" || kind === "interview") {
+        const units = kind === "repeat" ? (it.sentences || []) : (it.questions || []);
+        for (const u of units) {
+          const hit = old.get(u.id);
+          const text = String((kind === "repeat" ? u.sentence : u.question) || "");
+          if (hit && hit.text === text) { u.audio_url = hit.url; delete u.audio_pending; n += 1; }
+        }
+      } else {
+        const hit = old.get(it.id);
+        if (hit && hit.text === spokenText(kind, it)) {
+          it.audio_url = hit.url; delete it.audio_pending; n += 1;
+        }
+      }
+    }
+  }
+  return n;
+}
+
 /* ── 主流程 ─────────────────────────────────────────────────────────────── */
 function main() {
   const dry = process.argv.includes("--dry");
@@ -357,8 +801,15 @@ function main() {
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0,
-    mergedGroups: 0, droppedDupStem: 0,
+    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wSkippedThin: 0,
+    droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
+    lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
+    lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0,
+    lInvalidReasons: {}, lInvalidDetail: [],
+    sDroppedDupSet: 0, sDroppedInvalid: 0, sInvalidDetail: [],
   };
+  const writing = buildWriting(files, stats);
+  const ls = buildListeningSpeaking(files, stats);
   // 内容哈希 → 最早消费它的卷。files.sort() 保证遍历顺序稳定（按卷名），
   // 所以「谁算早」是确定的，不会因为目录枚举顺序变来变去。
   const seenHash = new Map();
@@ -385,6 +836,11 @@ function main() {
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
+    if (isHeld(setname, "reading")) {
+      console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（整科扣下待人工核对）`);
+      stats.droppedHeld += 1;
+      continue;
+    }
     stats.sets += 1;
 
     const meta0 = {
@@ -433,7 +889,7 @@ function main() {
   console.log("■ 真题阅读落库");
   console.log(`卷 ${stats.sets} 套；结构化产物里的阅读条目 ${stats.itemsSeen}`);
   console.log(`  盲审通过收下 ${stats.keptByAudit}；盲审不一致丢弃 ${stats.droppedDisagree}；没被盲审覆盖丢弃 ${stats.droppedNoAudit}`);
-  console.log(`  跨卷重复跳过 ${stats.droppedDupSet} 套`);
+  console.log(`  跨卷重复跳过 ${stats.droppedDupSet} 套；源料体检 blocking 扣下 ${stats.droppedHeld} 套`);
   console.log(`  选项残缺丢弃 ${stats.droppedBadOptions} 题（OCR 串栏，非 A-D 四选项 / answer_index 越界）；无 ■ 标记的插入题丢弃 ${stats.droppedInsert} 题`);
   console.log(`  材料模糊归并：并掉 ${stats.mergedGroups} 组（同一篇的 OCR 变体，Jaccard≥${MATERIAL_JACCARD_MIN} 或前 ${MATERIAL_PREFIX_CHARS} 字相同）；组内重复题干丢弃 ${stats.droppedDupStem} 题`);
   console.log(`  成品：AP ${out.ap.length} 组 / RDL ${out.rdl.length} 组 / CTW ${out.ctw.length} 段`);
@@ -441,10 +897,37 @@ function main() {
   console.log(`  选择题合计 ${qcount} 道；CTW 空位合计 ${out.ctw.reduce((n, x) => n + x.blank_count, 0)} 个`);
   console.log(`  构建失败 ${stats.buildFailed}`);
 
+  console.log("\n■ 真题写作落库（不走盲审：三种题型都没有唯一选项答案，闸门是解析器的结构校验）");
+  console.log(`  造句 ${writing.bs.length} 题 / 邮件 ${writing.email.length} 题 / 学术讨论 ${writing.discussion.length} 题`);
+  console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条`);
+
+  const L = ls.listening, S = ls.speaking;
+  console.log("\n■ 真题听力落库（材料 = 商家音频的 Whisper 逐字稿 + 文档转写合流后的 transcript_final）");
+  console.log(`  结构化产物里的听力条目 ${stats.lItemsSeen}；盲审通过 ${stats.lKeptByAudit}；`
+    + `不一致丢弃 ${stats.lDroppedDisagree}；没被盲审覆盖丢弃 ${stats.lDroppedNoAuditQ}`);
+  console.log(`  跨卷逐条内容重复跳过 ${stats.lDroppedDupItem} 组；无盲审结果跳过 ${stats.lDroppedNoAudit} 套；选项残缺丢弃 ${stats.lDroppedBadOptions} 题`);
+  console.log(`  validator 不收丢弃 ${stats.lDroppedInvalid} 组：${JSON.stringify(stats.lInvalidReasons)}`);
+  console.log(`  成品：LCR ${L.lcr.length} / LC ${L.lc.length} / LA ${L.la.length} / LAT ${L.lat.length}`);
+
+  console.log("\n■ 真题口语落库（无客观答案，不走盲审；闸门是合流阶段的结构校验 + validator）");
+  console.log(`  跨卷内容重复跳过 ${stats.sDroppedDupSet} 套；validator 不收丢弃 ${stats.sDroppedInvalid} 组`);
+  console.log(`  成品：复述 ${S.repeat.length} 套（${S.repeat.reduce((n, x) => n + x.sentences.length, 0)} 句）`
+    + ` / 面试 ${S.interview.length} 套（${S.interview.reduce((n, x) => n + x.questions.length, 0)} 题）`);
+  for (const d of [...stats.lInvalidDetail, ...stats.sInvalidDetail]) {
+    console.log(`    ✗ ${d.set} ${d.id} (${d.type}): ${d.errors.slice(0, 3).join(" | ")}`);
+  }
+
   if (dry) { console.log("\n（--dry，未写文件）"); return; }
   fs.mkdirSync(BANK_DIR, { recursive: true });
   for (const [k, v] of Object.entries(out)) {
     const p = path.join(BANK_DIR, `${k}.json`);
+    fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
+    console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
+  }
+
+  fs.mkdirSync(WRITING_DIR, { recursive: true });
+  for (const [k, v] of Object.entries(writing)) {
+    const p = path.join(WRITING_DIR, `${k}.json`);
     fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
     console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
   }
@@ -457,6 +940,26 @@ function main() {
   const counts = { ctw: out.ctw.length, rdl: out.rdl.length, ap: out.ap.length };
   fs.writeFileSync(countsPath, JSON.stringify(counts, null, 2), "utf8");
   console.log(`  → ${path.relative(process.cwd(), countsPath)}  ${JSON.stringify(counts)}`);
+
+  // 听力 / 口语：同一套写法（每个题型一个文件 + 一份计数），音频先留空。
+  // 落库前先把**口播文本没变**的条目的 audio_url 从上一版接过来（见 carryAudioUrls）。
+  const carried = carryAudioUrls(LISTENING_DIR, L) + carryAudioUrls(SPEAKING_DIR, S);
+  console.log(`
+■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）；`
+    + `其余 audio_pending 的交给 render_real_audio.mjs`);
+  for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
+    fs.mkdirSync(dir, { recursive: true });
+    const c = {};
+    for (const [k, v] of Object.entries(bundle)) {
+      const p = path.join(dir, `${k}.json`);
+      fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
+      console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
+      c[k] = v.length;
+    }
+    const cp = path.join(dir, "counts.json");
+    fs.writeFileSync(cp, JSON.stringify(c, null, 2), "utf8");
+    console.log(`  → ${path.relative(process.cwd(), cp)}  ${JSON.stringify(c)}`);
+  }
 }
 
 main();

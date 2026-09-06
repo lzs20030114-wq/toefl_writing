@@ -19,6 +19,16 @@ import json
 import os
 import sys
 
+# Windows 控制台默认代码页(GBK/cp936)编不出 ⚠ 等符号，report() 里一遇到就整个
+# 进程崩掉（本轮 5 月新卷验证时实测 5.11/5.20 两套的 blockers 一有这个字符就炸，
+# 后面的对齐结果和 --json 落盘都没跑到）。管道/文件重定向下 stdout 不是 tty，
+# reconfigure 不影响交互终端的正常显示，只在编不出的字符上退化成 '?' 而不是崩溃。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ops"))
 
@@ -28,7 +38,10 @@ from ingest_common import (
     parse_answer_pdf_with_warnings, resolve_orphan_chains, segment, strip_watermark,
 )
 
-SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
+DEFAULT_SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
+# --src / REALBANK_SRC 覆盖源目录（转换后的 docx 套题落在别处，不写回桌面源库）；
+# --src 优先于环境变量；两者都没给就用默认桌面路径，行为与改动前一致。
+SRC = os.environ.get("REALBANK_SRC") or DEFAULT_SRC
 OCR_CACHE = r"D:\toefl_writing\.codex-tmp\ocr"
 OUT = r"D:\toefl_writing\.codex-tmp\realbank"
 # 口语音频源多为屏幕录制的 .mp4/.mov（15/43 个 2026-09-06 补料文件），
@@ -101,8 +114,8 @@ def pdf_text(path):
     return cached, origin
 
 
-def scan_set(setname, do_ocr=True):
-    folder = os.path.join(SRC, setname)
+def scan_set(setname, do_ocr=True, src=None):
+    folder = os.path.join(src or SRC, setname)
     if not os.path.isdir(folder):
         raise SystemExit(f"找不到卷: {folder}")
 
@@ -240,16 +253,20 @@ def main():
     ap.add_argument("setname", nargs="?", help="卷文件夹名，如 3.10新托福真题")
     ap.add_argument("--all", action="store_true", help="扫全部卷，只出汇总表")
     ap.add_argument("--json", action="store_true", help="落盘中间产物")
+    ap.add_argument("--src", default=None,
+                     help="覆盖源目录（默认桌面路径，也可用 REALBANK_SRC 环境变量；"
+                          "两者都不给不改变原行为）")
     args = ap.parse_args()
+    src = args.src or SRC
 
     if args.all:
         os.makedirs(OUT, exist_ok=True)
         rows = []
-        for d in sorted(os.listdir(SRC)):
-            if not os.path.isdir(os.path.join(SRC, d)):
+        for d in sorted(os.listdir(src)):
+            if not os.path.isdir(os.path.join(src, d)):
                 continue
             try:
-                r = scan_set(d)
+                r = scan_set(d, src=src)
             except Exception as e:  # 单卷炸掉不许拖垮全表
                 rows.append((d, f"ERR {type(e).__name__}: {e}"))
                 continue
@@ -270,7 +287,7 @@ def main():
 
     if not args.setname:
         ap.error("给个卷名，或用 --all")
-    res = scan_set(args.setname)
+    res = scan_set(args.setname, src=src)
     report(res)
     if args.json:
         os.makedirs(OUT, exist_ok=True)

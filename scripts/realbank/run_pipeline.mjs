@@ -32,7 +32,12 @@ import tls from "tls";
 import { URL } from "url";
 import { spawn } from "child_process";
 
-const SRC = "D:\\桌面\\【2026改后全科真题】（持续更新中）";
+// --src / REALBANK_SRC 覆盖源目录（默认行为不变，仅影响 --all 的卷名枚举与传给
+// ingest_set.py 的 --src；structure_set.mjs / audit_answers.mjs 本身不读源目录）。
+const argvSrcIdx = process.argv.indexOf("--src");
+const SRC = (argvSrcIdx >= 0 && process.argv[argvSrcIdx + 1])
+  || process.env.REALBANK_SRC
+  || "D:\\桌面\\【2026改后全科真题】（持续更新中）";
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const PY = "D:\\python\\python";
 const SECTIONS = "reading,writing";
@@ -266,7 +271,7 @@ async function main() {
       continue;
     }
 
-    const a = await run(PY, ["scripts/realbank/ingest_set.py", s, "--json"], "ingest");
+    const a = await run(PY, ["scripts/realbank/ingest_set.py", s, "--json", "--src", SRC], "ingest");
     if (a.code !== 0) { console.log(`对齐失败`); rows.push({ set: s, err: "ingest" }); continue; }
 
     const b = await run("node", ["scripts/realbank/structure_set.mjs", s, "--sections", SECTIONS], "structure");
