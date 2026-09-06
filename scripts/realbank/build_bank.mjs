@@ -4,7 +4,8 @@
  *
  * 把 `<卷>.structured.json` + `<卷>.audit.json` 汇成 App 能直接消费的题库文件：
  *   data/realBank/reading/{ap,rdl,ctw}.json
- *   data/realBank/reading/counts.json   ← 只有 {ctw,rdl,ap} 三个数字，给首页卡片显示题量用
+ *   data/realBank/reading/counts.json   ← {ctw,rdl,ap} 三个题量 + {sets,latest} 场次数 / 最近考期，
+ *                                          给首页卡片显示用（首页不 import 真库，只读这几十字节）
  *
  * 三条硬规矩：
  *
@@ -454,7 +455,12 @@ function main() {
   // 所以额外落一份几十字节的计数文件，给 components/home/* 静态 import。
   // 刻意不写时间戳/生成信息：每次落库都产生无意义 diff，会淹掉真正的题量变化。
   const countsPath = path.join(BANK_DIR, "counts.json");
-  const counts = { ctw: out.ctw.length, rdl: out.rdl.length, ap: out.ap.length };
+  // sets / latest 给首页「按考试场次」入口卡用：按卷名（source）数场次，最近考期取最大 date。
+  // 与 lib/realBank.js getRealExamSets() 同口径（同名卷 = 同一场）。
+  const allItems = [...out.ctw, ...out.rdl, ...out.ap];
+  const setNames = new Set(allItems.map((it) => String(it.source || "").replace(/\s+/g, "")).filter(Boolean));
+  const latest = allItems.map((it) => String(it.date || "")).filter(Boolean).sort().pop() || "";
+  const counts = { ctw: out.ctw.length, rdl: out.rdl.length, ap: out.ap.length, sets: setNames.size, latest };
   fs.writeFileSync(countsPath, JSON.stringify(counts, null, 2), "utf8");
   console.log(`  → ${path.relative(process.cwd(), countsPath)}  ${JSON.stringify(counts)}`);
 }

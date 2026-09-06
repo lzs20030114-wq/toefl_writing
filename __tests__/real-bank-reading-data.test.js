@@ -25,6 +25,7 @@ import {
   getRealCTWItems,
   getRealDiscussionPrompts,
   getRealEmailPrompts,
+  getRealExamSets,
   getRealRDLItems,
   isRealBankId,
   mapRealAPToPicker,
@@ -58,12 +59,18 @@ describe("真题阅读：供给", () => {
   // 首页不能 import lib/realBank（会把整个真题库打进 `/` 的 first-load chunk，实测 255→318 kB）。
   // 镜像一旦和真库对不上，用户看到的题量就是假的；忘了跑 build_bank 也会在这里先暴露。
   test("counts.json 与三个真库的实际题量一致（首页显示的数字不许失真）", () => {
-    expect(RB_COUNTS).toEqual({ ctw: ctw.length, rdl: rdl.length, ap: ap.length });
+    const sets = getRealExamSets();
+    expect(RB_COUNTS).toEqual({
+      ctw: ctw.length, rdl: rdl.length, ap: ap.length,
+      sets: sets.length,
+      latest: sets[0]?.date || "",
+    });
   });
 
-  test("counts.json 只有三个数字键（塞时间戳/生成信息会让每次落库都产生无意义 diff）", () => {
-    expect(Object.keys(RB_COUNTS).sort()).toEqual(["ap", "ctw", "rdl"]);
-    Object.values(RB_COUNTS).forEach((n) => expect(Number.isInteger(n)).toBe(true));
+  test("counts.json 只有题量 + 场次数 + 最近考期五个键（塞时间戳/生成信息会让每次落库都产生无意义 diff）", () => {
+    expect(Object.keys(RB_COUNTS).sort()).toEqual(["ap", "ctw", "latest", "rdl", "sets"]);
+    ["ap", "ctw", "rdl", "sets"].forEach((k) => expect(Number.isInteger(RB_COUNTS[k])).toBe(true));
+    expect(RB_COUNTS.latest).toMatch(/^(\d{4}-\d{2}-\d{2})?$/);
   });
 });
 

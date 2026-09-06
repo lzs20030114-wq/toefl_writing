@@ -1,5 +1,9 @@
 "use client";
-// 「真题专区」独立路由（Pro 专属，一期只有写作三题型）。
+// 「真题专区」独立路由（Pro 专属）。?type= 选题型（写作三题型 + 阅读三题型）。
+//
+// 深链接（二期「按考试场次」页 /real-bank/sets 用）：?type=ap&item=<id>&set=<卷名>
+//   item 命中库里的题 → 跳过 picker 直接进答题；退出 / 做完返回时若带 set 就回到该场详情页，
+//   否则回本题型的 picker。判分 / 历史 / 已练与 picker 路径完全同一套。
 //
 // 与首页 section 面板（components/home/RealExamSectionContent.js）是两套东西：本页不在
 // HomePageClient 组件树下，挂在 HomePageClient 上的全局 open-upgrade-modal 事件到不了这里，
@@ -18,11 +22,12 @@ import { BuildSentenceTask } from "../../components/buildSentence/BuildSentenceT
 import { CTWTask } from "../../components/reading/CTWTask";
 import { RDLTask } from "../../components/reading/RDLTask";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
-import UpgradeModal from "../../components/shared/UpgradeModal";
+import { RealBankLockScreen } from "../../components/realBank/RealBankLockScreen";
+import { REAL_ACCENT, REAL_TYPE_LABELS as REAL_TYPES } from "../../components/realBank/theme";
+import { REAL_TYPE_DONE_KEYS } from "../../components/realBank/realBankDone";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { C, FONT } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
-import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { addDoneIds, loadDoneIds, saveSess } from "../../lib/sessionStore";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { normalizeReportLanguage } from "../../lib/reportLanguage";
@@ -41,34 +46,13 @@ import {
   mapRealEmailToPicker,
   mapRealRDLToPicker,
   REAL_TIER_NOTE,
+  realSourceFlagNote,
   realTierLabel,
 } from "../../lib/realBank";
 
-// 与 components/home/sections.js 的 SECTION_ACCENTS["real-bank"] 同色（金琥珀 = 权威感）。
-// 各任务页都在本地重复声明科目配色（见 app/reading/page.js:113），这里沿用同一惯例。
-const REAL_ACCENT = { color: "#B45309", soft: "#FFF7ED" };
-
-const REAL_TYPES = {
-  discussion: { title: "学术讨论真题", section: "真题专区 | 学术讨论" },
-  email: { title: "邮件真题", section: "真题专区 | 邮件写作" },
-  bs: { title: "造句官方真题", section: "真题专区 | 连词成句" },
-  // 阅读三题型：任务名沿用 app/reading/page.js 的 ETS 口径（Complete the Words /
-  // Read in Daily Life / Academic Passage），标题保持本页的中文house style。
-  ctw: { title: "阅读填词真题", section: "真题专区 | Complete the Words" },
-  rdl: { title: "日常阅读真题", section: "真题专区 | Read in Daily Life" },
-  ap: { title: "学术阅读真题", section: "真题专区 | Academic Passage" },
-};
-
 const READING_TYPES = new Set(["ctw", "rdl", "ap"]);
 
-// 阅读真题的「已练」写进各科目自己的 done key —— 与 app/reading/page.js 同一把钥匙，
-// 常规练习做过的题在真题专区也会显示已练（同一道题只有一个 id，本来就该是同一份进度）。
-const READING_DONE_KEYS = {
-  ctw: DONE_STORAGE_KEYS.READING_CTW,
-  rdl: DONE_STORAGE_KEYS.READING_RDL,
-  ap: DONE_STORAGE_KEYS.READING_AP,
-};
-
+// 题型 → 「已练」key 在 components/realBank/realBankDone.js（与常规练习页同一把钥匙）。
 // 缺省 / 非法 type 一律落回讨论（与 app/reading/page.js 的 `type || "ctw"` 同惯例）。
 function normalizeRealType(raw) {
   const t = String(raw || "").trim();
@@ -77,7 +61,7 @@ function normalizeRealType(raw) {
 
 /* ── 答题页顶部的来源标注条 ──────────────────────────────────────── */
 // 「真题」是敏感宣称，必须在用户实际看到题目的地方也标清来源分档，不能只标在 picker 上。
-function RealSourceBanner({ tierLabel, meta }) {
+function RealSourceBanner({ tierLabel, meta, flagNote }) {
   return (
     <div
       data-testid="real-source-banner"
@@ -96,6 +80,7 @@ function RealSourceBanner({ tierLabel, meta }) {
         {tierLabel}
       </span>
       {meta && <span style={{ opacity: 0.85 }}>{meta}</span>}
+      {flagNote && <span data-testid="real-source-flag" style={{ color: "#B45309", opacity: 0.9 }}>⚠ {flagNote}</span>}
     </div>
   );
 }
@@ -162,7 +147,7 @@ function saveRealReadingSession(subtype, itemData, result) {
       questions: (subtype === "rdl" || subtype === "ap") ? itemData.questions : undefined,
     },
   });
-  addDoneIds(READING_DONE_KEYS[subtype] || DONE_STORAGE_KEYS.READING_RDL, [itemData.id]);
+  addDoneIds(REAL_TYPE_DONE_KEYS[subtype] || REAL_TYPE_DONE_KEYS.rdl, [itemData.id]);
 }
 
 /* ── 页面主体 ────────────────────────────────────────────────────── */
@@ -172,6 +157,9 @@ function RealBankPageClient() {
   const searchParams = useSearchParams();
   const type = normalizeRealType(searchParams.get("type"));
   const reportLanguage = normalizeReportLanguage(searchParams.get("lang"));
+  // 深链接：从场次详情页点进来 → 直接进答题；set 记住回哪一场。
+  const deepItemId = String(searchParams.get("item") || "").trim();
+  const fromSetId = String(searchParams.get("set") || "").trim();
 
   const [isPro, setIsPro] = useState(false);
   const [userCode, setUserCode] = useState("");
@@ -187,7 +175,7 @@ function RealBankPageClient() {
   // 选中的题（写作 / 阅读）/ 批次（造句）；返回 picker 时清空。
   const [pickedPromptId, setPickedPromptId] = useState(null);
   const [pickedBatchId, setPickedBatchId] = useState(null);
-  const [pickedReadingId, setPickedReadingId] = useState(null);
+  const [pickedReadingId, setPickedReadingId] = useState(() => (deepItemId && READING_TYPES.has(type) ? deepItemId : null));
 
   const writingPrompts = useMemo(() => {
     if (type === "email") return getRealEmailPrompts();
@@ -219,35 +207,19 @@ function RealBankPageClient() {
   }, [type, readingItems]);
 
   const onExit = () => router.push("/?section=real-bank");
+  // 从场次页深链进来的，答完 / 退出回那一场；否则回本题型 picker。
+  const backFromReading = fromSetId
+    ? () => router.push(`/real-bank/sets?set=${encodeURIComponent(fromSetId)}`)
+    : () => setPickedReadingId(null);
 
   /* ── Pro 门禁（仿 app/reading/page.js:195-223，锁定屏自持 UpgradeModal） ── */
   if (!isPro) {
     return (
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: FONT, background: C.bg }}>
-        {upgradeOpen && (
-          <UpgradeModal
-            userCode={userCode}
-            currentTier={userTier}
-            onClose={() => setUpgradeOpen(false)}
-            onUpgraded={() => window.location.reload()}
-          />
-        )}
-        <div style={{ textAlign: "center", maxWidth: 380, padding: "0 20px" }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
-          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>Pro 专属功能</div>
-          <div style={{ fontSize: 14, color: C.t2, marginBottom: 20, lineHeight: 1.6 }}>
-            真题专区集中收录公开真题（学术讨论 / 邮件 / 造句 / 阅读三题型），仅对 Pro 用户开放。升级 Pro 即可解锁。
-          </div>
-          <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-            <button onClick={() => setUpgradeOpen(true)} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: REAL_ACCENT.color, color: "#fff", fontWeight: 600, cursor: "pointer", fontSize: 14, fontFamily: FONT }}>
-              升级 Pro
-            </button>
-            <button onClick={onExit} style={{ padding: "10px 24px", borderRadius: 8, border: `1px solid ${C.bdr}`, background: "#fff", cursor: "pointer", fontSize: 14, fontFamily: FONT }}>
-              返回首页
-            </button>
-          </div>
-        </div>
-      </div>
+      <RealBankLockScreen
+        userCode={userCode} userTier={userTier}
+        upgradeOpen={upgradeOpen} setUpgradeOpen={setUpgradeOpen}
+        onExit={onExit}
+      />
     );
   }
 
@@ -257,7 +229,7 @@ function RealBankPageClient() {
 
     if (!pickedReadingId) {
       // 已练读的正是 app/reading/page.js 写入的那把 key —— 常规练习做过的题在这里也会亮「已练」。
-      const doneIds = loadDoneIds(READING_DONE_KEYS[type]);
+      const doneIds = loadDoneIds(REAL_TYPE_DONE_KEYS[type]);
       return (
         <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
           <TopicPicker
@@ -277,7 +249,7 @@ function RealBankPageClient() {
     const item = readingItems.find((it) => String(it.id) === String(pickedReadingId));
     if (!item) return <ItemUnavailable onBack={() => setPickedReadingId(null)} />;
 
-    const backToPicker = () => setPickedReadingId(null);
+    const backToPicker = backFromReading;
     // AP 复用 RDLTask（同一套四选一交互），只把字段名对上：passage→text、topic→genre。
     // 适配对象只喂给组件；存历史 / 打已练一律用原 item（details.passage 那一支自己会挑）。
     const apAsRdl = { ...item, text: item.passage, genre: item.topic };
@@ -285,7 +257,7 @@ function RealBankPageClient() {
     return (
       <UsageGateWrapper onExit={backToPicker} practiceMode={PRACTICE_MODE.PRACTICE}>
         <>
-          <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} />
+          <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} flagNote={realSourceFlagNote(item.source_flags)} />
           {type === "ctw" && (
             <CTWTask
               item={item}
@@ -323,7 +295,7 @@ function RealBankPageClient() {
   /* ── 造句官方真题：2 张批次卡 → BuildSentenceTask ── */
   if (type === "bs") {
     if (!pickedBatchId) {
-      const doneIds = new Set([...loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP)].map(String));
+      const doneIds = new Set([...loadDoneIds(REAL_TYPE_DONE_KEYS.bs)].map(String));
       return (
         <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
           <TopicPicker
@@ -370,7 +342,7 @@ function RealBankPageClient() {
   }
 
   /* ── 讨论 / 邮件真题：TopicPicker → WritingTask（AI 评分链路零改动） ── */
-  const doneKey = type === "email" ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION;
+  const doneKey = REAL_TYPE_DONE_KEYS[type];
   const meta = REAL_TYPES[type];
 
   if (!pickedPromptId) {

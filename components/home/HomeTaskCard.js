@@ -85,9 +85,10 @@ export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge, footer 
   );
 }
 
-export function HomeLinkCard({ href, cardKey, hoverKey, setHoverKey, isChallenge, icon, eyebrow, title, description, tone = "primary", badge }) {
+export function HomeLinkCard({ href, cardKey, hoverKey, setHoverKey, isChallenge, icon, eyebrow, title, description, tone = "primary", badge, accentColor }) {
   const isHover = hoverKey === cardKey;
-  const color = tone === "warning" ? "#D97706" : T.primary;
+  // accentColor：科目自己的强调色（真题专区的金琥珀）优先；否则按 tone 取。
+  const color = accentColor || (tone === "warning" ? "#D97706" : T.primary);
 
   return (
     <Link

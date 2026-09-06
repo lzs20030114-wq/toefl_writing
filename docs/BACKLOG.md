@@ -5,6 +5,8 @@
 
 ## 需用户决策
 
+- [高] **邮件真题源文件不在 git 里，主分支构建会挂**：`data/emailWriting/tpo_reference.json` 被 `.gitignore` 的 `data/*/tpo_reference*.json` 排除、从未入库，但 `lib/realBank.js`（40ebfbe 起）静态 import 它 → 本机以外任何构建（含 Vercel）Module not found。拍板：①把该文件（13 条，tpo1/tpo2 官方 + 11 参考版）入库；或 ②改成可选加载（try/require，缺文件时邮件真题为 0 题）。出处：2026-09-06 真题场次页分支在云端构建时发现。
+- [中] 真题场次页（`/real-bank/sets`，分支 claude/exam-questions-frontend-design-yhzdxn）：已按「考期账本」方案实现并带截图设计稿；未做「整场连做」（做完自动跳下一题 + 场末总分），等写作 / 口语真题也进场次后再定义「一场」的完整形态。铺量时 `build_bank.mjs` 会顺手把 `sets` / `latest` 写进 counts.json 供首页入口卡用。
 - [中] `/api/ai` 线上成本护栏两处（出处：2026-09-05 DeepSeek 9/1 账单 ¥11.97 溯源，见 docs/deepseek-usage-ledger.md）：
   ① 生产库缺 `increment_daily_usage` RPC——Supabase edge 日志 8/31 实证 `POST /rest/v1/rpc/increment_daily_usage → 404`，`scripts/sql/daily-usage-quota.sql` 台账状态「历史迁移,状态未知」即从未跑过；计量退化到 `fallbackIncrementUsage` 读-改-写，并发可击穿免费 3 次/天。走 /sql-migrate 补跑并登记。
   ② `callAIMulti` 默认 `samples=3` + `maxTokens` 上限 8192，一次计量 = 3 次 DeepSeek 调用；Pro 日限 100 → 单人单日最多 300 次大 token 调用，无成本封顶。决策：按调用次数（而非提交次数）计量，或 Pro 日限按 samples 折算。

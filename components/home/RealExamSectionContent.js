@@ -6,7 +6,7 @@
 // HomePageClient 上挂着唯一监听者（HomePageClient.js:142-152），所以不需要自持 UpgradeModal。
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
-import { HomeTaskCard } from "./HomeTaskCard";
+import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
 // 故意**不** import lib/realBank，免得把 158 道写作真题的 JSON（238 KB）+ 阅读三个题库
 // 全打进首页 bundle（实测 `/` 的 First Load JS 会从 255 kB 涨到 318 kB）。
@@ -14,7 +14,21 @@ import { PromoBanner } from "./HomePageClient";
 // 写死的字符串会立刻过期 —— 折中办法是读 counts.json：build_bank 落库时顺手写的
 // 几十字节计数文件，只有 {ctw,rdl,ap} 三个数字，静态 import 进来几乎不占体积。
 // 写作三题型是冻结语料，题量保持写死（靠 __tests__/real-bank-section.component.test.js 交叉校验）。
+// counts.json 同时带 sets（场次数）/ latest（最近考期），给下面「按考试场次」入口卡用。
 import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
+
+/** 「按考试场次」入口卡的文案（桌面 / 移动端共用口径）。 */
+export function realSetsEntryCopy(counts = REAL_READING_COUNTS) {
+  const sets = Number(counts?.sets) || 0;
+  const latest = String(counts?.latest || "");
+  const latestShort = latest.match(/^\d{4}-(\d{2})-(\d{2})$/);
+  return {
+    badge: sets > 0 ? `${sets} 场` : "录入中",
+    description: sets > 0
+      ? `一场考试一套题，按考试日期排列${latestShort ? `，最近一场 ${Number(latestShort[1])}.${Number(latestShort[2])}` : ""}；每场看得到练到哪了。`
+      : "场次真题正在录入，先按题型练。",
+  };
+}
 
 const REAL_ACCENT = SECTION_ACCENTS["real-bank"];
 
@@ -165,6 +179,27 @@ export function RealExamSectionContent({
           )}
         </div>
       )}
+
+      {/* 按考试场次入口（非 Pro 同样置灰禁点） */}
+      <div style={{
+        marginBottom: 12, ...fadeIn(170),
+        opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
+        filter: isPro ? "none" : "grayscale(0.5)",
+      }}>
+        <HomeLinkCard
+          href="/real-bank/sets"
+          cardKey="real-sets"
+          hoverKey={hoverKey}
+          setHoverKey={setHoverKey}
+          isChallenge={isChallenge}
+          icon="📅"
+          eyebrow="By Exam Date"
+          title="按考试场次练"
+          description={realSetsEntryCopy().description}
+          badge={realSetsEntryCopy().badge}
+          accentColor={REAL_ACCENT.color}
+        />
+      </div>
 
       {/* Task grid（非 Pro 置灰禁点） */}
       <div className="home-grid" style={{

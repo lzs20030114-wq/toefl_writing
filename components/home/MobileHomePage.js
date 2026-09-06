@@ -794,6 +794,14 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
         display: "flex", flexDirection: "column", gap: 10, marginBottom: 14,
         ...(isPro ? {} : { opacity: 0.45, pointerEvents: "none", filter: "grayscale(0.5)" }),
       }}>
+        {/* 按考试场次入口：题量 / 最近考期读 counts.json 的 sets / latest */}
+        <MobileSecTaskCard
+          href="/real-bank/sets"
+          n="By Exam Date" t="按考试场次练"
+          d={REAL_READING_COUNTS.sets > 0 ? `一场考试一套题，最近一场 ${String(REAL_READING_COUNTS.latest || "").slice(5).replace(/^0/, "").replace("-0", ".").replace("-", ".")}` : "场次真题录入中"}
+          timeLabel={REAL_READING_COUNTS.sets > 0 ? `${REAL_READING_COUNTS.sets} 场` : "录入中"}
+          accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
+        />
         {tasks.map((task) => (
           <MobileSecTaskCard
             key={task.type}
