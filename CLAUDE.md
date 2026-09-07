@@ -182,7 +182,7 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
 - `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
 - `analytics/track` 事件 · `feedback/` 反馈
-- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/voice-vote/surveys/referrals
+- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals
 
 ## Database (Supabase)
 

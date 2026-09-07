@@ -1,6 +1,7 @@
 import { isAdminAuthorized } from "../../../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../../../lib/apiResponse";
+import { isRealSession } from "../../../../../../lib/admin/realSession";
 
 function safeNum(v, fallback = 0) {
   const n = Number(v);
@@ -45,6 +46,19 @@ function applyDelta(target, subject, subtype, n = 1) {
   }
 }
 
+// 真题场次的分题型计数（mock 不会是真题，所以只覆盖六种 practice type）。
+function accumulateReal(row, target) {
+  const type = String(row?.type || "");
+  if (type === "bs") return applyDelta(target, "writing", "build");
+  if (type === "email") return applyDelta(target, "writing", "email");
+  if (type === "discussion") return applyDelta(target, "writing", "discussion");
+  const subtype = String(row?.details?.subtype || "").toLowerCase();
+  if (!subtype) return;
+  if (type === "reading" || type === "listening" || type === "speaking") {
+    applyDelta(target, type, subtype);
+  }
+}
+
 function buildAttemptBase(row, taskType, idx) {
   return {
     id: `${row.id || "session"}-${taskType}-${idx}`,
@@ -52,6 +66,8 @@ function buildAttemptBase(row, taskType, idx) {
     date: row.date || null,
     sourceType: row.type || "",
     taskType,
+    // 真题专区记录：前端用它打「真题」标签；mock 场次不会命中。
+    real: row.__real === true,
   };
 }
 
@@ -210,11 +226,19 @@ export async function GET(request, { params }) {
     const summary = {
       sessions: Array.isArray(rows) ? rows.length : 0,
       answered: emptyAnswered(),
+      realSessions: 0,
+      answeredReal: emptyAnswered(),
       lastActiveAt: rows?.[0]?.date || null,
     };
 
     for (const row of rows || []) {
       const type = String(row?.type || "");
+      // 真题专区子集：各 collect* 只累加 summary.answered，这里按同一口径再记一份 answeredReal。
+      if (isRealSession(row)) {
+        row.__real = true;
+        summary.realSessions += 1;
+        accumulateReal(row, summary.answeredReal);
+      }
       if (type === "bs") {
         collectFromBs(row, attempts, summary, attemptLimit);
         continue;
