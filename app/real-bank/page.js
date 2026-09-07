@@ -423,6 +423,7 @@ function RealBankPageClient() {
             items={audioPickerItems}
             doneIds={doneIds}
             accent={REAL_ACCENT}
+            compact
             onSelect={(id) => setPickedAudioId(String(id))}
             onExit={onExit}
           />
@@ -509,6 +510,7 @@ function RealBankPageClient() {
             items={readingPickerItems}
             doneIds={doneIds}
             accent={REAL_ACCENT}
+            compact
             onSelect={(id) => setPickedReadingId(String(id))}
             onExit={onExit}
           />
@@ -575,6 +577,7 @@ function RealBankPageClient() {
             items={mapRealBSToPicker(bsBatches)}
             doneIds={doneIds}
             accent={REAL_ACCENT}
+            compact
             onSelect={(id) => setPickedBatchId(String(id))}
             onExit={onExit}
           />
@@ -626,6 +629,7 @@ function RealBankPageClient() {
           items={writingItems}
           doneIds={doneIds}
           accent={REAL_ACCENT}
+          compact
           onSelect={(id) => {
             // real_* id 不存在于 live 静态题库，必须靠快照交接，否则 WritingTask 报「已下线」。
             const raw = writingById.get(String(id));

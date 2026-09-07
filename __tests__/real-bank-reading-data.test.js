@@ -250,7 +250,7 @@ describe("真题阅读：TopicPicker 映射", () => {
   });
 
   test.each(cases)("%s 每张卡都标着来源分档「回忆版」", (_name, items) => {
-    items.forEach((it) => expect(it.tag).toContain(REAL_TIER_LABELS.recalled));
+    items.forEach((it) => expect(it.subtitle).toContain(REAL_TIER_LABELS.recalled));
   });
 
   test.each(cases)("%s picker id 与题目 id 同源（已练标记才对得上）", (_name, items, source) => {

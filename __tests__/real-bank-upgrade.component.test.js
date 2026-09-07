@@ -53,6 +53,7 @@ jest.mock("../components/shared/TopicPicker", () => ({
       <div data-testid="picker-accent">{accent?.color}</div>
       <div data-testid="picker-done">{[...(doneIds || [])].join(",")}</div>
       <div data-testid="picker-first-tag">{items[0]?.tag}</div>
+      <div data-testid="picker-first-subtitle">{items[0]?.subtitle}</div>
       <button data-testid="pick-first" onClick={() => onSelect(items[0].id)}>first</button>
       <button data-testid="pick-last" onClick={() => onSelect(items[items.length - 1].id)}>last</button>
     </div>
@@ -326,8 +327,9 @@ describe("真题专区独立页：阅读真题路由", () => {
     expect(await screen.findByTestId("picker-title")).toHaveTextContent(title);
     expect(screen.getByTestId("picker-count").textContent).toBe("1");
     expect(screen.getByTestId("picker-accent").textContent).toBe("#B45309");
-    // tag 走「来源分档 + 考试日期」，不查学科表（真题没有学科标签）。
-    expect(screen.getByTestId("picker-first-tag").textContent).toContain("回忆版");
+    // tag 只放考试日期，不查学科表（真题没有学科标签）；来源分档在卡片第二行。
+    expect(screen.getByTestId("picker-first-tag").textContent).toMatch(/^\d{4}\.\d{2}\.\d{2}$/);
+    expect(screen.getByTestId("picker-first-subtitle").textContent).toContain("回忆版");
   });
 
   test("非法 type 仍然落回学术讨论（阅读分支不会吞掉兜底）", async () => {

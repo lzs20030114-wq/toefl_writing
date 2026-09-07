@@ -41,6 +41,7 @@ jest.mock("../components/shared/TopicPicker", () => ({
       <div data-testid="picker-done">{[...(doneIds || [])].join(",")}</div>
       <div data-testid="picker-first-tag">{items[0]?.tag}</div>
       <div data-testid="picker-first-title">{items[0]?.title}</div>
+      <div data-testid="picker-first-subtitle">{items[0]?.subtitle}</div>
       <button data-testid="pick-first" onClick={() => onSelect(items[0].id)}>first</button>
     </div>
   ),
@@ -202,9 +203,9 @@ describe("真题专区：听力 / 口语六个入口都有 picker", () => {
     expect(screen.getByTestId("picker-section").textContent).toBe(section);
     expect(screen.getByTestId("picker-count").textContent).toBe("1");
     expect(screen.getByTestId("picker-accent").textContent).toBe("#B45309");
-    // tag 走「来源分档 + 考试日期」（真题没有可信的学科标签）。
-    expect(screen.getByTestId("picker-first-tag").textContent).toContain("回忆版");
-    expect(screen.getByTestId("picker-first-tag").textContent).toContain("2026-06-10");
+    // tag 只放考试日期（真题没有可信的学科标签），来源分档在卡片第二行。
+    expect(screen.getByTestId("picker-first-tag").textContent).toBe("2026.06.10");
+    expect(screen.getByTestId("picker-first-subtitle").textContent).toContain("回忆版");
   });
 
   test("免费用户仍被 Pro 门禁拦下（听力入口不能绕过）", async () => {

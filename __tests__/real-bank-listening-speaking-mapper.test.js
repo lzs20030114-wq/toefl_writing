@@ -211,8 +211,8 @@ describe("真题听力 / 口语：picker 卡片", () => {
       expect(c.id).toBeTruthy();
       expect(String(c.tag).length).toBeGreaterThan(0);
       expect(String(c.title).trim().length).toBeGreaterThan(0);
-      // tag 是「来源分档 · 考试日期」，必须带回忆版字样（真题专区的诚实标注贯穿到 picker）。
-      expect(String(c.tag)).toContain("回忆版");
+      // tag 只放考试日期（筛选条），来源分档「回忆版」落在卡片第二行 —— 诚实标注贯穿到 picker。
+      expect(String(c.subtitle)).toContain("回忆版");
     }
   });
 
