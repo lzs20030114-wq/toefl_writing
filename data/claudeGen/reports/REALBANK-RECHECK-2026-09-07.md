@@ -88,6 +88,19 @@ AP 砍得最狠（81→53）：一半是重复（题池 rp0819/rp0822 几乎整�
   修法二选一：① 改题干里的 the man/the woman（不用重配，¥0）；② 对调 transcript 标签并重配（≈ ¥0.3）。建议 ①。
 - 本环境访问不到 Supabase 存储和 treepractice.com（代理拒 CONNECT），mp3 文件是否真的在桶里没法验；`asr_similarity` 是录入时文档 vs 商家音频的相似度，与自家 mp3 无关。
 
+
+### 5.1 用户试听反馈（2026-09-07 晚）：切句把 a.m. 劈开
+
+用户听 `real_lc_rf0610_1_13`，「leave at seven a.m.」被念成「seven a … m」。根因在 `lib/tts/wavTools.splitSentences`：按每个句号切句、逐句 TTS 再拼，
+缩写 / 小数 / 网址里的句号全被当句界。已改成认缩写（a.m./p.m./Dr./Mr./U.S./e.g./…）、数字间小数点、无空格的域名，新增 4 组测试。
+`scripts/mark-audio-stale-by-split.mjs` 按「新旧切法结果不同」把已配音频作废：真题 15 条、生成库 79 条（LA 65 / LAT 9 / LC 5）。
+
+顺手再扫了一遍口播文本（旁白指令、题号标签、说话人标签、非口语符号、全大写、结尾无标点、LC 性别映射、ASR 听错词 269 个候选人工复核）：
+只多出一类真问题——8 条真题讲座 transcript 开头带「Listen to a talk in a biology class.」旁白，教授声把它念了出来。已截掉并把学科写进 `subject`。
+ASR 听错词 0 处；其余（AM/PM 大写、PTFE/HVAC、邮箱）TTS 本来就念对。
+
+补配：真题 23 条 ≈ ¥2.71（本机 `render_real_audio.mjs`）；生成库 79 条 ≈ ¥5.4（GitHub Actions `backfill-audio.yml` 手动 dispatch，openai provider）。
+
 ## 6. 待一起修的清单（按「能不能不看原截图」分）
 
 **已放行（2026-09-07 第二轮）**

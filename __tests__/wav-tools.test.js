@@ -37,4 +37,34 @@ describe("wavTools", () => {
   test("splitSentences returns the whole string when there is no terminator", () => {
     expect(splitSentences("no punctuation here")).toEqual(["no punctuation here"]);
   });
+
+  // 2026-09-07 线上反馈：LC「leave at seven a.m.」被切成 "seven a." + "m." 两次 TTS，中间停顿。
+  // 缩写/小数/网址里的句号不是句界。
+  test("splitSentences keeps a.m./p.m. together and only splits after them before a capital", () => {
+    expect(splitSentences("Just be ready to leave at seven a.m.")).toEqual(["Just be ready to leave at seven a.m."]);
+    expect(splitSentences("The shuttle runs from 7 a.m. to 9 p.m. daily.")).toEqual(["The shuttle runs from 7 a.m. to 9 p.m. daily."]);
+    expect(splitSentences("Be there by 7 a.m. Please don't be late.")).toEqual(["Be there by 7 a.m.", "Please don't be late."]);
+    expect(splitSentences("Doors open at 10:30 A.M. sharp.")).toEqual(["Doors open at 10:30 A.M. sharp."]);
+  });
+
+  test("splitSentences never splits after titles, e.g./i.e., initials, U.S.", () => {
+    expect(splitSentences("Dr. Lee said the U.S. team arrives at 3 p.m. tomorrow.")).toEqual([
+      "Dr. Lee said the U.S. team arrives at 3 p.m. tomorrow.",
+    ]);
+    expect(splitSentences("Our meeting, e.g. the one on Friday, moved. Mr. J. Smith agreed.")).toEqual([
+      "Our meeting, e.g. the one on Friday, moved.",
+      "Mr. J. Smith agreed.",
+    ]);
+  });
+
+  test("splitSentences keeps decimals, times and URLs intact", () => {
+    expect(splitSentences("It cost $4.50 on www.example.com yesterday. Version 2.1 is out!")).toEqual([
+      "It cost $4.50 on www.example.com yesterday.",
+      "Version 2.1 is out!",
+    ]);
+  });
+
+  test("splitSentences keeps a closing quote with the sentence it closes", () => {
+    expect(splitSentences('She said, "No way." Then she left.')).toEqual(['She said, "No way."', "Then she left."]);
+  });
 });
