@@ -18,6 +18,10 @@ import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
 // 听力 / 口语（三期）同理：只读 counts.json，不许 import lib/realBank。
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
 import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
+// 三档限时口径与常规练习共用（lib/realBankModes 只依赖 lib/practiceMode + lib/listeningTiming，
+// 不碰题库 JSON，所以不会把真题库打进首页 bundle）。
+import { PRACTICE_MODE } from "../../lib/practiceMode";
+import { getRealBankTimeLabels } from "../../lib/realBankModes";
 
 const REAL_ACCENT = SECTION_ACCENTS["real-bank"];
 
@@ -36,164 +40,194 @@ export const REAL_EXAM_TASKS = [
   {
     g: "writing",
     k: "real-discussion",
+    type: "discussion",
     href: "/real-bank?type=discussion",
     n: "Task 3",
     t: "学术讨论真题",
     d: "回忆版 44 题（2026 考生回忆）+ 参考版 81 题，AI 评分与常规练习一致。",
     it: "125 题",
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "writing",
     k: "real-email",
+    type: "email",
     href: "/real-bank?type=email",
     n: "Task 2",
     t: "邮件真题",
     d: "ETS 官方原题 2 题 + 参考版 11 题，附收件人与写作目标。",
     it: "13 题",
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "writing",
     k: "real-bs",
+    type: "bs",
     href: "/real-bank?type=bs",
     n: "Task 1",
     t: "造句官方真题",
     d: "ETS iBT Full-Length Practice Test 1 & 2 原题，含官方答案。",
     it: "20 题 · 2 套",
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "reading",
     k: "real-ctw",
+    type: "ctw",
     href: "/real-bank?type=ctw",
     n: "Reading 1",
     t: "阅读填词真题",
     d: "回忆版 Complete the Words 原文，按真题原样挖空。",
     it: `${REAL_READING_COUNTS.ctw} 篇`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "reading",
     k: "real-rdl",
+    type: "rdl",
     href: "/real-bank?type=rdl",
     n: "Reading 2",
     t: "日常阅读真题",
     d: "回忆版通知 / 邮件 / 海报等生活材料，附原题选项。",
     it: `${REAL_READING_COUNTS.rdl} 篇`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "reading",
     k: "real-ap",
+    type: "ap",
     href: "/real-bank?type=ap",
     n: "Reading 3",
     t: "学术阅读真题",
     d: "回忆版学术长文，一篇多题，与常规练习同一判分。",
     it: `${REAL_READING_COUNTS.ap} 篇`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "listening",
     k: "real-lcr",
+    type: "lcr",
     href: "/real-bank?type=lcr",
     n: "Listening 1",
     t: "听力应答真题",
     d: "回忆版 Choose a Response，配真题录音，一题一段。",
     it: `${REAL_LISTENING_COUNTS.lcr} 题`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "listening",
     k: "real-lc",
+    type: "lc",
     href: "/real-bank?type=lc",
     n: "Listening 2",
     t: "听力对话真题",
     d: "回忆版校园对话，一段音频多题。",
     it: `${REAL_LISTENING_COUNTS.lc} 段`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "listening",
     k: "real-la",
+    type: "la",
     href: "/real-bank?type=la",
     n: "Listening 3",
     t: "听力通知真题",
     d: "回忆版校园通知播报，附原题选项。",
     it: `${REAL_LISTENING_COUNTS.la} 段`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "listening",
     k: "real-lat",
+    type: "lat",
     href: "/real-bank?type=lat",
     n: "Listening 4",
     t: "听力讲座真题",
     d: "回忆版学术讲座，一段音频多题。",
     it: `${REAL_LISTENING_COUNTS.lat} 段`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "speaking",
     k: "real-repeat",
+    type: "repeat",
     href: "/real-bank?type=repeat",
     n: "Speaking 1",
     t: "口语跟读真题",
     d: "回忆版 Listen & Repeat，录音 + AI 评分与常规练习一致。",
     it: `${REAL_SPEAKING_COUNTS.repeat} 套`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
   {
     g: "speaking",
     k: "real-interview",
+    type: "interview",
     href: "/real-bank?type=interview",
     n: "Speaking 2",
     t: "口语访谈真题",
     d: "回忆版 Take an Interview，一套多问，含参考答案。",
     it: `${REAL_SPEAKING_COUNTS.interview} 套`,
-    timeLabel: "不限时",
-    standardLabel: "不限时",
   },
 ];
 
 export function RealExamSectionContent({
-  isChallenge, fadeIn,
+  isChallenge, isPractice, mode, switchMode, fadeIn,
   hoverKey, setHoverKey,
   userTier, isLoggedIn, showLoginModal,
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
+  const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
-  const gridItems = REAL_EXAM_TASKS.map((task, index) => ({
-    ...task,
-    acc: REAL_ACCENT,
-    isMock: false,
-    delay: 190 + index * 70,
-  }));
+  const gridItems = REAL_EXAM_TASKS.map((task, index) => {
+    const { timeLabel, standardLabel } = getRealBankTimeLabels(task.type, modeStr);
+    return {
+      ...task,
+      href: `${task.href}&mode=${modeStr}`,
+      timeLabel,
+      standardLabel,
+      acc: REAL_ACCENT,
+      isMock: false,
+      delay: 190 + index * 70,
+    };
+  });
 
   return (
     <div style={{ flex: 1, minWidth: 0, fontFamily: HOME_FONT }}>
       {/* Section header */}
       <div style={{ marginBottom: 16, ...fadeIn(50) }}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
-          真题专区 <span style={{ color: REAL_ACCENT.color }}>Real Questions</span>
-        </h1>
+        <div className="tp-home-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.5, lineHeight: 1.2 }}>
+            真题专区 <span style={{ color: REAL_ACCENT.color }}>Real Questions</span>
+          </h1>
+          {/* 三档切换：与阅读/听力/口语面板同款 pill（真题只换题源，不换计时口径） */}
+          <div className="tp-mode-switcher" style={{ display: "inline-flex", gap: 4, flexShrink: 0, background: isChallenge ? "rgba(255,255,255,0.05)" : T.card, border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`, borderRadius: 999, padding: 4, boxShadow: T.shadow }}>
+            {[
+              { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+              { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+              { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+            ].map((option) => {
+              const selected = mode === option.value;
+              const challengeOption = option.value === PRACTICE_MODE.CHALLENGE;
+              const practiceOption = option.value === PRACTICE_MODE.PRACTICE;
+              return (
+                <button
+                  key={option.value}
+                  onClick={() => switchMode && switchMode(option.value)}
+                  style={{
+                    border: "none",
+                    background: selected ? (challengeOption ? "rgba(255,30,30,0.18)" : practiceOption ? "rgba(99,102,241,0.12)" : "#fff") : "transparent",
+                    color: selected ? (challengeOption ? CH.accent : practiceOption ? "#6366f1" : T.t1) : (isChallenge ? CH.t2 : T.t2),
+                    borderRadius: 999, padding: "5px 14px", fontSize: 12, fontWeight: 700,
+                    cursor: "pointer", transition: "all .15s",
+                    boxShadow: selected && !challengeOption && !practiceOption ? "0 1px 4px rgba(0,0,0,0.1)" : "none",
+                    fontFamily: HOME_FONT,
+                  }}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
         <p style={{ margin: "8px 0 0", fontSize: 13, color: isChallenge ? CH.t2 : T.t2, lineHeight: 1.5 }}>
           把题库里现成的公开真题集中起来练：写作三题型 158 道 + 阅读三题型{" "}
           {REAL_READING_COUNTS.ctw + REAL_READING_COUNTS.rdl + REAL_READING_COUNTS.ap} 篇 + 听力四题型{" "}
           {REAL_LISTENING_COUNTS.lcr + REAL_LISTENING_COUNTS.lc + REAL_LISTENING_COUNTS.la + REAL_LISTENING_COUNTS.lat} 段 + 口语两题型{" "}
           {REAL_SPEAKING_COUNTS.repeat + REAL_SPEAKING_COUNTS.interview} 套，
-          不限时间、自选题目，做过的题会打上「已练」标记。
+          {isPractice
+            ? "自选题目，不限时间，做过的题会打上「已练」标记。"
+            : mode === PRACTICE_MODE.CHALLENGE
+              ? "挑战模式，限时更紧；自选题目，做过的题会打上「已练」标记。"
+              : "自选题目，按常规练习同一限时，做过的题会打上「已练」标记。"}
         </p>
       </div>
 

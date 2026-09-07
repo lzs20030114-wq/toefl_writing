@@ -11,6 +11,7 @@ import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
 import { pickWithTopicDiversity } from "../../lib/recentTopics";
+import { getReadingTimeSeconds } from "../../lib/practiceMode";
 import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 // RDL bank is split into two pools by question count:
@@ -122,13 +123,8 @@ function ReadingPageClient() {
   const mode = searchParams.get("mode") || "standard";
   const isPractice = mode === "practice";
 
-  // Time limits in seconds (0 = no limit for practice mode)
-  const READING_TIME_LIMITS = {
-    ctw: { standard: 300, challenge: 240 },        // 5 min / 4 min
-    rdl: { standard: 240, challenge: 180 },         // 4 min / 3 min
-    ap: { standard: 480, challenge: 390 },          // 8 min / 6.5 min
-  };
-  const timeLimit = isPractice ? 0 : (READING_TIME_LIMITS[type]?.[mode] || 300);
+  // 限时口径集中在 lib/practiceMode.js（READING_TIME_SECONDS）——「真题专区」复用同一张表。
+  const timeLimit = getReadingTimeSeconds(type, mode);
 
   const [isPro, setIsPro] = useState(false);
   // 此页是独立路由，不在 HomePageClient 树下，全局 open-upgrade-modal 事件监听者到不了这里，

@@ -23,21 +23,26 @@ jest.mock("../lib/AuthContext", () => ({
 }));
 
 let mockSearch = new URLSearchParams();
+const mockReplace = jest.fn();
+const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: mockPush, replace: mockReplace }),
   useSearchParams: () => mockSearch,
 }));
 
 // 锁定屏在这些组件之前 return；Pro 路径只需要证明 picker / 任务组件接线正确，本体不参与断言。
 jest.mock("../components/writing/WritingTask", () => ({
-  WritingTask: ({ type, initialPromptId, practiceMode }) => (
-    <div data-testid="writing-task">type={type} id={initialPromptId} mode={practiceMode}</div>
+  WritingTask: ({ type, initialPromptId, practiceMode, timeLimitSeconds }) => (
+    <div data-testid="writing-task">
+      type={type} id={initialPromptId} mode={practiceMode} limit={String(timeLimitSeconds)}
+    </div>
   ),
 }));
 jest.mock("../components/buildSentence/BuildSentenceTask", () => ({
-  BuildSentenceTask: ({ questions, practiceMode }) => (
+  BuildSentenceTask: ({ questions, practiceMode, timeLimitSeconds }) => (
     <div data-testid="bs-task">
       n={questions.length} group={questions[0]?.__sourceGroupId} mode={practiceMode}
+      limit={String(timeLimitSeconds)}
     </div>
   ),
 }));
@@ -46,9 +51,13 @@ jest.mock("../components/shared/UsageGateWrapper", () => ({
   default: ({ children }) => <>{children}</>,
 }));
 jest.mock("../components/shared/TopicPicker", () => ({
-  TopicPicker: ({ title, items, accent, doneIds, onSelect }) => (
+  TopicPicker: ({ title, items, accent, doneIds, onSelect, onExit, eyebrow, description, headerExtra }) => (
     <div data-testid="topic-picker">
       <div data-testid="picker-title">{title}</div>
+      <div data-testid="picker-eyebrow">{eyebrow}</div>
+      <div data-testid="picker-desc">{description}</div>
+      <div data-testid="picker-header-extra">{headerExtra}</div>
+      <button data-testid="picker-exit" onClick={onExit}>exit</button>
       <div data-testid="picker-count">{items.length}</div>
       <div data-testid="picker-accent">{accent?.color}</div>
       <div data-testid="picker-done">{[...(doneIds || [])].join(",")}</div>
@@ -254,7 +263,9 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     const task = screen.getByTestId("writing-task");
     expect(task.textContent).toContain("type=discussion");
     expect(task.textContent).toContain(`id=${prompts[0].id}`);
-    expect(task.textContent).toContain("mode=practice");
+    // 默认档 = standard（与 app/academic-writing 等常规入口一致），限时 600s。
+    expect(task.textContent).toContain("mode=standard");
+    expect(task.textContent).toContain("limit=600");
   });
 
   test("答题页可见来源标注（回忆版题）", async () => {
@@ -309,8 +320,125 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     const task = screen.getByTestId("bs-task");
     expect(task.textContent).toContain("n=10");
     expect(task.textContent).toContain("group=real-bs-set-1");
-    expect(task.textContent).toContain("mode=practice");
+    expect(task.textContent).toContain("mode=standard");
+    expect(task.textContent).toContain("limit=410");
     expect(screen.getByTestId("real-source-banner").textContent).toContain("Full-Length Practice Test 1");
+  });
+});
+
+/* ── 三档模式（Standard / Practice / Challenge） ───────────────── */
+
+describe("真题专区独立页：三档模式与常规练习同一限时口径", () => {
+  beforeEach(() => {
+    getSavedTier.mockReturnValue("pro");
+    mockReplace.mockClear();
+    mockPush.mockClear();
+    try { sessionStorage.clear(); localStorage.clear(); } catch {}
+  });
+
+  test("默认档 = standard（picker eyebrow + 文案都不再写「不限时间」）", async () => {
+    mockSearch = new URLSearchParams("type=ctw");
+    render(<RealBankPage />);
+    expect((await screen.findByTestId("picker-eyebrow")).textContent).toBe("Standard Mode");
+    const desc = screen.getByTestId("picker-desc").textContent;
+    expect(desc).toContain("5 min");
+    expect(desc).not.toContain("不限时");
+  });
+
+  test("?mode=practice → 不限时 + isPractice（旧行为仍可达）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=practice");
+    render(<RealBankPage />);
+    expect(screen.getByTestId("picker-eyebrow").textContent).toBe("Practice Mode");
+    fireEvent.click(await screen.findByTestId("pick-first"));
+
+    const task = screen.getByTestId("ctw-task");
+    expect(task.textContent).toContain("practice=true");
+    expect(task.textContent).toContain("limit=0");
+  });
+
+  test("?mode=challenge → CTW 240s、写作 510s、邮件 360s、造句 330s", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=challenge");
+    const { unmount } = render(<RealBankPage />);
+    expect(screen.getByTestId("picker-eyebrow").textContent).toBe("Challenge Mode");
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("ctw-task").textContent).toContain("limit=240");
+    expect(screen.getByTestId("ctw-task").textContent).toContain("practice=false");
+    unmount();
+
+    mockSearch = new URLSearchParams("mode=challenge");            // 讨论
+    const r2 = render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("writing-task").textContent).toContain("mode=challenge");
+    expect(screen.getByTestId("writing-task").textContent).toContain("limit=510");
+    r2.unmount();
+
+    mockSearch = new URLSearchParams("type=email&mode=challenge");
+    const r3 = render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("writing-task").textContent).toContain("limit=360");
+    r3.unmount();
+
+    mockSearch = new URLSearchParams("type=bs&mode=challenge");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("bs-task").textContent).toContain("mode=challenge");
+    expect(screen.getByTestId("bs-task").textContent).toContain("limit=330");
+  });
+
+  test("非法 mode 落回 standard（不会把 undefined 喂给倒计时）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=bogus");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("ctw-task").textContent).toContain("limit=300");
+  });
+
+  test("picker 头部有三档切换，点一下换 URL（保留 type，standard 不带 mode 参数）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=challenge");
+    render(<RealBankPage />);
+    expect(await screen.findByTestId("real-mode-switch")).toBeTruthy();
+
+    fireEvent.click(screen.getByTestId("real-mode-practice"));
+    expect(mockReplace).toHaveBeenCalledWith("/real-bank?type=ctw&mode=practice");
+
+    fireEvent.click(screen.getByTestId("real-mode-standard"));
+    expect(mockReplace).toHaveBeenCalledWith("/real-bank?type=ctw");
+  });
+
+  test("答题页顶部带档位 chip（standard 不渲染 chip）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=challenge");
+    const { unmount } = render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("real-source-banner").textContent).toContain("挑战模式");
+    unmount();
+
+    mockSearch = new URLSearchParams("type=ctw");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("real-source-banner").textContent).not.toContain("挑战模式");
+  });
+
+  test("交卷写历史时 mode 跟着档位走（不再硬编码 practice）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=challenge");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    fireEvent.click(screen.getByTestId("ctw-finish"));
+
+    const sess = (loadHist().sessions || []).find((x) => x.details?.itemId === "real_ctw_fx_1_1");
+    expect(sess.mode).toBe("challenge");
+  });
+
+  test("返回首页把档位带回去（HomePageClient 从 ?mode 读初始档）", async () => {
+    mockSearch = new URLSearchParams("type=ctw&mode=practice");
+    const { unmount } = render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("picker-exit"));
+    expect(mockPush).toHaveBeenCalledWith("/?section=real-bank&mode=practice");
+    unmount();
+
+    mockPush.mockClear();
+    mockSearch = new URLSearchParams("type=ctw");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("picker-exit"));
+    expect(mockPush).toHaveBeenCalledWith("/?section=real-bank");
   });
 });
 
@@ -389,7 +517,7 @@ describe("真题专区独立页：阅读真题路由", () => {
     expect(await screen.findByTestId("picker-title")).toHaveTextContent("学术讨论真题");
   });
 
-  test("?type=ctw 选题 → CTWTask（不限时 + practice），题面标回忆版且不冒充官方", async () => {
+  test("?type=ctw 选题 → CTWTask（standard 限时 300s），题面标回忆版且不冒充官方", async () => {
     mockSearch = new URLSearchParams("type=ctw");
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
@@ -397,8 +525,8 @@ describe("真题专区独立页：阅读真题路由", () => {
     const task = screen.getByTestId("ctw-task");
     expect(task.textContent).toContain("id=real_ctw_fx_1_1");
     expect(task.textContent).toContain("blanks=2");
-    expect(task.textContent).toContain("practice=true");
-    expect(task.textContent).toContain("limit=0");
+    expect(task.textContent).toContain("practice=false");
+    expect(task.textContent).toContain("limit=300");
 
     const banner = screen.getByTestId("real-source-banner");
     expect(banner.textContent).toContain("回忆版");
@@ -415,7 +543,8 @@ describe("真题专区独立页：阅读真题路由", () => {
     expect(task.textContent).toContain("id=real_rdl_fx_1_21");
     expect(task.textContent).toContain("text=Campus Notice");
     expect(task.textContent).toContain("genre=notice");
-    expect(task.textContent).toContain("practice=true");
+    expect(task.textContent).toContain("practice=false");
+    expect(task.textContent).toContain("limit=240");
   });
 
   test("?type=ap 选题 → RDLTask 收到适配对象（passage→text、topic→genre）+ 官方任务名", async () => {

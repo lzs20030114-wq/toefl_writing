@@ -26,11 +26,16 @@ import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { AssetPreloadGate } from "../../components/shared/AssetPreloadGate";
-import { C, FONT } from "../../components/shared/ui";
+import { C, FONT, ModeChip } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { addDoneIds, loadDoneIds, saveSess } from "../../lib/sessionStore";
-import { PRACTICE_MODE } from "../../lib/practiceMode";
+import { PRACTICE_MODE, normalizePracticeMode } from "../../lib/practiceMode";
+import {
+  getRealBankModeDescription,
+  getRealBankModeEyebrow,
+  getRealBankTimeSeconds,
+} from "../../lib/realBankModes";
 import { normalizeReportLanguage } from "../../lib/reportLanguage";
 import { stashPromptSnapshot } from "../../lib/history/retry";
 import { materialImagePreloadUrls } from "../../lib/reading/materialImage";
@@ -125,9 +130,50 @@ function normalizeRealType(raw) {
   return Object.prototype.hasOwnProperty.call(REAL_TYPES, t) ? t : "discussion";
 }
 
+/* ── picker 头部的三档切换（Standard / Practice / Challenge） ────── */
+// 真题专区与常规练习共用一套限时口径，所以也共用一套档位。样式照
+// components/home/ReadingSectionContent.js 的 pill 切换条，只把选中色换成真题金琥珀。
+const MODE_OPTIONS = [
+  { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+  { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+  { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+];
+
+function RealModeSwitch({ mode, onSwitch }) {
+  return (
+    <div
+      data-testid="real-mode-switch"
+      style={{
+        display: "inline-flex", gap: 4, flexShrink: 0, background: "#fff",
+        border: `1px solid ${C.bdr}`, borderRadius: 999, padding: 4,
+      }}
+    >
+      {MODE_OPTIONS.map((option) => {
+        const selected = mode === option.value;
+        return (
+          <button
+            key={option.value}
+            data-testid={`real-mode-${option.value}`}
+            onClick={() => onSwitch(option.value)}
+            style={{
+              border: "none",
+              background: selected ? REAL_ACCENT.soft : "transparent",
+              color: selected ? REAL_ACCENT.color : C.t2,
+              borderRadius: 999, padding: "5px 14px", fontSize: 12, fontWeight: 700,
+              cursor: "pointer", transition: "all .15s", fontFamily: FONT,
+            }}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ── 答题页顶部的来源标注条 ──────────────────────────────────────── */
 // 「真题」是敏感宣称，必须在用户实际看到题目的地方也标清来源分档，不能只标在 picker 上。
-function RealSourceBanner({ tierLabel, meta }) {
+function RealSourceBanner({ tierLabel, meta, mode }) {
   return (
     <div
       data-testid="real-source-banner"
@@ -145,6 +191,7 @@ function RealSourceBanner({ tierLabel, meta }) {
       }}>
         {tierLabel}
       </span>
+      <ModeChip mode={mode} />
       {meta && <span style={{ opacity: 0.85 }}>{meta}</span>}
     </div>
   );
@@ -207,12 +254,12 @@ function ItemUnavailable({ onBack }) {
  * 一个都不能改）—— components/history/ReadingProgressView.js 只认这套 details 形状，
  * 字段对不上就统计不到，用户会觉得「做了没记上」。
  */
-function saveRealReadingSession(subtype, itemData, result) {
+function saveRealReadingSession(subtype, itemData, result, mode) {
   const pct = result.total > 0 ? result.correct / result.total : 0;
   const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
   saveSess({
     type: "reading",
-    mode: PRACTICE_MODE.PRACTICE,
+    mode: normalizePracticeMode(mode),
     correct: result.correct,
     total: result.total,
     band,
@@ -238,7 +285,7 @@ function saveRealReadingSession(subtype, itemData, result) {
  * 字段对不上 = 历史统计不到、错题本捡不着。
  * 唯一的增量是 details.real —— 真题记录在历史里可辨认（id 的 real_ 前缀之外多一道明标）。
  */
-function saveRealListeningSession(subtype, item, result) {
+function saveRealListeningSession(subtype, item, result, mode) {
   const pct = result.total > 0 ? result.correct / result.total : 0;
   const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
 
@@ -259,7 +306,7 @@ function saveRealListeningSession(subtype, item, result) {
 
   saveSess({
     type: "listening",
-    mode: PRACTICE_MODE.PRACTICE,
+    mode: normalizePracticeMode(mode),
     correct: result.correct,
     total: result.total,
     band,
@@ -279,10 +326,10 @@ function saveRealListeningSession(subtype, item, result) {
  * 照抄 app/speaking/page.js 的 saveSpeakingSession：口语不在前端判分（分数在 result 里，
  * 由 RepeatTask / InterviewTask 走 STT + speakingEval 算好），这里只负责落历史。
  */
-function saveRealSpeakingSession(subtype, set, result) {
+function saveRealSpeakingSession(subtype, set, result, mode) {
   saveSess({
     type: "speaking",
-    mode: PRACTICE_MODE.PRACTICE,
+    mode: normalizePracticeMode(mode),
     details: {
       subtype,
       setId: set.id,
@@ -301,6 +348,11 @@ function RealBankPageClient() {
   const searchParams = useSearchParams();
   const type = normalizeRealType(searchParams.get("type"));
   const reportLanguage = normalizeReportLanguage(searchParams.get("lang"));
+  // 档位与常规练习同一口径：默认 standard（限时），practice 才不限时。
+  const mode = normalizePracticeMode(searchParams.get("mode"));
+  const isPractice = mode === PRACTICE_MODE.PRACTICE;
+  const timeLimitSeconds = getRealBankTimeSeconds(type, mode);
+  const modeEyebrow = getRealBankModeEyebrow(mode);
 
   const [isPro, setIsPro] = useState(false);
   const [userCode, setUserCode] = useState("");
@@ -369,7 +421,25 @@ function RealBankPageClient() {
     return [];
   }, [type, audioItems]);
 
-  const onExit = () => router.push("/?section=real-bank");
+  // 回首页时把档位带上 —— HomePageClient 从 ?mode 读初始档，否则「切了档再返回」会被打回 standard。
+  const onExit = () => router.push(
+    mode === PRACTICE_MODE.STANDARD ? "/?section=real-bank" : `/?section=real-bank&mode=${mode}`
+  );
+
+  // 切档只改 URL（不入历史栈），type / lang 原样保留。
+  const switchMode = (next) => {
+    const normalized = normalizePracticeMode(next);
+    if (normalized === mode) return;
+    const qs = new URLSearchParams();
+    qs.set("type", type);
+    const lang = searchParams.get("lang");
+    if (lang) qs.set("lang", lang);
+    if (normalized !== PRACTICE_MODE.STANDARD) qs.set("mode", normalized);
+    const url = `/real-bank?${qs.toString()}`;
+    if (typeof router.replace === "function") router.replace(url);
+    else router.push(url);
+  };
+  const modeSwitch = <RealModeSwitch mode={mode} onSwitch={switchMode} />;
 
   /* ── Pro 门禁（仿 app/reading/page.js:195-223，锁定屏自持 UpgradeModal） ── */
   if (!isPro) {
@@ -413,14 +483,16 @@ function RealBankPageClient() {
       // 常规练习做过的真题在这里也会亮「已练」（同一道题只有一个 id = 同一份进度）。
       const doneIds = loadDoneIds(doneKey);
       return (
-        <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
+        <UsageGateWrapper onExit={onExit} practiceMode={mode}>
           <TopicPicker
             title={labels.title}
             section={labels.section}
+            eyebrow={modeEyebrow}
+            headerExtra={modeSwitch}
             description={
               isSpeaking
-                ? `2026 考生回忆整理的口语真题，配真人化 TTS 音频；录音 + AI 评分与常规练习一致。${REAL_TIER_NOTE}`
-                : `2026 考生回忆整理的听力真题，配真题录音；不限时间、自选题目。${REAL_TIER_NOTE}`
+                ? `2026 考生回忆整理的口语真题，配真人化 TTS 音频；录音 + AI 评分与常规练习一致。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`
+                : `2026 考生回忆整理的听力真题，配真题录音。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`
             }
             items={audioPickerItems}
             doneIds={doneIds}
@@ -438,15 +510,15 @@ function RealBankPageClient() {
     const backToAudioPicker = () => setPickedAudioId(null);
 
     return (
-      <UsageGateWrapper onExit={backToAudioPicker} practiceMode={PRACTICE_MODE.PRACTICE}>
+      <UsageGateWrapper onExit={backToAudioPicker} practiceMode={mode}>
         <>
-          <RealSourceBanner tierLabel={realTierLabel(audioItem.tier)} meta={audioMeta(audioItem)} />
+          <RealSourceBanner tierLabel={realTierLabel(audioItem.tier)} meta={audioMeta(audioItem)} mode={mode} />
           {type === "lcr" && (
             <LCRTask
               item={audioItem}
-              onComplete={(result) => saveRealListeningSession("lcr", audioItem, result)}
+              onComplete={(result) => saveRealListeningSession("lcr", audioItem, result, mode)}
               onExit={backToAudioPicker}
-              isPractice
+              isPractice={isPractice}
             />
           )}
           {(type === "lc" || type === "la" || type === "lat") && (
@@ -454,9 +526,9 @@ function RealBankPageClient() {
               key={audioItem.id}
               item={audioItem}
               taskType={type}
-              onComplete={(result) => saveRealListeningSession(type, audioItem, result)}
+              onComplete={(result) => saveRealListeningSession(type, audioItem, result, mode)}
               onExit={backToAudioPicker}
-              isPractice
+              isPractice={isPractice}
               title={LISTENING_TASK_LABELS[type].title}
               section={LISTENING_TASK_LABELS[type].section}
             />
@@ -477,18 +549,18 @@ function RealBankPageClient() {
                 // 不再叠加生成的指令句（空串 = 该行不渲染）。
                 instructionText: "",
               }}
-              onComplete={(result) => saveRealSpeakingSession("repeat", audioItem, result)}
+              onComplete={(result) => saveRealSpeakingSession("repeat", audioItem, result, mode)}
               onExit={backToAudioPicker}
-              isPractice
+              isPractice={isPractice}
             />
           )}
           {type === "interview" && (
             <InterviewTask
               items={audioItem.questions}
               setInfo={{ intro: audioItem.intro }}
-              onComplete={(result) => saveRealSpeakingSession("interview", audioItem, result)}
+              onComplete={(result) => saveRealSpeakingSession("interview", audioItem, result, mode)}
               onExit={backToAudioPicker}
-              isPractice
+              isPractice={isPractice}
             />
           )}
         </>
@@ -504,11 +576,13 @@ function RealBankPageClient() {
       // 已练读的正是 app/reading/page.js 写入的那把 key —— 常规练习做过的题在这里也会亮「已练」。
       const doneIds = loadDoneIds(READING_DONE_KEYS[type]);
       return (
-        <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
+        <UsageGateWrapper onExit={onExit} practiceMode={mode}>
           <TopicPicker
             title={readingLabels.title}
             section={readingLabels.section}
-            description={`2026 考生回忆整理的阅读真题，独立盲审复核一致后才收录；不限时间、自选题目。${REAL_TIER_NOTE}`}
+            eyebrow={modeEyebrow}
+            headerExtra={modeSwitch}
+            description={`2026 考生回忆整理的阅读真题，独立盲审复核一致后才收录。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`}
             items={readingPickerItems}
             doneIds={doneIds}
             accent={REAL_ACCENT}
@@ -531,39 +605,39 @@ function RealBankPageClient() {
     // 材料原图先在加载页拉完再挂任务组件 —— RDLTask 一挂载就起计时，不能让用户
     // 盯着空白材料框等图。没图的题（CTW / 老库形状）数组为空，门原样透传。
     return (
-      <UsageGateWrapper onExit={backToPicker} practiceMode={PRACTICE_MODE.PRACTICE}>
+      <UsageGateWrapper onExit={backToPicker} practiceMode={mode}>
         <AssetPreloadGate
           images={materialImagePreloadUrls(item)}
           title={readingLabels.title}
           section={readingLabels.section}
           onExit={backToPicker}
         >
-          <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} />
+          <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} mode={mode} />
           {type === "ctw" && (
             <CTWTask
               item={item}
               onExit={backToPicker}
-              onComplete={(result) => saveRealReadingSession("ctw", item, result)}
-              timeLimit={0}
-              isPractice
+              onComplete={(result) => saveRealReadingSession("ctw", item, result, mode)}
+              timeLimit={timeLimitSeconds}
+              isPractice={isPractice}
             />
           )}
           {type === "rdl" && (
             <RDLTask
               item={item}
               onExit={backToPicker}
-              onComplete={(result) => saveRealReadingSession("rdl", item, result)}
-              timeLimit={0}
-              isPractice
+              onComplete={(result) => saveRealReadingSession("rdl", item, result, mode)}
+              timeLimit={timeLimitSeconds}
+              isPractice={isPractice}
             />
           )}
           {type === "ap" && (
             <RDLTask
               item={apAsRdl}
               onExit={backToPicker}
-              onComplete={(result) => saveRealReadingSession("ap", item, result)}
-              timeLimit={0}
-              isPractice
+              onComplete={(result) => saveRealReadingSession("ap", item, result, mode)}
+              timeLimit={timeLimitSeconds}
+              isPractice={isPractice}
               title="Academic Passage"
               section="Reading | Task 3"
             />
@@ -578,11 +652,13 @@ function RealBankPageClient() {
     if (!pickedBatchId) {
       const doneIds = new Set([...loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP)].map(String));
       return (
-        <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
+        <UsageGateWrapper onExit={onExit} practiceMode={mode}>
           <TopicPicker
             title={REAL_TYPES.bs.title}
             section={REAL_TYPES.bs.section}
-            description={`ETS 官方 Full-Length Practice Test 1 & 2 的 20 道连词成句原题（含官方答案）。${REAL_TIER_NOTE}`}
+            eyebrow={modeEyebrow}
+            headerExtra={modeSwitch}
+            description={`ETS 官方 Full-Length Practice Test 1 & 2 的 20 道连词成句原题（含官方答案）。${getRealBankModeDescription("bs", mode)}${REAL_TIER_NOTE}`}
             items={mapRealBSToPicker(bsBatches)}
             doneIds={doneIds}
             accent={REAL_ACCENT}
@@ -609,13 +685,13 @@ function RealBankPageClient() {
       );
     }
     return (
-      <UsageGateWrapper onExit={() => setPickedBatchId(null)} practiceMode={PRACTICE_MODE.PRACTICE}>
+      <UsageGateWrapper onExit={() => setPickedBatchId(null)} practiceMode={mode}>
         <>
-          <RealSourceBanner tierLabel={realTierLabel("official")} meta={batch.label} />
+          <RealSourceBanner tierLabel={realTierLabel("official")} meta={batch.label} mode={mode} />
           <BuildSentenceTask
             questions={batch.questions}
-            practiceMode={PRACTICE_MODE.PRACTICE}
-            timeLimitSeconds={0}
+            practiceMode={mode}
+            timeLimitSeconds={timeLimitSeconds}
             onExit={() => setPickedBatchId(null)}
           />
         </>
@@ -630,11 +706,13 @@ function RealBankPageClient() {
   if (!pickedPromptId) {
     const doneIds = loadDoneIds(doneKey);
     return (
-      <UsageGateWrapper onExit={onExit} practiceMode={PRACTICE_MODE.PRACTICE}>
+      <UsageGateWrapper onExit={onExit} practiceMode={mode}>
         <TopicPicker
           title={meta.title}
           section={meta.section}
-          description={`公开真题集中练习，不限时间，AI 评分与常规练习一致。${REAL_TIER_NOTE}`}
+          eyebrow={modeEyebrow}
+          headerExtra={modeSwitch}
+          description={`公开真题集中练习，AI 评分与常规练习一致。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`}
           items={writingItems}
           doneIds={doneIds}
           accent={REAL_ACCENT}
@@ -653,16 +731,18 @@ function RealBankPageClient() {
 
   const picked = writingById.get(String(pickedPromptId));
   return (
-    <UsageGateWrapper onExit={() => setPickedPromptId(null)} practiceMode={PRACTICE_MODE.PRACTICE}>
+    <UsageGateWrapper onExit={() => setPickedPromptId(null)} practiceMode={mode}>
       <>
         <RealSourceBanner
           tierLabel={realTierLabel(picked?.tier)}
           meta={type === "email" ? emailMeta(picked) : discussionMeta(picked)}
+          mode={mode}
         />
         <WritingTask
           onExit={() => setPickedPromptId(null)}
           type={type}
-          practiceMode={PRACTICE_MODE.PRACTICE}
+          practiceMode={mode}
+          timeLimitSeconds={timeLimitSeconds}
           reportLanguage={reportLanguage}
           initialPromptId={pickedPromptId}
         />

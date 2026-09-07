@@ -84,7 +84,7 @@ function CompactCard({ item, isDone, isHover, index, ac, onSelect, onHover, onLe
   );
 }
 
-export function TopicPicker({ title, section, description, items, onSelect, onExit, doneIds, accent, compact = false }) {
+export function TopicPicker({ title, section, description, items, onSelect, onExit, doneIds, accent, compact = false, eyebrow, headerExtra }) {
   const done = doneIds instanceof Set ? doneIds : new Set(doneIds || []);
   const [hoverIdx, setHoverIdx] = useState(-1);
   const [activeCategory, setActiveCategory] = useState(null);
@@ -138,13 +138,14 @@ export function TopicPicker({ title, section, description, items, onSelect, onEx
           }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
               <div style={{ flex: 1, minWidth: 200 }}>
-                <div style={{ fontSize: 11, color: ac.color, fontWeight: 700, letterSpacing: 0.3, marginBottom: 4 }}>Practice Mode</div>
+                <div style={{ fontSize: 11, color: ac.color, fontWeight: 700, letterSpacing: 0.3, marginBottom: 4 }}>{eyebrow || "Practice Mode"}</div>
                 <h2 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: T.t1, letterSpacing: -0.3 }}>{title}</h2>
                 <p style={{ margin: 0, fontSize: 13, color: T.t2, lineHeight: 1.5 }}>
                   {description || "无时间限制，选择任意题目开始练习。"}
                 </p>
               </div>
               <div style={{ textAlign: "right", minWidth: 140 }}>
+                {headerExtra ? <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>{headerExtra}</div> : null}
                 <div style={{ fontSize: 28, fontWeight: 800, color: ac.color }}>{doneCount}<span style={{ fontSize: 16, fontWeight: 600, color: T.t3 }}>/{items.length}</span></div>
                 <div style={{ fontSize: 11, color: T.t3, marginBottom: 8 }}>已完成</div>
                 <div style={{ height: 6, background: `${ac.color}18`, borderRadius: 3, overflow: "hidden", width: 140 }}>

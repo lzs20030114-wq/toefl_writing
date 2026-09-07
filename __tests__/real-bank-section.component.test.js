@@ -32,6 +32,9 @@ const path = require("path");
 
 const baseProps = {
   isChallenge: false,
+  isPractice: false,
+  mode: "standard",
+  switchMode: () => {},
   fadeIn: () => ({}),
   hoverKey: "",
   setHoverKey: () => {},
@@ -102,12 +105,12 @@ describe("真题专区 section：Pro 门禁", () => {
 
     const hrefs = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href"));
     expect(hrefs).toEqual(expect.arrayContaining([
-      "/real-bank?type=discussion",
-      "/real-bank?type=email",
-      "/real-bank?type=bs",
-      "/real-bank?type=ctw",
-      "/real-bank?type=rdl",
-      "/real-bank?type=ap",
+      "/real-bank?type=discussion&mode=standard",
+      "/real-bank?type=email&mode=standard",
+      "/real-bank?type=bs&mode=standard",
+      "/real-bank?type=ctw&mode=standard",
+      "/real-bank?type=rdl&mode=standard",
+      "/real-bank?type=ap&mode=standard",
     ]));
   });
 
@@ -142,7 +145,7 @@ describe("真题专区 section：Pro 门禁", () => {
     // 按 href 逐卡取，而不是 getByText —— 三个数字可能相同（例如库还没回填时全是 0），
     // getByText 会因为「找到多个」直接报错。
     [["ctw", READING_COUNTS.ctw], ["rdl", READING_COUNTS.rdl], ["ap", READING_COUNTS.ap]].forEach(([type, n]) => {
-      const card = container.querySelector(`a[href="/real-bank?type=${type}"]`);
+      const card = container.querySelector(`a[href="/real-bank?type=${type}&mode=standard"]`);
       expect(card).toBeTruthy();
       expect(card.textContent).toContain(`${n} 篇`);
     });
@@ -171,6 +174,61 @@ describe("真题专区 section：Pro 门禁", () => {
     expect(screen.getByText("13 题")).toBeTruthy();
     expect(screen.getByText("20 题 · 2 套")).toBeTruthy();
     expect(screen.getByText(/参考版：早期收集，来源未核验/)).toBeTruthy();
+  });
+});
+
+describe("真题专区 section：三档模式（与常规练习同一限时口径）", () => {
+  const pro = { ...baseProps, userTier: "pro", isLoggedIn: true };
+
+  test("头部有三个档位 pill，点一下调 switchMode", () => {
+    const switchMode = jest.fn();
+    render(<RealExamSectionContent {...pro} switchMode={switchMode} />);
+    ["Standard", "Practice", "Challenge"].forEach((label) => {
+      expect(screen.getByRole("button", { name: label })).toBeTruthy();
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Challenge" }));
+    expect(switchMode).toHaveBeenCalledWith("challenge");
+  });
+
+  test("standard 档：讨论卡显示 10 min（不再写死「不限时」）", () => {
+    const { container } = render(<RealExamSectionContent {...pro} />);
+    const card = container.querySelector('a[href="/real-bank?type=discussion&mode=standard"]');
+    expect(card.textContent).toContain("10 min");
+    expect(card.textContent).not.toContain("不限时");
+  });
+
+  test("challenge 档：href 带 mode=challenge，讨论卡 8m 30s（标准 10 min 划线对比）", () => {
+    const { container } = render(
+      <RealExamSectionContent {...pro} isChallenge mode="challenge" />
+    );
+    const card = container.querySelector('a[href="/real-bank?type=discussion&mode=challenge"]');
+    expect(card).toBeTruthy();
+    expect(card.textContent).toContain("8m 30s");
+    expect(card.textContent).toContain("10 min");
+  });
+
+  test("practice 档：href 带 mode=practice，卡片全是「不限时」", () => {
+    const { container } = render(
+      <RealExamSectionContent {...pro} isPractice mode="practice" />
+    );
+    const card = container.querySelector('a[href="/real-bank?type=ctw&mode=practice"]');
+    expect(card).toBeTruthy();
+    expect(card.textContent).toContain("不限时");
+  });
+
+  test("听力 lcr 卡标每题答题窗口（真题是单题，标整段 5 min 会骗人）", () => {
+    const { container } = render(<RealExamSectionContent {...pro} />);
+    const card = container.querySelector('a[href="/real-bank?type=lcr&mode=standard"]');
+    expect(card.textContent).toContain("20s/题");
+  });
+
+  test("移动端真题区也接了三档切换 + href 带 mode", () => {
+    const src = fs.readFileSync(path.join(__dirname, "../components/home/MobileHomePage.js"), "utf8");
+    const block = src.slice(src.indexOf("function MobileRealExamSection"));
+    const body = block.slice(0, block.indexOf("/* ── Mobile Listening"));
+    expect(body).toContain("withChallenge");
+    expect(body).toContain("&mode=${modeStr}");
+    expect(body).toContain("getRealBankTimeLabels");
   });
 });
 

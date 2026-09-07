@@ -9,6 +9,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { ReferralBanner } from "./ReferralBanner";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
+import { getRealBankTimeLabels } from "../../lib/realBankModes";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
@@ -182,7 +183,7 @@ export function MobileHomePage({
         <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
       ) : activeSection === "real-bank" ? (
         <MobileRealExamSection
-          isChallenge={isChallenge}
+          isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
           tier={tier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
           onUpgrade={() => setUpgradeOpen(true)} t1={t1} t2={t2}
         />
@@ -761,25 +762,27 @@ function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpg
 // 桌面端 RealExamSectionContent 的移动端平行实现（两条渲染链完全独立）。
 // 十二张卡对应 /real-bank?type=discussion|email|bs|ctw|rdl|ap|lcr|lc|la|lat|repeat|interview；
 // 按科目（写作 / 阅读 / 听力 / 口语）分段显示；非 Pro 时置灰禁点 + Pro 门禁横幅。
-function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
+function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
   const accent = SECTION_ACCENTS["real-bank"];
   const isPro = tier === "pro" || tier === "legacy";
+  // 档位与桌面端 / 常规练习同一口径（真题只换题源，不换计时）。
+  const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
   // 阅读题量随 build_bank 产物变化，写死会过期 → 读 counts.json（不是 lib/realBank，见文件头 import 处的说明）；
   // 写作三题型是冻结语料，保持写死。
   const tasks = [
-    { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", timeLabel: "125 题" },
-    { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", timeLabel: "13 题" },
-    { g: "写作", type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", timeLabel: "20 题" },
-    { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", timeLabel: `${REAL_READING_COUNTS.ctw} 篇` },
-    { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", timeLabel: `${REAL_READING_COUNTS.rdl} 篇` },
-    { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", timeLabel: `${REAL_READING_COUNTS.ap} 篇` },
-    { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，配真题录音", timeLabel: `${REAL_LISTENING_COUNTS.lcr} 题` },
-    { g: "听力", type: "lc", n: "Listening 2", t: "听力对话真题", d: "回忆版校园对话，一段多题", timeLabel: `${REAL_LISTENING_COUNTS.lc} 段` },
-    { g: "听力", type: "la", n: "Listening 3", t: "听力通知真题", d: "回忆版校园通知播报", timeLabel: `${REAL_LISTENING_COUNTS.la} 段` },
-    { g: "听力", type: "lat", n: "Listening 4", t: "听力讲座真题", d: "回忆版学术讲座，一段多题", timeLabel: `${REAL_LISTENING_COUNTS.lat} 段` },
-    { g: "口语", type: "repeat", n: "Speaking 1", t: "口语跟读真题", d: "回忆版跟读，录音 + AI 评分", timeLabel: `${REAL_SPEAKING_COUNTS.repeat} 套` },
-    { g: "口语", type: "interview", n: "Speaking 2", t: "口语访谈真题", d: "回忆版访谈，一套多问", timeLabel: `${REAL_SPEAKING_COUNTS.interview} 套` },
+    { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", count: "125 题" },
+    { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", count: "13 题" },
+    { g: "写作", type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", count: "20 题" },
+    { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", count: `${REAL_READING_COUNTS.ctw} 篇` },
+    { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", count: `${REAL_READING_COUNTS.rdl} 篇` },
+    { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", count: `${REAL_READING_COUNTS.ap} 篇` },
+    { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，配真题录音", count: `${REAL_LISTENING_COUNTS.lcr} 题` },
+    { g: "听力", type: "lc", n: "Listening 2", t: "听力对话真题", d: "回忆版校园对话，一段多题", count: `${REAL_LISTENING_COUNTS.lc} 段` },
+    { g: "听力", type: "la", n: "Listening 3", t: "听力通知真题", d: "回忆版校园通知播报", count: `${REAL_LISTENING_COUNTS.la} 段` },
+    { g: "听力", type: "lat", n: "Listening 4", t: "听力讲座真题", d: "回忆版学术讲座，一段多题", count: `${REAL_LISTENING_COUNTS.lat} 段` },
+    { g: "口语", type: "repeat", n: "Speaking 1", t: "口语跟读真题", d: "回忆版跟读，录音 + AI 评分", count: `${REAL_SPEAKING_COUNTS.repeat} 套` },
+    { g: "口语", type: "interview", n: "Speaking 2", t: "口语访谈真题", d: "回忆版访谈，一套多问", count: `${REAL_SPEAKING_COUNTS.interview} 套` },
   ];
   // 科目小标题：只在该科目第一张卡前插一行（12 张卡平铺在手机上根本找不着）。
   const groupSeen = new Set();
@@ -788,9 +791,15 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
     <>
       <div style={{ marginBottom: 14 }}>
         <h1 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>真题专区</h1>
-        <div style={{ fontSize: 12, color: t2, lineHeight: 1.5 }}>
-          公开真题集中练，不限时间、自选题目。每题标注来源分档：ETS官方 / 回忆版 / 参考版（早期收集，来源未核验）。
+        <div style={{ fontSize: 12, color: t2, lineHeight: 1.5, marginBottom: 10 }}>
+          {isPractice
+            ? "公开真题集中练，自选题目、不限时间。"
+            : mode === PRACTICE_MODE.CHALLENGE
+              ? "公开真题集中练，自选题目、挑战模式限时更紧。"
+              : "公开真题集中练，自选题目、按常规练习同一限时。"}
+          每题标注来源分档：ETS官方 / 回忆版 / 参考版（早期收集，来源未核验）。
         </div>
+        <MobileSecModeSwitch mode={mode} switchMode={switchMode} accent={accent} isChallenge={isChallenge} t2={t2} withChallenge />
       </div>
 
       {!isPro && (
@@ -817,9 +826,9 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
                 </div>
               )}
               <MobileSecTaskCard
-                href={`/real-bank?type=${task.type}`}
-                n={task.n} t={task.t} d={task.d}
-                timeLabel={task.timeLabel}
+                href={`/real-bank?type=${task.type}&mode=${modeStr}`}
+                n={task.n} t={task.t} d={`${task.d} · ${task.count}`}
+                timeLabel={getRealBankTimeLabels(task.type, modeStr).timeLabel}
                 accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
               />
             </div>
@@ -832,8 +841,19 @@ function MobileRealExamSection({ isChallenge, tier, isLoggedIn, showLoginModal, 
 
 /* ── Mobile Listening / Speaking shared pieces ── */
 
-// 二档模式切换条（Standard / Practice，无 Challenge）；选中态用本科目 accent
-function MobileSecModeSwitch({ mode, switchMode, accent, isChallenge, t2 }) {
+// 模式切换条：默认二档（Standard / Practice，听力/口语没有 Challenge 差异）；
+// 传 withChallenge 时补上第三档（真题专区用，配色照写作区的 CH.accent）。
+function MobileSecModeSwitch({ mode, switchMode, accent, isChallenge, t2, withChallenge = false }) {
+  const options = withChallenge
+    ? [
+        { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+        { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+        { value: PRACTICE_MODE.CHALLENGE, label: "Challenge" },
+      ]
+    : [
+        { value: PRACTICE_MODE.STANDARD, label: "Standard" },
+        { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
+      ];
   return (
     <div style={{
       display: "flex", gap: 0,
@@ -841,17 +861,15 @@ function MobileSecModeSwitch({ mode, switchMode, accent, isChallenge, t2 }) {
       border: `1px solid ${isChallenge ? "rgba(255,30,30,0.3)" : T.bdr}`,
       borderRadius: 10, overflow: "hidden",
     }}>
-      {[
-        { value: PRACTICE_MODE.STANDARD, label: "Standard" },
-        { value: PRACTICE_MODE.PRACTICE, label: "Practice" },
-      ].map((opt) => {
+      {options.map((opt) => {
         const sel = mode === opt.value;
+        const chOpt = opt.value === PRACTICE_MODE.CHALLENGE;
         return (
-          <button key={opt.value} onClick={() => switchMode(opt.value)} style={{
+          <button key={opt.value} onClick={() => switchMode && switchMode(opt.value)} style={{
             flex: 1, border: "none", padding: "10px 0", fontSize: 13, fontWeight: 700,
             cursor: "pointer", fontFamily: HOME_FONT, transition: "all .15s",
-            background: sel ? accent.color + "18" : "transparent",
-            color: sel ? accent.color : t2,
+            background: sel ? (chOpt ? "rgba(255,30,30,0.15)" : accent.color + "18") : "transparent",
+            color: sel ? (chOpt ? CH.accent : accent.color) : t2,
           }}>
             {opt.label}
           </button>

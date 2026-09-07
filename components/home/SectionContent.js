@@ -63,7 +63,7 @@ export function SectionContent({
   if (activeSection === "real-bank") {
     return (
       <RealExamSectionContent
-        isChallenge={isChallenge} fadeIn={fadeIn}
+        isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} fadeIn={fadeIn}
         hoverKey={hoverKey} setHoverKey={setHoverKey}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
       />

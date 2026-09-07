@@ -208,6 +208,24 @@ describe("真题专区：听力 / 口语六个入口都有 picker", () => {
     expect(screen.getByTestId("picker-first-subtitle").textContent).toContain("回忆版");
   });
 
+  test("?mode=practice → isPractice 仍为 true（不限时挡位可达）", async () => {
+    mockSearch = new URLSearchParams("type=lcr&mode=practice");
+    render(<RealBankPage />);
+    expect(screen.getByTestId("picker-desc").textContent).toContain("不限时间");
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("lcr-task").textContent).toContain("practice=true");
+  });
+
+  test("standard / challenge 档：picker 文案说「每题限时」，任务组件按题自己计时", async () => {
+    mockSearch = new URLSearchParams("type=lat&mode=challenge");
+    render(<RealBankPage />);
+    const desc = screen.getByTestId("picker-desc").textContent;
+    expect(desc).toContain("每题限时");
+    expect(desc).not.toContain("不限时");
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.getByTestId("mcq-task").textContent).toContain("practice=false");
+  });
+
   test("免费用户仍被 Pro 门禁拦下（听力入口不能绕过）", async () => {
     getSavedTier.mockReturnValue("free");
     mockSearch = new URLSearchParams("type=lcr");
@@ -226,7 +244,8 @@ describe("真题专区：听力选题 → 任务组件", () => {
     const task = screen.getByTestId("lcr-task");
     expect(task.textContent).toContain("id=real_lcr_fx_1");
     expect(task.textContent).toContain("audio=https://cdn.example.com/listening_audio/real/lcr_fx_1.mp3");
-    expect(task.textContent).toContain("practice=true");
+    // 默认档 = standard → 每题限时作答（isPractice=false，倒计时由 LCRTask 自己走）。
+    expect(task.textContent).toContain("practice=false");
   });
 
   test.each([
@@ -271,7 +290,7 @@ describe("真题专区：口语选题 → 任务组件（录音 + STT 链路复�
     expect(task.textContent).toContain("first=Use keywords");
     expect(task.textContent).toContain("audio=https://");
     expect(task.textContent).toContain("set=real_repeat_fx_1");
-    expect(task.textContent).toContain("practice=true");
+    expect(task.textContent).toContain("practice=false");
   });
 
   test("?type=interview → InterviewTask 收到逐题 items + intro", async () => {
