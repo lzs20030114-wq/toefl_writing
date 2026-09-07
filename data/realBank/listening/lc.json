@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 27,
+  "count": 31,
   "items": [
     {
       "id": "real_lc_rf0610_1_13",
@@ -871,6 +871,96 @@
       ]
     },
     {
+      "id": "real_lc_rf0620_2_06",
+      "difficulty": "medium",
+      "audio_url": null,
+      "asr_similarity": null,
+      "source_notes": [
+        "turns_from_asr_diarization:两簇 158Hz / 219Hz",
+        "proofread:proofread_ok:edit_ratio=0.000;proofread_ok:edit_ratio=0.000;proofread_ok:edit_ratio=0.000"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0620",
+      "date": "2026-06-20",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "My parents are visiting a few days before graduation weekend, and I'm thinking about renting bikes for us to explore the city. They're both in good shape, but you know, they're a little older. You think they could handle it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's pretty flat here, so it's easy riding. The thing is, some intersections get pretty busy. So they'll need to be careful at the traffic lights."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, like where Main Street meets George Street."
+        },
+        {
+          "speaker": "Man",
+          "text": "Have you looked into rental prices?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, there's a place near the university that offers hourly rentals. They're always very busy."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you'd better get on it."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What does the woman imply about the intersection at Main and George Streets?",
+          "options": {
+            "A": "The traffic lights are currently being repaired.",
+            "B": "It might be a nice neighborhood to explore with her parents.",
+            "C": "It may be a dangerous place to ride a bike.",
+            "D": "There is a popular bike rental shop there."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 206
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man suggest that the woman do soon?",
+          "options": {
+            "A": "Call her parents.",
+            "B": "Get her bicycle repaired.",
+            "C": "Make a reservation.",
+            "D": "Arrange a tour of the campus."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 207
+        }
+      ],
+      "audio_pending": true
+    },
+    {
       "id": "real_lc_rf0622_1_17",
       "difficulty": "medium",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0622_1_17.mp3",
@@ -953,6 +1043,92 @@
           "answer": "C",
           "explanation": "",
           "source_q": 118
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0622_2_06",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0622_2_06.mp3",
+      "asr_similarity": 0.97,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0622",
+      "date": "2026-06-22",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Have you checked out the new restaurant downtown? The sushi is made by an award-winning chef and is absolutely top-notch."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I'd love to, but I'm saving money for a vacation."
+        },
+        {
+          "speaker": "Man",
+          "text": "Do you have specific plans?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Not yet, but I'd love to spend a month somewhere in nature."
+        },
+        {
+          "speaker": "Man",
+          "text": "Have you considered a camping trip? You could just pack a tent and a sleeping bag into your car and travel around the mountains while sleeping at campsites. No need for hotels or plane tickets."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, I do love a comfortable bed at the end of an eventful day."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What does the man imply about a restaurant?",
+          "options": {
+            "A": "He really likes its sushi.",
+            "B": "Its location is inconvenient for him.",
+            "C": "Its chef deserves an award.",
+            "D": "It is too expensive for him."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 206
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman imply when she mentions a bed?",
+          "options": {
+            "A": "She loves sleeping in a sleeping bag at campsites.",
+            "B": "She is saving money for a new bed in her home.",
+            "C": "Some hotels are not very comfortable.",
+            "D": "She is unenthusiastic about the man's idea."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 207
         }
       ]
     },
@@ -1313,6 +1489,92 @@
           "answer": "C",
           "explanation": "",
           "source_q": 114
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0708_1_15",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0708_1_15.mp3",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0708",
+      "date": "2026-07-08",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "The first meeting of the film club was last night. I was expecting to see you there."
+        },
+        {
+          "speaker": "Man",
+          "text": "My manager called and asked me to pick up an extra shift, and I kinda needed the money. Was it interesting?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Definitely. The club president said we'd be focusing on cinema from the 1950s this semester. I think you'd like it."
+        },
+        {
+          "speaker": "Man",
+          "text": "Is it too late for me to participate?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Not at all. There's just a couple of forms online you'll need to take care of. I'll email you the info."
+        },
+        {
+          "speaker": "Man",
+          "text": "Thanks. I'll take care of it sometime today."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why did the man miss the film club meeting?",
+          "options": {
+            "A": "He had to attend a film class.",
+            "B": "He had to work an extra shift.",
+            "C": "He forgot where the club met.",
+            "D": "His manager invited him to a house."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 115
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man probably do next?",
+          "options": {
+            "A": "Complete the online forms.",
+            "B": "Contact the club president.",
+            "C": "Ask for another work shift.",
+            "D": "Watch a classic film."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 116
         }
       ]
     },
@@ -2079,6 +2341,92 @@
           "answer": "B",
           "explanation": "",
           "source_q": 207
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0808_1_13",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0808_1_13.mp3",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Are you going to the concert this weekend?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I want to, but I haven't bought a ticket yet."
+        },
+        {
+          "speaker": "Man",
+          "text": "You should hurry. I heard they're selling out quickly."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I know. I'm also trying to decide between general admission and the VIP section."
+        },
+        {
+          "speaker": "Man",
+          "text": "The VIP section offers a better view and some perks like free snacks."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds like something I can't pass up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man ask the woman about?",
+          "options": {
+            "A": "Whether she will go to a concert",
+            "B": "When a concert will begin",
+            "C": "Where a concert will take place",
+            "D": "What section of a concert hall she will sit in"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 113
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman imply she will do when she says, 'That sounds like something I can't pass up'?",
+          "options": {
+            "A": "Attend a different concert",
+            "B": "Buy a general admission ticket",
+            "C": "Purchase a VIP ticket",
+            "D": "Call one of her friends"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 114
         }
       ]
     },

@@ -141,18 +141,6 @@
     },
     {
       "file": "listening/lc",
-      "id": "real_lc_rf0708_1_15",
-      "scope": "unit",
-      "reason": "两道题问 the woman，逐字稿里对应内容是 the man（说话人标签与题干对调，音频无法核）"
-    },
-    {
-      "file": "listening/lc",
-      "id": "real_lc_rf0808_1_13",
-      "scope": "unit",
-      "reason": "两道题说话人与逐字稿对调"
-    },
-    {
-      "file": "listening/lc",
       "id": "real_lc_rf0808_2_06",
       "scope": "unit",
       "reason": "逐字稿三处截断，且说话人与两道题干对调"
@@ -162,18 +150,6 @@
       "id": "real_lc_rf0808_2_04",
       "scope": "unit",
       "reason": "逐字稿两处截断（They tweak the game / what's confusing about a）"
-    },
-    {
-      "file": "listening/lc",
-      "id": "real_lc_rf0620_2_06",
-      "scope": "unit",
-      "reason": "Q2 题干问 the man 的建议，那句在逐字稿里是 woman 说的（标签与题干对不上）；LC validator 要求恰好 2 题，只能整条下架"
-    },
-    {
-      "file": "listening/lc",
-      "id": "real_lc_rf0622_2_06",
-      "scope": "unit",
-      "reason": "Q2 题干问 the man 提到 bed，那句在逐字稿里是 woman 说的；LC validator 要求恰好 2 题，只能整条下架"
     },
     {
       "file": "listening/lat",
@@ -1970,6 +1946,174 @@
       "path": "passage",
       "op": "strip_insert_markers",
       "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.0.stem",
+      "op": "replace",
+      "from": "Why did the woman miss the film club meeting?",
+      "to": "Why did the man miss the film club meeting?",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.0.options.A",
+      "op": "replace",
+      "from": "She had to attend a film class.",
+      "to": "He had to attend a film class.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.0.options.B",
+      "op": "replace",
+      "from": "She had to work an extra shift.",
+      "to": "He had to work an extra shift.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.0.options.C",
+      "op": "replace",
+      "from": "She forgot where the club met.",
+      "to": "He forgot where the club met.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.0.options.D",
+      "op": "replace",
+      "from": "Her manager invited her to a house.",
+      "to": "His manager invited him to a house.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "path": "questions.1.stem",
+      "op": "replace",
+      "from": "What will the woman probably do next?",
+      "to": "What will the man probably do next?",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "path": "questions.0.stem",
+      "op": "replace",
+      "from": "What does the woman ask the man about?",
+      "to": "What does the man ask the woman about?",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "path": "questions.0.options.A",
+      "op": "replace",
+      "from": "Whether he will go to a concert",
+      "to": "Whether she will go to a concert",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "path": "questions.0.options.D",
+      "op": "replace",
+      "from": "What section of a concert hall he will sit in",
+      "to": "What section of a concert hall she will sit in",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "path": "questions.1.stem",
+      "op": "replace",
+      "from": "What does the man imply he will do when he says, 'That sounds like something I can't pass up'?",
+      "to": "What does the woman imply she will do when she says, 'That sounds like something I can't pass up'?",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "path": "questions.1.options.D",
+      "op": "replace",
+      "from": "Call one of his friends",
+      "to": "Call one of her friends",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_2_06",
+      "path": "questions.1.stem",
+      "op": "replace",
+      "from": "What does the man imply when he mentions a bed?",
+      "to": "What does the woman imply when she mentions a bed?",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_2_06",
+      "path": "questions.1.options.A",
+      "op": "replace",
+      "from": "He loves sleeping in his sleeping bag at campsites.",
+      "to": "She loves sleeping in a sleeping bag at campsites.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_2_06",
+      "path": "questions.1.options.B",
+      "op": "replace",
+      "from": "He is saving money for a new bed in his home.",
+      "to": "She is saving money for a new bed in her home.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_2_06",
+      "path": "questions.1.options.D",
+      "op": "replace",
+      "from": "He is unenthusiastic about the woman's idea.",
+      "to": "She is unenthusiastic about the man's idea.",
+      "why": "说话人与逐字稿对调，题干/选项按逐字稿改"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0620_2_06",
+      "path": "conversation",
+      "op": "set",
+      "to": [
+        {
+          "speaker": "Woman",
+          "text": "My parents are visiting a few days before graduation weekend, and I'm thinking about renting bikes for us to explore the city. They're both in good shape, but you know, they're a little older. You think they could handle it?"
+        },
+        {
+          "speaker": "Man",
+          "text": "It's pretty flat here, so it's easy riding. The thing is, some intersections get pretty busy. So they'll need to be careful at the traffic lights."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, like where Main Street meets George Street."
+        },
+        {
+          "speaker": "Man",
+          "text": "Have you looked into rental prices?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yeah, there's a place near the university that offers hourly rentals. They're always very busy."
+        },
+        {
+          "speaker": "Man",
+          "text": "Then you'd better get on it."
+        }
+      ],
+      "why": "末轮「Then you'd better get on it.」是 man 的建议，被并进了 woman 的台词；拆成独立一轮（口播文本变了，音频重配）"
     }
   ]
 }

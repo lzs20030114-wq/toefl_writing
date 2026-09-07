@@ -102,7 +102,7 @@ function applyPatch(item, patch, log) {
  */
 function markAudioStale(item, patchPath) {
   const m = patchPath.match(/^(sentences|questions)\.#([^.]+)\.(sentence|question)$/);
-  const owner = m ? (item[m[1]] || []).find((x) => x?.id === m[2]) : /^(transcript|announcement|speaker|conversation\.\d+\.text)$/.test(patchPath) ? item : null;
+  const owner = m ? (item[m[1]] || []).find((x) => x?.id === m[2]) : /^(transcript|announcement|speaker|conversation(\.\d+\.text)?)$/.test(patchPath) ? item : null;
   if (!owner || !owner.audio_url) return false;
   owner.audio_url = null;
   owner.audio_pending = true;

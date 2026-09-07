@@ -17,7 +17,7 @@
 - [中] 2026-07-05 合并的支付修复 + CTW 防呆是否发版（用户可见变更：升级按钮修通 + CTW 灰底 chip；走 /release-notes）。
 - [低] 模考 6.4 残项：#13 邮件排版（等参考图）/ #2#3 全屏与顶栏（等定范围）/ #18 三科合考（用户已 defer）。
 
-- [中] 真题专区复核余项（2026-09-07 全库复核，报告 data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md，清单 data/realBank/review-holds.json）：①音频已核：全是自家 TTS，URL↔id 0 错位；改过口播文本的 6 条已标 audio_pending，本机 `node scripts/realbank/render_real_audio.mjs --only=lat,repeat`（≈¥0.91）补配；②`real_ap_511_1_26#2` 答案键 D vs 独立作答 C，对原截图核；③LC 6 条说话人对调：音频按 transcript 标签配的，是题干反了，改题干 the man↔the woman 即可放行（4 条），另 2 条还有截断；④放行任何一条 = 删清单行 + 本机重跑 build_bank（成品已过滤，源料在 .codex-tmp）；⑤题池阅读 parse 阶段要保住段落分隔（本次 5 题因「paragraph N」无从定位被扣）。
+- [中] 真题专区复核余项（2026-09-07 全库复核，报告 data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md，清单 data/realBank/review-holds.json）：①音频已核：全是自家 TTS，URL↔id 0 错位，6 条改文本的已补配；②`real_ap_511_1_26#2` 答案键 D vs 独立作答 C，对原截图核；③LC 说话人对调 4 条已改题干放行（rf0620_2_06 拆轮后待本机补配 1 条音频），rf0808_2_04 / rf0808_2_06 另有截断仍扣；④放行任何一条 = 删清单行 + 本机重跑 build_bank（成品已过滤，源料在 .codex-tmp）；⑤题池阅读 parse 阶段要保住段落分隔（本次 5 题因「paragraph N」无从定位被扣）。
 - [中] 真题录入二期两项口径待拍板：①BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉（`data/realExam2026/writing/buildSentence.json` 363 条 `scrambled_ocr`），只能做成「真题句子 + 本站切块」，是否接受这种来源分档；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
 
 ## 进行中
