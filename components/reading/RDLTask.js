@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { C, FONT, READING_FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
+import { materialImageSrc } from "../../lib/reading/materialImage";
 
 /**
  * RDL Task — matches real TOEFL interface:
@@ -30,6 +31,11 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return 0;
   });
   const [submitted, setSubmitted] = useState(false);
+  // 材料框原图（真题专区独有的可选字段）。有图默认显示图 —— 真题界面的版面
+  // （邮件表头 / 短信气泡 / 海报分栏 / 柱状图）在纯文本里是丢掉的。
+  const materialImage = materialImageSrc(item);
+  const [showMaterialImage, setShowMaterialImage] = useState(true);
+  useEffect(() => { setShowMaterialImage(true); }, [item?.id]);
 
   useDraftPersist(draftKey, { selections, currentQ }, { enabled: !submitted });
 
@@ -190,16 +196,63 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: accent.soft, border: `1px solid ${accent.color}25`, fontSize: 12, color: accent.color, fontWeight: 600, marginBottom: 14 }}>
               {item.genre}
             </div>
-            {/* Passage */}
-            <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
-              {vocabWord
-                ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
-                    seg.hit
-                      ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
-                      : <span key={i}>{seg.text}</span>
-                  )
-                : item.text}
-            </div>
+            {/* 材料原图（真题）：默认显图，可切回文本；没有该字段时整段行为与从前一致。 */}
+            {materialImage && showMaterialImage ? (
+              <div>
+                {vocabWord && (
+                  <div style={{
+                    fontSize: 12.5, color: "#92400E", background: "#FFFBEB",
+                    border: "1px solid #FDE68A", borderRadius: 8,
+                    padding: "7px 10px", marginBottom: 10, lineHeight: 1.5,
+                  }}>
+                    本题考查词汇，可切换为文字查看高亮
+                  </div>
+                )}
+                <img
+                  src={materialImage}
+                  alt={item.genre ? `真题材料原图：${item.genre}` : "真题材料原图"}
+                  style={{
+                    display: "block", maxWidth: "100%", height: "auto",
+                    borderRadius: 10, border: `1px solid ${C.bdr}`, background: "#fff",
+                  }}
+                />
+                <button
+                  onClick={() => setShowMaterialImage(false)}
+                  style={{
+                    marginTop: 10, padding: "6px 12px", borderRadius: 999,
+                    border: `1px solid ${C.bdr}`, background: "#fff",
+                    fontSize: 12.5, color: C.t2, cursor: "pointer", fontFamily: FONT,
+                  }}
+                >
+                  切换为文字
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Passage */}
+                <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
+                  {vocabWord
+                    ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
+                        seg.hit
+                          ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+                          : <span key={i}>{seg.text}</span>
+                      )
+                    : item.text}
+                </div>
+                {materialImage && (
+                  <button
+                    onClick={() => setShowMaterialImage(true)}
+                    style={{
+                      marginTop: 14, padding: "6px 12px", borderRadius: 999,
+                      border: `1px solid ${C.bdr}`, background: "#fff",
+                      fontSize: 12.5, color: C.t2, cursor: "pointer", fontFamily: FONT,
+                    }}
+                  >
+                    查看原图
+                  </button>
+                )}
+              </>
+            )}
           </div>
 
           {/* RIGHT — question (scrolls independently) */}
