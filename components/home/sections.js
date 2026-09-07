@@ -48,10 +48,10 @@ export const SECTIONS = [
   },
   {
     id: "real-bank",
-    label: "Real Questions",
+    label: "真题专区",
     // 移动端 tab 是 6 等分横排（11.5px 字号，320px 屏也不能溢出），完整 label 会被挤爆，
     // 所以移动端读 shortLabel（见 MobileHomePage 的 tab 渲染）。
-    shortLabel: "Real",
+    shortLabel: "真题",
     labelZh: "真题专区",
     icon: "📜",
     status: SECTION_STATUS.ACTIVE,

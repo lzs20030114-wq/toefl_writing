@@ -46,7 +46,7 @@ describe("真题专区 section：注册表", () => {
     const sec = SECTIONS.find((s) => s.id === "real-bank");
     expect(sec).toBeTruthy();
     expect(sec.status).toBe(SECTION_STATUS.ACTIVE);
-    expect(sec.label).toBe("Real Questions");
+    expect(sec.label).toBe("真题专区");
     expect(sec.labelZh).toBe("真题专区");
     expect(sec.shortLabel.length).toBeLessThanOrEqual(6);
   });

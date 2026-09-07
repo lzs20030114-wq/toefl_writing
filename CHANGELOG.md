@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-08 — v1.18.0
+
+- **真题专区上线（Pro 专属，`/real-bank` + 首页 section）**：写作 158（讨论 125 / 邮件 13 / 造句 20）、阅读 166（CTW 64 / RDL 49 / AP 53）、听力 215（LCR 118 / LC 31 / LA 20 / LAT 46）、口语 38（跟读 21 / 访谈 17），共 577 题。来源分档（ETS 官方 / 回忆版 / 参考版）在选题卡与答题页顶部标注；阅读材料框有源图的显示原卷截图（`material_image`，同源图片代理）；听力/口语按回忆稿 TTS 配音；done-key 与常规练习共用。录入管线 `scripts/realbank/`，两波月份文件夹入库（`ed2f77b4`/`f8dede1d`/`b4808cf8`）。
+- **真题专区接入三档模式**（`22e7607b`）：`?mode=standard|practice|challenge`，限时单点 `lib/realBankModes.js` 转调 `lib/practiceMode`（阅读限时表从 `app/reading/page.js` 抽为 `READING_TIME_SECONDS`）；桌面/移动首页面板 + picker 头部三档切换；历史记录 mode 随档位；TopicPicker 新增 `eyebrow`/`headerExtra`。侧栏 label 改「真题专区」。jest 1415 全绿。
+
 ## 2026-08-02 — v1.17.0
 
 - **阅读全库答案 L1 二审：AP 9 + RDL 1 改键 + CTW 指示代词歧义 117 题系统性重挖**（报告 `data/claudeGen/reports/L1-answer-audit-20260802.md`；改键 `e5c4bca`/`857e776`/`d2446be`，CTW 重挖 `0a2d480`）：延续 LCR 审计，对 ap/rdl/ctw/lat/lc/la 六库跑 DeepSeek 盲审（5 轮）+ 多轮 opus/sonnet agent 分诊 + 人工复核原文。
