@@ -19,6 +19,8 @@ tmp/
 
 # TPO real question references (not for distribution)
 data/*/tpo_reference*.json
+# 例外：真题专区邮件题(lib/realBank.js)直接 import 这一份，Vercel 构建必须有它；App 本就把这 11 题展示给用户
+!data/emailWriting/tpo_reference.json
 data/*/real_questions_raw*
 
 # Generation artifacts (local only)
