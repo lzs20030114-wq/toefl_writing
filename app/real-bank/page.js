@@ -25,6 +25,7 @@ import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { TopicPicker } from "../../components/shared/TopicPicker";
+import { AssetPreloadGate } from "../../components/shared/AssetPreloadGate";
 import { C, FONT } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
@@ -32,6 +33,7 @@ import { addDoneIds, loadDoneIds, saveSess } from "../../lib/sessionStore";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { normalizeReportLanguage } from "../../lib/reportLanguage";
 import { stashPromptSnapshot } from "../../lib/history/retry";
+import { materialImagePreloadUrls } from "../../lib/reading/materialImage";
 import {
   getRealAPItems,
   getRealBSBatches,
@@ -526,9 +528,16 @@ function RealBankPageClient() {
     // 适配对象只喂给组件；存历史 / 打已练一律用原 item（details.passage 那一支自己会挑）。
     const apAsRdl = { ...item, text: item.passage, genre: item.topic };
 
+    // 材料原图先在加载页拉完再挂任务组件 —— RDLTask 一挂载就起计时，不能让用户
+    // 盯着空白材料框等图。没图的题（CTW / 老库形状）数组为空，门原样透传。
     return (
       <UsageGateWrapper onExit={backToPicker} practiceMode={PRACTICE_MODE.PRACTICE}>
-        <>
+        <AssetPreloadGate
+          images={materialImagePreloadUrls(item)}
+          title={readingLabels.title}
+          section={readingLabels.section}
+          onExit={backToPicker}
+        >
           <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} />
           {type === "ctw" && (
             <CTWTask
@@ -559,7 +568,7 @@ function RealBankPageClient() {
               section="Reading | Task 3"
             />
           )}
-        </>
+        </AssetPreloadGate>
       </UsageGateWrapper>
     );
   }

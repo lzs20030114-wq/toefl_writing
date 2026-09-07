@@ -136,6 +136,11 @@ jest.mock("../data/realBank/reading/ap.json", () => ({
     topic: "biology",
     subtopic: "",
     passage: "Photosynthesis converts light energy into chemical energy stored in sugar molecules inside the leaf.",
+    // 带材料原图：进入题目前要先过预加载门（见「阅读真题：材料原图预加载」）。
+    material_image: {
+      url: "https://abc123.supabase.co/storage/v1/object/public/real_bank_images/reading/real_ap_fx_2_24.webp",
+      w: 700, h: 400,
+    },
     paragraphs: [],
     questions: [{
       question_type: "main_idea",
@@ -311,6 +316,52 @@ describe("真题专区独立页：选题 → 答题接线", () => {
 
 /* ── 阅读真题（?type=ctw|rdl|ap） ─────────────────────────────────── */
 
+// 预加载门里的隐藏 <img> 在 jsdom 不会真的加载，手动触发 load 放行。
+function passPreload() {
+  for (const img of screen.queryAllByTestId("asset-preload-img")) fireEvent.load(img);
+}
+
+describe("真题专区独立页：阅读真题材料原图预加载", () => {
+  beforeEach(() => {
+    getSavedTier.mockReturnValue("pro");
+    try { sessionStorage.clear(); localStorage.clear(); } catch {}
+  });
+
+  test("带原图的题：先出加载页，图没到之前不挂 RDLTask（计时不起跑）", async () => {
+    mockSearch = new URLSearchParams("type=ap");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+
+    expect(screen.getByTestId("asset-preload-gate")).toBeTruthy();
+    expect(screen.queryByTestId("rdl-task")).toBeNull();
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
+    // 预热的正是同源代理地址（与 RDLTask 里 <img> 的 src 一致，才能命中缓存）。
+    const imgs = screen.getAllByTestId("asset-preload-img");
+    expect(imgs.map((i) => i.getAttribute("src"))).toEqual(["/api/img/reading/real_ap_fx_2_24.webp"]);
+
+    passPreload();
+    expect(screen.queryByTestId("asset-preload-gate")).toBeNull();
+    expect(screen.getByTestId("rdl-task").textContent).toContain("id=real_ap_fx_2_24");
+    expect(screen.getByTestId("real-source-banner")).toBeTruthy();
+  });
+
+  test("加载页的「返回」回到 picker，不留在加载页", async () => {
+    mockSearch = new URLSearchParams("type=ap");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    fireEvent.click(screen.getByText("返回"));
+    expect(screen.getByTestId("topic-picker")).toBeTruthy();
+  });
+
+  test("没有原图的题（rdl 夹具）直接进任务，不经过加载页", async () => {
+    mockSearch = new URLSearchParams("type=rdl");
+    render(<RealBankPage />);
+    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect(screen.queryByTestId("asset-preload-gate")).toBeNull();
+    expect(screen.getByTestId("rdl-task")).toBeTruthy();
+  });
+});
+
 describe("真题专区独立页：阅读真题路由", () => {
   beforeEach(() => {
     getSavedTier.mockReturnValue("pro");
@@ -371,6 +422,7 @@ describe("真题专区独立页：阅读真题路由", () => {
     mockSearch = new URLSearchParams("type=ap");
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
+    passPreload();
 
     const task = screen.getByTestId("rdl-task");
     expect(task.textContent).toContain("id=real_ap_fx_2_24");
@@ -410,6 +462,7 @@ describe("真题专区独立页：阅读做完 → 历史 + 已练", () => {
     mockSearch = new URLSearchParams("type=ap");
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
+    passPreload();
     fireEvent.click(screen.getByTestId("rdl-finish"));
 
     expect([...loadDoneIds(DONE_STORAGE_KEYS.READING_AP)]).toContain("real_ap_fx_2_24");
