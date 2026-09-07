@@ -19,6 +19,18 @@ const KEYS = ["A", "B", "C", "D"];
  *
  * Flow: listen to audio → answer questions one by one → results
  */
+// Gender per turn: speakers[].gender by name, else infer from the conventional
+// "Man"/"Woman" labels, else null (player falls back to the default voice).
+function conversationTurns(item) {
+  const byName = {};
+  for (const sp of item.speakers || []) if (sp && sp.name) byName[sp.name] = sp.gender;
+  return (item.conversation || []).map((t) => {
+    const name = String(t.speaker || "");
+    const g = byName[name] || (/^wom[ae]n$|^female$|^girl$/i.test(name) ? "female" : /^m[ae]n$|^male$|^boy$/i.test(name) ? "male" : null);
+    return { text: String(t.text || ""), gender: g };
+  });
+}
+
 export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractice = false, title = "Listening", section = "Listening" }) {
   const questions = item?.questions || [];
   const totalQ = questions.length;
@@ -26,10 +38,12 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
 
   // Get the text for TTS fallback
   const transcript = item?.transcript || item?.announcement || item?.lecture || "";
-  // For conversations, join turns
+  // For conversations: never speak the speaker labels ("Man:"), and hand the player
+  // the turns with genders so the fallback can voice the two speakers differently.
   const ttsText = item?.conversation
-    ? item.conversation.map(t => `${t.speaker}: ${t.text}`).join(". ")
+    ? item.conversation.map(t => t.text).join(" ")
     : transcript;
+  const ttsTurns = item?.conversation ? conversationTurns(item) : null;
 
   // Restore in-progress selections from localStorage when re-opening the same item.
   const draftKey = buildDraftKey("listening-mcq", item?.id || "");
@@ -177,6 +191,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
           <AudioPlayer
             src={item.audio_url || null}
             text={ttsText}
+            turns={ttsTurns}
             onEnded={handleAudioEnded}
             maxReplays={isPractice ? 99 : 0}
             isPractice={isPractice}

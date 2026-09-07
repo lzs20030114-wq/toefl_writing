@@ -14,12 +14,27 @@ const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 // player per question). Holds the currently-sounding instance's stop fn.
 let activePlayerStop = null;
 
+// Browser-TTS fallback voices for conversations (2026-09-07 用户反馈：兜底把「Man: … Woman: …」
+// 连角色名一起用一个声音念完)。按性别挑一个英文音色；浏览器没有可辨性别的音色时退回默认音色
+// 用音高区分（女 1.15 / 男 0.85）。
+const FEMALE_VOICE_RE = /Samantha|Aria|Zira|Jenny|Karen|Moira|Tessa|Victoria|Ava|Allison|Susan|Fiona|Google US English|Female/i;
+const MALE_VOICE_RE = /Alex|David|Daniel|Mark|Fred|Guy|Rishi|Tom|Oliver|George|Google UK English Male|Male/i;
+const TURN_GAP_MS = 350;
+function pickVoice(voices, gender) {
+  const re = gender === "female" ? FEMALE_VOICE_RE : gender === "male" ? MALE_VOICE_RE : null;
+  if (!re) return null;
+  return voices.find((v) => v.lang && v.lang.startsWith("en-") && re.test(v.name)) || null;
+}
+
 /**
  * Reusable audio player with Web Speech API fallback.
  *
  * Props:
  *  - src: audio URL (optional, uses TTS fallback if null)
  *  - text: text to speak via TTS when src is absent
+ *  - turns: optional [{ text, gender }] for two-speaker conversations. When given (2+ turns),
+ *           the TTS fallback speaks one utterance per turn, voiced by gender, with a short gap —
+ *           instead of one flat read of `text`. Speaker labels are never spoken.
  *  - onEnded: callback when playback finishes
  *  - maxReplays: replays allowed after the first full listen (exam mode: 0 = play once).
  *               isPractice overrides this to unlimited.
@@ -35,7 +50,7 @@ let activePlayerStop = null;
  * iOS Safari / WeChat per-element autoplay rules. With no provider (all
  * practice pages) every code path below is exactly the legacy one.
  */
-export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null }) {
+export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null }) {
   const examAudio = useExamAudio();
   const controller = examAudio ? examAudio.controller : null;
   const controllerMode = !!(controller && autoPlay);
@@ -59,6 +74,9 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   // Lets the <audio> 'error' listener reach the latest startTTS without making
   // the progress effect depend on it (avoids a TDZ on the dep array).
   const startTTSRef = useRef(null);
+  // Multi-turn TTS: bumped on every stop so a cancelled utterance's onend can't
+  // schedule the next turn of a playback that was already torn down.
+  const ttsSessionRef = useRef(0);
 
   const replayLimit = isPractice ? Infinity : maxReplays;
   const canReplay = replays < replayLimit;
@@ -67,6 +85,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   const audioSrc = sameOriginAudio(src);
 
   const stopPlayback = useCallback(() => {
+    ttsSessionRef.current += 1;
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (audioRef.current) {
@@ -220,7 +239,8 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
   // file) so the listen phase still completes instead of dead-ending. Returns
   // false when TTS is unavailable / there is no text to speak.
   const startTTS = useCallback(() => {
-    if (typeof speechSynthesis === "undefined" || !text) return false;
+    const multi = Array.isArray(turns) && turns.length > 1;
+    if (typeof speechSynthesis === "undefined" || (!text && !multi)) return false;
     // Claim the single playback slot, stopping whoever held it.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
@@ -238,6 +258,53 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       const enVoice = voices.find((v) => v.lang.startsWith("en-") && /Samantha|Aria|Google US English|Alex|Karen/i.test(v.name))
         || voices.find((v) => v.lang.startsWith("en-"));
       if (enVoice) utterance.voice = enVoice;
+
+      if (multi) {
+        // Conversation: one utterance per turn, gendered voice, gap between turns.
+        const session = ++ttsSessionRef.current;
+        const totalWords = turns.reduce((n, t) => n + String(t.text || "").split(/\s+/).filter(Boolean).length, 0);
+        ttsDurationRef.current = (totalWords / (130 * 0.9)) * 60 * 1000 + TURN_GAP_MS * (turns.length - 1);
+        ttsStartRef.current = Date.now();
+        const femaleVoice = pickVoice(voices, "female");
+        const maleVoice = pickVoice(voices, "male");
+        const distinct = !!(femaleVoice && maleVoice && femaleVoice !== maleVoice);
+        const speakTurn = (i) => {
+          if (ttsSessionRef.current !== session) return;
+          const t = turns[i];
+          const u = new SpeechSynthesisUtterance(String(t.text || ""));
+          u.lang = "en-US";
+          u.rate = 0.9;
+          const v = (t.gender === "female" ? femaleVoice : t.gender === "male" ? maleVoice : null) || enVoice;
+          if (v) u.voice = v;
+          if (!distinct) u.pitch = t.gender === "female" ? 1.15 : t.gender === "male" ? 0.85 : 1;
+          if (i === 0) {
+            u.onstart = () => {
+              setPlaying(true);
+              setBuffering(false);
+              animFrameRef.current = requestAnimationFrame(animateTTSProgress);
+            };
+          }
+          u.onend = () => {
+            if (ttsSessionRef.current !== session) return;
+            if (i < turns.length - 1) {
+              ttsTimerRef.current = setTimeout(() => speakTurn(i + 1), TURN_GAP_MS);
+              return;
+            }
+            setPlaying(false);
+            setProgress(1);
+            setCompleted(true);
+            if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+            if (onEnded) onEnded();
+          };
+          u.onerror = () => {
+            setPlaying(false);
+            if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+          };
+          speechSynthesis.speak(u);
+        };
+        speakTurn(0);
+        return;
+      }
 
       // Estimate duration: ~130 words/min at 0.9 rate
       const wordCount = text.split(/\s+/).length;
@@ -283,7 +350,7 @@ export function AudioPlayer({ src, text, onEnded, maxReplays = 2, isPractice = f
       speak(speechSynthesis.getVoices());
     }, 600);
     return true;
-  }, [text, onEnded, animateTTSProgress, stopSelf]);
+  }, [text, turns, onEnded, animateTTSProgress, stopSelf]);
   // Expose the latest startTTS to the <audio> 'error' listener (see above).
   startTTSRef.current = startTTS;
 
