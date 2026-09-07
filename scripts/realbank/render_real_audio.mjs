@@ -32,7 +32,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { renderSingleSpeaker, renderConversation } = require("../../lib/tts/renderListening.js");
 const { encodeWavToMp3 } = require("../../lib/tts/mp3Encode.js");
-const { uploadAudio } = require("../../lib/tts/storage.js");
+const { uploadAudio, versionedAudioUrl } = require("../../lib/tts/storage.js");
 
 const ROOT = process.cwd();
 const LISTENING_DIR = path.join(ROOT, "data", "realBank", "listening");
@@ -87,7 +87,7 @@ function planListening(type) {
     jobs.push({
       file: p, bank, type, id: it.id, words,
       render: () => (type === "lc" ? renderConversation(it) : renderSingleSpeaker(it, type)),
-      assign: (url) => { it.audio_url = url; delete it.audio_pending; },
+      assign: (url) => { it.audio_url = versionedAudioUrl(url); delete it.audio_pending; },
     });
   }
   return jobs;
@@ -116,7 +116,7 @@ function planSpeaking(kind) {
       jobs.push({
         file: p, bank, type: kind, id: unit.id, words: wc(text),
         render: () => renderSingleSpeaker(pseudo, "lcr"),
-        assign: (url) => { unit.audio_url = url; delete unit.audio_pending; },
+        assign: (url) => { unit.audio_url = versionedAudioUrl(url); delete unit.audio_pending; },
       });
     }
   }

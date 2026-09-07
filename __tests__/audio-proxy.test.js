@@ -28,6 +28,10 @@ describe("sameOriginAudio", () => {
     expect(sameOriginAudio("")).toBe("");
   });
 
+  test("keeps a ?v= cache-busting version on the proxy path (re-rendered clips)", () => {
+    expect(sameOriginAudio(`${SUPA}?v=mf3k2a`)).toBe("/api/audio/choose-response/lcr_001.mp3?v=mf3k2a");
+  });
+
   test("kill switch returns the raw Supabase URL", () => {
     process.env.NEXT_PUBLIC_AUDIO_PROXY_DISABLED = "1";
     expect(sameOriginAudio(SUPA)).toBe(SUPA);
@@ -102,6 +106,15 @@ describe("/api/audio edge route", () => {
     expect(suffix.status).toBe(206);
     expect(suffix.headers.get("content-range")).toBe("bytes 6-9/10");
     expect(await suffix.text()).toBe("6789");
+  });
+
+  test("forwards ?v= to the upstream URL so a re-rendered clip bypasses stale caches", async () => {
+    global.fetch = jest.fn(async (url) => {
+      expect(url).toBe("https://abc123.supabase.co/storage/v1/object/public/listening_audio/real/lc/x.mp3?v=abc");
+      return new Response("AUDIO", { status: 200, headers: { "content-type": "audio/mpeg", "content-length": "5" } });
+    });
+    const res = await GET({ headers: new Headers(), url: "https://treepractice.com/api/audio/real/lc/x.mp3?v=abc" }, { params: { path: ["real", "lc", "x.mp3"] } });
+    expect(res.status).toBe(200);
   });
 
   test("unsatisfiable range → 416 with the total size", async () => {

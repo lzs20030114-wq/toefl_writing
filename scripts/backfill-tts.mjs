@@ -17,7 +17,7 @@ import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
 const { generateSpeech, generateConversation } = require('../lib/tts/edgeTts.js');
-const { uploadAudio } = require('../lib/tts/storage.js');
+const { uploadAudio, versionedAudioUrl } = require('../lib/tts/storage.js');
 // Persona render path — used ONLY in --tts-provider=openai mode, listening types only.
 const { renderSingleSpeaker, renderConversation } = require('../lib/tts/renderListening.js');
 const { encodeWavToMp3 } = require('../lib/tts/mp3Encode.js');
@@ -79,7 +79,7 @@ async function backfillSingle(bankPath, textFn, prefix, preset, type) {
         storagePath = `${prefix}/${it.id}.mp3`;
       }
       const { url } = await uploadChecked(storagePath, buf);
-      it.audio_url = url; done++; budget--;
+      it.audio_url = versionedAudioUrl(url); done++; budget--;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
   save(bankPath, b);
@@ -107,7 +107,7 @@ async function backfillConversation(bankPath, prefix) {
         storagePath = `${prefix}/${it.id}.mp3`;
       }
       const { url } = await uploadChecked(storagePath, buf);
-      it.audio_url = url; done++; budget--;
+      it.audio_url = versionedAudioUrl(url); done++; budget--;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
   save(bankPath, b);
@@ -131,7 +131,7 @@ async function backfillRepeat(bankPath) {
         const buf = await generateSpeech(s.sentence, { preset: VMAP[s.difficulty] || 'lcr_staff_male', format: 'mp3' });
         const sid = s.id || `${set.id}_s${ss.indexOf(s) + 1}`;
         const { url } = await uploadChecked(`speaking/repeat/${sid}.mp3`, buf);
-        s.audio_url = url; sents++; any = true; budget--;
+        s.audio_url = versionedAudioUrl(url); sents++; any = true; budget--;
       } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${set.id}: ${e.message.slice(0, 80)}`); }
     }
     if (any) sets++;
@@ -160,7 +160,7 @@ async function backfillInterview(bankPath) {
         const buf = await generateSpeech(q.question, { preset: 'lcr_staff_female', format: 'mp3' });
         const qid = q.id || `${set.id}_${qq.indexOf(q) + 1}`;
         const { url } = await uploadChecked(`speaking/interview/${qid}.mp3`, buf);
-        q.audio_url = url; qs++; any = true; budget--;
+        q.audio_url = versionedAudioUrl(url); qs++; any = true; budget--;
       } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${set.id}: ${e.message.slice(0, 80)}`); }
     }
     if (any) sets++;

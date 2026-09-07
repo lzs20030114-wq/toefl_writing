@@ -50,7 +50,7 @@ function walkJson(dir, fn) {
   }
 }
 
-const stem = (p) => path.basename(p).replace(/\.mp3$/i, "").replace(/\.p\d+$/i, "");
+const stem = (p) => path.basename(String(p).split("?")[0]).replace(/\.mp3$/i, "").replace(/\.p\d+$/i, "");
 const mb = (a) => a.reduce((n, f) => n + f.size, 0) / 1024 / 1024;
 
 async function listBucket(sb) {

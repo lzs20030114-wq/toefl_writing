@@ -73,7 +73,11 @@ export async function GET(request, { params }) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!base) return new Response("Audio storage not configured", { status: 500 });
 
-  const upstreamUrl = `${base}/storage/v1/object/public/listening_audio/${filePath}`;
+  // ?v=<版本> 透传到上游：本路由的响应是一年 immutable 缓存，重配只能靠换 URL 失效；
+  // 上游 Supabase 对未知 query 不敏感，带上它顺便绕过存储侧 CDN 的旧副本。
+  let search = "";
+  try { search = new URL(request.url).search || ""; } catch { search = ""; }
+  const upstreamUrl = `${base}/storage/v1/object/public/listening_audio/${filePath}${search}`;
   const range = request.headers.get("range");
 
   let upstream;

@@ -26,7 +26,7 @@ import { loadEnv } from './ops/_shared.mjs';
 const require = createRequire(import.meta.url);
 const { renderSingleSpeaker, renderConversation } = require('../lib/tts/renderListening.js');
 const { encodeWavToMp3 } = require('../lib/tts/mp3Encode.js');
-const { uploadAudio } = require('../lib/tts/storage.js');
+const { uploadAudio, versionedAudioUrl } = require('../lib/tts/storage.js');
 const { estimateCost } = require('../lib/tts/openaiTts.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -58,7 +58,7 @@ const BANKS = [
 
 function load(p) { return JSON.parse(readFileSync(resolve(ROOT, p), 'utf8')); }
 function save(p, d) { writeFileSync(resolve(ROOT, p), JSON.stringify(d, null, 2) + '\n'); }
-const isRendered = (u) => typeof u === 'string' && u.endsWith('.p1.mp3');
+const isRendered = (u) => typeof u === 'string' && /\.p1\.mp3(\?|$)/.test(u);
 
 // Same safety valve as backfill-tts.mjs: a local-fallback URL means Supabase wasn't
 // configured — abort rather than write a .gitignored path that 404s in production.
@@ -134,7 +134,7 @@ async function withBackoff(fn, label) {
         const it = willDo[my];
         try {
           const url = await withBackoff(() => renderItem(bank, it), `${bank.type} ${it.id}`);
-          it.audio_url = url;
+          it.audio_url = versionedAudioUrl(url);
           totalRendered++; doneCount++;
         } catch (e) {
           console.log(`   ✗ ${it.id}: ${String(e.message).slice(0, 80)}`);
