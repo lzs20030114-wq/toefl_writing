@@ -66,24 +66,26 @@ _Q_TOKEN = re.compile(r"(?:^|_)q(\d+)(?=_|$)", re.I)
 
 
 def speak_unit(fn: str):
-    """口语音频文件名 → {kind: repeat|interview, n, set, setup}；认不出返回 None。
+    """口语音频文件名 → {kind: repeat|interview, n, q, set, setup}；认不出返回 None。
 
     `n` 是**全局题号**：没有 set 记号时就是裸题号（第一波逐字不变），
     有 set 记号时是 `set*100 + q`，保证同一套里多组复述/面试的题号不互相覆盖。
+    `q` 是**组内序号**：答案页那边分组也是按组内序号编的，对位时用它。
     """
     m = CANONICAL_REPEAT.match(fn)
     if m:
-        return {"kind": "repeat", "n": int(m.group(1)), "set": None, "setup": False}
+        return {"kind": "repeat", "n": int(m.group(1)), "q": int(m.group(1)), "set": None, "setup": False}
     m = CANONICAL_INTERVIEW.match(fn)
     if m:
-        return {"kind": "interview", "n": int(m.group(1)), "set": None, "setup": False}
+        return {"kind": "interview", "n": int(m.group(1)), "q": int(m.group(1)), "set": None, "setup": False}
     m = _POOL_SPEAK.match(fn)
     if m:
         kind = "repeat" if m.group(1).upper() == "R" else "interview"
         s = int(m.group(2))
         if m.group(3).lower() == "setup":
-            return {"kind": kind, "n": s * 100, "set": s, "setup": True}
-        return {"kind": kind, "n": s * 100 + int(m.group(4)), "set": s, "setup": False}
+            return {"kind": kind, "n": s * 100, "q": 0, "set": s, "setup": True}
+        return {"kind": kind, "n": s * 100 + int(m.group(4)), "q": int(m.group(4)),
+                "set": s, "setup": False}
     low = fn.lower()
     if not low.startswith("speaking") or not low.endswith(".mp3"):
         return None
@@ -100,7 +102,42 @@ def speak_unit(fn: str):
     qs = _Q_TOKEN.findall(base)
     if not qs:
         if setup and s:
-            return {"kind": kind, "n": s * 100, "set": s, "setup": True}
+            return {"kind": kind, "n": s * 100, "q": 0, "set": s, "setup": True}
         return None
     q = int(qs[-1])
-    return {"kind": kind, "n": (s * 100 + q) if s else q, "set": s, "setup": setup}
+    return {"kind": kind, "n": (s * 100 + q) if s else q, "q": q, "set": s, "setup": setup}
+
+
+def align_speaking_groups(units, groups):
+    """音频单元 ↔ 答案页分组对位。返回 (｛n: 内容｝, ｛n: 候选列表｝)。
+
+    三级：① 文件名带组号（`_s01_q03` / `S-R02_q3`）就按组号 + 题号直取；
+    ② 只有一组（第一波）按题号直取；③ 都不成但「文档条数 == 音频条数」就按顺序对位
+    （7.04/7.18 这类「文档分组、音频却是拉通编号」的排法）。
+    仍对不上的给出「同一组内序号相同」的候选，交给 merge 用 ASR 逐句裁决。
+    """
+    # 走过 JSON 的分组（merge 从 structured.json 读回来）题号会变成字符串
+    groups = [{"set": g.get("set"),
+               "map": dict((int(k), v) for k, v in (g.get("map") or {}).items())}
+              for g in groups]
+    byset: dict = {}
+    for i, g in enumerate(groups, 1):
+        byset[g["set"] if g["set"] is not None else i] = g["map"]
+    flat = [g["map"][q] for g in groups for q in sorted(g["map"])]
+    res: dict = {}
+    for u in units:
+        v = None
+        if u["set"] is not None:
+            v = byset.get(u["set"], {}).get(u["q"])
+        elif len(groups) == 1:
+            v = groups[0]["map"].get(u["q"])
+        res[u["n"]] = v
+    if any(res[u["n"]] is None for u in units) and len(flat) == len(units) and flat:
+        for u, v in zip(units, flat):
+            res[u["n"]] = v
+        return res, {u["n"]: [] for u in units}
+    cands = {}
+    for u in units:
+        cands[u["n"]] = ([] if res[u["n"]] is not None
+                         else [g["map"][u["q"]] for g in groups if u["q"] in g["map"]])
+    return res, cands

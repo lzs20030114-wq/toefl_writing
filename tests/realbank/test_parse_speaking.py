@@ -23,6 +23,7 @@ _spec = importlib.util.spec_from_file_location(
 PR = importlib.util.module_from_spec(_spec)
 sys.modules["parse_reformatted"] = PR
 _spec.loader.exec_module(PR)
+A = PR.audio_names          # 分组对位在 audio_names（merge 那边也要用同一份）
 
 
 def zones(lines):
@@ -143,6 +144,101 @@ class TestInterviewZone(unittest.TestCase):
         ])
         self.assertEqual(sorted(ak.interview_answer), [4])
         self.assertIn("With convenient services", ak.interview_answer[4])
+
+
+class TestSpeakingGroups(unittest.TestCase):
+    """题池：一块 `Listen and Repeat` 底下并排 3~6 组，每组题号都从 Q1 重数。"""
+
+    def test_groups_split_on_question_number_restart(self):
+        """7.04 形态：`Task 1.x` 分组、组内 1..7。旧版把 5 组的 Q1 粘成一句。"""
+        ak = zones(["Listen and Repeat",
+                    "Task 1.1: Course Selection",
+                    "1. Enter your name and student ID number.",
+                    "2. Browse the course catalog to choose your classes.",
+                    "Task 1.2: Woodworking Steps",
+                    "1. Measure carefully to avoid mistakes.",
+                    "2. Draw a line with a pencil before cutting."])
+        self.assertEqual([g["set"] for g in ak.repeat_groups], [1, 2])
+        self.assertEqual(ak.repeat_groups[0]["map"][1], "Enter your name and student ID number.")
+        self.assertEqual(ak.repeat_groups[1]["map"][1], "Measure carefully to avoid mistakes.")
+        # 拍平字段不许再把两组的 Q1 粘一起
+        self.assertEqual(ak.repeat[101], "Enter your name and student ID number.")
+        self.assertEqual(ak.repeat[201], "Measure carefully to avoid mistakes.")
+
+    def test_form_letter_groups_and_letter_numbered_items(self):
+        """8.19 / 8.12 形态：`Form B | 标题` 分组，题号写成 `B1.`。"""
+        ak = zones(["Listen and Repeat",
+                    "Form A | Campus Coffee Shop",
+                    "A1. We serve coffee and tea at the main counter.",
+                    "A2. Our pastries are all made fresh daily.",
+                    "Form B | Library Facilities",
+                    "B1. The computer lab has free Wi-Fi access.",
+                    "B2. The reading room is a quiet space for patrons."])
+        self.assertEqual([g["set"] for g in ak.repeat_groups], [1, 2])
+        self.assertEqual(ak.repeat_groups[1]["map"][2], "The reading room is a quiet space for patrons.")
+
+    def test_explicit_set_number_beats_document_order(self):
+        """7.25 / 7.29 形态：文档顺序是 39→22，音频却是 set22→set39，只能认显式组号。"""
+        ak = zones(["Listen and Repeat",
+                    "University Career Fair",
+                    "TOEFL Real Practice Set 39 · Module 1 · Questions 1-7",
+                    "Q1. Visit employers to learn about jobs.",
+                    "University Cultural Festival",
+                    "TOEFL Real Practice Set 22 · Module 1 · Questions 1-7",
+                    "Q1. Dance acts are featured throughout the day."])
+        self.assertEqual([g["set"] for g in ak.repeat_groups], [39, 22])
+        units = [{"n": 2201, "set": 22, "q": 1}, {"n": 3901, "set": 39, "q": 1}]
+        res, _ = A.align_speaking_groups(units, ak.repeat_groups)
+        self.assertEqual(res[2201], "Dance acts are featured throughout the day.")
+        self.assertEqual(res[3901], "Visit employers to learn about jobs.")
+
+    def test_group_title_line_does_not_glue_onto_previous_sentence(self):
+        """组与组之间的标题行不许被当成上一句的续行接上去。"""
+        ak = zones(["Listen and Repeat",
+                    "TOEFL Real Practice Set 39 · Module 1 · Questions 1-7",
+                    "Q1. Visit employers to learn about jobs.",
+                    "Assist Visitors at the Museum",
+                    "TOEFL Real Practice Set 31 · Module 1 · Questions 1-7",
+                    "Q1. Ancient artifacts are in the first section."])
+        self.assertEqual(ak.repeat_groups[0]["map"][1], "Visit employers to learn about jobs.")
+
+    def test_flat_audio_numbering_falls_back_to_positional(self):
+        """7.04 / 7.18：文档分组，音频却是拉通编号 q01..q14 —— 条数相等就按顺序对位。"""
+        ak = zones(["Listen and Repeat",
+                    "Task 1.1: A", "1. First sentence here.", "2. Second sentence here.",
+                    "Task 1.2: B", "1. Third sentence here.", "2. Fourth sentence here."])
+        units = [{"n": i, "set": None, "q": i} for i in (1, 2, 3, 4)]
+        res, cands = A.align_speaking_groups(units, ak.repeat_groups)
+        self.assertEqual([res[i] for i in (1, 2, 3, 4)],
+                         ["First sentence here.", "Second sentence here.",
+                          "Third sentence here.", "Fourth sentence here."])
+        self.assertEqual(cands[1], [])
+
+    def test_unresolvable_grouping_yields_candidates(self):
+        """8.12：答案页 3 组、音频只摘了 1 组且是裸编号 —— 不许瞎猜，给候选交给 ASR 裁决。"""
+        ak = zones(["Listen and Repeat",
+                    "Form A | A", "A1. Alpha sentence one.",
+                    "Form B | B", "B1. Bravo sentence one.",
+                    "Form C | C", "C1. Charlie sentence one."])
+        res, cands = A.align_speaking_groups([{"n": 1, "set": None, "q": 1}], ak.repeat_groups)
+        self.assertIsNone(res[1])
+        self.assertEqual(cands[1],
+                         ["Alpha sentence one.", "Bravo sentence one.", "Charlie sentence one."])
+
+    def test_interview_groups_keep_stem_and_answer_together(self):
+        ak = zones(["Take an Interview",
+                    "Historical Awareness",
+                    "Q1. What is one aspect of history that you find particularly interesting?",
+                    "I find everyday social history especially interesting because it shows how "
+                    "ordinary people lived, worked, and made decisions every single day.",
+                    "Renewable Energy Sources",
+                    "Q1. How important is renewable energy to you personally, and why?",
+                    "Renewable energy matters to me because it affects both the environment and "
+                    "the everyday health of the people living in my city."])
+        self.assertEqual(len(ak.interview_groups), 2)
+        self.assertTrue(ak.interview_groups[1]["map"][1]["stem"].startswith("How important"))
+        self.assertTrue(ak.interview_groups[1]["map"][1]["reference_answer"]
+                        .startswith("Renewable energy matters"))
 
 
 class TestParseSpeakingDocx(unittest.TestCase):

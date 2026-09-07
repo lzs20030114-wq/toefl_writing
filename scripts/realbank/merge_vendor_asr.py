@@ -709,19 +709,63 @@ def build_speaking(setkey, structured, asr, audio, stats):
         for fn in audio:
             u = audio_names.speak_unit(fn)
             if u and u["kind"] == kind and not u["setup"]:
-                got.append((u["n"], fn))
-        return [x[1] for x in sorted(got)], dict((fn, n) for n, fn in got)
+                got.append((u["n"], fn, u))
+        got.sort(key=lambda x: x[0])
+        files = [x[1] for x in got]
+        nmap = dict((x[1], x[0]) for x in got)
+        units = [{"n": x[0], "set": x[2].get("set"), "q": x[2].get("q", x[0])} for x in got]
+        return files, nmap, units
 
-    rep_files, rep_n = _speak_files("repeat")
+    def _doc_groups(kind):
+        """答案页分组：解析器写在 structured.speaking_key 里。
+
+        merge 是照着音频目录重建口语组的，而题池的 Speaking.docx 常只写了其中一两组的
+        `Audio:` 行 —— 解析器那边的 items 覆盖不全，得直接拿答案页分组重对一遍。
+        """
+        return (structured.get("speaking_key") or {}).get(kind) or []
+
+    def _pick(cands, asr_text, cur_text, get):
+        """候选里挑与 ASR 最像的一条（≥SIM_MIN 且比当前这条更像才算数）。
+
+        `cur_text` 是**已经取出来的文本**，不是候选对象 —— 面试的候选是
+        {stem, reference_answer} 字典而当前值是字符串，混着传会 AttributeError。
+        """
+        best, bs = None, -1.0
+        for c in cands:
+            txt = get(c)
+            if not txt:
+                continue
+            v = sim(txt, asr_text)
+            if v > bs:
+                best, bs = c, v
+        if best is not None and bs >= SIM_MIN and bs > (sim(cur_text, asr_text) if cur_text else -1):
+            return best, round(bs, 3)
+        return None, None
+
+    rep_files, rep_n, rep_units = _speak_files("repeat")
+    rep_res, rep_cands = audio_names.align_speaking_groups(rep_units, _doc_groups("repeat"))
     if rep_files:
         items, problems = [], []
         for fn in rep_files:
             n = rep_n[fn]
             a = asr.get(fn)
             asr_text = (a or {}).get("text", "").strip()
-            doc = (sp["repeat"].get(n) or {}).get("sentence", "").strip()
+            parsed = sp["repeat"].get(n) or {}
+            doc = (parsed.get("sentence") or "").strip()
             ip = []
             usable = True
+            if not doc:
+                doc = (rep_res.get(n) or "").strip()
+                if doc:
+                    ip.append("sentence_from_answer_key")
+            # 组号对不上又数不平时（8.12：答案页 3 组、音频只摘了 1 组）拿同序号的候选句
+            # 逐条比 ASR，>=0.6 才认；对不上的**单句** hold，不牵连同组其它句。
+            cands = list(parsed.get("sentence_candidates") or rep_cands.get(n) or [])
+            if cands and asr_text and (not doc or sim(doc, asr_text) < SIM_MIN):
+                got, gs = _pick(cands, asr_text, doc, lambda c: c)
+                if got:
+                    doc = got.strip()
+                    ip.append("sentence_from_candidates:sim=%.3f" % gs)
             if doc and asr_text:
                 s = round(sim(doc, asr_text), 3)
                 if s < SIM_MIN:
@@ -763,18 +807,34 @@ def build_speaking(setkey, structured, asr, audio, stats):
         stats["repeat_sets"] += 1
         stats["repeat_sentences"] += len(items)
 
-    iv_files, iv_n = _speak_files("interview")
+    iv_files, iv_n, iv_units = _speak_files("interview")
+    iv_res, iv_cands = audio_names.align_speaking_groups(iv_units, _doc_groups("interview"))
     if iv_files:
         items, problems = [], []
         for fn in iv_files:
             n = iv_n[fn]
             a = asr.get(fn)
             asr_stem = interview_stem_from_asr(a)
-            doc_raw = (sp["interview"].get(n) or {}).get("stem", "").strip()
+            parsed = sp["interview"].get(n) or {}
+            doc_raw = (parsed.get("stem") or "").strip()
+            ref = (parsed.get("reference_answer") or "").strip()
+            ip = []
+            if not doc_raw:
+                v = iv_res.get(n) or {}
+                doc_raw = (v.get("stem") or "").strip()
+                ref = ref or (v.get("reference_answer") or "").strip()
+                if doc_raw:
+                    ip.append("stem_from_answer_key")
+            cands = list(parsed.get("stem_candidates") or iv_cands.get(n) or [])
+            if cands and asr_stem and (not doc_raw or sim(doc_raw, asr_stem) < SIM_MIN):
+                got, gs = _pick(cands, asr_stem, doc_raw, lambda c: c.get("stem"))
+                if got:
+                    doc_raw = (got.get("stem") or "").strip()
+                    ref = (got.get("reference_answer") or "").strip() or ref
+                    ip.append("stem_from_candidates:sim=%.3f" % gs)
             # "Response: ______" 这类占位符不是题干
             doc = "" if (not doc_raw or re.match(r"^response\s*[:：]?\s*_*$", doc_raw, re.I)
                          or nwords(doc_raw) < 8) else doc_raw
-            ip = []
             usable = True
             if doc and asr_stem:
                 s = round(sim(doc, asr_stem), 3)
@@ -799,7 +859,7 @@ def build_speaking(setkey, structured, asr, audio, stats):
             items.append({"n": n, "q_number": n,
                           "audio_path": "audio/item_level/%s" % getattr(audio, "rel", {}).get(fn, fn),
                           "stem": doc, "stem_final": text, "transcript_final": text, "usable": usable,
-                          "reference_answer": (sp["interview"].get(n) or {}).get("reference_answer", ""),
+                          "reference_answer": ref,
                           "asr_similarity": s, "problems": ip})
         bad = [it for it in items if not it["usable"]]
         if bad:

@@ -389,5 +389,85 @@ class SpeakingDocFirstTest(unittest.TestCase):
         self.assertIn("no_stem_in_doc", r["items"][0]["problems"])
 
 
+class SpeakingGroupAlignTest(unittest.TestCase):
+    """题池：答案页并排放 3~6 组，Speaking.docx 只写了其中一组的 `Audio:` 行。
+
+    merge 是照音频目录重建口语组的，所以得直接吃解析器写在 `speaking_key` 里的分组：
+    组号对得上就直取，对不上就拿同序号的候选句逐条比 ASR（>=0.6 才认）。
+    """
+
+    KEY = {"repeat": [
+        {"set": 1, "map": {"1": "The Women's Clothing Section is this way.",
+                           "2": "Our accessories are on display near the entrance."}},
+        {"set": 2, "map": {"1": "You can buy tickets at the entrance.",
+                           "2": "The Rose Garden is beautiful this season."}},
+    ]}
+
+    def _run(self, files, asr_texts, key=None):
+        structured = {"results": [], "speaking_key": key if key is not None else self.KEY}
+        asr = dict((f, {"text": t, "segments": _segs(t)}) for f, t in zip(files, asr_texts))
+        audio = dict((f, "x.mp3") for f in files)
+        stats = {"repeat_sets": 0, "repeat_sentences": 0,
+                 "interview_sets": 0, "interview_questions": 0}
+        res = mva.build_speaking("rp9999", structured, asr, audio, stats)
+        return [r for r in res if r["type"] == "repeat"][0]["items"]
+
+    def test_set_numbered_filenames_take_their_own_group(self):
+        """`S-R02_q1.mp3` 只能拿第 2 组的第 1 句，不许串到第 1 组。"""
+        its = self._run(["S-R02_q1.mp3"], ["You can buy tickets at the entrance."])
+        self.assertEqual(its[0]["sentence_final"], "You can buy tickets at the entrance.")
+        self.assertTrue(its[0]["usable"])
+        self.assertIn("sentence_from_answer_key", its[0]["problems"])
+
+    def test_flat_filenames_pick_the_candidate_the_audio_actually_says(self):
+        """裸编号 `_q01`：两组都有 Q1，只能靠 ASR 裁决 —— 挑对的那条，不许瞎猜。"""
+        its = self._run(["speaking_listen_repeat_q01.mp3"],
+                        ["You can buy tickets at the entrance."])
+        self.assertEqual(its[0]["sentence_final"], "You can buy tickets at the entrance.")
+        self.assertTrue(its[0]["usable"])
+        self.assertTrue(any(p.startswith("sentence_from_candidates") for p in its[0]["problems"]),
+                        its[0]["problems"])
+
+    def test_candidate_that_matches_nothing_is_held_not_guessed(self):
+        its = self._run(["speaking_listen_repeat_q01.mp3"],
+                        ["Completely different audio about repairing a bicycle tire."])
+        self.assertFalse(its[0]["usable"])
+        self.assertEqual(its[0]["sentence_final"], "")
+        self.assertIn("no_sentence_in_doc", its[0]["problems"])
+
+    def test_one_bad_sentence_does_not_sink_the_whole_group(self):
+        """对不上的是**单句** hold；同组其它句照收（validator 认 5 句起）。"""
+        key = {"repeat": [{"set": 1, "map": dict((str(i), "Sentence number %s here now." % i)
+                                                 for i in range(1, 8))}]}
+        files = ["S-R01_q%d.mp3" % i for i in range(1, 8)]
+        texts = ["Sentence number %d here now." % i for i in range(1, 7)] + ["Totally unrelated words."]
+        its = self._run(files, texts, key)
+        self.assertEqual(sum(1 for i in its if i["usable"]), 6)
+        self.assertFalse(its[-1]["usable"])
+
+    def test_interview_candidate_pick_does_not_crash_on_existing_stem(self):
+        """当前题干是字符串、候选是 {stem, reference_answer} 字典 —— 两者不许混着比。"""
+        key = {"interview": [
+            {"set": 1, "map": {"1": {"stem": "How often do you take the bus to campus each week?",
+                                     "reference_answer": "I take the bus about four times a week."}}},
+            {"set": 2, "map": {"1": {"stem": "What kinds of books do you usually read for fun?",
+                                     "reference_answer": "I mostly read science fiction novels."}}},
+        ]}
+        text = "What kinds of books do you usually read for fun? Give details to explain."
+        structured = {"speaking_key": key, "results": [{
+            "section": "speaking", "type": "interview", "context": "",
+            "items": [{"n": 1, "stem": "Completely unrelated placeholder question about baking bread?"}],
+        }]}
+        asr = {"speaking_take_interview_q01.mp3": {"text": text, "segments": _segs(text)}}
+        audio = {"speaking_take_interview_q01.mp3": "x.mp3"}
+        stats = {"repeat_sets": 0, "repeat_sentences": 0,
+                 "interview_sets": 0, "interview_questions": 0}
+        it = [r for r in mva.build_speaking("rp9999", structured, asr, audio, stats)
+              if r["type"] == "interview"][0]["items"][0]
+        self.assertTrue(it["stem_final"].startswith("What kinds of books"))
+        self.assertEqual(it["reference_answer"], "I mostly read science fiction novels.")
+
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

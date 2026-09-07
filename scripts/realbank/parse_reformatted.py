@@ -346,6 +346,11 @@ class AnswerKey:
         self.interview: dict[int, str] = {}    # 兼容字段 = interview_answer
         self.interview_stem: dict[int, str] = {}     # 面试题号 → 题干（问句）
         self.interview_answer: dict[int, str] = {}   # 面试题号 → 参考答案
+        # 题池的口语一块里常并排放 3~6 组（Set / Form / Task n.m），每组题号都从 1 重数。
+        # 拍平成一个字典必然互相覆盖（7.04 实测把 5 组的 Q1 粘成一句），所以另外留分组视图，
+        # 由 parse_speaking 按音频文件名里的组号（或位置）对位。
+        self.repeat_groups: list[dict] = []      # [{set: int|None, map: {q: 句子}}]
+        self.interview_groups: list[dict] = []   # [{set: int|None, map: {q: {stem, reference_answer}}}]
         self.transcripts: list[dict] = []
         self.problems: list[str] = []
         self.raw_lines: list[str] = []
@@ -490,77 +495,191 @@ def _is_question_line(t: str) -> bool:
     return "?" in t and nwords(t) <= 70
 
 
-def parse_speaking_zones(lines: list, ak: AnswerKey) -> None:
-    """答案页里的口语两块 → ak.repeat / ak.interview_stem / ak.interview_answer。"""
-    zone = None
-    blocks: dict = {"repeat": {}, "interview": {}}   # zone → {n: [chunk, ...]}
-    cur_n = None
+# 题池里一块 `Listen and Repeat` 底下常并排放 3~6 组，每组题号都从 Q1 重数：
+#   `Task 1.2: Woodworking Steps`（7.04）/ `Listen and Repeat Set 2: Sew on a Button`（7.05/7.11/7.18）
+#   `Form B | Botanical Garden`（8.12/8.19/8.30）/ 标题行 + `TOEFL Real Practice Set 28 · …`（7.25/7.29）
+# 组号靠这三条认；认不出就用出现顺序当组号。
+_G_FORM = re.compile(r"^Form\s+([A-H])\b", re.I)
+_G_TASK = re.compile(r"^Task\s+\d+\s*[.．]\s*(\d+)\b", re.I)
+_G_SET = re.compile(r"(?<![A-Za-z])Set\s*[:：]?\s*(\d+)\b")
+# `A1.` / `B7.` 这种「组字母 + 题号」只在本组字母对得上时才认，免得把正文里的
+# "A 1" 之类误当题号（8.12/8.19 的答案页里 Form A 用裸 `1.`、Form B 起才带字母）。
+_Q_LEAD_LETTER = re.compile(r"^([A-H])\s*(\d+)\s*[.:：、)]\s*(.*)$", re.S)
 
-    def add(kind: str, n: int, text: str):
+
+def _group_marker(t: str):
+    """非题号行 → (组字母 or None, 组号 or None)；不像组标题返回 None。"""
+    m = _G_FORM.match(t)
+    if m:
+        return (m.group(1).upper(), ord(m.group(1).upper()) - 64)
+    m = _G_TASK.match(t)
+    if m:
+        return (None, int(m.group(1)))
+    # `Set 28` 只在短行里认：正文句子里的 "set 3 alarms" 不该把一组劈成两半。
+    if nwords(t) <= 14:
+        m = _G_SET.search(t)
+        if m:
+            return (None, int(m.group(1)))
+    return None
+
+
+def _is_title_line(zone: str, state: dict, t: str) -> bool:
+    """这行是「组标题 / 页眉噪声」而不是上一题的续行？
+
+    题池把 3~6 组并排放，组与组之间夹着 `Assist Visitors at the Museum`、
+    `July 29 Recall · 14` 这类短行。当成续行接上去，上一组最后一句就废了。
+    复述块判得更狠：复述句就是**一句**，上一句已经以句末标点收尾就不该再接。
+    """
+    g = state.get("g")
+    if not g or state.get("n") not in (g or {}).get("chunks", {}):
+        return False
+    prev = " ".join(g["chunks"][state["n"]]).strip()
+    tail_done = bool(prev) and prev[-1] in ".!?"
+    if zone == "repeat":
+        return tail_done
+    # 面试块：参考答案本来就跨行跨页，只挡「短 + 不带句末标点 + 大写开头」的标题行
+    return bool(t) and tail_done and nwords(t) <= 8 and t[:1].isupper() and t[-1] not in ".!?"
+
+
+def parse_speaking_zones(lines: list, ak: AnswerKey) -> None:
+    """答案页里的口语两块 → ak.repeat_groups / ak.interview_groups（+ 拍平的兼容字段）。
+
+    分组边界**不**靠标题行判——题池的答案页里混着 `July 29 Recall · 14` 这种页眉噪声，
+    按标题切会把一组劈碎。判据是「题号回到 Q1 且本组已经有过 Q1」，外加「刚见过组标记」；
+    组号取上一条组标记（Set / Form 字母 / Task n.m），认不出就用出现顺序。
+    单组的套（第一波全部）走下来只有一组，拍平结果与旧版逐字一致。
+    """
+    zone = None
+    zones: dict = {"repeat": [], "interview": []}
+    state = {"g": None, "set": None, "letter": None, "n": None}
+
+    def open_group():
+        g = {"set": state["set"], "chunks": {}, "order": []}
+        zones[zone].append(g)
+        state["g"] = g
+        state["set"] = None
+
+    def add(n: int, text: str):
         text = text.strip()
-        if not text:
+        g = state["g"]
+        if not text or g is None:
             return
-        blocks[kind].setdefault(n, []).append(text)
+        if n not in g["chunks"]:
+            g["chunks"][n] = []
+            g["order"].append(n)
+        g["chunks"][n].append(text)
+
+    def start_item(q: int, text: str):
+        # 只认「回到 Q1」这一个回落信号：双栏表格是列优先排的（Q1 Q5 Q4 Q8），
+        # 按「q <= 上一题」切会把一张表劈成三组（6.29 / 7.08 实测）。
+        restart = q == 1 and state["g"] is not None and 1 in state["g"]["chunks"]
+        if state["g"] is None or state["set"] is not None or restart:
+            open_group()
+        state["n"] = q
+        add(q, text)
 
     for raw in lines:
-        t = re.sub(r"[ 	]+", " ", str(raw or "")).strip()
+        t = re.sub(r"[ \t]+", " ", str(raw or "")).strip()
         if not t:
             continue
         mz = SPEAK_ZONE_REPEAT.match(t) or SPEAK_ZONE_INTERVIEW.match(t)
         if mz:
-            zone = "repeat" if SPEAK_ZONE_REPEAT.match(t) else "interview"
+            z = "repeat" if SPEAK_ZONE_REPEAT.match(t) else "interview"
+            if z != zone:
+                # 换块才清空；同一块里表头重复出现（`Take an Interview Q3 - Sample
+                # Response` 一题一个表头）不是换组信号。
+                zone = z
+                state.update(g=None, set=None, letter=None, n=None)
             rest = t[mz.end():].strip(" :：-–—")
+            gm = _group_marker(rest) if rest else None
+            if gm:
+                state["letter"], state["set"] = gm
             # `Take an Interview Q3 - Sample Response`：表头自带题号，后面那段答案属于它
             solo = re.findall(r"Q\s*(\d+)", rest)
             rng = re.match(r"^Q?\s*\d+\s*-\s*Q?\s*\d+", rest)
-            cur_n = int(solo[0]) if (solo and not rng) else None
+            if solo and not rng:
+                start_item(int(solo[0]), "")
             continue
         if zone is None:
             continue
         if _LEAVE_SPEAKING.match(t) or SECTION_HEAD.match(t):
             zone = None
-            cur_n = None
+            state.update(g=None, n=None)
             continue
         if _BLANK_LINE.match(t):
             continue
         if "|" in t:
+            gm = _group_marker(t.split("|")[0].strip())
+            if gm:
+                state["letter"], state["set"] = gm
+                continue
             pairs = _row_pairs(t)
             if pairs:
                 for n, v in pairs:
                     if n is None:
-                        if cur_n is not None:
-                            add(zone, cur_n, v)
+                        if state["n"] is not None:
+                            add(state["n"], v)
                         continue
-                    cur_n = n
-                    add(zone, n, v)
+                    start_item(n, v)
                 continue
+        ml = _Q_LEAD_LETTER.match(t)
+        if ml and state["letter"] and ml.group(1).upper() == state["letter"]:
+            start_item(int(ml.group(2)), ml.group(3))
+            continue
+        gm = _group_marker(t)
+        if gm and not _Q_LEAD.match(t):
+            state["letter"], state["set"] = gm
+            continue
         for chunk in _Q_SPLIT.split(t):
             chunk = chunk.strip()
             if not chunk or _BLANK_LINE.match(chunk):
                 continue
             m = _Q_LEAD.match(chunk)
             if m:
-                cur_n = int(m.group(1))
-                add(zone, cur_n, m.group(2))
-            elif cur_n is not None:
-                add(zone, cur_n, chunk)                 # 跨行续写（长句/参考答案换行）
+                start_item(int(m.group(1)), m.group(2))
+            elif state["n"] is not None and not _is_title_line(zone, state, chunk):
+                add(state["n"], chunk)              # 跨行续写（长句/参考答案换行）
 
-    for n, chunks in blocks["repeat"].items():
-        sent = " ".join(chunks).strip()
-        if nwords(sent) >= 3:
-            ak.repeat[n] = sent
-    for n, chunks in blocks["interview"].items():
-        chunks = [_SAMPLE_LEAD.sub("", c).strip() for c in chunks]
-        chunks = [c for c in chunks if c]
-        if not chunks:
-            continue
-        if _is_question_line(chunks[0]):
-            ak.interview_stem[n] = chunks[0]
-            rest = " ".join(chunks[1:]).strip()
-        else:
-            rest = " ".join(chunks).strip()
-        if nwords(rest) >= 8:
-            ak.interview_answer[n] = rest
+    for g in zones["repeat"]:
+        m: dict = {}
+        for n in g["order"]:
+            sent = " ".join(g["chunks"][n]).strip()
+            if nwords(sent) >= 3:
+                m[n] = sent
+        if m:
+            ak.repeat_groups.append({"set": g["set"], "map": m})
+    for g in zones["interview"]:
+        m = {}
+        for n in g["order"]:
+            chunks = [_SAMPLE_LEAD.sub("", c).strip() for c in g["chunks"][n]]
+            chunks = [c for c in chunks if c]
+            if not chunks:
+                continue
+            stem = ""
+            if _is_question_line(chunks[0]):
+                stem = chunks[0]
+                rest = " ".join(chunks[1:]).strip()
+            else:
+                rest = " ".join(chunks).strip()
+            ans = rest if nwords(rest) >= 8 else ""
+            if stem or ans:
+                m[n] = {"stem": stem, "reference_answer": ans}
+        if m:
+            ak.interview_groups.append({"set": g["set"], "map": m})
+
+    # 拍平的兼容字段：单组时就是原来的 {题号: 内容}（第一波逐字不变），
+    # 多组时用 `组号*100 + 题号` 做全局题号，与 audio_names.speak_unit 的口径一致。
+    for i, g in enumerate(ak.repeat_groups, 1):
+        base = 0 if len(ak.repeat_groups) == 1 else (g["set"] if g["set"] is not None else i) * 100
+        for q, v in g["map"].items():
+            ak.repeat[base + q] = v
+    for i, g in enumerate(ak.interview_groups, 1):
+        base = 0 if len(ak.interview_groups) == 1 else (g["set"] if g["set"] is not None else i) * 100
+        for q, v in g["map"].items():
+            if v["stem"]:
+                ak.interview_stem[base + q] = v["stem"]
+            if v["reference_answer"]:
+                ak.interview_answer[base + q] = v["reference_answer"]
     ak.interview = dict(ak.interview_answer)
 
 
@@ -1663,12 +1782,14 @@ def parse_speaking(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
             n = unit["n"]
             if zone == "repeat" and not any(i["n"] == n for i in repeat_items):
                 repeat_items.append({"n": n, "audio_path": cur_audio,
-                                     "sentence": ak.repeat.get(n, ""), "q_number": n})
+                                     "sentence": ak.repeat.get(n, ""), "q_number": n,
+                                     "_set": unit.get("set"), "_q": unit.get("q", n)})
             if zone == "interview" and not any(i["n"] == n for i in interview_items):
                 interview_items.append({"n": n, "audio_path": cur_audio,
                                         "stem": ak.interview_stem.get(n, ""),
                                         "reference_answer": ak.interview_answer.get(n, ""),
-                                        "q_number": n})
+                                        "q_number": n,
+                                        "_set": unit.get("set"), "_q": unit.get("q", n)})
             continue
         if _BLANK_LINE.match(t):                # `Response: ______` 是留白，不是内容
             continue
@@ -1691,6 +1812,34 @@ def parse_speaking(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
     out = []
     repeat_items.sort(key=lambda i: i["n"])
     interview_items.sort(key=lambda i: i["n"])
+    # 分组对位：题池的答案页把 3~6 组并排放，音频那边有时带组号（`_s01_q03`）、
+    # 有时是拉通编号（`_q01`~`_q35`）。上面按拍平题号直取只覆盖前者，剩下的在这里补。
+    if repeat_items:
+        res, cands = audio_names.align_speaking_groups(
+            [{"n": i["n"], "set": i["_set"], "q": i["_q"]} for i in repeat_items],
+            ak.repeat_groups)
+        for it in repeat_items:
+            if not it["sentence"] and res.get(it["n"]):
+                it["sentence"] = res[it["n"]]
+            if not it["sentence"] and cands.get(it["n"]):
+                # 组号对不上又数不平（8.12：文档 5 组、音频只摘了 1 组）——把同序号的
+                # 候选句全带上，由 merge 拿 ASR 逐句裁决，别在这里瞎猜一句就落库。
+                it["sentence_candidates"] = cands[it["n"]]
+    if interview_items:
+        res, cands = audio_names.align_speaking_groups(
+            [{"n": i["n"], "set": i["_set"], "q": i["_q"]} for i in interview_items],
+            ak.interview_groups)
+        for it in interview_items:
+            v = res.get(it["n"]) or {}
+            if not it["stem"] and v.get("stem"):
+                it["stem"] = v["stem"]
+            if not it["reference_answer"] and v.get("reference_answer"):
+                it["reference_answer"] = v["reference_answer"]
+            if not it["stem"] and cands.get(it["n"]):
+                it["stem_candidates"] = [c for c in cands[it["n"]] if c.get("stem")]
+    for it in repeat_items + interview_items:
+        it.pop("_set", None)
+        it.pop("_q", None)
     if repeat_items:
         missing = [i["n"] for i in repeat_items if not i["sentence"]]
         out.append({"key": "speaking|1|repeat|1", "section": "speaking", "module": 1, "type": "repeat",
@@ -1756,7 +1905,11 @@ def parse_set(folder: str, pool: bool = False) -> dict:
     tally: dict[str, int] = {}
     for r in results:
         tally[r["status"]] = tally.get(r["status"], 0) + 1
-    return {"set": setkey, "model": PARSER_ID, "source_dir": folder, "tally": tally, "results": results}
+    # merge_vendor_asr 是照着音频目录重建口语组的（Speaking.docx 里常只写了其中一组的
+    # `Audio:` 行），拿不到解析器内部的 AnswerKey —— 所以把答案页的分组一起写进产物。
+    return {"set": setkey, "model": PARSER_ID, "source_dir": folder, "tally": tally,
+            "speaking_key": {"repeat": ak.repeat_groups, "interview": ak.interview_groups},
+            "results": results}
 
 
 def write_scan_stub(folder: str, setkey: str, out_dir: str = None) -> str:

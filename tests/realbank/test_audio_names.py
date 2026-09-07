@@ -51,9 +51,15 @@ class TestListenNames(unittest.TestCase):
 class TestSpeakNames(unittest.TestCase):
     def test_wave1_canonical_unchanged(self):
         self.assertEqual(A.speak_unit("speaking_listen_repeat_q03.mp3"),
-                         {"kind": "repeat", "n": 3, "set": None, "setup": False})
+                         {"kind": "repeat", "n": 3, "q": 3, "set": None, "setup": False})
         self.assertEqual(A.speak_unit("speaking_take_interview_q01.mp3"),
-                         {"kind": "interview", "n": 1, "set": None, "setup": False})
+                         {"kind": "interview", "n": 1, "q": 1, "set": None, "setup": False})
+
+    def test_group_local_index(self):
+        """`q` 是组内序号：答案页那边分组也按组内序号编，对位靠它。"""
+        self.assertEqual(A.speak_unit("S-R02_q3.mp3")["q"], 3)
+        self.assertEqual(A.speak_unit("speaking_repeat_form03_q07.mp3")["q"], 7)
+        self.assertEqual(A.speak_unit("speaking_listen_repeat_q35.mp3")["q"], 35)
 
     def test_set_tokens_give_global_numbers(self):
         for fn in ("speaking_listen_repeat_s01_q03.mp3",
