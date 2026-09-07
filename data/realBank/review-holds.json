@@ -1,0 +1,1975 @@
+{
+  "_generated": "2026-09-07",
+  "_purpose": "真题成品复核结论（独立盲解 952 题 + 结构体检）。scripts/realbank/apply_review.mjs 读它：patches 先修文本，holds 再下架；build_bank 落库末尾自动应用。清单按成品 id 记，删条目 = 放行。",
+  "_report": "data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md",
+  "_scopes": {
+    "unit": "整条下架",
+    "question": "只扣 questions[q]（stem 前缀核对，防错位）",
+    "sentence": "只扣复述套里的一句 sentences[].id",
+    "iq": "只扣面试套里的一题 questions[].id"
+  },
+  "holds": [
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0725_1_101",
+      "scope": "unit",
+      "reason": "材料串入无关的「FILL IN THE MISSING LETTERS」练习（词被挖残），段落编号全错"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0725_2_201",
+      "scope": "unit",
+      "reason": "材料是三段无关内容拼接（两段填词练习 + 正文），段落编号全错"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_1001_100101",
+      "scope": "unit",
+      "reason": "文章开头被截（kintsugi 定义段缺失），Q2 问的「以贵金属修补」原文没有；两处选项串入「Read an article in a student magazine.」"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2005_200501",
+      "scope": "unit",
+      "reason": "文章开头被截，Q1 问的 closed-loop feedback systems 原文没有；插句题没有位置标记；整篇无分段但题目引用段落"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0902_2_211",
+      "scope": "unit",
+      "reason": "文章前面串进一段工业革命 + 一行标题，段落编号错位；且与 rf0716_2_211 同篇"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_523_undefined_34",
+      "scope": "unit",
+      "reason": "id 含 undefined（构建缺陷）；与 real_ap_523_1_31 同篇"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_511_1_26",
+      "scope": "question",
+      "q": 2,
+      "stem": "In the second paragraph, what is the rel",
+      "reason": "盲解不一致（独立作答选 C：第二句质疑了第一句的前提，答案键 D）；且题干引用的「sentence 1/2」原文无标记"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510v2_2_11",
+      "scope": "question",
+      "q": 4,
+      "stem": "According to the passage, the existence ",
+      "reason": "选项 C 是残句「than music that expresses sorrow」"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2003_200302",
+      "scope": "question",
+      "q": 3,
+      "stem": "In paragraph 3 that describes a specific",
+      "reason": "题干残缺（In paragraph 3 that describes…），整篇无分段却引用第 3 段，实为选句题被拍成 A–D"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2003_200302",
+      "scope": "question",
+      "q": 2,
+      "stem": "All of the following about Earth's core ",
+      "reason": "题干缺谓语「All of the following about Earth's core EXCEPT:」"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2001_200101",
+      "scope": "question",
+      "q": 3,
+      "stem": "What is the relationship between paragra",
+      "reason": "整篇无分段，题干引用 paragraphs 2 and 3 无从定位"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2004_200401",
+      "scope": "question",
+      "q": 3,
+      "stem": "What is the relationship between paragra",
+      "reason": "整篇无分段，题干引用 paragraph 2/3 无从定位"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0830_2001_200101",
+      "scope": "question",
+      "q": 3,
+      "stem": "What does the author suggest about biofe",
+      "reason": "整篇无分段，题干引用 the last paragraph 无从定位"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121a_1_33",
+      "scope": "unit",
+      "reason": "首段 OCR 损坏（孤立残句「animals or disease-causing agents.」+ 错用 However）"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_310_1_28",
+      "scope": "question",
+      "q": 2,
+      "stem": "What will Serena probably do if Ms. Thom",
+      "reason": "选项 D 是残片「Wednesday morning」"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0622_2_03",
+      "scope": "unit",
+      "reason": "题干截断「Come the professor decided…」（完整版见 rf0629_2_03）"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0615_1_03",
+      "scope": "unit",
+      "reason": "题干问 How 取消，四个选项没有一个回答 how；答案键与题干不匹配"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0716_2_01",
+      "scope": "unit",
+      "reason": "题干「…was fast」疑为「fascinating」损坏，选项无法对应"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0808_1_06",
+      "scope": "unit",
+      "reason": "题干「It was absolutely stunning.」无指代，B/C 两个选项都说得通"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0708_1_15",
+      "scope": "unit",
+      "reason": "两道题问 the woman，逐字稿里对应内容是 the man（说话人标签与题干对调，音频无法核）"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_1_13",
+      "scope": "unit",
+      "reason": "两道题说话人与逐字稿对调"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_2_06",
+      "scope": "unit",
+      "reason": "逐字稿三处截断，且说话人与两道题干对调"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0808_2_04",
+      "scope": "unit",
+      "reason": "逐字稿两处截断（They tweak the game / what's confusing about a）"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0620_2_06",
+      "scope": "unit",
+      "reason": "Q2 题干问 the man 的建议，那句在逐字稿里是 woman 说的（标签与题干对不上）；LC validator 要求恰好 2 题，只能整条下架"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_2_06",
+      "scope": "unit",
+      "reason": "Q2 题干问 the man 提到 bed，那句在逐字稿里是 woman 说的；LC validator 要求恰好 2 题，只能整条下架"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0716_1_29",
+      "scope": "unit",
+      "reason": "逐字稿开头被截（鱿鱼喷水那段前文缺失），尾巴串入 Module 2 题干"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rp0718_1_01",
+      "scope": "unit",
+      "reason": "逐字稿开头被截（睡眠讲座的开头缺失），Q2 问的记忆巩固/深睡原文没有；尾巴串入下一段"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rp0718_1_13",
+      "scope": "unit",
+      "reason": "逐字稿只讲工业城市布局，Q2/Q3/Q4 问的乡村移民、拥挤污染、改革原文都没有（题与稿不配）"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0629_1_29",
+      "scope": "question",
+      "q": 1,
+      "stem": "Why does the speaker mention Bollywood?",
+      "reason": "题干问 Bollywood，逐字稿里没有（讲的是 bossa nova）"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rf0708",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rf0808",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0705",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0711",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0718",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0812",
+      "scope": "unit",
+      "reason": "教授发言只有指令套话「Your professor is teaching a class. Write a post…」，真正的问题缺失"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0725",
+      "scope": "unit",
+      "reason": "字段错位：教授发言是学生帖，students 是课程名+教授发言"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0819",
+      "scope": "unit",
+      "reason": "教授发言只有标题行「Academic Discussion 1 | The Role of the Arts…」"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rp0822",
+      "scope": "unit",
+      "reason": "教授发言只有标题行「Academic Discussion 1 | Cultural Diversity…」"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rf0629_1",
+      "scope": "unit",
+      "reason": "4 题里 3 题与 rf0622_1 重复，且全套没有参考答案"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0729_1",
+      "scope": "unit",
+      "reason": "3 题全部与 rp0719_1 重复"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0610_1_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_310_1_1 同一份材料（跨套重复），保留 real_ctw_310_1_1",
+      "dup_of": "real_ctw_310_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_5_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_310_1_1 同一份材料（跨套重复），保留 real_ctw_310_1_1",
+      "dup_of": "real_ctw_310_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0622_2_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0629_2_1 同一份材料（跨套重复），保留 real_ctw_rf0629_2_1",
+      "dup_of": "real_ctw_rf0629_2_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0708_1_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0819_3_1 同一份材料（跨套重复），保留 real_ctw_rp0819_3_1",
+      "dup_of": "real_ctw_rp0819_3_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_11_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0708_1_11 同一份材料（跨套重复），保留 real_ctw_rf0708_1_11",
+      "dup_of": "real_ctw_rf0708_1_11"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_9_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0708_2_1 同一份材料（跨套重复），保留 real_ctw_rf0708_2_1",
+      "dup_of": "real_ctw_rf0708_2_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0902_1_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0716_1_1 同一份材料（跨套重复），保留 real_ctw_rf0716_1_1",
+      "dup_of": "real_ctw_rf0716_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0705_2_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0716_1_1 同一份材料（跨套重复），保留 real_ctw_rf0716_1_1",
+      "dup_of": "real_ctw_rf0716_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_7_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rf0716_1_1 同一份材料（跨套重复），保留 real_ctw_rf0716_1_1",
+      "dup_of": "real_ctw_rf0716_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0716_1_11",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0819_2_1 同一份材料（跨套重复），保留 real_ctw_rp0819_2_1",
+      "dup_of": "real_ctw_rp0819_2_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0902_1_11",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0819_2_1 同一份材料（跨套重复），保留 real_ctw_rp0819_2_1",
+      "dup_of": "real_ctw_rp0819_2_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_1_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0819_2_1 同一份材料（跨套重复），保留 real_ctw_rp0819_2_1",
+      "dup_of": "real_ctw_rp0819_2_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0826_1_11",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0711_1_1 同一份材料（跨套重复），保留 real_ctw_rp0711_1_1",
+      "dup_of": "real_ctw_rp0711_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_1_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0704_1_1 同一份材料（跨套重复），保留 real_ctw_rp0704_1_1",
+      "dup_of": "real_ctw_rp0704_1_1"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0830_15_1",
+      "scope": "unit",
+      "reason": "与 real_ctw_rp0819_4_1 同一份材料（跨套重复），保留 real_ctw_rp0819_4_1",
+      "dup_of": "real_ctw_rp0819_4_1"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0615_1_123",
+      "scope": "unit",
+      "reason": "与 real_rdl_415_1_23 同一份材料（跨套重复），保留 real_rdl_415_1_23",
+      "dup_of": "real_rdl_415_1_23"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_510v2_1_21",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0622_1_121 同一份材料（跨套重复），保留 real_rdl_rf0622_1_121",
+      "dup_of": "real_rdl_rf0622_1_121"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_529_1_21",
+      "scope": "unit",
+      "reason": "与 real_rdl_511_1_21 同一份材料（跨套重复），保留 real_rdl_511_1_21",
+      "dup_of": "real_rdl_511_1_21"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_529_1_23",
+      "scope": "unit",
+      "reason": "与 real_rdl_511_1_23 同一份材料（跨套重复），保留 real_rdl_511_1_23",
+      "dup_of": "real_rdl_511_1_23"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_518_1_23",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0808_1_123 同一份材料（跨套重复），保留 real_rdl_rf0808_1_123",
+      "dup_of": "real_rdl_rf0808_1_123"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0808_1_125",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0713_1_123 同一份材料（跨套重复），保留 real_rdl_rf0713_1_123",
+      "dup_of": "real_rdl_rf0713_1_123"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0716_1_121",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0902_1_121 同一份材料（跨套重复），保留 real_rdl_rf0902_1_121",
+      "dup_of": "real_rdl_rf0902_1_121"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0902_1_123",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0716_1_123 同一份材料（跨套重复），保留 real_rdl_rf0716_1_123",
+      "dup_of": "real_rdl_rf0716_1_123"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0716_1_125",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0902_1_125 同一份材料（跨套重复），保留 real_rdl_rf0902_1_125",
+      "dup_of": "real_rdl_rf0902_1_125"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0902_1_128",
+      "scope": "unit",
+      "reason": "与 real_rdl_rf0716_1_128 同一份材料（跨套重复），保留 real_rdl_rf0716_1_128",
+      "dup_of": "real_rdl_rf0716_1_128"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_523_1_31",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0822_2002_200201 同一份材料（跨套重复），保留 real_ap_rp0822_2002_200201",
+      "dup_of": "real_ap_rp0822_2002_200201"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_310_1_31",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0822_2002_200201 同一份材料（跨套重复），保留 real_ap_rp0822_2002_200201",
+      "dup_of": "real_ap_rp0822_2002_200201"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_415_1_32",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0822_2006_200601 同一份材料（跨套重复），保留 real_ap_rp0822_2006_200601",
+      "dup_of": "real_ap_rp0822_2006_200601"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510_2_11",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0620_1_126 同一份材料（跨套重复），保留 real_ap_rf0620_1_126",
+      "dup_of": "real_ap_rf0620_1_126"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0615_1_131",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0610_1_131 同一份材料（跨套重复），保留 real_ap_rf0610_1_131",
+      "dup_of": "real_ap_rf0610_1_131"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_511_1_26",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0610_1_131 同一份材料（跨套重复），保留 real_ap_rf0610_1_131",
+      "dup_of": "real_ap_rf0610_1_131"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_529_1_26",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0610_1_131 同一份材料（跨套重复），保留 real_ap_rf0610_1_131",
+      "dup_of": "real_ap_rf0610_1_131"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_529_1_31",
+      "scope": "unit",
+      "reason": "与 real_ap_511_1_31 同一份材料（跨套重复），保留 real_ap_511_1_31",
+      "dup_of": "real_ap_511_1_31"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0704_2003_200331",
+      "scope": "unit",
+      "reason": "与 real_ap_518_1_31 同一份材料（跨套重复），保留 real_ap_518_1_31",
+      "dup_of": "real_ap_518_1_31"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_518_2_11",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0819_2006_200601 同一份材料（跨套重复），保留 real_ap_rp0819_2006_200601",
+      "dup_of": "real_ap_rp0819_2006_200601"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_529_2_11",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0620_1_131 同一份材料（跨套重复），保留 real_ap_rf0620_1_131",
+      "dup_of": "real_ap_rf0620_1_131"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_56v2_1_31",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0704_2002_200231 同一份材料（跨套重复），保留 real_ap_rp0704_2002_200231",
+      "dup_of": "real_ap_rp0704_2002_200231"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0629_1_126",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0704_2002_200231 同一份材料（跨套重复），保留 real_ap_rp0704_2002_200231",
+      "dup_of": "real_ap_rp0704_2002_200231"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2003_200302",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0704_2002_200231 同一份材料（跨套重复），保留 real_ap_rp0704_2002_200231",
+      "dup_of": "real_ap_rp0704_2002_200231"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0812_2001_200101",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0615_2_211 同一份材料（跨套重复），保留 real_ap_rf0615_2_211",
+      "dup_of": "real_ap_rf0615_2_211"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0808_1_131",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0620_2_211 同一份材料（跨套重复），保留 real_ap_rf0620_2_211",
+      "dup_of": "real_ap_rf0620_2_211"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0622_1_131",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0704_2004_200411 同一份材料（跨套重复），保留 real_ap_rp0704_2004_200411",
+      "dup_of": "real_ap_rp0704_2004_200411"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0629_2_211",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0622_2_211 同一份材料（跨套重复），保留 real_ap_rf0622_2_211",
+      "dup_of": "real_ap_rf0622_2_211"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0808_2_211",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0713_2_211 同一份材料（跨套重复），保留 real_ap_rf0713_2_211",
+      "dup_of": "real_ap_rf0713_2_211"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0902_1_131",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0716_1_131 同一份材料（跨套重复），保留 real_ap_rf0716_1_131",
+      "dup_of": "real_ap_rf0716_1_131"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2005_200501",
+      "scope": "unit",
+      "reason": "与 real_ap_rf0716_2_211 同一份材料（跨套重复），保留 real_ap_rf0716_2_211",
+      "dup_of": "real_ap_rf0716_2_211"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2007_200701",
+      "scope": "unit",
+      "reason": "与 real_ap_rp0812_2002_200201 同一份材料（跨套重复），保留 real_ap_rp0812_2002_200201",
+      "dup_of": "real_ap_rp0812_2002_200201"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0622_1_15",
+      "scope": "unit",
+      "reason": "与 real_lc_rf0629_1_15 同一份材料（跨套重复），保留 real_lc_rf0629_1_15",
+      "dup_of": "real_lc_rf0629_1_15"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0629_1_17",
+      "scope": "unit",
+      "reason": "与 real_lc_rf0622_1_17 同一份材料（跨套重复），保留 real_lc_rf0622_1_17",
+      "dup_of": "real_lc_rf0622_1_17"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0713_1_17",
+      "scope": "unit",
+      "reason": "与 real_lc_rf0826_1_17 同一份材料（跨套重复），保留 real_lc_rf0826_1_17",
+      "dup_of": "real_lc_rf0826_1_17"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0826_1_21",
+      "scope": "unit",
+      "reason": "与 real_la_rf0620_1_21 同一份材料（跨套重复），保留 real_la_rf0620_1_21",
+      "dup_of": "real_la_rf0620_1_21"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0622_1_21",
+      "scope": "unit",
+      "reason": "与 real_la_rf0629_1_21 同一份材料（跨套重复），保留 real_la_rf0629_1_21",
+      "dup_of": "real_la_rf0629_1_21"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0713_1_23",
+      "scope": "unit",
+      "reason": "与 real_la_rf0622_1_23 同一份材料（跨套重复），保留 real_la_rf0622_1_23",
+      "dup_of": "real_la_rf0622_1_23"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0716_1_21",
+      "scope": "unit",
+      "reason": "与 real_la_rf0622_1_23 同一份材料（跨套重复），保留 real_la_rf0622_1_23",
+      "dup_of": "real_la_rf0622_1_23"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0708_1_19",
+      "scope": "unit",
+      "reason": "与 real_la_rf0622_1_23 同一份材料（跨套重复），保留 real_la_rf0622_1_23",
+      "dup_of": "real_la_rf0622_1_23"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0629_1_23",
+      "scope": "unit",
+      "reason": "与 real_la_rf0622_1_23 同一份材料（跨套重复），保留 real_la_rf0622_1_23",
+      "dup_of": "real_la_rf0622_1_23"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0713_1_19",
+      "scope": "unit",
+      "reason": "与 real_la_rf0708_1_23 同一份材料（跨套重复），保留 real_la_rf0708_1_23",
+      "dup_of": "real_la_rf0708_1_23"
+    },
+    {
+      "file": "listening/la",
+      "id": "real_la_rf0808_1_19",
+      "scope": "unit",
+      "reason": "与 real_la_rf0826_1_23 同一份材料（跨套重复），保留 real_la_rf0826_1_23",
+      "dup_of": "real_la_rf0826_1_23"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0622_1_25",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0826_1_25 同一份材料（跨套重复），保留 real_lat_rf0826_1_25",
+      "dup_of": "real_lat_rf0826_1_25"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0629_1_25",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0826_1_25 同一份材料（跨套重复），保留 real_lat_rf0826_1_25",
+      "dup_of": "real_lat_rf0826_1_25"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0629_1_29",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0622_1_29 同一份材料（跨套重复），保留 real_lat_rf0622_1_29",
+      "dup_of": "real_lat_rf0622_1_29"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0629_2_08",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0622_2_08 同一份材料（跨套重复），保留 real_lat_rf0622_2_08",
+      "dup_of": "real_lat_rf0622_2_08"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0629_2_12",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0622_2_12 同一份材料（跨套重复），保留 real_lat_rf0622_2_12",
+      "dup_of": "real_lat_rf0622_2_12"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0708_1_29",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0716_2_08 同一份材料（跨套重复），保留 real_lat_rf0716_2_08",
+      "dup_of": "real_lat_rf0716_2_08"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0713_1_25",
+      "scope": "unit",
+      "reason": "与 real_lat_rf0716_2_08 同一份材料（跨套重复），保留 real_lat_rf0716_2_08",
+      "dup_of": "real_lat_rf0716_2_08"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0713_2_08",
+      "scope": "unit",
+      "reason": "与 real_lat_rp0705_2_01 同一份材料（跨套重复），保留 real_lat_rp0705_2_01",
+      "dup_of": "real_lat_rp0705_2_01"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0716_1_25",
+      "scope": "unit",
+      "reason": "与 real_lat_rp0711_2_08 同一份材料（跨套重复），保留 real_lat_rp0711_2_08",
+      "dup_of": "real_lat_rp0711_2_08"
+    },
+    {
+      "file": "writing/email",
+      "id": "email_rf0716",
+      "scope": "unit",
+      "reason": "与 email_rf0713 同一份材料（跨套重复），保留 email_rf0713",
+      "dup_of": "email_rf0713"
+    },
+    {
+      "file": "writing/discussion",
+      "id": "disc_rf0826",
+      "scope": "unit",
+      "reason": "与 disc_rf0629 同一份材料（跨套重复），保留 disc_rf0629",
+      "dup_of": "disc_rf0629"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0615_2_03",
+      "scope": "unit",
+      "reason": "与 real_lcr_rf0610_2_02 同一份材料（跨套重复），保留 real_lcr_rf0610_2_02",
+      "dup_of": "real_lcr_rf0610_2_02"
+    },
+    {
+      "file": "listening/lcr",
+      "id": "real_lcr_rf0629_1_02",
+      "scope": "unit",
+      "reason": "与 real_lcr_rf0622_1_02 同一份材料（跨套重复），保留 real_lcr_rf0622_1_02",
+      "dup_of": "real_lcr_rf0622_1_02"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s15",
+      "reason": "与 real_repeat_rf0716_1_s1 同句",
+      "dup_of": "real_repeat_rf0716_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s16",
+      "reason": "与 real_repeat_rf0716_1_s2 同句",
+      "dup_of": "real_repeat_rf0716_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s17",
+      "reason": "与 real_repeat_rf0716_1_s3 同句",
+      "dup_of": "real_repeat_rf0716_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s18",
+      "reason": "与 real_repeat_rf0716_1_s4 同句",
+      "dup_of": "real_repeat_rf0716_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s19",
+      "reason": "与 real_repeat_rf0716_1_s5 同句",
+      "dup_of": "real_repeat_rf0716_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s20",
+      "reason": "与 real_repeat_rf0716_1_s6 同句",
+      "dup_of": "real_repeat_rf0716_1_s6"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0704_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0704_1_s21",
+      "reason": "与 real_repeat_rf0716_1_s7 同句",
+      "dup_of": "real_repeat_rf0716_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s1",
+      "reason": "与 real_repeat_rf0615_1_s1 同句",
+      "dup_of": "real_repeat_rf0615_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s2",
+      "reason": "与 real_repeat_rf0615_1_s2 同句",
+      "dup_of": "real_repeat_rf0615_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s3",
+      "reason": "与 real_repeat_rf0615_1_s3 同句",
+      "dup_of": "real_repeat_rf0615_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s6",
+      "reason": "与 real_repeat_rf0615_1_s4 同句",
+      "dup_of": "real_repeat_rf0615_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s7",
+      "reason": "与 real_repeat_rf0615_1_s5 同句",
+      "dup_of": "real_repeat_rf0615_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s15",
+      "reason": "与 real_repeat_rf0708_1_s1 同句",
+      "dup_of": "real_repeat_rf0708_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s16",
+      "reason": "与 real_repeat_rf0708_1_s2 同句",
+      "dup_of": "real_repeat_rf0708_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s17",
+      "reason": "与 real_repeat_rf0708_1_s3 同句",
+      "dup_of": "real_repeat_rf0708_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s18",
+      "reason": "与 real_repeat_rf0708_1_s4 同句",
+      "dup_of": "real_repeat_rf0708_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s19",
+      "reason": "与 real_repeat_rf0708_1_s5 同句",
+      "dup_of": "real_repeat_rf0708_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s20",
+      "reason": "与 real_repeat_rf0708_1_s6 同句",
+      "dup_of": "real_repeat_rf0708_1_s6"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0705_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0705_1_s21",
+      "reason": "与 real_repeat_rf0708_1_s7 同句",
+      "dup_of": "real_repeat_rf0708_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s15",
+      "reason": "与 real_repeat_rf0713_1_s1 同句",
+      "dup_of": "real_repeat_rf0713_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s17",
+      "reason": "与 real_repeat_rf0713_1_s3 同句",
+      "dup_of": "real_repeat_rf0713_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s18",
+      "reason": "与 real_repeat_rf0713_1_s4 同句",
+      "dup_of": "real_repeat_rf0713_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s19",
+      "reason": "与 real_repeat_rf0713_1_s5 同句",
+      "dup_of": "real_repeat_rf0713_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s21",
+      "reason": "与 real_repeat_rf0713_1_s7 同句",
+      "dup_of": "real_repeat_rf0713_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s29",
+      "reason": "与 real_repeat_rf0610_1_s1 同句",
+      "dup_of": "real_repeat_rf0610_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s30",
+      "reason": "与 real_repeat_rf0610_1_s2 同句",
+      "dup_of": "real_repeat_rf0610_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s32",
+      "reason": "与 real_repeat_rf0610_1_s4 同句",
+      "dup_of": "real_repeat_rf0610_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s33",
+      "reason": "与 real_repeat_rf0610_1_s5 同句",
+      "dup_of": "real_repeat_rf0610_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s34",
+      "reason": "与 real_repeat_rf0610_1_s6 同句",
+      "dup_of": "real_repeat_rf0610_1_s6"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0718_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0718_1_s35",
+      "reason": "与 real_repeat_rf0610_1_s7 同句",
+      "dup_of": "real_repeat_rf0610_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s22",
+      "reason": "与 real_repeat_rf0620_1_s1 同句",
+      "dup_of": "real_repeat_rf0620_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s24",
+      "reason": "与 real_repeat_rf0620_1_s3 同句",
+      "dup_of": "real_repeat_rf0620_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s25",
+      "reason": "与 real_repeat_rf0620_1_s4 同句",
+      "dup_of": "real_repeat_rf0620_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s26",
+      "reason": "与 real_repeat_rf0620_1_s5 同句",
+      "dup_of": "real_repeat_rf0620_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s27",
+      "reason": "与 real_repeat_rf0620_1_s6 同句",
+      "dup_of": "real_repeat_rf0620_1_s6"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0719_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0719_1_s28",
+      "reason": "与 real_repeat_rf0620_1_s7 同句",
+      "dup_of": "real_repeat_rf0620_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s1",
+      "reason": "与 real_repeat_rf0615_1_s1 同句",
+      "dup_of": "real_repeat_rf0615_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s2",
+      "reason": "与 real_repeat_rf0615_1_s2 同句",
+      "dup_of": "real_repeat_rf0615_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s3",
+      "reason": "与 real_repeat_rf0615_1_s3 同句",
+      "dup_of": "real_repeat_rf0615_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s4",
+      "reason": "与 real_repeat_rp0705_1_s4 同句",
+      "dup_of": "real_repeat_rp0705_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s5",
+      "reason": "与 real_repeat_rp0705_1_s5 同句",
+      "dup_of": "real_repeat_rp0705_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s6",
+      "reason": "与 real_repeat_rf0615_1_s4 同句",
+      "dup_of": "real_repeat_rf0615_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s7",
+      "reason": "与 real_repeat_rf0615_1_s5 同句",
+      "dup_of": "real_repeat_rf0615_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s15",
+      "reason": "与 real_repeat_rp0704_1_s22 同句",
+      "dup_of": "real_repeat_rp0704_1_s22"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s17",
+      "reason": "与 real_repeat_rp0704_1_s24 同句",
+      "dup_of": "real_repeat_rp0704_1_s24"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s18",
+      "reason": "与 real_repeat_rp0704_1_s25 同句",
+      "dup_of": "real_repeat_rp0704_1_s25"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s19",
+      "reason": "与 real_repeat_rp0704_1_s26 同句",
+      "dup_of": "real_repeat_rp0704_1_s26"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s20",
+      "reason": "与 real_repeat_rp0704_1_s27 同句",
+      "dup_of": "real_repeat_rp0704_1_s27"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s21",
+      "reason": "与 real_repeat_rp0704_1_s28 同句",
+      "dup_of": "real_repeat_rp0704_1_s28"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s22",
+      "reason": "与 real_repeat_rp0729_1_s8 同句",
+      "dup_of": "real_repeat_rp0729_1_s8"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s23",
+      "reason": "与 real_repeat_rp0729_1_s9 同句",
+      "dup_of": "real_repeat_rp0729_1_s9"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s24",
+      "reason": "与 real_repeat_rp0729_1_s10 同句",
+      "dup_of": "real_repeat_rp0729_1_s10"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s25",
+      "reason": "与 real_repeat_rp0729_1_s11 同句",
+      "dup_of": "real_repeat_rp0729_1_s11"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s26",
+      "reason": "与 real_repeat_rp0729_1_s12 同句",
+      "dup_of": "real_repeat_rp0729_1_s12"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s27",
+      "reason": "与 real_repeat_rp0729_1_s13 同句",
+      "dup_of": "real_repeat_rp0729_1_s13"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0819_1_s28",
+      "reason": "与 real_repeat_rp0729_1_s14 同句",
+      "dup_of": "real_repeat_rp0729_1_s14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s8",
+      "reason": "与 real_repeat_rp0729_1_s15 同句",
+      "dup_of": "real_repeat_rp0729_1_s15"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s9",
+      "reason": "与 real_repeat_rp0729_1_s16 同句",
+      "dup_of": "real_repeat_rp0729_1_s16"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s10",
+      "reason": "与 real_repeat_rp0729_1_s17 同句",
+      "dup_of": "real_repeat_rp0729_1_s17"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s11",
+      "reason": "与 real_repeat_rp0729_1_s18 同句",
+      "dup_of": "real_repeat_rp0729_1_s18"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s12",
+      "reason": "与 real_repeat_rp0729_1_s19 同句",
+      "dup_of": "real_repeat_rp0729_1_s19"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s13",
+      "reason": "与 real_repeat_rp0729_1_s20 同句",
+      "dup_of": "real_repeat_rp0729_1_s20"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0822_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0822_1_s14",
+      "reason": "与 real_repeat_rp0729_1_s21 同句",
+      "dup_of": "real_repeat_rp0729_1_s21"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s1",
+      "reason": "与 real_repeat_rp0719_1_s8 同句",
+      "dup_of": "real_repeat_rp0719_1_s8"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s2",
+      "reason": "与 real_repeat_rp0719_1_s9 同句",
+      "dup_of": "real_repeat_rp0719_1_s9"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s3",
+      "reason": "与 real_repeat_rp0719_1_s10 同句",
+      "dup_of": "real_repeat_rp0719_1_s10"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s4",
+      "reason": "与 real_repeat_rp0719_1_s11 同句",
+      "dup_of": "real_repeat_rp0719_1_s11"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s5",
+      "reason": "与 real_repeat_rp0719_1_s12 同句",
+      "dup_of": "real_repeat_rp0719_1_s12"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s6",
+      "reason": "与 real_repeat_rp0719_1_s13 同句",
+      "dup_of": "real_repeat_rp0719_1_s13"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s7",
+      "reason": "与 real_repeat_rp0719_1_s14 同句",
+      "dup_of": "real_repeat_rp0719_1_s14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s8",
+      "reason": "与 real_repeat_rf0620_1_s1 同句",
+      "dup_of": "real_repeat_rf0620_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s9",
+      "reason": "与 real_repeat_rp0719_1_s23 同句",
+      "dup_of": "real_repeat_rp0719_1_s23"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s10",
+      "reason": "与 real_repeat_rf0620_1_s3 同句",
+      "dup_of": "real_repeat_rf0620_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s11",
+      "reason": "与 real_repeat_rf0620_1_s4 同句",
+      "dup_of": "real_repeat_rf0620_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s12",
+      "reason": "与 real_repeat_rf0620_1_s5 同句",
+      "dup_of": "real_repeat_rf0620_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s13",
+      "reason": "与 real_repeat_rf0620_1_s6 同句",
+      "dup_of": "real_repeat_rf0620_1_s6"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s14",
+      "reason": "与 real_repeat_rf0620_1_s7 同句",
+      "dup_of": "real_repeat_rf0620_1_s7"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s15",
+      "reason": "与 real_repeat_rp0812_1_s1 同句",
+      "dup_of": "real_repeat_rp0812_1_s1"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s16",
+      "reason": "与 real_repeat_rp0812_1_s2 同句",
+      "dup_of": "real_repeat_rp0812_1_s2"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s17",
+      "reason": "与 real_repeat_rp0812_1_s3 同句",
+      "dup_of": "real_repeat_rp0812_1_s3"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s18",
+      "reason": "与 real_repeat_rp0812_1_s4 同句",
+      "dup_of": "real_repeat_rp0812_1_s4"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s19",
+      "reason": "与 real_repeat_rp0812_1_s5 同句",
+      "dup_of": "real_repeat_rp0812_1_s5"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0830_1",
+      "scope": "sentence",
+      "sid": "real_repeat_rp0830_1_s21",
+      "reason": "与 real_repeat_rp0812_1_s7 同句",
+      "dup_of": "real_repeat_rp0812_1_s7"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0718_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0718_1_q13",
+      "reason": "与 real_interview_rp0704_1_q10 同题",
+      "dup_of": "real_interview_rp0704_1_q10"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0718_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0718_1_q14",
+      "reason": "与 real_interview_rp0704_1_q11 同题",
+      "dup_of": "real_interview_rp0704_1_q11"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0718_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0718_1_q15",
+      "reason": "与 real_interview_rp0704_1_q12 同题",
+      "dup_of": "real_interview_rp0704_1_q12"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q9",
+      "reason": "与 real_interview_rp0725_1_q1 同题",
+      "dup_of": "real_interview_rp0725_1_q1"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q10",
+      "reason": "与 real_interview_rp0725_1_q2 同题",
+      "dup_of": "real_interview_rp0725_1_q2"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q11",
+      "reason": "与 real_interview_rp0725_1_q3 同题",
+      "dup_of": "real_interview_rp0725_1_q3"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q12",
+      "reason": "与 real_interview_rp0725_1_q4 同题",
+      "dup_of": "real_interview_rp0725_1_q4"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q17",
+      "reason": "与 real_interview_rp0719_1_q6 同题",
+      "dup_of": "real_interview_rp0719_1_q6"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0819_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0819_1_q18",
+      "reason": "与 real_interview_rp0704_1_q5 同题",
+      "dup_of": "real_interview_rp0704_1_q5"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0830_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0830_1_q5",
+      "reason": "与 real_interview_rp0812_1_q1 同题",
+      "dup_of": "real_interview_rp0812_1_q1"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0830_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0830_1_q6",
+      "reason": "与 real_interview_rp0812_1_q2 同题",
+      "dup_of": "real_interview_rp0812_1_q2"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0830_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0830_1_q7",
+      "reason": "与 real_interview_rp0812_1_q3 同题",
+      "dup_of": "real_interview_rp0812_1_q3"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_rp0830_1",
+      "scope": "iq",
+      "qid": "real_interview_rp0830_1_q8",
+      "reason": "与 real_interview_rp0812_1_q4 同题",
+      "dup_of": "real_interview_rp0812_1_q4"
+    },
+    {
+      "file": "writing/bs",
+      "id": "bs_rf0622_02",
+      "scope": "unit",
+      "reason": "与 bs_rf0610_02 同一句",
+      "dup_of": "bs_rf0610_02"
+    },
+    {
+      "file": "writing/bs",
+      "id": "bs_rf0708_09",
+      "scope": "unit",
+      "reason": "与 bs_rf0622_01 同一句",
+      "dup_of": "bs_rf0622_01"
+    },
+    {
+      "file": "writing/bs",
+      "id": "bs_rf0808_03",
+      "scope": "unit",
+      "reason": "与 bs_rf0622_09 同一句",
+      "dup_of": "bs_rf0622_09"
+    },
+    {
+      "file": "writing/bs",
+      "id": "bs_rf0808_09",
+      "scope": "unit",
+      "reason": "与 bs_rf0610_02 同一句",
+      "dup_of": "bs_rf0610_02"
+    }
+  ],
+  "patches": [
+    {
+      "file": "reading/ap",
+      "id": "real_ap_310_1_31",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " As efforts to capitalize on deeper offshore wind resources persist, floating turbines represent both a",
+      "why": "结尾半句被截，截掉残句"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510_2_11",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Thus, while these techniques can serve as powerful tools, their",
+      "why": "结尾半句被截"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510v2_1_31",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Using transparent",
+      "why": "结尾半句被截"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2006_200601",
+      "path": "questions.0.options.D",
+      "op": "replace",
+      "from": "cognitive development I",
+      "to": "cognitive development",
+      "why": "OCR 尾巴多了个 I"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2006_200601",
+      "path": "questions.1.options.D",
+      "op": "replace",
+      "from": "adesire",
+      "to": "a desire",
+      "why": "OCR 粘连"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_rf0808_1_123",
+      "path": "text",
+      "op": "replace",
+      "from": "Welcome to Movie Mani\n",
+      "to": "Welcome to Movie Mania\n",
+      "why": "标题截断"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_4_1",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Fill in the missing letters in the paragraph",
+      "why": "题型指令串进正文"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_529_1_1",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Public transit systems, like",
+      "why": "结尾半句被截（最后一个空在第 42 词，截掉不影响挖空）"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_1_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_5_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_6_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0819_7_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_3_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0822_6_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0830_2_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0830_3_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0830_5_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rp0830_15_1",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "OCR 丢了句末句号"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0615_1_29",
+      "path": "transcript",
+      "op": "trim_tail",
+      "from": " Q1. Who's managing the student newspaper now?",
+      "why": "尾巴串入 Module 2 题干"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0622_1_29",
+      "path": "transcript",
+      "op": "trim_tail",
+      "from": " Module 2: Choose the Best Response",
+      "why": "尾巴串入 Module 2 题干"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0708_1_29",
+      "path": "transcript",
+      "op": "trim_tail",
+      "from": " Listening Module 2 Q1.",
+      "why": "尾巴串入 Module 2 题干"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0808_1_29",
+      "path": "transcript",
+      "op": "trim_tail",
+      "from": " Listening Module 2 Q1.",
+      "why": "尾巴串入 Module 2 题干"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0716_2_08",
+      "path": "transcript",
+      "op": "replace",
+      "from": "energeshint LED lights",
+      "to": "energy-efficient LED lights",
+      "why": "ASR 听错"
+    },
+    {
+      "file": "listening/lat",
+      "id": "real_lat_rf0708_2_12",
+      "path": "transcript",
+      "op": "trim_head",
+      "from": "For more information, visit www.LazyBones.com",
+      "why": "开头串入上一条音频的尾巴"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0610_1_17",
+      "path": "questions.0.stem",
+      "op": "replace",
+      "from": "Emily",
+      "to": "the woman",
+      "why": "逐字稿里没有人名 Emily，只有 Man/Woman"
+    },
+    {
+      "file": "listening/lc",
+      "id": "real_lc_rf0610_1_17",
+      "path": "questions.1.stem",
+      "op": "replace",
+      "from": "Emily",
+      "to": "the woman",
+      "why": "同上"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0725_1",
+      "path": "sentences.#real_repeat_rp0725_1_s9.sentence",
+      "op": "append",
+      "to": ".",
+      "why": "丢句号"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_rp0819_1",
+      "path": "sentences.#real_repeat_rp0819_1_s19.sentence",
+      "op": "append",
+      "to": ".",
+      "why": "丢句号"
+    },
+    {
+      "file": "writing/bs",
+      "id": "bs_rf0629_07",
+      "path": "distractors",
+      "op": "set",
+      "to": [
+        "they",
+        "those"
+      ],
+      "why": "chunks 里混着 they/those 两个干扰块但 distractors 为空"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0610_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0615_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0620_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0622_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0629_1_131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0629_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0708_1_126",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0708_1_131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0713_1_126",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0713_1_131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0716_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0808_1_131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0826_1_131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rf0902_2_211",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0704_2001_200131",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0704_2005_200511",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0705_2001_200121",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0725_1_101",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0812_2001_200101",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2001_200101",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2001_200101",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2002_200201",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2005_200501",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0822_2007_200701",
+      "path": "passage",
+      "op": "strip_insert_markers",
+      "why": "无插句题，[A]~[D] 标记是视觉噪声"
+    }
+  ]
+}

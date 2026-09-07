@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 19,
+  "count": 17,
   "items": [
     {
       "id": "real_interview_rf0610_1",
@@ -243,68 +243,6 @@
       "tier": "recalled",
       "source": "rf0622",
       "date": "2026-06-22",
-      "source_flags": [
-        {
-          "code": "vendor_reformatted",
-          "severity": "warn",
-          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
-        }
-      ]
-    },
-    {
-      "id": "real_interview_rf0629_1",
-      "topic": "",
-      "intro": "You have volunteered for a research study about people's experiences with commuting. You will have a short online interview with a researcher.",
-      "questions": [
-        {
-          "id": "real_interview_rf0629_1_q1",
-          "position": "Q1",
-          "question": "What kinds of places do you usually go to during the week, and how do you get there?",
-          "difficulty": "personal",
-          "word_count": 18,
-          "expected_response_topics": [],
-          "reference_answer": "",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rf0629_1_q1.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rf0629_1_q2",
-          "position": "Q2",
-          "question": "Can you describe how someone in your family or a friend usually travels to work or school? How much time does it take, and what transportation does the person use?",
-          "difficulty": "descriptive",
-          "word_count": 30,
-          "expected_response_topics": [],
-          "reference_answer": "",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rf0629_1_q2.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rf0629_1_q3",
-          "position": "Q3",
-          "question": "Some people believe that living close to work or school improves quality of life, while others think location does not matter much. What do you think and why?",
-          "difficulty": "analytical",
-          "word_count": 28,
-          "expected_response_topics": [],
-          "reference_answer": "",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rf0629_1_q3.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rf0629_1_q4",
-          "position": "Q4",
-          "question": "Some people believe that employers should reimburse employees for their commuting costs, while others think employees should pay for their own travel to work. Which view do you agree with and why?",
-          "difficulty": "evaluative",
-          "word_count": 32,
-          "expected_response_topics": [],
-          "reference_answer": "",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rf0629_1_q4.mp3",
-          "from_asr": false
-        }
-      ],
-      "real": true,
-      "tier": "recalled",
-      "source": "rf0629",
-      "date": "2026-06-29",
       "source_flags": [
         {
           "code": "vendor_reformatted",
@@ -1162,39 +1100,6 @@
           "reference_answer": "I take several small actions to reduce my environmental impact. I separate recyclable paper, plastic, and metal, and I carry a reusable bottle and shopping bag. At home, I turn off lights when leaving a room and avoid running the air conditioner when an open window is comfortable. For short trips, I usually walk or use public transportation instead of taking a car. None of these actions is dramatic, but they are easy to repeat every day. I also try to buy durable items and repair them before replacing them, because reducing waste at the beginning is often more effective than recycling it later.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q12.mp3",
           "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q13",
-          "position": "Q13",
-          "question": "Can you describe one or two steps your community or neighborhood takes to be environmentally friendly? For example, are there solar panels on buildings or rainwater barrels available where you live?",
-          "difficulty": "analytical",
-          "word_count": 31,
-          "expected_response_topics": [],
-          "reference_answer": "My neighborhood has improved recycling and transportation. Different bins are placed near apartment buildings, and each bin has clear pictures showing what belongs inside. This makes recycling easier for residents who speak different languages. The community has also added protected bicycle lanes along the main road and installed bicycle racks near shops. As a result, more people can make short trips without driving. A few public buildings use solar panels, but that program is still small. The recycling system and bicycle lanes have had the clearest effect because residents can use them every day without buying special equipment.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q13.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q14",
-          "position": "Q14",
-          "question": "If you had the chance to participate in an ecological or nature-based activity, such as a community cleanup effort or tree planting event, what would you do and why?",
-          "difficulty": "analytical",
-          "word_count": 29,
-          "expected_response_topics": [],
-          "reference_answer": "I would choose a tree-planting event along a local river. Trees would improve the area for many years by stabilizing soil, providing shade, and creating habitat for birds and insects. I would like the event to include instruction from an environmental organization so volunteers learn which native species belong there and how to care for them after planting. A one-day activity is useful only if the trees survive, so I would also volunteer for follow-up watering and monitoring. This project combines immediate physical work with a long-term result, and it would help residents understand how river health, wildlife, and neighborhood comfort are connected.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q14.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q15",
-          "position": "Q15",
-          "question": "Some people believe that individual actions are not enough to address conservation issues and that significant changes must come from government policies. Do you agree or disagree with this viewpoint? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 34,
-          "expected_response_topics": [],
-          "reference_answer": "I agree that major conservation changes require government policy, but individual action still matters. Governments can set emissions standards, protect habitats, and invest in public transportation at a scale that one person cannot match. A household cannot require a factory to reduce pollution or create a regional recycling system. However, citizens influence which policies are politically possible through voting, purchasing, and community participation. Individual habits also determine whether public programs succeed. For example, a city can provide recycling bins, but residents must use them correctly. Government action should lead because it controls the largest systems, while informed personal choices support those policies and hold institutions accountable.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q15.mp3",
-          "from_asr": false
         }
       ],
       "real": true,
@@ -1587,57 +1492,6 @@
       ]
     },
     {
-      "id": "real_interview_rp0729_1",
-      "topic": "",
-      "intro": "",
-      "questions": [
-        {
-          "id": "real_interview_rp0729_1_q1",
-          "position": "Q1",
-          "question": "Great, thank you. Can you tell me what types of items you usually buy when you go grocery shopping? For example, do you buy fresh produce, dairy products or packaged foods?",
-          "difficulty": "personal",
-          "word_count": 31,
-          "expected_response_topics": [],
-          "reference_answer": "When I head to the grocery store, my shopping list is quite varied to ensure a balanced diet. I always prioritize fresh produce like fruits and vegetables, as they're essential for health and can be used in many meals. Dairy products such as milk and yogurt are also regular purchases for their nutritional value. Additionally, I often buy packaged foods like pasta or canned goods for convenience, especially on busy days. This mix helps me maintain a healthy lifestyle while saving time.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0729_1_q1.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0729_1_q2",
-          "position": "Q2",
-          "question": "Got it. When you are grocery shopping, how often do you impulse buy? In other words, buy things you did not plan on buying. What types of items do you or might you impulse buy?",
-          "difficulty": "descriptive",
-          "word_count": 35,
-          "expected_response_topics": [],
-          "reference_answer": "I'd say I'm fairly susceptible to impulse purchases, especially when I'm shopping for groceries. It probably happens about once every two or three trips. The items I tend to buy on a whim are usually snacks or treats, like a new flavor of chips or a fancy chocolate bar. Sometimes, I'll also grab seasonal fruits or vegetables if they look particularly fresh and appealing, even if I hadn't planned on buying them. These unplanned buys often occur near the checkout area, where small, tempting items are strategically placed. While I try to stick to my list, these little splurges add a bit of spontaneity to my shopping routine.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0729_1_q2.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0729_1_q3",
-          "position": "Q3",
-          "question": "Great, that's helpful. Last question, some people believe that shopping at local farmers markets is better than shopping at large grocery stores. Do you agree or disagree with this opinion? Why?",
-          "difficulty": "analytical",
-          "word_count": 31,
-          "expected_response_topics": [],
-          "reference_answer": "I strongly agree that shopping at local farmers markets is superior to large grocery stores for several compelling reasons. Firstly, the produce is exceptionally fresh and often harvested just hours before sale, ensuring peak flavor and nutritional value. Secondly, it fosters a direct connection with local farmers, supporting the regional economy and promoting sustainable agricultural practices. Additionally, farmers markets typically offer unique, seasonal items not found in supermarkets, enriching culinary experiences. While large stores provide convenience and variety, the personal touch, quality, and community benefits of farmers markets make them a better choice overall.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0729_1_q3.mp3",
-          "from_asr": false
-        }
-      ],
-      "real": true,
-      "tier": "recalled",
-      "source": "rp0729",
-      "date": "2026-07-29",
-      "source_flags": [
-        {
-          "code": "vendor_pool",
-          "severity": "warn",
-          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
-        }
-      ]
-    },
-    {
       "id": "real_interview_rp0812_1",
       "topic": "",
       "intro": "",
@@ -1793,50 +1647,6 @@
           "from_asr": false
         },
         {
-          "id": "real_interview_rp0819_1_q9",
-          "position": "Q9",
-          "question": "Thank you for agreeing to participate. I'd like to ask you some questions about cultural festivals. First, cultural festivals are events that celebrate traditions like food, music, art, or clothing from a certain culture. Have you ever been to one? Or would you like to go to one? Why?",
-          "difficulty": "analytical",
-          "word_count": 49,
-          "expected_response_topics": [],
-          "reference_answer": "I attended a local Chinese New Year festival last year, and it was an enriching experience. The vibrant dragon dances and traditional music performances captivated me, while the variety of authentic Chinese cuisine offered a delightful taste of the culture. I particularly enjoyed making dumplings with a volunteer and learning why families associate them with good fortune. Such festivals provide a valuable opportunity to immerse oneself in different traditions, fostering cross-cultural understanding and appreciation. For example, I'd definitely recommend attending one to anyone interested in exploring diverse heritages. That active participation makes the tradition easier to remember.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q9.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q10",
-          "position": "Q10",
-          "question": "Thank you. If you were to go to a cultural festival, what would you like to see or do there?",
-          "difficulty": "analytical",
-          "word_count": 20,
-          "expected_response_topics": [],
-          "reference_answer": "If I were to attend a cultural festival, I'd focus on exploring traditional crafts and culinary experiences. For example, I'd visit artisan booths to observe skilled craftspeople demonstrating techniques like pottery or weaving, as these hands-on activities offer deep insights into a culture's heritage. Engaging in interactive workshops, such as learning a folk dance or trying a craft myself, would make the experience more immersive. This approach allows me to appreciate the festival not just as a spectator but as an active participant, gaining a richer understanding of the culture through its tangible and sensory elements.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q10.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q11",
-          "position": "Q11",
-          "question": "Interesting, if you were to participate in a cultural festival for your own culture, what would you want to share with other people and why?",
-          "difficulty": "analytical",
-          "word_count": 25,
-          "expected_response_topics": [],
-          "reference_answer": "If I were to participate in a cultural festival representing my own culture, I'd focus on sharing traditional tea ceremonies. For example, this practice embodies core values of harmony, respect, and mindfulness that are central to our cultural identity. By demonstrating the precise steps of preparing and serving tea, I could illustrate how everyday rituals foster connection and tranquility. Also, I'd explain the historical significance of tea in our society, highlighting its role in social gatherings and philosophical discussions. Sharing this would allow others to experience a tangible aspect of our heritage while promoting cross-cultural appreciation through a simple, yet profound, activity.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q11.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q12",
-          "position": "Q12",
-          "question": "Great! Some people think cultural festivals are mainly just for fun, while others think they serve an important purpose, like helping to keep traditions alive. What do you think?",
-          "difficulty": "analytical",
-          "word_count": 29,
-          "expected_response_topics": [],
-          "reference_answer": "Cultural festivals are far more than just entertainment; they play a crucial role in preserving traditions and fostering community identity. While they offer fun and enjoyment, their deeper purpose lies in passing down customs, language, and values to younger generations. For example, festivals like Diwali or Thanksgiving involve rituals and stories that connect people to their heritage, reinforcing a sense of belonging. Also, these events promote cultural exchange and understanding among diverse groups, which is vital in our globalized world. Thus, I view cultural festivals as essential for maintaining cultural continuity and social cohesion, making them both enjoyable and meaningful.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q12.mp3",
-          "from_asr": false
-        },
-        {
           "id": "real_interview_rp0819_1_q13",
           "position": "Q13",
           "question": "Thank you for being involved in this research. I'd like to ask you some questions about hobbies. What hobbies do your friends or family have? Why do you think they enjoy doing them?",
@@ -1878,28 +1688,6 @@
           "expected_response_topics": [],
           "reference_answer": "It is quite important because new hobbies prevent adult life from becoming limited to work and routine. Learning something unfamiliar exercises patience and reminds people that they can still improve. It can also create new social connections, especially after someone moves, retires, or changes jobs. For instance, a community language class could introduce an older adult to both a useful skill and a new group of friends. People do not need to collect hobbies constantly, but remaining open to one new activity can support confidence, curiosity, and emotional well-being. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q16.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q17",
-          "position": "Q17",
-          "question": "Thank you. If you were to select a new hobby, what would you choose and why?",
-          "difficulty": "analytical",
-          "word_count": 16,
-          "expected_response_topics": [],
-          "reference_answer": "If I were to pick up a new hobby, I'd choose urban sketching. The main reason is that it combines creativity with exploration. For example, I enjoy discovering new places in my city, and sketching would allow me to capture those moments in a personal, artistic way. It's also a relaxing activity that doesn't require expensive equipment-just a sketchbook and a pen. Plus, it encourages me to slow down and observe details I might otherwise miss in my daily routine. This hobby would help me unwind while fostering a deeper connection to my surroundings.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q17.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q18",
-          "position": "Q18",
-          "question": "Thanks for your participation. I'd like to discuss your views on renewable energy. To start, how important is the issue of renewable energy, such as wind and solar power, to you personally? Why would you say you feel that way?",
-          "difficulty": "analytical",
-          "word_count": 40,
-          "expected_response_topics": [],
-          "reference_answer": "Renewable energy is very important to me because energy choices affect both the climate and everyday living costs. I don't expect one technology to replace every other source immediately, but wind and solar power can reduce pollution without consuming fuel each time electricity is produced. For example, this matters personally because my city often has poor air quality in winter. I also like that homes and schools can generate some of their own power. The transition requires investment and better storage, but I believe developing cleaner sources now will create healthier and more stable communities in the future. 先直接回答，再给出理由和一个具体细节；保持 45 秒口语长度，避免只重复题目。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q18.mp3",
           "from_asr": false
         },
         {
@@ -2167,50 +1955,6 @@
           "expected_response_topics": [],
           "reference_answer": "I think the issue of trusting online assessment results is complex but manageable. While it's true that online tests can be vulnerable to cheating, such as using unauthorized resources or getting help from others, I believe that with proper measures, their reliability can be ensured. For example, many institutions now use proctoring software that monitors students through webcams and restricts browser access during exams. From my experience, online learning often includes diverse evaluation methods like projects and discussions, which complement tests and provide a more holistic view of student performance.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0830_1_q4.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0830_1_q5",
-          "position": "Q5",
-          "question": "Thank you for taking the time to speak with me. I'd like to ask you some questions about your shopping habits. When was your last shopping trip? And what did you buy? Did you have a good shopping experience?",
-          "difficulty": "analytical",
-          "word_count": 39,
-          "expected_response_topics": [],
-          "reference_answer": "My last shopping trip was last weekend. For example, I went to a local supermarket to buy groceries. I purchased some fresh vegetables, fruits, milk, and bread. The experience was quite good because the store was not crowded, and I found everything I needed quickly. The checkout process was also efficient, so I didn't have to wait long. Overall, it was a pleasant and convenient shopping trip. That simple check keeps my spending aligned with my priorities. Seeing the numbers clearly helps me choose based on priorities instead of a momentary impulse.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0830_1_q5.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0830_1_q6",
-          "position": "Q6",
-          "question": "I see when you shop which do you like better shopping for yourself or shopping for others? Why?",
-          "difficulty": "analytical",
-          "word_count": 18,
-          "expected_response_topics": [],
-          "reference_answer": "I prefer shopping for others because it brings me more joy. For example, when I shop for myself, I often feel indecisive or guilty about spending money. But when I pick out gifts for friends or family, I focus on their preferences and happiness. It feels rewarding to see their reactions and know I made them feel special. Shopping for others also reduces the pressure of personal choice, making the experience more relaxed and enjoyable. That habit leaves room for occasional treats while protecting the money I need for larger goals.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0830_1_q6.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0830_1_q7",
-          "position": "Q7",
-          "question": "Interesting. Next, I'd like to get your opinion. In recent years, people's shopping preferences have shifted in various ways. Do you think that in the future, people will continue to change how and where they shop? Why? Or why not?",
-          "difficulty": "analytical",
-          "word_count": 40,
-          "expected_response_topics": [],
-          "reference_answer": "Absolutely, I believe people will continue to change their shopping habits. First, technology evolves rapidly, leading to more convenient online platforms and personalized experiences, which attract consumers. For example, augmented reality lets customers try products virtually, reducing returns. Second, sustainability concerns are growing; shoppers prefer eco-friendly brands and local stores to reduce Answers | 25 TOEFL iBT · 8.30 CHINA OFFLINE carbon footprints. Finally, economic factors like inflation encourage bargain hunting and second-hand shopping. Therefore, these shifts will persist as long as innovation and values drive consumer behavior. I still check important information myself, so convenience does not replace independent judgment.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0830_1_q7.mp3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0830_1_q8",
-          "position": "Q8",
-          "question": "Good points. I just have one more question. Some people believe that buying too many products you do not need harms the environment. Do you agree with this idea? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 33,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I agree with that view. I strongly agree that buying unnecessary products harms the environment. Every product we purchase requires resources to manufacture, package, and transport, which generates pollution and depletes natural resources. For example, when we buy things we don't need, we waste those resources and contribute to more waste in landfills. Fast fashion items are often bought impulsively and discarded quickly, leading to massive textile waste. Also, overconsumption drives demand for more production, which increases carbon emissions and environmental degradation. Therefore, I believe reducing unnecessary purchases is crucial for protecting our planet.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0830_1_q8.mp3",
           "from_asr": false
         }
       ],

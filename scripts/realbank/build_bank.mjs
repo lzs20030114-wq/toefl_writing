@@ -32,6 +32,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { createRequire } from "module";
+import { applyReview } from "./apply_review.mjs";
 
 const require = createRequire(import.meta.url);
 
@@ -959,6 +960,14 @@ function main() {
     const cp = path.join(dir, "counts.json");
     fs.writeFileSync(cp, JSON.stringify(c, null, 2), "utf8");
     console.log(`  → ${path.relative(process.cwd(), cp)}  ${JSON.stringify(c)}`);
+  }
+
+  // 最后一道闸：成品复核清单（data/realBank/review-holds.json）。源料在 .codex-tmp 里没改，
+  // 重跑会把复核判定下架的条目原样再产出来，所以每次落库末尾都要把清单重新应用一遍。
+  const r = applyReview({ root: process.cwd() });
+  if (r) {
+    console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`);
+    for (const l of r.log) console.log(l);
   }
 }
 

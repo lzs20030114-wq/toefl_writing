@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 15,
+  "count": 14,
   "items": [
     {
       "id": "email_rf0615",
@@ -139,30 +139,6 @@
       "source": "rf0713",
       "date": "2026-07-13",
       "source_hash": "3c625661eb6f",
-      "source_flags": [
-        {
-          "code": "vendor_reformatted",
-          "severity": "warn",
-          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
-        }
-      ]
-    },
-    {
-      "id": "email_rf0716",
-      "to": "Emma",
-      "subject": "Request for volunteering at charity event",
-      "scenario": "You are organizing a charity event at your university to raise funds for a local animal shelter. You need volunteers to help with various tasks. You know that your friend, Emma, has experience in organizing events and would be a great help.",
-      "direction": "Write an email to Emma.",
-      "goals": [
-        "Describe the charity event and explain the type of support you need.",
-        "Ask her if she would be willing to volunteer and specify the tasks she could assist with.",
-        "Explain how her help would benefit human members of the community as well as animals."
-      ],
-      "real": true,
-      "tier": "recalled",
-      "source": "rf0716",
-      "date": "2026-07-16",
-      "source_hash": "e863863b9514",
       "source_flags": [
         {
           "code": "vendor_reformatted",
