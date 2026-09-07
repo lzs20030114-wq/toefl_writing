@@ -93,6 +93,22 @@ function applyPatch(item, patch, log) {
   return true;
 }
 
+/**
+ * 真题音频一律是自家 TTS 按口播文本配的（render_real_audio.mjs），音频内容 == 配音时的文本。
+ * patch 改了口播文本，桶里那条 mp3 就过期了：清掉 audio_url、标 audio_pending，前端回退浏览器朗读
+ * （文本是对的），render_real_audio.mjs 下次只补这几条（它只挑没有 audio_url 的）。
+ * 口播字段：LAT transcript / LA announcement / LCR speaker / LC conversation[].text /
+ *           repeat sentences[].sentence / interview questions[].question。题干、选项不发音，不算。
+ */
+function markAudioStale(item, patchPath) {
+  const m = patchPath.match(/^(sentences|questions)\.#([^.]+)\.(sentence|question)$/);
+  const owner = m ? (item[m[1]] || []).find((x) => x?.id === m[2]) : /^(transcript|announcement|speaker|conversation\.\d+\.text)$/.test(patchPath) ? item : null;
+  if (!owner || !owner.audio_url) return false;
+  owner.audio_url = null;
+  owner.audio_pending = true;
+  return true;
+}
+
 export function applyReview({ root = process.cwd(), dry = false } = {}) {
   const bankDir = path.join(root, "data", "realBank");
   const holdsFile = path.join(bankDir, "review-holds.json");
@@ -101,7 +117,7 @@ export function applyReview({ root = process.cwd(), dry = false } = {}) {
   const holds = review.holds || [];
   const patches = review.patches || [];
   const log = [];
-  const stats = { patched: 0, patchGone: 0, holdGone: 0, units: 0, questions: 0, sentences: 0, iqs: 0 };
+  const stats = { patched: 0, patchGone: 0, holdGone: 0, audioStale: 0, units: 0, questions: 0, sentences: 0, iqs: 0 };
 
   const holdByFile = {};
   for (const h of holds) (holdByFile[h.file] = holdByFile[h.file] || []).push(h);
@@ -122,7 +138,11 @@ export function applyReview({ root = process.cwd(), dry = false } = {}) {
       const it = byId.get(patch.id);
       if (!it) { stats.patchGone += 1; continue; } // 条目已下架（holds 里同一条），patch 自然作废
       if (getPath(it, patch.path) === undefined) { stats.patchGone += 1; continue; } // 目标句/题已被 sentence/iq 级下架
-      if (applyPatch(it, patch, log)) { stats.patched += 1; if (isCtw && patch.path === "passage") refreshCtw(it); }
+      if (applyPatch(it, patch, log)) {
+        stats.patched += 1;
+        if (isCtw && patch.path === "passage") refreshCtw(it);
+        if (markAudioStale(it, patch.path)) stats.audioStale += 1;
+      }
     }
 
     const unitHold = new Set();
@@ -191,6 +211,7 @@ if (isMain) {
   if (r) {
     console.log(`■ apply_review${dry ? "（--dry）" : ""}：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
       + `（清单里已不在库的 ${r.stats.holdGone} 条、随整条下架作废的 patch ${r.stats.patchGone} 处）`);
+    if (r.stats.audioStale) console.log(`  口播文本改动 → ${r.stats.audioStale} 条音频作废（audio_pending），本机跑 render_real_audio.mjs 补配`);
     for (const l of r.log) console.log(l);
   }
 }
