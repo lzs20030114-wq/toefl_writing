@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 35,
+  "count": 79,
   "items": [
     {
       "id": "real_ctw_121a_1_11",
@@ -2915,6 +2915,3746 @@
           "code": "vendor_reformatted",
           "severity": "warn",
           "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0808_1_1",
+      "passage": "The Louisiana Purchase of 1803 was a landmark diplomatic agreement in which the United States acquisition approximately 828,000 square miles of territory from France for $15 million. Negotiated under President Thomas Jefferson, the acquisition nearly doubled the land area of the nation and secured access to key inland waterways and trade hubs essential for economic expansion. The purchase also affirmed the principle of implied powers within the United States Constitution, setting a precedent for future territorial growth.",
+      "word_count": 77,
+      "topic": "economics",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "acquisition",
+          "displayed_fragment": "acqui",
+          "hidden_length": 6
+        },
+        {
+          "position": 35,
+          "original_word": "doubled",
+          "displayed_fragment": "dou",
+          "hidden_length": 4
+        },
+        {
+          "position": 37,
+          "original_word": "land",
+          "displayed_fragment": "la",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 41,
+          "original_word": "nation",
+          "displayed_fragment": "nat",
+          "hidden_length": 3
+        },
+        {
+          "position": 43,
+          "original_word": "secured",
+          "displayed_fragment": "sec",
+          "hidden_length": 4
+        },
+        {
+          "position": 45,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 47,
+          "original_word": "inland",
+          "displayed_fragment": "inl",
+          "hidden_length": 3
+        },
+        {
+          "position": 49,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 51,
+          "original_word": "hubs",
+          "displayed_fragment": "hu",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The Louisiana Purchase of 1803 was a landmark diplomatic agreement in which the United States acquisition approximately 828,000 square miles of territory from France for $15 million.",
+      "blanked_text": "The Louisiana Purchase of 1803 was a landmark diplomatic agreement in which the United States acqui______ approximately 828,000 square miles of territory from France for $15 million. Negotiated under President Thomas Jefferson, the acquisition nearly dou____ the la__ area o_ the nat___ and sec____ access t_ key inl___ waterways a__ trade hu__ essential for economic expansion. The purchase also affirmed the principle of implied powers within the United States Constitution, setting a precedent for future territorial growth.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "2ea8d988ce05",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0808_1_11",
+      "passage": "Global temperatures and weather patterns are experiencing notable shifts, which scientific research strongly associates with human-related factors. Activities such as the use of fossil fuels , changes in land use , and industrial production contribute to the accumulation of greenhouse gases in the atmosphere. These gases retain heat, gradually increasing the Earth's average temperature. If emissions continue at current levels, potential outcomes may include more frequent extreme weather events, rising sea levels, and disruptions to ecosystems. Experts emphasize that timely and coordinated efforts are essential to reduce risks and promote long-term environmental stability.",
+      "word_count": 93,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 18,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 20,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 22,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 24,
+          "original_word": "fuels",
+          "displayed_fragment": "fu",
+          "hidden_length": 3
+        },
+        {
+          "position": 27,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 29,
+          "original_word": "use",
+          "displayed_fragment": "u",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "production",
+          "displayed_fragment": "produ",
+          "hidden_length": 5
+        },
+        {
+          "position": 35,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 37,
+          "original_word": "accumulation",
+          "displayed_fragment": "accumu",
+          "hidden_length": 6
+        },
+        {
+          "position": 39,
+          "original_word": "greenhouse",
+          "displayed_fragment": "green",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Global temperatures and weather patterns are experiencing notable shifts, which scientific research strongly associates with human-related factors.",
+      "blanked_text": "Global temperatures and weather patterns are experiencing notable shifts, which scientific research strongly associates with human-related factors. Activities su__ as t__ use o_ fossil fu___ , changes i_ land u__ , and industrial produ_____ contribute t_ the accumu______ of green_____ gases in the atmosphere. These gases retain heat, gradually increasing the Earth's average temperature. If emissions continue at current levels, potential outcomes may include more frequent extreme weather events, rising sea levels, and disruptions to ecosystems. Experts emphasize that timely and coordinated efforts are essential to reduce risks and promote long-term environmental stability.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "2ea8d988ce05",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0826_1_1",
+      "passage": "The study of exoplanets has rapidly advanced in recent years, redefining our understanding of the universe. Astronomers have identified thousands of planets beyond our solar system, some of which orbit close enough to their stars to support life. These findings challenge previous notions about planetary formation and the potential for life elsewhere. The detection of atmospheric components like water vapor and methane in these distant worlds offers exciting clues about their suitability for hosting life.",
+      "word_count": 75,
+      "topic": "astronomy",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 39,
+          "original_word": "findings",
+          "displayed_fragment": "find",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "previous",
+          "displayed_fragment": "prev",
+          "hidden_length": 4
+        },
+        {
+          "position": 43,
+          "original_word": "about",
+          "displayed_fragment": "ab",
+          "hidden_length": 3
+        },
+        {
+          "position": 45,
+          "original_word": "formation",
+          "displayed_fragment": "form",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 49,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "hidden_length": 2
+        },
+        {
+          "position": 51,
+          "original_word": "elsewhere",
+          "displayed_fragment": "else",
+          "hidden_length": 5
+        },
+        {
+          "position": 53,
+          "original_word": "detection",
+          "displayed_fragment": "dete",
+          "hidden_length": 5
+        },
+        {
+          "position": 55,
+          "original_word": "atmospheric",
+          "displayed_fragment": "atmos",
+          "hidden_length": 6
+        },
+        {
+          "position": 57,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The study of exoplanets has rapidly advanced in recent years, redefining our understanding of the universe.",
+      "blanked_text": "The study of exoplanets has rapidly advanced in recent years, redefining our understanding of the universe. Astronomers have identified thousands of planets beyond our solar system, some of which orbit close enough to their stars to support life. These find____ challenge prev____ notions ab___ planetary form_____ and t__ potential f__ life else_____ The dete_____ of atmos______ components li__ water vapor and methane in these distant worlds offers exciting clues about their suitability for hosting life.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "8859b1a0e487",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0826_1_11",
+      "passage": "The advancement of 3D printing technology has revolutionized manufacturing by enabling precise, layer-by-layer fabrication of complex objects. 3D printing can use diverse materials such as plastics, metals, and ceramics. Engineers are able to fabricate lightweight, strong components with internal structures that are impossible to produce using traditional methods. In the medical field, 3D printing facilitates the production of patient-specific implants and prosthetics tailored to anatomical data from imaging scans. 3D printing enhances design flexibility and production efficiency by streamlining prototyping and reducing material waste.",
+      "word_count": 84,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 21,
+          "original_word": "diverse",
+          "displayed_fragment": "div",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 25,
+          "original_word": "plastics",
+          "displayed_fragment": "plas",
+          "hidden_length": 4
+        },
+        {
+          "position": 27,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 29,
+          "original_word": "Engineers",
+          "displayed_fragment": "Engi",
+          "hidden_length": 5
+        },
+        {
+          "position": 31,
+          "original_word": "able",
+          "displayed_fragment": "ab",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "fabricate",
+          "displayed_fragment": "fabr",
+          "hidden_length": 5
+        },
+        {
+          "position": 35,
+          "original_word": "strong",
+          "displayed_fragment": "str",
+          "hidden_length": 3
+        },
+        {
+          "position": 37,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The advancement of 3D printing technology has revolutionized manufacturing by enabling precise, layer-by-layer fabrication of complex objects.",
+      "blanked_text": "The advancement of 3D printing technology has revolutionized manufacturing by enabling precise, layer-by-layer fabrication of complex objects. 3D printing can use div____ materials su__ as plas____ metals, a__ ceramics. Engi_____ are ab__ to fabr_____ lightweight, str___ components wi__ internal struc_____ that are impossible to produce using traditional methods. In the medical field, 3D printing facilitates the production of patient-specific implants and prosthetics tailored to anatomical data from imaging scans. 3D printing enhances design flexibility and production efficiency by streamlining prototyping and reducing material waste.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "8859b1a0e487",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0902_1_1",
+      "passage": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This field encompasses the exploration of ocean currents, marine ecosystems, and geological seabed structures. Oceanographers use satellites and other advanced technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "word_count": 71,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "field",
+          "displayed_fragment": "fi",
+          "hidden_length": 3
+        },
+        {
+          "position": 17,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 19,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 21,
+          "original_word": "currents",
+          "displayed_fragment": "cur",
+          "hidden_length": 5
+        },
+        {
+          "position": 23,
+          "original_word": "ecosystems",
+          "displayed_fragment": "ecosy",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "geological",
+          "displayed_fragment": "geol",
+          "hidden_length": 6
+        },
+        {
+          "position": 27,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "hidden_length": 5
+        },
+        {
+          "position": 29,
+          "original_word": "use",
+          "displayed_fragment": "u",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "advanced",
+          "displayed_fragment": "adv",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean.",
+      "blanked_text": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This fi___ encompasses t__ exploration o_ ocean cur_____ marine ecosy_____ and geol______ seabed struc_____ Oceanographers u__ satellites a__ other adv_____ technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0902",
+      "date": "2026-09-02",
+      "source_hash": "942d16465c5e",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0902_1_11",
+      "passage": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, which can lead to precipitation. Barometric pressure variations help meteorologists improve forecasts, as rapid fluctuations often signal approaching storms. Advanced models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments.",
+      "word_count": 80,
+      "topic": "environment",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 34,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "lead",
+          "displayed_fragment": "le",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "precipitation",
+          "displayed_fragment": "precip",
+          "hidden_length": 7
+        },
+        {
+          "position": 41,
+          "original_word": "variations",
+          "displayed_fragment": "varia",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "meteorologists",
+          "displayed_fragment": "meteor",
+          "hidden_length": 8
+        },
+        {
+          "position": 45,
+          "original_word": "forecasts",
+          "displayed_fragment": "fore",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "rapid",
+          "displayed_fragment": "rap",
+          "hidden_length": 2
+        },
+        {
+          "position": 49,
+          "original_word": "often",
+          "displayed_fragment": "of",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "approaching",
+          "displayed_fragment": "appro",
+          "hidden_length": 6
+        },
+        {
+          "position": 53,
+          "original_word": "Advanced",
+          "displayed_fragment": "Adv",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Atmospheric pressure plays a critical role in weather systems.",
+      "blanked_text": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, wh___ can le__ to precip_______ Barometric pressure varia_____ help meteor________ improve fore_____ as rap__ fluctuations of___ signal appro______ storms. Adv_____ models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0902",
+      "date": "2026-09-02",
+      "source_hash": "942d16465c5e",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rf0902_2_1",
+      "passage": "Yet, urbanization brought challenges like overcrowding, poor infrastructure, and social inequality. Historians debate whether these changes fostered modern prosperity or deepened divisions in society. The era's complex legacy continues to prompt scholarly inquiry, revealing how industrialization shaped North America's development and raised enduring questions about progress, equity, and the long-term impact of technological and economic transformation.",
+      "word_count": 56,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 3,
+          "original_word": "challenges",
+          "displayed_fragment": "challe",
+          "hidden_length": 4
+        },
+        {
+          "position": 5,
+          "original_word": "overcrowding",
+          "displayed_fragment": "overcro",
+          "hidden_length": 5
+        },
+        {
+          "position": 7,
+          "original_word": "infrastructure",
+          "displayed_fragment": "infra",
+          "hidden_length": 9
+        },
+        {
+          "position": 9,
+          "original_word": "social",
+          "displayed_fragment": "soc",
+          "hidden_length": 3
+        },
+        {
+          "position": 11,
+          "original_word": "Historians",
+          "displayed_fragment": "His",
+          "hidden_length": 7
+        },
+        {
+          "position": 13,
+          "original_word": "whether",
+          "displayed_fragment": "whe",
+          "hidden_length": 4
+        },
+        {
+          "position": 15,
+          "original_word": "changes",
+          "displayed_fragment": "cha",
+          "hidden_length": 4
+        },
+        {
+          "position": 17,
+          "original_word": "modern",
+          "displayed_fragment": "mod",
+          "hidden_length": 3
+        },
+        {
+          "position": 19,
+          "original_word": "or",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 21,
+          "original_word": "divisions",
+          "displayed_fragment": "divi",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Yet, urbanization brought challenges like overcrowding, poor infrastructure, and social inequality.",
+      "blanked_text": "Yet, urbanization brought challe____ like overcro_____ poor infra_________ and soc___ inequality. His_______ debate whe____ these cha____ fostered mod___ prosperity o_ deepened divi_____ in society. The era's complex legacy continues to prompt scholarly inquiry, revealing how industrialization shaped North America's development and raised enduring questions about progress, equity, and the long-term impact of technological and economic transformation.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0902",
+      "date": "2026-09-02",
+      "source_hash": "942d16465c5e",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0704_1_1",
+      "passage": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world. Coral reefs are produced by colonies of tiny animals called coral polyps, which secrete calcium carbonate to build their hard skeletons . These natural formations provide critical habitats for a diverse array of marine species, including fish, crustaceans, and mollusks. They also offer protection to coastal areas by reducing the impact of waves and storms. However, coral reefs are facing threats from climate change, pollution, and overfishing.",
+      "word_count": 81,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 17,
+          "original_word": "produced",
+          "displayed_fragment": "prod",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "colonies",
+          "displayed_fragment": "colo",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "tiny",
+          "displayed_fragment": "ti",
+          "hidden_length": 2
+        },
+        {
+          "position": 23,
+          "original_word": "called",
+          "displayed_fragment": "cal",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 30,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 32,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "skeletons",
+          "displayed_fragment": "skel",
+          "hidden_length": 5
+        },
+        {
+          "position": 37,
+          "original_word": "natural",
+          "displayed_fragment": "nat",
+          "hidden_length": 4
+        },
+        {
+          "position": 39,
+          "original_word": "provide",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world.",
+      "blanked_text": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world. Coral reefs are prod____ by colo____ of ti__ animals cal___ coral polyps, wh___ secrete calcium carbonate t_ build th___ hard skel_____ . These nat____ formations pro____ critical habitats for a diverse array of marine species, including fish, crustaceans, and mollusks. They also offer protection to coastal areas by reducing the impact of waves and storms. However, coral reefs are facing threats from climate change, pollution, and overfishing.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_hash": "9f56d7270a34",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0704_1_11",
+      "passage": "Fungi, a group of organisms that include mushrooms and yeast, are not plants but a separate branch of life. They can be found in almost every environment and play essential roles in various ecosystems. Many of them are decomposers, meaning that they break down organic matter and recycle nutrients back into the soil. Some fungi form symbiotic relationships with plants, helping them absorb water and nutrients. While many fungi are beneficial, others can cause diseases in plants, animals, and humans.",
+      "word_count": 80,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 20,
+          "original_word": "can",
+          "displayed_fragment": "c",
+          "hidden_length": 2
+        },
+        {
+          "position": 22,
+          "original_word": "found",
+          "displayed_fragment": "fo",
+          "hidden_length": 3
+        },
+        {
+          "position": 24,
+          "original_word": "almost",
+          "displayed_fragment": "alm",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "environment",
+          "displayed_fragment": "envir",
+          "hidden_length": 6
+        },
+        {
+          "position": 28,
+          "original_word": "play",
+          "displayed_fragment": "pl",
+          "hidden_length": 2
+        },
+        {
+          "position": 30,
+          "original_word": "roles",
+          "displayed_fragment": "ro",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "various",
+          "displayed_fragment": "var",
+          "hidden_length": 4
+        },
+        {
+          "position": 34,
+          "original_word": "Many",
+          "displayed_fragment": "Ma",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "them",
+          "displayed_fragment": "th",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "meaning",
+          "displayed_fragment": "mea",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Fungi, a group of organisms that include mushrooms and yeast, are not plants but a separate branch of life.",
+      "blanked_text": "Fungi, a group of organisms that include mushrooms and yeast, are not plants but a separate branch of life. They c__ be fo___ in alm___ every envir______ and pl__ essential ro___ in var____ ecosystems. Ma__ of th__ are decomposers, mea____ that they break down organic matter and recycle nutrients back into the soil. Some fungi form symbiotic relationships with plants, helping them absorb water and nutrients. While many fungi are beneficial, others can cause diseases in plants, animals, and humans.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_hash": "9f56d7270a34",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0704_1_21",
+      "passage": "Classical civilizations, such as Ancient Greece and Rome, have profoundly influenced modern Western culture. These societies achieved remarkable progress in philosophy , science, and government . The Greeks introduced fundamental ideas in democracy , whereas the Romans created an intricate legal framework . Studying classical civilizations provides insights into the origins of contemporary political systems, literary traditions, and architectural styles, highlighting the enduring legacy of these ancient cultures.",
+      "word_count": 68,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "societies",
+          "displayed_fragment": "socie",
+          "hidden_length": 4
+        },
+        {
+          "position": 17,
+          "original_word": "remarkable",
+          "displayed_fragment": "remark",
+          "hidden_length": 4
+        },
+        {
+          "position": 20,
+          "original_word": "philosophy",
+          "displayed_fragment": "philo",
+          "hidden_length": 5
+        },
+        {
+          "position": 24,
+          "original_word": "government",
+          "displayed_fragment": "gover",
+          "hidden_length": 5
+        },
+        {
+          "position": 28,
+          "original_word": "introduced",
+          "displayed_fragment": "introd",
+          "hidden_length": 4
+        },
+        {
+          "position": 30,
+          "original_word": "ideas",
+          "displayed_fragment": "id",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "democracy",
+          "displayed_fragment": "demo",
+          "hidden_length": 5
+        },
+        {
+          "position": 36,
+          "original_word": "Romans",
+          "displayed_fragment": "Rom",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "intricate",
+          "displayed_fragment": "intri",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "framework",
+          "displayed_fragment": "frame",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Classical civilizations, such as Ancient Greece and Rome, have profoundly influenced modern Western culture.",
+      "blanked_text": "Classical civilizations, such as Ancient Greece and Rome, have profoundly influenced modern Western culture. These socie____ achieved remark____ progress in philo_____ , science, and gover_____ . The Greeks introd____ fundamental id___ in demo_____ , whereas the Rom___ created an intri____ legal frame____ . Studying classical civilizations provides insights into the origins of contemporary political systems, literary traditions, and architectural styles, highlighting the enduring legacy of these ancient cultures.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_hash": "9f56d7270a34",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0704_1_31",
+      "passage": "The discovery of water and volcanic activity on moons like Europa and Enceladus has sparked interest in the potential for extraterrestrial life. These moons, orbiting the planets Jupiter and Saturn, have ice-covered surfaces with oceans lying underneath . Volcanic activity , in the form of hydrothermal vents, provides heat and nutrients, creating environments where microbial life could potentially thrive. Missions by spacecraft such as the Galileo and Cassini have gathered valuable data on these moons.",
+      "word_count": 75,
+      "topic": "astronomy",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 24,
+          "original_word": "orbiting",
+          "displayed_fragment": "orbi",
+          "hidden_length": 4
+        },
+        {
+          "position": 26,
+          "original_word": "planets",
+          "displayed_fragment": "pla",
+          "hidden_length": 4
+        },
+        {
+          "position": 28,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 30,
+          "original_word": "have",
+          "displayed_fragment": "ha",
+          "hidden_length": 2
+        },
+        {
+          "position": 32,
+          "original_word": "surfaces",
+          "displayed_fragment": "surf",
+          "hidden_length": 4
+        },
+        {
+          "position": 34,
+          "original_word": "oceans",
+          "displayed_fragment": "oce",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "underneath",
+          "displayed_fragment": "under",
+          "hidden_length": 5
+        },
+        {
+          "position": 39,
+          "original_word": "activity",
+          "displayed_fragment": "acti",
+          "hidden_length": 4
+        },
+        {
+          "position": 42,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 44,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The discovery of water and volcanic activity on moons like Europa and Enceladus has sparked interest in the potential for extraterrestrial life.",
+      "blanked_text": "The discovery of water and volcanic activity on moons like Europa and Enceladus has sparked interest in the potential for extraterrestrial life. These moons, orbi____ the pla____ Jupiter a__ Saturn, ha__ ice-covered surf____ with oce___ lying under_____ . Volcanic acti____ , in t__ form o_ hydrothermal vents, provides heat and nutrients, creating environments where microbial life could potentially thrive. Missions by spacecraft such as the Galileo and Cassini have gathered valuable data on these moons.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_hash": "9f56d7270a34",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0705_1_1",
+      "passage": "Medieval European history, lasting approximately from 500 C.E. to 1500 C.E., is marked by significant cultural, political, and economic changes. Feudalism dominated the social structure, with lords governing lands and vassals providing military services. The Church exerted substantial influence over daily life and governance. Trade routes expanded, facilitating the exchange of goods and ideas. Art and architecture flourished, exemplified by Gothic cathedrals and illuminated manuscripts. Studying this era involves analyzing historical documents, artifacts, and architectural remains to understand the complexities of medieval society.",
+      "word_count": 83,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "significant",
+          "displayed_fragment": "signi",
+          "hidden_length": 6
+        },
+        {
+          "position": 15,
+          "original_word": "cultural",
+          "displayed_fragment": "cult",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 27,
+          "original_word": "governing",
+          "displayed_fragment": "gover",
+          "hidden_length": 4
+        },
+        {
+          "position": 29,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "providing",
+          "displayed_fragment": "provid",
+          "hidden_length": 3
+        },
+        {
+          "position": 33,
+          "original_word": "services",
+          "displayed_fragment": "serv",
+          "hidden_length": 4
+        },
+        {
+          "position": 36,
+          "original_word": "exerted",
+          "displayed_fragment": "exer",
+          "hidden_length": 3
+        },
+        {
+          "position": 38,
+          "original_word": "influence",
+          "displayed_fragment": "influ",
+          "hidden_length": 4
+        },
+        {
+          "position": 40,
+          "original_word": "daily",
+          "displayed_fragment": "da",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Medieval European history, lasting approximately from 500 C.",
+      "blanked_text": "Medieval European history, lasting approximately from 500 C.E. to 1500 C.E., is marked by signi______ cult____ political, and economic changes. Feudalism dominated the social structure, wi__ lords gover____ lands a__ vassals provid___ military serv____ The Church exer___ substantial influ____ over da___ life and governance. Trade routes expanded, facilitating the exchange of goods and ideas. Art and architecture flourished, exemplified by Gothic cathedrals and illuminated manuscripts. Studying this era involves analyzing historical documents, artifacts, and architectural remains to understand the complexities of medieval society.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_hash": "cc71f4059d70",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0705_1_11",
+      "passage": "Deserts and extreme environments pose unique challenges for the organisms that inhabit them. These areas are characterized by harsh conditions such as intense temperatures, scarce water, and limited vegetation. Specialized adaptations have evolved in both plants and animals to increase survival. Studying these traits provides insights into the resilience of life and helps in understanding how ecosystems function under stress. Desert cacti store water in specialized tissues, while fennec foxes have enlarged ears for heat dissipation.",
+      "word_count": 76,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "areas",
+          "displayed_fragment": "ar",
+          "hidden_length": 3
+        },
+        {
+          "position": 16,
+          "original_word": "characterized",
+          "displayed_fragment": "charac",
+          "hidden_length": 7
+        },
+        {
+          "position": 18,
+          "original_word": "harsh",
+          "displayed_fragment": "ha",
+          "hidden_length": 3
+        },
+        {
+          "position": 20,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 22,
+          "original_word": "intense",
+          "displayed_fragment": "int",
+          "hidden_length": 4
+        },
+        {
+          "position": 24,
+          "original_word": "scarce",
+          "displayed_fragment": "sca",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "vegetation",
+          "displayed_fragment": "veget",
+          "hidden_length": 5
+        },
+        {
+          "position": 30,
+          "original_word": "adaptations",
+          "displayed_fragment": "adapt",
+          "hidden_length": 6
+        },
+        {
+          "position": 32,
+          "original_word": "evolved",
+          "displayed_fragment": "evo",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Deserts and extreme environments pose unique challenges for the organisms that inhabit them.",
+      "blanked_text": "Deserts and extreme environments pose unique challenges for the organisms that inhabit them. These ar___ are charac_______ by ha___ conditions su__ as int____ temperatures, sca___ water, a__ limited veget_____ Specialized adapt______ have evo____ in both plants and animals to increase survival. Studying these traits provides insights into the resilience of life and helps in understanding how ecosystems function under stress. Desert cacti store water in specialized tissues, while fennec foxes have enlarged ears for heat dissipation.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_hash": "cc71f4059d70",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0705_2_1",
+      "passage": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This field encompasses the exploration of ocean currents, marine ecosystems, and geological seabed structures. Oceanographers use satellites and other advanced technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "word_count": 71,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "field",
+          "displayed_fragment": "fi",
+          "hidden_length": 3
+        },
+        {
+          "position": 17,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 19,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 21,
+          "original_word": "currents",
+          "displayed_fragment": "curr",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "ecosystems",
+          "displayed_fragment": "ecosy",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "geological",
+          "displayed_fragment": "geolo",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "hidden_length": 5
+        },
+        {
+          "position": 29,
+          "original_word": "use",
+          "displayed_fragment": "u",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "advanced",
+          "displayed_fragment": "adva",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean.",
+      "blanked_text": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This fi___ encompasses t__ exploration o_ ocean curr____ marine ecosy_____ and geolo_____ seabed struc_____ Oceanographers u__ satellites a__ other adva____ technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_hash": "cc71f4059d70",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0705_2_11",
+      "passage": "Weather patterns are influenced by a variety of factors, including atmospheric pressure, temperature, and humidity. Meteorologists study these factors to predict weather conditions and understand climate change. Tools like satellites and radar allow meteorologists to monitor weather systems in great detail. Accurate weather forecasting is crucial for agriculture, disaster preparedness, and daily planning. It should be noted, however, that despite technological advancements, weather is inherently unpredictable due to the numerous atmospheric variables that can change rapidly.",
+      "word_count": 76,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 16,
+          "original_word": "study",
+          "displayed_fragment": "st",
+          "hidden_length": 3
+        },
+        {
+          "position": 18,
+          "original_word": "factors",
+          "displayed_fragment": "fac",
+          "hidden_length": 4
+        },
+        {
+          "position": 20,
+          "original_word": "predict",
+          "displayed_fragment": "pre",
+          "hidden_length": 4
+        },
+        {
+          "position": 22,
+          "original_word": "conditions",
+          "displayed_fragment": "condi",
+          "hidden_length": 5
+        },
+        {
+          "position": 24,
+          "original_word": "understand",
+          "displayed_fragment": "under",
+          "hidden_length": 5
+        },
+        {
+          "position": 26,
+          "original_word": "change",
+          "displayed_fragment": "cha",
+          "hidden_length": 3
+        },
+        {
+          "position": 28,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 30,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 32,
+          "original_word": "allow",
+          "displayed_fragment": "al",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Weather patterns are influenced by a variety of factors, including atmospheric pressure, temperature, and humidity.",
+      "blanked_text": "Weather patterns are influenced by a variety of factors, including atmospheric pressure, temperature, and humidity. Meteorologists st___ these fac____ to pre____ weather condi_____ and under_____ climate cha___ Tools li__ satellites a__ radar al___ meteorologists t_ monitor weather systems in great detail. Accurate weather forecasting is crucial for agriculture, disaster preparedness, and daily planning. It should be noted, however, that despite technological advancements, weather is inherently unpredictable due to the numerous atmospheric variables that can change rapidly.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_hash": "cc71f4059d70",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0711_1_1",
+      "passage": "The advancement of 3D printing technology has revolutionized manufacturing by enabling precise, layer-by-layer fabrication of complex objects. 3D printing can use diverse materials such as plastics, metals, ceramics, and even biomaterials. Engineers are able to fabricate lightweight, strong components with internal structures that are impossible to produce using traditional methods. In the medical field, 3D printing facilitates the production of patient-specific implants and prosthetics tailored to anatomical data from imaging scans. 3D printing promotes faster manufacturing efficiency by streamlining prototyping and reducing material waste.",
+      "word_count": 84,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 11,
+          "original_word": "precise",
+          "displayed_fragment": "pre",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "diverse",
+          "displayed_fragment": "div",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "such",
+          "displayed_fragment": "s",
+          "hidden_length": 3
+        },
+        {
+          "position": 25,
+          "original_word": "plastics",
+          "displayed_fragment": "pla",
+          "hidden_length": 5
+        },
+        {
+          "position": 31,
+          "original_word": "Engineers",
+          "displayed_fragment": "Eng",
+          "hidden_length": 6
+        },
+        {
+          "position": 35,
+          "original_word": "fabricate",
+          "displayed_fragment": "fab",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "strong",
+          "displayed_fragment": "str",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "with",
+          "displayed_fragment": "w",
+          "hidden_length": 3
+        },
+        {
+          "position": 76,
+          "original_word": "efficiency",
+          "displayed_fragment": "effi",
+          "hidden_length": 6
+        },
+        {
+          "position": 82,
+          "original_word": "material",
+          "displayed_fragment": "mat",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The advancement of 3D printing technology has revolutionized manufacturing by enabling precise, layer-by-layer fabrication of complex objects.",
+      "blanked_text": "The advancement of 3D printing technology has revolutionized manufacturing by enabling pre____ layer-by-layer fabrication of complex objects. 3D printing can use div____ materials s___ as pla_____ metals, ceramics, and even biomaterials. Eng______ are able to fab______ lightweight, str___ components w___ internal structures that are impossible to produce using traditional methods. In the medical field, 3D printing facilitates the production of patient-specific implants and prosthetics tailored to anatomical data from imaging scans. 3D printing promotes faster manufacturing effi______ by streamlining prototyping and reducing mat_____ waste.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0711",
+      "date": "2026-07-11",
+      "source_hash": "551e7da3a373",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0711_1_11",
+      "passage": "Logical reasoning is a cornerstone of academic methodology, providing a structured approach to analyzing arguments and evidence. Deductive reasoning starts with general principles and derived specific conclusions, while inductive thinking involves drawing broad generalizations from specific observations. Critical thinking skills enable scholars to identify logical fallacies, assess the credibility of sources, and construct coherent arguments. Developing proficiency in logical reasoning enhances the ability to solve complex problems and communicate effectively, fostering intellectual rigor and innovation.",
+      "word_count": 75,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 1,
+          "original_word": "reasoning",
+          "displayed_fragment": "reas",
+          "hidden_length": 5
+        },
+        {
+          "position": 20,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 22,
+          "original_word": "principles",
+          "displayed_fragment": "princ",
+          "hidden_length": 5
+        },
+        {
+          "position": 24,
+          "original_word": "derived",
+          "displayed_fragment": "der",
+          "hidden_length": 4
+        },
+        {
+          "position": 26,
+          "original_word": "conclusions",
+          "displayed_fragment": "concl",
+          "hidden_length": 6
+        },
+        {
+          "position": 28,
+          "original_word": "inductive",
+          "displayed_fragment": "indu",
+          "hidden_length": 5
+        },
+        {
+          "position": 30,
+          "original_word": "involves",
+          "displayed_fragment": "invo",
+          "hidden_length": 4
+        },
+        {
+          "position": 32,
+          "original_word": "broad",
+          "displayed_fragment": "br",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "from",
+          "displayed_fragment": "fr",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "observations",
+          "displayed_fragment": "observ",
+          "hidden_length": 6
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Logical reasoning is a cornerstone of academic methodology, providing a structured approach to analyzing arguments and evidence.",
+      "blanked_text": "Logical reas_____ is a cornerstone of academic methodology, providing a structured approach to analyzing arguments and evidence. Deductive reasoning starts wi__ general princ_____ and der____ specific concl______ while indu_____ thinking invo____ drawing br___ generalizations fr__ specific observ______ Critical thinking skills enable scholars to identify logical fallacies, assess the credibility of sources, and construct coherent arguments. Developing proficiency in logical reasoning enhances the ability to solve complex problems and communicate effectively, fostering intellectual rigor and innovation.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0711",
+      "date": "2026-07-11",
+      "source_hash": "551e7da3a373",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0711_2_1",
+      "passage": "The field of philosophy of mind delves into the nature of consciousness, thought processes, and the intricate relationship between the mind and body. It addresses fundamental questions about perception, identity, self-awareness, and subjective experience. The discipline explores how and why we perceive the world as we do, examining the mechanisms behind thought, emotion, and awareness. This field is a deeply interdisciplinary one that intersects with psychology, neuroscience, and cognitive science, providing a comprehensive approach to understanding human cognition and consciousness.",
+      "word_count": 80,
+      "topic": "philosophy",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 23,
+          "original_word": "It",
+          "displayed_fragment": "I",
+          "hidden_length": 1
+        },
+        {
+          "position": 25,
+          "original_word": "fundamental",
+          "displayed_fragment": "funda",
+          "hidden_length": 6
+        },
+        {
+          "position": 27,
+          "original_word": "about",
+          "displayed_fragment": "ab",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "identity",
+          "displayed_fragment": "iden",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "experience",
+          "displayed_fragment": "exper",
+          "hidden_length": 5
+        },
+        {
+          "position": 35,
+          "original_word": "discipline",
+          "displayed_fragment": "disci",
+          "hidden_length": 5
+        },
+        {
+          "position": 37,
+          "original_word": "how",
+          "displayed_fragment": "h",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "why",
+          "displayed_fragment": "w",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "perceive",
+          "displayed_fragment": "perc",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The field of philosophy of mind delves into the nature of consciousness, thought processes, and the intricate relationship between the mind and body.",
+      "blanked_text": "The field of philosophy of mind delves into the nature of consciousness, thought processes, and the intricate relationship between the mind and body. I_ addresses funda______ questions ab___ perception, iden____ self-awareness, a__ subjective exper_____ The disci_____ explores h__ and w__ we perc____ the world as we do, examining the mechanisms behind thought, emotion, and awareness. This field is a deeply interdisciplinary one that intersects with psychology, neuroscience, and cognitive science, providing a comprehensive approach to understanding human cognition and consciousness.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0711",
+      "date": "2026-07-11",
+      "source_hash": "551e7da3a373",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0812_1_1",
+      "passage": "The universe is a vast expanse, filled with mysteries that have intrigued humans for centuries. Black holes are regions in space where gravity is so strong that nothing, not even light, can escape. Even though they are invisible, black holes can be detected by observing their effects on nearby matter. Black holes play a crucial role in astrophysics, influencing galaxy formation and offering insights into the nature of space, time, and gravity.",
+      "word_count": 72,
+      "topic": "astronomy",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 18,
+          "original_word": "regions",
+          "displayed_fragment": "reg",
+          "hidden_length": 4
+        },
+        {
+          "position": 20,
+          "original_word": "space",
+          "displayed_fragment": "sp",
+          "hidden_length": 3
+        },
+        {
+          "position": 22,
+          "original_word": "gravity",
+          "displayed_fragment": "gra",
+          "hidden_length": 4
+        },
+        {
+          "position": 24,
+          "original_word": "so",
+          "displayed_fragment": "s",
+          "hidden_length": 1
+        },
+        {
+          "position": 26,
+          "original_word": "that",
+          "displayed_fragment": "th",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "not",
+          "displayed_fragment": "n",
+          "hidden_length": 2
+        },
+        {
+          "position": 30,
+          "original_word": "light",
+          "displayed_fragment": "li",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "escape",
+          "displayed_fragment": "esc",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "though",
+          "displayed_fragment": "tho",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "are",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The universe is a vast expanse, filled with mysteries that have intrigued humans for centuries.",
+      "blanked_text": "The universe is a vast expanse, filled with mysteries that have intrigued humans for centuries. Black holes are reg____ in sp___ where gra____ is s_ strong th__ nothing, n__ even li___ can esc___ Even tho___ they a__ invisible, black holes can be detected by observing their effects on nearby matter. Black holes play a crucial role in astrophysics, influencing galaxy formation and offering insights into the nature of space, time, and gravity.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0812",
+      "date": "2026-08-12",
+      "source_hash": "4413f78a8ecb",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_1_1",
+      "passage": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world. Coral reefs are produced by colonies of tiny animals called coral polyps, which secrete calcium carbonate to build their hard skeletons. These natural formations provide critical habitats for a diverse array of marine species, including fish, crustaceans, and mollusks. They also offer protection to coastal areas by reducing the impact of waves and storms. However, coral reefs are facing threats from climate change, pollution, and overfishing",
+      "word_count": 80,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 17,
+          "original_word": "produced",
+          "displayed_fragment": "prod",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "colonies",
+          "displayed_fragment": "colo",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "tiny",
+          "displayed_fragment": "ti",
+          "hidden_length": 2
+        },
+        {
+          "position": 23,
+          "original_word": "called",
+          "displayed_fragment": "cal",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 30,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 32,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "skeletons",
+          "displayed_fragment": "skel",
+          "hidden_length": 5
+        },
+        {
+          "position": 36,
+          "original_word": "natural",
+          "displayed_fragment": "nat",
+          "hidden_length": 4
+        },
+        {
+          "position": 38,
+          "original_word": "provide",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world.",
+      "blanked_text": "Coral reefs are vibrant underwater ecosystems found in warm, shallow oceans around the world. Coral reefs are prod____ by colo____ of ti__ animals cal___ coral polyps, wh___ secrete calcium carbonate t_ build th___ hard skel_____ These nat____ formations pro____ critical habitats for a diverse array of marine species, including fish, crustaceans, and mollusks. They also offer protection to coastal areas by reducing the impact of waves and storms. However, coral reefs are facing threats from climate change, pollution, and overfishing",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_2_1",
+      "passage": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, which can lead to precipitation. Barometric pressure variations help meteorologists improve forecasts, as rapid fluctuations often signal approaching storms. advanced models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments. Fill in the missing letters in the paragraph.",
+      "word_count": 88,
+      "topic": "environment",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 34,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "lead",
+          "displayed_fragment": "le",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "precipitation",
+          "displayed_fragment": "precip",
+          "hidden_length": 7
+        },
+        {
+          "position": 41,
+          "original_word": "variations",
+          "displayed_fragment": "varia",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "meteorologists",
+          "displayed_fragment": "meteoro",
+          "hidden_length": 7
+        },
+        {
+          "position": 45,
+          "original_word": "forecasts",
+          "displayed_fragment": "fore",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "rapid",
+          "displayed_fragment": "ra",
+          "hidden_length": 3
+        },
+        {
+          "position": 49,
+          "original_word": "often",
+          "displayed_fragment": "of",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "approaching",
+          "displayed_fragment": "appro",
+          "hidden_length": 6
+        },
+        {
+          "position": 53,
+          "original_word": "advanced",
+          "displayed_fragment": "Adva",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Atmospheric pressure plays a critical role in weather systems.",
+      "blanked_text": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, wh___ can le__ to precip_______ Barometric pressure varia_____ help meteoro_______ improve fore_____ as ra___ fluctuations of___ signal appro______ storms. Adva____ models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments. Fill in the missing letters in the paragraph.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_3_1",
+      "passage": "Modern geographers employ advanced technologies, including geographic information systems (GIS), to analyze spatial data, enabling them to visualize patterns of urban development, resource allocation, and environmental change. This analytical approach allows geographers to provide insights into pressing global issues such as climate change, migration, and sustainable development, offering frameworks for informed decision-making and policy implementation. Understanding the geographic dimensions of these challenges is crucial for fostering resilience and adaptability in a rapidly changing world. Fill in the missing letters in the paragraph.",
+      "word_count": 82,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 28,
+          "original_word": "analytical",
+          "displayed_fragment": "analy",
+          "hidden_length": 5
+        },
+        {
+          "position": 30,
+          "original_word": "allows",
+          "displayed_fragment": "all",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 34,
+          "original_word": "insights",
+          "displayed_fragment": "insi",
+          "hidden_length": 4
+        },
+        {
+          "position": 36,
+          "original_word": "pressing",
+          "displayed_fragment": "pres",
+          "hidden_length": 4
+        },
+        {
+          "position": 38,
+          "original_word": "issues",
+          "displayed_fragment": "iss",
+          "hidden_length": 3
+        },
+        {
+          "position": 40,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 42,
+          "original_word": "change",
+          "displayed_fragment": "cha",
+          "hidden_length": 3
+        },
+        {
+          "position": 44,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 46,
+          "original_word": "development",
+          "displayed_fragment": "devel",
+          "hidden_length": 6
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Modern geographers employ advanced technologies, including geographic information systems (GIS), to analyze spatial data, enabling them to visualize patterns of urban development, resource allocation, and environmental change.",
+      "blanked_text": "Modern geographers employ advanced technologies, including geographic information systems (GIS), to analyze spatial data, enabling them to visualize patterns of urban development, resource allocation, and environmental change. This analy_____ approach all___ geographers t_ provide insi____ into pres____ global iss___ such a_ climate cha___ migration, a__ sustainable devel______ offering frameworks for informed decision-making and policy implementation. Understanding the geographic dimensions of these challenges is crucial for fostering resilience and adaptability in a rapidly changing world. Fill in the missing letters in the paragraph.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_4_1",
+      "passage": "Glaciers play a crucial role in Earth's climate and ecosystems. They store about 70% of the planet's freshwater and help regulate global temperatures by reflecting sunlight. As they move, glaciers shape landscapes, carving valleys and transporting sediment. Their seasonal melting feeds rivers and lakes, supporting agriculture and wildlife. Glaciers serve as indicators of climate change-rapid melting signals shifts in global temperatures. Studying glaciers helps scientists understand past climate patterns and predict future environmental impacts, making them vital to global research. Fill in the missing letters in the paragraph",
+      "word_count": 88,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 31,
+          "original_word": "landscapes",
+          "displayed_fragment": "lands",
+          "hidden_length": 5
+        },
+        {
+          "position": 33,
+          "original_word": "valleys",
+          "displayed_fragment": "val",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "transporting",
+          "displayed_fragment": "transp",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "Their",
+          "displayed_fragment": "Th",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "melting",
+          "displayed_fragment": "mel",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "rivers",
+          "displayed_fragment": "riv",
+          "hidden_length": 3
+        },
+        {
+          "position": 43,
+          "original_word": "lakes",
+          "displayed_fragment": "la",
+          "hidden_length": 3
+        },
+        {
+          "position": 45,
+          "original_word": "agriculture",
+          "displayed_fragment": "agric",
+          "hidden_length": 6
+        },
+        {
+          "position": 47,
+          "original_word": "wildlife",
+          "displayed_fragment": "wild",
+          "hidden_length": 4
+        },
+        {
+          "position": 49,
+          "original_word": "serve",
+          "displayed_fragment": "se",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Glaciers play a crucial role in Earth's climate and ecosystems.",
+      "blanked_text": "Glaciers play a crucial role in Earth's climate and ecosystems. They store about 70% of the planet's freshwater and help regulate global temperatures by reflecting sunlight. As they move, glaciers shape lands_____ carving val____ and transp______ sediment. Th___ seasonal mel____ feeds riv___ and la___ supporting agric______ and wild____ Glaciers se___ as indicators of climate change-rapid melting signals shifts in global temperatures. Studying glaciers helps scientists understand past climate patterns and predict future environmental impacts, making them vital to global research. Fill in the missing letters in the paragraph",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_5_1",
+      "passage": "The earliest ancestor of the modern bicycle is probably a machine used in England in the early 1800s called a hobbyhorse. It had two wheels and a place to sit, but no pedals; riders would push it along with their feet. Later, an inventor added pedals directly to the front wheel, like a modern child's tricycle. This version, with a huge front wheel, was faster, but it was unsafe. Riders were high off the ground, and the two wheels were close together, making both balance and stopping difficult",
+      "word_count": 88,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 22,
+          "original_word": "had",
+          "displayed_fragment": "h",
+          "hidden_length": 2
+        },
+        {
+          "position": 24,
+          "original_word": "wheels",
+          "displayed_fragment": "whe",
+          "hidden_length": 3
+        },
+        {
+          "position": 27,
+          "original_word": "place",
+          "displayed_fragment": "pl",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "sit",
+          "displayed_fragment": "s",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "no",
+          "displayed_fragment": "n",
+          "hidden_length": 1
+        },
+        {
+          "position": 33,
+          "original_word": "riders",
+          "displayed_fragment": "rid",
+          "hidden_length": 3
+        },
+        {
+          "position": 35,
+          "original_word": "push",
+          "displayed_fragment": "pu",
+          "hidden_length": 2
+        },
+        {
+          "position": 37,
+          "original_word": "along",
+          "displayed_fragment": "al",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 41,
+          "original_word": "Later",
+          "displayed_fragment": "La",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The earliest ancestor of the modern bicycle is probably a machine used in England in the early 1800s called a hobbyhorse.",
+      "blanked_text": "The earliest ancestor of the modern bicycle is probably a machine used in England in the early 1800s called a hobbyhorse. It h__ two whe___ and a pl___ to s__ but n_ pedals; rid___ would pu__ it al___ with th___ feet. La___ an inventor added pedals directly to the front wheel, like a modern child's tricycle. This version, with a huge front wheel, was faster, but it was unsafe. Riders were high off the ground, and the two wheels were close together, making both balance and stopping difficult",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_6_1",
+      "passage": "Pigments are substances that provide color to materials, and they can be derived from various natural sources, such as minerals and plants. It was once common for artists to create their own paints by mixing several pigments together. This process was time-consuming and required detailed knowledge of pigments-their chemical properties, how they interact with different media, and their durability over time. But it also allowed painters to give their artworks a truly unique color palette",
+      "word_count": 75,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 23,
+          "original_word": "was",
+          "displayed_fragment": "w",
+          "hidden_length": 2
+        },
+        {
+          "position": 25,
+          "original_word": "common",
+          "displayed_fragment": "com",
+          "hidden_length": 3
+        },
+        {
+          "position": 27,
+          "original_word": "artists",
+          "displayed_fragment": "art",
+          "hidden_length": 4
+        },
+        {
+          "position": 29,
+          "original_word": "create",
+          "displayed_fragment": "cre",
+          "hidden_length": 3
+        },
+        {
+          "position": 31,
+          "original_word": "own",
+          "displayed_fragment": "o",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "by",
+          "displayed_fragment": "b",
+          "hidden_length": 1
+        },
+        {
+          "position": 35,
+          "original_word": "several",
+          "displayed_fragment": "sev",
+          "hidden_length": 4
+        },
+        {
+          "position": 37,
+          "original_word": "together",
+          "displayed_fragment": "toge",
+          "hidden_length": 4
+        },
+        {
+          "position": 39,
+          "original_word": "process",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        },
+        {
+          "position": 60,
+          "original_word": "time",
+          "displayed_fragment": "ti",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Pigments are substances that provide color to materials, and they can be derived from various natural sources, such as minerals and plants.",
+      "blanked_text": "Pigments are substances that provide color to materials, and they can be derived from various natural sources, such as minerals and plants. It w__ once com___ for art____ to cre___ their o__ paints b_ mixing sev____ pigments toge____ This pro____ was time-consuming and required detailed knowledge of pigments-their chemical properties, how they interact with different media, and their durability over ti__ But it also allowed painters to give their artworks a truly unique color palette",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0819_7_1",
+      "passage": "The Odyssey is an ancient Greek epic poem that follows the hero, Odysseus, on his ten-year journey home after the Trojan War. It is widely considered one of the greatest works in the history of European literature. The Odyssey established many narrative structures and archetypes-like the hero's journey-that continue to shape storytelling today. It also delves into timeless human experiences. Odysseus's longing to return home, for example, resonates with the universal desire for belonging and stability. He must adapt, disguise, and rediscover himself, reflecting the fluid nature of identity",
+      "word_count": 89,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 2,
+          "original_word": "is",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 25,
+          "original_word": "considered",
+          "displayed_fragment": "consi",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 29,
+          "original_word": "greatest",
+          "displayed_fragment": "grea",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 33,
+          "original_word": "history",
+          "displayed_fragment": "his",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "European",
+          "displayed_fragment": "Euro",
+          "hidden_length": 4
+        },
+        {
+          "position": 39,
+          "original_word": "established",
+          "displayed_fragment": "estab",
+          "hidden_length": 6
+        },
+        {
+          "position": 41,
+          "original_word": "narrative",
+          "displayed_fragment": "narr",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The Odyssey is an ancient Greek epic poem that follows the hero, Odysseus, on his ten-year journey home after the Trojan War.",
+      "blanked_text": "The Odyssey i_ an ancient Greek epic poem that follows the hero, Odysseus, on his ten-year journey home after the Trojan War. It is widely consi_____ one o_ the grea____ works i_ the his____ of Euro____ literature. The Odyssey estab______ many narr_____ structures a__ archetypes-like the hero's journey-that continue to shape storytelling today. It also delves into timeless human experiences. Odysseus's longing to return home, for example, resonates with the universal desire for belonging and stability. He must adapt, disguise, and rediscover himself, reflecting the fluid nature of identity",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "744820597392",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_1_1",
+      "passage": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, which can lead to precipitation. Barometric pressure variations help meteorologists improve forecasts, as rapid fluctuations often signal approaching storms. advanced models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments.",
+      "word_count": 80,
+      "topic": "environment",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 34,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "lead",
+          "displayed_fragment": "le",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "precipitation",
+          "displayed_fragment": "precip",
+          "hidden_length": 7
+        },
+        {
+          "position": 41,
+          "original_word": "variations",
+          "displayed_fragment": "varia",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "meteorologists",
+          "displayed_fragment": "meteoro",
+          "hidden_length": 7
+        },
+        {
+          "position": 45,
+          "original_word": "forecasts",
+          "displayed_fragment": "fore",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "rapid",
+          "displayed_fragment": "ra",
+          "hidden_length": 3
+        },
+        {
+          "position": 49,
+          "original_word": "often",
+          "displayed_fragment": "of",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "approaching",
+          "displayed_fragment": "appro",
+          "hidden_length": 6
+        },
+        {
+          "position": 53,
+          "original_word": "advanced",
+          "displayed_fragment": "Adva",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Atmospheric pressure plays a critical role in weather systems.",
+      "blanked_text": "Atmospheric pressure plays a critical role in weather systems. High-pressure zones bring clear, calm conditions due to descending air that inhibits cloud formation. In low-pressure systems, warm air rises, cools, and condenses into clouds, wh___ can le__ to precip_______ Barometric pressure varia_____ help meteoro_______ improve fore_____ as ra___ fluctuations of___ signal appro______ storms. Adva____ models use atmospheric force gradients, temperature, and humidity to predict storm movement and intensity, providing vital information for both short-term weather outlooks and long-term climate assessments.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_2_1",
+      "passage": "Rooted in both biology and chemistry, modern biochemistry has grown into a foundational science that explores the molecular basis of life. it emerged from early investigations into natural processes like fermentation and digestion and now encompasses the study of biomolecules such as proteins, carbohydrates, and nucleic acids. Biochemistry plays a vital role in diverse fields including agriculture, environmental science, and pharmacology, contributing to innovations in areas like crop improvement, pollution control, and drug design, for example. Its broad applications continue to shape our understanding of living systems and support solutions to global challenges.",
+      "word_count": 93,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 21,
+          "original_word": "it",
+          "displayed_fragment": "I",
+          "hidden_length": 1
+        },
+        {
+          "position": 23,
+          "original_word": "from",
+          "displayed_fragment": "fr",
+          "hidden_length": 2
+        },
+        {
+          "position": 25,
+          "original_word": "investigations",
+          "displayed_fragment": "investi",
+          "hidden_length": 7
+        },
+        {
+          "position": 27,
+          "original_word": "natural",
+          "displayed_fragment": "nat",
+          "hidden_length": 4
+        },
+        {
+          "position": 29,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "now",
+          "displayed_fragment": "n",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 40,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Rooted in both biology and chemistry, modern biochemistry has grown into a foundational science that explores the molecular basis of life.",
+      "blanked_text": "Rooted in both biology and chemistry, modern biochemistry has grown into a foundational science that explores the molecular basis of life. I_ emerged fr__ early investi_______ into nat____ processes li__ fermentation a__ digestion and n__ encompasses t__ study o_ biomolecules su__ as proteins, carbohydrates, and nucleic acids. Biochemistry plays a vital role in diverse fields including agriculture, environmental science, and pharmacology, contributing to innovations in areas like crop improvement, pollution control, and drug design, for example. Its broad applications continue to shape our understanding of living systems and support solutions to global challenges.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_3_1",
+      "passage": "Human anatomy is the scientific study of human structure. Anatomy reveals how different parts of the body interact and function together to maintain life. For example, the circulatory system transports blood throughout the body, carrying oxygen and nutrients to cells while removing waste products. Anatomists must also understand the organization of organs, tissues, and cells. Medical professionals use anatomical knowledge to diagnose and treat illnesses, improving patient care and health outcomes",
+      "word_count": 71,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 10,
+          "original_word": "reveals",
+          "displayed_fragment": "rev",
+          "hidden_length": 4
+        },
+        {
+          "position": 13,
+          "original_word": "parts",
+          "displayed_fragment": "pa",
+          "hidden_length": 3
+        },
+        {
+          "position": 15,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 17,
+          "original_word": "interact",
+          "displayed_fragment": "inte",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "function",
+          "displayed_fragment": "func",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 23,
+          "original_word": "life",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 25,
+          "original_word": "example",
+          "displayed_fragment": "exa",
+          "hidden_length": 4
+        },
+        {
+          "position": 28,
+          "original_word": "system",
+          "displayed_fragment": "sys",
+          "hidden_length": 3
+        },
+        {
+          "position": 30,
+          "original_word": "blood",
+          "displayed_fragment": "bl",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Human anatomy is the scientific study of human structure.",
+      "blanked_text": "Human anatomy is the scientific study of human structure. Anatomy rev____ how different pa___ of t__ body inte____ and func____ together t_ maintain li__ For exa____ the circulatory sys___ transports bl___ throughout the body, carrying oxygen and nutrients to cells while removing waste products. Anatomists must also understand the organization of organs, tissues, and cells. Medical professionals use anatomical knowledge to diagnose and treat illnesses, improving patient care and health outcomes",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_6_1",
+      "passage": "The concept of microfinance has transformed the way people access financial services. Microfinance institutions provide small loans to individuals or groups who lack access to traditional banking. These loans empower recipients to start or expand small businesses, improving their living conditions and communities. By encouraging financial literacy and advancing financial inclusion, microfinance helps reduce poverty, foster economic development, and build long-term stability at the grassroots level. Understanding this system helps design effective financial inclusion strategies",
+      "word_count": 75,
+      "topic": "economics",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 30,
+          "original_word": "recipients",
+          "displayed_fragment": "recip",
+          "hidden_length": 5
+        },
+        {
+          "position": 32,
+          "original_word": "start",
+          "displayed_fragment": "st",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "expand",
+          "displayed_fragment": "exp",
+          "hidden_length": 3
+        },
+        {
+          "position": 36,
+          "original_word": "businesses",
+          "displayed_fragment": "busin",
+          "hidden_length": 5
+        },
+        {
+          "position": 38,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 40,
+          "original_word": "conditions",
+          "displayed_fragment": "condi",
+          "hidden_length": 5
+        },
+        {
+          "position": 42,
+          "original_word": "communities",
+          "displayed_fragment": "commu",
+          "hidden_length": 6
+        },
+        {
+          "position": 44,
+          "original_word": "encouraging",
+          "displayed_fragment": "encou",
+          "hidden_length": 6
+        },
+        {
+          "position": 46,
+          "original_word": "literacy",
+          "displayed_fragment": "lite",
+          "hidden_length": 4
+        },
+        {
+          "position": 48,
+          "original_word": "advancing",
+          "displayed_fragment": "adva",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The concept of microfinance has transformed the way people access financial services.",
+      "blanked_text": "The concept of microfinance has transformed the way people access financial services. Microfinance institutions provide small loans to individuals or groups who lack access to traditional banking. These loans empower recip_____ to st___ or exp___ small busin_____ improving th___ living condi_____ and commu______ By encou______ financial lite____ and adva_____ financial inclusion, microfinance helps reduce poverty, foster economic development, and build long-term stability at the grassroots level. Understanding this system helps design effective financial inclusion strategies",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_7_1",
+      "passage": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This field encompasses the exploration of ocean currents, marine ecosystems, and geological seabed structures. Oceanographers use satellites and other advanced technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "word_count": 71,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "field",
+          "displayed_fragment": "fi",
+          "hidden_length": 3
+        },
+        {
+          "position": 17,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 19,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 21,
+          "original_word": "currents",
+          "displayed_fragment": "curr",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "ecosystems",
+          "displayed_fragment": "ecosy",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "geological",
+          "displayed_fragment": "geolo",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "hidden_length": 5
+        },
+        {
+          "position": 29,
+          "original_word": "use",
+          "displayed_fragment": "u",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "advanced",
+          "displayed_fragment": "adva",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean.",
+      "blanked_text": "Oceanography is the study of the physical, chemical, and biological aspects of the ocean. This fi___ encompasses t__ exploration o_ ocean curr____ marine ecosy_____ and geolo_____ seabed struc_____ Oceanographers u__ satellites a__ other adva____ technology to monitor and analyze ocean conditions. By tracking sea surface temperatures, currents, salinity, and other features, researchers contribute to our understanding of climate change. Their work is vital for sustaining ocean health and preserving marine biodiversity.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_9_1",
+      "passage": "Public health is a field that looks at the overall well-being of communities, focusing on how society and individual health are connected. Over time, public health programs have grown from basic efforts like improving sanitation to include many strategies that deal with social factors affecting health. This history shows the ongoing challenge of deciding how to use limited resources while facing more and more health problems, such as new diseases and long-term conditions linked to lifestyle. As leaders work to solve these issues, they are realizing the importance of teamwork across different fields.",
+      "word_count": 93,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 23,
+          "original_word": "time",
+          "displayed_fragment": "ti",
+          "hidden_length": 2
+        },
+        {
+          "position": 26,
+          "original_word": "programs",
+          "displayed_fragment": "prog",
+          "hidden_length": 4
+        },
+        {
+          "position": 28,
+          "original_word": "grown",
+          "displayed_fragment": "gr",
+          "hidden_length": 3
+        },
+        {
+          "position": 30,
+          "original_word": "basic",
+          "displayed_fragment": "ba",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "sanitation",
+          "displayed_fragment": "sanit",
+          "hidden_length": 5
+        },
+        {
+          "position": 36,
+          "original_word": "include",
+          "displayed_fragment": "inc",
+          "hidden_length": 4
+        },
+        {
+          "position": 38,
+          "original_word": "strategies",
+          "displayed_fragment": "strat",
+          "hidden_length": 5
+        },
+        {
+          "position": 40,
+          "original_word": "deal",
+          "displayed_fragment": "de",
+          "hidden_length": 2
+        },
+        {
+          "position": 42,
+          "original_word": "social",
+          "displayed_fragment": "soc",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Public health is a field that looks at the overall well-being of communities, focusing on how society and individual health are connected.",
+      "blanked_text": "Public health is a field that looks at the overall well-being of communities, focusing on how society and individual health are connected. Over ti__ public health prog____ have gr___ from ba___ efforts li__ improving sanit_____ to inc____ many strat_____ that de__ with soc___ factors affecting health. This history shows the ongoing challenge of deciding how to use limited resources while facing more and more health problems, such as new diseases and long-term conditions linked to lifestyle. As leaders work to solve these issues, they are realizing the importance of teamwork across different fields.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0822_11_1",
+      "passage": "Medieval European history encompasses the time period from the fall of the Roman Empire to the onset of the Renaissance. This era lasted around 900 years and is also called the Middle Ages. During these centuries, feudalism was the dominant social structure, shaping the political, economic, and cultural landscape. Daily life and governance were strongly influenced by the Catholic Church. Studying medieval history reveals the foundations of modern European society and the profound changes that occurred over time. It also helps students understand how people lived, worked, and believed during this important time in history.",
+      "word_count": 95,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 33,
+          "original_word": "During",
+          "displayed_fragment": "Dur",
+          "hidden_length": 3
+        },
+        {
+          "position": 35,
+          "original_word": "centuries",
+          "displayed_fragment": "cent",
+          "hidden_length": 5
+        },
+        {
+          "position": 37,
+          "original_word": "was",
+          "displayed_fragment": "w",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "dominant",
+          "displayed_fragment": "domi",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "structure",
+          "displayed_fragment": "stru",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 45,
+          "original_word": "economic",
+          "displayed_fragment": "econ",
+          "hidden_length": 4
+        },
+        {
+          "position": 47,
+          "original_word": "cultural",
+          "displayed_fragment": "cult",
+          "hidden_length": 4
+        },
+        {
+          "position": 49,
+          "original_word": "Daily",
+          "displayed_fragment": "Da",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Medieval European history encompasses the time period from the fall of the Roman Empire to the onset of the Renaissance.",
+      "blanked_text": "Medieval European history encompasses the time period from the fall of the Roman Empire to the onset of the Renaissance. This era lasted around 900 years and is also called the Middle Ages. Dur___ these cent_____ feudalism w__ the domi____ social stru_____ shaping t__ political, econ____ and cult____ landscape. Da___ life a__ governance were strongly influenced by the Catholic Church. Studying medieval history reveals the foundations of modern European society and the profound changes that occurred over time. It also helps students understand how people lived, worked, and believed during this important time in history.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_2_1",
+      "passage": "Prehistoric art and religion provide invaluable insights into the spiritual life of early humans. Cave paintings and carvings often depict animals and symbolic figures, reflecting the beliefs and rituals of ancient communities. These artworks serve as a window into the social structures and cultural practices of prehistoric times . By studying them, researchers can better understand the evolution of human thought and spirituality. These early forms of art show that even long ago, people had deep feelings, ideas, and questions about life and the world around them",
+      "word_count": 87,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 34,
+          "original_word": "serve",
+          "displayed_fragment": "se",
+          "hidden_length": 3
+        },
+        {
+          "position": 37,
+          "original_word": "window",
+          "displayed_fragment": "win",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "structures",
+          "displayed_fragment": "struc",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "cultural",
+          "displayed_fragment": "cult",
+          "hidden_length": 4
+        },
+        {
+          "position": 45,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 47,
+          "original_word": "times",
+          "displayed_fragment": "ti",
+          "hidden_length": 3
+        },
+        {
+          "position": 50,
+          "original_word": "studying",
+          "displayed_fragment": "stud",
+          "hidden_length": 4
+        },
+        {
+          "position": 52,
+          "original_word": "researchers",
+          "displayed_fragment": "resea",
+          "hidden_length": 6
+        },
+        {
+          "position": 54,
+          "original_word": "better",
+          "displayed_fragment": "bet",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Prehistoric art and religion provide invaluable insights into the spiritual life of early humans.",
+      "blanked_text": "Prehistoric art and religion provide invaluable insights into the spiritual life of early humans. Cave paintings and carvings often depict animals and symbolic figures, reflecting the beliefs and rituals of ancient communities. These artworks se___ as a win___ into t__ social struc_____ and cult____ practices o_ prehistoric ti___ . By stud____ them, resea______ can bet___ understand the evolution of human thought and spirituality. These early forms of art show that even long ago, people had deep feelings, ideas, and questions about life and the world around them",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_3_1",
+      "passage": "The study of animal behavior, specifically that of insects, provides insight into the complex interactions within ecosystems. Insects exhibit a broad range of behaviors from foraging and mating to complex social organization. For instance, bees perform intricate dances to communicate the location of food sources. Ants communicate using chemical signals called pheromones, which help coordinate complex tasks like defending the colony and locating resources. This cooperative behavior ensures the survival and efficiency of their communities",
+      "word_count": 75,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 18,
+          "original_word": "exhibit",
+          "displayed_fragment": "exh",
+          "hidden_length": 4
+        },
+        {
+          "position": 20,
+          "original_word": "broad",
+          "displayed_fragment": "br",
+          "hidden_length": 3
+        },
+        {
+          "position": 22,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 24,
+          "original_word": "from",
+          "displayed_fragment": "fr",
+          "hidden_length": 2
+        },
+        {
+          "position": 26,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 30,
+          "original_word": "social",
+          "displayed_fragment": "soc",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "For",
+          "displayed_fragment": "F",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "bees",
+          "displayed_fragment": "be",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "intricate",
+          "displayed_fragment": "intr",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The study of animal behavior, specifically that of insects, provides insight into the complex interactions within ecosystems.",
+      "blanked_text": "The study of animal behavior, specifically that of insects, provides insight into the complex interactions within ecosystems. Insects exh____ a br___ range o_ behaviors fr__ foraging a__ mating t_ complex soc___ organization. F__ instance, be__ perform intr_____ dances to communicate the location of food sources. Ants communicate using chemical signals called pheromones, which help coordinate complex tasks like defending the colony and locating resources. This cooperative behavior ensures the survival and efficiency of their communities",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_4_1",
+      "passage": "Observing the moon's phases has been important for many cultures throughout history, influencing calendars, navigation, and mythology. Lunar cycles formed the basis of early timekeeping systems, such as the Islamic Hijri calendar and the traditional Chinese lunisolar calendar. Seafarers used the position of the moon to make predictions about ocean levels and its illumination to guide their voyages, especially during night travel. In mythology, the moon often embodied powerful deities or symbols, shaping rituals, stories, and seasonal festivals. Across continents, the waxing and waning of the moon has remained a universal clock and an inspiration for human imagination.",
+      "word_count": 98,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 39,
+          "original_word": "used",
+          "displayed_fragment": "us",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "position",
+          "displayed_fragment": "posi",
+          "hidden_length": 4
+        },
+        {
+          "position": 43,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 45,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 47,
+          "original_word": "predictions",
+          "displayed_fragment": "predi",
+          "hidden_length": 6
+        },
+        {
+          "position": 49,
+          "original_word": "ocean",
+          "displayed_fragment": "oc",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 53,
+          "original_word": "illumination",
+          "displayed_fragment": "illumin",
+          "hidden_length": 5
+        },
+        {
+          "position": 55,
+          "original_word": "guide",
+          "displayed_fragment": "gu",
+          "hidden_length": 3
+        },
+        {
+          "position": 57,
+          "original_word": "voyages",
+          "displayed_fragment": "voy",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Observing the moon's phases has been important for many cultures throughout history, influencing calendars, navigation, and mythology.",
+      "blanked_text": "Observing the moon's phases has been important for many cultures throughout history, influencing calendars, navigation, and mythology. Lunar cycles formed the basis of early timekeeping systems, such as the Islamic Hijri calendar and the traditional Chinese lunisolar calendar. Seafarers us__ the posi____ of t__ moon t_ make predi______ about oc___ levels a__ its illumin_____ to gu___ their voy____ especially during night travel. In mythology, the moon often embodied powerful deities or symbols, shaping rituals, stories, and seasonal festivals. Across continents, the waxing and waning of the moon has remained a universal clock and an inspiration for human imagination.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_5_1",
+      "passage": "The Mughal Empire, which ruled much of South Asia from 1526 to 1857, was a powerful Islamic dynasty known for its administrative sophistication and cultural patronage. Mughal paintings, particularly miniature illustrations, blended Persian, Indian, and Central Asian artistic traditions. These small works, commissioned by Mughal emperors, often depicted royal life, historical events, and scenes from mythology with remarkable detail and realism. As court-sponsored art, they reflected imperial wealth, political authority, and cross-cultural exchange, serving both aesthetic and documentary purposes within a thriving economy supported by trade, agriculture, and centralized governance",
+      "word_count": 90,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 40,
+          "original_word": "small",
+          "displayed_fragment": "sm",
+          "hidden_length": 3
+        },
+        {
+          "position": 42,
+          "original_word": "commissioned",
+          "displayed_fragment": "commis",
+          "hidden_length": 6
+        },
+        {
+          "position": 45,
+          "original_word": "emperors",
+          "displayed_fragment": "empe",
+          "hidden_length": 4
+        },
+        {
+          "position": 47,
+          "original_word": "depicted",
+          "displayed_fragment": "depi",
+          "hidden_length": 4
+        },
+        {
+          "position": 49,
+          "original_word": "life",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 51,
+          "original_word": "events",
+          "displayed_fragment": "eve",
+          "hidden_length": 3
+        },
+        {
+          "position": 53,
+          "original_word": "scenes",
+          "displayed_fragment": "sce",
+          "hidden_length": 3
+        },
+        {
+          "position": 55,
+          "original_word": "mythology",
+          "displayed_fragment": "myth",
+          "hidden_length": 5
+        },
+        {
+          "position": 57,
+          "original_word": "remarkable",
+          "displayed_fragment": "remar",
+          "hidden_length": 5
+        },
+        {
+          "position": 59,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The Mughal Empire, which ruled much of South Asia from 1526 to 1857, was a powerful Islamic dynasty known for its administrative sophistication and cultural patronage.",
+      "blanked_text": "The Mughal Empire, which ruled much of South Asia from 1526 to 1857, was a powerful Islamic dynasty known for its administrative sophistication and cultural patronage. Mughal paintings, particularly miniature illustrations, blended Persian, Indian, and Central Asian artistic traditions. These sm___ works, commis______ by Mughal empe____ often depi____ royal li__ historical eve___ and sce___ from myth_____ with remar_____ detail a__ realism. As court-sponsored art, they reflected imperial wealth, political authority, and cross-cultural exchange, serving both aesthetic and documentary purposes within a thriving economy supported by trade, agriculture, and centralized governance",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_6_1",
+      "passage": "This knowledge is essential for planning disaster response, managing resources and addressing climate change. Geographic literacy also fosters critical thinking about migration, urban development, and environmental sustainability. By teaching students to analyze maps, data, and patterns, geography empowers them to make informed decisions in an increasingly interconnected and environmentally challenged world.",
+      "word_count": 51,
+      "topic": "environment",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 1,
+          "original_word": "knowledge",
+          "displayed_fragment": "know",
+          "hidden_length": 5
+        },
+        {
+          "position": 3,
+          "original_word": "essential",
+          "displayed_fragment": "esse",
+          "hidden_length": 5
+        },
+        {
+          "position": 5,
+          "original_word": "planning",
+          "displayed_fragment": "plan",
+          "hidden_length": 4
+        },
+        {
+          "position": 7,
+          "original_word": "response",
+          "displayed_fragment": "respo",
+          "hidden_length": 3
+        },
+        {
+          "position": 9,
+          "original_word": "resources",
+          "displayed_fragment": "reso",
+          "hidden_length": 5
+        },
+        {
+          "position": 11,
+          "original_word": "addressing",
+          "displayed_fragment": "addre",
+          "hidden_length": 5
+        },
+        {
+          "position": 13,
+          "original_word": "change",
+          "displayed_fragment": "cha",
+          "hidden_length": 3
+        },
+        {
+          "position": 15,
+          "original_word": "literacy",
+          "displayed_fragment": "lite",
+          "hidden_length": 4
+        },
+        {
+          "position": 17,
+          "original_word": "fosters",
+          "displayed_fragment": "fos",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "thinking",
+          "displayed_fragment": "thin",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "This knowledge is essential for planning disaster response, managing resources and addressing climate change.",
+      "blanked_text": "This know_____ is esse_____ for plan____ disaster respo___ managing reso_____ and addre_____ climate cha___ Geographic lite____ also fos____ critical thin____ about migration, urban development, and environmental sustainability. By teaching students to analyze maps, data, and patterns, geography empowers them to make informed decisions in an increasingly interconnected and environmentally challenged world.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_7_1",
+      "passage": "Sodium-ion batteries are gaining attention as a potential alternative to lithium-ion batteries. Sodium is more accessible than lithium because it can be extracted from seawater, while lithium typically requires mining methods that can harm the environment. Sodium-ion technology is considered more sustainable in the long term . However, several challenges limit its widespread use. Sodium-ion batteries often store less energy than lithium-ion batteries, reducing their efficiency for certain applications. Researchers continue to study sodium-ion batteries in order to improve their performance and determine their role in future energy systems.",
+      "word_count": 89,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 33,
+          "original_word": "harm",
+          "displayed_fragment": "ha",
+          "hidden_length": 2
+        },
+        {
+          "position": 35,
+          "original_word": "environment",
+          "displayed_fragment": "envir",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "technology",
+          "displayed_fragment": "techn",
+          "hidden_length": 5
+        },
+        {
+          "position": 39,
+          "original_word": "considered",
+          "displayed_fragment": "consi",
+          "hidden_length": 5
+        },
+        {
+          "position": 41,
+          "original_word": "sustainable",
+          "displayed_fragment": "susta",
+          "hidden_length": 6
+        },
+        {
+          "position": 43,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 45,
+          "original_word": "term",
+          "displayed_fragment": "te",
+          "hidden_length": 2
+        },
+        {
+          "position": 48,
+          "original_word": "several",
+          "displayed_fragment": "sev",
+          "hidden_length": 4
+        },
+        {
+          "position": 50,
+          "original_word": "limit",
+          "displayed_fragment": "li",
+          "hidden_length": 3
+        },
+        {
+          "position": 52,
+          "original_word": "widespread",
+          "displayed_fragment": "wides",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Sodium-ion batteries are gaining attention as a potential alternative to lithium-ion batteries.",
+      "blanked_text": "Sodium-ion batteries are gaining attention as a potential alternative to lithium-ion batteries. Sodium is more accessible than lithium because it can be extracted from seawater, while lithium typically requires mining methods that can ha__ the envir______ Sodium-ion techn_____ is consi_____ more susta______ in t__ long te__ . However, sev____ challenges li___ its wides_____ use. Sodium-ion batteries often store less energy than lithium-ion batteries, reducing their efficiency for certain applications. Researchers continue to study sodium-ion batteries in order to improve their performance and determine their role in future energy systems.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_10_1",
+      "passage": "The concept of ecological footprints is used to analyze an individual's or a nation's environmental impacts. This measure accounts for the resources consumed as well as waste created and compares them to Earth's ability to regenerate those resources. Because consumption patterns vary globally, significant disparities emerge between regions. In developed countries, larger footprints result from greater per capita resource use and greater reliance on technology. Understanding these patterns is crucial for developing sustainable policies that aim to reduce human demands on the planet's ecosystems, ensuring long-term environmental and economic viability.",
+      "word_count": 90,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 39,
+          "original_word": "consumption",
+          "displayed_fragment": "consu",
+          "hidden_length": 6
+        },
+        {
+          "position": 41,
+          "original_word": "vary",
+          "displayed_fragment": "va",
+          "hidden_length": 2
+        },
+        {
+          "position": 43,
+          "original_word": "significant",
+          "displayed_fragment": "signi",
+          "hidden_length": 6
+        },
+        {
+          "position": 45,
+          "original_word": "emerge",
+          "displayed_fragment": "eme",
+          "hidden_length": 3
+        },
+        {
+          "position": 47,
+          "original_word": "regions",
+          "displayed_fragment": "reg",
+          "hidden_length": 4
+        },
+        {
+          "position": 49,
+          "original_word": "developed",
+          "displayed_fragment": "deve",
+          "hidden_length": 5
+        },
+        {
+          "position": 51,
+          "original_word": "larger",
+          "displayed_fragment": "lar",
+          "hidden_length": 3
+        },
+        {
+          "position": 53,
+          "original_word": "result",
+          "displayed_fragment": "res",
+          "hidden_length": 3
+        },
+        {
+          "position": 55,
+          "original_word": "greater",
+          "displayed_fragment": "gre",
+          "hidden_length": 4
+        },
+        {
+          "position": 57,
+          "original_word": "capita",
+          "displayed_fragment": "cap",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The concept of ecological footprints is used to analyze an individual's or a nation's environmental impacts.",
+      "blanked_text": "The concept of ecological footprints is used to analyze an individual's or a nation's environmental impacts. This measure accounts for the resources consumed as well as waste created and compares them to Earth's ability to regenerate those resources. Because consu______ patterns va__ globally, signi______ disparities eme___ between reg____ In deve_____ countries, lar___ footprints res___ from gre____ per cap___ resource use and greater reliance on technology. Understanding these patterns is crucial for developing sustainable policies that aim to reduce human demands on the planet's ecosystems, ensuring long-term environmental and economic viability.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_12_1",
+      "passage": "The rise of industrialization in the eighteenth and nineteenth centuries brought about a dramatic shift in how goods were made, leading to the widespread development of factories. These centralized workplaces replaced traditional handicrafting and cottage industries with mechanized production systems powered by steam, water, or electricity, allowing for greater efficiency in the manufacturing of goods. Factories not only transformed economies and labor systems but also reshaped urban landscapes, contributing to population growth, environmental changes, and new social dynamics.",
+      "word_count": 78,
+      "topic": "environment",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 29,
+          "original_word": "workplaces",
+          "displayed_fragment": "workp",
+          "hidden_length": 5
+        },
+        {
+          "position": 31,
+          "original_word": "traditional",
+          "displayed_fragment": "tradi",
+          "hidden_length": 6
+        },
+        {
+          "position": 33,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 35,
+          "original_word": "industries",
+          "displayed_fragment": "indus",
+          "hidden_length": 5
+        },
+        {
+          "position": 38,
+          "original_word": "production",
+          "displayed_fragment": "produ",
+          "hidden_length": 5
+        },
+        {
+          "position": 40,
+          "original_word": "powered",
+          "displayed_fragment": "pow",
+          "hidden_length": 4
+        },
+        {
+          "position": 42,
+          "original_word": "steam",
+          "displayed_fragment": "st",
+          "hidden_length": 3
+        },
+        {
+          "position": 44,
+          "original_word": "or",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 46,
+          "original_word": "allowing",
+          "displayed_fragment": "allo",
+          "hidden_length": 4
+        },
+        {
+          "position": 48,
+          "original_word": "greater",
+          "displayed_fragment": "gre",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The rise of industrialization in the eighteenth and nineteenth centuries brought about a dramatic shift in how goods were made, leading to the widespread development of factories.",
+      "blanked_text": "The rise of industrialization in the eighteenth and nineteenth centuries brought about a dramatic shift in how goods were made, leading to the widespread development of factories. These centralized workp_____ replaced tradi______ handicrafting a__ cottage indus_____ with mechanized produ_____ systems pow____ by st___ water, o_ electricity, allo____ for gre____ efficiency in the manufacturing of goods. Factories not only transformed economies and labor systems but also reshaped urban landscapes, contributing to population growth, environmental changes, and new social dynamics.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_14_1",
+      "passage": "Geographical features such as mountains shape the landscape and climate of a region. Mountains can act as natural barriers . The Himalayas, for example, block cold winds coming from Central Asia, keeping the Indian subcontinent warmer . They also cause orographic rainfall, where moist air rises, cools, and precipitates on the windward side, creating lush forests, while the leeward side remains dry. Mountain ranges like the Andes and the Rockies host unique flora and fauna adapted to high altitudes.",
+      "word_count": 79,
+      "topic": "geology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "can",
+          "displayed_fragment": "c",
+          "hidden_length": 2
+        },
+        {
+          "position": 16,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 18,
+          "original_word": "barriers",
+          "displayed_fragment": "barr",
+          "hidden_length": 4
+        },
+        {
+          "position": 22,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "hidden_length": 2
+        },
+        {
+          "position": 24,
+          "original_word": "block",
+          "displayed_fragment": "bl",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "winds",
+          "displayed_fragment": "wi",
+          "hidden_length": 3
+        },
+        {
+          "position": 28,
+          "original_word": "from",
+          "displayed_fragment": "fr",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "keeping",
+          "displayed_fragment": "kee",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "warmer",
+          "displayed_fragment": "war",
+          "hidden_length": 3
+        },
+        {
+          "position": 38,
+          "original_word": "also",
+          "displayed_fragment": "al",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Geographical features such as mountains shape the landscape and climate of a region.",
+      "blanked_text": "Geographical features such as mountains shape the landscape and climate of a region. Mountains c__ act a_ natural barr____ . The Himalayas, f__ example, bl___ cold wi___ coming fr__ Central Asia, kee____ the Indian subcontinent war___ . They al__ cause orographic rainfall, where moist air rises, cools, and precipitates on the windward side, creating lush forests, while the leeward side remains dry. Mountain ranges like the Andes and the Rockies host unique flora and fauna adapted to high altitudes.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_15_1",
+      "passage": "Glaciers play a crucial role in Earth's climate and ecosystems. They store about 70% of the planet's freshwater and help regulate global temperatures by reflecting sunlight. As they move, glaciers shape landscapes, carving valleys and transporting sediment. Their seasonal melting feeds rivers and lakes, supporting agriculture and wildlife. Glaciers serve as indicators of climate change-rapid melting signals shifts in global temperatures. Studying glaciers helps scientists understand past climate patterns and predict future environmental impacts, making them vital to global research",
+      "word_count": 80,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 31,
+          "original_word": "landscapes",
+          "displayed_fragment": "lands",
+          "hidden_length": 5
+        },
+        {
+          "position": 33,
+          "original_word": "valleys",
+          "displayed_fragment": "val",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "transporting",
+          "displayed_fragment": "transp",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "Their",
+          "displayed_fragment": "Th",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "melting",
+          "displayed_fragment": "mel",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "rivers",
+          "displayed_fragment": "riv",
+          "hidden_length": 3
+        },
+        {
+          "position": 43,
+          "original_word": "lakes",
+          "displayed_fragment": "la",
+          "hidden_length": 3
+        },
+        {
+          "position": 45,
+          "original_word": "agriculture",
+          "displayed_fragment": "agric",
+          "hidden_length": 6
+        },
+        {
+          "position": 47,
+          "original_word": "wildlife",
+          "displayed_fragment": "wild",
+          "hidden_length": 4
+        },
+        {
+          "position": 49,
+          "original_word": "serve",
+          "displayed_fragment": "se",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Glaciers play a crucial role in Earth's climate and ecosystems.",
+      "blanked_text": "Glaciers play a crucial role in Earth's climate and ecosystems. They store about 70% of the planet's freshwater and help regulate global temperatures by reflecting sunlight. As they move, glaciers shape lands_____ carving val____ and transp______ sediment. Th___ seasonal mel____ feeds riv___ and la___ supporting agric______ and wild____ Glaciers se___ as indicators of climate change-rapid melting signals shifts in global temperatures. Studying glaciers helps scientists understand past climate patterns and predict future environmental impacts, making them vital to global research",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_rp0830_16_1",
+      "passage": "The evolution of the film industry has been shaped by major technological shifts, especially the move from silent films to movies with sound. In the silent era, filmmakers relied entirely on visual storytelling, using expressive acting and title cards to convey dialogue and emotion. The introduction of synchronized sound - where audio was matched precisely with the moving image - allowed audiences to hear actors speak for the first time, transforming the cinematic experience. This breakthrough laid the foundation for later innovations like CGI and immersive sound design, expanding how stories could be told onscreen.",
+      "word_count": 95,
+      "topic": "technology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 45,
+          "original_word": "introduction",
+          "displayed_fragment": "intro",
+          "hidden_length": 7
+        },
+        {
+          "position": 48,
+          "original_word": "sound",
+          "displayed_fragment": "so",
+          "hidden_length": 3
+        },
+        {
+          "position": 51,
+          "original_word": "audio",
+          "displayed_fragment": "au",
+          "hidden_length": 3
+        },
+        {
+          "position": 53,
+          "original_word": "matched",
+          "displayed_fragment": "mat",
+          "hidden_length": 4
+        },
+        {
+          "position": 55,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 57,
+          "original_word": "moving",
+          "displayed_fragment": "mov",
+          "hidden_length": 3
+        },
+        {
+          "position": 58,
+          "original_word": "image",
+          "displayed_fragment": "i",
+          "hidden_length": 4
+        },
+        {
+          "position": 60,
+          "original_word": "allowed",
+          "displayed_fragment": "all",
+          "hidden_length": 4
+        },
+        {
+          "position": 62,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 64,
+          "original_word": "actors",
+          "displayed_fragment": "act",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The evolution of the film industry has been shaped by major technological shifts, especially the move from silent films to movies with sound.",
+      "blanked_text": "The evolution of the film industry has been shaped by major technological shifts, especially the move from silent films to movies with sound. In the silent era, filmmakers relied entirely on visual storytelling, using expressive acting and title cards to convey dialogue and emotion. The intro_______ of synchronized so___ - where au___ was mat____ precisely wi__ the mov___ i____ - all____ audiences t_ hear act___ speak for the first time, transforming the cinematic experience. This breakthrough laid the foundation for later innovations like CGI and immersive sound design, expanding how stories could be told onscreen.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0830",
+      "date": "2026-08-30",
+      "source_hash": "f37e2f91aee6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
       ]
     }

@@ -48,6 +48,7 @@ sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
+import audio_names  # noqa: E402  （同目录脚本：逐题音频文件名的读法）
 import ocr_images  # noqa: E402  （同目录脚本：只用它的缓存读取与 setkey 规则）
 
 REPO_ROOT = os.path.dirname(os.path.dirname(_HERE))
@@ -156,6 +157,23 @@ SECTION_ALIASES = {
 # 正文词数低于此值的 docx 判定「内容在图里」（与 ocr_images.THIN_DOCX_WORDS 同口径）。
 THIN_DOCX_WORDS = 300
 
+# 「题池」模式（--pool）：第二波里有一批「国内线下」拼盘 —— 不是完整一卷，
+# 阅读 38~45 题、写作 1500~2800 词、听力只有零星讲座、口语题号自成一套。
+# 这些不按「整卷」收，按题型能收多少收多少：
+#   · setkey 前缀 rp（与整卷模式的 rf 分开，id/缓存/去重都不相撞）；
+#   · 每道题带 vendor_pool(warn) 源料标记，前端与盲审都知情；
+#   · 听力若整组没有音频，只要文档逐字稿词数达标就直接拿文档当逐字稿。
+POOL_MODE = False
+# 无音频听力「文档逐字稿够不够用」的门槛（词），与 merge 阶段的节选判据同口径。
+POOL_TRANSCRIPT_MIN = {"lat": 150, "lc": 60, "la": 40, "lcr": 20, "listening_mcq": 60}
+
+
+def _ocr_note(origin: str, fn: str) -> list[str]:
+    """题面来自图片 OCR 时的机器可读记号（build_bank 的 source_notes 认 `code: 详情` 这个形状）。"""
+    if origin != "ocr":
+        return []
+    return [f"ocr_sourced: 题面来自 {fn} 的图片 OCR 转写，需人工抽检"]
+
 
 def _section_candidates(folder: str, section: str) -> list[str]:
     keys = SECTION_ALIASES[section]
@@ -202,6 +220,10 @@ def _ocr_paras(setkey: str, path: str, problems: list[str], label: str) -> list[
     out: list[Para] = []
     for i in sorted(cache):
         for line in cache[i].splitlines():
+            # OCR prompt 要求表格用 " | " 分列，Qwen 有时改吐制表符（8.08/8.26 的答案页）。
+            # 不归一化的话「Q1 \t D \t Q17 \t A」会被当成一个整体，答案解析成
+            # 「D Q17 A」这种非单字母，整张答案表作废。
+            line = re.sub(r"[ \t]*\t[ \t]*", " | ", line)
             line = (line.replace("\xa0", " ").replace("–", "-").replace("—", "-")
                         .replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')).strip()
             out.append(Para(line, [], False, len(out)))
@@ -348,7 +370,7 @@ _H_RANGE = re.compile(r"Q?(\d+)\s*-\s*Q?(\d+)")
 _ROW_CELL = re.compile(r"^Q?(\d+)$")
 
 
-def classify_header(h: str, section: str | None, cur_module: int = 1):
+def classify_header(h: str, section: str | None, cur_module: int = 1, zone_seq: dict = None):
     """一行是不是表头？是的话返回 (kind, module, q_start)。
 
     `cur_module` 是「最近一次见到的 Module N」。图片版答案页常把上下文拆成两行
@@ -382,17 +404,50 @@ def classify_header(h: str, section: str | None, cur_module: int = 1):
         return ("listening_mcq", module or 1, q_start)
     if section == "listening" and (module or re.match(r"^Module\s*\d", t, re.I)):
         return ("listening_mcq", module or cur_module, q_start)
+    if POOL_MODE and section == "listening":
+        mf = POOL_LISTEN_HEAD.match(t)
+        if mf:
+            return ("listening_mcq", int(mf.group(1)), 1)
     if section == "reading" or re.match(r"^Reading\b", t, re.I):
+        # 分区表头要**最先**判：`Academic Reading 1 | Dinosaur Feathers` 会被 _H_MCQ 的
+        # "Academic" 抢先吃掉，那样序号就丢了，一个分区里七篇的答案又糊回同一格。
+        if POOL_MODE:
+            mz = POOL_READ_ZONE.search(t)
+            if mz:
+                base = pool_zone_base(mz.group(1))
+                # 表头带篇号就用它；不带（7.04 的 `Reading Module 2 Academic Reading: 标题`）
+                # 就在本分区里顺着数 —— 题面那边没写篇号时也是顺着数的。
+                if mz.group(2):
+                    n = int(mz.group(2))
+                else:
+                    n = zone_seq.get(base, 0) + 1 if zone_seq is not None else 1
+                if zone_seq is not None:
+                    zone_seq[base] = n
+                return ("reading_mcq", base + n, 1)
         if _H_CTW.search(t):
             return ("reading_ctw", module or cur_module, q_start)
         if _H_MCQ.search(t):
             return ("reading_mcq", module or cur_module, q_start)
+        # 题池模式：拼盘常用 `Task 4 | Moon Phases` / `Form 02` 分节（8.30），不带 Module。
+        # 不认这行的话十几段填词的答案会堆进同一块，空位数对不上、整科作废。
+        mf = POOL_FORM_HEAD.match(t) if POOL_MODE else None
+        if mf:
+            return ("reading_auto", module or int(mf.group(1)), 1)
         if module:
             return ("reading_auto", module, q_start)
         # 光有 `Q11-Q15` 这种区间、没有任何关键词的行也算表头（6.29 就是这么排的），
         # 但必须整行只有区间，免得把正文句子里的 "Q1-Q10" 误当表头。
         if rng and re.match(r"^Q?\d+\s*-\s*Q?\d+$", t):
             return ("reading_auto", cur_module, q_start)
+        # 题池模式：拼盘的答案页不写「Reading Module 1 Fill-in-the-Blank Q1-Q10」，
+        # 直接拿文章标题当分节（7.18 的 `Craftsmanship as Art`）。没有这条的话整份
+        # 阅读答案会糊成一块、CTW 的 order 永远对不上。判据收紧到「像标题」：
+        # 首字母大写、≤8 词、不带数字/分隔符、不以句末标点收尾。
+        if (POOL_MODE and section == "reading" and not rng and not module
+                and "|" not in t and not re.search(r"\d", t)
+                and not t.endswith((".", "?", "!", ",", ";", ":"))
+                and 1 <= len(words(t)) <= 8 and t[:1].isupper()):
+            return ("reading_auto", cur_module, 1)
         return None
     return None
 
@@ -528,6 +583,21 @@ def _row_pairs(line: str) -> list:
             else:
                 i += 1
         return out
+    # 「裸多栏」：答案表是 4 栏（Question|Answer|Question|Answer），但源里分隔符全丢了 ——
+    # docx 表格被读成一段 `Q33 B Q34 D`，OCR 也常吐成这样。不认的话整行会被当成
+    # 「Q33 的答案是『B Q34 D』」，一张答案表全废（7.04 / 8.08 实测）。
+    # 判据收得很紧：整行必须是「Q数字 + ≤3 词」重复两次以上，长答案（含引用句）不受影响。
+    if ";" not in t and "；" not in t and len(re.findall(r"(?<![A-Za-z0-9])Q\d+\b", t)) >= 2:
+        segs = [s.strip() for s in re.split(r"(?<![A-Za-z0-9])(?=Q\d+\b)", t) if s.strip()]
+        multi = []
+        for s in segs:
+            m = re.match(r"^Q(\d+)\s+([A-Za-z][A-Za-z'\-]*)$", s)
+            if not m:
+                multi = []
+                break
+            multi.append((int(m.group(1)), m.group(2)))
+        if len(multi) >= 2:
+            return multi
     out = []
     for part in _split_semis(t):
         m = re.match(r"^Q?(\d+)[.、)]?\s+(.+)$", part)
@@ -553,6 +623,7 @@ def parse_answers_lines(lines: list) -> AnswerKey:
     section = None
     acc = None
     ctw_order: dict = {}
+    zone_seq: dict = {}      # 题池阅读分区（日常/学术）各自数到第几篇
     cur_module = 1
     transcript_mode = False
     cur_tr = None
@@ -642,7 +713,7 @@ def parse_answers_lines(lines: list) -> AnswerKey:
         head_text, inline = t, None
         if ":" in t and "|" not in t.split(":", 1)[0]:
             head_text, inline = t.split(":", 1)
-        cls = classify_header(head_text, section, cur_module)
+        cls = classify_header(head_text, section, cur_module, zone_seq)
         if cls:
             flush()
             cur_module = cls[1]
@@ -659,6 +730,35 @@ def parse_answers_lines(lines: list) -> AnswerKey:
 
 
 
+_CELL_QNO = re.compile(r"^Q\s*\d+$", re.I)
+_CELL_HEAD = re.compile(r"^(Question|Answer)$", re.I)
+
+
+def reflow_cell_lines(lines: list[str]) -> list[str]:
+    """docx 表格被读成「一格一行」时，把 `Q1` 和它下一行的值拼回 `Q1 | 值`。
+
+    read_docx 是按段落取文本的，多数套的答案表一行一段（`Q1 | precise | Q6 | fabricate`），
+    但有几套（7.11 / 7.19）每个单元格自成一段 —— 那样 `Q1` 这一行没有值、`precise`
+    这一行没有题号，整张答案表解不出任何一对。表头单元格（Question/Answer）顺手丢掉。
+    """
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        t = lines[i].strip()
+        if _CELL_HEAD.match(t):
+            i += 1
+            continue
+        if _CELL_QNO.match(t) and i + 1 < len(lines):
+            nxt = lines[i + 1].strip()
+            if nxt and not _CELL_QNO.match(nxt) and not _CELL_HEAD.match(nxt):
+                out.append("%s | %s" % (t, nxt))
+                i += 2
+                continue
+        out.append(lines[i])
+        i += 1
+    return out
+
+
 def load_answer_lines(folder: str, setkey: str, problems: list[str]) -> list[str]:
     """答案页文本：优先 docx 里的文字；整份是截图的那 6 套改读 OCR 缓存。"""
     cand = _section_candidates(folder, "answer")
@@ -673,14 +773,14 @@ def load_answer_lines(folder: str, setkey: str, problems: list[str]) -> list[str
         if not paras:
             return []
         problems.append(f"{fn} 的答案文本来自 OCR（ocr_sourced）")
-        return [p.text for p in paras]
+        return reflow_cell_lines([p.text for p in paras])
     paras = read_docx(os.path.join(folder, fn))
     text_lines = [p.text for p in paras if p.text.strip()]
     # 判据是「有没有图 + 文字够不够」两条一起看：图片版答案页（8 套里的 6 套）是整份 7~10 张
     # 截图、一个字都没有；纯文字版一张图都没有。只看字数会把短小的文字版误判成图片版。
     has_images = any(p.images for p in paras)
     if not has_images or sum(nwords(l) for l in text_lines) >= 200:
-        return text_lines
+        return reflow_cell_lines(text_lines)
     cache = ocr_images.cached_texts(setkey, base)
     if not cache:
         problems.append(f"{fn} 是图片版答案且没有 OCR 缓存 —— 先跑 "
@@ -693,7 +793,7 @@ def load_answer_lines(folder: str, setkey: str, problems: list[str]) -> list[str
     out: list[str] = []
     for i, _, _ in imgs:
         if i in cache:
-            out.extend(l for l in cache[i].splitlines())
+            out.extend(re.sub(r"[ \t]*\t[ \t]*", " | ", l) for l in cache[i].splitlines())
     return out
 
 
@@ -704,6 +804,23 @@ CTW_HEAD = re.compile(
 # 强制要冠词会让那一屏被误判成学术短文。
 RDL_HEAD = re.compile(r"^Read\s+(?:a|an|the|some\s+)?\w[\w' -]{0,50}[.．]?\s*$", re.I)
 MODULE_HEAD = re.compile(r"^(?:Reading|Listening)?\s*Module\s*(\d)\b", re.I)
+# 题池版式：拼盘不写 `Module N`，写 `Form 02 | Dark Stores` / `Task 4 | Moon Phases`。
+# 音频文件名里的 form/set 编号也是同一套（listening_form02_… → module 2），
+# 所以把它当 module 用 —— 题面、答案页、音频三边才对得上（8.30 实测：不这么做
+# 12 个 form 的题号全撞在 module 1 上，答案错位一整格）。
+POOL_FORM_HEAD = re.compile(r"^(?:Form|Task|Set|Passage)\s*0*(\d+)\b", re.I)
+# 听力侧同理，但拼盘写的是体裁：`Lecture 3 | Indian Pangolin`（8.30 的题面与答案页都这么写）。
+POOL_LISTEN_HEAD = re.compile(
+    r"^(?:Lecture|Conversation|Announcement|Talk|Discussion|Form|Set|Task)\s*0*(\d+)\b", re.I)
+# 题池的阅读选择题分区。题面侧只有一行大写分区名（`ACADEMIC READING`），答案侧带序号
+# （`Academic Reading 3 | Unveiling Earth's Core`）。两个分区各自从 1 数起，会撞号，
+# 所以给各自一个 module 命名空间。
+POOL_READ_ZONE = re.compile(r"(Daily[- ]?life\s+Reading|Academic\s+Reading)\s*:?\s*0*(\d*)\b", re.I)
+POOL_ZONE_BASE = {"daily": 1000, "academic": 2000}
+
+
+def pool_zone_base(name: str) -> int:
+    return POOL_ZONE_BASE["academic" if re.match(r"^academic", name.strip(), re.I) else "daily"]
 Q_HEAD = re.compile(r"^Q\s*(\d+)\s*[.:]?\s*(.*)$")
 OPT_HEAD = re.compile(r"^([A-H])[.)]\s*(.+)$")
 AP_HEAD = re.compile(r"^Academic Reading\b\s*[:：]?\s*(.*)$", re.I)
@@ -764,6 +881,11 @@ def build_ctw_item(passage_raw: str, answer_words: list[str], title: str):
     parts = template.split("\x00")
     passage = parts[0]
     for w, tail in zip(answer_words, parts[1:]):
+        # 空位后面常常直接顶着下一个词（源里写成 `prod _ _ _ _by colonies`）。不补这个空格，
+        # 回填出来就是 "producedby colonies" —— 屏幕上是错字，题也没法读
+        # （8.19/8.22 实测 15 段全中）。
+        if tail[:1].isalpha():
+            tail = " " + tail
         passage += str(w).strip() + tail
     passage = re.sub(r"\s+", " ", passage).strip()
     return {"passage": passage, "blanks": blanks, "topic": guess_topic(f"{title} {passage}"),
@@ -783,6 +905,10 @@ def material_kind(b: dict) -> str:
     return label.lower() or "other"
 
 
+# C-test 版式的分离下划线：`pre _ _ _ _` / `wi _ _`（字母 + 至少两个用空格隔开的下划线）
+_CTEST_BLANK = re.compile(r"([A-Za-z])((?:\s*_){2,})")
+
+
 def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
     """Reading.docx → results（ctw / rdl / ap）。"""
     src_problems: list[str] = []
@@ -796,6 +922,9 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
     ocr_cache = ocr_images.cached_texts(setkey, base) if origin == "docx" else {}
 
     module = 1
+    zone_base = 0          # 题池选择题分区码：1000=日常阅读，2000=学术阅读
+    zone_explicit = None   # 分区表头上写明的篇号（`Academic Reading 3:`），没写就顺延
+    zone_pending = False   # 刚见过分区表头，下一个材料块归它
     results: list[dict] = []
     ctw_seen: dict[int, int] = {}
     blocks: list[dict] = []      # 选择题材料块
@@ -810,10 +939,20 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
         cur = None
 
     def new_block(kind: str, label: str):
-        nonlocal cur
+        nonlocal cur, zone_pending
         close_block()
-        cur = {"kind": kind, "label": label, "module": module, "material": [],
+        m = module
+        if False:
+            # 题池的选择题分区（`DAILY-LIFE READING` / `ACADEMIC READING`）里，
+            # 每篇材料的题号都从 Q1 重来，而答案页按 `Academic Reading 3 | 标题` 分节 ——
+            # 所以用「分区码 + 第几篇」当 module，两边才对得上。不这么做，一个分区里
+            # 五篇文章的 Q1-Q5 全撞在同一个 (module, q) 上，只有最后一篇的答案留得下来
+            # （8.19/8.22 实测盲审一致率掉到 33~40%，跟瞎猜一个量级）。
+            pass
+        cur = {"kind": kind, "label": label, "module": m, "zone": zone_base,
+               "zone_no": zone_explicit if zone_pending else None, "material": [],
                "images": [], "questions": []}
+        zone_pending = False
 
     for p in paras:
         t = p.text.strip()
@@ -842,6 +981,22 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
             pending_ctw = None
             continue
 
+        if POOL_MODE:
+            mz = POOL_READ_ZONE.search(t)
+            if mz and nwords(t) <= 12:
+                close_block()
+                zone_base = pool_zone_base(mz.group(1))
+                zone_explicit = int(mz.group(2)) if mz.group(2) else None
+                zone_pending = True
+                pending_ctw = None
+                continue
+            mf = POOL_FORM_HEAD.match(t)
+            if mf and nwords(t) <= 14:
+                close_block()
+                module = int(mf.group(1))
+                zone_base = 0
+                pending_ctw = None
+                continue
         m = CTW_HEAD.match(t)
         if m:
             close_block()
@@ -852,6 +1007,20 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
             pending_ctw = {"title": title, "module": module}
             continue
 
+        # 题池模式：拼盘的填词段常常不带 `Fill-in-the-Blanks` 表头，直接就是正文
+        # （7.11 的 `pre _ _ _ _, layer-by-layer …`），而且下划线是**分开写**的。
+        # 判据：≥25 词的段落里出现 ≥3 处「字母后跟一串分离下划线」= C-test 版式。
+        if POOL_MODE and pending_ctw is None and nwords(t) >= 25 and len(_CTEST_BLANK.findall(t)) >= 3:
+            title = (cur["label"] if cur and cur.get("label") and not cur["questions"] else "")
+            close_block()
+            pending_ctw = {"title": title, "module": module}
+        if POOL_MODE and pending_ctw is not None:
+            # `pre _ _ _ _` → `pre____`：空位长度按下划线个数还原，build_ctw_item 才数得对。
+            t = _CTEST_BLANK.sub(lambda m: m.group(1) + "_" * len(re.findall(r"_", m.group(2))), t)
+            # 源里空位后面常常直接顶着下一个词（`prod _ _ _ _by coloniesof`）。不补这个空格，
+            # 填完答案就粘成 "producedby"，整段 CTW 在 build_bank 里建不出空位被丢掉
+            # （8.19/8.22 实测 15 段全废）。
+            t = re.sub(r"_(?=[A-Za-z])", "_ ", t)
         if pending_ctw is not None and nwords(t) >= 25:
             order = ctw_seen.get(module, 0) + 1
             ctw_seen[module] = order
@@ -924,6 +1093,22 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
 
     close_block()
 
+    # 题池的选择题分区（`DAILY-LIFE READING` / `ACADEMIC READING`）里每篇材料的题号都从
+    # Q1 重来，而答案页按 `Academic Reading 3 | 标题` 分节 —— 所以给**真正带题的**材料块
+    # 按分区重编 module（`分区码 + 第几篇`）。不这么做，一个分区里五篇文章的 Q1-Q5 全撞在
+    # 同一个 (module, q) 上，只有最后一篇的答案留得下来（8.19/8.22 实测盲审一致率 33~40%，
+    # 跟瞎猜一个量级）。编号只数「带题的块」，标题行造出来的空壳块不占号。
+    if POOL_MODE:
+        zseen: dict[int, int] = {}
+        for b in blocks:
+            z = b.get("zone") or 0
+            if not z or not b["questions"]:
+                continue
+            # 表头写了篇号就用它（`Academic Reading 3:`），没写就在上一篇的基础上顺延 ——
+            # 答案页那边没有篇号时也是顺着数的，两边这样才对得齐。
+            zseen[z] = b["zone_no"] if b.get("zone_no") else zseen.get(z, 0) + 1
+            b["module"] = z + zseen[z]
+
     # —— 材料块 → results ——
     for b in blocks:
         material = "\n\n".join(b["material"]).strip()
@@ -975,6 +1160,8 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
             "problems": problems, "items": items,
             "material_title": b["label"],
         })
+    for r in results:
+        r["problems"] = list(r["problems"]) + _ocr_note(origin, fn)
     return results
 
 
@@ -1045,7 +1232,7 @@ def parse_writing(folder: str, setkey: str) -> list[dict]:
         if m and cur is not None:
             cur["bank"] = [x.strip() for x in m.group(1).split("|") if x.strip()]
             continue
-    results.append({"__bs_raw": bs_raw})   # 交给 finalize_writing 与答案合并
+    results.append({"__bs_raw": bs_raw, "__ocr_note": _ocr_note(_origin, _fn)})   # 交给 finalize_writing 与答案合并
     results.append({"__email_paras": email_paras, "__disc_paras": disc_paras})
     return results
 
@@ -1318,7 +1505,7 @@ def audio_type(audio_path: str) -> str:
 
 def parse_listening(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
     src_problems: list[str] = []
-    paras, _origin, _fn = resolve_doc(folder, setkey, "listening", src_problems)
+    paras, origin, fn = resolve_doc(folder, setkey, "listening", src_problems)
     if paras is None:
         return [{"key": "listening|missing", "section": "listening", "module": 1, "type": "unknown",
                  "q_start": 0, "q_end": 0, "tier": TIER, "status": "flagged",
@@ -1350,6 +1537,12 @@ def parse_listening(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
             if re.search(r"Q\s*\d", t):
                 open_group(True)
             continue
+        if POOL_MODE:
+            mf = POOL_LISTEN_HEAD.match(t)
+            if mf and nwords(t) <= 14:
+                module = int(mf.group(1))
+                cur_group = None
+                continue
         m = AUDIO_RE.match(t)
         if m:
             if cur_group is not None and not cur_group["audio"]:
@@ -1379,9 +1572,12 @@ def parse_listening(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
     for g in [x for x in groups if x["questions"]]:
         items = []
         problems = []
+        gkind = ""
         for q in g["questions"]:
             letter = ak.listening_mcq.get((g["module"], q["q"]))
             tr = tr_by_range.get((g["module"], q["q"]))
+            if tr and not gkind:
+                gkind = (tr.get("kind") or "").lower()
             transcript = "\n".join(tr["lines"]) if tr else ""
             if tr:
                 kind = (tr.get("kind") or "").lower()
@@ -1404,19 +1600,32 @@ def parse_listening(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
                 "transcript_words": nwords(transcript),
             })
         qs = [q["q"] for q in g["questions"]]
+        # 音频缺席时（题池里常见：只摘了讲座、LCR 音频没给）用答案页的转写体裁定题型；
+        # 再按体裁门槛判「文档逐字稿够不够当逐字稿用」——够就记 transcript_from_doc，
+        # 由 merge 阶段直接放行；不够记 no_audio_hold，扣下。
+        ftype = audio_type(g["audio"]) if (g["audio"] or not POOL_MODE) else audio_type(gkind or "")
+        if POOL_MODE and not g["audio"]:
+            tw = max([nwords(i["transcript"]) for i in items] or [0])
+            need = POOL_TRANSCRIPT_MIN.get(ftype, 60)
+            if tw >= need:
+                problems.append(f"transcript_from_doc: 无逐题音频，直接用文档逐字稿（{tw} 词 ≥ {need}）")
+            else:
+                problems.append(f"no_audio_hold: 无逐题音频，且文档逐字稿只有 {tw} 词（<{need}）")
         results.append({
             "key": f"listening|{g['module']}|{qs[0]}", "section": "listening", "module": g["module"],
-            "type": audio_type(g["audio"]), "q_start": qs[0], "q_end": qs[-1], "tier": TIER,
+            "type": ftype, "q_start": qs[0], "q_end": qs[-1], "tier": TIER,
             "status": "deferred",
             "problems": ["听力本期只解析不落库：题面依赖逐题音频，音频链路未验收"] + problems,
             "items": items,
         })
+    for r in results:
+        r["problems"] = list(r["problems"]) + _ocr_note(origin, fn)
     return results
 
 
 def parse_speaking(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
     src_problems: list[str] = []
-    paras, _origin, _fn = resolve_doc(folder, setkey, "speaking", src_problems)
+    paras, origin, fn = resolve_doc(folder, setkey, "speaking", src_problems)
     if paras is None:
         return [{"key": "speaking|missing", "section": "speaking", "module": 1, "type": "unknown",
                  "q_start": 0, "q_end": 0, "tier": TIER, "status": "flagged",
@@ -1446,10 +1655,12 @@ def parse_speaking(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
         if m:
             cur_audio = m.group(1).strip()
             base = os.path.basename(cur_audio)
-            mn = re.search(r"_q0*(\d+)\.mp3$", base, re.I)
-            n = int(mn.group(1)) if mn else None
-            if n is None:
+            # 题号交给 audio_names.speak_unit：第一波的 `speaking_listen_repeat_q03.mp3` 仍是 3，
+            # 分组命名（`_s01_q03` / `S-R02_q3`）则给 set*100+q 的全局题号，两组不互相覆盖。
+            unit = audio_names.speak_unit(base)
+            if not unit or unit.get("setup"):
                 continue
+            n = unit["n"]
             if zone == "repeat" and not any(i["n"] == n for i in repeat_items):
                 repeat_items.append({"n": n, "audio_path": cur_audio,
                                      "sentence": ak.repeat.get(n, ""), "q_number": n})
@@ -1492,6 +1703,8 @@ def parse_speaking(folder: str, ak: AnswerKey, setkey: str = "") -> list[dict]:
                     "q_start": 1, "q_end": len(interview_items), "tier": TIER, "status": "deferred",
                     "problems": ["口语本期只解析不落库：题面依赖逐题音频"],
                     "items": interview_items, "context": context["interview"]})
+    for r in out:
+        r["problems"] = list(r["problems"]) + _ocr_note(origin, fn)
     return out
 
 
@@ -1508,9 +1721,11 @@ def set_slug(setkey: str) -> str:
     return setkey
 
 
-def parse_set(folder: str) -> dict:
+def parse_set(folder: str, pool: bool = False) -> dict:
+    global POOL_MODE
+    POOL_MODE = pool
     folder = os.path.normpath(folder)
-    setkey = ocr_images.setkey_for(folder)
+    setkey = ocr_images.setkey_for(folder, "rp" if pool else "rf")
     problems: list[str] = []
     ak = parse_answers_lines(load_answer_lines(folder, setkey, problems))
     problems.extend(ak.problems)
@@ -1520,9 +1735,13 @@ def parse_set(folder: str) -> dict:
 
     wr = parse_writing(folder, setkey)
     if wr and "__bs_raw" in wr[0]:
-        results.append(finalize_bs(wr[0]["__bs_raw"], ak, set_slug(setkey)))
-        results.append(finalize_email(wr[1]["__email_paras"], set_slug(setkey)))
-        results.append(finalize_discussion(wr[1]["__disc_paras"], set_slug(setkey)))
+        wnote = wr[0].get("__ocr_note") or []
+        wres = [finalize_bs(wr[0]["__bs_raw"], ak, set_slug(setkey)),
+                finalize_email(wr[1]["__email_paras"], set_slug(setkey)),
+                finalize_discussion(wr[1]["__disc_paras"], set_slug(setkey))]
+        for r in wres:
+            r["problems"] = list(r["problems"]) + wnote
+        results.extend(wres)
     else:
         results.extend(wr)
 
@@ -1549,18 +1768,26 @@ def write_scan_stub(folder: str, setkey: str, out_dir: str = None) -> str:
     """
     files = []
     for fn in sorted(os.listdir(folder)):
-        if not fn.lower().endswith(".docx") or fn.startswith("~$"):
+        low = fn.lower()
+        # 第二波起 Reading/Listening 也可能整份是 PDF（8.30 / 9.02 / 7.29），
+        # 只哈希 docx 的话这些套在跨卷去重里等于没有指纹 —— 重复上线就查不出来。
+        if not (low.endswith(".docx") or low.endswith(".pdf")) or fn.startswith("~$"):
             continue
         p = os.path.join(folder, fn)
-        low = fn.lower()
-        section = ("reading" if "reading" in low else "listening" if "listening" in low
-                   else "speaking" if "speaking" in low else "writing" if "writing" in low else None)
-        role = "answer-key" if re.search(r"answer", low) else "questions"
+        section = None
+        for sec, keys in SECTION_ALIASES.items():
+            if sec == "answer":
+                continue
+            if any(k in low for k in keys):
+                section = sec
+                break
+        role = "answer-key" if any(k in low for k in SECTION_ALIASES["answer"]) else "questions"
         anchors = {"reading": 0, "listening": 0, "speaking": 0, "writing": 0}
         if section:
             anchors[section] = 1
-        files.append({"file": fn, "mb": round(os.path.getsize(p) / 1024 / 1024, 2), "kind": "docx",
-                      "origin": "reformatted-docx", "section": section, "confidence": 1.0,
+        kind = "pdf" if low.endswith(".pdf") else "docx"
+        files.append({"file": fn, "mb": round(os.path.getsize(p) / 1024 / 1024, 2), "kind": kind,
+                      "origin": f"reformatted-{kind}", "section": section, "confidence": 1.0,
                       "anchors": anchors, "blocks": 0, "hash": file_hash(p), "role": role})
     audio_dir = os.path.join(folder, "audio", "item_level")
     audio = sorted(os.listdir(audio_dir)) if os.path.isdir(audio_dir) else []
@@ -1580,6 +1807,8 @@ def main() -> int:
     ap.add_argument("folder", help="套题文件夹路径")
     ap.add_argument("--dry", action="store_true", help="只打印统计，不写盘")
     ap.add_argument("--verbose", action="store_true", help="打印每条 problem")
+    ap.add_argument("--pool", action="store_true",
+                    help="题池模式：不当整卷收，setkey 用 rp 前缀，能收多少收多少")
     ap.add_argument("--out-dir", default=OUT_DIR,
                     help="产物目录（默认 .codex-tmp/realbank；测试用临时目录跑，免得 fixture 混进真题库）")
     args = ap.parse_args()
@@ -1588,7 +1817,7 @@ def main() -> int:
     if not os.path.isdir(folder):
         print(f"找不到套题文件夹：{folder}", file=sys.stderr)
         return 2
-    data = parse_set(folder)
+    data = parse_set(folder, pool=args.pool)
     setkey = data["set"]
 
     print(f"■ {os.path.basename(folder)} → {setkey}")

@@ -44,7 +44,9 @@ import argparse
 import subprocess
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ops"))
+import audio_names  # noqa: E402  （逐题音频文件名的读法，与解析器共用一份）
 import _usage_ledger as ledger  # noqa: E402
 
 ROOT = ledger.repo_root()
@@ -162,7 +164,23 @@ def load_asr(dirpath):
         with open(os.path.join(dirpath, fn), encoding="utf-8") as fh:
             j = json.load(fh)
         out[j["file"]] = j
+        # item_level 有子目录时逐字稿名字是 `listening__L01_x.mp3`（run_asr 扁平化过），
+        # 而分组用的是裸文件名 —— 两个 key 都挂上，查得到就行。
+        bare = j["file"].split("__")[-1]
+        out.setdefault(bare, j)
     return out
+
+
+class AudioIndex(dict):
+    """裸文件名 → 绝对路径；`.rel` 记相对 item_level 的路径（带子目录）。
+
+    分组正则、ASR 缓存都按裸文件名认，但 audio_path 要写相对路径 —— 两者分开放，
+    不往同一个 dict 里塞 `__rel__` 前缀的假 key（那会让「音频条数」之类的统计翻倍）。
+    """
+
+    def __init__(self, *a, **kw):
+        super().__init__(*a, **kw)
+        self.rel = {}
 
 
 def audio_index(source_dir):
@@ -170,7 +188,21 @@ def audio_index(source_dir):
     d = os.path.join(source_dir, "audio", "item_level")
     if not os.path.isdir(d):
         return {}
-    return {fn: os.path.join(d, fn) for fn in sorted(os.listdir(d)) if fn.lower().endswith(".mp3")}
+    # 第二波起 item_level 下面可能还有 listening/ speaking/ 一层（8.19 / 8.22）。
+    # key 仍用**裸文件名**（正则和 ASR 缓存都按它认），值记相对 item_level 的路径，
+    # 好让 audio_path 指得准。同名文件跨子目录冲突时保留先见到的并不静默——记在 _dupes。
+    out = AudioIndex()
+    for dirpath, _dirs, files in os.walk(d):
+        rel = os.path.relpath(dirpath, d)
+        for fn in sorted(files):
+            if not fn.lower().endswith(".mp3"):
+                continue
+            relpath = fn if rel in (".", "") else (rel.replace(os.sep, "/") + "/" + fn)
+            if fn in out:
+                continue
+            out[fn] = os.path.join(dirpath, fn)
+            out.rel[fn] = relpath
+    return out
 
 
 def unit_type(slug, nq):
@@ -478,14 +510,12 @@ def build_listening(setkey, structured, asr, audio, stats):
     by_q = collect_listening_items(structured)
     units = []
     for fn in sorted(audio):
-        m = LISTEN_FILE_RE.match(fn)
-        if not m:
+        u = audio_names.listen_unit(fn)
+        if not u:
             continue
-        module = int(m.group(1))
-        q0 = int(m.group(2))
-        q1 = int(m.group(3)) if m.group(3) else q0
-        units.append({"file": fn, "path": audio[fn], "module": module,
-                      "q_start": q0, "q_end": q1, "slug": m.group(4)})
+        units.append({"file": fn, "path": audio[fn], "module": u["module"],
+                      "q_start": u["q_start"], "q_end": u["q_end"], "slug": u["slug"],
+                      "rel": getattr(audio, "rel", {}).get(fn, fn)})
 
     results = []
     for u in units:
@@ -597,7 +627,7 @@ def build_listening(setkey, structured, asr, audio, stats):
                 "material": "", "material_kind": "audio",
                 "stem": it.get("stem", ""), "options": opts,
                 "answer_index": it.get("answer_index"), "answer_key": it.get("answer_key"),
-                "audio_path": "audio/item_level/%s" % u["file"],
+                "audio_path": "audio/item_level/%s" % u.get("rel", u["file"]),
                 "transcript": it.get("transcript", ""),
                 "transcript_final": transcript_final,
                 "turns": turns, "framing": framing,
@@ -674,12 +704,19 @@ def build_speaking(setkey, structured, asr, audio, stats):
     sp = collect_speaking(structured)
     results = []
 
-    rep_files = sorted([fn for fn in audio if REPEAT_FILE_RE.match(fn)],
-                       key=lambda fn: int(REPEAT_FILE_RE.match(fn).group(1)))
+    def _speak_files(kind):
+        got = []
+        for fn in audio:
+            u = audio_names.speak_unit(fn)
+            if u and u["kind"] == kind and not u["setup"]:
+                got.append((u["n"], fn))
+        return [x[1] for x in sorted(got)], dict((fn, n) for n, fn in got)
+
+    rep_files, rep_n = _speak_files("repeat")
     if rep_files:
         items, problems = [], []
         for fn in rep_files:
-            n = int(REPEAT_FILE_RE.match(fn).group(1))
+            n = rep_n[fn]
             a = asr.get(fn)
             asr_text = (a or {}).get("text", "").strip()
             doc = (sp["repeat"].get(n) or {}).get("sentence", "").strip()
@@ -708,7 +745,7 @@ def build_speaking(setkey, structured, asr, audio, stats):
                 usable = False
                 ip.append("sentence_word_count:%d" % nwords(text))
             items.append({"n": n, "q_number": n,
-                          "audio_path": "audio/item_level/%s" % fn,
+                          "audio_path": "audio/item_level/%s" % getattr(audio, "rel", {}).get(fn, fn),
                           "sentence": doc, "sentence_final": text, "usable": usable,
                           "transcript_final": text, "asr_similarity": s, "problems": ip})
         bad = [it for it in items if not it["usable"]]
@@ -726,12 +763,11 @@ def build_speaking(setkey, structured, asr, audio, stats):
         stats["repeat_sets"] += 1
         stats["repeat_sentences"] += len(items)
 
-    iv_files = sorted([fn for fn in audio if INTERVIEW_FILE_RE.match(fn)],
-                      key=lambda fn: int(INTERVIEW_FILE_RE.match(fn).group(1)))
+    iv_files, iv_n = _speak_files("interview")
     if iv_files:
         items, problems = [], []
         for fn in iv_files:
-            n = int(INTERVIEW_FILE_RE.match(fn).group(1))
+            n = iv_n[fn]
             a = asr.get(fn)
             asr_stem = interview_stem_from_asr(a)
             doc_raw = (sp["interview"].get(n) or {}).get("stem", "").strip()
@@ -761,7 +797,7 @@ def build_speaking(setkey, structured, asr, audio, stats):
                 usable = False
                 ip.append("stem_word_count:%d" % nwords(text))
             items.append({"n": n, "q_number": n,
-                          "audio_path": "audio/item_level/%s" % fn,
+                          "audio_path": "audio/item_level/%s" % getattr(audio, "rel", {}).get(fn, fn),
                           "stem": doc, "stem_final": text, "transcript_final": text, "usable": usable,
                           "reference_answer": (sp["interview"].get(n) or {}).get("reference_answer", ""),
                           "asr_similarity": s, "problems": ip})
@@ -900,7 +936,7 @@ def main():
     args = ap.parse_args()
 
     files = sorted(f for f in os.listdir(OUT_DIR)
-                   if re.match(r"^rf\d{4}\.structured\.json$", f))
+                   if re.match(r"^r[fp]\d{4}\.structured\.json$", f))
     if args.set:
         want = set(args.set)
         files = [f for f in files if f.split(".")[0] in want]

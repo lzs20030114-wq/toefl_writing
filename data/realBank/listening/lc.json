@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 30,
+  "count": 36,
   "items": [
     {
       "id": "real_lc_rf0610_1_13",
@@ -2610,6 +2610,530 @@
           "answer": "B",
           "explanation": "",
           "source_q": 207
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0808_1_13",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0808_1_13.mp3",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Are you going to the concert this weekend?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I want to, but I haven't bought a ticket yet."
+        },
+        {
+          "speaker": "Man",
+          "text": "You should hurry. I heard they're selling out quickly."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I know. I'm also trying to decide between general admission and the VIP section."
+        },
+        {
+          "speaker": "Man",
+          "text": "The VIP section offers a better view and some perks like free snacks."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds like something I can't pass up."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman ask the man about?",
+          "options": {
+            "A": "Whether he will go to a concert",
+            "B": "When a concert will begin",
+            "C": "Where a concert will take place",
+            "D": "What section of a concert hall he will sit in"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 113
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply he will do when he says, 'That sounds like something I can't pass up'?",
+          "options": {
+            "A": "Attend a different concert",
+            "B": "Buy a general admission ticket",
+            "C": "Purchase a VIP ticket",
+            "D": "Call one of his friends"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 114
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0808_2_04",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0808_2_04.mp3",
+      "asr_similarity": 0.928,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "I didn't know the library hosted board game nights."
+        },
+        {
+          "speaker": "Woman",
+          "text": "It doesn't. Friday's event is a playtest sponsored by Silverton Studios, a board game developer."
+        },
+        {
+          "speaker": "Man",
+          "text": "What's a playtest?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "It's when designers try out newly developed games to see what works. They tweak the game"
+        },
+        {
+          "speaker": "Man",
+          "text": "And university students are good playtest subjects?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I think so. We're trained to be critical thinkers. We're likely to notice what's confusing about a"
+        },
+        {
+          "speaker": "Man",
+          "text": "But what's in it for us?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Silverton Studios gives each participant a gift card."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why do board game developers host events at universities?",
+          "options": {
+            "A": "University students have free time to attend.",
+            "B": "Universities have space to host events.",
+            "C": "University students provide helpful feedback.",
+            "D": "University students enjoy playing board games."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 204
+        },
+        {
+          "type": "detail",
+          "stem": "What does the woman mention about Silverton Studios at the end?",
+          "options": {
+            "A": "It sells a board game she finds confusing.",
+            "B": "It occasionally hires recent university graduates.",
+            "C": "It compensates students for donating their time.",
+            "D": "It hosts events at an office in the city."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 205
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0808_2_06",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0808_2_06.mp3",
+      "asr_similarity": 0.911,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Do you want to come to the basketball game tonight against Summit Tech? I have an extra"
+        },
+        {
+          "speaker": "Woman",
+          "text": "That sounds fun, but I'll be in the library. My roommate needs help studying for tomorrow's"
+        },
+        {
+          "speaker": "Man",
+          "text": "Oh, well, you're probably better off in the library anyway."
+        },
+        {
+          "speaker": "Woman",
+          "text": "How come?"
+        },
+        {
+          "speaker": "Man",
+          "text": "The college has already lost its first three games of the season. Summit Tech is playing at a"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Well, I sure hope you're wrong."
+        },
+        {
+          "speaker": "Man",
+          "text": "Thanks, and I hope your roommate crushes it tomorrow."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Thank you."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the man unable to join the woman?",
+          "options": {
+            "A": "He is scheduled to work a shift in the library.",
+            "B": "He needs to work on a sociology paper.",
+            "C": "He and his roommate are going to a basketball game.",
+            "D": "He is helping someone prepare for an exam."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 206
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman suggest about her college's basketball team?",
+          "options": {
+            "A": "Its previous season was disappointing.",
+            "B": "It is not likely to win tonight's game.",
+            "C": "Its game against Summit Tech will be postponed.",
+            "D": "It is likely to improve over the course of the season."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 207
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0826_1_15",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0826_1_15.mp3",
+      "asr_similarity": 0.985,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Are you going to the guest lecture on Friday? It's part of the Innovative Science Series."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I don't know. I went to the last one with Professor Gale. I really like her work, but I didn't think she was the most engaging lecturer."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, maybe this one will be more up your alley. Dr. Chen from the City Environmental Institute is going to be the speaker. He focuses on urban sustainability."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Dr. Chen? Wow! I cited his paper on eco-friendly city planning for my project last semester."
+        },
+        {
+          "speaker": "Man",
+          "text": "Great. I'll save you a seat."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "Why is the woman unsure about attending a lecture?",
+          "options": {
+            "A": "She will be busy working on a paper on urban sustainability.",
+            "B": "She is not interested in the topic.",
+            "C": "She is meeting Professor Gale at the time of the lecture.",
+            "D": "She did not enjoy the last lecture in the series."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 115
+        },
+        {
+          "type": "detail",
+          "stem": "How does the man persuade the woman to attend the lecture?",
+          "options": {
+            "A": "He tells her the name of the guest lecturer.",
+            "B": "He tells her that he is majoring in urban sustainability.",
+            "C": "He offers to help her with her city-planning project.",
+            "D": "He promises to save her a seat at the lecture."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 116
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0826_1_17",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0826_1_17.mp3",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you visited that new health food store near the train station?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yeah, I stopped by yesterday after work. I was really impressed. They've got a huge range of organic and specialty items, even some things I've never seen before."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Nice. Did you end up buying anything?"
+        },
+        {
+          "speaker": "Man",
+          "text": "I did. I picked up some organic berries and a mix of raw nuts. The bakery section looked really good too. I didn't get anything though, because I didn't really have enough time to explore it. Next time though."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Maybe I'll join you."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What opinion does the man express about a new store?",
+          "options": {
+            "A": "He appreciates the friendly service.",
+            "B": "He likes its variety.",
+            "C": "He thinks it has a convenient location.",
+            "D": "He is impressed by the displays."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 117
+        },
+        {
+          "type": "detail",
+          "stem": "Why did the man not get anything from the bakery section?",
+          "options": {
+            "A": "The items did not look fresh.",
+            "B": "The prices were too high.",
+            "C": "He was in a hurry.",
+            "D": "He does not usually eat baked goods."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 118
+        }
+      ]
+    },
+    {
+      "id": "real_lc_rf0826_2_04",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/lc/real_lc_rf0826_2_04.mp3",
+      "asr_similarity": 0.995,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Wow! That postcard is really cool. Isn't that Notre Dame in Paris?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Yes. It's from 1925. I collect postcards like that. I started with a few from the 1920s and got hooked. Each one feels like a tiny piece of history."
+        },
+        {
+          "speaker": "Man",
+          "text": "Where do you usually find them? I wouldn't know where to start."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Flea markets are great, but I've had the best luck at household clear-out sales. You have to dig a bit, but that's part of the fun."
+        },
+        {
+          "speaker": "Man",
+          "text": "Do you focus on a certain theme?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Mostly famous landmarks. I love seeing how places and traditions were portrayed decades ago."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the woman's postcards?",
+          "options": {
+            "A": "They depict places she has traveled to.",
+            "B": "They were a gift from a relative.",
+            "C": "She values them for their historical significance.",
+            "D": "She started collecting them for a school project."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 204
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman imply about finding postcards?",
+          "options": {
+            "A": "It is not always easy.",
+            "B": "It is an expensive hobby.",
+            "C": "She buys postcards mainly online.",
+            "D": "She collects only European postcards."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 205
         }
       ]
     }

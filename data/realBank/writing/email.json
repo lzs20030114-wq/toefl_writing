@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 7,
+  "count": 15,
   "items": [
     {
       "id": "email_rf0615",
@@ -168,6 +168,198 @@
           "code": "vendor_reformatted",
           "severity": "warn",
           "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "email_rf0808",
+      "to": "Mr. Adams",
+      "subject": "Concerns About Equipment",
+      "scenario": "You recently joined the campus gym and have been enjoying the facilities. However, you have noticed that some of the equipment is not properly maintained. You need to contact the gym manager, Mr. Adams, to report the issue and suggest improvements.",
+      "direction": "Write an email to Mr. Adams.",
+      "goals": [
+        "Mention specifically what you like most about the gym.",
+        "Describe the issues with the equipment and the potential risks.",
+        "Suggest ways to improve the equipment."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "email_rf0826",
+      "to": "Ms. Baker",
+      "subject": "Request for additional cooking tips",
+      "scenario": "You recently attended a cooking class and thoroughly enjoyed the experience. You found the instructor, Ms. Baker, very helpful and want to thank her for the enjoyable class.",
+      "direction": "Write an email to Ms. Baker.",
+      "goals": [
+        "Mention why you enjoyed the class.",
+        "Request advice and resources to improve your cooking skills.",
+        "Thank her for the class."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0711",
+      "to": "John",
+      "subject": "Summer trip itinerary ideas",
+      "scenario": "You and your friend, John, are planning a trip to Europe this summer. You have researched several destinations and activities that you would like to include in your itinerary.",
+      "direction": "Write an email to Your coach.",
+      "goals": [
+        "Describe the destinations you have researched.",
+        "Explain why you think these destinations would be enjoyable.",
+        "Ask for John's opinion on the suggested itinerary and any additional ideas he may have."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0711",
+      "date": "2026-07-11",
+      "source_hash": "b0bef129b3ea",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0725",
+      "to": "Ms. Brown",
+      "subject": "Damaged furniture item",
+      "scenario": "You recently purchased a piece of furniture for your dorm room from an online store called 'Home Comforts.' When the item arrived, you discovered that it was damaged during shipping. You are disappointed because you were looking forward to using the new furniture. You need to contact customer service to resolve the issue.",
+      "direction": "Write an email to Ms. Turner.",
+      "goals": [
+        "Describe the item you purchased and the damage it sustained.",
+        "Explain why you are disappointed with the situation.",
+        "Request a replacement or a refund for the damaged item."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0725",
+      "date": "2026-07-25",
+      "source_hash": "20fccfe038e1",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0729",
+      "to": "Ms. Martinez",
+      "subject": "Advice on yoga practice",
+      "scenario": "You recently started going to yoga classes at your university gym. You have been enjoying the sessions overall, but you have experienced some back pain and would like advice from the instructor, Ms. Martinez, on how to modify your practice to avoid further discomfort.",
+      "direction": "Write an email to Ms. Johnson.",
+      "goals": [
+        "Mention how much you enjoy the yoga classes.",
+        "Describe the back pain you are experiencing.",
+        "Ask for advice on how to modify your practice to prevent discomfort."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0729",
+      "date": "2026-07-29",
+      "source_hash": "e1bae0790b39",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0812",
+      "to": "Customer Service",
+      "subject": "Recent order",
+      "scenario": "You and your friend, John, are planning a trip to Europe this summer. You have done some research and found some interesting destinations and activities that you would like to include in your itinerary. You want to share your ideas with John and get his opinion.",
+      "direction": "Write an email to the guest lecturer.",
+      "goals": [
+        "Describe the destinations you have researched.",
+        "Explain why you think these destinations would be enjoyable.",
+        "Ask for his opinion on the suggested itinerary and any additional ideas he might have."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0812",
+      "date": "2026-08-12",
+      "source_hash": "28078855aaa6",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0819",
+      "to": "Ms. Harris",
+      "subject": "Park Improvement Suggestions",
+      "scenario": "You recently visited Mountain View Park. You enjoyed the scenery, the well-maintained walking paths, and the peaceful atmosphere. However, you noticed litter along the paths and found that the park did not have a public drinking-water facility, so visitors had to bring a large amount of water.",
+      "direction": "Write an email to Ms. Garcia.",
+      "goals": [
+        "Describe what you liked about the park.",
+        "Explain the problems you noticed and how they affected visitors.",
+        "Suggest practical improvements, including more trash bins, regular cleanup patrols, and public drinking-water stations."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_hash": "a01fbaac8a07",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ]
+    },
+    {
+      "id": "email_rp0822",
+      "to": "Ms. Lopez",
+      "subject": "Feedback on Recent Cake Purchase",
+      "scenario": "You are a regular customer at a local bakery and have always enjoyed their products. Recently, you bought a cake for your favorite professor, but it did not meet your expectations. You want to provide feedback to the bakery owner, Ms. Lopez, and suggest improvements.",
+      "direction": "Write an email to Professor Patel.",
+      "goals": [
+        "Explain what you usually enjoy about their products.",
+        "Describe the issues you had with your recent cake purchase.",
+        "Suggest how they could improve the quality of their cakes."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "e0bc46d0188a",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
       ]
     }

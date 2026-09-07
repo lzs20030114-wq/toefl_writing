@@ -218,7 +218,13 @@ describe("真题阅读：选择题形状（RDLTask 硬契约）", () => {
       const material = it.text || it.passage || "";
       it.questions.forEach((q) => {
         const probe = [q.stem, ...Object.values(q.options)].join(" ");
-        if (/insert|slot\s*\d|■/i.test(probe) && !/■/.test(material)) suspicious.push(`${it.id}: ${q.stem}`);
+        // 可见的插入位标记有两套：旧源（ETS 截图）用 ■，第二来源「重排版」用 [A]-[D]
+        // 字母方括号（选项也直接写 "A. [A]"）。两种都是屏幕上看得见的定位符，用户看得见
+        // 就答得了 —— 判据必须和 build_bank.hasInsertMarkers 一致，否则同一道题在落库时
+        // 放行、在测试里报错。四个字母缺一个仍不算（那是 OCR 掉了标记）。
+        const marked = /■/.test(material)
+          || ["[A]", "[B]", "[C]", "[D]"].every((x) => material.includes(x));
+        if (/insert|slot\s*\d|■/i.test(probe) && !marked) suspicious.push(`${it.id}: ${q.stem}`);
       });
     });
     expect(suspicious).toEqual([]);

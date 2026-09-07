@@ -85,18 +85,18 @@ function isHeld(setName, section) {
  * 认不出就退回 "2026"（只影响展示，不影响能不能落库）。
  */
 function setDate(setname) {
-  const rf = String(setname).match(/^rf(\d{2})(\d{2})$/);
+  const rf = String(setname).match(/^r[fp](\d{2})(\d{2})$/);
   if (rf) return `2026-${rf[1]}-${rf[2]}`;
   const m = String(setname).match(/^(\d{1,2})[.．](\d{1,2})/);
   return m ? `2026-${String(+m[1]).padStart(2, "0")}-${String(+m[2]).padStart(2, "0")}` : "2026";
 }
 /**
- * 卷名 → id 里的短标识。**必须跨来源唯一**：重排版源直接用 setkey（rf0610），
+ * 卷名 → id 里的短标识。**必须跨来源唯一**：重排版源直接用 setkey（整卷 rf0610 / 题池 rp0704），
  * 与旧源的 "310" / "121a" 天然不撞；认不出的退回 "x" 会让多卷共用同一个 id 前缀，
  * 所以新来源接进来时一定要在这里给出确定的规则，不能靠兜底。
  */
 function setSlug(setname) {
-  if (/^rf\d{4}$/.test(String(setname))) return String(setname);
+  if (/^r[fp]\d{4}$/.test(String(setname))) return String(setname);
   const m = String(setname).match(/^(\d{1,2})[.．](\d{1,2})/);
   const base = m ? `${m[1]}${m[2]}` : "x";
   const variant = String(setname).match(/([ABC])卷/);

@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 77,
+  "count": 91,
   "items": [
     {
       "id": "bs_rf0610_01",
@@ -2111,6 +2111,389 @@
       "source": "rf0716",
       "date": "2026-07-16",
       "source_hash": "e863863b9514",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_01",
+      "prompt": "Are you planning to go to the rescheduled class tomorrow?",
+      "blanks": "I have _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "go",
+        "to",
+        "class",
+        "to",
+        "no plans",
+        "that"
+      ],
+      "answer": "I have no plans to go to that class.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_03",
+      "prompt": "I need to buy a gift for my classmate's birthday.",
+      "blanks": "_____ _____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "of",
+        "your classmate",
+        "does",
+        "kind",
+        "things",
+        "what",
+        "like"
+      ],
+      "answer": "What kind of things does your classmate like?",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_04",
+      "prompt": "A new student was asking about the literature course.",
+      "blanks": "She wanted _____ _____ _____ _____.",
+      "chunks": [
+        "was",
+        "which novel",
+        "to know",
+        "assigned"
+      ],
+      "answer": "She wanted to know which novel was assigned.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_05",
+      "prompt": "The language lab software update includes several new features.",
+      "blanks": "_____ _____ _____ _____ _____?",
+      "chunks": [
+        "bugs",
+        "the previous",
+        "it resolves",
+        "do you",
+        "know if"
+      ],
+      "answer": "Do you know if it resolves the previous bugs?",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_06",
+      "prompt": "There will be a time-management workshop next week.",
+      "blanks": "_____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "be conducted",
+        "do you",
+        "in person",
+        "know if",
+        "it will",
+        "online or"
+      ],
+      "answer": "Do you know if it will be conducted online or in person?",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_07",
+      "prompt": "Why don't you use the new software?",
+      "blanks": "_____ _____ _____ _____ _____ _____ bugs.",
+      "chunks": [
+        "last month",
+        "has a",
+        "of",
+        "they released",
+        "the version",
+        "lot"
+      ],
+      "answer": "The version they released last month has a lot of bugs.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_08",
+      "prompt": "Which study method works best for you?",
+      "blanks": "The _____ _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "tutor recommended",
+        "work",
+        "best",
+        "seems",
+        "to",
+        "technique",
+        "that my"
+      ],
+      "answer": "The technique that my tutor recommended seems to work best.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_09",
+      "prompt": "Why did you miss the class party?",
+      "blanks": "_____ _____ _____ _____ _____ _____ address.",
+      "chunks": [
+        "received",
+        "the invitation",
+        "wrong",
+        "had",
+        "I",
+        "the"
+      ],
+      "answer": "The invitation I received had the wrong address.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0808_10",
+      "prompt": "Which off-campus gym do you prefer?",
+      "blanks": "The gym _____ _____ _____ _____ _____ _____ favorite.",
+      "chunks": [
+        "my",
+        "is",
+        "equipment",
+        "the latest",
+        "that has"
+      ],
+      "answer": "The gym that has the latest equipment is my favorite.",
+      "distractors": [],
+      "source_label": "2026-08-08 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
+      "source_hash": "56be0559cecc",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0826_03",
+      "prompt": "Did you enjoy the movie produced by the school's drama club?",
+      "blanks": "_____ _____ _____ _____ _____.",
+      "chunks": [
+        "were",
+        "characters",
+        "me",
+        "none of the",
+        "interesting to"
+      ],
+      "answer": "None of the characters were interesting to me.",
+      "distractors": [],
+      "source_label": "2026-08-26 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0826_06",
+      "prompt": "I just joined the school gym last week.",
+      "blanks": "_____ _____ _____ _____?",
+      "chunks": [
+        "classes",
+        "what",
+        "they offer",
+        "do"
+      ],
+      "answer": "What classes do they offer?",
+      "distractors": [],
+      "source_label": "2026-08-26 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0826_07",
+      "prompt": "Why didn't you attend the seminar last week?",
+      "blanks": "_____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "commitments",
+        "scheduled last",
+        "that was",
+        "week conflicted",
+        "the seminar",
+        "with my other"
+      ],
+      "answer": "The seminar that was scheduled last week conflicted with my other commitments.",
+      "distractors": [],
+      "source_label": "2026-08-26 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0826_08",
+      "prompt": "Are you planning to join us for the make-up class tomorrow?",
+      "blanks": "I _____ _____ _____ _____ _____.",
+      "chunks": [
+        "have no",
+        "intention",
+        "class",
+        "tomorrow's",
+        "of attending"
+      ],
+      "answer": "I have no intention of attending tomorrow's class.",
+      "distractors": [],
+      "source_label": "2026-08-26 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "bs_rf0826_10",
+      "prompt": "I heard that the school band is playing a concert downtown next week.",
+      "blanks": "_____ _____ _____?",
+      "chunks": [
+        "do you",
+        "tickets are still available",
+        "know if"
+      ],
+      "answer": "Do you know if tickets are still available?",
+      "distractors": [],
+      "source_label": "2026-08-26 真题造句",
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0826",
+      "date": "2026-08-26",
+      "source_hash": "3a3a5238b4a5",
       "source_flags": [
         {
           "code": "vendor_reformatted",
