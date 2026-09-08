@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-const QR_IMAGE_SRC = "/wechat-group-qr.jpg";
+// 走同源代理：后台 /admin-wechat-qr 拖图上传后即时生效（存 Supabase Storage）；
+// 没上传过或上游失败时代理会 302 回内置默认图 public/wechat-group-qr.jpg。
+const QR_IMAGE_SRC = "/api/wechat-qr";
 
 /**
  * 微信群二维码图片,点击可全屏放大。

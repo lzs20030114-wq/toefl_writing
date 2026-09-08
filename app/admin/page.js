@@ -42,6 +42,7 @@ const QUICK_LINKS = [
     items: [
       { href: "/admin-analytics", label: "数据分析" },
       { href: "/admin-feedback", label: "用户反馈" },
+      { href: "/admin-wechat-qr", label: "微信群二维码", hint: "拖图即换，无需部署" },
       { href: "/admin-surveys", label: "新手问卷", hint: "首套题完成后体验调研" },
       { href: "/admin-voice-vote", label: "语音升级投票", hint: "听力语音 A/B 投票结果" },
       { href: "/admin-api-errors", label: "API 错误" },
