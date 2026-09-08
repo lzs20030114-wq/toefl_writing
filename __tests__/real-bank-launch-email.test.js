@@ -22,9 +22,10 @@ describe("buildRealBankLaunchEmail", () => {
   });
 
   test("in-app announcement carries the same total", () => {
-    const entry = announcements.find((a) => a.id === "2026-09-08-v1.18.0");
+    // 题量会随补录增长；公告不回头改，所以看「最新一条提到真题题量的公告」是否与快照一致。
+    const entry = announcements.find((a) => a.items.some((t) => /共 \d+ 题/.test(t)));
     expect(entry).toBeTruthy();
-    expect(entry.items[0]).toContain(`共 ${REAL_BANK_LAUNCH_COUNTS.total} 题`);
+    expect(entry.items.join("\n")).toContain(`共 ${REAL_BANK_LAUNCH_COUNTS.total} 题`);
   });
 
   test("pro view: greeting, counts, real-bank link, no upgrade nag", () => {

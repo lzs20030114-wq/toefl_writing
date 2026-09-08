@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-08 — v1.18.1
+
+- **真题专区听力口语补录第一来源 14 套锚点卷**（自带「听力原文」逐字稿 + 按 Module 切好音频的 1.21A/B/C、1.27A/B、1.28A/B、2.1A/B/C、2.2、2.10、2.28、3.14）：听力 215 → **419** 段（LCR 118→248 / LC 31→47 / LA 20→50 / LAT 46→74，完整卷 10→22 套），复述 21 套 270 句 → **30 套 333 句**，面试不变（无文档来源整批扣下）；真题总量 989 → **1202**。
+- 新桥接 `scripts/realbank/merge_first_source_asr.py`：第一来源只有整块 25 分钟音频、无逐题文件，分组 ground truth 改用逐字稿 PDF 分段，Whisper（本地 faster-whisper CUDA，`scripts/realbank/asr_cache.py`，零 API 费）词级 LCS 对齐得到每段材料的 `audio_span_sec`；四道 fail-closed 闸（分组校验和与 module 题数、对齐命中率 <0.6、区间缺失/塌陷/倒序、A/B 对话基频判性别失败、材料结尾无句末标点＝换行截断）任一不过整 module 扣下。音频不切片，上线一律 `render_real_audio.mjs` 自家 TTS 重配。对齐 354/382（剔除源料错配的 1.28A 后 99.7%），DeepSeek 盲审 93.4%。
+- 落库后复核：Opus 3 路盲解 441 题 434 一致（98.4%）；`material_bleed` 21 条（时间戳 `{ 1:52 }`、材料尾巴串进下一题、`B;` 标签）在桥接里治根重跑；`speaker_swapped` 4 / 盲解不一致 7 / 题干材料不符 2 / 无正确项 1 + 跨卷 Jaccard 重复听力 19 条、复述 4 套 → review-holds +51 下架。
+- 闸门拦下的源料造假：1.28A 听力 mp3 内容是 1.21A 的；2.1C 口语 mp3 讲体育赛事而试卷是图书馆；1.21A / 2.1C 截图 OCR 题号错位（盲审 63%）整卷下架。**已知坑**：`build_bank.mjs` 与 `render_real_audio.mjs` 并发会互相覆盖题库文件，必须串行。另 39 套无逐字稿卷不建议直接铺（可只做 LCR）。费用 DeepSeek ¥15.55 + TTS ≈¥10.43。报告 `data/claudeGen/reports/REALBANK-LISTENING-SPEAKING-WAVE3-2026-09-08.md`。
+- 公告邮件题量快照 `REAL_BANK_LAUNCH_COUNTS` 同步到 1202；测试改为核对「最新一条带题量的公告」，公告条目不回头改。
+
 ## 2026-09-08 — v1.18.0
 
 - **真题专区上线（Pro 专属，`/real-bank` + 首页 section）**：写作 440（讨论 132 / 邮件 27 / 造句 281 题 36 套）、阅读 296（CTW 87 / RDL 110 / AP 99）、听力 215（LCR 118 / LC 31 / LA 20 / LAT 46）、口语 38（跟读 21 / 访谈 17），共 989 题（补录 `10292d5`/`799d015` 后口径）。来源分档（ETS 官方 / 回忆版 / 参考版）在选题卡与答题页顶部标注；阅读材料框有源图的显示原卷截图（`material_image`，同源图片代理）；听力/口语按回忆稿 TTS 配音；done-key 与常规练习共用。录入管线 `scripts/realbank/`，两波月份文件夹入库（`ed2f77b4`/`f8dede1d`/`b4808cf8`）。
