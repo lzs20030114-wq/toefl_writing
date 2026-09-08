@@ -2,7 +2,7 @@
  * 「真题专区」数据层契约测试（lib/realBank.js）。
  *
  * 锁三件事：
- *   1. 题量与来源分档（讨论 132 / 邮件 27 / 造句 106；来源标签不许把未核验语料吹成 ETS 官方）；
+ *   1. 题量与来源分档（讨论 132 / 邮件 27 / 造句 292；来源标签不许把未核验语料吹成 ETS 官方）；
  *   2. id 全部带 `real_` 前缀且全局唯一 —— real_tpo_reference.json 有 27 条 ad* id 与 live
  *      库 data/academicWriting/prompts.json 重叠，前缀是「已练 / 历史记录不互相污染」的唯一保障；
  *   3. 三种题型规范化后能被各自的消费方直接吃下（写作 normalizePrompt 的必填字段、
@@ -17,7 +17,7 @@ import AD_RECALLED from "../data/academicWriting/recalled_supplement.json";
 import EM_TPO_REFERENCE from "../data/emailWriting/tpo_reference.json";
 import BS_TPO_OFFICIAL from "../data/buildSentence/tpo_official.json";
 import AD_LIVE from "../data/academicWriting/prompts.json";
-// realBank 写作回忆版（build_bank.mjs 产物）：造句 87 / 邮件 14 / 讨论 7。
+// realBank 写作回忆版（build_bank.mjs 产物）：造句 272 / 邮件 14 / 讨论 7。
 import RB_BS from "../data/realBank/writing/bs.json";
 import RB_EMAIL from "../data/realBank/writing/email.json";
 import RB_DISCUSSION from "../data/realBank/writing/discussion.json";
@@ -31,6 +31,7 @@ import {
   mapRealBSToPicker,
   mapRealDiscussionToPicker,
   mapRealEmailToPicker,
+  REAL_BS_MIN_BATCH,
   REAL_TIER_LABELS,
   realTierLabel,
 } from "../lib/realBank";
@@ -40,9 +41,17 @@ const email = getRealEmailPrompts();
 const bsQuestions = getRealBSQuestions();
 const bsBatches = getRealBSBatches();
 
-// realBank 造句回忆版里有 1 题（bs_rf0808_01）词块重复，runtime 会判「题库数据异常」——
-// 数据层提前丢掉它（宁可少题不许出死题），所以 87 → 86。
-const RB_BS_DROPPED = 1;
+// 落库侧已经把「过不了 runtimeModel」的题拦在库外（scripts/realbank/bs_runtime_gate.mjs，
+// 2026-09-08 起接进 build_bank）——以前 bs_rf0808_01 这种词块重复的题会躺在库里、
+// 由前端 groupBsBatches 静默丢，导致「库里的条数」比「能做的题数」多。现在两者相等。
+const RB_BS_DROPPED = 0;
+
+// 「造句要按套算」：题数 < REAL_BS_MIN_BATCH 的碎卷（源卷零星回忆，凑不成一套）不进真题专区。
+// 2026-09-08 实测命中 5 卷（3 题的 3.6/3.23/4.28，1 题的 4.5/rf0615），共 11 题被过滤。
+const RB_BS_SPARSE_SOURCES = ["3.6新托福真题", "3.23新托福真题", "4.28新托福真题", "4.5新托福真题", "rf0615"];
+const RB_BS_FILTERED_OUT = RB_BS.items.filter((q) =>
+  RB_BS_SPARSE_SOURCES.includes(q.source || q.source_label)
+).length;
 
 describe("真题专区：题量", () => {
   test("学术讨论 132 题（81 参考版 + 44 + 7 回忆版），一条不丢", () => {
@@ -58,22 +67,41 @@ describe("真题专区：题量", () => {
     expect(email.length).toBe(27);
   });
 
-  test("造句 106 题（20 官方 + 86 回忆版），官方 2 批各 10 题、批次号不动", () => {
+  test("造句 281 题（20 官方 + 261 回忆版），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(RB_BS.items.length).toBe(87);
-    expect(bsQuestions.length).toBe(20 + RB_BS.items.length - RB_BS_DROPPED);
+    expect(RB_BS.items.length).toBe(272);
+    expect(RB_BS_FILTERED_OUT).toBe(11);
+    expect(bsQuestions.length).toBe(20 + RB_BS.items.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT);
     // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
     expect(bsBatches.length).toBeGreaterThan(2);
     expect(bsBatches.slice(0, 2).map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);
     expect(bsBatches.slice(0, 2).map((b) => b.questions.length)).toEqual([10, 10]);
-    expect(bsBatches.map((b) => b.id)).toEqual(bsBatches.map((_, i) => `real-bs-set-${i + 1}`));
-    // 回忆版按考试套次（source）分批，一批 = 一场考试。
+    // 批次号（groupId）按源文件出现顺序在过滤前分配，过滤只摘掉碎卷、不重排剩余批次的号，
+    // 所以幸存批次的编号不连续是预期行为（不能断言 set-N 严格等于数组下标 N）。
+    const idNums = bsBatches.map((b) => Number(b.id.replace("real-bs-set-", "")));
+    expect(idNums).toEqual([...idNums].sort((a, b) => a - b));
+    expect(new Set(idNums).size).toBe(idNums.length);
+    // 每批题数都达标，官方两批各 10 题不受影响。
+    expect(bsBatches.every((b) => b.questions.length >= REAL_BS_MIN_BATCH)).toBe(true);
+    // 回忆版按考试套次（source）分批，一批 = 一场考试；碎卷（< REAL_BS_MIN_BATCH 题）已被过滤。
     const recalledBatches = bsBatches.slice(2);
-    expect(recalledBatches.length).toBe(new Set(RB_BS.items.map((q) => q.source)).size);
+    const recalledSources = new Set(RB_BS.items.map((q) => q.source));
+    expect(recalledBatches.length).toBe(recalledSources.size - RB_BS_SPARSE_SOURCES.length);
     expect(recalledBatches.every((b) => b.tier === "recalled")).toBe(true);
+    expect(recalledBatches.every((b) => b.questions.length >= REAL_BS_MIN_BATCH)).toBe(true);
     expect(recalledBatches.reduce((n, b) => n + b.questions.length, 0)).toBe(
-      RB_BS.items.length - RB_BS_DROPPED
+      RB_BS.items.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
     );
+  });
+
+  test("所有回忆版造句批次题数 ≥ REAL_BS_MIN_BATCH（碎卷不进真题专区）", () => {
+    const recalledBatches = bsBatches.filter((b) => b.tier === "recalled");
+    expect(recalledBatches.length).toBeGreaterThan(0);
+    recalledBatches.forEach((b) => {
+      expect(b.questions.length).toBeGreaterThanOrEqual(REAL_BS_MIN_BATCH);
+    });
+    // 反向核实：源文件里确有 < REAL_BS_MIN_BATCH 题的卷（否则这条断言测不出回归）。
+    expect(RB_BS_SPARSE_SOURCES.length).toBeGreaterThan(0);
   });
 
   test("回忆版造句每题都能被 runtime 消费：prefilled_positions 齐全 + 词块能拼回 answer", () => {

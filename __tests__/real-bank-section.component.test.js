@@ -183,7 +183,7 @@ describe("真题专区 section：Pro 门禁", () => {
     // 这条断言要的是「徽章在、数字对」，不是「全页面只有一个 125」。
     expect(screen.getAllByText("132 题").length).toBeGreaterThan(0);
     expect(screen.getAllByText("27 题").length).toBeGreaterThan(0);
-    expect(screen.getByText("106 题 · 12 套")).toBeTruthy();
+    expect(screen.getByText("281 题 · 36 套")).toBeTruthy();
     expect(screen.getByText(/参考版：早期收集，来源未核验/)).toBeTruthy();
   });
 });

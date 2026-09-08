@@ -33,6 +33,7 @@ import path from "path";
 import crypto from "crypto";
 import { createRequire } from "module";
 import { applyReview } from "./apply_review.mjs";
+import { bsRuntimeReject } from "./bs_runtime_gate.mjs";
 
 const require = createRequire(import.meta.url);
 
@@ -447,6 +448,36 @@ function thin(stats, type, missing) {
   stats.wThinReasons[k] = (stats.wThinReasons[k] || 0) + 1;
 }
 
+/**
+ * 第一来源（截图卷）的造句题面 —— `scripts/realbank/extract_bs_pages.py` 的产物
+ * `<卷名>.bs.json`。为什么不走 structured.json：那份是文本解析器的产物，而第一来源的
+ * 写作 PDF 没有文字层，题面（模板 + 词块）只存在于考试界面截图里，structured 的
+ * writing/build 段因此只有 `{n, sentence}` 答案句 —— 单靠它拼不出可练的题（thin 丢弃）。
+ * 识图那一半在 Python 侧做完并**机械校验过**（答案句必须能被模板固定词 + 词块按序恰好拼出），
+ * 这里只负责把校验过的题接进同一条落库通道（同一套 meta / 同一套去重）。
+ */
+function readSetBsFile(setname) {
+  const f = path.join(OUT_DIR, `${setname}.bs.json`);
+  if (!fs.existsSync(f)) return [];
+  try {
+    const j = JSON.parse(fs.readFileSync(f, "utf8"));
+    return Array.isArray(j.items) ? j.items : [];
+  } catch (e) {
+    console.warn(`读不到 ${setname}.bs.json：${e.message}`);
+    return [];
+  }
+}
+
+/** 造句题的跨卷去重键：答案句归一化（与 lib/realBank.js bsNormWord 同口径）。 */
+function bsAnswerKey(answer) {
+  return String(answer || "")
+    .toLowerCase()
+    .replace(/[.,!?;:]/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .join(" ");
+}
+
 function buildWriting(files, stats) {
   const out = { bs: [], email: [], discussion: [] };
   const seenHash = new Map();
@@ -471,6 +502,13 @@ function buildWriting(files, stats) {
       source_hash: (hashes && hashes[0]) || null,
       source_flags: flagsFor(setname, "writing"),
     };
+    for (const it of readSetBsFile(setname)) {
+      out.bs.push({
+        id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
+        answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
+        source_label: `${setDate(setname)} 真题造句`, ...meta,
+      });
+    }
     for (const r of st.results || []) {
       if (r.section !== "writing" || r.status !== "ok") continue;
       for (const it of r.items || []) {
@@ -512,6 +550,30 @@ function buildWriting(files, stats) {
       }
     }
   }
+  // 造句跨卷去重：两个来源（截图卷 + 重排版卷）覆盖的考试日期有重叠，实测同一道题会
+  // 两边各出一次。按答案句归一化去重（id/卷名都不行：两边的 id 规则和卷名都不一样），
+  // 先入库的留下 —— files 是按卷名排序遍历的，数字卷（1~5 月）排在 rf*（6~9 月）前面，
+  // 所以「留下的那份」= 日期早的那份，且与遍历顺序一样可复现。
+  const seenAnswer = new Set();
+  const bs = [];
+  for (const q of out.bs) {
+    const k = bsAnswerKey(q.answer);
+    if (!k || seenAnswer.has(k)) {
+      stats.wDroppedDupBs = (stats.wDroppedDupBs || 0) + 1;
+      continue;
+    }
+    // 前端渲染闸：过不了 runtimeModel 的题进库也做不了（groupBsBatches 会静默丢），
+    // 只会让批次卡上的题数虚高 —— 落库这一侧就拦掉。
+    const why = bsRuntimeReject(q);
+    if (why) {
+      stats.wDroppedBsRuntime = (stats.wDroppedBsRuntime || 0) + 1;
+      stats.wBsRuntimeDetail.push(`${q.id}: ${why}`);
+      continue;
+    }
+    seenAnswer.add(k);
+    bs.push(q);
+  }
+  out.bs = bs;
   return out;
 }
 
@@ -881,7 +943,7 @@ function main() {
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0,
-    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wSkippedThin: 0,
+    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
@@ -994,7 +1056,8 @@ function main() {
 
   console.log("\n■ 真题写作落库（不走盲审：三种题型都没有唯一选项答案，闸门是解析器的结构校验）");
   console.log(`  造句 ${writing.bs.length} 题 / 邮件 ${writing.email.length} 题 / 学术讨论 ${writing.discussion.length} 题`);
-  console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条`);
+  console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条；造句答案句跨卷重复丢弃 ${stats.wDroppedDupBs} 题；造句过不了 runtime 丢弃 ${stats.wDroppedBsRuntime} 题`);
+  for (const d of stats.wBsRuntimeDetail) console.log(`    ✗ ${d}`);
   const thinTop = Object.entries(stats.wThinReasons).sort((a, b) => b[1] - a[1]);
   if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
 
@@ -1015,6 +1078,44 @@ function main() {
   }
 
   if (dry) { console.log("\n（--dry，未写文件）"); return; }
+
+  // `--only-bs`：只落 data/realBank/writing/bs.json，其余文件一个字节都不动。
+  //
+  // 为什么需要这个口子：.codex-tmp 里躺着的结构化产物**多于**已入库的量（铺量在
+  // 「第一来源体检 → 拍板」那一步被叫停，structured 先跑了、库还没跟着铺）。这时候跑
+  // 全量重建，阅读会从 AP 99 → 210、听力 LCR 118 → 124 …… 一次改掉四科，那是另一个
+  // 需要人拍板的决定，不该由「加造句题」这件事顺手带出去。造句是新增内容且有自己的
+  // 机械闸（答案句必须能被模板固定词 + 词块拼出），可以单独落。
+  if (process.argv.includes("--only-bs")) {
+    fs.mkdirSync(WRITING_DIR, { recursive: true });
+    const p = path.join(WRITING_DIR, "bs.json");
+    fs.writeFileSync(p, JSON.stringify({
+      tier: TIER, generated_by: "scripts/realbank/build_bank.mjs",
+      count: writing.bs.length, items: writing.bs,
+    }, null, 2), "utf8");
+    console.log(`\n（--only-bs）→ ${path.relative(process.cwd(), p)}  ${writing.bs.length} 条；其余文件未动`);
+    // 人工复核清单照常生效：writing/bs 上已有 4 条下架 + 1 处 patch，跳过 applyReview
+    // 会让下架过的题随重建复活。但 applyReview 没有按科目收窄的入口，它会把**所有**库文件
+    // 重写一遍 —— 内容虽然一模一样（holds 早就应用过），字节却会变（行尾/末尾换行），
+    // git 上就是一片假 diff。所以先按字节拍快照，跑完把非 bs 的文件原样放回去。
+    const bankRoot = path.join(process.cwd(), "data", "realBank");
+    const snap = new Map();
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
+      const q = path.join(d, e.name);
+      if (e.isDirectory()) walk(q);
+      else if (e.isFile() && q !== p) snap.set(q, fs.readFileSync(q));
+    });
+    walk(bankRoot);
+    const r = applyReview({ dry: false });
+    let restored = 0;
+    for (const [q, buf] of snap) {
+      if (!fs.existsSync(q) || !fs.readFileSync(q).equals(buf)) { fs.writeFileSync(q, buf); restored += 1; }
+    }
+    if (restored) console.log(`  （--only-bs）已把 applyReview 顺手重写的 ${restored} 个非 bs 文件按字节还原`);
+    if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
+    console.log(`  → 复核后 ${JSON.parse(fs.readFileSync(p, "utf8")).items.length} 条`);
+    return;
+  }
 
   // 材料原图沿用：落盘前先拍上一版 ap/rdl 快照（out 是全量重建的新对象，不带 material_image），
   // 同 id 且材料正文逐字未变就把 material_image 接回，避免每次重建都要重跑 upload 脚本补图。

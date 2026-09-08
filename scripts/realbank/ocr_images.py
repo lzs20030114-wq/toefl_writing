@@ -239,7 +239,11 @@ def _is_systemic(status: int | None, body: str) -> bool:
     return bool(re.search(r"InvalidApiKey|Arrearage|insufficient|quota|AccessDenied", body, re.I))
 
 
-def call_qwen(image_bytes: bytes, ext: str, model: str, timeout: int = 120) -> str:
+def call_qwen(image_bytes: bytes, ext: str, model: str, timeout: int = 120,
+              prompt: str | None = None) -> str:
+    """`prompt` 缺省 = 逐字转写（本脚本的老行为）。传别的 system prompt 就能让同一个
+    客户端做别的视觉任务（extract_bs_pages.py 用它抽造句题的题面结构）——
+    调用、鉴权、估价、错误分类只此一份。"""
     import base64
 
     api_key = os.environ.get("DASHSCOPE_API_KEY")
@@ -254,7 +258,7 @@ def call_qwen(image_bytes: bytes, ext: str, model: str, timeout: int = 120) -> s
         "max_tokens": 4096,
         "stream": False,
         "messages": [
-            {"role": "system", "content": TRANSCRIBE_PROMPT},
+            {"role": "system", "content": prompt or TRANSCRIBE_PROMPT},
             {"role": "user", "content": [{"type": "image_url", "image_url": {"url": data_url}}]},
         ],
     }
