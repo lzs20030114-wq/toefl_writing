@@ -267,6 +267,8 @@ export function useBuildSentenceSession(questions, options = {}) {
       band,
       errors: nr.filter((r) => !r.isCorrect).flatMap((r) => r.q.grammar_points || []),
       details: nr.map((r) => ({
+        // qid：题目 id（real_ 前缀 = 真题专区），后台真题统计靠它辨认造句真题；纯增量字段。
+        qid: String(r.q.id || ""),
         prompt: r.q.prompt,
         userAnswer: r.userAnswer,
         correctAnswer: r.q.answer || "",

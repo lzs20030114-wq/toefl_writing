@@ -1,6 +1,7 @@
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../../lib/supabaseAdmin";
 import { jsonError } from "../../../../lib/apiResponse";
+import { REAL_SESSION_SELECT, isRealSessionRow } from "../../../../lib/admin/realSession";
 
 const CODE_CHARS = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const CODE_LEN = 6;
@@ -186,6 +187,9 @@ export async function GET(request) {
       usageByCode[code] = {
         sessions: 0,
         answered: emptyAnswered(),
+        // 真题专区（/real-bank）子集：场次 + 分题型计数，口径与 answered 完全一致。
+        realSessions: 0,
+        answeredReal: emptyAnswered(),
         lastActiveAt: null,
         tier: null,
         tierExpiresAt: null,
@@ -212,7 +216,7 @@ export async function GET(request) {
       const [{ data: sessionRows, error: sessionError }, { data: promptRows }] = await Promise.all([
         supabaseAdmin
           .from("sessions")
-          .select("user_code,type,date,score,subtype:details->>subtype")
+          .select(`user_code,type,date,score,${REAL_SESSION_SELECT}`)
           .in("user_code", codeList)
           .order("date", { ascending: false })
           .limit(20000),
@@ -237,6 +241,10 @@ export async function GET(request) {
           usage.lastActiveAt = row.date || null;
         }
         accumulateRow(row, usage.answered);
+        if (isRealSessionRow(row)) {
+          usage.realSessions += 1;
+          accumulateRow(row, usage.answeredReal);
+        }
         if (String(row?.type || "") === "mock" && uniqueSets[code]) {
           const ids = extractMockPromptIds(row.score);
           ids.email.forEach((pid) => uniqueSets[code].email.add(pid));

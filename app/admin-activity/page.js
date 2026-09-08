@@ -144,7 +144,29 @@ function groupBySubtype(items, subjectKey) {
   return out;
 }
 
-function ChipBadge({ subject, subtype, fromMock }) {
+const REAL_CHIP = { bg: "#fef3c7", fg: "#92400e", bdr: "#f59e0b" };
+
+function RealChip({ title }) {
+  return (
+    <span
+      title={title || "该作答来自真题专区 /real-bank"}
+      style={{
+        background: REAL_CHIP.bg,
+        color: REAL_CHIP.fg,
+        border: "1px solid " + REAL_CHIP.bdr,
+        borderRadius: 4,
+        padding: "0 6px",
+        fontSize: 10,
+        fontWeight: 700,
+        lineHeight: "16px",
+      }}
+    >
+      真题
+    </span>
+  );
+}
+
+function ChipBadge({ subject, subtype, fromMock, real }) {
   const { short, long } = subtypeChip(subject, subtype);
   const palette = SUBTYPE_CHIP_STYLE[subject] || SUBTYPE_CHIP_STYLE.writing;
   return (
@@ -177,6 +199,7 @@ function ChipBadge({ subject, subtype, fromMock }) {
           Mock源
         </span>
       ) : null}
+      {real ? <RealChip /> : null}
     </span>
   );
 }
@@ -185,7 +208,7 @@ function WritingAttemptCard({ a }) {
   return (
     <div style={{ borderBottom: "1px solid #f1f5f9", padding: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 6, alignItems: "center" }}>
-        <ChipBadge subject="writing" subtype={a.subtype} fromMock={a.fromMock} />
+        <ChipBadge subject="writing" subtype={a.subtype} fromMock={a.fromMock} real={a.real} />
         <div style={{ color: writingScoreColor(a.scoreText), fontWeight: 700, fontSize: 12 }}>{a.scoreText || "-"}</div>
       </div>
       <div style={{ fontSize: 11, color: C.t2, marginBottom: 6 }}>{fmtDate(a.date)}</div>
@@ -222,7 +245,7 @@ function ReadingListeningRow({ a }) {
       }}
     >
       <div style={{ color: C.t2 }}>{fmtDate(a.date)}</div>
-      <ChipBadge subject={a.subject} subtype={a.subtype} />
+      <ChipBadge subject={a.subject} subtype={a.subtype} real={a.real} />
       <div style={{ color: C.t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {a.topic || subtypeChip(a.subject, a.subtype).long}
       </div>
@@ -248,8 +271,201 @@ function SpeakingRow({ a }) {
       }}
     >
       <div style={{ color: C.t2 }}>{fmtDate(a.date)}</div>
-      <ChipBadge subject="speaking" subtype={a.subtype} />
+      <ChipBadge subject="speaking" subtype={a.subtype} real={a.real} />
       <div style={{ color: C.t1 }}>{a.topic || subtypeChip("speaking", a.subtype).long}</div>
+    </div>
+  );
+}
+
+const REAL_RANGE_OPTIONS = [
+  { value: 7, label: "7天" },
+  { value: 30, label: "30天" },
+  { value: 90, label: "90天" },
+  { value: 0, label: "全部" },
+];
+
+function RealStatCard({ value, label, sub, color }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: "12px 14px" }}>
+      <div style={{ fontSize: 24, fontWeight: 800, color: color || C.nav, lineHeight: 1.1 }}>{value ?? "—"}</div>
+      <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>{label}</div>
+      {sub ? <div style={{ fontSize: 11, color: C.t3 || C.t2, marginTop: 2 }}>{sub}</div> : null}
+    </div>
+  );
+}
+
+function RealDailyBars({ data }) {
+  const list = Array.isArray(data) ? data : [];
+  if (list.length === 0) return <div style={{ color: C.t2, fontSize: 12 }}>暂无数据</div>;
+  const max = Math.max(...list.map((d) => safeNum(d.count)), 1);
+  const height = 72;
+  return (
+    <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height, padding: "0 2px" }}>
+      {list.map((d) => {
+        const n = safeNum(d.count);
+        const h = n > 0 ? Math.max((n / max) * (height - 14), 3) : 1;
+        return (
+          <div key={d.date} title={`${d.date}: ${n} 场真题练习`} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end" }}>
+            <div style={{ fontSize: 9, color: C.t2, marginBottom: 1 }}>{n || ""}</div>
+            <div style={{ width: "100%", maxWidth: 22, height: h, borderRadius: "3px 3px 0 0", background: n > 0 ? REAL_CHIP.bdr : "#e2e8f0" }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * 「真题板块」：真题专区（/real-bank）的全站练习统计，数据来自 /api/admin/real-bank。
+ * 场次口径 = sessions 表一条记录（与下方按登录码的「场次」同口径），真题判定见 lib/admin/realSession.js。
+ */
+function RealBankPanel({ callAdminApi, hasToken }) {
+  const [days, setDays] = useState(30);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(true);
+
+  async function load(d) {
+    if (!hasToken) return;
+    setLoading(true);
+    setError("");
+    try {
+      const body = await callAdminApi(`/api/admin/real-bank?days=${d}`, { method: "GET" });
+      setData(body);
+    } catch (e) {
+      setError(String(e.message || e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (hasToken) load(days);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasToken]);
+
+  function changeDays(d) {
+    setDays(d);
+    load(d);
+  }
+
+  const subtypes = (data?.subtypes || []).filter((x) => SUBTYPE_LABEL[x.subject]?.[x.subtype]);
+  const activeSubtypes = subtypes.filter((x) => safeNum(x.sessions) > 0);
+  const rangeLabel = days === 0 ? "全部时间" : `近 ${days} 天`;
+
+  return (
+    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderTop: "3px solid " + REAL_CHIP.bdr, borderRadius: 8, padding: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginBottom: open ? 10 : 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <div style={{ fontWeight: 700, color: C.nav }}>真题专区练习统计</div>
+          <RealChip title="真题专区 /real-bank 的练习记录" />
+          <div style={{ fontSize: 11, color: C.t2 }}>
+            {loading ? "加载中..." : error ? <span style={{ color: C.red || "#b91c1c" }}>{error}</span> : data ? `${rangeLabel} · 全站 ${safeNum(data.allSessions)} 场练习里有 ${safeNum(data.realSessions)} 场是真题` : "—"}
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {REAL_RANGE_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              onClick={() => changeDays(opt.value)}
+              disabled={loading}
+              style={{
+                padding: "4px 10px", borderRadius: 6, fontSize: 12, fontWeight: days === opt.value ? 700 : 500,
+                border: "1px solid " + (days === opt.value ? REAL_CHIP.bdr : C.bdr),
+                background: days === opt.value ? REAL_CHIP.bg : "#fff",
+                color: days === opt.value ? REAL_CHIP.fg : C.t2,
+                cursor: loading ? "wait" : "pointer",
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            style={{ border: "1px solid " + C.bdr, background: "#fff", color: C.t2, borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 12 }}
+          >
+            {open ? "收起" : "展开"}
+          </button>
+        </div>
+      </div>
+
+      {open && (
+        <div style={{ display: "grid", gap: 12 }}>
+          <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
+            <RealStatCard value={data?.realSessions} label="真题练习场次" sub={data?.realSharePct != null ? `占全部练习 ${data.realSharePct}%` : rangeLabel} color={REAL_CHIP.fg} />
+            <RealStatCard value={data?.realUsers} label="练过真题的用户" sub={data?.userSharePct != null ? `占活跃用户 ${data.userSharePct}%（活跃 ${safeNum(data?.allUsers)} 人）` : ""} color="#16a34a" />
+            <RealStatCard value={data?.accuracyPct != null ? `${data.accuracyPct}%` : "—"} label="客观题正确率" sub="造句 / 阅读 / 听力真题合计（按题数）" color={C.blue} />
+            <RealStatCard value={activeSubtypes.length} label="有人练过的真题题型" sub={`共 ${subtypes.length} 种题型上线`} color={C.nav} />
+          </div>
+
+          <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, padding: "10px 12px" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.nav, marginBottom: 6 }}>每日真题练习场次</div>
+            {loading && !data ? <div style={{ height: 72, background: "#f8fafc", borderRadius: 6 }} /> : <RealDailyBars data={data?.daily} />}
+          </div>
+
+          <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 12 }}>
+            <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, overflow: "hidden" }}>
+              <div style={{ padding: "8px 12px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", fontSize: 12, fontWeight: 700, color: C.nav }}>分题型</div>
+              <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontVariantNumeric: "tabular-nums" }}>
+                  <thead>
+                    <tr style={{ color: C.t2 }}>
+                      <th style={{ textAlign: "left", padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>题型</th>
+                      <th style={{ textAlign: "right", padding: "6px 8px", borderBottom: "1px solid #f1f5f9" }}>场次</th>
+                      <th style={{ textAlign: "right", padding: "6px 8px", borderBottom: "1px solid #f1f5f9" }}>人数</th>
+                      <th style={{ textAlign: "right", padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>正确率 / 均分</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subtypes.map((x) => {
+                      const meta = subtypeChip(x.subject, x.subtype);
+                      const empty = safeNum(x.sessions) === 0;
+                      const scoreCell = x.accuracyPct != null
+                        ? <span style={{ color: pctColor(x.accuracyPct), fontWeight: 700 }}>{x.accuracyPct}% <span style={{ fontSize: 11, fontWeight: 400, color: C.t2 }}>({x.correct}/{x.total})</span></span>
+                        : x.avgScore != null
+                          ? <span style={{ color: C.nav, fontWeight: 700 }}>{x.avgScore}<span style={{ fontSize: 11, fontWeight: 400, color: C.t2 }}> / 5 均分</span></span>
+                          : <span style={{ color: C.t2 }}>—</span>;
+                      return (
+                        <tr key={`${x.subject}.${x.subtype}`} style={{ opacity: empty ? 0.5 : 1 }}>
+                          <td style={{ padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>
+                            <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                              <ChipBadge subject={x.subject} subtype={x.subtype} />
+                              <span style={{ color: C.t1 }}>{meta.long}</span>
+                            </span>
+                          </td>
+                          <td style={{ padding: "6px 8px", borderBottom: "1px solid #f1f5f9", textAlign: "right", fontWeight: empty ? 400 : 700, color: subjectCellColor(safeNum(x.sessions)) }}>{safeNum(x.sessions) || "—"}</td>
+                          <td style={{ padding: "6px 8px", borderBottom: "1px solid #f1f5f9", textAlign: "right", color: subjectCellColor(safeNum(x.users)) }}>{safeNum(x.users) || "—"}</td>
+                          <td style={{ padding: "6px 12px", borderBottom: "1px solid #f1f5f9", textAlign: "right" }}>{empty ? <span style={{ color: C.t2 }}>—</span> : scoreCell}</td>
+                        </tr>
+                      );
+                    })}
+                    {subtypes.length === 0 && (
+                      <tr><td colSpan={4} style={{ padding: 12, color: C.t2 }}>{loading ? "加载中..." : "暂无数据"}</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, overflow: "hidden" }}>
+              <div style={{ padding: "8px 12px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", fontSize: 12, fontWeight: 700, color: C.nav }}>最常练的真题 Top 10</div>
+              {(data?.topItems || []).length === 0 ? (
+                <div style={{ padding: 12, color: C.t2, fontSize: 12 }}>{loading ? "加载中..." : "暂无数据"}</div>
+              ) : (data.topItems || []).map((it, i) => (
+                <div key={it.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, padding: "6px 12px", borderTop: i > 0 ? "1px solid #f1f5f9" : "none", fontSize: 12 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+                    <span style={{ width: 18, height: 18, borderRadius: 4, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700, background: i < 3 ? REAL_CHIP.bdr : "#e2e8f0", color: i < 3 ? "#fff" : C.t2, flexShrink: 0 }}>{i + 1}</span>
+                    <ChipBadge subject={it.subject} subtype={it.subtype} />
+                    <span title={it.id} style={{ fontFamily: "monospace", color: C.t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it.id}</span>
+                  </div>
+                  <span style={{ color: C.nav, fontWeight: 700, flexShrink: 0 }}>{it.sessions} 场 <span style={{ fontSize: 11, fontWeight: 400, color: C.t2 }}>· {it.users} 人</span></span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -418,10 +634,12 @@ export default function AdminActivityPage() {
           </div>
         </div>
 
+        <RealBankPanel callAdminApi={callAdminApi} hasToken={ready && hasToken} />
+
         <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 8, padding: 14 }}>
           <div style={{ fontWeight: 700, marginBottom: 6 }}>按登录码查看作答（默认折叠）</div>
           <div style={{ fontSize: 11, color: C.t2, marginBottom: 10 }}>
-            写作/阅读/听力/口语 = 该用户在各科目下完成的题目数；展开查看分题型详情。
+            写作/阅读/听力/口语 = 该用户在各科目下完成的题目数；真题 = 其中来自真题专区的场次；展开查看分题型详情（真题作答带「真题」标签）。
           </div>
           <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontVariantNumeric: "tabular-nums" }}>
@@ -434,6 +652,7 @@ export default function AdminActivityPage() {
                   <th style={{ textAlign: "right", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>听力</th>
                   <th style={{ textAlign: "right", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>口语</th>
                   <th style={{ textAlign: "right", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>场次</th>
+                  <th style={{ textAlign: "right", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }} title="来自真题专区 /real-bank 的场次">真题</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>最近</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>详情</th>
                 </tr>
@@ -447,6 +666,10 @@ export default function AdminActivityPage() {
                   const listeningN = subjectTotal(usage, "listening");
                   const speakingN = subjectTotal(usage, "speaking");
                   const sessions = safeNum(usage?.sessions, 0);
+                  const realSessions = safeNum(usage?.realSessions, 0);
+                  const realTip = realSessions > 0
+                    ? SUBJECTS.map((sub) => `${sub.label} ${safeNum(usage?.answeredReal?.[sub.key]?.total, 0)}`).join(" · ")
+                    : "";
                   const total = totalActivity(usage);
                   const isOpen = !!expanded[code];
                   const activity = activityByCode[code];
@@ -466,6 +689,7 @@ export default function AdminActivityPage() {
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "right", fontWeight: listeningN > 0 ? 700 : 400, color: subjectCellColor(listeningN) }}>{listeningN || "—"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "right", fontWeight: speakingN > 0 ? 700 : 400, color: subjectCellColor(speakingN) }}>{speakingN || "—"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "right", color: sessions > 0 ? C.t1 : C.t2 }}>{sessions || "—"}</td>
+                        <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", textAlign: "right", fontWeight: realSessions > 0 ? 700 : 400, color: realSessions > 0 ? REAL_CHIP.fg : C.t2 }} title={realTip}>{realSessions || "—"}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", color: C.t2 }} title={fmtDate(usage?.lastActiveAt)}>{fmtRelative(usage?.lastActiveAt)}</td>
                         <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>
                           <button
@@ -487,7 +711,7 @@ export default function AdminActivityPage() {
                       </tr>
                       {isOpen && (
                         <tr>
-                          <td colSpan={9} style={{ padding: "10px 12px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                          <td colSpan={10} style={{ padding: "10px 12px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
                             {loading && <div style={{ color: C.t2 }}>正在加载详情...</div>}
                             {!loading && error && <div style={{ color: C.red }}>{error}</div>}
                             {!loading && !error && activity && (
@@ -616,7 +840,7 @@ export default function AdminActivityPage() {
                 })}
                 {rowsView.length === 0 && (
                   <tr>
-                    <td colSpan={9} style={{ padding: 12, color: C.t2 }}>暂无数据。</td>
+                    <td colSpan={10} style={{ padding: 12, color: C.t2 }}>暂无数据。</td>
                   </tr>
                 )}
               </tbody>
