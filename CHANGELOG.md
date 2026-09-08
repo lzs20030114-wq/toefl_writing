@@ -2,8 +2,9 @@
 
 ## 2026-09-08 — v1.18.0
 
-- **真题专区上线（Pro 专属，`/real-bank` + 首页 section）**：写作 158（讨论 125 / 邮件 13 / 造句 20）、阅读 166（CTW 64 / RDL 49 / AP 53）、听力 215（LCR 118 / LC 31 / LA 20 / LAT 46）、口语 38（跟读 21 / 访谈 17），共 577 题。来源分档（ETS 官方 / 回忆版 / 参考版）在选题卡与答题页顶部标注；阅读材料框有源图的显示原卷截图（`material_image`，同源图片代理）；听力/口语按回忆稿 TTS 配音；done-key 与常规练习共用。录入管线 `scripts/realbank/`，两波月份文件夹入库（`ed2f77b4`/`f8dede1d`/`b4808cf8`）。
+- **真题专区上线（Pro 专属，`/real-bank` + 首页 section）**：写作 440（讨论 132 / 邮件 27 / 造句 281 题 36 套）、阅读 296（CTW 87 / RDL 110 / AP 99）、听力 215（LCR 118 / LC 31 / LA 20 / LAT 46）、口语 38（跟读 21 / 访谈 17），共 989 题（补录 `10292d5`/`799d015` 后口径）。来源分档（ETS 官方 / 回忆版 / 参考版）在选题卡与答题页顶部标注；阅读材料框有源图的显示原卷截图（`material_image`，同源图片代理）；听力/口语按回忆稿 TTS 配音；done-key 与常规练习共用。录入管线 `scripts/realbank/`，两波月份文件夹入库（`ed2f77b4`/`f8dede1d`/`b4808cf8`）。
 - **真题专区接入三档模式**（`22e7607b`）：`?mode=standard|practice|challenge`，限时单点 `lib/realBankModes.js` 转调 `lib/practiceMode`（阅读限时表从 `app/reading/page.js` 抽为 `READING_TIME_SECONDS`）；桌面/移动首页面板 + picker 头部三档切换；历史记录 mode 随档位；TopicPicker 新增 `eyebrow`/`headerExtra`。侧栏 label 改「真题专区」。jest 1415 全绿。
+- **真题专区上线公告邮件**：`lib/mail/templates/realBankLaunch.js`（Pro/免费两种 CTA，题量快照有测试与 live bank 交叉校验）+ 群发脚本 `scripts/ops/send-real-bank-announcement.mjs`（默认 dry-run，`--to` 单发测试，`--yes` 真发；台账 `.ops/state/real-bank-announcement.json` 断点续发，默认每轮 80 封 / 45s 间隔适配 QQ SMTP 日上限）。
 
 ## 2026-08-02 — v1.17.0
 
