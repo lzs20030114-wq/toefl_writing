@@ -1,6 +1,6 @@
 ---
 name: swap-qrcode
-description: Replace the WeChat group QR code image shown across the app. Use when the user says "换二维码"、"新的群二维码"、"二维码过期了 更新一下"、"新的群二维码在桌面，名字叫X 换上去"、"桌面上有个叫X的jpg 换上" or wants to update the group QR code image. The user typically drops the new image on the desktop (usually `C:\Users\35827\Desktop\` or "D盘桌面") and names the filename in the message.
+description: Replace the WeChat group QR code image shown across the app. Use when the user says "换二维码"、"新的群二维码"、"二维码过期了 更新一下"、"新的群二维码在桌面，名字叫X 换上去"、"桌面上有个叫X的jpg 换上" or wants to update the group QR code image. Since the admin upload page exists, the default answer is to point the user at /admin-wechat-qr; only fall back to replacing the static file when they explicitly want the built-in default image changed.
 user-invocable: true
 argument-hint: [新图片路径,默认在桌面]
 ---
@@ -9,48 +9,44 @@ argument-hint: [新图片路径,默认在桌面]
 
 ## 现状（已核实的真实路径）
 
-- 图片文件：`public/wechat-group-qr.jpg`
-- 唯一引用位置：`components/shared/WechatQrImage.js`，硬编码常量 `QR_IMAGE_SRC = "/wechat-group-qr.jpg"`
-- 所有展示二维码的地方（`components/home/NavSidebar.js`、`components/home/MobileHomePage.js`、`components/shared/WechatGroupModal.js`）都通过这个共享组件渲染，**没有直接引用图片路径**
-- 图片是本地静态文件（`public/` 目录），不是外链、不存 Supabase
+二维码有两层：
 
-**只要新图片文件名保持 `wechat-group-qr.jpg` 不变，直接覆盖 `public/wechat-group-qr.jpg` 即可，不需要改任何组件代码。**
+1. **后台自定义图（首选，无需代码/部署）**：后台页 `/admin-wechat-qr`，把新图拖进去即上传到
+   Supabase Storage（bucket `app_assets`，对象键 `wechat/group-qr`，首次上传自动建桶）。
+   前台所有位置通过 `components/shared/WechatQrImage.js` → 同源代理 `/api/wechat-qr`
+   （Edge，国内可达）读取；缓存 60s，线上约 2 分钟内生效。
+   - 后台 API：`app/api/admin/wechat-qr/route.js`（GET 状态 / POST 上传 / DELETE 恢复默认）
+   - 存储层：`lib/wechatQr/storage.js`
+   - 代理：`app/api/wechat-qr/route.js`
+2. **内置默认图（兜底）**：`public/wechat-group-qr.jpg`。没上传过自定义图、Storage 未配置、
+   或上游失败时，代理 302 到它。只有想改「默认图」本身才需要动这个文件 + git 提交部署。
+
+展示二维码的地方（`components/home/NavSidebar.js`、`components/home/MobileHomePage.js`、
+`components/shared/WechatGroupModal.js`）都只用共享组件，**不要直接改它们**。
 
 ## 步骤
 
-### Step 1 — 确认新图来源
+### 首选：后台拖图（用户自己 30 秒搞定）
 
-问用户新图片在哪里，通常是桌面：`C:\Users\35827\Desktop\`。如果用户已经在消息里给出路径，跳过这步。
+告诉用户：打开 `/admin-wechat-qr`（后台侧栏「运营 → 微信群二维码」），把新图拖进虚线框
+（也可点选文件 / Ctrl+V 粘贴截图），上传完右侧「当前线上二维码」会立刻显示新图。
+不用推送、不用部署。要撤回就点「恢复默认图」。
 
-### Step 2 — 覆盖到 public/ 下
+限制：JPEG / PNG / WebP，≤ 3MB。上传失败常见原因：口令没填（先在任意后台页输入
+ADMIN_DASHBOARD_TOKEN）、Vercel 没配 `SUPABASE_SERVICE_ROLE_KEY`。
 
-把新图片复制/覆盖到 `public/wechat-group-qr.jpg`。
+### 备选：改内置默认图（仅当用户明确要求，或 Storage 不可用）
 
-- 如果新图片本身也是 `.jpg` 格式，直接覆盖同名文件即可
-- 如果新图片是其他格式（`.png`/`.webp` 等），有两个选择：
-  1. 转成 `.jpg` 后覆盖（保持文件名不变，零代码改动）
-  2. 保留原格式存成新文件名，然后同步修改 `components/shared/WechatQrImage.js` 里的 `QR_IMAGE_SRC` 常量指向新文件名 —— 这种情况明确告知用户"这次需要改一行代码"
-
-用 PowerShell 复制文件（Windows 环境）：
-```powershell
-Copy-Item "C:\Users\35827\Desktop\<新图片文件名>" "D:\toefl_writing\public\wechat-group-qr.jpg" -Force
-```
-
-### Step 3 — 本地预览确认
-
-用 `/run` 或直接起 dev server 预览，导航到首页侧边栏（`NavSidebar`）或触发 `WechatGroupModal`，确认新二维码正常渲染、清晰度可接受、点击放大功能正常（`WechatQrImage` 组件支持点击放大到全屏）。
-
-### Step 4 — 提示推送
-
-预览确认没问题后，提示用户：「二维码已经更新，走 `/ship` 推送上线吧。」——图片文件本身也需要走 git 提交才能部署到 Vercel。
-
-## 特殊情况
-
-- 如果用户说图片其实是外链（CDN/图床）或存在 Supabase Storage，**不要**按上面步骤覆盖本地文件 —— 先搜索确认实际存储位置和引用方式，再按实际情况调整步骤（例如改的是数据库里的一个 URL 字段，或者要走 Supabase Storage 上传 API）。当前代码库核实的情况是本地静态文件，这是最新鲜的核实结果，但如果代码后续变了以实际搜索结果为准。
+1. 确认新图来源（通常桌面 `C:\Users\35827\Desktop\`）。
+2. 覆盖到 `public/wechat-group-qr.jpg`（非 jpg 先转成 jpg，保持文件名不变，零代码改动）：
+   ```powershell
+   Copy-Item "C:\Users\35827\Desktop\<新图片文件名>" "D:\toefl_writing\public\wechat-group-qr.jpg" -Force
+   ```
+3. 本地预览（首页侧栏 / WechatGroupModal，点击放大正常）。注意：如果 Storage 里已有
+   自定义图，前台显示的是自定义图而不是默认图——要让默认图生效需在后台点「恢复默认图」。
+4. 提示用户走 `/ship` 推送（静态文件必须 git 提交才能部署）。
 
 ## 触发示例
 
-用户说：
-- "换个群二维码" → 完整走 Step 1-4
-- "群二维码过期了，换新的" → 完整走 Step 1-4
-- "把桌面上那张二维码换上去" → Step 1 已知路径,直接 Step 2 开始
+- "换个群二维码" / "群二维码过期了" → 首选路径：指引去 `/admin-wechat-qr` 拖图
+- "把默认的那张二维码也换掉" / "后台传不上去" → 备选路径 Step 1-4

@@ -70,6 +70,7 @@ const NAV_GROUPS = [
       { label: "周报月报", href: "/admin-report", icon: "calendar" },
       { label: "邀请活动", href: "/admin-referrals", icon: "gift" },
       { label: "用户反馈", href: "/admin-feedback", icon: "msg" },
+      { label: "微信群二维码", href: "/admin-wechat-qr", icon: "image" },
       { label: "新手问卷", href: "/admin-surveys", icon: "msg" },
       { label: "语音投票", href: "/admin-voice-vote", icon: "chart" },
       { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
@@ -93,6 +94,7 @@ const ICONS = {
   target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z",
   library: "M3 3h6v18H3zm8 0h6v18h-6zm8 3l3 1-5 15-3-1z",
   inbox: "M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z",
+  image: "M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21",
   gift: "M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z",
 };
 

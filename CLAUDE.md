@@ -35,12 +35,13 @@ app/                          # Next.js App Router
 ├── my-bank/                  # 个人题库 (Pro 专属)
 ├── terms/                    # 条款页
 ├── admin*/                   # 后台页 (codes/users/questions/staging/analytics/
-│                             #   retention/report/voice-vote/surveys/referrals/…)
+│                             #   retention/report/voice-vote/surveys/referrals/wechat-qr/…)
 └── api/                      # 见下方「API」
     ├── ai/                   # DeepSeek 写作评分 (限流 45/min + origin 校验)
     ├── audio/[...path]/      # 听力音频同源流式代理 (Edge, 国内可达 Supabase Storage)
     ├── speech/               # 口语 STT (transcribe) + 录音授权 (consent)
     ├── user-bank/            # 个人题库 (extract / extract-image / render-audio / verify)
+    ├── wechat-qr/            # 群二维码同源代理 (Edge；后台 /admin-wechat-qr 拖图上传到 Supabase Storage)
     ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
 
 components/                   # 分科任务 UI + 后台
@@ -70,6 +71,7 @@ lib/
 ├── bsGen/                    # BS 出题：promptBuilders(纯函数) + circuitBreaker(熔断低通过率)
 ├── tts/                      # edgeTts / openaiTts / toneDirector(persona) / renderListening / storage
 ├── userBank/                 # personalBank(拉取+映射picker), imageSniff, listeningAudioRender
+├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
 ├── gate/                     # 通用防退化门：gateHarness + gate-registry + measurers/
 ├── quality/                  # scoreBatch.mjs (真题校准打分器)
 ├── mockExam/                 # 模考：service, planner(reading/listening/speaking),
@@ -182,7 +184,7 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
 - `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
 - `analytics/track` 事件 · `feedback/` 反馈
-- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals
+- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals/wechat-qr(群二维码上传)
 
 ## Database (Supabase)
 
@@ -282,7 +284,7 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 | 建表 / 迁移 / SQL怎么跑;「建好了/跑完了」 | /sql-migrate（完成语=登记台账） |
 | 退化了 / 不像真题 / 机器味 / 全校准一下 | /calibration-fix |
 | github有没有现成的 / 找参考 / 先调研再做 | /research-reuse |
-| 换二维码 | /swap-qrcode |
+| 换二维码 | /swap-qrcode（首选指引后台 /admin-wechat-qr 拖图，无需部署） |
 | 成本多少 / 精算 / 预算 | /cost |
 | 模拟真实用户 / 过一遍题型 / 线上看一眼 | /smoke |
 | 查bug / 复查一下改动 | /code-review |
