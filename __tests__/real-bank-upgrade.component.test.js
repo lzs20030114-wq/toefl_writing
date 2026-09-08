@@ -168,7 +168,7 @@ jest.mock("../data/realBank/reading/ap.json", () => ({
 import RealBankPage from "../app/real-bank/page";
 import { getSavedTier } from "../lib/AuthContext";
 import { stashPromptSnapshot } from "../lib/history/retry";
-import { getRealDiscussionPrompts, getRealEmailPrompts } from "../lib/realBank";
+import { getRealBSBatches, getRealDiscussionPrompts, getRealEmailPrompts, realTierLabel } from "../lib/realBank";
 import { addDoneIds, loadDoneIds, loadHist } from "../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../lib/questionSelector";
 
@@ -206,31 +206,31 @@ describe("真题专区独立页：Pro 用户看到 picker", () => {
   test.each([
     ["pro"],
     ["legacy"],
-  ])("tier=%s 解锁学术讨论 125 题", async (tier) => {
+  ])("tier=%s 解锁学术讨论 132 题", async (tier) => {
     getSavedTier.mockReturnValue(tier);
     render(<RealBankPage />);
 
     expect(await screen.findByTestId("topic-picker")).toBeTruthy();
     expect(screen.getByTestId("picker-title").textContent).toBe("学术讨论真题");
-    expect(screen.getByTestId("picker-count").textContent).toBe("125");
+    expect(screen.getByTestId("picker-count").textContent).toBe(String(getRealDiscussionPrompts().length));
     expect(screen.getByTestId("picker-accent").textContent).toBe("#B45309");
     expect(screen.queryByText("Pro 专属功能")).toBeNull();
   });
 
-  test("?type=email → 邮件 13 题", async () => {
+  test("?type=email → 邮件 27 题", async () => {
     getSavedTier.mockReturnValue("pro");
     mockSearch = new URLSearchParams("type=email");
     render(<RealBankPage />);
     expect(await screen.findByTestId("picker-title")).toHaveTextContent("邮件真题");
-    expect(screen.getByTestId("picker-count").textContent).toBe("13");
+    expect(screen.getByTestId("picker-count").textContent).toBe(String(getRealEmailPrompts().length));
   });
 
-  test("?type=bs → 造句 2 张批次卡", async () => {
+  test("?type=bs → 造句一卷一张批次卡", async () => {
     getSavedTier.mockReturnValue("pro");
     mockSearch = new URLSearchParams("type=bs");
     render(<RealBankPage />);
-    expect(await screen.findByTestId("picker-title")).toHaveTextContent("造句官方真题");
-    expect(screen.getByTestId("picker-count").textContent).toBe("2");
+    expect(await screen.findByTestId("picker-title")).toHaveTextContent("造句真题");
+    expect(screen.getByTestId("picker-count").textContent).toBe(String(getRealBSBatches().length));
   });
 
   test("非法 type 落回学术讨论，不白屏", async () => {
@@ -286,7 +286,9 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     expect(banner.textContent).not.toContain("ETS官方");
   });
 
-  test("选邮件题 → stash type=email，官方题标 ETS官方", async () => {
+  // 邮件列表按来源分档排序：ETS 官方 tpo1 / tpo2 永远在最前（第 1 / 2 套），
+  // 回忆版 14 条其次，参考版垫底 —— 首条一定是官方题，banner 必须标「ETS官方」。
+  test("选邮件题 → stash type=email，首条是 ETS 官方题", async () => {
     mockSearch = new URLSearchParams("type=email");
     const emails = getRealEmailPrompts();
     render(<RealBankPage />);
@@ -294,7 +296,11 @@ describe("真题专区独立页：选题 → 答题接线", () => {
 
     expect(stashPromptSnapshot).toHaveBeenCalledWith("email", expect.objectContaining({ id: emails[0].id }));
     expect(screen.getByTestId("writing-task").textContent).toContain("type=email");
+    expect(screen.getByTestId("real-source-banner").textContent).toContain(realTierLabel(emails[0].tier));
     expect(screen.getByTestId("real-source-banner").textContent).toContain("ETS官方");
+    // 只有 tpo1 / tpo2 是 ETS 官方，且被排到列表最前两位（第 1 / 2 套）。
+    expect(emails.filter((p) => p.tier === "official").map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
+    expect(emails.slice(0, 2).map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
   });
 
   test("讨论 picker 的「已练」读的正是 WritingTask 写入的 key（real_ id 能落进去）", async () => {

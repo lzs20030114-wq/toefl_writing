@@ -18,6 +18,9 @@ import MyBankImporter from "../userBank/MyBankImporter";
 // bundle（实测 `/` 的 First Load JS 255 kB → 318 kB）。阅读题量改读 build_bank 落库时
 // 顺手写的几十字节计数文件，只有 {ctw,rdl,ap} 三个数字。
 import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
+// 写作三题型是冻结语料（没有 counts.json）：题量走 realExamCounts.js —— 与桌面端
+// RealExamSectionContent 同一个常量，两边不许各写各的字符串。
+import { REAL_WRITING_COUNTS } from "./realExamCounts";
 // 听力 / 口语（三期）同理，只读几十字节的 counts.json。
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
 import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
@@ -768,12 +771,13 @@ function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier
   // 档位与桌面端 / 常规练习同一口径（真题只换题源，不换计时）。
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
-  // 阅读题量随 build_bank 产物变化，写死会过期 → 读 counts.json（不是 lib/realBank，见文件头 import 处的说明）；
-  // 写作三题型是冻结语料，保持写死。
+  // 题量一律不写死（写死的字符串在题库长大后会立刻过期）：阅读 / 听力 / 口语读 build_bank
+  // 落库时顺手写的 counts.json，写作三题型读 realExamCounts.js —— 与桌面端同一来源，
+  // 都不是 lib/realBank（那会把整个真题库打进首页 bundle，见文件头 import 处的说明）。
   const tasks = [
-    { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 44 + 参考版 81", count: "125 题" },
-    { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "ETS 官方 2 + 参考版 11", count: "13 题" },
-    { g: "写作", type: "bs", n: "Task 1", t: "造句官方真题", d: "ETS 官方原题，含官方答案", count: "20 题" },
+    { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 51 + 参考版 81", count: `${REAL_WRITING_COUNTS.discussion} 题` },
+    { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "官方 2 + 回忆版 14 + 参考版 11", count: `${REAL_WRITING_COUNTS.email} 题` },
+    { g: "写作", type: "bs", n: "Task 1", t: "造句真题", d: "ETS 官方 20 + 回忆版 86", count: `${REAL_WRITING_COUNTS.bs} 题` },
     { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", count: `${REAL_READING_COUNTS.ctw} 篇` },
     { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", count: `${REAL_READING_COUNTS.rdl} 篇` },
     { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", count: `${REAL_READING_COUNTS.ap} 篇` },

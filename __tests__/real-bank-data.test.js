@@ -2,7 +2,7 @@
  * 「真题专区」数据层契约测试（lib/realBank.js）。
  *
  * 锁三件事：
- *   1. 题量与来源分档（125 / 13 / 20；来源标签不许把未核验语料吹成 ETS 官方）；
+ *   1. 题量与来源分档（讨论 132 / 邮件 27 / 造句 106；来源标签不许把未核验语料吹成 ETS 官方）；
  *   2. id 全部带 `real_` 前缀且全局唯一 —— real_tpo_reference.json 有 27 条 ad* id 与 live
  *      库 data/academicWriting/prompts.json 重叠，前缀是「已练 / 历史记录不互相污染」的唯一保障；
  *   3. 三种题型规范化后能被各自的消费方直接吃下（写作 normalizePrompt 的必填字段、
@@ -17,6 +17,10 @@ import AD_RECALLED from "../data/academicWriting/recalled_supplement.json";
 import EM_TPO_REFERENCE from "../data/emailWriting/tpo_reference.json";
 import BS_TPO_OFFICIAL from "../data/buildSentence/tpo_official.json";
 import AD_LIVE from "../data/academicWriting/prompts.json";
+// realBank 写作回忆版（build_bank.mjs 产物）：造句 87 / 邮件 14 / 讨论 7。
+import RB_BS from "../data/realBank/writing/bs.json";
+import RB_EMAIL from "../data/realBank/writing/email.json";
+import RB_DISCUSSION from "../data/realBank/writing/discussion.json";
 
 import {
   getRealBSBatches,
@@ -36,32 +40,66 @@ const email = getRealEmailPrompts();
 const bsQuestions = getRealBSQuestions();
 const bsBatches = getRealBSBatches();
 
+// realBank 造句回忆版里有 1 题（bs_rf0808_01）词块重复，runtime 会判「题库数据异常」——
+// 数据层提前丢掉它（宁可少题不许出死题），所以 87 → 86。
+const RB_BS_DROPPED = 1;
+
 describe("真题专区：题量", () => {
-  test("学术讨论 125 题（81 参考版 + 44 回忆版），一条不丢", () => {
+  test("学术讨论 132 题（81 参考版 + 44 + 7 回忆版），一条不丢", () => {
     expect(AD_TPO_REFERENCE.length).toBe(81);
     expect(AD_RECALLED.length).toBe(44);
-    expect(discussion.length).toBe(125);
+    expect(RB_DISCUSSION.items.length).toBe(7);
+    expect(discussion.length).toBe(132);
   });
 
-  test("邮件 13 题", () => {
+  test("邮件 27 题（13 官方 / 参考版 + 14 回忆版）", () => {
     expect(EM_TPO_REFERENCE.length).toBe(13);
-    expect(email.length).toBe(13);
+    expect(RB_EMAIL.items.length).toBe(14);
+    expect(email.length).toBe(27);
   });
 
-  test("造句官方 20 题，拆成 2 批各 10 题", () => {
+  test("造句 106 题（20 官方 + 86 回忆版），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(bsQuestions.length).toBe(20);
-    expect(bsBatches.length).toBe(2);
-    expect(bsBatches.map((b) => b.questions.length)).toEqual([10, 10]);
-    expect(bsBatches.map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);
+    expect(RB_BS.items.length).toBe(87);
+    expect(bsQuestions.length).toBe(20 + RB_BS.items.length - RB_BS_DROPPED);
+    // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
+    expect(bsBatches.length).toBeGreaterThan(2);
+    expect(bsBatches.slice(0, 2).map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);
+    expect(bsBatches.slice(0, 2).map((b) => b.questions.length)).toEqual([10, 10]);
+    expect(bsBatches.map((b) => b.id)).toEqual(bsBatches.map((_, i) => `real-bs-set-${i + 1}`));
+    // 回忆版按考试套次（source）分批，一批 = 一场考试。
+    const recalledBatches = bsBatches.slice(2);
+    expect(recalledBatches.length).toBe(new Set(RB_BS.items.map((q) => q.source)).size);
+    expect(recalledBatches.every((b) => b.tier === "recalled")).toBe(true);
+    expect(recalledBatches.reduce((n, b) => n + b.questions.length, 0)).toBe(
+      RB_BS.items.length - RB_BS_DROPPED
+    );
+  });
+
+  test("回忆版造句每题都能被 runtime 消费：prefilled_positions 齐全 + 词块能拼回 answer", () => {
+    const recalled = bsQuestions.filter((q) => q.tier === "recalled");
+    expect(recalled.length).toBeGreaterThanOrEqual(80);
+    recalled.forEach((raw) => {
+      const answerWordCount = String(raw.answer).trim().split(/\s+/).length;
+      expect(Object.keys(raw.prefilled_positions).sort()).toEqual([...raw.prefilled].sort());
+      raw.prefilled.forEach((key) => {
+        expect(typeof raw.prefilled_positions[key]).toBe("number");
+        expect(raw.prefilled_positions[key]).toBeGreaterThanOrEqual(0);
+        expect(raw.prefilled_positions[key]).toBeLessThan(answerWordCount);
+      });
+      // 词块（含题干给定词）能原样拼回官方答案 —— 拼不回来就是死题。
+      const q = runtimeModel.normalizeRuntimeQuestion(raw);
+      expect(runtimeModel.normalizeWord(runtimeModel.renderCorrectSentence(q)))
+        .toBe(runtimeModel.normalizeWord(raw.answer));
+    });
   });
 });
 
 describe("真题专区：id 前缀与全局唯一", () => {
   const allIds = [...discussion, ...email, ...bsQuestions].map((x) => x.id);
 
-  test("158 个 id 全部带 real_ 前缀", () => {
-    expect(allIds.length).toBe(158);
+  test("265 个 id 全部带 real_ 前缀", () => {
+    expect(allIds.length).toBe(discussion.length + email.length + bsQuestions.length);
     const bad = allIds.filter((id) => !isRealBankId(id));
     expect(bad).toEqual([]);
   });
@@ -91,19 +129,34 @@ describe("真题专区：来源分档标注诚实", () => {
     expect(AD_TPO_REFERENCE.some((p) => "tier" in p)).toBe(false);
   });
 
-  test("讨论题分档 = 44 回忆版 + 81 参考版，零官方", () => {
+  test("讨论题分档 = 51 回忆版（44 + 7）+ 81 参考版，零官方", () => {
     const byTier = discussion.reduce((acc, p) => { acc[p.tier] = (acc[p.tier] || 0) + 1; return acc; }, {});
-    expect(byTier).toEqual({ recalled: 44, legacy: 81 });
+    expect(byTier).toEqual({ recalled: 51, legacy: 81 });
   });
 
-  test("邮件题只有 tpo1 / tpo2 是 ETS 官方，其余 11 条是参考版", () => {
+  test("邮件题只有 tpo1 / tpo2 是 ETS 官方，11 条参考版 + 14 条回忆版", () => {
     const official = email.filter((p) => p.tier === "official").map((p) => p.id);
     expect(official).toEqual(["real_tpo1", "real_tpo2"]);
     expect(email.filter((p) => p.tier === "legacy").length).toBe(11);
+    expect(email.filter((p) => p.tier === "recalled").length).toBe(14);
   });
 
-  test("造句 20 题全部 ETS 官方", () => {
-    expect(bsQuestions.every((q) => q.tier === "official")).toBe(true);
+  // 「第 N 套」按数组下标算（compactCard），所以数组顺序 = 用户看到的排序：
+  // ETS 官方逐字原题必须是第 1 / 2 套，不能被后入库的回忆版挤到第 15 套去。
+  test("邮件题按来源分档排序：官方 → 回忆版 → 参考版", () => {
+    expect(email.slice(0, 2).map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
+    const rank = { official: 0, recalled: 1, legacy: 2 };
+    const ranks = email.map((p) => rank[p.tier]);
+    expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
+    // 同档内保持入库顺序（稳定排序）：回忆版 14 条仍是 email.json 的原顺序。
+    expect(email.filter((p) => p.tier === "recalled").map((p) => p.id))
+      .toEqual(RB_EMAIL.items.map((it) => `real_${it.id}`));
+  });
+
+  test("造句只有 20 条 ETS 官方，其余全是回忆版（回忆版不许冒充官方）", () => {
+    expect(bsQuestions.filter((q) => q.tier === "official").length).toBe(20);
+    expect(bsQuestions.filter((q) => q.tier === "recalled").length).toBe(bsQuestions.length - 20);
+    expect(bsQuestions.some((q) => q.tier === "legacy")).toBe(false);
   });
 
   test("标签映射：未知 / 缺失 tier 一律降级到「参考版」", () => {
@@ -134,11 +187,11 @@ describe("真题专区：写作题规范化形状", () => {
 });
 
 describe("真题专区：造句题适配 runtime 形状", () => {
-  test("20 题全部通过 prepareQuestions（strictThrow）零错误", () => {
+  test("全部造句真题通过 prepareQuestions（strictThrow）零错误", () => {
     expect(() => runtimeModel.prepareQuestions(bsQuestions, { strictThrow: true })).not.toThrow();
     const prepared = runtimeModel.prepareQuestions(bsQuestions, { strictThrow: false });
     expect(prepared.errors).toEqual([]);
-    expect(prepared.questions.length).toBe(20);
+    expect(prepared.questions.length).toBe(bsQuestions.length);
   });
 
   test("逐题 normalize + validate 通过，且 answerOrder/givenSlots 能重建出 answer", () => {
@@ -156,8 +209,9 @@ describe("真题专区：造句题适配 runtime 形状", () => {
     // 其余全空位题的 prefilled 必须为空，不许凭空造给定词。
     const withPrefilled = bsQuestions.filter((q) => q.prefilled.length > 0);
     expect(withPrefilled.length).toBeGreaterThan(0);
+    const rawById = new Map([...BS_TPO_OFFICIAL, ...RB_BS.items].map((r) => [`real_${r.id}`, r]));
     bsQuestions.forEach((q) => {
-      const blanksHasLiteral = /[A-Za-z']/.test(String(BS_TPO_OFFICIAL.find((r) => `real_${r.id}` === q.id).blanks).replace(/_{2,}/g, " "));
+      const blanksHasLiteral = /[A-Za-z']/.test(String(rawById.get(q.id).blanks).replace(/_{2,}/g, " "));
       expect(q.prefilled.length > 0).toBe(blanksHasLiteral);
       // 每个 prefilled 都有位置，且位置在 answer 词数范围内。
       const answerWordCount = String(q.answer).trim().split(/\s+/).length;
@@ -175,14 +229,16 @@ describe("真题专区：造句题适配 runtime 形状", () => {
       expect(q.has_question_mark).toBe(/\?$/.test(String(q.answer).trim()));
       expect(Array.isArray(q.grammar_points)).toBe(true);
     });
-    // 源文件带 distractor 的题数量必须原样传导（不多不少）。
-    const srcWith = BS_TPO_OFFICIAL.filter((r) => (r.distractors || []).length > 0).length;
+    // 源文件带 distractor 的题数量必须原样传导（不多不少；被丢掉的那题不计）。
+    const keptIds = new Set(bsQuestions.map((q) => q.id));
+    const srcWith = [...BS_TPO_OFFICIAL, ...RB_BS.items]
+      .filter((r) => keptIds.has(`real_${r.id}`) && (r.distractors || []).length > 0).length;
     expect(bsQuestions.filter((q) => q.distractor).length).toBe(srcWith);
   });
 
   // 判分闭环：BuildSentenceTask 的桌面端是纯拖拽交互，UI 里点不出来，所以这里直接打到
   // 判分函数本体 —— 拼对了必须判对、拼错了必须判错，否则真题会变成「怎么拼都错」的死题。
-  test("按官方答案顺序拼出来 → evaluateBuildSentenceOrder 判对（20/20）", () => {
+  test("按官方答案顺序拼出来 → evaluateBuildSentenceOrder 判对（全库）", () => {
     bsQuestions.forEach((raw) => {
       const q = runtimeModel.normalizeRuntimeQuestion(raw);
       expect(evaluateBuildSentenceOrder(q, q.answerOrder).isCorrect).toBe(true);
@@ -219,7 +275,7 @@ describe("真题专区：造句题适配 runtime 形状", () => {
 describe("真题专区：TopicPicker 映射", () => {
   test("讨论题 item 契约齐全，且分类基数够低（不会撑爆筛选栏）", () => {
     const items = mapRealDiscussionToPicker(discussion);
-    expect(items.length).toBe(125);
+    expect(items.length).toBe(discussion.length);
     items.forEach((it) => {
       expect(typeof it.id).toBe("string");
       expect(it.title).toBeTruthy();
@@ -242,24 +298,26 @@ describe("真题专区：TopicPicker 映射", () => {
     });
   });
 
-  test("邮件题 tag 单一（picker 自动不显示筛选栏），subtitle 前缀标来源", () => {
+  test("邮件题 tag 只有两类（回忆版 / TPO），每张卡都看得到来源分档", () => {
     const items = mapRealEmailToPicker(email);
-    expect(items.length).toBe(13);
-    expect(new Set(items.map((it) => it.tag))).toEqual(new Set(["TPO"]));
+    expect(items.length).toBe(email.length);
+    expect(new Set(items.map((it) => it.tag))).toEqual(new Set([REAL_TIER_LABELS.recalled, "TPO"]));
     const byId = new Map(email.map((p) => [p.id, p]));
     items.forEach((it) => {
-      expect(it.subtitle.startsWith(realTierLabel(byId.get(it.id).tier))).toBe(true);
+      expect(`${it.tag} ${it.subtitle}`).toContain(realTierLabel(byId.get(it.id).tier));
       expect(it.title).toBeTruthy();
     });
   });
 
-  test("造句题 = 2 张批次卡，id 与 __sourceGroupId 同源（已练标记才对得上）", () => {
+  test("造句题 = 一卷一张批次卡，id 与 __sourceGroupId 同源（已练标记才对得上）", () => {
     const items = mapRealBSToPicker(bsBatches);
     expect(items.map((it) => it.id)).toEqual(bsBatches.map((b) => b.id));
     items.forEach((it, i) => {
-      expect(it.title).toContain("10 题");
-      expect(it.tag).toBe(REAL_TIER_LABELS.official);
+      expect(it.title).toContain(`${bsBatches[i].questions.length} 题`);
+      expect(it.tag).toBe(realTierLabel(bsBatches[i].tier));
       expect(it.subtitle).toBe(bsBatches[i].label);
+      // 徽章只给 ETS 官方，回忆版不许带。
+      expect(it.badge).toBe(bsBatches[i].tier === "official" ? REAL_TIER_LABELS.official : undefined);
     });
   });
 });
@@ -272,5 +330,11 @@ describe("真题专区：源文件只读", () => {
     expect(BS_TPO_OFFICIAL[0].id).toBe("bs_official_01");
     expect("prefilled_positions" in BS_TPO_OFFICIAL[0]).toBe(false);
     expect("__sourceGroupId" in BS_TPO_OFFICIAL[0]).toBe(false);
+    // realBank 写作三个构建产物同样只读。
+    expect(RB_BS.items[0].id.startsWith("bs_")).toBe(true);
+    expect("prefilled_positions" in RB_BS.items[0]).toBe(false);
+    expect("__sourceGroupId" in RB_BS.items[0]).toBe(false);
+    expect(RB_EMAIL.items[0].id.startsWith("email_")).toBe(true);
+    expect(RB_DISCUSSION.items[0].id.startsWith("disc_")).toBe(true);
   });
 });

@@ -8,12 +8,14 @@ import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { HomeTaskCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
-// 故意**不** import lib/realBank，免得把 158 道写作真题的 JSON（238 KB）+ 阅读三个题库
+// 故意**不** import lib/realBank，免得把 265 道写作真题的 JSON（350 KB+）+ 阅读三个题库
 // 全打进首页 bundle（实测 `/` 的 First Load JS 会从 255 kB 涨到 318 kB）。
 // 但阅读真题是 scripts/realbank/build_bank.mjs 的构建产物，54 套卷陆续入库题量一直在变，
 // 写死的字符串会立刻过期 —— 折中办法是读 counts.json：build_bank 落库时顺手写的
 // 几十字节计数文件，只有 {ctw,rdl,ap} 三个数字，静态 import 进来几乎不占体积。
-// 写作三题型是冻结语料，题量保持写死（靠 __tests__/real-bank-section.component.test.js 交叉校验）。
+// 写作三题型是冻结语料，题量走 realExamCounts.js（桌面 / 移动端共用的单一来源，
+// 靠 __tests__/real-bank-section.component.test.js 与 lib/realBank 交叉校验）。
+import { REAL_WRITING_COUNTS } from "./realExamCounts";
 import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
 // 听力 / 口语（三期）同理：只读 counts.json，不许 import lib/realBank。
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
@@ -44,8 +46,8 @@ export const REAL_EXAM_TASKS = [
     href: "/real-bank?type=discussion",
     n: "Task 3",
     t: "学术讨论真题",
-    d: "回忆版 44 题（2026 考生回忆）+ 参考版 81 题，AI 评分与常规练习一致。",
-    it: "125 题",
+    d: "回忆版 51 题（2026 考生回忆）+ 参考版 81 题，AI 评分与常规练习一致。",
+    it: `${REAL_WRITING_COUNTS.discussion} 题`,
   },
   {
     g: "writing",
@@ -54,8 +56,8 @@ export const REAL_EXAM_TASKS = [
     href: "/real-bank?type=email",
     n: "Task 2",
     t: "邮件真题",
-    d: "ETS 官方原题 2 题 + 参考版 11 题，附收件人与写作目标。",
-    it: "13 题",
+    d: "ETS 官方原题 2 题 + 回忆版 14 题 + 参考版 11 题，附收件人与写作目标。",
+    it: `${REAL_WRITING_COUNTS.email} 题`,
   },
   {
     g: "writing",
@@ -63,9 +65,9 @@ export const REAL_EXAM_TASKS = [
     type: "bs",
     href: "/real-bank?type=bs",
     n: "Task 1",
-    t: "造句官方真题",
-    d: "ETS iBT Full-Length Practice Test 1 & 2 原题，含官方答案。",
-    it: "20 题 · 2 套",
+    t: "造句真题",
+    d: "ETS 官方原题 20 题（Full-Length Practice Test 1 & 2）+ 回忆版 86 题，按套次分组。",
+    it: `${REAL_WRITING_COUNTS.bs} 题 · ${REAL_WRITING_COUNTS.bsSets} 套`,
   },
   {
     g: "reading",

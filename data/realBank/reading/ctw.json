@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 64,
+  "count": 87,
   "items": [
     {
       "id": "real_ctw_121a_1_11",
@@ -162,6 +162,175 @@
       "source_flags": []
     },
     {
+      "id": "real_ctw_223_1_1",
+      "passage": "Museums often serve as cultural hubs, preserving and exhibiting artifacts that reflect human history and creativity. They provide educational resources that help visitors understand diverse cultural, historical eras, and artistic movements. Exhibits are designed to tell compelling stories and engage the audience. Museums also play a crucial role in conservation, employing techniques to preserve delicate or ancient items. They foster a deeper appreciation for heritage and inspire curious minds to explore the past and present through tangible connections.",
+      "word_count": 78,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 17,
+          "original_word": "provide",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "resources",
+          "displayed_fragment": "reso",
+          "hidden_length": 5
+        },
+        {
+          "position": 21,
+          "original_word": "help",
+          "displayed_fragment": "he",
+          "hidden_length": 2
+        },
+        {
+          "position": 23,
+          "original_word": "understand",
+          "displayed_fragment": "under",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "cultural",
+          "displayed_fragment": "cult",
+          "hidden_length": 4
+        },
+        {
+          "position": 27,
+          "original_word": "eras",
+          "displayed_fragment": "er",
+          "hidden_length": 2
+        },
+        {
+          "position": 29,
+          "original_word": "artistic",
+          "displayed_fragment": "arti",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "Exhibits",
+          "displayed_fragment": "exhi",
+          "hidden_length": 4
+        },
+        {
+          "position": 33,
+          "original_word": "designed",
+          "displayed_fragment": "desi",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "tell",
+          "displayed_fragment": "te",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Museums often serve as cultural hubs, preserving and exhibiting artifacts that reflect human history and creativity.",
+      "blanked_text": "Museums often serve as cultural hubs, preserving and exhibiting artifacts that reflect human history and creativity. They pro____ educational reso_____ that he__ visitors under_____ diverse cult____ historical er__ and arti____ movements. exhi____ are desi____ to te__ compelling stories and engage the audience. Museums also play a crucial role in conservation, employing techniques to preserve delicate or ancient items. They foster a deeper appreciation for heritage and inspire curious minds to explore the past and present through tangible connections.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "2.23新托福真题",
+      "date": "2026-02-23",
+      "source_hash": "8890234bf6e6",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_28_2_1",
+      "passage": "millions of years. It is driven by natural factors like volcanic eruptions and human activities such as burning fossil fuels and removing trees, which release large amounts of greenhouse gases into the atmosphere. These gases trap heat, leading to global warming, rising sea levels, and more extreme weather events. Addressing climate change requires sustainable practices and international cooperation to mitigate its impacts.",
+      "word_count": 62,
+      "topic": "environmental science",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 5,
+          "original_word": "driven",
+          "displayed_fragment": "dri",
+          "hidden_length": 3
+        },
+        {
+          "position": 7,
+          "original_word": "natural",
+          "displayed_fragment": "nat",
+          "hidden_length": 4
+        },
+        {
+          "position": 9,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 11,
+          "original_word": "eruptions",
+          "displayed_fragment": "erup",
+          "hidden_length": 5
+        },
+        {
+          "position": 13,
+          "original_word": "human",
+          "displayed_fragment": "hu",
+          "hidden_length": 3
+        },
+        {
+          "position": 15,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 17,
+          "original_word": "burning",
+          "displayed_fragment": "bur",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "fuels",
+          "displayed_fragment": "fu",
+          "hidden_length": 3
+        },
+        {
+          "position": 21,
+          "original_word": "removing",
+          "displayed_fragment": "remo",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "millions of years.",
+      "blanked_text": "millions of years. It is dri___ by nat____ factors li__ volcanic erup_____ and hu___ activities su__ as bur____ fossil fu___ and remo____ trees, wh___ release large amounts of greenhouse gases into the atmosphere. These gases trap heat, leading to global warming, rising sea levels, and more extreme weather events. Addressing climate change requires sustainable practices and international cooperation to mitigate its impacts.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "2.8新托福真题",
+      "date": "2026-02-08",
+      "source_hash": "e77d98ff6142",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 15 题（配对 35／满分 50）。"
+        },
+        {
+          "code": "ingest_blocker",
+          "severity": "blocking",
+          "detail": "[2.8 套一 答案.pdf] 答案页第 8 行出现无科目头的题号重启块（当前科目 reading），已忽略(fail-closed)：1driven 2natural 3like 4eruptions 5human 6such 7burning 8fue"
+        }
+      ]
+    },
+    {
       "id": "real_ctw_310_1_1",
       "passage": "The earliest ancestor of the modern bicycle is probably a machine used in England in the early 1800s called a hobbyhorse. It has two wheels and a place to sit, but no pedals; riders would push it along with their feet. Later, an inventor added pedals directly to the front wheel, like a modern child's tricycle. This version, with a huge front wheel, was faster, but it was unsafe. Riders were high off the ground, and the two wheels were close together, making both balance and stopping difficult.",
       "word_count": 88,
@@ -238,6 +407,938 @@
       "source": "3.10新托福真题",
       "date": "2026-03-10",
       "source_hash": "27ab38ff78dc",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_311_2_1",
+      "passage": "James Cook was a British naval officer, explorer, and cartographer born in 1728. He is best known for his three voyages across the Pacific Ocean, during which he meticulously mapped coastlines and collected data on astronomy, natural history, and oceanography. Cook is the first European to circumnavigate New Zealand and make contact with the Hawaiian Islands. He is also notable for implementing health measures aboard his ships, such as dietary changes to prevent the disease scurvy.",
+      "word_count": 76,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "is",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 16,
+          "original_word": "known",
+          "displayed_fragment": "kn",
+          "hidden_length": 3
+        },
+        {
+          "position": 18,
+          "original_word": "his",
+          "displayed_fragment": "h",
+          "hidden_length": 2
+        },
+        {
+          "position": 20,
+          "original_word": "voyages",
+          "displayed_fragment": "voy",
+          "hidden_length": 4
+        },
+        {
+          "position": 22,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 24,
+          "original_word": "Ocean",
+          "displayed_fragment": "oc",
+          "hidden_length": 3
+        },
+        {
+          "position": 26,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 28,
+          "original_word": "meticulously",
+          "displayed_fragment": "meticu",
+          "hidden_length": 6
+        },
+        {
+          "position": 30,
+          "original_word": "coastlines",
+          "displayed_fragment": "coast",
+          "hidden_length": 5
+        },
+        {
+          "position": 32,
+          "original_word": "collected",
+          "displayed_fragment": "coll",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "James Cook was a British naval officer, explorer, and cartographer born in 1728.",
+      "blanked_text": "James Cook was a British naval officer, explorer, and cartographer born in 1728. He i_ best kn___ for h__ three voy____ across t__ Pacific oc___ during wh___ he meticu______ mapped coast_____ and coll_____ data on astronomy, natural history, and oceanography. Cook is the first European to circumnavigate New Zealand and make contact with the Hawaiian Islands. He is also notable for implementing health measures aboard his ships, such as dietary changes to prevent the disease scurvy.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.11新托福真题",
+      "date": "2026-03-11",
+      "source_hash": "0addbd9ad3a0",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.15新托福真题、3.16新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "identical_file",
+          "severity": "warn",
+          "detail": "文件 3.11 阅读.pdf 与 3.21新托福真题 内容哈希完全一致。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_316_1_1",
+      "passage": "Museums play a crucial role in preserving and showcasing art, history, and culture. They provide a space where people can engage with multiple forms of artistic expression and historical artifacts. Many museums also offer educational programs and workshops, fostering a deeper understanding of the subjects they display. In addition, digital innovations have enabled museums to reach global audiences through virtual tours and online collections. The patronage of visual arts by individuals and organizations helps support artists and ensures the continued growth and diversity of the cultural landscape.",
+      "word_count": 87,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 14,
+          "original_word": "provide",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        },
+        {
+          "position": 16,
+          "original_word": "space",
+          "displayed_fragment": "sp",
+          "hidden_length": 3
+        },
+        {
+          "position": 18,
+          "original_word": "people",
+          "displayed_fragment": "peo",
+          "hidden_length": 3
+        },
+        {
+          "position": 20,
+          "original_word": "engage",
+          "displayed_fragment": "eng",
+          "hidden_length": 3
+        },
+        {
+          "position": 22,
+          "original_word": "multiple",
+          "displayed_fragment": "mult",
+          "hidden_length": 4
+        },
+        {
+          "position": 24,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 26,
+          "original_word": "expression",
+          "displayed_fragment": "expre",
+          "hidden_length": 5
+        },
+        {
+          "position": 28,
+          "original_word": "historical",
+          "displayed_fragment": "histo",
+          "hidden_length": 5
+        },
+        {
+          "position": 30,
+          "original_word": "Many",
+          "displayed_fragment": "ma",
+          "hidden_length": 2
+        },
+        {
+          "position": 32,
+          "original_word": "also",
+          "displayed_fragment": "al",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Museums play a crucial role in preserving and showcasing art, history, and culture.",
+      "blanked_text": "Museums play a crucial role in preserving and showcasing art, history, and culture. They pro____ a sp___ where peo___ can eng___ with mult____ forms o_ artistic expre_____ and histo_____ artifacts. ma__ museums al__ offer educational programs and workshops, fostering a deeper understanding of the subjects they display. In addition, digital innovations have enabled museums to reach global audiences through virtual tours and online collections. The patronage of visual arts by individuals and organizations helps support artists and ensures the continued growth and diversity of the cultural landscape.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.16新托福真题",
+      "date": "2026-03-16",
+      "source_hash": "24cd3dbd1dad",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_316_1_11",
+      "passage": "Grasshoppers are insects commonly found in dry places with grass and plants. Grasshoppers have several ways they protect themselves against danger. They have powerful back legs, which allow them to jump away from enemies, such as rodents and snakes. Some grasshoppers can jump twenty times the length of their bodies. By the time they are adults, grasshoppers can also fly. Adult grasshoppers fly very quickly and this helps them avoid danger.",
+      "word_count": 71,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 13,
+          "original_word": "have",
+          "displayed_fragment": "ha",
+          "hidden_length": 2
+        },
+        {
+          "position": 15,
+          "original_word": "ways",
+          "displayed_fragment": "wa",
+          "hidden_length": 2
+        },
+        {
+          "position": 17,
+          "original_word": "protect",
+          "displayed_fragment": "pro",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "against",
+          "displayed_fragment": "aga",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "They",
+          "displayed_fragment": "Th",
+          "hidden_length": 2
+        },
+        {
+          "position": 23,
+          "original_word": "powerful",
+          "displayed_fragment": "powe",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "legs",
+          "displayed_fragment": "le",
+          "hidden_length": 2
+        },
+        {
+          "position": 27,
+          "original_word": "allow",
+          "displayed_fragment": "al",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 31,
+          "original_word": "away",
+          "displayed_fragment": "aw",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Grasshoppers are insects commonly found in dry places with grass and plants.",
+      "blanked_text": "Grasshoppers are insects commonly found in dry places with grass and plants. Grasshoppers ha__ several wa__ they pro____ themselves aga____ danger. Th__ have powe____ back le__ which al___ them t_ jump aw__ from enemies, such as rodents and snakes. Some grasshoppers can jump twenty times the length of their bodies. By the time they are adults, grasshoppers can also fly. Adult grasshoppers fly very quickly and this helps them avoid danger.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.16新托福真题",
+      "date": "2026-03-16",
+      "source_hash": "24cd3dbd1dad",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_317_1_11",
+      "passage": "Fossils provide invaluable evidence of evolutionary history, documenting species that lived millions of years ago. Paleontologists examine these remains to understand how organisms have changed over time. Natural selection explains how advantageous traits increase in frequency in a population. Species adapt to their environments, which leads to incredible diversity observed in the biological world today through the mechanism of natural selection. The ongoing study of evolution continues to reveal how life on Earth has developed and diversified.",
+      "word_count": 77,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 29,
+          "original_word": "explains",
+          "displayed_fragment": "expl",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "advantageous",
+          "displayed_fragment": "advant",
+          "hidden_length": 6
+        },
+        {
+          "position": 33,
+          "original_word": "increase",
+          "displayed_fragment": "incr",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "frequency",
+          "displayed_fragment": "freq",
+          "hidden_length": 5
+        },
+        {
+          "position": 38,
+          "original_word": "population",
+          "displayed_fragment": "popul",
+          "hidden_length": 5
+        },
+        {
+          "position": 40,
+          "original_word": "adapt",
+          "displayed_fragment": "ad",
+          "hidden_length": 3
+        },
+        {
+          "position": 42,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 44,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 46,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 48,
+          "original_word": "diversity",
+          "displayed_fragment": "dive",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Fossils provide invaluable evidence of evolutionary history, documenting species that lived millions of years ago.",
+      "blanked_text": "Fossils provide invaluable evidence of evolutionary history, documenting species that lived millions of years ago. Paleontologists examine these remains to understand how organisms have changed over time. Natural selection expl____ how advant______ traits incr____ in freq_____ in a popul_____ Species ad___ to th___ environments, wh___ leads t_ incredible dive_____ observed in the biological world today through the mechanism of natural selection. The ongoing study of evolution continues to reveal how life on Earth has developed and diversified.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.17新托福真题",
+      "date": "2026-03-17",
+      "source_hash": "b2f6b0f240b8",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.16新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_317_2_1",
+      "passage": "The Great Plains of North America were once home to vast herds of bison, which played a crucial role in the lives of Indigenous peoples, who made use of bison meat, hides, and bones. These communities relied on bison for food, clothing, and shelter. Hunting practices were often sophisticated, involving coordinated efforts to drive bison into traps or over cliffs. The arrival of European settlers dramatically altered the landscape, leading to overhunting and near extinction of bison populations. Conservation efforts in the twentieth century helped restore bison numbers, symbolizing resilience and recovery.",
+      "word_count": 92,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 35,
+          "original_word": "communities",
+          "displayed_fragment": "commu",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "on",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 39,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "clothing",
+          "displayed_fragment": "clot",
+          "hidden_length": 4
+        },
+        {
+          "position": 43,
+          "original_word": "shelter",
+          "displayed_fragment": "she",
+          "hidden_length": 4
+        },
+        {
+          "position": 45,
+          "original_word": "practices",
+          "displayed_fragment": "prac",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "often",
+          "displayed_fragment": "of",
+          "hidden_length": 3
+        },
+        {
+          "position": 49,
+          "original_word": "involving",
+          "displayed_fragment": "invo",
+          "hidden_length": 5
+        },
+        {
+          "position": 51,
+          "original_word": "efforts",
+          "displayed_fragment": "eff",
+          "hidden_length": 4
+        },
+        {
+          "position": 53,
+          "original_word": "drive",
+          "displayed_fragment": "dr",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The Great Plains of North America were once home to vast herds of bison, which played a crucial role in the lives of Indigenous peoples, who made use of bison meat, hides, and bones.",
+      "blanked_text": "The Great Plains of North America were once home to vast herds of bison, which played a crucial role in the lives of Indigenous peoples, who made use of bison meat, hides, and bones. These commu______ relied o_ bison f__ food, clot____ and she____ Hunting prac_____ were of___ sophisticated, invo_____ coordinated eff____ to dr___ bison into traps or over cliffs. The arrival of European settlers dramatically altered the landscape, leading to overhunting and near extinction of bison populations. Conservation efforts in the twentieth century helped restore bison numbers, symbolizing resilience and recovery.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.17新托福真题",
+      "date": "2026-03-17",
+      "source_hash": "b2f6b0f240b8",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.16新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_318_2_1",
+      "passage": "political, and economic changes. Feudalism dominated the social structure, with lords governing lands and vassals providing military service. The Church exerted substantial influence over daily life and exemplified by Gothic cathedrals and illuminated manuscripts. Studying this era involves analyzing historical documents, artifacts, and architectural remains to understand the complexities of medieval society.",
+      "word_count": 52,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 5,
+          "original_word": "dominated",
+          "displayed_fragment": "domi",
+          "hidden_length": 5
+        },
+        {
+          "position": 7,
+          "original_word": "social",
+          "displayed_fragment": "soc",
+          "hidden_length": 3
+        },
+        {
+          "position": 9,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 11,
+          "original_word": "governing",
+          "displayed_fragment": "gove",
+          "hidden_length": 5
+        },
+        {
+          "position": 13,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 15,
+          "original_word": "providing",
+          "displayed_fragment": "prov",
+          "hidden_length": 5
+        },
+        {
+          "position": 17,
+          "original_word": "service",
+          "displayed_fragment": "ser",
+          "hidden_length": 4
+        },
+        {
+          "position": 20,
+          "original_word": "exerted",
+          "displayed_fragment": "exe",
+          "hidden_length": 4
+        },
+        {
+          "position": 22,
+          "original_word": "influence",
+          "displayed_fragment": "infl",
+          "hidden_length": 5
+        },
+        {
+          "position": 24,
+          "original_word": "daily",
+          "displayed_fragment": "da",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "political, and economic changes.",
+      "blanked_text": "political, and economic changes. Feudalism domi_____ the soc___ structure, wi__ lords gove_____ lands a__ vassals prov_____ military ser____ The Church exe____ substantial infl_____ over da___ life and exemplified by Gothic cathedrals and illuminated manuscripts. Studying this era involves analyzing historical documents, artifacts, and architectural remains to understand the complexities of medieval society.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.18新托福真题",
+      "date": "2026-03-18",
+      "source_hash": "b1ca530c41e0",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_324_1_11",
+      "passage": "Art has long reflected human culture, mirroring society's values and beliefs. Throughout history, artists have expressed emotions, told stories, and challenged norms. During the Renaissance, figures like Leonardo da Vinci and Michelangelo explored anatomy and perspective, echoing the era's interest in science and nature. Later, movements such as Impressionism and Abstract Expressionism redefined traditional boundaries. These styles invited viewers to see the world differently, highlighting art's lasting ability to provoke thought, inspire change, and deepen our understanding of human experience.",
+      "word_count": 80,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 33,
+          "original_word": "anatomy",
+          "displayed_fragment": "ana",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "perspective",
+          "displayed_fragment": "persp",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "interest",
+          "displayed_fragment": "inte",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "science",
+          "displayed_fragment": "sci",
+          "hidden_length": 4
+        },
+        {
+          "position": 43,
+          "original_word": "nature",
+          "displayed_fragment": "nat",
+          "hidden_length": 3
+        },
+        {
+          "position": 45,
+          "original_word": "movements",
+          "displayed_fragment": "move",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 49,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 52,
+          "original_word": "redefined",
+          "displayed_fragment": "rede",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Art has long reflected human culture, mirroring society's values and beliefs.",
+      "blanked_text": "Art has long reflected human culture, mirroring society's values and beliefs. Throughout history, artists have expressed emotions, told stories, and challenged norms. During the Renaissance, figures like Leonardo da Vinci and Michelangelo explored ana____ and persp______ echoing t__ era's inte____ in sci____ and nat___ Later, move_____ such a_ Impressionism a__ Abstract Expressionism rede_____ traditional boundaries. These styles invited viewers to see the world differently, highlighting art's lasting ability to provoke thought, inspire change, and deepen our understanding of human experience.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.24新托福真题",
+      "date": "2026-03-24",
+      "source_hash": "c0d091677e19",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 15 题（配对 35／满分 50）。"
+        },
+        {
+          "code": "ingest_blocker",
+          "severity": "blocking",
+          "detail": "[3.24 套一 答案.pdf] 答案页第 9 行出现无科目头的题号重启块（当前科目 reading），已忽略(fail-closed)：1era 2significant 3most 4the 5of 6and 7establishment 8powerf"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_327_2_1",
+      "passage": "Cosmology is the study of how the universe began, changed over time, and might evolve in the future. Scientists examine stars, planets, and galaxies using observations and models to describe cosmic events. One widely accepted idea is the big bang, which suggests the universe started from a single point and has been expanding ever since. Ongoing research helps improve our understanding of space, time, and the forces shaping the cosmos, revealing new discoveries about the vast universe.",
+      "word_count": 77,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 19,
+          "original_word": "examine",
+          "displayed_fragment": "exa",
+          "hidden_length": 4
+        },
+        {
+          "position": 21,
+          "original_word": "planets",
+          "displayed_fragment": "pla",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "galaxies",
+          "displayed_fragment": "gala",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "observations",
+          "displayed_fragment": "observ",
+          "hidden_length": 6
+        },
+        {
+          "position": 27,
+          "original_word": "models",
+          "displayed_fragment": "mod",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "describe",
+          "displayed_fragment": "desc",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "events",
+          "displayed_fragment": "eve",
+          "hidden_length": 3
+        },
+        {
+          "position": 33,
+          "original_word": "widely",
+          "displayed_fragment": "wid",
+          "hidden_length": 3
+        },
+        {
+          "position": 35,
+          "original_word": "idea",
+          "displayed_fragment": "id",
+          "hidden_length": 2
+        },
+        {
+          "position": 40,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Cosmology is the study of how the universe began, changed over time, and might evolve in the future.",
+      "blanked_text": "Cosmology is the study of how the universe began, changed over time, and might evolve in the future. Scientists exa____ stars, pla____ and gala____ using observ______ and mod___ to desc____ cosmic eve___ One wid___ accepted id__ is the big bang, wh___ suggests the universe started from a single point and has been expanding ever since. Ongoing research helps improve our understanding of space, time, and the forces shaping the cosmos, revealing new discoveries about the vast universe.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.27新托福真题",
+      "date": "2026-03-27",
+      "source_hash": "3bdf1073f8df",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_32b_2_1",
+      "passage": "Paleontology is the scientific study of life's history through the examination of fossil remains. Fossils, including bones, shells, and footprints, provide critical evidence of past organisms and their environments. By analyzing such remnants, paleontologists can reconstruct ancient ecosystems and track evolutionary changes over millions of years. This field offers valuable insights into the development and extinction of species. Advanced techniques like radiometric dating and CT scanning allow scientists to determine precise ages of specimens and examine internal structures without damaging delicate fossils.",
+      "word_count": 82,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 15,
+          "original_word": "including",
+          "displayed_fragment": "incl",
+          "hidden_length": 5
+        },
+        {
+          "position": 17,
+          "original_word": "shells",
+          "displayed_fragment": "she",
+          "hidden_length": 3
+        },
+        {
+          "position": 19,
+          "original_word": "footprints",
+          "displayed_fragment": "foot",
+          "hidden_length": 6
+        },
+        {
+          "position": 21,
+          "original_word": "critical",
+          "displayed_fragment": "crit",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 25,
+          "original_word": "organisms",
+          "displayed_fragment": "orga",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "their",
+          "displayed_fragment": "th",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "By",
+          "displayed_fragment": "B",
+          "hidden_length": 1
+        },
+        {
+          "position": 31,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "paleontologists",
+          "displayed_fragment": "paleont",
+          "hidden_length": 8
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Paleontology is the scientific study of life's history through the examination of fossil remains.",
+      "blanked_text": "Paleontology is the scientific study of life's history through the examination of fossil remains. Fossils, incl_____ bones, she___ and foot______ provide crit____ evidence o_ past orga_____ and th___ environments. B_ analyzing su__ remnants, paleont________ can reconstruct ancient ecosystems and track evolutionary changes over millions of years. This field offers valuable insights into the development and extinction of species. Advanced techniques like radiometric dating and CT scanning allow scientists to determine precise ages of specimens and examine internal structures without damaging delicate fossils.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.2新托福真题B卷",
+      "date": "2026-03-02",
+      "source_hash": "6b9dcf893b2e",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、4.11新托福真题、4.8新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 13 题（配对 37／满分 50）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_34_2_1",
+      "passage": "Tectonic plates are large pieces of Earth's outer shell that move slowly over the planet's surface, and their study is fundamental in understanding Earth's geological activity. These plates fit together much like a jigsaw puzzle and constantly shift, causing earthquakes, the formation of mountains, and volcanic eruptions. Scientists analyze these movements to better understand natural disasters and how Earth's surface changes over time. Advances in this field have significantly improved our ability to monitor and prepare for natural disasters as well as to mitigate their impacts.",
+      "word_count": 86,
+      "topic": "geology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 29,
+          "original_word": "together",
+          "displayed_fragment": "toge",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "jigsaw",
+          "displayed_fragment": "jig",
+          "hidden_length": 3
+        },
+        {
+          "position": 35,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 37,
+          "original_word": "shift",
+          "displayed_fragment": "sh",
+          "hidden_length": 3
+        },
+        {
+          "position": 39,
+          "original_word": "earthquakes",
+          "displayed_fragment": "earth",
+          "hidden_length": 6
+        },
+        {
+          "position": 41,
+          "original_word": "formation",
+          "displayed_fragment": "form",
+          "hidden_length": 5
+        },
+        {
+          "position": 43,
+          "original_word": "mountains",
+          "displayed_fragment": "moun",
+          "hidden_length": 5
+        },
+        {
+          "position": 45,
+          "original_word": "volcanic",
+          "displayed_fragment": "volc",
+          "hidden_length": 4
+        },
+        {
+          "position": 47,
+          "original_word": "Scientists",
+          "displayed_fragment": "scien",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Tectonic plates are large pieces of Earth's outer shell that move slowly over the planet's surface, and their study is fundamental in understanding Earth's geological activity.",
+      "blanked_text": "Tectonic plates are large pieces of Earth's outer shell that move slowly over the planet's surface, and their study is fundamental in understanding Earth's geological activity. These plates fit toge____ much li__ a jig___ puzzle a__ constantly sh___ causing earth______ the form_____ of moun_____ and volc____ eruptions. scien_____ analyze these movements to better understand natural disasters and how Earth's surface changes over time. Advances in this field have significantly improved our ability to monitor and prepare for natural disasters as well as to mitigate their impacts.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.4新托福真题",
+      "date": "2026-03-04",
+      "source_hash": "51fe91d704e8",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_413_2_1",
+      "passage": "Paleontology, the study of ancient life through fossils, provides valuable insights into Earth's biological history. Fossils, including bones and shells, offer evidence of organisms that lived millions of years ago. By studying these remains, paleontologists can reconstruct the appearance, behavior, and ecological relationships of extinct species. Techniques such as radiometric dating help determine the age of fossils and the geological context in which environmental changes, and the development of life on Earth.",
+      "word_count": 72,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 16,
+          "original_word": "including",
+          "displayed_fragment": "incl",
+          "hidden_length": 5
+        },
+        {
+          "position": 19,
+          "original_word": "shells",
+          "displayed_fragment": "she",
+          "hidden_length": 3
+        },
+        {
+          "position": 21,
+          "original_word": "evidence",
+          "displayed_fragment": "evid",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "organisms",
+          "displayed_fragment": "orga",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "lived",
+          "displayed_fragment": "li",
+          "hidden_length": 3
+        },
+        {
+          "position": 27,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 29,
+          "original_word": "ago",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "studying",
+          "displayed_fragment": "stud",
+          "hidden_length": 4
+        },
+        {
+          "position": 33,
+          "original_word": "remains",
+          "displayed_fragment": "rem",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "can",
+          "displayed_fragment": "c",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Paleontology, the study of ancient life through fossils, provides valuable insights into Earth's biological history.",
+      "blanked_text": "Paleontology, the study of ancient life through fossils, provides valuable insights into Earth's biological history. Fossils, incl_____ bones and she___ offer evid____ of orga_____ that li___ millions o_ years a__ By stud____ these rem____ paleontologists c__ reconstruct the appearance, behavior, and ecological relationships of extinct species. Techniques such as radiometric dating help determine the age of fossils and the geological context in which environmental changes, and the development of life on Earth.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.13新托福真题",
+      "date": "2026-04-13",
+      "source_hash": "9beab7fe7956",
       "source_flags": []
     },
     {
@@ -322,6 +1423,594 @@
           "code": "duplicate_cluster",
           "severity": "warn",
           "detail": "与 5.3新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_418_1_1",
+      "passage": "Climate change refers to significant and lasting changes in weather patterns over periods ranging from decades to millions of years. It is driven by natural factors like volcanic eruptions and human activities such as burning fossil fuels and removing trees, which release large amounts of greenhouse gases into the atmosphere. These gases trap heat, leading to global warming, rising sea levels, and more extreme weather events.",
+      "word_count": 66,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 22,
+          "original_word": "driven",
+          "displayed_fragment": "dri",
+          "hidden_length": 3
+        },
+        {
+          "position": 24,
+          "original_word": "natural",
+          "displayed_fragment": "nat",
+          "hidden_length": 4
+        },
+        {
+          "position": 26,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "eruptions",
+          "displayed_fragment": "erup",
+          "hidden_length": 5
+        },
+        {
+          "position": 30,
+          "original_word": "human",
+          "displayed_fragment": "hu",
+          "hidden_length": 3
+        },
+        {
+          "position": 32,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "burning",
+          "displayed_fragment": "bur",
+          "hidden_length": 4
+        },
+        {
+          "position": 36,
+          "original_word": "fuels",
+          "displayed_fragment": "fu",
+          "hidden_length": 3
+        },
+        {
+          "position": 38,
+          "original_word": "removing",
+          "displayed_fragment": "remo",
+          "hidden_length": 4
+        },
+        {
+          "position": 40,
+          "original_word": "which",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Climate change refers to significant and lasting changes in weather patterns over periods ranging from decades to millions of years.",
+      "blanked_text": "Climate change refers to significant and lasting changes in weather patterns over periods ranging from decades to millions of years. It is dri___ by nat____ factors li__ volcanic erup_____ and hu___ activities su__ as bur____ fossil fu___ and remo____ trees, wh___ release large amounts of greenhouse gases into the atmosphere. These gases trap heat, leading to global warming, rising sea levels, and more extreme weather events.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.18新托福真题",
+      "date": "2026-04-18",
+      "source_hash": "0b76208ca065",
+      "source_flags": [
+        {
+          "code": "ingest_blocker",
+          "severity": "blocking",
+          "detail": "[4.18 答案.pdf] 答案页第 12 行出现无科目头的题号重启块（当前科目 listening），已忽略(fail-closed)：1d 2c 3c 4d 5c 6a 7b 8b 9a 10c 11b 12b 13a 14d 15a"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_418_1_11",
+      "passage": "Initially, humans used naturally occurring objects as tools (for instance, a sharp stone or a forked stick). Later, people began purposefully to shape wood and stone into tools. Because of the perishable nature of wood, modern knowledge of how it was used in prehistoric times is largely a matter of inference. With tools of stone, however, archaeologists are on firmer ground; there are a vast number of surviving artifacts. Throughout the world, flint was a favored material because of its unusual physical properties.",
+      "word_count": 83,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 18,
+          "original_word": "people",
+          "displayed_fragment": "peo",
+          "hidden_length": 3
+        },
+        {
+          "position": 20,
+          "original_word": "purposefully",
+          "displayed_fragment": "purpos",
+          "hidden_length": 6
+        },
+        {
+          "position": 22,
+          "original_word": "shape",
+          "displayed_fragment": "sh",
+          "hidden_length": 3
+        },
+        {
+          "position": 24,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 26,
+          "original_word": "into",
+          "displayed_fragment": "in",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "Because",
+          "displayed_fragment": "Bec",
+          "hidden_length": 4
+        },
+        {
+          "position": 30,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 32,
+          "original_word": "nature",
+          "displayed_fragment": "nat",
+          "hidden_length": 3
+        },
+        {
+          "position": 34,
+          "original_word": "wood",
+          "displayed_fragment": "wo",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "knowledge",
+          "displayed_fragment": "know",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Initially, humans used naturally occurring objects as tools (for instance, a sharp stone or a forked stick).",
+      "blanked_text": "Initially, humans used naturally occurring objects as tools (for instance, a sharp stone or a forked stick). Later, peo___ began purpos______ to sh___ wood a__ stone in__ tools. Bec____ of t__ perishable nat___ of wo__ modern know_____ of how it was used in prehistoric times is largely a matter of inference. With tools of stone, however, archaeologists are on firmer ground; there are a vast number of surviving artifacts. Throughout the world, flint was a favored material because of its unusual physical properties.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.18新托福真题",
+      "date": "2026-04-18",
+      "source_hash": "0b76208ca065",
+      "source_flags": [
+        {
+          "code": "ingest_blocker",
+          "severity": "blocking",
+          "detail": "[4.18 答案.pdf] 答案页第 12 行出现无科目头的题号重启块（当前科目 listening），已忽略(fail-closed)：1d 2c 3c 4d 5c 6a 7b 8b 9a 10c 11b 12b 13a 14d 15a"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_418_2_1",
+      "passage": "Throughout history, art and religion have been deeply intertwined. Religious beliefs often inspire artistic creations, from ancient cave paintings to elaborate cathedral architecture. Throughout history artists have used visual imagery to express spiritual ideas and convey religious stories. Iconography, the study of symbols and images in art, helps us understand the meaning behind religious artworks. Churches, temples, and other places of worship are often adorned with intricate designs that reflect the convictions and practices of their communities.",
+      "word_count": 77,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 10,
+          "original_word": "beliefs",
+          "displayed_fragment": "bel",
+          "hidden_length": 4
+        },
+        {
+          "position": 12,
+          "original_word": "inspire",
+          "displayed_fragment": "ins",
+          "hidden_length": 4
+        },
+        {
+          "position": 14,
+          "original_word": "creations",
+          "displayed_fragment": "crea",
+          "hidden_length": 5
+        },
+        {
+          "position": 16,
+          "original_word": "ancient",
+          "displayed_fragment": "anc",
+          "hidden_length": 4
+        },
+        {
+          "position": 18,
+          "original_word": "paintings",
+          "displayed_fragment": "pain",
+          "hidden_length": 5
+        },
+        {
+          "position": 20,
+          "original_word": "elaborate",
+          "displayed_fragment": "elab",
+          "hidden_length": 5
+        },
+        {
+          "position": 22,
+          "original_word": "architecture",
+          "displayed_fragment": "archit",
+          "hidden_length": 6
+        },
+        {
+          "position": 24,
+          "original_word": "history",
+          "displayed_fragment": "his",
+          "hidden_length": 4
+        },
+        {
+          "position": 26,
+          "original_word": "have",
+          "displayed_fragment": "ha",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "visual",
+          "displayed_fragment": "vis",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Throughout history, art and religion have been deeply intertwined.",
+      "blanked_text": "Throughout history, art and religion have been deeply intertwined. Religious bel____ often ins____ artistic crea_____ from anc____ cave pain_____ to elab_____ cathedral archit______ Throughout his____ artists ha__ used vis___ imagery to express spiritual ideas and convey religious stories. Iconography, the study of symbols and images in art, helps us understand the meaning behind religious artworks. Churches, temples, and other places of worship are often adorned with intricate designs that reflect the convictions and practices of their communities.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.18新托福真题",
+      "date": "2026-04-18",
+      "source_hash": "0b76208ca065",
+      "source_flags": [
+        {
+          "code": "ingest_blocker",
+          "severity": "blocking",
+          "detail": "[4.18 答案.pdf] 答案页第 12 行出现无科目头的题号重启块（当前科目 listening），已忽略(fail-closed)：1d 2c 3c 4d 5c 6a 7b 8b 9a 10c 11b 12b 13a 14d 15a"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_420_2_1",
+      "passage": "The study of the classical world involves examining the cultural, political, and social structures of ancient civilizations such as Greece and Rome. These societies have greatly influenced modern governance, philosophy, and art. The concept of democracy originated in Athens, and Romans were superb engineers, building roads to gain insight into the foundations of contemporary society. Archaeologists and historians employ various methods to uncover artifacts and interpret historical records from ancient times.",
+      "word_count": 71,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 23,
+          "original_word": "societies",
+          "displayed_fragment": "soci",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "greatly",
+          "displayed_fragment": "gre",
+          "hidden_length": 4
+        },
+        {
+          "position": 27,
+          "original_word": "modern",
+          "displayed_fragment": "mod",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "philosophy",
+          "displayed_fragment": "philo",
+          "hidden_length": 5
+        },
+        {
+          "position": 31,
+          "original_word": "art",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "concept",
+          "displayed_fragment": "con",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "democracy",
+          "displayed_fragment": "demo",
+          "hidden_length": 5
+        },
+        {
+          "position": 37,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 39,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "were",
+          "displayed_fragment": "we",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The study of the classical world involves examining the cultural, political, and social structures of ancient civilizations such as Greece and Rome.",
+      "blanked_text": "The study of the classical world involves examining the cultural, political, and social structures of ancient civilizations such as Greece and Rome. These soci_____ have gre____ influenced mod___ governance, philo_____ and a__ The con____ of demo_____ originated i_ Athens, a__ Romans we__ superb engineers, building roads to gain insight into the foundations of contemporary society. Archaeologists and historians employ various methods to uncover artifacts and interpret historical records from ancient times.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.20新托福真题",
+      "date": "2026-04-20",
+      "source_hash": "3642c4566456",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.10新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 10 题（配对 40／满分 50）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_424_2_1",
+      "passage": "The piano has a rich history that spans over 300 years, evolving from earlier keyboard instruments like the clavichord and harpsichord. The modern piano was invented around 1700 by Bartolomeo Cristofori, who developed a new mechanism that made it possible for players to control the dynamics—soft and loud sounds—by varying the pressure on the keys. Later key improvements include the addition of a cast iron frame and felt-covered hammers, and popular music.",
+      "word_count": 72,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 22,
+          "original_word": "modern",
+          "displayed_fragment": "mod",
+          "hidden_length": 3
+        },
+        {
+          "position": 24,
+          "original_word": "was",
+          "displayed_fragment": "w",
+          "hidden_length": 2
+        },
+        {
+          "position": 26,
+          "original_word": "around",
+          "displayed_fragment": "aro",
+          "hidden_length": 3
+        },
+        {
+          "position": 28,
+          "original_word": "by",
+          "displayed_fragment": "b",
+          "hidden_length": 1
+        },
+        {
+          "position": 31,
+          "original_word": "who",
+          "displayed_fragment": "w",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "new",
+          "displayed_fragment": "n",
+          "hidden_length": 2
+        },
+        {
+          "position": 36,
+          "original_word": "that",
+          "displayed_fragment": "th",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "it",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 40,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "hidden_length": 2
+        },
+        {
+          "position": 42,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The piano has a rich history that spans over 300 years, evolving from earlier keyboard instruments like the clavichord and harpsichord.",
+      "blanked_text": "The piano has a rich history that spans over 300 years, evolving from earlier keyboard instruments like the clavichord and harpsichord. The mod___ piano w__ invented aro___ 1700 b_ Bartolomeo Cristofori, w__ developed a n__ mechanism th__ made i_ possible f__ players t_ control the dynamics—soft and loud sounds—by varying the pressure on the keys. Later key improvements include the addition of a cast iron frame and felt-covered hammers, and popular music.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.24新托福真题",
+      "date": "2026-04-24",
+      "source_hash": "65104882d92d",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_428_1_1",
+      "passage": "Agriculture refers to the systematic cultivation of crops and the domestication of animals to produce food and other essential resources. This practice has sustained human societies for millennia. Farmers employ various techniques such as plowing and irrigation to manage land effectively. Additionally, livestock including cattle, poultry, and sheep are raised for products like milk, meat, and wool. Agriculture remains a cornerstone of global food security and plays a vital role in supporting economies and communities worldwide.",
+      "word_count": 76,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 21,
+          "original_word": "practice",
+          "displayed_fragment": "prac",
+          "hidden_length": 4
+        },
+        {
+          "position": 23,
+          "original_word": "sustained",
+          "displayed_fragment": "sust",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "societies",
+          "displayed_fragment": "soci",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "millennia",
+          "displayed_fragment": "mill",
+          "hidden_length": 5
+        },
+        {
+          "position": 29,
+          "original_word": "employ",
+          "displayed_fragment": "emp",
+          "hidden_length": 3
+        },
+        {
+          "position": 31,
+          "original_word": "techniques",
+          "displayed_fragment": "techn",
+          "hidden_length": 5
+        },
+        {
+          "position": 33,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 35,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 37,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 39,
+          "original_word": "land",
+          "displayed_fragment": "la",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Agriculture refers to the systematic cultivation of crops and the domestication of animals to produce food and other essential resources.",
+      "blanked_text": "Agriculture refers to the systematic cultivation of crops and the domestication of animals to produce food and other essential resources. This prac____ has sust_____ human soci_____ for mill_____ Farmers emp___ various techn_____ such a_ plowing a__ irrigation t_ manage la__ effectively. Additionally, livestock including cattle, poultry, and sheep are raised for products like milk, meat, and wool. Agriculture remains a cornerstone of global food security and plays a vital role in supporting economies and communities worldwide.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.28新托福真题",
+      "date": "2026-04-28",
+      "source_hash": "8f22085884df",
+      "source_flags": []
+    },
+    {
+      "id": "real_ctw_48_1_1",
+      "passage": "Crop rotation is a farming technique that involves growing a series of different types of crops in the same area across a sequence of seasons. Different crops use different nutrients from the soil, so rotating them prevents the soil from becoming depleted. This method helps to reduce pests and diseases; it also decreases the need for chemical fertilizers, promoting sustainable agriculture. Farmers use this practice to improve crop yields and maintain healthy soil.",
+      "word_count": 73,
+      "topic": "agriculture",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 42,
+          "original_word": "This",
+          "displayed_fragment": "Th",
+          "hidden_length": 2
+        },
+        {
+          "position": 44,
+          "original_word": "helps",
+          "displayed_fragment": "he",
+          "hidden_length": 3
+        },
+        {
+          "position": 46,
+          "original_word": "reduce",
+          "displayed_fragment": "re",
+          "hidden_length": 4
+        },
+        {
+          "position": 48,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 50,
+          "original_word": "it",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 52,
+          "original_word": "decreases",
+          "displayed_fragment": "decr",
+          "hidden_length": 5
+        },
+        {
+          "position": 54,
+          "original_word": "need",
+          "displayed_fragment": "ne",
+          "hidden_length": 2
+        },
+        {
+          "position": 56,
+          "original_word": "chemical",
+          "displayed_fragment": "chem",
+          "hidden_length": 4
+        },
+        {
+          "position": 58,
+          "original_word": "promoting",
+          "displayed_fragment": "prom",
+          "hidden_length": 5
+        },
+        {
+          "position": 60,
+          "original_word": "agriculture",
+          "displayed_fragment": "agricultur",
+          "hidden_length": 1
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Crop rotation is a farming technique that involves growing a series of different types of crops in the same area across a sequence of seasons.",
+      "blanked_text": "Crop rotation is a farming technique that involves growing a series of different types of crops in the same area across a sequence of seasons. Different crops use different nutrients from the soil, so rotating them prevents the soil from becoming depleted. Th__ method he___ to re____ pests a__ diseases; i_ also decr_____ the ne__ for chem____ fertilizers, prom_____ sustainable agricultur_ Farmers use this practice to improve crop yields and maintain healthy soil.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.8新托福真题",
+      "date": "2026-04-08",
+      "source_hash": "94001281a0b0",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、3.2新托福真题B卷、4.11新托福真题 属同题簇（部分科目共题，机经正常形态）。"
         }
       ]
     },
@@ -877,6 +2566,261 @@
       "date": "2026-05-29",
       "source_hash": "157bb546e3c1",
       "source_flags": []
+    },
+    {
+      "id": "real_ctw_53_2_1",
+      "passage": "The study of insect behavior reveals complex survival strategies and social interactions across species. Honeybees, for instance, perform a distinctive dance to convey spatial information about foraging sites. Ants exemplify extraordinary collective behavior, defined by cooperative efficiency. By analyzing these patterns, researchers can trace evolutionary pathways and adaptive strategies that support insect resilience across diverse ecosystems. These insights underscore the ecological sophistication embedded within even the smallest of organisms.",
+      "word_count": 69,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 16,
+          "original_word": "instance",
+          "displayed_fragment": "inst",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "distinctive",
+          "displayed_fragment": "disti",
+          "hidden_length": 6
+        },
+        {
+          "position": 21,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 23,
+          "original_word": "spatial",
+          "displayed_fragment": "spa",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "about",
+          "displayed_fragment": "ab",
+          "hidden_length": 3
+        },
+        {
+          "position": 27,
+          "original_word": "sites",
+          "displayed_fragment": "si",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "exemplify",
+          "displayed_fragment": "exem",
+          "hidden_length": 5
+        },
+        {
+          "position": 31,
+          "original_word": "collective",
+          "displayed_fragment": "colle",
+          "hidden_length": 5
+        },
+        {
+          "position": 33,
+          "original_word": "defined",
+          "displayed_fragment": "def",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "cooperative",
+          "displayed_fragment": "cooper",
+          "hidden_length": 5
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The study of insect behavior reveals complex survival strategies and social interactions across species.",
+      "blanked_text": "The study of insect behavior reveals complex survival strategies and social interactions across species. Honeybees, for inst____ perform a disti______ dance t_ convey spa____ information ab___ foraging si___ Ants exem_____ extraordinary colle_____ behavior, def____ by cooper_____ efficiency. By analyzing these patterns, researchers can trace evolutionary pathways and adaptive strategies that support insect resilience across diverse ecosystems. These insights underscore the ecological sophistication embedded within even the smallest of organisms.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "5.3新托福真题",
+      "date": "2026-05-03",
+      "source_hash": "f9df8e520428",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 4.15新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_56_1_1",
+      "passage": "The introduction of sanitation practices in urban areas during the nineteenth century significantly improved public health. Innovations such as sewage systems and clean water supplies developed from the growing awareness of the connection between poor hygiene and illness, and reduced the spread of infectious diseases like cholera and typhoid. Public health campaigns, supported by local governments and medical professionals, educated communities on the importance of hygiene. These efforts were instrumental in decreasing mortality rates and enhancing quality of life.",
+      "word_count": 79,
+      "topic": "history",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 19,
+          "original_word": "sewage",
+          "displayed_fragment": "sew",
+          "hidden_length": 3
+        },
+        {
+          "position": 21,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 23,
+          "original_word": "water",
+          "displayed_fragment": "wa",
+          "hidden_length": 3
+        },
+        {
+          "position": 25,
+          "original_word": "developed",
+          "displayed_fragment": "deve",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 29,
+          "original_word": "awareness",
+          "displayed_fragment": "awar",
+          "hidden_length": 5
+        },
+        {
+          "position": 32,
+          "original_word": "connection",
+          "displayed_fragment": "conne",
+          "hidden_length": 5
+        },
+        {
+          "position": 34,
+          "original_word": "poor",
+          "displayed_fragment": "po",
+          "hidden_length": 2
+        },
+        {
+          "position": 37,
+          "original_word": "illness",
+          "displayed_fragment": "ill",
+          "hidden_length": 4
+        },
+        {
+          "position": 41,
+          "original_word": "spread",
+          "displayed_fragment": "spr",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The introduction of sanitation practices in urban areas during the nineteenth century significantly improved public health.",
+      "blanked_text": "The introduction of sanitation practices in urban areas during the nineteenth century significantly improved public health. Innovations such as sew___ systems a__ clean wa___ supplies deve_____ from t__ growing awar_____ of the conne_____ between po__ hygiene and ill____ and reduced the spr___ of infectious diseases like cholera and typhoid. Public health campaigns, supported by local governments and medical professionals, educated communities on the importance of hygiene. These efforts were instrumental in decreasing mortality rates and enhancing quality of life.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "5.6新托福真题",
+      "date": "2026-05-06",
+      "source_hash": "1376b2f358ee",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 4.15新托福真题、5.3新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_56_1_11",
+      "passage": "In recent decades, environmental awareness has surged, driven largely by the visible impacts of climate change and the depletion of natural resources. As societies grapple with the necessity of sustainable practices, debates continue over the most effective strategies. Renewable energy sources, such as solar and wind power, have gained prominence as potential solutions. Nevertheless, their implementation often encounters hurdles ranging from economic feasibility to technological limitations. Moreover, the transition toward greener alternatives necessitates a paradigm shift in both consumption patterns and industrial processes.",
+      "word_count": 83,
+      "topic": "other",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 23,
+          "original_word": "societies",
+          "displayed_fragment": "soci",
+          "hidden_length": 5
+        },
+        {
+          "position": 25,
+          "original_word": "with",
+          "displayed_fragment": "wi",
+          "hidden_length": 2
+        },
+        {
+          "position": 27,
+          "original_word": "necessity",
+          "displayed_fragment": "nece",
+          "hidden_length": 5
+        },
+        {
+          "position": 29,
+          "original_word": "sustainable",
+          "displayed_fragment": "susta",
+          "hidden_length": 6
+        },
+        {
+          "position": 31,
+          "original_word": "debates",
+          "displayed_fragment": "deb",
+          "hidden_length": 4
+        },
+        {
+          "position": 33,
+          "original_word": "over",
+          "displayed_fragment": "ov",
+          "hidden_length": 2
+        },
+        {
+          "position": 35,
+          "original_word": "most",
+          "displayed_fragment": "mo",
+          "hidden_length": 2
+        },
+        {
+          "position": 37,
+          "original_word": "strategies",
+          "displayed_fragment": "strat",
+          "hidden_length": 5
+        },
+        {
+          "position": 39,
+          "original_word": "energy",
+          "displayed_fragment": "ene",
+          "hidden_length": 3
+        },
+        {
+          "position": 41,
+          "original_word": "such",
+          "displayed_fragment": "su",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "In recent decades, environmental awareness has surged, driven largely by the visible impacts of climate change and the depletion of natural resources.",
+      "blanked_text": "In recent decades, environmental awareness has surged, driven largely by the visible impacts of climate change and the depletion of natural resources. As soci_____ grapple wi__ the nece_____ of susta______ practices, deb____ continue ov__ the mo__ effective strat_____ Renewable ene___ sources, su__ as solar and wind power, have gained prominence as potential solutions. Nevertheless, their implementation often encounters hurdles ranging from economic feasibility to technological limitations. Moreover, the transition toward greener alternatives necessitates a paradigm shift in both consumption patterns and industrial processes.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "5.6新托福真题",
+      "date": "2026-05-06",
+      "source_hash": "1376b2f358ee",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 4.15新托福真题、5.3新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
     },
     {
       "id": "real_ctw_rf0610_1_11",

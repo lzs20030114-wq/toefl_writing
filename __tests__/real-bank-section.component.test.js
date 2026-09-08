@@ -16,6 +16,7 @@ jest.mock("../components/home/HomePageClient", () => ({
 
 import { RealExamSectionContent, REAL_EXAM_TASKS } from "../components/home/RealExamSectionContent";
 import {
+  getRealBSBatches,
   getRealBSQuestions,
   getRealDiscussionPrompts,
   getRealEmailPrompts,
@@ -24,6 +25,8 @@ import {
 // 「首页不许 import lib/realBank」那条。counts.json 与真实题量是否一致由
 // __tests__/real-bank-reading-data.test.js 守（那边本来就 import lib/realBank）。
 import READING_COUNTS from "../data/realBank/reading/counts.json";
+// 写作三题型没有 counts.json（冻结语料），题量常量放在这里，桌面 / 移动端共用。
+import { REAL_WRITING_COUNTS } from "../components/home/realExamCounts";
 import { SectionContent } from "../components/home/SectionContent";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "../components/home/sections";
 
@@ -121,12 +124,20 @@ describe("真题专区 section：Pro 门禁", () => {
     expect(screen.getByText("学术阅读真题")).toBeTruthy();
   });
 
-  // 写作三题型是冻结语料 → 题量写死，靠这道交叉校验兜住。
-  test("写作卡写死的题量与数据源实际题量一致", () => {
+  // 写作三题型是冻结语料 → 题量常量写在 realExamCounts.js，靠这道交叉校验兜住
+  // （题库长大而常量没跟着改 → 这里直接红）。桌面与移动端都读这一份常量。
+  test("REAL_WRITING_COUNTS 与 lib/realBank 的实际题量一致", () => {
+    expect(REAL_WRITING_COUNTS.discussion).toBe(getRealDiscussionPrompts().length);
+    expect(REAL_WRITING_COUNTS.email).toBe(getRealEmailPrompts().length);
+    expect(REAL_WRITING_COUNTS.bs).toBe(getRealBSQuestions().length);
+    expect(REAL_WRITING_COUNTS.bsSets).toBe(getRealBSBatches().length);
+  });
+
+  test("写作卡的题量与数据源实际题量一致", () => {
     const byKey = Object.fromEntries(REAL_EXAM_TASKS.map((t) => [t.k, t]));
     expect(byKey["real-discussion"].it).toBe(`${getRealDiscussionPrompts().length} 题`);
     expect(byKey["real-email"].it).toBe(`${getRealEmailPrompts().length} 题`);
-    expect(byKey["real-bs"].it).toBe(`${getRealBSQuestions().length} 题 · 2 套`);
+    expect(byKey["real-bs"].it).toBe(`${getRealBSQuestions().length} 题 · ${getRealBSBatches().length} 套`);
   });
 
   // 阅读是 build_bank 的构建产物（54 套卷会持续入库），题量不许写死 —— 但也不许为了「现算」
@@ -170,9 +181,9 @@ describe("真题专区 section：Pro 门禁", () => {
     // 用 getAllByText：题库长大后不同题型的徽章会撞到同一个数字（第二波之后
     // 写作造句和听力 LCR 都是 125 题），getByText 会因为「找到多个」直接报错 ——
     // 这条断言要的是「徽章在、数字对」，不是「全页面只有一个 125」。
-    expect(screen.getAllByText("125 题").length).toBeGreaterThan(0);
-    expect(screen.getByText("13 题")).toBeTruthy();
-    expect(screen.getByText("20 题 · 2 套")).toBeTruthy();
+    expect(screen.getAllByText("132 题").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("27 题").length).toBeGreaterThan(0);
+    expect(screen.getByText("106 题 · 12 套")).toBeTruthy();
     expect(screen.getByText(/参考版：早期收集，来源未核验/)).toBeTruthy();
   });
 });
@@ -284,6 +295,29 @@ describe("真题专区 section：SectionContent 路由分支", () => {
     expect(tasks).toContain("REAL_READING_COUNTS.ctw");
     expect(tasks).toContain("REAL_READING_COUNTS.rdl");
     expect(tasks).toContain("REAL_READING_COUNTS.ap");
+    // 写作三题型同理：读桌面端共用的 REAL_WRITING_COUNTS，不许再写死字符串。
+    expect(tasks).toContain("REAL_WRITING_COUNTS.discussion");
+    expect(tasks).toContain("REAL_WRITING_COUNTS.email");
+    expect(tasks).toContain("REAL_WRITING_COUNTS.bs");
+    expect(/count:\s*"\d+\s*题"/.test(tasks)).toBe(false);
+  });
+
+  // 移动端与桌面端是两条独立渲染链，最容易出的事故就是「桌面改了题量、移动端忘改」——
+  // 两边都读同一份常量，这条断言钉死移动端渲染出来的数字 = 数据层实际题量。
+  test("移动端写作三张卡的题量 = 数据层实际题量（与桌面同一来源）", () => {
+    const src = fs.readFileSync(path.join(__dirname, "../components/home/MobileHomePage.js"), "utf8");
+    const block = src.slice(src.indexOf("function MobileRealExamSection"));
+    const tasks = block.slice(0, block.indexOf("return ("));
+    const countOf = (type) => {
+      const line = tasks.split(/\r?\n/).find((l) => l.includes(`type: "${type}"`));
+      // 卡片渲染成 `${d} · ${count}`，count 是模板串 —— 这里把常量代入求值。
+      const m = line.match(/count: `\$\{REAL_WRITING_COUNTS\.(\w+)\} (.)`/);
+      expect(m).toBeTruthy();
+      return { n: REAL_WRITING_COUNTS[m[1]], unit: m[2] };
+    };
+    expect(countOf("discussion")).toEqual({ n: getRealDiscussionPrompts().length, unit: "题" });
+    expect(countOf("email")).toEqual({ n: getRealEmailPrompts().length, unit: "题" });
+    expect(countOf("bs")).toEqual({ n: getRealBSQuestions().length, unit: "题" });
   });
 
   test("sections.js 的真题专区描述提到了阅读（不然导航里像是只有写作）", () => {

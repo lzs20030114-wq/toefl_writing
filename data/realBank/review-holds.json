@@ -1,5 +1,5 @@
 {
-  "_generated": "2026-09-07",
+  "_generated": "2026-09-07 / 追加 recheck-2026-09-08",
   "_purpose": "真题成品复核结论（独立盲解 952 题 + 结构体检）。scripts/realbank/apply_review.mjs 读它：patches 先修文本，holds 再下架；build_bank 落库末尾自动应用。清单按成品 id 记，删条目 = 放行。",
   "_report": "data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md",
   "_scopes": {
@@ -1535,6 +1535,1352 @@
       "scope": "unit",
       "reason": "与 bs_rf0610_02 同一句",
       "dup_of": "bs_rf0610_02"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_34_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_121a_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_121a_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_411_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_121a_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_121a_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_427_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_121a_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_121a_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_48_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_121a_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_121a_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_36_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_320_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_320_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_121b_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_320_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_320_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_411_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_34_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_34_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_36_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_34_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_34_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_121b_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_34_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_34_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_329_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_56v2_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_56v2_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_424_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_56v2_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_56v2_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_121c_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_56v2_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_56v2_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_318_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_318_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_127a_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_318_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_318_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_127a_2_12",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2004_200411 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2004_200411",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_223_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_510_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_510_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_127b_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_510_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_510_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_127b_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_424_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_424_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_128a_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0705_2001_200121 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0705_2001_200121",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_128b_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_411_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_411_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_48_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_411_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_411_1_23",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_48_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_411_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_411_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_223_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_411_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_411_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_128b_2_12",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_411_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_411_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_316_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_324_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_324_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_210_1_33",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_324_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_324_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_32b_1_32",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_324_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_324_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_320_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_41_1_32",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_28_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_210_2_12",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21b_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_45_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_45_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_316_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_45_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_45_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21c_1_27",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_510v2_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_510v2_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_34_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_510v2_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_510v2_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_325_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0819_2002_200201 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0819_2002_200201",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21c_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0819_2002_200201 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0819_2002_200201",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_228_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0713_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0713_1_131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_315_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0713_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0713_1_131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_317_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0713_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0713_1_131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_428_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0713_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0713_1_131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_228_2_14",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_323_2_12 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_323_2_12",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_28_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_22_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_22_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_22_1_34",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0819_2001_200101 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0819_2001_200101",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_22_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0620_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0620_1_131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_327_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_310_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_310_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_210_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_310_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_310_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_323_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_310_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_310_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_41_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_41_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_311_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_311_1_28",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_311_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2005_200511 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2005_200511",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_41_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2005_200511 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2005_200511",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_314_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_418_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_418_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121c_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32a_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_424_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_315_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/rdl"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_317_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_320_1_29",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121b_1_29",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_420_1_29",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_36_1_29",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_125 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_125",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_45_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_315_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_315_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_317_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_413_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_413_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_413_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_324_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_324_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_38_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_325_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_325_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_32a_2_12",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_325_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_325_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_48_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_325_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_325_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_413_1_33",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_56_1_32 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_56_1_32",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_327_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_56_1_32 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_56_1_32",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_327_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_415_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_415_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_56_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_415_2_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_415_2_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_427_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_329_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_329_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_56_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_329_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_329_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_329_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0822_2003_200301 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0822_2003_200301",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_32b_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2001_200131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2001_200131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_420_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2001_200131 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2001_200131",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_330_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0822_2001_200101 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0822_2001_200101",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_418_1_31",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_330_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_330_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_38_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_510_1_26 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_510_1_26",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_45_1_26",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_38_1_31 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_38_1_31",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_56_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_424_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_424_1_28",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121c_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_424_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_424_1_28",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_427_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0716_2_211 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0716_2_211",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_428_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rf0716_2_211 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rf0716_2_211",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_428_1_32",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0704_2002_200231 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0704_2002_200231",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_327_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_523_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_523_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_34_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_523_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_523_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_225_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_523_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_523_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_228_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_523_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_523_1_25",
+      "source": "recheck-2026-09-08",
+      "dup_of_file": "reading/ap"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_53_2_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_rp0822_2004_200401 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ap_rp0822_2004_200401",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_413_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121a_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121a_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121b_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_320_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_320_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_36_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_320_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_320_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121c_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_320_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32a_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32b_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_36_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_424_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_320_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_36_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_121b_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_121b_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121c_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_424_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_424_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_127a_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_223_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_223_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_128b_1_30",
+      "scope": "unit",
+      "reason": "同簇抄本均因内容缺陷下架（保留候选 real_rdl_314_1_28 亦已下架）",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_210_1_24",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_420_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_420_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_315_1_24",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_420_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_420_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_323_1_24",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_420_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_420_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_327_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_310_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_310_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_21a_1_24",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_310_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_310_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_21a_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_310_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_310_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_223_1_22",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0622_1_123 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0622_1_123",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_323_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_228_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_228_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_228_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_34_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_34_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32a_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_228_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_228_1_28",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_427_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_228_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_228_1_28",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32b_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_22_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_22_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_314_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_28_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_28_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_28_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_314_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_314_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_41_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_311_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_311_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_41_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_311_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_311_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_317_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_315_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_315_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_56_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_315_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_315_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_317_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_315_1_28 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_315_1_28",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_318_1_28",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_415_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_415_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_53_1_25",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_415_1_25 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_415_1_25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_330_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_325_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_325_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_418_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_327_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_327_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_38_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0610_1_123 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0610_1_123",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_48_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_411_1_21 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_411_1_21",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_413_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_511_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_511_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_53_1_23",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_415_1_23 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_415_1_23",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_418_1_21",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_rdl_rf0622_1_121 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_rdl_rf0622_1_121",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_28_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_223_1_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_223_1_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_420_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_310_1_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_310_1_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_41_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_311_2_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_311_2_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_45_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_316_1_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_316_1_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_316_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rp0705_1_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_rp0705_1_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_327_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_317_1_11 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_317_1_11",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_320_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_518_1_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_518_1_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_323_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rp0830_2_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_rp0830_2_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_411_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rp0822_6_1 同一份材料（Jaccard>=0.8），每簇保留一条",
+      "dup_of": "real_ctw_rp0822_6_1",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21b_2_11",
+      "scope": "unit",
+      "reason": "材料大面积缺词断句（段首无主语、多处断句），题干答案在文中无直接依据",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_22_2_12",
+      "scope": "unit",
+      "reason": "「When waves collide, they create storms when ocean waves are more powerful.」语义崩坏，且只剩 1 题",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21a_1_33",
+      "scope": "unit",
+      "reason": "材料中段成矿描述整段缺失，Q34 依据的总起句也被截",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_127a_1_27",
+      "scope": "unit",
+      "reason": "多段开头缺前文（第2段以 and carbon dioxide removal 起、第3段以 concern, as… 起）+ 句子断裂 + 残留 [B][C] 标记",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_128a_1_31",
+      "scope": "unit",
+      "reason": "两处成分缺失（a handy are also incorporated into… / people who fear public their speech），第2段语义断裂",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21a_2_11",
+      "scope": "unit",
+      "reason": "首段被截断串行，剧作名与论述主干丢失",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_21b_1_27",
+      "scope": "unit",
+      "reason": "中段整段说明丢失，只剩空格（The process involves   hydrogen can then be…）",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_46_2_13",
+      "scope": "unit",
+      "reason": "P2 结尾 conveying events. 为 conveying context 被截，Q13 题干引用的 context 在材料中不存在",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_21a_1_21",
+      "scope": "unit",
+      "reason": "题干称 social media post 但材料是校园布告；材料首行 North Bay 为孤立残行",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32a_2_13",
+      "scope": "unit",
+      "reason": "全篇单词无空格粘连不可读，标题截断为 Cyberneti，题干与选项同样粘连",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_428_1_33",
+      "scope": "unit",
+      "reason": "全篇大面积丢空格（Geophysicistshavelongbeen…）几乎不可读",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_46_1_25",
+      "scope": "unit",
+      "reason": "两处漏字（feedback on very helpful / discuss difference in how I am approaching），句子不成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_210_1_31",
+      "scope": "unit",
+      "reason": "开头缺主语被截 + 末段两句粘连丢字",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_128a_1_21",
+      "scope": "unit",
+      "reason": "private breakfast and complimentary breakfast 疑为 private beach 误抄；题干 Ms./Mr. Anderson 与材料不一致",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_314_1_28",
+      "scope": "unit",
+      "reason": "小票金额自相矛盾：合计 158 vs Subtotal 320 / VAT 64.25 / Total 379.25",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_225_1_30",
+      "scope": "unit",
+      "reason": "与 real_rdl_314_1_28 同源小票（金额被改），同样金额不自洽",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_1_28",
+      "scope": "question",
+      "q": 2,
+      "stem": "Who is most likely to obtain a locker?",
+      "reason": "Who is most likely to obtain a locker? A 与 D 两个选项都成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_311_1_31",
+      "scope": "question",
+      "q": 0,
+      "stem": "According to the passage, simpler functi",
+      "reason": "A（简化复杂问题）与 D（较快建立解题步骤）两选项都成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_320_1_31",
+      "scope": "question",
+      "q": 3,
+      "stem": "Why does the author cite studies showing",
+      "reason": "B（体现适应性的例子）与 D（支持对各行业有用）两选项都成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_316_2_11",
+      "scope": "question",
+      "q": 2,
+      "stem": "How does paragraph 3 relate to paragraph",
+      "reason": "段落编号歧义，按 paragraphs 下标四个选项均不成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_225_2_11",
+      "scope": "question",
+      "q": 0,
+      "stem": "In the first paragraph, what is the rela",
+      "reason": "题干引用 sentence 2，但材料里没有任何句子编号标记（同 09-07 real_ap_511_1_26#2 口径）",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_32b_1_21",
+      "scope": "question",
+      "q": 1,
+      "stem": "What can be inferred about Sarah o'Neill",
+      "reason": "问 can be inferred，但选项 C（Pets: None）在表格里已明写，与需推断的 A 同时成立（盲解唯一不一致项）",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_324_1_21",
+      "scope": "question",
+      "q": 1,
+      "stem": "What is the goal of the new schedule?",
+      "reason": "A（鼓励更多人使用）与 B（更好服务社区成员）两选项都成立",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_324_1_23",
+      "scope": "question",
+      "q": 0,
+      "stem": "The post recommends that students change",
+      "reason": "选项 A 加了原文没有的 to Student Housing stores 限定",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_418_1_25",
+      "scope": "question",
+      "q": 1,
+      "stem": "The word \"complimentary\" in the first pa",
+      "reason": "题干称 in the first paragraph，但材料为无分段单块文本，无第一段可定位",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_127a_1_21",
+      "scope": "question",
+      "q": 0,
+      "stem": "What is the main purpose of the notice?",
+      "reason": "材料带 Subject 行为邮件，题干却称 the notice，体裁标注与题干不一致",
+      "source": "recheck-2026-09-08"
     }
   ],
   "patches": [
@@ -2242,6 +3588,200 @@
       "op": "set",
       "to": "geography",
       "why": "从旁白指令里取学科，替换掉 general"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_53_1_32",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Urban planners can use these materials to design acoustic panels and noise barriers, strategically placing these",
+      "why": "结尾半句被截，截掉残句",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_2_12",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Conductors may need to adjust their",
+      "why": "结尾半句被截，截掉残句",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_56_1_32",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Quantum computing holds promise for advancements in fields like",
+      "why": "结尾半句被截，截掉残句",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_1_28",
+      "path": "passage",
+      "op": "replace",
+      "from": "10:00 p.M.",
+      "to": "10:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_1_28",
+      "path": "passage",
+      "op": "replace",
+      "from": "8:00 p.M.",
+      "to": "8:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_323_1_28",
+      "path": "passage",
+      "op": "replace",
+      "from": "6:00 p.M.",
+      "to": "6:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_210_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "3:00 p.M.",
+      "to": "3:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_22_1_22",
+      "path": "text",
+      "op": "replace",
+      "from": "3:00 p.M.",
+      "to": "3:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_411_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "12:00 p.M.",
+      "to": "12:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_411_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "6:00 p.M.",
+      "to": "6:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_411_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "3:00 p.M.",
+      "to": "3:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_28_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "9:00 A.M.  8:00 p.M.",
+      "to": "9:00 A.M. - 8:00 p.m.",
+      "why": "营业时间连字符丢失 + p.M. 大小写",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_28_1_21",
+      "path": "text",
+      "op": "replace",
+      "from": "5:00 p.M.",
+      "to": "5:00 p.m.",
+      "why": "OCR 大小写错乱 p.M. -> p.m.",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_127b_1_28",
+      "path": "text",
+      "op": "replace",
+      "from": "\nhave any questions",
+      "to": "\nIf you have any questions",
+      "why": "句首缺 If you",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_420_1_23",
+      "path": "text",
+      "op": "trim_tail",
+      "from": "\n(12) 80-399 131506",
+      "why": "条码残行串入",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_420_1_23",
+      "path": "text",
+      "op": "replace",
+      "from": "Cost: #1,000",
+      "to": "Cost: ₦1,000",
+      "why": "奈拉符号被 OCR 成 #",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_223_1_23",
+      "path": "text",
+      "op": "replace",
+      "from": "located at 123 Elm Street\n",
+      "to": "located at 123 Elm Street.\n",
+      "why": "句末缺句号",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_316_2_11",
+      "path": "passage",
+      "op": "replace",
+      "from": "leading isolated populations",
+      "to": "leading to isolated populations",
+      "why": "缺 to",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_315_2_11",
+      "path": "questions.2.options.C",
+      "op": "append",
+      "to": ".",
+      "why": "选项缺句末句号",
+      "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_325_1_23",
+      "path": "questions.1.options.C",
+      "op": "append",
+      "to": ".",
+      "why": "选项缺句末句号",
+      "source": "recheck-2026-09-08"
     }
   ]
 }

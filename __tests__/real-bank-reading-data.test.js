@@ -122,10 +122,38 @@ describe("真题阅读：源料缺陷标记（source_flags）", () => {
 
   // 入库的题不该带 blocking —— blocking 的含义就是「这一科别入库」。
   // 真出现了，是 build_bank 的过滤漏了，不是数据的正常状态。
-  test("已入库的题不带 blocking 级缺陷", () => {
-    const bad = allReading
-      .filter((it) => it.source_flags.some((f) => f.severity === "blocking"))
-      .map((it) => `${it.id}(${it.source})`);
+  //
+  // 2026-09-08 两个例外（判据与理由见 scripts/realbank/hold_policy.js，单测
+  // __tests__/realbank-hold-policy.test.js）：这两条 blocking 原本把整个阅读科扣下，
+  // 人工核对第一来源 34 套后判定过严，改成了逐题/条件放行 —— 于是放行的题上仍留着
+  // 原始 flag（前端要看得见「这卷源料有什么毛病」），但它们不再等于「不该入库」。
+  //   · ctw_answer_truncated：源答案页只砍了**填词题**的词首，与 AP/RDL 的选择题答案键无关，
+  //     所以只拒收 CTW；带这个 flag 的 AP/RDL 是合法入库的（每道还单独过了盲审）。
+  //   · section_gap：缺口本身只说明源里少了几题，配对上的每题都过了盲审；
+  //     真正的答案错位会把盲审一致率打塌，由 audit_low_agreement / answer_key_misaligned 拦。
+  //   · ingest_blocker 的**一种形态**（detail 里写「无科目头的题号重启块…已忽略(fail-closed)」，
+  //     2026-09-08 追加）：解析器忽略的是答案页多出来的一段，配上的每题仍逐题过了盲审
+  //     （2.8 / 3.24 / 3.29 三卷阅读一致率 94~100%）。放行同样卡在盲审一致率 ≥0.85 上。
+  //     ingest_blocker 的其它形态（真读不出源等）出现在成品里仍然是红灯 —— 这里用 hold_policy
+  //     导出的同一个正则判形态，免得测试与落库判据各说各话。
+  // 除这三条以外，任何 blocking 出现在成品里仍然是红灯；CTW 题带 ctw_answer_truncated 也是红灯。
+  const { INGEST_BLOCKER_RELAXABLE } = require("../scripts/realbank/hold_policy.js");
+  const BLOCKING_ALLOWED = new Set(["ctw_answer_truncated", "section_gap", "ingest_blocker"]);
+  test("已入库的题不带 blocking 级缺陷（除放行判据明列的三条）", () => {
+    const bad = [];
+    allReading.forEach((it) => {
+      const isCtw = it.id.startsWith("real_ctw_");
+      it.source_flags.forEach((f) => {
+        if (f.severity !== "blocking") return;
+        if (!BLOCKING_ALLOWED.has(f.code)) { bad.push(`${it.id}(${it.source}) ${f.code}`); return; }
+        if (f.code === "ingest_blocker" && !INGEST_BLOCKER_RELAXABLE.test(String(f.detail || ""))) {
+          bad.push(`${it.id}(${it.source}) ingest_blocker(非题号重启块形态)`);
+          return;
+        }
+        // 放行的是「非 CTW 题」；CTW 自己带这个 flag = 过滤漏了
+        if (f.code === "ctw_answer_truncated" && isCtw) bad.push(`${it.id}(${it.source}) ctw 未被拒收`);
+      });
+    });
     expect(bad).toEqual([]);
   });
 });

@@ -76,7 +76,7 @@ const REAL_ACCENT = { color: "#B45309", soft: "#FFF7ED" };
 const REAL_TYPES = {
   discussion: { title: "学术讨论真题", section: "真题专区 | 学术讨论" },
   email: { title: "邮件真题", section: "真题专区 | 邮件写作" },
-  bs: { title: "造句官方真题", section: "真题专区 | 连词成句" },
+  bs: { title: "造句真题", section: "真题专区 | 连词成句" },
   // 阅读三题型：任务名沿用 app/reading/page.js 的 ETS 口径（Complete the Words /
   // Read in Daily Life / Academic Passage），标题保持本页的中文house style。
   ctw: { title: "阅读填词真题", section: "真题专区 | Complete the Words" },
@@ -647,7 +647,7 @@ function RealBankPageClient() {
     );
   }
 
-  /* ── 造句官方真题：2 张批次卡 → BuildSentenceTask ── */
+  /* ── 造句真题：一卷一张批次卡（官方 2 套 + 回忆版若干）→ BuildSentenceTask ── */
   if (type === "bs") {
     if (!pickedBatchId) {
       const doneIds = new Set([...loadDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP)].map(String));
@@ -658,7 +658,7 @@ function RealBankPageClient() {
             section={REAL_TYPES.bs.section}
             eyebrow={modeEyebrow}
             headerExtra={modeSwitch}
-            description={`ETS 官方 Full-Length Practice Test 1 & 2 的 20 道连词成句原题（含官方答案）。${getRealBankModeDescription("bs", mode)}${REAL_TIER_NOTE}`}
+            description={`ETS 官方 Full-Length Practice Test 1 & 2 原题（含官方答案）+ 2026 回忆版整卷造句题，按套次分组。${getRealBankModeDescription("bs", mode)}${REAL_TIER_NOTE}`}
             items={mapRealBSToPicker(bsBatches)}
             doneIds={doneIds}
             accent={REAL_ACCENT}
@@ -687,7 +687,7 @@ function RealBankPageClient() {
     return (
       <UsageGateWrapper onExit={() => setPickedBatchId(null)} practiceMode={mode}>
         <>
-          <RealSourceBanner tierLabel={realTierLabel("official")} meta={batch.label} mode={mode} />
+          <RealSourceBanner tierLabel={realTierLabel(batch.tier)} meta={batch.label} mode={mode} />
           <BuildSentenceTask
             questions={batch.questions}
             practiceMode={mode}

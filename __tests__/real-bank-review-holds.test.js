@@ -57,10 +57,11 @@ describe("真题复核清单：holds 已落地", () => {
     expect(leaked).toEqual([]);
   });
 
+  // 同一份材料被录成两个题型（ap 与 rdl）时，保留的那条可能在另一个文件里：dup_of_file 指明去哪找。
   test("跨套重复只保留一份：dup_of 指向的那条必须还在库里（不许两头都删光）", () => {
     const missingKeeper = review.holds
       .filter((h) => h.dup_of && h.scope === "unit")
-      .filter((h) => !items(h.file).some((it) => it.id === h.dup_of))
+      .filter((h) => !items(h.dup_of_file || h.file).some((it) => it.id === h.dup_of))
       .map((h) => `${h.file}:${h.id} → ${h.dup_of}`);
     expect(missingKeeper).toEqual([]);
   });

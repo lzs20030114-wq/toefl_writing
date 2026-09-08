@@ -36,6 +36,12 @@ import { applyReview } from "./apply_review.mjs";
 
 const require = createRequire(import.meta.url);
 
+// 扣留判据抽成纯函数放隔壁（无 IO，可单测）：见 scripts/realbank/hold_policy.js 顶部注释，
+// 那里写着 ctw_answer_truncated / section_gap 两条为什么在阅读科被放宽。
+const { holdDecision, sectionAgreement } = require("./hold_policy.js");
+// 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
+const { carryMaterialImages } = require("./material_image_carry.js");
+
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
 const LETTERS = "ABCDEFGH";
@@ -73,10 +79,16 @@ function flagsFor(setName, section) {
  * 不据此拦人 —— 于是 5.20（阅读盲审 7/13=54%、疑似答案键整段错位）照样落了库，
  * 只有 __tests__/real-bank-reading-data.test.js 的「已入库的题不带 blocking 级缺陷」
  * 在事后发现。闸门补在这里：标了 blocking 就整科不收。
+ *
+ * 2026-09-08：阅读科两条判据（ctw_answer_truncated / section_gap）经人工核对判定过严，
+ * 改由 hold_policy.holdDecision 做**逐 code** 判定（降级/条件放行），其余 code 与其余三科
+ * 行为完全不变 —— isHeld 就是 holdDecision 的布尔投影，供写作/听力/口语沿用。
  */
+function holdFor(setName, section, ctx) {
+  return holdDecision(SOURCE_FLAGS[setName] || [], section, ctx);
+}
 function isHeld(setName, section) {
-  return (SOURCE_FLAGS[setName] || []).some(
-    (f) => f.severity === "blocking" && (f.sections || []).some((x) => x === "*" || x === section));
+  return holdFor(setName, section).held;
 }
 
 /**
@@ -424,6 +436,17 @@ function writingSourceHashes(setname) {
   }
 }
 
+/**
+ * 写作侧「字段不全整条丢弃」的记账：只记原因分布，不改判据。
+ * 296 条被丢掉时光看总数说明不了问题 —— 是解析器漏抽了 chunks，还是源料本来就只有答案句，
+ * 得靠这份 top 原因分布判断值不值得回头改解析器。
+ */
+function thin(stats, type, missing) {
+  stats.wSkippedThin += 1;
+  const k = `${type}:${missing.join("+")}`;
+  stats.wThinReasons[k] = (stats.wThinReasons[k] || 0) + 1;
+}
+
 function buildWriting(files, stats) {
   const out = { bs: [], email: [], discussion: [] };
   const seenHash = new Map();
@@ -454,24 +477,33 @@ function buildWriting(files, stats) {
         if (!it || typeof it !== "object") continue;
         if (r.type === "build") {
           // 旧源的 build result 只有 {n, sentence}（答案句，没有模板/词库）—— 拼不出可练的题，跳过。
-          if (!it.blanks || !Array.isArray(it.chunks) || !it.chunks.length || !it.answer || !it.prompt) {
-            stats.wSkippedThin += 1;
-            continue;
-          }
+          const miss = [];
+          if (!it.prompt) miss.push("prompt");
+          if (!it.blanks) miss.push("blanks");
+          if (!Array.isArray(it.chunks) || !it.chunks.length) miss.push("chunks");
+          if (!it.answer) miss.push("answer");
+          if (miss.length) { thin(stats, "build", miss); continue; }
           out.bs.push({
             id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
             answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
             source_label: `${setDate(setname)} 真题造句`, ...meta,
           });
         } else if (r.type === "email") {
-          if (!it.scenario || !Array.isArray(it.goals) || it.goals.length < 3) { stats.wSkippedThin += 1; continue; }
+          const missE = [];
+          if (!it.scenario) missE.push("scenario");
+          if (!Array.isArray(it.goals)) missE.push("goals");
+          else if (it.goals.length < 3) missE.push(`goals<3(${it.goals.length})`);
+          if (missE.length) { thin(stats, "email", missE); continue; }
           out.email.push({
             id: it.id, to: it.to || "Professor", subject: it.subject || "",
             scenario: it.scenario, direction: it.direction || "", goals: it.goals.slice(0, 3), ...meta,
           });
         } else if (r.type === "discussion") {
           const students = Array.isArray(it.students) ? it.students.filter((s) => s && s.name && s.text) : [];
-          if (!it.professor?.text || students.length < 2) { stats.wSkippedThin += 1; continue; }
+          const missD = [];
+          if (!it.professor?.text) missD.push("professor.text");
+          if (students.length < 2) missD.push(`students<2(${students.length})`);
+          if (missD.length) { thin(stats, "discussion", missD); continue; }
           out.discussion.push({
             id: it.id, course: it.course || "", professor: it.professor,
             students: students.slice(0, 2), ...meta,
@@ -756,13 +788,21 @@ function spokenText(kind, it) {
   return "";
 }
 
-function carryAudioUrls(dir, bundle) {
+/** 把某目录下上一版的题库读进内存（{题型: items[]}），落盘前先拍这一张快照。 */
+function readBundle(dir, kinds) {
+  const out = {};
+  for (const k of kinds) {
+    try { out[k] = JSON.parse(fs.readFileSync(path.join(dir, `${k}.json`), "utf8")).items || []; }
+    catch { out[k] = []; }
+  }
+  return out;
+}
+
+function carryAudioUrls(prevBundle, bundle) {
   let n = 0;
   for (const [kind, list] of Object.entries(bundle)) {
-    const p = path.join(dir, `${kind}.json`);
-    if (!fs.existsSync(p)) continue;
-    let prev;
-    try { prev = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const prev = { items: (prevBundle || {})[kind] };
+    if (!Array.isArray(prev.items)) continue;
     const old = new Map();
     for (const it of prev.items || []) {
       if (kind === "repeat" || kind === "interview") {
@@ -794,6 +834,45 @@ function carryAudioUrls(dir, bundle) {
   return n;
 }
 
+/**
+ * applyReview 落盘之后再跑一遍音频沿用：直接读硬盘上**已打过 patch** 的成品，
+ * 与落盘前拍的上一版快照比口播文本，逐字相同就把 audio_url 接回并去掉 audio_pending。
+ * 只写回真的改动了的文件。
+ */
+function recarryOnDisk(dir, prevBundle) {
+  let n = 0;
+  for (const kind of Object.keys(prevBundle || {})) {
+    const p = path.join(dir, `${kind}.json`);
+    if (!fs.existsSync(p)) continue;
+    let cur;
+    try { cur = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const got = carryAudioUrls({ [kind]: prevBundle[kind] }, { [kind]: cur.items || [] });
+    if (!got) continue;
+    n += got;
+    fs.writeFileSync(p, JSON.stringify(cur, null, 2), "utf8");
+  }
+  return n;
+}
+
+/**
+ * applyReview 落盘之后再跑一遍材料原图沿用（与 recarryOnDisk 同一套理由：复核清单的 patch
+ * 可能改了材料正文，第一遍沿用比对用的是没打 patch 的新文本，需要再比一次已打 patch 的成品）。
+ */
+function recarryMaterialImagesOnDisk(dir, prevBundle) {
+  let n = 0;
+  for (const kind of Object.keys(prevBundle || {})) {
+    const p = path.join(dir, `${kind}.json`);
+    if (!fs.existsSync(p)) continue;
+    let cur;
+    try { cur = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const got = carryMaterialImages({ [kind]: prevBundle[kind] }, { [kind]: cur.items || [] });
+    if (!got) continue;
+    n += got;
+    fs.writeFileSync(p, JSON.stringify(cur, null, 2), "utf8");
+  }
+  return n;
+}
+
 /* ── 主流程 ─────────────────────────────────────────────────────────────── */
 function main() {
   const dry = process.argv.includes("--dry");
@@ -804,6 +883,8 @@ function main() {
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0,
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
+    droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
+    wThinReasons: {},
     lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
     lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0,
     lInvalidReasons: {}, lInvalidDetail: [],
@@ -837,11 +918,19 @@ function main() {
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
-    if (isHeld(setname, "reading")) {
-      console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（整科扣下待人工核对）`);
+    // 扣留判定：ctw_answer_truncated 降级为只丢 CTW、section_gap 按盲审一致率条件放行，
+    // 其余 blocking code 仍整科扣下（判据与理由见 hold_policy.js）。
+    const readAgree = sectionAgreement(au.audited, "reading");
+    const hold = holdFor(setname, "reading", { agreement: readAgree });
+    if (hold.held) {
+      console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（${hold.heldBy.join("/")}，整科扣下待人工核对）`);
       stats.droppedHeld += 1;
       continue;
     }
+    for (const n of hold.notes) console.warn(`放行 ${setname} 阅读：${n}`);
+    if (hold.notes.some((n) => n.startsWith("section_gap"))) stats.releasedSectionGap += 1;
+    if (hold.notes.some((n) => n.startsWith("ingest_blocker"))) stats.releasedIngestBlocker += 1;
+    if (hold.dropCtw) stats.releasedCtwTruncated += 1;
     stats.sets += 1;
 
     const meta0 = {
@@ -863,6 +952,8 @@ function main() {
     for (const r of recs) {
       if (r.type !== "ctw") continue;
       stats.itemsSeen += 1;
+      // 该卷答案 PDF 把填词答案词首砍掉 → CTW fail-closed 拒收（AP/RDL 不受影响）。
+      if (hold.dropCtw) { stats.droppedCtwTruncated += 1; continue; }
       const built = buildCtw(r.item, { ...meta0, module: r.module, qStart: r.q });
       if (built) { out.ctw.push(built); stats.built += 1; } else stats.buildFailed += 1;
     }
@@ -891,6 +982,9 @@ function main() {
   console.log(`卷 ${stats.sets} 套；结构化产物里的阅读条目 ${stats.itemsSeen}`);
   console.log(`  盲审通过收下 ${stats.keptByAudit}；盲审不一致丢弃 ${stats.droppedDisagree}；没被盲审覆盖丢弃 ${stats.droppedNoAudit}`);
   console.log(`  跨卷重复跳过 ${stats.droppedDupSet} 套；源料体检 blocking 扣下 ${stats.droppedHeld} 套`);
+  console.log(`  闸门放宽：ctw_answer_truncated 降级 ${stats.releasedCtwTruncated} 套（丢弃 CTW ${stats.droppedCtwTruncated} 段，AP/RDL 照收）；`
+    + `section_gap 按盲审一致率条件放行 ${stats.releasedSectionGap} 套；`
+    + `ingest_blocker(题号重启块) 按盲审一致率条件放行 ${stats.releasedIngestBlocker} 套`);
   console.log(`  选项残缺丢弃 ${stats.droppedBadOptions} 题（OCR 串栏，非 A-D 四选项 / answer_index 越界）；无 ■ 标记的插入题丢弃 ${stats.droppedInsert} 题`);
   console.log(`  材料模糊归并：并掉 ${stats.mergedGroups} 组（同一篇的 OCR 变体，Jaccard≥${MATERIAL_JACCARD_MIN} 或前 ${MATERIAL_PREFIX_CHARS} 字相同）；组内重复题干丢弃 ${stats.droppedDupStem} 题`);
   console.log(`  成品：AP ${out.ap.length} 组 / RDL ${out.rdl.length} 组 / CTW ${out.ctw.length} 段`);
@@ -901,6 +995,8 @@ function main() {
   console.log("\n■ 真题写作落库（不走盲审：三种题型都没有唯一选项答案，闸门是解析器的结构校验）");
   console.log(`  造句 ${writing.bs.length} 题 / 邮件 ${writing.email.length} 题 / 学术讨论 ${writing.discussion.length} 题`);
   console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条`);
+  const thinTop = Object.entries(stats.wThinReasons).sort((a, b) => b[1] - a[1]);
+  if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
 
   const L = ls.listening, S = ls.speaking;
   console.log("\n■ 真题听力落库（材料 = 商家音频的 Whisper 逐字稿 + 文档转写合流后的 transcript_final）");
@@ -919,6 +1015,13 @@ function main() {
   }
 
   if (dry) { console.log("\n（--dry，未写文件）"); return; }
+
+  // 材料原图沿用：落盘前先拍上一版 ap/rdl 快照（out 是全量重建的新对象，不带 material_image），
+  // 同 id 且材料正文逐字未变就把 material_image 接回，避免每次重建都要重跑 upload 脚本补图。
+  const prevReading = readBundle(BANK_DIR, ["ap", "rdl"]);
+  const carriedImages = carryMaterialImages(prevReading, { ap: out.ap, rdl: out.rdl });
+  console.log(`\n■ 材料原图沿用：${carriedImages} 条`);
+
   fs.mkdirSync(BANK_DIR, { recursive: true });
   for (const [k, v] of Object.entries(out)) {
     const p = path.join(BANK_DIR, `${k}.json`);
@@ -944,7 +1047,10 @@ function main() {
 
   // 听力 / 口语：同一套写法（每个题型一个文件 + 一份计数），音频先留空。
   // 落库前先把**口播文本没变**的条目的 audio_url 从上一版接过来（见 carryAudioUrls）。
-  const carried = carryAudioUrls(LISTENING_DIR, L) + carryAudioUrls(SPEAKING_DIR, S);
+  // 上一版的库先拍快照：落盘会覆盖它们，而 applyReview 之后还要再比一次（见下）。
+  const prevL = readBundle(LISTENING_DIR, Object.keys(L));
+  const prevS = readBundle(SPEAKING_DIR, Object.keys(S));
+  const carried = carryAudioUrls(prevL, L) + carryAudioUrls(prevS, S);
   console.log(`
 ■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）；`
     + `其余 audio_pending 的交给 render_real_audio.mjs`);
@@ -965,6 +1071,16 @@ function main() {
   // 最后一道闸：成品复核清单（data/realBank/review-holds.json）。源料在 .codex-tmp 里没改，
   // 重跑会把复核判定下架的条目原样再产出来，所以每次落库末尾都要把清单重新应用一遍。
   const r = applyReview({ root: process.cwd() });
+  // 第二遍音频沿用（必须在 applyReview 之后）：复核清单的 patch 会改**口播文本**
+  // （real_lat_rf0610_2_12 的 trim_head 削掉旁白指令、real_lc_rf0620_2_06 整段重写会话…），
+  // 而第一遍比对用的是没打 patch 的新文本 —— 与上一版（打过 patch、并按 patch 后文本配过音的）
+  // 一比就不相等，于是每次重建都白白把这些条目已经花钱配好的 audio_url 丢成 audio_pending
+  // （实测 2026-09-08 一次重建丢了 14 条）。patch 是确定性的，打完之后文本与上一版逐字相同，
+  // 所以这里再比一次、把 URL 接回来。
+  const recarried = recarryOnDisk(LISTENING_DIR, prevL) + recarryOnDisk(SPEAKING_DIR, prevS);
+  if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
+  const recarriedImages = recarryMaterialImagesOnDisk(BANK_DIR, prevReading);
+  if (recarriedImages) console.log(`■ 复核 patch 后二次沿用：${recarriedImages} 条 material_image 接回（patch 后材料文本与上一版逐字相同）`);
   if (r) {
     console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`);
     for (const l of r.log) console.log(l);
