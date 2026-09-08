@@ -8,8 +8,8 @@
  *
  * 默认 dry-run（只列名单不发信）。用法：
  *   node scripts/ops/send-real-bank-announcement.mjs                    # dry-run：统计 + 前 20 个收件人
- *   node scripts/ops/send-real-bank-announcement.mjs --to me@x.com      # 只发一封测试信到指定邮箱（不记台账）
- *   node scripts/ops/send-real-bank-announcement.mjs --to me@x.com --as-free   # 以免费用户视角预览
+ *   node scripts/ops/send-real-bank-announcement.mjs --to me@x.com      # 只发一封测试信到指定邮箱（不记台账；按邮箱查真实用户码/Pro 状态）
+ *   node scripts/ops/send-real-bank-announcement.mjs --to me@x.com --as-free   # 强制免费用户视角（--as-pro 反之）
  *   node scripts/ops/send-real-bank-announcement.mjs --yes              # 真发，默认每次最多 80 封、间隔 45s
  *   node scripts/ops/send-real-bank-announcement.mjs --yes --max 50 --delay-ms 30000
  *   node scripts/ops/send-real-bank-announcement.mjs --yes --tier pro   # 只发给当前 Pro 用户（free|pro|all）
@@ -81,11 +81,36 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function fetchRecipients(tierFilter) {
+function makeSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-  const key = getRequiredEnv("SUPABASE_SERVICE_ROLE_KEY");
-  if (!url) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL");
-  const sb = createClient(url, key, { auth: { persistSession: false } });
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+async function lookupUserByEmail(email) {
+  const sb = makeSupabase();
+  if (!sb) {
+    console.log("[test] 未配置 Supabase env，跳过用户码查询");
+    return null;
+  }
+  const { data, error } = await sb
+    .from("users")
+    .select("code,tier,tier_expires_at")
+    .ilike("email", email.trim())
+    .order("created_at", { ascending: true })
+    .limit(1);
+  if (error) {
+    console.log(`[test] 查用户失败：${error.message}`);
+    return null;
+  }
+  const row = data?.[0];
+  return row ? { code: row.code, isPro: isProNow(row) } : null;
+}
+
+async function fetchRecipients(tierFilter) {
+  const sb = makeSupabase();
+  if (!sb) throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY");
 
   const rows = [];
   const PAGE = 1000;
@@ -128,9 +153,12 @@ async function main() {
 
   const testTo = args.get("--to");
   if (testTo) {
-    const payload = buildRealBankLaunchEmail({ userCode: "ABC123", isPro: !args.has("--as-free") });
+    // 按邮箱查真实用户码 / Pro 状态，收到的测试信和正式信一模一样；查不到就用不带用户码的通用问候
+    const found = await lookupUserByEmail(String(testTo));
+    const isPro = args.has("--as-free") ? false : args.has("--as-pro") ? true : (found ? found.isPro : true);
+    const payload = buildRealBankLaunchEmail({ userCode: found?.code || "", isPro });
     const id = await sendOne(makeTransporter(), String(testTo), payload);
-    console.log(`[test] sent to ${testTo} (${args.has("--as-free") ? "free" : "pro"} view) messageId=${id}`);
+    console.log(`[test] sent to ${testTo} code=${found?.code || "(未找到该邮箱用户，用通用问候)"} view=${isPro ? "pro" : "free"} messageId=${id}`);
     return;
   }
 

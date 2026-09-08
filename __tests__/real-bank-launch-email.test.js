@@ -44,6 +44,13 @@ describe("buildRealBankLaunchEmail", () => {
     expect(html).toContain("升级 Pro，解锁真题专区");
   });
 
+  test("no user code → generic greeting, no placeholder", () => {
+    const { text, html } = buildRealBankLaunchEmail({ userCode: "", isPro: true });
+    expect(text.startsWith("您好：")).toBe(true);
+    expect(html).not.toContain("ABC123");
+    expect(html).not.toContain("公开");
+  });
+
   test("html escapes user code", () => {
     const { html } = buildRealBankLaunchEmail({ userCode: "<scr>", isPro: true });
     expect(html).not.toContain("<scr>");
