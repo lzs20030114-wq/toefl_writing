@@ -24,6 +24,8 @@ import { relativeDateLabel } from "../../lib/history/dateGroup";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { HistoryRow } from "../history/HistoryRow";
+import { WritingFeedbackPanel } from "../writing/WritingFeedbackPanel";
+import { buildRetryHref, startRetryFromHistory } from "../../lib/history/retry";
 import { CTWDetail, RDLDetail } from "../reading/ReadingProgressView";
 import { LCRDetail, LADetail, LCDetail } from "../listening/ListeningProgressView";
 import { RepeatDetail, InterviewDetail } from "../speaking/SpeakingProgressView";
@@ -296,10 +298,33 @@ function EntryRow({ entry, index, onOpen, onDelete }) {
 
 /* ── 完整回顾（右栏） ──────────────────────────────────────────────── */
 
-function RealSessionBody({ entry }) {
+function RealSessionBody({ entry, onClose }) {
   const s = entry.session;
   const sub = entry.subtype;
-  if (sub === "bs" || sub === "email" || sub === "discussion") {
+  // 写作（讨论 / 邮件）：与主练习记录页（ProgressView）和模考报告同一套 WritingFeedbackPanel ——
+  // 左栏原文逐句批注、右栏「宏观评价与建议 / 逐句批注大纲 / 范文对比分析」三标签。
+  // 评分失败（feedback 为空）的记录退回 HistoryRow，它会把作答文本和「没有评分反馈」说清楚。
+  if (sub === "email" || sub === "discussion") {
+    const fb = s.details?.feedback || null;
+    if (!fb) return <HistoryRow entry={{ session: s, sourceIndex: entry.sourceIndex }} isExpanded detailOnly />;
+    const retry = buildRetryHref(s);
+    return (
+      <div data-testid="real-writing-report" style={{ borderLeft: `3px solid ${REAL_SUBTYPE_META[sub].color}`, borderRadius: 12, overflow: "hidden" }}>
+        <WritingFeedbackPanel
+          key={entry.sourceIndex}
+          fb={fb}
+          type={sub}
+          pd={s.details?.promptData || null}
+          userText={s.details?.userText || ""}
+          containerHeight="720px"
+          onRetry={retry ? () => startRetryFromHistory(s) : null}
+          onNext={null}
+          onExit={onClose}
+        />
+      </div>
+    );
+  }
+  if (sub === "bs") {
     return <HistoryRow entry={{ session: s, sourceIndex: entry.sourceIndex }} isExpanded detailOnly />;
   }
   if (sub === "ctw") return <CTWDetail session={s} />;
@@ -314,6 +339,7 @@ function RealSessionBody({ entry }) {
 
 function RealSessionDetail({ entry, index, onClose, onDelete }) {
   const s = entry.session;
+  const sub = entry.subtype;
   const { meta, tier, tierLabel, examDate, subtitle } = describeEntry(entry, index);
   const score = realSessionScore(s);
   const sc = realScoreColor(score.pct, P.textSec);
@@ -359,8 +385,10 @@ function RealSessionDetail({ entry, index, onClose, onDelete }) {
         </div>
       </SurfaceCard>
       <SurfaceCard style={{ padding: "18px 22px", boxShadow: "none" }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 12, letterSpacing: "0.02em" }}>逐题回顾</div>
-        <RealSessionBody entry={entry} />
+        <div style={{ fontSize: 12, fontWeight: 700, color: P.textSec, marginBottom: 12, letterSpacing: "0.02em" }}>
+          {sub === "email" || sub === "discussion" ? "批改报告" : "逐题回顾"}
+        </div>
+        <RealSessionBody entry={entry} onClose={onClose} />
       </SurfaceCard>
     </div>
   );
