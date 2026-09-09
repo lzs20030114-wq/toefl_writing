@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-09 — v1.18.2
+
+- **真题装回整卷**（`b580b18`/`7c10ee8`）：从 79 套机经的题号页眉反推 2026 改后整卷结构（阅读 M1 35 = CTW 1-20 / RDL 21-30 或 21-25 / AP 31-35 或 26-35，M2 15 = CTW 1-10 / AP 11-15；听力 M1 32 = LCR 1-12 / LC 13-18 / LA 19-24 / LAT 25-32，M2 15 = LCR 1-3 / LC 4-7 / LAT 8-15；口语 7 + 4；写作 10 + 1 + 1），写成 `lib/realExam/blueprint.mjs`。`scripts/realbank/assemble_sets.mjs` 按 id 里的「卷/module/题号」把按题型拆散的真题逐槽回填算原卷完整度，再以强卷为骨架从拼盘卷/弱卷借同规格题拼卷（借题带出处、每槽至少差 1 题才算齐、只借不造），产物 `data/realBank/sets.json` + 报告 `REALBANK-SETS-2026-09-09.md`：阅读 29 / 听力 9 / 口语 19 / 写作 7 套拼齐，整卷 2 同源 + 5 跨源。顺带按体裁把 8 道入库时按字数误标成 ap 的日常阅读改回 rdl（装卷时修正，库文件未改）。文档 `docs/realbank-set-blueprint.md`。
+- **拼盘面试按话题人工切分**（`14bc6b3`）：8 条 11~19 问的拼盘面试大集是几场面试首尾相接（机械按 4 切会缝合两场），逐题阅读写出 `data/realBank/speaking/interview-splits.json`（23 套 × 4 问，24 问尾巴记 leftover 不入库、保留 id 字面量防 cleanup_audio 误删音频）；`lib/realExam/interviewSplits.mjs` 按表拆（问题 id / 音频不变、position 重编、幂等），`build_bank.mjs` 在 applyReview 之后自动应用（切分表按下架后的库选题）。interview 17 → **32** 套，真题总量 1202 → **1217**；`REAL_BANK_LAUNCH_COUNTS` 同步。
+- **模考 planner 对齐真卷**：新增 `lib/mockExam/modulePlans.js` 作为构成/题数/计时唯一真源（不 import 题库 JSON，首页卡可直接用）。阅读 M1 = CTW×2 + RDL 2 short + 2 long（`pickRdlQuestionSet`，默认 10 题，回退仍搜全池保证凑满）+ AP×1，M2 = CTW×1 + AP×1（原来 20/30 且 M2 带 RDL）；听力 M1 = 12 LCR + 3 LC + 3 LA + 2 LAT，M2 = 3 LCR + 2 LC + 2 LAT，两路只差难度档（`buildFromPlan` 让两路构成在代码上不可能不同）。IntroCard 与首页三处模考卡的题量/时长改为派生。计时：阅读按原每题节奏（M1 36 s / M2 20 s）缩放为 21 + 5 min；听力 29 min 总预算不变，按两模块的音频 + 答题窗口需求切成 18.6 + 10.4 min。`mock-exam-difficulty-routing.test.js` 45 例（+ 构成/顺序/计时/回退断言）。**待拍板**：阅读总时长是否改按真考约 42 s/题；`adaptiveScoring` 的 M1 40% / M2 60% 权重与新题量方向相反。
+
 ## 2026-09-08 — v1.18.1
 
 - **真题专区听力口语补录第一来源 14 套锚点卷**（自带「听力原文」逐字稿 + 按 Module 切好音频的 1.21A/B/C、1.27A/B、1.28A/B、2.1A/B/C、2.2、2.10、2.28、3.14）：听力 215 → **419** 段（LCR 118→248 / LC 31→47 / LA 20→50 / LAT 46→74，完整卷 10→22 套），复述 21 套 270 句 → **30 套 333 句**，面试不变（无文档来源整批扣下）；真题总量 989 → **1202**。
