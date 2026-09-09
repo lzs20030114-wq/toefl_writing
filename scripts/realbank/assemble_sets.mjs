@@ -108,7 +108,7 @@ export function indexItems(banks) {
       else q = normalizeQ(parsed.q, { module: mod });
       if (mod !== 1 && mod !== 2) { records.push({ ...base, module: mod, q, why: `module ${mod} 不在卷面上` }); continue; }
       if (q == null) { records.push({ ...base, module: mod, why: "题号无卷面意义" }); continue; }
-      const ptype = positionType(type, { module: mod, q, nq });
+      const ptype = positionType(type, { module: mod, q, nq, genre: item.topic || item.genre });
       records.push({ ...base, ptype, module: mod, q, anchorable: true });
     }
   }
@@ -210,10 +210,17 @@ function donorFrom(r, via) {
   return { id: r.id, type: r.ptype, nq: r.nq, q: r.q, set: r.set, date: r.date, via, split: null, used: false };
 }
 
-/** 拼盘里 28 句的复述 / 19 问的面试 → 按考试规格切成 7 句 / 4 问一份。 */
-function splitPooled(donor, item, unit) {
-  const list = donor.type === "repeat" ? (item.sentences || []) : (item.questions || []);
-  if (list.length <= unit) return [donor];
+/**
+ * 拼盘里 28 句的复述 → 按 7 句一份切开。只在总数恰为整数倍时切（28/21/14），
+ * 16 / 31 这种切出来对不齐真实套次边界，整条作废等人工切分。
+ * 面试**不自动切**：实测拼盘面试是几场不同话题的面试首尾相接（Q5 开头 "I'd like to discuss
+ * your views on renewable energy"），且 19 / 15 / 11 问的都有，机械按 4 切会把两场面试缝在一起；
+ * 只有恰 4 问的拼盘面试可直接用。
+ */
+export function splitPooled(donor, item, unit) {
+  const list = donor.type === "repeat" ? (item?.sentences || []) : (item?.questions || []);
+  if (list.length === unit) return [donor];
+  if (donor.type === "interview" || list.length % unit !== 0) return [{ ...donor, used: true, unsplittable: true }];
   const out = [];
   for (let i = 0, k = 1; i < list.length; i += unit, k += 1) {
     const chunk = list.slice(i, i + unit);
@@ -439,7 +446,11 @@ export function buildManifest(bankDir, opts = {}) {
     if (s.sections.listening?.modules[2]?.got) formsObserved.listening_m2[s.sections.listening.modules[2].form] += 1;
   }
   const residue = {};
-  for (const sec of SECTIONS) for (const d of donorsBySection[sec]) if (!d.used && !d.split) residue[d.type] = (residue[d.type] || 0) + 1;
+  const poolUnsplit = [];
+  for (const sec of SECTIONS) for (const d of donorsBySection[sec]) {
+    if (d.unsplittable) { poolUnsplit.push({ id: d.id, type: d.type, n: d.nq }); continue; }
+    if (!d.used && !d.split) residue[d.type] = (residue[d.type] || 0) + 1;
+  }
   // 切分出来的拼盘子集只按母题计一次
   for (const sec of SECTIONS) {
     const seen = new Set();
@@ -486,7 +497,7 @@ export function buildManifest(bankDir, opts = {}) {
     params: { skeleton_min: o.skeletonMin, full_min: o.fullMin, near: "差 1 题且槽位 ≥4 题" },
     inventory, pool_items: poolCounts, forms_observed: formsObserved, summary,
     sets, composites: compositesBySection, exams: bundle.exams, exam_leftover: bundle.leftover,
-    residue, unanchored,
+    residue, pool_unsplit: poolUnsplit, unanchored,
   };
 }
 
@@ -544,6 +555,11 @@ export function renderReport(man) {
   L.push("## 六、残余与未锚定", "");
   L.push(`借完之后还剩的素材：${Object.entries(man.residue).map(([t, n]) => `${t} ${n}`).join(" · ") || "无"}`, "");
   L.push(`拼盘卷（rp*，无卷面题号，只作素材）：${Object.entries(man.pool_items).map(([t, n]) => `${t} ${n}`).join(" · ") || "无"}`, "");
+  if (man.pool_unsplit.length) {
+    L.push(`拼盘大集**未自动切分**（面试一律不切；复述只切 7 的整数倍）——这些要人工/LLM 按话题切成 4 问 / 7 句一套后重新入库才能用：`, "");
+    for (const u of man.pool_unsplit) L.push(`- ${u.id}：${u.type} ${u.n} ${u.type === "interview" ? "问" : "句"}`);
+    L.push("");
+  }
   if (man.unanchored.length) {
     L.push(`认不出卷面位置的题 ${man.unanchored.length} 条：`, "");
     for (const u of man.unanchored.slice(0, 40)) L.push(`- ${u.id}（${u.set}）：${u.why}`);

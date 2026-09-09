@@ -69,8 +69,8 @@
   },
   "forms_observed": {
     "reading_m1": {
-      "A": 47,
-      "B": 16
+      "A": 50,
+      "B": 13
     },
     "listening_m2": {
       "A": 20,
@@ -86,7 +86,7 @@
         "native_half": 30,
         "native_scraps": 33,
         "skeletons": 29,
-        "composites_complete": 27,
+        "composites_complete": 29,
         "composites_pure": 2,
         "dissolved": 36
       },
@@ -106,7 +106,7 @@
         "native_half": 14,
         "native_scraps": 0,
         "skeletons": 19,
-        "composites_complete": 19,
+        "composites_complete": 9,
         "composites_pure": 5,
         "dissolved": 0
       },
@@ -121,8 +121,8 @@
         "dissolved": 12
       }
     },
-    "exams_native": 2,
-    "exams_mixed": 5
+    "exams_native": 1,
+    "exams_mixed": 6
   },
   "sets": [
     {
@@ -6479,13 +6479,13 @@
       "date": "2026-03-11",
       "sections": {
         "reading": {
-          "completeness": 0.44,
-          "got": 22,
+          "completeness": 0.46,
+          "got": 23,
           "need": 50,
           "modules": {
             "1": {
-              "form": "B",
-              "got": 12,
+              "form": "A",
+              "got": 13,
               "need": 35,
               "slots": [
                 {
@@ -6517,11 +6517,11 @@
                   "type": "rdl",
                   "band": [
                     21,
-                    25
+                    30
                   ],
-                  "need": 5,
-                  "got": 6,
-                  "status": "full",
+                  "need": 10,
+                  "got": 9,
+                  "status": "near",
                   "items": [
                     {
                       "id": "real_rdl_311_1_21",
@@ -6537,20 +6537,7 @@
                       "id": "real_ap_311_1_25",
                       "nq": 3,
                       "q": 25
-                    }
-                  ]
-                },
-                {
-                  "key": "ap_26",
-                  "type": "ap",
-                  "band": [
-                    26,
-                    30
-                  ],
-                  "need": 5,
-                  "got": 3,
-                  "status": "partial",
-                  "items": [
+                    },
                     {
                       "id": "real_ap_311_1_28",
                       "nq": 3,
@@ -8304,7 +8291,7 @@
           "need": 50,
           "modules": {
             "1": {
-              "form": "B",
+              "form": "A",
               "got": 2,
               "need": 35,
               "slots": [
@@ -8337,21 +8324,9 @@
                   "type": "rdl",
                   "band": [
                     21,
-                    25
-                  ],
-                  "need": 5,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
-                },
-                {
-                  "key": "ap_26",
-                  "type": "ap",
-                  "band": [
-                    26,
                     30
                   ],
-                  "need": 5,
+                  "need": 10,
                   "got": 2,
                   "status": "partial",
                   "items": [
@@ -10984,7 +10959,7 @@
           "need": 50,
           "modules": {
             "1": {
-              "form": "B",
+              "form": "A",
               "got": 5,
               "need": 35,
               "slots": [
@@ -11017,30 +10992,17 @@
                   "type": "rdl",
                   "band": [
                     21,
-                    25
+                    30
                   ],
-                  "need": 5,
-                  "got": 2,
+                  "need": 10,
+                  "got": 5,
                   "status": "partial",
                   "items": [
                     {
                       "id": "real_rdl_424_1_23",
                       "nq": 2,
                       "q": 23
-                    }
-                  ]
-                },
-                {
-                  "key": "ap_26",
-                  "type": "ap",
-                  "band": [
-                    26,
-                    30
-                  ],
-                  "need": 5,
-                  "got": 3,
-                  "status": "partial",
-                  "items": [
+                    },
                     {
                       "id": "real_ap_424_1_28",
                       "nq": 3,
@@ -22495,10 +22457,10 @@
         ]
       },
       {
-        "id": "reading:318",
+        "id": "reading:311",
         "section": "reading",
-        "base_set": "3.18新托福真题",
-        "date": "2026-03-18",
+        "base_set": "3.11新托福真题",
+        "date": "2026-03-11",
         "forms": {
           "1": "A",
           "2": "A"
@@ -22506,7 +22468,7 @@
         "completeness_before": 0.46,
         "completeness": 0.96,
         "complete": true,
-        "purity": 0.417,
+        "purity": 0.479,
         "borrowed": [
           {
             "slot": "ctw_1",
@@ -22526,14 +22488,6 @@
           },
           {
             "slot": "rdl_21",
-            "id": "real_ap_325_1_23",
-            "nq": 3,
-            "q": null,
-            "from": "3.25新托福真题",
-            "via": "dissolved"
-          },
-          {
-            "slot": "rdl_21",
             "id": "real_rdl_225_1_23",
             "nq": 1,
             "q": null,
@@ -22542,10 +22496,10 @@
           },
           {
             "slot": "ap_11",
-            "id": "real_ap_320_1_31",
+            "id": "real_ap_315_2_11",
             "nq": 4,
             "q": 11,
-            "from": "3.20新托福真题",
+            "from": "3.15新托福真题",
             "via": "dissolved"
           }
         ],
@@ -22610,6 +22564,241 @@
                 ],
                 "items": [
                   {
+                    "id": "real_rdl_311_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_311_1_23",
+                    "nq": 1,
+                    "q": 23,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_ap_311_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_ap_311_1_28",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_225_1_23",
+                    "nq": 1,
+                    "q": null,
+                    "from": "2.25新托福真题",
+                    "via": "dissolved"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_311_1_31",
+                    "nq": 4,
+                    "q": 31,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 35,
+            "got": 34
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_311_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_315_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "3.15新托福真题",
+                    "via": "dissolved"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M1/ap_31:4/5",
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
+        "id": "reading:318",
+        "section": "reading",
+        "base_set": "3.18新托福真题",
+        "date": "2026-03-18",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.46,
+        "completeness": 0.96,
+        "complete": true,
+        "purity": 0.417,
+        "borrowed": [
+          {
+            "slot": "ctw_1",
+            "id": "real_ctw_rp0819_2_1",
+            "nq": 10,
+            "q": 1,
+            "from": "rp0819",
+            "via": "pool"
+          },
+          {
+            "slot": "ctw_11",
+            "id": "real_ctw_rp0819_3_1",
+            "nq": 10,
+            "q": 11,
+            "from": "rp0819",
+            "via": "pool"
+          },
+          {
+            "slot": "rdl_21",
+            "id": "real_ap_325_1_23",
+            "nq": 3,
+            "q": null,
+            "from": "3.25新托福真题",
+            "via": "dissolved"
+          },
+          {
+            "slot": "rdl_21",
+            "id": "real_rdl_427_1_21",
+            "nq": 1,
+            "q": null,
+            "from": "4.27新托福真题",
+            "via": "dissolved"
+          },
+          {
+            "slot": "ap_11",
+            "id": "real_ap_320_1_31",
+            "nq": 4,
+            "q": 11,
+            "from": "3.20新托福真题",
+            "via": "dissolved"
+          }
+        ],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rp0819_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "rp0819",
+                    "via": "pool"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rp0819_3_1",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "rp0819",
+                    "via": "pool"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
                     "id": "real_rdl_318_1_22",
                     "nq": 1,
                     "q": 22,
@@ -22638,10 +22827,10 @@
                     "via": "dissolved"
                   },
                   {
-                    "id": "real_rdl_225_1_23",
+                    "id": "real_rdl_427_1_21",
                     "nq": 1,
                     "q": null,
-                    "from": "2.25新托福真题",
+                    "from": "4.27新托福真题",
                     "via": "dissolved"
                   }
                 ],
@@ -22785,7 +22974,7 @@
           },
           {
             "slot": "ctw_1",
-            "id": "real_ctw_rp0819_2_1",
+            "id": "real_ctw_rp0819_4_1",
             "nq": 10,
             "q": 1,
             "from": "rp0819",
@@ -22932,7 +23121,7 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ctw_rp0819_2_1",
+                    "id": "real_ctw_rp0819_4_1",
                     "nq": 10,
                     "q": 1,
                     "from": "rp0819",
@@ -22989,7 +23178,7 @@
         "borrowed": [
           {
             "slot": "ctw_11",
-            "id": "real_ctw_rp0819_3_1",
+            "id": "real_ctw_rp0819_6_1",
             "nq": 10,
             "q": 11,
             "from": "rp0819",
@@ -23005,10 +23194,10 @@
           },
           {
             "slot": "rdl_21",
-            "id": "real_rdl_427_1_21",
+            "id": "real_rdl_22_1_22",
             "nq": 1,
             "q": null,
-            "from": "4.27新托福真题",
+            "from": "2.2新托福真题",
             "via": "dissolved"
           },
           {
@@ -23021,7 +23210,7 @@
           },
           {
             "slot": "ctw_1",
-            "id": "real_ctw_rp0819_4_1",
+            "id": "real_ctw_rp0819_7_1",
             "nq": 10,
             "q": 1,
             "from": "rp0819",
@@ -23065,7 +23254,7 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ctw_rp0819_3_1",
+                    "id": "real_ctw_rp0819_6_1",
                     "nq": 10,
                     "q": 11,
                     "from": "rp0819",
@@ -23117,10 +23306,10 @@
                     "via": "dissolved"
                   },
                   {
-                    "id": "real_rdl_427_1_21",
+                    "id": "real_rdl_22_1_22",
                     "nq": 1,
                     "q": null,
-                    "from": "4.27新托福真题",
+                    "from": "2.2新托福真题",
                     "via": "dissolved"
                   }
                 ],
@@ -23167,7 +23356,7 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ctw_rp0819_4_1",
+                    "id": "real_ctw_rp0819_7_1",
                     "nq": 10,
                     "q": 1,
                     "from": "rp0819",
@@ -23204,241 +23393,6 @@
           }
         },
         "missing": [
-          "M1/ap_31:4/5",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:311",
-        "section": "reading",
-        "base_set": "3.11新托福真题",
-        "date": "2026-03-11",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.44,
-        "completeness": 0.94,
-        "complete": true,
-        "purity": 0.417,
-        "borrowed": [
-          {
-            "slot": "ctw_1",
-            "id": "real_ctw_rp0819_6_1",
-            "nq": 10,
-            "q": 1,
-            "from": "rp0819",
-            "via": "pool"
-          },
-          {
-            "slot": "ctw_11",
-            "id": "real_ctw_rp0819_7_1",
-            "nq": 10,
-            "q": 11,
-            "from": "rp0819",
-            "via": "pool"
-          },
-          {
-            "slot": "ap_26",
-            "id": "real_ap_315_2_11",
-            "nq": 4,
-            "q": 26,
-            "from": "3.15新托福真题",
-            "via": "dissolved"
-          },
-          {
-            "slot": "ap_11",
-            "id": "real_ap_38_2_11",
-            "nq": 4,
-            "q": 11,
-            "from": "3.8新托福真题",
-            "via": "dissolved"
-          }
-        ],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_rp0819_6_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "rp0819",
-                    "via": "pool"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_rp0819_7_1",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "rp0819",
-                    "via": "pool"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_311_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "3.11新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_311_1_23",
-                    "nq": 1,
-                    "q": 23,
-                    "from": "3.11新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_ap_311_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "3.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 6,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_315_2_11",
-                    "nq": 4,
-                    "q": 26,
-                    "from": "3.15新托福真题",
-                    "via": "dissolved"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_311_1_31",
-                    "nq": 4,
-                    "q": 31,
-                    "from": "3.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 35,
-            "got": 33
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_311_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "3.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_38_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "3.8新托福真题",
-                    "via": "dissolved"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 14
-          }
-        },
-        "missing": [
-          "M1/ap_26:4/5",
           "M1/ap_31:4/5",
           "M2/ap_11:4/5"
         ]
@@ -23718,18 +23672,18 @@
           },
           {
             "slot": "rdl_21",
-            "id": "real_rdl_22_1_22",
+            "id": "real_rdl_128a_1_23",
             "nq": 1,
             "q": null,
-            "from": "2.2新托福真题",
+            "from": "1.28新托福真题A卷",
             "via": "dissolved"
           },
           {
             "slot": "ap_31",
-            "id": "real_ap_32a_1_31",
+            "id": "real_ap_38_2_11",
             "nq": 4,
             "q": 31,
-            "from": "3.2新托福真题A卷",
+            "from": "3.8新托福真题",
             "via": "dissolved"
           }
         ],
@@ -23822,10 +23776,10 @@
                     "via": "dissolved"
                   },
                   {
-                    "id": "real_rdl_22_1_22",
+                    "id": "real_rdl_128a_1_23",
                     "nq": 1,
                     "q": null,
-                    "from": "2.2新托福真题",
+                    "from": "1.28新托福真题A卷",
                     "via": "dissolved"
                   }
                 ],
@@ -23843,10 +23797,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_32a_1_31",
+                    "id": "real_ap_38_2_11",
                     "nq": 4,
                     "q": 31,
-                    "from": "3.2新托福真题A卷",
+                    "from": "3.8新托福真题",
                     "via": "dissolved"
                   }
                 ],
@@ -23961,6 +23915,14 @@
           },
           {
             "slot": "rdl_21",
+            "id": "real_ap_323_1_28",
+            "nq": 2,
+            "q": null,
+            "from": "3.23新托福真题",
+            "via": "dissolved"
+          },
+          {
+            "slot": "rdl_21",
             "id": "real_rdl_325_1_21",
             "nq": 2,
             "q": null,
@@ -23968,24 +23930,16 @@
             "via": "dissolved"
           },
           {
-            "slot": "rdl_21",
-            "id": "real_rdl_327_1_21",
-            "nq": 2,
-            "q": null,
-            "from": "3.27新托福真题",
+            "slot": "ap_31",
+            "id": "real_ap_32a_1_31",
+            "nq": 4,
+            "q": 31,
+            "from": "3.2新托福真题A卷",
             "via": "dissolved"
           },
           {
-            "slot": "ap_31",
-            "id": "real_ap_rp0704_2001_200131",
-            "nq": 4,
-            "q": 31,
-            "from": "rp0704",
-            "via": "pool"
-          },
-          {
             "slot": "ap_11",
-            "id": "real_ap_rp0704_2005_200511",
+            "id": "real_ap_rp0704_2001_200131",
             "nq": 4,
             "q": 11,
             "from": "rp0704",
@@ -24074,17 +24028,17 @@
                     "via": "dissolved"
                   },
                   {
+                    "id": "real_ap_323_1_28",
+                    "nq": 2,
+                    "q": null,
+                    "from": "3.23新托福真题",
+                    "via": "dissolved"
+                  },
+                  {
                     "id": "real_rdl_325_1_21",
                     "nq": 2,
                     "q": null,
                     "from": "3.25新托福真题",
-                    "via": "dissolved"
-                  },
-                  {
-                    "id": "real_rdl_327_1_21",
-                    "nq": 2,
-                    "q": null,
-                    "from": "3.27新托福真题",
                     "via": "dissolved"
                   }
                 ],
@@ -24102,11 +24056,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_rp0704_2001_200131",
+                    "id": "real_ap_32a_1_31",
                     "nq": 4,
                     "q": 31,
-                    "from": "rp0704",
-                    "via": "pool"
+                    "from": "3.2新托福真题A卷",
+                    "via": "dissolved"
                   }
                 ],
                 "got": 4,
@@ -24152,7 +24106,7 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_rp0704_2005_200511",
+                    "id": "real_ap_rp0704_2001_200131",
                     "nq": 4,
                     "q": 11,
                     "from": "rp0704",
@@ -24196,10 +24150,10 @@
           },
           {
             "slot": "rdl_21",
-            "id": "real_rdl_32a_1_21",
+            "id": "real_rdl_327_1_21",
             "nq": 2,
             "q": null,
-            "from": "3.2新托福真题A卷",
+            "from": "3.27新托福真题",
             "via": "dissolved"
           },
           {
@@ -24212,10 +24166,10 @@
           },
           {
             "slot": "ap_11",
-            "id": "real_ap_rp0705_2001_200121",
+            "id": "real_ap_rp0704_2005_200511",
             "nq": 4,
             "q": 11,
-            "from": "rp0705",
+            "from": "rp0704",
             "via": "pool"
           }
         ],
@@ -24294,10 +24248,10 @@
                     "via": "native"
                   },
                   {
-                    "id": "real_rdl_32a_1_21",
+                    "id": "real_rdl_327_1_21",
                     "nq": 2,
                     "q": null,
-                    "from": "3.2新托福真题A卷",
+                    "from": "3.27新托福真题",
                     "via": "dissolved"
                   }
                 ],
@@ -24386,10 +24340,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_rp0705_2001_200121",
+                    "id": "real_ap_rp0704_2005_200511",
                     "nq": 4,
                     "q": 11,
-                    "from": "rp0705",
+                    "from": "rp0704",
                     "via": "pool"
                   }
                 ],
@@ -24414,13 +24368,13 @@
         "base_set": "4.24新托福真题",
         "date": "2026-04-24",
         "forms": {
-          "1": "B",
+          "1": "A",
           "2": "A"
         },
         "completeness_before": 0.4,
-        "completeness": 0.96,
+        "completeness": 0.98,
         "complete": true,
-        "purity": 0.354,
+        "purity": 0.408,
         "borrowed": [
           {
             "slot": "ctw_1",
@@ -24440,6 +24394,14 @@
           },
           {
             "slot": "rdl_21",
+            "id": "real_rdl_32a_1_21",
+            "nq": 2,
+            "q": null,
+            "from": "3.2新托福真题A卷",
+            "via": "dissolved"
+          },
+          {
+            "slot": "rdl_21",
             "id": "real_rdl_228_1_21",
             "nq": 2,
             "q": null,
@@ -24448,33 +24410,25 @@
           },
           {
             "slot": "rdl_21",
-            "id": "real_rdl_128a_1_23",
+            "id": "real_rdl_127a_1_21",
             "nq": 1,
             "q": null,
-            "from": "1.28新托福真题A卷",
+            "from": "1.27新托福真题A卷",
             "via": "dissolved"
           },
           {
-            "slot": "ap_26",
-            "id": "real_ap_rp0819_2004_200401",
-            "nq": 4,
-            "q": 26,
-            "from": "rp0819",
-            "via": "pool"
-          },
-          {
             "slot": "ap_31",
-            "id": "real_ap_rp0822_2002_200201",
+            "id": "real_ap_rp0705_2001_200121",
             "nq": 4,
             "q": 31,
-            "from": "rp0822",
+            "from": "rp0705",
             "via": "pool"
           }
         ],
         "modules": {
           "1": {
             "module": 1,
-            "form": "B",
+            "form": "A",
             "slots": [
               {
                 "key": "ctw_1",
@@ -24523,12 +24477,12 @@
                 "type": "rdl",
                 "band": [
                   21,
-                  25
+                  30
                 ],
-                "need": 5,
+                "need": 10,
                 "units": [
-                  1,
-                  3
+                  2,
+                  5
                 ],
                 "items": [
                   {
@@ -24539,6 +24493,20 @@
                     "via": "native"
                   },
                   {
+                    "id": "real_ap_424_1_28",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "4.24新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_32a_1_21",
+                    "nq": 2,
+                    "q": null,
+                    "from": "3.2新托福真题A卷",
+                    "via": "dissolved"
+                  },
+                  {
                     "id": "real_rdl_228_1_21",
                     "nq": 2,
                     "q": null,
@@ -24546,36 +24514,15 @@
                     "via": "dissolved"
                   },
                   {
-                    "id": "real_rdl_128a_1_23",
+                    "id": "real_rdl_127a_1_21",
                     "nq": 1,
                     "q": null,
-                    "from": "1.28新托福真题A卷",
+                    "from": "1.27新托福真题A卷",
                     "via": "dissolved"
                   }
                 ],
-                "got": 5,
+                "got": 10,
                 "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_rp0819_2004_200401",
-                    "nq": 4,
-                    "q": 26,
-                    "from": "rp0819",
-                    "via": "pool"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
               },
               {
                 "key": "ap_31",
@@ -24588,10 +24535,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_rp0822_2002_200201",
+                    "id": "real_ap_rp0705_2001_200121",
                     "nq": 4,
                     "q": 31,
-                    "from": "rp0822",
+                    "from": "rp0705",
                     "via": "pool"
                   }
                 ],
@@ -24600,7 +24547,7 @@
               }
             ],
             "need": 35,
-            "got": 33
+            "got": 34
           },
           "2": {
             "module": 2,
@@ -24654,7 +24601,6 @@
           }
         },
         "missing": [
-          "M1/ap_26:4/5",
           "M1/ap_31:4/5"
         ]
       },
@@ -24668,9 +24614,9 @@
           "2": "A"
         },
         "completeness_before": 0.4,
-        "completeness": 0.94,
-        "complete": false,
-        "purity": 0.426,
+        "completeness": 0.96,
+        "complete": true,
+        "purity": 0.417,
         "borrowed": [
           {
             "slot": "ctw_11",
@@ -24722,19 +24668,19 @@
           },
           {
             "slot": "ap_31",
-            "id": "real_ap_rp0822_2007_200701",
+            "id": "real_ap_rp0819_2004_200401",
             "nq": 4,
             "q": 31,
-            "from": "rp0822",
+            "from": "rp0819",
             "via": "pool"
           },
           {
             "slot": "ap_11",
-            "id": "real_ap_518_1_28",
-            "nq": 3,
+            "id": "real_ap_rp0822_2002_200201",
+            "nq": 4,
             "q": 11,
-            "from": "5.18新托福真题",
-            "via": "displaced"
+            "from": "rp0822",
+            "via": "pool"
           }
         ],
         "modules": {
@@ -24847,10 +24793,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_rp0822_2007_200701",
+                    "id": "real_ap_rp0819_2004_200401",
                     "nq": 4,
                     "q": 31,
-                    "from": "rp0822",
+                    "from": "rp0819",
                     "via": "pool"
                   }
                 ],
@@ -24897,24 +24843,24 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_518_1_28",
-                    "nq": 3,
+                    "id": "real_ap_rp0822_2002_200201",
+                    "nq": 4,
                     "q": 11,
-                    "from": "5.18新托福真题",
-                    "via": "displaced"
+                    "from": "rp0822",
+                    "via": "pool"
                   }
                 ],
-                "got": 3,
-                "status": "partial"
+                "got": 4,
+                "status": "near"
               }
             ],
             "need": 15,
-            "got": 13
+            "got": 14
           }
         },
         "missing": [
           "M1/ap_31:4/5",
-          "M2/ap_11:3/5"
+          "M2/ap_11:4/5"
         ]
       },
       {
@@ -24927,9 +24873,9 @@
           "2": "A"
         },
         "completeness_before": 0.36,
-        "completeness": 0.96,
-        "complete": false,
-        "purity": 0.375,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 0.367,
         "borrowed": [
           {
             "slot": "ctw_1",
@@ -24973,11 +24919,11 @@
           },
           {
             "slot": "ap_31",
-            "id": "real_ap_225_2_11",
-            "nq": 3,
+            "id": "real_ap_rp0822_2007_200701",
+            "nq": 4,
             "q": 31,
-            "from": "2.25新托福真题",
-            "via": "dissolved"
+            "from": "rp0822",
+            "via": "pool"
           }
         ],
         "modules": {
@@ -25090,19 +25036,19 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ap_225_2_11",
-                    "nq": 3,
+                    "id": "real_ap_rp0822_2007_200701",
+                    "nq": 4,
                     "q": 31,
-                    "from": "2.25新托福真题",
-                    "via": "dissolved"
+                    "from": "rp0822",
+                    "via": "pool"
                   }
                 ],
-                "got": 3,
-                "status": "partial"
+                "got": 4,
+                "status": "near"
               }
             ],
             "need": 35,
-            "got": 33
+            "got": 34
           },
           "2": {
             "module": 2,
@@ -25156,7 +25102,7 @@
           }
         },
         "missing": [
-          "M1/ap_31:3/5"
+          "M1/ap_31:4/5"
         ]
       },
       {
@@ -25169,9 +25115,9 @@
           "2": "A"
         },
         "completeness_before": 0.34,
-        "completeness": 0.96,
+        "completeness": 0.94,
         "complete": true,
-        "purity": 0.354,
+        "purity": 0.362,
         "borrowed": [
           {
             "slot": "ctw_11",
@@ -25203,14 +25149,6 @@
             "nq": 2,
             "q": null,
             "from": "1.27新托福真题B卷",
-            "via": "dissolved"
-          },
-          {
-            "slot": "rdl_21",
-            "id": "real_rdl_127a_1_21",
-            "nq": 1,
-            "q": null,
-            "from": "1.27新托福真题A卷",
             "via": "dissolved"
           },
           {
@@ -25317,17 +25255,10 @@
                     "q": null,
                     "from": "1.27新托福真题B卷",
                     "via": "dissolved"
-                  },
-                  {
-                    "id": "real_rdl_127a_1_21",
-                    "nq": 1,
-                    "q": null,
-                    "from": "1.27新托福真题A卷",
-                    "via": "dissolved"
                   }
                 ],
-                "got": 10,
-                "status": "full"
+                "got": 9,
+                "status": "near"
               },
               {
                 "key": "ap_31",
@@ -25352,7 +25283,7 @@
               }
             ],
             "need": 35,
-            "got": 34
+            "got": 33
           },
           "2": {
             "module": 2,
@@ -25406,6 +25337,7 @@
           }
         },
         "missing": [
+          "M1/rdl_21:9/10",
           "M1/ap_31:4/5",
           "M2/ap_11:4/5"
         ]
@@ -31871,24 +31803,11 @@
         "borrowed": [
           {
             "slot": "interview_8",
-            "id": "real_interview_rp0704_1#c1",
+            "id": "real_interview_rp0812_1",
             "nq": 4,
             "q": 8,
-            "from": "rp0704",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0704_1",
-              "ids": [
-                "real_interview_rp0704_1_q1",
-                "real_interview_rp0704_1_q2",
-                "real_interview_rp0704_1_q3",
-                "real_interview_rp0704_1_q4"
-              ],
-              "range": [
-                1,
-                4
-              ]
-            }
+            "from": "rp0812",
+            "via": "pool"
           }
         ],
         "modules": {
@@ -31928,24 +31847,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_interview_rp0704_1#c1",
+                    "id": "real_interview_rp0812_1",
                     "nq": 4,
                     "q": 8,
-                    "from": "rp0704",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0704_1",
-                      "ids": [
-                        "real_interview_rp0704_1_q1",
-                        "real_interview_rp0704_1_q2",
-                        "real_interview_rp0704_1_q3",
-                        "real_interview_rp0704_1_q4"
-                      ],
-                      "range": [
-                        1,
-                        4
-                      ]
-                    }
+                    "from": "rp0812",
+                    "via": "pool"
                   }
                 ],
                 "got": 4,
@@ -31973,24 +31879,11 @@
         "borrowed": [
           {
             "slot": "interview_8",
-            "id": "real_interview_rp0704_1#c2",
+            "id": "real_interview_rp0830_1",
             "nq": 4,
             "q": 8,
-            "from": "rp0704",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0704_1",
-              "ids": [
-                "real_interview_rp0704_1_q5",
-                "real_interview_rp0704_1_q6",
-                "real_interview_rp0704_1_q7",
-                "real_interview_rp0704_1_q8"
-              ],
-              "range": [
-                5,
-                8
-              ]
-            }
+            "from": "rp0830",
+            "via": "pool"
           }
         ],
         "modules": {
@@ -32030,24 +31923,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_interview_rp0704_1#c2",
+                    "id": "real_interview_rp0830_1",
                     "nq": 4,
                     "q": 8,
-                    "from": "rp0704",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0704_1",
-                      "ids": [
-                        "real_interview_rp0704_1_q5",
-                        "real_interview_rp0704_1_q6",
-                        "real_interview_rp0704_1_q7",
-                        "real_interview_rp0704_1_q8"
-                      ],
-                      "range": [
-                        5,
-                        8
-                      ]
-                    }
+                    "from": "rp0830",
+                    "via": "pool"
                   }
                 ],
                 "got": 4,
@@ -32069,32 +31949,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0704_1#c3",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0704",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0704_1",
-              "ids": [
-                "real_interview_rp0704_1_q9",
-                "real_interview_rp0704_1_q10",
-                "real_interview_rp0704_1_q11",
-                "real_interview_rp0704_1_q12"
-              ],
-              "range": [
-                9,
-                12
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32130,37 +31988,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0704_1#c3",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0704",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0704_1",
-                      "ids": [
-                        "real_interview_rp0704_1_q9",
-                        "real_interview_rp0704_1_q10",
-                        "real_interview_rp0704_1_q11",
-                        "real_interview_rp0704_1_q12"
-                      ],
-                      "range": [
-                        9,
-                        12
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:127a",
@@ -32171,32 +32010,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0704_1#c4",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0704",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0704_1",
-              "ids": [
-                "real_interview_rp0704_1_q13",
-                "real_interview_rp0704_1_q14",
-                "real_interview_rp0704_1_q15",
-                "real_interview_rp0704_1_q16"
-              ],
-              "range": [
-                13,
-                16
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32232,37 +32049,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0704_1#c4",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0704",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0704_1",
-                      "ids": [
-                        "real_interview_rp0704_1_q13",
-                        "real_interview_rp0704_1_q14",
-                        "real_interview_rp0704_1_q15",
-                        "real_interview_rp0704_1_q16"
-                      ],
-                      "range": [
-                        13,
-                        16
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:128a",
@@ -32273,32 +32071,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0705_1#c1",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0705",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0705_1",
-              "ids": [
-                "real_interview_rp0705_1_q1",
-                "real_interview_rp0705_1_q2",
-                "real_interview_rp0705_1_q3",
-                "real_interview_rp0705_1_q4"
-              ],
-              "range": [
-                1,
-                4
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32334,37 +32110,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0705_1#c1",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0705",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0705_1",
-                      "ids": [
-                        "real_interview_rp0705_1_q1",
-                        "real_interview_rp0705_1_q2",
-                        "real_interview_rp0705_1_q3",
-                        "real_interview_rp0705_1_q4"
-                      ],
-                      "range": [
-                        1,
-                        4
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:21b",
@@ -32375,32 +32132,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0705_1#c2",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0705",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0705_1",
-              "ids": [
-                "real_interview_rp0705_1_q5",
-                "real_interview_rp0705_1_q6",
-                "real_interview_rp0705_1_q7",
-                "real_interview_rp0705_1_q8"
-              ],
-              "range": [
-                5,
-                8
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32436,37 +32171,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0705_1#c2",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0705",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0705_1",
-                      "ids": [
-                        "real_interview_rp0705_1_q5",
-                        "real_interview_rp0705_1_q6",
-                        "real_interview_rp0705_1_q7",
-                        "real_interview_rp0705_1_q8"
-                      ],
-                      "range": [
-                        5,
-                        8
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:22",
@@ -32477,32 +32193,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0705_1#c3",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0705",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0705_1",
-              "ids": [
-                "real_interview_rp0705_1_q9",
-                "real_interview_rp0705_1_q10",
-                "real_interview_rp0705_1_q11",
-                "real_interview_rp0705_1_q12"
-              ],
-              "range": [
-                9,
-                12
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32538,37 +32232,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0705_1#c3",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0705",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0705_1",
-                      "ids": [
-                        "real_interview_rp0705_1_q9",
-                        "real_interview_rp0705_1_q10",
-                        "real_interview_rp0705_1_q11",
-                        "real_interview_rp0705_1_q12"
-                      ],
-                      "range": [
-                        9,
-                        12
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:228",
@@ -32579,32 +32254,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0711_1#c1",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0711",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0711_1",
-              "ids": [
-                "real_interview_rp0711_1_q1",
-                "real_interview_rp0711_1_q2",
-                "real_interview_rp0711_1_q3",
-                "real_interview_rp0711_1_q4"
-              ],
-              "range": [
-                1,
-                4
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32640,37 +32293,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0711_1#c1",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0711",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0711_1",
-                      "ids": [
-                        "real_interview_rp0711_1_q1",
-                        "real_interview_rp0711_1_q2",
-                        "real_interview_rp0711_1_q3",
-                        "real_interview_rp0711_1_q4"
-                      ],
-                      "range": [
-                        1,
-                        4
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:314",
@@ -32681,32 +32315,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0711_1#c2",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0711",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0711_1",
-              "ids": [
-                "real_interview_rp0711_1_q5",
-                "real_interview_rp0711_1_q6",
-                "real_interview_rp0711_1_q7",
-                "real_interview_rp0711_1_q8"
-              ],
-              "range": [
-                5,
-                8
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32742,37 +32354,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0711_1#c2",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0711",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0711_1",
-                      "ids": [
-                        "real_interview_rp0711_1_q5",
-                        "real_interview_rp0711_1_q6",
-                        "real_interview_rp0711_1_q7",
-                        "real_interview_rp0711_1_q8"
-                      ],
-                      "range": [
-                        5,
-                        8
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:rf0629",
@@ -32783,32 +32376,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0718_1#c1",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0718",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0718_1",
-              "ids": [
-                "real_interview_rp0718_1_q1",
-                "real_interview_rp0718_1_q2",
-                "real_interview_rp0718_1_q3",
-                "real_interview_rp0718_1_q4"
-              ],
-              "range": [
-                1,
-                4
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32844,37 +32415,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0718_1#c1",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0718",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0718_1",
-                      "ids": [
-                        "real_interview_rp0718_1_q1",
-                        "real_interview_rp0718_1_q2",
-                        "real_interview_rp0718_1_q3",
-                        "real_interview_rp0718_1_q4"
-                      ],
-                      "range": [
-                        1,
-                        4
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:rf0708",
@@ -32885,32 +32437,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0718_1#c2",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0718",
-            "via": "pool",
-            "split": {
-              "from": "real_interview_rp0718_1",
-              "ids": [
-                "real_interview_rp0718_1_q5",
-                "real_interview_rp0718_1_q6",
-                "real_interview_rp0718_1_q7",
-                "real_interview_rp0718_1_q8"
-              ],
-              "range": [
-                5,
-                8
-              ]
-            }
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -32946,37 +32476,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0718_1#c2",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0718",
-                    "via": "pool",
-                    "split": {
-                      "from": "real_interview_rp0718_1",
-                      "ids": [
-                        "real_interview_rp0718_1_q5",
-                        "real_interview_rp0718_1_q6",
-                        "real_interview_rp0718_1_q7",
-                        "real_interview_rp0718_1_q8"
-                      ],
-                      "range": [
-                        5,
-                        8
-                      ]
-                    }
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       },
       {
         "id": "speaking:rf0808",
@@ -32987,19 +32498,10 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 1,
-        "complete": true,
-        "purity": 0.636,
-        "borrowed": [
-          {
-            "slot": "interview_8",
-            "id": "real_interview_rp0812_1",
-            "nq": 4,
-            "q": 8,
-            "from": "rp0812",
-            "via": "pool"
-          }
-        ],
+        "completeness": 0.636,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
         "modules": {
           "1": {
             "module": 1,
@@ -33035,24 +32537,18 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_interview_rp0812_1",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rp0812",
-                    "via": "pool"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 11,
-            "got": 11
+            "got": 7
           }
         },
-        "missing": []
+        "missing": [
+          "M1/interview_8:0/4"
+        ]
       }
     ],
     "writing": [
@@ -37484,18 +36980,6 @@
       }
     },
     {
-      "id": "exam:rf0708",
-      "kind": "native",
-      "base_set": "rf0708",
-      "date": "2026-07-08",
-      "sections": {
-        "reading": "reading:rf0708",
-        "listening": "listening:rf0708",
-        "speaking": "speaking:rf0708",
-        "writing": "writing:rf0708"
-      }
-    },
-    {
       "id": "exam:mixed-01",
       "kind": "mixed",
       "base_set": null,
@@ -37523,11 +37007,11 @@
       "id": "exam:mixed-03",
       "kind": "mixed",
       "base_set": null,
-      "date": "2026-03-10",
+      "date": "2026-03-04",
       "sections": {
-        "reading": "reading:310",
+        "reading": "reading:34",
         "listening": "listening:228",
-        "speaking": "speaking:121c",
+        "speaking": "speaking:rf0610",
         "writing": "writing:330"
       }
     },
@@ -37535,11 +37019,11 @@
       "id": "exam:mixed-04",
       "kind": "mixed",
       "base_set": null,
-      "date": "2026-03-11",
+      "date": "2026-03-10",
       "sections": {
-        "reading": "reading:311",
+        "reading": "reading:310",
         "listening": "listening:314",
-        "speaking": "speaking:127a",
+        "speaking": "speaking:rf0615",
         "writing": "writing:48"
       }
     },
@@ -37547,11 +37031,23 @@
       "id": "exam:mixed-05",
       "kind": "mixed",
       "base_set": null,
+      "date": "2026-03-11",
+      "sections": {
+        "reading": "reading:311",
+        "listening": "listening:rf0610",
+        "speaking": "speaking:rf0622",
+        "writing": "writing:rf0708"
+      }
+    },
+    {
+      "id": "exam:mixed-06",
+      "kind": "mixed",
+      "base_set": null,
       "date": "2026-03-16",
       "sections": {
         "reading": "reading:316",
-        "listening": "listening:rf0610",
-        "speaking": "speaking:128a",
+        "listening": "listening:rf0615",
+        "speaking": "speaking:rf0713",
         "writing": "writing:rf0716"
       }
     }
@@ -37570,46 +37066,103 @@
       "reading:511",
       "reading:518",
       "reading:523",
+      "reading:529",
       "reading:rf0610",
       "reading:rf0615",
       "reading:rf0622",
       "reading:rf0629",
+      "reading:rf0708",
       "reading:rf0713",
       "reading:rf0716",
       "reading:rf0808",
       "reading:rf0826"
     ],
     "listening": [
-      "listening:rf0615",
+      "listening:rf0708",
       "listening:rf0826"
     ],
     "speaking": [
-      "speaking:21b",
-      "speaking:22",
-      "speaking:228",
-      "speaking:314",
-      "speaking:rf0610",
-      "speaking:rf0615",
-      "speaking:rf0622",
-      "speaking:rf0629",
-      "speaking:rf0713",
       "speaking:rf0716",
-      "speaking:rf0808",
       "speaking:rf0826"
     ],
     "writing": []
   },
   "residue": {
-    "ap": 22,
+    "ap": 21,
     "rdl": 8,
     "lat": 23,
     "lcr": 49,
     "la": 9,
     "repeat": 3,
-    "interview": 1,
     "bs": 2,
-    "repeat(pool-chunk)": 10,
-    "interview(pool-chunk)": 8
+    "repeat(pool-chunk)": 5
   },
+  "pool_unsplit": [
+    {
+      "id": "real_repeat_rp0705_1",
+      "type": "repeat",
+      "n": 16
+    },
+    {
+      "id": "real_repeat_rp0718_1",
+      "type": "repeat",
+      "n": 31
+    },
+    {
+      "id": "real_repeat_rp0719_1",
+      "type": "repeat",
+      "n": 22
+    },
+    {
+      "id": "real_repeat_rp0819_1",
+      "type": "repeat",
+      "n": 8
+    },
+    {
+      "id": "real_repeat_rp0830_1",
+      "type": "repeat",
+      "n": 8
+    },
+    {
+      "id": "real_interview_rp0704_1",
+      "type": "interview",
+      "n": 19
+    },
+    {
+      "id": "real_interview_rp0705_1",
+      "type": "interview",
+      "n": 14
+    },
+    {
+      "id": "real_interview_rp0711_1",
+      "type": "interview",
+      "n": 11
+    },
+    {
+      "id": "real_interview_rp0718_1",
+      "type": "interview",
+      "n": 12
+    },
+    {
+      "id": "real_interview_rp0719_1",
+      "type": "interview",
+      "n": 15
+    },
+    {
+      "id": "real_interview_rp0725_1",
+      "type": "interview",
+      "n": 16
+    },
+    {
+      "id": "real_interview_rp0819_1",
+      "type": "interview",
+      "n": 15
+    },
+    {
+      "id": "real_interview_rp0822_1",
+      "type": "interview",
+      "n": 14
+    }
+  ],
   "unanchored": []
 }

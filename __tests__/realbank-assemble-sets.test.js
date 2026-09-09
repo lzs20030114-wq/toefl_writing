@@ -39,6 +39,10 @@ describe("blueprint: id 解析与位置修正", () => {
     expect(bp.positionType("ap", { module: 1, q: 31, nq: 5 })).toBe("ap");
     expect(bp.positionType("ap", { module: 2, q: 11, nq: 4 })).toBe("ap");
     expect(bp.positionType("rdl", { module: 1, q: 23, nq: 3 })).toBe("rdl");
+    // 体裁证据优先：topic 落成 email / notice 的 ap，就算起步 26 也是日常阅读
+    expect(bp.positionType("ap", { module: 1, q: 26, nq: 3, genre: "email" })).toBe("rdl");
+    expect(bp.positionType("ap", { module: 1, q: 28, nq: 2, genre: "Notice" })).toBe("rdl");
+    expect(bp.positionType("ap", { module: 1, q: 31, nq: 5, genre: "biology" })).toBe("ap");
   });
 
   test("版式判定", () => {
@@ -87,12 +91,16 @@ function writeMiniBank(dir) {
     lc: [mcq("real_lc_22_1_13", S2, d2, 2), mcq("real_lc_22_1_15", S2, d2, 2), mcq("real_lc_22_1_17", S2, d2, 2), mcq("real_lc_22_2_04", S2, d2, 2), mcq("real_lc_121a_2_06", S1, d1, 2)],
     la: [mcq("real_la_22_1_19", S2, d2, 2), mcq("real_la_22_1_21", S2, d2, 2), mcq("real_la_22_1_23", S2, d2, 2)],
     lat: [mcq("real_lat_22_1_25", S2, d2, 4), mcq("real_lat_22_1_29", S2, d2, 4), mcq("real_lat_22_2_08", S2, d2, 4), mcq("real_lat_22_2_12", S2, d2, 3)],
-    // 口语：RF 只有 5 句复述（partial）→ 用拼盘 14 句切出的 7 句替换；面试从拼盘 8 问切 4 问
+    // 口语：RF 只有 5 句复述（partial）→ 用拼盘 14 句（7 的整数倍）切出的 7 句替换
     repeat: [
       one("real_repeat_rf0620_1", RF, dr, { sentences: Array.from({ length: 5 }, (_, i) => ({ id: `rf_s${i + 1}`, sentence: `s${i + 1}` })) }),
       one("real_repeat_rp0704_1", RP, dp, { sentences: Array.from({ length: 14 }, (_, i) => ({ id: `rp_s${i + 1}`, sentence: `s${i + 1}` })) }),
     ],
-    interview: [one("real_interview_rp0704_1", RP, dp, { questions: Array.from({ length: 8 }, (_, i) => ({ id: `rp_q${i + 1}`, question: `q${i + 1}` })) })],
+    // 面试：4 问的拼盘可直接用；19 问的拼盘是几场面试缝在一起，不许机械切
+    interview: [
+      one("real_interview_rp0704_1", RP, dp, { questions: Array.from({ length: 19 }, (_, i) => ({ id: `rp_q${i + 1}`, question: `q${i + 1}` })) }),
+      one("real_interview_rp0812_1", "rp0812", "2026-08-12", { questions: Array.from({ length: 4 }, (_, i) => ({ id: `rp8_q${i + 1}`, question: `q${i + 1}` })) }),
+    ],
     // 写作：RF 10 句 + 邮件，没有讨论题 → 不算拼齐
     bs: Array.from({ length: 10 }, (_, i) => one(`bs_rf0620_${String(i + 1).padStart(2, "0")}`, RF, dr, { prompt: "p" })),
     email: [one("email_rf0620", RF, dr)],
@@ -138,7 +146,7 @@ describe("assemble_sets：迷你题库端到端", () => {
 
   test("拼盘 rp* 不锚定：不出现在 sets 里，只当素材", () => {
     expect(setOf(names.RP)).toBeUndefined();
-    expect(man.pool_items).toEqual({ ap: 1, repeat: 1, interview: 1 });
+    expect(man.pool_items).toEqual({ ap: 1, repeat: 1, interview: 2 });
     expect(man.unanchored).toEqual([]);
   });
 
@@ -159,16 +167,17 @@ describe("assemble_sets：迷你题库端到端", () => {
     expect(c.missing).toEqual(["M2/lat_12:3/4"]);
   });
 
-  test("拼卷口语：5 句的复述被拼盘切出的 7 句替换，面试从 8 问里切 4 问", () => {
+  test("拼卷口语：5 句的复述被拼盘切出的 7 句替换；面试只用恰 4 问的拼盘，19 问的整条作废", () => {
     const c = man.composites.speaking.find((x) => x.base_set === names.RF);
     const rep = slotOf(c, 1, "repeat_1").items[0];
     expect(rep.id).toBe("real_repeat_rp0704_1#c1");
     expect(rep.split).toEqual({ from: "real_repeat_rp0704_1", ids: ["rp_s1", "rp_s2", "rp_s3", "rp_s4", "rp_s5", "rp_s6", "rp_s7"], range: [1, 7] });
     const iv = slotOf(c, 1, "interview_8").items[0];
-    expect(iv.id).toBe("real_interview_rp0704_1#c1");
+    expect(iv.id).toBe("real_interview_rp0812_1");
     expect(iv.nq).toBe(4);
     expect(c.complete).toBe(true);
     expect(c.purity).toBe(0);
+    expect(man.pool_unsplit).toEqual([{ id: "real_interview_rp0704_1", type: "interview", n: 19 }]);
   });
 
   test("拼齐必须每槽都在：写作缺讨论题 → 11/12 过了 90% 也不算齐", () => {
