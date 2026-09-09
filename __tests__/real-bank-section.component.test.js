@@ -326,3 +326,36 @@ describe("真题专区 section：SectionContent 路由分支", () => {
     expect(sec.description).toContain("Reading");
   });
 });
+
+describe("真题专区 section：练习记录入口（/real-bank/progress）", () => {
+  const pro = { ...baseProps, userTier: "pro", isLoggedIn: true };
+  const realCtw = { id: 1, type: "reading", date: "2026-09-02T10:00:00.000Z", correct: 1, total: 2, details: { subtype: "ctw", itemId: "real_ctw_1", results: [] } };
+  const liveCtw = { id: 2, type: "reading", date: "2026-09-02T11:00:00.000Z", correct: 2, total: 2, details: { subtype: "ctw", itemId: "ctw-9", results: [] } };
+  const realBs = { id: 3, type: "bs", date: "2026-09-03T10:00:00.000Z", correct: 9, total: 10, details: [{ qid: "real_bs_1", isCorrect: true }] };
+
+  test("Pro：有入口卡，条数只数真题记录（常规练习不算）", () => {
+    const { container } = render(<RealExamSectionContent {...pro} sessions={[realCtw, liveCtw, realBs]} />);
+    const card = container.querySelector('a[href="/real-bank/progress"]');
+    expect(card).toBeTruthy();
+    expect(card.textContent).toContain("真题练习记录");
+    expect(card.textContent).toContain("2 条记录");
+  });
+
+  test("Pro 且无记录：入口卡仍在，标「暂无记录」", () => {
+    const { container } = render(<RealExamSectionContent {...pro} sessions={[liveCtw]} />);
+    const card = container.querySelector('a[href="/real-bank/progress"]');
+    expect(card).toBeTruthy();
+    expect(card.textContent).toContain("暂无记录");
+  });
+
+  test("非 Pro：不显示入口卡", () => {
+    const { container } = render(<RealExamSectionContent {...baseProps} userTier="free" isLoggedIn={true} sessions={[realCtw]} />);
+    expect(container.querySelector('a[href="/real-bank/progress"]')).toBeNull();
+  });
+
+  test("SectionContent 把 sessions 透传给真题面板（漏传 = 入口卡永远「暂无记录」）", () => {
+    const src = fs.readFileSync(path.join(__dirname, "..", "components/home/SectionContent.js"), "utf8");
+    const block = src.slice(src.indexOf('activeSection === "real-bank"'), src.indexOf('activeSection === "my-bank"'));
+    expect(block).toMatch(/sessions=\{sessions\}/);
+  });
+});

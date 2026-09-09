@@ -6,7 +6,7 @@
 // HomePageClient 上挂着唯一监听者（HomePageClient.js:142-152），所以不需要自持 UpgradeModal。
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
-import { HomeTaskCard } from "./HomeTaskCard";
+import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
 // 故意**不** import lib/realBank，免得把 265 道写作真题的 JSON（350 KB+）+ 阅读三个题库
 // 全打进首页 bundle（实测 `/` 的 First Load JS 会从 255 kB 涨到 318 kB）。
@@ -24,6 +24,8 @@ import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
 // 不碰题库 JSON，所以不会把真题库打进首页 bundle）。
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { getRealBankTimeLabels } from "../../lib/realBankModes";
+// 真题练习记录条数：纯函数层（只读 lib/admin/realSession 的判定），不碰题库 JSON。
+import { countRealBankSessions } from "../../lib/realBankHistory";
 
 const REAL_ACCENT = SECTION_ACCENTS["real-bank"];
 
@@ -165,8 +167,10 @@ export function RealExamSectionContent({
   isChallenge, isPractice, mode, switchMode, fadeIn,
   hoverKey, setHoverKey,
   userTier, isLoggedIn, showLoginModal,
+  sessions = [],
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
+  const realCount = countRealBankSessions(sessions);
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
   const gridItems = REAL_EXAM_TASKS.map((task, index) => {
@@ -315,6 +319,24 @@ export function RealExamSectionContent({
           </div>
         );
       })}
+      {/* 真题练习记录入口（与阅读 / 听力 / 口语面板的「练习记录」伴生卡同款）。
+          非 Pro 不显示 —— 真题专区本身就是 Pro 专属，没记录可看。 */}
+      {isPro && (
+        <div style={{ marginBottom: 20, ...fadeIn(400) }}>
+          <HomeLinkCard
+            href="/real-bank/progress"
+            cardKey="real-progress"
+            hoverKey={hoverKey}
+            setHoverKey={setHoverKey}
+            isChallenge={isChallenge}
+            icon="📈"
+            eyebrow="记录"
+            title="真题练习记录"
+            description={realCount > 0 ? `已记录 ${realCount} 次真题练习，可逐题回顾、查看题库覆盖与得分率趋势。` : "在真题专区做完任意一题后，记录会自动保存在这里（含逐题回顾）。"}
+            badge={realCount > 0 ? `${realCount} 条记录` : "暂无记录"}
+          />
+        </div>
+      )}
       <div style={{ marginBottom: 8 }} />
 
       <PromoBanner isChallenge={isChallenge} fadeIn={fadeIn} />

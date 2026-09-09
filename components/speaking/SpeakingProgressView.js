@@ -176,7 +176,7 @@ function MockDetail({ session }) {
 
 // -- Repeat Detail --
 
-function RepeatDetail({ session }) {
+export function RepeatDetail({ session }) {
   const items = session.details?.items || [];
   const elapsed = session.details?.elapsed || 0;
   const attempted = session.details?.attempted || 0;
@@ -320,7 +320,7 @@ const DIM_COLORS = {
   organization: "#16A34A",
 };
 
-function InterviewDetail({ session }) {
+export function InterviewDetail({ session }) {
   const items = session.details?.items || [];
   const elapsed = session.details?.totalElapsed || session.details?.elapsed || 0;
   const attempted = session.details?.attempted || 0;

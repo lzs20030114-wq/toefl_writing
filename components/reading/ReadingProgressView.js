@@ -139,7 +139,7 @@ function SessionRow({ session, expanded, onToggle, onDelete }) {
 // Old simplified MockDetail removed — see MockSessionDetail.js for the full
 // post-exam review (band cells + per-task drill-down with AI explanations).
 
-function CTWDetail({ session }) {
+export function CTWDetail({ session }) {
   const results = session.details?.results || [];
   const passage = session.details?.passage;
   const blanks = session.details?.blanks || [];
@@ -218,7 +218,7 @@ function CTWDetail({ session }) {
   );
 }
 
-function RDLDetail({ session }) {
+export function RDLDetail({ session }) {
   const results = session.details?.results;
   const passage = session.details?.passage;
   const questions = session.details?.questions;

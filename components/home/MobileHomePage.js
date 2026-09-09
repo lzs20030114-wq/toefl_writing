@@ -839,6 +839,27 @@ function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier
           );
         })}
       </div>
+
+      {/* 真题练习记录入口（Pro 才有记录可看；样式照上方「拼句错题本」那张链接卡）。 */}
+      {isPro && (
+        <Link
+          href="/real-bank/progress"
+          style={{
+            display: "flex", alignItems: "center", gap: 12,
+            padding: "14px 16px", marginBottom: 14,
+            background: isChallenge ? CH.card : T.card,
+            border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+            borderRadius: 12, textDecoration: "none", color: "inherit",
+          }}
+        >
+          <span style={{ fontSize: 20 }}>📈</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>真题练习记录</div>
+            <div style={{ fontSize: 12, color: t2 }}>逐题回顾、题库覆盖、得分率趋势</div>
+          </div>
+          <span style={{ color: t2 }}>›</span>
+        </Link>
+      )}
     </>
   );
 }
