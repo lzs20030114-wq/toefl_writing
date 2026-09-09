@@ -5,6 +5,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
+import { LISTENING_TOTAL_QUESTIONS, listeningModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
 const LISTENING_ACCENT = SECTION_ACCENTS.listening;
 
@@ -189,8 +190,9 @@ export function ListeningSectionContent({
               n: "\u6A21\u8003",
               t: "\u542C\u529B\u81EA\u9002\u5E94\u6A21\u8003",
               d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
-              it: "30 \u9898",
-              timeLabel: "17 + 12 min",
+              // 题量/时长从模考 module plan 派生（听力 47 题 = M1 32 + M2 15）
+              it: `${LISTENING_TOTAL_QUESTIONS} \u9898`,
+              timeLabel: moduleTimeLabel(listeningModuleSeconds),
               isMock: true,
               delay: 0,
             }}
