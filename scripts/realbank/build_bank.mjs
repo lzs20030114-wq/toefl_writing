@@ -43,6 +43,8 @@ const require = createRequire(import.meta.url);
 const { holdDecision, sectionAgreement } = require("./hold_policy.js");
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
 const { carryMaterialImages } = require("./material_image_carry.js");
+// 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
+const { decideInsertMaterial } = require("./insert_markers.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -62,6 +64,20 @@ const SOURCE_FLAGS = (() => {
     // 清单缺失不该拦住入库：退化成「不打标」，但要让跑的人看见。
     console.warn(`[build_bank] 读不到 ${FLAGS_FILE}，本次入库的题不带 source_flags`);
     return {};
+  }
+})();
+
+/**
+ * 插入句题的 ■ 标记表（data/realBank/reading/insert-markers.json 的 entries）。
+ *
+ * 表由 restore_insert_markers.py（重新 OCR 源截图）+ insert_markers_apply.mjs（校验合并）维护，
+ * **build_bank 只读不写**。缺文件 = 空表 = 行为与接线前完全一致（插入题照旧丢弃）。
+ */
+const INSERT_MARKERS = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(BANK_DIR, "insert-markers.json"), "utf8")).entries || [];
+  } catch {
+    return [];
   }
 })();
 
@@ -316,8 +332,25 @@ function hasInsertMarkers(material) {
 function buildMcqGroup(group, meta, stats) {
   // 代表材料取簇里最长的那份（OCR 漏字只会变短），material_kind 也跟着它走。
   const first = (group.rep || group.records[0]).item;
-  const material = String(first.material || "").trim();
+  let material = String(first.material || "").trim();
   if (words(material).length < 12) return null;      // 材料太短，多半没抽干净
+
+  // 这一簇里有插入句题、但代表材料被 OCR 抹掉了 ■ → 查 insert-markers.json 找回带标记的正文。
+  // 表里没有 / 校验不过就什么都不变，插入题照旧被下面那一刀丢掉（fail-closed）。
+  // 注意：换材料等于换 passage 文本，material_image 的沿用判据（同 id 同文本）会因此不命中，
+  // 这些组要重跑一次 upload_material_images.mjs —— 比留着一道答不了的死题划算。
+  let restoredInsert = false;
+  if (group.records.some((r) => looksLikeInsertQuestion(r.item)) && !hasInsertMarkers(material)) {
+    const d = decideInsertMaterial(material, INSERT_MARKERS);
+    if (d.restored) {
+      material = d.material;
+      restoredInsert = true;
+      console.log(`  找回 ■：${meta.set} M${meta.module} 材料按 insert-markers.json 换成带标记版`
+        + `（by ${d.entry && d.entry.by ? d.entry.by : "?"}`
+        + `${d.problems.includes("paragraphs_lost") ? "，段落分隔未能还原" : ""}）`);
+    }
+  }
+
   const collected = [];
   for (const r of group.records) {
     const it = r.item;
@@ -330,9 +363,14 @@ function buildMcqGroup(group, meta, stats) {
       stats.droppedBadOptions += 1;
       continue;
     }
-    if (looksLikeInsertQuestion(it) && !hasInsertMarkers(it.material || material)) {
-      stats.droppedInsert += 1;
-      continue;
+    if (looksLikeInsertQuestion(it)) {
+      if (restoredInsert) {
+        // 代表材料已经换成带 ■ 的版本 → 这道题在 App 里能答了。
+        stats.restoredInsert += 1;
+      } else if (!hasInsertMarkers(it.material || material)) {
+        stats.droppedInsert += 1;
+        continue;
+      }
     }
     const optMap = {};
     opts.forEach((o, i) => { optMap[LETTERS[i]] = o; });
@@ -943,7 +981,7 @@ function main() {
   const out = { ap: [], rdl: [], ctw: [] };
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, droppedNoAudit: 0, droppedDisagree: 0,
-    built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0,
+    built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
@@ -1048,7 +1086,8 @@ function main() {
   console.log(`  闸门放宽：ctw_answer_truncated 降级 ${stats.releasedCtwTruncated} 套（丢弃 CTW ${stats.droppedCtwTruncated} 段，AP/RDL 照收）；`
     + `section_gap 按盲审一致率条件放行 ${stats.releasedSectionGap} 套；`
     + `ingest_blocker(题号重启块) 按盲审一致率条件放行 ${stats.releasedIngestBlocker} 套`);
-  console.log(`  选项残缺丢弃 ${stats.droppedBadOptions} 题（OCR 串栏，非 A-D 四选项 / answer_index 越界）；无 ■ 标记的插入题丢弃 ${stats.droppedInsert} 题`);
+  console.log(`  选项残缺丢弃 ${stats.droppedBadOptions} 题（OCR 串栏，非 A-D 四选项 / answer_index 越界）；无 ■ 标记的插入题丢弃 ${stats.droppedInsert} 题；`
+    + `查 insert-markers.json 找回标记救回 ${stats.restoredInsert} 题（表里 ${INSERT_MARKERS.length} 条）`);
   console.log(`  材料模糊归并：并掉 ${stats.mergedGroups} 组（同一篇的 OCR 变体，Jaccard≥${MATERIAL_JACCARD_MIN} 或前 ${MATERIAL_PREFIX_CHARS} 字相同）；组内重复题干丢弃 ${stats.droppedDupStem} 题`);
   console.log(`  成品：AP ${out.ap.length} 组 / RDL ${out.rdl.length} 组 / CTW ${out.ctw.length} 段`);
   const qcount = [...out.ap, ...out.rdl].reduce((n, x) => n + x.questions.length, 0);

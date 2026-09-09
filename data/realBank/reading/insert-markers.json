@@ -1,0 +1,6 @@
+{
+  "_purpose": "真题阅读插入句题（\"Look at the four squares [■] … Where would the sentence best fit?\"）的插入位标记表。真考材料里靠 4 个 ■ 定位插入点，我们的材料是考场截图逐字 OCR 出来的，■ 被 OCR 丢光了 —— build_bank.mjs 把没有标记的插入题当「无法作答的死题」丢弃（stats.droppedInsert）。这张表存的是同一段正文的『带 ■ 版本』，落库时查表换材料，把那些题救回来。",
+  "_format": "entries[] = { set: 卷名（= structured 产物文件名前缀，也是题上的 source）, module: 模块号, q_number: 真题题号, bank_id: 落库 id（仅供人读，**不作匹配键**：插入题被丢会让 id 里的簇首题号漂移）, marked: 带 4 个 ■ 的正文全文, by: 来源（qwen3-vl / 人工）, verified: 是否已过 validateMarked, note: 可选备注 }",
+  "_workflow": "1) python scripts/realbank/restore_insert_markers.py --list  → .codex-tmp/realbank/insert-markers.todo.json；2) --fill --dry-run 看要调几次 Qwen；3) --fill 真跑 → insert-markers.candidates.json；4) node scripts/realbank/insert_markers_apply.mjs（先 --dry-run）把过校验的合并进本表；5) node scripts/realbank/build_bank.mjs 重新落库，日志里看『找回 ■ 标记』的题数。build_bank 只读本表，永远不写。",
+  "entries": []
+}
