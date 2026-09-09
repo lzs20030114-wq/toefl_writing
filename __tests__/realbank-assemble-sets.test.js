@@ -120,7 +120,8 @@ describe("assemble_sets：迷你题库端到端", () => {
   beforeAll(() => {
     dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-sets-"));
     names = writeMiniBank(dir);
-    man = asm.buildManifest(dir);
+    // 这一组测的是借题拼卷（--borrow）；默认的同源不借见下一组
+    man = asm.buildManifest(dir, { borrow: true });
   });
   afterAll(() => fs.rmSync(dir, { recursive: true, force: true }));
 
@@ -203,3 +204,68 @@ describe("assemble_sets：迷你题库端到端", () => {
     expect(md).toContain(names.S1);
   });
 });
+
+describe("assemble_sets：默认同源不借 + 跨套重复别名 + 题型套", () => {
+  let dir, names, man;
+  beforeAll(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-sets-native-"));
+    names = writeMiniBank(dir);
+    // 复核清单：S1 的 M2 学术段落曾与 S3 那篇同材料被下架（库里只留 S3 那份）
+    fs.writeFileSync(path.join(dir, "review-holds.json"), JSON.stringify({ holds: [
+      { file: "reading/ap", id: "real_ap_121a_2_11", scope: "unit", reason: "与 real_ap_325_2_11 同一份材料（跨套重复），保留 real_ap_325_2_11", dup_of: "real_ap_325_2_11" },
+      { file: "reading/ap", id: "real_ap_nope_1_31", scope: "unit", reason: "指向不存在的题", dup_of: "real_ap_missing" },
+      { file: "reading/rdl", id: "real_rdl_325_1_21", scope: "question", reason: "单题下架不算别名", dup_of: "real_rdl_121a_1_21" },
+    ] }));
+    man = asm.buildManifest(dir);
+  });
+  afterAll(() => fs.rmSync(dir, { recursive: true, force: true }));
+
+  const setOf = (name) => man.sets.find((s) => s.set === name);
+  const slotOf = (sec, mod, key) => sec.modules[mod].slots.find((s) => s.key === key);
+
+  test("别名原位还回：S1 的 M2 学术段落用 S3 那份的内容，标 alias_of；坏别名/单题下架不算", () => {
+    expect(man.params.borrow).toBe(false);
+    expect(man.summary.aliases_restored).toBe(1);
+    const r = setOf(names.S1).sections.reading;
+    expect(slotOf(r, 2, "ap_11").items).toEqual([{ id: "real_ap_325_2_11", nq: 5, q: 11, alias_of: "real_ap_121a_2_11" }]);
+    expect(r.completeness).toBe(1);
+    // S3 自己那份还在
+    expect(slotOf(setOf(names.S3).sections.reading, 2, "ap_11").items.map((x) => x.id)).toEqual(["real_ap_325_2_11"]);
+  });
+
+  test("不借：拼卷 = 原卷自己，purity 1、无 borrowed，弱卷不被拆散", () => {
+    const c1 = man.composites.reading.find((x) => x.base_set === names.S1);
+    expect(c1.complete).toBe(true);
+    expect(c1.purity).toBe(1);
+    expect(c1.borrowed).toEqual([]);
+    expect(man.composites.reading.some((x) => x.base_set === names.S3)).toBe(true);
+    expect(man.summary.per_section.reading.dissolved).toBe(0);
+    const lis = man.composites.listening.find((x) => x.base_set === names.S2);
+    expect(lis.complete).toBe(false);
+    expect(lis.missing).toContain("M2/lc_6:0/2");
+  });
+
+  test("题型套：一套 = 该场该题型全部题，如实标 got/need，状态沿用槽位语义", () => {
+    const apS1 = man.type_sets.ap.find((x) => x.set === names.S1);
+    expect(apS1).toMatchObject({ id: "ap:121a", need: 15, got: 15, status: "full" });
+    expect(apS1.items.map((x) => [x.module, x.q, x.id, x.alias_of || null])).toEqual([
+      [1, 26, "real_ap_121a_1_26", null], [1, 31, "real_ap_121a_1_31", null], [2, 11, "real_ap_325_2_11", "real_ap_121a_2_11"],
+    ]);
+    const lcS2 = man.type_sets.lc.find((x) => x.set === names.S2);
+    expect(lcS2).toMatchObject({ need: 10, got: 8, status: "partial" });
+    const latS2 = man.type_sets.lat.find((x) => x.set === names.S2);
+    expect(latS2).toMatchObject({ need: 16, got: 15, status: "near" });
+    const bsRF = man.type_sets.bs.find((x) => x.set === names.RF);
+    expect(bsRF).toMatchObject({ need: 10, got: 10, status: "full" });
+    expect(man.summary.type_sets.ap).toEqual({ sets: 2, full: 1, near: 0, partial: 1 });
+    // 拼盘 rp* 不出题型套
+    expect(man.type_sets.ap.some((x) => x.set === names.RP)).toBe(false);
+  });
+
+  test("报告含题型套一节", () => {
+    const md = asm.renderReport(man);
+    expect(md).toContain("## 六、按题型组套（同源，不借）");
+    expect(md).toContain("同源不借");
+  });
+});
+

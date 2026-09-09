@@ -17,10 +17,16 @@
  *
  * 只借不造：借不到就留缺口如实报告，不会把 3 题的学术段落假装成 5 题。
  *
+ * 2026-09-09 用户拍板「同源不借」：默认 --no-borrow（拼卷/整卷只看原卷自己有什么），
+ * 改按题型出「题型套」（type_sets：一套 = 该场考试该题型的全部题，如实标 N/应有）。
+ * 另外把复核清单里「跨套重复」下架的题当**别名**还回原场次（review-holds.json 的 dup_of）：
+ * 同一篇文章本来就在两场考试里都出现过，只是库里只留了一份；按场组套时该场引用保留的那份，
+ * 一道外来题都没有。加 --borrow 才启用旧的借题拼卷。
+ *
  * 用法：
  *   node scripts/realbank/assemble_sets.mjs                   # 写 sets.json + 报告
  *   node scripts/realbank/assemble_sets.mjs --dry-run         # 只打印摘要
- *   --bank <dir> --out <file> --report <file> --skeleton-min 0.5 --full-min 0.9
+ *   --bank <dir> --out <file> --report <file> --skeleton-min 0.3 --full-min 0.9 --borrow
  */
 import fs from "fs";
 import path from "path";
@@ -41,7 +47,7 @@ export const BANK_FILES = Object.freeze({
   bs: "writing/bs.json", email: "writing/email.json", disc: "writing/discussion.json",
 });
 
-const DEFAULTS = Object.freeze({ skeletonMin: 0.3, fullMin: 0.9 });
+const DEFAULTS = Object.freeze({ skeletonMin: 0.3, fullMin: 0.9, borrow: false });
 
 /* ── 读库 ─────────────────────────────────────────────────────────────── */
 
@@ -76,6 +82,21 @@ export function loadClusters(bankDir) {
   return out;
 }
 
+/**
+ * 跨套重复的别名：review-holds.json 里 scope=unit 且带 dup_of 的下架条目
+ * （"与 real_ap_310_1_31 同一份材料（跨套重复），保留 real_ap_310_1_31"）。
+ * 被下架的 id 仍然编码着它在**自己那场**的 module/题号，所以能原位还回去，内容指向保留的那份。
+ * 返回 [{ held, canonical, source }]。
+ */
+export function loadDupAliases(bankDir) {
+  const p = path.join(bankDir, "review-holds.json");
+  if (!fs.existsSync(p)) return [];
+  const holds = JSON.parse(fs.readFileSync(p, "utf8")).holds || [];
+  return holds
+    .filter((h) => h && h.scope === "unit" && h.dup_of && h.id && h.dup_of !== h.id)
+    .map((h) => ({ held: String(h.id), canonical: String(h.dup_of), source: h.source ? String(h.source) : null }));
+}
+
 /* ── 逐题建索引 ────────────────────────────────────────────────────────── */
 
 /**
@@ -83,17 +104,37 @@ export function loadClusters(bankDir) {
  *   { id, type, ptype, section, set, slug, date, pool, module, q, nq, anchorable, why }
  * ptype 是按位置修正后的题型（见 blueprint.positionType）。
  */
-export function indexItems(banks) {
+export function indexItems(banks, aliases = []) {
   const records = [];
-  for (const [type, items] of Object.entries(banks)) {
-    for (const item of items) {
+  const byId = new Map();
+  for (const [type, items] of Object.entries(banks)) for (const it of items) byId.set(String(it.id), { type, item: it });
+  const slugSet = new Map(), slugDate = new Map();
+  for (const { item } of byId.values()) {
+    const parsed = parseRealBankId(item.id);
+    if (parsed && item.source && !slugSet.has(parsed.slug)) { slugSet.set(parsed.slug, String(item.source).trim()); slugDate.set(parsed.slug, String(item.date || "").trim()); }
+  }
+  // 别名 = 一条「长得像被下架 id、内容取保留那份」的虚拟 item
+  const virtual = [];
+  for (const a of aliases) {
+    const can = byId.get(a.canonical);
+    const parsed = parseRealBankId(a.held);
+    if (!can || !parsed || can.type !== parsed.type) continue;
+    const set = slugSet.get(parsed.slug) || a.source;
+    if (!set) continue;
+    virtual.push({ type: can.type, item: { ...can.item, id: a.held, source: set, date: slugDate.get(parsed.slug) || can.item.date }, aliasOf: a.canonical });
+  }
+  const all = [];
+  for (const [type, items] of Object.entries(banks)) for (const item of items) all.push({ type, item, aliasOf: null });
+  all.push(...virtual);
+  for (const { type, item, aliasOf } of all) {
+    {
       const parsed = parseRealBankId(item.id);
       const nq = questionCount(type, item);
       const base = {
         id: String(item.id), type, ptype: type, section: SECTION_OF[type],
         set: String(item.source || "").trim() || "?", slug: parsed?.slug || "?",
         date: String(item.date || "").trim(), nq, pool: false, module: null, q: null,
-        anchorable: false, why: "",
+        anchorable: false, why: "", ...(aliasOf ? { aliasOf } : {}),
       };
       if (!parsed) { records.push({ ...base, why: "id 形状认不出" }); continue; }
       base.slug = parsed.slug;
@@ -166,7 +207,7 @@ function refreshSection(sec) {
   return sec;
 }
 
-const asFill = (r, extra = {}) => ({ id: r.id, nq: r.nq, q: r.q, from: r.set, via: "native", ...extra });
+const asFill = (r, extra = {}) => ({ id: r.aliasOf || r.id, nq: r.nq, q: r.q, from: r.set, via: "native", ...(r.aliasOf ? { alias_of: r.id } : {}), ...extra });
 
 /**
  * 把可锚定的题按 (卷, 科, module, 题号) 塞进槽位。
@@ -265,6 +306,7 @@ function cloneFrame(sec) {
  */
 export function assembleSection(section, anchored, records, banks, clusters, opts = {}) {
   const o = { ...DEFAULTS, ...opts };
+  if (!o.borrow) return assembleNative(section, anchored, o);
   const itemById = new Map();
   for (const [type, items] of Object.entries(banks)) for (const it of items) itemById.set(String(it.id), { type, item: it });
   const recById = new Map(records.map((r) => [r.id, r]));
@@ -391,6 +433,58 @@ export function assembleSection(section, anchored, records, banks, clusters, opt
   return { composites, donors, skeletons: composites.length, dissolved: [...dissolved] };
 }
 
+/** 同源不借：每套原卷就是自己的「拼卷」，只算完整度，不动一道题。 */
+function assembleNative(section, anchored, o) {
+  const composites = [];
+  const ranked = [...anchored.values()].filter((s) => s.sections[section])
+    .sort((a, b) => b.sections[section].completeness - a.sections[section].completeness || String(a.date).localeCompare(String(b.date)) || a.set.localeCompare(b.set));
+  for (const s of ranked) {
+    const sec = cloneFrame(s.sections[section]);
+    refreshSection(sec);
+    const slotsAll = Object.values(sec.modules).flatMap((m) => m.slots);
+    composites.push({
+      id: `${section}:${s.slug}`, section, base_set: s.set, date: s.date,
+      forms: Object.fromEntries(Object.values(sec.modules).map((m) => [m.module, m.form])),
+      completeness_before: sec.completeness, completeness: sec.completeness,
+      complete: sec.completeness >= o.fullMin && slotsAll.every((sl) => sl.status === "full" || sl.status === "near"),
+      purity: 1, borrowed: [], modules: sec.modules,
+      missing: Object.values(sec.modules).flatMap((m) => m.slots.filter((sl) => sl.status !== "full").map((sl) => `M${m.module}/${sl.key}:${sl.got}/${sl.need}`)),
+    });
+  }
+  return { composites, donors: [], skeletons: composites.length, dissolved: [] };
+}
+
+/**
+ * 题型套：一套 = 该场考试该题型的全部题（按卷面顺序），如实标 got/need。
+ * status 沿用槽位语义：full = 每槽满；near = 每槽满或只差 1 题（槽位 ≥4 题时）；partial = 有槽残缺；
+ * 单元素题型（email/disc/repeat/interview）一题一套，不另出。
+ */
+export function buildTypeSets(anchored) {
+  const TYPES = ["lcr", "lc", "la", "lat", "ctw", "rdl", "ap", "bs"];
+  const out = Object.fromEntries(TYPES.map((t) => [t, []]));
+  for (const s of anchored.values()) {
+    for (const t of TYPES) {
+      const slots = [];
+      for (const sec of Object.values(s.sections)) for (const m of Object.values(sec.modules)) for (const sl of m.slots) {
+        const st = sl.type === "mcq2" ? (sl.items[0] ? sl.items[0].id.split("_")[1] : "la") : sl.type;
+        if (st === t) slots.push({ module: m.module, ...sl });
+      }
+      if (!slots.length) continue;
+      const items = slots.flatMap((sl) => sl.items.map((x) => ({ id: x.id, ...(x.alias_of ? { alias_of: x.alias_of } : {}), nq: x.nq, module: sl.module, q: x.q, slot: sl.key })));
+      const need = slots.reduce((a, sl) => a + sl.need, 0);
+      const got = slots.reduce((a, sl) => a + Math.min(sl.got, sl.need), 0);
+      const statuses = slots.map((sl) => sl.status);
+      const status = statuses.every((x) => x === "full") ? "full"
+        : statuses.every((x) => x === "full" || x === "near") ? "near"
+          : got > 0 ? "partial" : "empty";
+      if (status === "empty") continue;
+      out[t].push({ id: `${t}:${s.slug}`, type: t, set: s.set, date: s.date, need, got, status, items });
+    }
+    for (const t of TYPES) out[t].sort((a, b) => (b.got / b.need) - (a.got / a.need) || String(a.date).localeCompare(String(b.date)));
+  }
+  return out;
+}
+
 /** 四科合成整卷：同一源卷四科都拼齐 → native；否则把各科剩余的完整卷按日期顺序配对 → mixed。 */
 export function bundleExams(compositesBySection, opts = {}) {
   const o = { ...DEFAULTS, ...opts };
@@ -424,8 +518,11 @@ export function buildManifest(bankDir, opts = {}) {
   const o = { ...DEFAULTS, ...opts };
   const banks = loadBanks(bankDir);
   const clusters = loadClusters(bankDir);
-  const records = indexItems(banks);
+  const aliases = loadDupAliases(bankDir);
+  const records = indexItems(banks, aliases);
   const anchored = anchorSets(records);
+  const typeSets = buildTypeSets(anchored);
+  const aliasesRestored = records.filter((r) => r.aliasOf && r.anchorable).length;
 
   const compositesBySection = {}, donorsBySection = {}, dissolvedBySection = {};
   for (const sec of SECTIONS) {
@@ -461,7 +558,7 @@ export function buildManifest(bankDir, opts = {}) {
     set: s.set, slug: s.slug, date: s.date,
     sections: Object.fromEntries(Object.entries(s.sections).map(([sec, f]) => [sec, {
       completeness: f.completeness, got: f.got, need: f.need,
-      modules: Object.fromEntries(Object.values(f.modules).map((m) => [m.module, { form: m.form, got: m.got, need: m.need, slots: m.slots.map((sl) => ({ key: sl.key, type: sl.type, band: sl.band, need: sl.need, got: sl.got, status: sl.status, items: sl.items.map((x) => ({ id: x.id, nq: x.nq, q: x.q })) })) }])),
+      modules: Object.fromEntries(Object.values(f.modules).map((m) => [m.module, { form: m.form, got: m.got, need: m.need, slots: m.slots.map((sl) => ({ key: sl.key, type: sl.type, band: sl.band, need: sl.need, got: sl.got, status: sl.status, items: sl.items.map((x) => ({ id: x.id, nq: x.nq, q: x.q, ...(x.alias_of ? { alias_of: x.alias_of } : {}) })) })) }])),
       unplaced: f.unplaced.map((u) => ({ id: u.id, type: u.ptype, module: u.module, q: u.q, nq: u.nq, why: u.why })),
     }])),
   }));
@@ -488,15 +585,22 @@ export function buildManifest(bankDir, opts = {}) {
     })),
     exams_native: bundle.exams.filter((e) => e.kind === "native").length,
     exams_mixed: bundle.exams.filter((e) => e.kind === "mixed").length,
+    aliases_restored: aliasesRestored,
+    type_sets: Object.fromEntries(Object.entries(typeSets).map(([t, list]) => [t, {
+      sets: list.length,
+      full: list.filter((x) => x.status === "full").length,
+      near: list.filter((x) => x.status === "near").length,
+      partial: list.filter((x) => x.status === "partial").length,
+    }])),
   };
 
   return {
     blueprint_version: BLUEPRINT_VERSION,
     generated: new Date().toISOString().slice(0, 10),
     generated_by: "scripts/realbank/assemble_sets.mjs",
-    params: { skeleton_min: o.skeletonMin, full_min: o.fullMin, near: "差 1 题且槽位 ≥4 题" },
+    params: { skeleton_min: o.skeletonMin, full_min: o.fullMin, near: "差 1 题且槽位 ≥4 题", borrow: !!o.borrow },
     inventory, pool_items: poolCounts, forms_observed: formsObserved, summary,
-    sets, composites: compositesBySection, exams: bundle.exams, exam_leftover: bundle.leftover,
+    sets, type_sets: typeSets, composites: compositesBySection, exams: bundle.exams, exam_leftover: bundle.leftover,
     residue, pool_unsplit: poolUnsplit, unanchored,
   };
 }
@@ -509,7 +613,7 @@ export function renderReport(man) {
   const L = [];
   L.push(`# 真题装回整卷报告（${man.generated}）`, "");
   L.push(`> 生成：\`node scripts/realbank/assemble_sets.mjs\` · 蓝图 ${man.blueprint_version}（lib/realExam/blueprint.mjs）· 零 LLM · 产物 data/realBank/sets.json`, "");
-  L.push(`> 参数：骨架门槛 ${pct(man.params.skeleton_min)}（低于此的卷拆成补位素材）· 完整门槛 ${pct(man.params.full_min)} · 近似满(near) = 只差 1 题且槽位 ≥4 题`, "");
+  L.push(`> 参数：${man.params.borrow ? `借题拼卷开启 · 骨架门槛 ${pct(man.params.skeleton_min)}（低于此的卷拆成补位素材）` : "**同源不借**（--borrow 未开，拼卷 = 原卷自己）"} · 完整门槛 ${pct(man.params.full_min)} · 近似满(near) = 只差 1 题且槽位 ≥4 题 · 跨套重复别名还回 ${man.summary.aliases_restored} 条`, "");
 
   L.push("## 一、2026 改后整卷结构（每套的题数与配比）", "");
   L.push("| 科目 | 总题数 | Module 1 | Module 2 |", "|---|---|---|---|");
@@ -552,7 +656,19 @@ export function renderReport(man) {
   for (const e of man.exams) L.push(`| ${e.id} | ${e.kind} | ${e.date} | ${e.sections.reading} | ${e.sections.listening} | ${e.sections.speaking} | ${e.sections.writing} |`);
   L.push("", `配不成整卷的完整单科：${Object.entries(man.exam_leftover).map(([s, l]) => `${s} ${l.length}`).join(" · ")}`, "");
 
-  L.push("## 六、残余与未锚定", "");
+  L.push("## 六、按题型组套（同源，不借）", "");
+  L.push("一套 = 该场考试该题型的全部题，按卷面顺序，如实标「有 / 应有」。齐 = 每槽满；只差一点 = 每槽满或只差 1 题；残缺 = 有槽缺得更多。", "");
+  L.push("| 题型 | 一套规格 | 有题的场次 | 齐 | 只差一点 | 残缺 |", "|---|---|---|---|---|---|");
+  const spec = { lcr: "15 道（M1 12 + M2 3）", lc: "5 段", la: "3 段", lat: "4 段", ctw: "3 篇", rdl: "10 题（A 型）/ 5 题（B 型）", ap: "2 篇（A 型）/ 3 篇（B 型）", bs: "10 句" };
+  for (const [t, x] of Object.entries(man.summary.type_sets)) L.push(`| ${t} | ${spec[t]} | ${x.sets} | ${x.full} | ${x.near} | ${x.partial} |`);
+  L.push("", "逐场明细在 sets.json 的 type_sets；别名（alias_of）= 该场原有、库里只留了另一场那份的同一篇。", "");
+  for (const [t, list] of Object.entries(man.type_sets)) {
+    const good = list.filter((x) => x.status === "full" || x.status === "near");
+    if (!good.length) continue;
+    L.push(`- **${t}** 可直接上架 ${good.length} 套：${good.map((x) => `${x.set}(${x.got}/${x.need})`).join("、")}`);
+  }
+  L.push("");
+  L.push("## 七、残余与未锚定", "");
   L.push(`借完之后还剩的素材：${Object.entries(man.residue).map(([t, n]) => `${t} ${n}`).join(" · ") || "无"}`, "");
   L.push(`拼盘卷（rp*，无卷面题号，只作素材）：${Object.entries(man.pool_items).map(([t, n]) => `${t} ${n}`).join(" · ") || "无"}`, "");
   if (man.pool_unsplit.length) {
@@ -572,7 +688,7 @@ export function renderReport(man) {
 /* ── CLI ───────────────────────────────────────────────────────────────── */
 
 function parseArgs(argv) {
-  const a = { bank: path.join(ROOT, "data", "realBank"), out: null, report: null, dryRun: false, skeletonMin: DEFAULTS.skeletonMin, fullMin: DEFAULTS.fullMin };
+  const a = { bank: path.join(ROOT, "data", "realBank"), out: null, report: null, dryRun: false, borrow: DEFAULTS.borrow, skeletonMin: DEFAULTS.skeletonMin, fullMin: DEFAULTS.fullMin };
   for (let i = 0; i < argv.length; i += 1) {
     const k = argv[i], v = argv[i + 1];
     if (k === "--bank") { a.bank = path.resolve(v); i += 1; }
@@ -581,6 +697,7 @@ function parseArgs(argv) {
     else if (k === "--skeleton-min") { a.skeletonMin = Number(v); i += 1; }
     else if (k === "--full-min") { a.fullMin = Number(v); i += 1; }
     else if (k === "--dry-run") a.dryRun = true;
+    else if (k === "--borrow") a.borrow = true;
     else if (k === "--help" || k === "-h") { console.log(fs.readFileSync(fileURLToPath(import.meta.url), "utf8").split("*/")[0]); process.exit(0); }
   }
   a.out ??= path.join(a.bank, "sets.json");
@@ -590,9 +707,10 @@ function parseArgs(argv) {
 
 function main() {
   const a = parseArgs(process.argv.slice(2));
-  const man = buildManifest(a.bank, { skeletonMin: a.skeletonMin, fullMin: a.fullMin });
+  const man = buildManifest(a.bank, { skeletonMin: a.skeletonMin, fullMin: a.fullMin, borrow: a.borrow });
   const s = man.summary;
-  console.log(`卷 ${s.sets_total} 套 · 蓝图 ${man.blueprint_version}`);
+  console.log(`卷 ${s.sets_total} 套 · 蓝图 ${man.blueprint_version} · ${a.borrow ? "借题拼卷" : "同源不借"} · 跨套重复别名还回 ${s.aliases_restored}`);
+  for (const [t, x] of Object.entries(s.type_sets)) console.log(`  题型套 ${t.padEnd(4)} 场次 ${String(x.sets).padStart(2)} · 齐 ${String(x.full).padStart(2)} · 只差一点 ${String(x.near).padStart(2)} · 残 ${String(x.partial).padStart(2)}`);
   for (const [sec, x] of Object.entries(s.per_section)) {
     console.log(`  ${sec.padEnd(9)} 有题 ${String(x.sets_with_any).padStart(2)} · 原生完整 ${String(x.native_complete).padStart(2)} · 骨架 ${String(x.skeletons).padStart(2)} → 拼齐 ${String(x.composites_complete).padStart(2)}（纯原卷 ${x.composites_pure}）· 拆散 ${x.dissolved}`);
   }

@@ -59,6 +59,15 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
 
 零 LLM、确定性、可重复；每次 `build_bank.mjs` 落库后重跑一遍即可。
 
+**默认「同源不借」**（2026-09-09 用户拍板）：拼卷 = 原卷自己有什么就是什么，一道外来题不借；`--borrow` 才启用下面描述的借题拼卷。
+默认模式下两件事撑起产量：
+
+- **跨套重复别名还回原场次**：复核清单（review-holds.json）里 scope=unit 且带 `dup_of` 的下架条目（212 条，阅读 188 / 听力 22 / 写作 2）
+  是「同一篇材料在两场考试都出现、库里只留一份」。被下架的 id 仍编码着它在自己那场的 module/题号，
+  装卷时原位还回、内容指向保留的那份（`items[].alias_of` = 被下架的原 id，`id` = 库里那份）。这不是借题：那场考试确实考了这篇。
+- **题型套 `type_sets`**：一套 = 该场考试该题型的全部题（按卷面顺序），如实标 `got/need`，`status` 沿用槽位语义
+  （full = 每槽满；near = 每槽满或只差 1 题；partial = 有槽缺得更多）。单元素题型（email/disc/repeat/interview）一题一套，不另出。
+
 **两层产出：**
 
 1. **原卷（`sets[]`）**：每套源卷按蓝图槽位逐槽回填，给出每科每 module 每槽的
@@ -87,6 +96,7 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
   sets: [ { set, slug, date, sections: { reading: { completeness, got, need,
               modules: { 1: { form, got, need, slots: [ { key, type, band, need, got, status, items: [{id,nq,q}] } ] } },
               unplaced: [] } } } ],
+  type_sets: { lcr: [ { id: "lcr:121b", type, set, date, need, got, status, items: [{id, alias_of?, nq, module, q, slot}] } ], lc, la, lat, ctw, rdl, ap, bs },
   composites: { reading: [ { id: "reading:rf0620", base_set, date, forms, completeness_before, completeness,
               complete, purity, borrowed: [{slot,id,nq,q,from,via,split?}], modules, missing } ], … },
   exams: [ { id, kind: "native"|"mixed", base_set, date, sections: { reading: "reading:rf0620", … } } ],
@@ -111,6 +121,21 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
 要提高整卷数，补料顺序是：**听力对话（lc）> 学术讨论（disc）> 邮件（email）**（面试拆分已做）。
 其余题型库存都够 16 套以上。
 
+**同源不借 + 别名还回后的题型套**（2026-09-09 第二次跑，`--borrow` 关）：
+
+| 题型 | 一套规格 | 有题的场次 | 齐 | 只差一点 | 残缺 | 别名还回前「齐」 |
+|---|---|---|---|---|---|---|
+| 短应答 lcr | 15 道 | 21 | 3 | 4 | 14 | 3 |
+| 对话 lc | 5 段 | 17 | 1 | 0 | 16 | 1 |
+| 通知 la | 3 段 | 21 | 16 | 0 | 5 | 9 |
+| 讲座 lat | 4 段 | 21 | 15 | 1 | 5 | 7 |
+| 填词 ctw | 3 篇 | 42 | 11 | 0 | 31 | 5 |
+| 日常阅读 rdl | 10 题 | 67 | 27 | 17 | 23 | 11 |
+| 学术段落 ap | 2~3 篇 | 66 | 2 | 33 | 31 | 0 |
+| 造句 bs | 10 句 | 39 | 6 | 7 | 26 | 5 |
+
+「只差一点」的学术段落 33 场几乎全是每篇 4/5 题（结构化漏抽 1 题），补抽漏题后会整体变「齐」。
+
 **审查时改过的两条判据**（2026-09-09 自审）：
 - 拼盘面试机械按 4 问切会把两场面试缝在一起（rp0704 第 5 问开头就是 "I'd like to discuss your views on renewable energy"，
   且 19 / 15 / 11 问的都有，边界对不齐 4 的倍数）→ 脚本不自动切；改为**人工逐题读出切分表**
@@ -120,9 +145,20 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
 - 8 道被入库路由错标成 ap 的日常阅读（topic 落成 email / notice / schedule / poster / website）按体裁改回 rdl，
   阅读因此从 27 套涨到 29 套（上限）。
 
-## 四、下一步（未做，待拍板）
+## 四、补题清单（用户 2026-09-09 拍板「先找题，能补就补」）
 
-- 前端「整卷练习 / 真题模考」消费 `sets.json`（按 `exams[]` 或单科 `composites`），
-  现在真题专区仍按题型进；模考壳需要先把 planner 结构对齐真卷（见上文不一致 1）。
-- 听力对话是全局瓶颈：源料里 rf/rp 后续几套、以及 2.23/3.4/3.8/4.18 等被 HOLD 的听力科若放行，直接抬高上限。
+源料本身九成以上完整（体检配对：阅读 2514/2650、听力 2305/2491），缺口主要是管线丢的。按收益排：
+
+| # | 缺口 | 量 | 怎么补 | 在哪跑 | 状态 |
+|---|---|---|---|---|---|
+| 1 | 跨套重复被下架 | 阅读 188 篇 + 听力 22 段 | 装卷时按 `dup_of` 原位还回（别名） | 仓库，零成本 | ✅ 已做 |
+| 2 | 学术段落每篇漏抽 1 题 | 122 题（33 场因此「只差一点」） | 结构化阶段对 flagged 单元按答案键题号补抽（`structure_set.mjs` 的 repairUnit 已有此机制，需对 4/5 的组再跑一轮修复；仍失败的用原图重抽） | 本机（.codex-tmp + DeepSeek 少量费用） | 待做 |
+| 3 | 对话判不出性别被扣 | 34 段 | `lc_gender_worksheet.py` 听音标注 → 覆盖表 → 重跑合流 | 本机，约半小时 | 工具已就绪 |
+| 4 | 4/5 月 16 套没跑 | 整卷 | `run_pipeline.mjs --all --resume` | 本机，约 ¥26 | 待充值 |
+| 5 | 填词答案词首被截 | 13 套 × 30 空 | 用题干词首 + 答案残片机械还原；需先看几条原始残片定规则 | 本机（要源 PDF） | 待设计 |
+| 6 | 听力无音频 | 18 套 | 源缺，只能补料 | — | 源缺 |
+
+跑完 2~5 任一项后：`build_bank.mjs` → `apply_interview_splits.mjs`（build_bank 已自动调）→ `assemble_sets.mjs`，题型套数字自动更新。
+
+- 前端「题型套」入口：按 `type_sets[type]` 列卡片（第 N 场 · 日期 · got/need），点进去按 items 顺序连做；`alias_of` 只影响归属显示，题面按 `id` 回查。
 - B 型（阅读 M1 双学术簇 / 听力 M2 七短应答）是否对应自适应的高/低档，需要更多样本或官方说明确认。
