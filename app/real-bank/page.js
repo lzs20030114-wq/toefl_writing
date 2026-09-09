@@ -12,6 +12,7 @@
 //   造句       → BuildSentenceTask 的 questions prop 非空时完全跳过随机选题。
 
 import { Suspense, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { WritingTask } from "../../components/writing/WritingTask";
 import { BuildSentenceTask } from "../../components/buildSentence/BuildSentenceTask";
@@ -439,7 +440,23 @@ function RealBankPageClient() {
     if (typeof router.replace === "function") router.replace(url);
     else router.push(url);
   };
-  const modeSwitch = <RealModeSwitch mode={mode} onSwitch={switchMode} />;
+  // picker 头部：练习记录入口 + 三档切换（记录页在 /real-bank/progress，与分科历史页同一挂法）。
+  const modeSwitch = (
+    <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+      <Link
+        href="/real-bank/progress"
+        data-testid="real-progress-link"
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: 999,
+          border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, fontSize: 12, fontWeight: 700,
+          textDecoration: "none", fontFamily: FONT, whiteSpace: "nowrap",
+        }}
+      >
+        📈 练习记录
+      </Link>
+      <RealModeSwitch mode={mode} onSwitch={switchMode} />
+    </div>
+  );
 
   /* ── Pro 门禁（仿 app/reading/page.js:195-223，锁定屏自持 UpgradeModal） ── */
   if (!isPro) {

@@ -66,6 +66,7 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} fadeIn={fadeIn}
         hoverKey={hoverKey} setHoverKey={setHoverKey}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+        sessions={sessions}
       />
     );
   }

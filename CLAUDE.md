@@ -32,6 +32,8 @@ app/                          # Next.js App Router
 ├── post-writing-practice/    # 写后练习
 ├── mistake-notebook/         # 错题本
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
+├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
+│                             #   (lib/realBankHistory 辨认真题记录, 复用各科历史页的逐题回顾渲染)
 ├── my-bank/                  # 个人题库 (Pro 专属)
 ├── terms/                    # 条款页
 ├── admin*/                   # 后台页 (codes/users/questions/staging/analytics/
@@ -52,6 +54,7 @@ components/                   # 分科任务 UI + 后台
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
 ├── userBank/                 # 个人题库导入/管理 UI
+├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
 ├── referral/                 # 推荐邀请浮层/入口
 ├── home/ history/ mistakes/ login/ admin/
 └── shared/                   # ui.js(设计系统 C/FONT/Btn/PageShell), UpgradeModal,
@@ -71,6 +74,7 @@ lib/
 ├── bsGen/                    # BS 出题：promptBuilders(纯函数) + circuitBreaker(熔断低通过率)
 ├── tts/                      # edgeTts / openaiTts / toneDirector(persona) / renderListening / storage
 ├── userBank/                 # personalBank(拉取+映射picker), imageSniff, listeningAudioRender
+├── realBank.js realBankModes.js realBankHistory.js   # 真题专区数据层 / 三档限时 / 练习记录纯函数
 ├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
 ├── gate/                     # 通用防退化门：gateHarness + gate-registry + measurers/
 ├── quality/                  # scoreBatch.mjs (真题校准打分器)

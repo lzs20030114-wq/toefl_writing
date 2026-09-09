@@ -269,7 +269,7 @@ function MockTaskCard({ task, index }) {
 
 // -- LCR Detail (Choose a Response) --
 
-function LCRDetail({ session }) {
+export function LCRDetail({ session }) {
   const results = session.details?.results || [];
   // LCR persists its per-item snapshot under details.items (parallel to
   // results) — see saveListeningSession in app/listening/page.js and the
@@ -349,7 +349,7 @@ function LCRDetail({ session }) {
 
 // -- LA/LAT Detail (Announcement / Academic Talk) --
 
-function LADetail({ session }) {
+export function LADetail({ session }) {
   const results = session.details?.results || [];
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
@@ -431,7 +431,7 @@ function LADetail({ session }) {
 
 // -- LC Detail (Conversation) --
 
-function LCDetail({ session }) {
+export function LCDetail({ session }) {
   const results = session.details?.results || [];
   const questions = session.details?.questions || [];
   const conversation = session.details?.conversation || session.details?.turns || [];
