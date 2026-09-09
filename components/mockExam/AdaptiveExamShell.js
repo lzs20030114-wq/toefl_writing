@@ -37,8 +37,8 @@ import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from 
 // Both budgets are DERIVED from each planner's module plan so they track the
 // question counts automatically (see readingModuleSeconds /
 // listeningModuleSeconds for the conversion):
-//   - Reading keeps its shipped per-question pace (M1 36 s/题, M2 20 s/题).
-//     M1 20→35 题 ⇒ 12→21 min · M2 30→15 题 ⇒ 10→5 min (section 22→26 min).
+//   - Reading uses the real test's 30-min seated section budget, split by
+//     scored question count (35 : 15 ⇒ 21 min / 9 min).
 //   - Listening keeps its 29-min section budget; the split moved from raw
 //     item count (12:8) to each module's time demand (audio + answer windows),
 //     because M2 is lecture-heavy: ≈18.6 min / ≈10.4 min.
@@ -1575,14 +1575,14 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
           label="Module 1 (路由阶段)"
           correct={m1Correct}
           total={m1Total}
-          weight="40%"
+          weight={`${Math.round((score.m1Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
         <ScoreBreakdownRow
           label={`Module 2 (${score.path === "upper" ? "Upper" : "Lower"})`}
           correct={m2Correct}
           total={m2Total}
-          weight="60%"
+          weight={`${Math.round((score.m2Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
 

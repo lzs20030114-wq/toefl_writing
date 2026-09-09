@@ -30,7 +30,7 @@
 ## 可派工
 
 - [中] **真题整卷消费**：`scripts/realbank/assemble_sets.mjs` 已把拆散的真题装回整卷（`data/realBank/sets.json`：原卷完整度 + 拼卷 + 整卷清单，2026-09-09 阅读 29 / 听力 9 / 口语 19 / 写作 7 套拼齐，整卷 2 native + 5 mixed；拼盘面试已人工切成 23 套入库）。前端真题专区仍按题型进，需要一个「整卷 / 单科整套」入口按 `exams[]` / `composites[]` 的 id 回查题面；蓝图与用法见 docs/realbank-set-blueprint.md。补料优先级：①听力对话 lc（9 套上限）；②学术讨论 disc（7）> 邮件 email（14）；③5 条不是 7 整数倍的拼盘复述大集（rp0705 16 / rp0718 31 / rp0719 22 / rp0819 8 / rp0830 8 句）人工切分。
-- [✅完成 2026-09-09] **模考 planner 结构对齐 2026 真卷**：阅读 M1 35（CTW 20 + RDL 10 + AP 5）/ M2 15（CTW 10 + AP 5，无 RDL），听力 M1 32（12 LCR + 3 LC + 3 LA + 2 LAT）/ M2 15（3 LCR + 2 LC + 2 LAT，两路构成相同）；构成/题数/计时唯一真源 `lib/mockExam/modulePlans.js`，IntroCard 与首页模考卡题量改为派生。**遗留两项需拍板**：①阅读模考计时按「每题节奏不变」缩放成 21 + 5 = 26 min，若要对齐真考约 42 s/题只需改 `READING_SECONDS_PER_QUESTION`；②`adaptiveScoring.js` 的 M1 40% / M2 60% 权重与题量（M1 占 35/50、32/47）方向相反，是否改为按题量加权。
+- [✅完成 2026-09-09] **模考 planner 结构对齐 2026 真卷**：阅读 M1 35（CTW 20 + RDL 10 + AP 5）/ M2 15（CTW 10 + AP 5，无 RDL），听力 M1 32（12 LCR + 3 LC + 3 LA + 2 LAT）/ M2 15（3 LCR + 2 LC + 2 LAT，两路构成相同）；构成/题数/计时唯一真源 `lib/mockExam/modulePlans.js`，IntroCard 与首页模考卡题量改为派生。2026-09-09 用户拍板「全部对齐真考」：①阅读段按真考 30 min 座位时长（ETS 公布 18–27 min 对应 35–48 题；机经全卷 50 题取 30 min，与听力 29 min 同口径），按题数比例切 21 + 9 min；②评分改为每题等权（ETS 未公布模块权重与原始分换算，等权即各模块按题数占比），lower 封顶 4.0 不变，结果页权重改为派生显示。
 
 - [高] 点数周期刷新机制（**开 CREDITS_ENFORCEMENT_ENABLED 前必须**）：①季/年卡每 30 天补发 100 点（webhook 只发首期）；②活跃周期内续费被跳过的点数补发（webhook 日志可 grep `active period, skip` 出欠账名单，iap_entitlements 是 ground truth）；③CREDITS_ENABLED 翻开前的购买补发。出处：2026-08-01 提价接线（commit 6804b146）。
 - [中] 加量包（50/150/400 点）定价按 deepseek-v4-flash 真实单次成本校准 + 购买链路接线——enforcement 开启后才需要上架。出处：PRICING-USAGE-PLAN-2026-07-13。

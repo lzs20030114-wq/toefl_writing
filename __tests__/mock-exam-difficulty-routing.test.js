@@ -18,6 +18,7 @@ import {
   READING_TOTAL_QUESTIONS,
   readingModuleQuestionCount,
   readingModuleSeconds,
+  TOEFL_READING_SECTION_SECONDS,
   describeModulePlan as describeReadingModulePlan,
 } from "../lib/mockExam/readingPlanner";
 import {
@@ -503,9 +504,11 @@ describe("2026 blueprint composition", () => {
       expect(describeReadingModulePlan(2)).toBe("15 题 (CTW 10空 + AP 5题)");
     });
 
-    test("module timers keep the shipped per-question pace (36s / 20s)", () => {
-      expect(readingModuleSeconds(1)).toBe(36 * 35); // 21 min
-      expect(readingModuleSeconds(2)).toBe(20 * 15); // 5 min
+    test("module timers split the real 30-min reading budget by question count (21 / 9 min)", () => {
+      expect(TOEFL_READING_SECTION_SECONDS).toBe(30 * 60);
+      expect(readingModuleSeconds(1)).toBe(21 * 60);
+      expect(readingModuleSeconds(2)).toBe(9 * 60);
+      expect(readingModuleSeconds(1) + readingModuleSeconds(2)).toBe(TOEFL_READING_SECTION_SECONDS);
     });
   });
 
