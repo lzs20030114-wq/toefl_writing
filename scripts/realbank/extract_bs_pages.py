@@ -56,7 +56,8 @@ from ocr_images import (  # noqa: E402  复用同一个 Qwen3-VL 客户端 / 估
 )
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC_ROOT = r"D:\桌面\【2026改后全科真题】（持续更新中）"
+# 源根目录：REALBANK_SRC（云端 Worker 只设这一个）/ --src 覆盖，默认仍是桌面路径。
+SRC_ROOT = os.environ.get("REALBANK_SRC") or r"D:\桌面\【2026改后全科真题】（持续更新中）"
 OUT_DIR = os.path.join(REPO_ROOT, ".codex-tmp", "realbank")
 PAGE_DIR = os.path.join(OUT_DIR, "bs-pages")
 OCR_DIR = os.path.join(OUT_DIR, "bs-ocr")
@@ -503,7 +504,13 @@ def main() -> int:
     ap.add_argument("--no-ocr", action="store_true", help="只用已有缓存跑校验，零调用")
     ap.add_argument("--model", default=os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus")
     ap.add_argument("--max-images", type=int, default=400)
+    ap.add_argument("--src", default=None,
+                    help="覆盖源根目录（默认桌面路径，也可用 REALBANK_SRC 环境变量）")
     args = ap.parse_args()
+
+    global SRC_ROOT
+    if args.src:
+        SRC_ROOT = args.src
 
     load_env()
     if not os.path.isdir(SRC_ROOT):

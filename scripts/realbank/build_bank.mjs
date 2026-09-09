@@ -85,8 +85,34 @@ function flagsFor(setName, section) {
  * 改由 hold_policy.holdDecision 做**逐 code** 判定（降级/条件放行），其余 code 与其余三科
  * 行为完全不变 —— isHeld 就是 holdDecision 的布尔投影，供写作/听力/口语沿用。
  */
+/**
+ * 本次重建的扣留台账（`--report <path>` 落盘，供自动录入 Worker 填 job.result.holds）。
+ *
+ * 以前扣留只有 console.warn 一行 —— 人跑管线时够用（眼睛就在终端上），云端跑就等于没有：
+ * Actions 日志翻页几千行，后台「复核队列」拿不到结构化的「哪一卷哪一科为什么被扣」，
+ * 人也就无从点「放行」。所以每个扣留/降级/条件放行的判定都在这里记一笔。
+ */
+const HOLD_LEDGER = [];
+function recordHold(setName, section, hold) {
+  if (hold.held) {
+    HOLD_LEDGER.push({
+      set: setName, section, code: hold.heldBy.join("/"), codes: hold.heldBy,
+      kind: "held", detail: `源料体检 blocking：${hold.heldBy.join("/")}，整科扣下待人工核对`,
+    });
+  }
+  for (const n of hold.notes || []) {
+    HOLD_LEDGER.push({
+      set: setName, section, kind: n.startsWith("ctw_answer_truncated") ? "downgraded" : "released",
+      code: String(n).split("：")[0], detail: n,
+    });
+  }
+}
+
 function holdFor(setName, section, ctx) {
-  return holdDecision(SOURCE_FLAGS[setName] || [], section, ctx);
+  // set 必须传下去：hold_policy 要拿 (set, section, code) 去 review-overrides.json 查
+  // 后台复核的放行清单（契约 §4）。不传的话所有 override 都不生效，人在后台点了「放行」
+  // 也白点 —— 这是 2026-09-09 接自动录入时新加的入参，别再回退成只传两个。
+  return holdDecision(SOURCE_FLAGS[setName] || [], section, { ...(ctx || {}), set: setName });
 }
 function isHeld(setName, section) {
   return holdFor(setName, section).held;
@@ -492,7 +518,9 @@ function buildWriting(files, stats) {
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
-    if (isHeld(setname, "writing")) {
+    const wHold = holdFor(setname, "writing");
+    recordHold(setname, "writing", wHold);
+    if (wHold.held) {
       console.warn(`跳过 ${setname} 写作：源料体检标了 blocking（整科扣下待人工核对）`);
       stats.wDroppedHeld += 1;
       continue;
@@ -676,7 +704,11 @@ function buildListeningSpeaking(files, stats) {
     const setname = f.replace(/\.structured\.json$/, "");
     const st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
     if (!st.merged_asr) continue;                    // 没跑过合流的卷这期不收
-    if (isHeld(setname, "listening") && isHeld(setname, "speaking")) {
+    const lHold = holdFor(setname, "listening");
+    const sHold = holdFor(setname, "speaking");
+    recordHold(setname, "listening", lHold);
+    recordHold(setname, "speaking", sHold);
+    if (lHold.held && sHold.held) {
       console.warn(`跳过 ${setname} 听力/口语：源料体检标了 blocking`);
       stats.lDroppedHeld += 1;
       continue;
@@ -935,6 +967,53 @@ function recarryMaterialImagesOnDisk(dir, prevBundle) {
   return n;
 }
 
+/**
+ * 落 `--report` JSON。逐卷读一遍 .audit.json 算「每科盲审一致率 + 不一致明细」——
+ * 这两样和扣留台账一起，构成后台复核队列要展示的全部内容。
+ */
+function writeReport(reportPath, files, extra) {
+  const audit = {};
+  const disagreed = [];
+  for (const f of files.sort()) {
+    const setname = f.replace(/\.structured\.json$/, "");
+    const p = path.join(OUT_DIR, `${setname}.audit.json`);
+    if (!fs.existsSync(p)) continue;
+    let au;
+    try { au = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    if (!Array.isArray(au.audited)) continue;
+    const bySection = {};
+    for (const a of au.audited) {
+      const s = a && a.section;
+      if (!s) continue;
+      bySection[s] = bySection[s] || { agree: 0, total: 0 };
+      bySection[s].total += 1;
+      if (a.agree === true) bySection[s].agree += 1;
+      else {
+        // 字段名跟 audit_answers.mjs 的 audited 明细一致：stamped = 答案页盖上去的，
+        // model = 盲审模型自己做出来的。两者不一致才进这张表。
+        disagreed.push({
+          set: setname, section: s, type: a.type || null, q: a.q ?? null,
+          key: a.stamped ?? null, model: a.model ?? null,
+        });
+      }
+    }
+    audit[setname] = bySection;
+  }
+  const report = {
+    generated_at: new Date().toISOString(),
+    sets: files.length,
+    dry: Boolean(extra && extra.dry),
+    counts_after: (extra && extra.counts_after) || null,
+    audit,
+    holds: HOLD_LEDGER.filter((h) => h.kind === "held"),
+    hold_notes: HOLD_LEDGER.filter((h) => h.kind !== "held"),
+    disagreed,
+  };
+  fs.mkdirSync(path.dirname(path.resolve(reportPath)), { recursive: true });
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf8");
+  console.log(`\n■ 重建报告 → ${reportPath}（扣留 ${report.holds.length} 条 / 放行记账 ${report.hold_notes.length} 条 / 盲审不一致 ${disagreed.length} 题）`);
+}
+
 /* ── 主流程 ─────────────────────────────────────────────────────────────── */
 function main() {
   const dry = process.argv.includes("--dry");
@@ -984,6 +1063,7 @@ function main() {
     // 其余 blocking code 仍整科扣下（判据与理由见 hold_policy.js）。
     const readAgree = sectionAgreement(au.audited, "reading");
     const hold = holdFor(setname, "reading", { agreement: readAgree });
+    recordHold(setname, "reading", { ...hold, agreement: readAgree });
     if (hold.held) {
       console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（${hold.heldBy.join("/")}，整科扣下待人工核对）`);
       stats.droppedHeld += 1;
@@ -1075,6 +1155,22 @@ function main() {
     + ` / 面试 ${S.interview.length} 套（${S.interview.reduce((n, x) => n + x.questions.length, 0)} 题）`);
   for (const d of [...stats.lInvalidDetail, ...stats.sInvalidDetail]) {
     console.log(`    ✗ ${d.set} ${d.id} (${d.type}): ${d.errors.slice(0, 3).join(" | ")}`);
+  }
+
+  // `--report <path>`：把这次重建的扣留台账 + 逐科盲审一致率 + 盲审不一致明细落成 JSON。
+  // 人跑管线看终端就够了，云端 Worker 需要结构化的东西才能填 job.result（契约 §5），
+  // 后台「复核队列」也只有拿到 (卷, 科, code) 才点得动「放行」。
+  const reportPath = (() => { const i = process.argv.indexOf("--report"); return i >= 0 ? process.argv[i + 1] : null; })();
+  if (reportPath) {
+    writeReport(reportPath, files, {
+      counts_after: {
+        reading: { ap: out.ap.length, rdl: out.rdl.length, ctw: out.ctw.length },
+        writing: { bs: writing.bs.length, email: writing.email.length, discussion: writing.discussion.length },
+        listening: Object.fromEntries(Object.entries(L).map(([k, v]) => [k, v.length])),
+        speaking: Object.fromEntries(Object.entries(S).map(([k, v]) => [k, v.length])),
+      },
+      dry,
+    });
   }
 
   if (dry) { console.log("\n（--dry，未写文件）"); return; }

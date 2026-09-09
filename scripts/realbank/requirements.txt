@@ -1,0 +1,30 @@
+# 真题录入管线（scripts/realbank/*.py + 它们 import 的 scripts/ops/*）的全部第三方依赖。
+# GitHub Actions 的 real-bank-ingest.yml 用 `pip install -r scripts/realbank/requirements.txt`
+# 装这一份；本机（D:\python\python）早就装齐了，这里只是把清单固化下来。
+#
+# 逐脚本核过的来源（`import X` → 包名）：
+#   fitz                     → PyMuPDF        ingest_set / convert_docx_set / crop_materials /
+#                                             extract_bs_pages / ocr_images / ingest_common /
+#                                             scripts/ops/ocr_common.py
+#   PIL.Image                → Pillow         convert_docx_set / ocr_images / extract_bs_pages
+#   docx                     → python-docx    convert_docx_set / parse_reformatted / ocr_images
+#   numpy                    → numpy          crop_materials / scripts/ops/ocr_common.py
+#   cv2                      → opencv-python-headless   crop_materials（无头环境不能装带 GUI 的 opencv-python）
+#   rapidocr_onnxruntime     → rapidocr-onnxruntime     scripts/ops/ocr_common.py 的本地 OCR 兜底
+#   requests                 → requests       scripts/ops/audio_transcribe.py 的 openai 后端
+#                                             （multipart 上传 + 自动认 HTTPS_PROXY；其余脚本走 urllib）
+#   wordninja                → wordninja      scripts/ops/parse_reading.py / parse_writing.py
+#                                             （旧解析器，run_pipeline 不走，但同目录被 import 过，装上省事）
+#
+# 刻意**不含** faster-whisper / torch：转写在云端走 REALBANK_ASR_BACKEND=openai（Whisper API），
+# local 后端只在本机用，faster_whisper 是 audio_transcribe.get_model() 里的懒加载 import，
+# 云端根本走不到那一行。装它会把 torch/CUDA 一整套拖进 Actions（>2GB、装几分钟）。
+
+PyMuPDF>=1.24
+Pillow>=10.0
+python-docx>=1.1
+numpy>=1.26
+opencv-python-headless>=4.9
+rapidocr-onnxruntime>=1.3
+requests>=2.31
+wordninja>=2.0

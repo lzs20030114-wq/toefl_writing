@@ -42,8 +42,11 @@ DEFAULT_SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
 # --src / REALBANK_SRC 覆盖源目录（转换后的 docx 套题落在别处，不写回桌面源库）；
 # --src 优先于环境变量；两者都没给就用默认桌面路径，行为与改动前一致。
 SRC = os.environ.get("REALBANK_SRC") or DEFAULT_SRC
-OCR_CACHE = r"D:\toefl_writing\.codex-tmp\ocr"
-OUT = r"D:\toefl_writing\.codex-tmp\realbank"
+# 产物一律相对仓库根（本文件在 <root>/scripts/realbank/ 下），不再写死 D:\toefl_writing ——
+# 云端 checkout 在 /home/runner/work/... 下，写死路径会让整条链路的中间产物落到不存在的盘符。
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OCR_CACHE = os.path.join(REPO_ROOT, ".codex-tmp", "ocr")
+OUT = os.path.join(REPO_ROOT, ".codex-tmp", "realbank")
 # 口语音频源多为屏幕录制的 .mp4/.mov（15/43 个 2026-09-06 补料文件），
 # 音轨同样是 AAC，ffmpeg 可直接抽取；漏掉它们会把有音频的套判成「无音频」。
 AUDIO_EXT = (".mp3", ".m4a", ".wav", ".mp4", ".mov")

@@ -27,6 +27,7 @@ const QUICK_LINKS = [
       { href: "/admin-questions", label: "写作题库编辑", hint: "学术 / 邮件 / BS CRUD" },
       { href: "/admin-generate", label: "AI 自动生成", hint: "发起生成任务" },
       { href: "/admin-staging", label: "暂存库审核", hint: "审核/部署生成结果" },
+      { href: "/admin-real-bank-ingest", label: "真题录入", hint: "拖一套源进来自动上线" },
     ],
   },
   {

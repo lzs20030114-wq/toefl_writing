@@ -40,9 +40,17 @@ import fitz  # PyMuPDF
 from PIL import Image
 
 DEFAULT_SRC_ROOT = r"D:\桌面\【2026改后全科真题】（持续更新中）"
-OUT_ROOT = r"D:\toefl_writing\.codex-tmp\realbank\src-converted"
+# 产物相对仓库根（本文件在 <root>/scripts/realbank/ 下）：写死 D:\toefl_writing 的话
+# 云端 checkout（/home/runner/work/...）会把转换结果写到一个不存在的盘符上。
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OUT_ROOT = os.path.join(REPO_ROOT, ".codex-tmp", "realbank", "src-converted")
 
 # key -> {src: 相对 DEFAULT_SRC_ROOT/--src 的子路径, out: 输出卷名}
+#
+# 这张表**只是 5 月那 7 套的便捷别名**，不是能转哪些卷的白名单：自动录入进来的套目录
+# 事先不可能出现在这里（2.4新托福真题当初就是卡在这上面）。任意套目录走 `--dir <目录>`
+# （相对 --src 根或绝对路径）+ 可选 `--out-name <卷名>`，见 convert_set_dir()。
+#
 # 5.10 / 5.6 在桌面根目录下已有同名旧卷（内容不同，答案键已核实不重合），
 # 输出必须加 _v2 以免被误当成同一套卷覆盖。
 SETS = {
@@ -224,18 +232,43 @@ def copy_audio_file(path, rel_components, out_dir, date, results):
 
 
 # ── 单套卷驱动 ────────────────────────────────────────────────────────────────
+def date_hint_of(dirname):
+    """从套目录名里刨出「日期前缀」（用作输出文件名 "<date> 阅读.pdf" 的那一段）。
+
+    自动录入的套名五花八门（"9.12新托福真题" / "5.20" / "9月12日套一"），
+    只要能认出 M.D 就用它；认不出就退回目录名本身（照样唯一，只是不好看）。
+    """
+    m = re.match(r"^\s*(\d{1,2})[.．\-月](\d{1,2})", str(dirname))
+    if m:
+        return f"{int(m.group(1))}.{int(m.group(2))}"
+    return str(dirname).strip() or "set"
+
+
+def convert_set_dir(src_dir, out_name=None, out_root=OUT_ROOT, date=None):
+    """转换**任意**一个套目录（不需要事先登记在 SETS 里）。"""
+    if not os.path.isdir(src_dir):
+        raise SystemExit(f"源目录不存在: {src_dir}")
+    out_name = out_name or os.path.basename(os.path.normpath(src_dir))
+    date = date or date_hint_of(out_name)
+    return _convert(src_dir, out_name, out_root, date, key=out_name)
+
+
 def convert_set(key, src_root=None, out_root=OUT_ROOT):
     if key not in SETS:
-        raise SystemExit(f"未知卷 key: {key}（可选: {', '.join(SETS)}）")
+        raise SystemExit(f"未知卷 key: {key}（可选: {', '.join(SETS)}；"
+                         f"任意套目录请改用 --dir <目录>）")
     cfg = SETS[key]
     src_root = src_root or DEFAULT_SRC_ROOT
     src_dir = os.path.join(src_root, cfg["src"])
     if not os.path.isdir(src_dir):
         raise SystemExit(f"源目录不存在: {src_dir}")
-    out_dir = os.path.join(out_root, cfg["out"])
+    return _convert(src_dir, cfg["out"], out_root, key, key=key)
+
+
+def _convert(src_dir, out_name, out_root, date, key):
+    out_dir = os.path.join(out_root, out_name)
     os.makedirs(out_dir, exist_ok=True)
 
-    date = key
     files_report = []
     skipped = []
 
@@ -297,16 +330,32 @@ def main():
     ap.add_argument("key", nargs="?", help=f"卷 key，如 5.10（可选: {', '.join(SETS)}）")
     ap.add_argument("--all", action="store_true", help="转全部 7 套")
     ap.add_argument("--src", default=None, help="覆盖源根目录（默认桌面路径，也可用 REALBANK_SRC 环境变量）")
+    ap.add_argument("--dir", default=None,
+                    help="直接给套目录（绝对路径，或相对 --src 根的子路径）——不需要登记在 SETS 里")
+    ap.add_argument("--out-name", default=None, help="配合 --dir：输出卷名（默认取目录名）")
     ap.add_argument("--out", default=OUT_ROOT, help="覆盖输出根目录")
     ap.add_argument("--json", action="store_true", help="落盘转换报告")
     args = ap.parse_args()
 
     src_root = args.src or os.environ.get("REALBANK_SRC") or DEFAULT_SRC_ROOT
-    keys = list(SETS) if args.all else ([args.key] if args.key else None)
-    if not keys:
-        ap.error("给个卷 key，或用 --all")
 
     all_res = []
+    if args.dir:
+        src_dir = args.dir if os.path.isabs(args.dir) else os.path.join(src_root, args.dir)
+        res = convert_set_dir(src_dir, out_name=args.out_name, out_root=args.out)
+        report(res)
+        all_res.append(res)
+        if args.json:
+            os.makedirs(args.out, exist_ok=True)
+            p = os.path.join(args.out, f"_convert_{res['key']}.json")
+            json.dump(res, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            print(f"  报告 → {p}")
+        return
+
+    keys = list(SETS) if args.all else ([args.key] if args.key else None)
+    if not keys:
+        ap.error("给个卷 key、用 --all，或用 --dir <套目录>")
+
     for k in keys:
         res = convert_set(k, src_root=src_root, out_root=args.out)
         report(res)

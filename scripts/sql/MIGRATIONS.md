@@ -24,6 +24,7 @@
 | `mistake-favorites.sql` | 2026-05-07 | 历史迁移,状态未知(建库早期) | 错题本收藏(⭐)功能 |
 | `pro-codes-batch-2026-03-23.sql` | 2026-03-23 | 历史迁移,状态未知(建库早期) | 可变时长 Pro 登录码 + 首次登录激活 |
 | `pro-trial-migration.sql` | 2026-03-19 | 历史迁移,状态未知(建库早期) | 新用户自动赠送 3 天 Pro 试用 |
+| `real-bank-ingest-jobs.sql` | 2026-09-09 | 已跑(用户 2026-09-09 确认) | 真题自动录入任务表 `real_bank_ingest_jobs`（后台拖入 → Actions Worker → 自动上线；RLS 无 policy，仅 service role 经 /api/admin/real-bank-ingest 与 worker.mjs 读写） |
 | `referral-email-optout.sql` | 2026-05-13 | 历史迁移,状态未知(建库早期) | 邀请奖励到账邮件通知的退订字段 |
 | `referral-events.sql` | 2026-05-13 | 历史迁移,状态未知(建库早期) | 邀请增长循环 Phase 1 基础表 |
 | `referrals.sql` | 2026-05-13 | 历史迁移,状态未知(建库早期) | 邀请好友计划(邀请人+3天Pro) |

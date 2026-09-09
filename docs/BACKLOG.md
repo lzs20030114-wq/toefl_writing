@@ -5,6 +5,7 @@
 
 ## 需用户决策
 
+- [高] 真题自动录入上线前置（2026-09-09 实施完成未推送，契约 docs/realbank-ingest-contract.md）：①跑迁移 `scripts/sql/real-bank-ingest-jobs.sql` 并登记；②GitHub secrets 五个（DEEPSEEK_API_KEY / DASHSCOPE_API_KEY / OPENAI_API_KEY / NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY），其中 OPENAI_API_KEY 的 GitHub secret 从未验证过；③Vercel 核对 GH_PAT(actions:write+contents:write)/GH_OWNER/GH_REPO；④中间产物桶 `real_bank_artifacts` 已由本机 `artifacts_sync.mjs --push` 灌满（清单 structured 数必须 ≥ 81，否则云端全量重建会清库——worker 另有 >20% 缩水拒推闸）；⑤云端首航用后台「手动 rebuild」（不碰源文件）验证 pip/ffmpeg/push 权限，再拖第一套真卷；⑥Supabase Storage 逼近 1GB 免费档，源文件桶 done 后自动删，仍建议先清 382MB 孤儿音频。
 - [中] `/api/ai` 线上成本护栏两处（出处：2026-09-05 DeepSeek 9/1 账单 ¥11.97 溯源，见 docs/deepseek-usage-ledger.md）：
   ① 生产库缺 `increment_daily_usage` RPC——Supabase edge 日志 8/31 实证 `POST /rest/v1/rpc/increment_daily_usage → 404`，`scripts/sql/daily-usage-quota.sql` 台账状态「历史迁移,状态未知」即从未跑过；计量退化到 `fallbackIncrementUsage` 读-改-写，并发可击穿免费 3 次/天。走 /sql-migrate 补跑并登记。
   ② `callAIMulti` 默认 `samples=3` + `maxTokens` 上限 8192，一次计量 = 3 次 DeepSeek 调用；Pro 日限 100 → 单人单日最多 300 次大 token 调用，无成本封顶。决策：按调用次数（而非提交次数）计量，或 Pro 日限按 samples 折算。

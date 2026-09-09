@@ -1,0 +1,80 @@
+# 真题自动录入 —— 云端 Worker（契约 docs/realbank-ingest-contract.md §7）
+#
+# 触发：后台 /admin-real-bank-ingest 建完 job 后由 GH_PAT workflow_dispatch 打进来，
+# inputs.job_id 就是 real_bank_ingest_jobs.id。人也可以在 Actions 页手动填一个 job id 重跑。
+#
+# 为什么 concurrency 不取消在跑的：一个 job 跑到一半被 cancel，中间产物是半截的，
+# 而且它可能已经把题 push 上 main 了。排队等着比中途腰斩安全。
+name: Real Bank Ingest
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: "real_bank_ingest_jobs.id (uuid)"
+        required: true
+        type: string
+
+concurrency:
+  group: real-bank-ingest
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    # 一套卷的完整链路（结构化 + 盲审 + 转写 + 全量重建 + TTS）实测 1~2 小时，
+    # 头一次跑还要先从产物桶拉 32MB。300 分钟留足余量。
+    timeout-minutes: 300
+
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # runner 没有 GPU，也不装 torch —— 转写一律走 Whisper API（scripts/ops/audio_transcribe.py）
+      REALBANK_ASR_BACKEND: openai
+      REALBANK_PY: python
+      REALBANK_JOB_ID: ${{ inputs.job_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/realbank/requirements.txt
+
+      - name: Install python dependencies
+        run: pip install -r scripts/realbank/requirements.txt
+
+      - name: Install ffmpeg
+        # 转写要切长音频（>24MB 走 ffmpeg 切 10 分钟片段），配音要压 mp3。
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Run ingest worker
+        run: node scripts/realbank/worker.mjs --job "${{ inputs.job_id }}"
+
+      - name: Mark job failed (fallback)
+        # Worker 自己写 failed 是常态；这一步只兜「runner 被 kill / OOM / 超时」那种
+        # 它来不及写状态的情况。worker 见到 job 已是 done/failed 就不覆盖。
+        if: failure()
+        run: node scripts/realbank/worker.mjs --job "${{ inputs.job_id }}" --mark-failed "actions job failed (run ${{ github.run_id }})"

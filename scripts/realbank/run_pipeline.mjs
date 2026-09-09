@@ -39,7 +39,12 @@ const SRC = (argvSrcIdx >= 0 && process.argv[argvSrcIdx + 1])
   || process.env.REALBANK_SRC
   || "D:\\桌面\\【2026改后全科真题】（持续更新中）";
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
-const PY = "D:\\python\\python";
+// Python 解释器：本机是 D:\python\python（PATH 里的 `python` 是别的版本），云端(ubuntu)
+// 只有 `python`。写死本机路径的话 Actions 上第一步就 ENOENT，所以改成 REALBANK_PY 覆盖，
+// 默认值仍是本机那一份 —— 本机不设环境变量时行为与改动前逐字相同。
+// 默认 "python"；本机那一份存在就仍旧用它（不设 REALBANK_PY 时行为与改动前逐字相同）。
+const PY = process.env.REALBANK_PY
+  || (fs.existsSync("D:\\python\\python.exe") ? "D:\\python\\python" : "python");
 const SECTIONS = "reading,writing";
 const BALANCE_URL = "https://api.deepseek.com/user/balance";
 // 子进程用它表示「系统性失败」，和普通的非零退出区分开。

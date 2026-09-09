@@ -51,6 +51,7 @@ const NAV_GROUPS = [
       { label: "写作题库编辑", href: "/admin-questions", icon: "book" },
       { label: "AI 自动生成", href: "/admin-generate", icon: "zap" },
       { label: "暂存审核", href: "/admin-staging", icon: "inbox" },
+      { label: "真题录入", href: "/admin-real-bank-ingest", icon: "inbox" },
     ],
   },
   {

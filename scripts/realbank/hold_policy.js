@@ -52,6 +52,58 @@ const READING_RELAXED = new Set(["ctw_answer_truncated", "section_gap", "ingest_
  */
 const INGEST_BLOCKER_RELAXABLE = /题号重启块/;
 
+/* ── 后台复核放行清单（契约 §4） ─────────────────────────────────────────────
+ *
+ * data/realBank/review-overrides.json 由后台「复核队列」写（A 线），这里只读。
+ * 语义：allow[] 里的 (set, section, code) 命中就当这条 blocking 不存在 —— 人已经核过了，
+ * 比任何自动判据都权威；把条目删掉就恢复扣留。code:"*" = 该卷该科全部 blocking 放行。
+ *
+ * 文件不存在 / 读不出 / 格式坏掉一律**当成空清单**（fail-safe 到「照旧扣留」那一侧）：
+ * 放行清单缺失应该让题少上线，绝不能让它变成默认放行。
+ */
+const fs = require("fs");
+const path = require("path");
+
+const OVERRIDES_FILE = path.join("data", "realBank", "review-overrides.json");
+
+let _cache = null;
+let _cacheKey = null;
+
+function overridesPath(root) {
+  return path.join(root || process.cwd(), OVERRIDES_FILE);
+}
+
+/** 读放行清单（按路径缓存一次：build_bank 一次重建会问上千遍）。 */
+function loadOverrides(root) {
+  const p = overridesPath(root);
+  if (_cache && _cacheKey === p) return _cache;
+  let parsed = { allow: [] };
+  try {
+    const raw = JSON.parse(fs.readFileSync(p, "utf8"));
+    if (raw && Array.isArray(raw.allow)) parsed = { allow: raw.allow };
+  } catch {
+    /* 没有文件 = 没有放行项，这是常态（A 线还没写过任何决定时） */
+  }
+  _cache = parsed;
+  _cacheKey = p;
+  return parsed;
+}
+
+/** 测试与长跑进程用：丢掉缓存，下次重新读盘。 */
+function clearOverridesCache() {
+  _cache = null;
+  _cacheKey = null;
+}
+
+/** allow[] 里有没有覆盖到 (set, section, code)。set 不给（老调用方）就一律不放行。 */
+function allowSays(allow, set, section, code) {
+  if (!set || !Array.isArray(allow)) return false;
+  return allow.some((a) => a
+    && a.set === set
+    && (a.section === section || a.section === "*")
+    && (a.code === code || a.code === "*"));
+}
+
 /**
  * 从 .audit.json 的 audited 明细算某一科的盲审一致率。
  * 没有明细 / 该科一题没审过 → 返回 null（= 无从判断，按「不放行」处理）。
@@ -80,11 +132,20 @@ function holdDecision(flags, section, ctx = {}) {
   const blocking = (flags || []).filter(
     (f) => f && f.severity === "blocking" && (f.sections || []).some((x) => x === "*" || x === section));
 
+  // 后台复核放行清单（契约 §4）。人已经核过的 (卷, 科, code) 直接跳过，不再扣留。
+  // 放在最前面：override 的语义就是「人看过了，比自动判据更权威」。
+  const allow = ctx.allow !== undefined ? (ctx.allow || []) : loadOverrides().allow;
+  const allowed = (code) => allowSays(allow, ctx.set, section, code);
+
   const heldBy = [];
   const notes = [];
   let dropCtw = false;
 
   for (const f of blocking) {
+    if (allowed(f.code)) {
+      notes.push(`${f.code}：后台复核已放行（review-overrides.json）`);
+      continue;
+    }
     if (section !== "reading" || !READING_RELAXED.has(f.code)) {
       heldBy.push(f.code);
       continue;
@@ -119,6 +180,10 @@ function holdDecision(flags, section, ctx = {}) {
 module.exports = {
   SECTION_GAP_MIN_AGREEMENT,
   INGEST_BLOCKER_RELAXABLE,
+  OVERRIDES_FILE,
   holdDecision,
   sectionAgreement,
+  loadOverrides,
+  clearOverridesCache,
+  allowSays,
 };

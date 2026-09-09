@@ -1,0 +1,5 @@
+{
+  "_purpose": "后台复核放行清单。allow[] 里的 (set,section,code) 让 hold_policy 对该科该 blocking code 视为放行；删条目 = 恢复扣下。code:\"*\" 表示该科全部 blocking code 放行。",
+  "_writer": "app/api/admin/real-bank-ingest/review/decision（后台「放行整科」按钮，经 GitHub Contents API 提交 main）",
+  "allow": []
+}

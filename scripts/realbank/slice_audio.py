@@ -28,8 +28,10 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ops"))
 
-SRC = r"D:\桌面\【2026改后全科真题】（持续更新中）"
-WORK = r"D:\toefl_writing\.codex-tmp\realbank"
+# 源根目录 REALBANK_SRC / --src 覆盖；产物一律相对仓库根（云端 checkout 不在 D 盘）。
+SRC = os.environ.get("REALBANK_SRC") or r"D:\桌面\【2026改后全科真题】（持续更新中）"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+WORK = os.path.join(REPO_ROOT, ".codex-tmp", "realbank")
 ASR_CACHE = os.path.join(WORK, "asr")
 AUDIO_OUT = os.path.join(WORK, "audio")
 
@@ -260,7 +262,13 @@ def main():
     ap.add_argument("--plan", action="store_true", help="只体检，不出片")
     ap.add_argument("--force", action="store_true", help="对不齐也切")
     ap.add_argument("--model", default="small")
+    ap.add_argument("--src", default=None,
+                    help="覆盖源根目录（默认桌面路径，也可用 REALBANK_SRC 环境变量）")
     args = ap.parse_args()
+
+    global SRC
+    if args.src:
+        SRC = args.src
 
     ffmpeg = find_ffmpeg()
     print(f"ffmpeg: {ffmpeg or '【未找到】'}")

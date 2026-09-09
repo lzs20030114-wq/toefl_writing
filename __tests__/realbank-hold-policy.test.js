@@ -154,3 +154,57 @@ describe("hold_policy.holdDecision：其余判据行为不变", () => {
     expect(holdDecision([F("section_no_stems", ["writing"])], "reading", {}).held).toBe(false);
   });
 });
+
+/**
+ * 后台复核放行清单（契约 §4，data/realBank/review-overrides.json）。
+ *
+ * 语义：人在后台点过「放行」的 (卷, 科, code) 就当这条 blocking 不存在。它比任何自动
+ * 判据都权威 —— 自动判据是「没人看过时怎么办」，override 是「人看过了」。
+ * 但清单**缺失**时必须 fail 到「照旧扣留」那一侧：读不到文件绝不等于全部放行。
+ */
+describe("hold_policy 复核放行清单（review-overrides）", () => {
+  const { allowSays, loadOverrides, clearOverridesCache } = require("../scripts/realbank/hold_policy.js");
+  const A = (set, section, code) => ({ set, section, code, reason: "人工核过", by: "admin" });
+
+  test("命中 (set, section, code) → 不再扣留，并留下记账 note", () => {
+    const d = holdDecision([F("section_no_stems")], "reading",
+      { set: "9.12新托福真题", allow: [A("9.12新托福真题", "reading", "section_no_stems")] });
+    expect(d.held).toBe(false);
+    expect(d.notes.join()).toMatch(/后台复核已放行/);
+  });
+
+  test('code:"*" 放行该科全部 blocking', () => {
+    const d = holdDecision([F("section_no_stems"), F("answer_key_misaligned")], "reading",
+      { set: "S", allow: [A("S", "reading", "*")] });
+    expect(d.held).toBe(false);
+  });
+
+  test('section:"*" 跨科放行', () => {
+    expect(holdDecision([F("section_gap", ["writing"])], "writing",
+      { set: "S", allow: [A("S", "*", "section_gap")] }).held).toBe(false);
+  });
+
+  test("卷名/科目/code 任一对不上就不放行", () => {
+    const flags = [F("section_no_stems")];
+    expect(holdDecision(flags, "reading", { set: "S", allow: [A("别的卷", "reading", "section_no_stems")] }).held).toBe(true);
+    expect(holdDecision(flags, "reading", { set: "S", allow: [A("S", "listening", "section_no_stems")] }).held).toBe(true);
+    expect(holdDecision(flags, "reading", { set: "S", allow: [A("S", "reading", "别的code")] }).held).toBe(true);
+  });
+
+  test("没给 set（老调用方）→ 一律不放行，行为与改动前相同", () => {
+    expect(holdDecision([F("section_no_stems")], "reading",
+      { allow: [A("S", "reading", "section_no_stems")] }).held).toBe(true);
+  });
+
+  test("清单空/缺失 → 照旧扣留（fail 到安全那一侧）", () => {
+    expect(holdDecision([F("section_no_stems")], "reading", { set: "S", allow: [] }).held).toBe(true);
+    expect(allowSays(undefined, "S", "reading", "x")).toBe(false);
+    expect(allowSays([A("S", "reading", "x")], "", "reading", "x")).toBe(false);
+  });
+
+  test("loadOverrides 读不到文件时返回空清单而不是抛异常", () => {
+    clearOverridesCache();
+    expect(loadOverrides("/definitely/not/a/repo")).toEqual({ allow: [] });
+    clearOverridesCache();
+  });
+});

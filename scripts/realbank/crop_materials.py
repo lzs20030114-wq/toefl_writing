@@ -649,7 +649,13 @@ def main() -> int:
     ap.add_argument("--model", default=os.environ.get("QWEN_VL_MODEL") or ocr_images.DEFAULT_MODEL)
     ap.add_argument("--max-images", type=int, default=200, help="安全阀：待 OCR 张数超过就停")
     ap.add_argument("--self-check", action="store_true", help="只跑纯函数自测（零网络）")
+    ap.add_argument("--src", default=None,
+                    help="覆盖源根目录（默认桌面路径，也可用 REALBANK_SRC 环境变量）")
     args = ap.parse_args()
+
+    global DESKTOP_SRC
+    if args.src:
+        DESKTOP_SRC = args.src
 
     if args.self_check:
         return self_check()

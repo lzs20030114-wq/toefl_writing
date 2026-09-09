@@ -26,9 +26,11 @@ import audio_transcribe  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 OUT_DIR = os.path.join(ROOT, ".codex-tmp", "realbank")
 ASR_DIR = os.path.join(OUT_DIR, "asr")
-SRC_ROOT = os.environ.get(
-    "REALBANK_SRC_ROOT",
-    r"D:\桌面\【2026改后全科真题】（持续更新中）")
+# 源根目录：统一成 REALBANK_SRC（云端 Worker 只设这一个），REALBANK_SRC_ROOT 保留为
+# 历史别名（本机脚本/笔记里还在用），默认仍是桌面路径 —— 都不设时行为与改动前相同。
+SRC_ROOT = (os.environ.get("REALBANK_SRC")
+            or os.environ.get("REALBANK_SRC_ROOT")
+            or r"D:\桌面\【2026改后全科真题】（持续更新中）")
 
 MODEL_SIZE = os.environ.get("REALBANK_WHISPER_MODEL", "small")
 
@@ -72,6 +74,9 @@ def transcribe_role(setkey, role, path, force=False):
     segs, info, dev = audio_transcribe.transcribe(path, MODEL_SIZE)
     data = {
         "set": setkey, "role": role, "file": os.path.basename(path),
+        # backend 记进缓存：同一份 .codex-tmp 会被本机(faster-whisper)和云端(Whisper API)
+        # 交替写，出问题时得能一眼看出这份逐字稿是谁转的。
+        "backend": audio_transcribe.active_backend(),
         "model": MODEL_SIZE, "device": dev,
         "duration": getattr(info, "duration", None),
         "elapsed_sec": round(time.time() - t0, 1),
@@ -88,7 +93,13 @@ def main():
     ap.add_argument("sets", nargs="*")
     ap.add_argument("--all", action="store_true")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--src", default=None,
+                    help="覆盖源根目录（默认桌面路径，也可用 REALBANK_SRC 环境变量）")
     args = ap.parse_args()
+
+    global SRC_ROOT
+    if args.src:
+        SRC_ROOT = args.src
 
     sets = list(args.sets)
     if args.all:
