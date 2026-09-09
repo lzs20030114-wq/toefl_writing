@@ -22,6 +22,8 @@
 - [中] 真题录入二期两项口径待拍板：①BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉（`data/realExam2026/writing/buildSentence.json` 363 条 `scrambled_ocr`），只能做成「真题句子 + 本站切块」，是否接受这种来源分档；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
 
 ## 进行中
+- [中] DeepSeek 余额告警（出处：2026-09-09 排查 502 时在 /admin-api-errors 看到 9/5 22:21–22:24 三条 **402 Insufficient Balance**，即账户欠费过一次，用户侧同样只看到「评分服务暂时不可用」）：建议 nightly-quality-monitor 或后台首页加余额/402 计数告警，欠费与网关故障要能分开。
+- [低] `/api/ai` 直连路径 2026-09-09 已改流式拼接 + 快速 5xx 单次重试 + `fail()` 不再丢上游原文（修前后台「详情」列一直为空）。**待验证**：下一次晚高峰观察 api_error_feedback 里 stage=deepseek 的 error_detail 是否带 `upstream 5xx:` 前缀；若仍成批出现且原文是 503 overloaded，下一步把 samples=3 在重试时降为 1 路。
 
 - [✅完成] L1 存量库答案全量二审（2026-08-02）：覆盖 ~1593 题（LCR 413 + 阅读听力 7 库），5 轮 DeepSeek 盲审 + 多轮 agent 分诊 + 人工复核。**改键 26**（LCR 16 角色反转 + AP 9 insert_text 时序 + RDL 1）+ 数据毛病 2 + CTW 指示代词歧义 117 题系统性重挖 + 挖空器闭集跳过根治。lat/lc/la/rdl-short 零实锤。完整报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**遗留（低优先，非阻塞）**：①CTW 10 项低危残留（2 validator + 8 长尾歧义，各 1/10 空双解，合库层 CTW auditor 对未来题兜底）；②AP 11 + CTW 18 题因 DeepSeek 反复超时未被二审覆盖（顽固 error 项，可在后续 full-audit-l1 dispatch 顺带续扫，L1-state 断点续跑只重试 error）。**衍生新条目见下「AP insert_text 生成侧缺陷」**。
 - [中] AP insert_text 生成侧缺陷：L1 二审在 AP 库查出 9 处 insert_text 答案错序（例子/回指置于概括句之前），且多题 explanation 自曝「Wait…」「retained per the plan」——说明生成期对插入题的自检形同虚设。已逐一改键，但**生成侧未修**：需在 AP 生成 prompt/校验里加插入题时序自检（回指词需前置先行词、例子在概括之后），否则新出的 AP 插入题仍会复发。出处：L1-answer-audit-20260802.md。

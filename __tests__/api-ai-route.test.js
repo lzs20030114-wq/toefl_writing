@@ -211,10 +211,11 @@ describe("/api/ai route", () => {
     });
 
     test("samples=3 tolerates a partial failure (2 succeed, 1 fails)", async () => {
+      // 429 不可重试(5xx 会被快速重试一次并恢复,见下方 direct-path describe)。
       let n = 0;
       global.fetch = jest.fn().mockImplementation(async () => {
         n += 1;
-        if (n === 2) return { ok: false, status: 500, text: async () => "boom" };
+        if (n === 2) return { ok: false, status: 429, text: async () => "boom" };
         return { ok: true, json: async () => ({ choices: [{ message: { content: `ok-${n}` } }] }) };
       });
 
@@ -249,6 +250,100 @@ describe("/api/ai route", () => {
     });
   });
 
+  // ── 2026-09-09 直连路径:流式拼接 + 快速 5xx 单次重试 + 上游状态码留痕 ──
+  describe("direct path streaming + retry", () => {
+    function sseResponse(chunks) {
+      const encoder = new TextEncoder();
+      const body = new ReadableStream({
+        start(controller) {
+          chunks.forEach((c) => controller.enqueue(encoder.encode(c)));
+          controller.close();
+        },
+      });
+      return { ok: true, status: 200, headers: new Headers({ "content-type": "text/event-stream" }), body };
+    }
+    const singleRequest = () => new Request("http://localhost/api/ai", {
+      method: "POST",
+      body: JSON.stringify({ system: "s", message: "m", maxTokens: 100 }),
+    });
+
+    test("sends stream:true upstream and reassembles SSE deltas (keep-alive, split chunks, [DONE])", async () => {
+      global.fetch = jest.fn().mockResolvedValue(sseResponse([
+        ": keep-alive\n\n",
+        'data: {"choices":[{"delta":{"reasoning_content":"thinking..."}}]}\n\n',
+        'data: {"choices":[{"delta":{"content":"===SC"}}]}\n\ndata: {"choices":[{"del',
+        'ta":{"content":"ORE===\\n4"}}]}\n\n',
+        "data: [DONE]\n\n",
+      ]));
+
+      const res = await POST(singleRequest());
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body.content).toBe("===SCORE===\n4");
+      const sent = JSON.parse(global.fetch.mock.calls[0][1].body);
+      expect(sent.stream).toBe(true);
+      expect(global.fetch.mock.calls[0][1].signal).toBeDefined();
+    });
+
+    test("an error object inside the stream fails that sample with its text", async () => {
+      global.fetch = jest.fn().mockResolvedValue(sseResponse([
+        'data: {"error":{"message":"server overloaded","code":"503"}}\n\n',
+      ]));
+
+      const res = await POST(singleRequest());
+      expect(res.status).toBe(502); // 有 errText 无 status → 按上游失败映射 502
+    });
+
+    test("retries a fast 5xx once and succeeds on the second attempt", async () => {
+      let n = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        n += 1;
+        if (n === 1) return { ok: false, status: 503, text: async () => "overloaded" };
+        return { ok: true, json: async () => ({ choices: [{ message: { content: "recovered" } }] }) };
+      });
+
+      const res = await POST(singleRequest());
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body.content).toBe("recovered");
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    test("does not retry 402 (insufficient balance) and passes status through", async () => {
+      global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 402, text: async () => "Insufficient Balance" });
+
+      const res = await POST(singleRequest());
+
+      expect(res.status).toBe(402);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    test("records the upstream status in error_detail when every attempt fails", async () => {
+      mockSupabaseConfigured = true;
+      mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };
+      mockInsertCalls.length = 0;
+      try {
+        global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 504, text: async () => "<html>Gateway Time-out</html>" });
+        const req = new Request("http://localhost/api/ai", {
+          method: "POST",
+          body: JSON.stringify({ system: "s", message: "m", maxTokens: 100, samples: 3, userCode: "ABC123" }),
+        });
+        const res = await POST(req);
+
+        expect(res.status).toBe(502);
+        expect(global.fetch).toHaveBeenCalledTimes(6); // 3 路 × (1 + 1 次重试)
+        const failRow = mockInsertCalls.find((c) => c.table === "api_error_feedback" && c.row.stage === "deepseek");
+        expect(failRow.row.http_status).toBe(502);
+        expect(failRow.row.error_detail).toBe("upstream 504: <html>Gateway Time-out</html>");
+      } finally {
+        mockSupabaseConfigured = false;
+        mockUsersRow = null;
+      }
+    });
+  });
+
   // ── 修6:多采样部分失败留痕(stage=deepseek_partial)────────────
   describe("partial-failure logging (deepseek_partial)", () => {
     beforeEach(() => {
@@ -272,7 +367,7 @@ describe("/api/ai route", () => {
       let n = 0;
       global.fetch = jest.fn().mockImplementation(async () => {
         n += 1;
-        if (n === 2) return { ok: false, status: 500, text: async () => "boom" };
+        if (n === 2) return { ok: false, status: 429, text: async () => "boom" };
         return { ok: true, json: async () => ({ choices: [{ message: { content: `ok-${n}` } }] }) };
       });
 
@@ -285,7 +380,7 @@ describe("/api/ai route", () => {
       expect(errorLogs).toHaveLength(1);
       expect(errorLogs[0].row.stage).toBe("deepseek_partial");
       expect(errorLogs[0].row.error_type).toBe("upstream_partial");
-      expect(errorLogs[0].row.http_status).toBe(500);
+      expect(errorLogs[0].row.http_status).toBe(429);
       expect(errorLogs[0].row.error_detail).toBe("boom");
     });
 
