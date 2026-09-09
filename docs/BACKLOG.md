@@ -29,6 +29,9 @@
 
 ## 可派工
 
+- [中] **真题整卷消费**：`scripts/realbank/assemble_sets.mjs` 已把拆散的真题装回整卷（`data/realBank/sets.json`：原卷完整度 + 拼卷 + 整卷清单，2026-09-09 首跑 阅读 27 / 听力 9 / 口语 19 / 写作 7 套拼齐，整卷 2 native + 5 mixed）。前端真题专区仍按题型进，需要一个「整卷 / 单科整套」入口按 `exams[]` / `composites[]` 的 id 回查题面；蓝图与用法见 docs/realbank-set-blueprint.md。补料优先级：听力对话 lc（9 套上限）> 学术讨论 disc（7）> 邮件 email（14）。
+- [中] **模考 planner 结构与 2026 真卷相反**：`lib/mockExam/readingPlanner.js` M1 20 题（CTW 10 + RDL 5 + AP 5）/ M2 30 题，真卷是 M1 35（CTW 20 + RDL 10 + AP 5，或 RDL 5 + AP 10）/ M2 15（CTW 10 + AP 5，无 RDL）；`listeningPlanner.js` M1 只有 10 LCR + 1 LA + 1 LC，真卷 M1 32 题 = 12 LCR + 3 LC + 3 LA + 2 LAT，M2 15 = 3 LCR + 2 LC + 2 LAT。`AdaptiveExamShell.js` IntroCard 的手写题量串也跟着错。对齐后再让模考直接吃真题整卷。证据：docs/realbank-set-blueprint.md §一。
+
 - [高] 点数周期刷新机制（**开 CREDITS_ENFORCEMENT_ENABLED 前必须**）：①季/年卡每 30 天补发 100 点（webhook 只发首期）；②活跃周期内续费被跳过的点数补发（webhook 日志可 grep `active period, skip` 出欠账名单，iap_entitlements 是 ground truth）；③CREDITS_ENABLED 翻开前的购买补发。出处：2026-08-01 提价接线（commit 6804b146）。
 - [中] 加量包（50/150/400 点）定价按 deepseek-v4-flash 真实单次成本校准 + 购买链路接线——enforcement 开启后才需要上架。出处：PRICING-USAGE-PLAN-2026-07-13。
 - [中] Interview 口语接入生产线：live 库仅 11 题（全题型最少），但 interview 不在 routine 12-bank 名单里（2026-05-31 校准时 deferred，无校准 prompt）——需先走校准流程（realExam2026 锚 + eval-spec）再入名单；按需出题 demand 文件会把它标为 `not_in_routine` 跳过。**前置依赖：上方「盲审 routine 停摆」拍板**（口语库合库通道本身停着）。出处：按需出题机制自审 2026-07-15。

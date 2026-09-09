@@ -71,6 +71,7 @@ lib/
 ├── bsGen/                    # BS 出题：promptBuilders(纯函数) + circuitBreaker(熔断低通过率)
 ├── tts/                      # edgeTts / openaiTts / toneDirector(persona) / renderListening / storage
 ├── userBank/                 # personalBank(拉取+映射picker), imageSniff, listeningAudioRender
+├── realExam/                 # blueprint.mjs: 2026 整卷结构蓝图(题号带/槽位) — scripts/realbank/assemble_sets.mjs 用
 ├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
 ├── gate/                     # 通用防退化门：gateHarness + gate-registry + measurers/
 ├── quality/                  # scoreBatch.mjs (真题校准打分器)
@@ -89,6 +90,7 @@ data/                         # 题库 + 校准语料 (JSON)
 ├── listening/bank/           # lcr.json, lc.json, la.json, lat.json (+ staging/, profile/)
 ├── speaking/bank/            # repeat.json, interview.json (+ staging/, profile/)
 ├── realExam2026/             # ★真题 ground truth (reading/listening/speaking/writing) — 校准基准
+├── realBank/                 # 真题专区成品库 (build_bank.mjs 产物) + sets.json(装回整卷: 原卷完整度/拼卷/整卷清单)
 ├── eval-profiles/            # 各题型 eval 画像 + gate 标准 (bs/ad/email/ctw/ap/listening/...)
 ├── vocabulary/               # 词表
 ├── announcements.json        # 应用内更新公告 (发版时改)
