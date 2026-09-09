@@ -57,6 +57,32 @@ ROOT = V.ROOT
 OUT_DIR = V.OUT_DIR
 MERGER_ID = "merge_first_source_asr-v1"
 
+# 人工标注的对话首位说话人性别（放行「基频判不出性别」被扣的 LC 段）。
+# 形状见文件本身；键 = "<卷名>|M<module>|Q<起始题号>"，值.first_speaker = male|female。
+# 产生/回填这张表用 scripts/realbank/lc_gender_worksheet.py。
+LC_OVERRIDES_PATH = os.path.join(ROOT, "data", "realBank", "listening", "lc-speaker-overrides.json")
+
+
+def load_lc_overrides(setkey, path=None):
+    """→ {(module, q_start): 'male'|'female'}，只取本卷、只认合法值。"""
+    p = path or LC_OVERRIDES_PATH
+    if not os.path.exists(p):
+        return {}
+    try:
+        with open(p, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, ValueError):
+        return {}
+    out = {}
+    for key, val in (data.get("overrides") or {}).items():
+        m = re.match(r"^(.+)\|M(\d+)\|Q(\d+)$", str(key))
+        if not m or m.group(1) != setkey:
+            continue
+        g = str((val or {}).get("first_speaker") or "").strip().lower()
+        if g in ("male", "female"):
+            out[(int(m.group(2)), int(m.group(3)))] = g
+    return out
+
 # 逐字稿段 ↔ 音频的词级命中率下限。低于此值 = 这段稿子与音频对不上。
 SIM_MIN = 0.60
 # 区间倒序容忍度（词）。Whisper 偶尔把上一段的尾巴并进下一段，允许一点点回退。
@@ -380,14 +406,21 @@ def span_time(span, seg_owner, segments):
 
 
 # ══ 角色判定 ═════════════════════════════════════════════════════════════
-def genders_for_turns(turns, style, audio_path, segments):
-    """返回 ({label: 'male'|'female'}, note)；判不出返回 (None, 原因)。"""
+def genders_for_turns(turns, style, audio_path, segments, override=None):
+    """返回 ({label: 'male'|'female'}, note)；判不出返回 (None, 原因)。
+
+    override = 人工标注的「先开口的是 male/female」（lc-speaker-overrides.json）。
+    只对 A/B 式标签生效：稿子自带 Man/Woman 的以稿子为准，人工标注不许推翻文档。
+    """
     labs = []
     for t in turns:
         if t["label"] not in labs:
             labs.append(t["label"])
     if len(labs) != 2:
         return None, "speaker_count:%d" % len(labs)
+    if style == "ab" and override in ("male", "female"):
+        return ({labs[0]: override, labs[1]: ("female" if override == "male" else "male")},
+                "manual_override:first=%s" % override)
     if style == "gender":
         g = {}
         for l in labs:
@@ -579,8 +612,9 @@ def _pack(mod, typ, q_start, q_end, got, transcript, turns, speakers,
     }
 
 
-def build_listening(scan, structured, pdf_mods, asr, audio_paths, stats):
+def build_listening(scan, structured, pdf_mods, asr, audio_paths, stats, lc_overrides=None):
     by_q = collect_items(structured)
+    lc_overrides = lc_overrides or {}
     screens = screen_groups(scan)
     results = []
 
@@ -676,11 +710,14 @@ def build_listening(scan, structured, pdf_mods, asr, audio_paths, stats):
                     seg_slice = _seg_slice(info, aowner, segments)
                     gmap, note = (None, "no_turns")
                     if raw:
-                        gmap, note = genders_for_turns(raw, style, apath, seg_slice)
+                        gmap, note = genders_for_turns(raw, style, apath, seg_slice,
+                                                       override=lc_overrides.get((mod, g["q_start"])))
                     if not gmap:
                         problems.append("diarization_failed:%s" % note)
                     else:
                         problems.append(note)
+                        if note.startswith("manual_override"):
+                            stats["manual_override"] = stats.get("manual_override", 0) + 1
                         turns = V.merge_same_speaker([
                             {"speaker": "Man" if gmap[t["label"]] == "male" else "Woman",
                              "text": V.sentence_case(t["text"])} for t in raw])
@@ -701,9 +738,16 @@ def build_listening(scan, structured, pdf_mods, asr, audio_paths, stats):
                     transcript = strip_question_tail(
                         strip_framing_text(sec["body"]),
                         [it.get("stem") for _, it in got])
-            results.append(_pack(mod, g["type"], g["q_start"], g["q_end"], got,
-                                 transcript, turns, speakers, info, segments, aowner,
-                                 problems, stats, framing=g.get("framing", "")))
+            rec = _pack(mod, g["type"], g["q_start"], g["q_end"], got,
+                        transcript, turns, speakers, info, segments, aowner,
+                        problems, stats, framing=g.get("framing", ""))
+            if g["type"] == "lc" and sec and not turns:
+                # 判不出性别被扣的对话：把 A/B 原始轮次留在产物里，
+                # lc_gender_worksheet.py 据此出「待人工听音」清单（不用再翻 PDF）。
+                raw_turns, _style = parse_turns(sec["body"])
+                if raw_turns:
+                    rec["turns_raw"] = [{"label": t["label"], "text": t["text"]} for t in raw_turns]
+            results.append(rec)
     return results
 
 
@@ -841,7 +885,10 @@ def process_set(setkey, args, totals):
         return None
 
     stats = new_stats()
-    listening = build_listening(scan, parsed, pdf_mods, asr, roles, stats)
+    lc_overrides = load_lc_overrides(setkey)
+    listening = build_listening(scan, parsed, pdf_mods, asr, roles, stats, lc_overrides)
+    if lc_overrides:
+        print("  %s：人工性别覆盖 %d 条，命中 %d 条" % (setkey, len(lc_overrides), stats.get("manual_override", 0)))
     speaking = build_speaking(scan, parsed, asr, stats, answer_pdf_repeat(setdir))
 
     ar = (stats["align_ok"] / stats["align_total"]) if stats["align_total"] else 0.0
@@ -966,6 +1013,26 @@ def self_test():
     g, why = genders_for_turns([{"label": "a", "text": "x"}, {"label": "b", "text": "y"}],
                                "ab", None, [])
     check("A/B 无音频扣下", g is None and why == "no_audio_for_diarization", why)
+    g, why = genders_for_turns([{"label": "a", "text": "x"}, {"label": "b", "text": "y"}],
+                               "ab", None, [], override="female")
+    check("A/B 人工覆盖放行", g == {"a": "female", "b": "male"} and why == "manual_override:first=female", (g, why))
+    g, why = genders_for_turns([{"label": "a", "text": "x"}, {"label": "b", "text": "y"}],
+                               "ab", None, [], override="unknown")
+    check("非法覆盖值不生效", g is None and why == "no_audio_for_diarization", (g, why))
+    g, why = genders_for_turns([{"label": "man", "text": "x"}, {"label": "woman", "text": "y"}],
+                               "gender", None, [], override="female")
+    check("有 Man/Woman 标签时人工覆盖不推翻文档", g == {"man": "male", "woman": "female"} and why == "labels", (g, why))
+    import tempfile
+    _d = tempfile.mkdtemp()
+    _p = os.path.join(_d, "ov.json")
+    with open(_p, "w", encoding="utf-8") as fh:
+        json.dump({"overrides": {"卷A|M1|Q13": {"first_speaker": "Male"}, "卷A|M2|Q4": {"first_speaker": "x"},
+                                 "卷B|M1|Q13": {"first_speaker": "female"}, "坏键": {"first_speaker": "male"}}}, fh)
+    check("覆盖表按卷读取、只认合法值",
+          load_lc_overrides("卷A", _p) == {(1, 13): "male"} and load_lc_overrides("卷B", _p) == {(1, 13): "female"},
+          (load_lc_overrides("卷A", _p), load_lc_overrides("卷B", _p)))
+    check("覆盖表缺失 → 空", load_lc_overrides("卷A", os.path.join(_d, "nope.json")) == {}, "")
+    shutil.rmtree(_d, ignore_errors=True)
 
     t = ("Module1\nChoose the best response.\n1. Where are you?\n2. Man: Who is it?\n"
          "Conversation1\nA: hi. B: hello.\n13. What?\nLecture1\nListen to a talk. Body here.\n"
