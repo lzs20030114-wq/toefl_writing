@@ -34,6 +34,7 @@ import crypto from "crypto";
 import { createRequire } from "module";
 import { applyReview } from "./apply_review.mjs";
 import { bsRuntimeReject } from "./bs_runtime_gate.mjs";
+import { applyInterviewSplitsOnDisk } from "./apply_interview_splits.mjs";
 
 const require = createRequire(import.meta.url);
 
@@ -1185,6 +1186,13 @@ function main() {
   if (r) {
     console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`);
     for (const l of r.log) console.log(l);
+  }
+  // 最后一步：拼盘面试大集按人工切分表拆成 4 问一套（data/realBank/speaking/interview-splits.json）。
+  // 必须排在 applyReview 之后 —— 切分表里的问题 id 是按下架之后的库选的。
+  const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
+  if (sp && sp.changed) {
+    console.log(`■ 拼盘面试切分：${sp.stats.split} 条大集 → ${sp.stats.chunks} 套 4 问；尾巴 ${sp.stats.dropped_questions} 问不入库；interview 共 ${sp.count} 套`);
+    for (const k of sp.stats.skipped) console.warn(`  ⚠ 跳过 ${k.id} #${k.chunk}：${k.why}`);
   }
 }
 

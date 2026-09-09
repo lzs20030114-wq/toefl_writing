@@ -27,7 +27,7 @@
 | la | 50 | 100 | 3 item / 6 题 | 16 |
 | lat | 74 | 294 | 4 item / 16 题 | 18 |
 | repeat | 30 | 333 | 1 item / 7 题 | 47 |
-| interview | 17 | 151 | 1 item / 4 题 | 37 |
+| interview | 32 | 127 | 1 item / 4 题 | 31 |
 | bs | 272 | 272 | 10 item / 10 题 | 27 |
 | email | 14 | 14 | 1 item / 1 题 | 14 |
 | disc | 7 | 7 | 1 item / 1 题 | 7 |
@@ -49,10 +49,10 @@
 |---|---|---|---|---|
 | reading | 29 | 29 | 2 | 36 |
 | listening | 13 | 9 | 0 | 8 |
-| speaking | 19 | 9 | 5 | 0 |
+| speaking | 19 | 19 | 5 | 0 |
 | writing | 27 | 7 | 1 | 12 |
 
-整卷：四科同源拼齐 **1** 套（native），跨源配对 **6** 套（mixed）。
+整卷：四科同源拼齐 **2** 套（native），跨源配对 **5** 套（mixed）。
 
 ### reading
 
@@ -119,16 +119,16 @@
 | rf0826 | 2026-08-26 | M1A | 73% | **91%** | 1 | 30% | M1/interview_8:3/4 |
 | 1.21新托福真题A卷 | 2026-01-21 | M1A | 64% | **100%** | 1 | 64% | — |
 | 1.21新托福真题B卷 | 2026-01-21 | M1A | 64% | **100%** | 1 | 64% | — |
-| 1.21新托福真题C卷 | 2026-01-21 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 1.27新托福真题A卷 | 2026-01-27 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 1.28新托福真题A卷 | 2026-01-28 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 2.1新托福真题B卷 | 2026-02-01 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 2.2新托福真题 | 2026-02-02 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 2.28新托福真题 | 2026-02-28 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| 3.14新托福真题 | 2026-03-14 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| rf0629 | 2026-06-29 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| rf0708 | 2026-07-08 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
-| rf0808 | 2026-08-08 | M1A | 64% | 64% | 0 | 100% | M1/interview_8:0/4 |
+| 1.21新托福真题C卷 | 2026-01-21 | M1A | 64% | **100%** | 1 | 64% | — |
+| 1.27新托福真题A卷 | 2026-01-27 | M1A | 64% | **100%** | 1 | 64% | — |
+| 1.28新托福真题A卷 | 2026-01-28 | M1A | 64% | **100%** | 1 | 64% | — |
+| 2.1新托福真题B卷 | 2026-02-01 | M1A | 64% | **100%** | 1 | 64% | — |
+| 2.2新托福真题 | 2026-02-02 | M1A | 64% | **100%** | 1 | 64% | — |
+| 2.28新托福真题 | 2026-02-28 | M1A | 64% | **100%** | 1 | 64% | — |
+| 3.14新托福真题 | 2026-03-14 | M1A | 64% | **100%** | 1 | 64% | — |
+| rf0629 | 2026-06-29 | M1A | 64% | **100%** | 1 | 64% | — |
+| rf0708 | 2026-07-08 | M1A | 64% | **100%** | 1 | 64% | — |
+| rf0808 | 2026-08-08 | M1A | 64% | **100%** | 1 | 64% | — |
 
 ### writing
 
@@ -167,20 +167,20 @@
 | 整卷 | 类型 | 日期 | 阅读 | 听力 | 口语 | 写作 |
 |---|---|---|---|---|---|---|
 | exam:rf0620 | native | 2026-06-20 | reading:rf0620 | listening:rf0620 | speaking:rf0620 | writing:rf0620 |
+| exam:rf0708 | native | 2026-07-08 | reading:rf0708 | listening:rf0708 | speaking:rf0708 | writing:rf0708 |
 | exam:mixed-01 | mixed | 2026-01-21 | reading:121a | listening:128b | speaking:121a | writing:316 |
 | exam:mixed-02 | mixed | 2026-02-23 | reading:223 | listening:210 | speaking:121b | writing:325 |
-| exam:mixed-03 | mixed | 2026-03-04 | reading:34 | listening:228 | speaking:rf0610 | writing:330 |
-| exam:mixed-04 | mixed | 2026-03-10 | reading:310 | listening:314 | speaking:rf0615 | writing:48 |
-| exam:mixed-05 | mixed | 2026-03-11 | reading:311 | listening:rf0610 | speaking:rf0622 | writing:rf0708 |
-| exam:mixed-06 | mixed | 2026-03-16 | reading:316 | listening:rf0615 | speaking:rf0713 | writing:rf0716 |
+| exam:mixed-03 | mixed | 2026-03-04 | reading:34 | listening:228 | speaking:121c | writing:330 |
+| exam:mixed-04 | mixed | 2026-03-10 | reading:310 | listening:314 | speaking:127a | writing:48 |
+| exam:mixed-05 | mixed | 2026-03-11 | reading:311 | listening:rf0610 | speaking:128a | writing:rf0716 |
 
-配不成整卷的完整单科：reading 22 · listening 2 · speaking 2 · writing 0
+配不成整卷的完整单科：reading 22 · listening 2 · speaking 12 · writing 0
 
 ## 六、残余与未锚定
 
-借完之后还剩的素材：ap 21 · rdl 8 · lat 23 · lcr 49 · la 9 · repeat 3 · bs 2 · repeat(pool-chunk) 5
+借完之后还剩的素材：ap 21 · rdl 8 · lat 23 · lcr 49 · la 9 · repeat 3 · interview 13 · bs 2 · repeat(pool-chunk) 5
 
-拼盘卷（rp*，无卷面题号，只作素材）：ctw 29 · ap 17 · la 1 · lat 14 · repeat 11 · interview 10 · email 6 · disc 1
+拼盘卷（rp*，无卷面题号，只作素材）：ctw 29 · ap 17 · la 1 · lat 14 · repeat 11 · interview 25 · email 6 · disc 1
 
 拼盘大集**未自动切分**（面试一律不切；复述只切 7 的整数倍）——这些要人工/LLM 按话题切成 4 问 / 7 句一套后重新入库才能用：
 
@@ -189,11 +189,3 @@
 - real_repeat_rp0719_1：repeat 22 句
 - real_repeat_rp0819_1：repeat 8 句
 - real_repeat_rp0830_1：repeat 8 句
-- real_interview_rp0704_1：interview 19 问
-- real_interview_rp0705_1：interview 14 问
-- real_interview_rp0711_1：interview 11 问
-- real_interview_rp0718_1：interview 12 问
-- real_interview_rp0719_1：interview 15 问
-- real_interview_rp0725_1：interview 16 问
-- real_interview_rp0819_1：interview 15 问
-- real_interview_rp0822_1：interview 14 问

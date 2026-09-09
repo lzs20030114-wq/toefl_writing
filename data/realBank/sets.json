@@ -41,8 +41,8 @@
       "questions": 333
     },
     "interview": {
-      "items": 17,
-      "questions": 151
+      "items": 32,
+      "questions": 127
     },
     "bs": {
       "items": 272,
@@ -63,7 +63,7 @@
     "la": 1,
     "lat": 14,
     "repeat": 11,
-    "interview": 10,
+    "interview": 25,
     "email": 6,
     "disc": 1
   },
@@ -106,7 +106,7 @@
         "native_half": 14,
         "native_scraps": 0,
         "skeletons": 19,
-        "composites_complete": 9,
+        "composites_complete": 19,
         "composites_pure": 5,
         "dissolved": 0
       },
@@ -121,8 +121,8 @@
         "dissolved": 12
       }
     },
-    "exams_native": 1,
-    "exams_mixed": 6
+    "exams_native": 2,
+    "exams_mixed": 5
   },
   "sets": [
     {
@@ -31803,10 +31803,10 @@
         "borrowed": [
           {
             "slot": "interview_8",
-            "id": "real_interview_rp0812_1",
+            "id": "real_interview_rp0704_1_c1",
             "nq": 4,
             "q": 8,
-            "from": "rp0812",
+            "from": "rp0704",
             "via": "pool"
           }
         ],
@@ -31847,10 +31847,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_interview_rp0812_1",
+                    "id": "real_interview_rp0704_1_c1",
                     "nq": 4,
                     "q": 8,
-                    "from": "rp0812",
+                    "from": "rp0704",
                     "via": "pool"
                   }
                 ],
@@ -31879,10 +31879,10 @@
         "borrowed": [
           {
             "slot": "interview_8",
-            "id": "real_interview_rp0830_1",
+            "id": "real_interview_rp0704_1_c2",
             "nq": 4,
             "q": 8,
-            "from": "rp0830",
+            "from": "rp0704",
             "via": "pool"
           }
         ],
@@ -31923,10 +31923,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_interview_rp0830_1",
+                    "id": "real_interview_rp0704_1_c2",
                     "nq": 4,
                     "q": 8,
-                    "from": "rp0830",
+                    "from": "rp0704",
                     "via": "pool"
                   }
                 ],
@@ -31949,10 +31949,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0704_1_c3",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0704",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -31988,18 +31997,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0704_1_c3",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0704",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:127a",
@@ -32010,10 +32025,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0704_1_c4",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0704",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32049,18 +32073,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0704_1_c4",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0704",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:128a",
@@ -32071,10 +32101,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0705_1_c1",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0705",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32110,18 +32149,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0705_1_c1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0705",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:21b",
@@ -32132,10 +32177,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0705_1_c2",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0705",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32171,18 +32225,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0705_1_c2",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0705",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:22",
@@ -32193,10 +32253,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0705_1_c3",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0705",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32232,18 +32301,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0705_1_c3",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0705",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:228",
@@ -32254,10 +32329,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0711_1_c1",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0711",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32293,18 +32377,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0711_1_c1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0711",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:314",
@@ -32315,10 +32405,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0711_1_c2",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0711",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32354,18 +32453,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0711_1_c2",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0711",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:rf0629",
@@ -32376,10 +32481,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0718_1_c1",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0718",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32415,18 +32529,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0718_1_c1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0718",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:rf0708",
@@ -32437,10 +32557,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0718_1_c2",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0718",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32476,18 +32605,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0718_1_c2",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0718",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       },
       {
         "id": "speaking:rf0808",
@@ -32498,10 +32633,19 @@
           "1": "A"
         },
         "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
+        "completeness": 1,
+        "complete": true,
+        "purity": 0.636,
+        "borrowed": [
+          {
+            "slot": "interview_8",
+            "id": "real_interview_rp0812_1",
+            "nq": 4,
+            "q": 8,
+            "from": "rp0812",
+            "via": "pool"
+          }
+        ],
         "modules": {
           "1": {
             "module": 1,
@@ -32537,18 +32681,24 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_interview_rp0812_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rp0812",
+                    "via": "pool"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 11,
-            "got": 7
+            "got": 11
           }
         },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
+        "missing": []
       }
     ],
     "writing": [
@@ -36980,6 +37130,18 @@
       }
     },
     {
+      "id": "exam:rf0708",
+      "kind": "native",
+      "base_set": "rf0708",
+      "date": "2026-07-08",
+      "sections": {
+        "reading": "reading:rf0708",
+        "listening": "listening:rf0708",
+        "speaking": "speaking:rf0708",
+        "writing": "writing:rf0708"
+      }
+    },
+    {
       "id": "exam:mixed-01",
       "kind": "mixed",
       "base_set": null,
@@ -37011,7 +37173,7 @@
       "sections": {
         "reading": "reading:34",
         "listening": "listening:228",
-        "speaking": "speaking:rf0610",
+        "speaking": "speaking:121c",
         "writing": "writing:330"
       }
     },
@@ -37023,7 +37185,7 @@
       "sections": {
         "reading": "reading:310",
         "listening": "listening:314",
-        "speaking": "speaking:rf0615",
+        "speaking": "speaking:127a",
         "writing": "writing:48"
       }
     },
@@ -37035,25 +37197,14 @@
       "sections": {
         "reading": "reading:311",
         "listening": "listening:rf0610",
-        "speaking": "speaking:rf0622",
-        "writing": "writing:rf0708"
-      }
-    },
-    {
-      "id": "exam:mixed-06",
-      "kind": "mixed",
-      "base_set": null,
-      "date": "2026-03-16",
-      "sections": {
-        "reading": "reading:316",
-        "listening": "listening:rf0615",
-        "speaking": "speaking:rf0713",
+        "speaking": "speaking:128a",
         "writing": "writing:rf0716"
       }
     }
   ],
   "exam_leftover": {
     "reading": [
+      "reading:316",
       "reading:317",
       "reading:318",
       "reading:324",
@@ -37071,18 +37222,27 @@
       "reading:rf0615",
       "reading:rf0622",
       "reading:rf0629",
-      "reading:rf0708",
       "reading:rf0713",
       "reading:rf0716",
       "reading:rf0808",
       "reading:rf0826"
     ],
     "listening": [
-      "listening:rf0708",
+      "listening:rf0615",
       "listening:rf0826"
     ],
     "speaking": [
+      "speaking:21b",
+      "speaking:22",
+      "speaking:228",
+      "speaking:314",
+      "speaking:rf0610",
+      "speaking:rf0615",
+      "speaking:rf0622",
+      "speaking:rf0629",
+      "speaking:rf0713",
       "speaking:rf0716",
+      "speaking:rf0808",
       "speaking:rf0826"
     ],
     "writing": []
@@ -37094,6 +37254,7 @@
     "lcr": 49,
     "la": 9,
     "repeat": 3,
+    "interview": 13,
     "bs": 2,
     "repeat(pool-chunk)": 5
   },
@@ -37122,46 +37283,6 @@
       "id": "real_repeat_rp0830_1",
       "type": "repeat",
       "n": 8
-    },
-    {
-      "id": "real_interview_rp0704_1",
-      "type": "interview",
-      "n": 19
-    },
-    {
-      "id": "real_interview_rp0705_1",
-      "type": "interview",
-      "n": 14
-    },
-    {
-      "id": "real_interview_rp0711_1",
-      "type": "interview",
-      "n": 11
-    },
-    {
-      "id": "real_interview_rp0718_1",
-      "type": "interview",
-      "n": 12
-    },
-    {
-      "id": "real_interview_rp0719_1",
-      "type": "interview",
-      "n": 15
-    },
-    {
-      "id": "real_interview_rp0725_1",
-      "type": "interview",
-      "n": 16
-    },
-    {
-      "id": "real_interview_rp0819_1",
-      "type": "interview",
-      "n": 15
-    },
-    {
-      "id": "real_interview_rp0822_1",
-      "type": "interview",
-      "n": 14
     }
   ],
   "unanchored": []

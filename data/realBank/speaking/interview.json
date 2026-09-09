@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 17,
+  "count": 32,
   "items": [
     {
       "id": "real_interview_rf0610_1",
@@ -427,8 +427,8 @@
       ]
     },
     {
-      "id": "real_interview_rp0704_1",
-      "topic": "",
+      "id": "real_interview_rp0704_1_c1",
+      "topic": "history education",
       "intro": "You have volunteered for a research study about history education. You will have a short online interview with a researcher.",
       "questions": [
         {
@@ -474,10 +474,29 @@
           "reference_answer": "Yes, I think the study of history remains important in education. The main reason is that history helps students understand how societies change and why certain problems repeat. For example, when students learn about economic crises, wars, or social movements, they can see how decisions made by leaders and ordinary citizens created long-term consequences. This can make them more careful when they think about current events. Of course, students also need science, technology, and practical skills. But history gives them context and judgment. Without it, people may only react to the present without understanding where problems came from. So I think history should stay in the curriculum.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0704_1"
+    },
+    {
+      "id": "real_interview_rp0704_1_c2",
+      "topic": "renewable energy",
+      "intro": "You have agreed to take part in a short research interview about renewable energy. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0704_1_q5",
-          "position": "Q5",
+          "position": "Q1",
           "question": "Thanks for your participation. I'd like to discuss your views on renewable energy. To start, how important is the issue of renewable energy, such as wind and solar power, to you personally? Why would you say you feel that way?",
           "difficulty": "analytical",
           "word_count": 40,
@@ -488,7 +507,7 @@
         },
         {
           "id": "real_interview_rp0704_1_q6",
-          "position": "Q6",
+          "position": "Q2",
           "question": "Now, describe a time when you or someone you know tried to reduce energy use. What actions were taken? What made it easy or difficult?",
           "difficulty": "analytical",
           "word_count": 25,
@@ -499,7 +518,7 @@
         },
         {
           "id": "real_interview_rp0704_1_q7",
-          "position": "Q7",
+          "position": "Q3",
           "question": "Great. In your daily life, have you noticed any renewable energy initiatives in your community? If yes, what have you seen? How do they impact your area? If not, what’s an initiative that might be beneficial for your community?",
           "difficulty": "analytical",
           "word_count": 39,
@@ -510,134 +529,13 @@
         },
         {
           "id": "real_interview_rp0704_1_q8",
-          "position": "Q8",
+          "position": "Q4",
           "question": "Many believe that transitioning to renewable energy is crucial for environmental sustainability, while others worry about the costs involved. Do you think the benefits of renewable energy outweigh the drawbacks? Why or why not?",
           "difficulty": "analytical",
           "word_count": 34,
           "expected_response_topics": [],
           "reference_answer": "I think the benefits of renewable energy outweigh the drawbacks. It is true that building wind farms, solar panels, or new power systems can be expensive at first. However, the long-term benefits are stronger because renewable energy reduces pollution, protects public health, and makes communities less dependent on limited fossil fuels. For example, once a school or library installs solar panels, it can lower energy costs over time and also teach students about sustainability. Some people worry about reliability, and that is a real concern. But with better storage technology and careful planning, renewable energy can become more practical. So overall, I think it is worth the investment.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q8.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q9",
-          "position": "Q9",
-          "question": "First, do you take any specific actions to reduce your environmental impact, such as recycling or conserving energy? Give details in your answer.",
-          "difficulty": "analytical",
-          "word_count": 23,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I try to reduce my environmental impact in a few practical ways. I recycle bottles and paper when bins are available, carry a reusable water bottle, and turn off lights or air conditioning when I leave a room. These actions are small, but they are easy to repeat every day, which makes them useful. I also try not to buy things I do not really need, because waste often begins with unnecessary consumption. Of course, I know these habits alone cannot solve climate change. Still, they help me stay aware of my choices and make me more willing to support larger environmental policies.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q9.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q10",
-          "position": "Q10",
-          "question": "Can you describe one or two steps your community or neighborhood takes to be environmentally friendly? For example, are there solar panels on buildings or rainwater barrels available where you live?",
-          "difficulty": "analytical",
-          "word_count": 31,
-          "expected_response_topics": [],
-          "reference_answer": "My neighborhood has recycling bins in several public areas and a small community garden near the apartment buildings. The garden encourages people to compost food waste and grow vegetables together. It is not a huge project, but it makes environmental protection feel local and practical. For example, children can see how food scraps turn into soil, and older residents often share gardening tips. There are also signs reminding people to save water and sort trash correctly. These steps are simple, but they create a habit of paying attention to waste. I think that kind of daily awareness is important for a community.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q10.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q11",
-          "position": "Q11",
-          "question": "If you had the chance to participate in an ecological or nature-based activity, such as a community cleanup effort or tree planting event, what would you do and why?",
-          "difficulty": "analytical",
-          "word_count": 29,
-          "expected_response_topics": [],
-          "reference_answer": "If I had the chance to join an ecological activity, I would choose a tree planting event. The main reason is that it has a clear long-term benefit. Trees can provide shade, improve air quality, reduce heat in public spaces, and make a neighborhood more pleasant. I would also enjoy doing something visible and practical with other people. A cleanup activity is useful too, but the effect can disappear quickly if people litter again. A tree, if it is cared for properly, can keep helping the community for years. So I would choose tree planting because it combines teamwork with a lasting environmental result.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q11.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q12",
-          "position": "Q12",
-          "question": "Some people believe that individual actions are not enough to address conservation issues and that significant changes must come from government policies. Do you agree or disagree with this viewpoint? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 34,
-          "expected_response_topics": [],
-          "reference_answer": "I partly agree with the idea that major conservation changes must come from government policies. Large environmental problems require large-scale action, such as regulations on pollution, investment in public transportation, and support for clean energy. Individual people cannot control factories or national energy systems by themselves. However, I do not think personal action is meaningless. If citizens recycle, conserve energy, and use public transportation, it becomes easier for governments to pass stronger policies because the public already supports them. Individual behavior also creates social pressure on businesses. So overall, government action is essential, but it works best when ordinary people cooperate and change their habits too.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q12.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q13",
-          "position": "Q13",
-          "question": "Do you mainly gain historical knowledge from school classes or from independent reading outside class?",
-          "difficulty": "analytical",
-          "word_count": 15,
-          "expected_response_topics": [],
-          "reference_answer": "I mainly gain historical knowledge through independent reading because it lets me choose topics that truly interest me. Classes are useful because they provide structure and help me understand major events in order. However, books, articles, and documentaries allow me to explore details at my own pace. For example, if I become interested in ancient trade or local history, I can read more than a class would normally cover. Independent reading also makes me ask my own questions instead of only following a syllabus. So I think both methods matter, but outside reading gives me more freedom and makes history feel more personal.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q13.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q14",
-          "position": "Q14",
-          "question": "When studying history, which area interests you more: culture, politics, or another topic?",
-          "difficulty": "analytical",
-          "word_count": 13,
-          "expected_response_topics": [],
-          "reference_answer": "Culture interests me most when I study history because it shows how people expressed their values through language, food, art, religion, and daily customs. Politics is important, of course, because governments and leaders shape major events. But culture often reveals what life felt like for ordinary people. For example, learning about traditional clothing or festivals can show how communities understood family, identity, and social roles. That kind of information makes the past more vivid for me. It also helps me compare different societies without only focusing on wars or rulers. So if I had to choose, I would say culture is my favorite area.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q14.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q15",
-          "position": "Q15",
-          "question": "Have you visited a museum? Can places like museums deepen your understanding of history?",
-          "difficulty": "analytical",
-          "word_count": 14,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I have visited a museum, and it did deepen my understanding of history. Seeing real objects, maps, tools, and photographs made the past feel much more concrete. For example, when I saw old household items and handwritten letters, I could imagine how people lived and communicated. A textbook can explain events clearly, but a museum gives a visual and emotional experience. It also organizes objects in a way that shows connections between different periods. Of course, a museum cannot show everything, and visitors still need background knowledge. But overall, I think museums are very helpful because they make history easier to remember.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q15.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q16",
-          "position": "Q16",
-          "question": "Do you agree that studying history can help people avoid repeating past mistakes? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 17,
-          "expected_response_topics": [],
-          "reference_answer": "I agree that studying history can help people avoid repeating past mistakes, although it does not guarantee better choices. The main reason is that history shows patterns in conflict, prejudice, economic problems, and poor leadership. For example, when people learn how misinformation or extreme nationalism contributed to past crises, they may become more careful about similar trends today. History also teaches that decisions often have consequences beyond the present moment. Of course, every situation is different, so we cannot simply copy old solutions. Still, understanding the past gives people more perspective. It can make citizens and leaders think before acting too quickly.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q16.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q17",
-          "position": "Q17",
-          "question": "What are the factors that you consider when giving gifts to other people?",
-          "difficulty": "analytical",
-          "word_count": 13,
-          "expected_response_topics": [],
-          "reference_answer": "When I choose a gift, I usually consider the person's interests, age, and current needs. I also think about whether the gift should be practical or more emotional. For example, if someone is moving into a new apartment, a useful household item may be better than a decorative object. But if it is a close friend, I might choose something connected to a shared memory. Price matters, but it is not the most important factor. A very expensive gift can feel awkward if it does not match the person. I think the best gift shows that the giver paid real attention.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q17.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q18",
-          "position": "Q18",
-          "question": "What is one memorable gift you have received, or that you gave to others before?",
-          "difficulty": "analytical",
-          "word_count": 15,
-          "expected_response_topics": [],
-          "reference_answer": "A memorable gift I received was a notebook from a friend before an important exam. It was not expensive at all, but she wrote a short encouraging message inside the first page. At that time, I was nervous and felt that I was not fully prepared. The message made me feel supported, and I actually used the notebook to organize my review plan. What made the gift special was not the notebook itself, but the timing and the personal note. I kept it afterward because it reminded me that someone believed in me. That gift taught me that thoughtfulness matters more than price.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q18.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0704_1_q19",
-          "position": "Q19",
-          "question": "Do you prefer to make a wish list and let other people send you gifts on the list, or do you prefer to have surprises?",
-          "difficulty": "analytical",
-          "word_count": 25,
-          "expected_response_topics": [],
-          "reference_answer": "I prefer surprises because they feel more personal and emotional. A wish list is useful, especially when people do not know each other well, because it prevents waste. However, it can also make gift-giving feel like a transaction. I enjoy it more when someone chooses a surprise carefully based on what they know about me. For example, if a friend remembers a book I mentioned months ago and buys it for me, I would feel really touched. Of course, surprises can sometimes miss the mark. But overall, I like them because they show attention, effort, and a real understanding of the relationship.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q19.mp3?v=mtr9fei3",
           "from_asr": false
         }
       ],
@@ -651,12 +549,139 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0704_1"
     },
     {
-      "id": "real_interview_rp0705_1",
-      "topic": "",
-      "intro": "",
+      "id": "real_interview_rp0704_1_c3",
+      "topic": "environmental practices",
+      "intro": "You have agreed to take part in a short research interview about your environmental practices. Answer each question in the time allowed.",
+      "questions": [
+        {
+          "id": "real_interview_rp0704_1_q9",
+          "position": "Q1",
+          "question": "First, do you take any specific actions to reduce your environmental impact, such as recycling or conserving energy? Give details in your answer.",
+          "difficulty": "analytical",
+          "word_count": 23,
+          "expected_response_topics": [],
+          "reference_answer": "Yes, I try to reduce my environmental impact in a few practical ways. I recycle bottles and paper when bins are available, carry a reusable water bottle, and turn off lights or air conditioning when I leave a room. These actions are small, but they are easy to repeat every day, which makes them useful. I also try not to buy things I do not really need, because waste often begins with unnecessary consumption. Of course, I know these habits alone cannot solve climate change. Still, they help me stay aware of my choices and make me more willing to support larger environmental policies.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q9.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q10",
+          "position": "Q2",
+          "question": "Can you describe one or two steps your community or neighborhood takes to be environmentally friendly? For example, are there solar panels on buildings or rainwater barrels available where you live?",
+          "difficulty": "analytical",
+          "word_count": 31,
+          "expected_response_topics": [],
+          "reference_answer": "My neighborhood has recycling bins in several public areas and a small community garden near the apartment buildings. The garden encourages people to compost food waste and grow vegetables together. It is not a huge project, but it makes environmental protection feel local and practical. For example, children can see how food scraps turn into soil, and older residents often share gardening tips. There are also signs reminding people to save water and sort trash correctly. These steps are simple, but they create a habit of paying attention to waste. I think that kind of daily awareness is important for a community.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q10.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q11",
+          "position": "Q3",
+          "question": "If you had the chance to participate in an ecological or nature-based activity, such as a community cleanup effort or tree planting event, what would you do and why?",
+          "difficulty": "analytical",
+          "word_count": 29,
+          "expected_response_topics": [],
+          "reference_answer": "If I had the chance to join an ecological activity, I would choose a tree planting event. The main reason is that it has a clear long-term benefit. Trees can provide shade, improve air quality, reduce heat in public spaces, and make a neighborhood more pleasant. I would also enjoy doing something visible and practical with other people. A cleanup activity is useful too, but the effect can disappear quickly if people litter again. A tree, if it is cared for properly, can keep helping the community for years. So I would choose tree planting because it combines teamwork with a lasting environmental result.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q11.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q12",
+          "position": "Q4",
+          "question": "Some people believe that individual actions are not enough to address conservation issues and that significant changes must come from government policies. Do you agree or disagree with this viewpoint? Why or why not?",
+          "difficulty": "analytical",
+          "word_count": 34,
+          "expected_response_topics": [],
+          "reference_answer": "I partly agree with the idea that major conservation changes must come from government policies. Large environmental problems require large-scale action, such as regulations on pollution, investment in public transportation, and support for clean energy. Individual people cannot control factories or national energy systems by themselves. However, I do not think personal action is meaningless. If citizens recycle, conserve energy, and use public transportation, it becomes easier for governments to pass stronger policies because the public already supports them. Individual behavior also creates social pressure on businesses. So overall, government action is essential, but it works best when ordinary people cooperate and change their habits too.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q12.mp3?v=mtr9fei3",
+          "from_asr": false
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0704_1"
+    },
+    {
+      "id": "real_interview_rp0704_1_c4",
+      "topic": "learning history",
+      "intro": "You have agreed to take part in a short research interview about how people learn history. Answer each question in the time allowed.",
+      "questions": [
+        {
+          "id": "real_interview_rp0704_1_q13",
+          "position": "Q1",
+          "question": "Do you mainly gain historical knowledge from school classes or from independent reading outside class?",
+          "difficulty": "analytical",
+          "word_count": 15,
+          "expected_response_topics": [],
+          "reference_answer": "I mainly gain historical knowledge through independent reading because it lets me choose topics that truly interest me. Classes are useful because they provide structure and help me understand major events in order. However, books, articles, and documentaries allow me to explore details at my own pace. For example, if I become interested in ancient trade or local history, I can read more than a class would normally cover. Independent reading also makes me ask my own questions instead of only following a syllabus. So I think both methods matter, but outside reading gives me more freedom and makes history feel more personal.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q13.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q14",
+          "position": "Q2",
+          "question": "When studying history, which area interests you more: culture, politics, or another topic?",
+          "difficulty": "analytical",
+          "word_count": 13,
+          "expected_response_topics": [],
+          "reference_answer": "Culture interests me most when I study history because it shows how people expressed their values through language, food, art, religion, and daily customs. Politics is important, of course, because governments and leaders shape major events. But culture often reveals what life felt like for ordinary people. For example, learning about traditional clothing or festivals can show how communities understood family, identity, and social roles. That kind of information makes the past more vivid for me. It also helps me compare different societies without only focusing on wars or rulers. So if I had to choose, I would say culture is my favorite area.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q14.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q15",
+          "position": "Q3",
+          "question": "Have you visited a museum? Can places like museums deepen your understanding of history?",
+          "difficulty": "analytical",
+          "word_count": 14,
+          "expected_response_topics": [],
+          "reference_answer": "Yes, I have visited a museum, and it did deepen my understanding of history. Seeing real objects, maps, tools, and photographs made the past feel much more concrete. For example, when I saw old household items and handwritten letters, I could imagine how people lived and communicated. A textbook can explain events clearly, but a museum gives a visual and emotional experience. It also organizes objects in a way that shows connections between different periods. Of course, a museum cannot show everything, and visitors still need background knowledge. But overall, I think museums are very helpful because they make history easier to remember.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q15.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0704_1_q16",
+          "position": "Q4",
+          "question": "Do you agree that studying history can help people avoid repeating past mistakes? Why or why not?",
+          "difficulty": "analytical",
+          "word_count": 17,
+          "expected_response_topics": [],
+          "reference_answer": "I agree that studying history can help people avoid repeating past mistakes, although it does not guarantee better choices. The main reason is that history shows patterns in conflict, prejudice, economic problems, and poor leadership. For example, when people learn how misinformation or extreme nationalism contributed to past crises, they may become more careful about similar trends today. History also teaches that decisions often have consequences beyond the present moment. Of course, every situation is different, so we cannot simply copy old solutions. Still, understanding the past gives people more perspective. It can make citizens and leaders think before acting too quickly.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0704_1_q16.mp3?v=mtr9fei3",
+          "from_asr": false
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0704",
+      "date": "2026-07-04",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0704_1"
+    },
+    {
+      "id": "real_interview_rp0705_1_c1",
+      "topic": "sleep habits",
+      "intro": "You have agreed to take part in a short research interview about sleep habits. Answer each question in the time allowed.",
       "questions": [
         {
           "id": "real_interview_rp0705_1_q1",
@@ -701,10 +726,29 @@
           "reference_answer": "I agree that high schools should start later. Teenagers often have heavy homework, after-school activities, and long commutes, so an early start can make them sleep-deprived. If school began later, students would probably be more alert in morning classes and perform better on tests. It could also improve their mood and reduce stress. Some people may worry that a later schedule would affect sports or family routines, but schools could adjust after-school activities slightly. Overall, I think better sleep would make students healthier and more productive.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0705_1"
+    },
+    {
+      "id": "real_interview_rp0705_1_c2",
+      "topic": "parks and recreation",
+      "intro": "You have agreed to take part in a short research interview about parks and public recreational spaces. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0705_1_q5",
-          "position": "Q5",
+          "position": "Q1",
           "question": "Describe a memorable visit to a park or recreational area. What made it special?",
           "difficulty": "analytical",
           "word_count": 14,
@@ -715,7 +759,7 @@
         },
         {
           "id": "real_interview_rp0705_1_q6",
-          "position": "Q6",
+          "position": "Q2",
           "question": "Are public recreational spaces more important for adults or for children? Why?",
           "difficulty": "analytical",
           "word_count": 12,
@@ -726,7 +770,7 @@
         },
         {
           "id": "real_interview_rp0705_1_q7",
-          "position": "Q7",
+          "position": "Q3",
           "question": "Do you agree that parks improve community health and well-being and that local governments should invest more money in them?",
           "difficulty": "analytical",
           "word_count": 20,
@@ -737,79 +781,13 @@
         },
         {
           "id": "real_interview_rp0705_1_q8",
-          "position": "Q8",
+          "position": "Q4",
           "question": "In large cities, should land be used mainly for new housing or for more parks and recreational spaces?",
           "difficulty": "analytical",
           "word_count": 18,
           "expected_response_topics": [],
           "reference_answer": "I think cities need both housing and parks, but if I had to choose, I would prioritize housing in areas with serious housing shortages. People need affordable places to live before they can enjoy other parts of city life. If rent becomes too high, students and workers may be pushed far away from schools and jobs. However, housing projects should still include green areas, small playgrounds, or shared courtyards. That way, the city does not completely sacrifice recreation. Large parks are important, but a city also has to solve practical problems. Balanced planning is best, but urgent housing needs should come first.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q8.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q9",
-          "position": "Q9",
-          "question": "How do you usually arrange your time during the day?",
-          "difficulty": "analytical",
-          "word_count": 10,
-          "expected_response_topics": [],
-          "reference_answer": "I usually arrange my day around my most important tasks. In the morning, I try to do work that requires concentration, such as reading, writing, or reviewing notes. In the afternoon, I handle easier tasks like messages, errands, or group discussions. I also leave some time in the evening for exercise or rest, because I do not want my whole day to be only about work. This schedule is not perfect, but it helps me use my energy wisely. I have learned that I am more productive when difficult tasks are done earlier.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q9.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q10",
-          "position": "Q10",
-          "question": "Do you make a daily plan? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 10,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I usually make a daily plan, but I keep it simple. I write down three or four important tasks instead of filling every hour with detailed activities. This helps me stay focused without feeling too controlled by the schedule. If I make a very strict plan, I often feel stressed when something unexpected happens. A short plan gives me direction and flexibility at the same time. For example, I may list an assignment, a meeting, and a workout. As long as I finish those main items, I feel the day has been successful.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q10.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q11",
-          "position": "Q11",
-          "question": "What do you do if your day does not go according to plan?",
-          "difficulty": "analytical",
-          "word_count": 13,
-          "expected_response_topics": [],
-          "reference_answer": "If my day does not go according to plan, I first decide which tasks are truly urgent. Sometimes one unexpected problem takes more time than I expected, so I cannot finish everything. In that situation, I move less important tasks to the next day and focus on what has a deadline. I also try not to blame myself too much, because plans are only tools, not promises. For example, if a group meeting takes longer than expected, I may shorten my study session but still review the most important material. Flexibility keeps me calm.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q11.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q12",
-          "position": "Q12",
-          "question": "Do you think good daily planning affects work or study efficiency?",
-          "difficulty": "analytical",
-          "word_count": 11,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I think good daily planning can strongly affect work or study efficiency. A plan helps people avoid wasting time deciding what to do next. It also makes large tasks feel more manageable, because they can be divided into smaller steps. For example, if I have a research paper, I can plan one day for collecting sources, another day for outlining, and another for writing. Without a plan, I might delay the work until the last minute. Planning does not guarantee success, but it makes it easier to stay organized and use time well.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q12.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q13",
-          "position": "Q13",
-          "question": "Do you usually participate in art activities? What kind of art would you like to try?",
-          "difficulty": "analytical",
-          "word_count": 16,
-          "expected_response_topics": [],
-          "reference_answer": "I do not participate in art activities very often, but I would like to try photography. I think photography is interesting because it helps people notice details in ordinary life, such as light, color, and facial expressions. It also feels more accessible than some other art forms because I can practice with a phone or a simple camera. If I had more time, I would join a beginner photography club and learn how to take better pictures of people and city scenes. I like the idea of using images to tell small stories.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q13.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0705_1_q14",
-          "position": "Q14",
-          "question": "Can art and music express emotions and ideas better than language?",
-          "difficulty": "analytical",
-          "word_count": 11,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I think art and music can sometimes express emotions better than language. Words are useful for explaining ideas clearly, but they may not capture complex feelings like nostalgia, loneliness, or excitement. A piece of music can make people feel something immediately, even if there are no lyrics. A painting can also show mood through color and shape. For example, a sad melody can communicate grief to people from different countries, even when they do not share the same language. Language is powerful, but art often reaches people in a more direct emotional way.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q14.mp3?v=mtr9fei3",
           "from_asr": false
         }
       ],
@@ -823,12 +801,76 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0705_1"
     },
     {
-      "id": "real_interview_rp0711_1",
-      "topic": "",
-      "intro": "You will have a short online interview with a researcher. Answer each question.",
+      "id": "real_interview_rp0705_1_c3",
+      "topic": "daily planning",
+      "intro": "You have agreed to take part in a short research interview about how people plan their day. Answer each question in the time allowed.",
+      "questions": [
+        {
+          "id": "real_interview_rp0705_1_q9",
+          "position": "Q1",
+          "question": "How do you usually arrange your time during the day?",
+          "difficulty": "analytical",
+          "word_count": 10,
+          "expected_response_topics": [],
+          "reference_answer": "I usually arrange my day around my most important tasks. In the morning, I try to do work that requires concentration, such as reading, writing, or reviewing notes. In the afternoon, I handle easier tasks like messages, errands, or group discussions. I also leave some time in the evening for exercise or rest, because I do not want my whole day to be only about work. This schedule is not perfect, but it helps me use my energy wisely. I have learned that I am more productive when difficult tasks are done earlier.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q9.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0705_1_q10",
+          "position": "Q2",
+          "question": "Do you make a daily plan? Why or why not?",
+          "difficulty": "analytical",
+          "word_count": 10,
+          "expected_response_topics": [],
+          "reference_answer": "Yes, I usually make a daily plan, but I keep it simple. I write down three or four important tasks instead of filling every hour with detailed activities. This helps me stay focused without feeling too controlled by the schedule. If I make a very strict plan, I often feel stressed when something unexpected happens. A short plan gives me direction and flexibility at the same time. For example, I may list an assignment, a meeting, and a workout. As long as I finish those main items, I feel the day has been successful.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q10.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0705_1_q11",
+          "position": "Q3",
+          "question": "What do you do if your day does not go according to plan?",
+          "difficulty": "analytical",
+          "word_count": 13,
+          "expected_response_topics": [],
+          "reference_answer": "If my day does not go according to plan, I first decide which tasks are truly urgent. Sometimes one unexpected problem takes more time than I expected, so I cannot finish everything. In that situation, I move less important tasks to the next day and focus on what has a deadline. I also try not to blame myself too much, because plans are only tools, not promises. For example, if a group meeting takes longer than expected, I may shorten my study session but still review the most important material. Flexibility keeps me calm.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q11.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0705_1_q12",
+          "position": "Q4",
+          "question": "Do you think good daily planning affects work or study efficiency?",
+          "difficulty": "analytical",
+          "word_count": 11,
+          "expected_response_topics": [],
+          "reference_answer": "Yes, I think good daily planning can strongly affect work or study efficiency. A plan helps people avoid wasting time deciding what to do next. It also makes large tasks feel more manageable, because they can be divided into smaller steps. For example, if I have a research paper, I can plan one day for collecting sources, another day for outlining, and another for writing. Without a plan, I might delay the work until the last minute. Planning does not guarantee success, but it makes it easier to stay organized and use time well.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0705_1_q12.mp3?v=mtr9fei3",
+          "from_asr": false
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0705",
+      "date": "2026-07-05",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0705_1"
+    },
+    {
+      "id": "real_interview_rp0711_1_c1",
+      "topic": "weather and climate",
+      "intro": "You have agreed to take part in a short research interview about weather and climate. Answer each question in the time allowed.",
       "questions": [
         {
           "id": "real_interview_rp0711_1_q1",
@@ -873,43 +915,29 @@
           "reference_answer": "Governments should focus on preparation, infrastructure, and clear public communication. First, cities need drainage systems, flood barriers, cooling centers, and stronger electrical networks that can continue operating during emergencies. Second, weather warnings should be sent quickly through phones, television, and community organizations, with clear instructions in several languages. Governments should also identify vulnerable residents, such as older adults, and provide transportation or temporary shelter when necessary. Finally, building standards should be updated for local risks. These measures cannot prevent extreme weather, but they can reduce injuries, protect essential services, and help communities recover much faster afterward.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0711_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0711",
+      "date": "2026-07-11",
+      "source_flags": [
         {
-          "id": "real_interview_rp0711_1_q5",
-          "position": "Q5",
-          "question": "Could you tell me about your current living arrangements? Do you live alone, or do you share your home with others?",
-          "difficulty": "analytical",
-          "word_count": 21,
-          "expected_response_topics": [],
-          "reference_answer": "I currently share an apartment with one roommate near my workplace. We each have a private bedroom, but we share the kitchen, living room, and bathroom. Living with someone else helps reduce rent and utility costs, which is important in a large city. We also divide household responsibilities, so one person does not have to manage everything. At the same time, we try to respect each other's schedules and need for quiet. I sometimes miss the privacy of living alone, but overall the arrangement works well because my roommate is responsible, friendly, and easy to communicate with.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0711_1_q5.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0711_1_q6",
-          "position": "Q6",
-          "question": "Is there a household chore that you dislike doing regularly? What is it, and why does it bother you?",
-          "difficulty": "analytical",
-          "word_count": 19,
-          "expected_response_topics": [],
-          "reference_answer": "The household chore I dislike most is cleaning the bathroom. It takes more time than other tasks because every surface needs attention, including the sink, mirror, shower, and floor. I also dislike the strong smell of many cleaning products, so I have to keep the window open and wear gloves. Even though it is not enjoyable, I clean the bathroom every week because a clean shared space is important. I make the task easier by keeping supplies together and cleaning small areas during the week. That prevents the job from becoming overwhelming on the weekend.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0711_1_q6.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0711_1_q7",
-          "position": "Q7",
-          "question": "What modern invention has changed the way you handle household tasks, and why is it essential?",
-          "difficulty": "analytical",
-          "word_count": 16,
-          "expected_response_topics": [],
-          "reference_answer": "The washing machine is the household invention I find most essential. Without it, washing clothes and bedding by hand would take several hours and require a great deal of physical effort. With a washing machine, I can start a load, complete other work, and return when the cycle finishes. Modern machines also offer settings for delicate clothes, heavy fabrics, and water-saving cycles, so they protect clothing and reduce waste. This invention is especially valuable in a busy household because clean clothes are a constant need. It saves time every week and makes an important routine task much more manageable.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0711_1_q7.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0711_1"
+    },
+    {
+      "id": "real_interview_rp0711_1_c2",
+      "topic": "online shopping",
+      "intro": "You have agreed to take part in a short research interview about online shopping. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0711_1_q8",
-          "position": "Q8",
+          "position": "Q1",
           "question": "How often do you shop online: weekly, monthly, or less frequently?",
           "difficulty": "analytical",
           "word_count": 11,
@@ -920,7 +948,7 @@
         },
         {
           "id": "real_interview_rp0711_1_q9",
-          "position": "Q9",
+          "position": "Q2",
           "question": "What types of products are you most likely to buy online?",
           "difficulty": "analytical",
           "word_count": 11,
@@ -931,7 +959,7 @@
         },
         {
           "id": "real_interview_rp0711_1_q10",
-          "position": "Q10",
+          "position": "Q3",
           "question": "Some people prefer physical stores, while others think online shopping is worse because it lacks human interaction. What is your opinion?",
           "difficulty": "analytical",
           "word_count": 21,
@@ -942,7 +970,7 @@
         },
         {
           "id": "real_interview_rp0711_1_q11",
-          "position": "Q11",
+          "position": "Q4",
           "question": "Do you think physical stores will eventually disappear because of online shopping?",
           "difficulty": "analytical",
           "word_count": 12,
@@ -962,12 +990,13 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0711_1"
     },
     {
-      "id": "real_interview_rp0718_1",
-      "topic": "",
-      "intro": "Q1. Thank you for agreeing to participate. I'd like to ask you some questions about online shopping. First, how often do you shop online? Weekly, monthly, or less frequently?",
+      "id": "real_interview_rp0718_1_c1",
+      "topic": "social media",
+      "intro": "You have agreed to take part in a short research interview about social media. Answer each question in the time allowed.",
       "questions": [
         {
           "id": "real_interview_rp0718_1_q1",
@@ -1012,43 +1041,29 @@
           "reference_answer": "I agree that social media currently creates more negative effects than positive ones, although the technology itself can be useful. The biggest problem is that platforms reward attention, so extreme claims and emotional arguments spread faster than careful explanations. This can increase anxiety and make public discussion more hostile. Social media does help families stay connected and allows small organizations to reach supporters. However, those benefits do not remove the risks of misinformation, comparison, and lost privacy. Platforms need clearer rules and more transparent recommendation systems, while users need stronger media-literacy skills. Until those changes become common, the negative social effects are likely to remain greater.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0718",
+      "date": "2026-07-18",
+      "source_flags": [
         {
-          "id": "real_interview_rp0718_1_q5",
-          "position": "Q5",
-          "question": "If you shop online, what types of products are you likely to buy? For example, would you buy clothes, electronics, or groceries?",
-          "difficulty": "analytical",
-          "word_count": 22,
-          "expected_response_topics": [],
-          "reference_answer": "I am most likely to buy books and electronics online. Books are easy to identify by title and edition, so I know exactly what will arrive, and online stores usually offer a wider selection. Small electronic items, such as headphones or chargers, are also convenient because I can compare specifications and prices. I am less willing to buy clothes because size and fabric are difficult to judge from photographs. I also avoid ordering fresh groceries unless delivery is necessary, since I prefer choosing produce myself. In general, I buy standardized products online and visit a physical store when fit, texture, or freshness matters.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q5.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q6",
-          "position": "Q6",
-          "question": "Some people believe shopping in physical stores is more convenient, while others think online shopping is a worse experience because it lacks the human interaction of in-person shopping. What is your opinion, and why?",
-          "difficulty": "analytical",
-          "word_count": 34,
-          "expected_response_topics": [],
-          "reference_answer": "For routine purchases, I think online shopping is more convenient because it saves travel time and allows quick comparison. However, physical stores provide a better experience when I need advice or want to inspect a product. A salesperson can answer a follow-up question immediately, and I can test the size or quality before paying. The lack of human interaction online does not make every purchase worse, because reviews and clear product information are often enough. My preference depends on risk: I buy familiar, inexpensive items online, but I visit a store for clothing, expensive equipment, or products that may require service after the sale.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q6.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q7",
-          "position": "Q7",
-          "question": "Some people believe physical stores might one day disappear because of online shopping. What is your opinion on this?",
-          "difficulty": "analytical",
-          "word_count": 19,
-          "expected_response_topics": [],
-          "reference_answer": "I do not think physical stores will disappear completely. Online shopping will probably handle more routine purchases, but stores offer services that websites cannot fully replace. Customers may want to try clothing, examine furniture, receive a demonstration, or solve a problem with a real employee. Stores can also function as pickup and return centers for online orders. I expect the two systems to become more integrated rather than one eliminating the other. Successful retailers may keep smaller showrooms while holding more inventory in regional warehouses. In that model, customers gain online convenience but still have a physical place for advice, testing, and immediate support.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q7.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0718_1"
+    },
+    {
+      "id": "real_interview_rp0718_1_c2",
+      "topic": "music preferences",
+      "intro": "You have agreed to take part in a short research interview about your music preferences. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0718_1_q8",
-          "position": "Q8",
+          "position": "Q1",
           "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your music preferences. First, how often do you listen to music? Do you listen daily, weekly, or less often?",
           "difficulty": "analytical",
           "word_count": 33,
@@ -1059,7 +1074,7 @@
         },
         {
           "id": "real_interview_rp0718_1_q9",
-          "position": "Q9",
+          "position": "Q2",
           "question": "What genres or types of music do you usually enjoy listening to? For example, do you prefer classical, rock, or jazz music? Give details to explain your answer.",
           "difficulty": "analytical",
           "word_count": 28,
@@ -1070,7 +1085,7 @@
         },
         {
           "id": "real_interview_rp0718_1_q10",
-          "position": "Q10",
+          "position": "Q3",
           "question": "Can you tell me about a concert or live music event you would like to attend? Why would you make that particular choice?",
           "difficulty": "analytical",
           "word_count": 23,
@@ -1081,24 +1096,13 @@
         },
         {
           "id": "real_interview_rp0718_1_q11",
-          "position": "Q11",
+          "position": "Q4",
           "question": "Some people believe that music can have a powerful effect on our emotions and moods. Do you agree or disagree with this viewpoint? Why?",
           "difficulty": "analytical",
           "word_count": 24,
           "expected_response_topics": [],
           "reference_answer": "I strongly agree that music affects emotions and moods. Rhythm, volume, and melody can change a person's energy even before the listener pays attention to the words. Fast music can make exercise feel easier, while a slow, familiar song can reduce stress after a difficult day. Music also becomes connected with memories, so hearing a particular piece may bring back the feelings associated with an important event. The effect is not identical for everyone because personal experience and cultural background matter. Still, people often use playlists deliberately to concentrate, celebrate, or relax, which shows that music is a practical tool for managing emotion.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q11.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0718_1_q12",
-          "position": "Q12",
-          "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your environmental practices. First, do you take any specific actions to reduce your environmental impact, such as recycling or conserving energy? Give details in your answer.",
-          "difficulty": "analytical",
-          "word_count": 40,
-          "expected_response_topics": [],
-          "reference_answer": "I take several small actions to reduce my environmental impact. I separate recyclable paper, plastic, and metal, and I carry a reusable bottle and shopping bag. At home, I turn off lights when leaving a room and avoid running the air conditioner when an open window is comfortable. For short trips, I usually walk or use public transportation instead of taking a car. None of these actions is dramatic, but they are easy to repeat every day. I also try to buy durable items and repair them before replacing them, because reducing waste at the beginning is often more effective than recycling it later.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0718_1_q12.mp3?v=mtr9fei3",
           "from_asr": false
         }
       ],
@@ -1112,12 +1116,13 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0718_1"
     },
     {
-      "id": "real_interview_rp0719_1",
-      "topic": "",
-      "intro": "Q1. Thank you for agreeing to participate. I'd like to ask you some questions about hobbies. To begin, do you have a hobby or interest that you regularly spend time doing?",
+      "id": "real_interview_rp0719_1_c1",
+      "topic": "fashion and clothing",
+      "intro": "You have signed up for a research study about fashion and clothing. You will have a short online interview with a researcher.",
       "questions": [
         {
           "id": "real_interview_rp0719_1_q1",
@@ -1162,43 +1167,29 @@
           "reference_answer": "I mostly agree that fashion trends change too quickly and can encourage wasteful spending. Companies release new styles constantly, even when last season's clothes are still useful. People may buy items for a short-lived look, wear them only a few times, and then throw them away. That wastes money and creates environmental problems. However, fashion can also be creative and help people express identity. The solution is not to reject every trend, but to choose carefully. I prefer durable basics and occasionally add one fashionable item that works with what I already own. That keeps style enjoyable without making constant consumption necessary.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0719_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0719",
+      "date": "2026-07-19",
+      "source_flags": [
         {
-          "id": "real_interview_rp0719_1_q5",
-          "position": "Q5",
-          "question": "Thank you for agreeing to participate. I'd like to ask you some questions about hobbies. To begin, do you have a hobby or interest that you regularly spend time doing?",
-          "difficulty": "analytical",
-          "word_count": 30,
-          "expected_response_topics": [],
-          "reference_answer": "My main hobby is photography, and I spend a few hours on it most weekends. I usually walk through different neighborhoods and look for interesting light, architecture, or ordinary scenes that people often overlook. Later, I select a small number of photographs and edit them carefully. Photography helps me slow down and pay attention to details, which is a useful contrast to a busy week of study. It also gives me a reason to explore new places. I do not need expensive equipment; using one camera consistently has taught me more about timing and composition than buying new devices would.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0719_1_q5.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0719_1_q6",
-          "position": "Q6",
-          "question": "Thank you! If you were to select a new hobby, what would you choose and why?",
-          "difficulty": "analytical",
-          "word_count": 16,
-          "expected_response_topics": [],
-          "reference_answer": "If I selected a new hobby, I would learn basic woodworking. I like activities that produce something useful, and woodworking combines planning, measurement, and creativity. I would begin with a small project such as a bookshelf or a simple stool, because the result would be easy to evaluate and use at home. The hobby would also teach patience, since careless measurements cannot be fixed by rushing. I would take an introductory class rather than learning entirely online so an instructor could demonstrate safe tool use. Over time, I would like to repair furniture instead of replacing it whenever a small part breaks.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0719_1_q6.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0719_1_q7",
-          "position": "Q7",
-          "question": "Great! Some people believe it is better to have one interest outside of work or school that you dedicate yourself to, rather than multiple smaller ones. What do you think about that and why?",
-          "difficulty": "analytical",
-          "word_count": 34,
-          "expected_response_topics": [],
-          "reference_answer": "I think it is better to have one main interest and a few smaller ones. A serious hobby becomes rewarding only after a person practices long enough to move beyond the beginner stage. Dedication creates skill, confidence, and a community of people with the same interest. However, focusing on only one activity can become repetitive or difficult if circumstances change. Smaller hobbies provide variety and relaxation without requiring the same commitment. For example, I might devote most of my free time to photography while occasionally cooking or hiking. This balance gives me the satisfaction of real progress while preserving curiosity and flexibility.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0719_1_q7.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0719_1"
+    },
+    {
+      "id": "real_interview_rp0719_1_c2",
+      "topic": "personal finance",
+      "intro": "You have agreed to take part in a short research interview about personal finance habits. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0719_1_q8",
-          "position": "Q8",
+          "position": "Q1",
           "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your personal finance habits. First, how often do you review your money management, such as tracking your expenses or budgeting? Do you do this weekly, monthly or less often?",
           "difficulty": "analytical",
           "word_count": 43,
@@ -1209,7 +1200,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q9",
-          "position": "Q9",
+          "position": "Q2",
           "question": "Thank you. Can you describe one or two methods you or someone you know uses to manage your finances? For example, do you use budgeting apps or keep a written record?",
           "difficulty": "analytical",
           "word_count": 31,
@@ -1220,7 +1211,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q10",
-          "position": "Q10",
+          "position": "Q3",
           "question": "Interesting, tell me about a financial goal you have achieved recently. What motivated you to achieve this goal?",
           "difficulty": "analytical",
           "word_count": 18,
@@ -1231,7 +1222,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q11",
-          "position": "Q11",
+          "position": "Q4",
           "question": "Great. Some people believe that fiscal responsibility education should be mandatory in schools to help students manage money effectively as adults. Do you agree or disagree with this idea? Why?",
           "difficulty": "analytical",
           "word_count": 30,
@@ -1239,10 +1230,29 @@
           "reference_answer": "I agree that financial responsibility should be mandatory in schools because every student will eventually manage income, bills, credit, and taxes. These decisions have serious consequences, yet many young adults learn only after making costly mistakes. A practical course could explain budgeting, compound interest, student loans, insurance, and common scams through realistic examples. It should not tell students exactly how to spend their money; it should give them tools to compare choices. Families will still influence financial habits, but not every family has the same knowledge. School instruction can provide a basic, equal foundation before students face adult responsibilities.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0719_1_q11.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0719",
+      "date": "2026-07-19",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0719_1"
+    },
+    {
+      "id": "real_interview_rp0719_1_c3",
+      "topic": "grocery shopping",
+      "intro": "You have agreed to take part in a short research interview about grocery shopping habits. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0719_1_q12",
-          "position": "Q12",
+          "position": "Q1",
           "question": "Thank you for taking part in our study. I'd like to ask you some questions about your grocery shopping habits. First, how often do you go grocery shopping each week? Why that often?",
           "difficulty": "analytical",
           "word_count": 33,
@@ -1253,7 +1263,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q13",
-          "position": "Q13",
+          "position": "Q2",
           "question": "Great, thank you. Can you tell me what types of items you usually buy when you go grocery shopping? For example, do you buy fresh produce, dairy products, or packaged foods?",
           "difficulty": "analytical",
           "word_count": 31,
@@ -1264,7 +1274,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q14",
-          "position": "Q14",
+          "position": "Q3",
           "question": "Got it. When you are grocery shopping, how often do you impulse buy? In other words, buy things you did not plan on buying. What types of items do you or might you impulse buy?",
           "difficulty": "analytical",
           "word_count": 35,
@@ -1275,7 +1285,7 @@
         },
         {
           "id": "real_interview_rp0719_1_q15",
-          "position": "Q15",
+          "position": "Q4",
           "question": "Great, that's helpful. Last question, some people believe that shopping at local farmers' markets is better than shopping at large grocery stores. Do you agree or disagree with this opinion? Why?",
           "difficulty": "analytical",
           "word_count": 31,
@@ -1295,12 +1305,13 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0719_1"
     },
     {
-      "id": "real_interview_rp0725_1",
-      "topic": "",
-      "intro": "",
+      "id": "real_interview_rp0725_1_c1",
+      "topic": "cultural festivals",
+      "intro": "You have agreed to take part in a short research interview about cultural festivals. Answer each question in the time allowed.",
       "questions": [
         {
           "id": "real_interview_rp0725_1_q1",
@@ -1345,10 +1356,29 @@
           "reference_answer": "Cultural festivals are far more than just entertainment; they play a crucial role in preserving traditions and fostering community identity. While they offer fun and enjoyment, their deeper purpose lies in passing down customs, language, and values to younger generations. For example, festivals like Diwali or Thanksgiving involve rituals and stories that connect people to their heritage, reinforcing a sense of belonging. Additionally, these events promote cultural exchange and understanding among diverse groups, which is vital in our globalized world. Thus, I view cultural festivals as essential for maintaining cultural continuity and social cohesion, making them both enjoyable and meaningful.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0725_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0725",
+      "date": "2026-07-25",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0725_1"
+    },
+    {
+      "id": "real_interview_rp0725_1_c2",
+      "topic": "movies and entertainment",
+      "intro": "You have agreed to take part in a short research interview about entertainment preferences. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0725_1_q5",
-          "position": "Q5",
+          "position": "Q1",
           "question": "Today I'd like to ask you some questions about your entertainment preferences. What kind of movies do your family or friends generally like to watch? For example, do they prefer action movies, comedies, dramas, or other types?",
           "difficulty": "analytical",
           "word_count": 37,
@@ -1359,7 +1389,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q6",
-          "position": "Q6",
+          "position": "Q2",
           "question": "I see. When you watch a movie, do you prefer to watch after work or school on weekdays or do you like to watch during the weekends? Why?",
           "difficulty": "analytical",
           "word_count": 28,
@@ -1370,7 +1400,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q7",
-          "position": "Q7",
+          "position": "Q3",
           "question": "Interesting. Next, I'd like to get your opinion. In the past, people mostly watched movies in theaters. Today, many people watch movies at home. Do you think that movie theaters will continue to exist in the future? Why or why not?",
           "difficulty": "analytical",
           "word_count": 41,
@@ -1381,7 +1411,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q8",
-          "position": "Q8",
+          "position": "Q4",
           "question": "Good points. I just have one more question. Some people believe that movies can be a powerful tool for educating people and raising awareness about important issues. Do you agree with this idea, or do you think there are other, more effective ways to educate people? Explain why you think so.",
           "difficulty": "analytical",
           "word_count": 51,
@@ -1389,10 +1419,29 @@
           "reference_answer": "I agree that movies can be a powerful educational tool. Films often present complex issues in an engaging, visual format that resonates emotionally with audiences, making topics like social justice or environmental concerns more accessible and memorable. For example, documentaries like 'An Inconvenient Truth' have significantly raised public awareness about climate change. However, I think other methods can be more effective in certain contexts. Interactive education, such as hands- July 25 Recall · 14 TOEFL · JULY 25 DOMESTIC OFFLINE RECALL on workshops or community discussions, allows for direct participation and deeper understanding, which movies alone might not achieve. Thus, while movies are valuable for sparking interest, combining them with interactive approaches likely offers the most comprehensive education.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0725_1_q8.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0725",
+      "date": "2026-07-25",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0725_1"
+    },
+    {
+      "id": "real_interview_rp0725_1_c3",
+      "topic": "childhood education",
+      "intro": "You have agreed to take part in a short research interview about childhood education. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0725_1_q9",
-          "position": "Q9",
+          "position": "Q1",
           "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your thoughts on childhood education. First, did you enjoy your school experience as a child?",
           "difficulty": "analytical",
           "word_count": 29,
@@ -1403,7 +1452,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q10",
-          "position": "Q10",
+          "position": "Q2",
           "question": "Thank you. Tell me about a school project or activity you participated in. What made that project or activity special?",
           "difficulty": "analytical",
           "word_count": 20,
@@ -1414,7 +1463,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q11",
-          "position": "Q11",
+          "position": "Q3",
           "question": "Interesting. Tell me a little about the technology you use during your childhood education. Do you feel like that technology prepared you for life after school? Why or why not?",
           "difficulty": "analytical",
           "word_count": 30,
@@ -1425,7 +1474,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q12",
-          "position": "Q12",
+          "position": "Q4",
           "question": "Great! Some people believe that the current education system needs significant changes to better prepare children for the future, focusing more on skills like problem solving and teamwork instead of mainly teaching facts. Do you agree or disagree with this viewpoint? Why?",
           "difficulty": "analytical",
           "word_count": 42,
@@ -1433,10 +1482,29 @@
           "reference_answer": "I agree that education should evolve to emphasize skills like problem-solving and teamwork. While factual knowledge is important, it's often quickly outdated in our fast-changing world. In contrast, skills such as critical thinking and collaboration are timeless and directly applicable to real-life challenges. For example, in a workplace, employees rarely work in isolation; they must solve problems together. By shifting focus to these competencies, schools can better equip children for future careers and societal roles, fostering adaptability and innovation. This approach doesn't discard facts but integrates them into practical, skill-based learning, making education more relevant and effective.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0725_1_q12.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0725",
+      "date": "2026-07-25",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0725_1"
+    },
+    {
+      "id": "real_interview_rp0725_1_c4",
+      "topic": "public transportation",
+      "intro": "You have agreed to take part in a short research interview about public transportation. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0725_1_q13",
-          "position": "Q13",
+          "position": "Q1",
           "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your use of public transportation. First, how often do you use public transportation, like buses or trains? Give details to explain your answer.",
           "difficulty": "analytical",
           "word_count": 37,
@@ -1447,7 +1515,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q14",
-          "position": "Q14",
+          "position": "Q2",
           "question": "Thank you. Can you describe any benefits or disadvantages you might experience from using public transportation?",
           "difficulty": "analytical",
           "word_count": 16,
@@ -1458,7 +1526,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q15",
-          "position": "Q15",
+          "position": "Q3",
           "question": "Interesting. Would you consider moving in order to have better access to public transportation? Why or why not?",
           "difficulty": "analytical",
           "word_count": 18,
@@ -1469,7 +1537,7 @@
         },
         {
           "id": "real_interview_rp0725_1_q16",
-          "position": "Q16",
+          "position": "Q4",
           "question": "Great. Some people believe that cities should invest more in public transportation, to reduce traffic congestion, commuting time and pollution. Do you agree or disagree with this idea? Why?",
           "difficulty": "analytical",
           "word_count": 29,
@@ -1489,7 +1557,8 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0725_1"
     },
     {
       "id": "real_interview_rp0812_1",
@@ -1554,9 +1623,9 @@
       ]
     },
     {
-      "id": "real_interview_rp0819_1",
-      "topic": "",
-      "intro": "",
+      "id": "real_interview_rp0819_1_c1",
+      "topic": "art and music",
+      "intro": "You have agreed to take part in a short research interview about art and music. Answer each question in the time allowed.",
       "questions": [
         {
           "id": "real_interview_rp0819_1_q1",
@@ -1601,10 +1670,29 @@
           "reference_answer": "I agree because art can communicate through mood, image, and rhythm before an audience has to define the feeling in words. For example, a quiet melody may suggest loneliness and hope at the same time, while a photograph can show tension between two people without explaining their history. Different viewers may interpret the work differently, but that ambiguity is often useful rather than confusing. It invites people to reflect on their own experiences. Words remain important, yet art can start an emotional conversation when direct language feels too limited or uncomfortable. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q4.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0819_1"
+    },
+    {
+      "id": "real_interview_rp0819_1_c2",
+      "topic": "books and reading",
+      "intro": "You have agreed to take part in a short research interview about books and reading. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0819_1_q5",
-          "position": "Q5",
+          "position": "Q1",
           "question": "Thank you for your participation. I'd like to learn about your experiences with books and reading. Was there a time in your life when you read more or less than you do now? What changed?",
           "difficulty": "analytical",
           "word_count": 35,
@@ -1615,7 +1703,7 @@
         },
         {
           "id": "real_interview_rp0819_1_q6",
-          "position": "Q6",
+          "position": "Q2",
           "question": "Great. In your opinion, is reading for pleasure a popular way people spend their free time where you live. Why do you think that is?",
           "difficulty": "analytical",
           "word_count": 25,
@@ -1626,7 +1714,7 @@
         },
         {
           "id": "real_interview_rp0819_1_q7",
-          "position": "Q7",
+          "position": "Q3",
           "question": "Interesting. Do you think reading different types of books helps people understand each other and get along better? Why or why not?",
           "difficulty": "analytical",
           "word_count": 22,
@@ -1637,90 +1725,13 @@
         },
         {
           "id": "real_interview_rp0819_1_q8",
-          "position": "Q8",
+          "position": "Q4",
           "question": "Good points. I just have one more question. Looking ahead, some people believe that future generations will read less than today's generation. Do you agree or disagree? Why?",
           "difficulty": "analytical",
           "word_count": 28,
           "expected_response_topics": [],
           "reference_answer": "I disagree with the idea that future generations will read less. While digital distractions are prevalent, technology also offers new ways to engage with reading, such as e-books and audiobooks, which can make literature more accessible. Additionally, educational systems increasingly emphasize literacy skills, and many young people use online platforms to discuss books, fostering a culture of reading. Therefore, I think reading will evolve rather than decline, adapting to modern lifestyles while maintaining its importance for knowledge and entertainment. This choice is realistic because it can fit into a normal schedule without creating too much pressure.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q8.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q13",
-          "position": "Q13",
-          "question": "Thank you for being involved in this research. I'd like to ask you some questions about hobbies. What hobbies do your friends or family have? Why do you think they enjoy doing them?",
-          "difficulty": "analytical",
-          "word_count": 33,
-          "expected_response_topics": [],
-          "reference_answer": "My mother enjoys gardening, while one of my closest friends spends weekends cycling. They like these hobbies for different reasons. Gardening gives my mother a quiet routine and the satisfaction of watching something grow over time. Cycling, by contrast, helps my friend stay active and explore places outside the city. Both activities also provide a break from screens and work-related pressure. I think that balance is what makes a hobby sustainable: it should feel personally rewarding while offering a clear change from a person's normal responsibilities. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q13.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q14",
-          "position": "Q14",
-          "question": "Thanks for that. Now, if your school or workplace were to organize after-work hobby clubs, which club do you think would interest the most people?",
-          "difficulty": "analytical",
-          "word_count": 25,
-          "expected_response_topics": [],
-          "reference_answer": "I think a casual photography club would interest the most people because almost everyone already has a phone camera, so joining would require little money or previous training. For example, the club could organize short walks around campus, teach simple techniques, and let members discuss a few pictures afterward. That format would suit both beginners and experienced photographers. It would also be social without demanding constant conversation, which can make new members more comfortable. Low costs, flexible attendance, and visible results would attract a broad group and keep people involved. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q14.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q15",
-          "position": "Q15",
-          "question": "Great, that's helpful. Next, do you think hobbies should mostly be relaxing, or is it better if they're challenging? Why?",
-          "difficulty": "analytical",
-          "word_count": 20,
-          "expected_response_topics": [],
-          "reference_answer": "I think a good hobby should be enjoyable first but include a manageable challenge. If it is completely effortless, people may become bored and stop improving. On the other hand, if every session feels like a test, the hobby simply creates more stress. When I learned basic cooking, familiar recipes helped me relax, while trying one new technique each week kept the activity interesting. That balance gave me progress without pressure. In my view, the best challenge is optional and gradual, so people remain curious instead of feeling judged by the result. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q15.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q16",
-          "position": "Q16",
-          "question": "Got it. Now, last question. How important do you think it is for people to keep exploring new hobbies as they grow older? Why?",
-          "difficulty": "analytical",
-          "word_count": 24,
-          "expected_response_topics": [],
-          "reference_answer": "It is quite important because new hobbies prevent adult life from becoming limited to work and routine. Learning something unfamiliar exercises patience and reminds people that they can still improve. It can also create new social connections, especially after someone moves, retires, or changes jobs. For instance, a community language class could introduce an older adult to both a useful skill and a new group of friends. People do not need to collect hobbies constantly, but remaining open to one new activity can support confidence, curiosity, and emotional well-being. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q16.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q19",
-          "position": "Q19",
-          "question": "Now, describe a time when you or someone you know tried to reduce energy use. What actions were taken, and what made it easy or difficult?",
-          "difficulty": "analytical",
-          "word_count": 26,
-          "expected_response_topics": [],
-          "reference_answer": "Last winter, my family tried to reduce electricity use after our monthly bill increased. For example, we replaced several old light bulbs with LEDs, unplugged chargers when they were not needed, and used the washing machine only with full loads. The easiest change was turning off lights because everyone could see the result immediately. The hardest part was reducing heating, since the weather was unusually cold. We solved that by sealing gaps around one window and wearing warmer clothes indoors. Our next bill was lower, and the experience showed us that several small habits can make a noticeable difference. 先直接回答，再给出理由和一个具体细节；保持 45 秒口语长度，避免只重复题目。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q19.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q20",
-          "position": "Q20",
-          "question": "In your daily life, have you noticed any renewable energy initiatives in your community? If yes, what have you seen, and how do they impact your area? If not, what's an initiative that might be beneficial for your community?",
-          "difficulty": "analytical",
-          "word_count": 39,
-          "expected_response_topics": [],
-          "reference_answer": "I have noticed solar panels on several newer apartment buildings and on the roof of a local school. The school uses a display near the entrance to show how much electricity the panels produce, which makes the project educational as well as practical. For example, these installations probably don't supply all the buildings' energy, but they reduce demand from the regular grid during sunny hours. They also make renewable energy feel visible and realistic to residents. I think the next useful step would be adding panels to public parking areas, where they could produce electricity while providing shade for cars. 先直接回答，再给出理由和一个具体细节；保持 45 秒口语长度，避免只重复题目。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q20.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0819_1_q21",
-          "position": "Q21",
-          "question": "Many believe transitioning to renewable energy is crucial for environmental sustainability, while others worry about the costs involved. Do you think the benefits of renewable energy outweigh the drawbacks? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 33,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I think the long-term benefits of renewable energy outweigh the drawbacks. Building solar farms, wind turbines, and improved power grids can be expensive at first, and some projects require careful planning to protect wildlife and local communities. For example, however, fossil-fuel pollution also creates enormous health and environmental costs that continue every year. Renewable systems use resources that don't run out and usually become cheaper after the initial investment. Governments should support workers and regions affected by the transition, but delaying change would be more costly. With responsible planning, cleaner air and a more stable energy supply justify the short-term difficulties. 先直接回答，再给出理由和一个具体细节；保持 45 秒口语长度，避免只重复题目。 Answers | 29",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q21.mp3?v=mtr9fei3",
           "from_asr": false
         }
       ],
@@ -1734,49 +1745,80 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0819_1"
     },
     {
-      "id": "real_interview_rp0822_1",
-      "topic": "",
-      "intro": "",
+      "id": "real_interview_rp0819_1_c3",
+      "topic": "hobbies",
+      "intro": "You have agreed to take part in a short research interview about hobbies. Answer each question in the time allowed.",
       "questions": [
         {
-          "id": "real_interview_rp0822_1_q1",
+          "id": "real_interview_rp0819_1_q13",
           "position": "Q1",
-          "question": "Great, that's interesting. Now, if you had to choose, would you rather create music yourself or listen to music created by others? Why?",
-          "difficulty": "personal",
-          "word_count": 23,
-          "expected_response_topics": [],
-          "reference_answer": "I would rather listen to music created by others. I do not have enough technical training to compose confidently, whereas listening lets me explore many styles immediately. On a typical week, I might hear jazz while studying, pop music at the gym, and traditional music recommended by a classmate. Each style offers a different mood and perspective. Creating music can be rewarding, but as a listener I can appreciate the skill of many artists and keep discovering sounds I would never produce on my own. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q1.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0822_1_q2",
-          "position": "Q2",
-          "question": "Okay, noted. Do you think music should be a required part of children's education? Why or why not?",
-          "difficulty": "descriptive",
-          "word_count": 18,
-          "expected_response_topics": [],
-          "reference_answer": "Yes, I think basic music education should be required, although students should not be forced into advanced performance. Learning rhythm, singing, or a simple instrument develops careful listening and persistence. It also gives children a creative way to express feelings that may be difficult to explain directly. In group performances, they must watch one another and cooperate, which strengthens teamwork. Schools should therefore provide an accessible introductory course, while allowing students who are especially interested to continue with more demanding musical training. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q2.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0822_1_q3",
-          "position": "Q3",
-          "question": "Fair enough. Final question. Some people believe that live music has a stronger impact than recorded music. Do you agree or disagree with that? Why or why not?",
+          "question": "Thank you for being involved in this research. I'd like to ask you some questions about hobbies. What hobbies do your friends or family have? Why do you think they enjoy doing them?",
           "difficulty": "analytical",
-          "word_count": 28,
+          "word_count": 33,
           "expected_response_topics": [],
-          "reference_answer": "I generally agree that live music has a stronger impact. At a concert, the performers react to the audience, and everyone experiences the same unrepeatable moment. I once heard a student orchestra perform a familiar piece, and the energy in the room made it far more moving than the recording I already knew. Recorded music is more convenient and often technically cleaner, so I value it too. Still, the shared atmosphere and small variations in a live performance create a deeper and more memorable emotional response. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q3.mp3?v=mtr9fei3",
+          "reference_answer": "My mother enjoys gardening, while one of my closest friends spends weekends cycling. They like these hobbies for different reasons. Gardening gives my mother a quiet routine and the satisfaction of watching something grow over time. Cycling, by contrast, helps my friend stay active and explore places outside the city. Both activities also provide a break from screens and work-related pressure. I think that balance is what makes a hobby sustainable: it should feel personally rewarding while offering a clear change from a person's normal responsibilities. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q13.mp3?v=mtr9fei3",
           "from_asr": false
         },
+        {
+          "id": "real_interview_rp0819_1_q14",
+          "position": "Q2",
+          "question": "Thanks for that. Now, if your school or workplace were to organize after-work hobby clubs, which club do you think would interest the most people?",
+          "difficulty": "analytical",
+          "word_count": 25,
+          "expected_response_topics": [],
+          "reference_answer": "I think a casual photography club would interest the most people because almost everyone already has a phone camera, so joining would require little money or previous training. For example, the club could organize short walks around campus, teach simple techniques, and let members discuss a few pictures afterward. That format would suit both beginners and experienced photographers. It would also be social without demanding constant conversation, which can make new members more comfortable. Low costs, flexible attendance, and visible results would attract a broad group and keep people involved. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内。",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q14.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0819_1_q15",
+          "position": "Q3",
+          "question": "Great, that's helpful. Next, do you think hobbies should mostly be relaxing, or is it better if they're challenging? Why?",
+          "difficulty": "analytical",
+          "word_count": 20,
+          "expected_response_topics": [],
+          "reference_answer": "I think a good hobby should be enjoyable first but include a manageable challenge. If it is completely effortless, people may become bored and stop improving. On the other hand, if every session feels like a test, the hobby simply creates more stress. When I learned basic cooking, familiar recipes helped me relax, while trying one new technique each week kept the activity interesting. That balance gave me progress without pressure. In my view, the best challenge is optional and gradual, so people remain curious instead of feeling judged by the result. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q15.mp3?v=mtr9fei3",
+          "from_asr": false
+        },
+        {
+          "id": "real_interview_rp0819_1_q16",
+          "position": "Q4",
+          "question": "Got it. Now, last question. How important do you think it is for people to keep exploring new hobbies as they grow older? Why?",
+          "difficulty": "analytical",
+          "word_count": 24,
+          "expected_response_topics": [],
+          "reference_answer": "It is quite important because new hobbies prevent adult life from becoming limited to work and routine. Learning something unfamiliar exercises patience and reminds people that they can still improve. It can also create new social connections, especially after someone moves, retires, or changes jobs. For instance, a community language class could introduce an older adult to both a useful skill and a new group of friends. People do not need to collect hobbies constantly, but remaining open to one new activity can support confidence, curiosity, and emotional well-being. 先直接回应问题，再用清晰理由、具体细节和结果展开；自然口语表达，控制在45秒内.",
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0819_1_q16.mp3?v=mtr9fei3",
+          "from_asr": false
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0819",
+      "date": "2026-08-19",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0819_1"
+    },
+    {
+      "id": "real_interview_rp0822_1_c1",
+      "topic": "gardening",
+      "intro": "You have agreed to take part in a short research interview about gardening. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0822_1_q4",
-          "position": "Q4",
+          "position": "Q1",
           "question": "Thank you for agreeing to participate. I'd like to ask you some questions about your experiences with gardening. First, do you have a garden or any plants that you take care of? If so, how often do you spend time gardening, and if not, why?",
           "difficulty": "evaluative",
           "word_count": 45,
@@ -1787,7 +1829,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q5",
-          "position": "Q5",
+          "position": "Q2",
           "question": "Thank you! What kinds of plants or gardens have you seen or heard about that you found interesting or appealing? Describe them and talk about why you found them interesting or appealing.",
           "difficulty": "analytical",
           "word_count": 32,
@@ -1798,7 +1840,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q6",
-          "position": "Q6",
+          "position": "Q3",
           "question": "Interesting! What challenges do you think people face when trying to grow plants or maintain a garden?",
           "difficulty": "analytical",
           "word_count": 17,
@@ -1809,7 +1851,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q7",
-          "position": "Q7",
+          "position": "Q4",
           "question": "Great! Some people believe that gardening can have positive effects on personal mental health and well-being. Do you agree or disagree with this viewpoint? Why?",
           "difficulty": "analytical",
           "word_count": 25,
@@ -1817,43 +1859,29 @@
           "reference_answer": "Yes, I agree with that view. I strongly agree that gardening positively impacts mental health. First, it reduces stress by connecting us with nature, which lowers cortisol levels. For example, second, it provides a sense of accomplishment when plants thrive, boosting self-esteem. Finally, gardening encourages mindfulness, as focusing on tasks like watering or weeding helps clear the mind. These benefits collectively improve well-being, making gardening a valuable therapeutic activity. That routine is simple enough to continue even during a demanding school week. A practical health habit matters more to me than a plan that looks impressive but never lasts.",
           "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q7.mp3?v=mtr9fei3",
           "from_asr": false
-        },
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_flags": [
         {
-          "id": "real_interview_rp0822_1_q8",
-          "position": "Q8",
-          "question": "Okay, thanks. What is your typical routine before bedtime? What do you usually do before going to bed?",
-          "difficulty": "analytical",
-          "word_count": 18,
-          "expected_response_topics": [],
-          "reference_answer": "My typical bedtime routine starts around 10 p.m. First, I brush my teeth and wash my face to feel refreshed. Then, I change into comfortable pajamas. For example, I often read a book for about 20 minutes to unwind, avoiding screens to help me fall asleep faster. Finally, I set my alarm and do some light stretching before getting into bed. This routine helps me relax and ensures a good night's rest. A modern story can still explore timeless questions while using situations that feel familiar today. That relevance would make the book easier to discuss with friends after I finished it.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q8.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0822_1_q9",
-          "position": "Q9",
-          "question": "Great. Now, some people have trouble sleeping when they stay overnight at a hotel or at a friend's house. Are you able to sleep well in unfamiliar places? Why or why not?",
-          "difficulty": "analytical",
-          "word_count": 32,
-          "expected_response_topics": [],
-          "reference_answer": "I generally have no trouble sleeping in unfamiliar places, as long as the environment is reasonably quiet and comfortable. For example, I think my ability to adapt comes from years of traveling for work and leisure, which has trained me to relax even in new settings. I also bring a familiar pillow or use a sleep mask to create a sense of normalcy. However, if the place is too noisy or the bed is very uncomfortable, I might struggle a bit. Overall, I can sleep well most of the time.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q9.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
-        {
-          "id": "real_interview_rp0822_1_q10",
-          "position": "Q10",
-          "question": "Many parents worry about their teenage children getting enough sleep. Some high schools have considered starting later in the morning to allow teenage students more time to sleep each night. What do you think of this idea? Explain why.",
-          "difficulty": "analytical",
-          "word_count": 39,
-          "expected_response_topics": [],
-          "reference_answer": "I strongly support the idea of starting high school later in the morning. Teenagers have a natural biological shift that makes it hard to fall asleep early, so later start times align with their sleep cycles. This change can improve their health, academic performance, and mood. For example, studies show that schools with later start times report fewer absences and better grades. Although adjusting schedules might be challenging, the benefits outweigh the drawbacks. Ultimately, prioritizing teenagers' sleep needs is crucial for their development. Students learn more when they can connect an idea with something they have actually tried.",
-          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real/interview/real_interview_rp0822_1_q10.mp3?v=mtr9fei3",
-          "from_asr": false
-        },
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "split_from": "real_interview_rp0822_1"
+    },
+    {
+      "id": "real_interview_rp0822_1_c2",
+      "topic": "musical experiences",
+      "intro": "You have agreed to take part in a short research interview about your musical experiences. Answer each question in the time allowed.",
+      "questions": [
         {
           "id": "real_interview_rp0822_1_q11",
-          "position": "Q11",
+          "position": "Q1",
           "question": "Thanks for participating. I'd like to ask you some questions about your musical experiences. Do you play a musical instrument or sing? If not, what would you choose to learn how to do?",
           "difficulty": "analytical",
           "word_count": 33,
@@ -1864,7 +1892,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q12",
-          "position": "Q12",
+          "position": "Q2",
           "question": "Can you describe one memorable experience you have had with music? What made it special?",
           "difficulty": "analytical",
           "word_count": 15,
@@ -1875,7 +1903,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q13",
-          "position": "Q13",
+          "position": "Q3",
           "question": "I see. When you listen to music, do you prefer listening by yourself or with others?",
           "difficulty": "analytical",
           "word_count": 16,
@@ -1886,7 +1914,7 @@
         },
         {
           "id": "real_interview_rp0822_1_q14",
-          "position": "Q14",
+          "position": "Q4",
           "question": "Fascinating. Some people believe that music education should be an important part of the school curriculum. Do you agree or disagree with this viewpoint? Please explain your reasons.",
           "difficulty": "analytical",
           "word_count": 28,
@@ -1906,7 +1934,8 @@
           "severity": "warn",
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
-      ]
+      ],
+      "split_from": "real_interview_rp0822_1"
     },
     {
       "id": "real_interview_rp0830_1",
