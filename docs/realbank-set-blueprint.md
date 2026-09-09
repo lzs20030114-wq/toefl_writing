@@ -152,13 +152,39 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
 | # | 缺口 | 量 | 怎么补 | 在哪跑 | 状态 |
 |---|---|---|---|---|---|
 | 1 | 跨套重复被下架 | 阅读 188 篇 + 听力 22 段 | 装卷时按 `dup_of` 原位还回（别名） | 仓库，零成本 | ✅ 已做 |
-| 2 | 学术段落每篇漏抽 1 题 | 122 题（33 场因此「只差一点」） | 结构化阶段对 flagged 单元按答案键题号补抽（`structure_set.mjs` 的 repairUnit 已有此机制，需对 4/5 的组再跑一轮修复；仍失败的用原图重抽） | 本机（.codex-tmp + DeepSeek 少量费用） | 待做 |
+| 2a | 学术段落每篇少的那 1 题 = **插入句题**（缺 60 次第 5 题、29 次第 4 题）：OCR 丢了材料里的 4 个 ■，build_bank 把它当死题丢 | 上限 89 题，预计落地 40~70 | 从源截图用 Qwen3-VL 重新转写带 ■ 的正文 → 校验（恰 4 个 ■、与原文覆盖率 ≥0.92）→ `insert-markers.json` → build_bank 换材料救题。工具链：`restore_insert_markers.py --list / --fill`、`insert_markers_apply.mjs`、`insert_markers.js`（纯函数 + 36 例测试） | 本机（源截图 + DASHSCOPE，约 ¥1） | ✅ 工具就绪 |
+| 2b | 重排版源（rf*）插入题 docx 里没有选项，被丢 | 8 套 12 题（+2 题答案页写整句），12 套外推约 18~20 | `parse_reformatted.py`：材料 [A]~[D] 四个齐 → 合成选项；答案整句 → 按紧跟 [X] 之后定位推字母（`answer_from_sentence`）；待插入句保住并进题干 | 本机重跑 `parse_reformatted.py` → run_pipeline | ✅ 已改，待重跑 |
 | 3 | 对话判不出性别被扣 | 34 段 | `lc_gender_worksheet.py` 听音标注 → 覆盖表 → 重跑合流 | 本机，约半小时 | 工具已就绪 |
 | 4 | 4/5 月 16 套没跑 | 整卷 | `run_pipeline.mjs --all --resume` | 本机，约 ¥26 | 待充值 |
 | 5 | 填词答案词首被截 | 13 套 × 30 空 | 用题干词首 + 答案残片机械还原；需先看几条原始残片定规则 | 本机（要源 PDF） | 待设计 |
 | 6 | 听力无音频 | 18 套 | 源缺，只能补料 | — | 源缺 |
 
 跑完 2~5 任一项后：`build_bank.mjs` → `apply_interview_splits.mjs`（build_bank 已自动调）→ `assemble_sets.mjs`，题型套数字自动更新。
+
+**本机补题顺序（一次跑完，约 1 小时人力 + ¥30）**
+
+```bash
+# 2a 插入题 ■ 找回（约 ¥1）
+python scripts/realbank/restore_insert_markers.py --list
+python scripts/realbank/restore_insert_markers.py --fill --dry-run   # 看「将调用 N 次 / 预计 ¥X」
+python scripts/realbank/restore_insert_markers.py --fill             # >120 次要 --yes
+node scripts/realbank/insert_markers_apply.mjs --dry-run
+node scripts/realbank/insert_markers_apply.mjs
+# 2b 重排版插入题：重跑 12 套 rf* 的解析（零 token）
+python scripts/realbank/parse_reformatted.py <rf 源目录> --out-dir .codex-tmp/realbank   # 逐套
+# 3 对话人工标性别（约半小时）
+python scripts/realbank/merge_first_source_asr.py --all
+python scripts/realbank/lc_gender_worksheet.py --list --csv lc-gender.csv   # 听音填 male/female
+python scripts/realbank/lc_gender_worksheet.py --apply lc-gender.csv
+python scripts/realbank/merge_first_source_asr.py --all
+# 4 4/5 月 16 套（约 ¥26）
+node scripts/realbank/run_pipeline.mjs --all --resume
+# 落库 + 装卷
+node scripts/realbank/build_bank.mjs        # 日志看「找回标记救回 N 题」
+node scripts/realbank/upload_material_images.mjs   # 被换了材料的组要重传原图
+node scripts/realbank/assemble_sets.mjs
+```
+注意：2a 换了材料的组，`material_image` 沿用会失效，要重跑一次 `upload_material_images.mjs`。
 
 - 前端「题型套」入口：按 `type_sets[type]` 列卡片（第 N 场 · 日期 · got/need），点进去按 items 顺序连做；`alias_of` 只影响归属显示，题面按 `id` 回查。
 - B 型（阅读 M1 双学术簇 / 听力 M2 七短应答）是否对应自适应的高/低档，需要更多样本或官方说明确认。

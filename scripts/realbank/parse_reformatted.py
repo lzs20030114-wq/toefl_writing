@@ -340,6 +340,11 @@ class AnswerKey:
     def __init__(self):
         self.reading_ctw: list[dict] = []      # [{module, order, words:[...], header}]
         self.reading_mcq: dict[tuple, str] = {}   # (module, q) → letter
+        # 答案页把某道阅读选择题的答案写成了**整句**而不是字母（插入题最常见：商家的答案页
+        # 直接抄了材料里紧挨着插入位的那句话）。这里先原样收着 —— 只有 parse_reading 手上
+        # 才有材料，能按「这句紧挨着哪个 [X]」把字母推回来；推不出来的在那边落 problem。
+        self.reading_sentence: dict[tuple, str] = {}          # (module, q) → 整句
+        self.reading_sentence_problem: dict[tuple, str] = {}  # 同键 → 没救成时要报的话
         self.listening_mcq: dict[tuple, str] = {}
         self.bs: dict[int, str] = {}           # 造句题号 → 完整句子
         self.repeat: dict[int, str] = {}       # 复述题号 → 原句
@@ -777,9 +782,15 @@ def parse_answers_lines(lines: list) -> AnswerKey:
                 v = v.strip().rstrip(".")
                 if re.match(r"^[A-H]$", v, re.I):
                     target[(a.module, qn)] = v.upper()
+                    continue
+                msg = f"{kind} module{a.module} Q{qn} 答案不是单字母（源料给的是「{v[:50]}」）"
+                if kind == "reading_mcq" and nwords(v) >= 3:
+                    # 整句答案还有救：插入题的答案句能在材料里定位到某个 [X]。挂起交给
+                    # parse_reading，救不回来时由它把这句话落成 problem。
+                    ak.reading_sentence[(a.module, qn)] = v
+                    ak.reading_sentence_problem[(a.module, qn)] = msg
                 else:
-                    ak.problems.append(
-                        f"{kind} module{a.module} Q{qn} 答案不是单字母（源料给的是「{v[:50]}」）")
+                    ak.problems.append(msg)
             return
         if kind in ("bs", "repeat", "interview"):
             store = {"bs": ak.bs, "repeat": ak.repeat, "interview": ak.interview}[kind]
@@ -945,6 +956,79 @@ OPT_HEAD = re.compile(r"^([A-H])[.)]\s*(.+)$")
 AP_HEAD = re.compile(r"^Academic Reading\b\s*[:：]?\s*(.*)$", re.I)
 BLANK_RE = re.compile(r"([A-Za-z][A-Za-z'’]*)((?:\s*_)+)")
 INSERT_HINT = re.compile(r"four locations|where would the following sentence|best fit", re.I)
+# 重排版源的插入位就印成 `[A]`~`[D]`（旧的 ETS 截图源用 ■）。build_bank.hasInsertMarkers
+# 要求四个齐全才认，这里保持同一口径。
+INSERT_MARKERS = ["[A]", "[B]", "[C]", "[D]"]
+_MARKER_RE = re.compile(r"\[([A-D])\]")
+_NON_WORD = re.compile(r"[^a-z0-9]+")
+
+
+def _norm_words(s: str) -> str:
+    """去标点、小写、压空白 —— 答案页的整句和材料里的同一句只在标点/大小写上会有出入。"""
+    return _NON_WORD.sub(" ", str(s or "").lower()).strip()
+
+
+def _starts_with_words(hay: str, needle: str) -> bool:
+    return bool(needle) and (hay == needle or hay.startswith(needle + " "))
+
+
+def _ends_with_words(hay: str, needle: str) -> bool:
+    return bool(needle) and (hay == needle or hay.endswith(" " + needle))
+
+
+def insert_sentence_of(q: dict) -> str:
+    """插入题题干后面跟着的「待插入的句子」。
+
+    源料把它单独排一行（后面常还有一行 `Where would the sentence best fit?` 的重复问句），
+    解析时那两行是被 pending_insert 吞掉的 —— 但**句子不能丢**：丢了这句，题目就成了
+    「把某句话插到哪」却不说是哪句，用户没法答。这里只把重复问句滤掉。
+    """
+    out = []
+    for line in q.get("insert_lines") or []:
+        t = str(line).strip()
+        if not t or INSERT_HINT.search(t) or nwords(t) < 3:
+            continue
+        out.append(t)
+    return " ".join(out).strip()
+
+
+def letter_from_sentence(sentence: str, material: str):
+    """答案页把插入题答案写成整句时，靠「这句紧挨着哪个 [X]」把字母推回来。
+
+    返回 (字母 | None, 说明)。两段式，**先看「紧跟在 [X] 之后」**再看「紧接在 [X] 之前」：
+    一句话夹在 `[B] 这句 [C]` 中间时两边都成立，不定优先级就永远算歧义、一道也救不回来。
+    取「之后」是因为答案页抄的是插入位那一屏的下文（插入句就插在这句前面）。
+    任何一段里命中多个位置仍然判歧义丢弃 —— 猜错位置比丢题更糟。
+    推出来的答案会带 `answer_from_sentence: true`，盲审（audit_answers.mjs）是第二道闸。
+    """
+    target = _norm_words(sentence)
+    if len(target.split()) < 3:
+        return None, "答案句不足 3 个词，没法在材料里唯一定位"
+    segs = []          # 逐段：("mark", 字母) / ("text", 归一化文本)
+    last = 0
+    for m in _MARKER_RE.finditer(material or ""):
+        segs.append(("text", _norm_words(material[last:m.start()])))
+        segs.append(("mark", m.group(1).upper()))
+        last = m.end()
+    segs.append(("text", _norm_words((material or "")[last:])))
+    after, before = [], []
+    for i, (kind, val) in enumerate(segs):
+        if kind != "mark":
+            continue
+        nxt = segs[i + 1][1] if i + 1 < len(segs) else ""
+        prv = segs[i - 1][1] if i > 0 else ""
+        if _starts_with_words(nxt, target):
+            after.append(val)
+        if _ends_with_words(prv, target):
+            before.append(val)
+    for hits, where in ((sorted(set(after)), "紧跟在"), (sorted(set(before)), "紧接在")):
+        if len(hits) == 1:
+            return hits[0], f"答案句{where} [{hits[0]}] {'之后' if where == '紧跟在' else '之前'}"
+        if len(hits) > 1:
+            pos = "之后" if where == "紧跟在" else "之前"
+            return None, (f"答案句在材料里 {'/'.join('[' + h + ']' for h in hits)} {pos}"
+                          f"都出现，位置有歧义")
+    return None, "答案句在材料里定位不到任何 [A]~[D] 位置"
 
 
 def split_blanks(passage_raw: str):
@@ -1079,13 +1163,19 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
         # 「Where would the sentence best fit?」两行说明，吞掉免得被当成新材料块；
         # 但**不能**吞选项行 —— 有的套把 A.[A] B.[B] 四个选项排在这两行之前。
         if t and pending_insert > 0:
-            # 遇到任何结构行（模块头 / 题型头 / 题号 / 选项）就说明插入题那两行说明已经过去了，
+            # 遇到任何结构行（模块头 / 题型头 / 题号）就说明插入题那两行说明已经过去了，
             # 计数器必须清零 —— 留着它会把下一段正文（比如 module 2 的填词短文）吃掉。
-            structural = (Q_HEAD.match(t) or OPT_HEAD.match(t) or MODULE_HEAD.match(t)
+            structural = (Q_HEAD.match(t) or MODULE_HEAD.match(t)
                           or CTW_HEAD.match(t) or RDL_HEAD.match(t) or AP_HEAD.match(t))
+            # 选项行例外：有的套把 `A. [A] B. [B] …` 排在那两行说明**之前**，清零就会把
+            # 后面的待插入句子当成新材料块。让选项照常走下面的 OPT 分支，计数器留着。
+            is_opt = bool(OPT_HEAD.match(t) and cur and cur["questions"])
             if structural:
                 pending_insert = 0
-            else:
+            elif not is_opt:
+                # 待插入的句子就在这两行里，挂到刚才那道题上（insert_sentence_of 再挑）。
+                if cur and cur["questions"]:
+                    cur["questions"][-1].setdefault("insert_lines", []).append(t)
                 pending_insert -= 1
                 continue
         if p.images and cur is not None and not cur["questions"]:
@@ -1247,12 +1337,50 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
             qp: list[str] = []
             letter = ak.reading_mcq.get((module_n, q["q"]))
             opts = q["options"]
-            if len(opts) < 3:
-                qp.append(f"Q{q['q']} 只解析到 {len(opts)} 个选项"
-                          + ("（插入题在这套源料里没有选项，无法作答）" if INSERT_HINT.search(q["stem"]) else ""))
-            if letter is None:
+            stem = q["stem"]
+            is_insert = bool(INSERT_HINT.search(stem))
+            extra: dict = {}
+            opts_reported = False
+            answer_reported = False
+            if is_insert:
+                # (a) 待插入的句子塞回题干 —— 源料把它单排一行，不带上题目就没法答。
+                sentence = insert_sentence_of(q)
+                if sentence:
+                    extra["insert_sentence"] = sentence
+                    if _norm_words(sentence) not in _norm_words(stem):
+                        stem = f"{stem}\n\n{sentence}"
+                # (b) 没有选项 → 四个位置标记本身就是选项。源料里**有**选项的那批写的是
+                #     `A. [A]`，OPT_HEAD 剥掉字母后正好是 `[A]`，两边落成同一形态；
+                #     build_bank.hasInsertMarkers 也是按这四个标记放行的。
+                markers = [mk for mk in INSERT_MARKERS if mk in material]
+                if len(opts) < 3:
+                    if len(markers) == 4:
+                        opts = list(INSERT_MARKERS)
+                    else:
+                        miss = [mk for mk in INSERT_MARKERS if mk not in markers]
+                        qp.append(f"Q{q['q']} 插入题没有选项，材料只有 "
+                                  f"{''.join(markers) or '（一个位置标记都没有）'}，"
+                                  f"缺 {''.join(miss)} —— 位置标记不全，无法作答")
+                        opts_reported = True
+                # (c) 答案页给的是整句：按「紧挨着哪个 [X]」把字母推回来。
+                if letter is None and (module_n, q["q"]) in ak.reading_sentence:
+                    sent = ak.reading_sentence[(module_n, q["q"])]
+                    guess, why = letter_from_sentence(sent, material)
+                    ak.reading_sentence_problem.pop((module_n, q["q"]), None)
+                    if guess:
+                        letter = guess
+                        extra["answer_from_sentence"] = True
+                    else:
+                        qp.append(f"Q{q['q']} 答案页给的是整句不是字母，{why}"
+                                  f"（源料给的是「{sent[:50]}」）")
+                        answer_reported = True
+            if len(opts) < 3 and not opts_reported:
+                qp.append(f"Q{q['q']} 只解析到 {len(opts)} 个选项")
+            if letter is None and not answer_reported:
                 qp.append(f"Q{q['q']} 答案页里没有答案")
-            elif LETTERS.find(letter) >= len(opts):
+            elif letter is not None and LETTERS.find(letter) >= len(opts) and not opts_reported:
+                # opts_reported 的那条已经说清「插入题位置标记不全」了，越界只是它的后果，
+                # 再报一遍会让同一道题在 problems 里占两行、看着像两个毛病。
                 qp.append(f"Q{q['q']} 答案 {letter} 越界（只有 {len(opts)} 个选项）")
             if qp or material_missing:
                 problems.extend(qp)
@@ -1263,11 +1391,12 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
                 "q_number_raw": q["q"],
                 "material": material,
                 "material_kind": material_kind(b),
-                "stem": q["stem"],
+                "stem": stem,
                 "options": opts,
                 "answer_index": idx,
                 "answer_text": opts[idx],
                 "answer_key": letter,
+                **extra,
             })
         if not b["questions"]:
             continue
@@ -1877,10 +2006,15 @@ def parse_set(folder: str, pool: bool = False) -> dict:
     setkey = ocr_images.setkey_for(folder, "rp" if pool else "rf")
     problems: list[str] = []
     ak = parse_answers_lines(load_answer_lines(folder, setkey, problems))
-    problems.extend(ak.problems)
 
     results: list[dict] = []
     results.extend(parse_reading(folder, setkey, ak))
+    # 「答案是整句」的挂起项：能按 [X] 位置推回字母的已被 parse_reading 消费掉，
+    # 剩下的（不是插入题 / 定位不到 / 题号在题面里根本没出现）落回全卷 problems。
+    # 所以 ak.problems 必须**等 parse_reading 跑完**再收。
+    ak.problems.extend(ak.reading_sentence_problem.values())
+    ak.reading_sentence_problem.clear()
+    problems.extend(ak.problems)
 
     wr = parse_writing(folder, setkey)
     if wr and "__bs_raw" in wr[0]:
