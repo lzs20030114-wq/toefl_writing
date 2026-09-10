@@ -5,8 +5,9 @@
  * 整科上线。2026-09-08 人工核对第一来源 34 套后放宽了阅读科的两条判据，这里把
  * 「放宽到哪为止」锁死：
  *
- *   · ctw_answer_truncated 只挡该卷的 CTW，AP/RDL 照收（它们的答案不来自填词答案页，
- *     且逐题过了盲审）；
+ *   · ctw_answer_truncated 不整科扣，CTW 也不再整卷拒收（答案页是后半截写法，逐空由
+ *     ctw_verify.js 还原校验）；AP/RDL 照收（逐题过了盲审）；
+ *   · 盲审闸 auditPassed：第一票一致即过；第一票不一致时只有显式跑过且一致的第二票能放行；
  *   · section_gap 按阅读盲审一致率条件放行（高一致率 = 答案页没错位，缺的题只是源里没有）；
  *   · ingest_blocker 里「无科目头的题号重启块被忽略」这一种，同样按阅读盲审一致率条件放行
  *     （被忽略的是答案页多出来的一段，配上的每题都过了盲审）；其它形态的 ingest_blocker 不变；
@@ -19,6 +20,7 @@ const {
   SECTION_GAP_MIN_AGREEMENT,
   holdDecision,
   sectionAgreement,
+  auditPassed,
 } = require("../scripts/realbank/hold_policy.js");
 
 const F = (code, sections = ["reading"], severity = "blocking") => ({
@@ -43,15 +45,15 @@ describe("hold_policy.sectionAgreement", () => {
   });
 });
 
-describe("hold_policy.holdDecision：ctw_answer_truncated 只挡 CTW", () => {
-  test("阅读不整科扣下，改为 dropCtw", () => {
+describe("hold_policy.holdDecision：ctw_answer_truncated 不扣科、不整卷拒收 CTW", () => {
+  test("阅读不整科扣下，CTW 也不整卷拒收（逐空后半截还原校验在 ctw_verify.js）", () => {
     const d = holdDecision([F("ctw_answer_truncated")], "reading", { agreement: 0.94 });
     expect(d.held).toBe(false);
-    expect(d.dropCtw).toBe(true);
+    expect(d.dropCtw).toBe(false);
     expect(d.notes.join("")).toMatch(/ctw_answer_truncated/);
   });
 
-  test("与一致率无关：盲审再低也只影响逐题闸，不改变「只挡 CTW」这条", () => {
+  test("与一致率无关：盲审再低也只影响逐题闸，不改变「不扣科」这条", () => {
     // 一致率低的卷靠 build_bank 的逐题盲审闸自己丢题，不该在这里被误判成整科扣。
     expect(holdDecision([F("ctw_answer_truncated")], "reading", { agreement: 0.4 }).held).toBe(false);
     expect(holdDecision([F("ctw_answer_truncated")], "reading", {}).held).toBe(false);
@@ -152,5 +154,38 @@ describe("hold_policy.holdDecision：其余判据行为不变", () => {
 
   test("其它科目的 flag 不影响本科", () => {
     expect(holdDecision([F("section_no_stems", ["writing"])], "reading", {}).held).toBe(false);
+  });
+});
+
+describe("hold_policy.auditPassed：第二票只对显式跑过的题生效", () => {
+  test("第一票一致即过", () => {
+    expect(auditPassed({ section: "reading", q: 1, agree: true })).toBe(true);
+  });
+
+  test("第一票不一致 / 没作答且没有第二票 → 不过（与引入第二票之前一致）", () => {
+    expect(auditPassed({ agree: false, model: "A", stamped: "B" })).toBe(false);
+    expect(auditPassed({ agree: false, model: null, stamped: "B" })).toBe(false);
+  });
+
+  test("第一票不一致、第二票与答案页一致 → 过", () => {
+    expect(auditPassed({ agree: false, second_vote: { model: "deepseek-v4-pro", pick: "B", agree: true } })).toBe(true);
+  });
+
+  test("第二票也不一致 / 没作答 → 不过", () => {
+    expect(auditPassed({ agree: false, second_vote: { pick: "A", agree: false } })).toBe(false);
+    expect(auditPassed({ agree: false, second_vote: { pick: null, agree: false } })).toBe(false);
+  });
+
+  test("sectionAgreement 仍只数第一票（条件放行口径不因第二票抬高）", () => {
+    const audited = [
+      { section: "reading", agree: true },
+      { section: "reading", agree: false, second_vote: { agree: true } },
+    ];
+    expect(sectionAgreement(audited, "reading")).toBe(0.5);
+  });
+
+  test("空值不炸", () => {
+    expect(auditPassed(null)).toBe(false);
+    expect(auditPassed(undefined)).toBe(false);
   });
 });

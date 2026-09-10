@@ -152,11 +152,11 @@ node scripts/realbank/assemble_sets.mjs --dry-run    # 只打印摘要
 | # | 缺口 | 量 | 怎么补 | 在哪跑 | 状态 |
 |---|---|---|---|---|---|
 | 1 | 跨套重复被下架 | 阅读 188 篇 + 听力 22 段 | 装卷时按 `dup_of` 原位还回（别名） | 仓库，零成本 | ✅ 已做 |
-| 2a | 学术段落每篇少的那 1 题 = **插入句题**（缺 60 次第 5 题、29 次第 4 题）：OCR 丢了材料里的 4 个 ■，build_bank 把它当死题丢 | 上限 89 题，预计落地 40~70 | 从源截图用 Qwen3-VL 重新转写带 ■ 的正文 → 校验（恰 4 个 ■、与原文覆盖率 ≥0.92）→ `insert-markers.json` → build_bank 换材料救题。工具链：`restore_insert_markers.py --list / --fill`、`insert_markers_apply.mjs`、`insert_markers.js`（纯函数 + 36 例测试） | 本机（源截图 + DASHSCOPE，约 ¥1） | ✅ 工具就绪 |
-| 2b | 重排版源（rf*）插入题 docx 里没有选项，被丢 | 8 套 12 题（+2 题答案页写整句），12 套外推约 18~20 | `parse_reformatted.py`：材料 [A]~[D] 四个齐 → 合成选项；答案整句 → 按紧跟 [X] 之后定位推字母（`answer_from_sentence`）；待插入句保住并进题干 | 本机重跑 `parse_reformatted.py` → run_pipeline | ✅ 已改，待重跑 |
-| 3 | 对话判不出性别被扣 | 34 段 | `lc_gender_worksheet.py` 听音标注 → 覆盖表 → 重跑合流 | 本机，约半小时 | 工具已就绪 |
-| 4 | 4/5 月 16 套没跑 | 整卷 | `run_pipeline.mjs --all --resume` | 本机，约 ¥26 | 待充值 |
-| 5 | 填词答案词首被截 | 13 套 × 30 空 | 用题干词首 + 答案残片机械还原；需先看几条原始残片定规则 | 本机（要源 PDF） | 待设计 |
+| 2a | 学术段落每篇少的那 1 题 = **插入句题**（缺 60 次第 5 题、29 次第 4 题）：OCR 丢了材料里的 4 个 ■，build_bank 把它当死题丢 | 上限 89 题，预计落地 40~70 | 从源截图用 Qwen3-VL 重新转写带 ■ 的正文 → 校验（恰 4 个 ■、与原文覆盖率 ≥0.92）→ `insert-markers.json` → build_bank 换材料救题。工具链：`restore_insert_markers.py --list / --fill`、`insert_markers_apply.mjs`、`insert_markers.js`（纯函数 + 36 例测试） | 本机（源截图 + DASHSCOPE，约 ¥1） | ✅ 09-10 跑完：真实盘子只有 3 道（全在无截图的 rf/rp 源），0 入库；大头是「0 选项被判 flagged」的 27 道 → 走 `--include-flagged` + `insert_promote.mjs` 转正，+2 入库。见 REALBANK-RECOVERY-2026-09-10.md |
+| 2b | 重排版源（rf*）插入题 docx 里没有选项，被丢 | 8 套 12 题（+2 题答案页写整句），12 套外推约 18~20 | `parse_reformatted.py`：材料 [A]~[D] 四个齐 → 合成选项；答案整句 → 按紧跟 [X] 之后定位推字母（`answer_from_sentence`）；待插入句保住并进题干 | 本机重跑 `parse_reformatted.py` → `audit_answers --section=reading`（不能走 run_pipeline：`--resume` 整套跳过、不带则 structure_set 会覆盖解析产物） | ✅ 09-10 跑完：+10 入库。rf0629 Q30 / rf0713 Q12 是选句题不是插入题（无题型，未接）。**注意重跑会冲掉 rf 的听力合流，要从 prev 拼回** |
+| 3 | 对话判不出性别被扣 | 34 段 | `lc_gender_worksheet.py` 听音标注 → 覆盖表 → 重跑合流 | 本机，约半小时 | ✅ 09-11 标完 34 段：21 段只差性别 → 听力可落库 318→339，lc 47→63 入库。10 段（1.21C/1.27A）稿子无说话人标签（no_turns）标了也挂不上；1.28A 听力 mp3 实为 1.21A 的（源错配）；2.1C M2 Q4 对话音频源缺 |
+| 4 | 4/5 月 16 套没跑 | 整卷 | `run_pipeline.mjs --all --resume` | 本机，约 ¥26 | ✅ 无事可做：18 套里 17 套早已跑完，只剩 4.29（答案 PDF 无阅读选择题答案，源缺）。`--all` 会把月份文件夹/OG 当卷烧钱，别用 |
+| 5 | 填词答案词首被截 | 13 套 × 30 空 | 用题干词首 + 答案残片机械还原；需先看几条原始残片定规则 | 本机（要源 PDF） | ✅ 09-10 做完：答案页给的是「要填的后半截」，前缀+后半截=整词 且 前缀=floor(n/2)（200/200），`ctw_verify.js` 逐空还原；CTW 87→116 篇。1.28A/2.28/3.14 各剩 1 块 OCR 太差没过 |
 | 6 | 听力无音频 | 18 套 | 源缺，只能补料 | — | 源缺 |
 
 跑完 2~5 任一项后：`build_bank.mjs` → `apply_interview_splits.mjs`（build_bank 已自动调）→ `assemble_sets.mjs`，题型套数字自动更新。

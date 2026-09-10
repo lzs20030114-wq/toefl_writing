@@ -16,6 +16,8 @@ OCR 出来的，RapidOCR / Qwen 转写都会把黑方块丢掉 —— build_bank
   --list  扫 structured 产物，挑出「题干像插入题 + status=ok」的阅读 MCQ，回到
           data/realBank/reading/{ap,rdl}.json 按文本匹配到 bank item（拿 bank_id 与
           材料），写 .codex-tmp/realbank/insert-markers.todo.json。
+          加 --include-flagged 再收「0 选项被判 flagged」的插入题（带 flagged/answer_key，
+          标记表就绪后由 insert_promote.mjs 转正）。
   --fill  对 todo 每条，用 crop_materials 的定位办法（item 文本 ↔ 每张源截图 OCR 文本，
           token 覆盖率 ≥0.6）找到那张源截图，调 Qwen3-VL 用**专门的 prompt** 重新转写，
           初检恰好 4 个 ■ 才写进 insert-markers.candidates.json。
@@ -70,6 +72,11 @@ INSERT_RE = re.compile(
 
 # item ↔ 源截图 的定位阈值，与 crop_materials.COVERAGE_MATCH 同一口径（那边已实测可用）。
 COVERAGE_MATCH = 0.60
+# 选页：同一篇材料在簇内每道题的那一屏上都有（左栏正文一样），■ 只画在**插入句题自己那一屏**。
+# 所以先按正文覆盖率圈出「这篇材料的屏」，再按题干（含待插入句）覆盖率挑出插入题那一屏。
+# 题干里的指令语（"four locations … could be added"）每道插入题都一样，单看题干会挑到**别的文章**
+# 的插入题屏（3.25 p15 就有 0.8），所以两个覆盖率必须同时达标。
+STEM_MATCH = 0.60
 # todo 里 structured 材料 ↔ bank item 的匹配阈值。bank 的材料取的是簇里最长那份 OCR 变体，
 # 与单条记录的材料不会逐字相同，所以给到 0.90，并且要求**唯一命中**。
 BANK_MATCH_MIN = 0.90
@@ -178,22 +185,53 @@ def record_material(rec: dict, item: dict) -> str:
     return ""
 
 
-def insert_records(structured: dict, setkey: str) -> list[dict]:
-    """一份 structured 产物 → 插入句题清单（section=reading、status=ok、题干像插入题）。"""
+ANSWER_LETTER_RE = re.compile(r"^[a-dA-D]$")
+
+
+def flagged_insert_ok(rec: dict, item: dict) -> bool:
+    """被结构化判 flagged 的插入句题，归不归这条链找回（--include-flagged）。
+
+    结构化器按普通选择题要 3~5 个文字选项；插入句题考场上没有文字选项（点方块作答），于是整条
+    flagged、build_bank 看都不看。第一来源这样丢了 27 道，答案页字母都在。只收「选项不足 3 个 +
+    答案页是 a~d 单字母 + 有材料」的，别的 flagged 原因（串栏、缺题干…）不归这条链管。
+    """
+    opts = item.get("options")
+    n_opts = len(opts) if isinstance(opts, list) else 0
+    return (n_opts < 3
+            and bool(ANSWER_LETTER_RE.match(str(item.get("answer_key") or "").strip()))
+            and bool(record_material(rec, item)))
+
+
+def insert_records(structured: dict, setkey: str, include_flagged: bool = False) -> list[dict]:
+    """一份 structured 产物 → 插入句题清单（section=reading、题干像插入题）。
+
+    默认只收 status=ok 的；include_flagged=True 时再收「0 选项被判 flagged」的那一种
+    （见 flagged_insert_ok），这类条目带 flagged=True 与 answer_key。
+    """
     rows = []
     for rec in structured.get("results", []) or []:
-        if rec.get("section") != "reading" or rec.get("status") != "ok":
+        if rec.get("section") != "reading":
+            continue
+        status = rec.get("status")
+        if status != "ok" and not (include_flagged and status == "flagged"):
             continue
         for item in rec.get("items") or []:
             if not isinstance(item, dict) or not looks_like_insert(item):
                 continue
-            rows.append({
+            flagged = status != "ok"
+            if flagged and not flagged_insert_ok(rec, item):
+                continue
+            row = {
                 "set": setkey,
                 "module": rec.get("module"),
                 "q_number": item.get("q_number", rec.get("q_start")),
                 "stem": re.sub(r"\s+", " ", str(item.get("stem") or "")).strip(),
                 "material": record_material(rec, item),
-            })
+            }
+            if flagged:
+                row["flagged"] = True
+                row["answer_key"] = str(item.get("answer_key")).strip().lower()
+            rows.append(row)
     return rows
 
 
@@ -228,7 +266,7 @@ def _clip(t, n=200):
     return t if len(t) <= n else t[:n - 1] + "…"
 
 
-def build_todo(out_dir: str, bank_dir: str, only_sets=None) -> list[dict]:
+def build_todo(out_dir: str, bank_dir: str, only_sets=None, include_flagged=False) -> list[dict]:
     bank_items = load_bank("ap", bank_dir) + load_bank("rdl", bank_dir)
     todo = []
     for f in structured_files(out_dir):
@@ -237,7 +275,7 @@ def build_todo(out_dir: str, bank_dir: str, only_sets=None) -> list[dict]:
             continue
         with open(f, encoding="utf-8") as fh:
             structured = json.load(fh)
-        for row in insert_records(structured, name):
+        for row in insert_records(structured, name, include_flagged):
             hit = match_bank(row["material"], bank_items)
             todo.append({
                 "set": row["set"],
@@ -249,6 +287,7 @@ def build_todo(out_dir: str, bank_dir: str, only_sets=None) -> list[dict]:
                 # 全文不进 todo 的展示字段，但 --fill 定位要用，单独放一个键。
                 "material": row["material"],
                 "bank_has_squares": bool(hit and count_squares(bank_material(hit))),
+                **({"flagged": True, "answer_key": row["answer_key"]} if row.get("flagged") else {}),
             })
     return todo
 
@@ -259,7 +298,7 @@ def cmd_list(args) -> int:
         print(f"找不到 structured 产物目录：{args.out_dir}", file=sys.stderr)
         return 2
     only = set(args.set or []) or None
-    todo = build_todo(args.out_dir, args.bank_dir, only)
+    todo = build_todo(args.out_dir, args.bank_dir, only, args.include_flagged)
     missing = [t for t in todo if not t["bank_has_squares"]]
     os.makedirs(args.out_dir, exist_ok=True)
     path = os.path.join(args.out_dir, TODO_NAME)
@@ -267,6 +306,9 @@ def cmd_list(args) -> int:
         json.dump({"entries": todo}, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
     print(f"插入题 {len(todo)} 道，其中 bank 材料无 ■ 的 {len(missing)} 道")
+    if args.include_flagged:
+        nflag = sum(1 for t in todo if t.get("flagged"))
+        print(f"  其中 0 选项被判 flagged、待转正的 {nflag} 道（标记表就绪后跑 insert_promote.mjs）")
     nobank = sum(1 for t in todo if not t["bank_id"])
     print(f"  对不上 bank item 的 {nobank} 道（apply 阶段没法校验，会被跳过）")
     print(f"→ {path}")
@@ -281,6 +323,25 @@ def _load_sibling(name: str):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
+
+
+def pick_question_page(units: list, material: str, stem: str):
+    """在源截图单元里挑出「这道插入题自己那一屏」；挑不出返回 None（不猜、不调模型）。
+
+    旧实现取正文最像的若干屏里页码最小的那张 —— 拿到的是本簇**第一题**的屏（插入句题通常是簇内
+    最后一题），Qwen 当然转不出方块：2026-09-10 实跑 26 张只有 2 张转出 4 个 ■，3.25 那张还把
+    词汇题的高亮词当成了 ■。源 PDF 里没截到插入题那一屏的（2.23 只截到 Q31~Q34）同样返回 None。
+    """
+    best = None
+    for u in units:
+        if glued_coverage(material, u["text"]) < COVERAGE_MATCH:
+            continue
+        sc = glued_coverage(stem, u["text"])
+        if sc < STEM_MATCH:
+            continue
+        if best is None or (sc, u["page"]) > (best[0], best[1]["page"]):
+            best = (sc, u)
+    return best[1] if best else None
 
 
 def cache_key(entry: dict) -> str:
@@ -366,8 +427,11 @@ def cmd_fill(args) -> int:
             skipped.append({"key": key, "why": "no_page", "match_coverage": round(top_cov, 3)})
             print(f"  [{i}/{len(entries)}] × {key}  no_page cov={top_cov:.2f}")
             continue
-        near = [u for c, u in scored if c >= top_cov - 0.02]
-        unit = min(near, key=lambda u: u["page"])
+        unit = pick_question_page(units, body, str(e.get("stem") or ""))
+        if unit is None:
+            skipped.append({"key": key, "why": "no_question_page", "match_coverage": round(top_cov, 3)})
+            print(f"  [{i}/{len(entries)}] × {key}  no_question_page（源里找不到这道插入题自己那一屏）")
+            continue
 
         cached = None if args.force else ocr_images.read_cache(CACHE_SETKEY, key, 1)
         if cached is not None:
@@ -473,6 +537,23 @@ def self_test() -> int:
     check("只抽 reading + status=ok 的插入题", [r["q_number"] for r in rows] == [25], rows)
     check("材料从记录级 material 兜底取到", "Coral reefs" in rows[0]["material"], rows[0])
 
+    # 1b) --include-flagged：只多收「0 选项 + 答案页 a~d 单字母 + 有材料」的 flagged 插入题。
+    flagged_fixture = {"results": structured["results"] + [
+        {"section": "reading", "type": "rdl", "module": 2, "status": "flagged", "q_start": 15,
+         "problems": ["选项数异常：0"],
+         "items": [{"q_number": 15, "stem": "There are four locations [■] in the passage that indicate "
+                                             "where the following sentence could be added.",
+                    "options": [], "answer_key": "C", "material": "Some passage text here."}]},
+        {"section": "reading", "type": "rdl", "module": 2, "status": "flagged", "q_start": 14,
+         "items": [{"q_number": 14, "stem": "Where would the following sentence best fit?",
+                    "options": [], "answer_key": "", "material": "Some passage text here."}]},
+    ]}
+    rows_f = insert_records(flagged_fixture, "卷A", include_flagged=True)
+    check("--include-flagged 只多收 0 选项 + 字母答案的 flagged 插入题",
+          [(r["q_number"], r.get("flagged", False), r.get("answer_key")) for r in rows_f]
+          == [(25, False, None), (15, True, "c")], rows_f)
+    check("默认不收 flagged", [r["q_number"] for r in insert_records(flagged_fixture, "卷A")] == [25])
+
     d = tempfile.mkdtemp()
     try:
         with open(os.path.join(d, "卷A.structured.json"), "w", encoding="utf-8") as fh:
@@ -497,6 +578,21 @@ def self_test() -> int:
         check("bank 材料没有 ■ → 需要找回", todo[0]["bank_has_squares"] is False, todo[0])
     finally:
         shutil.rmtree(d, ignore_errors=True)
+
+    # 1c) 选页：正文一样的好几屏里挑题干（含待插入句）对得上的那一屏；别的文章的插入题屏不算。
+    body = "coral reefs grow slowly over many centuries and shelter countless species of fish"
+    stem = ("There are four locations in the passage that indicate where the following sentence "
+            "could be added. Warm water speeds recovery.")
+    units = [
+        {"page": 6, "text": "Question 26 of 35 " + body + " The word slowly is closest in meaning to"},
+        {"page": 9, "text": "Question 30 of 35 " + body + " " + stem},
+        {"page": 12, "text": "Question 35 of 35 urban resilience refers to the ability of cities "
+                             + stem.split(".")[0]},
+    ]
+    picked = pick_question_page(units, body, stem)
+    check("选中插入题自己那一屏（不是簇内第一屏）", picked is not None and picked["page"] == 9, picked)
+    check("源里没截到那一屏 → 不猜", pick_question_page(units[:1], body, stem) is None)
+    check("别的文章的插入题屏不算", pick_question_page([units[0], units[2]], body, stem) is None)
 
     # 2) 候选初检：恰好 4 个 ■ 过，3 个不过。
     four = "a ■ b ■ c ■ d ■ e"
@@ -535,6 +631,8 @@ def main() -> int:
     ap.add_argument("--fill", action="store_true", help="按 todo 重新 OCR 源截图，产出候选")
     ap.add_argument("--self-test", action="store_true", help="纯 fixture 自检（零网络、零依赖）")
     ap.add_argument("--set", action="append", default=None, help="只处理这些卷（可重复）")
+    ap.add_argument("--include-flagged", action="store_true",
+                    help="--list 时连「0 选项被判 flagged」的插入题一起收（见 flagged_insert_ok）")
     ap.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
     ap.add_argument("--bank-dir", default=BANK_DIR)
     ap.add_argument("--dry-run", action="store_true", help="只打印将调用几次，不发请求、不写文件")

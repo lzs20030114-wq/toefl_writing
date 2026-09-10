@@ -179,6 +179,22 @@ describe("insert_markers · findMarkedPassage（按文本，不按 id）", () =>
     expect(findMarkedPassage(PLAIN, ambiguous)).toBeNull();
   });
 
+  test("多条都够像、但带 ■ 原文逐字相同（同一份源文件在两场考试各录一次）→ 取第一条", () => {
+    const dup = [
+      { ...table[0], set: "3.21新托福真题", marked: markedFrom(BODY_WORDS.slice(0, 49)) },
+      { ...table[0], set: "4.1新托福真题", marked: markedFrom(BODY_WORDS.slice(0, 49)) },
+    ];
+    expect(findMarkedPassage(PLAIN, dup)).toBe(dup[0]);
+  });
+
+  test("词完全一样但 ■ 挪了一个位置 → 仍然不猜", () => {
+    const moved = [
+      { ...table[0], marked: markedFrom(BODY_WORDS.slice(0, 49)) },
+      { ...table[0], q_number: 26, marked: markedFrom(BODY_WORDS.slice(0, 49), [11, 20, 30, 40]) },
+    ];
+    expect(findMarkedPassage(PLAIN, moved)).toBeNull();
+  });
+
   test("逐字相同优先于覆盖率兜底：有精确命中就不管还有几条很像", () => {
     const mixed = [
       { ...table[0], q_number: 26, marked: markedFrom(BODY_WORDS.slice(0, 49)) },
@@ -398,5 +414,52 @@ describe("insert-markers.json 初始表", () => {
     const d = decideInsertMaterial(PLAIN, []);
     expect(d.material).toBe(PLAIN);
     expect(d.restored).toBe(false);
+  });
+});
+
+describe("insert_markers · labelSquares（■ → [A]~[D]）", () => {
+  const { labelSquares, INSERT_LABELS } = require("../scripts/realbank/insert_markers.js");
+
+  test("恰好 4 个 ■ 按出现顺序标成 [A]~[D]", () => {
+    const out = labelSquares(MARKED);
+    expect(out).not.toMatch(/■/);
+    const at = INSERT_LABELS.map((l) => out.indexOf(l));
+    expect(at.every((i) => i > 0)).toBe(true);
+    expect([...at].sort((a, b) => a - b)).toEqual(at);
+  });
+
+  test("不是恰好 4 个 ■ → 原样返回，不猜", () => {
+    const three = markedFrom(BODY_WORDS, [10, 20, 30]);
+    expect(labelSquares(three)).toBe(three);
+  });
+});
+
+describe("insert_markers · promoteInsertItem（0 选项被判 flagged 的插入题转正）", () => {
+  const { promoteInsertItem } = require("../scripts/realbank/insert_markers.js");
+  const STEM = "There are four locations [■] in the passage that indicate where the following sentence could be added.";
+  const TABLE = [{ set: "卷A", module: 1, q_number: 35, marked: MARKED, by: "qwen3-vl", verified: true }];
+
+  test("标记表有这段材料 → 材料标 [A]~[D]、选项固定 [A]~[D]、按答案页字母盖下标", () => {
+    const r = promoteInsertItem({ stem: STEM, material: PLAIN, options: [], answer_key: "c" }, TABLE, "c");
+    expect(r.ok).toBe(true);
+    expect(r.item.options).toEqual(["[A]", "[B]", "[C]", "[D]"]);
+    expect(r.item.answer_index).toBe(2);
+    expect(r.item.answer_text).toBe("[C]");
+    expect(r.item.material).toMatch(/\[A\][\s\S]*\[B\][\s\S]*\[C\][\s\S]*\[D\]/);
+    expect(r.item.material).not.toMatch(/■/);
+    expect(r.item.stem).toMatch(/four locations \[A\]-\[D\]/);
+    expect(r.item.insert_restored.by).toBe("qwen3-vl");
+  });
+
+  test("标记表里没有 → 不转正（与 build_bank 换材料同一套判据，fail-closed）", () => {
+    const r = promoteInsertItem({ stem: STEM, material: PLAIN }, [], "c");
+    expect(r.ok).toBe(false);
+    expect(r.problems).toContain("no_entry");
+  });
+
+  test("答案页不是 a~d 单字母 → 不转正", () => {
+    expect(promoteInsertItem({ stem: STEM, material: PLAIN }, TABLE, "e").ok).toBe(false);
+    expect(promoteInsertItem({ stem: STEM, material: PLAIN }, TABLE, "").ok).toBe(false);
+    expect(promoteInsertItem({ stem: STEM, material: PLAIN }, TABLE, "ab").ok).toBe(false);
   });
 });

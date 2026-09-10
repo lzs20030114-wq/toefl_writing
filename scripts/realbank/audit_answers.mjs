@@ -31,6 +31,8 @@ const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../lib/ai/deepseekH
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
+// 第二票（--second-vote）用更强的模型：账户 /models 里 flash 之外的另一个就是它。
+const SECOND_VOTE_MODEL = "deepseek-v4-pro";
 const CONCURRENCY = 4;
 const LETTERS = "ABCDEFGH";
 // 专用退出码：3 = 系统性 API 失败。与 2（用法/输入缺失）区分，run_pipeline 见 3 就整批停下。
@@ -90,7 +92,7 @@ const SOLVE_PROMPT = `你是 TOEFL 考生。读材料、答题、选一个最佳
 只输出 JSON：{"answer":"A"}（字母之一），不要解释、不要 markdown。
 材料里没有依据就选你认为最可能的那个，不要拒答。`;
 
-async function solve(rec) {
+async function solve(rec, model = MODEL) {
   // 测试钩子，只用于验证守卫：REALBANK_FAKE_API_ERROR=402 让每次调用都抛该状态码的 API 错误。
   if (process.env.REALBANK_FAKE_API_ERROR) {
     throw new Error(`DeepSeek ${process.env.REALBANK_FAKE_API_ERROR}: `
@@ -116,7 +118,7 @@ async function solve(rec) {
     proxyUrl: resolveProxyUrl(),
     timeoutMs: 90000,
     payload: {
-      model: MODEL, temperature: 0, max_tokens: 8000, stream: false,
+      model, temperature: 0, max_tokens: 8000, stream: false,
       messages: [{ role: "system", content: SOLVE_PROMPT }, { role: "user", content: user }],
     },
   });
@@ -154,7 +156,23 @@ async function main() {
   // 听力是后补进来的（合流之后才有材料），阅读早就审完并已落库 —— 整卷重跑会让已上线的
   // 阅读题因为模型抖动被翻案，凭空产生一批 diff。所以按科增量审、结果合并。
   const onlySection = (args.find((a) => a.startsWith("--section=")) || "").split("=")[1] || null;
-  if (!setname) { console.error("用法: node scripts/realbank/audit_answers.mjs <卷名> [--section=listening]"); process.exit(2); }
+  // --only-missing：只审「上一次 audited 明细里没有」的题（插入题转正、解析器补出新题之后用），
+  //   旧明细原样沿用 —— 不重审已审过的题，免得模型抖动把已上线的题翻案（按科重跑就翻过 1 道）。
+  // --only-q=215,135：只审这些题号（可与上面叠加）。
+  // --second-vote[=模型]：不重做第一票，只给「第一票不一致 / 没作答」的题补一票更强模型的独立盲解
+  //   （默认 deepseek-v4-pro），记在该条 second_vote 上；build_bank 按 hold_policy.auditPassed 认。
+  const onlyMissing = args.includes("--only-missing");
+  const onlyQ = (() => {
+    const a = args.find((x) => x.startsWith("--only-q="));
+    return a ? new Set(a.slice("--only-q=".length).split(",").map((s) => s.trim()).filter(Boolean)) : null;
+  })();
+  const secondVoteArg = args.find((a) => a === "--second-vote" || a.startsWith("--second-vote="));
+  const secondVoteModel = secondVoteArg ? (secondVoteArg.split("=")[1] || SECOND_VOTE_MODEL) : null;
+  if (!setname) {
+    console.error("用法: node scripts/realbank/audit_answers.mjs <卷名> [--section=listening]"
+      + " [--only-missing] [--only-q=215,135] [--second-vote[=deepseek-v4-pro]]");
+    process.exit(2);
+  }
   const p = path.join(OUT_DIR, `${setname}.structured.json`);
   if (!fs.existsSync(p)) { console.error(`缺少结构化产物: ${p}`); process.exit(2); }
   const data = JSON.parse(fs.readFileSync(p, "utf8"));
@@ -200,6 +218,61 @@ async function main() {
       if (!rec.material) skipped.push(rec); else auditable.push(rec);
     }
   }
+  const auditFile = path.join(OUT_DIR, `${setname}.audit.json`);
+  const qKey = (section, q) => `${section}#${q}`;
+  const readOldAudit = (flag) => {
+    const old = fs.existsSync(auditFile) ? JSON.parse(fs.readFileSync(auditFile, "utf8")) : null;
+    if (!old || !Array.isArray(old.audited)) {
+      console.error(`${flag} 需要既有盲审明细：${auditFile}`);
+      process.exit(2);
+    }
+    return old;
+  };
+
+  if (secondVoteModel) {
+    const old = readOldAudit("--second-vote");
+    const recByKey = new Map(auditable.map((r) => [qKey(r.section, r.item.q_number), r]));
+    const targets = old.audited.filter((a) => a.agree !== true && !a.second_vote
+      && (!onlySection || a.section === onlySection)
+      && (!onlyQ || onlyQ.has(String(a.q))));
+    const runnable = targets.map((a) => ({ a, r: recByKey.get(qKey(a.section, a.q)) })).filter((x) => x.r);
+    console.log(`■ ${setname} 第二票（${secondVoteModel}）：第一票不一致/没作答 ${targets.length} 题，可审 ${runnable.length} 题`);
+    if (!runnable.length) return;
+    const votes = await runPool(runnable, (x) => solve(x.r, secondVoteModel), CONCURRENCY);
+    abortIfSystemic();
+    let pass = 0;
+    runnable.forEach((x, i) => {
+      const pick = typeof votes[i] === "string" ? votes[i] : null;
+      const stamped = LETTERS[x.r.item.answer_index];
+      x.a.second_vote = { model: secondVoteModel, pick, agree: pick === stamped };
+      if (pick === stamped) pass += 1;
+      console.log(`  [${x.a.section}/${x.a.type} Q${x.a.q}] 答案页=${stamped} 第一票=${x.a.model || "未作答"}`
+        + ` 第二票=${pick || "未作答"}${pick === stamped ? "  → 放行" : ""}`);
+    });
+    fs.copyFileSync(auditFile, path.join(OUT_DIR, `${setname}.audit.prev.json`));
+    fs.writeFileSync(auditFile, JSON.stringify(old, null, 2), "utf8");
+    console.log(`第二票与答案页一致 ${pass}/${runnable.length} → ${auditFile}`);
+    return;
+  }
+
+  let oldForMissing = null;
+  if (onlyMissing) {
+    oldForMissing = readOldAudit("--only-missing");
+    const seen = new Set(oldForMissing.audited.map((a) => qKey(a.section, a.q)));
+    const before = auditable.length;
+    for (let i = auditable.length - 1; i >= 0; i -= 1) {
+      if (seen.has(qKey(auditable[i].section, auditable[i].item.q_number))) auditable.splice(i, 1);
+    }
+    console.log(`--only-missing：${before} → ${auditable.length} 题（已审过的沿用旧明细）`);
+  }
+  if (onlyQ) {
+    const before = auditable.length;
+    for (let i = auditable.length - 1; i >= 0; i -= 1) {
+      if (!onlyQ.has(String(auditable[i].item.q_number))) auditable.splice(i, 1);
+    }
+    console.log(`--only-q：${before} → ${auditable.length} 题`);
+  }
+
   const bySrc = auditable.reduce((m, r) => { m[r.materialSource] = (m[r.materialSource] || 0) + 1; return m; }, {});
   console.log(`■ ${setname} 盲审`);
   console.log(`可审 ${auditable.length} 题（${Object.entries(bySrc).map(([k, v]) => `${k} ${v}`).join("，")}）；`
@@ -254,7 +327,12 @@ async function main() {
   const outPath = path.join(OUT_DIR, `${setname}.audit.json`);
   const prevPath = path.join(OUT_DIR, `${setname}.audit.prev.json`);
   let carriedDisagree = [];
-  if (onlySection && fs.existsSync(outPath)) {
+  if (oldForMissing) {
+    // 只审了新题：旧明细全部原样保留，新题追加在后。
+    carriedDisagree = oldForMissing.disagree || [];
+    console.log(`增量审（--only-missing）：沿用旧明细 ${oldForMissing.audited.length} 条，新增 ${audited.length} 条`);
+    audited = oldForMissing.audited.concat(audited);
+  } else if (onlySection && fs.existsSync(outPath)) {
     // 增量审：把**别的科目**上一次的明细原样带过来，只替换本科的。
     try {
       const old = JSON.parse(fs.readFileSync(outPath, "utf8"));

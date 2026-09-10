@@ -39,6 +39,9 @@ const SQUARE = "■";
 /** 插入位的固定个数（ETS 的插入句题永远是四选一）。 */
 const SQUARE_COUNT = 4;
 
+/** App 里插入句题靠 A–D 四个选项作答（RDLTask）；入库时 ■ 按顺序标成这四个，选项也固定是它们。 */
+const INSERT_LABELS = ["[A]", "[B]", "[C]", "[D]"];
+
 /** 两个 ■ 之间至少要隔开这么多个词（连着的方块 = 把装饰符/表格线当成了标记）。 */
 const MIN_WORDS_BETWEEN = 3;
 
@@ -156,7 +159,13 @@ function findMarkedPassage(material, table) {
   if (exact.length) return exact[0];
 
   const near = entries.filter((e) => coverage(e.marked, material) >= LOOKUP_COVERAGE_MIN);
-  return near.length === 1 ? near[0] : null;
+  if (near.length === 1) return near[0];
+  // 多条都够像时仍然不猜。唯一例外：这几条带 ■ 的原文**逐字相同**（空白归一化后，■ 保留）——
+  // 那是同一份源文件在两场考试里各录了一次（source-flags 的 identical_file，如 3.21 与 4.1），
+  // 正文与插入位都一样，取哪条结果都相同，谈不上「猜」。差一个词或 ■ 挪一个位置都照旧返回 null。
+  const sameText = (e) => String(e.marked).replace(/\s+/g, " ").trim();
+  if (near.length > 1 && new Set(near.map(sameText)).size === 1) return near[0];
+  return null;
 }
 
 /** 词 + 它在原串里的字符区间（■ 不是字母数字，天然被跳过）。 */
@@ -265,9 +274,76 @@ function decideInsertMaterial(material, table) {
   };
 }
 
+/**
+ * 正文里恰好 4 个 ■ → 按出现顺序换成 [A]~[D]。
+ *
+ * 为什么要换：App 里作答是点 A/B/C/D 四个选项，不是点方块。正文里只画四个一模一样的黑方块，
+ * 用户得自己数「第三个方块 = C」。重排版源（rf*）的材料本来就写 [A]~[D]、选项写 [A]~[D]，
+ * 两种来源统一成同一个样子。■ 不是恰好 4 个就原样返回（不猜）。
+ */
+function labelSquares(text) {
+  const s = String(text == null ? "" : text);
+  if ((s.match(/■/g) || []).length !== SQUARE_COUNT) return s;
+  let i = 0;
+  return s.replace(/■/g, () => INSERT_LABELS[i++]);
+}
+
+// 与 structure_set.mjs verifyMcq 同一份词表：转正的题绕过了结构化校验，这两条要在这里补查。
+const CJK = /[一-鿿]/;
+const WATERMARK = /闲鱼|盗卖|退款|店铺|甜茶|满分小屋|唯一闲/;
+
+/**
+ * 把一道「0 个选项、被结构化判 flagged」的插入句题转正（insert_promote.mjs 调）。
+ *
+ * 结构化器按普通选择题要 3~5 个文字选项；插入句题考场上没有文字选项（点四个方块作答），于是整条
+ * flagged、build_bank 连看都不看。第一来源这样丢了 27 道，答案页字母都在。
+ * 转正的前提与 build_bank 换材料**同一套判据**（decideInsertMaterial：标记表里有这段材料的带 ■ 版本、
+ * validateMarked 过）。过了才把材料换成标好 [A]~[D] 的正文、选项固定 [A]~[D]、按答案页字母盖 answer_index；
+ * 之后照常走盲审闸，不因为转正而免审。
+ *
+ * @param {object} item   structured 里那道题（要有 stem / material）
+ * @param {Array<object>} table insert-markers.json 的 entries
+ * @param {string} answerLetter 答案页字母（a~d，大小写不限）
+ * @returns {{ok: boolean, item: object|null, problems: string[]}}
+ */
+function promoteInsertItem(item, table, answerLetter) {
+  const problems = [];
+  const letter = String(answerLetter == null ? "" : answerLetter).trim().toUpperCase();
+  const idx = ["A", "B", "C", "D"].indexOf(letter);
+  if (letter.length !== 1 || idx < 0) problems.push(`answer_not_a_to_d:${JSON.stringify(answerLetter)}`);
+  const stem = String((item && item.stem) || "").trim();
+  if (tokensForMatch(stem).length < 2) problems.push("stem_missing");
+  const d = decideInsertMaterial(String((item && item.material) || ""), table);
+  if (!d.restored) problems.push(...d.problems);
+  const blob = `${stem} ${d.material}`;
+  if (CJK.test(blob)) problems.push("cjk_in_text");
+  if (WATERMARK.test(blob)) problems.push("watermark_in_text");
+  if (problems.length) return { ok: false, item: null, problems };
+  const options = INSERT_LABELS.slice();
+  return {
+    ok: true,
+    problems: d.problems, // 可能带 paragraphs_lost（与 build_bank 同口径：记账但照收）
+    item: {
+      ...item,
+      stem: stem.replace(/\[\s*■\s*\]/g, "[A]-[D]"),
+      material: labelSquares(d.material),
+      options,
+      answer_index: idx,
+      answer_text: options[idx],
+      insert_restored: {
+        by: (d.entry && d.entry.by) || null,
+        paragraphs_lost: d.problems.includes("paragraphs_lost"),
+      },
+    },
+  };
+}
+
 module.exports = {
   SQUARE,
   SQUARE_COUNT,
+  INSERT_LABELS,
+  labelSquares,
+  promoteInsertItem,
   MIN_WORDS_BETWEEN,
   COVERAGE_MIN,
   LOOKUP_COVERAGE_MIN,

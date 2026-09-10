@@ -40,11 +40,11 @@ const require = createRequire(import.meta.url);
 
 // 扣留判据抽成纯函数放隔壁（无 IO，可单测）：见 scripts/realbank/hold_policy.js 顶部注释，
 // 那里写着 ctw_answer_truncated / section_gap 两条为什么在阅读科被放宽。
-const { holdDecision, sectionAgreement } = require("./hold_policy.js");
+const { holdDecision, sectionAgreement, auditPassed } = require("./hold_policy.js");
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
 const { carryMaterialImages } = require("./material_image_carry.js");
 // 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
-const { decideInsertMaterial } = require("./insert_markers.js");
+const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -80,6 +80,30 @@ const INSERT_MARKERS = (() => {
     return [];
   }
 })();
+
+/**
+ * 复核清单里「跨套重复」下架条目的保留方：被下架的 id → 它指向的保留 id（review-holds.json 的 dup_of）。
+ *
+ * build_bank 自己也按「口播 / 复述 / 面试内容逐字相同」跨卷去重，默认留先遍历到的那条。两道闸各自决定
+ * 「留哪条」时会打架：先遍历到的恰好是清单要下架的那条 → 这里跳过了清单指定的保留方、applyReview 再下架
+ * 先遍历到的那条，两头都删光（2026-09-10 rf0808 la Q19 / rf0826 la Q23 就是这样两条都没了，
+ * __tests__/real-bank-review-holds.test.js 的「dup_of 指向的那条必须还在库里」会报红）。
+ * 所以撞重复时先问清单：先收的那条若被清单判为本条的重复，两条都放行，交给 applyReview 按清单下架。
+ */
+const DUP_KEEPER = (() => {
+  try {
+    const holds = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "review-holds.json"), "utf8")).holds || [];
+    return new Map(holds.filter((h) => h && h.id && h.dup_of).map((h) => [h.id, h.dup_of]));
+  } catch {
+    return new Map();
+  }
+})();
+
+/** seen 表记的是 `卷名/id`：先收的那条被复核清单判为 id 的重复 → true（本条是保留方，不该跳过）。 */
+function reviewKeepsLater(seenEntry, id) {
+  const prevId = String(seenEntry || "").split("/").pop();
+  return DUP_KEEPER.get(prevId) === id;
+}
 
 /** 取某套在某科目下生效的 flag（sections 含 "*" 的是全科通用）。 */
 function flagsFor(setName, section) {
@@ -299,9 +323,12 @@ function groupByMaterial(records, stats) {
 
   const groups = [];
   const matLen = (r) => String(r.item.material || "").trim().length;
+  // 带插入位标记的材料优先当代表：插入句题只有在「用户看到的正文」里有 [A]~[D]/■ 时才答得了，
+  // 不能因为另一份 OCR 变体多几个字符就把带标记的那份挤掉。其次才比长短（OCR 漏字只会变短）。
+  const repScore = (r) => (hasInsertMarkers(r.item.material) ? 1e9 : 0) + matLen(r);
   for (const c of byRoot.values()) {
     let rep = c.records[0];
-    for (const r of c.records) if (matLen(r) > matLen(rep)) rep = r;
+    for (const r of c.records) if (repScore(r) > repScore(rep)) rep = r;
     groups.push({ module: c.module, rep, records: c.records });
   }
   if (stats) stats.mergedGroups += seeds.length - groups.length;
@@ -343,7 +370,8 @@ function buildMcqGroup(group, meta, stats) {
   if (group.records.some((r) => looksLikeInsertQuestion(r.item)) && !hasInsertMarkers(material)) {
     const d = decideInsertMaterial(material, INSERT_MARKERS);
     if (d.restored) {
-      material = d.material;
+      // ■ 按顺序标成 [A]~[D]：App 里作答是点 A–D 选项，裸方块用户对不上号（见 insert_markers.labelSquares）。
+      material = labelSquares(d.material);
       restoredInsert = true;
       console.log(`  找回 ■：${meta.set} M${meta.module} 材料按 insert-markers.json 换成带标记版`
         + `（by ${d.entry && d.entry.by ? d.entry.by : "?"}`
@@ -364,13 +392,14 @@ function buildMcqGroup(group, meta, stats) {
       continue;
     }
     if (looksLikeInsertQuestion(it)) {
-      if (restoredInsert) {
-        // 代表材料已经换成带 ■ 的版本 → 这道题在 App 里能答了。
-        stats.restoredInsert += 1;
-      } else if (!hasInsertMarkers(it.material || material)) {
+      // 判的是**用户实际看到的**那份（代表材料），不是这道题自己抽到的那份：两份不一致时，
+      // 按题自己的材料放行会上线一道正文里没有插入位的死题。
+      if (!hasInsertMarkers(material)) {
         stats.droppedInsert += 1;
         continue;
       }
+      // 代表材料已按标记表换成带标记版，或这道题是 insert_promote.mjs 转正的 → 算「找回」。
+      if (restoredInsert || it.insert_restored) stats.restoredInsert += 1;
     }
     const optMap = {};
     opts.forEach((o, i) => { optMap[LETTERS[i]] = o; });
@@ -732,7 +761,7 @@ function buildListeningSpeaking(files, stats) {
     if (fs.existsSync(auditPath)) {
       const au = JSON.parse(fs.readFileSync(auditPath, "utf8"));
       if (Array.isArray(au.audited)) {
-        passedKeys = new Set(au.audited.filter((a) => a.agree).map((a) => `${a.section}#${a.q}`));
+        passedKeys = new Set(au.audited.filter(auditPassed).map((a) => `${a.section}#${a.q}`));
         auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
       }
     }
@@ -782,9 +811,13 @@ function buildListeningSpeaking(files, stats) {
         }
         const dk = `${r.type}#${spokenKey(item)}`;
         if (seenL.has(dk)) {
-          console.warn(`跳过 ${setname} ${id}：口播内容与 ${seenL.get(dk)} 逐字相同`);
-          stats.lDroppedDupItem += 1;
-          continue;
+          if (reviewKeepsLater(seenL.get(dk), id)) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenL.get(dk)} 口播逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
+          } else {
+            console.warn(`跳过 ${setname} ${id}：口播内容与 ${seenL.get(dk)} 逐字相同`);
+            stats.lDroppedDupItem += 1;
+            continue;
+          }
         }
         seenL.set(dk, `${setname}/${id}`);
         const res = V[r.type](item);
@@ -820,9 +853,13 @@ function buildListeningSpeaking(files, stats) {
         const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
         const sk = `repeat#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
-          console.warn(`跳过 ${setname} ${id}：复述内容与 ${seenS.get(sk)} 逐字相同`);
-          stats.sDroppedDupSet += 1;
-          continue;
+          if (reviewKeepsLater(seenS.get(sk), id)) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 复述逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
+          } else {
+            console.warn(`跳过 ${setname} ${id}：复述内容与 ${seenS.get(sk)} 逐字相同`);
+            stats.sDroppedDupSet += 1;
+            continue;
+          }
         }
         seenS.set(sk, `${setname}/${id}`);
         const v = SPV.validateRepeatSet(set);
@@ -851,9 +888,13 @@ function buildListeningSpeaking(files, stats) {
         const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
         const sk = `interview#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
-          console.warn(`跳过 ${setname} ${id}：面试内容与 ${seenS.get(sk)} 逐字相同`);
-          stats.sDroppedDupSet += 1;
-          continue;
+          if (reviewKeepsLater(seenS.get(sk), id)) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 面试逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
+          } else {
+            console.warn(`跳过 ${setname} ${id}：面试内容与 ${seenS.get(sk)} 逐字相同`);
+            stats.sDroppedDupSet += 1;
+            continue;
+          }
         }
         seenS.set(sk, `${setname}/${id}`);
         const v = SPV.validateInterviewSet(set);
@@ -980,7 +1021,7 @@ function main() {
   const files = fs.readdirSync(OUT_DIR).filter((f) => f.endsWith(".structured.json"));
   const out = { ap: [], rdl: [], ctw: [] };
   const stats = {
-    sets: 0, itemsSeen: 0, keptByAudit: 0, droppedNoAudit: 0, droppedDisagree: 0,
+    sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
@@ -1008,7 +1049,10 @@ function main() {
       continue;
     }
     // 只有 agree===true 的题号才放行。没出现在 audited 里的 = 没审过 = 不收。
-    const passedKeys = new Set(au.audited.filter((a) => a.agree).map((a) => `${a.section}#${a.q}`));
+    // 盲审闸判据在 hold_policy.auditPassed：第一票一致，或第一票不一致但显式跑过且一致的第二票。
+    const passedKeys = new Set(au.audited.filter(auditPassed).map((a) => `${a.section}#${a.q}`));
+    const secondVoteKeys = new Set(au.audited.filter((a) => a.agree !== true && auditPassed(a))
+      .map((a) => `${a.section}#${a.q}`));
     const auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
     // 跨卷去重：这卷的阅读题目文件如果被更早的卷收过了，整科跳过
     const hashes = readingSourceHashes(setname);
@@ -1031,7 +1075,7 @@ function main() {
     for (const n of hold.notes) console.warn(`放行 ${setname} 阅读：${n}`);
     if (hold.notes.some((n) => n.startsWith("section_gap"))) stats.releasedSectionGap += 1;
     if (hold.notes.some((n) => n.startsWith("ingest_blocker"))) stats.releasedIngestBlocker += 1;
-    if (hold.dropCtw) stats.releasedCtwTruncated += 1;
+    if (hold.notes.some((n) => n.startsWith("ctw_answer_truncated"))) stats.releasedCtwTruncated += 1;
     stats.sets += 1;
 
     const meta0 = {
@@ -1068,6 +1112,7 @@ function main() {
       if (!auditedKeys.has(key)) { stats.droppedNoAudit += 1; continue; }
       if (!passedKeys.has(key)) { stats.droppedDisagree += 1; continue; }
       stats.keptByAudit += 1;
+      if (secondVoteKeys.has(key)) stats.keptBySecondVote += 1;
       passed.push(r);
     }
     for (const g of groupByMaterial(passed, stats)) {
@@ -1081,7 +1126,7 @@ function main() {
 
   console.log("■ 真题阅读落库");
   console.log(`卷 ${stats.sets} 套；结构化产物里的阅读条目 ${stats.itemsSeen}`);
-  console.log(`  盲审通过收下 ${stats.keptByAudit}；盲审不一致丢弃 ${stats.droppedDisagree}；没被盲审覆盖丢弃 ${stats.droppedNoAudit}`);
+  console.log(`  盲审通过收下 ${stats.keptByAudit}（其中第二票放行 ${stats.keptBySecondVote}）；盲审不一致丢弃 ${stats.droppedDisagree}；没被盲审覆盖丢弃 ${stats.droppedNoAudit}`);
   console.log(`  跨卷重复跳过 ${stats.droppedDupSet} 套；源料体检 blocking 扣下 ${stats.droppedHeld} 套`);
   console.log(`  闸门放宽：ctw_answer_truncated 降级 ${stats.releasedCtwTruncated} 套（丢弃 CTW ${stats.droppedCtwTruncated} 段，AP/RDL 照收）；`
     + `section_gap 按盲审一致率条件放行 ${stats.releasedSectionGap} 套；`

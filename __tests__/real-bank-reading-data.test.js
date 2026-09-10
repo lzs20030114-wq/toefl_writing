@@ -136,7 +136,10 @@ describe("真题阅读：源料缺陷标记（source_flags）", () => {
   //     （2.8 / 3.24 / 3.29 三卷阅读一致率 94~100%）。放行同样卡在盲审一致率 ≥0.85 上。
   //     ingest_blocker 的其它形态（真读不出源等）出现在成品里仍然是红灯 —— 这里用 hold_policy
   //     导出的同一个正则判形态，免得测试与落库判据各说各话。
-  // 除这三条以外，任何 blocking 出现在成品里仍然是红灯；CTW 题带 ctw_answer_truncated 也是红灯。
+  // 除这三条以外，任何 blocking 出现在成品里仍然是红灯。
+  // CTW 题带 ctw_answer_truncated：2026-09-10 起放行（答案页是「要填的后半截」写法，structure_set 逐空按
+  // scripts/realbank/ctw_verify.js 还原校验：前缀 + 后半截 = 整词 且 前缀恰为一半，13 套 200/200 残片验证）。
+  // 放行的 CTW 挖空结构必须自洽，否则仍是红灯。
   const { INGEST_BLOCKER_RELAXABLE } = require("../scripts/realbank/hold_policy.js");
   const BLOCKING_ALLOWED = new Set(["ctw_answer_truncated", "section_gap", "ingest_blocker"]);
   test("已入库的题不带 blocking 级缺陷（除放行判据明列的三条）", () => {
@@ -150,8 +153,17 @@ describe("真题阅读：源料缺陷标记（source_flags）", () => {
           bad.push(`${it.id}(${it.source}) ingest_blocker(非题号重启块形态)`);
           return;
         }
-        // 放行的是「非 CTW 题」；CTW 自己带这个 flag = 过滤漏了
-        if (f.code === "ctw_answer_truncated" && isCtw) bad.push(`${it.id}(${it.source}) ctw 未被拒收`);
+        if (f.code === "ctw_answer_truncated" && isCtw) {
+          const blanks = it.blanks || [];
+          // lib/realBank 映射后的 blank 只剩 position / original_word / displayed_fragment（输入框宽度
+          // 由两者之差现算），所以只按这两个字段判：前缀对得上、且留得出要填的部分。
+          const broken = blanks.filter((b) => {
+            const w = String(b.original_word || "");
+            const g = String(b.displayed_fragment || "");
+            return !w || !g || !w.toLowerCase().startsWith(g.toLowerCase()) || w.length - g.length < 1;
+          });
+          if (!blanks.length || broken.length) bad.push(it.id + "(" + it.source + ") ctw 挖空结构不自洽");
+        }
       });
     });
     expect(bad).toEqual([]);
@@ -303,5 +315,26 @@ describe("真题阅读：源文件只读", () => {
       expect(a[0]).not.toBe((RB_CTW.items || [])[0]);
       expect(a[0].blanks[0]).not.toBe((RB_CTW.items || [])[0].blanks[0]);
     }
+  });
+});
+
+describe("真题阅读：插入句题可作答", () => {
+  // 真题练习按 passage 渲染（lib/realBank 的 AP 映射），插入句题的四个插入位只能靠正文里的 [A]~[D] / ■ 定位。
+  // 2026-09-10 回归：复核清单的 strip_insert_markers（前提「无插句题」）在插入题被找回之后仍把标记剥掉，
+  // 10 道插入题差点变成死题。apply_review 现在前提不成立就跳过；这里锁成品。
+  const INSERT = /insert|slot\s*\d|■|four locations|where would the following sentence/i;
+  const withInsert = ap.filter((it) => (it.questions || [])
+    .some((q) => INSERT.test(String(q.stem || q.question || q.prompt || ""))));
+
+  test("库里确实有插入句题（否则下面那条是空跑）", () => {
+    expect(withInsert.length).toBeGreaterThan(0);
+  });
+
+  test("带插入句题的 AP，passage 里必须看得见四个插入位标记", () => {
+    const dead = withInsert.filter((it) => {
+      const p = String(it.passage || "");
+      return !(p.includes("■") || ["[A]", "[B]", "[C]", "[D]"].every((x) => p.includes(x)));
+    }).map((it) => it.id);
+    expect(dead).toEqual([]);
   });
 });
