@@ -30,6 +30,10 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require("../../lib/ai/deepseekHttp");
+// CTW 逐空校验抽成纯函数（可单测）：./ctw_verify.js —— 那里写着「答案页只给后半截」为什么能收。
+const { verifyCtw } = require("./ctw_verify.js");
+// 就地修补（--merge / --only-failed / --reverify-ctw）写回时统一走这里：同步第一来源的 rw 阅读基线。
+const { writeStructured } = require("./structured_io.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -88,6 +92,11 @@ const OCR_NOTE = `输入是对考试截图做 OCR 得到的文本，有三种典
 - 左右分栏交错：屏幕左边是材料、右边是题干与选项，OCR 会把两栏的行交替吐出来；
 - 页眉残留（"Hide Time"、倒计时、"Question 21 of 35"）与卖家水印，一律丢弃。
 只转写你在文本里真实看到的内容，看不到就留空，**不要补写、不要润色、不要翻译**。`;
+
+// 答案页有时只给要填的后半截（13 套第一来源卷如此，见 ctw_verify.js）。提示里说的是「完整词列表」，
+// 列表里却混着 "le" 这种残片，模型要在两者之间自己圆 —— 这 13 套里 17 块真填词在旧提示下没吐出合法 JSON。
+const CTW_ANSWER_NOTE = "注意：答案页有时只给出被砍掉的**后半截**字母（例如列表写 le、OCR 里残留 ma → 这个空的 word 是 male、given 是 ma）。"
+  + "遇到这种条目，word 一律写**完整词**，given 写屏幕上残留的前缀，blanks 的个数与顺序仍与列表一一对应。";
 
 const PROMPTS = {
   mcq: `你是 TOEFL 真题转写器。${OCR_NOTE}
@@ -284,32 +293,7 @@ function verifyMcq(item) {
   return p;
 }
 
-function verifyCtw(item, answerWords) {
-  const p = [];
-  const blanks = Array.isArray(item.blanks) ? item.blanks : [];
-  if (blanks.length !== answerWords.length) {
-    p.push(`空位数 ${blanks.length} ≠ 答案词数 ${answerWords.length}`);
-    return p;
-  }
-  blanks.forEach((b, i) => {
-    const want = String(answerWords[i] || "").trim().toLowerCase();
-    const got = String(b?.word || "").trim().toLowerCase();
-    const given = String(b?.given || "").trim().toLowerCase();
-    if (got !== want) p.push(`第 ${i + 1} 空：还原成 "${got}"，答案是 "${want}"`);
-    if (!given || !want.startsWith(given)) p.push(`第 ${i + 1} 空：给定前缀 "${given}" 不是 "${want}" 的前缀`);
-    if (given.length >= want.length) p.push(`第 ${i + 1} 空：前缀 "${given}" 没留下要填的部分`);
-  });
-  const passage = String(item.passage || "");
-  if (countWords(passage) < 30) p.push("还原段落过短");
-  if (CJK.test(passage)) p.push("段落里混入中文");
-  for (const w of answerWords) {
-    if (!new RegExp(`\\b${w.replace(/[^\w]/g, "")}\\b`, "i").test(passage)) {
-      p.push(`还原段落里找不到答案词 "${w}"`);
-      break;
-    }
-  }
-  return p;
-}
+// verifyCtw 见 ./ctw_verify.js（整词 / 后半截两种答案页写法）。
 
 /* ── 5. 驱动 ─────────────────────────────────────────────────────────────── */
 /** 把 alignment 摊平成待处理单元：同一 block 只处理一次，携带它名下所有答案。 */
@@ -373,6 +357,8 @@ function carryPassages(units) {
 }
 
 const MCQ_TYPES = new Set(["rdl", "ap", "lcr", "lc", "la", "lat", "listening_mcq"]);
+// 真 CTW 块恒 10 空；答案不足这个数的「填词块」是路由误判（--only-failed 不为它烧钱）。
+const CTW_MIN_ANSWERS = 5;
 
 /**
  * 第二轮：修 OCR 分栏乱序切坏的题块。
@@ -431,7 +417,7 @@ async function processUnit(u) {
   if (u.type === "ctw") {
     const words = u.answers.map((a) => a.answer);
     const raw = await callModel(PROMPTS.ctw,
-      `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}`);
+      `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}\n\n${CTW_ANSWER_NOTE}`);
     const obj = parseJsonLoose(raw);
     if (!obj) return { ...base, status: "flagged", problems: ["模型输出无法解析为 JSON"], items: [] };
     const problems = verifyCtw(obj, words);
@@ -499,8 +485,22 @@ async function main() {
   const onlySections = secIdx >= 0
     ? new Set(String(args[secIdx + 1] || "").split(",").map((s) => s.trim()).filter(Boolean))
     : null;
+  // --types ctw：只处理这些题型的块（与 --sections 同理，显式圈定）。
+  const typIdx = args.indexOf("--types");
+  const onlyTypes = typIdx >= 0
+    ? new Set(String(args[typIdx + 1] || "").split(",").map((s) => s.trim()).filter(Boolean))
+    : null;
+  // 就地修补模式（都要求磁盘上已有 structured.json；写回时同步第一来源的 rw 阅读基线）：
+  //   --merge        本次结果按块 key 并回既有产物，只替换本次处理的块，其余原样保留；
+  //   --only-failed  隐含 --merge，且只处理既有产物里不是 ok 的块；
+  //   --reverify-ctw 不调模型，只拿当前 ctw_verify.js 重判既有 CTW 块（判据更新后零成本回收）。
+  // 三者都**不会**拿新结果盖掉既有的 ok 块。
+  const onlyFailed = args.includes("--only-failed");
+  const merge = onlyFailed || args.includes("--merge");
+  const reverifyCtw = args.includes("--reverify-ctw");
   if (!setname) {
-    console.error("用法: node scripts/realbank/structure_set.mjs <卷名> [--dry] [--limit N] [--force]");
+    console.error("用法: node scripts/realbank/structure_set.mjs <卷名> [--dry] [--limit N] [--force]"
+      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw]");
     process.exit(2);
   }
   const scanPath = path.join(OUT_DIR, `${setname}.json`);
@@ -514,6 +514,51 @@ async function main() {
     const before = units.length;
     units = units.filter((u) => onlySections.has(u.section));
     console.log(`科目过滤 [${[...onlySections].join(",")}]：${before} → ${units.length} 块`);
+  }
+  if (onlyTypes) {
+    const before = units.length;
+    units = units.filter((u) => onlyTypes.has(u.type));
+    console.log(`题型过滤 [${[...onlyTypes].join(",")}]：${before} → ${units.length} 块`);
+  }
+  const outPath = path.join(OUT_DIR, `${setname}.structured.json`);
+  const prevPath = path.join(OUT_DIR, `${setname}.structured.prev.json`);
+  let existing = null;
+  if (merge || reverifyCtw) {
+    if (!fs.existsSync(outPath)) {
+      console.error(`--merge / --only-failed / --reverify-ctw 需要既有产物：${outPath}`);
+      process.exit(2);
+    }
+    existing = JSON.parse(fs.readFileSync(outPath, "utf8"));
+  }
+  if (reverifyCtw) {
+    const byKey = new Map(collectUnits(scan).map((u) => [u.key, u]));
+    let healed = 0, still = 0, orphan = 0;
+    const results = existing.results.map((r) => {
+      if (r.type !== "ctw" || !Array.isArray(r.items) || !r.items.length) return r;
+      const u = byKey.get(r.key);
+      if (!u) { orphan += 1; return r; }
+      const problems = verifyCtw(r.items[0], u.answers.map((a) => a.answer));
+      if (!problems.length && r.status !== "ok") healed += 1;
+      if (problems.length) still += 1;
+      return { ...r, status: problems.length ? "flagged" : "ok", problems };
+    });
+    console.log(`■ ${setname} 重判 CTW：转 ok ${healed} 块；仍 flagged ${still} 块；找不到对应答案块 ${orphan} 块`);
+    if (dry) { console.log("（--dry，未写盘）"); return; }
+    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results });
+    console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
+    return;
+  }
+  if (onlyFailed) {
+    const prevStatus = new Map(existing.results.map((r) => [r.key, r.status]));
+    const before = units.length;
+    units = units.filter((u) => !["ok", "passage_screen", "deferred"].includes(prevStatus.get(u.key))
+      && !(u.type === "ctw" && u.answers.length < CTW_MIN_ANSWERS));
+    console.log(`--only-failed：${before} → ${units.length} 块`
+      + `（既有 ok 的不重跑；答案不足 ${CTW_MIN_ANSWERS} 个的填词块是路由误判，跳过）`);
+  }
+  if (merge && !units.length) {
+    console.log(`■ ${setname}：没有需要处理的块，产物未改动。`);
+    return;
   }
 
   const byType = units.reduce((m, u) => { m[u.type] = (m[u.type] || 0) + 1; return m; }, {});
@@ -560,8 +605,23 @@ async function main() {
     console.log(`\n-- 需人工的 ${flagged.length} 块（前 12）--`);
     flagged.slice(0, 12).forEach((r) => console.log(`  ${r.section}/${r.type} ${r.key}: ${r.problems.slice(0, 2).join(" / ")}`));
   }
-  const outPath = path.join(OUT_DIR, `${setname}.structured.json`);
-  const prevPath = path.join(OUT_DIR, `${setname}.structured.prev.json`);
+  if (merge) {
+    const fresh = new Map(results.map((r) => [r.key, r]));
+    let replaced = 0, keptOk = 0, added = 0;
+    const merged = existing.results.map((r) => {
+      const n = fresh.get(r.key);
+      if (!n) return r;
+      fresh.delete(r.key);
+      if (r.status === "ok" && n.status !== "ok") { keptOk += 1; return r; }
+      replaced += 1;
+      return n;
+    });
+    for (const n of fresh.values()) { merged.push(n); added += 1; }
+    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results: merged });
+    console.log(`\n并回既有产物：替换 ${replaced} 块，新增 ${added} 块，保住既有 ok ${keptOk} 块`
+      + `${synced ? "（已同步 rw 阅读基线）" : ""}\n产物 → ${outPath}`);
+    return;
+  }
 
   // ── 防覆盖守卫 ──
   // 「跑完了」不等于「跑出东西了」。一次大面积调用失败的空跑，结构上和一次正常跑一模一样，

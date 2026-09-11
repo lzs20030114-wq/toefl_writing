@@ -55,6 +55,13 @@ const step = (o, k) => (o == null ? undefined : k.startsWith("#") && Array.isArr
 function getPath(obj, p) { return p.split(".").reduce(step, obj); }
 function setPath(obj, p, v) { const ks = p.split("."); const last = ks.pop(); const o = ks.reduce(step, obj); if (o == null) throw new Error(`[apply_review] 路径 ${p} 不存在`); o[last] = v; }
 
+/** 这条 AP / RDL 里有没有插入句题（题干口径与 build_bank.looksLikeInsertQuestion 一致）。 */
+function hasInsertQuestion(item) {
+  const qs = Array.isArray(item && item.questions) ? item.questions : [];
+  return qs.some((q) => /insert|slot\s*\d|■|four locations|where would the following sentence/i
+    .test(String((q && (q.stem || q.question)) || "")));
+}
+
 function applyPatch(item, patch, log) {
   const cur = getPath(item, patch.path);
   if (patch.op === "set") { // 整个字段赋值（非字符串字段，如 distractors 数组）
@@ -83,6 +90,12 @@ function applyPatch(item, patch, log) {
       next = cur + patch.to;
       break;
     case "strip_insert_markers": // 无插句题却带着 [A]~[D] 位置标记：纯视觉噪声
+      // 前提是「无插句题」。插入题被找回之后（parse_reformatted 合成 [A]~[D] 选项 / insert_promote 转正），
+      // 这些标记就是作答必需的定位符 —— 真题练习按 passage 渲染，再剥就是造死题。前提不成立时跳过，条目不删。
+      if (hasInsertQuestion(item)) {
+        log.push("  · " + item.id + " " + patch.path + "：已有插入句题，跳过 strip_insert_markers");
+        return false;
+      }
       next = cur.replace(/\s*\[[A-D]\]\s*/g, " ").replace(/[ \t]{2,}/g, " ").replace(/ \n/g, "\n").trim();
       if (next === cur) return false;
       break;

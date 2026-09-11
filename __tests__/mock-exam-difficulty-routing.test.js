@@ -9,16 +9,30 @@
 import {
   pickItems as pickReadingItems,
   filterRdlPool,
-  pickRdlFiveQuestionSet,
+  pickRdlQuestionSet,
   buildReadingModule1,
   buildReadingModule2,
   RDL_MIN_FILTERED_POOL,
+  RDL_SET_SHAPE,
+  READING_MODULE_PLAN,
+  READING_TOTAL_QUESTIONS,
+  readingModuleQuestionCount,
+  readingModuleSeconds,
+  TOEFL_READING_SECTION_SECONDS,
+  describeModulePlan as describeReadingModulePlan,
 } from "../lib/mockExam/readingPlanner";
 import {
   pickItems as pickListeningItems,
   buildListeningModule1,
   buildListeningModule2,
+  LISTENING_MODULE_PLAN,
+  LISTENING_TOTAL_QUESTIONS,
+  listeningModuleQuestionCount,
+  listeningModuleSeconds,
+  describeModulePlan as describeListeningModulePlan,
 } from "../lib/mockExam/listeningPlanner";
+import { plannedTotal } from "../lib/mockExam/timeoutFinalize";
+import { TOEFL_LISTENING_SECTION_SECONDS } from "../lib/listeningTiming";
 import lcrBank from "../data/listening/bank/lcr.json";
 import { estimateRdlDifficulty } from "../lib/readingGen/rdlDifficulty";
 
@@ -214,9 +228,10 @@ describe("filterRdlPool floor guard", () => {
   });
 });
 
-describe("pickRdlFiveQuestionSet difficulty routing (injected pools)", () => {
+describe("pickRdlQuestionSet difficulty routing (injected pools)", () => {
   const short = (difficulty, id) => ({ id, difficulty, questions: [{}, {}] });
   const long = (difficulty, id) => ({ id, difficulty, questions: [{}, {}, {}] });
+  const questions = (picked) => picked.reduce((s, i) => s + i.questions.length, 0);
 
   function pools() {
     const shortPool = [];
@@ -228,24 +243,70 @@ describe("pickRdlFiveQuestionSet difficulty routing (injected pools)", () => {
     return { short: shortPool, long: longPool };
   }
 
+  test("default shape is 2 short + 2 long = 10 questions", () => {
+    expect(RDL_SET_SHAPE).toEqual({ short: 2, long: 2 });
+    const picked = pickRdlQuestionSet(new Set(), null, pools());
+    expect(picked).toHaveLength(4);
+    expect(questions(picked)).toBe(10);
+    // paper order: the two 2Q shorts come before the two 3Q longs (2+2+3+3)
+    expect(picked.map((i) => i.questions.length)).toEqual([2, 2, 3, 3]);
+  });
+
   test("upper-style preference yields only matching items", () => {
-    const picked = pickRdlFiveQuestionSet(new Set(), ["hard"], pools());
-    expect(picked.reduce((s, i) => s + i.questions.length, 0)).toBeGreaterThanOrEqual(5);
+    const picked = pickRdlQuestionSet(new Set(), ["hard"], pools());
+    expect(questions(picked)).toBeGreaterThanOrEqual(10);
     for (const item of picked) expect(item.difficulty).toBe("hard");
   });
 
   test("lower-style preference yields only matching items", () => {
-    const picked = pickRdlFiveQuestionSet(new Set(), ["easy"], pools());
+    const picked = pickRdlQuestionSet(new Set(), ["easy"], pools());
     for (const item of picked) expect(item.difficulty).toBe("easy");
   });
 
-  test("still fills 5 questions when a tier is thin (floor fallback)", () => {
+  test("still fills 10 questions when a tier is thin (floor fallback)", () => {
     const thin = {
       short: [short("hard", "sh0"), ...Array.from({ length: 40 }, (_, i) => short("easy", `se${i}`))],
       long: Array.from({ length: 40 }, (_, i) => long("easy", `le${i}`)),
     };
-    const picked = pickRdlFiveQuestionSet(new Set(), ["hard"], thin);
-    expect(picked.reduce((s, i) => s + i.questions.length, 0)).toBeGreaterThanOrEqual(5);
+    const picked = pickRdlQuestionSet(new Set(), ["hard"], thin);
+    expect(questions(picked)).toBeGreaterThanOrEqual(10);
+  });
+
+  test("fills 10 questions from shorts alone when the long pool is empty", () => {
+    const shortsOnly = {
+      short: Array.from({ length: 8 }, (_, i) => short("medium", `se${i}`)),
+      long: [],
+    };
+    const picked = pickRdlQuestionSet(new Set(), ["hard"], shortsOnly);
+    expect(questions(picked)).toBeGreaterThanOrEqual(10); // 5 shorts
+    expect(new Set(picked.map((i) => i.id)).size).toBe(picked.length); // no repeats
+  });
+
+  test("fills 10 questions from longs alone when the short pool is empty", () => {
+    const longsOnly = {
+      short: [],
+      long: Array.from({ length: 8 }, (_, i) => long("medium", `le${i}`)),
+    };
+    const picked = pickRdlQuestionSet(new Set(), null, longsOnly);
+    expect(questions(picked)).toBeGreaterThanOrEqual(10); // 4 longs
+  });
+
+  test("excludeIds is never violated, even on the fallback path", () => {
+    const excluded = new Set(["se0", "se1", "le0"]);
+    const picked = pickRdlQuestionSet(excluded, null, {
+      short: Array.from({ length: 4 }, (_, i) => short("medium", `se${i}`)),
+      long: Array.from({ length: 4 }, (_, i) => long("medium", `le${i}`)),
+    });
+    for (const item of picked) expect(excluded.has(item.id)).toBe(false);
+    expect(picked.reduce((s, i) => s + i.questions.length, 0)).toBeGreaterThanOrEqual(10);
+  });
+
+  test("doneIds only demote — a fully-done pool still fills the set", () => {
+    const p = pools();
+    const allDone = new Set([...p.short, ...p.long].map((i) => i.id));
+    const picked = pickRdlQuestionSet(new Set(), ["hard"], p, allDone);
+    expect(questions(picked)).toBeGreaterThanOrEqual(10);
+    for (const item of picked) expect(item.difficulty).toBe("hard"); // tier ③ before ④
   });
 });
 
@@ -299,7 +360,9 @@ describe("live-bank routing (real data invariants)", () => {
     }
 
     const lower = buildListeningModule2("lower");
-    expect(lower.items.some((i) => i.taskType === "lat")).toBe(false);
+    // Both paths share the same composition now (blueprint M2 A 型), so LAT
+    // appears on the lower path too — only the difficulty band differs.
+    expect(lower.items.some((i) => i.taskType === "lat")).toBe(true);
     for (const item of lower.items) {
       expect(["easy", "medium"]).toContain(item.difficulty);
     }
@@ -374,5 +437,153 @@ describe("rdlDifficulty estimator", () => {
         expect(item.difficulty).toBe(difficulty);
       }
     }
+  });
+});
+
+/**
+ * Blueprint conformance — the adaptive mock must match the 2026 real paper
+ * structure reverse-engineered in docs/realbank-set-blueprint.md §1:
+ *   Reading   50 题 = M1 35 (CTW×2 + RDL 10题 + AP×1) + M2 15 (CTW×1 + AP×1, no RDL)
+ *   Listening 47 题 = M1 32 (12 LCR + 3 LC + 3 LA + 2 LAT) + M2 15 (3 LCR + 2 LC + 2 LAT)
+ */
+describe("2026 blueprint composition", () => {
+  const TRIALS = 10;
+  const byType = (items) =>
+    items.reduce((acc, i) => ({ ...acc, [i.taskType]: (acc[i.taskType] || 0) + 1 }), {});
+  const typeOrder = (items) => items.map((i) => i.taskType).join(",");
+
+  describe("reading", () => {
+    test("plan constants describe a 35 + 15 = 50 question exam", () => {
+      expect(READING_MODULE_PLAN[1]).toEqual({ ctw: 2, rdlShort: 2, rdlLong: 2, ap: 1 });
+      expect(READING_MODULE_PLAN[2]).toEqual({ ctw: 1, ap: 1 });
+      expect(READING_MODULE_PLAN[2].rdlShort).toBeUndefined();
+      expect(READING_MODULE_PLAN[2].rdlLong).toBeUndefined();
+      expect(readingModuleQuestionCount(1)).toBe(35);
+      expect(readingModuleQuestionCount(2)).toBe(15);
+      expect(READING_TOTAL_QUESTIONS).toBe(50);
+    });
+
+    test("Module 1 = CTW×2 + RDL(2 short + 2 long) + AP×1, in paper order, 35 题", () => {
+      for (let k = 0; k < TRIALS; k++) {
+        const { items, usedIds } = buildReadingModule1();
+        expect(byType(items)).toEqual({ ctw: 2, rdl: 4, ap: 1 });
+        expect(typeOrder(items)).toBe("ctw,ctw,rdl,rdl,rdl,rdl,ap");
+        const rdl = items.filter((i) => i.taskType === "rdl");
+        expect(rdl.map((i) => i.questions.length)).toEqual([2, 2, 3, 3]);
+        expect(plannedTotal(items)).toBe(readingModuleQuestionCount(1));
+        // no item is served twice inside one module
+        expect(new Set(items.map((i) => i.id)).size).toBe(items.length);
+        expect(usedIds.size).toBe(items.length);
+      }
+    });
+
+    test("Module 2 = CTW×1 + AP×1, no RDL, 15 题 — identical on both paths", () => {
+      for (const path of ["upper", "lower"]) {
+        for (let k = 0; k < TRIALS; k++) {
+          const { items } = buildReadingModule2(path);
+          expect(byType(items)).toEqual({ ctw: 1, ap: 1 });
+          expect(typeOrder(items)).toBe("ctw,ap");
+          expect(items.some((i) => i.taskType === "rdl")).toBe(false);
+          expect(plannedTotal(items)).toBe(15);
+        }
+      }
+    });
+
+    test("Module 2 never re-serves a Module 1 item", () => {
+      for (let k = 0; k < TRIALS; k++) {
+        const m1 = buildReadingModule1();
+        const m2 = buildReadingModule2("upper", m1.usedIds);
+        const m1Ids = new Set(m1.items.map((i) => i.id));
+        for (const item of m2.items) expect(m1Ids.has(item.id)).toBe(false);
+        expect(plannedTotal([...m1.items, ...m2.items])).toBe(READING_TOTAL_QUESTIONS);
+      }
+    });
+
+    test("describeModulePlan renders the intro-card blurbs", () => {
+      expect(describeReadingModulePlan(1)).toBe("35 题 (CTW 20空 + RDL 10题 + AP 5题)");
+      expect(describeReadingModulePlan(2)).toBe("15 题 (CTW 10空 + AP 5题)");
+    });
+
+    test("module timers split the real 30-min reading budget by question count (21 / 9 min)", () => {
+      expect(TOEFL_READING_SECTION_SECONDS).toBe(30 * 60);
+      expect(readingModuleSeconds(1)).toBe(21 * 60);
+      expect(readingModuleSeconds(2)).toBe(9 * 60);
+      expect(readingModuleSeconds(1) + readingModuleSeconds(2)).toBe(TOEFL_READING_SECTION_SECONDS);
+    });
+  });
+
+  describe("listening", () => {
+    test("plan constants describe a 32 + 15 = 47 question exam", () => {
+      expect(LISTENING_MODULE_PLAN[1]).toEqual({ lcr: 12, lc: 3, la: 3, lat: 2 });
+      expect(LISTENING_MODULE_PLAN[2]).toEqual({ lcr: 3, lc: 2, lat: 2 });
+      expect(LISTENING_MODULE_PLAN[2].la).toBeUndefined();
+      expect(listeningModuleQuestionCount(1)).toBe(32);
+      expect(listeningModuleQuestionCount(2)).toBe(15);
+      expect(LISTENING_TOTAL_QUESTIONS).toBe(47);
+    });
+
+    test("Module 1 = 12 LCR + 3 LC + 3 LA + 2 LAT, in paper order, 32 题", () => {
+      for (let k = 0; k < TRIALS; k++) {
+        const { items, usedIds } = buildListeningModule1();
+        expect(byType(items)).toEqual({ lcr: 12, lc: 3, la: 3, lat: 2 });
+        expect(typeOrder(items)).toBe(
+          [...Array(12).fill("lcr"), "lc", "lc", "lc", "la", "la", "la", "lat", "lat"].join(",")
+        );
+        expect(plannedTotal(items)).toBe(listeningModuleQuestionCount(1));
+        expect(new Set(items.map((i) => i.id)).size).toBe(items.length);
+        expect(usedIds.size).toBe(items.length);
+      }
+    });
+
+    test("Module 2 = 3 LCR + 2 LC + 2 LAT, 15 题 — upper and lower are structurally identical", () => {
+      const shapes = [];
+      for (const path of ["upper", "lower"]) {
+        for (let k = 0; k < TRIALS; k++) {
+          const { items } = buildListeningModule2(path);
+          expect(byType(items)).toEqual({ lcr: 3, lc: 2, lat: 2 });
+          expect(typeOrder(items)).toBe("lcr,lcr,lcr,lc,lc,lat,lat");
+          expect(items.some((i) => i.taskType === "la")).toBe(false);
+          expect(plannedTotal(items)).toBe(15);
+        }
+        shapes.push(JSON.stringify(byType(buildListeningModule2(path).items)));
+      }
+      expect(shapes[0]).toBe(shapes[1]); // only difficulty differs between paths
+    });
+
+    test("Module 2 never re-serves a Module 1 item", () => {
+      for (let k = 0; k < TRIALS; k++) {
+        const m1 = buildListeningModule1();
+        const m2 = buildListeningModule2("lower", m1.usedIds);
+        const m1Ids = new Set(m1.items.map((i) => i.id));
+        for (const item of m2.items) expect(m1Ids.has(item.id)).toBe(false);
+        expect(plannedTotal([...m1.items, ...m2.items])).toBe(LISTENING_TOTAL_QUESTIONS);
+      }
+    });
+
+    test("describeModulePlan renders the intro-card blurbs", () => {
+      expect(describeListeningModulePlan(1)).toBe("32 题 (12 LCR + 3 LC + 3 LA + 2 LAT)");
+      expect(describeListeningModulePlan(2)).toBe("15 题 (3 LCR + 2 LC + 2 LAT)");
+    });
+
+    test("module timers still split exactly the 29-minute section budget", () => {
+      const m1 = listeningModuleSeconds(1);
+      const m2 = listeningModuleSeconds(2);
+      expect(m1 + m2).toBe(TOEFL_LISTENING_SECTION_SECONDS);
+      expect(m1).toBeGreaterThan(m2); // M1 carries 32 of the 47 questions
+    });
+  });
+
+  test("done-set exhaustion still yields the full blueprint composition", () => {
+    const readingDone = new Set(
+      [...ctwBank.items, ...apBank.items, ...rdlShortBank.items, ...rdlLongBank.items].map((i) => i.id)
+    );
+    expect(plannedTotal(buildReadingModule1(readingDone).items)).toBe(35);
+    expect(plannedTotal(buildReadingModule2("lower", new Set(), readingDone).items)).toBe(15);
+
+    const listeningDone = new Set(
+      [...lcrBank.items, ...laBank.items, ...lcBank.items, ...latBank.items].map((i) => i.id)
+    );
+    expect(plannedTotal(buildListeningModule1(listeningDone).items)).toBe(32);
+    expect(plannedTotal(buildListeningModule2("upper", new Set(), listeningDone).items)).toBe(15);
   });
 });

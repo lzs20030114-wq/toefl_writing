@@ -6,6 +6,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
 import { PromoBanner } from "./HomePageClient";
+import { READING_TOTAL_QUESTIONS, readingModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
 const READING_ACCENT = SECTION_ACCENTS.reading;
 
@@ -227,8 +228,9 @@ export function ReadingSectionContent({
               n: "\u6A21\u8003",
               t: "\u9605\u8BFB\u81EA\u9002\u5E94\u6A21\u8003",
               d: "Module 1 + Module 2 \u81EA\u9002\u5E94\u96BE\u5EA6",
-              it: "35 \u9898",
-              timeLabel: "12 + 10 min",
+              // 题量/时长从模考 module plan 派生（阅读 50 题 = M1 35 + M2 15）
+              it: `${READING_TOTAL_QUESTIONS} \u9898`,
+              timeLabel: moduleTimeLabel(readingModuleSeconds),
               isMock: true,
               delay: 0,
             }}

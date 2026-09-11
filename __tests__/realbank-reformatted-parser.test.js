@@ -13,6 +13,8 @@
  *   2. 造句：模板 + 词库 → chunks / distractors（词库里没被答案用到的块）；
  *   3. Answers 文本解析：行内分号式与 `Sentence Construction Qn:` 式都要认；
  *   4. 听力题号 → 逐题音频路径映射，且状态必须是 deferred（本期不许落库）。
+ *   5. 插入句题：源料没有选项行，四个 [A]-[D] 位置合成选项；位置缺一律丢；
+ *      答案页写成整句时按「紧挨着哪个 [X]」把字母推回来。
  */
 const { execFileSync, spawnSync } = require("child_process");
 const fs = require("fs");
@@ -94,12 +96,67 @@ maybe("重排版真题解析器", () => {
   });
 
   test("AP：学术短文标题起新块，材料不与前一道 RDL 混淆", () => {
-    const ap = byType("ap");
-    expect(ap).toHaveLength(1);
-    const item = ap[0].items[0];
+    const sleep = byType("ap").find((r) => r.items.some((x) => x.q_number_raw === 31));
+    const item = sleep.items[0];
     expect(item.material).toContain("Researchers studying memory");
     expect(item.material).not.toContain("Library Hours Notice");
     expect(item.answer_key).toBe("B");
+  });
+
+  // 插入句题在这批源料里被排成「点材料里的 [A]~[D] 选位置」的交互，docx 根本没有选项行。
+  // 老解析器一律丢弃（实测 12 题），但四个位置标记就印在材料里 —— 位置本身就是选项。
+  const insertItem = (q) =>
+    data.results.flatMap((r) => r.items || []).find((x) => x.q_number_raw === q);
+
+  test("插入题：没有选项行 → 四个 [A]-[D] 位置合成选项，答案字母照旧算得出", () => {
+    const it = insertItem(41);
+    expect(it).toBeTruthy();
+    // 源料里**有**选项的那批写的是 `A. [A]`，剥掉字母后正是 `[A]` —— 两边同一形态，
+    // build_bank.hasInsertMarkers 才放行
+    expect(it.options).toEqual(["[A]", "[B]", "[C]", "[D]"]);
+    expect(it.answer_key).toBe("C");
+    expect(it.answer_index).toBe(2);
+    expect(it.answer_text).toBe("[C]");
+    // 材料里四个位置齐全（build_bank 的硬门槛）
+    for (const mk of ["[A]", "[B]", "[C]", "[D]"]) expect(it.material).toContain(mk);
+    // 待插入的句子不能丢：丢了这句，题目就成了「把某句话插到哪」却不说是哪句
+    expect(it.insert_sentence).toBe(
+      "The ones that do arrive are so exhausted that they rest for two days before feeding."
+    );
+    expect(it.stem).toContain(it.insert_sentence);
+    expect(it.stem).toContain("Where would the following sentence best fit?");
+    // 重复的那句问句（`Where would the sentence best fit?`）不算待插入的句子
+    expect(it.insert_sentence).not.toMatch(/Where would/i);
+    // 这一块整块干净：合成出来的题不该再留「无法作答」之类的账
+    const block = data.results.find((r) => (r.items || []).some((x) => x.q_number_raw === 41));
+    expect(block.problems).toEqual([]);
+    expect(block.status).toBe("ok");
+  });
+
+  test("插入题反例：材料只有 [A][B][C] → 丢弃，problem 写清缺哪个", () => {
+    expect(insertItem(42)).toBeUndefined();
+    const block = data.results.find(
+      (r) => r.section === "reading" && r.problems.some((p) => p.includes("Q42"))
+    );
+    expect(block.status).toBe("flagged");
+    const msg = block.problems.join(" ");
+    expect(msg).toContain("缺 [D]");
+    expect(msg).toContain("材料只有 [A][B][C]");
+    // 「答案越界」只是「没有选项」的后果，同一道题不该在 problems 里占两行
+    expect(block.problems).toHaveLength(1);
+  });
+
+  test("插入题：答案页给整句而不是字母 → 按紧挨着的 [X] 推回字母", () => {
+    const it = insertItem(43);
+    expect(it).toBeTruthy();
+    // 答案句 "Some plants melt the fragments…" 紧跟在 [B] 之后
+    expect(it.answer_key).toBe("B");
+    expect(it.answer_index).toBe(1);
+    expect(it.answer_from_sentence).toBe(true);
+    expect(it.options).toEqual(["[A]", "[B]", "[C]", "[D]"]);
+    // 推出来了就不该再留「答案不是单字母」的账（全卷 problems 里也不许有）
+    const all = data.results.flatMap((r) => r.problems || []).join(" ");
+    expect(all).not.toContain("Q43");
   });
 
   test("造句：模板 + 词库 → chunks / distractors，答案来自答案页", () => {

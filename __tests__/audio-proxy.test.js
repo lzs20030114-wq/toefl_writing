@@ -36,6 +36,14 @@ describe("sameOriginAudio", () => {
     process.env.NEXT_PUBLIC_AUDIO_PROXY_DISABLED = "1";
     expect(sameOriginAudio(SUPA)).toBe(SUPA);
   });
+
+  // 真题「原声优先」把真人原声切片放在 real_orig/ 前缀下（TTS 的 real/ 原样留着可回滚）。
+  // 代理按路径重写、不带前缀白名单，所以新前缀天然可达 —— 这条测试就是把「天然可达」钉死，
+  // 免得有人日后给代理加白名单时把原声漏掉，线上表现是真题听力集体没声音。
+  test("原声前缀 real_orig/ 与 TTS 前缀 real/ 一样能走同源代理", () => {
+    const orig = "https://abc123.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_121b_1_01.mp3?v=mf3k2a";
+    expect(sameOriginAudio(orig)).toBe("/api/audio/real_orig/lcr/real_lcr_121b_1_01.mp3?v=mf3k2a");
+  });
 });
 
 describe("/api/audio edge route", () => {

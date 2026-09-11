@@ -1,0 +1,409 @@
+{
+  "_purpose": "拼盘卷（rp*）的面试大集是几场不同话题的面试首尾相接，这里按话题人工切成 4 问一套。scripts/realbank/assemble_sets.mjs 装卷、lib/realBank.js 真题专区列表都读它；build_bank.mjs 重跑不会覆盖本文件。",
+  "_method": "2026-09-09 逐题阅读切分（开场语「Thank you for agreeing to participate. I'd like to ask you some questions about X」= 新一场面试的第 1 问）。只有恰好 4 问且话题连贯的才成套；不足 4 问的尾巴记在 leftover，等源料补齐。",
+  "_rule": "一套 = 4 问，question_ids 必须是原 item 里的 id（音频跟着 id 走）；intro 为该场面试的情境说明，缺开场语的场次由切分人补写。 leftover 里的问题以 {id} 形状列出，是为了让 cleanup_audio.mjs 仍把它们的音频当作在用（等源料补齐后可直接成套）。",
+  "splits": {
+    "real_interview_rp0704_1": [
+      {
+        "chunk": 1,
+        "topic": "history education",
+        "intro": "You have volunteered for a research study about history education. You will have a short online interview with a researcher.",
+        "question_ids": [
+          "real_interview_rp0704_1_q1",
+          "real_interview_rp0704_1_q2",
+          "real_interview_rp0704_1_q3",
+          "real_interview_rp0704_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "renewable energy",
+        "intro": "You have agreed to take part in a short research interview about renewable energy. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0704_1_q5",
+          "real_interview_rp0704_1_q6",
+          "real_interview_rp0704_1_q7",
+          "real_interview_rp0704_1_q8"
+        ]
+      },
+      {
+        "chunk": 3,
+        "topic": "environmental practices",
+        "intro": "You have agreed to take part in a short research interview about your environmental practices. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0704_1_q9",
+          "real_interview_rp0704_1_q10",
+          "real_interview_rp0704_1_q11",
+          "real_interview_rp0704_1_q12"
+        ]
+      },
+      {
+        "chunk": 4,
+        "topic": "learning history",
+        "intro": "You have agreed to take part in a short research interview about how people learn history. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0704_1_q13",
+          "real_interview_rp0704_1_q14",
+          "real_interview_rp0704_1_q15",
+          "real_interview_rp0704_1_q16"
+        ]
+      }
+    ],
+    "real_interview_rp0705_1": [
+      {
+        "chunk": 1,
+        "topic": "sleep habits",
+        "intro": "You have agreed to take part in a short research interview about sleep habits. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0705_1_q1",
+          "real_interview_rp0705_1_q2",
+          "real_interview_rp0705_1_q3",
+          "real_interview_rp0705_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "parks and recreation",
+        "intro": "You have agreed to take part in a short research interview about parks and public recreational spaces. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0705_1_q5",
+          "real_interview_rp0705_1_q6",
+          "real_interview_rp0705_1_q7",
+          "real_interview_rp0705_1_q8"
+        ]
+      },
+      {
+        "chunk": 3,
+        "topic": "daily planning",
+        "intro": "You have agreed to take part in a short research interview about how people plan their day. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0705_1_q9",
+          "real_interview_rp0705_1_q10",
+          "real_interview_rp0705_1_q11",
+          "real_interview_rp0705_1_q12"
+        ]
+      }
+    ],
+    "real_interview_rp0711_1": [
+      {
+        "chunk": 1,
+        "topic": "weather and climate",
+        "intro": "You have agreed to take part in a short research interview about weather and climate. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0711_1_q1",
+          "real_interview_rp0711_1_q2",
+          "real_interview_rp0711_1_q3",
+          "real_interview_rp0711_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "online shopping",
+        "intro": "You have agreed to take part in a short research interview about online shopping. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0711_1_q8",
+          "real_interview_rp0711_1_q9",
+          "real_interview_rp0711_1_q10",
+          "real_interview_rp0711_1_q11"
+        ]
+      }
+    ],
+    "real_interview_rp0718_1": [
+      {
+        "chunk": 1,
+        "topic": "social media",
+        "intro": "You have agreed to take part in a short research interview about social media. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0718_1_q1",
+          "real_interview_rp0718_1_q2",
+          "real_interview_rp0718_1_q3",
+          "real_interview_rp0718_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "music preferences",
+        "intro": "You have agreed to take part in a short research interview about your music preferences. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0718_1_q8",
+          "real_interview_rp0718_1_q9",
+          "real_interview_rp0718_1_q10",
+          "real_interview_rp0718_1_q11"
+        ]
+      }
+    ],
+    "real_interview_rp0719_1": [
+      {
+        "chunk": 1,
+        "topic": "fashion and clothing",
+        "intro": "You have signed up for a research study about fashion and clothing. You will have a short online interview with a researcher.",
+        "question_ids": [
+          "real_interview_rp0719_1_q1",
+          "real_interview_rp0719_1_q2",
+          "real_interview_rp0719_1_q3",
+          "real_interview_rp0719_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "personal finance",
+        "intro": "You have agreed to take part in a short research interview about personal finance habits. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0719_1_q8",
+          "real_interview_rp0719_1_q9",
+          "real_interview_rp0719_1_q10",
+          "real_interview_rp0719_1_q11"
+        ]
+      },
+      {
+        "chunk": 3,
+        "topic": "grocery shopping",
+        "intro": "You have agreed to take part in a short research interview about grocery shopping habits. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0719_1_q12",
+          "real_interview_rp0719_1_q13",
+          "real_interview_rp0719_1_q14",
+          "real_interview_rp0719_1_q15"
+        ]
+      }
+    ],
+    "real_interview_rp0725_1": [
+      {
+        "chunk": 1,
+        "topic": "cultural festivals",
+        "intro": "You have agreed to take part in a short research interview about cultural festivals. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0725_1_q1",
+          "real_interview_rp0725_1_q2",
+          "real_interview_rp0725_1_q3",
+          "real_interview_rp0725_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "movies and entertainment",
+        "intro": "You have agreed to take part in a short research interview about entertainment preferences. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0725_1_q5",
+          "real_interview_rp0725_1_q6",
+          "real_interview_rp0725_1_q7",
+          "real_interview_rp0725_1_q8"
+        ]
+      },
+      {
+        "chunk": 3,
+        "topic": "childhood education",
+        "intro": "You have agreed to take part in a short research interview about childhood education. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0725_1_q9",
+          "real_interview_rp0725_1_q10",
+          "real_interview_rp0725_1_q11",
+          "real_interview_rp0725_1_q12"
+        ]
+      },
+      {
+        "chunk": 4,
+        "topic": "public transportation",
+        "intro": "You have agreed to take part in a short research interview about public transportation. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0725_1_q13",
+          "real_interview_rp0725_1_q14",
+          "real_interview_rp0725_1_q15",
+          "real_interview_rp0725_1_q16"
+        ]
+      }
+    ],
+    "real_interview_rp0819_1": [
+      {
+        "chunk": 1,
+        "topic": "art and music",
+        "intro": "You have agreed to take part in a short research interview about art and music. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0819_1_q1",
+          "real_interview_rp0819_1_q2",
+          "real_interview_rp0819_1_q3",
+          "real_interview_rp0819_1_q4"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "books and reading",
+        "intro": "You have agreed to take part in a short research interview about books and reading. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0819_1_q5",
+          "real_interview_rp0819_1_q6",
+          "real_interview_rp0819_1_q7",
+          "real_interview_rp0819_1_q8"
+        ]
+      },
+      {
+        "chunk": 3,
+        "topic": "hobbies",
+        "intro": "You have agreed to take part in a short research interview about hobbies. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0819_1_q13",
+          "real_interview_rp0819_1_q14",
+          "real_interview_rp0819_1_q15",
+          "real_interview_rp0819_1_q16"
+        ]
+      }
+    ],
+    "real_interview_rp0822_1": [
+      {
+        "chunk": 1,
+        "topic": "gardening",
+        "intro": "You have agreed to take part in a short research interview about gardening. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0822_1_q4",
+          "real_interview_rp0822_1_q5",
+          "real_interview_rp0822_1_q6",
+          "real_interview_rp0822_1_q7"
+        ]
+      },
+      {
+        "chunk": 2,
+        "topic": "musical experiences",
+        "intro": "You have agreed to take part in a short research interview about your musical experiences. Answer each question in the time allowed.",
+        "question_ids": [
+          "real_interview_rp0822_1_q11",
+          "real_interview_rp0822_1_q12",
+          "real_interview_rp0822_1_q13",
+          "real_interview_rp0822_1_q14"
+        ]
+      }
+    ]
+  },
+  "leftover": {
+    "real_interview_rp0704_1": [
+      {
+        "why": "礼物话题只剩 3 问，缺第 4 问",
+        "questions": [
+          {
+            "id": "real_interview_rp0704_1_q17"
+          },
+          {
+            "id": "real_interview_rp0704_1_q18"
+          },
+          {
+            "id": "real_interview_rp0704_1_q19"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0705_1": [
+      {
+        "why": "艺术活动只剩 2 问",
+        "questions": [
+          {
+            "id": "real_interview_rp0705_1_q13"
+          },
+          {
+            "id": "real_interview_rp0705_1_q14"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0711_1": [
+      {
+        "why": "居家生活只剩 3 问，缺观点题",
+        "questions": [
+          {
+            "id": "real_interview_rp0711_1_q5"
+          },
+          {
+            "id": "real_interview_rp0711_1_q6"
+          },
+          {
+            "id": "real_interview_rp0711_1_q7"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0718_1": [
+      {
+        "why": "网购场次的第 1 问被源料写进了 item.intro（没有音频），只剩 3 问",
+        "questions": [
+          {
+            "id": "real_interview_rp0718_1_q5"
+          },
+          {
+            "id": "real_interview_rp0718_1_q6"
+          },
+          {
+            "id": "real_interview_rp0718_1_q7"
+          }
+        ]
+      },
+      {
+        "why": "环保场次只剩开场 1 问",
+        "questions": [
+          {
+            "id": "real_interview_rp0718_1_q12"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0719_1": [
+      {
+        "why": "爱好场次只有 3 问",
+        "questions": [
+          {
+            "id": "real_interview_rp0719_1_q5"
+          },
+          {
+            "id": "real_interview_rp0719_1_q6"
+          },
+          {
+            "id": "real_interview_rp0719_1_q7"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0819_1": [
+      {
+        "why": "可再生能源场次缺开场问；且与 rp0704 第 6-8 问同题",
+        "questions": [
+          {
+            "id": "real_interview_rp0819_1_q19"
+          },
+          {
+            "id": "real_interview_rp0819_1_q20"
+          },
+          {
+            "id": "real_interview_rp0819_1_q21"
+          }
+        ]
+      }
+    ],
+    "real_interview_rp0822_1": [
+      {
+        "why": "音乐场次只剩后 3 问，开场问缺失",
+        "questions": [
+          {
+            "id": "real_interview_rp0822_1_q1"
+          },
+          {
+            "id": "real_interview_rp0822_1_q2"
+          },
+          {
+            "id": "real_interview_rp0822_1_q3"
+          }
+        ]
+      },
+      {
+        "why": "睡眠场次只剩 3 问，且与 rp0705 第 2-4 问同题",
+        "questions": [
+          {
+            "id": "real_interview_rp0822_1_q8"
+          },
+          {
+            "id": "real_interview_rp0822_1_q9"
+          },
+          {
+            "id": "real_interview_rp0822_1_q10"
+          }
+        ]
+      }
+    ]
+  }
+}

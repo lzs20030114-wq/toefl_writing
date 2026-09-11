@@ -7,32 +7,49 @@ import { AudioPlayer } from "../listening/AudioPlayer";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
-import { buildReadingModule1, routeModule2 as routeReadingM2, buildReadingModule2 } from "../../lib/mockExam/readingPlanner";
-import { buildListeningModule1, routeModule2 as routeListeningM2, buildListeningModule2 } from "../../lib/mockExam/listeningPlanner";
+import {
+  buildReadingModule1,
+  routeModule2 as routeReadingM2,
+  buildReadingModule2,
+  describeModulePlan as describeReadingModulePlan,
+  readingModuleSeconds,
+} from "../../lib/mockExam/readingPlanner";
+import {
+  buildListeningModule1,
+  routeModule2 as routeListeningM2,
+  buildListeningModule2,
+  describeModulePlan as describeListeningModulePlan,
+  listeningModuleSeconds,
+} from "../../lib/mockExam/listeningPlanner";
 import { finalizeTimedOutResults } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { fmt } from "../../lib/utils";
-import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, TOEFL_LISTENING_SECTION_SECONDS, formatAnswerTime } from "../../lib/listeningTiming";
+import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 // ------ Constants ------
 
 // Per-module timers. Real ETS 2026 uses an independent countdown for each
 // module (the on-screen clock shows time remaining in the *current* module
 // and resets when Module 2 starts), so we model the same shape here.
-//   - Reading Module 1 (routing): ~12 min · Module 2 (adaptive): ~10 min
-//   - Listening's section pace (29 min) is preserved but split roughly
-//     proportional to item counts; the same per-module reset rule applies.
+// Both budgets are DERIVED from each planner's module plan so they track the
+// question counts automatically (see readingModuleSeconds /
+// listeningModuleSeconds for the conversion):
+//   - Reading uses the real test's 30-min seated section budget, split by
+//     scored question count (35 : 15 ⇒ 21 min / 9 min).
+//   - Listening keeps its 29-min section budget; the split moved from raw
+//     item count (12:8) to each module's time demand (audio + answer windows),
+//     because M2 is lecture-heavy: ≈18.6 min / ≈10.4 min.
 const SECTION_CONFIG = {
   reading: {
     label: "Reading",
     labelZh: "阅读",
     accent: "#3B82F6",
     accentSoft: "#EFF6FF",
-    module1TimeSeconds: 12 * 60,
-    module2TimeSeconds: 10 * 60,
+    module1TimeSeconds: readingModuleSeconds(1),
+    module2TimeSeconds: readingModuleSeconds(2),
     buildM1: buildReadingModule1,
     routeM2: routeReadingM2,
     buildM2: buildReadingModule2,
@@ -52,11 +69,12 @@ const SECTION_CONFIG = {
     accent: "#8B5CF6",
     accentSoft: "#F5F3FF",
     // Listening's per-module split isn't published precisely; we approximate
-    // it from the 29-min section total, weighted by item count (M1 has 12,
-    // M2 has 8). This keeps the section pace unchanged while still resetting
-    // the timer between modules to match the real test's on-screen clock.
-    module1TimeSeconds: Math.round((TOEFL_LISTENING_SECTION_SECONDS * 12) / 20),
-    module2TimeSeconds: Math.round((TOEFL_LISTENING_SECTION_SECONDS * 8) / 20),
+    // it from the 29-min section total, weighted by each module's estimated
+    // wall-clock demand (audio + answer windows). This keeps the section pace
+    // unchanged while still resetting the timer between modules to match the
+    // real test's on-screen clock.
+    module1TimeSeconds: listeningModuleSeconds(1),
+    module2TimeSeconds: listeningModuleSeconds(2),
     buildM1: buildListeningModule1,
     routeM2: routeListeningM2,
     buildM2: buildListeningModule2,
@@ -1327,14 +1345,13 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
 
 function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit }) {
   const isReading = config.label === "Reading";
-  // Reading: Module 1 = 20 scored questions, Module 2 = 30. Upper/Lower share
-  // the SAME structure (只题目难度不同), so reading shows one Module 2 box.
-  // Listening's Upper/Lower composition genuinely differs (LAT only on Upper;
-  // 2×LA on Lower), so listening keeps its two separate boxes.
-  const m1Count = isReading ? "20 题 (CTW 10空 + RDL 5题 + AP 5题)" : "12 项 (10 LCR + 1 LA + 1 LC)";
-  const m2ReadingCount = "30 题 (CTW 20空 + RDL 5题 + AP 5题)";
-  const m2UpperCount = "8 项 (5 LCR + 1 LA + 1 LC + 1 LAT)";
-  const m2LowerCount = "8 项 (5 LCR + 2 LA + 1 LC)";
+  // Composition strings are derived from the planners' module plans (reading
+  // 35/15, listening 32/15 — see docs/realbank-set-blueprint.md §1), never
+  // hand-written here. Upper/Lower share the SAME composition on both sections
+  // (只题目难度不同), so each shows a single Module 2 box.
+  const describe = isReading ? describeReadingModulePlan : describeListeningModulePlan;
+  const m1Count = describe(1);
+  const m2Count = describe(2);
   const m1Time = Math.round(config.module1TimeSeconds / 60);
   const m2Time = Math.round(config.module2TimeSeconds / 60);
   const totalTime = m1Time + m2Time;
@@ -1368,14 +1385,7 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
           accentSoft={accentSoft}
         />
         <InfoBox label="Module 1 题量" value={m1Count} accent={accent} accentSoft={accentSoft} />
-        {isReading ? (
-          <InfoBox label="Module 2 题量" value={m2ReadingCount} accent={accent} accentSoft={accentSoft} />
-        ) : (
-          <>
-            <InfoBox label="M2 Upper" value={m2UpperCount} accent={accent} accentSoft={accentSoft} />
-            <InfoBox label="M2 Lower" value={m2LowerCount} accent={accent} accentSoft={accentSoft} />
-          </>
-        )}
+        <InfoBox label="Module 2 题量" value={m2Count} accent={accent} accentSoft={accentSoft} />
         <InfoBox
           label="总计"
           value={`约 ${totalTime} 分钟`}
@@ -1392,7 +1402,7 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
       }}>
         <strong style={{ color: accent }}>自适应机制:</strong> Module 1 正确率 &ge; 60% 进入 Upper 路径 (更难, 最高 6.0 Band),
         否则进入 Lower 路径 (较易, 最高 4.0 Band)。
-        {isReading && " Upper 与 Lower 路径题量完全相同，仅题目难度不同。"}
+        {" Upper 与 Lower 路径题量完全相同，仅题目难度不同。"}
       </div>
 
       {/* Timer rule — matches real ETS behavior */}
@@ -1565,14 +1575,14 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
           label="Module 1 (路由阶段)"
           correct={m1Correct}
           total={m1Total}
-          weight="40%"
+          weight={`${Math.round((score.m1Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
         <ScoreBreakdownRow
           label={`Module 2 (${score.path === "upper" ? "Upper" : "Lower"})`}
           correct={m2Correct}
           total={m2Total}
-          weight="60%"
+          weight={`${Math.round((score.m2Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
 

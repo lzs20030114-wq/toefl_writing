@@ -9,6 +9,8 @@
  *     它 sections 标 "reading"，于是同卷的 AP / RDL 也被整科扣下。但 AP/RDL 的答案
  *     来自选择题答案键，与填词答案页无关，且每道都单独过了盲审（模型盲解 vs 答案键）。
  *     → 改成 **只拒收该卷的 CTW 题**，AP/RDL 照常走盲审。
+ *     2026-09-10 再放宽：答案页其实给的是「要填的后半截」（13 套 200/200 残片验证），CTW 逐空按
+ *     ctw_verify.js 还原校验、还原不了的块本来就进不了库 → 连 CTW 也不再整卷拒收。
  *
  *  2. `section_gap`（reading，缺 ≥10 题）—— 这条 blocking 的本意是防「答案页与题面错位」。
  *     但错位有更直接的证据：盲审一致率会塌。实测同批第一来源：
@@ -124,7 +126,7 @@ function sectionAgreement(audited, section) {
  * @returns {{held:boolean, heldBy:string[], dropCtw:boolean, notes:string[]}}
  *   held    —— 整科不收
  *   heldBy  —— 造成扣留的 code（用于日志）
- *   dropCtw —— 不整科扣留，但该卷的 CTW 题要逐题丢弃
+ *   dropCtw —— 不整科扣留，但该卷的 CTW 题要逐题丢弃（2026-09-10 起恒为 false，字段保留兼容）
  *   notes   —— 放行/降级的记账行，调用方打到日志里
  */
 function holdDecision(flags, section, ctx = {}) {
@@ -151,9 +153,9 @@ function holdDecision(flags, section, ctx = {}) {
       continue;
     }
     if (f.code === "ctw_answer_truncated") {
-      // 降级：不整科扣，只丢 CTW。
-      dropCtw = true;
-      notes.push("ctw_answer_truncated：降级为只拒收本卷 CTW 题（AP/RDL 走逐题盲审）");
+      // 不整科扣，CTW 也不再整卷拒收：答案页是后半截写法，structure_set 的逐空校验（ctw_verify.js）
+      // 按「前缀 + 后半截 = 整词 且 前缀恰为一半」确定性还原，还原不了的块 flagged、本来就进不了库。
+      notes.push("ctw_answer_truncated：答案页是后半截写法，CTW 逐空按 ctw_verify.js 还原校验，不再整卷拒收");
       continue;
     }
     if (f.code === "ingest_blocker" && !INGEST_BLOCKER_RELAXABLE.test(String(f.detail || ""))) {
@@ -177,6 +179,22 @@ function holdDecision(flags, section, ctx = {}) {
   return { held: heldBy.length > 0, heldBy, dropCtw: heldBy.length ? false : dropCtw, notes };
 }
 
+/**
+ * 盲审闸：这一题算不算过。
+ *
+ * 第一票（deepseek-v4-flash 不看答案盲解）与答案页一致即过。第一票不一致 / 没作答时，若跑过
+ * 第二票（更强的 deepseek-v4-pro 独立盲解，audit_answers.mjs --second-vote）且第二票与答案页一致，
+ * 也算过。2026-09-10 用户拍板引入，起因是插入句题：四个插入位几乎等价，flash 一票不一致率 50%，
+ * 人工逐题核对 8 道全是答案页对、模型错。第二票只对显式跑过的题生效，没跑的行为与之前完全一致。
+ *
+ * sectionAgreement 仍只数第一票 —— 条件放行用的一致率口径不因第二票抬高。
+ */
+function auditPassed(entry) {
+  if (!entry) return false;
+  if (entry.agree === true) return true;
+  return !!(entry.second_vote && entry.second_vote.agree === true);
+}
+
 module.exports = {
   SECTION_GAP_MIN_AGREEMENT,
   INGEST_BLOCKER_RELAXABLE,
@@ -186,4 +204,5 @@ module.exports = {
   loadOverrides,
   clearOverridesCache,
   allowSays,
+  auditPassed,
 };

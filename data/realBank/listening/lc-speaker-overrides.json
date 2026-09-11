@@ -1,0 +1,140 @@
+{
+  "_purpose": "第一来源听力合流（scripts/realbank/merge_first_source_asr.py）里，A/B 式对话要靠音频基频判「先开口的是男是女」，判不出就整段扣下（2026-09-08 报告：34 段对话因此被扣，占对话总数约一半，是听力整卷拼不齐的第一瓶颈）。这里放人工听音标注的结果，合流时优先于基频判定。",
+  "_format": "overrides 的键 = \"<卷名>|M<module>|Q<起始题号>\"（与 structured.json 里 listening 记录的 module / q_start 一致）；first_speaker = male | female，指对话里**先开口**的那个人；by / note 只作记录。",
+  "_workflow": "1) python scripts/realbank/merge_first_source_asr.py --all（产物里会给被扣的对话留 turns_raw）→ 2) python scripts/realbank/lc_gender_worksheet.py --list --csv lc-gender.csv 出待听清单（含音频文件、起止秒、前两句）→ 3) 听音填 first_speaker 列 → 4) python scripts/realbank/lc_gender_worksheet.py --apply lc-gender.csv 回填本文件 → 5) 重跑 merge_first_source_asr.py --all、build_bank.mjs、assemble_sets.mjs。",
+  "_rule": "稿子自带 Man/Woman 标签的段落以稿子为准，本表不会推翻；只对 A/B（Speaker A/B）式标签生效。",
+  "overrides": {
+    "1.21新托福真题B卷|M1|Q13": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.21新托福真题B卷|M1|Q15": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "1.21新托福真题B卷|M1|Q17": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "1.21新托福真题B卷|M2|Q4": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.21新托福真题B卷|M2|Q6": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.21新托福真题C卷|M1|Q13": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.21新托福真题C卷|M1|Q15": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.21新托福真题C卷|M1|Q17": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "1.21新托福真题C卷|M2|Q8": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "1.21新托福真题C卷|M2|Q10": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.27新托福真题A卷|M1|Q13": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.27新托福真题A卷|M1|Q15": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.27新托福真题A卷|M1|Q17": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.27新托福真题A卷|M2|Q4": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "1.27新托福真题A卷|M2|Q6": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.27新托福真题B卷|M1|Q17": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "1.28新托福真题B卷|M1|Q13": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "2.10新托福真题|M1|Q15": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.10新托福真题|M1|Q17": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.10新托福真题|M2|Q4": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.1新托福真题A卷|M1|Q15": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "2.1新托福真题A卷|M1|Q17": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "2.1新托福真题A卷|M2|Q4": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.1新托福真题A卷|M2|Q6": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.1新托福真题B卷|M1|Q13": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "2.1新托福真题B卷|M2|Q4": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.1新托福真题C卷|M2|Q6": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.28新托福真题|M1|Q15": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.28新托福真题|M1|Q17": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "2.2新托福真题|M1|Q13": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "2.2新托福真题|M2|Q6": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    },
+    "3.14新托福真题|M1|Q15": {
+      "first_speaker": "female",
+      "by": "人工听音"
+    },
+    "rp0719|M2|Q4": {
+      "first_speaker": "male",
+      "by": "人工听音"
+    }
+  }
+}

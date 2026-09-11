@@ -1,0 +1,97 @@
+{
+  "_purpose": "真题阅读插入句题（\"Look at the four squares [■] … Where would the sentence best fit?\"）的插入位标记表。真考材料里靠 4 个 ■ 定位插入点，我们的材料是考场截图逐字 OCR 出来的，■ 被 OCR 丢光了 —— build_bank.mjs 把没有标记的插入题当「无法作答的死题」丢弃（stats.droppedInsert）。这张表存的是同一段正文的『带 ■ 版本』，落库时查表换材料，把那些题救回来。",
+  "_format": "entries[] = { set: 卷名（= structured 产物文件名前缀，也是题上的 source）, module: 模块号, q_number: 真题题号, bank_id: 落库 id（仅供人读，**不作匹配键**：插入题被丢会让 id 里的簇首题号漂移）, marked: 带 4 个 ■ 的正文全文, by: 来源（qwen3-vl / 人工）, verified: 是否已过 validateMarked, note: 可选备注 }",
+  "_workflow": "1) python scripts/realbank/restore_insert_markers.py --list  → .codex-tmp/realbank/insert-markers.todo.json；2) --fill --dry-run 看要调几次 Qwen；3) --fill 真跑 → insert-markers.candidates.json；4) node scripts/realbank/insert_markers_apply.mjs（先 --dry-run）把过校验的合并进本表；5) node scripts/realbank/build_bank.mjs 重新落库，日志里看『找回 ■ 标记』的题数。build_bank 只读本表，永远不写。",
+  "entries": [
+    {
+      "set": "2.2新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_22_1_26",
+      "marked": "Coral reefs are among the most diverse and valuable ecosystems on Earth, providing habitat for countless marine species. However, climate change poses a severe threat to these vibrant underwater communities. Rising sea temperatures lead to coral bleaching, a phenomenon where corals lose their color and essential symbiotic algae, resulting in weakened corals that are more susceptible to disease.\n\nIn addition to temperature changes, climate change contributes to ocean acidification through increased atmospheric CO₂ levels. Ocean acidification reduces the availability of calcium carbonate, a crucial component of coral skeletons. ■ As the acidity of seawater increases, corals struggle to maintain their structures, leading to diminished reef growth and stability. ■\n\nEfforts to mitigate these impacts include developing coral species that are more resilient to temperature fluctuations and acidification. ■ Scientists are exploring selective breeding and genetic modification as potential solutions. Furthermore, initiatives to reduce CO₂ emissions globally aim to alleviate the stress on coral reefs. ■ The survival of coral reefs depends largely on addressing climate change comprehensively.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2026新托福真题08.pdf p7 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.21新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rp0704_2005_200511",
+      "marked": "Ecological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development. ■ It posits that individuals are shaped by interactions among multiple overlapping environmental systems. ■ This theory reshaped developmental research, offering a multi-faceted lens that surpasses earlier, linear models. ■ By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth. ■\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child’s development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher’s communication with parents on a child’s education. Beyond these, the exosystem consists of indirect influences like a parent’s workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner’s model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.21 阅读.pdf p13 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.27新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_56_1_32",
+      "marked": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography —techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum-resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. ■ Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. ■ Despite the challenges, progress is accelerating. ■ Scientists are developing error-correcting codes and stable qubit designs to address these issues. ■ Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.27 阅读.pdf p9 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.2新托福真题A卷",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_32a_1_31",
+      "marked": "Cetaceans—a group of mammals that includes whales, dolphins, and porpoises—use echolocation to navigate and hunt in waters too deep for sunlight to penetrate. ■ Many cetaceans emit clicks, producing sound waves that bounce off objects and return as echoes.\n\nEcholocation techniques vary among species, depending on their environments and needs. ■ Dolphins, for instance, produce more frequent and higher-pitched clicks than do larger cetaceans like sperm whales. ■ Although high frequency sounds do not travel as far as low frequencies do, high frequencies with very short wavelengths help dolphins locate small objects and pick out fine detail—the higher the frequencies, the better the detail. ■ This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid and use lower-frequency clicks that travel farther in the deep ocean.\n\nNoise pollution can interfere with the echolocation signals used by cetaceans. Human-made sounds—such as those from sonar and ship engines—can make it difficult for whales and dolphins to locate prey, orient themselves, or communicate with others. The disruption can cause stress and disorientation, increasing the risk of collisions and strandings, and it can also induce changes in behavior or habitat.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.2 套一 阅读.pdf p11 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.13新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_324_1_26",
+      "marked": "The Power of Music Therapy\n\nMusic therapy is known for its powerful effects on mental health. By using musical interventions, therapists aim to improve people's emotional well-being and cognitive functioning.\n\nThe roots of music therapy trace back to ancient healing rituals, but its modern form appeared after World War II, when musicians played for veterans suffering from trauma. Research shows that music therapy can reduce anxiety and stress. Listening to calming music can lower heart rates and cortisol levels. ■ This is why music therapy is often used in hospitals. A study found that patients who listened to 30 minutes of music daily experienced significant reductions in anxiety. ■ Engaging with familiar music can also trigger pleasant memories and improve mood. Patients who participated in music therapy showed better memory recall and increased social interaction. ■ A study demonstrated that Alzheimer's patients who listened to music from their youth had improved cognitive function.\n\nDespite its benefits, music therapy is not a one-size-fits-all solution. Its effectiveness varies depending on the individual and type of music used. ■ Personal musical preferences, cultural background, and the context in which the music is played are crucial to the therapy's success.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.13  阅读.pdf p6 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.1新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rp0704_2005_200511",
+      "marked": "Ecological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development. ■ It posits that individuals are shaped by interactions among multiple overlapping environmental systems. ■ This theory reshaped developmental research, offering a multi-faceted lens that surpasses earlier, linear models. ■ By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth. ■\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child’s development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher’s communication with parents on a child’s education. Beyond these, the exosystem consists of indirect influences like a parent’s workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner’s model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.1 阅读.pdf p13 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_510v2_1_31",
+      "marked": "Sociocybernetics is a field that provides tools to analyze complex social systems, merging sociology and cybernetics. ■ By applying principles of feedback, control, and communication from cybernetics, sociologists can understand how societies function. ■ A key concept in sociocybernetics is self-organization. ■ This is the process in which social systems develop ordered patterns without centralized control. ■\n\nFeedback loops are crucial in sociocybernetics. Positive feedback amplifies changes, leading to rapid social transformations. Negative feedback stabilizes systems, maintaining equilibrium. In economic systems, positive feedback can result in booming markets, while negative feedback can prevent financial crises. Recognizing these mechanisms helps sociologists predict and influence social dynamics.\n\nCommunication is another critical aspect. Effective communication channels within social systems impact their stability and adaptability. Misinformation or communication breakdowns can disrupt social cohesion and lead to chaos. Sociocybernetic models highlight the importance of transparent information flow in maintaining healthy social systems. These models also explore how digital technologies influence communication patterns.\n\nSociocybernetics is important to urban planning. Cities are complex systems with numerous interacting components. Using",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 5.10 阅读.pdf p17 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "5.11新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_511_2_11",
+      "marked": "Optical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. ■ This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth’s atmosphere, creating a shimmering effect that distorts them. ■ Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. ■ The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second. ■\n\nHowever, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories’ carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially habitable to life.\n\nThe debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 5.11 阅读.pdf p24 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "5.29新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_511_1_31",
+      "marked": "Graphic design has transformed repeatedly throughout history, influenced by both cultural shifts and technological advancements. In Europe, during the Middle Ages (the fifth to fifteenth centuries), the creation of intricate manuscripts was predominant. The advent of the printing press in the fifteenth century altered these dynamics, facilitating mass production and broadening public access to designed materials. Such technological shifts not only changed the way art was produced but also how it was perceived.\n\nBy the mid-twentieth century, Swiss design emerged as a response to the chaotic visual landscape, introducing principles of minimalism and functionality. ■ Heavily influenced by the Bauhaus movement, designers like Josef Müller-Brockmann advocated for simplicity and rationality. ■ Their grid-based approach brought order and readability to what often seemed to be overwhelming visuals. ■ Some critics argue that the rigid structure, while effective, limited expressive possibilities and emotional resonance in design. ■\n\nToday, graphic design stands at the intersection of tradition and innovation. While digital tools democratize access and encourage experimentation, designers grapple with preserving artistic integrity. The challenge lies in blending the precision of technology with the warmth of human creativity. Thus, graphic design continues to evolve, reflecting broader cultural debates about art and technology.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 5.29 阅读.pdf p17 #1 / qwen3-vl-plus"
+    }
+  ]
+}

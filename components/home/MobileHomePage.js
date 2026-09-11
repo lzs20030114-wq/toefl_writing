@@ -25,6 +25,7 @@ import { REAL_WRITING_COUNTS } from "./realExamCounts";
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
 import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
 import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
+import { LISTENING_TOTAL_QUESTIONS, listeningModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
 /* ── 颜色工具 ── */
 const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
@@ -1009,8 +1010,8 @@ function MobileListeningSection({ isChallenge, isPractice, mode, switchMode, tie
         <MobileSecTaskCard
           href="/listening-exam"
           n="模考" t="听力自适应模考"
-          d="Module 1 + Module 2 自适应难度 · 30 题"
-          timeLabel="17 + 12 min"
+          d={`Module 1 + Module 2 自适应难度 · ${LISTENING_TOTAL_QUESTIONS} 题`}
+          timeLabel={moduleTimeLabel(listeningModuleSeconds)}
           accent={accent} isChallenge={isChallenge} isMock t1={t1} t2={t2}
         />
       </div>

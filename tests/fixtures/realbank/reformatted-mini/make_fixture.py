@@ -7,6 +7,8 @@
   · 造句模板 + 词库 + 干扰项推断（含一个不会出现在答案里的干扰块）
   · Answers 文本解析（行内分号式 + `Sentence Construction Qn:` 式）
   · 听力题号 → 逐题音频路径映射
+  · 插入句题（源料没有选项行）：四个 [A]-[D] 位置合成选项 / 位置缺一就丢 /
+    答案页写成整句时按位置回推字母
 
 docx 直接手写成最小 OOXML zip（只有 [Content_Types].xml / _rels/.rels / word/document.xml），
 不经 python-docx —— 后者的默认模板会让每份文件涨到 36 KB，四份就 145 KB，
@@ -47,13 +49,26 @@ def table(lines) -> str:
     return f"<w:tbl>{rows}</w:tbl>"
 
 
+# zip 条目里带着修改时间，直接 writestr 会写「此刻」—— 同样的输入两次跑出来字节不同，
+# 产物是入库的，那就等于每次重跑都产生一次假 diff。固定成一个常量时间戳，让生成确定可复现。
+ZIP_TS = (2026, 9, 9, 0, 0, 0)
+
+
+def _entry(name: str) -> zipfile.ZipInfo:
+    zi = zipfile.ZipInfo(name, date_time=ZIP_TS)
+    zi.compress_type = zipfile.ZIP_DEFLATED
+    zi.external_attr = 0o600 << 16
+    zi.create_system = 0
+    return zi
+
+
 def save(name, blocks):
     body = "".join(table(b[1]) if isinstance(b, tuple) and b[0] == "table" else para(b) for b in blocks)
     os.makedirs(SET, exist_ok=True)
     with zipfile.ZipFile(os.path.join(SET, name), "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", CONTENT_TYPES)
-        z.writestr("_rels/.rels", ROOT_RELS)
-        z.writestr("word/document.xml", DOC_OPEN + body + DOC_CLOSE)
+        z.writestr(_entry("[Content_Types].xml"), CONTENT_TYPES)
+        z.writestr(_entry("_rels/.rels"), ROOT_RELS)
+        z.writestr(_entry("word/document.xml"), DOC_OPEN + body + DOC_CLOSE)
 
 
 READING = [
@@ -89,6 +104,38 @@ READING = [
     "B. The brain replays the day's experiences",
     "C. The body repairs muscle tissue only",
     "D. Memories are permanently erased",
+    # 插入句题（这批源料的排法）：没有选项行，四个位置就印在材料里，
+    # 题干后面单排「待插入的句子」+ 一句重复的问句。
+    "Migration and Rest",
+    "Many small birds cross the gulf in a single night. [A] They leave the coast at dusk and "
+    "climb into steady winds. [B] The flight lasts about fifteen hours and burns most of the "
+    "fat they stored in autumn. [C] Birds that meet a headwind halfway may never reach the far "
+    "shore. [D] Volunteers on the beaches count the survivors every spring.",
+    "Q41. There are four locations [A] [B] [C] [D] in the passage. Where would the following "
+    "sentence best fit?",
+    "The ones that do arrive are so exhausted that they rest for two days before feeding.",
+    "Where would the sentence best fit?",
+    # 反例：材料只印了 [A][B][C]，缺 [D] —— 位置不全就没法答，必须丢。
+    "Desert Flash Floods",
+    "Rain falls on the high desert only a few times each year. [A] Water races over bare rock "
+    "instead of soaking into it. [B] Within an hour the dry channels swell into fast brown "
+    "rivers. [C] By the next morning the sand is dry again and the river has vanished.",
+    "Q42. There are four locations [A] [B] [C] [D] in the passage. Where would the following "
+    "sentence best fit?",
+    "Travellers who camp in these channels are sometimes caught by the flood.",
+    "Where would the sentence best fit?",
+    # 答案页把这题的答案写成了整句（rf0629 Q30 / rf0713 Q12 那种）：
+    # 那句话紧跟在 [B] 之后，字母得由解析器推回来。
+    "Glass Recycling",
+    "Collection trucks bring bottles to a sorting yard every morning. [A] Machines crush the "
+    "glass into fragments the size of gravel. [B] Some plants melt the fragments into new "
+    "bottles within a single day. [C] Other plants sell the fragments to builders who mix them "
+    "into road surfaces. [D] The whole cycle uses far less energy than making glass from raw "
+    "sand.",
+    "Q43. There are four locations [A] [B] [C] [D] in the passage. Where would the following "
+    "sentence best fit?",
+    "Colour sorting happens before the crushing stage.",
+    "Where would the sentence best fit?",
 ]
 
 WRITING = [
@@ -143,7 +190,8 @@ ANSWERS = [
     "TOEFL Answers",
     "Reading Answers",
     "Reading Module 1 Fill-in-the-Blank 1: Q1 had; Q2 long; Q3 pull.",
-    "Reading Module 1 Multiple Choice: Q21 B; Q22 A; Q31 B.",
+    "Reading Module 1 Multiple Choice: Q21 B; Q22 A; Q31 B; Q41 C; Q42 B; "
+    "Q43 Some plants melt the fragments into new bottles within a single day.",
     "Listening Answers",
     "Listening Module 1: Q1 C; Q13 A; Q14 B",
     "Listening Transcript",
