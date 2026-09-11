@@ -116,3 +116,17 @@ structured 产物按来源家族 × 科目的 ok 率：
 - `data/realBank/reading/insert-markers.json` 9 条；`data/realBank/listening/lc-speaker-overrides.json` 34 条
 - `__tests__/real-bank-reading-data.test.js`：截断卷 CTW 由「必须拒收」改为「放行但挖空结构自洽」；新增「带插入题的 AP 正文必须有插入位标记」
 - `lib/mail/templates/realBankLaunch.js` / `data/announcements.json`（本分支未发布的 v1.18.2 草稿）：题量 1217 → 1262（阅读 +29、听力 +16）
+
+## 9. 真题听力「原声优先」（2026-09-11，用户拍板）
+
+用户亲耳判定商家音频是真人、音质可接受 → 真题专区听力改为：有原声且能可靠切出的用原声，切不出/过不了闸的保持 TTS。工具 `scripts/realbank/bind_original_audio.mjs`（判据纯函数 `original_audio.js`，词级转写 `asr_words.py`，本机 faster-whisper medium.en 免费）。
+
+**统一切片规范**：起点 = 旁白后正文首词 − 0.25s（词级时间戳）；终点 = 能量真正收声 + 0.5s（Whisper 词末偏早；计时"咔"落在留白里就收到它之前）；终点 ≤ 下一组起点；lcr 逐句唯一定位；loudnorm −16 LUFS + alimiter −3 dBFS（64k mp3 解码过冲 ~1.5 dB）+ 20ms 淡入淡出；mp3 单声道 64k/44.1k。逐条闸：覆盖率 ≥0.85 或漏词 ≤1、首尾锚点、WPM 90–320、不越界、尾巴 −40 dB 干净、≥1s。
+
+**旁白**（实测 385 条原声：lcr 全无；lc 清一色 "Listen to a conversation."；la 22 种带场景；lat 39 种带学科/播客；旁白→正文间隔中位 2.4s）：lcr 不加；lc 通用句；la/lat 逐条用词级缓存还原的原句（`cleanNarration` 切到第一个句号 + 残句硬校验），还原不到用通用句。播音员 gpt-4o-mini-tts `sage`（与 lc 角色声表不相交），按句去重 61 句 ¥0.39，拼在正文前 2.4s。
+
+**结果**：435 条全部有原声可对，**过闸 385（88.5%）**：lcr 215/248、lc 59/63、la 45/50、lat 66/74。上传 `listening_audio/real_orig/<type>/<id>.mp3`（TTS 的 `real/` 原样保留可回滚），清单 `data/realBank/listening/original-audio.json`（385 entries + 50 skipped 带原因），build_bank 按 sha1(spokenText) 回挂（385/385，重建前后逐字节一致）。17 条 TTS 兜底 lc/la/lat 也补了同款旁白（台账 `tts-narration.json`，同路径换版本号）。上传核验 10/10；全量 jest 1654 绿；本地 dev server 经 `/api/audio/real_orig/...` 代理播放 200/206 验证通过。原来 17 条 audio_pending 全部由原声补上。
+
+**未过闸 50 条（皆源料问题，保持 TTS）**：三卷 module 1 的 LCR 音频只录了 6–7 句（1.21C/2.1A/2.28，17 条）；rf0615 三条逐题 mp3 是静音；音频版本与逐字稿不是同一版（首尾锚点拦下 11 条）；逐题音频台词与题面不一致 7 条（rf0808 q03、rf0622 q07 等，需人工定以哪边为准）；Whisper 短句时间戳错位 3 条；尾巴不干净 4 条。
+
+**待办**：1.28A M1 用新源 part1.m4a 重跑合流（+~20 组）；口语原声；生成题库 TTS 语速返工时一并加旁白；商家补录清单（50 条原因）。

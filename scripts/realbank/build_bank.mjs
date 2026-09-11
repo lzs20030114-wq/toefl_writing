@@ -45,6 +45,8 @@ const { holdDecision, sectionAgreement, auditPassed } = require("./hold_policy.j
 const { carryMaterialImages } = require("./material_image_carry.js");
 // 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
 const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
+// 听力原声回挂判据同样抽成纯函数（无 IO，可单测）：scripts/realbank/original_audio.js。
+const { applyOriginalAudio } = require("./original_audio.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -1277,6 +1279,46 @@ function main() {
   if (sp && sp.changed) {
     console.log(`■ 拼盘面试切分：${sp.stats.split} 条大集 → ${sp.stats.chunks} 套 4 问；尾巴 ${sp.stats.dropped_questions} 问不入库；interview 共 ${sp.count} 套`);
     for (const k of sp.stats.skipped) console.warn(`  ⚠ 跳过 ${k.id} #${k.chunk}：${k.why}`);
+  }
+  // 听力原声回挂（必须排在 applyReview 之后：清单的 text_sha1 是按**打完 patch** 的口播文本算的）。
+  mountOriginalAudio();
+}
+
+/**
+ * 真题听力「原声优先」：按清单把真人原声的 audio_url 挂回来（见 scripts/realbank/original_audio.js）。
+ * build_bank 是全量重建，条目对象每次都新造（audio_url: null），清单是原声唯一的落脚点。
+ * 口播文本的 sha1 对不上就**不挂** —— 那条原声对应的已经不是现在这道题了，退回 TTS 更安全。
+ */
+function mountOriginalAudio() {
+  const p = path.join(LISTENING_DIR, "original-audio.json");
+  if (!fs.existsSync(p)) return;
+  let manifest;
+  try { manifest = JSON.parse(fs.readFileSync(p, "utf8")); } catch (e) {
+    console.warn(`⚠ 原声清单读不了，跳过回挂：${e.message}`);
+    return;
+  }
+  const kinds = ["lcr", "lc", "la", "lat"];
+  const files = {};
+  const bundle = {};
+  for (const k of kinds) {
+    const q = path.join(LISTENING_DIR, `${k}.json`);
+    if (!fs.existsSync(q)) continue;
+    files[k] = JSON.parse(fs.readFileSync(q, "utf8"));
+    bundle[k] = files[k].items || [];
+  }
+  const res = applyOriginalAudio(bundle, manifest, spokenText);
+  for (const [k, doc] of Object.entries(files)) {
+    fs.writeFileSync(path.join(LISTENING_DIR, `${k}.json`), JSON.stringify(doc, null, 2), "utf8");
+  }
+  console.log(`\n■ 听力原声回挂：${res.mounted} 条挂上真人原声`
+    + `（清单 ${Object.keys(manifest.entries || {}).length} 条）`);
+  if (res.mismatched.length) {
+    console.warn(`  ⚠ ${res.mismatched.length} 条口播文本与清单 sha1 对不上，保持 TTS：${res.mismatched.slice(0, 8).join(", ")}`
+      + (res.mismatched.length > 8 ? " …" : ""));
+  }
+  if (res.missing.length) {
+    console.warn(`  ⚠ 清单里有 ${res.missing.length} 条在库里找不到（已下架？）：${res.missing.slice(0, 8).join(", ")}`
+      + (res.missing.length > 8 ? " …" : ""));
   }
 }
 

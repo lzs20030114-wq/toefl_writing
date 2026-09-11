@@ -110,6 +110,33 @@ maybe("真题听力 / 口语：音频状态", () => {
     expect(bad).toEqual([]);
   });
 
+  // 「原声优先」：能可靠切出来的真题条目挂的是商家源料里的**真人原声**
+  // （scripts/realbank/bind_original_audio.mjs 切片 → real_orig/ 前缀 → original-audio.json
+  // 清单 → build_bank 重建时回挂）。TTS 兜底的条目不带 audio_source，保持向后兼容。
+  test("audio_source 只能是 original，且必须指向 real_orig/ 前缀", () => {
+    const bad = audioUnits
+      .filter(({ u }) => u.audio_source !== undefined)
+      .filter(({ u }) => u.audio_source !== "original"
+        || !(typeof u.audio_url === "string" && u.audio_url.includes("/real_orig/"))
+        || u.audio_pending)
+      .map(({ id, u }) => ({ id, audio_source: u.audio_source, audio_url: u.audio_url }));
+    expect(bad).toEqual([]);
+  });
+
+  test("原声清单里的每一条都真的挂在库上（清单与库不许对不上）", () => {
+    const p = path.join(L_DIR, "original-audio.json");
+    if (!fs.existsSync(p)) return;                     // 还没跑过 bind_original_audio
+    const entries = JSON.parse(fs.readFileSync(p, "utf8")).entries || {};
+    const byId = new Map(allListening.map((it) => [it.id, it]));
+    const bad = [];
+    for (const [id, e] of Object.entries(entries)) {
+      const it = byId.get(id);
+      if (!it) continue;                                // 条目被复核清单下架了，正常
+      if (it.audio_url !== e.url || it.audio_source !== "original") bad.push(id);
+    }
+    expect(bad).toEqual([]);
+  });
+
   test("本地兜底路径（/listening-audio/…）不许进库：线上 404", () => {
     const bad = audioUnits
       .filter(({ u }) => typeof u.audio_url === "string" && u.audio_url.startsWith("/"))
