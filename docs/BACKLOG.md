@@ -40,6 +40,7 @@
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。
+- [中] 听力模考自动播放偶发卡「缓冲中…」（用户 2026-09-12 桌面 Chrome 本地 dev 截图：第 4 题 play 按钮未变暂停、进度条不走、须手点播放/开始答题；用户自己浏览器复跑又正常，已搁置）。已查到两条线索：① `components/mockExam/AdaptiveExamShell.js:930` 首次渲染就读 localStorage 断点（`useState(() => loadAdaptiveCheckpoint)`），服务端无断点→hydration 不一致→React 丢树重渲，页面留下两个 body 级 audio 元素（生产静默重渲同样发生），应改为 mount 后再读；② 听音阶段常驻「开始答题」按钮+「没声音请点播放」提示，真考没有，用户会当成必须点。复现要点：`ended` 后控制器 preload 下一题，第 N 题 play 后只有 loading 无 playing 事件（watchdog 4s/15s 才报 error→TTS 兜底）。修法建议：断点读入移到 effect；听音阶段只留被拦截时的恢复层；给 play→playing 超时加一次同元素重试再报错。
 - [低] 模考壳 AdaptiveExamShell 交卷/超时路径没有显式 `examController.stop()`，停音目前**间接依赖** AudioPlayer 卸载（2026-09-11 修「退出后共享音频继续播」时发现，AudioPlayer 已修，壳未动）；在 handleFinish / 超时 finalize 里补一行 stop() 是零风险保险丝，防将来播放器跨结束态保持挂载时漏音。
 - [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。
 - [中] admin「部署到正式题库」按钮接入 validator+gate（当前零校验旁路，同题不同判）。出处：QUESTION-PIPELINE-REVIEW-2026-07-07 §2.3。
