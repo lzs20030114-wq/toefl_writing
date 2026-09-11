@@ -84,6 +84,19 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   // Only the <audio src> is rewritten; play/reset logic keys on the raw `src`.
   const audioSrc = sameOriginAudio(src);
 
+  // ── 共享元素的停止通道 ──────────────────────────────────────────────────
+  // stopPlayback 必须保持空依赖：卸载清理(:下方)、换题重置、紧凑模式手动停止
+  // 都把它当 effect/callback 依赖，identity 一变就会连锁重跑那些 effect（卸载
+  // 清理重跑 = 正常播放中被自己掐断）。所以 controller 和「本实例正在响的那条
+  // 片段」都走 ref，渲染时同步赋值、stopPlayback 内部只读 ref。
+  const controllerRef = useRef(null);
+  controllerRef.current = controller;
+  // 本实例最后一次交给共享元素播放的 src。判定「这条是我的」只能靠它：换题时
+  // audioSrc 已经是新值，拿新值去和 controller.getCurrentSrc() 判等会漏掉仍在
+  // 响的旧片段（新题没有 audio_url 时更是彻底漏掉——那条路径根本不碰 controller）。
+  // 只在共享模式的播放路径里写入，所以它非空就意味着共享模式，无需再判模式。
+  const sharedPlaySrcRef = useRef(null);
+
   const stopPlayback = useCallback(() => {
     ttsSessionRef.current += 1;
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
@@ -91,6 +104,16 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
+    }
+    // 共享模式下声音在 Provider 那个常驻 <audio> 里（本地 audioRef 根本没渲染），
+    // 上面的 pause 停不了任何东西 —— 播放中「返回」列表后音频照放到底的根因。
+    // 只停自己这条：共享元素若已被别的播放器接手（currentSrc 已变），停它就会
+    // 掐断别人刚开始的正片。
+    const sharedController = controllerRef.current;
+    const mineSrc = sharedPlaySrcRef.current;
+    if (sharedController && mineSrc && sharedController.getCurrentSrc() === mineSrc) {
+      sharedPlaySrcRef.current = null;
+      sharedController.stop();
     }
     if (typeof speechSynthesis !== "undefined") {
       speechSynthesis.cancel();
@@ -365,6 +388,8 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     if (controllerMode && src) {
       setPlaying(true);
       setBuffering(true);
+      // 记下「我这条」，卸载/换题/手动停止时才知道共享元素上响的是不是自己的片段。
+      sharedPlaySrcRef.current = audioSrc;
       controller.play(audioSrc, { section: "listening", taskType, itemId });
       return;
     }
