@@ -301,7 +301,7 @@ function SpeakingExamShellInner({ onExit }) {
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
             <Btn onClick={handleRestart} variant="secondary">
-              \u8FD4\u56DE
+              返回
             </Btn>
           </SurfaceCard>
         </div>
