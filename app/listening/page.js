@@ -68,8 +68,8 @@ function buildLCRTopics() {
 }
 
 // LA / LC / LAT practice topic builders. Previously the picker hardcoded LCR for ALL
-// four subtypes, so la/lc/lat practice links (\u9996\u9875 mode=practice) resolved into the LCR
-// list and then died on a wrong-bank id lookup ("\u6682\u65e0\u9898\u76ee"). Each now builds its own list:
+// four subtypes, so la/lc/lat practice links (首页 mode=practice) resolved into the LCR
+// list and then died on a wrong-bank id lookup ("暂无题目"). Each now builds its own list:
 // tag = context/subject, title = situation/topic first line, subtitle = a short descriptor.
 function buildLATopics() {
   return (LA_DATA.items || []).map((i) => ({
@@ -97,7 +97,7 @@ function buildLATTopics() {
 }
 
 // Per-subtype picker config: which topic builder, done-key, and picker copy. This replaces
-// the LCR-hardcoded practice branch \u2014 la/lc/lat are now first-class practice modes.
+// the LCR-hardcoded practice branch — la/lc/lat are now first-class practice modes.
 const PRACTICE_CONFIG = {
   lcr: {
     build: buildLCRTopics,

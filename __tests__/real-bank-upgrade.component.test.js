@@ -63,6 +63,7 @@ jest.mock("../components/shared/TopicPicker", () => ({
       <div data-testid="picker-done">{[...(doneIds || [])].join(",")}</div>
       <div data-testid="picker-first-tag">{items[0]?.tag}</div>
       <div data-testid="picker-first-subtitle">{items[0]?.subtitle}</div>
+      <div data-testid="picker-last-subtitle">{items[items.length - 1]?.subtitle}</div>
       <button data-testid="pick-first" onClick={() => onSelect(items[0].id)}>first</button>
       <button data-testid="pick-last" onClick={() => onSelect(items[items.length - 1].id)}>last</button>
     </div>
@@ -268,36 +269,41 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     expect(task.textContent).toContain("limit=600");
   });
 
-  test("答题页可见来源标注（回忆版题）", async () => {
+  // 来源分档只在选题页呈现：答题页要与常规练习逐像素同款，多一条通栏会把整页顶下去
+  // （顶栏是 sticky、阅读答题区高度算式按常规结构写死）。
+  test("来源分档标在选题卡上；答题页不再挂来源条", async () => {
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
-    const banner = screen.getByTestId("real-source-banner");
-    expect(banner.textContent).toContain("真题专区");
-    expect(banner.textContent).toContain("回忆版");
+    expect(await screen.findByTestId("picker-first-subtitle")).toHaveTextContent("回忆版");
+    expect(screen.getByTestId("picker-desc").textContent).toContain("回忆版 = 2026 考生回忆整理");
+
+    fireEvent.click(screen.getByTestId("pick-first"));
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
   });
 
-  test("答题页对参考版题标「来源未核验」，不冒充官方", async () => {
+  test("参考版题在选题页标「参考版 / 来源未核验」，不冒充官方", async () => {
     render(<RealBankPage />);
     // 列表尾部是参考版（real_tpo_reference 的 81 条）。
-    fireEvent.click(await screen.findByTestId("pick-last"));
-    const banner = screen.getByTestId("real-source-banner");
-    expect(banner.textContent).toContain("参考版");
-    expect(banner.textContent).toContain("来源未核验");
-    expect(banner.textContent).not.toContain("ETS官方");
+    const last = await screen.findByTestId("picker-last-subtitle");
+    expect(last.textContent).toContain("参考版");
+    expect(last.textContent).not.toContain("ETS官方");
+    expect(screen.getByTestId("picker-desc").textContent).toContain("参考版 = 早期收集，来源未核验");
   });
 
   // 邮件列表按来源分档排序：ETS 官方 tpo1 / tpo2 永远在最前（第 1 / 2 套），
-  // 回忆版 14 条其次，参考版垫底 —— 首条一定是官方题，banner 必须标「ETS官方」。
+  // 回忆版 14 条其次，参考版垫底 —— 首条一定是官方题，选题卡必须标「ETS官方」。
   test("选邮件题 → stash type=email，首条是 ETS 官方题", async () => {
     mockSearch = new URLSearchParams("type=email");
     const emails = getRealEmailPrompts();
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
 
+    // 分档标在选题卡上，点进答题页后 picker 就卸载了 —— 先断言再点。
+    const firstSub = (await screen.findByTestId("picker-first-subtitle")).textContent;
+    expect(firstSub).toContain(realTierLabel(emails[0].tier));
+    expect(firstSub).toContain("ETS官方");
+
+    fireEvent.click(screen.getByTestId("pick-first"));
     expect(stashPromptSnapshot).toHaveBeenCalledWith("email", expect.objectContaining({ id: emails[0].id }));
     expect(screen.getByTestId("writing-task").textContent).toContain("type=email");
-    expect(screen.getByTestId("real-source-banner").textContent).toContain(realTierLabel(emails[0].tier));
-    expect(screen.getByTestId("real-source-banner").textContent).toContain("ETS官方");
     // 只有 tpo1 / tpo2 是 ETS 官方，且被排到列表最前两位（第 1 / 2 套）。
     expect(emails.filter((p) => p.tier === "official").map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
     expect(emails.slice(0, 2).map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
@@ -321,14 +327,15 @@ describe("真题专区独立页：选题 → 答题接线", () => {
   test("选造句批次 → BuildSentenceTask 收到 10 题 + 批次 __sourceGroupId", async () => {
     mockSearch = new URLSearchParams("type=bs");
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
+    expect((await screen.findByTestId("picker-first-subtitle")).textContent).toContain("Full-Length Practice Test 1");
+    fireEvent.click(screen.getByTestId("pick-first"));
 
     const task = screen.getByTestId("bs-task");
     expect(task.textContent).toContain("n=10");
     expect(task.textContent).toContain("group=real-bs-set-1");
     expect(task.textContent).toContain("mode=standard");
     expect(task.textContent).toContain("limit=410");
-    expect(screen.getByTestId("real-source-banner").textContent).toContain("Full-Length Practice Test 1");
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
   });
 });
 
@@ -410,17 +417,17 @@ describe("真题专区独立页：三档模式与常规练习同一限时口径"
     expect(mockReplace).toHaveBeenCalledWith("/real-bank?type=ctw");
   });
 
-  test("答题页顶部带档位 chip（standard 不渲染 chip）", async () => {
+  test("档位只在选题页露出；答题页与常规练习同款，不挂任何真题条", async () => {
     mockSearch = new URLSearchParams("type=ctw&mode=challenge");
     const { unmount } = render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
-    expect(screen.getByTestId("real-source-banner").textContent).toContain("挑战模式");
+    expect(await screen.findByTestId("picker-eyebrow")).toHaveTextContent("Challenge Mode");
+    fireEvent.click(screen.getByTestId("pick-first"));
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
     unmount();
 
     mockSearch = new URLSearchParams("type=ctw");
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
-    expect(screen.getByTestId("real-source-banner").textContent).not.toContain("挑战模式");
+    expect(await screen.findByTestId("picker-eyebrow")).toHaveTextContent("Standard Mode");
   });
 
   test("交卷写历史时 mode 跟着档位走（不再硬编码 practice）", async () => {
@@ -468,7 +475,6 @@ describe("真题专区独立页：阅读真题材料原图预加载", () => {
 
     expect(screen.getByTestId("asset-preload-gate")).toBeTruthy();
     expect(screen.queryByTestId("rdl-task")).toBeNull();
-    expect(screen.queryByTestId("real-source-banner")).toBeNull();
     // 预热的正是同源代理地址（与 RDLTask 里 <img> 的 src 一致，才能命中缓存）。
     const imgs = screen.getAllByTestId("asset-preload-img");
     expect(imgs.map((i) => i.getAttribute("src"))).toEqual(["/api/img/reading/real_ap_fx_2_24.webp"]);
@@ -476,7 +482,6 @@ describe("真题专区独立页：阅读真题材料原图预加载", () => {
     passPreload();
     expect(screen.queryByTestId("asset-preload-gate")).toBeNull();
     expect(screen.getByTestId("rdl-task").textContent).toContain("id=real_ap_fx_2_24");
-    expect(screen.getByTestId("real-source-banner")).toBeTruthy();
   });
 
   test("加载页的「返回」回到 picker，不留在加载页", async () => {
@@ -523,21 +528,20 @@ describe("真题专区独立页：阅读真题路由", () => {
     expect(await screen.findByTestId("picker-title")).toHaveTextContent("学术讨论真题");
   });
 
-  test("?type=ctw 选题 → CTWTask（standard 限时 300s），题面标回忆版且不冒充官方", async () => {
+  test("?type=ctw 选题 → CTWTask（standard 限时 300s）；分档标在选题卡且不冒充官方", async () => {
     mockSearch = new URLSearchParams("type=ctw");
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
+    const sub = (await screen.findByTestId("picker-first-subtitle")).textContent;
+    expect(sub).toContain("回忆版");
+    expect(sub).not.toContain("ETS官方");
+    fireEvent.click(screen.getByTestId("pick-first"));
 
     const task = screen.getByTestId("ctw-task");
     expect(task.textContent).toContain("id=real_ctw_fx_1_1");
     expect(task.textContent).toContain("blanks=2");
     expect(task.textContent).toContain("practice=false");
     expect(task.textContent).toContain("limit=300");
-
-    const banner = screen.getByTestId("real-source-banner");
-    expect(banner.textContent).toContain("回忆版");
-    expect(banner.textContent).toContain("非 ETS 官方原题");
-    expect(banner.textContent).not.toContain("ETS官方");
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
   });
 
   test("?type=rdl 选题 → RDLTask 直接吃 item（text/genre 原样）", async () => {

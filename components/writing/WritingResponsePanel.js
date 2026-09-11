@@ -25,10 +25,10 @@ function ScoringWaitCard() {
         borderRadius: "50%", animation: "tp-score-spin 0.8s linear infinite",
       }} />
       <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 4, fontFamily: FONT }}>
-        AI \u6B63\u5728\u8BC4\u5206\u2026\uFF08{secs}s\uFF09
+        AI 正在评分…（{secs}s）
       </div>
       <div style={{ fontSize: 13, color: C.t2, fontFamily: FONT }}>
-        \u901A\u5E38\u9700 20\u201340 \u79D2\uFF0C\u8BF7\u4FDD\u6301\u9875\u9762\u6253\u5F00\u3001\u4E0D\u8981\u5237\u65B0\u3002
+        通常需 20–40 秒，请保持页面打开、不要刷新。
       </div>
     </SurfaceCard>
   );

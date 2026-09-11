@@ -617,8 +617,11 @@ export function WritingTask({
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
                     {isPracticeMode && <span> Practice mode — no time limit.</span>}
                   </InfoStrip>
-                  {/* 桌面端：左右双栏 */}
-                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                  {/* 桌面端：左右双栏。
+                      两栏必须写成 minmax(0, 1fr)：裸 1fr = minmax(auto, 1fr)，任一栏里只要出现
+                      一个不可断行的长串（曾经是 ScoringWaitCard 里误写成字面量的 \uXXXX 文案），
+                      它的 min-content 就会顶穿 50% 的份额，把另一栏挤成一条窄缝。 */}
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 20 }}>
                     <WritingPromptPanel type={type} pd={pd} />
                     <WritingResponsePanel
                       type={type} pd={pd} phase={phase}

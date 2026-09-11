@@ -352,7 +352,9 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
                 </span>
               </div>
             )}
-            <div className={"tp-exam-grid" + (session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16, alignItems: "start" }}>
+            {/* 主栏写 minmax(0, 1fr)：裸 1fr = minmax(auto, 1fr)，主栏里的任务内容一旦有
+                不可断行的长串就会把整个 grid 顶宽，连带 280px 侧栏被推出可视区。 */}
+            <div className={"tp-exam-grid" + (session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
             <MockExamMainPanel
               session={session}
               currentTask={currentTask}

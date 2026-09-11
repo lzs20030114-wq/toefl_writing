@@ -301,7 +301,7 @@ function SpeakingExamShellInner({ onExit }) {
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
             <Btn onClick={handleRestart} variant="secondary">
-              \u8FD4\u56DE
+              返回
             </Btn>
           </SurfaceCard>
         </div>
@@ -494,9 +494,9 @@ function InfoBox({ label, value }) {
 }
 
 /**
- * Task-level narration screen \u2014 reads the verbatim real-exam section/task
+ * Task-level narration screen — reads the verbatim real-exam section/task
  * narration aloud (best-effort Web Speech) while the same text is on screen,
- * then advances on an explicit \u7EE7\u7EED gesture. Not counted in the exam stopwatch.
+ * then advances on an explicit 继续 gesture. Not counted in the exam stopwatch.
  */
 function NarrationCard({ title, body, onContinue }) {
   useNarration(body);

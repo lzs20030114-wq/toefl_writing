@@ -259,6 +259,16 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 ## Conventions
 
 - **Styling**: 内联 style objects, 设计系统在 `components/shared/ui.js` (C=颜色常量, FONT)
+- **内容分栏防挤压**: 题面/作答、文章/题目这类内容双栏，grid track 一律写 `minmax(0, 1fr)`（裸 `1fr` = `minmax(auto, 1fr)`，
+  某一栏冒出不可断行的长串就会顶穿份额、把另一栏挤成窄缝）；flex 分栏同理，可伸缩的那一侧必须带 `minWidth: 0`。
+  stat 卡 / auto-fit 卡片网格不受此约束。
+- **真题答题页 = 常规练习答题页**: 真题专区复用各科现成任务组件，答题页不许再套任何额外外壳
+  （通栏横幅 / 额外顶条都不行）：顶栏是 `position: sticky` 贴顶的，阅读等答题区高度写死 `calc(100vh - N)`
+  且 N 按常规结构算，多一条就整页下移、答题区溢出视口。真题的来源分档一律只在选题页呈现
+  （卡片「考试日期 · 来源分档」+ 源料缺陷徽章，释义在列表说明 `REAL_TIER_NOTE`）。
+- **JSX 文本禁写 `\uXXXX`**: JSX 文本与 JSX 属性都不是 JS 字符串字面量，`\uXXXX` 不会被解码，会原样渲染成一长串 ASCII
+  （既是乱码，又因不可断行而挤爆分栏）。中文直接写中文；`__tests__/encoding-hygiene.regression.test.js` 会拦。
+  同源问题还有题库 JSON 里的 U+FFFD 替换字符（`caf�`），同一条测试一起扫。
 - **State**: 无 Redux/Zustand, 用 useState + localStorage + Supabase
 - **API**: 所有 API 返回 `{ ok: boolean, ...data }` 格式, 见 `lib/apiResponse.js`
 - **Prompts**: AI prompt 模板集中在 `lib/*Gen/` 与 `lib/ai/prompts/`, 纯字符串拼接, 不引入模板引擎
@@ -279,6 +289,10 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **报告语言**: 一律中文。
 - **固定入口**: 开工先看 docs/BACKLOG.md（统一挂起清单）；推送走 /ship；发版走 /release-notes；SQL 迁移走 /sql-migrate；题库质量退化先走 /calibration-fix；GitHub 方案调研走 /research-reuse。
 - **发版前置**: 未跑迁移(scripts/sql/MIGRATIONS.md)/未翻 flag/未勾 Vercel env 必须在推送前核对。
+- **复现 UI 问题必须挂真实组件**: 一律起 dev server + 临时页 import 真组件（`app/zz-probe/page.js` 之类，用完删）跑真浏览器量，
+  禁止手写一份「长得像」的 HTML/JSX 复刻页来下判断——bug 按定义就住在「你以为的实现」和「真实现」的差里，
+  复刻页只会复现你的理解，让你误判成「代码没问题」。2026-09-11 的写作分栏事故就栽在这一步，多绕了一整轮像素取证。
+  （量法：临时页里 clone 节点进 `width:min-content` 容器读 `getBoundingClientRect`，即得该列 min-content。）
 
 ### 口语路由表（用户怎么说,就怎么接;不要求用户记指令）
 | 用户说 | 动作 |
