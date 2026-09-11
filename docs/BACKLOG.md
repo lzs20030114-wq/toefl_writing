@@ -40,6 +40,7 @@
 - [中] referral 奖励无上限 + 一次性邮箱可无限薅 3 天 Pro（email-login 自动发放）——需先定防滥用策略，再实施节流/校验。
 - [低中] gate harness 推广：`scripts/cli/enforce-gates.mjs` 仍是 REPORT-only，未接入生产 merge 流程；更多题型待接入注册表；语义判分门尚未设计。
 - [低] IDOR 端点复查后的修复（feedback / mistakes / entitlements / speech-consent 等端点，具体清单见 PROJECT-REVIEW-2026-06-17）。
+- [低] 模考壳 AdaptiveExamShell 交卷/超时路径没有显式 `examController.stop()`，停音目前**间接依赖** AudioPlayer 卸载（2026-09-11 修「退出后共享音频继续播」时发现，AudioPlayer 已修，壳未动）；在 handleFinish / 超时 finalize 里补一行 stop() 是零风险保险丝，防将来播放器跨结束态保持挂载时漏音。
 - [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。
 - [中] admin「部署到正式题库」按钮接入 validator+gate（当前零校验旁路，同题不同判）。出处：QUESTION-PIPELINE-REVIEW-2026-07-07 §2.3。
 - [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、~~听力 auditor 接线~~ ✅2026-08-02 已完成、LCR 范式配比、监控加固等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7。
