@@ -1,5 +1,8 @@
 /**
- * 回归锁：JSX 文本里不得出现 \uXXXX 字面量。
+ * 回归锁：编码卫生。两条，同一次事故牵出来的同源问题。
+ *
+ * 1) JSX 文本 / JSX 属性里不得出现 \uXXXX 字面量。
+ * 2) 题库与源码里不得出现 U+FFFD 替换字符（编码转换时丢字符的痕迹）。
  *
  * 事故现场（2026-09-11，真题邮件写作提交后）：ScoringWaitCard 的两行中文被写成
  * `AI 正在评分…`。JSX 文本不是 JS 字符串字面量，\uXXXX 不会被解码，
@@ -38,6 +41,36 @@ function offendingLines(src) {
   });
   return bad;
 }
+
+// U+FFFD：编码转坏的残骸。出现在题库里就是学生看到 "revising my r?sum?"，
+// 出现在造句 target 里更糟 —— 那道题的答案永远判不对。
+describe("题库 / 源码不得含 U+FFFD 替换字符", () => {
+  const DATA_ROOTS = ["data", "app", "components", "lib"];
+
+  function walkAny(dir, out = []) {
+    if (!fs.existsSync(dir)) return out;
+    for (const name of fs.readdirSync(dir)) {
+      if (SKIP_DIRS.has(name)) continue;
+      const p = path.join(dir, name);
+      const st = fs.statSync(p);
+      if (st.isDirectory()) walkAny(p, out);
+      else if (/\.(js|jsx|json|md|css)$/.test(name)) out.push(p);
+    }
+    return out;
+  }
+
+  it("全仓零替换字符", () => {
+    const hits = [];
+    for (const f of DATA_ROOTS.flatMap((r) => walkAny(path.join(process.cwd(), r)))) {
+      const src = fs.readFileSync(f, "utf8");
+      if (src.includes("\uFFFD")) {
+        const line = src.split(/\r?\n/).findIndex((l) => l.includes("\uFFFD")) + 1;
+        hits.push(`${path.relative(process.cwd(), f)}:${line}`);
+      }
+    }
+    expect(hits.join("\n")).toBe("");
+  });
+});
 
 describe("JSX 文本不得含 \\uXXXX 字面量", () => {
   const files = ROOTS.flatMap((r) => walk(path.join(process.cwd(), r)));
