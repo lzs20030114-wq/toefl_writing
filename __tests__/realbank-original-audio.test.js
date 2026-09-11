@@ -395,6 +395,86 @@ describe("cleanNarration / narrationTextFor —— 旁白拼回去", () => {
   });
 });
 
+describe("decideTtsNarration —— 增量跑不许碰范围外、不许把原句刷成通用句", () => {
+  // 2026-09-11 真实事故：`--set="1.28新托福真题A卷"` 增量跑时，TTS 兜底那一步没按 --set 收窄，
+  // 8 条不相干条目被重传，旁白从「Listen to an announcement at the university bookstore.」
+  // 退化成「Listen to an announcement.」（这一轮 survey/plan 只覆盖 1.28A，还原不到就退通用句）。
+  const GEN_LA = "Listen to an announcement.";
+  const GEN_LAT = "Listen to a talk.";
+  const SPECIFIC = "Listen to an announcement at the university bookstore.";
+  const entry = (text) => ({ narration_text: text, text_sha1: "sha1", url: "https://cdn/real/la/x.mp3?v=1" });
+  const base = { generic: GEN_LA, inScope: true, sha: "sha1", url: "https://cdn/real/la/x.mp3?v=1" };
+
+  test("① 范围外：skip，而且原句原样带出来（调用方不许拿它去重写台账）", () => {
+    const d = OA.decideTtsNarration({ ...base, inScope: false, existing: entry(SPECIFIC), recovered: GEN_LA });
+    expect(d.action).toBe("skip");
+    expect(d.why).toBe("out_of_scope");
+    expect(d.text).toBe(SPECIFIC);
+  });
+
+  test("② 台账是原句、本轮只还原出通用句 → 保留原句，绝不退化", () => {
+    const d = OA.decideTtsNarration({ ...base, existing: entry(SPECIFIC), recovered: GEN_LA });
+    expect(d.text).toBe(SPECIFIC);
+    expect(d.action).toBe("skip");                       // 其余字段都一致 → 连重拼都不必
+    const forced = OA.decideTtsNarration({ ...base, existing: entry(SPECIFIC), recovered: GEN_LA, redo: true });
+    expect(forced.action).toBe("keep");                  // --redo 重拼，但用的还是原句
+    expect(forced.text).toBe(SPECIFIC);
+    expect(forced.why).toBe("keep_ledger_over_generic");
+  });
+
+  test("② 变体：本轮**什么都没还原到**（范围内但缺词级缓存）也保留原句", () => {
+    const d = OA.decideTtsNarration({ ...base, existing: entry(SPECIFIC), recovered: null, redo: true });
+    expect(d.text).toBe(SPECIFIC);
+    expect(d.action).toBe("keep");
+  });
+
+  test("③ 台账是通用句、本轮还原出具体句 → update 成具体句", () => {
+    const d = OA.decideTtsNarration({ ...base, existing: entry(GEN_LA), recovered: SPECIFIC });
+    expect(d.action).toBe("update");
+    expect(d.text).toBe(SPECIFIC);
+    expect(d.why).toBe("recovered_more_specific");
+  });
+
+  test("④ 完全一致 → skip（不下载、不重编码、不换 ?v=）", () => {
+    const d = OA.decideTtsNarration({ ...base, existing: entry(SPECIFIC), recovered: SPECIFIC });
+    expect(d.action).toBe("skip");
+    expect(d.why).toBe("unchanged");
+  });
+
+  test("口播文本变了（sha 对不上）→ 要重拼，但旁白仍沿用台账那句", () => {
+    const d = OA.decideTtsNarration({ ...base, sha: "sha-new", existing: entry(SPECIFIC), recovered: null });
+    expect(d.action).toBe("keep");
+    expect(d.text).toBe(SPECIFIC);
+  });
+
+  test("audio_url 被别的流程换过 → 同样重拼且沿用台账旁白", () => {
+    const d = OA.decideTtsNarration({ ...base, url: "https://cdn/real/la/x.mp3?v=9", existing: entry(SPECIFIC), recovered: null });
+    expect(d.action).toBe("keep");
+    expect(d.text).toBe(SPECIFIC);
+  });
+
+  test("台账里没有这条（第一次补）：还原到就用原句，还原不到才用通用句", () => {
+    const fresh = OA.decideTtsNarration({ ...base, existing: null, recovered: SPECIFIC });
+    expect(fresh).toMatchObject({ action: "update", text: SPECIFIC, why: "recovered_new" });
+    const plain = OA.decideTtsNarration({ ...base, existing: null, recovered: null });
+    expect(plain).toMatchObject({ action: "update", text: GEN_LA, why: "generic_new" });
+  });
+
+  test("两句都是具体句但不同 → 用本轮还原出来的（判据只拦退化，不拦更新）", () => {
+    const other = "Listen to an announcement in a dormitory.";
+    const d = OA.decideTtsNarration({ ...base, existing: entry(SPECIFIC), recovered: other });
+    expect(d).toMatchObject({ action: "update", text: other });
+  });
+
+  test("通用句是按题型给的：lat 的通用句不会被当成 la 的具体句", () => {
+    const d = OA.decideTtsNarration({
+      ...base, generic: GEN_LAT, existing: entry("Listen to a talk in a history class."), recovered: GEN_LAT, redo: true,
+    });
+    expect(d.text).toBe("Listen to a talk in a history class.");
+    expect(d.action).toBe("keep");
+  });
+});
+
 describe("resolveHead —— 头部不许带别人的声音", () => {
   test("正文前隔着安静的那一声「咔」：起点挪到它后面", () => {
     // 正文起于 6.30，计时音在 5.90–6.10，中间 6.12–6.28 是安静的

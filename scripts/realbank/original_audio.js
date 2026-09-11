@@ -504,6 +504,63 @@ function narrationTextFor(type, raw) {
   return ok ? s : def;
 }
 
+/**
+ * TTS 兜底条目「这一轮要不要重拼旁白、用哪句」的判据。
+ *
+ * 背景（真实事故，2026-09-11）：`bind_original_audio.mjs --set="1.28新托福真题A卷"` 这样
+ * 按卷增量跑时，TTS 兜底那一步没按 --set 收窄，把 8 条和 1.28A 毫不相干的条目一起重处理了；
+ * 更糟的是这一轮的 narration_survey / plan 只覆盖 1.28A，那 8 条的旁白**还原不到**，
+ * 于是退回通用句、重编码、重传同路径换了 ?v= —— 线上音频从
+ * 「Listen to an announcement at the university bookstore.」退化成「Listen to an announcement.」，
+ * 台账时长各短了 0.8–2.3s。丢的是真考的场景信息，而且是静默丢的。
+ *
+ * 所以判据落三条铁律：
+ *   ① 范围外一律不碰（连下载都不下）；
+ *   ② 台账里已有的具体旁白是**基线**，本轮还原不到就沿用台账，绝不退化成通用句；
+ *   ③ 只有本轮还原出一句**更具体**（非通用句）且与台账不同的，才允许更新。
+ *
+ * @param {object} p
+ * @param {object|null} p.existing  台账里已有的条目（tts-narration.json 的 entries[id]）
+ * @param {string|null} p.recovered 本轮还原出来的旁白（可能为通用句，也可能 null）
+ * @param {string|null} p.generic   这个题型的通用句（NARRATION_DEFAULTS[type]）
+ * @param {boolean} p.inScope       本轮 --set / --ids / --only 是否覆盖这条
+ * @param {string} [p.sha]          本轮口播文本 sha1（对不上说明正文改了，要重拼）
+ * @param {string} [p.url]          题库里现在的 audio_url（对不上说明被别的流程动过）
+ * @param {boolean} [p.redo]        --redo-tts-narration：强制重拼，但**不许换掉**基线旁白
+ * @returns {{action:"skip"|"keep"|"update", text:string|null, why:string}}
+ *   skip   = 什么都不做；keep = 用台账原来那句重拼；update = 用新的（更具体的）那句拼
+ */
+function decideTtsNarration(p) {
+  const generic = p.generic || null;
+  const existing = p.existing || null;
+  const prevText = existing && existing.narration_text ? existing.narration_text : null;
+  const recovered = p.recovered || null;
+  const isGeneric = (s) => !s || (generic != null && s === generic);
+
+  if (!p.inScope) return { action: "skip", text: prevText, why: "out_of_scope" };
+
+  let text;
+  let why;
+  if (prevText) {
+    if (recovered && !isGeneric(recovered) && recovered !== prevText) {
+      text = recovered; why = "recovered_more_specific";
+    } else {
+      text = prevText; why = isGeneric(recovered) ? "keep_ledger_over_generic" : "ledger_unchanged";
+    }
+  } else {
+    text = recovered || generic;
+    why = recovered ? "recovered_new" : "generic_new";
+  }
+  if (!text) return { action: "skip", text: null, why: "no_text" };
+
+  const matches = !!existing && existing.narration_text === text
+    && (p.sha == null || existing.text_sha1 === p.sha)
+    && (p.url == null || existing.url === p.url);
+  if (matches && !p.redo) return { action: "skip", text, why: "unchanged" };
+  if (!existing) return { action: "update", text, why };
+  return { action: prevText === text ? "keep" : "update", text, why };
+}
+
 /* ── 逐条过闸 ───────────────────────────────────────────────────────────── */
 
 /**
@@ -574,6 +631,7 @@ module.exports = {
   NARRATION_DEFAULTS,
   cleanNarration,
   narrationTextFor,
+  decideTtsNarration,
   normTokens,
   spokenPlainText,
   sha1,

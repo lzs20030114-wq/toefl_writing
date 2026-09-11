@@ -8084,6 +8084,69 @@
       "clip_duration_sec": 2.98,
       "verified": true,
       "on": "2026-09-11"
+    },
+    "real_lcr_128a_1_04": {
+      "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_128a_1_04.mp3?v=mtx6n6m9",
+      "source": "first",
+      "set": "1.28新托福真题A卷",
+      "source_file": "ListeningModule1.mp3",
+      "span_sec": [
+        66.64,
+        70.4
+      ],
+      "duration_sec": 3.76,
+      "text_sha1": "3d124a60c8122245c68f0398b21c64b60747c1f3",
+      "coverage": 1,
+      "wpm": 179,
+      "lufs_in": -7.45,
+      "narration_text": null,
+      "narration_source": null,
+      "narration_gap_sec": null,
+      "clip_duration_sec": 3.76,
+      "verified": true,
+      "on": "2026-09-11"
+    },
+    "real_lcr_128a_1_11": {
+      "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_128a_1_11.mp3?v=mtx6n6wg",
+      "source": "first",
+      "set": "1.28新托福真题A卷",
+      "source_file": "ListeningModule1.mp3",
+      "span_sec": [
+        166.87,
+        170.37
+      ],
+      "duration_sec": 3.5,
+      "text_sha1": "7f1afdba6c642d10ed34a91bbff29faf7bcd5970",
+      "coverage": 0.889,
+      "wpm": 196,
+      "lufs_in": -11.31,
+      "narration_text": null,
+      "narration_source": null,
+      "narration_gap_sec": null,
+      "clip_duration_sec": 3.5,
+      "verified": true,
+      "on": "2026-09-11"
+    },
+    "real_lcr_128a_1_12": {
+      "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_128a_1_12.mp3?v=mtx6n77s",
+      "source": "first",
+      "set": "1.28新托福真题A卷",
+      "source_file": "ListeningModule1.mp3",
+      "span_sec": [
+        182.45,
+        185.27
+      ],
+      "duration_sec": 2.82,
+      "text_sha1": "46cc54eac6b8499619c76f4796963547f4bef03f",
+      "coverage": 1,
+      "wpm": 232,
+      "lufs_in": -15.69,
+      "narration_text": null,
+      "narration_source": null,
+      "narration_gap_sec": null,
+      "clip_duration_sec": 2.82,
+      "verified": true,
+      "on": "2026-09-11"
     }
   },
   "skipped": {
@@ -8286,8 +8349,16 @@
     "real_lcr_rf0826_1_05": {
       "reason": "locate_failed",
       "coverage": 0.6666666666666666
+    },
+    "real_lcr_128a_1_05": {
+      "reason": "tail_not_clean",
+      "coverage": 1
+    },
+    "real_lcr_128a_1_09": {
+      "reason": "wpm_out_of_range",
+      "coverage": 1
     }
   },
   "_purpose": "真题听力原声切片清单：build_bank.mjs 重建时按 text_sha1 回挂 audio_url（见 scripts/realbank/original_audio.js）",
-  "generated_at": "2026-09-11T12:52:17.537Z"
+  "generated_at": "2026-09-11T16:40:40.416Z"
 }

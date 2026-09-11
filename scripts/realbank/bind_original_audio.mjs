@@ -62,6 +62,24 @@ const LIMIT = flag("limit") ? parseInt(flag("limit"), 10) || Infinity : Infinity
 const SKIP_TTS_NARRATION = argv.includes("--skip-tts-narration");
 const REDO_TTS_NARRATION = argv.includes("--redo-tts-narration");
 
+/** 本轮是否带了收窄范围的开关（--set / --ids / --only）。 */
+const SCOPED = !!(SET || IDS || ONLY);
+
+/**
+ * 这一条在本轮的范围内吗？与 buildPlan 的筛选同口径。
+ *
+ * 增量跑（`--set=某卷`）必须只动它自己那一卷：TTS 兜底补旁白、清单的 skipped 合并
+ * 都要过这道闸。2026-09-11 就是因为 TTS 兜底那一步没过闸，8 条不相干的条目被重传、
+ * 旁白退化成通用句。`--limit` 不进这个谓词（它只是原声侧的调试开关）。
+ */
+function inScope(id, type, setname) {
+  if (ONLY && !ONLY.has(type)) return false;
+  if (IDS && !IDS.has(id)) return false;
+  // 认不出卷名时 fail-closed：宁可不碰，也不要在范围外乱改
+  if (SET && !(setname && (SET.has(setname) || SET.has(setSlug(setname))))) return false;
+  return true;
+}
+
 const pad2 = (n) => String(n).padStart(2, "0");
 const round3 = (x) => Math.round(x * 1000) / 1000;
 const log = (...a) => console.log(...a);
@@ -207,13 +225,13 @@ function buildPlan() {
     const bank = JSON.parse(fs.readFileSync(p, "utf8"));
     for (const it of bank.items || []) {
       const hit = idx.get(it.id);
-      if (!hit) { skipped[it.id] = { type, reason: "no_structured_record" }; continue; }
+      if (!hit) { skipped[it.id] = { type, set: null, reason: "no_structured_record" }; continue; }
       const { setname, r, st } = hit;
       // --only / --ids 只筛「要评估哪些」，**不筛定位**：第一来源是整块 module，
       // 同 module 里每一组的切点都依赖前一组的终点与后一组的起点。
       // 按题型先筛掉一半再定位，剩下的组会把被筛掉那组的音频一起吃进来。
       const selected = (!ONLY || ONLY.has(type)) && (!IDS || IDS.has(it.id));
-      if (SET && !SET.has(setname) && !SET.has(setSlug(setname))) continue;
+      if (SET && !(SET.has(setname) || SET.has(setSlug(setname)))) continue;
 
       const vendor = !!(r.items && r.items[0] && r.items[0].audio_path);
       let audioFile = null;
@@ -925,7 +943,13 @@ async function report(plan, skipped, results, asrStat, narrStat, t0) {
     manifest.skipped[r.id] = { reason: r.reasons.join(","), coverage: r.coverage ?? null };
     delete manifest.entries[r.id];      // 上一轮过闸、这一轮不过 → 清单里不该再留着
   }
-  for (const [id, s] of Object.entries(skipped)) { manifest.skipped[id] = { reason: s.reason }; delete manifest.entries[id]; }
+  for (const [id, s] of Object.entries(skipped)) {
+    // 范围外的条目这一轮根本没评估过（`--ids` 不会把别的卷排除出 plan，源音频找不到
+    // 就会被记成 source_missing）—— 把它们从清单里删掉等于拿一次增量跑清空上一轮的成果。
+    if (SCOPED && !inScope(id, s.type, s.set)) continue;
+    manifest.skipped[id] = { reason: s.reason };
+    delete manifest.entries[id];
+  }
   fs.writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2) + "\n", "utf8");
   log(`\n■ 清单 → ${path.relative(ROOT, MANIFEST)}（${up} 条原声 / ${Object.keys(manifest.skipped).length} 条保持 TTS）`);
 
@@ -980,11 +1004,17 @@ async function verifyUploads(manifest, passed) {
  * 把线上那条 mp3 拉下来、在前面接同一把嗓子念的旁白，再传回**同一路径**（换 ?v=）。
  *
  * 正文不重配（一个 token 都不花），只是在前面多接一段旁白 —— 与原声条目听起来是一套。
- * 这些条目**不进 original-audio.json**（它们不是原声），台账另记 tts-narration.json：
- * 靠 text_sha1 做幂等，重跑不会把旁白接两遍。
+ * 这些条目**不进 original-audio.json**（它们不是原声），台账另记 tts-narration.json。
+ *
+ * 「动哪些条目、用哪句旁白」不在这里判，全交给 OA.decideTtsNarration（纯函数 + 单测）：
+ * 范围外一条不碰、台账里的具体旁白不许退化成通用句、只有本轮还原出更具体的才更新。
+ * 这三条是 2026-09-11 那次事故（按卷增量跑把 8 条不相干条目的原句旁白刷成通用句）的补丁。
  */
 async function narrateTtsFallbacks(plan, manifest, results, uploadAudio, versionedAudioUrl) {
   const planById = new Map((plan || []).map((e) => [e.id, e]));
+  // 范围判据要按卷名过滤，而 plan 在 --set 时已经把别的卷剔掉了 —— 卷名得从 structured 索引里取。
+  const setnameById = new Map();
+  for (const [id, hit] of buildIndex().idx) setnameById.set(id, hit.setname);
   if (SKIP_TTS_NARRATION) { log("\n■ TTS 兜底补旁白：--skip-tts-narration，跳过"); return; }
   const survey = loadNarrationSurvey();
   let ledger = { entries: {} };
@@ -995,6 +1025,7 @@ async function narrateTtsFallbacks(plan, manifest, results, uploadAudio, version
 
   const bundle = {};
   const jobs = [];
+  const tally = { skip: 0, keep: 0, update: 0, out_of_scope: 0 };
   for (const t of ["lc", "la", "lat"]) {
     const p = path.join(LISTENING_DIR, `${t}.json`);
     if (!fs.existsSync(p)) continue;
@@ -1006,16 +1037,29 @@ async function narrateTtsFallbacks(plan, manifest, results, uploadAudio, version
       const sha = OA.sha1(spokenFingerprint(t, it));
       const prev = ledger.entries[it.id];
       const e = planById.get(it.id);
-      const text = (e && e.narrationText)
-        || OA.narrationTextFor(t, survey.get(it.id) || (e ? recoverNarrationRaw(e) : null));
-      if (!text) continue;
-      // 幂等键要带旁白文本：换了旁白（例如原句还原出来了）就得重做，不能被台账挡住
-      if (!REDO_TTS_NARRATION && prev && prev.text_sha1 === sha
-          && prev.url === it.audio_url && prev.narration_text === text) continue;
-      jobs.push({ type: t, item: it, sha, text, prev, doc: bundle[t] });
+      // 本轮能还原出什么就交给判据，**不在这里做取舍** —— 取舍规则（范围外不碰、
+      // 台账具体句不许退化成通用句、只有更具体才更新）全在 OA.decideTtsNarration 里，有单测。
+      const recovered = OA.narrationTextFor(t,
+        survey.get(it.id) || (e ? (e.narrationRaw || recoverNarrationRaw(e)) : null));
+      const d = OA.decideTtsNarration({
+        existing: prev || null, recovered, generic: OA.NARRATION_DEFAULTS[t] || null,
+        inScope: inScope(it.id, t, setnameById.get(it.id) || null),
+        sha, url: it.audio_url, redo: REDO_TTS_NARRATION,
+      });
+      if (d.why === "out_of_scope") tally.out_of_scope += 1;
+      else tally[d.action] += 1;
+      if (d.action === "skip" || !d.text) continue;
+      jobs.push({ type: t, item: it, sha, text: d.text, prev, why: d.why, action: d.action, doc: bundle[t] });
     }
   }
-  log(`\n■ TTS 兜底补旁白：${jobs.length} 条（lc/la/lat 里没绑上原声、已有 TTS 音频的）`);
+  log(`\n■ TTS 兜底补旁白：要动 ${jobs.length} 条`
+    + `（沿用台账旁白 ${tally.keep} / 换成更具体的 ${tally.update} / 已是最新跳过 ${tally.skip}`
+    + `${SCOPED ? ` / 本轮范围外不碰 ${tally.out_of_scope}` : ""}）`);
+  for (const j of jobs) {
+    if (j.action === "update" && j.prev && j.prev.narration_text !== j.text) {
+      log(`  · ${j.item.id} 旁白更新：${JSON.stringify(j.prev.narration_text)} → ${JSON.stringify(j.text)}（${j.why}）`);
+    }
+  }
   if (!jobs.length) return;
 
   await ensureNarrations(jobs.map((j) => j.text), { dry: false });
@@ -1031,7 +1075,9 @@ async function narrateTtsFallbacks(plan, manifest, results, uploadAudio, version
       // 上一轮的带旁白版本 upsert 覆盖了，再下载来拼一次就会把旁白念两遍。
       if (!fs.existsSync(tmpIn)) {
         if (j.prev) {
-          throw new Error("台账说这条补过旁白，但本地没留未加旁白的正文 —— 拒绝二次拼接（会念两遍）");
+          throw new Error("台账说这条补过旁白，但本地 _tts/<id>.src.mp3 不在了 —— 拒绝二次拼接"
+            + "（线上那条路径已是带旁白版本，再拼一次就念两遍）。要重做得先用 render_real_audio.mjs"
+            + " 重配一版不带旁白的正文，或者把 .src.mp3 找回来");
         }
         const buf = await withRetry(async () => {
           const res = await fetch(j.item.audio_url);
