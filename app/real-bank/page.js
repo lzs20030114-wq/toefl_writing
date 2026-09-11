@@ -27,7 +27,7 @@ import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { TopicPicker } from "../../components/shared/TopicPicker";
 import { AssetPreloadGate } from "../../components/shared/AssetPreloadGate";
-import { C, FONT, ModeChip } from "../../components/shared/ui";
+import { C, FONT } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { addDoneIds, loadDoneIds, saveSess } from "../../lib/sessionStore";
@@ -66,8 +66,6 @@ import {
   mapRealRDLToPicker,
   mapRealRepeatToPicker,
   REAL_TIER_NOTE,
-  realSourceFlagNote,
-  realTierLabel,
 } from "../../lib/realBank";
 
 // 与 components/home/sections.js 的 SECTION_ACCENTS["real-bank"] 同色（金琥珀 = 权威感）。
@@ -172,68 +170,9 @@ function RealModeSwitch({ mode, onSwitch }) {
   );
 }
 
-/* ── 答题页顶部的来源标注条 ──────────────────────────────────────── */
-// 「真题」是敏感宣称，必须在用户实际看到题目的地方也标清来源分档，不能只标在 picker 上。
-function RealSourceBanner({ tierLabel, meta, mode }) {
-  return (
-    <div
-      data-testid="real-source-banner"
-      style={{
-        display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8,
-        padding: "8px 20px", background: REAL_ACCENT.soft,
-        borderBottom: `1px solid ${REAL_ACCENT.color}33`,
-        fontFamily: FONT, fontSize: 12, color: "#7C2D12", lineHeight: 1.6,
-      }}
-    >
-      <span style={{ fontWeight: 800 }}>📜 真题专区</span>
-      <span style={{
-        fontWeight: 700, background: "#fff", borderRadius: 999,
-        border: `1px solid ${REAL_ACCENT.color}44`, padding: "1px 8px",
-      }}>
-        {tierLabel}
-      </span>
-      <ModeChip mode={mode} />
-      {meta && <span style={{ opacity: 0.85 }}>{meta}</span>}
-    </div>
-  );
-}
-
-function discussionMeta(prompt) {
-  const bits = [];
-  if (prompt?.course) bits.push(prompt.course);
-  if (prompt?.date) bits.push(`考试日期 ${prompt.date}`);
-  if (prompt?.tier === "legacy") bits.push("来源未核验，仅作练习参考");
-  return bits.join(" · ");
-}
-
-function emailMeta(prompt) {
-  if (prompt?.tier === "official") return "ETS 官方 Full-Length Practice Test 原题";
-  return "来源未核验，仅作练习参考";
-}
-
-// 阅读真题全部是 recalled（考生回忆整理 + 独立盲审通过），不是 ETS 官方 PDF —— 说清楚。
-function readingMeta(item) {
-  const bits = [];
-  if (item?.source) bits.push(item.source);
-  if (item?.date) bits.push(`考试日期 ${item.date}`);
-  bits.push("考生回忆整理，非 ETS 官方原题");
-  return bits.join(" · ");
-}
-
-/**
- * 听力 / 口语真题的来源说明。与阅读同底（recalled = 考生回忆整理），额外追加源料缺陷标记：
- * 这批题的题面来自商家「重排版」docx、答案页是 AI 补写的（source_flags: vendor_reformatted），
- * 落库前过了双票复核 —— 这件事必须让用户在做题页看到，不能只留在数据里。
- */
-function audioMeta(item) {
-  const bits = [];
-  if (item?.source) bits.push(item.source);
-  if (item?.date) bits.push(`考试日期 ${item.date}`);
-  bits.push("考生回忆整理，非 ETS 官方原题");
-  const flagNote = realSourceFlagNote(item);
-  if (flagNote) bits.push(flagNote);
-  return bits.join(" · ");
-}
+/* 答题页不再挂来源标注条 —— 真题答题界面与常规练习逐像素同款（顶栏贴顶、答题区高度算式
+   按常规结构写死，多一条通栏会把整页顶下去、阅读分栏还会溢出视口）。来源分档改为只在选题页
+   逐题呈现：每张卡带「考试日期 · 来源分档（· 答案经双票复核）」，列表说明里另有分档释义。 */
 
 /** 选中的题在库里找不到时的逃生口（不该发生，但别把用户卡在空白页）。 */
 function ItemUnavailable({ onBack }) {
@@ -529,7 +468,6 @@ function RealBankPageClient() {
     return (
       <UsageGateWrapper onExit={backToAudioPicker} practiceMode={mode}>
         <>
-          <RealSourceBanner tierLabel={realTierLabel(audioItem.tier)} meta={audioMeta(audioItem)} mode={mode} />
           {type === "lcr" && (
             <LCRTask
               item={audioItem}
@@ -629,7 +567,6 @@ function RealBankPageClient() {
           section={readingLabels.section}
           onExit={backToPicker}
         >
-          <RealSourceBanner tierLabel={realTierLabel(item.tier)} meta={readingMeta(item)} mode={mode} />
           {type === "ctw" && (
             <CTWTask
               item={item}
@@ -703,15 +640,12 @@ function RealBankPageClient() {
     }
     return (
       <UsageGateWrapper onExit={() => setPickedBatchId(null)} practiceMode={mode}>
-        <>
-          <RealSourceBanner tierLabel={realTierLabel(batch.tier)} meta={batch.label} mode={mode} />
-          <BuildSentenceTask
+        <BuildSentenceTask
             questions={batch.questions}
             practiceMode={mode}
             timeLimitSeconds={timeLimitSeconds}
-            onExit={() => setPickedBatchId(null)}
-          />
-        </>
+          onExit={() => setPickedBatchId(null)}
+        />
       </UsageGateWrapper>
     );
   }
@@ -746,24 +680,16 @@ function RealBankPageClient() {
     );
   }
 
-  const picked = writingById.get(String(pickedPromptId));
   return (
     <UsageGateWrapper onExit={() => setPickedPromptId(null)} practiceMode={mode}>
-      <>
-        <RealSourceBanner
-          tierLabel={realTierLabel(picked?.tier)}
-          meta={type === "email" ? emailMeta(picked) : discussionMeta(picked)}
-          mode={mode}
-        />
-        <WritingTask
-          onExit={() => setPickedPromptId(null)}
-          type={type}
-          practiceMode={mode}
-          timeLimitSeconds={timeLimitSeconds}
-          reportLanguage={reportLanguage}
-          initialPromptId={pickedPromptId}
-        />
-      </>
+      <WritingTask
+        onExit={() => setPickedPromptId(null)}
+        type={type}
+        practiceMode={mode}
+        timeLimitSeconds={timeLimitSeconds}
+        reportLanguage={reportLanguage}
+        initialPromptId={pickedPromptId}
+      />
     </UsageGateWrapper>
   );
 }

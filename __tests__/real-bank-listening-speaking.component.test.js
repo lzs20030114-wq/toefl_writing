@@ -42,6 +42,7 @@ jest.mock("../components/shared/TopicPicker", () => ({
       <div data-testid="picker-first-tag">{items[0]?.tag}</div>
       <div data-testid="picker-first-title">{items[0]?.title}</div>
       <div data-testid="picker-first-subtitle">{items[0]?.subtitle}</div>
+      <div data-testid="picker-first-badge">{items[0]?.badge}</div>
       <button data-testid="pick-first" onClick={() => onSelect(items[0].id)}>first</button>
     </div>
   ),
@@ -265,17 +266,23 @@ describe("真题专区：听力选题 → 任务组件", () => {
     expect(task.textContent).toContain("audio=https://");
   });
 
-  test("答题页来源条：回忆版 + 非官方 + 重排版双票复核说明（source_flags 上屏）", async () => {
+  // 来源信息全部落在选题卡上（答题页与常规练习逐像素同款，不挂来源条）：
+  // 考试日期 + 分档 + source_flags 的一句话说明，都要在用户点进去之前看得到。
+  test("选题卡带来源：考试日期 + 回忆版 + 重排版双票复核（source_flags 上屏）", async () => {
     mockSearch = new URLSearchParams("type=la");
     render(<RealBankPage />);
-    fireEvent.click(await screen.findByTestId("pick-first"));
 
-    const banner = screen.getByTestId("real-source-banner");
-    expect(banner.textContent).toContain("回忆版");
-    expect(banner.textContent).toContain("考试日期 2026-06-10");
-    expect(banner.textContent).toContain("非 ETS 官方原题");
-    expect(banner.textContent).toContain("回忆重排版，答案经双票复核");
-    expect(banner.textContent).not.toContain("ETS官方");
+    const sub = (await screen.findByTestId("picker-first-subtitle")).textContent;
+    expect(sub).toContain("2026.06.10");
+    expect(sub).toContain("回忆版");
+    expect(sub).not.toContain("ETS官方");
+    // source_flags 走徽章位（subtitle 是 nowrap 窄行，塞进去会被 ellipsis 吃掉）。
+    expect(screen.getByTestId("picker-first-badge")).toHaveTextContent("双票复核");
+    expect(screen.getByTestId("picker-desc").textContent).toContain("回忆版 = 2026 考生回忆整理");
+    expect(screen.getByTestId("picker-desc").textContent).toContain("答案经两家模型复核一致后才收录");
+
+    fireEvent.click(screen.getByTestId("pick-first"));
+    expect(screen.queryByTestId("real-source-banner")).toBeNull();
   });
 });
 

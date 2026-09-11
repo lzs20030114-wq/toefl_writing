@@ -262,6 +262,10 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **内容分栏防挤压**: 题面/作答、文章/题目这类内容双栏，grid track 一律写 `minmax(0, 1fr)`（裸 `1fr` = `minmax(auto, 1fr)`，
   某一栏冒出不可断行的长串就会顶穿份额、把另一栏挤成窄缝）；flex 分栏同理，可伸缩的那一侧必须带 `minWidth: 0`。
   stat 卡 / auto-fit 卡片网格不受此约束。
+- **真题答题页 = 常规练习答题页**: 真题专区复用各科现成任务组件，答题页不许再套任何额外外壳
+  （通栏横幅 / 额外顶条都不行）：顶栏是 `position: sticky` 贴顶的，阅读等答题区高度写死 `calc(100vh - N)`
+  且 N 按常规结构算，多一条就整页下移、答题区溢出视口。真题的来源分档一律只在选题页呈现
+  （卡片「考试日期 · 来源分档」+ 源料缺陷徽章，释义在列表说明 `REAL_TIER_NOTE`）。
 - **JSX 文本禁写 `\uXXXX`**: JSX 文本与 JSX 属性都不是 JS 字符串字面量，`\uXXXX` 不会被解码，会原样渲染成一长串 ASCII
   （既是乱码，又因不可断行而挤爆分栏）。中文直接写中文；`__tests__/encoding-hygiene.regression.test.js` 会拦。
   同源问题还有题库 JSON 里的 U+FFFD 替换字符（`caf�`），同一条测试一起扫。
