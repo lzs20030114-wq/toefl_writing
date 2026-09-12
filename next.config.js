@@ -3,6 +3,18 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // 隐藏 X-Powered-By: Next.js（减少信息泄露）
   compress: true,
+  async headers() {
+    return [
+      {
+        // 划词词典的分片是只读静态表（换词库 = 重跑 scripts/dict/build-dict.mjs 再部署），
+        // 默认的 max-age=0 会让每次复盘都重新下几百 KB，这里放成一天 + 一周内后台刷新。
+        source: "/dict/:file*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+        ],
+      },
+    ];
+  },
   experimental: {
     outputFileTracingIncludes: {
       "/api/admin/questions": ["./data/**/*"],

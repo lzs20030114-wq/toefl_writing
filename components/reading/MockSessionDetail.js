@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
+import { WordLookupLayer } from "./WordLookupLayer";
 import { formatLocalDateTime } from "../../lib/utils";
 import { getBandColor } from "../../lib/history/bandColor";
 
@@ -97,7 +98,8 @@ function CtwTaskBody({ task }) {
 
   return (
     <div>
-      <div
+      <WordLookupLayer
+        passage={passage}
         style={{
           fontSize: 14,
           lineHeight: 2.1,
@@ -109,7 +111,7 @@ function CtwTaskBody({ task }) {
         }}
       >
         {rendered}
-      </div>
+      </WordLookupLayer>
       {mistakes.length > 0 && (
         <div>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.textSec, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.4 }}>
@@ -181,7 +183,8 @@ function McqTaskBody({ task, explainHook }) {
             原文 {!passageOpen && `(${passage.length} 字)`}
           </button>
           {passageOpen && (
-            <div
+            <WordLookupLayer
+              passage={passage}
               style={{
                 fontSize: 13.5,
                 lineHeight: 1.8,
@@ -196,7 +199,7 @@ function McqTaskBody({ task, explainHook }) {
               }}
             >
               {passage}
-            </div>
+            </WordLookupLayer>
           )}
         </div>
       )}

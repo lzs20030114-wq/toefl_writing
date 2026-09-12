@@ -11,6 +11,7 @@ import { getBandColor } from "../../lib/history/bandColor";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { MockSessionDetail } from "./MockSessionDetail";
+import { WordLookupLayer } from "./WordLookupLayer";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
 
@@ -180,11 +181,11 @@ export function CTWDetail({ session }) {
 
   return (
     <div>
-      {/* Passage with blanks highlighted as colored inline tags */}
+      {/* Passage with blanks highlighted as colored inline tags（点词/划词查词典） */}
       {passage && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 2.2, padding: "14px 18px", background: "#fafbfa", borderRadius: 12, marginBottom: 12, border: `1px solid ${P.borderSubtle}` }}>
+        <WordLookupLayer passage={passage} style={{ fontSize: 13, color: P.text, lineHeight: 2.2, padding: "14px 18px", background: "#fafbfa", borderRadius: 12, marginBottom: 12, border: `1px solid ${P.borderSubtle}` }}>
           {renderMarkedPassage()}
-        </div>
+        </WordLookupLayer>
       )}
       {/* Summary: correct vs total */}
       <div style={{ fontSize: 12, color: P.textSec, marginBottom: 8 }}>
@@ -225,11 +226,11 @@ export function RDLDetail({ session }) {
 
   return (
     <div>
-      {/* Original passage */}
+      {/* Original passage（点词/划词查词典） */}
       {passage && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 150, overflow: "auto" }}>
+        <WordLookupLayer passage={passage} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 150, overflow: "auto" }}>
           {passage}
-        </div>
+        </WordLookupLayer>
       )}
       {/* Per-question detail with full stem + options */}
       {Array.isArray(results) && (
