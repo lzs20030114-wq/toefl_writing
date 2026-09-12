@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI } from "../../lib/ai/client";
+import { callAI, mapAiHelperError } from "../../lib/ai/client";
 
 // Pro-only AI explainer for Reading / Listening MCQ mistakes, mirroring the
 // Build-a-Sentence useBsAiExplain pattern. Responses are cached in
@@ -83,7 +83,7 @@ export function useMcqAiExplain(section = "reading") {
       saveToCache(section, mistake, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
-      setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text: null, error: e.message || "请求失败" } }));
+      setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text: null, error: mapAiHelperError(e) } }));
     }
   }, [section]);
 

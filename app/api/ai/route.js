@@ -2,6 +2,7 @@ import { createRequire } from "module";
 import { createHash } from "crypto";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { createRateLimiter, getIp } from "../../../lib/rateLimit";
+import { lookupUserTier } from "../../../lib/userLookup";
 
 // Give the serverless function room to wait for slow DeepSeek responses.
 // Without this, Vercel's hobby default (10s) would kill the request long
@@ -415,11 +416,22 @@ export async function POST(request) {
       if (!userCode || userCode.length !== 6) {
         return fail({ ...requestMeta, stage: "auth", errorType: "missing_user" }, 403, { error: "Authentication required." });
       }
-      const { data: user } = await supabaseAdmin
-        .from("users")
-        .select("tier, tier_expires_at")
-        .eq("code", userCode)
-        .maybeSingle();
+      // 2026-09-13: 这里以前只解构 data,查库失败和「查无此人」都是 user==null,
+      // 于是 PostgREST 一次 504 就被当成 403 Invalid user. —— 用户看到红字
+      // "API error 403"(hook 直接渲染 e.message),而重试其实就能过。见 lib/userLookup.js。
+      const { user, error: userLookupError } = await lookupUserTier(userCode);
+      if (userLookupError) {
+        return fail(
+          {
+            ...requestMeta,
+            stage: "auth",
+            errorType: "user_lookup_failed",
+            errorDetail: userLookupError.message || String(userLookupError),
+          },
+          503,
+          { error: "服务暂时不可用，请稍后重试", code: "USER_LOOKUP_FAILED" },
+        );
+      }
       if (!user) {
         return fail({ ...requestMeta, stage: "auth", errorType: "invalid_user" }, 403, { error: "Invalid user." });
       }

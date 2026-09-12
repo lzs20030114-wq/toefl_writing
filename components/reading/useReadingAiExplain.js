@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI } from "../../lib/ai/client";
+import { callAI, mapAiHelperError } from "../../lib/ai/client";
 
 // System prompt is reading-specific: stem + options + the right/wrong
 // answers. Pattern mirrors useBsAiExplain so caching + Pro gate stay in sync.
@@ -77,7 +77,7 @@ export function useReadingAiExplain() {
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
-      setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text: null, error: e.message || "请求失败" } }));
+      setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text: null, error: mapAiHelperError(e) } }));
     }
   }, []);
 
