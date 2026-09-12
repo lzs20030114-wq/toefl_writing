@@ -11,6 +11,7 @@ import { getBandColor } from "../../lib/history/bandColor";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { MockSessionDetail } from "./MockSessionDetail";
+import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
@@ -144,6 +145,12 @@ export function CTWDetail({ session }) {
   const results = session.details?.results || [];
   const passage = session.details?.passage;
   const blanks = session.details?.blanks || [];
+  const itemId = session.details?.itemId || "";
+  // 点开一个答错的空 → 看到「自己填的 vs 正确答案 + 所在句子 + AI 解析」。
+  // 同一时刻只展开一个；再点同一个收起。
+  const [openBlank, setOpenBlank] = useState(null);
+  // hook 在组件顶层调一次（不能在 map 里调）。
+  const ctwAi = useCtwAiExplain();
 
   // Map blank positions for quick lookup
   const blankByPos = {};
@@ -190,6 +197,9 @@ export function CTWDetail({ session }) {
       {/* Summary: correct vs total */}
       <div style={{ fontSize: 12, color: P.textSec, marginBottom: 8 }}>
         填空结果（<span style={{ color: "#059669", fontWeight: 600 }}>绿色</span> = 正确，<span style={{ color: "#DC2626", fontWeight: 600 }}>红色</span> = 错误）
+        {results.some(r => !r.isCorrect) && (
+          <span style={{ marginLeft: 6, color: P.textDim }}>点击红色错项查看解析</span>
+        )}
       </div>
       {/* Compact blank pills in a table-like layout */}
       {results.length > 0 && (
@@ -199,18 +209,114 @@ export function CTWDetail({ session }) {
             const frag = blank.displayed_fragment || "";
             const full = blank.original_word || "";
             const missing = full.slice(frag.length);
-            return (
-              <div key={i} style={{
-                fontSize: 12, padding: "5px 10px", borderRadius: 8,
-                background: r.isCorrect ? "#F0FDF4" : "#FEF2F2",
-                border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}`,
-                fontFamily: "'Courier New', monospace", fontWeight: 600,
-                display: "flex", alignItems: "center", gap: 4,
-              }}>
+            const isOpen = openBlank === i;
+            // 用户只输入了缺失部分（不含前缀）；fullWord 才是他的完整词。
+            // 老记录可能没存 fullWord —— 用前缀 + 输入拼回来。
+            const answered = String(r.userAnswer ?? "").trim() !== "";
+            const userFull = r.fullWord || `${frag}${r.userAnswer ?? ""}`;
+            const chipBase = {
+              fontSize: 12, padding: "5px 10px", borderRadius: 8,
+              background: r.isCorrect ? "#F0FDF4" : "#FEF2F2",
+              fontFamily: "'Courier New', monospace", fontWeight: 600,
+              display: "flex", alignItems: "center", gap: 4,
+            };
+            const chipInner = (
+              <>
                 <span style={{ color: r.isCorrect ? "#059669" : "#DC2626", fontSize: 11 }}>{r.isCorrect ? "✓" : "✗"}</span>
                 <span style={{ color: P.textDim }}>{frag}</span>
                 <span style={{ color: r.isCorrect ? "#059669" : "#DC2626" }}>{missing}</span>
-              </div>
+              </>
+            );
+            const loc = isOpen ? locateBlankSentence(passage, blank.position) : null;
+            return (
+              <React.Fragment key={i}>
+                {r.isCorrect ? (
+                  <div style={{ ...chipBase, border: "1px solid #BBF7D0" }}>{chipInner}</div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setOpenBlank(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    style={{
+                      ...chipBase,
+                      border: `1px solid ${isOpen ? "#DC2626" : "#FECACA"}`,
+                      borderWidth: isOpen ? 1.5 : 1,
+                      background: isOpen ? "#FEE2E2" : "#FEF2F2",
+                      cursor: "pointer", textAlign: "left", transition: "all 0.15s",
+                    }}
+                    onMouseEnter={e => { if (!isOpen) { e.currentTarget.style.background = "#FEE2E2"; e.currentTarget.style.borderColor = "#FCA5A5"; } }}
+                    onMouseLeave={e => { if (!isOpen) { e.currentTarget.style.background = "#FEF2F2"; e.currentTarget.style.borderColor = "#FECACA"; } }}
+                  >
+                    {chipInner}
+                    <span style={{ marginLeft: "auto", color: "#DC262699", fontSize: 10 }}>{isOpen ? "▴" : "▾"}</span>
+                  </button>
+                )}
+                {isOpen && (
+                  // 占满整行：不受 minmax(130px, 1fr) 约束，不会把 chip 挤窄。
+                  <div data-testid="ctw-blank-panel" style={{
+                    gridColumn: "1 / -1", minWidth: 0,
+                    padding: "12px 14px", marginBottom: 2,
+                    background: P.surface, borderRadius: 10,
+                    border: `1px solid ${P.borderSubtle}`, borderLeft: "3px solid #DC2626",
+                    animation: "fadeUp 0.2s ease",
+                  }}>
+                    {/* 必补的信息缺口：chip 上红色显示的是正确答案的补全，用户看不到自己填了什么 */}
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px 14px", fontSize: 12, color: P.textSec, marginBottom: 8 }}>
+                      <span style={{ fontWeight: 700, color: P.text }}>第 {i + 1} 空</span>
+                      <span style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 0 }}>
+                        你填的：
+                        {answered ? (
+                          <span style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, color: "#DC2626", wordBreak: "break-all" }}>{userFull}</span>
+                        ) : (
+                          <span style={{ color: P.textDim }}>未作答</span>
+                        )}
+                      </span>
+                      <span style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 0 }}>
+                        正确答案：
+                        <span style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, color: "#059669", wordBreak: "break-all" }}>{full}</span>
+                      </span>
+                    </div>
+                    {/* 该空所在的原文句子（目标词高亮，风格与上方 passage 一致） */}
+                    {loc?.sentence && (
+                      <div style={{ fontSize: 13, color: P.text, lineHeight: 2, padding: "8px 10px", background: "#fafbfa", borderRadius: 8, border: `1px solid ${P.borderSubtle}`, wordBreak: "break-word" }}>
+                        {loc.words.map((w, wi) => {
+                          if (wi !== loc.targetIndexInSentence) return <span key={wi}>{w} </span>;
+                          const punct = w.match(/[.,;:!?]+$/)?.[0] || "";
+                          const core = punct ? w.slice(0, -punct.length) : w;
+                          return (
+                            <span key={wi}>
+                              <span style={{
+                                background: "#D1FAE5", color: "#059669", fontWeight: 700,
+                                borderRadius: 4, padding: "1px 4px", borderBottom: "2px solid #059669",
+                                fontFamily: "'Courier New', monospace", fontSize: 13,
+                              }}>{core}</span>
+                              {punct}{" "}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+                    <CtwAiExplainBlock
+                      explainKey={`${session.id || itemId}-${i}`}
+                      detail={{
+                        isCorrect: !!r.isCorrect,
+                        itemId,
+                        position: blank.position,
+                        displayed_fragment: frag,
+                        original_word: full,
+                        fullWord: userFull,
+                        userAnswer: r.userAnswer ?? "",
+                        passage: passage || "",
+                        blankIndex: i,
+                        blankTotal: results.length,
+                      }}
+                      aiExplains={ctwAi.aiExplains}
+                      isPro={ctwAi.isPro}
+                      handleAiExplain={ctwAi.handleAiExplain}
+                    />
+                  </div>
+                )}
+              </React.Fragment>
             );
           })}
         </div>
