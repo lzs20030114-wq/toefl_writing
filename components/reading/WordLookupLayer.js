@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
@@ -222,7 +223,10 @@ export function WordLookupLayer({ passage, children, style }) {
   return (
     <div onMouseUp={handlePick} onTouchEnd={handleTouch} style={style}>
       {children}
-      {pop && popStyle && (
+      {/* Portal 到 body：页面外层 <main> 的 animation 用了 fill-mode both，结束态留下
+          transform: translateY(0)；任何非 none 的 transform 都会成为 position:fixed
+          后代的包含块，弹窗会被整体推走（实测偏 344,213）。挂到 body 上才跟得住词。 */}
+      {pop && popStyle && typeof document !== "undefined" && createPortal(
         <div
           ref={popRef}
           onMouseUp={(e) => e.stopPropagation()}
@@ -350,7 +354,8 @@ export function WordLookupLayer({ passage, children, style }) {
               )}
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
