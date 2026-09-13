@@ -330,6 +330,27 @@ async function fail(meta, status, payload) {
   return Response.json(payload, { status });
 }
 
+// 上游 200 但正文为空。deepseek-v4-flash 的推理 token 计入 max_tokens，预算给小了推理就把它吃光，
+// content 是空串。单采样路径原先照常计量并把空串返回：前端表现为「点了没反应」，还白扣一次次数
+// （2026-09-13 实测：造句讲解上限 300 时 4 次里 3 次为空、错题本分析上限 500 时 4 次里 2 次截断）。
+// 多采样路径早由 collectContents 过滤掉空串；这里让单采样也当上游失败：不计量、留痕、502。
+function isBlankContent(content) {
+  return !String(content ?? "").trim();
+}
+
+function emptyContentFailure(requestMeta, maxTokens) {
+  return fail(
+    {
+      ...requestMeta,
+      stage: "deepseek",
+      errorType: "empty_content",
+      errorDetail: `upstream 200 with empty content; max_tokens=${maxTokens} (reasoning tokens count toward it)`,
+    },
+    502,
+    { error: "AI service temporarily unavailable. Please retry." },
+  );
+}
+
 // Atomically record one unit of AI usage for the day, enforcing the cap as a
 // race backstop. Prefers the increment_daily_usage RPC (single round-trip, no
 // read-then-write race); if that RPC is missing — e.g. the migration hasn't
@@ -482,6 +503,7 @@ export async function POST(request) {
         return Response.json({ content: contents[0], contents });
       }
       const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
+      if (isBlankContent(content)) return emptyContentFailure(requestMeta, maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
@@ -516,6 +538,7 @@ export async function POST(request) {
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
     try {
       const content = await callDirectOnce(apiKey, upstreamParams);
+      if (isBlankContent(content)) return emptyContentFailure(requestMeta, maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {

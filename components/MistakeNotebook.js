@@ -6,7 +6,7 @@ import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { C, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
 import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
-import { callAI } from "../lib/ai/client";
+import { callAI, mapAiHelperError } from "../lib/ai/client";
 import { extractReadingMistakes, countReadingMistakes } from "../lib/readingMistakes";
 import { extractListeningMistakes, countListeningMistakes } from "../lib/listeningMistakes";
 import { McqMistakesView } from "./mistakes/McqMistakesView";
@@ -276,10 +276,11 @@ function StatsBar({ groups, totalWrong, isLegacy }) {
     setAnalysis({ loading: true, text: null, error: null });
     try {
       const prompt = buildAnalysisPrompt(groups, totalWrong, gpFreq);
-      const text = await callAI(ANALYSIS_SYSTEM, prompt, 500, 60000, 0.4);
+      // 上限要给足：deepseek-v4-flash 的推理 token 计入 max_tokens，给小了推理吃光、正文为空（2026-09-13 实测上限 500 时 4 次截断 2 次；推理长度在 200~725 token 间波动）
+      const text = await callAI(ANALYSIS_SYSTEM, prompt, 1500, 60000, 0.4);
       setAnalysis({ loading: false, text, error: null });
     } catch (e) {
-      setAnalysis({ loading: false, text: null, error: e.message || "分析失败" });
+      setAnalysis({ loading: false, text: null, error: mapAiHelperError(e) });
     }
   }, [groups, totalWrong, gpFreq, analysis.loading, isLegacy]);
 

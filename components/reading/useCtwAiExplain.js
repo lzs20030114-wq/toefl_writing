@@ -139,7 +139,8 @@ export function useCtwAiExplain() {
       // 700 而不是 350：实测 350 会把 3-5 句的中文讲解硬截断在句子中间
       // （deepseek-v4-flash 的推理 token 也吃这份预算）。只在用户点按钮时计费，
       // 上调预算的实际成本可忽略。
-      const text = await callAI(SYSTEM, buildMessage(detail), 700, 60000, 0.3);
+      // 上限要给足：deepseek-v4-flash 的推理 token 计入 max_tokens，给小了推理吃光、正文为空（2026-09-13 实测上限 700 时 6 次截断 1 次，另有两次用到 555/618 贴线）
+      const text = await callAI(SYSTEM, buildMessage(detail), 1500, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

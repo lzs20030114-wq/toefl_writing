@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, isDailyLimitError } from "../../lib/ai/client";
+import { callAI, mapAiHelperError } from "../../lib/ai/client";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -244,11 +244,7 @@ export function WordLookupLayer({ passage, children, style }) {
       setAi({ loading: false, text, error: null });
     } catch (e) {
       if (wordRef.current !== word) return;
-      setAi({
-        loading: false,
-        text: null,
-        error: isDailyLimitError(e) ? "今天的 AI 次数用完了" : "AI 暂时没响应，稍后再试",
-      });
+      setAi({ loading: false, text: null, error: mapAiHelperError(e) });
     }
   }, [pop, passage]);
 

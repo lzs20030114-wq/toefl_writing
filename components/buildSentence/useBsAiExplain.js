@@ -48,7 +48,8 @@ export function useBsAiExplain() {
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
       const message = `题目：${detail.prompt}\n学生答案：${detail.userAnswer}\n正确答案：${detail.correctAnswer}${detail.grammar_points?.length ? `\n涉及语法点：${detail.grammar_points.join(", ")}` : ""}`;
-      const text = await callAI(SYSTEM, message, 300, 60000, 0.3);
+      // 上限要给足：deepseek-v4-flash 的推理 token 计入 max_tokens，给小了推理吃光、正文为空（2026-09-13 实测上限 300 时 4 次全截断、3 次一个字都没有；完整输出要 376~498 token）
+      const text = await callAI(SYSTEM, message, 1500, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

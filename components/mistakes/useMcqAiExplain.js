@@ -79,7 +79,8 @@ export function useMcqAiExplain(section = "reading") {
     try {
       const sys = SYSTEM_BY_SECTION[section] || SYSTEM_BY_SECTION.reading;
       const message = buildPrompt(section, mistake, context);
-      const text = await callAI(sys, message, 320, 60000, 0.3);
+      // 上限要给足：deepseek-v4-flash 的推理 token 计入 max_tokens，给小了推理吃光、正文为空（2026-09-13 实测上限 320 时 4 次截断 1 次，只剩 22 字）
+      const text = await callAI(sys, message, 1500, 60000, 0.3);
       saveToCache(section, mistake, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

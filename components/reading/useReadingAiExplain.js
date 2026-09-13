@@ -73,7 +73,8 @@ export function useReadingAiExplain() {
         (optionsBlock ? `选项：\n${optionsBlock}\n` : "") +
         `学生选择：${detail.selected || "未作答"}\n` +
         `正确答案：${detail.correct}`;
-      const text = await callAI(SYSTEM, message, 350, 60000, 0.3);
+      // 上限要给足：deepseek-v4-flash 的推理 token 计入 max_tokens，给小了推理吃光、正文为空（2026-09-13 实测本按钮输出 213~298 token，350 余量太薄）
+      const text = await callAI(SYSTEM, message, 1500, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

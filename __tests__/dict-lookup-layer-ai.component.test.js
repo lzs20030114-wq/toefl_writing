@@ -9,11 +9,11 @@ import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 
 jest.mock("../lib/ai/client", () => ({
+  ...jest.requireActual("../lib/ai/client"),
   callAI: jest.fn(),
-  isDailyLimitError: (e) => !!(e && e.code === "DAILY_LIMIT"),
 }));
 
-import { callAI } from "../lib/ai/client";
+import { callAI, mapAiHelperError } from "../lib/ai/client";
 import { WordLookupLayer } from "../components/reading/WordLookupLayer";
 
 const PASSAGE = "The small fish hides among the long stinging tentacles.";
@@ -81,11 +81,13 @@ describe("划词弹窗 · AI 讲解", () => {
     expect(localStorage.getItem("dict-ai-explain-cache")).toBeNull();
   });
 
-  it("请求失败给人话，不把 API error 403 这种原文丢给用户", async () => {
-    callAI.mockRejectedValue(Object.assign(new Error("API error 500"), { status: 500 }));
+  it("请求失败给人话，不把 API error 502 这种原文丢给用户", async () => {
+    // 服务端把「推理吃光预算、正文为空」也报成 502，这类失败现在会被用户看见
+    const err = Object.assign(new Error("API error 502"), { status: 502 });
+    callAI.mockRejectedValue(err);
     render(<WordLookupLayer passage={PASSAGE}>{PASSAGE}</WordLookupLayer>);
     fireEvent.click(await openWord(150));
-    expect(await screen.findByText("AI 暂时没响应，稍后再试")).toBeInTheDocument();
+    expect(await screen.findByText(mapAiHelperError(err))).toBeInTheDocument();
     expect(screen.queryByText(/API error/)).toBeNull();
   });
 

@@ -282,7 +282,9 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     expect(message).toContain("该空所在句子：Early pots were 【shaped】 by hand.");
     expect(message).toContain("第 1 个空（共 3 个）");
     expect(message).toContain(PASSAGE);
-    expect([maxTokens, timeoutMs, temperature]).toEqual([700, 60000, 0.3]);
+    expect([timeoutMs, temperature]).toEqual([60000, 0.3]);
+    // 推理 token 计入 max_tokens：2026-09-13 实测上限 700 时 6 次截断 1 次，低于 1000 会随机出空/半句
+    expect(maxTokens).toBeGreaterThanOrEqual(1000);
 
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
   });
