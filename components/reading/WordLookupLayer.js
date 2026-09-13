@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI } from "../../lib/ai/client";
+import { callAI, isDailyLimitError } from "../../lib/ai/client";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -91,6 +91,7 @@ function saveAiCache(key, text) {
 export function WordLookupLayer({ passage, children, style }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
+  const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
 
@@ -98,6 +99,7 @@ export function WordLookupLayer({ passage, children, style }) {
   const isPro = tier === "legacy" || tier === "pro";
 
   const close = useCallback(() => {
+    wordRef.current = null;
     setPop(null);
     setAi(null);
   }, []);
@@ -116,6 +118,7 @@ export function WordLookupLayer({ passage, children, style }) {
     if (!word || !/[a-z]/.test(word)) return;
     // 记住这个词的 Range：页面滚动时据此重算位置，弹窗才跟得住词。
     rangeRef.current = range;
+    wordRef.current = word;
     setAi(null);
     setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
     const entry = await lookupWord(word);
@@ -209,6 +212,7 @@ export function WordLookupLayer({ passage, children, style }) {
 
   const askAi = useCallback(async () => {
     if (!pop) return;
+    const word = pop.word;
     const sentence = sentenceAround(passage, pop.word) || pop.word;
     const key = `${pop.word}|||${sentence.slice(0, 80)}`;
     const cached = loadAiCache()[key];
@@ -224,11 +228,27 @@ export function WordLookupLayer({ passage, children, style }) {
         (pop.entry && pop.entry.t
           ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}`
           : "词典未收录这个词。");
-      const text = await callAI(SYSTEM, message, 260, 60000, 0.3);
+      // 预算必须给足：deepseek-v4-flash 的推理 token 也计入 max_tokens，而推理长度波动很大——
+      // 2026-09-13 实测同一 prompt 一次完整讲解输出 248~669 token（同一个词两次就差出 300）。
+      // 原先给 260 时 6 次全被截断，其中 2 次推理就吃光预算、正文 0 字，前端表现为「转一会儿
+      // 什么都没有」；试过 800 也只剩 16% 余量。按实际输出计费，上限放宽不增加正常调用的花费。
+      const raw = await callAI(SYSTEM, message, 1500, 60000, 0.3);
+      if (wordRef.current !== word) return; // 等的时候换了词或关了弹窗，别把旧词的讲解贴到新词上
+      const text = String(raw || "").trim();
+      if (!text) {
+        // 空正文不缓存、也别悄悄退回按钮——得让用户知道这次没成功
+        setAi({ loading: false, text: null, error: "AI 这次没返回内容，再点一次试试" });
+        return;
+      }
       saveAiCache(key, text);
       setAi({ loading: false, text, error: null });
     } catch (e) {
-      setAi({ loading: false, text: null, error: e.message || "请求失败" });
+      if (wordRef.current !== word) return;
+      setAi({
+        loading: false,
+        text: null,
+        error: isDailyLimitError(e) ? "今天的 AI 次数用完了" : "AI 暂时没响应，稍后再试",
+      });
     }
   }, [pop, passage]);
 
