@@ -8,7 +8,7 @@
  * 两侧都锁死。
  */
 const {
-  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate, shouldResweep, isMergeOwned,
+  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate, shouldResweep, isMergeOwned, reverifyStructure,
 } = require("../scripts/realbank/failure_policy.js");
 
 const err = (message, code) => Object.assign(new Error(message), code ? { code } : {});
@@ -188,5 +188,77 @@ describe("为什么不能靠 key 查合流记录（回归：两边 key 格式零
     expect(prev.get(unit.key)).toBeUndefined();
     expect(shouldResweep(unit, prev.get(unit.key)).resweep).toBe(true);   // 光靠 shouldResweep 拦不住
     expect(isMergeOwned(unit.key.split("|")[0], { merged_asr: {} })).toBe(true);   // 要靠这条拦
+  });
+});
+
+/**
+ * 按当前结构闸重判存量（--reverify-mcq，零 token）。
+ *
+ * 起因：2026-09-14 把「选项 3~5 个都放行」收紧成「恒 4 个」后发现，新闸对**存量一条都管不到**
+ * ——`--only-failed` 读的是磁盘上存着的 status，那些 3 选项的块早写成 ok 了：
+ * 重扫不捡（already_done），落库照扔（build_bank 只收恰好 4 个）。死循环没解开。
+ */
+describe("reverifyStructure", () => {
+  const MCQ = new Set(["ap", "rdl", "lcr", "lc", "la", "lat", "listening_mcq"]);
+  // 假结构闸：选项不是恰好 4 个就报问题
+  const verify = (it) => (Array.isArray(it.options) && it.options.length === 4 ? [] : ["选项数异常"]);
+  const res = (over) => ({ key: "reading|1|31-31|35", section: "reading", type: "ap", status: "ok",
+    problems: [], items: [{ options: ["a", "b", "c", "d"] }], ...over });
+
+  test("按新判据不合格的 ok 块 → 降级成 flagged，并把新问题追加进 problems", () => {
+    const bad = res({ items: [{ options: ["a", "b", "c"] }] });
+    const out = reverifyStructure([bad], verify, MCQ);
+    expect(out.demoted).toBe(1);
+    expect(out.results[0].status).toBe("flagged");
+    expect(out.results[0].problems).toContain("选项数异常");
+  });
+
+  test("合格的 ok 块原样不动", () => {
+    const out = reverifyStructure([res()], verify, MCQ);
+    expect(out).toMatchObject({ demoted: 0, kept: 1 });
+    expect(out.results[0].status).toBe("ok");
+  });
+
+  test("只降级不升级：原本 flagged 的块即使结构闸过了也不放行", () => {
+    const wasFlagged = res({ status: "flagged", problems: ["答案不是单个字母"] });
+    const out = reverifyStructure([wasFlagged], verify, MCQ);
+    expect(out.results[0].status).toBe("flagged");
+    expect(out.results[0].problems).toEqual(["答案不是单个字母"]);
+    expect(out.demoted).toBe(0);
+  });
+
+  test("跳过合流产出（带 merged_by）—— 降级它们会让线上听力题被 build_bank 丢掉", () => {
+    const merged = res({ section: "listening", type: "lc", merged_by: "merge_first_source_asr-v1",
+      items: [{ options: ["x", "y", "z"] }] });
+    const out = reverifyStructure([merged], verify, MCQ);
+    expect(out).toMatchObject({ demoted: 0, skippedMerged: 1 });
+    expect(out.results[0].status).toBe("ok");
+  });
+
+  test("非选择题 / 没有 items 的记录一概不碰", () => {
+    const ctw = res({ type: "ctw", items: [{ passage: "x" }] });
+    const empty = res({ items: [] });
+    const out = reverifyStructure([ctw, empty], verify, MCQ);
+    expect(out).toMatchObject({ demoted: 0, kept: 0, skippedMerged: 0 });
+    expect(out.results.map((r) => r.status)).toEqual(["ok", "ok"]);
+  });
+
+  test("不改入参，返回新数组（重跑可复现）", () => {
+    const input = [res({ items: [{ options: ["a", "b", "c"] }] })];
+    const snapshot = JSON.stringify(input);
+    const out = reverifyStructure(input, verify, MCQ);
+    expect(JSON.stringify(input)).toBe(snapshot);
+    expect(out.results).not.toBe(input);
+  });
+
+  test("detail 逐条说清是哪个块、为什么降级（日志要能直接看）", () => {
+    const out = reverifyStructure([res({ items: [{ options: ["a"] }] })], verify, MCQ);
+    expect(out.detail[0]).toContain("reading/ap");
+    expect(out.detail[0]).toContain("选项数异常");
+  });
+
+  test("空输入不炸", () => {
+    expect(reverifyStructure([], verify, MCQ)).toMatchObject({ demoted: 0, kept: 0 });
+    expect(reverifyStructure(undefined, verify, MCQ).results).toEqual([]);
   });
 });

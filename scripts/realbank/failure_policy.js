@@ -125,7 +125,42 @@ function shouldResweep(unit, prev, ctwMinAnswers = 5) {
   return { resweep: true, skip: null };
 }
 
+/**
+ * 按**当前**结构闸重判既有产物（`--reverify-mcq`，零 token）。
+ *
+ * 为什么需要：`--only-failed` 读的是磁盘上存着的 status，不会拿当前判据重算。
+ * 2026-09-14 把「选项 3~5 个都放行」收紧成「恒 4 个」之后，存量里那些 3 选项的块
+ * 仍写着 status=ok —— 新闸对存量一条都管不到：重扫不捡（already_done），
+ * 落库照扔（build_bank 只收恰好 4 个）。死循环没解开。
+ *
+ * 两条安全约束：
+ *   · **只降级不升级**：ok → flagged 可以，flagged → ok 不行。原本因别的原因扣下的块
+ *     （答案不是单个字母、修复轮没还原出来…），不能因为结构闸过了就被放行。
+ *   · **跳过带 merged_by 的记录**：那是合流产出的听力/口语，降级它们会让线上听力题被
+ *     build_bank 丢掉（它只收 status=ok）。
+ *
+ * @param {Array}    results   既有产物的 results
+ * @param {Function} verify    结构闸，签名 (item) => string[]
+ * @param {Set}      mcqTypes  哪些 type 算选择题
+ * @returns {{results, demoted, kept, skippedMerged, detail}}
+ */
+function reverifyStructure(results, verify, mcqTypes) {
+  let demoted = 0, kept = 0, skippedMerged = 0;
+  const detail = [];
+  const next = (results || []).map((r) => {
+    if (!r || !mcqTypes.has(r.type) || !Array.isArray(r.items) || !r.items.length) return r;
+    if (r.merged_by) { skippedMerged += 1; return r; }
+    if (r.status !== "ok") return r;
+    const problems = r.items.flatMap((it) => verify(it));
+    if (!problems.length) { kept += 1; return r; }
+    demoted += 1;
+    detail.push(`${r.section}/${r.type} ${r.key}: ${problems.slice(0, 2).join(" / ")}`);
+    return { ...r, status: "flagged", problems: [...(r.problems || []), ...problems] };
+  });
+  return { results: next, demoted, kept, skippedMerged, detail };
+}
+
 module.exports = {
   SOFT_FAILURE_LIMIT, HARD_HTTP, DONE_STATUSES, MERGE_OWNED_SECTIONS,
-  classifySystemicFailure, escalate, shouldResweep, isMergeOwned,
+  classifySystemicFailure, escalate, shouldResweep, isMergeOwned, reverifyStructure,
 };

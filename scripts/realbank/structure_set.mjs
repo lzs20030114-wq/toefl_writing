@@ -40,7 +40,8 @@ const { writeStructured } = require("./structured_io.js");
 const { callBudget, retryBudget, parseJsonLoose, unparsableProblem, isBudgetProblem, ctwVisionCacheFile }
   = require("./model_output.js");
 // 失败分级（硬失败整卷作废 / 单块超时只记这一块）：./failure_policy.js
-const { classifySystemicFailure, escalate, shouldResweep, isMergeOwned } = require("./failure_policy.js");
+const { classifySystemicFailure, escalate, shouldResweep, isMergeOwned, reverifyStructure }
+  = require("./failure_policy.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -513,9 +514,10 @@ async function main() {
   const onlyFailed = args.includes("--only-failed");
   const merge = onlyFailed || args.includes("--merge");
   const reverifyCtw = args.includes("--reverify-ctw");
+  const reverifyMcq = args.includes("--reverify-mcq");
   if (!setname) {
     console.error("用法: node scripts/realbank/structure_set.mjs <卷名> [--dry] [--limit N] [--force]"
-      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw] [--ctw-vision-body]");
+      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw | --reverify-mcq] [--ctw-vision-body]");
     process.exit(2);
   }
   const scanPath = path.join(OUT_DIR, `${setname}.json`);
@@ -556,9 +558,9 @@ async function main() {
   const outPath = path.join(OUT_DIR, `${setname}.structured.json`);
   const prevPath = path.join(OUT_DIR, `${setname}.structured.prev.json`);
   let existing = null;
-  if (merge || reverifyCtw) {
+  if (merge || reverifyCtw || reverifyMcq) {
     if (!fs.existsSync(outPath)) {
-      console.error(`--merge / --only-failed / --reverify-ctw 需要既有产物：${outPath}`);
+      console.error(`--merge / --only-failed / --reverify-ctw / --reverify-mcq 需要既有产物：${outPath}`);
       process.exit(2);
     }
     existing = JSON.parse(fs.readFileSync(outPath, "utf8"));
@@ -582,6 +584,32 @@ async function main() {
     console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
     return;
   }
+  // 零 token 重判选择题结构闸。
+  //
+  // 为什么需要它：`--only-failed` 读的是**磁盘上存着的** status，而不是拿当前判据重算。
+  // 2026-09-14 把「选项 3~5 个都放行」收紧成「恒 4 个」之后，既有产物里那些 3 选项的块
+  // 仍然写着 status=ok —— 于是新闸对存量一条都管不到：重扫不捡它（already_done），
+  // 落库照样扔它（build_bank 只收恰好 4 个）。死循环没被解开。
+  //
+  // 这一步就是把存量按新判据重判一遍，零调用、零花费。
+  // **只降级不升级**：ok → flagged 可以，flagged → ok 不行 —— 原本因为别的原因
+  // （答案不是单个字母、修复轮没还原出来…）扣下的块，不能因为结构闸过了就被放行。
+  // 跳过带 merged_by 的记录：那是合流产出的听力/口语，降级它们会让线上听力题被 build_bank 丢掉。
+  if (reverifyMcq) {
+    const { results, demoted, kept, skippedMerged, detail } =
+      reverifyStructure(existing.results, verifyMcq, MCQ_TYPES);
+    console.log(`■ ${setname} 按当前结构闸重判选择题：`
+      + `ok → flagged ${demoted} 块；仍 ok ${kept} 块；跳过合流产出 ${skippedMerged} 块`);
+    detail.slice(0, 12).forEach((d) => console.log(`   ✗ ${d}`));
+    if (!demoted) { console.log("  （没有需要降级的块，产物未改动）"); return; }
+    if (dry) { console.log("（--dry，未写盘）"); return; }
+    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results },
+      { freshKeys: new Set(results.map((r) => r.key)) });
+    console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
+    console.log("  降级的块现在会被 --only-failed 捡起来重扫。");
+    return;
+  }
+
   if (onlyFailed) {
     const prev = new Map(existing.results.map((r) => [r.key, r]));
     const before = units.length;
