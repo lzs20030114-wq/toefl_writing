@@ -15,7 +15,10 @@
  *   source_defect      源料体检认领的缺口（source-flags.json）。补不了，除非找商家重出。
  *   held               复核清单主动扣下的（review-holds.json，非 dup_of）。设计行为，不是丢题。
  *   deduped            跨卷同篇合并时被丢掉的题（consolidation.json 的 skipped）。放宽判据可回收。
- *   section_absent     这套卷这一科在 sets.json 里**整科缺席**：一道题都没进过库。
+ *   section_lost       这一科**在管线覆盖范围内、这套卷也确实跑过**（同卷别的科有题），库里却一道都没有。
+ *                      与 pipeline_loss 同性质、同处置，只是丢得更彻底（整科归零）。
+ *   section_never_run  这一科压根没被跑过（不在管线覆盖范围，或这套卷没进过管线）。
+ *                      要不要补是**铺量决策**，不是修 bug。
  *   pipeline_loss      以上都不是：源里有、管线也跑过这一科，题却没进库。**这才是要修的丢题。**
  *
  * 为什么按额度扣而不是按标签判：早期写法是「这卷这科只要挂过任何 source flag，缺的全算源料缺陷」，
@@ -34,7 +37,8 @@ const CAUSES = Object.freeze([
   "source_defect",
   "held",
   "deduped",
-  "section_absent",
+  "section_never_run",
+  "section_lost",
   "pipeline_loss",
 ]);
 
@@ -42,9 +46,23 @@ const CAUSE_LABEL = Object.freeze({
   source_defect: "源料缺陷",
   held: "复核扣下",
   deduped: "跨卷合并丢弃",
-  section_absent: "整科缺席",
+  section_never_run: "整科没跑过",
+  section_lost: "整科跑了归零",
   pipeline_loss: "管线丢题",
 });
+
+/**
+ * 结构化管线常规覆盖的科目 —— `run_pipeline.mjs` 的 `SECTIONS` 锁死在这两科
+ * （一期定的「听力/口语题面依赖音频、盲审不达标」，听力/口语靠单独脚本合流）。
+ *
+ * 为什么这条要写进归因：整科缺席有两种完全不同的病，处置也完全不同。
+ *   · 听力/口语整科没题 = 管线本来就没跑它 → 要不要补是铺量决策（还要掏 TTS 的钱）；
+ *   · 阅读/写作整科没题，而同卷别的科**有**题 = 这套卷确实进过管线、这一科被跑过，却颗粒无收
+ *     → 和管线丢题同一种病，重扫就能捡。
+ * 实测（2026-09-14）：24 套写作整科缺席的卷，阅读全都有题 —— 全是后一种。
+ * 若将来放开 SECTIONS，改这里即可，账本会自动跟着重新归类。
+ */
+const PIPELINE_SECTIONS = Object.freeze(["reading", "writing"]);
 
 /**
  * 能解释「这一科少了题」的源料体检 code。
@@ -211,6 +229,8 @@ function rowsForSet(set, ctx) {
   const rows = [];
   const sections = set?.sections || {};
   const flagEntry = flagIndex.get(set?.set) || null;
+  // 这套卷进过管线吗 —— 任一科有题即是。用来把「跑了归零」和「压根没跑」分开。
+  const anySectionHasItems = Object.values(sections).some((x) => (x?.got || 0) > 0);
   // 额度是「按卷按科」的，逐行扣：Map<type|slug, 剩余>
   const holdLeft = new Map();
   const dedupLeft = new Map();
@@ -227,11 +247,14 @@ function rowsForSet(set, ctx) {
     const type = slot.type;
     const k = key(type, set.slug);
     const explainer = findExplainer(flagEntry, section, type);
+    // 整科缺席分两种：管线覆盖且这卷跑过 → 跑了归零（可扫）；否则 → 压根没跑（铺量决策）
+    const absentCause = PIPELINE_SECTIONS.includes(section) && anySectionHasItems
+      ? "section_lost" : "section_never_run";
     const { charged, cause } = chargeMissing(missing, [
       ["source_defect", () => (explainer ? explainer.remaining : 0)],
       ["held", () => takeFrom(holdLeft, holdIndex, k)],
       ["deduped", () => takeFrom(dedupLeft, dedupIndex, k)],
-      ["section_absent", () => (absent ? missing : 0)],
+      [absentCause, () => (absent ? missing : 0)],
     ]);
     if (charged.source_defect && explainer) explainer.remaining -= charged.source_defect;
     if (charged.held) spend(holdLeft, k, charged.held);
@@ -353,8 +376,9 @@ function buildLedger({ sets, holds = [], clusters = [], sourceFlags = {}, defaul
       overfilled,
       completeness: need ? Number((got / need).toFixed(4)) : 1,
       causes,
-      // 「值得修的缺口」= 管线丢的 + 整科缺席。源缺/扣下/合并各有各的处置，不混进来催人。
-      actionable: (causes.pipeline_loss || 0) + (causes.section_absent || 0),
+      // 「值得修的缺口」= 重扫管线就能捡回来的那些。源缺/扣下/合并各有各的处置；
+      // 「整科没跑过」是铺量决策（还要掏钱），也不混进来催人。
+      actionable: (causes.pipeline_loss || 0) + (causes.section_lost || 0),
     },
     byType,
     bySection,
@@ -364,12 +388,13 @@ function buildLedger({ sets, holds = [], clusters = [], sourceFlags = {}, defaul
 
 /**
  * 把行按「同一套卷同一科」聚成可执行的补题任务，按缺口从大到小排。
- * 只聚 actionable 的（pipeline_loss / section_absent）—— 其余不是重跑管线能解决的。
+ * 只聚重扫管线就能捡的（pipeline_loss / section_lost）——
+ * 「整科没跑过」要先拍板铺不铺，不算可执行任务。
  */
 function actionableTasks(rows, { limit = 0 } = {}) {
   const m = new Map();
   for (const r of rows) {
-    const actionable = (r.charged.pipeline_loss || 0) + (r.charged.section_absent || 0);
+    const actionable = (r.charged.pipeline_loss || 0) + (r.charged.section_lost || 0);
     if (actionable <= 0) continue;
     const k = `${r.set}|${r.section}`;
     const t = m.get(k) || {
@@ -379,8 +404,8 @@ function actionableTasks(rows, { limit = 0 } = {}) {
     t.missing += actionable;
     t.types[r.type] = (t.types[r.type] || 0) + actionable;
     t.slots.push(`M${r.module}/${r.slotKey}(-${actionable})`);
-    // 同一科混着两种成因时，整科缺席优先（处置动作完全不同：一个是整科重跑，一个是扫 flagged 块）
-    if (r.charged.section_absent) t.cause = "section_absent";
+    // 同一科混着两种成因时，整科归零优先（处置不同：一个是整科重跑，一个是扫 flagged 块）
+    if (r.charged.section_lost) t.cause = "section_lost";
     m.set(k, t);
   }
   const list = [...m.values()].sort((a, b) => b.missing - a.missing || a.set.localeCompare(b.set));
@@ -390,6 +415,7 @@ function actionableTasks(rows, { limit = 0 } = {}) {
 module.exports = {
   CAUSES,
   CAUSE_LABEL,
+  PIPELINE_SECTIONS,
   SOURCE_DEFECT_CODES,
   PROVENANCE_CODES,
   QUESTIONS_PER_UNIT,

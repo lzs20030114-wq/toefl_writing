@@ -112,8 +112,9 @@ function main() {
   // 两种缺口的处置完全不同，别加总成一个数字催人：
   //   管线丢题 = 源里有、这一科也跑过，重扫 flagged 块就能回收；
   //   整科缺席 = 这一科一道题都没进过库，先查源料在不在（无音频的卷是源缺，补不了）。
-  console.log(`  管线丢题 ${s.causes.pipeline_loss} 题（重扫 flagged 块可回收）`);
-  console.log(`  整科缺席 ${s.causes.section_absent} 题（先查源料在不在：有源就整科重跑，无源要找商家补料）\n`);
+  console.log(`  管线丢题   ${s.causes.pipeline_loss} 题（重扫 flagged 块可回收）`);
+  console.log(`  整科跑了归零 ${s.causes.section_lost} 题（管线覆盖这科、这卷也跑过，却颗粒无收 —— 同上，重扫）`);
+  console.log(`  整科没跑过 ${s.causes.section_never_run} 题（管线本来就没跑它；补不补是铺量决策，听力还要掏 TTS 的钱）\n`);
 
   console.log("按题型：");
   console.log(`  ${pad("题型", 12)}${pad("got/need", 12, true)}${pad("完整度", 9, true)}${pad("缺", 6, true)}   `
@@ -135,7 +136,7 @@ function main() {
   // 两张表分开：整科缺席的卷长得一模一样（每套听力都缺 47），混在一起会把
   // 「立刻重跑就能回收」的那些刷下去。
   const lossTasks = tasks.filter((t) => t.cause === "pipeline_loss");
-  const absentTasks = tasks.filter((t) => t.cause === "section_absent");
+  const absentTasks = tasks.filter((t) => t.cause === "section_lost");
 
   console.log(`\n① 立刻能回收的（${CAUSE_LABEL.pipeline_loss}，共 ${lossTasks.length} 套·科；`
     + "跑 structure_set --only-failed 扫这一科的 flagged 块)：");
@@ -145,7 +146,7 @@ function main() {
   }
   if (lossTasks.length > top) console.log(`  …另有 ${lossTasks.length - top} 套·科，见账本 tasks[]`);
 
-  console.log(`\n② ${CAUSE_LABEL.section_absent}（一道题都没进过库；先查源料在不在，有源才谈重跑）：`);
+  console.log(`\n② ${CAUSE_LABEL.section_lost}（跑过却颗粒无收 —— 整科重扫，不是补料问题）：`);
   const absentBySection = {};
   for (const t of absentTasks) {
     absentBySection[t.section] ||= { sets: 0, missing: 0 };
@@ -154,6 +155,21 @@ function main() {
   }
   for (const [section, v] of Object.entries(absentBySection).sort((a, b) => b[1].missing - a[1].missing)) {
     console.log(`  ${pad(section, 12)}${pad(`${v.sets} 套`, 8, true)}${pad(`缺 ${v.missing} 题`, 12, true)}`);
+  }
+
+  // ③ 铺量决策那一桶：不进 tasks，单独报规模
+  const neverRun = {};
+  for (const r of rows) {
+    if (!r.charged.section_never_run) continue;
+    neverRun[r.section] ||= { sets: new Set(), missing: 0 };
+    neverRun[r.section].sets.add(r.set);
+    neverRun[r.section].missing += r.charged.section_never_run;
+  }
+  if (Object.keys(neverRun).length) {
+    console.log(`\n③ ${CAUSE_LABEL.section_never_run}（管线没跑过；补不补要先拍板，听力/口语还要掏配音的钱）：`);
+    for (const [section, v] of Object.entries(neverRun).sort((a, b) => b[1].missing - a[1].missing)) {
+      console.log(`  ${pad(section, 12)}${pad(`${v.sets.size} 套`, 8, true)}${pad(`缺 ${v.missing} 题`, 12, true)}`);
+    }
   }
 
   if (dry) { console.log("\n--dry-run：未写文件"); return; }

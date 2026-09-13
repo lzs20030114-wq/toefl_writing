@@ -210,10 +210,34 @@ describe("rowsForSet", () => {
     const rows = rowsForSet(fixtureSet(), ctx);
     const listening = rows.filter((r) => r.section === "listening");
     expect(listening.map((r) => r.type).sort()).toEqual(["lat", "lcr"]);
-    expect(listening.every((r) => r.cause === "section_absent" && r.got === 0 && r.status === "absent")).toBe(true);
+    // 听力不在管线覆盖范围 → 压根没跑过，不是丢的
+    expect(listening.every((r) => r.cause === "section_never_run" && r.got === 0 && r.status === "absent")).toBe(true);
     expect(listening.reduce((a, r) => a + r.missing, 0)).toBe(20);
     // 已经在 sets.json 里的科目不会被默认槽位重复补一遍
     expect(rows.filter((r) => r.section === "reading" && r.type === "ctw")).toHaveLength(0);
+  });
+
+  test("整科缺席分两种：管线覆盖的科目 + 这卷确实跑过 = 跑了归零（可扫），不是「没跑过」", () => {
+    // fixtureSet 的阅读有题 → 这卷进过管线；写作在管线覆盖内却整科缺席 = 跑了颗粒无收。
+    // 实测就是这个形状：24 套写作整科缺席的卷，阅读全都有题。
+    const ctx = {
+      ...emptyCtx(),
+      defaultSlots: {
+        writing: [{ key: "bs_1", type: "bs", q: 10, module: "1", form: "A" }],
+        speaking: [{ key: "repeat_1", type: "repeat", q: 7, module: "1", form: "A" }],
+      },
+    };
+    const rows = rowsForSet(fixtureSet(), ctx);
+    expect(rows.find((r) => r.section === "writing").cause).toBe("section_lost");
+    expect(rows.find((r) => r.section === "speaking").cause).toBe("section_never_run");
+  });
+
+  test("这卷一科都没进过库时，阅读/写作也算「没跑过」——没有证据说它被跑过", () => {
+    const set = fixtureSet();
+    set.sections.reading.got = 0;
+    set.sections.reading.modules[1].slots.forEach((sl) => { sl.got = 0; });
+    const ctx = { ...emptyCtx(), defaultSlots: { writing: [{ key: "bs_1", type: "bs", q: 10, module: "1", form: "A" }] } };
+    expect(rowsForSet(set, ctx).find((r) => r.section === "writing").cause).toBe("section_never_run");
   });
 });
 
@@ -274,12 +298,14 @@ describe("actionableTasks", () => {
       { set: "A", slug: "a", date: "1", section: "reading", module: "1", slotKey: "ctw_1", type: "ctw", missing: 10, charged: { pipeline_loss: 10 } },
       { set: "A", slug: "a", date: "1", section: "reading", module: "1", slotKey: "ap_31", type: "ap", missing: 2, charged: { pipeline_loss: 2 } },
       { set: "B", slug: "b", date: "2", section: "writing", module: "1", slotKey: "bs_1", type: "bs", missing: 9, charged: { source_defect: 9 } },
-      { set: "C", slug: "c", date: "3", section: "listening", module: "1", slotKey: "lcr_1", type: "lcr", missing: 12, charged: { section_absent: 12 } },
+      { set: "C", slug: "c", date: "3", section: "writing", module: "1", slotKey: "bs_1", type: "bs", missing: 12, charged: { section_lost: 12 } },
+      { set: "D", slug: "d", date: "4", section: "listening", module: "1", slotKey: "lcr_1", type: "lcr", missing: 15, charged: { section_never_run: 15 } },
     ];
     const tasks = actionableTasks(rows);
-    expect(tasks.map((t) => `${t.set}/${t.section}`)).toEqual(["A/reading", "C/listening"]);
+    // 源缺不进清单；「整科没跑过」是铺量决策，也不进
+    expect(tasks.map((t) => `${t.set}/${t.section}`)).toEqual(["A/reading", "C/writing"]);
     expect(tasks[0]).toMatchObject({ missing: 12, cause: "pipeline_loss", types: { ctw: 10, ap: 2 } });
-    expect(tasks[1].cause).toBe("section_absent");
+    expect(tasks[1].cause).toBe("section_lost");
   });
 
   test("一行里混着两种成因时，只把可执行的那部分计入任务量", () => {
