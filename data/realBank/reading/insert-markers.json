@@ -4,6 +4,26 @@
   "_workflow": "1) python scripts/realbank/restore_insert_markers.py --list  → .codex-tmp/realbank/insert-markers.todo.json；2) --fill --dry-run 看要调几次 Qwen；3) --fill 真跑 → insert-markers.candidates.json；4) node scripts/realbank/insert_markers_apply.mjs（先 --dry-run）把过校验的合并进本表；5) node scripts/realbank/build_bank.mjs 重新落库，日志里看『找回 ■ 标记』的题数。build_bank 只读本表，永远不写。",
   "entries": [
     {
+      "set": "2.1新托福真题B卷",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_21b_2_13",
+      "marked": "The Role of AI in Diagnosing Diseases\n\nArtificial Intelligence (AI) is transforming health informatics, particularly in diagnosing diseases. AI algorithms can analyze medical images, detecting abnormalities in X-rays, MRIs, and CT scans with accuracy comparable to trained radiologists. By processing vast amounts of data quickly, AI helps radiologists identify conditions that might be missed during routine examinations.\n\n■ AI predicts disease outbreaks by analyzing data from social media, search engines, and health records. ■ AI systems track the spread of infectious diseases by identifying patterns and trends human analysts might overlook. ■ This predictive capability allows for faster responses and better allocation of medical resources. ■\n\nMoreover, AI personalizes treatment plans. By considering an individual’s genetic makeup, lifestyle, and medical history, AI can recommend tailored treatments that improve patient outcomes. This approach is beneficial in managing chronic diseases like diabetes and hypertension.\n\nDespite these advancements, integrating AI into healthcare presents challenges. Concerns about data privacy, the need for large datasets to train algorithms, and the potential for algorithmic bias need to be addressed. Algorithmic bias happens when AI systems learn from data that doesn’t fully represent all groups of people, which can lead to unfair or inaccurate results for some patients. Ensuring the ethical use of AI, particularly in maintaining patient confidentiality and mitigating bias, is crucial.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2026新托福真题10.pdf p10 #3 / qwen3-vl-plus"
+    },
+    {
+      "set": "2.25新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_225_1_31",
+      "marked": "Parallel algorithms, a computing method common in modern computers, solve problems faster by dividing a task into smaller parts that run at the same time. Instead of checking every item in a huge database one by one as in a sequential algorithm, a parallel algorithm might split the job across multiple processor cores, each checking a portion of the data simultaneously.\n\nIn healthcare, parallel algorithms play a crucial role in analyzing large datasets quickly. When researchers simulate how a virus spreads through a population, they need to process millions of data points—like infection rates and demographics. Using parallel processing, these simulations can run in minutes instead of hours, helping public health officials make faster decisions during outbreaks. However, if too much data is sent to the processors at once without proper management, the system slows down.\n\nOne of the strengths of parallel algorithms is their versatility. ■ Developers can tailor them to work efficiently on different types of hardware, such as graphics processing units (GPUs), which are especially good at handling many tasks at once. ■ This is a big reason why deep learning—used in things like facial recognition—has advanced so quickly. ■ Training a deep learning model would be nearly impossible without parallel computing. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2.25  阅读.pdf p9 #2 / qwen3-vl-plus"
+    },
+    {
       "set": "2.2新托福真题",
       "module": 1,
       "q_number": 30,
@@ -14,6 +34,96 @@
       "note": "源截图 2026新托福真题08.pdf p7 #1 / qwen3-vl-plus"
     },
     {
+      "set": "2.8新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_28_1_26",
+      "marked": "Smart Textiles\n\nSmart textiles are revolutionizing the fashion industry by integrating advanced digital technology into fabrics. These textiles can respond to environmental changes, monitor physical activity, and even generate energy. One example is phase-change materials that adapt to temperature fluctuations, providing warmth when it’s cold and cooling when it’s hot. Another innovation is textiles embedded with sensors that track health metrics, such as heart rate and body temperature. These developments offer promising applications for athletes and medical patients.\n\nResearchers are also exploring textiles that harvest energy from movement. These fabrics utilize piezoelectric materials that generate electricity when subjected to mechanical stress. ■ Envision clothing that can change your smartphone simply through your daily activities. ■ Moreover, smart textiles can be designed to change color or pattern based on electrical stimuli, opening up new possibilities for both fashion and interior design. ■\n\nYet, integrating technology into textiles presents challenges. ■ Durability, washability, and cost are significant concerns. Since their initial cost will be higher than traditional fabrics, ensuring that smart textiles can withstand regular use without degrading is essential for their widespread adoption. Protecting privacy is another concern of many; smart textiles could collect vast amounts of user data that must be properly secured.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2.8 套一 阅读.pdf p9 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.10新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_rp0822_2002_200201",
+      "marked": "Wind turbines are large devices with long blades that capture wind energy and convert it into electricity. Floating wind turbines are a special type of wind turbines because they are not fixed to the seabed but are anchored using advanced mooring systems, allowing placement in deeper waters where winds are more consistent. In this context, anchoring refers to securing the turbine in place using cables or chains connected to weighted structures or anchors on the ocean floor, ensuring stability despite the lack of a fixed foundation. The deeper placement means the wind turbines can harness untapped wind resources that traditional turbines cannot access.\n\nEngineering floating turbines involves unique challenges. They rely on buoyancy principles rather than on solid ground, making their design and maintenance complex. Despite the increased costs, their ability to reduce visual and noise pollution makes them an attractive option for distant offshore locations. However, their long-term viability is threatened by harsh marine conditions that can accelerate wear and tear.\n\n■ Research continues to explore solutions for these problems. ■ Some experts are investigating materials and designs to enhance durability. ■ As efforts to capitalize on deeper offshore wind resources persist, floating turbines represent both a promising opportunity and a complex engineering puzzle.■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.10 阅读.pdf p8 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.11新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rp0704_2005_200511",
+      "marked": "Ecological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development. ■ It posits that individuals are shaped by interactions among multiple overlapping environmental systems. ■ This theory reshaped developmental research, offering a multi-faceted lens that surpasses earlier, linear models. ■ By considering the dynamic interplay between a person and their environment, it highlights the multifactorial nature of psychological growth. ■\n\nThe theory delineates several environmental layers, beginning with the microsystem, which refers to the institutions and groups that most directly impact the child’s development, such as family and school. The mesosystem encompasses the relationships among the microsystems, such as the impact of a teacher’s communication with parents on a child’s education. Beyond these, the exosystem consists of indirect influences like a parent’s workplace stress subtly affecting the home environment. The macrosystem, encompassing broader cultural and societal contexts, frames these interactions with underlying norms and policies.\n\nWhile Bronfenbrenner’s model offers an intricate framework, it is not without critique. Some argue that the model underestimates the role of technology, which has created virtual microsystems that transcend geographical limits. Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.11 阅读.pdf p13 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.14新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_314_2_11",
+      "marked": "Advances in traumatology have highlighted the potential of electromagnetic fields (EMFs) in promoting bone healing. EMFs, invisible areas of energy produced by electrically charged objects, are recognized for their therapeutic benefits. Researchers have found that specific EMF frequencies can stimulate cellular activity, enhancing bone repair. Unlike traditional treatments such as metal implants and bone grafts, EMF therapy is non-invasive and produces few side effects. In clinical studies, patients with non-healing fractures exposed to EMFs showed significant improvement. One study showed that EMFs reduced recovery time by accelerating healing by up to 50 percent, a significant difference for patients with conditions that impede natural healing.\n\n■ Multiple mechanisms driven by EMFs have been identified as contributing to bone healing, yet the complete picture is not fully understood. ■ Some scientists believe that EMFs enhance the production of substances known as growth factors, which include essential proteins for cell growth and repair. ■ Others note that EMFs improve blood circulation to the damaged area, facilitating nutrient delivery and waste removal. Researchers are uncertain of how the mechanisms interact, the optimal parameters (frequency, intensity, duration) for therapies, and the relation between the amount of a treatment and the magnitude of the effect it produces. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2026新托福真题.pdf p14 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.15新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_rf0713_1_131",
+      "marked": "Social role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on societal expectations. Society is structured by roles, each with specific behaviors and norms. ■ A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person who is both a parent and an employee might struggle to balance caring for their children and meeting work obligations. This conflict can lead to stress and decreased performance in one or both roles. ■ Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels overwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. ■ As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with increasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.15  阅读.pdf p10 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.15新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_315_2_11",
+      "marked": "Expert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering.\n\nAn early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN’s system needed constant updates, requiring extensive input from medical professionals.\n\n■ Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. ■ Advancements in machine learning and natural language processing could address these issues. ■ By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.15  阅读.pdf p16 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.16新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_324_1_31",
+      "marked": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity. ■\n\nUrban green spaces also contribute to environmental sustainability. ■ They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species. ■\n\nRecent initiatives have focused on creating more green spaces in underserved areas. ■ Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.16  阅读.pdf p7 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.16新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_316_2_11",
+      "marked": "across a landscape to access resources, find mates, disperse  \nseeds, or migrate. This concept is crucial in landscape ecology, as  \nit significantly impacts the survival and movement of wildlife.  \nFragmentation of habitats due to human activities, such as  \nurbanization and agriculture, can reduce connectivity, leading to  \nisolated populations and, in turn, decreased biodiversity.  \n\nOne approach to enhancing landscape connectivity is through  \nthe creation of wildlife corridors. These corridors are strips of  \nnatural habitat that connect isolated patches, allowing animals to  \nmove more freely. For example, bridges and underpasses  \ndesigned specifically for wildlife can mitigate the effects of roads  \nand highways.  \n\nRecent studies have shown that landscape connectivity benefits  \nwildlife and has positive effects on ecosystem services. ■  \nImproved connectivity can enhance pollination, seed dispersal,  \nand pest control, which are vital for healthy ecosystems. ■  \nAdditionally, connecting habitats can help species adapt to  \nclimate change by providing migration pathways.  \n\nHowever, creating wildlife corridors is not without challenges. It  \nrequires careful planning and consideration of various factors,  \nsuch as the specific needs of target species, the existing  \nlandscape features, and potential human-wildlife conflicts.■  \nDespite these challenges, efforts to improve landscape  \nconnectivity are crucial for the conservation of biodiversity and  \nthe sustainability of ecosystems. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.16  阅读.pdf p14 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.17新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_413_2_11",
+      "marked": "Control engineering is a branch of engineering focused on designing systems that regulate themselves to achieve desired behaviors, often through feedback mechanisms. These systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature is a core strength, feedback loops can also introduce unexpected complications.\n\nConsider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize.\n\n■ In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave unpredictably under certain conditions. ■ For example, small timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. ■ This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. ■ Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and precision, especially in high-stakes fields like aerospace and robotics.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.17  阅读.pdf p13 #2 / qwen3-vl-plus"
+    },
+    {
       "set": "3.21新托福真题",
       "module": 2,
       "q_number": 15,
@@ -22,6 +132,16 @@
       "by": "qwen3-vl",
       "verified": true,
       "note": "源截图 3.21 阅读.pdf p13 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.25新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_325_1_31",
+      "marked": "Urban resilience refers to the ability of cities to absorb, recover from, and prepare for shocks such as natural disasters, economic crises, and social upheavals. This concept is becoming increasingly important as more people move into urban areas and face the challenges that come with densely populated areas. Cities are implementing various strategies to enhance resilience. For instance, green infrastructure, like parks and green roofs, can help manage stormwater and reduce flooding. Renewable energy sources, such as solar and wind, reduce dependence on non-renewable resources and improve energy security.\n\nCommunity engagement is another critical component of urban resilience. Local governments are involving residents in planning and decision-making processes to ensure that the needs of the community are met. This participatory approach fosters a sense of ownership and accountability among citizens, improving the effectiveness of resilience strategies. Technology also plays a role, with smart city initiatives using data and sensors to monitor infrastructure and predict potential problems. ■\n\nNonetheless, building urban resilience is not without obstacles. ■ Budget constraints and political disagreements can hinder the implementation of necessary measures. ■ Additionally, the integration of new technologies requires substantial investment and training. ■ Despite these obstacles, the pursuit of urban resilience is essential for the sustainable development of cities worldwide.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.25 阅读.pdf p15 #1 / qwen3-vl-plus"
     },
     {
       "set": "3.27新托福真题",
@@ -44,6 +164,66 @@
       "note": "源截图 3.2 套一 阅读.pdf p11 #1 / qwen3-vl-plus"
     },
     {
+      "set": "3.2新托福真题A卷",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_325_1_26",
+      "marked": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements.\n\nOne example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees.\n\n■ The high cost of these prosthetics makes them inaccessible to many. ■ Additionally, the technology requires regular maintenance and updates, which can be a barrier. ■ Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendly. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.2 套一 阅读.pdf p15 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.2新托福真题B卷",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rp0704_2001_200131",
+      "marked": "The concept of a growth mindset has gained attention in educational psychology. Coined by Carol Dweck, the phrase “growth mindset” refers to the belief that abilities and intelligence can be developed through dedication and hard work. This contrasts with a fixed mindset, where individuals believe their abilities are static.\n\nResearch suggests that students with a growth mindset are more likely to embrace challenges, persevere through difficulties, and see effort as a path to mastery. For example, a student who struggles with math but believes they can improve with practice is displaying a growth mindset. This belief encourages resilience and a positive attitude towards learning.\n\nEducators play a crucial role in fostering a growth mindset in their students. Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset. Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy.\n\n■ However, implementing growth mindset strategies is not without challenges. ■ Some students may find it difficult to change how they view their abilities, especially if they have been accustomed to a fixed mindset for a long time. ■ Additionally, educators themselves must genuinely believe in the growth mindset principles to effectively convey them to their students.\n■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.2 套二 阅读.pdf p12 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.30新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_rp0822_2001_200101",
+      "marked": "Data visualization is transforming how we interpret complex datasets, moving beyond traditional charts, such as static charts and graphs, to dynamic graphical representations, such as heat maps, time-lapse animations, and network graphs. This shift allows for the discovery of patterns and anomalies otherwise hidden in raw data. For example, when studying climate change impacts, a time-lapse heat map might reveal unexpected temperature shifts over decades that spreadsheets alone could not capture.\n\nA significant development in this field is the use of interactive dashboards. These tools not only display data but also allow users to manipulate variables to explore different scenarios. In the business sector, decision-makers use dashboards to simulate market conditions, adjusting factors like demand and supply to forecast outcomes. However, the effectiveness of these dashboards often hinges on the user’s ability to interpret complex visual cues, which can be overwhelming.\n\nIn the realm of public health, data visualization has proven invaluable in tracking disease spread. ■ The combination of geographical maps and timelines helps analysts predict outbreak hot spots. ■ Nonetheless, this predictive power depends heavily on the quality of data inputs. ■ Still, data visualization tools help public health officials to act before a situation becomes unmanageable. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.30 阅读.pdf p6 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.30新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_330_2_11",
+      "marked": "The fall of the Roman Empire reshaped the geopolitical landscape of Europe and the Mediterranean in profound ways. One widely accepted hypothesis is that the collapse of Roman administrative and military structures led to the fragmentation of centralized authority. Without Rome’s unifying legal framework, power devolved to local warlords and tribal leaders, paving the way for feudalism and a mosaic of competing kingdoms. This decentralization fostered chronic instability, as seen in the frequent conflicts among the Franks, Visigoths, and Lombards.\n\nHowever, some scholars argue that this fragmentation was not purely detrimental. The absence of a dominant empire may have encouraged regional innovation and adaptability. For instance, the Carolingian Renaissance under Charlemagne suggests that localized rule could still produce cultural and intellectual flourishing. The emergence of monastic communities during this period also played a crucial role in preserving classical knowledge and fostering educational continuity across fragmented territories. ■\n\nAnother compelling example is the Byzantine Empire, which retained Roman governance in the East and acted as a stabilizing force for centuries. ■ Its survival challenges the notion that imperial collapse inevitably leads to disorder. ■ While the fall of Rome dismantled a centralized system, it also opened space for diverse political experiments—some chaotic, and others surprisingly resilient. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.30 阅读.pdf p12 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.4新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_510v2_1_31",
+      "marked": "Sociocybernetics is a field that provides tools to analyze complex social systems, merging sociology and cybernetics. ■ By applying principles of feedback, control, and communication from cybernetics, sociologists can understand how societies function. ■ A key concept in sociocybernetics is self-organization. ■ This is the process in which social systems develop ordered patterns without centralized control. ■\n\nFeedback loops are crucial in sociocybernetics. Positive feedback amplifies changes, leading to rapid social transformations. Negative feedback stabilizes systems, maintaining equilibrium. In economic systems, positive feedback can result in booming markets, while negative feedback can prevent financial crises. Recognizing these mechanisms helps sociologists predict and influence social dynamics.\n\nCommunication is another critical aspect. Effective communication channels within social systems impact their stability and adaptability. Misinformation or communication breakdowns can disrupt social cohesion and lead to chaos. Sociocybernetic models highlight the importance of transparent information flow in maintaining healthy social systems. These models also explore how digital technologies influence communication patterns.\n\nSociocybernetics is important to urban planning. Cities are complex systems with numerous interacting components. Using",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.4 阅读.pdf p6 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "3.8新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_38_2_11",
+      "marked": "Biochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory’s ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers.\n\nWhile the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory’s reliability, particularly in drug development, where predicting compounds’ effects on metabolic pathways is crucial yet fraught with uncertainty.\n\nFurthermore, biochemical systems theory has sparked debates over its ethical implications. ■ By scrutinizing biological systems, researchers identify processes ripe for intervention. ■ Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. ■ As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 3.8  阅读.pdf p15 #1 / qwen3-vl-plus"
+    },
+    {
       "set": "4.13新托福真题",
       "module": 1,
       "q_number": 30,
@@ -52,6 +232,26 @@
       "by": "qwen3-vl",
       "verified": true,
       "note": "源截图 4.13  阅读.pdf p6 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.13新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_56_1_32",
+      "marked": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography—techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum-resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. ■ Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. ■ Despite the challenges, progress is accelerating. ■ Scientists are developing error-correcting codes and stable qubit designs to address these issues. ■ Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.13  阅读.pdf p8 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.13新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_413_2_11",
+      "marked": "Control engineering is a branch of engineering focused on designing systems that regulate themselves to achieve desired behaviors, often through feedback mechanisms. These systems monitor their output and adjust their input accordingly, forming closed-loop mechanisms that maintain stability and performance. While this self-regulating nature is a core strength, feedback loops can also introduce unexpected complications.\n\nConsider how feedback controls temperature in a home heating system: A thermostat compares the current temperature to a set point and modifies the heating output based on the difference. However, time delays in this loop can cause overcorrections, resulting in temperature fluctuations. If the feedback response is not precisely calibrated, the system may oscillate continuously, failing to stabilize.\n\n■ In more complex systems, such as automated flight control or robotic motion, feedback mechanisms can behave unpredictably under certain conditions. ■ For example, small timing mismatches or overly sensitive sensors may cause a drone to overreact to minor disturbances, leading to erratic flight patterns. ■ This phenomenon, known as chaotic behavior, reveals that feedback is not inherently stabilizing. ■ Instead, it demands careful tuning and predictive modeling. As control engineering advances, understanding and mitigating this unpredictability will be essential for ensuring reliability and precision, especially in high-stakes fields like aerospace and robotics.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.13  阅读.pdf p12 #1 / qwen3-vl-plus"
     },
     {
       "set": "4.1新托福真题",
@@ -64,6 +264,56 @@
       "note": "源截图 4.1 阅读.pdf p13 #1 / qwen3-vl-plus"
     },
     {
+      "set": "4.27新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rf0716_2_211",
+      "marked": "Stretching has long been championed as integral to physical fitness, widely believed to enhance flexibility and reduce injury risk. However, research supports a more nuanced picture, with the distinction between dynamic and static stretching being particularly critical.\n\nDynamic stretching, involving controlled, fluid movements through a range of motion, apparently improves athletic performance by priming muscles for activity. In contrast, static stretching, the holding of a position for an extended period, seems to hinder performance of subsequent exercise. Related studies show that static stretching can temporarily reduce muscle strength, likely due to reduced muscle activation through the nervous system and a decrease in muscle stiffness, both of which can impair the ability to generate force. For example, athletes engaging in static pre-competition stretches often exhibit diminished sprint speed and vertical jump height.\n\n■ There is, however, a key qualification to this contrast: While static stretching may be detrimental before exertion, it remains valuable post-exercise, aiding in recovery and flexibility maintenance. ■ Meanwhile, dynamic stretching not only prepares the body physically but may also enhance coordination and neuromuscular efficiency. ■ The evolving understanding of these techniques challenges the one-size-fits-all approach to stretching, suggesting that timing, context, and type are essential variables in optimizing physical readiness and long-term fitness outcomes. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.27 阅读.pdf p12 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.28新托福真题",
+      "module": 1,
+      "q_number": 30,
+      "bank_id": "real_ap_rf0713_1_131",
+      "marked": "Social role theory is a significant framework in theoretical sociology, explaining how individuals adopt roles based on societal expectations. Society is structured by roles, each with specific behaviors and norms. ■ A key aspect of social role theory is role conflict, which occurs when the expectations of one role clash with those of another. For instance, a person who is both a parent and an employee might struggle to balance caring for their children and meeting work obligations. This conflict can lead to stress and decreased performance in one or both roles. ■ Another important concept is role strain, which is stress within a single role due to competing demands or insufficient resources. An example is a teacher who feels overwhelmed by the need to manage classroom behavior while also keeping lessons engaging. Social role theory also addresses how roles change over time. ■ As society evolves, the expectations attached to roles can shift. For example, the role of women in the workforce has changed dramatically, with increasing acceptance of women in leadership. Understanding these dynamics is crucial for analyzing how social structures impact individual behavior and societal change. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.28 阅读.pdf p6 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.28新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_rf0716_2_211",
+      "marked": "Stretching has long been championed as integral to physical fitness, widely believed to enhance flexibility and reduce injury risk. However, research supports a more nuanced picture, with the distinction between dynamic and static stretching being particularly critical.\n\nDynamic stretching, involving controlled, fluid movements through a range of motion, apparently improves athletic performance by priming muscles for activity. In contrast, static stretching, the holding of a position for an extended period, seems to hinder performance of subsequent exercise. Related studies show that static stretching can temporarily reduce muscle strength, likely due to reduced muscle activation through the nervous system and a decrease in muscle stiffness, both of which can impair the ability to generate force. For example, athletes engaging in static pre-competition stretches often exhibit diminished sprint speed and vertical jump height.\n\n■ There is, however, a key qualification to this contrast: While static stretching may be detrimental before exertion, it remains valuable post-exercise, aiding in recovery and flexibility maintenance. ■ Meanwhile, dynamic stretching not only prepares the body physically but may also enhance coordination and neuromuscular efficiency. ■ The evolving understanding of these techniques challenges the one-size-fits-all approach to stretching, suggesting that timing, context, and type are essential variables in optimizing physical readiness and long-term fitness outcomes. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.28 阅读.pdf p12 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.5新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_315_2_11",
+      "marked": "Expert Systems\n\nExpert systems are a branch of artificial intelligence designed to mimic the decision-making abilities of human experts. These systems use a knowledge base of specialized information and rules to solve specific problems. Their goal is to replicate the expertise and reasoning of professionals in fields like medicine and engineering.\n\nAn early expert system is MYCIN, developed in the 1970s to diagnose bacterial infections and recommend antibiotics. MYCIN used rules provided by medical experts to analyze patient data, infer diagnoses, and suggest treatments. MYCIN often performed as well as human specialists; however, MYCIN’s system needed constant updates, requiring extensive input from medical professionals.\n\n■ Despite their potential, expert systems have limitations; since they rely on static knowledge databases, they can become outdated without ongoing input from human experts. The process of updating the system can be labor-intensive. ■ Advancements in machine learning and natural language processing could address these issues. ■ By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance. Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.5 套二 阅读.pdf p12 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "4.8新托福真题",
+      "module": 2,
+      "q_number": 15,
+      "bank_id": "real_ap_325_1_26",
+      "marked": "Cybernetic prosthetics have revolutionized medical technology, offering hope to individuals who have lost limbs. Unlike traditional prosthetics, which are often cumbersome and limited in function, cybernetic versions are designed to integrate seamlessly with the human nervous system. This integration allows for more natural movement and even sensation. A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements.\n\nOne example is a cybernetic hand that can perform delicate tasks such as picking up small objects or typing. This is achieved through advanced algorithms that translate muscle signals into controlled movements. Researchers are also exploring haptic feedback, which would enable users to feel textures and temperatures through their prosthetic limbs. It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals. This could significantly improve the quality of life for amputees.\n\n■ The high cost of these prosthetics makes them inaccessible to many. ■ Additionally, the technology requires regular maintenance and updates, which can be a barrier. ■ Current battery life is another limitation, as it restricts the user's ability to wear the prosthetic for extended periods. Researchers are continually working to make these devices more affordable and user-friendly. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 4.8 阅读.pdf p17 #1 / qwen3-vl-plus"
+    },
+    {
       "set": "5.10新托福真题_v2",
       "module": 1,
       "q_number": 35,
@@ -72,6 +322,16 @@
       "by": "qwen3-vl",
       "verified": true,
       "note": "源截图 5.10 阅读.pdf p17 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "5.11新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_511_1_31",
+      "marked": "Graphic design has transformed repeatedly throughout history, influenced by both cultural shifts and technological advancements. In Europe, during the Middle Ages (the fifth to fifteenth centuries), the creation of intricate manuscripts was predominant. The advent of the printing press in the fifteenth century altered these dynamics, facilitating mass production and broadening public access to designed materials. Such technological shifts not only changed the way art was produced but also how it was perceived.\n\nBy the mid-twentieth century, Swiss design emerged as a response to the chaotic visual landscape, introducing principles of minimalism and functionality. ■ Heavily influenced by the Bauhaus movement, designers like Josef Müller-Brockmann advocated for simplicity and rationality. ■ Their grid-based approach brought order and readability to what often seemed to be overwhelming visuals. ■ Some critics argue that the rigid structure, while effective, limited expressive possibilities and emotional resonance in design. ■\n\nToday, graphic design stands at the intersection of tradition and innovation. While digital tools democratize access and encourage experimentation, designers grapple with preserving artistic integrity. The challenge lies in blending the precision of technology with the warmth of human creativity. Thus, graphic design continues to evolve, reflecting broader cultural debates about art and technology.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 5.11 阅读.pdf p17 #1 / qwen3-vl-plus"
     },
     {
       "set": "5.11新托福真题",
@@ -92,6 +352,16 @@
       "by": "qwen3-vl",
       "verified": true,
       "note": "源截图 5.29 阅读.pdf p17 #1 / qwen3-vl-plus"
+    },
+    {
+      "set": "5.6新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_56_1_32",
+      "marked": "Quantum computing promises to revolutionize technology by delivering unprecedented computational power. Traditional computers store data in binary bits, representing 0 or 1. Quantum computers use qubits, which can represent 0, 1, or both simultaneously (a state called superposition). This allows quantum computers to process vast amounts of data simultaneously, solving complex problems much faster than classical computers.\n\nQuantum computing has promising applications in cryptography—techniques for encoding and decoding messages. Current encryption (encoding) methods rely on complex algorithms that classical computers struggle to break. Quantum computers could potentially break these encryption algorithms with ease, requiring new, quantum-resistant techniques. Researchers are exploring such methods to secure data in a post-quantum world.\n\nOne challenge to fully realizing quantum computing is that qubits are highly sensitive to external disturbances. ■ Maintaining coherence, the state needed by qubits to perform calculations, requires extremely low temperatures and isolation from environmental noise, such as magnetic or electric field fluctuations. ■ Despite the challenges, progress is accelerating. ■ Scientists are developing error-correcting codes and stable qubit designs to address these issues. ■ Quantum computing holds promise for advancements in fields like medicine, finance, and artificial intelligence.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 5.6 阅读.pdf p8 #2 / qwen3-vl-plus"
     }
   ]
 }

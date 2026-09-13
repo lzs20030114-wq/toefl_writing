@@ -1,0 +1,1427 @@
+{
+  "generated_by": "scripts/realbank/build_bank.mjs",
+  "generated": "2026-09-13",
+  "aliases": [
+    {
+      "from": "real_ap_121a_1_33",
+      "to": "real_ap_330_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_121a_2_11",
+      "to": "real_ap_325_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_121a_2_14",
+      "to": "real_ap_325_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_121b_1_31",
+      "to": "real_ap_320_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_121b_2_11",
+      "to": "real_ap_34_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_121c_1_31",
+      "to": "real_ap_56v2_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_127a_1_31",
+      "to": "real_ap_318_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_127a_2_11",
+      "to": "real_ap_rp0704_2004_200411",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_127b_1_31",
+      "to": "real_ap_510_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_127b_2_11",
+      "to": "real_ap_424_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_128a_2_11",
+      "to": "real_ap_315_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_128b_1_26",
+      "to": "real_rdl_411_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_128b_2_12",
+      "to": "real_ap_411_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_210_1_32",
+      "to": "real_ap_324_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_210_2_12",
+      "to": "real_ap_311_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_21a_1_29",
+      "to": "real_rdl_21a_1_29",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_21b_1_23",
+      "to": "real_rdl_21b_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_21b_1_31",
+      "to": "real_ap_45_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_21c_1_27",
+      "to": "real_ap_510v2_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_21c_2_11",
+      "to": "real_ap_rp0819_2002_200201",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_22_1_34",
+      "to": "real_ap_rp0819_2001_200101",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_22_2_11",
+      "to": "real_ap_rf0620_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_223_1_26",
+      "to": "real_ap_510_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_223_2_11",
+      "to": "real_ap_411_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_228_1_31",
+      "to": "real_ap_rf0713_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_228_2_14",
+      "to": "real_ap_323_2_12",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_28_1_31",
+      "to": "real_ap_22_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_28_2_11",
+      "to": "real_ap_311_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_310_1_25",
+      "to": "real_rdl_310_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_310_1_31",
+      "to": "real_ap_rp0822_2002_200201",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_311_1_25",
+      "to": "real_rdl_311_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_311_1_28",
+      "to": "real_rdl_311_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_311_2_11",
+      "to": "real_ap_rp0704_2005_200511",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_314_1_31",
+      "to": "real_ap_418_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_315_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_315_1_31",
+      "to": "real_ap_rf0713_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_316_1_26",
+      "to": "real_ap_324_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_316_1_31",
+      "to": "real_ap_45_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_317_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_317_1_31",
+      "to": "real_ap_rf0713_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_317_2_11",
+      "to": "real_ap_413_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_320_2_11",
+      "to": "real_ap_311_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_323_1_28",
+      "to": "real_rdl_323_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_323_1_31",
+      "to": "real_ap_318_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_325_1_23",
+      "to": "real_rdl_325_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_325_2_11",
+      "to": "real_ap_rp0819_2002_200201",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_327_1_25",
+      "to": "real_rdl_310_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_327_1_31",
+      "to": "real_ap_56_1_32",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_327_2_11",
+      "to": "real_ap_415_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_329_1_31",
+      "to": "real_ap_56v2_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_329_2_11",
+      "to": "real_ap_rp0822_2003_200301",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_32a_2_11",
+      "to": "real_ap_325_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_32b_1_31",
+      "to": "real_ap_324_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_32b_2_11",
+      "to": "real_ap_rp0704_2001_200131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_330_1_26",
+      "to": "real_ap_rp0822_2001_200101",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_34_1_26",
+      "to": "real_ap_510v2_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_34_1_29",
+      "to": "real_ap_510v2_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_34_1_31",
+      "to": "real_ap_121a_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_36_1_31",
+      "to": "real_ap_320_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_36_2_11",
+      "to": "real_ap_34_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_38_1_23",
+      "to": "real_rdl_325_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_38_1_26",
+      "to": "real_ap_510_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_41_1_25",
+      "to": "real_rdl_311_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_41_1_28",
+      "to": "real_rdl_311_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_41_1_32",
+      "to": "real_ap_311_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_41_2_11",
+      "to": "real_ap_rp0704_2005_200511",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_411_1_23",
+      "to": "real_rdl_411_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_411_1_26",
+      "to": "real_ap_121a_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_411_2_11",
+      "to": "real_ap_34_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_413_1_26",
+      "to": "real_ap_324_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_413_1_33",
+      "to": "real_ap_56_1_32",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_415_1_32",
+      "to": "real_ap_rp0822_2006_200601",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_418_1_31",
+      "to": "real_ap_330_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_420_1_31",
+      "to": "real_ap_rp0704_2001_200131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_424_1_28",
+      "to": "real_rdl_424_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_424_1_31",
+      "to": "real_ap_56v2_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_427_1_26",
+      "to": "real_ap_329_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_427_1_31",
+      "to": "real_ap_121a_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_427_2_11",
+      "to": "real_ap_rf0716_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_428_1_26",
+      "to": "real_ap_rf0713_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_428_1_32",
+      "to": "real_ap_rp0704_2002_200231",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_428_2_11",
+      "to": "real_ap_rf0716_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_45_1_26",
+      "to": "real_ap_38_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_45_2_11",
+      "to": "real_ap_315_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_48_1_23",
+      "to": "real_rdl_411_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_48_1_26",
+      "to": "real_ap_121a_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_48_1_31",
+      "to": "real_ap_411_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_48_2_11",
+      "to": "real_ap_325_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_510_1_23",
+      "to": "real_rdl_510_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_510_2_11",
+      "to": "real_ap_rf0620_1_126",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_510v2_1_25",
+      "to": "real_rdl_510v2_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_511_1_26",
+      "to": "real_ap_rf0610_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_518_1_28",
+      "to": "real_rdl_518_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_518_2_11",
+      "to": "real_ap_rp0819_2006_200601",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_523_1_25",
+      "to": "real_rdl_523_1_25",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_523_1_31",
+      "to": "real_ap_rp0822_2002_200201",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_529_1_26",
+      "to": "real_ap_rf0610_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_529_1_31",
+      "to": "real_ap_511_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_529_2_11",
+      "to": "real_ap_rf0620_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_53_1_32",
+      "to": "real_ap_128a_1_27",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_53_2_11",
+      "to": "real_ap_rp0822_2004_200401",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_56_1_23",
+      "to": "real_rdl_424_1_28",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_56_1_26",
+      "to": "real_ap_329_1_26",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_56_2_11",
+      "to": "real_ap_415_2_11",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_56v2_1_23",
+      "to": "real_rdl_56v2_1_23",
+      "from_type": "ap",
+      "to_type": "rdl",
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_ap_56v2_1_31",
+      "to": "real_ap_rp0704_2002_200231",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0615_1_131",
+      "to": "real_ap_rf0610_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0622_1_131",
+      "to": "real_ap_rp0704_2004_200411",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0629_1_126",
+      "to": "real_ap_rp0704_2002_200231",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0629_2_211",
+      "to": "real_ap_rf0622_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0808_1_131",
+      "to": "real_ap_rf0620_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0808_2_211",
+      "to": "real_ap_rf0713_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0902_1_131",
+      "to": "real_ap_rf0716_1_131",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rf0902_2_211",
+      "to": "real_ap_rf0716_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rp0704_2003_200331",
+      "to": "real_ap_518_1_31",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rp0812_2001_200101",
+      "to": "real_ap_rf0615_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rp0819_2003_200302",
+      "to": "real_ap_rp0704_2002_200231",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rp0819_2007_200701",
+      "to": "real_ap_rp0812_2002_200201",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_ap_rp0822_2005_200501",
+      "to": "real_ap_rf0716_2_211",
+      "from_type": "ap",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121a_1_33",
+      "to": "real_ap_330_1_31",
+      "from_type": "rdl",
+      "to_type": "ap",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121b_1_21",
+      "to": "real_rdl_320_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121b_1_29",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121c_1_21",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121c_1_23",
+      "to": "real_rdl_424_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121c_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_121c_1_28",
+      "to": "real_rdl_424_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_127a_1_23",
+      "to": "real_rdl_223_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_128b_1_26",
+      "to": "real_rdl_411_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_210_1_23",
+      "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_210_1_28",
+      "to": "real_rdl_310_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_210_1_31",
+      "to": null,
+      "from_type": "rdl",
+      "to_type": null,
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_rdl_21a_1_23",
+      "to": "real_rdl_310_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_21a_1_24",
+      "to": "real_rdl_310_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_223_1_22",
+      "to": "real_rdl_rf0622_1_123",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_225_1_25",
+      "to": "real_rdl_523_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_228_1_23",
+      "to": "real_rdl_34_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_228_1_25",
+      "to": "real_rdl_523_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_28_1_23",
+      "to": "real_rdl_314_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_314_1_21",
+      "to": "real_rdl_28_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_315_1_23",
+      "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_315_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_317_1_21",
+      "to": "real_rdl_315_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_317_1_23",
+      "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_317_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_317_1_28",
+      "to": "real_rdl_315_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_318_1_22",
+      "to": "real_rdl_rf0902_1_121",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_318_1_28",
+      "to": "real_rdl_415_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_320_1_23",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_320_1_25",
+      "to": "real_rdl_121b_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_320_1_28",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_320_1_29",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_323_1_21",
+      "to": "real_rdl_228_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_323_1_23",
+      "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_323_1_25",
+      "to": "real_rdl_310_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_327_1_23",
+      "to": "real_rdl_310_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_327_1_25",
+      "to": "real_rdl_310_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_327_1_28",
+      "to": "real_rdl_523_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_32a_1_23",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_32a_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_32a_1_28",
+      "to": "real_rdl_228_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_32a_2_13",
+      "to": null,
+      "from_type": "rdl",
+      "to_type": null,
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_rdl_32b_1_23",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_32b_1_25",
+      "to": "real_rdl_22_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_330_1_21",
+      "to": "real_rdl_325_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_34_1_23",
+      "to": "real_rdl_523_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_36_1_21",
+      "to": "real_rdl_320_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_36_1_23",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_36_1_25",
+      "to": "real_rdl_121b_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_36_1_28",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_36_1_29",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_38_1_21",
+      "to": "real_rdl_rf0610_1_123",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_38_1_23",
+      "to": "real_rdl_325_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_41_1_21",
+      "to": "real_rdl_311_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_41_1_23",
+      "to": "real_rdl_311_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_41_1_25",
+      "to": "real_rdl_311_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_41_1_28",
+      "to": "real_rdl_311_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_413_1_21",
+      "to": "real_rdl_121a_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_413_1_23",
+      "to": "real_rdl_511_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_418_1_21",
+      "to": "real_rdl_rf0622_1_121",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_418_1_23",
+      "to": "real_rdl_327_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_420_1_29",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_424_1_21",
+      "to": "real_rdl_121b_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_424_1_25",
+      "to": "real_rdl_rf0610_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_427_1_23",
+      "to": "real_rdl_228_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_428_1_33",
+      "to": null,
+      "from_type": "rdl",
+      "to_type": null,
+      "reason": "reclassified"
+    },
+    {
+      "from": "real_rdl_48_1_21",
+      "to": "real_rdl_411_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_48_1_23",
+      "to": "real_rdl_411_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_510v2_1_21",
+      "to": "real_rdl_rf0622_1_121",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_518_1_23",
+      "to": "real_rdl_rf0808_1_123",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_518_1_25",
+      "to": "real_rdl_121a_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_529_1_21",
+      "to": "real_rdl_511_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_529_1_23",
+      "to": "real_rdl_511_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_53_1_23",
+      "to": "real_rdl_415_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_53_1_25",
+      "to": "real_rdl_415_1_25",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_56_1_21",
+      "to": "real_rdl_315_1_21",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_56_1_23",
+      "to": "real_rdl_424_1_28",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0610_1_121",
+      "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0615_1_123",
+      "to": "real_rdl_415_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0716_1_121",
+      "to": "real_rdl_rf0902_1_121",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0716_1_125",
+      "to": "real_rdl_rf0902_1_125",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0808_1_125",
+      "to": "real_rdl_rf0713_1_123",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0902_1_123",
+      "to": "real_rdl_rf0716_1_123",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_rf0902_1_128",
+      "to": "real_rdl_rf0716_1_128",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    }
+  ]
+}
