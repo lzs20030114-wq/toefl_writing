@@ -164,10 +164,13 @@ async function pool(items, n, fn) {
 
 /* ── push ────────────────────────────────────────────────────────────────── */
 
-export async function push(sb, { dry = false, only = null, log = console.log } = {}) {
+// tmpDir 可注入：默认是本机 .codex-tmp，单测传夹具目录。写死 cwd 的话，
+// 测试在没有产物的机器上（CI、新 clone）会扫出 0 个文件、静默走到完全不同的
+// 分支去——那正是这两条用例长期在 CI 红、在作者机器绿的原因。
+export async function push(sb, { dry = false, only = null, log = console.log, tmpDir = TMP } = {}) {
   await ensureBucket(sb);
   const remote = await readManifest(sb);
-  const local = scanLocal();
+  const local = scanLocal(tmpDir);
 
   const changed = [];
   const skippedBig = [];
@@ -189,7 +192,7 @@ export async function push(sb, { dry = false, only = null, log = console.log } =
   const files = { ...(remote.files || {}) };
   await pool(changed, CONCURRENCY, async (rel) => {
     try {
-      const buf = fs.readFileSync(path.join(TMP, rel));
+      const buf = fs.readFileSync(path.join(tmpDir, rel));
       const { error } = await sb.storage.from(BUCKET).upload(encodeObjectPath(rel), buf, {
         upsert: true, contentType: "application/octet-stream",
       });
@@ -220,17 +223,28 @@ export async function push(sb, { dry = false, only = null, log = console.log } =
     count: Object.keys(files).length,
     files,
   };
-  const { error } = await sb.storage.from(BUCKET).upload(
-    MANIFEST_KEY, Buffer.from(JSON.stringify(manifest, null, 1), "utf8"),
-    { upsert: true, contentType: "application/json" });
-  if (error) throw new Error(`清单写入失败: ${error.message}`);
+  // 清单没写成也是「同步没做完」：文件传上去了但基线没更新，下次 pull 的
+  // fail-closed 校验会拿旧数字去比。必须走 SyncFailure —— 裸 Error 没有 exitCode，
+  // CLI 的 `Number(e.exitCode) || 3` 会把它退成 3（Supabase 不可用），语义是反的。
+  // try/catch 是因为 storage-js 偶尔是抛而不是返回 {error}（与上面逐文件那段同理）。
+  let manifestError = null;
+  try {
+    ({ error: manifestError } = await sb.storage.from(BUCKET).upload(
+      MANIFEST_KEY, Buffer.from(JSON.stringify(manifest, null, 1), "utf8"),
+      { upsert: true, contentType: "application/json" }));
+  } catch (e) {
+    manifestError = e;
+  }
+  if (manifestError) {
+    throw SyncFailure(`清单写入失败，清单未更新: ${manifestError.message || manifestError}`);
+  }
   log(`  ✓ 上传 ${uploaded} 个；清单 ${manifest.count} 个文件 / structured ${manifest.structured} 套`);
   return { changed, uploaded, skippedBig, manifest };
 }
 
 /* ── pull ────────────────────────────────────────────────────────────────── */
 
-export async function pull(sb, { dry = false, log = console.log } = {}) {
+export async function pull(sb, { dry = false, log = console.log, tmpDir = TMP } = {}) {
   await ensureBucket(sb);
   const remote = await readManifest(sb);
   const remoteFiles = remote.files || {};
@@ -238,7 +252,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     log("■ pull：远端清单为空（桶还没灌过），跳过");
     return { downloaded: 0, structured: 0, empty: true };
   }
-  const local = scanLocal();
+  const local = scanLocal(tmpDir);
 
   const todo = Object.keys(remoteFiles).filter((rel) => {
     if (!isSynced(rel)) return false;                       // 清单被人动过手脚也不越界写盘
@@ -259,7 +273,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     } catch (e) { failed.push(`${rel}: ${(e && e.message) || e}`); return; }
     if (error || !data) { failed.push(`${rel}: ${error && error.message}`); return; }
     // 清单里的 key 已经是原始相对路径了，这里 decode 是防御：万一有人把编码 key 写进了清单。
-    const abs = path.join(TMP, decodeObjectPath(rel));
+    const abs = path.join(tmpDir, decodeObjectPath(rel));
     fs.mkdirSync(path.dirname(abs), { recursive: true });
     fs.writeFileSync(abs, Buffer.from(await data.arrayBuffer()));
     // mtime 对齐远端记录：否则下一次 push 会因为「mtime 变了」把刚拉下来的文件原样再传一遍。
@@ -272,7 +286,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     throw SyncFailure(`有 ${failed.length} 个文件下载失败：\n  ${failed.slice(0, 5).join("\n  ")}`);
   }
 
-  const after = countStructured(scanLocal());
+  const after = countStructured(scanLocal(tmpDir));
   log(`  ✓ 下载 ${downloaded} 个；本地 structured ${after} 套（远端清单记 ${remote.structured ?? "?"}）`);
   return { downloaded, structured: remote.structured || 0, localStructured: after };
 }
