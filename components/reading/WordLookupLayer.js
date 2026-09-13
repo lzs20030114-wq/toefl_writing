@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { isSaved, saveWord, removeWord } from "../../lib/vocab/vocabStore";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
@@ -229,11 +229,11 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
         (pop.entry && pop.entry.t
           ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}`
           : "词典未收录这个词。");
-      const text = await callAI(SYSTEM, message, 260, 60000, 0.3);
+      const text = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveAiCache(key, text);
       setAi({ loading: false, text, error: null });
     } catch (e) {
-      setAi({ loading: false, text: null, error: e.message || "请求失败" });
+      setAi({ loading: false, text: null, error: mapAiHelperError(e) });
     }
   }, [pop, passage]);
 

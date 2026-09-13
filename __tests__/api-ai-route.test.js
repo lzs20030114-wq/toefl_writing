@@ -320,6 +320,64 @@ describe("/api/ai route", () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
+    // ── 2026-09-13 故障:上游 200 + 空正文被单采样路径原样放行 ───────────
+    // v4-flash 的 reasoning_tokens 计入 max_tokens 预算,预算被推理吃光时上游回
+    // finish_reason=length + 空 content 而 HTTP 仍是 200。放行它 = 前端拿到
+    // {content:""} 当成功,AI 解释渲染成「点了不出内容也不报错」的死按钮。
+    test("SSE 流里只有 reasoning_content(正文为空)→ 按上游失败回 502，不是 200 空串", async () => {
+      global.fetch = jest.fn().mockResolvedValue(sseResponse([
+        'data: {"choices":[{"delta":{"reasoning_content":"先分析主谓"}}]}\n\n',
+        'data: {"choices":[{"delta":{"reasoning_content":"再看时态"},"finish_reason":"length"}]}\n\n',
+        "data: [DONE]\n\n",
+      ]));
+
+      const res = await POST(singleRequest());
+
+      expect(res.status).toBe(502);
+      expect((await res.json()).content).toBeUndefined();
+    });
+
+    test("非流式 JSON 正文为空 → 同样回 502", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        headers: new Headers({ "content-type": "application/json" }),
+        json: async () => ({ choices: [{ message: { content: "" }, finish_reason: "length" }] }),
+      });
+
+      const res = await POST(singleRequest());
+
+      expect(res.status).toBe(502);
+    });
+
+    test("空正文会留痕到 api_error_feedback(errorType=empty_content)，且不扣用量", async () => {
+      mockSupabaseConfigured = true;
+      mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };
+      mockInsertCalls.length = 0;
+      try {
+        global.fetch = jest.fn().mockResolvedValue(sseResponse([
+          'data: {"choices":[{"delta":{"reasoning_content":"想了很久"}}]}\n\n',
+          "data: [DONE]\n\n",
+        ]));
+        const req = new Request("http://localhost/api/ai", {
+          method: "POST",
+          body: JSON.stringify({ system: "s", message: "m", maxTokens: 2000, userCode: "ABC123" }),
+        });
+
+        const res = await POST(req);
+
+        expect(res.status).toBe(502);
+        // 关键:原来是 200,这条记录根本不存在,后台 /admin-api-errors 查不到任何线索。
+        const failRow = mockInsertCalls.find((c) => c.table === "api_error_feedback");
+        expect(failRow.row.error_type).toBe("empty_content");
+        expect(failRow.row.http_status).toBe(502);
+        expect(failRow.row.error_detail).toContain("empty content");
+      } finally {
+        mockSupabaseConfigured = false;
+        mockUsersRow = null;
+      }
+    });
+
     test("records the upstream status in error_detail when every attempt fails", async () => {
       mockSupabaseConfigured = true;
       mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };

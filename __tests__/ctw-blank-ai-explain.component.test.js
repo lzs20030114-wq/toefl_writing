@@ -35,10 +35,14 @@ jest.mock("../lib/sessionStore", () => ({
 }));
 
 const callAI = jest.fn(async () => "这是 AI 讲解：被动语态要求过去分词。");
+// 只替换 callAI，其余照搬真模块 —— 整个模块替成一个字面量会让 AI_HELPER_MAX_TOKENS
+// 这类具名导出变成 undefined，测试便断言不到组件真正传出去的预算。
 jest.mock("../lib/ai/client", () => ({
+  ...jest.requireActual("../lib/ai/client"),
   callAI: (...args) => callAI(...args),
 }));
 
+import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
 import { CTWDetail } from "../components/reading/ReadingProgressView";
 import { locateBlankSentence } from "../components/reading/useCtwAiExplain";
 
@@ -282,7 +286,9 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     expect(message).toContain("该空所在句子：Early pots were 【shaped】 by hand.");
     expect(message).toContain("第 1 个空（共 3 个）");
     expect(message).toContain(PASSAGE);
-    expect([maxTokens, timeoutMs, temperature]).toEqual([700, 60000, 0.3]);
+    // 预算收口到共享常量（2026-09-13：260-700 会被 v4-flash 的推理 token 吃光，
+    // 上游回空正文 → 「AI 解释点了不出内容」）。断言常量本身，别再写死数字。
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
 
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
   });
