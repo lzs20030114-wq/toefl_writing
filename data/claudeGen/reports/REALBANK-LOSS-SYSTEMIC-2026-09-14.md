@@ -152,30 +152,43 @@ section_no_answers / answer_key_misaligned …）解释。其余 2436 题，体�
 云端这台容器没有 `.codex-tmp/realbank/`（中间产物只在你本机），也没有 API key，所以数据侧一步都没跑。
 本机按这个顺序：
 
+**不用自己从账本里挑卷** —— 作业单会按阶段排好可粘贴的命令：
+
 ```bash
-# 0. 先看账本，确认要扫哪些卷（零成本，随时可跑）
-node scripts/realbank/loss_ledger.mjs --top 40
-#    ① 那张表就是「立刻能回收的」清单，97 套·科
+node scripts/realbank/loss_ledger.mjs --plan            # 全部（写作 61 套 / 阅读 23 套 / 听力口语 23 套）
+node scripts/realbank/loss_ledger.mjs --plan --limit 8  # 每阶段只出前 8 套
+```
 
-# 1. 阅读/写作：扫 flagged 块（新预算 + 自动重试 + 超时不再整卷作废）
-node scripts/realbank/structure_set.mjs "<卷名>" --only-failed --sections reading,writing
-#    先挑账本里缺口最大的几卷试跑，看日志里「预算重试」救回多少再铺开
+阶段顺序是按**验证价值**排的，不是按缺口大小：写作（不碰音频、链路最短、最卡整卷）→
+阅读（量最大）→ 听力/口语（跑完必须重跑合流）。同一套卷的多科会合成一条命令。
 
-# 2. 听力/口语：同样扫，然后**必须重跑合流**，否则救回的块进不了库
-node scripts/realbank/structure_set.mjs "<卷名>" --only-failed --sections listening,speaking
-#    日志会打印「已同步合流快照 …」——看到这行才说明 §2.3 那个坑绕过去了
-python scripts/realbank/merge_first_source_asr.py --all      # 第一来源
-# 或 python scripts/realbank/merge_vendor_asr.py ...          # 第二来源
+**第 0 步是零成本的**：作业单里每条命令都带 `--dry`，`--dry` 在任何模型调用之前就返回，
+不花一分钱、秒回，只报这卷这科还有几个失败块可重扫。所以先把整个阶段的 `--dry` 跑一遍，
+拿到真实可回收量，再决定花钱跑哪些。怎么读结果：
 
-# 3. 落库 + 装卷 + 重算账本
+| `--dry` 说 | 含义 | 下一步 |
+|---|---|---|
+| 待处理题块 N | 有 N 个失败块可重扫 | 去掉 `--dry` 真跑 |
+| 没有需要处理的块 | 这卷这科在中间产物里**根本没有题块** | 缺口在 ingest/对齐层，重扫解决不了；**记下来**，这是有用的诊断 |
+| 需要既有产物 | 这卷的中间产物不在 `.codex-tmp` | 跳过 |
+
+第二行尤其要留意：写作那 449 题里有多少是「块都没有」，只有 `--dry` 跑完才知道 ——
+这正是把「跑了归零」进一步分成「跑了丢光」与「压根没解析出块」的唯一办法。
+
+跑完扫描后的收尾（顺序不能换，作业单末尾也会打印）：
+
+```bash
+python scripts/realbank/merge_first_source_asr.py --all   # 只有扫过听力/口语才需要
 node scripts/realbank/build_bank.mjs
 node scripts/realbank/assemble_sets.mjs
-node scripts/realbank/loss_ledger.mjs --freeze       # 数字涨了就重冻基线
-npx jest __tests__/realbank-loss-guard.test.js       # 确认没有哪个题型反而变少
+node scripts/realbank/loss_ledger.mjs --freeze            # 数字涨了就重冻基线
+npx jest __tests__/realbank-loss-guard.test.js            # 确认没有哪个题型反而变少
+node scripts/ops/deepseek-usage-report.mjs                # 对账这轮花了多少
 ```
 
 花费：只对已经失败的块重跑，且只在失败签名是预算形时才多一次重试。
-跑之前用 `--dry` 看块数，按台账口径估价（`node scripts/ops/deepseek-usage-report.mjs` 对账）。
+听力那边，**合流层扣下的段会自动跳过**（带 `merged_by`）—— 它们的病在对齐/性别/音频，
+重跑结构化一分钱都治不了；不挡的话一轮听力扫描就是纯烧钱。
 
 **顺手可验证 §2.1 的推断**：台账里顶到 16000 的那 531 次调用，按题型拆一下
 （`.ops/deepseek-usage.jsonl`）。如果非 CTW 占大头，就实锤了「选择题也一直在顶预算」。
@@ -184,15 +197,15 @@ npx jest __tests__/realbank-loss-guard.test.js       # 确认没有哪个题型�
 
 ## 6. 建议（按做的顺序）
 
-### 第一步：先把 944 题捞回来 —— 不需要拍板，成本极小
+### 第一步：先把 944 题捞回来 —— 不需要拍板，且第 0 步零成本
 
-只对**已经失败的块**重跑，且只在失败签名是预算形时才多一次重试。按账本 ① 的清单从缺口最大的
-几卷开始，跑法见 §5。做完重跑账本 + `--freeze` + `npx jest __tests__/realbank-loss-guard.test.js`。
+`node scripts/realbank/loss_ledger.mjs --plan` 出作业单，先把**阶段 1 写作**的 `--dry` 全跑一遍
+（不花钱、秒回），拿到真实可回收量，再去掉 `--dry` 真跑。
 
-优先级建议：**先写作（4.5 / 3.23 / 4.28 那批）**。理由不是它最大，而是它最卡：
-学术讨论全库只有 7 题，是整卷拼齐的唯一瓶颈，而这一桶里就有 24 题 disc + 24 题 email；
-且写作不碰音频、不用重跑合流，链路最短、最容易验证新预算是否真的在救题。
-写作跑通、确认「预算重试」确实在日志里救回东西，再铺到阅读（ctw 为主）和听力。
+为什么先写作：不是它最大，是它最卡 —— 学术讨论全库只有 7 题、是整卷拼齐的唯一瓶颈，
+而这一桶里就躺着 24 题 disc + 24 题 email；且写作不碰音频、不用重跑合流，链路最短，
+最容易看出新预算是不是真的在救题。写作跑通、确认日志里「预算重试」确实救回东西，
+再铺到阅读（填词为主）和听力。
 
 ### 第二步：听力/口语铺量 —— 建议**先只铺一套试水，不要整批铺**
 

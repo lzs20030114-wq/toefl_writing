@@ -1,5 +1,7 @@
 /**
- * 结构化阶段的「这次失败要不要整卷停下」判据（纯函数，无 IO —— 供 structure_set.mjs 与单测共用）。
+ * 结构化阶段的失败处置判据（纯函数，无 IO —— 供 structure_set.mjs 与单测共用）：
+ * ① 这次调用失败要不要整卷停下（classifySystemicFailure / escalate）；
+ * ② `--only-failed` 重扫时，哪些失败块值得再花一次钱（shouldResweep）。
  *
  * ── 硬失败：继续跑只会得到同样的结果 ──
  * 事故背景：DeepSeek 账户欠费时每个题块都拿到 `DeepSeek 402: {"error":{"message":
@@ -69,4 +71,33 @@ function escalate(sys, softFailures = 0) {
   };
 }
 
-module.exports = { SOFT_FAILURE_LIMIT, HARD_HTTP, classifySystemicFailure, escalate };
+/* ── --only-failed 的重扫判据 ───────────────────────────────────────────── */
+
+/** 已经跑成功、或本来就不该结构化的状态：不重扫。 */
+const DONE_STATUSES = Object.freeze(["ok", "passage_screen", "deferred"]);
+
+/**
+ * 这个块值得再花一次钱重扫吗。
+ *
+ * @param {object} unit  待处理块（要 type 与 answers）
+ * @param {object} prev  既有产物里同 key 的记录（没有就传 null/undefined）
+ * @param {number} [ctwMinAnswers] 真 CTW 块恒 10 空，少于这个数的是路由误判
+ * @returns {{resweep: boolean, skip: string|null}} skip = 跳过原因的机器可读标签
+ */
+function shouldResweep(unit, prev, ctwMinAnswers = 5) {
+  if (prev && DONE_STATUSES.includes(prev.status)) return { resweep: false, skip: "already_done" };
+  // 合流层扣下的块重扫没有意义：听力/口语记录经 merge_first_source_asr / merge_vendor_asr
+  // 改写后都带 merged_by，它们的 flagged 来自对齐/性别/段数/无文档题干这些**合流层**的病。
+  // 结构化只看 OCR 文本、根本不碰音频，重跑一分钱都治不了，结果照旧扣下 —— 纯烧钱。
+  // 要治得回合流那一层（lc_gender_worksheet 标性别、补音频、人工切轮次）。
+  if (prev && prev.merged_by) return { resweep: false, skip: "merge_held" };
+  if (unit && unit.type === "ctw" && (unit.answers || []).length < ctwMinAnswers) {
+    return { resweep: false, skip: "ctw_misrouted" };
+  }
+  return { resweep: true, skip: null };
+}
+
+module.exports = {
+  SOFT_FAILURE_LIMIT, HARD_HTTP, DONE_STATUSES,
+  classifySystemicFailure, escalate, shouldResweep,
+};

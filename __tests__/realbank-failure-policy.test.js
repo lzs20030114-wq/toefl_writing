@@ -8,7 +8,7 @@
  * 两侧都锁死。
  */
 const {
-  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate,
+  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate, shouldResweep,
 } = require("../scripts/realbank/failure_policy.js");
 
 const err = (message, code) => Object.assign(new Error(message), code ? { code } : {});
@@ -86,5 +86,53 @@ describe("escalate", () => {
 
   test("普通失败（null）既不中止也不计数", () => {
     expect(escalate(null, 3)).toEqual({ abort: false, softFailures: 3, info: null });
+  });
+});
+
+/**
+ * --only-failed 的重扫判据。
+ * 这里最贵的一条是「合流层扣下的块不重扫」：听力/口语被 merge_*_asr 扣下的段同样标成 flagged，
+ * 不挡的话一轮听力扫描会把整批扣下的段重新过一遍模型 —— 而结构化只看 OCR 文本、不碰音频，
+ * 对齐/性别/段数的病一分钱都治不了，结果照旧扣下。纯烧钱。
+ */
+describe("shouldResweep", () => {
+  const unit = (over = {}) => ({ key: "reading|1|31-31|35", type: "ap", answers: [{ n: 31, answer: "b" }], ...over });
+
+  test("失败的块要重扫（这才是 --only-failed 的本职）", () => {
+    for (const status of ["flagged", "error", undefined]) {
+      expect(shouldResweep(unit(), { status })).toEqual({ resweep: true, skip: null });
+    }
+    expect(shouldResweep(unit(), null)).toEqual({ resweep: true, skip: null });   // 既有产物里没有 = 新块
+  });
+
+  test("已经 ok / 材料屏 / 等音频的，不重扫", () => {
+    for (const status of ["ok", "passage_screen", "deferred"]) {
+      expect(shouldResweep(unit(), { status })).toEqual({ resweep: false, skip: "already_done" });
+    }
+  });
+
+  test("合流层扣下的（带 merged_by）不重扫 —— 重跑结构化治不了对齐/性别/音频的病", () => {
+    const held = { status: "flagged", merged_by: "merge_first_source_asr-v1",
+      problems: ["no_turns:对话没有说话人标签"] };
+    expect(shouldResweep(unit({ type: "lc" }), held)).toEqual({ resweep: false, skip: "merge_held" });
+    expect(shouldResweep(unit({ type: "interview" }), { status: "flagged", merged_by: "merge_vendor_asr-v1" }))
+      .toEqual({ resweep: false, skip: "merge_held" });
+  });
+
+  test("合流层已经跑成 ok 的更不用说（两条判据都拦得住）", () => {
+    expect(shouldResweep(unit({ type: "lat" }), { status: "ok", merged_by: "merge_vendor_asr-v1" }).resweep)
+      .toBe(false);
+  });
+
+  test("没经过合流的听力块照常重扫 —— 别把整科一起挡掉", () => {
+    expect(shouldResweep(unit({ type: "lcr" }), { status: "flagged" }))
+      .toEqual({ resweep: true, skip: null });
+  });
+
+  test("答案不足的填词块是路由误判，不为它烧钱", () => {
+    expect(shouldResweep({ type: "ctw", answers: [{ n: 1 }, { n: 2 }] }, { status: "flagged" }))
+      .toEqual({ resweep: false, skip: "ctw_misrouted" });
+    const real = { type: "ctw", answers: Array.from({ length: 10 }, (_, i) => ({ n: i + 1 })) };
+    expect(shouldResweep(real, { status: "flagged" })).toEqual({ resweep: true, skip: null });
   });
 });

@@ -24,6 +24,8 @@
  *   node scripts/realbank/loss_ledger.mjs --top 30         # 多列几条补题任务
  *   node scripts/realbank/loss_ledger.mjs --type ap,ctw    # 只看这些题型
  *   node scripts/realbank/loss_ledger.mjs --freeze         # 顺手把当前各题型入库量冻成基线
+ *   node scripts/realbank/loss_ledger.mjs --plan          # 出「回收作业单」：按阶段排好的可粘贴命令
+ *   node scripts/realbank/loss_ledger.mjs --plan --limit 8  # 每阶段只出前 8 套
  *
  * 防退化：`data/realBank/loss-baseline.json` 是冻结基线，
  * `__tests__/realbank-loss-guard.test.js` 拿它卡住「重建一次库，某题型悄悄变少」——
@@ -80,10 +82,87 @@ function pad(s, n, right = false) {
   return right ? fill + str : str + fill;
 }
 
+
+/**
+ * 回收作业单：把账本里「重扫就能捡」的任务排成可粘贴的命令。
+ *
+ * 排序不是按缺口大小，而是按**验证价值**：
+ *   阶段 1 写作 —— 不碰音频、不用重跑合流，链路最短，最容易看出新预算是否真在救题；
+ *                 而且学术讨论全库只有 7 题、是整卷拼齐的唯一瓶颈，这一桶里就躺着 24 题。
+ *   阶段 2 阅读 —— 同样不碰音频，量最大（填词为主）。
+ *   阶段 3 听力/口语 —— 必须接着重跑合流，否则救回的块进不了库（见 structured_io 头注）。
+ *
+ * 同一套卷的多个科目合成一条命令（--sections a,b），少跑一次扫描。
+ */
+function printPlan(tasks, limit) {
+  const STAGES = [
+    { name: "阶段 1 · 写作（先跑这个：链路最短、最卡整卷）", sections: ["writing"] },
+    { name: "阶段 2 · 阅读（量最大，填词为主）", sections: ["reading"] },
+    { name: "阶段 3 · 听力/口语（跑完必须重跑合流，否则救回的块进不了库）", sections: ["listening", "speaking"] },
+  ];
+  console.log("\n" + "=".repeat(72));
+  console.log("回收作业单（在本机 .codex-tmp 所在的仓库根目录跑）");
+  console.log("=".repeat(72));
+  console.log("下面每条都带 --dry：**不调模型、零成本、秒回**，只报这卷这科还有几个失败块可重扫。");
+  console.log("所以第 0 步是把整个阶段的 --dry 全跑一遍（不花钱），拿到真实可回收量，再决定花钱跑哪些。");
+  console.log("");
+  console.log("怎么读 --dry 的结果：");
+  console.log("  · 报出「待处理题块 N」→ 有 N 个失败块可重扫，去掉 --dry 就真跑；");
+  console.log("  · 报「没有需要处理的块」→ 这卷这科在中间产物里根本没有题块。那是 ingest/对齐层的空缺");
+  console.log("    （源里没有这几页，或对齐没认出来），重扫解决不了 —— **但这本身就是有用的诊断**，");
+  console.log("    说明这批缺口要去 ingest 那一层找，请记下来。");
+  console.log("  · 报「需要既有产物」→ 这卷的中间产物不在 .codex-tmp，跳过即可。");
+  console.log("");
+  console.log("每条命令只重扫**已经失败**的块；合流层扣下的听力段会自动跳过");
+  console.log("（它们的病在对齐/性别/音频，重跑结构化治不了）。");
+
+  let anyListening = false;
+  for (const stage of STAGES) {
+    const mine = tasks.filter((t) => stage.sections.includes(t.section));
+    if (!mine.length) continue;
+    // 同一套卷的多科合成一条命令
+    const bySet = new Map();
+    for (const t of mine) {
+      const cur = bySet.get(t.set) || { set: t.set, missing: 0, sections: new Set(), types: {} };
+      cur.missing += t.missing;
+      cur.sections.add(t.section);
+      for (const [k, v] of Object.entries(t.types)) cur.types[k] = (cur.types[k] || 0) + v;
+      bySet.set(t.set, cur);
+    }
+    let list = [...bySet.values()].sort((a, b) => b.missing - a.missing);
+    const total = list.reduce((a, b) => a + b.missing, 0);
+    if (limit > 0) list = list.slice(0, limit);
+    if (stage.sections.includes("listening")) anyListening = true;
+
+    console.log(`\n── ${stage.name} —— ${bySet.size} 套，合计缺 ${total} 题 ──`);
+    for (const x of list) {
+      const types = Object.entries(x.types).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}-${v}`).join(" ");
+      console.log(`# 缺 ${x.missing}：${types}`);
+      console.log(`node scripts/realbank/structure_set.mjs "${x.set}" --only-failed --sections ${[...x.sections].join(",")} --dry`);
+    }
+    if (limit > 0 && bySet.size > limit) console.log(`# …另有 ${bySet.size - limit} 套，去掉 --limit 看全部`);
+  }
+
+  console.log("\n── 跑完扫描后（顺序不能换）──");
+  if (anyListening) {
+    console.log("# 听力/口语扫过的卷必须重跑合流，否则救回的块只躺在 structured.json 里进不了库");
+    console.log("python scripts/realbank/merge_first_source_asr.py --all        # 第一来源");
+    console.log("# 第二来源的卷用 merge_vendor_asr.py（按该卷的来源选一个）");
+  }
+  console.log("node scripts/realbank/build_bank.mjs");
+  console.log("node scripts/realbank/assemble_sets.mjs");
+  console.log("node scripts/realbank/loss_ledger.mjs --freeze     # 数字涨了就重冻基线");
+  console.log("npx jest __tests__/realbank-loss-guard.test.js     # 确认没有哪个题型反而变少");
+  console.log("node scripts/ops/deepseek-usage-report.mjs         # 对账这轮花了多少");
+}
+
 function main() {
   const args = process.argv.slice(2);
   const dry = args.includes("--dry-run");
   const freeze = args.includes("--freeze");
+  const plan = args.includes("--plan");
+  const limIdx = args.indexOf("--limit");
+  const planLimit = limIdx >= 0 ? Number(args[limIdx + 1]) || 0 : 0;
   const topIdx = args.indexOf("--top");
   const top = topIdx >= 0 ? Number(args[topIdx + 1]) || 15 : 15;
   const typeIdx = args.indexOf("--type");
@@ -171,6 +250,8 @@ function main() {
       console.log(`  ${pad(section, 12)}${pad(`${v.sets.size} 套`, 8, true)}${pad(`缺 ${v.missing} 题`, 12, true)}`);
     }
   }
+
+  if (plan) printPlan(tasks, planLimit);
 
   if (dry) { console.log("\n--dry-run：未写文件"); return; }
 

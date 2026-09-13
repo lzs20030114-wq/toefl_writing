@@ -40,7 +40,7 @@ const { writeStructured } = require("./structured_io.js");
 const { callBudget, retryBudget, parseJsonLoose, unparsableProblem, isBudgetProblem, ctwVisionCacheFile }
   = require("./model_output.js");
 // 失败分级（硬失败整卷作废 / 单块超时只记这一块）：./failure_policy.js
-const { classifySystemicFailure, escalate } = require("./failure_policy.js");
+const { classifySystemicFailure, escalate, shouldResweep } = require("./failure_policy.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -571,12 +571,22 @@ async function main() {
     return;
   }
   if (onlyFailed) {
-    const prevStatus = new Map(existing.results.map((r) => [r.key, r.status]));
+    const prev = new Map(existing.results.map((r) => [r.key, r]));
     const before = units.length;
-    units = units.filter((u) => !["ok", "passage_screen", "deferred"].includes(prevStatus.get(u.key))
-      && !(u.type === "ctw" && u.answers.length < CTW_MIN_ANSWERS));
+    // 重扫判据（含「合流层扣下的块不重跑」）见 ./failure_policy.js 的 shouldResweep。
+    const skipped = {};
+    units = units.filter((u) => {
+      const { resweep, skip } = shouldResweep(u, prev.get(u.key), CTW_MIN_ANSWERS);
+      if (!resweep) skipped[skip] = (skipped[skip] || 0) + 1;
+      return resweep;
+    });
+    const mergeHeld = skipped.merge_held || 0;
     console.log(`--only-failed：${before} → ${units.length} 块`
       + `（既有 ok 的不重跑；答案不足 ${CTW_MIN_ANSWERS} 个的填词块是路由误判，跳过）`);
+    if (mergeHeld) {
+      console.log(`  其中 ${mergeHeld} 块是合流层扣下的（带 merged_by），跳过 —— 它们的病在对齐/性别/音频，`
+        + "重跑结构化治不了，要回 merge_*_asr 那一层修。");
+    }
   }
   if (merge && !units.length) {
     console.log(`■ ${setname}：没有需要处理的块，产物未改动。`);
