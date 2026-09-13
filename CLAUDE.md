@@ -31,6 +31,7 @@ app/                          # Next.js App Router
 ├── speaking-exam/            # 口语模考
 ├── post-writing-practice/    # 写后练习
 ├── mistake-notebook/         # 错题本
+├── vocab-notebook/           # 单词本 (划词收藏的词 + FSRS-6 间隔重复复习)
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
 ├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
 │                             #   (lib/realBankHistory 辨认真题记录, 复用各科历史页的逐题回顾渲染)
@@ -43,6 +44,7 @@ app/                          # Next.js App Router
     ├── audio/[...path]/      # 听力音频同源流式代理 (Edge, 国内可达 Supabase Storage)
     ├── speech/               # 口语 STT (transcribe) + 录音授权 (consent)
     ├── user-bank/            # 个人题库 (extract / extract-image / render-audio / verify)
+    ├── vocab/                # 单词本云端副本 (卡片 JSONB 镜像 + logs/ 复习日志归档)
     ├── wechat-qr/            # 群二维码同源代理 (Edge；后台 /admin-wechat-qr 拖图上传到 Supabase Storage)
     ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
 
@@ -55,6 +57,7 @@ components/                   # 分科任务 UI + 后台
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
 ├── userBank/                 # 个人题库导入/管理 UI
 ├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
+├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
 ├── home/ history/ mistakes/ login/ admin/
 └── shared/                   # ui.js(设计系统 C/FONT/Btn/PageShell), UpgradeModal,
@@ -74,6 +77,9 @@ lib/
 ├── bsGen/                    # BS 出题：promptBuilders(纯函数) + circuitBreaker(熔断低通过率)
 ├── tts/                      # edgeTts / openaiTts / toneDirector(persona) / renderListening / storage
 ├── userBank/                 # personalBank(拉取+映射picker), imageSniff, listeningAudioRender
+├── vocab/                    # 单词本：srs(FSRS-6 调度) + book(排队/卡型/统计) +
+│                             #   vocabStore(本地优先+云同步) + reviewLog(复习日志)
+├── dict/                     # 划词词典查询层 (core 纯函数 + lookup 分片 fetch)
 ├── realBank.js realBankModes.js realBankHistory.js   # 真题专区数据层 / 三档限时 / 练习记录纯函数
 ├── realExam/                 # blueprint.mjs: 2026 整卷结构蓝图(题号带/槽位) — scripts/realbank/assemble_sets.mjs 用
 ├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
@@ -174,6 +180,25 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 写作模考仍是 3-task 固定卷(lib/mockExam/service.js + stateMachine)。
 ```
 
+### 8. 单词本 (Vocabulary Notebook)
+
+```
+阅读复盘 WordLookupLayer 划词 → 词典弹窗「☆ 收藏到单词本」
+  → lib/vocab/vocabStore.saveWord(): 连词形/音标/释义/标签/**所在原句**/来源一起存
+  → localStorage 是真源（点一下必须立刻变色，不能等网络）；登录后 /api/vocab 双向合并
+    （按 word 取 updatedAt 新的一份，软删除 deletedAt 也参与比较，删除能同步）
+→ /vocab-notebook：buildQueue 排今日队列 → VocabReview 翻卡 → gradeCard 写回 SRS 状态
+  + appendReviewLog 记一条日志（debounce 后随卡片一起推到 vocab_review_logs）
+```
+调度是 **FSRS-6**（`lib/vocab/srs.js`，21 参数 DSR 模型），不是 SM-2。几条不要随手改的设定：
+- **评分只有二档**「忘了/记得」，且**不显示下次间隔** —— 四档的自评噪声大于信息增益；
+  看见间隔用户就会按「想隔多久再见」而不是「记得多牢」来评分
+- **主卡型是原句挖空**，挖不出来才退纯词卡；一个词只有一张卡，不双向排
+- 目标留存率 0.90，考前 10 天自动进 0.95 冲刺档（读 studyPlan 的 examDate）
+- 新词毕业后的第一个间隔强制压到 1 天（跨一次睡眠）
+每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
+`__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
+
 ### 7. 个人题库 (User Bank, Pro 专属, v1.11.0 全 12 题型)
 
 ```
@@ -186,7 +211,7 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 ## API 一览 (app/api/*)
 
 - `ai/` 写作评分 · `audio/[...path]/` 听力音频 Edge 代理 · `speech/{transcribe,consent}` 口语 STT
-- `user-bank/{extract,extract-image,render-audio,verify}` 个人题库
+- `user-bank/{extract,extract-image,render-audio,verify}` 个人题库 · `vocab/` 单词本同步 + `vocab/logs` 复习日志
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
 - `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
 - `analytics/track` 事件 · `feedback/` 反馈
@@ -206,6 +231,8 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 | `user_question_banks` | 个人题库 (widen-types 迁移后支持全 12 题型) |
 | `referrals` / `referral_events` | 推荐关系 + 事件 |
 | `mistake_favorites` | 错题收藏 |
+| `vocab_cards` | 单词本（word + 整卡 JSONB，本地 localStorage 才是真源，这是跨设备镜像） |
+| `vocab_review_logs` | 每次复习一行，供日后用真实数据重拟合 FSRS 权重 / 做留存率校准 |
 | `user_surveys` | 问卷/语音投票 |
 | `page_views` | 埋点 |
 | `api_error_feedback` | 用户上报的 API 错误 |
