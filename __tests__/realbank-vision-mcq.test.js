@@ -25,11 +25,17 @@ const lf = (s) => String(s).replace(/\r\n/g, "\n");
 describe("vision_mcq：与 structure_set.mjs 同一套盖答案 / 结构闸（逐字复制防漂移）", () => {
   const original = lf(fs.readFileSync(STRUCTURE_SET, "utf8"));
   const copy = lf(fs.readFileSync(path.join(__dirname, "..", "scripts", "realbank", "vision_mcq.js"), "utf8"));
+  // gt_fallback_ap.mjs 也抄了同一份闸。2026-09-14 改「选项恒 4 个」时发现它不在这条测试里，
+  // 三份能各改各的而不被发现 —— 一并纳入。
+  const copy2 = lf(fs.readFileSync(path.join(__dirname, "..", "scripts", "realbank", "gt_fallback_ap.mjs"), "utf8"));
   test.each(["stampAnswer", "verifyMcq"])("%s 与原件逐字相同", (name) => {
     const a = functionSource(original, name);
     const b = functionSource(copy, name);
     expect(a).toBeTruthy();
     expect(b).toBe(a);
+  });
+  test.each(["verifyMcq"])("gt_fallback_ap 的 %s 也与原件逐字相同", (name) => {
+    expect(functionSource(copy2, name)).toBe(functionSource(original, name));
   });
   test("两边的 LETTERS / CJK / WATERMARK / countWords 常量也一致", () => {
     for (const line of [
@@ -192,5 +198,69 @@ describe("vision_mcq.restoredRecord：可追溯", () => {
     expect(out.vision_restored).toMatchObject({ by: "qwen3-vl", prev_status: "flagged", prev_type: "ctw", prev_problems: ["x"], prev_items: [], category: "misrouted_ctw" });
     expect(rec.status).toBe("flagged");
     expect(rec.type).toBe("ctw");
+  });
+});
+
+/**
+ * 选项数闸：恒 4 个（2026-09-14）。
+ *
+ * 为什么这条值得单测：它是「AP 每篇不足 5 题」的一条真实成因，而且旧口径（3~5 都放行）
+ * 制造了一个死循环——3 选项的题拿到 status=ok，`--only-failed` 判它 already_done 永不重扫，
+ * 落库时 build_bank.optionsMap 又因为「不是恰好 4 个」整题作废，中间还白花一笔盲审的钱。
+ * 早拒才能把它放进重扫名单。
+ */
+describe("verifyMcq：选项必须恰好 4 个", () => {
+  const ok4 = { stem: "What does the author suggest?", options: ["alpha one", "beta two", "gamma three", "delta four"] };
+  const run = (item) => V.verifyMcq(item);
+
+  test("恰好 4 个 → 无问题", () => {
+    expect(run(ok4)).toEqual([]);
+  });
+
+  test("3 个 / 5 个都要报出来（旧口径这两种都放行，正是死循环的入口）", () => {
+    for (const n of [3, 5]) {
+      const item = { ...ok4, options: ok4.options.slice(0, n).concat(n === 5 ? ["epsilon five"] : []) };
+      const p = run(item);
+      expect(p.some((x) => /选项数异常/.test(x))).toBe(true);
+    }
+  });
+
+  test("2 个 / 1 个 / 0 个照样报", () => {
+    for (const n of [0, 1, 2]) {
+      expect(run({ ...ok4, options: ok4.options.slice(0, n) }).some((x) => /选项数异常/.test(x))).toBe(true);
+    }
+  });
+
+  test("报错文案要说清是「恒 4 个」，让看日志的人知道该去找丢掉的那一项", () => {
+    const p = run({ ...ok4, options: ok4.options.slice(0, 3) });
+    const msg = p.find((x) => /选项数异常/.test(x));
+    expect(msg).toMatch(/恒 4 个/);
+    expect(msg).toMatch(/3/);
+  });
+
+  test("其余判据不受影响：重复选项 / 空选项 / 题干过短 / 中文 / 水印", () => {
+    expect(run({ ...ok4, options: ["a one", "a one", "b two", "c three"] })
+      .some((x) => /重复选项/.test(x))).toBe(true);
+    expect(run({ ...ok4, options: ["a one", "", "b two", "c three"] })
+      .some((x) => /选项为空/.test(x))).toBe(true);
+    expect(run({ ...ok4, stem: "x" }).some((x) => /题干缺失或过短/.test(x))).toBe(true);
+    expect(run({ ...ok4, stem: "这是中文题干 really" }).some((x) => /混入中文/.test(x))).toBe(true);
+  });
+});
+
+describe("PROMPTS.mcq：不许诱导模型编选项", () => {
+  const src = lf(fs.readFileSync(STRUCTURE_SET, "utf8"));
+
+  test("说明真题恒 4 个选项", () => {
+    expect(src).toMatch(/恒 4 个选项/);
+  });
+
+  test("同时明令禁止凑数 —— 编一个假选项比这道题作废严重得多", () => {
+    expect(src).toMatch(/不要自己编一个凑满 4 个/);
+    expect(src).toMatch(/不要编一个凑数/);
+  });
+
+  test("旧的「也可能是 3 个」已经删掉（它在邀请模型少给选项）", () => {
+    expect(src).not.toMatch(/也可能是 3 个/);
   });
 });

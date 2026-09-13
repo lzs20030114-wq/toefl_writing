@@ -49,7 +49,14 @@ function verifyMcq(item) {
   if (!item.stem || countWords(item.stem) < 2) p.push("题干缺失或过短");
   if (!Array.isArray(item.options)) p.push("options 不是数组");
   else {
-    if (item.options.length < 3 || item.options.length > 5) p.push(`选项数异常：${item.options.length}`);
+    // 恒 4 个。为什么不是「3~5 都放行」（2026-09-14 改）：落库那一步
+    // build_bank.optionsMap 只收恰好 4 个，不是 4 个就整题作废。放行 3 个的后果是这道题
+    //   ① 拿到 status=ok → `--only-failed` 判它 already_done，**永远不会重扫**；
+    //   ② 却每次重建都被 build_bank 扔掉 —— 不会被重试、也永远进不了库，永久困死；
+    //   ③ 中间还白花一笔盲审的钱（audit_answers 只审 status=ok 的块）。
+    // 早拒 = 标 flagged = 进重扫名单 + 省下盲审的钱 + 损失当场可见。
+    // 实测依据：线上 690 道阅读题 + 773 道听力题，选项数**全部恰好 4 个**（少于 4 的早被扔光了）。
+    if (item.options.length !== 4) p.push(`选项数异常：${item.options.length}（真题选择题恒 4 个，多半是分栏没理干净或某项被 OCR 吃了）`);
     if (new Set(item.options.map((o) => String(o).trim().toLowerCase())).size !== item.options.length) {
       p.push("存在重复选项（多半是分栏没理干净）");
     }
