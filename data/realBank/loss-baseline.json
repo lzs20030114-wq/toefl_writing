@@ -1,0 +1,23 @@
+{
+  "_generated": "2026-09-13",
+  "_generated_by": "scripts/realbank/loss_ledger.mjs --freeze",
+  "_purpose": "各题型入库量的冻结基线。重建后只许涨不许跌；跌了 __tests__/realbank-loss-guard.test.js 会红。",
+  "_how_to_bump": "确认数字是真涨了（不是把别的题挤掉换来的），重跑 node scripts/realbank/loss_ledger.mjs --freeze",
+  "blueprint_version": "2026.1",
+  "total_got": 4327,
+  "byType": {
+    "ctw": 1739,
+    "rdl": 497,
+    "ap": 737,
+    "repeat": 210,
+    "interview": 27,
+    "lcr": 259,
+    "lc": 136,
+    "la": 116,
+    "lat": 310,
+    "bs": 276,
+    "email": 9,
+    "disc": 7,
+    "mcq2": 4
+  }
+}

@@ -95,6 +95,7 @@ data/                         # 题库 + 校准语料 (JSON)
 ├── speaking/bank/            # repeat.json, interview.json (+ staging/, profile/)
 ├── realExam2026/             # ★真题 ground truth (reading/listening/speaking/writing) — 校准基准
 ├── realBank/                 # 真题专区成品库 (build_bank.mjs 产物) + sets.json(装回整卷: 原卷完整度/拼卷/整卷清单)
+│                             #   + loss-ledger.json(全科丢题账本: 每个缺口槽位+归因) / loss-baseline.json(防退化基线)
 ├── eval-profiles/            # 各题型 eval 画像 + gate 标准 (bs/ad/email/ctw/ap/listening/...)
 ├── vocabulary/               # 词表
 ├── announcements.json        # 应用内更新公告 (发版时改)
@@ -290,6 +291,10 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **后台长任务**: Workflow/子代理/长脚本每完成一个阶段要向用户回报一行进度，不许黑盒静默跑。
 - **报告语言**: 一律中文。
 - **固定入口**: 开工先看 docs/BACKLOG.md（统一挂起清单）；推送走 /ship；发版走 /release-notes；SQL 迁移走 /sql-migrate；题库质量退化先走 /calibration-fix；GitHub 方案调研走 /research-reuse。
+- **真题「丢题/缺题/这篇怎么只有几道题」**: 先跑 `node scripts/realbank/loss_ledger.mjs`（零 token、只读仓库），
+  它直接给出每套卷每个槽位缺几题 + 归因（管线丢题 / 整科缺席 / 源料缺陷 / 复核扣下 / 跨卷合并）。
+  **不要凭用户撞见的那一篇开工** —— 那正是 2026-09 连修几轮仍普遍丢题的原因（口径见 scripts/realbank/loss_attribution.js 头注）。
+  重建题库后要 `--freeze` 重冻基线，`__tests__/realbank-loss-guard.test.js` 卡住「某题型悄悄变少」。
 - **发版前置**: 未跑迁移(scripts/sql/MIGRATIONS.md)/未翻 flag/未勾 Vercel env 必须在推送前核对。
 - **复现 UI 问题必须挂真实组件**: 一律起 dev server + 临时页 import 真组件（`app/zz-probe/page.js` 之类，用完删）跑真浏览器量，
   禁止手写一份「长得像」的 HTML/JSX 复刻页来下判断——bug 按定义就住在「你以为的实现」和「真实现」的差里，

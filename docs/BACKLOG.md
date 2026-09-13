@@ -21,6 +21,17 @@
 - [中] 真题专区复核余项（2026-09-07 全库复核，报告 data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md，清单 data/realBank/review-holds.json）：①音频：切句 bug（a.m. 被劈开）已修，真题 23 条 + 生成库 79 条音频已作废待补配（本机 render_real_audio / Actions backfill-audio）；②`real_ap_511_1_26#2` 答案键 D vs 独立作答 C，对原截图核；③LC 说话人对调 4 条已改题干放行（rf0620_2_06 拆轮后待本机补配 1 条音频），rf0808_2_04 / rf0808_2_06 另有截断仍扣；④放行任何一条 = 删清单行 + 本机重跑 build_bank（成品已过滤，源料在 .codex-tmp）；⑤题池阅读 parse 阶段要保住段落分隔（本次 5 题因「paragraph N」无从定位被扣）。
 - [中] 真题录入二期两项口径待拍板：①BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉（`data/realExam2026/writing/buildSentence.json` 363 条 `scrambled_ocr`），只能做成「真题句子 + 本站切块」，是否接受这种来源分档；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
 
+- [高] 真题丢题全科口径（2026-09-14，报告 data/claudeGen/reports/REALBANK-LOSS-SYSTEMIC-2026-09-14.md）：
+  新账本 `node scripts/realbank/loss_ledger.mjs` 给出真实完整度 **4327/8280 = 52.3%**
+  （旧口径 84.8% 是因为 47 套卷的听力、46 套口语、30 套写作在 sets.json 里整科缺席、压根没进分母）。
+  代码侧已修（预算按题型放开 + 预算形自动重试 + 单块超时不再整卷作废 + 合流快照同步），
+  **数据侧一步没跑**（云端没有 .codex-tmp 与 API key）。要你拍板/要在本机跑的三件：
+  ①「管线丢题」585 题：本机按报告 §5 扫 flagged 块回收（只对已失败的块重跑，花费小）；
+  ②「整科缺席」2455 题（听力 42 套 / 口语 31 套 / 写作 24 套 / 阅读 2 套）要不要铺量 ——
+  先分清源料在不在（无音频 18 套是源缺），有源的要跑 structure_set + 合流 + TTS，**这是唯一真花钱的部分**；
+  ③ `run_pipeline.mjs` 的 `SECTIONS` 是否从 `reading,writing` 放开到四科（一期按「听力盲审 60% 不达标」锁的，
+  现在听力已是两票制 + 原声优先，条件变了，但放开 = 听力进常规产线，成本口径要重定）。
+
 ## 进行中
 - [中] DeepSeek 余额告警（出处：2026-09-09 排查 502 时在 /admin-api-errors 看到 9/5 22:21–22:24 三条 **402 Insufficient Balance**，即账户欠费过一次，用户侧同样只看到「评分服务暂时不可用」）：建议 nightly-quality-monitor 或后台首页加余额/402 计数告警，欠费与网关故障要能分开。
 - [低] `/api/ai` 直连路径 2026-09-09 已改流式拼接 + 快速 5xx 单次重试 + `fail()` 不再丢上游原文（修前后台「详情」列一直为空）。**待验证**：下一次晚高峰观察 api_error_feedback 里 stage=deepseek 的 error_detail 是否带 `upstream 5xx:` 前缀；若仍成批出现且原文是 503 overloaded，下一步把 samples=3 在重试时降为 1 路。
@@ -50,6 +61,9 @@
 - [中] 860 条孤儿听力音频清理（Supabase storage）：清库删除的重复条目各有独立 audio_url，id 清单在 `data/claudeGen/reports/dedup-removed-ids-2026-07-07.json`。
 - [中] admin「部署到正式题库」按钮接入 validator+gate（当前零校验旁路，同题不同判）。出处：QUESTION-PIPELINE-REVIEW-2026-07-07 §2.3。
 - [中] 出题管线审查 P1/P2 余项（BS 干扰词 0%/82%/10% 定案、答案位/最长项批级校验、~~听力 auditor 接线~~ ✅2026-08-02 已完成、LCR 范式配比、监控加固等）：完整清单见 QUESTION-PIPELINE-REVIEW-2026-07-07 §7。
+- [低] `__tests__/realbank-artifacts-sync.test.js` 2 例在 HEAD 上就是红的（upload 失败没收敛成 `SyncFailure`，
+  抛的是普通 `Error`）：2026-09-14 排查丢题时发现，stash 掉全部改动后照样红，与那轮改动无关，未修。
+
 - [低] 仓库卫生：
   - 5 个已合并 worktree + 孤儿目录 `cranky-lehmann` 清理
   - 已合并分支清理
