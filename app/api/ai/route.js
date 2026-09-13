@@ -264,6 +264,19 @@ function describeUpstreamError(reason) {
   return Number.isFinite(status) && status ? `upstream ${status}: ${text}` : text;
 }
 
+// 上游「HTTP 200 但正文是空的」——单采样路径必须把它当失败。
+//
+// 2026-09-13: v4-flash 是推理型模型,reasoning_tokens 计入 max_tokens 预算(见
+// lib/ai/writingEval.js 的实测记录)。预算被推理吃光时上游回 finish_reason=length
+// + 空 content,HTTP 却是 200。原来的单采样路径直接 Response.json({ content }) 放行,
+// 前端拿到 {content:""} 当成功:AI 解释类 hook 把空串写进 state(ex.text 是假值 →
+// 渲染回按钮)和 localStorage 缓存,用户看到的是「点了既不出内容也不报错」的死按钮,
+// 而 api_error_feedback 里一条记录都没有,后台完全查不到。
+// 多采样路径的 collectContents 早就把空串判为失败了,这里补齐单采样的同款判据。
+function isNonEmptyContent(content) {
+  return typeof content === "string" && content.trim().length > 0;
+}
+
 // 从 allSettled 结果里挑出成功且非空的 content(保持采样顺序)。
 function collectContents(results) {
   return results
@@ -328,6 +341,22 @@ async function fail(meta, status, payload) {
     errorDetail: payload?.detail || meta?.errorDetail || "",
   });
   return Response.json(payload, { status });
+}
+
+// 空正文一律按上游失败回 502(与其他 upstream 失败同一套文案/状态码),并且**不计用量**
+// —— 与本路由既有原则一致:失败的调用不扣次数。errorType 单列 empty_content,好让后台
+// /admin-api-errors 一眼区分「上游报错」和「上游回了 200 但正文是空的」。
+function failEmptyContent(requestMeta, path) {
+  return fail(
+    {
+      ...requestMeta,
+      stage: "deepseek",
+      errorType: "empty_content",
+      errorDetail: `upstream returned empty content (${path}, samples=1)`,
+    },
+    502,
+    { error: "AI service temporarily unavailable. Please retry." },
+  );
 }
 
 // Atomically record one unit of AI usage for the day, enforcing the cap as a
@@ -482,6 +511,7 @@ export async function POST(request) {
         return Response.json({ content: contents[0], contents });
       }
       const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
+      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "proxy");
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
@@ -516,6 +546,7 @@ export async function POST(request) {
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
     try {
       const content = await callDirectOnce(apiKey, upstreamParams);
+      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct");
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {

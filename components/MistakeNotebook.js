@@ -6,7 +6,7 @@ import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
 import { C, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
 import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
 import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
-import { callAI } from "../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
 import { extractReadingMistakes, countReadingMistakes } from "../lib/readingMistakes";
 import { extractListeningMistakes, countListeningMistakes } from "../lib/listeningMistakes";
 import { McqMistakesView } from "./mistakes/McqMistakesView";
@@ -276,10 +276,10 @@ function StatsBar({ groups, totalWrong, isLegacy }) {
     setAnalysis({ loading: true, text: null, error: null });
     try {
       const prompt = buildAnalysisPrompt(groups, totalWrong, gpFreq);
-      const text = await callAI(ANALYSIS_SYSTEM, prompt, 500, 60000, 0.4);
+      const text = await callAI(ANALYSIS_SYSTEM, prompt, AI_HELPER_MAX_TOKENS, 60000, 0.4);
       setAnalysis({ loading: false, text, error: null });
     } catch (e) {
-      setAnalysis({ loading: false, text: null, error: e.message || "分析失败" });
+      setAnalysis({ loading: false, text: null, error: mapAiHelperError(e) });
     }
   }, [groups, totalWrong, gpFreq, analysis.loading, isLegacy]);
 

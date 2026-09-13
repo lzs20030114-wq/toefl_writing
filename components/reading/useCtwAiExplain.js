@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 
 // CTW（阅读填词 / C-test）专用的 AI 讲解。与 useReadingAiExplain / useMcqAiExplain
 // 同一骨架（Pro 门 + localStorage 缓存 + 点了才计费），差别只在 prompt：
@@ -136,10 +136,9 @@ export function useCtwAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      // 700 而不是 350：实测 350 会把 3-5 句的中文讲解硬截断在句子中间
-      // （deepseek-v4-flash 的推理 token 也吃这份预算）。只在用户点按钮时计费，
-      // 上调预算的实际成本可忽略。
-      const text = await callAI(SYSTEM, buildMessage(detail), 700, 60000, 0.3);
+      // 预算见 AI_HELPER_MAX_TOKENS 的注释：这里曾单独调到 700（350 会把讲解截断在
+      // 句子中间），但同一个根因在 6 个辅助调用点各有一份,现已统一到共享常量。
+      const text = await callAI(SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
