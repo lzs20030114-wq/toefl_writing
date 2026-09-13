@@ -13,6 +13,7 @@ import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { MockSessionDetail } from "./MockSessionDetail";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { isSentenceSelection, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
 
@@ -350,8 +351,24 @@ export function RDLDetail({ session }) {
                   <span style={{ fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626", flexShrink: 0 }}>{r.isCorrect ? "✓" : "✗"}</span>
                   <span>{q ? q.stem : `第 ${i + 1} 题`}</span>
                 </div>
+                {/* 选句题（真题 AP）：选项是第 N 段各句、答案是 S 键 —— 直接写出你选的句子与正确句子 */}
+                {q && isSentenceSelection(q) && (
+                  <div data-testid="ss-history-detail" style={{ marginLeft: 20, display: "flex", flexDirection: "column", gap: 4 }}>
+                    {Number.isInteger(q.paragraph) && (
+                      <div style={{ fontSize: 11, color: P.textDim }}>选句题 · 第 {q.paragraph} 段</div>
+                    )}
+                    <div style={{ fontSize: 12, lineHeight: 1.6, color: r.isCorrect ? "#059669" : "#DC2626", fontWeight: 600 }}>
+                      你选的句子：{sentenceOptionText(q, r.selected) || "未作答"}{r.isCorrect && " ✓"}
+                    </div>
+                    {!r.isCorrect && (
+                      <div style={{ fontSize: 12, lineHeight: 1.6, color: "#059669", fontWeight: 600 }}>
+                        正确句子：{sentenceOptionText(q, r.correct || q.correct_answer)}
+                      </div>
+                    )}
+                  </div>
+                )}
                 {/* Options (if available) */}
-                {q && q.options && (
+                {q && q.options && !isSentenceSelection(q) && (
                   <div style={{ marginLeft: 20, display: "flex", flexDirection: "column", gap: 3 }}>
                     {["A", "B", "C", "D"].map(key => {
                       if (!q.options[key]) return null;

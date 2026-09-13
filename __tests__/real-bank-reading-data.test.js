@@ -10,8 +10,11 @@
  *   4. **CTW 的 original_word 不许带尾标点**（回归测试）：CTWTask 用
  *      `original_word.length - displayed_fragment.length` 算输入框宽度和 maxLength，
  *      带着句号就多算一位，屏幕上多一条永远填不满的下划线；
- *   5. 每道选择题恰好 A–D 四个非空选项 + 合法答案键 —— RDLTask:262 硬编码渲染这四个键，
- *      少一个（实测 OCR 串栏会吃掉一个选项）正确答案就渲染不出来，用户怎么点都错。
+ *   5. 每道四选一题恰好 A–D 四个非空选项 + 合法答案键 —— RDLTask 对四选一硬编码渲染这四个键，
+ *      少一个（实测 OCR 串栏会吃掉一个选项）正确答案就渲染不出来，用户怎么点都错；
+ *      选句题（sentence_selection）另有契约：S1..Sn 连续、答案在键里、paragraph_index（paragraphs 的
+ *      0 起下标）合法、每句在 paragraphs[paragraph_index] 里按序找得到
+ *      （lib/reading/sentenceSelection.js，RDLTask 在正文里逐句圈出来作答）。
  */
 
 import RB_CTW from "../data/realBank/reading/ctw.json";
@@ -219,11 +222,16 @@ describe("真题阅读：CTW 形状（CTWTask 硬契约）", () => {
 });
 
 describe("真题阅读：选择题形状（RDLTask 硬契约）", () => {
-  test("每题恰好 A–D 四个非空选项", () => {
+  // 与前端同一把尺子：题型 sentence_selection **且** 选项是 S1..Sn 才是点选句子；
+  // 第二来源拍成 A–D 的选句题（题型同名、选项 A–D）是普通四选一，走上面的四选一契约。
+  const { isSentenceSelection: isSelection } = require("../lib/reading/sentenceSelection");
+
+  test("每道四选一题恰好 A–D 四个非空选项", () => {
     const bad = [];
     mcqItems.forEach((it) => {
       expect(it.questions.length).toBeGreaterThan(0);
       it.questions.forEach((q, i) => {
+        if (isSelection(q)) return; // 选句题的形状见下面两条
         const keys = Object.keys(q.options).sort();
         if (keys.join("") !== "ABCD") bad.push(`${it.id}#${i} 选项键 ${keys.join("")}`);
         keys.forEach((k) => {
@@ -234,13 +242,77 @@ describe("真题阅读：选择题形状（RDLTask 硬契约）", () => {
     expect(bad).toEqual([]);
   });
 
-  test("correct_answer 必须是 A/B/C/D 之一，且 stem 非空", () => {
+  test("四选一题 correct_answer 必须是 A/B/C/D 之一，且 stem 非空", () => {
     mcqItems.forEach((it) => {
       it.questions.forEach((q) => {
-        expect(["A", "B", "C", "D"]).toContain(q.correct_answer);
         expect(String(q.stem).trim().length).toBeGreaterThan(0);
+        if (isSelection(q)) return;
+        expect(["A", "B", "C", "D"]).toContain(q.correct_answer);
       });
     });
+  });
+
+  // 选句题：mapper 已按 lib/reading/sentenceSelection.js 体检过，这里再用渲染侧的同一个版面函数
+  // 对成品逐题复核一遍 —— 放行了却圈不出句子 = 用户看到一道点不了的死题。
+  test("选句题：S1..Sn 连续（n≥2）、答案在键里、paragraph_index 合法、每句在 paragraphs[paragraph_index] 里按序圈得出来", () => {
+    const { readingParagraphs, sentenceSelectionLayout } = require("../lib/reading/sentenceSelection");
+    const bad = [];
+    mcqItems.forEach((it) => {
+      // 与 app/real-bank/page.js 喂给 RDLTask 的正文同源：AP 是 passage→text + paragraphs，RDL 是 text（+ 可选 paragraphs）
+      const material = { text: it.text || it.passage, paragraphs: it.paragraphs };
+      const paragraphCount = readingParagraphs(material).length;
+      it.questions.forEach((q, i) => {
+        if (!isSelection(q)) return;
+        const keys = Object.keys(q.options);
+        if (keys.length < 2 || keys.some((k, j) => k !== `S${j + 1}`)) bad.push(`${it.id}#${i} 选项键 ${keys.join(",")}`);
+        if (!keys.includes(q.correct_answer)) bad.push(`${it.id}#${i} 答案 ${q.correct_answer}`);
+        if (!Number.isInteger(q.paragraph) || q.paragraph < 1) bad.push(`${it.id}#${i} 段号 ${q.paragraph}`);
+        if (!Number.isInteger(q.paragraph_index) || q.paragraph_index < 0 || q.paragraph_index >= paragraphCount) {
+          bad.push(`${it.id}#${i} paragraph_index ${q.paragraph_index}（共 ${paragraphCount} 段）`);
+        }
+        if (!sentenceSelectionLayout(material, q)) bad.push(`${it.id}#${i} paragraphs[${q.paragraph_index}] 圈不出句子`);
+      });
+    });
+    expect(bad).toEqual([]);
+  });
+
+  // 选句题不合格时 mapper 只丢那一道题（不连累同篇），用户侧看不见 —— 所以在源文件上逐题说清被拒的原因，
+  // 数据侧（scripts/realbank）一看报错就知道改哪：缺下标 / 下标越界 / passage 与 paragraphs 不同步 / 句子不在该段。
+  test("源文件里的选句题逐题过得了 mapper（过不了的列出原因）", () => {
+    const { locateParagraph, normalizeSentenceSelection, readingParagraphs, sentenceOptionKeys } = require("../lib/reading/sentenceSelection");
+    const reasonOf = (q, material) => {
+      if (normalizeSentenceSelection(q, material)) return null;
+      const text = String(material.text || material.passage || "");
+      const paras = readingParagraphs(material);
+      const idx = q && q.paragraph_index;
+      if (!Number.isInteger(idx)) return `缺 paragraph_index（或不是整数：${JSON.stringify(idx)}）`;
+      if (idx < 0 || idx >= paras.length) return `paragraph_index ${idx} 越界（共 ${paras.length} 段）`;
+      if (!locateParagraph(text, paras, idx)) return `paragraphs[${idx}] 在 passage 里找不到（passage 与 paragraphs 不同步）`;
+      const missing = sentenceOptionKeys(q.options).filter((k) => !paras[idx].includes(String(q.options[k] || "").trim()));
+      if (missing.length) return `${missing.join(",")} 不在 paragraphs[${idx}] 里`;
+      return "段号 / 选项键 / 答案键 / 句子顺序不合契约";
+    };
+    const bad = [];
+    const scan = (items, toMaterial) => items.forEach((raw) => {
+      (Array.isArray(raw.questions) ? raw.questions : []).forEach((q, i) => {
+        if (!isSelection(q)) return;
+        const why = reasonOf(q, toMaterial(raw));
+        if (why) bad.push(`${raw.id}#${i}: ${why}`);
+      });
+    });
+    // 与 lib/realBank.js 的 mapRealAP / mapRealRDL 同口径拼材料（逐项 trim、不滤空）
+    const trimParas = (raw) => (Array.isArray(raw.paragraphs) ? raw.paragraphs : []).map((p) => String(p ?? "").trim());
+    scan(RB_AP.items || [], (raw) => ({ passage: String(raw.passage || raw.text || "").trim(), paragraphs: trimParas(raw) }));
+    scan(RB_RDL.items || [], (raw) => ({ text: String(raw.text || raw.passage || "").trim(), paragraphs: trimParas(raw) }));
+    expect(bad).toEqual([]);
+  });
+
+  // 按题数对账：源文件里有几道选句题，上屏就得有几道（整条被四选一题连累作废的也在这里现形）。
+  test("源文件里的选句题一道都没被 mapper 静默丢掉", () => {
+    const countSelections = (items) => items.reduce(
+      (n, it) => n + (Array.isArray(it.questions) ? it.questions.filter(isSelection).length : 0), 0);
+    expect(countSelections(ap)).toBe(countSelections(RB_AP.items || []));
+    expect(countSelections(rdl)).toBe(countSelections(RB_RDL.items || []));
   });
 
   test("RDL 有 text、AP 有 passage（RDLTask 渲染 item.text，AP 靠页面适配层转）", () => {
@@ -257,6 +329,8 @@ describe("真题阅读：选择题形状（RDLTask 硬契约）", () => {
     mcqItems.forEach((it) => {
       const material = it.text || it.passage || "";
       it.questions.forEach((q) => {
+        // 选句题的「选项」是正文原句，句子里出现 insert 之类的词不代表它是插入题
+        if (isSelection(q)) return;
         const probe = [q.stem, ...Object.values(q.options)].join(" ");
         // 可见的插入位标记有两套：旧源（ETS 截图）用 ■，第二来源「重排版」用 [A]-[D]
         // 字母方括号（选项也直接写 "A. [A]"）。两种都是屏幕上看得见的定位符，用户看得见

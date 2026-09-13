@@ -1,11 +1,30 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { C, FONT, READING_FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { materialImageSrc } from "../../lib/reading/materialImage";
 import { questionTypeLabel } from "../../lib/reading/questionTypeLabels";
+import {
+  isSentenceSelection,
+  sentenceOptionKeys,
+  sentenceOptionText,
+  sentenceSelectionLayout,
+  sentenceSelectionSegments,
+} from "../../lib/reading/sentenceSelection";
+
+const MCQ_KEYS = ["A", "B", "C", "D"];
+
+// 选句题的句子是行内 span（按钮是 inline-block，会把整句顶成一块、打断正文换行），
+// 键盘焦点环只能靠 :focus-visible —— 行内 style 写不了伪类，这里挂一小段样式。
+// 顺带一条提示语的断点：≤768px 时阅读分栏上下堆叠（app/mobile.css 同一断点），文章在题目上方，
+// 「点击左侧文章」要换成「点击上方文章」。
+const SENTENCE_SELECTION_CSS = [
+  ".tp-ss-sentence:focus-visible{outline:2px solid #3B82F6;outline-offset:2px;}",
+  ".tp-ss-hint-stacked{display:none;}",
+  "@media (max-width: 768px){.tp-ss-hint-split{display:none;}.tp-ss-hint-stacked{display:inline;}}",
+].join("");
 
 /**
  * RDL Task — matches real TOEFL interface:
@@ -13,6 +32,12 @@ import { questionTypeLabel } from "../../lib/reading/questionTypeLabels";
  * - One question at a time (passage always visible)
  * - Select answer → Next (no immediate feedback)
  * - After all questions → Submit → See all results at once
+ *
+ * 真题学术阅读的选句题（sentence_selection，契约见 lib/reading/sentenceSelection.js）：
+ * 作答区在左栏 —— paragraphs[paragraph_index] 那一段的每一句变成可点（悬停淡高亮、选中实底、
+ * Tab/Enter 可操作），右栏只放题干 + 「第 N 段」提示（N = 题干段号 paragraph，只管展示）+「已选：…」。
+ * 原图模式下这道题强制显示文字（图上点不了句子）。
+ * 版面定位不到时（mapper 已拦，这里兜底）右栏退回逐句列表作答，绝不出点不了的死题。
  */
 export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2" }) {
   // Scope drafts by item id; reading tasks use the same RDLTask shell for AP too,
@@ -53,6 +78,33 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   const vocabWord = getVocabTargetWord(question);
   const answeredCount = selections.filter(s => s !== null).length;
   const allAnswered = answeredCount === questions.length;
+
+  // 选句题：第 N 段每一句在正文里的位置。null = 不是选句题，或定位不到（→ 右栏列表兜底）。
+  const isSelection = isSentenceSelection(question);
+  const selectionLayout = useMemo(
+    () => (isSelection ? sentenceSelectionLayout(item, question) : null),
+    // item 是页面每次渲染新拼的适配对象，只盯真正参与定位的字段。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isSelection, item.text, item.passage, item.paragraphs, question]
+  );
+  const [hoverSentence, setHoverSentence] = useState(null); // `${题号}:${S 键}`
+  const leftPaneRef = useRef(null);
+  const selectionParagraphRef = useRef(null);
+
+  // 切到选句题时把第 N 段滚进左栏视口（整段已经可见就不动，免得来回切题时文章乱跳）。
+  // 只滚左栏自己的滚动容器，不动整页 —— 手机上左栏在上、题目在下，整页一滚题目就没了。
+  useEffect(() => {
+    if (!selectionLayout) return;
+    const box = leftPaneRef.current;
+    const target = selectionParagraphRef.current;
+    if (!box || !target) return;
+    const b = box.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
+    if (t.top >= b.top && t.bottom <= b.bottom) return;
+    const top = Math.max(0, box.scrollTop + (t.top - b.top) - 16);
+    if (typeof box.scrollTo === "function") box.scrollTo({ top, behavior: "smooth" });
+    else box.scrollTop = top;
+  }, [currentQ, selectionLayout]);
 
   // Timer: countdown or elapsed
   useEffect(() => {
@@ -139,6 +191,105 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   // otherwise fall back to the task label ("Read in Daily Life" / "Academic Passage").
   const heading = item.format_metadata?.title || item.format_metadata?.subject || title;
 
+  // 原图模式下，选句题强制显示文字（图上没法点句子）；换到别的题，原图偏好照旧生效。
+  const forceText = !!selectionLayout;
+  const showImage = !!materialImage && showMaterialImage && !forceText;
+  // 右栏选项键：四选一 A–D；选句题（仅在正文定位不到时走列表兜底）用 S1..Sn。
+  const optionKeys = isSelection ? sentenceOptionKeys(question.options) : MCQ_KEYS;
+  const selectedKey = selections[currentQ];
+  const selectedSentence = isSelection ? sentenceOptionText(question, selectedKey) : "";
+  const correctSentence = isSelection ? sentenceOptionText(question, question.correct_answer) : "";
+
+  const renderPlain = (text, keyPrefix) => (
+    vocabWord
+      ? splitForHighlight(text, vocabWord).map((seg, i) =>
+          seg.hit
+            ? <mark key={`${keyPrefix}-${i}`} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+            : <span key={`${keyPrefix}-${i}`}>{seg.text}</span>
+        )
+      : text
+  );
+
+  // 选句题的正文：段前 / 第 N 段（逐句可点）/ 段后。词汇高亮在每一截里照常生效。
+  function renderSelectionPassage() {
+    const { before, paragraph, after } = sentenceSelectionSegments(item.text, selectionLayout);
+    return (
+      <>
+        {renderPlain(before, "before")}
+        <span
+          ref={selectionParagraphRef}
+          data-testid="ss-paragraph"
+          data-paragraph={selectionLayout.paragraph}
+          data-paragraph-index={selectionLayout.paragraphIndex}
+        >
+          {paragraph.map((part, i) => {
+            if (part.type !== "sentence") return <span key={`gap-${i}`}>{renderPlain(part.text, `gap-${i}`)}</span>;
+            const { key } = part;
+            const isChosen = selectedKey === key;
+            const isHover = !submitted && hoverSentence === `${currentQ}:${key}`;
+            let state = "idle";
+            if (submitted) {
+              if (key === question.correct_answer) state = "correct";
+              else if (isChosen) state = "wrong";
+              else state = "review";
+            } else if (isChosen) state = "selected";
+            else if (isHover) state = "hover";
+
+            // 每个状态写满同一组长属性：简写 textDecoration 与长属性混用，切状态时 React 会报样式冲突。
+            const [background, color, underline] = {
+              idle: ["transparent", C.t1, `${accent.color}66`],
+              hover: [accent.soft, C.t1, accent.color],
+              selected: [accent.color, "#fff", null],
+              correct: ["#D1FAE5", "#065F46", null],
+              wrong: ["#FEE2E2", "#991B1B", null],
+              review: ["transparent", C.t1, null],
+            }[state];
+            const look = {
+              background,
+              color,
+              textDecorationLine: underline ? "underline" : "none",
+              textDecorationStyle: "dashed",
+              textDecorationColor: underline || "transparent",
+            };
+            const interactive = !submitted;
+            return (
+              <span
+                key={key}
+                className="tp-ss-sentence"
+                data-ss-key={key}
+                data-ss-state={state}
+                data-no-dict={interactive ? "" : undefined}
+                role={interactive ? "button" : undefined}
+                tabIndex={interactive ? 0 : undefined}
+                aria-pressed={interactive ? isChosen : undefined}
+                onClick={interactive ? () => handleSelect(key) : undefined}
+                onKeyDown={interactive ? (e) => {
+                  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleSelect(key); }
+                } : undefined}
+                onMouseEnter={interactive ? () => setHoverSentence(`${currentQ}:${key}`) : undefined}
+                onMouseLeave={interactive ? () => setHoverSentence(null) : undefined}
+                style={{
+                  ...look,
+                  textUnderlineOffset: 5,
+                  borderRadius: 4,
+                  // 只给竖向内边距：行内元素的横向 padding 会占宽度，切到本题时整段换行位置会跟着变。
+                  padding: "2px 0",
+                  boxDecorationBreak: "clone",
+                  WebkitBoxDecorationBreak: "clone",
+                  cursor: interactive ? "pointer" : "default",
+                  transition: "background 0.12s, color 0.12s",
+                }}
+              >
+                {renderPlain(part.text, `s-${key}`)}
+              </span>
+            );
+          })}
+        </span>
+        {renderPlain(after, "after")}
+      </>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       <TopBar
@@ -192,13 +343,14 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
           }}
         >
           {/* LEFT — passage (scrolls independently) */}
-          <div className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", padding: "22px 26px", borderRight: `1px solid ${C.bdr}` }}>
+          <div ref={leftPaneRef} className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", padding: "22px 26px", borderRight: `1px solid ${C.bdr}` }}>
             {/* Genre / topic badge */}
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: accent.soft, border: `1px solid ${accent.color}25`, fontSize: 12, color: accent.color, fontWeight: 600, marginBottom: 14 }}>
               {item.genre}
             </div>
-            {/* 材料原图（真题）：默认显图，可切回文本；没有该字段时整段行为与从前一致。 */}
-            {materialImage && showMaterialImage ? (
+            {/* 材料原图（真题）：默认显图，可切回文本；没有该字段时整段行为与从前一致。
+                选句题例外：强制显示文字（showImage 已把它排除）。 */}
+            {showImage ? (
               <div>
                 {vocabWord && (
                   <div style={{
@@ -230,17 +382,29 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               </div>
             ) : (
               <>
+                {forceText && materialImage && showMaterialImage && (
+                  <div style={{
+                    fontSize: 12.5, color: "#1E40AF", background: accent.soft,
+                    border: `1px solid ${accent.color}33`, borderRadius: 8,
+                    padding: "7px 10px", marginBottom: 10, lineHeight: 1.5,
+                  }}>
+                    {submitted ? "选句题在文字里回看，已切换为文字" : "本题需要在文章里点选句子，已切换为文字"}
+                  </div>
+                )}
+                {forceText && <style>{SENTENCE_SELECTION_CSS}</style>}
                 {/* Passage */}
                 <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
-                  {vocabWord
-                    ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
-                        seg.hit
-                          ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
-                          : <span key={i}>{seg.text}</span>
-                      )
-                    : item.text}
+                  {selectionLayout
+                    ? renderSelectionPassage()
+                    : vocabWord
+                      ? splitForHighlight(item.text, vocabWord).map((seg, i) =>
+                          seg.hit
+                            ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+                            : <span key={i}>{seg.text}</span>
+                        )
+                      : item.text}
                 </div>
-                {materialImage && (
+                {materialImage && !forceText && (
                   <button
                     onClick={() => setShowMaterialImage(true)}
                     style={{
@@ -313,9 +477,34 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 {question.stem}
               </div>
 
+              {/* 选句题：作答在左栏正文里，右栏只报「已选哪一句」 */}
+              {selectionLayout && !submitted && (
+                <div data-testid="ss-answer-panel">
+                  <div style={{ fontSize: 13, color: C.t2, marginBottom: 10, lineHeight: 1.5 }}>
+                    <span className="tp-ss-hint-split">点击左侧文章第 {selectionLayout.paragraph} 段中的一句作答</span>
+                    <span className="tp-ss-hint-stacked">点击上方文章第 {selectionLayout.paragraph} 段中的一句作答</span>
+                  </div>
+                  <div style={{
+                    padding: "11px 14px", borderRadius: 8, lineHeight: 1.6,
+                    background: selectedSentence ? accent.soft : "#FAFAFA",
+                    border: `1.5px solid ${selectedSentence ? accent.color : "#E5E7EB"}`,
+                  }}>
+                    {selectedSentence ? (
+                      <>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: accent.color }}>已选：</span>
+                        <span style={{ fontSize: 14, color: C.t1, fontFamily: READING_FONT }}>{selectedSentence}</span>
+                      </>
+                    ) : (
+                      <span style={{ fontSize: 13, color: C.t3 }}>尚未选择</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Options — circle radio style like real TOEFL (no letter labels) */}
+              {!selectionLayout && (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {["A", "B", "C", "D"].map(key => {
+                {optionKeys.map(key => {
                   const isSelected = selections[currentQ] === key;
                   const isCorrectOption = submitted && key === question.correct_answer;
                   const isWrongSelected = submitted && isSelected && key !== question.correct_answer;
@@ -362,9 +551,36 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                   );
                 })}
               </div>
+              )}
+
+              {/* 选句题复盘：正确句原文必须写出来（S 键对用户没有意义） */}
+              {submitted && isSelection && (
+                <div data-testid="ss-review" style={{
+                  marginTop: selectionLayout ? 0 : 16, padding: "10px 14px", borderRadius: 8,
+                  background: results[currentQ].isCorrect ? "#F0FDF4" : "#FEF2F2",
+                  border: `1px solid ${results[currentQ].isCorrect ? "#BBF7D0" : "#FECACA"}`,
+                }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: results[currentQ].isCorrect ? "#065F46" : "#991B1B", marginBottom: 6 }}>
+                    {results[currentQ].isCorrect ? "回答正确" : "回答错误"}
+                  </div>
+                  {!results[currentQ].isCorrect && (
+                    <div style={{ fontSize: 13, color: "#991B1B", lineHeight: 1.6, marginBottom: 6 }}>
+                      <span style={{ fontWeight: 700 }}>你选的：</span>
+                      <span style={{ fontFamily: READING_FONT }}>{selectedSentence || "未作答"}</span>
+                    </div>
+                  )}
+                  <div style={{ fontSize: 13, color: "#065F46", lineHeight: 1.6 }}>
+                    <span style={{ fontWeight: 700 }}>正确句：</span>
+                    <span style={{ fontFamily: READING_FONT }}>{correctSentence}</span>
+                  </div>
+                  {question.explanation && (
+                    <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5, marginTop: 6 }}>{question.explanation}</div>
+                  )}
+                </div>
+              )}
 
               {/* Explanation (only after submit) */}
-              {submitted && question.explanation && (
+              {submitted && !isSelection && question.explanation && (
                 <div style={{
                   marginTop: 16, padding: "10px 14px", borderRadius: 8,
                   background: results[currentQ].isCorrect ? "#F0FDF4" : "#FEF2F2",

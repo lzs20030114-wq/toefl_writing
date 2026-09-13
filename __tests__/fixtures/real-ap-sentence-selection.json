@@ -1,0 +1,130 @@
+{
+  "_note": "测试与浏览器验收用 fixture，不是题库数据。正文与段落逐字取自 data/realBank/reading/ap.json 的 real_ap_128a_1_27「Noise Control in Urban Areas」；第 27 题是该条目的真题原题，第 28 题（词汇）与第 29 题（sentence_selection，题干第 4 段）是按数据契约手造的，第 29 题的正确句 S2 为 fixture 随意指定，不是真题答案。这篇的 paragraphs[0] 是标题，所以题干第 4 段 = paragraph_index 4（「第 0 段不是标题」的篇目在测试里另造，那时第 4 段 = paragraph_index 3）。第二条与第一条内容相同，只多一个 material_image（内联 SVG 占位图，不是真实扫描），用来验「原图模式下选句题强制显示文字」。",
+  "items": [
+    {
+      "id": "real_ap_fixture_ss_1",
+      "source": "1.28新托福真题A卷",
+      "date": "2026-01-28",
+      "tier": "recalled",
+      "real": true,
+      "difficulty": "medium",
+      "source_hash": "532fdd72ba87",
+      "source_flags": [],
+      "topic": "passage",
+      "subtopic": null,
+      "passage": "Noise Control in Urban Areas\n\nUrban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.\n\nInnovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.\n\nAnother approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.\n\nAdvancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem.",
+      "paragraphs": [
+        "Noise Control in Urban Areas",
+        "Urban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.",
+        "Innovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.",
+        "Another approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.",
+        "Advancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "How do green walls help control noise pollution?",
+          "options": {
+            "A": "By purifying the air around buildings",
+            "B": "By disrupting the path of sound waves",
+            "C": "By making building facades more attractive",
+            "D": "By reducing temperatures inside buildings"
+          },
+          "correct_answer": "B",
+          "q_number": 27
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"grappling\" in paragraph 1 is closest in meaning to",
+          "options": {
+            "A": "struggling",
+            "B": "agreeing",
+            "C": "celebrating",
+            "D": "ignoring"
+          },
+          "correct_answer": "A",
+          "q_number": 28
+        },
+        {
+          "question_type": "sentence_selection",
+          "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
+          "paragraph": 4,
+          "paragraph_index": 4,
+          "options": {
+            "S1": "Advancements in technology have also led to the creation of noise cancelling materials.",
+            "S2": "Such materials are often used on buildings or road surfaces.",
+            "S3": "They work by actively reducing sound vibrations.",
+            "S4": "Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
+          },
+          "correct_answer": "S2",
+          "q_number": 29
+        }
+      ]
+    },
+    {
+      "id": "real_ap_fixture_ss_img_1",
+      "source": "1.28新托福真题A卷",
+      "date": "2026-01-28",
+      "tier": "recalled",
+      "real": true,
+      "difficulty": "medium",
+      "source_hash": "532fdd72ba87",
+      "source_flags": [],
+      "topic": "passage",
+      "subtopic": null,
+      "passage": "Noise Control in Urban Areas\n\nUrban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.\n\nInnovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.\n\nAnother approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.\n\nAdvancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem.",
+      "paragraphs": [
+        "Noise Control in Urban Areas",
+        "Urban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.",
+        "Innovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.",
+        "Another approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.",
+        "Advancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
+      ],
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "How do green walls help control noise pollution?",
+          "options": {
+            "A": "By purifying the air around buildings",
+            "B": "By disrupting the path of sound waves",
+            "C": "By making building facades more attractive",
+            "D": "By reducing temperatures inside buildings"
+          },
+          "correct_answer": "B",
+          "q_number": 27
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"grappling\" in paragraph 1 is closest in meaning to",
+          "options": {
+            "A": "struggling",
+            "B": "agreeing",
+            "C": "celebrating",
+            "D": "ignoring"
+          },
+          "correct_answer": "A",
+          "q_number": 28
+        },
+        {
+          "question_type": "sentence_selection",
+          "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
+          "paragraph": 4,
+          "paragraph_index": 4,
+          "options": {
+            "S1": "Advancements in technology have also led to the creation of noise cancelling materials.",
+            "S2": "Such materials are often used on buildings or road surfaces.",
+            "S3": "They work by actively reducing sound vibrations.",
+            "S4": "Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
+          },
+          "correct_answer": "S2",
+          "q_number": 29
+        }
+      ],
+      "material_image": {
+        "url": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCI+PHJlY3Qgd2lkdGg9IjY0MCIgaGVpZ2h0PSIzNjAiIGZpbGw9IiNGMUY1RjkiLz48cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI2MDAiIGhlaWdodD0iMzIwIiByeD0iMTIiIGZpbGw9IiNGRkZGRkYiIHN0cm9rZT0iI0NCRDVFMSIvPjx0ZXh0IHg9IjQ0IiB5PSI3MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxRTI5M0IiPk5vaXNlIENvbnRyb2wgaW4gVXJiYW4gQXJlYXM8L3RleHQ+PHRleHQgeD0iNDQiIHk9IjExMiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTUiIGZpbGw9IiM2NDc0OEIiPmZpeHR1cmUgbWF0ZXJpYWwgaW1hZ2UgKG5vdCBhIHJlYWwgc2Nhbik8L3RleHQ+PC9zdmc+",
+        "w": 640,
+        "h": 360
+      }
+    }
+  ]
+}

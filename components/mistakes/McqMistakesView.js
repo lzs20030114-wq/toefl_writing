@@ -106,6 +106,12 @@ function OptionRow({ optionKey, text, isSelected, isCorrect }) {
 
 function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handleAiExplain, section }) {
   const hasOptions = mistake.options && mistake.optionsKey && mistake.optionsKey.length > 0;
+  // 真题 AP 选句题：答案是原文里的一句（lib/readingMistakes 已把 S 键换成句子原文）。
+  const isSentenceSelection = mistake.kind === "sentence_selection";
+  // AI 讲解上下文给「第 N 段」而不是整篇 —— 讲解 hook 只取文章前 1500 字，长文的后几段会被截掉。
+  const explainContext = isSentenceSelection && mistake.paragraphText
+    ? { ...context, passage: mistake.paragraphText }
+    : context;
 
   return (
     <div style={{
@@ -136,12 +142,15 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
         </div>
       ) : (
         <>
+          {isSentenceSelection && mistake.paragraph ? (
+            <div style={{ fontSize: 11.5, color: C.t3, marginBottom: 4 }}>选句题 · 第 {mistake.paragraph} 段</div>
+          ) : null}
           <div style={{ fontSize: 13.5, marginBottom: 4, lineHeight: 1.6 }}>
-            <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>你的答案</span>
+            <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>{isSentenceSelection ? "你选的句子" : "你的答案"}</span>
             <span style={{ color: C.red }}>{mistake.userAnswer || "(未作答)"}</span>
           </div>
           <div style={{ fontSize: 13.5, marginBottom: 8, lineHeight: 1.6 }}>
-            <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>正确答案</span>
+            <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>{isSentenceSelection ? "正确句子" : "正确答案"}</span>
             <span style={{ color: C.green }}>{mistake.correctAnswer}</span>
           </div>
         </>
@@ -184,7 +193,7 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
       <McqAiExplainBlock
         explainKey={explainKey}
         mistake={mistake}
-        context={context}
+        context={explainContext}
         aiExplains={aiExplains}
         isPro={isPro}
         handleAiExplain={handleAiExplain}

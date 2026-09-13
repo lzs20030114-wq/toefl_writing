@@ -57,6 +57,9 @@ import {
   getRealRepeatSets,
   realTierLabel,
 } from "../../lib/realBank";
+// 题库重建会给阅读条目改名 / 归位（放错进学术阅读的日常材料挪回 RDL、跨卷同篇合并）：
+// 覆盖率 / 最新一次 / 分类筛选都按解析后的「当前 id + 当前题型」算，旧记录照样对得上账。
+import { resolveRealReadingRef } from "../../lib/realBankAliases";
 import { REAL_WRITING_COUNTS } from "../home/realExamCounts";
 import REAL_READING_COUNTS from "../../data/realBank/reading/counts.json";
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
@@ -136,7 +139,9 @@ function describeEntry(entry, index) {
   const d = s.details;
   const obj = d && typeof d === "object" && !Array.isArray(d) ? d : {};
   const ids = realSessionItemIds(s);
-  const info = ids.length > 0 ? index.get(ids[0]) : null;
+  // 题库查询用解析后的当前 id（旧 id 在库里已经查不到了）；解析不出（已下线）再退回记录里的 id。
+  const lookupId = (Array.isArray(entry.itemIds) && entry.itemIds[0]) || ids[0];
+  const info = lookupId ? index.get(lookupId) : null;
   // 写作历史里整道题（promptData）都存了，分档 / 日期优先读历史本身（老记录也能显示）。
   const tier = obj.promptData?.tier || info?.tier || (ids.length > 0 && sub !== "bs" && sub !== "email" && sub !== "discussion" ? "recalled" : "");
   const examDate = formatExamDate(obj.promptData?.date || info?.date || "");
@@ -416,7 +421,10 @@ export function RealBankProgressView({ onBack }) {
   }, []);
 
   const index = useMemo(() => getRealItemIndex(), []);
-  const entries = useMemo(() => buildRealBankEntries(hist?.sessions), [hist]);
+  const entries = useMemo(
+    () => buildRealBankEntries(hist?.sessions, { resolveItemRef: resolveRealReadingRef }),
+    [hist],
+  );
   const coverage = useMemo(() => buildRealBankCoverage(entries, BANK_TOTALS), [entries]);
   const subjectStats = useMemo(() => buildRealBankSubjectStats(entries), [entries]);
 

@@ -67,6 +67,7 @@ import {
   mapRealRepeatToPicker,
   REAL_TIER_NOTE,
 } from "../../lib/realBank";
+import { collectRealReadingDoneIds, findRealReadingItem } from "../../lib/realBankAliases";
 
 // 与 components/home/sections.js 的 SECTION_ACCENTS["real-bank"] 同色（金琥珀 = 权威感）。
 // 各任务页都在本地重复声明科目配色（见 app/reading/page.js:113），这里沿用同一惯例。
@@ -529,7 +530,9 @@ function RealBankPageClient() {
 
     if (!pickedReadingId) {
       // 已练读的正是 app/reading/page.js 写入的那把 key —— 常规练习做过的题在这里也会亮「已练」。
-      const doneIds = loadDoneIds(READING_DONE_KEYS[type]);
+      // 再叠一层旧 id 别名（lib/realBankAliases）：题库重建改了名 / 从学术阅读归位到日常阅读的条目，
+      // 用户按旧 id 记在旧题型 key 里的「已练」照样算数。
+      const doneIds = collectRealReadingDoneIds(type, (t) => loadDoneIds(READING_DONE_KEYS[t]));
       return (
         <UsageGateWrapper onExit={onExit} practiceMode={mode}>
           <TopicPicker
@@ -549,11 +552,21 @@ function RealBankPageClient() {
       );
     }
 
-    const item = readingItems.find((it) => String(it.id) === String(pickedReadingId));
-    if (!item) return <ItemUnavailable onBack={() => setPickedReadingId(null)} />;
+    // 按 id 找题统一走别名：精确命中当前列表最常见；拿着旧 id 来的（改了名 / 归位到别的题型）
+    // 接到新条目，按新题型渲染与存记录，而不是摆一张「这道真题暂不可用」。
+    const found = findRealReadingItem(pickedReadingId, type, (t) => {
+      if (t === type) return readingItems;
+      if (t === "ctw") return getRealCTWItems();
+      if (t === "rdl") return getRealRDLItems();
+      return getRealAPItems();
+    });
+    if (!found) return <ItemUnavailable onBack={() => setPickedReadingId(null)} />;
+    const { item, type: taskType } = found;
+    const taskLabels = REAL_TYPES[taskType] || readingLabels;
+    const taskTimeLimit = taskType === type ? timeLimitSeconds : getRealBankTimeSeconds(taskType, mode);
 
     const backToPicker = () => setPickedReadingId(null);
-    // AP 复用 RDLTask（同一套四选一交互），只把字段名对上：passage→text、topic→genre。
+    // AP 复用 RDLTask（同一套交互，四选一 + 选句题），只把字段名对上：passage→text、topic→genre。
     // 适配对象只喂给组件；存历史 / 打已练一律用原 item（details.passage 那一支自己会挑）。
     const apAsRdl = { ...item, text: item.passage, genre: item.topic };
 
@@ -563,34 +576,34 @@ function RealBankPageClient() {
       <UsageGateWrapper onExit={backToPicker} practiceMode={mode}>
         <AssetPreloadGate
           images={materialImagePreloadUrls(item)}
-          title={readingLabels.title}
-          section={readingLabels.section}
+          title={taskLabels.title}
+          section={taskLabels.section}
           onExit={backToPicker}
         >
-          {type === "ctw" && (
+          {taskType === "ctw" && (
             <CTWTask
               item={item}
               onExit={backToPicker}
               onComplete={(result) => saveRealReadingSession("ctw", item, result, mode)}
-              timeLimit={timeLimitSeconds}
+              timeLimit={taskTimeLimit}
               isPractice={isPractice}
             />
           )}
-          {type === "rdl" && (
+          {taskType === "rdl" && (
             <RDLTask
               item={item}
               onExit={backToPicker}
               onComplete={(result) => saveRealReadingSession("rdl", item, result, mode)}
-              timeLimit={timeLimitSeconds}
+              timeLimit={taskTimeLimit}
               isPractice={isPractice}
             />
           )}
-          {type === "ap" && (
+          {taskType === "ap" && (
             <RDLTask
               item={apAsRdl}
               onExit={backToPicker}
               onComplete={(result) => saveRealReadingSession("ap", item, result, mode)}
-              timeLimit={timeLimitSeconds}
+              timeLimit={taskTimeLimit}
               isPractice={isPractice}
               title="Academic Passage"
               section="Reading | Task 3"
