@@ -8,6 +8,7 @@ import { WechatQrImage } from "../shared/WechatQrImage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { ReferralBanner } from "./ReferralBanner";
+import { MobileVocabEntry } from "../vocab/MobileVocabEntry";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { getRealBankTimeLabels } from "../../lib/realBankModes";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
@@ -314,6 +315,9 @@ export function MobileHomePage({
 
       </>
       )}
+
+      {/* ── 单词本入口（跨科目，切到哪个 tab 都在） ── */}
+      <MobileVocabEntry isChallenge={isChallenge} querySuffix={querySuffix} />
 
       {/* ── 底部快捷入口 ── */}
       <div style={{ display: "flex", gap: 8 }}>

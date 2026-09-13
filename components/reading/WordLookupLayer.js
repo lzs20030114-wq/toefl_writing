@@ -5,6 +5,7 @@ import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup
 import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI } from "../../lib/ai/client";
+import { isSaved, saveWord, removeWord } from "../../lib/vocab/vocabStore";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -87,12 +88,14 @@ function saveAiCache(key, text) {
 /**
  * 用法：<WordLookupLayer passage={passage}>…原文…</WordLookupLayer>
  * 带 data-no-dict 属性的子节点（例如 CTW 里点开解析的填空 chip）不触发查词。
+ * source 会记进单词本，用来在 /vocab-notebook 里显示这个词是从哪儿收藏的。
  */
-export function WordLookupLayer({ passage, children, style }) {
+export function WordLookupLayer({ passage, children, style, source = "reading" }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
+  const [saved, setSaved] = useState(false); // 当前这个词在不在单词本里
 
   const tier = typeof window !== "undefined" ? getSavedTier() : null;
   const isPro = tier === "legacy" || tier === "pro";
@@ -100,6 +103,7 @@ export function WordLookupLayer({ passage, children, style }) {
   const close = useCallback(() => {
     setPop(null);
     setAi(null);
+    setSaved(false);
   }, []);
 
   // 文章用到哪些首字母就预热哪些分片，点词时不必等网络。
@@ -117,6 +121,7 @@ export function WordLookupLayer({ passage, children, style }) {
     // 记住这个词的 Range：页面滚动时据此重算位置，弹窗才跟得住词。
     rangeRef.current = range;
     setAi(null);
+    setSaved(isSaved(word));
     setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
     const entry = await lookupWord(word);
     setPop((prev) =>
@@ -232,6 +237,36 @@ export function WordLookupLayer({ passage, children, style }) {
     }
   }, [pop, passage]);
 
+  // 词典命中的原形才是该进单词本的那个词：学生查 studies，收藏的应该是 study。
+  const saveWordForm = (pop && pop.entry && pop.entry.word) || (pop && pop.word) || "";
+
+  // 查词结果回来后词形可能被归一，重新对一次收藏态。
+  useEffect(() => {
+    if (!saveWordForm) return;
+    setSaved(isSaved(saveWordForm));
+  }, [saveWordForm]);
+
+  const toggleSave = useCallback(() => {
+    if (!pop || !saveWordForm) return;
+    if (isSaved(saveWordForm)) {
+      removeWord(saveWordForm);
+      setSaved(false);
+      return;
+    }
+    saveWord({
+      word: saveWordForm,
+      display: saveWordForm,
+      phonetic: (pop.entry && pop.entry.p) || "",
+      def: (pop.entry && pop.entry.t) || "",
+      tag: (pop.entry && pop.entry.g) || "",
+      // 连词所在的整句一起存：复习时在原语境里认词比孤立词表记得牢，
+      // 这句话也是「挖空填词」卡片的原料。
+      sentence: sentenceAround(passage, pop.word) || "",
+      source,
+    });
+    setSaved(true);
+  }, [pop, saveWordForm, passage, source]);
+
   // 贴在词的正下方；下方装不下就翻到上方，左右不越界。
   let popStyle = null;
   if (pop && pop.rect) {
@@ -344,8 +379,35 @@ export function WordLookupLayer({ passage, children, style }) {
             </div>
           )}
 
-          {isPro && !pop.loading && (
+          {!pop.loading && (
             <div style={{ marginTop: 10, borderTop: "1px solid #eef2ef", paddingTop: 8 }}>
+              <button
+                onClick={toggleSave}
+                aria-label={saved ? "从单词本移除" : "收藏到单词本"}
+                title={saved ? "已在单词本里，点一下移除" : "收藏到单词本，之后按遗忘曲线安排复习"}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  border: `1px solid ${saved ? "#f0c14b" : "#dbe3dd"}`,
+                  background: saved ? "#fff8e6" : "#fff",
+                  color: saved ? "#9a6b00" : "#5a6b62",
+                  borderRadius: 999,
+                  padding: "4px 12px",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  lineHeight: 1.5,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {saved ? "★ 已在单词本" : "☆ 收藏到单词本"}
+              </button>
+            </div>
+          )}
+
+          {isPro && !pop.loading && (
+            <div style={{ marginTop: 8, paddingTop: 0 }}>
               {ai && ai.text ? (
                 <div
                   style={{

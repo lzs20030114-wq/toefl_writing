@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
+import { VocabSideCard } from "../vocab/VocabSideCard";
 import {
   loadStudyPlan, saveStudyPlan, clearStudyPlan, hasGoal,
   STUDY_PLAN_UPDATED_EVENT,
@@ -351,6 +352,9 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
           本月 {currentMonthCount} 天 · 累计 {totalCount} 天
         </div>
       </div>
+
+      {/* ══ 卡片三：单词本 ══ */}
+      <VocabSideCard isChallenge={isChallenge} cardStyle={modernCard} fadeIn={fadeIn} />
 
       {editorOpen && createPortal(
         <GoalEditor

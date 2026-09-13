@@ -11,6 +11,7 @@ import { ListeningSectionContent } from "./ListeningSectionContent";
 import { SpeakingSectionContent } from "./SpeakingSectionContent";
 import { MyBankSectionContent } from "./MyBankSectionContent";
 import { RealExamSectionContent } from "./RealExamSectionContent";
+import { VocabLinkCard } from "../vocab/VocabLinkCard";
 
 export function SectionContent({
   activeSection,
@@ -159,6 +160,9 @@ export function SectionContent({
           description={bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题，点击查看详情和 AI 解析。` : "做完拼句练习后，错题会自动收录在这里。"}
           badge={bsMistakeCount > 0 ? `${bsMistakeCount} 题` : "暂无错题"}
         />
+      </div>
+      <div style={{ marginBottom: 12, ...fadeIn(480) }}>
+        <VocabLinkCard hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
       </div>
       <div style={{ marginBottom: 28, ...fadeIn(500) }}>
         <HomeLinkCard
