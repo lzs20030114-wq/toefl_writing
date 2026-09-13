@@ -90,6 +90,7 @@ function saveAiCache(key, text) {
  */
 export function WordLookupLayer({ passage, children, style }) {
   const popRef = useRef(null);
+  const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
 
@@ -110,11 +111,13 @@ export function WordLookupLayer({ passage, children, style }) {
     prefetchShards([...letters]);
   }, [passage]);
 
-  const openFor = useCallback(async (raw, rect) => {
+  const openFor = useCallback(async (raw, range) => {
     const word = normalizeWord(raw);
     if (!word || !/[a-z]/.test(word)) return;
+    // 记住这个词的 Range：页面滚动时据此重算位置，弹窗才跟得住词。
+    rangeRef.current = range;
     setAi(null);
-    setPop({ word, rect, entry: null, loading: true, notFound: false });
+    setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
     const entry = await lookupWord(word);
     setPop((prev) =>
       prev && prev.word === word
@@ -133,8 +136,8 @@ export function WordLookupLayer({ passage, children, style }) {
       if (picked) {
         // 划词：限制在一句以内，别把整段当词查
         if (picked.length > 60 || picked.split(/\s+/).length > 6) return;
-        const rect = sel.getRangeAt(0).getBoundingClientRect();
-        openFor(picked, rect);
+        // selection 的 Range 是 live 的（用户再选别处就会变），克隆一份快照留着定位
+        openFor(picked, sel.getRangeAt(0).cloneRange());
         return;
       }
       const r = wordRangeFromPoint(ev.clientX, ev.clientY);
@@ -142,7 +145,7 @@ export function WordLookupLayer({ passage, children, style }) {
         close();
         return;
       }
-      openFor(r.toString(), r.getBoundingClientRect());
+      openFor(r.toString(), r);
     },
     [openFor, close]
   );
@@ -158,27 +161,51 @@ export function WordLookupLayer({ passage, children, style }) {
     [handlePick]
   );
 
+  // 只在「开/关」这个布尔翻转时装拆监听——位置更新走 ref，不进依赖，
+  // 否则每滚一帧 setPop 都会把监听重装一遍。
+  const isOpen = !!pop;
   useEffect(() => {
-    if (!pop) return undefined;
+    if (!isOpen) return undefined;
     const onDown = (e) => {
       if (!popRef.current || !popRef.current.contains(e.target)) close();
     };
     const onKey = (e) => {
       if (e.key === "Escape") close();
     };
-    // 页面一滚动，词的位置就变了，直接收起最省事
-    const onScroll = () => close();
+    // 滚动时跟着词走，而不是收起：AI 讲解展开后内容长，用户正需要滚着读。
+    // 词滚出视口才收起——那时弹窗已经没有依附对象了。
+    // 同步算，不走 requestAnimationFrame：rAF 在页面不渲染时（后台标签页、
+    // 被遮挡的窗口）会被挂起，那样弹窗就停在旧位置不动，比收起来还糟。
+    // 只有弹窗开着时才挂这个监听，一次 getBoundingClientRect 的开销可以忽略。
+    const reposition = () => {
+      const range = rangeRef.current;
+      if (!range) return;
+      const r = range.getBoundingClientRect();
+      const gone = r.width === 0 && r.height === 0; // 节点被重渲染换掉了
+      if (gone || r.bottom < 0 || r.top > window.innerHeight) {
+        close();
+        return;
+      }
+      setPop((prev) => {
+        if (!prev) return prev;
+        const p = prev.rect;
+        if (p && Math.abs(p.top - r.top) < 0.5 && Math.abs(p.left - r.left) < 0.5) {
+          return prev; // 词没动（例如在弹窗内部滚动），别白白重渲染
+        }
+        return { ...prev, rect: r };
+      });
+    };
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
-    window.addEventListener("scroll", onScroll, true);
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
     return () => {
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
-      window.removeEventListener("scroll", onScroll, true);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
     };
-  }, [pop, close]);
+  }, [isOpen, close]);
 
   const askAi = useCallback(async () => {
     if (!pop) return;
@@ -210,14 +237,19 @@ export function WordLookupLayer({ passage, children, style }) {
   if (pop && pop.rect) {
     const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
     const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const below = vh - pop.rect.bottom > 200;
+    const spaceBelow = vh - pop.rect.bottom - 16;
+    const spaceAbove = pop.rect.top - 16;
+    // 下方够放就放下方，否则挑空间大的一侧
+    const below = spaceBelow >= 200 || spaceBelow >= spaceAbove;
+    // AI 讲解会把弹窗撑高：限制在可用空间内，让它自己内部滚动，别顶出视口
+    const maxHeight = Math.round(Math.max(140, Math.min(320, below ? spaceBelow : spaceAbove)));
     const left = Math.max(
       8,
       Math.min(pop.rect.left + pop.rect.width / 2 - POP_W / 2, vw - POP_W - 8)
     );
     popStyle = below
-      ? { top: Math.round(pop.rect.bottom + 8), left: Math.round(left) }
-      : { bottom: Math.round(vh - pop.rect.top + 8), left: Math.round(left) };
+      ? { top: Math.round(pop.rect.bottom + 8), left: Math.round(left), maxHeight }
+      : { bottom: Math.round(vh - pop.rect.top + 8), left: Math.round(left), maxHeight };
   }
 
   return (
@@ -236,8 +268,9 @@ export function WordLookupLayer({ passage, children, style }) {
             width: POP_W,
             // 不加这行的话 padding 会撑出 POP_W，靠右边的词弹窗会溢出视口
             boxSizing: "border-box",
-            maxHeight: 300,
             overflowY: "auto",
+            // 弹窗内滚到底时别把页面一起带着滚
+            overscrollBehavior: "contain",
             background: "#fff",
             border: "1px solid #d8e0da",
             borderRadius: 12,
