@@ -45,6 +45,16 @@
   ③ `run_pipeline.mjs` 的 `SECTIONS` 放开到四科：**建议现在不动**，等 ② 的实测单价再说
   （`--only-failed` 直接调 structure_set 已够用，放开只省几行命令却把听力并进常规产线）。
 
+- [高] 阅读「丢选项 = 整题作废」的死循环（2026-09-14，报告 REALBANK-INGEST-AUDIT-2026-09-14.md §7）：
+  三层口径不一致——`PROMPTS.mcq` 明说「也可能是 3 个」、`verifyMcq` 放行 3~5 个（status=ok）、
+  `build_bank.optionsMap` 却要求恰好 4 个否则整题作废。后果：被 OCR 吃掉一个选项的题
+  ①先花结构化的钱 ②再花盲审的钱 ③落库时静默丢弃 ④因为状态是 ok，`--only-failed` **永远不会重扫它**
+  → **永久困死，重扫也救不回**，这解释了为什么反复补题某些篇子始终补不满。
+  修法：`verifyMcq` 对阅读选择题改成「必须恰好 4 个否则 flagged」（早拒 = 放它进重扫名单 + 省盲审的钱），
+  同步删掉 prompt 里「也可能是 3 个」那句；并把落库丢弃计数按 (卷,科,题号,原因) 落账、纳入 loss-ledger
+  （现在这些计数只 console.log 到终端，跑完即散，事后无从查证）。
+  另：`real_ap_21b_2_12` 插入题选项是正文碎片而非 [A]~[D]（26 道里 1 道），走复核清单修。
+
 ## 进行中
 - [中] DeepSeek 余额告警（出处：2026-09-09 排查 502 时在 /admin-api-errors 看到 9/5 22:21–22:24 三条 **402 Insufficient Balance**，即账户欠费过一次，用户侧同样只看到「评分服务暂时不可用」）：建议 nightly-quality-monitor 或后台首页加余额/402 计数告警，欠费与网关故障要能分开。
 - [低] `/api/ai` 直连路径 2026-09-09 已改流式拼接 + 快速 5xx 单次重试 + `fail()` 不再丢上游原文（修前后台「详情」列一直为空）。**待验证**：下一次晚高峰观察 api_error_feedback 里 stage=deepseek 的 error_detail 是否带 `upstream 5xx:` 前缀；若仍成批出现且原文是 503 overloaded，下一步把 samples=3 在重试时降为 1 路。
