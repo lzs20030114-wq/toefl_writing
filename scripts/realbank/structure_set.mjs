@@ -40,7 +40,7 @@ const { writeStructured } = require("./structured_io.js");
 const { callBudget, retryBudget, parseJsonLoose, unparsableProblem, isBudgetProblem, ctwVisionCacheFile }
   = require("./model_output.js");
 // 失败分级（硬失败整卷作废 / 单块超时只记这一块）：./failure_policy.js
-const { classifySystemicFailure, escalate, shouldResweep } = require("./failure_policy.js");
+const { classifySystemicFailure, escalate, shouldResweep, isMergeOwned } = require("./failure_policy.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -576,16 +576,20 @@ async function main() {
     // 重扫判据（含「合流层扣下的块不重跑」）见 ./failure_policy.js 的 shouldResweep。
     const skipped = {};
     units = units.filter((u) => {
+      // 合流跑过的卷，听力/口语已归合流所有：key 格式都换了，这里查不到、全量重跑还付全额。
+      // 详见 failure_policy.isMergeOwned 的注释。
+      if (isMergeOwned(u.section, existing)) { skipped.merge_owned = (skipped.merge_owned || 0) + 1; return false; }
       const { resweep, skip } = shouldResweep(u, prev.get(u.key), CTW_MIN_ANSWERS);
       if (!resweep) skipped[skip] = (skipped[skip] || 0) + 1;
       return resweep;
     });
-    const mergeHeld = skipped.merge_held || 0;
     console.log(`--only-failed：${before} → ${units.length} 块`
       + `（既有 ok 的不重跑；答案不足 ${CTW_MIN_ANSWERS} 个的填词块是路由误判，跳过）`);
-    if (mergeHeld) {
-      console.log(`  其中 ${mergeHeld} 块是合流层扣下的（带 merged_by），跳过 —— 它们的病在对齐/性别/音频，`
-        + "重跑结构化治不了，要回 merge_*_asr 那一层修。");
+    if (skipped.merge_owned) {
+      console.log(`  跳过 ${skipped.merge_owned} 块听力/口语：这卷已跑过合流，这两科归合流所有。`);
+      console.log("  重跑它们既查不到失败块（key 格式不同 → 会变成整科全量重跑、全额付费），");
+      console.log("  也换不来题（正文来自商家逐字稿 + ASR 对齐，扣题原因全判在合流层）。");
+      console.log("  要修回合流那一层：lc_gender_worksheet 标性别 / 补音频 / 人工切轮次，再重跑 merge_*_asr。");
     }
   }
   if (merge && !units.length) {

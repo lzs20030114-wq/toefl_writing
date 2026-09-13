@@ -8,7 +8,7 @@
  * 两侧都锁死。
  */
 const {
-  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate, shouldResweep,
+  SOFT_FAILURE_LIMIT, classifySystemicFailure, escalate, shouldResweep, isMergeOwned,
 } = require("../scripts/realbank/failure_policy.js");
 
 const err = (message, code) => Object.assign(new Error(message), code ? { code } : {});
@@ -134,5 +134,59 @@ describe("shouldResweep", () => {
       .toEqual({ resweep: false, skip: "ctw_misrouted" });
     const real = { type: "ctw", answers: Array.from({ length: 10 }, (_, i) => ({ n: i + 1 })) };
     expect(shouldResweep(real, { status: "flagged" })).toEqual({ resweep: true, skip: null });
+  });
+});
+
+/**
+ * 合流过的卷，听力/口语归合流所有。
+ *
+ * 这条是 2026-09-14 顺着用户那句「听力不用重扫吧，我们不是直接放商家的听力吗」核出来的：
+ * structure_set 的块 key 是 `section|module|start-end|total`，而两个来源的合流写回时
+ * 换成了 `listening|{mod}|{q_start}` / `speaking|1|repeat|1`。两种格式零重合，于是
+ * `--only-failed --sections listening` 在合流过的卷上会
+ *   ① 查不到任何既有记录 → 每块都当「没跑过」→ 整科全量重跑、全额付费；
+ *   ② 结果 key 也对不上 → merge 回写只能追加 → 同一段听力在产物里出现两份。
+ * 而且重跑换不来题：正文来自商家逐字稿 + ASR 对齐，扣题原因全判在合流层。
+ */
+describe("isMergeOwned", () => {
+  const merged = { merged_asr: { merger: "merge_first_source_asr-v1" }, results: [] };
+  const raw = { results: [] };
+
+  test("合流过的卷：听力/口语归合流，不归 structure_set", () => {
+    expect(isMergeOwned("listening", merged)).toBe(true);
+    expect(isMergeOwned("speaking", merged)).toBe(true);
+  });
+
+  test("阅读/写作任何时候都归 structure_set —— 别把能扫的一起挡掉", () => {
+    expect(isMergeOwned("reading", merged)).toBe(false);
+    expect(isMergeOwned("writing", merged)).toBe(false);
+  });
+
+  test("没跑过合流的卷：听力/口语该扫还得扫（合流前必须先有结构化产物）", () => {
+    expect(isMergeOwned("listening", raw)).toBe(false);
+    expect(isMergeOwned("speaking", raw)).toBe(false);
+    expect(isMergeOwned("listening", null)).toBe(false);
+    expect(isMergeOwned("listening", undefined)).toBe(false);
+  });
+});
+
+describe("为什么不能靠 key 查合流记录（回归：两边 key 格式零重合）", () => {
+  // structure_set：collectUnits 里 `${section}|${mod.module}|${b.start}-${b.end}|${b.total}`
+  const unitKey = (section, mod, start, end, total) => `${section}|${mod}|${start}-${end}|${total}`;
+  // 合流：merge_first_source_asr / merge_vendor_asr 写回时用的
+  const mergeKey = (mod, qStart) => `listening|${mod}|${qStart}`;
+
+  test("同一段听力，两边算出来的 key 不相等", () => {
+    expect(unitKey("listening", 1, 13, 14, 32)).toBe("listening|1|13-14|32");
+    expect(mergeKey(1, 13)).toBe("listening|1|13");
+    expect(unitKey("listening", 1, 13, 14, 32)).not.toBe(mergeKey(1, 13));
+  });
+
+  test("所以按 key 查合流产物必然落空 —— shouldResweep 会把它当新块放行，", () => {
+    const prev = new Map([[mergeKey(1, 13), { status: "ok", merged_by: "merge_first_source_asr-v1" }]]);
+    const unit = { key: unitKey("listening", 1, 13, 14, 32), type: "lc", answers: [{ n: 13 }] };
+    expect(prev.get(unit.key)).toBeUndefined();
+    expect(shouldResweep(unit, prev.get(unit.key)).resweep).toBe(true);   // 光靠 shouldResweep 拦不住
+    expect(isMergeOwned(unit.key.split("|")[0], { merged_asr: {} })).toBe(true);   // 要靠这条拦
   });
 });

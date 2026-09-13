@@ -160,7 +160,9 @@ node scripts/realbank/loss_ledger.mjs --plan --limit 8  # 每阶段只出前 8 �
 ```
 
 阶段顺序是按**验证价值**排的，不是按缺口大小：写作（不碰音频、链路最短、最卡整卷）→
-阅读（量最大）→ 听力/口语（跑完必须重跑合流）。同一套卷的多科会合成一条命令。
+阅读（量最大）。同一套卷的多科会合成一条命令。
+
+**听力/口语不在作业单里**（那 250 题），原因见 §7 —— 重扫它们既白花钱又污染产物。
 
 **第 0 步是零成本的**：作业单里每条命令都带 `--dry`，`--dry` 在任何模型调用之前就返回，
 不花一分钱、秒回，只报这卷这科还有几个失败块可重扫。所以先把整个阶段的 `--dry` 跑一遍，
@@ -187,8 +189,6 @@ node scripts/ops/deepseek-usage-report.mjs                # 对账这轮花了�
 ```
 
 花费：只对已经失败的块重跑，且只在失败签名是预算形时才多一次重试。
-听力那边，**合流层扣下的段会自动跳过**（带 `merged_by`）—— 它们的病在对齐/性别/音频，
-重跑结构化一分钱都治不了；不挡的话一轮听力扫描就是纯烧钱。
 
 **顺手可验证 §2.1 的推断**：台账里顶到 16000 的那 531 次调用，按题型拆一下
 （`.ops/deepseek-usage.jsonl`）。如果非 CTW 占大头，就实锤了「选择题也一直在顶预算」。
@@ -229,3 +229,65 @@ node scripts/ops/deepseek-usage-report.mjs                # 对账这轮花了�
   抛的是普通 `Error`）。与本轮改动无关，已确认 stash 掉全部改动后照样红。没修，免得混进这次的 diff。
 - 账本对「整科缺席」只能看出「一题都没进过库」，分不清「源里没有」和「没跑过」——
   要分清得读 `.codex-tmp` 里的对齐产物，那只在本机。本机跑一次账本可以顺手补这一维。
+
+---
+
+## 7. 更正：听力/口语不能靠重扫回收（2026-09-14 二次核查）
+
+用户看到第一版作业单后指出「听力不用重扫吧，我们不是把商家给的听力直接放进题里吗」。
+核过代码与数据，**这个更正是对的，而且实际后果比「没必要」更严重**。
+
+### 7.1 听力题到底是怎么拼出来的
+
+以 `real_lat_121b_1_25` 为例，逐字段的来源：
+
+| 字段 | 来源 |
+|---|---|
+| `audio_url` | **商家原声**（`audio_source: "original"`，存 Supabase `listening_audio` 桶）。全库 440 条里 **388 条挂原声**，52 条退回 TTS |
+| `transcript` / `turns` / `speakers` | **商家「听力原文」逐字稿 PDF**，经 Whisper 词级对齐核验（该条 `asr_similarity` 0.996）。合流层产出 |
+| `questions[].stem` / `options` | OCR 的答题屏 → `structure_set` 模型转写。**这是 structure_set 唯一负责的部分** |
+| `answer` | 答案 PDF 的答案键（模型只转写不解题） |
+
+所以「商家给的听力直接放进题里」对音频与逐字稿完全成立；模型只经手题干和选项。
+退回 TTS 的那 52 条，原因全是音频定位类（`locate_failed` 23 / `anchor_mismatch` 11 /
+`coverage_low` 7 / `tail_not_clean` 4 / `wpm_out_of_range` 3 / `source_no_speech` 3），
+没有一条是「模型转写失败」。
+
+### 7.2 重扫会发生什么（实测判据，不是推测）
+
+`build_bank.mjs` 对听力有一句 `if (!st.merged_asr) continue;` —— **没跑过合流的卷一条听力都不收**。
+也就是说听力的产物完全由合流层拥有。而两边的块 key 格式**零重合**：
+
+- `structure_set`（`collectUnits`）：`section|module|start-end|total` → `listening|1|13-14|32`
+- 合流写回（两个来源都是）：`listening|{mod}|{q_start}` → `listening|1|13`；
+  口语是 `speaking|1|repeat|1` / `speaking|1|interview|1`
+
+于是在合流过的卷上跑 `--only-failed --sections listening`：
+
+1. 按 key 一条既有记录都查不到 → 每个块都被当成「没跑过」→ **不是只扫失败的，是整科全量重跑、全额付费**；
+2. 跑出来的结果 key 也对不上，`--merge` 回写只能**追加** → 产物里同一段听力出现两份
+   （合流那份 + 生料那份），直到下次跑合流整体覆盖才清掉。
+
+而且重跑换不来题：听力扣题的判据（`transcript_mismatch` / `diarization_failed` /
+`group_count_mismatch` / `transcript_truncated` / `screen_items_missing` …）**全部判在合流层**，
+`structure_set` 只看 OCR 文本、根本不碰音频。
+
+### 7.3 已改
+
+- `failure_policy.isMergeOwned`：合流跑过的卷，`--only-failed` **直接不给听力/口语派活**，
+  并打印为什么、以及该去哪修。（上一版加的 `merged_by` 跳过是**无效的** —— 正是因为 key 查不到，
+  那个判断根本不会触发。这是我上一个 commit 的错，已在此更正。）
+- `--plan` 作业单删掉听力/口语阶段，改成单独一段说明「这 250 题不要重扫」+ 正确的修法入口。
+
+### 7.4 听力那 250 题该怎么补
+
+回合流层，按 BACKLOG 既有的线：
+
+```bash
+python scripts/realbank/lc_gender_worksheet.py --list --csv lc-gender.csv   # 听音标性别（对话回收率第一瓶颈）
+python scripts/realbank/lc_gender_worksheet.py --apply lc-gender.csv
+python scripts/realbank/merge_first_source_asr.py --all
+```
+
+源料本身缺的（音频缺失 / 无说话人标签 / 1.28A 听力 mp3 实为 1.21A 的）要找商家补料，
+清单在 `data/realBank/listening/original-audio.json` 的 `skipped`。

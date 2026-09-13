@@ -95,10 +95,13 @@ function pad(s, n, right = false) {
  * 同一套卷的多个科目合成一条命令（--sections a,b），少跑一次扫描。
  */
 function printPlan(tasks, limit) {
+  // 只有阅读/写作能靠重扫 structure_set 回收。听力/口语**不在作业单里**：
+  // 合流跑过之后这两科归合流所有（key 格式都换了），重扫既查不到失败块、会变成整科
+  // 全量付费重跑，也换不来题 —— 正文来自商家逐字稿 + ASR 对齐，扣题原因全判在合流层。
+  // 详见 scripts/realbank/failure_policy.js 的 isMergeOwned。
   const STAGES = [
     { name: "阶段 1 · 写作（先跑这个：链路最短、最卡整卷）", sections: ["writing"] },
     { name: "阶段 2 · 阅读（量最大，填词为主）", sections: ["reading"] },
-    { name: "阶段 3 · 听力/口语（跑完必须重跑合流，否则救回的块进不了库）", sections: ["listening", "speaking"] },
   ];
   console.log("\n" + "=".repeat(72));
   console.log("回收作业单（在本机 .codex-tmp 所在的仓库根目录跑）");
@@ -116,7 +119,6 @@ function printPlan(tasks, limit) {
   console.log("每条命令只重扫**已经失败**的块；合流层扣下的听力段会自动跳过");
   console.log("（它们的病在对齐/性别/音频，重跑结构化治不了）。");
 
-  let anyListening = false;
   for (const stage of STAGES) {
     const mine = tasks.filter((t) => stage.sections.includes(t.section));
     if (!mine.length) continue;
@@ -132,7 +134,6 @@ function printPlan(tasks, limit) {
     let list = [...bySet.values()].sort((a, b) => b.missing - a.missing);
     const total = list.reduce((a, b) => a + b.missing, 0);
     if (limit > 0) list = list.slice(0, limit);
-    if (stage.sections.includes("listening")) anyListening = true;
 
     console.log(`\n── ${stage.name} —— ${bySet.size} 套，合计缺 ${total} 题 ──`);
     for (const x of list) {
@@ -143,12 +144,22 @@ function printPlan(tasks, limit) {
     if (limit > 0 && bySet.size > limit) console.log(`# …另有 ${bySet.size - limit} 套，去掉 --limit 看全部`);
   }
 
-  console.log("\n── 跑完扫描后（顺序不能换）──");
-  if (anyListening) {
-    console.log("# 听力/口语扫过的卷必须重跑合流，否则救回的块只躺在 structured.json 里进不了库");
-    console.log("python scripts/realbank/merge_first_source_asr.py --all        # 第一来源");
-    console.log("# 第二来源的卷用 merge_vendor_asr.py（按该卷的来源选一个）");
+  // 听力/口语单独说清楚：它们的缺口在作业单里是**故意不出现**的
+  const lsn = tasks.filter((t) => t.section === "listening" || t.section === "speaking");
+  if (lsn.length) {
+    const q = lsn.reduce((a, b) => a + b.missing, 0);
+    console.log(`\n── 听力/口语的 ${q} 题：不要重扫 ──`);
+    console.log("这两科合流跑过之后就归合流所有（structure_set 的 key 格式与合流写回的不同），");
+    console.log("重扫既查不到失败块（会变成整科全量重跑、全额付费），也换不来题：");
+    console.log("听力题的正文/轮次/说话人来自商家逐字稿 PDF + ASR 词级对齐，音频是商家原声，");
+    console.log("structure_set 只负责转写答题屏上的题干选项；扣题原因（对齐不符 / 性别判不出 /");
+    console.log("段数不符 / 逐字稿被截 / 屏幕侧缺题）全部判在合流层。要补得回合流那一层：");
+    console.log("  python scripts/realbank/lc_gender_worksheet.py --list --csv lc-gender.csv   # 听音标性别");
+    console.log("  python scripts/realbank/merge_first_source_asr.py --all                     # 标完重跑合流");
+    console.log("源料本身缺的（音频缺失/无说话人标签）要找商家补料，见 data/realBank/listening/original-audio.json 的 skipped。");
   }
+
+  console.log("\n── 跑完扫描后（顺序不能换）──");
   console.log("node scripts/realbank/build_bank.mjs");
   console.log("node scripts/realbank/assemble_sets.mjs");
   console.log("node scripts/realbank/loss_ledger.mjs --freeze     # 数字涨了就重冻基线");

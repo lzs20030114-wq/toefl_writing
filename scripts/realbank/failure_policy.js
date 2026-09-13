@@ -73,6 +73,34 @@ function escalate(sys, softFailures = 0) {
 
 /* ── --only-failed 的重扫判据 ───────────────────────────────────────────── */
 
+/**
+ * 合流跑过之后，这两科的记录就**不归 structure_set 管了**。
+ *
+ * 实证（2026-09-14 顺着「听力不用重扫吧」这句话核出来的）：
+ *   · structure_set 的块 key 是 `section|module|start-end|total`（如 `listening|1|13-14|32`）；
+ *   · 两个来源的合流写回时把 key 换成了 `listening|{mod}|{q_start}`（如 `listening|1|13`）
+ *     与 `speaking|1|repeat|1` / `speaking|1|interview|1`。
+ * 两种格式**零重合**。于是在合流过的卷上跑 `--only-failed --sections listening`：
+ *   1. 按 key 查不到任何既有记录 → 每个块都被当成「没跑过」→ 不是「只扫失败的」，
+ *      而是**整科全量重跑，每块都付钱**；
+ *   2. 跑出来的结果 key 也对不上，merge 回写时只能**追加**，产物里同一段听力出现两份
+ *      （合流那份 + 生料那份），直到下次跑合流整体覆盖才清掉。
+ *
+ * 而且重跑也换不来题：听力题的正文/轮次/说话人来自商家逐字稿 PDF + ASR 对齐（合流层），
+ * 音频是商家原声（388/440 条），structure_set 只负责把答题屏上的题干选项转写出来。
+ * 听力扣题的原因（transcript_mismatch / diarization_failed / group_count_mismatch /
+ * transcript_truncated / screen_items_missing …）全部判在合流层，重跑结构化一条都治不了。
+ *
+ * 所以：合流过的卷，这两科直接不派活。要修得回合流那一层
+ * （lc_gender_worksheet 标性别、补音频、人工切轮次，再重跑 merge_*_asr）。
+ */
+const MERGE_OWNED_SECTIONS = Object.freeze(["listening", "speaking"]);
+
+/** 这一科在这份产物里是否已经归合流所有。existing 是磁盘上的 structured.json。 */
+function isMergeOwned(section, existing) {
+  return Boolean(existing && existing.merged_asr) && MERGE_OWNED_SECTIONS.includes(section);
+}
+
 /** 已经跑成功、或本来就不该结构化的状态：不重扫。 */
 const DONE_STATUSES = Object.freeze(["ok", "passage_screen", "deferred"]);
 
@@ -98,6 +126,6 @@ function shouldResweep(unit, prev, ctwMinAnswers = 5) {
 }
 
 module.exports = {
-  SOFT_FAILURE_LIMIT, HARD_HTTP, DONE_STATUSES,
-  classifySystemicFailure, escalate, shouldResweep,
+  SOFT_FAILURE_LIMIT, HARD_HTTP, DONE_STATUSES, MERGE_OWNED_SECTIONS,
+  classifySystemicFailure, escalate, shouldResweep, isMergeOwned,
 };
