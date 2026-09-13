@@ -99,9 +99,15 @@ function printPlan(tasks, limit) {
   // 合流跑过之后这两科归合流所有（key 格式都换了），重扫既查不到失败块、会变成整科
   // 全量付费重跑，也换不来题 —— 正文来自商家逐字稿 + ASR 对齐，扣题原因全判在合流层。
   // 详见 scripts/realbank/failure_policy.js 的 isMergeOwned。
+  // types = 这一阶段**真能靠重扫 structure_set 回收**的题型。
+  // 造句(bs)故意不在里面：真题造句的题面不来自 structured.json，而是
+  // extract_bs_pages.py 看图产出的 `<卷>.bs.json`（写作 PDF 没有文字层，模板+词块只存在于截图里）；
+  // structured 的 build 段只有 {n, sentence} 答案句，build_bank 按 thin 丢弃。见下面单列的一段。
   const STAGES = [
-    { name: "阶段 1 · 写作（先跑这个：链路最短、最卡整卷）", sections: ["writing"] },
-    { name: "阶段 2 · 阅读（量最大，填词为主）", sections: ["reading"] },
+    { name: "阶段 1 · 写作的邮件/学术讨论（先跑这个：最卡整卷，且不碰音频）",
+      sections: ["writing"], types: ["email", "disc"] },
+    { name: "阶段 2 · 阅读（量最大，填词为主）",
+      sections: ["reading"], types: ["ctw", "rdl", "ap"] },
   ];
   console.log("\n" + "=".repeat(72));
   console.log("回收作业单（在本机 .codex-tmp 所在的仓库根目录跑）");
@@ -125,12 +131,17 @@ function printPlan(tasks, limit) {
     // 同一套卷的多科合成一条命令
     const bySet = new Map();
     for (const t of mine) {
+      // 只计这一阶段能靠重扫回收的题型，免得把「重扫治不了的」也算进预期收益
+      const types = Object.entries(t.types).filter(([k]) => stage.types.includes(k));
+      const missing = types.reduce((a, [, v]) => a + v, 0);
+      if (!missing) continue;
       const cur = bySet.get(t.set) || { set: t.set, missing: 0, sections: new Set(), types: {} };
-      cur.missing += t.missing;
+      cur.missing += missing;
       cur.sections.add(t.section);
-      for (const [k, v] of Object.entries(t.types)) cur.types[k] = (cur.types[k] || 0) + v;
+      for (const [k, v] of types) cur.types[k] = (cur.types[k] || 0) + v;
       bySet.set(t.set, cur);
     }
+    if (!bySet.size) continue;
     let list = [...bySet.values()].sort((a, b) => b.missing - a.missing);
     const total = list.reduce((a, b) => a + b.missing, 0);
     if (limit > 0) list = list.slice(0, limit);
@@ -142,6 +153,20 @@ function printPlan(tasks, limit) {
       console.log(`node scripts/realbank/structure_set.mjs "${x.set}" --only-failed --sections ${[...x.sections].join(",")} --dry`);
     }
     if (limit > 0 && bySet.size > limit) console.log(`# …另有 ${bySet.size - limit} 套，去掉 --limit 看全部`);
+  }
+
+  // 造句单独一段：工具链完全不同
+  const bsGap = tasks.reduce((a, t) => a + (t.types.bs || 0), 0);
+  if (bsGap) {
+    console.log(`\n── 真题造句（bs）的 ${bsGap} 题：走看图，不是重扫 ──`);
+    console.log("写作 PDF 没有文字层，造句题的模板 + 乱序词块只存在于考试界面截图里。");
+    console.log("structured.json 的 build 段只有 {n, sentence} 答案句，build_bank 按 thin 丢弃；");
+    console.log("题面来自 extract_bs_pages.py 看图产出的 `<卷>.bs.json`。");
+    console.log("  D:/python/python scripts/realbank/extract_bs_pages.py --dry-run   # 先报「几张图 / 预计 ¥」(¥0.01/张)");
+    console.log("  D:/python/python scripts/realbank/extract_bs_pages.py --only <卷名>");
+    console.log("⚠ 先看 docs/BACKLOG.md 里那条未决项：写作 PDF 上的词块边界已被 OCR 糊掉");
+    console.log("  （363 条 scrambled_ocr），只能做成「真题句子 + 本站切块」——");
+    console.log("  这种来源分档接不接受，是要你先拍板的，别先烧看图的钱。");
   }
 
   // 听力/口语单独说清楚：它们的缺口在作业单里是**故意不出现**的
@@ -160,6 +185,10 @@ function printPlan(tasks, limit) {
   }
 
   console.log("\n── 跑完扫描后（顺序不能换）──");
+  console.log("# 阅读救回的题必须补盲审：build_bank 的阅读闸按 <卷>.audit.json 放行，");
+  console.log("# 没审过的题会被当场丢掉（stats.droppedNoAudit）。写作不走这道闸，跳过即可。");
+  console.log("node scripts/realbank/audit_answers.mjs \"<卷名>\" --section=reading --only-missing");
+  console.log("#  ⚠ --only-q 不带 --only-missing 会清空该卷全部阅读盲审条目（已知工具坑，别单独用）");
   console.log("node scripts/realbank/build_bank.mjs");
   console.log("node scripts/realbank/assemble_sets.mjs");
   console.log("node scripts/realbank/loss_ledger.mjs --freeze     # 数字涨了就重冻基线");

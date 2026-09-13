@@ -291,3 +291,33 @@ python scripts/realbank/merge_first_source_asr.py --all
 
 源料本身缺的（音频缺失 / 无说话人标签 / 1.28A 听力 mp3 实为 1.21A 的）要找商家补料，
 清单在 `data/realBank/listening/original-audio.json` 的 `skipped`。
+
+---
+
+## 8. 再更正：写作那 449 题里，只有 108 题能靠重扫（2026-09-14 三次核查）
+
+写 §6「先跑写作」时没核 BS 的题面来自哪里。核过 `build_bank.buildWriting` 后：
+
+| 题型 | 可回收 | 题面来源 | 怎么补 |
+|---|---|---|---|
+| email | 54 | `structure_set` 转写答题屏 | **重扫**（`--only-failed --sections writing`）|
+| disc 学术讨论 | 54 | 同上 | **重扫** |
+| bs 造句 | 341 | `extract_bs_pages.py` **看图**产出的 `<卷>.bs.json` | 看图，不是重扫 |
+
+原因：第一来源的写作 PDF **没有文字层**，造句题的模板 + 乱序词块只存在于考试界面截图里。
+`structured.json` 的 `build` 段只有 `{n, sentence}` 答案句，`build_bank` 按 thin 丢弃
+（源码注释写着「单靠它拼不出可练的题」）。所以对造句跑 `--sections writing` 是空转
+（`build` 走零 token 路，不花钱，但也不产题）。
+
+**造句那 341 题还卡着一条未决项**（BACKLOG 已记）：写作 PDF 上的词块边界被 OCR 糊掉，
+363 条只能做成「真题句子 + 本站切块」—— 这种来源分档接不接受要先拍板，别先烧看图的钱
+（`extract_bs_pages.py --dry-run` 会先报「几张图 / 预计 ¥」，¥0.01/张）。
+
+好消息是剩下的 108 题正是最卡的那部分：**学术讨论全库只有 7 题**，是整卷拼齐的唯一瓶颈，
+而这里有 54 题；邮件同理（14 → 可能 60+）。而且写作**不走盲审闸**
+（`buildWriting` 只看 `status === "ok"`），重扫完直接 `build_bank` 就能进库，链路最短。
+
+阅读则相反：`build_bank` 的阅读闸按 `<卷>.audit.json` 放行，**救回的题必须补盲审**
+（`audit_answers.mjs "<卷名>" --section=reading --only-missing`），否则当场被丢
+（`stats.droppedNoAudit`）。作业单末尾已加这一步，并标了 `--only-q` 不带 `--only-missing`
+会清空该卷阅读盲审条目的工具坑。
