@@ -4,11 +4,20 @@
  * 2026-09-13 根因：第一来源 CTW 块 88/96 报「模型输出无法解析为 JSON」，实际是 deepseek-v4-flash
  * 的推理 token 把 max_tokens=16000 吃光、正文为空串（实测单块推理 13.4k token）。这里锁死：
  *   · CTW 预算放宽且超时跟着放宽（否则长推理撞超时 → 被当成系统性失败整卷中止）；
- *   · 选择题预算不变；
  *   · 宽松解析兼容旧实现能解析的一切，另外接住「JSON 后跟带括号的解释」，截断仍返回 null；
  *   · 正文为空与坏 JSON 分开报。
+ *
+ * 2026-09-14 扩面：上面那条闸对**所有题型**生效，但当时只给 CTW 修过，选择题继续吃 16000/90s
+ * （台账里顶到 16000 的 531 次调用多于 CTW 全部块的调用数；`--only-failed` 不改代码重跑能救回
+ * 一半 flagged 块 —— 都是预算病的签名）。这里把口径改成：
+ *   · 每个题型都有够用的预算，且**超时一律从预算推导**，不许手写（手写就会再配出一个撞墙组合）；
+ *   · 输出失败分三种：正文为空 / 中途截断（预算病，可重试）/ 真坏格式（重试无用）。
  */
-const { CALL_BUDGET, callBudget, parseJsonLoose, unparsableProblem, ctwVisionCacheFile } = require("../scripts/realbank/model_output.js");
+const {
+  CALL_BUDGET, callBudget, budgetOf, retryBudget,
+  parseJsonLoose, unparsableProblem, classifyBadOutput, isBudgetProblem,
+  ctwVisionCacheFile,
+} = require("../scripts/realbank/model_output.js");
 
 // structure_set.mjs 2026-09-13 之前的实现，原样搬来当回归基准。
 function legacyParse(raw) {
@@ -24,18 +33,42 @@ function legacyParse(raw) {
 }
 
 describe("model_output.callBudget", () => {
-  test("CTW 放宽到 32000 token；选择题与未知题型仍是旧预算 16000 / 90s", () => {
-    expect(callBudget("ctw")).toEqual({ maxTokens: 32000, timeoutMs: 300000 });
-    for (const t of ["ap", "rdl", "lcr", "listening_mcq", undefined, "whatever"]) {
-      expect(callBudget(t)).toEqual({ maxTokens: 16000, timeoutMs: 90000 });
+  test("CTW 最宽；选择题与修复轮不再吃 16000（实证会顶满 → 正文空/截断 → flagged → 丢题）", () => {
+    expect(callBudget("ctw").maxTokens).toBe(32000);
+    for (const t of ["ap", "rdl", "lcr", "lc", "la", "lat", "listening_mcq", "mcq_repair"]) {
+      expect(callBudget(t).maxTokens).toBeGreaterThan(16000);
     }
   });
 
-  test("超时必须够把预算跑满（按 150 token/s 的保守吞吐算），否则长推理会被当成系统性超时整卷中止", () => {
-    for (const b of Object.values(CALL_BUDGET)) {
-      expect(b.timeoutMs).toBeGreaterThanOrEqual((b.maxTokens / 150) * 1000 * 0.5);
+  test("未知题型走 default，且 default 也够宽 —— 新题型不许默认继承那个会丢题的预算", () => {
+    for (const t of [undefined, null, "", "whatever", "新题型"]) {
+      expect(callBudget(t)).toEqual(CALL_BUDGET.default);
     }
-    expect(CALL_BUDGET.ctw.timeoutMs).toBeGreaterThanOrEqual((CALL_BUDGET.ctw.maxTokens / 150) * 1000);
+    expect(CALL_BUDGET.default.maxTokens).toBeGreaterThan(16000);
+  });
+
+  test("超时一律从预算推导：跑满预算也撞不到墙（否则长推理被当成系统性超时整卷中止）", () => {
+    // 实测 ~230 token/s。按保守 150 token/s 算，跑满预算的耗时仍须小于超时。
+    for (const [name, b] of Object.entries(CALL_BUDGET)) {
+      expect({ name, ok: b.timeoutMs > (b.maxTokens / 150) * 1000 }).toEqual({ name, ok: true });
+    }
+  });
+
+  test("budgetOf 单调：预算越大超时越长，且任何预算都带握手余量", () => {
+    expect(budgetOf(48000).timeoutMs).toBeGreaterThan(budgetOf(24000).timeoutMs);
+    expect(budgetOf(1).timeoutMs).toBeGreaterThanOrEqual(30000);
+  });
+
+  test("retryBudget 翻倍但封在实测跑通过的 32000，且永不把预算调小", () => {
+    const r = retryBudget(callBudget("ap"));
+    expect(r.maxTokens).toBe(32000);                       // 24000 翻倍 → 封顶
+    expect(r.timeoutMs).toBeGreaterThan(callBudget("ap").timeoutMs);
+    expect(Object.isFrozen(r)).toBe(true);
+    // 已经在上限的题型：同预算再打一次（正文为空本身带随机性），不是降级
+    expect(retryBudget(callBudget("ctw")).maxTokens).toBe(32000);
+    // 高于上限的预算不许被封顶封回去
+    expect(retryBudget({ maxTokens: 60000 }).maxTokens).toBe(60000);
+    expect(retryBudget(undefined).maxTokens).toBe(32000);
   });
 
   test("预算表冻结，调用方改不动", () => {
@@ -134,7 +167,43 @@ describe("model_output.unparsableProblem", () => {
     }
   });
 
-  test("有正文但解析不了 → 旧文案原样", () => {
-    expect(unparsableProblem("{\"passage\": \"trunc")).toBe("模型输出无法解析为 JSON");
+  test("吐到一半被截断 → 报成预算病，不再与坏格式混为一谈", () => {
+    const p = unparsableProblem("{\"passage\": \"trunc");
+    expect(p).toMatch(/截断/);
+    expect(p).toMatch(/max_tokens/);
+    expect(p).toMatch(/无法解析为 JSON/);          // 旧 grep 口径不断
+    expect(isBudgetProblem(p)).toBe(true);
+  });
+
+  test("有完整结构但不是合法 JSON / 压根没有 JSON → 格式病，重试无用", () => {
+    for (const raw of ["{not json}", "对不起，这一屏我看不清", "[1, 2,]"]) {
+      const p = unparsableProblem(raw);
+      expect(p).toBe("模型输出无法解析为 JSON");
+      expect(isBudgetProblem(p)).toBe(false);
+    }
+  });
+});
+
+describe("model_output.classifyBadOutput", () => {
+  test("三分：空 / 截断 / 坏格式", () => {
+    expect(classifyBadOutput("")).toBe("empty");
+    expect(classifyBadOutput("   \n ")).toBe("empty");
+    expect(classifyBadOutput(null)).toBe("empty");
+    expect(classifyBadOutput("{\"a\": [1, 2")).toBe("truncated");
+    expect(classifyBadOutput("```json\n{\"a\": 1")).toBe("truncated");
+    expect(classifyBadOutput("{not json}")).toBe("unparsable");
+    expect(classifyBadOutput("没有 JSON")).toBe("unparsable");
+  });
+
+  test("字符串里的括号不算结构（不能把好输出误判成截断）", () => {
+    expect(classifyBadOutput("{\"stem\": \"选 {A} 还是 [B]\"")).toBe("truncated");
+    expect(classifyBadOutput("{\"stem\": \"选 {A}\"} 解释：(见上)")).toBe("unparsable");
+  });
+
+  test("只有预算病才让重试：截断/空 → true，坏格式 → false", () => {
+    expect(isBudgetProblem(unparsableProblem(""))).toBe(true);
+    expect(isBudgetProblem(unparsableProblem("{\"a\": 1"))).toBe(true);
+    expect(isBudgetProblem(unparsableProblem("{not json}"))).toBe(false);
+    expect(isBudgetProblem("随便一句别的话")).toBe(false);
   });
 });

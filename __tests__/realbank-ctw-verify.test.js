@@ -11,7 +11,8 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { resolveBlank, verifyCtw } = require("../scripts/realbank/ctw_verify.js");
-const { writeStructured, syncReadingToBase } = require("../scripts/realbank/structured_io.js");
+const { writeStructured, syncReadingToBase, syncListeningToMergeBases }
+  = require("../scripts/realbank/structured_io.js");
 
 const FILLER = "Researchers have long studied how animals share space and resources across many different habitats"
   + " and seasons while scientists record the patterns they observe in careful detail every single year";
@@ -115,4 +116,78 @@ describe("structured_io：就地修阅读要同步 rw 基线（否则重跑合�
       fs.rmSync(d, { recursive: true, force: true });
     }
   });
+});
+
+/**
+ * 合流快照同步（2026-09-14）。
+ * 两个来源的合流都「只在第一次把 structure_set 的原始产物快照一次，之后永不刷新」，
+ * 于是重跑 structure_set 救回的听力块只写进 structured.json，下一次合流照旧从陈旧快照重建，
+ * 刚救回来的题一声不响地消失 —— 听力恰好是全库丢题最多的一科。这里锁死同步行为。
+ */
+describe("structured_io.syncListeningToMergeBases", () => {
+  const withDir = (fn) => {
+    const d = fs.mkdtempSync(path.join(os.tmpdir(), "rb-mb-"));
+    try { return fn(d); } finally { fs.rmSync(d, { recursive: true, force: true }); }
+  };
+  const snapshot = (d, name, results) =>
+    fs.writeFileSync(path.join(d, name), JSON.stringify({ set: "卷A", results }));
+  const readJson = (d, name) => JSON.parse(fs.readFileSync(path.join(d, name), "utf8"));
+
+  test("救回的听力块写进第一来源快照，替换同 key 的旧记录并留一代备份", () => withDir((d) => {
+    snapshot(d, "卷A.structured.fs_parsed.json", [
+      { key: "listening|1|13-14|32", section: "listening", status: "flagged", items: [] },
+      { key: "reading|1|1-10|35", section: "reading", status: "ok", items: [{ passage: "p" }] },
+    ]);
+    const fresh = { key: "listening|1|13-14|32", section: "listening", status: "ok", items: [{ q: 13 }] };
+    const written = syncListeningToMergeBases(d, "卷A", [fresh], new Set([fresh.key]));
+
+    expect(written).toEqual([{ file: "卷A.structured.fs_parsed.json", replaced: 1, added: 0 }]);
+    const out = readJson(d, "卷A.structured.fs_parsed.json");
+    expect(out.results.find((r) => r.section === "listening").status).toBe("ok");
+    expect(out.results.find((r) => r.section === "reading").items).toEqual([{ passage: "p" }]);   // 别的科不动
+    expect(out.tally).toEqual({ ok: 2 });
+    expect(fs.existsSync(path.join(d, "卷A.fsparsed.prev.json"))).toBe(true);
+  }));
+
+  test("第二来源快照同理；两份都在就都写", () => withDir((d) => {
+    snapshot(d, "卷A.structured.fs_parsed.json", []);
+    snapshot(d, "卷A.structured.parsed.json", []);
+    const fresh = { key: "speaking|1|1-7|11", section: "speaking", status: "ok", items: [] };
+    const written = syncListeningToMergeBases(d, "卷A", [fresh], new Set([fresh.key]));
+    expect(written.map((w) => w.file).sort())
+      .toEqual(["卷A.structured.fs_parsed.json", "卷A.structured.parsed.json"]);
+    expect(written.every((w) => w.added === 1)).toBe(true);
+    expect(fs.existsSync(path.join(d, "卷A.parsedbase.prev.json"))).toBe(true);
+  }));
+
+  test("freshKeys 之外的记录不回灌 —— 合流过的结果灌回快照就毁掉幂等", () => withDir((d) => {
+    snapshot(d, "卷A.structured.fs_parsed.json", [
+      { key: "listening|1|13-14|32", section: "listening", status: "flagged", items: [] },
+    ]);
+    const merged = { key: "listening|1|13-14|32", section: "listening", status: "ok",
+      items: [], transcript_final: "合流改写过的文本" };
+    expect(syncListeningToMergeBases(d, "卷A", [merged], new Set())).toEqual([]);
+    expect(readJson(d, "卷A.structured.fs_parsed.json").results[0].status).toBe("flagged");
+  }));
+
+  test("阅读/写作记录不进合流快照；没有快照文件就什么也不做", () => withDir((d) => {
+    expect(syncListeningToMergeBases(d, "卷A", [
+      { key: "reading|1|1-10|35", section: "reading", status: "ok" },
+    ], null)).toEqual([]);
+    snapshot(d, "卷A.structured.fs_parsed.json", []);
+    expect(syncListeningToMergeBases(d, "卷A", [
+      { key: "reading|1|1-10|35", section: "reading", status: "ok" },
+    ], null)).toEqual([]);
+  }));
+
+  test("writeStructured 顺带把合流快照一起同步（这才是真正的调用路径）", () => withDir((d) => {
+    snapshot(d, "卷A.structured.fs_parsed.json", [
+      { key: "listening|1|13-14|32", section: "listening", status: "flagged", items: [] },
+    ]);
+    fs.writeFileSync(path.join(d, "卷A.structured.json"), JSON.stringify({ set: "卷A", results: [] }));
+    const fresh = { key: "listening|1|13-14|32", section: "listening", status: "ok", items: [{ q: 13 }] };
+    const res = writeStructured(d, "卷A", { set: "卷A", results: [fresh] }, { freshKeys: new Set([fresh.key]) });
+    expect(res.mergeBases).toEqual([{ file: "卷A.structured.fs_parsed.json", replaced: 1, added: 0 }]);
+    expect(readJson(d, "卷A.structured.fs_parsed.json").results[0].status).toBe("ok");
+  }));
 });

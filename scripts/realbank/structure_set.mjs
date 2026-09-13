@@ -34,9 +34,13 @@ const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require(".
 const { verifyCtw } = require("./ctw_verify.js");
 // 就地修补（--merge / --only-failed / --reverify-ctw）写回时统一走这里：同步第一来源的 rw 阅读基线。
 const { writeStructured } = require("./structured_io.js");
-// 调用预算（CTW 单独放宽）+ 宽松 JSON 解析 + 解析失败文案，抽成纯函数可单测：./model_output.js ——
-// 那里写着 CTW「无法解析为 JSON」的真因（推理 token 吃光 max_tokens，正文为空）。
-const { callBudget, parseJsonLoose, unparsableProblem, ctwVisionCacheFile } = require("./model_output.js");
+// 调用预算（按题型给，超时从预算推导）+ 宽松 JSON 解析 + 解析失败文案，抽成纯函数可单测：./model_output.js ——
+// 那里写着「无法解析为 JSON」的真因（推理 token 吃光 max_tokens，正文为空或被截断），
+// 以及为什么 2026-09-14 把这条预算从只给 CTW 放开到全部题型。
+const { callBudget, retryBudget, parseJsonLoose, unparsableProblem, isBudgetProblem, ctwVisionCacheFile }
+  = require("./model_output.js");
+// 失败分级（硬失败整卷作废 / 单块超时只记这一块）：./failure_policy.js
+const { classifySystemicFailure, escalate } = require("./failure_policy.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -161,40 +165,14 @@ ${NO_SOLVE}`,
 
 /* ── 3. 模型调用 ─────────────────────────────────────────────────────────── */
 
-/**
- * 系统性 API 失败识别。
- *
- * 事故背景：DeepSeek 账户欠费时每个题块都拿到 `DeepSeek 402: {"error":{"message":
- * "Insufficient Balance"}}`，被当成普通失败记成 error，然后**照常写出** .structured.json，
- * 把上一次花钱跑出来的好产物静默冲掉，整套卷 40 秒跑完还 exit 0。
- *
- * 判据是「继续跑下去只会得到同样的失败」：
- *   - HTTP 401/402/403/407/429：鉴权 / 余额 / 权限 / 代理鉴权 / 限流；
- *   - 缺 key、代理 schema 不支持、代理端口不是 HTTP 代理等配置错误；
- *   - 连接错误与超时（ECONNREFUSED / ENOTFOUND / socket hang up / timeout …）。
- * 故意**不**把单块 5xx 算进来：deepseekHttp 内部已对 5xx 重试过一次，零星 5xx 更像抖动；
- * 真出现 5xx 风暴时由下面「不许拿空结果覆盖既有产物」的守卫兜底。
- *
- * 返回 null = 普通失败（模型输出不合格之类），照旧记 flagged/error 继续跑。
+/*
+ * 系统性 API 失败识别 + 软失败升级判据抽成纯函数：./failure_policy.js
+ * 那里写着「为什么单块超时不再整卷作废」（一块慢 = 整卷白跑，正好砸在最该救的那些块上）。
  */
-function classifySystemicFailure(err) {
-  const text = String(err?.message || err || "");
-  const blob = `${text} ${String(err?.code || "")}`;
-  const m = text.match(/DeepSeek\s+(\d{3})\b/) || text.match(/proxy CONNECT failed:\s*(\d{3})/i);
-  const httpStatus = m ? Number(m[1]) : null;
-  const apiMessage = (text.match(/"message"\s*:\s*"([^"]+)"/) || [])[1] || "";
-  const hit = (reason) => ({ httpStatus, apiMessage, reason, text });
-  if (httpStatus && [401, 402, 403, 407, 429].includes(httpStatus)) return hit("鉴权/余额/权限/限流");
-  if (/Missing DEEPSEEK_API_KEY/i.test(text)) return hit("没有 API key");
-  if (/Insufficient Balance|insufficient[_ ]quota|Authentication Fails|invalid[_ ]api[_ ]key/i.test(text)) return hit("余额或鉴权");
-  if (/timeout/i.test(text)) return hit("请求超时");
-  if (/socket hang up|ECONNREFUSED|ECONNRESET|ENOTFOUND|EAI_AGAIN|ETIMEDOUT|EPIPE|ECONNABORTED|ENETUNREACH/i.test(blob)) return hit("连接错误");
-  if (/SOCKS proxy is not supported|Unsupported proxy schema|not a valid HTTP proxy/i.test(text)) return hit("代理配置错误");
-  return null;
-}
 
 // 一旦置位就代表整卷作废：不再派新活、不写产物、以 EXIT_SYSTEMIC 退出。只记第一次。
 let systemicFailure = null;
+let softFailures = 0;
 
 function noteSystemicFailure(info) {
   if (!systemicFailure) systemicFailure = info;
@@ -240,6 +218,27 @@ async function callModel(systemPrompt, userText, budget = callBudget()) {
     },
   });
   return content;
+}
+
+/**
+ * 要 JSON 的调用统一走这里：解析不出、且失败签名是「预算形」（正文为空 / 吐到一半被截断）
+ * 就**加倍预算重试一次**。
+ *
+ * 为什么要在这里自愈，而不是记 flagged 等下一次 --only-failed：
+ * flagged 块从不进盲审，也就从不进库 —— 一次预算抖动 = 一道真题永久消失，
+ * 而「下一次什么时候重跑」全看有没有人想起来。09-13 那轮原地重跑 165 块救回 81 块（≈50%），
+ * 救回的正是这一类，本就该在第一次调用里自动做掉。
+ * 成本只落在本来就已经失败的块上，而且 max_tokens 是上限不是账单 —— 用不到不花钱。
+ *
+ * 返回 { raw, obj, budgetRetried }；obj 为 null 表示两次都没解析出来。
+ */
+async function callForJson(systemPrompt, userText, budget = callBudget()) {
+  const first = await callModel(systemPrompt, userText, budget);
+  const firstObj = parseJsonLoose(first);
+  if (firstObj) return { raw: first, obj: firstObj, budgetRetried: false };
+  if (!isBudgetProblem(unparsableProblem(first))) return { raw: first, obj: null, budgetRetried: false };
+  const raw = await callModel(systemPrompt, userText, retryBudget(budget));
+  return { raw, obj: parseJsonLoose(raw) || null, budgetRetried: true };
 }
 
 // parseJsonLoose 见 ./model_output.js（旧两步原样保留，另加按括号配对取第一个完整 JSON 值）。
@@ -371,10 +370,14 @@ async function repairUnit(units, idx) {
   }
   const targets = u.answers.map((a) => a.n);
   const body = near.map((v) => `[Q${v.start}${v.end !== v.start ? `-${v.end}` : ""} 区段]\n${v.body}`).join("\n\n");
-  const raw = await callModel(PROMPTS.mcq_repair,
-    `【OCR 文本（跨 ${near.length} 道题，分栏可能乱序）】\n${body}\n\n【请只还原这些题号】${targets.join(", ")}`);
-  const arr = parseJsonLoose(raw);
-  if (!Array.isArray(arr)) return { repaired: false, problems: ["修复轮输出不是 JSON 数组"], items: [] };
+  const { raw, obj: arr } = await callForJson(PROMPTS.mcq_repair,
+    `【OCR 文本（跨 ${near.length} 道题，分栏可能乱序）】\n${body}\n\n【请只还原这些题号】${targets.join(", ")}`,
+    callBudget("mcq_repair"));
+  if (!Array.isArray(arr)) {
+    // 预算病与格式病分开报：报成同一句话，下次排查又得重新抓原始响应。
+    const why = arr === null ? unparsableProblem(raw) : "修复轮输出不是 JSON 数组";
+    return { repaired: false, problems: [why], items: [] };
+  }
 
   const items = [];
   const problems = [];
@@ -413,10 +416,9 @@ async function processUnit(u) {
     const words = u.answers.map((a) => a.answer);
     // --ctw-vision-body 换过输入的块在产物上记一笔来源（见 main 里的说明）
     const src = u.bodySource ? { body_source: u.bodySource } : {};
-    const raw = await callModel(PROMPTS.ctw,
+    const { raw, obj } = await callForJson(PROMPTS.ctw,
       `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}\n\n${CTW_ANSWER_NOTE}`,
       callBudget("ctw"));
-    const obj = parseJsonLoose(raw);
     if (!obj) return { ...base, ...src, status: "flagged", problems: [unparsableProblem(raw)], items: [] };
     const problems = verifyCtw(obj, words);
     return { ...base, ...src, status: problems.length ? "flagged" : "ok", problems, items: [obj] };
@@ -429,10 +431,12 @@ async function processUnit(u) {
 
   // 选择题：一个 block 对应一道题（真题一屏一题）
   const ans = u.answers[0];
-  const raw = await callModel(PROMPTS.mcq,
+  // 按题型取预算（不再一律吃 default）：带 carryMaterial 的块要把整篇材料转写出来，
+  // 16000 实证会顶满 —— 顶满即正文空/截断 → flagged → 这道真题永远进不了库。
+  const { raw, obj } = await callForJson(PROMPTS.mcq,
     (u.carryMaterial ? `【材料（在前一屏，本题就是问它）】\n${u.carryMaterial}\n\n` : "")
-    + `【OCR 文本】\n${u.body}`);
-  const obj = parseJsonLoose(raw);
+    + `【OCR 文本】\n${u.body}`,
+    callBudget(u.type));
   if (!obj) return { ...base, status: "flagged", problems: [unparsableProblem(raw)], items: [] };
   const problems = [...verifyMcq(obj), ...stampAnswer(obj, ans?.answer)];
   obj.q_number = ans?.n;
@@ -457,8 +461,9 @@ async function runPool(units, worker, concurrency) {
         };
         // 系统性失败（欠费/鉴权/断网…）：把游标推到末尾，不再派新活。
         // 已经在飞的请求让它们自己结束即可，反正结果不会落盘。
-        const sys = classifySystemicFailure(e);
-        if (sys) { noteSystemicFailure(sys); cursor = units.length; }
+        const step = escalate(classifySystemicFailure(e), softFailures);
+        softFailures = step.softFailures;
+        if (step.abort) { noteSystemicFailure(step.info); cursor = units.length; }
       }
       process.stdout.write(`\r  进度 ${out.filter(Boolean).length}/${units.length}   `);
     }
@@ -560,7 +565,8 @@ async function main() {
     });
     console.log(`■ ${setname} 重判 CTW：转 ok ${healed} 块；仍 flagged ${still} 块；找不到对应答案块 ${orphan} 块`);
     if (dry) { console.log("（--dry，未写盘）"); return; }
-    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results });
+    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results },
+      { freshKeys: new Set(results.map((r) => r.key)) });
     console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
     return;
   }
@@ -623,6 +629,9 @@ async function main() {
   }
   if (merge) {
     const fresh = new Map(results.map((r) => [r.key, r]));
+    // 真正采用了本次结果的块 —— 只有这些算 fresh。被「保住既有 ok」挡下的那些不能算，
+    // 否则会把上一次合流过的听力记录回灌进合流快照，把幂等毁掉（见 structured_io 头注）。
+    const appliedKeys = new Set();
     let replaced = 0, keptOk = 0, added = 0;
     const merged = existing.results.map((r) => {
       const n = fresh.get(r.key);
@@ -630,12 +639,17 @@ async function main() {
       fresh.delete(r.key);
       if (r.status === "ok" && n.status !== "ok") { keptOk += 1; return r; }
       replaced += 1;
+      appliedKeys.add(n.key);
       return n;
     });
-    for (const n of fresh.values()) { merged.push(n); added += 1; }
-    const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results: merged });
+    for (const n of fresh.values()) { merged.push(n); added += 1; appliedKeys.add(n.key); }
+    const { synced, mergeBases } = writeStructured(OUT_DIR, setname, { ...existing, results: merged },
+      { freshKeys: appliedKeys });
+    const baseNote = mergeBases.length
+      ? `（已同步合流快照 ${mergeBases.map((b) => `${b.file}: 替换 ${b.replaced} 新增 ${b.added}`).join("；")}）`
+      : "";
     console.log(`\n并回既有产物：替换 ${replaced} 块，新增 ${added} 块，保住既有 ok ${keptOk} 块`
-      + `${synced ? "（已同步 rw 阅读基线）" : ""}\n产物 → ${outPath}`);
+      + `${synced ? "（已同步 rw 阅读基线）" : ""}\n产物 → ${outPath}${baseNote ? `\n${baseNote}` : ""}`);
     return;
   }
 
@@ -667,6 +681,13 @@ async function main() {
   }
   fs.writeFileSync(outPath, JSON.stringify({ set: setname, model: MODEL, tally, results }, null, 2), "utf8");
   console.log(`\n产物 → ${outPath}`);
+  // 全量重跑不动合流快照（那两份快照存的就是「解析器原始产物」，重跑等于换了一份新的原始产物，
+  // 该由合流脚本自己重建，不该在这里替它决定）。但要说出来 —— 不然听力/口语看起来没变化。
+  for (const snap of ["structured.fs_parsed", "structured.parsed"]) {
+    if (!fs.existsSync(path.join(OUT_DIR, `${setname}.${snap}.json`))) continue;
+    console.log(`[提醒] 这卷有合流快照 ${setname}.${snap}.json，听力/口语仍按旧快照重建。`);
+    console.log("  要让本次结果生效，重跑对应的合流脚本（merge_first_source_asr.py / merge_vendor_asr.py）。");
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
