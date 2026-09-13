@@ -222,19 +222,19 @@ export default function VocabNotebook({ onBack }) {
           <div style={{ fontSize: 34, marginBottom: 10 }}>📖</div>
           <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 8 }}>单词本还是空的</div>
           <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.9, maxWidth: 420, margin: "0 auto 20px" }}>
-            做完一套阅读后进「练习记录 → 逐题回顾」，在原文里点任何一个词，
-            弹出的词典卡片下方有「☆ 收藏到单词本」，点一下这个词就进来了。
+            做完一套阅读后，在「阅读练习记录」里打开任意一次练习就能看到原文。
+            在原文里点任何一个词，弹出的词典卡片下方有「☆ 收藏到单词本」，点一下这个词就进来了。
             <br />
             从自己读过的文章里攒词，比背现成词表记得牢得多——因为每个词都带着你见过它的那句话。
           </div>
           <Link
-            href="/progress/reading"
+            href="/reading/progress"
             style={{
               display: "inline-block", background: ACCENT, color: "#fff", textDecoration: "none",
               borderRadius: 10, padding: "10px 22px", fontSize: 13.5, fontWeight: 700,
             }}
           >
-            去阅读复盘查词
+            去阅读练习记录
           </Link>
         </SurfaceCard>
       )}
