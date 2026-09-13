@@ -34,4 +34,4 @@
 | `user-question-banks-widen-types.sql` | 2026-07-04 | 已跑 | 「我的题库」12 题型全量扩展:把 `user_question_banks.type` 的 CHECK 约束放宽到全部 12 类(见 CHANGELOG v1.11.0) |
 | `user-question-banks.sql` | 2026-06-27 | 历史迁移,状态未知(建库早期) | 「我的题库」P0:用户自助导入题目到个人库 + 视觉识别接入 |
 | `user-surveys-schema.sql` | 2026-05-26 | 历史迁移,状态未知(建库早期) | 新用户首套题完成度调研 + 管理后台统计页 |
-| `vocab-notebook.sql` | 2026-09-13 | 待跑 | 单词本：`vocab_cards`（划词收藏的词 + FSRS 复习进度，整卡存 JSONB）+ `vocab_review_logs`（每次复习一行，供日后重拟合 FSRS 权重与留存率校准）。两张表 RLS 无公开策略，只经 /api/vocab 与 /api/vocab/logs 的 service role 读写。**没跑也不会坏**：本地 localStorage 是真源，云同步失败会静默降级成单设备可用 |
+| `vocab-notebook.sql` | 2026-09-13 | 已跑(用户 2026-09-13 确认) | 单词本：`vocab_cards`（划词收藏的词 + FSRS 复习进度，整卡存 JSONB）+ `vocab_review_logs`（每次复习一行，供日后重拟合 FSRS 权重与留存率校准）。两张表 RLS 无公开策略，只经 /api/vocab 与 /api/vocab/logs 的 service role 读写。**没跑也不会坏**：本地 localStorage 是真源，云同步失败会静默降级成单设备可用 |
