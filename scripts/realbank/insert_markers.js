@@ -20,7 +20,8 @@
  * 判错一次就会把**另一篇文章**的正文塞进这道题：
  *
  *  1. `validateMarked` —— 恰好 4 个 ■（真题固定四个插入位；多/少都说明转写没转对）、
- *     ■ 不在开头结尾且两两之间至少 3 个词（连着的 ■ 是 OCR 把装饰符当标记）、
+ *     首个 ■ 之前有正文、两两之间至少 3 个词（连着的 ■ 是 OCR 把装饰符当标记；
+ *     最后一个 ■ 可以在文末，见 validateMarked 里 2026-09-13 的说明）、
  *     与原材料的 token 覆盖率 ≥ 0.92（同一段文本，不是另一篇）。
  *  2. `findMarkedPassage` —— **按文本匹配，不按 id**。build_bank 生成的 id 形如
  *     `real_ap_<slug>_<module>_<簇内首题号>`，插入题被丢会让簇的题号集合变化，
@@ -124,7 +125,10 @@ function validateMarked(marked, material) {
   if (squares > 0) {
     const wordsOf = (x) => tokensForMatch(x).length;
     if (wordsOf(segments[0]) === 0) problems.push("square_at_start");
-    if (wordsOf(segments[segments.length - 1]) === 0) problems.push("square_at_end");
+    // 不再判「■ 在文末」（2026-09-13 放宽）：最后一个插入位本来就常画在全文最后一句之后 ——
+    // 源截图实证 4.27 M2 Q15 第 4 个方块紧跟 "…long-term fitness outcomes." 画在文末，
+    // rf 重排版同一篇的 [D] 也在段末。旧判据（square_at_end）2026-09-10 挡掉 9 道这样的合法插入题。
+    // 仍然守住的：恰好 4 个、首个 ■ 之前必须有正文、两两间隔 ≥3 词、与原材料覆盖率 ≥0.92。
     for (let i = 1; i < segments.length - 1; i += 1) {
       if (wordsOf(segments[i]) < MIN_WORDS_BETWEEN) {
         problems.push(`squares_too_close@${i}`);

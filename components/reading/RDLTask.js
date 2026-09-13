@@ -5,6 +5,7 @@ import { C, FONT, READING_FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { materialImageSrc } from "../../lib/reading/materialImage";
+import { questionTypeLabel } from "../../lib/reading/questionTypeLabels";
 
 /**
  * RDL Task — matches real TOEFL interface:
@@ -304,7 +305,9 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 8 }}>
                 第 {currentQ + 1} 题 / 共 {questions.length} 题
-                <span style={{ marginLeft: 8, color: accent.color }}>({question.question_type})</span>
+                {questionTypeLabel(question.question_type) && (
+                  <span style={{ marginLeft: 8, color: accent.color }}>({questionTypeLabel(question.question_type)})</span>
+                )}
               </div>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
                 {question.stem}

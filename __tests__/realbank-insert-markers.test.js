@@ -4,7 +4,7 @@
  *
  * 这条链决定「一段带 ■ 的正文能不能替换掉库里的材料」。判错一次就会把**另一篇文章**
  * 的正文塞进这道题（用户看到的材料与题目对不上），所以四条判据在这里逐条锁死：
- *   1. 恰好 4 个 ■，且不在首尾、不连着；
+ *   1. 恰好 4 个 ■，首个之前有正文（最后一个可在文末）、不连着；
  *   2. 与原材料 token 覆盖率 ≥0.92（多重集合口径，虚词刷不上去）；
  *   3. 查表**按文本不按 id**（插入题被丢会让 build_bank 生成的 id 漂移）；
  *   4. 段落分隔（\n\n）要还原；还原不了就标 paragraphs_lost，不许静默压成一坨。
@@ -110,11 +110,30 @@ describe("insert_markers · validateMarked", () => {
     expect(v.problems).toContain("squares=5!=4");
   });
 
-  test("■ 在开头 / 结尾不收", () => {
+  test("■ 在开头不收", () => {
     const head = validateMarked(`■ ${markedFrom(BODY_WORDS, [10, 20, 30])}`, PLAIN);
+    expect(head.ok).toBe(false);
     expect(head.problems).toContain("square_at_start");
+  });
+
+  // 2026-09-13 放宽：最后一个插入位画在全文最后一句之后是真考常态（4.27 M2 Q15 源截图实证）。
+  test("最后一个 ■ 在文末（最后一句之后）收", () => {
     const tail = validateMarked(`${markedFrom(BODY_WORDS, [10, 20, 30])} ■`, PLAIN);
-    expect(tail.problems).toContain("square_at_end");
+    expect(tail.ok).toBe(true);
+    expect(tail.squares).toBe(4);
+    expect(tail.problems).not.toContain("square_at_end");
+  });
+
+  test("■ 在文末也照样守住其余判据：第 3、4 个挨着不收；覆盖率不够不收；首个之前没正文不收", () => {
+    const glued = validateMarked(`${markedFrom(BODY_WORDS, [10, 20, 49])} ■`, PLAIN);
+    expect(glued.ok).toBe(false);
+    expect(glued.problems.some((p) => p.startsWith("squares_too_close"))).toBe(true);
+    const thin = validateMarked(`${markedFrom(BODY_WORDS.slice(0, 40), [10, 20, 30])} ■`, PLAIN);
+    expect(thin.ok).toBe(false);
+    expect(thin.problems.some((p) => p.startsWith("coverage="))).toBe(true);
+    const both = validateMarked(`■ ${markedFrom(BODY_WORDS, [20, 30])} ■`, PLAIN);
+    expect(both.ok).toBe(false);
+    expect(both.problems).toContain("square_at_start");
   });
 
   test("两个 ■ 之间不足 3 个词（含连着的）不收", () => {

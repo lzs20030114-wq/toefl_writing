@@ -338,3 +338,66 @@ describe("真题阅读：插入句题可作答", () => {
     expect(dead).toEqual([]);
   });
 });
+
+describe("真题阅读：同一篇文章只留一条（跨卷同篇已合并）", () => {
+  // build_bank 的 consolidate_reading 把同一篇的跨卷副本合成一条（副本多出来的题并进保留的那条）。
+  // 这条锁的是它的结果：用户在真题阅读里不该连着抽到同一篇文章两次。
+  // 判据与 scripts/realbank/consolidate_reading.js 同一套（直接引它，免得两处漂）。
+  const fs = require("fs");
+  const path = require("path");
+  const CR = require("../scripts/realbank/consolidate_reading.js");
+
+  // 主工作树在重建题库之前还没有 consolidation.json —— 那时库里本来就还有未合并的同篇，
+  // 不该让这条把主树刷红。产物出现之后它才生效。
+  const consolidated = fs.existsSync(path.join(__dirname, "..", "data/realBank/reading/consolidation.json"));
+  const t = consolidated ? test : test.skip;
+
+  const paras = (it) => (Array.isArray(it.paragraphs) && it.paragraphs.length
+    ? it.paragraphs
+    : String(it.passage || "").split(/\n{2,}/)).map((s) => String(s || "").trim()).filter(Boolean);
+  const bodyTokens = (it) => {
+    const p = paras(it);
+    return CR.tokens(p.slice(1).join("\n\n").trim() || String(it.passage || ""));
+  };
+
+  t("live AP 里没有两篇标题相同且正文 Jaccard ≥ 0.5 的 item", () => {
+    const items = RB_AP.items || [];
+    const dup = [];
+    for (let i = 0; i < items.length; i += 1) {
+      for (let j = i + 1; j < items.length; j += 1) {
+        const ta = CR.titleKey(paras(items[i])[0] || "");
+        const tb = CR.titleKey(paras(items[j])[0] || "");
+        if (!ta || ta !== tb) continue;
+        const v = CR.jaccard(bodyTokens(items[i]), bodyTokens(items[j]));
+        if (v >= CR.AP_TITLE_BODY_JACCARD_MIN) dup.push(`${items[i].id} ≈ ${items[j].id} (${v.toFixed(2)})`);
+      }
+    }
+    expect(dup).toEqual([]);
+  });
+
+  t("live AP 里没有两篇正文 Jaccard ≥ 0.8 的 item（标题被 OCR 吃掉的那种）", () => {
+    const items = RB_AP.items || [];
+    const toks = items.map(bodyTokens);
+    const dup = [];
+    for (let i = 0; i < items.length; i += 1) {
+      for (let j = i + 1; j < items.length; j += 1) {
+        const v = CR.jaccard(toks[i], toks[j]);
+        if (v >= CR.AP_BODY_JACCARD_MIN) dup.push(`${items[i].id} ≈ ${items[j].id} (${v.toFixed(2)})`);
+      }
+    }
+    expect(dup).toEqual([]);
+  });
+
+  t("consolidation.json 里被合并掉的 id 不在成品里，保留的那条在", () => {
+    const cons = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data/realBank/reading/consolidation.json"), "utf8"));
+    const live = new Set([...(RB_AP.items || []), ...(RB_RDL.items || [])].map((it) => String(it.id)));
+    const leaked = [];
+    for (const c of cons.clusters || []) {
+      for (const d of c.dropped || []) if (live.has(String(d))) leaked.push(`dropped 仍在库：${d}`);
+    }
+    expect(leaked).toEqual([]);
+    // 保留方可能随后被复核清单整条下架（那是另一道闸），所以只要求「不是每一条都没了」。
+    const keptAlive = (cons.clusters || []).filter((c) => live.has(String(c.kept))).length;
+    if ((cons.clusters || []).length) expect(keptAlive).toBeGreaterThan(0);
+  });
+});

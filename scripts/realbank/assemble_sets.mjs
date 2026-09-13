@@ -83,18 +83,69 @@ export function loadClusters(bankDir) {
 }
 
 /**
+ * 阅读条目的 id 别名：优先读 reading/id-aliases.json（build_bank 落的账本，含跨卷同篇合并 consolidated
+ * 与 ap↔rdl 归位 reclassified 两类，to 已收敛到本次产物里活着的 id）；没有这份账本（旧产物）时退回
+ * reading/consolidation.json 的 dropped → kept。
+ * 与 review-holds 的 dup_of 是同一回事 —— 被移除的 id 仍然编码着它在**自己那场**的 module/题号，
+ * 所以照样能原位还回去，内容指向保留的那份。归位类别名题型对不上（ap → rdl），indexItems 会跳过它：
+ * 归位后的条目本身就以新 id 按原场次落槽，不需要别名再放一次。两份文件都不存在 = 还没重建过库，忽略。
+ */
+export function loadConsolidationAliases(bankDir) {
+  const ledgerPath = path.join(bankDir, "reading", "id-aliases.json");
+  if (fs.existsSync(ledgerPath)) {
+    try {
+      const aliases = JSON.parse(fs.readFileSync(ledgerPath, "utf8")).aliases || [];
+      return aliases
+        .filter((a) => a && a.from && a.to && String(a.from) !== String(a.to))
+        .map((a) => ({ held: String(a.from), canonical: String(a.to), source: null }));
+    } catch { /* 坏账本：退回 consolidation.json */ }
+  }
+  const p = path.join(bankDir, "reading", "consolidation.json");
+  if (!fs.existsSync(p)) return [];
+  let clusters;
+  try { clusters = JSON.parse(fs.readFileSync(p, "utf8")).clusters || []; } catch { return []; }
+  const out = [];
+  for (const c of clusters || []) {
+    if (!c || !c.kept) continue;
+    for (const d of c.dropped || []) {
+      if (d && String(d) !== String(c.kept)) out.push({ held: String(d), canonical: String(c.kept), source: null });
+    }
+  }
+  return out;
+}
+
+/**
+ * 别名链收敛：A→B、B→C 时把 A 直接指向 C。
+ * 两条来源（复核清单 dup_of / 跨卷同篇合并）各自只知道自己那一跳，串起来才找得到库里还活着的那条
+ * —— 中间那跳的条目已经不在库里，indexItems 的 byId.get(canonical) 会落空，槽位就白空着。
+ * 同一个 held 只留第一条（复核清单优先于合并账本）；成环时停在原地，不死循环。
+ */
+function resolveAliasChains(aliases) {
+  const byHeld = new Map();
+  for (const a of aliases) if (a && a.held && a.canonical && a.held !== a.canonical && !byHeld.has(a.held)) byHeld.set(a.held, a);
+  const out = [];
+  for (const a of byHeld.values()) {
+    let can = a.canonical;
+    const seen = new Set([a.held]);
+    while (byHeld.has(can) && !seen.has(can)) { seen.add(can); can = byHeld.get(can).canonical; }
+    if (can !== a.held) out.push({ ...a, canonical: can });
+  }
+  return out;
+}
+
+/**
  * 跨套重复的别名：review-holds.json 里 scope=unit 且带 dup_of 的下架条目
- * （"与 real_ap_310_1_31 同一份材料（跨套重复），保留 real_ap_310_1_31"）。
- * 被下架的 id 仍然编码着它在**自己那场**的 module/题号，所以能原位还回去，内容指向保留的那份。
- * 返回 [{ held, canonical, source }]。
+ * （"与 real_ap_310_1_31 同一份材料（跨套重复），保留 real_ap_310_1_31"），
+ * 外加 reading/consolidation.json 里被合并掉的副本（见 loadConsolidationAliases）。
+ * 返回 [{ held, canonical, source }]，canonical 已顺着别名链收敛到库里还活着的那条。
  */
 export function loadDupAliases(bankDir) {
   const p = path.join(bankDir, "review-holds.json");
-  if (!fs.existsSync(p)) return [];
-  const holds = JSON.parse(fs.readFileSync(p, "utf8")).holds || [];
-  return holds
+  const holds = fs.existsSync(p) ? (JSON.parse(fs.readFileSync(p, "utf8")).holds || []) : [];
+  const fromHolds = holds
     .filter((h) => h && h.scope === "unit" && h.dup_of && h.id && h.dup_of !== h.id)
     .map((h) => ({ held: String(h.id), canonical: String(h.dup_of), source: h.source ? String(h.source) : null }));
+  return resolveAliasChains([...fromHolds, ...loadConsolidationAliases(bankDir)]);
 }
 
 /* ── 逐题建索引 ────────────────────────────────────────────────────────── */

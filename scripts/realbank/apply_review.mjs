@@ -15,10 +15,20 @@
  *
  * 幂等：重复跑无副作用（patch 用 from→to 精确替换，找不到 from 就跳过并提示）。
  *
+ * 阅读条目 id 会变（data/realBank/reading/id-aliases.json）：
+ *   · reclassified（ap ↔ rdl 归位，同一份材料换了前缀）→ 清单里记在旧 file+id 上的下架 / patch
+ *     **照样生效**：顺着账本搬到新 file+id，patch 路径跟着翻译（AP passage ↔ RDL text）。
+ *   · consolidated（跨卷同篇合并，副本被合进保留方）→ **不搬**：下架的是那份坏副本，它已经不在库里了，
+ *     搬到保留方头上等于把好的那份删掉。
+ *
  * 用法: node scripts/realbank/apply_review.mjs [--dry]
  */
 import fs from "fs";
 import path from "path";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const { reclassifiedRedirects } = require("./id_aliases.js");
 
 const FILES = {
   "reading/ctw": "reading", "reading/rdl": "reading", "reading/ap": "reading",
@@ -54,6 +64,39 @@ function refreshCtw(item) {
 const step = (o, k) => (o == null ? undefined : k.startsWith("#") && Array.isArray(o) ? o.find((x) => x?.id === k.slice(1)) : o[k]);
 function getPath(obj, p) { return p.split(".").reduce(step, obj); }
 function setPath(obj, p, v) { const ks = p.split("."); const last = ks.pop(); const o = ks.reduce(step, obj); if (o == null) throw new Error(`[apply_review] 路径 ${p} 不存在`); o[last] = v; }
+
+/**
+ * 条目换了题型文件时，patch 的字段路径跟着翻译。AP 的材料在 passage（paragraphs 是它的派生），
+ * RDL 的材料在 text；题目路径 questions.* 两边一样。翻不了的（AP 的 paragraphs.N 没有 RDL 对应物）→ null。
+ */
+function translatePatchPath(p, fromType, toType) {
+  if (!p || fromType === toType) return p;
+  if (fromType === "ap" && toType === "rdl") {
+    if (p === "passage") return "text";
+    if (p === "topic") return "genre";
+    if (/^(paragraphs|subtopic)(\.|$)/.test(p)) return null;
+    return p;
+  }
+  if (fromType === "rdl" && toType === "ap") {
+    if (p === "text") return "passage";
+    if (p === "genre") return "topic";
+    if (/^format_metadata(\.|$)/.test(p)) return null;
+    return p;
+  }
+  return p;
+}
+
+/** AP 的 paragraphs 是 passage 按空行切出来的（build_bank.buildMcqGroup 同口径）；passage 被 patch 过就得重切，
+ *  否则两份文字对不上 —— 点选句子题的选项是按 paragraphs 定位的。 */
+function refreshApParagraphs(item) {
+  if (typeof item.passage !== "string") return;
+  item.paragraphs = item.passage.split(/\n{2,}/).map((s) => s.trim()).filter(Boolean);
+}
+
+/** 读别名账本（不存在 / 坏了 = 空账本，行为与没有账本时完全一致）。 */
+function readAliasLedger(bankDir) {
+  try { return JSON.parse(fs.readFileSync(path.join(bankDir, "reading", "id-aliases.json"), "utf8")); } catch { return null; }
+}
 
 /** 这条 AP / RDL 里有没有插入句题（题干口径与 build_bank.looksLikeInsertQuestion 一致）。 */
 function hasInsertQuestion(item) {
@@ -122,15 +165,44 @@ function markAudioStale(item, patchPath) {
   return true;
 }
 
-export function applyReview({ root = process.cwd(), dry = false } = {}) {
+/**
+ * @param {{root?: string, dry?: boolean, aliases?: object|null}} opts
+ *   aliases  id 别名账本（id-aliases.json 的形状）。缺省读 data/realBank/reading/id-aliases.json；
+ *            build_bank 在落账本之前调本函数，会把本次重建算出来的账本直接传进来。
+ */
+export function applyReview({ root = process.cwd(), dry = false, aliases } = {}) {
   const bankDir = path.join(root, "data", "realBank");
   const holdsFile = path.join(bankDir, "review-holds.json");
   if (!fs.existsSync(holdsFile)) { console.warn(`[apply_review] 没有 ${holdsFile}，跳过`); return null; }
   const review = JSON.parse(fs.readFileSync(holdsFile, "utf8"));
-  const holds = review.holds || [];
-  const patches = review.patches || [];
   const log = [];
-  const stats = { patched: 0, patchGone: 0, holdGone: 0, audioStale: 0, units: 0, questions: 0, sentences: 0, iqs: 0 };
+  const stats = { patched: 0, patchGone: 0, holdGone: 0, audioStale: 0, units: 0, questions: 0, sentences: 0, iqs: 0, redirected: 0 };
+
+  // ── 阅读条目被归位（ap ↔ rdl）后，清单里记在旧 file+id 上的条目顺着账本搬到新 file+id ──
+  // 只搬「旧 id 在它原来的文件里已经找不到」的：同一个 id 两边都在（归位前的旧库还没重建）时不动。
+  const redirects = reclassifiedRedirects(aliases === undefined ? readAliasLedger(bankDir) : aliases);
+  const readingIds = {};
+  for (const f of ["reading/ap", "reading/rdl"]) {
+    try { readingIds[f] = new Set(JSON.parse(fs.readFileSync(path.join(bankDir, `${f}.json`), "utf8")).items.map((it) => it.id)); }
+    catch { readingIds[f] = new Set(); }
+  }
+  const redirect = (x, isPatch) => {
+    if (!x || !readingIds[x.file] || readingIds[x.file].has(x.id)) return x;
+    const r = redirects.get(String(x.id));
+    if (!r || !readingIds[r.file] || !readingIds[r.file].has(r.id)) return x;
+    const fromType = x.file.slice("reading/".length);
+    const toType = r.file.slice("reading/".length);
+    const moved = { ...x, file: r.file, id: r.id, redirected_from: `${x.file}:${x.id}` };
+    if (isPatch) {
+      const p = translatePatchPath(x.path, fromType, toType);
+      if (p == null) return { ...moved, untranslatable: true };
+      moved.path = p;
+    }
+    stats.redirected += 1;
+    return moved;
+  };
+  const holds = (review.holds || []).map((h) => redirect(h, false));
+  const patches = (review.patches || []).map((p) => redirect(p, true));
 
   const holdByFile = {};
   for (const h of holds) (holdByFile[h.file] = holdByFile[h.file] || []).push(h);
@@ -150,10 +222,12 @@ export function applyReview({ root = process.cwd(), dry = false } = {}) {
     for (const patch of patchByFile[file] || []) {
       const it = byId.get(patch.id);
       if (!it) { stats.patchGone += 1; continue; } // 条目已下架（holds 里同一条），patch 自然作废
+      if (patch.untranslatable) { stats.patchGone += 1; log.push(`  ! ${patch.redirected_from} → ${file}:${patch.id} 路径 ${patch.path} 在新题型里没有对应字段，跳过`); continue; }
       if (getPath(it, patch.path) === undefined) { stats.patchGone += 1; continue; } // 目标句/题已被 sentence/iq 级下架
       if (applyPatch(it, patch, log)) {
         stats.patched += 1;
         if (isCtw && patch.path === "passage") refreshCtw(it);
+        if (file === "reading/ap" && patch.path === "passage") refreshApParagraphs(it);
         if (markAudioStale(it, patch.path)) stats.audioStale += 1;
       }
     }
@@ -183,18 +257,27 @@ export function applyReview({ root = process.cwd(), dry = false } = {}) {
         default: throw new Error(`[apply_review] 未知 scope ${h.scope}`);
       }
     }
-    for (const [id, idx] of qHold) {
+    for (const [id] of qHold) {
       const it = byId.get(id);
-      // 幂等：靠 q_number/source_q 之外没有稳定键，所以 holds 里 question 级条目要带 stem 前缀核对，
-      // 已经扣掉的题 stem 对不上就跳过，不会误扣下一题。
+      // 定位：**先按 stem 前缀找**，同前缀有多道时才用下标 q 挑。只按下标会漂 —— 挂上点选句子题、
+      // 跨卷合并按题号重排之后，同一道题的下标就变了，按旧下标核 stem 对不上只能放过，下架的题就复活了。
+      // 清单条目没带 stem 的（老数据）才退回纯下标。已经扣掉的题找不到 → holdGone（幂等）。
       const before = it.questions.length;
       const wanted = holds.filter((h) => h.file === file && h.id === id && h.scope === "question");
-      it.questions = it.questions.filter((q, i) => {
-        const h = wanted.find((w) => w.q === i);
-        if (!h) return true;
-        if (h.stem && !String(q.stem || "").startsWith(h.stem)) { stats.holdGone += 1; return true; } // 已扣过，下标漂到了别的题：不许误扣
-        return false;
-      });
+      const drop = new Set();
+      for (const h of wanted) {
+        let at = -1;
+        if (h.stem) {
+          const hits = [];
+          it.questions.forEach((q, i) => { if (!drop.has(i) && String(q.stem || "").startsWith(h.stem)) hits.push(i); });
+          at = hits.includes(h.q) ? h.q : (hits.length ? hits[0] : -1);
+        } else if (Number.isInteger(h.q) && h.q >= 0 && h.q < it.questions.length && !drop.has(h.q)) {
+          at = h.q;
+        }
+        if (at < 0) { stats.holdGone += 1; continue; }
+        drop.add(at);
+      }
+      it.questions = it.questions.filter((_, i) => !drop.has(i));
       stats.questions += before - it.questions.length;
       if (it.questions.length === 0) { unitHold.add(id); log.push(`  · ${id} 题全被扣光，整条下架`); }
     }
@@ -223,7 +306,8 @@ if (isMain) {
   const r = applyReview({ dry });
   if (r) {
     console.log(`■ apply_review${dry ? "（--dry）" : ""}：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
-      + `（清单里已不在库的 ${r.stats.holdGone} 条、随整条下架作废的 patch ${r.stats.patchGone} 处）`);
+      + `（清单里已不在库的 ${r.stats.holdGone} 条、随整条下架作废的 patch ${r.stats.patchGone} 处；`
+      + `顺着 id-aliases.json 归位搬到新 file+id 的 ${r.stats.redirected} 条）`);
     if (r.stats.audioStale) console.log(`  口播文本改动 → ${r.stats.audioStale} 条音频作废（audio_pending），本机跑 render_real_audio.mjs 补配`);
     for (const l of r.log) console.log(l);
   }

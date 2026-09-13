@@ -32,6 +32,22 @@ describe("blueprint: id 解析与位置修正", () => {
     expect(bp.normalizeQ(7, { module: 1 })).toBe(7);
   });
 
+  // id 沿用（scripts/realbank/id_carry.js）之后，id 里的题号不再保证等于组内最小题号
+  // ——补回一道更靠前的题时，内容从 26 起步而 id 还叫 _27。槽位/版式/题型修正全按**题号带**判，
+  // 带内漂移不改结果，所以沿用是安全的。这条把「带内漂移无影响」锁住。
+  test("id 里的题号在同一题号带内漂移（26↔27）不改槽位 / 版式 / 题型修正", () => {
+    const slots = bp.slotsFor("reading", 1, "B");
+    expect(bp.findSlot(slots, "ap", 26).key).toBe("ap_26");
+    expect(bp.findSlot(slots, "ap", 27).key).toBe("ap_26");
+    expect(bp.positionType("ap", { module: 1, q: 26, nq: 5 })).toBe("ap");
+    expect(bp.positionType("ap", { module: 1, q: 27, nq: 5 })).toBe("ap");
+    expect(bp.detectReadingM1Form([{ module: 1, type: "ap", q: 26 }])).toBe("B");
+    expect(bp.detectReadingM1Form([{ module: 1, type: "ap", q: 27 }])).toBe("B");
+    // rf 卷的百位前缀归一同理（131 / 132 → 31 / 32，同在 [31,35] 带）
+    expect(bp.findSlot(slots, "ap", bp.normalizeQ(131, { module: 1 })).key).toBe("ap_31");
+    expect(bp.findSlot(slots, "ap", bp.normalizeQ(132, { module: 1 })).key).toBe("ap_31");
+  });
+
   test("positionType：M1 起步 23/25/28 且 ≤3 题的 ap 是日常阅读；26/31 起步才是学术段落", () => {
     expect(bp.positionType("ap", { module: 1, q: 23, nq: 3 })).toBe("rdl");
     expect(bp.positionType("ap", { module: 1, q: 25, nq: 3 })).toBe("rdl");
@@ -266,6 +282,63 @@ describe("assemble_sets：默认同源不借 + 跨套重复别名 + 题型套", 
     const md = asm.renderReport(man);
     expect(md).toContain("## 六、按题型组套（同源，不借）");
     expect(md).toContain("同源不借");
+  });
+});
+
+/* ── 跨卷同篇合并（build_bank 的 consolidate_reading）留下的别名 ───────── */
+
+describe("assemble_sets：consolidation.json 的别名", () => {
+  let dir;
+  beforeEach(() => { dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-sets-cons-")); });
+  afterEach(() => fs.rmSync(dir, { recursive: true, force: true }));
+
+  const writeCons = (clusters) => {
+    fs.mkdirSync(path.join(dir, "reading"), { recursive: true });
+    fs.writeFileSync(path.join(dir, "reading", "consolidation.json"), JSON.stringify({ clusters }));
+  };
+  const writeHolds = (holds) => fs.writeFileSync(path.join(dir, "review-holds.json"), JSON.stringify({ holds }));
+
+  test("被合并掉的副本当成别名（与 review-holds 的 dup_of 同等）", () => {
+    writeCons([{ kept: "real_ap_325_2_11", dropped: ["real_ap_121a_2_11"], merged: [], skipped: [] }]);
+    expect(asm.loadConsolidationAliases(dir)).toEqual([
+      { held: "real_ap_121a_2_11", canonical: "real_ap_325_2_11", source: null },
+    ]);
+    expect(asm.loadDupAliases(dir)).toEqual([
+      { held: "real_ap_121a_2_11", canonical: "real_ap_325_2_11", source: null },
+    ]);
+  });
+
+  test("别名链收敛：dup_of 指向的那条又被合并掉了，也要一路指到库里还活着的那条", () => {
+    writeHolds([{ file: "reading/ap", id: "real_ap_a_1_31", scope: "unit", dup_of: "real_ap_b_1_31", reason: "跨套重复" }]);
+    writeCons([{ kept: "real_ap_c_1_31", dropped: ["real_ap_b_1_31"], merged: [], skipped: [] }]);
+    const aliases = asm.loadDupAliases(dir);
+    expect(aliases).toEqual(expect.arrayContaining([
+      { held: "real_ap_a_1_31", canonical: "real_ap_c_1_31", source: null },
+      { held: "real_ap_b_1_31", canonical: "real_ap_c_1_31", source: null },
+    ]));
+    expect(aliases).toHaveLength(2);
+  });
+
+  test("文件不存在 / 内容坏掉 → 忽略，不拖垮整份清单", () => {
+    writeHolds([{ file: "reading/ap", id: "real_ap_a_1_31", scope: "unit", dup_of: "real_ap_b_1_31", reason: "x" }]);
+    expect(asm.loadConsolidationAliases(dir)).toEqual([]);
+    expect(asm.loadDupAliases(dir)).toHaveLength(1);
+    fs.mkdirSync(path.join(dir, "reading"), { recursive: true });
+    fs.writeFileSync(path.join(dir, "reading", "consolidation.json"), "{ not json");
+    expect(asm.loadConsolidationAliases(dir)).toEqual([]);
+    expect(asm.loadDupAliases(dir)).toHaveLength(1);
+  });
+
+  test("端到端：被合并掉的 id 照样把自己那场的槽位填上，标 alias_of", () => {
+    const names = writeMiniBank(dir);
+    // S1 的 M2 学术段落在重建时被判为与 S3 那篇同一篇，合进了 S3 那条
+    writeCons([{ kept: "real_ap_325_2_11", dropped: ["real_ap_121a_2_11"], merged: [], skipped: [] }]);
+    const man2 = asm.buildManifest(dir);
+    expect(man2.summary.aliases_restored).toBe(1);
+    const r = man2.sets.find((s) => s.set === names.S1).sections.reading;
+    const slot = r.modules[2].slots.find((s) => s.key === "ap_11");
+    expect(slot.items).toEqual([{ id: "real_ap_325_2_11", nq: 5, q: 11, alias_of: "real_ap_121a_2_11" }]);
+    expect(r.completeness).toBe(1);
   });
 });
 

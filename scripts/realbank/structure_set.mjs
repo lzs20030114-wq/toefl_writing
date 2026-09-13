@@ -34,6 +34,9 @@ const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require(".
 const { verifyCtw } = require("./ctw_verify.js");
 // 就地修补（--merge / --only-failed / --reverify-ctw）写回时统一走这里：同步第一来源的 rw 阅读基线。
 const { writeStructured } = require("./structured_io.js");
+// 调用预算（CTW 单独放宽）+ 宽松 JSON 解析 + 解析失败文案，抽成纯函数可单测：./model_output.js ——
+// 那里写着 CTW「无法解析为 JSON」的真因（推理 token 吃光 max_tokens，正文为空）。
+const { callBudget, parseJsonLoose, unparsableProblem, ctwVisionCacheFile } = require("./model_output.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -209,7 +212,7 @@ function abortIfSystemic() {
   process.exit(EXIT_SYSTEMIC);
 }
 
-async function callModel(systemPrompt, userText) {
+async function callModel(systemPrompt, userText, budget = callBudget()) {
   // —— 测试钩子，只用于验证守卫，正常运行不会触发 ——
   // REALBANK_FAKE_API_ERROR=402   每次调用都抛该状态码的 API 错误（验证「系统性失败即中止」）
   // REALBANK_FAKE_MODEL_JSON=<json>  每次调用都返回这段 JSON、不发网络请求（验证一代备份）
@@ -222,11 +225,13 @@ async function callModel(systemPrompt, userText) {
   const content = await callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
     proxyUrl: resolveProxyUrl(),
-    timeoutMs: 90000,
+    timeoutMs: budget.timeoutMs,
     payload: {
       model: MODEL,
       temperature: 0,
-      max_tokens: 16000, // deepseek-v4-flash 是推理模型：预算给小了推理会把正文吃光，返回空串（写作评分那次的同一个坑）
+      // deepseek-v4-flash 是推理模型：max_tokens 含推理 token，预算给小了推理会把正文吃光、返回空串
+      // （写作评分那次的同一个坑）。CTW 推理特别长，预算单独放宽，见 model_output.js。
+      max_tokens: budget.maxTokens,
       stream: false,
       messages: [
         { role: "system", content: systemPrompt },
@@ -237,17 +242,7 @@ async function callModel(systemPrompt, userText) {
   return content;
 }
 
-function parseJsonLoose(raw) {
-  const s = String(raw || "").replace(/^```(?:json)?/i, "").replace(/```\s*$/, "").trim();
-  try { return JSON.parse(s); } catch { /* 继续兜底 */ }
-  const start = s.search(/[[{]/);
-  if (start < 0) return null;
-  const open = s[start];
-  const close = open === "[" ? "]" : "}";
-  const end = s.lastIndexOf(close);
-  if (end <= start) return null;
-  try { return JSON.parse(s.slice(start, end + 1)); } catch { return null; }
-}
+// parseJsonLoose 见 ./model_output.js（旧两步原样保留，另加按括号配对取第一个完整 JSON 值）。
 
 /* ── 4. 盖答案 + 校验 ────────────────────────────────────────────────────── */
 const LETTERS = "abcdefgh";
@@ -416,12 +411,15 @@ async function processUnit(u) {
 
   if (u.type === "ctw") {
     const words = u.answers.map((a) => a.answer);
+    // --ctw-vision-body 换过输入的块在产物上记一笔来源（见 main 里的说明）
+    const src = u.bodySource ? { body_source: u.bodySource } : {};
     const raw = await callModel(PROMPTS.ctw,
-      `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}\n\n${CTW_ANSWER_NOTE}`);
+      `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}\n\n${CTW_ANSWER_NOTE}`,
+      callBudget("ctw"));
     const obj = parseJsonLoose(raw);
-    if (!obj) return { ...base, status: "flagged", problems: ["模型输出无法解析为 JSON"], items: [] };
+    if (!obj) return { ...base, ...src, status: "flagged", problems: [unparsableProblem(raw)], items: [] };
     const problems = verifyCtw(obj, words);
-    return { ...base, status: problems.length ? "flagged" : "ok", problems, items: [obj] };
+    return { ...base, ...src, status: problems.length ? "flagged" : "ok", problems, items: [obj] };
   }
 
   // 材料屏本身不是题（它的题号只是页眉），交给后面的题块当 carryMaterial 用
@@ -435,7 +433,7 @@ async function processUnit(u) {
     (u.carryMaterial ? `【材料（在前一屏，本题就是问它）】\n${u.carryMaterial}\n\n` : "")
     + `【OCR 文本】\n${u.body}`);
   const obj = parseJsonLoose(raw);
-  if (!obj) return { ...base, status: "flagged", problems: ["模型输出无法解析为 JSON"], items: [] };
+  if (!obj) return { ...base, status: "flagged", problems: [unparsableProblem(raw)], items: [] };
   const problems = [...verifyMcq(obj), ...stampAnswer(obj, ans?.answer)];
   obj.q_number = ans?.n;
   obj.answer_key = ans?.answer;
@@ -500,7 +498,7 @@ async function main() {
   const reverifyCtw = args.includes("--reverify-ctw");
   if (!setname) {
     console.error("用法: node scripts/realbank/structure_set.mjs <卷名> [--dry] [--limit N] [--force]"
-      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw]");
+      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw] [--ctw-vision-body]");
     process.exit(2);
   }
   const scanPath = path.join(OUT_DIR, `${setname}.json`);
@@ -519,6 +517,24 @@ async function main() {
     const before = units.length;
     units = units.filter((u) => onlyTypes.has(u.type));
     console.log(`题型过滤 [${[...onlyTypes].join(",")}]：${before} → ${units.length} 块`);
+  }
+  // --ctw-vision-body：填词块的输入换成 Qwen3-VL 看源截图的逐字转写
+  // （scripts/realbank/ctw_vision_transcribe.py 写的缓存 .codex-tmp/ocr/ctwvis__<卷>_M<m>_<起>-<止>__img1.txt）。
+  // 2026-09-13 实测：第一来源本地 OCR 常把填词屏整行吃掉，模型为了交出「补全后的完整原文」会把缺的句子编出来
+  // （3.30 M1 11-20 丢了开头整句，产物写成「Health innovations such as…」；3.15 M1 1-10 编出
+  //  「they were also interested in the process of dancing」）。挖空逐空校验照样过，但正文不是原文。
+  // 看图转写的行是全的、挖空词只留露出的前缀 + "_"。没有缓存的块照旧用本地 OCR。只影响输入，不动任何判据。
+  if (args.includes("--ctw-vision-body")) {
+    const ocrDir = path.join(process.cwd(), ".codex-tmp", "ocr");
+    let hit = 0, ctwUnits = 0;
+    for (const u of units) {
+      if (u.type !== "ctw") continue;
+      ctwUnits += 1;
+      const p = path.join(ocrDir, ctwVisionCacheFile(setname, u.module, u.start, u.end));
+      const text = fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
+      if (text.trim()) { u.body = text; u.bodySource = "qwen3-vl"; hit += 1; }
+    }
+    console.log(`--ctw-vision-body：${ctwUnits} 个填词块里 ${hit} 个改用看图逐字转写当输入，其余照旧用本地 OCR`);
   }
   const outPath = path.join(OUT_DIR, `${setname}.structured.json`);
   const prevPath = path.join(OUT_DIR, `${setname}.structured.prev.json`);

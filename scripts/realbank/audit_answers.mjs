@@ -346,9 +346,17 @@ async function main() {
     fs.copyFileSync(outPath, prevPath);   // 一代备份（只留一代，够回滚一次误跑）
     console.log(`已备份上一版 → ${prevPath}`);
   }
+  // 顶层计数按**合并后的 audited 全量**重算，不是本批新题。
+  // 增量审（--section= / --only-missing）下，本批只覆盖一小撮题，直接写 `auditable/agree/nulls`
+  // 会让顶层数字和 `audited` 明细对不上（实测 34/79 卷已经这样，例：1.21B 写着 auditable:3
+  // 而 audited 里有 56 条）。闸门读的是 audited 数组（hold_policy.sectionAgreement 现算），
+  // 所以这只是显示错，但人一眼看过去会以为盲审覆盖率塌了。全量重算与整卷跑的语义一致
+  // （整卷跑时 audited = auditable.map(...)，两者本来就相等）。
+  const totalAgree = audited.filter((a) => a && a.agree === true).length;
+  const totalNulls = audited.filter((a) => a && a.model == null).length;
   fs.writeFileSync(outPath, JSON.stringify({
-    set: setname, model: MODEL, auditable: auditable.length, skipped: skipped.length,
-    agree, nulls, audited,
+    set: setname, model: MODEL, auditable: audited.length, skipped: skipped.length,
+    agree: totalAgree, nulls: totalNulls, audited,
     disagree: carriedDisagree.concat(disagree.map((d) => ({
       section: d.section, type: d.type, q: d.item.q_number,
       stamped: d.stamped, model: d.model, stem: d.item.stem, options: d.item.options,

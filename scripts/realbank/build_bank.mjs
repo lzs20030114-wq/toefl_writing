@@ -24,15 +24,23 @@
  * 4. **来源分档只能标 recalled。** 这批是闲鱼来源的 2026 机经回忆版，不是 ETS 官方 PDF。
  *    data/REFERENCE_BANKS.md 的口径：没核验过的一律不许标 official。
  *
+ * 5. **跨卷同篇要合回去，不是扔掉一份。** 同一篇文章被两套卷各抽了一部分题时，老办法
+ *    （内容哈希去重 / 复核清单 dup_of 下架）留一份扔一份，扔掉那份多出来的题也一起没了。
+ *    见 scripts/realbank/consolidate_reading.js。
+ *
  * 用法:
- *   node scripts/realbank/build_bank.mjs            # 汇总所有已跑过的卷
- *   node scripts/realbank/build_bank.mjs --dry      # 只看统计，不写文件
+ *   node scripts/realbank/build_bank.mjs                  # 汇总所有已跑过的卷
+ *   node scripts/realbank/build_bank.mjs --dry            # 只看统计，不写文件
+ *   node scripts/realbank/build_bank.mjs --only-reading   # 只写 data/realBank/reading/，其余字节不动
+ *   node scripts/realbank/build_bank.mjs --only-bs        # 只写 data/realBank/writing/bs.json
  */
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { createRequire } from "module";
 import { applyReview } from "./apply_review.mjs";
+// 日常阅读 / 学术阅读按考卷题号带归位（不再只看材料词数）：scripts/realbank/reading_position.mjs。
+import { decideReadingKinds } from "./reading_position.mjs";
 import { bsRuntimeReject } from "./bs_runtime_gate.mjs";
 import { applyInterviewSplitsOnDisk } from "./apply_interview_splits.mjs";
 
@@ -47,6 +55,16 @@ const { carryMaterialImages } = require("./material_image_carry.js");
 const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 // 听力原声回挂判据同样抽成纯函数（无 IO，可单测）：scripts/realbank/original_audio.js。
 const { applyOriginalAudio } = require("./original_audio.js");
+// 跨卷同篇合并（AP/RDL）同样抽成纯函数：scripts/realbank/consolidate_reading.js。
+const { consolidateReading } = require("./consolidate_reading.js");
+// 条目 id 沿用（题号会随补题变，id 不能跟着变）同样抽成纯函数：scripts/realbank/id_carry.js。
+const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js");
+// id 别名账本（合并 / 归位之后旧 id 指到哪）：scripts/realbank/id_aliases.js。
+const { buildIdAliases } = require("./id_aliases.js");
+// 点选句子题（账本 → 挂题 → 落盘后按盲审哈希放行）：scripts/realbank/sentence_select.js。
+const SS = require("./sentence_select.js");
+// AP 题型推断（结构化产物不带 question_type，落库前按题干句式推回）：scripts/realbank/question_type.js。
+const { apQuestionType } = require("./question_type.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -91,14 +109,32 @@ const INSERT_MARKERS = (() => {
  * 先遍历到的那条，两头都删光（2026-09-10 rf0808 la Q19 / rf0826 la Q23 就是这样两条都没了，
  * __tests__/real-bank-review-holds.test.js 的「dup_of 指向的那条必须还在库里」会报红）。
  * 所以撞重复时先问清单：先收的那条若被清单判为本条的重复，两条都放行，交给 applyReview 按清单下架。
+ *
+ * REVIEW 是整份清单（跨卷同篇合并也要读它的 dup_of 与 scope=question 歧义题干），
+ * DUP_KEEPER 是从里面抽出来的「被下架 id → 保留 id」。
  */
-const DUP_KEEPER = (() => {
+const REVIEW = (() => {
   try {
-    const holds = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "review-holds.json"), "utf8")).holds || [];
-    return new Map(holds.filter((h) => h && h.id && h.dup_of).map((h) => [h.id, h.dup_of]));
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "review-holds.json"), "utf8"));
   } catch {
-    return new Map();
+    return { holds: [], patches: [] };
   }
+})();
+const DUP_KEEPER = new Map((REVIEW.holds || []).filter((h) => h && h.id && h.dup_of).map((h) => [h.id, h.dup_of]));
+
+/**
+ * 点选句子题账本（data/realBank/reading/sentence-select.json）：题干 / 段号 / 答案开头词 / 盲审记录。
+ * 由 sentence_select_ledger.mjs 建、audit_sentence_select.mjs 补审，**build_bank 只读不写**。
+ * 缺文件 = 空账本 = 行为与接线前完全一致（选句题照旧不上线）。
+ */
+const SENTENCE_LEDGER = (() => {
+  try { return JSON.parse(fs.readFileSync(path.join(BANK_DIR, "sentence-select.json"), "utf8")); } catch { return { entries: [] }; }
+})();
+const SENTENCE_PASSES = SS.passingHashes(SENTENCE_LEDGER);
+
+/** 上一版 id 别名账本（跨重建累积：旧条目保留、重新收敛）。 */
+const PREV_ALIASES = (() => {
+  try { return JSON.parse(fs.readFileSync(path.join(BANK_DIR, "id-aliases.json"), "utf8")); } catch { return null; }
 })();
 
 /** seen 表记的是 `卷名/id`：先收的那条被复核清单判为 id 的重复 → true（本条是保留方，不该跳过）。 */
@@ -319,7 +355,7 @@ function groupByMaterial(records, stats) {
   const byKey = new Map();
   for (const r of records) {
     const key = matNorm(r.item.material);
-    const mapKey = `${r.module} ${key}`;
+    const mapKey = `${r.module}\u0000${key}`;
     let seed = byKey.get(mapKey);
     if (!seed) {
       seed = { module: r.module, key, tokens: matTokens(r.item.material), records: [] };
@@ -384,7 +420,11 @@ function hasInsertMarkers(material) {
   return ["[A]", "[B]", "[C]", "[D]"].every((x) => s.includes(x));
 }
 
-function buildMcqGroup(group, meta, stats) {
+/**
+ * @param {{kind?: "ap"|"rdl"}} opts kind 给了就按它出 AP / RDL 形状（考卷位置归位用，见 reading_position.mjs）；
+ *        不给就走老判据（组里有 type=ap 的记录或材料 ≥160 词）。
+ */
+function buildMcqGroup(group, meta, stats, { kind } = {}) {
   // 代表材料取簇里最长的那份（OCR 漏字只会变短），material_kind 也跟着它走。
   const first = (group.rep || group.records[0]).item;
   let material = String(first.material || "").trim();
@@ -451,7 +491,11 @@ function buildMcqGroup(group, meta, stats) {
     questions.push(q);
   }
   if (!questions.length) return null;                // 一组全丢 → 不出组（材料没有题就没有练习价值）
-  const isAp = group.records.some((r) => r.type === "ap") || words(material).length >= 160;
+  const isAp = kind ? kind === "ap" : (group.records.some((r) => r.type === "ap") || words(material).length >= 160);
+  // AP 题型：结构化产物**从不带** question_type，上面一律落成占位值 "detail" —— 前端 RDLTask
+  // 把这个字段原样印在题号行上（"(detail)"），全库同一个词等于没标签。按题干句式推回题型
+  // （见 scripts/realbank/question_type.js）。RDL 不动：它的题型没有真题口径可循，不编造。
+  if (isAp) for (const q of questions) q.question_type = apQuestionType(q.question_type, q.stem);
   const qs = questions.map((q) => q.q_number).filter((n) => n != null);
   const base = {
     id: `real_${isAp ? "ap" : "rdl"}_${meta.slug}_${meta.module}_${qs[0] ?? "x"}`,
@@ -1101,6 +1145,8 @@ function main() {
   const dry = process.argv.includes("--dry");
   const files = fs.readdirSync(OUT_DIR).filter((f) => f.endsWith(".structured.json"));
   const out = { ap: [], rdl: [], ctw: [] };
+  // 按考卷位置换了题型（ap ↔ rdl）的条目：落 id-aliases.json 的 reclassified 边、打印清单都用它
+  const RECLASSIFIED = [];
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
@@ -1197,14 +1243,111 @@ function main() {
       if (secondVoteKeys.has(key)) stats.keptBySecondVote += 1;
       passed.push(r);
     }
-    for (const g of groupByMaterial(passed, stats)) {
-      const meta = { ...meta0, module: g.module };
-      const built = buildMcqGroup(g, meta, stats);
-      if (!built) { stats.buildFailed += 1; continue; }
-      (built.passage ? out.ap : out.rdl).push(built);
+    // 两遍：第一遍按老判据出条目（拿到真正留下来的题号）；再按考卷题号带决定 AP / RDL
+    // （reading_position.mjs，要看同卷所有组才判得了版式），题型变了的那几组按新题型重出一次。
+    // 重出用一份丢弃的计数器：丢题口径（选项残缺 / 插入题无标记）与题型无关，第一遍已经记过账。
+    const first = groupByMaterial(passed, stats)
+      .map((g) => ({ g, built: buildMcqGroup(g, { ...meta0, module: g.module }, stats) }));
+    stats.buildFailed += first.filter((x) => !x.built).length;
+    const alive = first.filter((x) => x.built);
+    const kinds = decideReadingKinds(alive.map((x, i) => ({
+      key: i, module: x.g.module,
+      qs: x.built.questions.map((q) => q.q_number).filter((n) => n != null),
+      genre: x.built.topic || x.built.genre,
+      kind: x.built.passage != null ? "ap" : "rdl",
+    })), { slug: meta0.slug });
+    alive.forEach((x, i) => {
+      let built = x.built;
+      const d = kinds[i];
+      if (d.changed) {
+        const scratch = { droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0, droppedDupStem: 0 };
+        const rebuilt = buildMcqGroup(x.g, { ...meta0, module: x.g.module }, scratch, { kind: d.kind });
+        if (rebuilt) {
+          RECLASSIFIED.push({
+            set: setname, from: d.from, to: d.kind, why: d.why, firstId: built.id, item: rebuilt,
+            title: String((built.paragraphs || [])[0] || built.text || "").split("\n")[0].slice(0, 60),
+          });
+          built = rebuilt;
+        }
+      }
+      (built.passage != null ? out.ap : out.rdl).push(built);
       stats.built += 1;
-    }
+    });
   }
+
+  // 点选句子题挂题（结构校验，不看盲审）：必须排在跨卷合并之前 —— 合并要判断它能不能跟着换宿主。
+  // 盲审闸在落盘之后（gateSentenceSelectOnDisk），对着用户最终看到的那段文字核哈希。
+  const ssAttach = SS.attachSentenceSelect(out.ap, SENTENCE_LEDGER);
+
+  // 上一版库的快照：id 沿用、材料原图沿用都拿它当基准，所以要在**任何落盘之前**读。
+  // （--dry 也要读：不然 --dry 报的 id 与真跑不一致，看了等于没看。）
+  const prevReading = readBundle(BANK_DIR, ["ap", "rdl"]);
+
+  // id 沿用（scripts/realbank/id_carry.js）：AP/RDL 的 id 带着「组内最小题号」，
+  // 而源料会长 —— 补回一道更靠前的题，27 就变 26，整条 item 改名。改名会让
+  // review-holds.json 按 id 记的下架/patch 静默失配（实测一次补题复活 15 道人工下架的题），
+  // 用户侧错题本/练习记录也按 id 关联。所以同一篇材料一律沿用上一版的 id。
+  // 必须排在跨卷同篇合并**之前**：合并要按 id 查清单的 dup_of / 待下架，id 得先稳定。
+  const idc = carryItemIds(prevReading, { ap: out.ap, rdl: out.rdl });
+  console.log(`■ 条目 id 沿用：${idc.carried} 条按上一版材料认回旧 id（题号变了也不改名）`);
+  for (const r of idc.renamed) console.log(`  · ${r.from} → ${r.to}`);
+  for (const c of idc.conflicts) console.warn(`  ⚠ ${c.id} 想沿用 ${c.wanted} 但没拿到：${c.why}`);
+
+  // 按题号认领清单里按 id 记的条目（id_carry.claimReferencedIds）：被整条下架的条目从来不在线，id 沿用认不回它，
+  // 补题改名后下架就静默失效、条目复活（实测 real_ap_21a_1_33 改名成 _31 复活，还当选了 Opal 簇代表）。
+  // 靠上一版在线条目沿用到 id 的不参与（沿用优先）；认领到的 kind 不同时记 reclassified 边，apply_review 顺着搬。
+  const prevLiveIds = new Set([...prevReading.ap, ...prevReading.rdl].map((it) => String(it.id)));
+  const claim = claimReferencedIds({ ap: out.ap, rdl: out.rdl }, REVIEW, {
+    skipIds: [...out.ap, ...out.rdl].map((it) => String(it.id)).filter((id) => prevLiveIds.has(id)),
+  });
+  console.log(`■ 按题号认领清单 id：${claim.claimed.length} 条（整条下架 ${claim.claimed.filter((c) => c.source === "unit").length}`
+    + ` / 单题下架 ${claim.claimed.filter((c) => c.source === "question").length} / patch ${claim.claimed.filter((c) => c.source === "patch").length}）；`
+    + `换前缀或一对多记 reclassified 边 ${claim.edges.length} 条`);
+  for (const c of claim.claimed) console.log(`  · ${c.from} → ${c.to}（认领 ${c.source} ${c.ref}${c.also.length ? `，另指向它的 ${c.also.join(", ")}` : ""}）`);
+  for (const w of claim.warnings) console.warn(`  ⚠ ${w}`);
+
+  // 归位的别名边：from = 上一版在**另一类**库里的 id（用户记录 / 复核清单认的是它），上一版没有就用
+  // 按老判据本该生成的 id；to = 沿用之后的最终 id。
+  const reclassEdges = RECLASSIFIED.map((r) => ({
+    ...r,
+    fromId: findPrevId(prevReading[r.from], r.item) || r.firstId,
+    toId: r.item.id,
+  })).filter((r) => r.fromId !== r.toId);
+  const edgesThisBuild = [
+    ...reclassEdges.map((r) => ({ from: r.fromId, to: r.toId, reason: "reclassified" })),
+    ...claim.edges,
+  ];
+  console.log(`■ 日常 / 学术按考卷位置归位：${reclassEdges.length} 篇换了题型`
+    + `（ap→rdl ${reclassEdges.filter((r) => r.to === "rdl").length} / rdl→ap ${reclassEdges.filter((r) => r.to === "ap").length}）`);
+  for (const r of reclassEdges) console.log(`  · ${r.fromId} → ${r.toId}  [${r.why}]「${r.title}」`);
+
+  // 复核清单按旧 id 记的 dup_of / 待下架，跨卷合并选代表要认得出归位后的新 id（否则保留方认不出来，
+  // 被别的副本合掉）。本次归位边 + 上一版账本里的归位条目一起翻译。
+  const renameReclass = new Map();
+  for (const a of (PREV_ALIASES && PREV_ALIASES.aliases) || []) {
+    if (a && a.reason === "reclassified" && a.to) renameReclass.set(String(a.from), String(a.to));
+  }
+  for (const e of edgesThisBuild) renameReclass.set(e.from, e.to);
+  const tr = (id) => (id && renameReclass.has(String(id)) ? renameReclass.get(String(id)) : id);
+  const reviewForMerge = {
+    ...REVIEW,
+    holds: (REVIEW.holds || []).map((h) => (h ? { ...h, id: tr(h.id), ...(h.dup_of ? { dup_of: tr(h.dup_of) } : {}) } : h)),
+  };
+
+  // 跨卷同篇合并（scripts/realbank/consolidate_reading.js）。卷内归并只管同卷同 module；
+  // 跨卷的同一篇此前一律「留一份、扔一份」（内容哈希去重 / 复核清单 dup_of 下架），
+  // **扔掉那份多出来的题也跟着没了** —— AP 普遍缺题的根因之一（真考一篇 5 题，我们平均不到 4 题）。
+  // 必须排在 applyReview 之前：选代表要读清单的 dup_of（谁是保留方），逐题守卫要读
+  // scope=question 的歧义题干前缀。也必须排在 --dry 之前，不然 --dry 报的数是合并前的。
+  const before = {
+    ap: [out.ap.length, out.ap.reduce((n, x) => n + x.questions.length, 0)],
+    rdl: [out.rdl.length, out.rdl.reduce((n, x) => n + x.questions.length, 0)],
+  };
+  const consolidated = consolidateReading({ ap: out.ap, rdl: out.rdl }, reviewForMerge, { sentencePasses: SENTENCE_PASSES });
+  out.ap = consolidated.ap;
+  out.rdl = consolidated.rdl;
+  const cs = consolidated.summary;
+  for (const c of consolidated.clusters) for (const d of c.dropped) edgesThisBuild.push({ from: d, to: c.kept, reason: "consolidated" });
 
   console.log("■ 真题阅读落库");
   console.log(`卷 ${stats.sets} 套；结构化产物里的阅读条目 ${stats.itemsSeen}`);
@@ -1216,6 +1359,17 @@ function main() {
   console.log(`  选项残缺丢弃 ${stats.droppedBadOptions} 题（OCR 串栏，非 A-D 四选项 / answer_index 越界）；无 ■ 标记的插入题丢弃 ${stats.droppedInsert} 题；`
     + `查 insert-markers.json 找回标记救回 ${stats.restoredInsert} 题（表里 ${INSERT_MARKERS.length} 条）`);
   console.log(`  材料模糊归并：并掉 ${stats.mergedGroups} 组（同一篇的 OCR 变体，Jaccard≥${MATERIAL_JACCARD_MIN} 或前 ${MATERIAL_PREFIX_CHARS} 字相同）；组内重复题干丢弃 ${stats.droppedDupStem} 题`);
+  console.log(`  跨卷同篇合并：${cs.clusters} 簇；移除副本 ${cs.dropped} 篇；并入题 ${cs.merged} 道；`
+    + `逐题守卫跳过 ${Object.entries(cs.skipped).map(([k, n]) => `${k} ${n}`).join(" / ") || "0"}`
+    + `　AP ${before.ap[0]} 篇/${before.ap[1]} 题 → ${out.ap.length} 篇/${out.ap.reduce((n, x) => n + x.questions.length, 0)} 题；`
+    + `RDL ${before.rdl[0]} 篇/${before.rdl[1]} 题 → ${out.rdl.length} 篇/${out.rdl.reduce((n, x) => n + x.questions.length, 0)} 题`);
+  if (cs.conflicts) {
+    console.warn(`  ⚠ 其中 ${cs.conflicts} 簇里有不止一个复核清单指定的保留方（dup_of 与合并判据打架），已按规则选一条留下，建议人工看一眼 consolidation.json`);
+  }
+  console.log(`  点选句子题：账本 ${(SENTENCE_LEDGER.entries || []).length} 条，挂上 ${ssAttach.attached} 道`
+    + `（挂不上：${Object.entries(ssAttach.failed).map(([k, n]) => `${k} ${n}`).join(" / ") || "0"}）；`
+    + `账本里通过盲审的「题干+段落」哈希 ${SENTENCE_PASSES.size} 个 —— 上线与否落盘后按哈希定`);
+  for (const d of ssAttach.detail.filter((x) => x.why)) console.log(`    ✗ ${d.key}: ${d.why}`);
   console.log(`  成品：AP ${out.ap.length} 组 / RDL ${out.rdl.length} 组 / CTW ${out.ctw.length} 段`);
   const qcount = [...out.ap, ...out.rdl].reduce((n, x) => n + x.questions.length, 0);
   console.log(`  选择题合计 ${qcount} 道；CTW 空位合计 ${out.ctw.reduce((n, x) => n + x.blank_count, 0)} 个`);
@@ -1300,22 +1454,14 @@ function main() {
     return;
   }
 
-  // 材料原图沿用：落盘前先拍上一版 ap/rdl 快照（out 是全量重建的新对象，不带 material_image），
+  // 材料原图沿用：拿上面那份 prevReading 快照（out 是全量重建的新对象，不带 material_image），
   // 同 id 且材料正文逐字未变就把 material_image 接回，避免每次重建都要重跑 upload 脚本补图。
-  const prevReading = readBundle(BANK_DIR, ["ap", "rdl"]);
   const carriedImages = carryMaterialImages(prevReading, { ap: out.ap, rdl: out.rdl });
   console.log(`\n■ 材料原图沿用：${carriedImages} 条`);
 
   fs.mkdirSync(BANK_DIR, { recursive: true });
   for (const [k, v] of Object.entries(out)) {
     const p = path.join(BANK_DIR, `${k}.json`);
-    fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
-    console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
-  }
-
-  fs.mkdirSync(WRITING_DIR, { recursive: true });
-  for (const [k, v] of Object.entries(writing)) {
-    const p = path.join(WRITING_DIR, `${k}.json`);
     fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
     console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
   }
@@ -1328,6 +1474,65 @@ function main() {
   const counts = { ctw: out.ctw.length, rdl: out.rdl.length, ap: out.ap.length };
   fs.writeFileSync(countsPath, JSON.stringify(counts, null, 2), "utf8");
   console.log(`  → ${path.relative(process.cwd(), countsPath)}  ${JSON.stringify(counts)}`);
+
+  // 跨卷同篇合并的账本：谁被谁合掉了、哪几道题并进来、哪几道被守卫挡了。
+  // assemble_sets.mjs 读它把被合掉的 id 当别名还回原场次（否则整卷拼盘会缺槽位）。
+  const consPath = path.join(BANK_DIR, "consolidation.json");
+  fs.writeFileSync(consPath, JSON.stringify({
+    generated_by: "scripts/realbank/build_bank.mjs",
+    generated: new Date().toISOString().slice(0, 10),
+    clusters: consolidated.clusters,
+  }, null, 2), "utf8");
+  console.log(`  → ${path.relative(process.cwd(), consPath)}  ${consolidated.clusters.length} 簇`);
+
+  // 复核清单要认得出归位之后的新 id：按本次的边 + 上一版账本先算一份（这时的「活着」= 落盘前的产物），
+  // 交给 applyReview 顺着 reclassified 链把下架 / patch 搬到新 file+id。正式账本等复核落地后再算一次。
+  const preReviewAliases = buildIdAliases({
+    prev: PREV_ALIASES, edges: edgesThisBuild, holds: REVIEW.holds,
+    liveIds: new Set([...out.ap, ...out.rdl].map((it) => String(it.id))),
+  });
+
+  // `--only-reading`：只落 data/realBank/reading/ 下的产物，其余文件一个字节都不动。
+  // 与 --only-bs 同一套办法、同一个理由（见上面那段注释）：.codex-tmp 里躺着的结构化产物
+  // 多于已入库的量，一次全量重建会同时改掉四科，那是另一个需要人拍板的决定，不该由
+  // 「把跨卷同篇的题合回来」这件事顺手带出去。
+  // applyReview 照常跑（复核清单对阅读有 patch + 下架），跑完把 reading/ 之外的文件按字节还原。
+  if (process.argv.includes("--only-reading")) {
+    const bankRoot = path.join(process.cwd(), "data", "realBank");
+    const snap = new Map();
+    const outside = (q) => path.relative(BANK_DIR, q).split(path.sep)[0] === "..";
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
+      const q = path.join(d, e.name);
+      if (e.isDirectory()) walk(q);
+      else if (e.isFile() && outside(q)) snap.set(q, fs.readFileSync(q));
+    });
+    walk(bankRoot);
+    const rr = applyReview({ root: process.cwd(), aliases: preReviewAliases });
+    let restored = 0;
+    for (const [q, buf] of snap) {
+      if (!fs.existsSync(q) || !fs.readFileSync(q).equals(buf)) { fs.writeFileSync(q, buf); restored += 1; }
+    }
+    if (restored) console.log(`  （--only-reading）已把 applyReview 顺手重写的 ${restored} 个非阅读文件按字节还原`);
+    // 复核 patch 会改材料正文，第一遍沿用是拿没打 patch 的新文本比的 —— 打完再比一次把原图接回来
+    // （与全量路径末尾同一个理由，见 recarryMaterialImagesOnDisk 上方注释）。
+    const reImages = recarryMaterialImagesOnDisk(BANK_DIR, prevReading);
+    if (reImages) console.log(`■ 复核 patch 后二次沿用：${reImages} 条 material_image 接回`);
+    if (rr) console.log(`  apply_review：patch ${rr.stats.patched} 处；下架 整条 ${rr.stats.units} / 单题 ${rr.stats.questions}`
+      + `（顺着归位别名搬到新 file+id ${rr.stats.redirected} 条）`);
+    finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending);
+    for (const k of ["ap", "rdl", "ctw"]) {
+      const q = path.join(BANK_DIR, `${k}.json`);
+      console.log(`  → 复核后 ${k} ${JSON.parse(fs.readFileSync(q, "utf8")).items.length} 条`);
+    }
+    return;
+  }
+
+  fs.mkdirSync(WRITING_DIR, { recursive: true });
+  for (const [k, v] of Object.entries(writing)) {
+    const p = path.join(WRITING_DIR, `${k}.json`);
+    fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
+    console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
+  }
 
   // 听力 / 口语：同一套写法（每个题型一个文件 + 一份计数），音频先留空。
   // 落库前先把**口播文本没变**的条目的 audio_url 从上一版接过来（见 carryAudioUrls）。
@@ -1354,7 +1559,7 @@ function main() {
 
   // 最后一道闸：成品复核清单（data/realBank/review-holds.json）。源料在 .codex-tmp 里没改，
   // 重跑会把复核判定下架的条目原样再产出来，所以每次落库末尾都要把清单重新应用一遍。
-  const r = applyReview({ root: process.cwd() });
+  const r = applyReview({ root: process.cwd(), aliases: preReviewAliases });
   // 第二遍音频沿用（必须在 applyReview 之后）：复核清单的 patch 会改**口播文本**
   // （real_lat_rf0610_2_12 的 trim_head 削掉旁白指令、real_lc_rf0620_2_06 整段重写会话…），
   // 而第一遍比对用的是没打 patch 的新文本 —— 与上一版（打过 patch、并按 patch 后文本配过音的）
@@ -1366,9 +1571,11 @@ function main() {
   const recarriedImages = recarryMaterialImagesOnDisk(BANK_DIR, prevReading);
   if (recarriedImages) console.log(`■ 复核 patch 后二次沿用：${recarriedImages} 条 material_image 接回（patch 后材料文本与上一版逐字相同）`);
   if (r) {
-    console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`);
+    console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
+      + `（顺着归位别名搬到新 file+id ${r.stats.redirected} 条）`);
     for (const l of r.log) console.log(l);
   }
+  finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending);
   // 最后一步：拼盘面试大集按人工切分表拆成 4 问一套（data/realBank/speaking/interview-splits.json）。
   // 必须排在 applyReview 之后 —— 切分表里的问题 id 是按下架之后的库选的。
   const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
@@ -1378,6 +1585,67 @@ function main() {
   }
   // 听力原声回挂（必须排在 applyReview 之后：清单的 text_sha1 是按**打完 patch** 的口播文本算的）。
   mountOriginalAudio();
+}
+
+/**
+ * 阅读产物落盘、复核清单落地之后的两件事（全量路径与 --only-reading 共用，只写 reading/ 下的文件）：
+ *
+ *  1. 点选句子题上线闸：对着**用户最终看到的**那段文字（复核 patch 之后的 paragraphs[N]）核盲审哈希，
+ *     没有通过记录的那道题摘掉。摘下来的清单落 sentence-select.pending.json（重建产物，不进仓库），
+ *     `node scripts/realbank/audit_sentence_select.mjs` 只审这些哈希失配的。
+ *  2. id 别名账本 id-aliases.json：本次的合并 / 归位边 + 上一版账本，按**最终**产物收敛。
+ */
+function finishReadingOnDisk(edges, mergeCandidates = []) {
+  const apPath = path.join(BANK_DIR, "ap.json");
+  const apDoc = JSON.parse(fs.readFileSync(apPath, "utf8"));
+  const before = JSON.stringify(apDoc.items);
+  const gate = SS.gateSentenceSelect(apDoc.items, SENTENCE_PASSES);
+  apDoc.items = apDoc.items.filter((it) => (it.questions || []).length > 0);
+  apDoc.count = apDoc.items.length;
+  if (JSON.stringify(apDoc.items) !== before) {
+    fs.writeFileSync(apPath, JSON.stringify(apDoc, null, 2), "utf8");
+    const countsPath = path.join(BANK_DIR, "counts.json");
+    const c = JSON.parse(fs.readFileSync(countsPath, "utf8"));
+    c.ap = apDoc.items.length;
+    fs.writeFileSync(countsPath, JSON.stringify(c, null, 2), "utf8");
+  }
+  // 跨卷合并时「只差代表那段没审过」没搬过来的选句题：按复核落地之后的代表文字重算哈希，也进待审清单。
+  // 审计脚本只审这份清单 —— 建库真正要放的位置，而不是它自己去猜宿主（猜会审到根本不会放题的地方）。
+  const liveAp = new Map(apDoc.items.map((it) => [String(it.id), it]));
+  const mergePending = [];
+  for (const m of mergeCandidates || []) {
+    const host = liveAp.get(String(m.host));
+    const q = m.question;
+    const text = host && Array.isArray(host.paragraphs) ? host.paragraphs[q.paragraph_index] : undefined;
+    if (typeof text !== "string") continue;                 // 代表被复核下架 / 段落没了：不必审
+    let cursor = 0;
+    const intact = Object.values(q.options).every((v) => { const at = text.indexOf(v, cursor); if (at < 0) return false; cursor = at + v.length; return true; });
+    if (!intact) continue;
+    const hash = SS.auditHash(q.stem, text);
+    if (SS.auditPasses(SENTENCE_PASSES, hash, SS.correctSentenceOf(q))) continue;
+    mergePending.push({ host: host.id, q_number: q.q_number, stem: q.stem, paragraph: q.paragraph, hash, why: "merge_unaudited", question: q });
+  }
+  const pendingPath = path.join(BANK_DIR, "sentence-select.pending.json");
+  fs.writeFileSync(pendingPath, JSON.stringify({
+    generated_by: "scripts/realbank/build_bank.mjs",
+    note: "建库时没放行的点选句子题：落盘闸摘下的（哈希没有通过的盲审记录 / 结构不成立）+ 跨卷合并时代表那段没审过、没搬过来的。"
+      + "audit_sentence_select.mjs 只审这份清单里哈希失配的。",
+    pending: [...gate.pending, ...mergePending],
+  }, null, 2), "utf8");
+  console.log(`\n■ 点选句子题上线闸：上线 ${gate.live} 道；摘下 ${Object.entries(gate.dropped).map(([k, n]) => `${k} ${n}`).join(" / ") || "0"}；`
+    + `合并时待代表段落审过才能搬的 ${mergePending.length} 道（待审清单 → ${path.relative(process.cwd(), pendingPath)}）`);
+
+  const rdlDoc = JSON.parse(fs.readFileSync(path.join(BANK_DIR, "rdl.json"), "utf8"));
+  const live = new Set([...apDoc.items, ...(rdlDoc.items || [])].map((it) => String(it.id)));
+  // 复核清单里「跨套重复、有保留方」的整条下架也是边：内容在保留方上，不能收敛成 null 让前端当成题下线
+  const ledger = buildIdAliases({ prev: PREV_ALIASES, edges, holds: REVIEW.holds, liveIds: live });
+  const aliasPath = path.join(BANK_DIR, "id-aliases.json");
+  fs.writeFileSync(aliasPath, JSON.stringify(ledger, null, 2), "utf8");
+  const byReason = {};
+  for (const a of ledger.aliases) byReason[a.reason] = (byReason[a.reason] || 0) + 1;
+  console.log(`■ id 别名账本 → ${path.relative(process.cwd(), aliasPath)}  ${ledger.aliases.length} 条`
+    + `（${Object.entries(byReason).map(([k, n]) => `${k} ${n}`).join(" / ")}；收敛不到活 id 的 ${ledger.aliases.filter((a) => !a.to).length} 条）`);
+  return { gate, ledger };
 }
 
 /**
