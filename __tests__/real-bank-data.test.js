@@ -2,7 +2,7 @@
  * 「真题专区」数据层契约测试（lib/realBank.js）。
  *
  * 锁三件事：
- *   1. 题量与来源分档（讨论 132 / 邮件 27 / 造句 292；来源标签不许把未核验语料吹成 ETS 官方）；
+ *   1. 题量与来源分档（讨论 162 / 邮件 57 / 造句 281；来源标签不许把未核验语料吹成 ETS 官方）；
  *   2. id 全部带 `real_` 前缀且全局唯一 —— real_tpo_reference.json 有 27 条 ad* id 与 live
  *      库 data/academicWriting/prompts.json 重叠，前缀是「已练 / 历史记录不互相污染」的唯一保障；
  *   3. 三种题型规范化后能被各自的消费方直接吃下（写作 normalizePrompt 的必填字段、
@@ -17,7 +17,8 @@ import AD_RECALLED from "../data/academicWriting/recalled_supplement.json";
 import EM_TPO_REFERENCE from "../data/emailWriting/tpo_reference.json";
 import BS_TPO_OFFICIAL from "../data/buildSentence/tpo_official.json";
 import AD_LIVE from "../data/academicWriting/prompts.json";
-// realBank 写作回忆版（build_bank.mjs 产物）：造句 272 / 邮件 14 / 讨论 7。
+// realBank 写作回忆版（build_bank.mjs 产物）：造句 272 / 邮件 44 / 讨论 37。
+// 邮件 / 讨论里 rf/rp 第二来源 14 / 7 条在前，其后是 2026-09-14 第一来源补录（writing-recall.json，逐条对过原卷）。
 import RB_BS from "../data/realBank/writing/bs.json";
 import RB_EMAIL from "../data/realBank/writing/email.json";
 import RB_DISCUSSION from "../data/realBank/writing/discussion.json";
@@ -54,17 +55,17 @@ const RB_BS_FILTERED_OUT = RB_BS.items.filter((q) =>
 ).length;
 
 describe("真题专区：题量", () => {
-  test("学术讨论 132 题（81 参考版 + 44 + 7 回忆版），一条不丢", () => {
+  test("学术讨论 162 题（81 参考版 + 44 + 37 回忆版），一条不丢", () => {
     expect(AD_TPO_REFERENCE.length).toBe(81);
     expect(AD_RECALLED.length).toBe(44);
-    expect(RB_DISCUSSION.items.length).toBe(7);
-    expect(discussion.length).toBe(132);
+    expect(RB_DISCUSSION.items.length).toBe(37);
+    expect(discussion.length).toBe(162);
   });
 
-  test("邮件 27 题（13 官方 / 参考版 + 14 回忆版）", () => {
+  test("邮件 57 题（13 官方 / 参考版 + 44 回忆版）", () => {
     expect(EM_TPO_REFERENCE.length).toBe(13);
-    expect(RB_EMAIL.items.length).toBe(14);
-    expect(email.length).toBe(27);
+    expect(RB_EMAIL.items.length).toBe(44);
+    expect(email.length).toBe(57);
   });
 
   test("造句 281 题（20 官方 + 261 回忆版），官方 2 批各 10 题、批次号不动", () => {
@@ -157,16 +158,16 @@ describe("真题专区：来源分档标注诚实", () => {
     expect(AD_TPO_REFERENCE.some((p) => "tier" in p)).toBe(false);
   });
 
-  test("讨论题分档 = 51 回忆版（44 + 7）+ 81 参考版，零官方", () => {
+  test("讨论题分档 = 81 回忆版（44 + 37）+ 81 参考版，零官方", () => {
     const byTier = discussion.reduce((acc, p) => { acc[p.tier] = (acc[p.tier] || 0) + 1; return acc; }, {});
-    expect(byTier).toEqual({ recalled: 51, legacy: 81 });
+    expect(byTier).toEqual({ recalled: 81, legacy: 81 });
   });
 
-  test("邮件题只有 tpo1 / tpo2 是 ETS 官方，11 条参考版 + 14 条回忆版", () => {
+  test("邮件题只有 tpo1 / tpo2 是 ETS 官方，11 条参考版 + 44 条回忆版", () => {
     const official = email.filter((p) => p.tier === "official").map((p) => p.id);
     expect(official).toEqual(["real_tpo1", "real_tpo2"]);
     expect(email.filter((p) => p.tier === "legacy").length).toBe(11);
-    expect(email.filter((p) => p.tier === "recalled").length).toBe(14);
+    expect(email.filter((p) => p.tier === "recalled").length).toBe(44);
   });
 
   // 「第 N 套」按数组下标算（compactCard），所以数组顺序 = 用户看到的排序：
@@ -176,7 +177,7 @@ describe("真题专区：来源分档标注诚实", () => {
     const rank = { official: 0, recalled: 1, legacy: 2 };
     const ranks = email.map((p) => rank[p.tier]);
     expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
-    // 同档内保持入库顺序（稳定排序）：回忆版 14 条仍是 email.json 的原顺序。
+    // 同档内保持入库顺序（稳定排序）：回忆版 44 条仍是 email.json 的原顺序（补录只往后追加，老题序号不漂）。
     expect(email.filter((p) => p.tier === "recalled").map((p) => p.id))
       .toEqual(RB_EMAIL.items.map((it) => `real_${it.id}`));
   });

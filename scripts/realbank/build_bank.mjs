@@ -33,6 +33,8 @@
  *   node scripts/realbank/build_bank.mjs --dry            # 只看统计，不写文件
  *   node scripts/realbank/build_bank.mjs --only-reading   # 只写 data/realBank/reading/，其余字节不动
  *   node scripts/realbank/build_bank.mjs --only-bs        # 只写 data/realBank/writing/bs.json
+ *   node scripts/realbank/build_bank.mjs --only-writing-recall
+ *                     # 只写 writing/{email,discussion,id-aliases}.json（第一来源补录，见 writing_recall.js）
  */
 import fs from "fs";
 import path from "path";
@@ -65,6 +67,8 @@ const { buildIdAliases } = require("./id_aliases.js");
 const SS = require("./sentence_select.js");
 // AP 题型推断（结构化产物不带 question_type，落库前按题干句式推回）：scripts/realbank/question_type.js。
 const { apQuestionType } = require("./question_type.js");
+// 第一来源邮件 / 学术讨论补录（读 data/realBank/writing-recall.json）：scripts/realbank/writing_recall.js。
+const WR = require("./writing_recall.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -131,6 +135,18 @@ const SENTENCE_LEDGER = (() => {
   try { return JSON.parse(fs.readFileSync(path.join(BANK_DIR, "sentence-select.json"), "utf8")); } catch { return { entries: [] }; }
 })();
 const SENTENCE_PASSES = SS.passingHashes(SENTENCE_LEDGER);
+
+/**
+ * 第一来源邮件 / 学术讨论补录账本（data/realBank/writing-recall.json）：recall_writing.mjs 生成并对着该卷 OCR 核过，
+ * **build_bank 只读不写**，只收 verdict=ok 的条目。缺文件 = 空账本 = 行为与接线前完全一致（第一来源卷照旧没有邮件 / 讨论）。
+ */
+const WRITING_RECALL = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "writing-recall.json"), "utf8"));
+  } catch {
+    return { email: {}, discussion: {} };
+  }
+})();
 
 /** 上一版 id 别名账本（跨重建累积：旧条目保留、重新收敛）。 */
 const PREV_ALIASES = (() => {
@@ -621,6 +637,9 @@ function bsAnswerKey(answer) {
 function buildWriting(files, stats) {
   const out = { bs: [], email: [], discussion: [] };
   const seenHash = new Map();
+  // 补录用：过了去重与扣留的卷（带这套卷是否已从结构化产物拿到邮件 / 讨论），以及整份写作源与更早一套相同的卷
+  const eligible = [];
+  const dupSets = [];
   for (const f of files.sort()) {
     const setname = f.replace(/\.structured\.json$/, "");
     const st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
@@ -629,21 +648,34 @@ function buildWriting(files, stats) {
     if (dup) {
       console.warn(`跳过 ${setname} 写作：与 ${seenHash.get(dup)} 内容相同(hash ${dup})`);
       stats.wDroppedDupSet += 1;
+      dupSets.push({ setname, kept: seenHash.get(dup) });
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
     const wHold = holdFor(setname, "writing");
     recordHold(setname, "writing", wHold);
-    if (wHold.held) {
-      console.warn(`跳过 ${setname} 写作：源料体检标了 blocking（整科扣下待人工核对）`);
-      stats.wDroppedHeld += 1;
-      continue;
-    }
     const meta = {
       real: true, tier: TIER, source: setname, date: setDate(setname),
       source_hash: (hashes && hashes[0]) || null,
       source_flags: flagsFor(setname, "writing"),
     };
+    if (wHold.held) {
+      console.warn(`跳过 ${setname} 写作：源料体检标了 blocking（整科扣下待人工核对）`);
+      stats.wDroppedHeld += 1;
+      // 扣留码只涉及答案页 / 造句题面时，邮件与讨论补录照收（判据与理由见 writing_recall.recallAllowedDespiteHold）；
+      // 题上不挂这几条 blocking 标记 —— 它们说的不是这两道题，挂上前端会给题打上不相干的缺陷徽章。
+      if (WR.recallAllowedDespiteHold(wHold.heldBy)) {
+        const recallMeta = {
+          ...meta,
+          source_flags: meta.source_flags.filter((f) => !(f.severity === "blocking" && wHold.heldBy.includes(f.code))),
+        };
+        eligible.push({ setname, meta: recallMeta, has: { email: false, discussion: false }, released: true });
+        stats.wRecallReleased.push(`${setname}(${wHold.heldBy.join("/")})`);
+      }
+      continue;
+    }
+    const has = { email: false, discussion: false };
+    eligible.push({ setname, meta, has });
     for (const it of readSetBsFile(setname)) {
       out.bs.push({
         id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
@@ -678,6 +710,7 @@ function buildWriting(files, stats) {
             id: it.id, to: it.to || "Professor", subject: it.subject || "",
             scenario: it.scenario, direction: it.direction || "", goals: it.goals.slice(0, 3), ...meta,
           });
+          has.email = true;
         } else if (r.type === "discussion") {
           const students = Array.isArray(it.students) ? it.students.filter((s) => s && s.name && s.text) : [];
           const missD = [];
@@ -688,6 +721,7 @@ function buildWriting(files, stats) {
             id: it.id, course: it.course || "", professor: it.professor,
             students: students.slice(0, 2), ...meta,
           });
+          has.discussion = true;
         }
       }
     }
@@ -716,7 +750,84 @@ function buildWriting(files, stats) {
     bs.push(q);
   }
   out.bs = bs;
+  stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
   return out;
+}
+
+/** 写作侧 id 别名账本。刻意不写生成日期：每次重建都会产生无意义 diff（与 counts.json 同一个理由）。 */
+function writeWritingAliases(aliases) {
+  const p = path.join(WRITING_DIR, "id-aliases.json");
+  fs.mkdirSync(WRITING_DIR, { recursive: true });
+  fs.writeFileSync(p, JSON.stringify({
+    generated_by: "scripts/realbank/build_bank.mjs",
+    _purpose: "写作侧 id 别名：同一道邮件 / 讨论题在别的卷里的那份（from）→ 库里留下的那条（to）。"
+      + "assemble_sets.mjs 用它把槽位还回原卷；见 scripts/realbank/writing_recall.js。",
+    aliases,
+  }, null, 2), "utf8");
+  return p;
+}
+
+/**
+ * 第一来源邮件 / 学术讨论补录：账本里核过的条目**追加**到 out.email / out.discussion 末尾。
+ * 判据全在 ./writing_recall.js（只追加、同一道题只收一条、结构闸 + OCR 覆盖率闸，理由见那里头注）；
+ * 这里只负责接上三件事：这套卷有没有已经从结构化产物拿到这道题、有没有被扣下、账本里有没有 verdict=ok 的条目。
+ *
+ * 返回写作侧 id 别名（from = 这套卷本该有的 id，to = 库里留下的同一道题），落 writing/id-aliases.json，
+ * assemble_sets 靠它把「这一场也考了这道题」还回原卷槽位 —— 不记别名，sets.json 与丢题账本会把这些卷一直算成缺题。
+ */
+function recallWriting(out, eligible, dupSets, stats) {
+  const PREFIX = { email: "email", discussion: "disc" };
+  const aliases = [];
+  // 写作整科被扣、只为补录放行的卷排在最后：同一道题已经有没被扣的卷收过时，保留那一份（id 不换、核过的原卷版本不被顶掉），
+  // 放行卷只贡献别处没有的新题 + 别名。不排后的话，日期更早的放行卷会按「卷名靠前者留下」抢走保留位。
+  const ordered = [...eligible.filter((e) => !e.released), ...eligible.filter((e) => e.released)];
+  for (const type of ["email", "discussion"]) {
+    const book = WRITING_RECALL[type] || {};
+    const candidates = [];
+    for (const { setname, meta, has } of ordered) {
+      if (has[type]) continue;
+      const entry = book[setname];
+      if (!entry) continue;
+      const id = `${PREFIX[type]}_${setSlug(setname)}`;
+      if (entry.verdict !== "ok") {
+        stats.wRecallDropped.push({
+          set: setname, id, type, code: `recall_${entry.verdict || "unknown"}`, detail: (entry.problems || []).join("；"),
+        });
+        continue;
+      }
+      // 落库时再过一遍结构闸：账本可能被人手改过（locked 条目），不能只信账本里记的 verdict
+      if (type === "email") {
+        const c = WR.emailFromGt(entry.content);
+        candidates.push({
+          set: setname, id, problems: WR.emailProblems(c),
+          item: { id, to: c.to, subject: c.subject, scenario: c.scenario, direction: c.direction, goals: c.goals, ...meta },
+        });
+      } else {
+        const c = WR.discussionShape(entry.content);
+        candidates.push({
+          set: setname, id, problems: WR.discussionProblems(c, entry.question),
+          item: { id, course: c.course, professor: c.professor, students: c.students.slice(0, 2), ...meta },
+        });
+      }
+    }
+    const plan = WR.planRecall({ type, existing: out[type], candidates });
+    out[type].push(...plan.accepted);
+    stats.wRecallAdded[type] = plan.accepted.length;
+    aliases.push(...plan.aliases);
+    for (const d of plan.dropped) stats.wRecallDropped.push({ ...d, type });
+  }
+  // 整份写作源文件与更早一套相同而被跳过的卷：它的邮件 / 讨论就是那一套的那两道题。
+  for (const { setname, kept } of dupSets) {
+    for (const type of ["email", "discussion"]) {
+      const keptOwnId = `${PREFIX[type]}_${setSlug(kept)}`;
+      const keptItem = out[type].find((x) => x.source === kept);
+      const to = keptItem ? keptItem.id : (aliases.find((a) => a.from === keptOwnId) || {}).to;
+      if (!to) continue;
+      const from = `${PREFIX[type]}_${setSlug(setname)}`;
+      if (from !== to) aliases.push({ from, to, from_type: PREFIX[type], to_type: PREFIX[type], reason: "duplicate_set" });
+    }
+  }
+  return aliases;
 }
 
 /* ── 听力 / 口语 ────────────────────────────────────────────────────────────
@@ -1152,6 +1263,7 @@ function main() {
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
+    wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
     lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
@@ -1381,6 +1493,13 @@ function main() {
   for (const d of stats.wBsRuntimeDetail) console.log(`    ✗ ${d}`);
   const thinTop = Object.entries(stats.wThinReasons).sort((a, b) => b[1] - a[1]);
   if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
+  const recallDrops = stats.wRecallDropped.reduce((m, d) => { const k = `${d.type}:${d.code}`; m[k] = (m[k] || 0) + 1; return m; }, {});
+  console.log(`  第一来源补录（writing-recall.json）：邮件 +${stats.wRecallAdded.email} / 讨论 +${stats.wRecallAdded.discussion}；`
+    + `同一道题记别名 ${stats.wRecallAliases.length} 条；未收 ${JSON.stringify(recallDrops)}`
+    + `${stats.wRecallReleased.length ? `；写作整科被扣但照收补录 ${stats.wRecallReleased.length} 套：${stats.wRecallReleased.join("、")}` : ""}`);
+  for (const d of stats.wRecallDropped.filter((x) => String(x.code).startsWith("recall_"))) {
+    console.log(`    ✗ ${d.type} ${d.set}（${d.code}）: ${d.detail}`);
+  }
 
   const L = ls.listening, S = ls.speaking;
   console.log("\n■ 真题听力落库（材料 = 商家音频的 Whisper 逐字稿 + 文档转写合流后的 transcript_final）");
@@ -1451,6 +1570,43 @@ function main() {
     if (restored) console.log(`  （--only-bs）已把 applyReview 顺手重写的 ${restored} 个非 bs 文件按字节还原`);
     if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
     console.log(`  → 复核后 ${JSON.parse(fs.readFileSync(p, "utf8")).items.length} 条`);
+    return;
+  }
+
+  // `--only-writing-recall`：只落 writing/{email,discussion,id-aliases}.json，其余文件一个字节都不动。
+  // 与 --only-bs 同一个理由、同一套办法（全量重建会一次改掉四科，那是另一个要拍板的决定）：
+  // 第一来源补录只往邮件 / 讨论末尾追加，applyReview 照常跑（writing/email 上有复核下架），跑完把其余文件按字节还原。
+  if (process.argv.includes("--only-writing-recall")) {
+    fs.mkdirSync(WRITING_DIR, { recursive: true });
+    const keep = new Set();
+    for (const k of ["email", "discussion"]) {
+      const p = path.join(WRITING_DIR, `${k}.json`);
+      fs.writeFileSync(p, JSON.stringify({
+        tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: writing[k].length, items: writing[k],
+      }, null, 2), "utf8");
+      keep.add(p);
+    }
+    keep.add(writeWritingAliases(stats.wRecallAliases));
+    const bankRoot = path.join(process.cwd(), "data", "realBank");
+    const snap = new Map();
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
+      const q = path.join(d, e.name);
+      if (e.isDirectory()) walk(q);
+      else if (e.isFile() && !keep.has(q)) snap.set(q, fs.readFileSync(q));
+    });
+    walk(bankRoot);
+    const r = applyReview({ dry: false });
+    let restored = 0;
+    for (const [q, buf] of snap) {
+      if (!fs.existsSync(q) || !fs.readFileSync(q).equals(buf)) { fs.writeFileSync(q, buf); restored += 1; }
+    }
+    if (restored) console.log(`  （--only-writing-recall）已把 applyReview 顺手重写的 ${restored} 个其余文件按字节还原`);
+    if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
+    for (const k of ["email", "discussion"]) {
+      const q = path.join(WRITING_DIR, `${k}.json`);
+      console.log(`  → 复核后 ${k} ${JSON.parse(fs.readFileSync(q, "utf8")).items.length} 条`);
+    }
+    console.log(`  → writing/id-aliases.json  ${stats.wRecallAliases.length} 条`);
     return;
   }
 
@@ -1533,6 +1689,7 @@ function main() {
     fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
     console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
   }
+  console.log(`  → ${path.relative(process.cwd(), writeWritingAliases(stats.wRecallAliases))}  ${stats.wRecallAliases.length} 条`);
 
   // 听力 / 口语：同一套写法（每个题型一个文件 + 一份计数），音频先留空。
   // 落库前先把**口播文本没变**的条目的 audio_url 从上一版接过来（见 carryAudioUrls）。

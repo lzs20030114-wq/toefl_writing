@@ -115,6 +115,23 @@ export function loadConsolidationAliases(bankDir) {
 }
 
 /**
+ * 写作侧 id 别名：writing/id-aliases.json（build_bank 落）。第一来源邮件 / 讨论补录时，
+ * 同一道题只收一条，其余考过它的卷记成 from → to（见 scripts/realbank/writing_recall.js）；
+ * 整份写作源文件与更早一套相同而被跳过的卷也记在这里。没有这份文件 = 还没补录过，忽略。
+ */
+export function loadWritingAliases(bankDir) {
+  const p = path.join(bankDir, "writing", "id-aliases.json");
+  if (!fs.existsSync(p)) return [];
+  try {
+    return (JSON.parse(fs.readFileSync(p, "utf8")).aliases || [])
+      .filter((a) => a && a.from && a.to && String(a.from) !== String(a.to))
+      .map((a) => ({ held: String(a.from), canonical: String(a.to), source: null }));
+  } catch {
+    return [];
+  }
+}
+
+/**
  * 别名链收敛：A→B、B→C 时把 A 直接指向 C。
  * 两条来源（复核清单 dup_of / 跨卷同篇合并）各自只知道自己那一跳，串起来才找得到库里还活着的那条
  * —— 中间那跳的条目已经不在库里，indexItems 的 byId.get(canonical) 会落空，槽位就白空着。
@@ -136,7 +153,8 @@ function resolveAliasChains(aliases) {
 /**
  * 跨套重复的别名：review-holds.json 里 scope=unit 且带 dup_of 的下架条目
  * （"与 real_ap_310_1_31 同一份材料（跨套重复），保留 real_ap_310_1_31"），
- * 外加 reading/consolidation.json 里被合并掉的副本（见 loadConsolidationAliases）。
+ * 外加 reading/consolidation.json 里被合并掉的副本（见 loadConsolidationAliases），
+ * 以及写作补录记下的同一道题（见 loadWritingAliases）。
  * 返回 [{ held, canonical, source }]，canonical 已顺着别名链收敛到库里还活着的那条。
  */
 export function loadDupAliases(bankDir) {
@@ -145,7 +163,7 @@ export function loadDupAliases(bankDir) {
   const fromHolds = holds
     .filter((h) => h && h.scope === "unit" && h.dup_of && h.id && h.dup_of !== h.id)
     .map((h) => ({ held: String(h.id), canonical: String(h.dup_of), source: h.source ? String(h.source) : null }));
-  return resolveAliasChains([...fromHolds, ...loadConsolidationAliases(bankDir)]);
+  return resolveAliasChains([...fromHolds, ...loadConsolidationAliases(bankDir), ...loadWritingAliases(bankDir)]);
 }
 
 /* ── 逐题建索引 ────────────────────────────────────────────────────────── */

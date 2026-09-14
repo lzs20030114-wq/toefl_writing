@@ -12,9 +12,9 @@
  */
 export const REAL_WRITING_COUNTS = {
   /** 学术讨论：getRealDiscussionPrompts().length */
-  discussion: 132,
+  discussion: 162,
   /** 邮件：getRealEmailPrompts().length */
-  email: 27,
+  email: 57,
   /** 造句题数：getRealBSQuestions().length（少于 REAL_BS_MIN_BATCH=5 题的碎卷已过滤，不进专区） */
   bs: 281,
   /** 造句卷数（一卷一张批次卡）：getRealBSBatches().length */

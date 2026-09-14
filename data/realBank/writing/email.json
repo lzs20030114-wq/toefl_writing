@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 14,
+  "count": 44,
   "items": [
     {
       "id": "email_rf0615",
@@ -338,6 +338,617 @@
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
       ]
+    },
+    {
+      "id": "email_121a",
+      "to": "Mr. Thompson",
+      "subject": "Request for apartment repairs",
+      "scenario": "You are a university student who has recently moved into a new apartment. You have noticed some issues with the apartment. You want to inform your landlord, Mr. Thompson, about these problems.",
+      "direction": "Write an email to Mr. Thompson.",
+      "goals": [
+        "Describe the issues you have encountered in the apartment.",
+        "Explain how conditions negatively affect your studies.",
+        "Request that he make arrangements to address these issues soon."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.21新托福真题A卷",
+      "date": "2026-01-21",
+      "source_hash": "fe6efa23535e",
+      "source_flags": []
+    },
+    {
+      "id": "email_121b",
+      "to": "Julia",
+      "subject": "Ideas for recycling awareness event",
+      "scenario": "You recently joined a student organization at your university that focuses on environmental conservation. The group is planning an upcoming event to raise awareness about recycling and reducing waste. You have some ideas for activities and would like to share them with the group leader, Julia.",
+      "direction": "Write an email to Julia.",
+      "goals": [
+        "Describe your ideas for the awareness event.",
+        "Explain why you believe these activities will be effective.",
+        "Offer to help organize and implement the activities."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.21新托福真题B卷",
+      "date": "2026-01-21",
+      "source_hash": "2d17fb514f19",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "warn",
+          "detail": "writing 科缺 5 题（配对 5／满分 10）。"
+        }
+      ]
+    },
+    {
+      "id": "email_121c",
+      "to": "Jasmine",
+      "subject": "Fundraising event planning",
+      "scenario": "You and your friend, Jasmine, are planning to host a fundraising event for a local children's hospital. You have some ideas for activities and entertainment to include in the event, but you need Jasmine's input to finalize the plans. You also want to discuss the best time to meet and organize the details.",
+      "direction": "Write an email to Jasmine.",
+      "goals": [
+        "Describe the ideas you have for the fundraising event.",
+        "Explain why you think these activities will be successful.",
+        "Suggest a time to meet and discuss the plans in more detail."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.21新托福真题C卷",
+      "date": "2026-01-21",
+      "source_hash": "aa7b7831421b",
+      "source_flags": []
+    },
+    {
+      "id": "email_127a",
+      "to": "Dr. Smith",
+      "subject": "Issues with group project",
+      "scenario": "Your professor, Dr. Smith, recently assigned a group project due in two weeks. You are frustrated because not all of your group members are contributing equally to the project.",
+      "direction": "Write an email to Dr. Smith.",
+      "goals": [
+        "Describe the issue you are facing with your group members.",
+        "Describe your specific contribution to the project.",
+        "Explain why you and the group have been unable to address this issue."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.27新托福真题A卷",
+      "date": "2026-01-27",
+      "source_hash": "82b8a64feca5",
+      "source_flags": []
+    },
+    {
+      "id": "email_127b",
+      "to": "Mr. Evans",
+      "subject": "Internet connection issues in dormitory",
+      "scenario": "You are a university student living in a dormitory. Recently, you have noticed that the internet connection in your dormitory is very slow and often disconnects. This issue is making it difficult for you to complete your assignments and attend online classes. You want to report this problem to the dormitory manager, Mr. Evans, and request a solution.",
+      "direction": "Write an email to Mr. Evans.",
+      "goals": [
+        "Describe the issue with the internet connection.",
+        "Explain how this problem is affecting your studies.",
+        "Request that the internet connection be improved as soon as possible."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.27新托福真题B卷",
+      "date": "2026-01-27",
+      "source_hash": "829c567fe00d",
+      "source_flags": []
+    },
+    {
+      "id": "email_128a",
+      "to": "Alex",
+      "subject": "Managing stress and workload",
+      "scenario": "Your friend, Alex, has been feeling overwhelmed with university assignments. You have noticed that he is struggling to keep up with his workload and is not taking proper care of his health. You want to offer some helpful advice.",
+      "direction": "Write an email to Alex.",
+      "goals": [
+        "Describe to Alex what you have recently noticed about him.",
+        "Explain why it is important to maintain good health.",
+        "Suggest some specific strategies Alex can use to manage his stress and workload."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.28新托福真题A卷",
+      "date": "2026-01-28",
+      "source_hash": "532fdd72ba87",
+      "source_flags": []
+    },
+    {
+      "id": "email_128b",
+      "to": "Professor Patel",
+      "subject": "Request to discuss academic and work balance",
+      "scenario": "You recently started a job on campus. Your academic advisor, Professor Patel, has been helpful in guiding you through your studies. However, you are finding it difficult to balance your work schedule with your academic commitments.",
+      "direction": "Write an email to Professor Patel.",
+      "goals": [
+        "Thank her for the support and guidance she has provided.",
+        "Discuss why you are having difficulty completing your academic commitments.",
+        "Explain how you plan to balance your academic commitments and work plans."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "1.28新托福真题B卷",
+      "date": "2026-01-28",
+      "source_hash": "51add43a68f9",
+      "source_flags": []
+    },
+    {
+      "id": "email_210",
+      "to": "Lisa",
+      "subject": "Appreciation for group project contribution",
+      "scenario": "You are a student who recently participated in a group project for your marketing class. One of your group members, Lisa, did an excellent job on part of the project.",
+      "direction": "Write an email to Lisa.",
+      "goals": [
+        "Thank her for her excellent contribution to the group project.",
+        "Explain what part of Lisa's contribution you appreciated most and how her efforts helped the team succeed.",
+        "Suggest working together on future projects and ask for her opinion."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "2.10新托福真题",
+      "date": "2026-02-10",
+      "source_hash": "22cd4d0b2984",
+      "source_flags": []
+    },
+    {
+      "id": "email_21b",
+      "to": "Ms. Johnson",
+      "subject": "Catering service issues",
+      "scenario": "Your classmate Emma recently hosted a charity event on campus to raise funds for a local animal shelter. The event was successful overall, but there were some issues with the catering service, including delayed food delivery and incorrect orders. You need to address these concerns to the catering manager, Ms. Johnson.",
+      "direction": "Write an email to Ms. Johnson.",
+      "goals": [
+        "Thank her for the service provided.",
+        "Describe the issues that occurred during the event.",
+        "Suggest how these issues could be resolved in future events."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "2.1新托福真题B卷",
+      "date": "2026-02-01",
+      "source_hash": "0b6d2dab1af0",
+      "source_flags": []
+    },
+    {
+      "id": "email_21c",
+      "to": "Mr. Anderson",
+      "subject": "Damaged library book",
+      "scenario": "You are a student who recently borrowed a book from the university library. Unfortunately, you accidentally damaged the book. You want to inform the librarian, Mr. Anderson, about the incident and inquire about the steps you need to take to resolve the situation.",
+      "direction": "Write an email to Mr. Anderson.",
+      "goals": [
+        "Describe the incident that caused the book damage and the extent of the damage to the book.",
+        "Explain your concern about the consequences for damaging the book.",
+        "Ask about the steps you should take to resolve the situation."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "2.1新托福真题C卷",
+      "date": "2026-02-01",
+      "source_hash": "fd435d9b28fd",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "warn",
+          "detail": "writing 科缺 4 题（配对 6／满分 10）。"
+        }
+      ]
+    },
+    {
+      "id": "email_228",
+      "to": "Ms. Davis",
+      "subject": "Lost Jacket Inquiry",
+      "scenario": "You recently attended your university's choir concert and had a great experience. However, you left your favorite jacket behind. You need to contact the university's lost and found department.",
+      "direction": "Write an email to the lost and found manager, Ms. Davis.",
+      "goals": [
+        "Explain when and where you left your jacket.",
+        "Describe the jacket in detail.",
+        "Suggest a solution for the issue."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "2.28新托福真题",
+      "date": "2026-02-28",
+      "source_hash": "fff8cf81bbc3",
+      "source_flags": []
+    },
+    {
+      "id": "email_22",
+      "to": "Mr. Bridges",
+      "subject": "Feedback on concert sound quality",
+      "scenario": "You recently attended a university orchestra concert. While you enjoyed the performance greatly, the sound quality at the venue was poor, making it difficult to fully appreciate the music. You would like to provide feedback to the sound engineer, Mr. Bridges, in hopes of improving future events.",
+      "direction": "Write an email to Mr. Bridges.",
+      "goals": [
+        "Describe what you enjoyed about the concert.",
+        "Explain the issue you had with the sound quality.",
+        "Suggest ways the venue could improve the sound experience for future concerts."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "2.2新托福真题",
+      "date": "2026-02-02",
+      "source_hash": "3983deaafeeb",
+      "source_flags": []
+    },
+    {
+      "id": "email_311",
+      "to": "Mr. Carter",
+      "subject": "Trip Accommodation Inquiry",
+      "scenario": "You are planning a trip with your classmates to a popular tourist destination during your semester break. You need to book accommodations and ensure the hotel can meet your group's needs. You want to contact the hotel to confirm these details.",
+      "direction": "Write an email to the hotel manager, Mr. Carter.",
+      "goals": [
+        "Explain the purpose of your trip and the number of people in your group.",
+        "Explain your group's specific requirements.",
+        "Request the hotel send any additional information needed."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.11新托福真题",
+      "date": "2026-03-11",
+      "source_hash": "a93f04376cda",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.15新托福真题、3.16新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_314",
+      "to": "Ms. Parker",
+      "subject": "Issue with kitchen appliance purchase",
+      "scenario": "You recently purchased a new kitchen appliance from a store called 'Home Essentials.' After using it for a few days, you noticed some problems with it. You want to inform the customer service representative, Ms. Parker, about the issue.",
+      "direction": "Write an email to Ms. Parker.",
+      "goals": [
+        "Describe the issue you are experiencing with the kitchen appliance.",
+        "Explain why this issue is problematic for you.",
+        "Request a replacement or repair for the appliance."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.14新托福真题",
+      "date": "2026-03-14",
+      "source_hash": "66cf312a3112",
+      "source_flags": []
+    },
+    {
+      "id": "email_315",
+      "to": "Ms. Clark",
+      "subject": "Printing Services for Upcoming Play",
+      "scenario": "You are part of your school's drama club and have been assigned the role of event coordinator for an upcoming play. You need to arrange for promotional materials, such as posters and flyers, to be printed and distributed. You want to contact a local print shop to discuss this.",
+      "direction": "Write an email to the print shop manager, Ms. Clark.",
+      "goals": [
+        "Describe the event and its importance.",
+        "Ask about their services for printing promotional materials.",
+        "Inquire about the costs and turnaround time for printing."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.15新托福真题",
+      "date": "2026-03-15",
+      "source_hash": "ff6e924c6ef1",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.16新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "identical_file",
+          "severity": "warn",
+          "detail": "文件 3.15  写作.pdf 与 3.20新托福真题 内容哈希完全一致。"
+        }
+      ]
+    },
+    {
+      "id": "email_316",
+      "to": "Ms. Taylor",
+      "subject": "Suggestion for updating gym equipment",
+      "scenario": "You are a member of a local gym called Fitness Zone. Recently, you have noticed that some of the exercise equipment is problematic. You want to suggest this to the gym manager, Ms. Taylor.",
+      "direction": "Write an email to Ms. Taylor.",
+      "goals": [
+        "Describe the issues you have noticed with the current equipment.",
+        "Provide reasons for why adding new equipment would improve the gym experience.",
+        "Explain the consequences on membership of not improving the services."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.16新托福真题",
+      "date": "2026-03-16",
+      "source_hash": "fa290558fc56",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_317",
+      "to": "Mr. Lee",
+      "subject": "Arrangements for Surprise Birthday Party",
+      "scenario": "You are planning a surprise birthday party for your classmate, Sarah. You want to hold the party for the whole class at Sarah's favorite restaurant. You need to contact the restaurant manager, Mr. Lee, to make the arrangements.",
+      "direction": "Write an email to Mr. Lee.",
+      "goals": [
+        "Explain the purpose of the event.",
+        "Ask about the offers and accommodations they provide for large groups.",
+        "Inquire about any additional services they offer."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.17新托福真题",
+      "date": "2026-03-17",
+      "source_hash": "2c6d20702a37",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.16新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_321",
+      "to": "Ms. Taylor",
+      "subject": "Resort Inquiry",
+      "scenario": "You are organizing a team-building retreat for the whole class. You have found a suitable resort for the event and need to contact the resort manager, Ms. Taylor, to discuss the reservation details.",
+      "direction": "Write an email to Ms. Taylor.",
+      "goals": [
+        "Explain the purpose of the retreat and why you chose this particular resort.",
+        "Ask about the special dietary options offered.",
+        "Inquire about the recreational activities offered at the resort."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.21新托福真题",
+      "date": "2026-03-21",
+      "source_hash": "75cae5c80ee8",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.16新托福真题、3.17新托福真题、3.20新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_323",
+      "to": "Ms. Anderson",
+      "subject": "Inquiry About Internship Program",
+      "scenario": "You are a university student who recently attended a career fair on campus. You met Ms. Anderson from a company where you are very interested in applying for an internship. You want to follow up with her about the internship program.",
+      "direction": "Write an email to Ms. Anderson.",
+      "goals": [
+        "Reiterate your interest in the company and your intention to apply for the internship program.",
+        "Describe your relevant skills and experiences.",
+        "Ask for details about the application process and position."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.23新托福真题",
+      "date": "2026-03-23",
+      "source_hash": "9adb11b1fe96",
+      "source_flags": []
+    },
+    {
+      "id": "email_330",
+      "to": "Mr. Evans",
+      "subject": "Printer Malfunction Issues",
+      "scenario": "You are a student who works in the Office of Admissions and have noticed that the office printer frequently malfunctions. You want to report this problem to the university's IT department and suggest a solution.",
+      "direction": "Write an email to the IT manager, Mr. Evans.",
+      "goals": [
+        "Describe the issues you are experiencing with the printer.",
+        "Explain how these issues are affecting your work.",
+        "Suggest a possible solution to the problem."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.30新托福真题",
+      "date": "2026-03-30",
+      "source_hash": "8f298e4d6e7a",
+      "source_flags": []
+    },
+    {
+      "id": "email_415",
+      "to": "Ms. Williams",
+      "subject": "Career Workshop",
+      "scenario": "You recently attended a university-sponsored career workshop and found the information on job hunting very helpful. However, there were some issues with the workshop organization. You want to follow up with the organizer, Ms. Williams, to express your appreciation for the event and provide feedback on the workshop organization.",
+      "direction": "Write an email to Ms. Williams.",
+      "goals": [
+        "Explain what you found especially helpful about workshop.",
+        "Describe the problems you found with the workshop organization.",
+        "Suggest ways to avoid these issues in future events."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.15新托福真题",
+      "date": "2026-04-15",
+      "source_hash": "66c67b362fe7",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.3新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_420",
+      "to": "Mr. Rodriguez",
+      "subject": "Issues with hotel room",
+      "scenario": "You recently stayed at a hotel called 'Coastal Retreat' during your vacation. While you were generally satisfied with the service, there were several problems with the room's features and overall condition. You want to inform the hotel manager, Mr. Rodriguez, about these issues.",
+      "direction": "Write an email to Mr. Rodriguez.",
+      "goals": [
+        "Describe the issues you encountered with the room.",
+        "Explain how these issues affected your stay.",
+        "Request some form of compensation for the inconvenience caused."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.20新托福真题",
+      "date": "2026-04-20",
+      "source_hash": "ed38e6b6c99e",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.10新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_427",
+      "to": "Ms. Thompson",
+      "subject": "Feedback on Hotel Stay",
+      "scenario": "You recently stayed at a hotel during a campus visit. While you generally liked the room, there were some issues with the room during your stay. You need to provide feedback to the hotel manager, Ms. Thompson, and suggest improvements.",
+      "direction": "Write an email to Ms. Thompson.",
+      "goals": [
+        "Describe what you enjoyed about your stay.",
+        "Explain the issues you had with the room and stay.",
+        "Suggest ways that the hotel could make a guest's stay more peaceful."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.27新托福真题",
+      "date": "2026-04-27",
+      "source_hash": "2b18f0eaa7d2",
+      "source_flags": []
+    },
+    {
+      "id": "email_46",
+      "to": "Ms. Lee",
+      "subject": "Feedback on dining experience",
+      "scenario": "You recently had dinner at a restaurant called 'Cozy Corner.' While part of the experience was enjoyable, the service was poor. You want to provide feedback to the restaurant owner, Ms. Lee.",
+      "direction": "Write an email to Ms. Lee.",
+      "goals": [
+        "Describe what you enjoyed about your dining experience.",
+        "Explain the issues you faced with the service and your order.",
+        "Suggest ways to improve the service for future customers."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.6新托福真题",
+      "date": "2026-04-06",
+      "source_hash": "e3e463822784",
+      "source_flags": []
+    },
+    {
+      "id": "email_48",
+      "to": "Mr. Brown",
+      "subject": "Inquiry About Class Field Trip Travel Packages",
+      "scenario": "You are a student leader at your school and have been assigned to help plan your class field trip. You have found a travel agency that offers comprehensive travel packages and want to contact the travel agent, Mr. Brown, to inquire about their services.",
+      "direction": "Write an email to the travel agent, Mr. Brown.",
+      "goals": [
+        "Explain the purpose and dates of the class field trip.",
+        "Ask about the available offers for large groups.",
+        "Request details on how they can accommodate specific travel needs and additional services offered."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.8新托福真题",
+      "date": "2026-04-08",
+      "source_hash": "6350b0bd9860",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、3.2新托福真题B卷、4.11新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_511",
+      "to": "Maria",
+      "subject": "Request for Lecture Notes",
+      "scenario": "You are a student who missed an important lecture in your biology class. You need to catch up on the material and want to ask a classmate, Maria, for her notes and any key information you missed. You also want to thank her in advance for her help.",
+      "direction": "Write an email to Maria.",
+      "goals": [
+        "Explain why you did not attend the lecture.",
+        "Request her help and ask her if she has time available to help you catch up.",
+        "Thank her in advance for her assistance."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.11新托福真题",
+      "date": "2026-05-11",
+      "source_hash": "08f4df5149e8",
+      "source_flags": []
+    },
+    {
+      "id": "email_518",
+      "to": "Chemistry Class",
+      "subject": "Let's study for the final exam",
+      "scenario": "The final exam in your chemistry class is coming soon. You want to organize a study session with your classmates to prepare for the exam. You need to invite your classmates and also provide some ideas about how to make the study session effective.",
+      "direction": "Write an email to your classmates.",
+      "goals": [
+        "Invite them to join the study session.",
+        "Suggest a time and place for the meeting.",
+        "Provide some suggestions for an effective study session."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.18新托福真题",
+      "date": "2026-05-18",
+      "source_hash": "338ccb8ecd84",
+      "source_flags": []
+    },
+    {
+      "id": "email_523",
+      "to": "Customer Service",
+      "subject": "Recent order",
+      "scenario": "You recently purchased a shirt online for the upcoming university gala. When the shirt arrived, you noticed some issues. You need to contact the online store's customer service to report the issue and request a solution.",
+      "direction": "Write an email to customer service.",
+      "goals": [
+        "Explain what you liked about your online shopping experience.",
+        "Describe the issue with the shirt you received.",
+        "Suggest a resolution for the issue."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.23新托福真题",
+      "date": "2026-05-23",
+      "source_hash": "801d42cf4edb",
+      "source_flags": []
+    },
+    {
+      "id": "email_53",
+      "to": "Ms. Miller",
+      "subject": "Request for Advice in Fitness Class",
+      "scenario": "You recently joined a new fitness class at the campus gym and have been enjoying the workouts. However, you are experiencing some difficulty with certain exercises. You would like to ask the instructor, Ms. Miller, for her advice and express your appreciation for her guidance so far.",
+      "direction": "Write an email to Ms. Miller.",
+      "goals": [
+        "Mention what you enjoy about the fitness class.",
+        "Describe the difficulty you are having with certain exercises.",
+        "Ask for advice to address the difficulty you are having."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.3新托福真题",
+      "date": "2026-05-03",
+      "source_hash": "3c22d3d0bba8",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 4.15新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ]
+    },
+    {
+      "id": "email_56v2",
+      "to": "Professor Brown",
+      "subject": "Feedback on world history course",
+      "scenario": "You recently completed a course on world history and found it very interesting, though you do have some criticisms. The teacher, Professor Brown, has asked for feedback from students to help improve the course. You want to offer some suggestions.",
+      "direction": "Write an email to Professor Brown.",
+      "goals": [
+        "Express your appreciation for Professor Brown's teaching.",
+        "Mention what you found most helpful about the course.",
+        "Suggest what aspect of the course could be improved and how."
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.6新托福真题_v2",
+      "date": "2026-05-06",
+      "source_hash": "2458534ac0d1",
+      "source_flags": []
     }
   ]
 }

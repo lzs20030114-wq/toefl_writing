@@ -181,8 +181,8 @@ describe("真题专区 section：Pro 门禁", () => {
     // 用 getAllByText：题库长大后不同题型的徽章会撞到同一个数字（第二波之后
     // 写作造句和听力 LCR 都是 125 题），getByText 会因为「找到多个」直接报错 ——
     // 这条断言要的是「徽章在、数字对」，不是「全页面只有一个 125」。
-    expect(screen.getAllByText("132 题").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("27 题").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("162 题").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("57 题").length).toBeGreaterThan(0);
     expect(screen.getByText("281 题 · 36 套")).toBeTruthy();
     expect(screen.getByText(/参考版：早期收集，来源未核验/)).toBeTruthy();
   });

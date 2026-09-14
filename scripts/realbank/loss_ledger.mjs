@@ -86,27 +86,24 @@ function pad(s, n, right = false) {
 /**
  * 回收作业单：把账本里「重扫就能捡」的任务排成可粘贴的命令。
  *
- * 排序不是按缺口大小，而是按**验证价值**：
- *   阶段 1 写作 —— 不碰音频、不用重跑合流，链路最短，最容易看出新预算是否真在救题；
- *                 而且学术讨论全库只有 7 题、是整卷拼齐的唯一瓶颈，这一桶里就躺着 24 题。
- *   阶段 2 阅读 —— 同样不碰音频，量最大（填词为主）。
- *   阶段 3 听力/口语 —— 必须接着重跑合流，否则救回的块进不了库（见 structured_io 头注）。
+ * 只剩阅读一个阶段能靠重扫：不碰音频、量最大（填词为主）。
+ * 听力/口语必须接着重跑合流，否则救回的块进不了库（见 structured_io 头注）。
  *
  * 同一套卷的多个科目合成一条命令（--sections a,b），少跑一次扫描。
  */
 function printPlan(tasks, limit) {
-  // 只有阅读/写作能靠重扫 structure_set 回收。听力/口语**不在作业单里**：
+  // 只有阅读能靠重扫 structure_set 回收。听力/口语**不在作业单里**：
   // 合流跑过之后这两科归合流所有（key 格式都换了），重扫既查不到失败块、会变成整科
   // 全量付费重跑，也换不来题 —— 正文来自商家逐字稿 + ASR 对齐，扣题原因全判在合流层。
   // 详见 scripts/realbank/failure_policy.js 的 isMergeOwned。
-  // types = 这一阶段**真能靠重扫 structure_set 回收**的题型。
-  // 造句(bs)故意不在里面：真题造句的题面不来自 structured.json，而是
-  // extract_bs_pages.py 看图产出的 `<卷>.bs.json`（写作 PDF 没有文字层，模板+词块只存在于截图里）；
-  // structured 的 build 段只有 {n, sentence} 答案句，build_bank 按 thin 丢弃。见下面单列的一段。
+  // 写作三题型都**不靠重扫**（下面各自单列一段）：
+  //   · 造句(bs)：题面来自 extract_bs_pages.py 看图产出的 `<卷>.bs.json`（写作 PDF 没有文字层）；
+  //     structured 的 build 段只有 {n, sentence} 答案句，build_bank 按 thin 丢弃。
+  //   · 邮件 / 学术讨论：structure_set 根本没有这两种题的路由（2026-09-14 实测 54 套 --dry 全是
+  //     「没有需要处理的块」）—— 它靠答案页题号对题，这两题没有标准答案，对齐层不生成题块。
+  //     第一来源的这两题走 writing-recall 补录账本（scripts/realbank/writing_recall.js 头注）。
   const STAGES = [
-    { name: "阶段 1 · 写作的邮件/学术讨论（先跑这个：最卡整卷，且不碰音频）",
-      sections: ["writing"], types: ["email", "disc"] },
-    { name: "阶段 2 · 阅读（量最大，填词为主）",
+    { name: "阶段 1 · 阅读（量最大，填词为主）",
       sections: ["reading"], types: ["ctw", "rdl", "ap"] },
   ];
   console.log("\n" + "=".repeat(72));
@@ -153,6 +150,19 @@ function printPlan(tasks, limit) {
       console.log(`node scripts/realbank/structure_set.mjs "${x.set}" --only-failed --sections ${[...x.sections].join(",")} --dry`);
     }
     if (limit > 0 && bySet.size > limit) console.log(`# …另有 ${bySet.size - limit} 套，去掉 --limit 看全部`);
+  }
+
+  // 邮件 / 学术讨论单独一段：不是重扫，是补录账本
+  const wGap = tasks.reduce((a, t) => a + (t.types.email || 0) + (t.types.disc || 0), 0);
+  if (wGap) {
+    console.log(`\n── 真题邮件 / 学术讨论的 ${wGap} 题：走补录账本，不是重扫 ──`);
+    console.log("structure_set 靠答案页题号对题，这两题没有标准答案 → 对齐层根本不给它们生成题块，重扫全是空转。");
+    console.log("第一来源卷的这两题早在校准时抽过（data/realExam2026/writing/），核过原卷后记进 data/realBank/writing-recall.json：");
+    console.log("  node scripts/realbank/recall_writing.mjs --dry          # 账本里每卷 ok / review / reject 与原因");
+    console.log("  node scripts/realbank/build_bank.mjs --only-writing-recall");
+    console.log("  node scripts/realbank/assemble_sets.mjs");
+    console.log("剩下的缺口多半是：同一道题在别的卷已入库（记成别名，assemble 后自动补回槽位）、");
+    console.log("教授原话 / 学生帖只抽到一半（要对着原卷截图补进账本）、或写作整科被源料体检扣下。");
   }
 
   // 造句单独一段：工具链完全不同

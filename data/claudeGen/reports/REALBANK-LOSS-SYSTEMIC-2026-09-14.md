@@ -321,3 +321,29 @@ python scripts/realbank/merge_first_source_asr.py --all
 （`audit_answers.mjs "<卷名>" --section=reading --only-missing`），否则当场被丢
 （`stats.droppedNoAudit`）。作业单末尾已加这一步，并标了 `--only-q` 不带 `--only-missing`
 会清空该卷阅读盲审条目的工具坑。
+
+---
+
+## 9. 再更正：邮件 / 学术讨论也不靠重扫（2026-09-14 本机实测）
+
+§8 说「email 54 + disc 54 靠 `structure_set --only-failed --sections writing` 重扫」—— **不成立**。
+本机把阶段 1 的 54 条 `--dry` 全跑了：54/54「没有需要处理的块」。原因在代码里：
+
+- `structure_set.routeType` 对写作块只会返回 `build`，没有邮件 / 讨论路由；
+- 对齐层靠答案页题号生成题块，写作第 11 / 12 题没有标准答案（`alignment.writing.missing_answer = [11, 12]`），根本不进 unit；
+- 全仓库只有 `parse_reformatted.py`（rf/rp 第二来源 docx）产出 email / discussion。
+
+实际走的路：同批卷这两题早在 2026-05 校准时抽过（`data/realExam2026/writing/`），教授整段原话另有
+`scripts/research/ad_eval/prof_posts_real.json`。逐条对原卷截图核对 / 转写后记进 `data/realBank/writing-recall.json`，
+`build_bank --only-writing-recall` 只往邮件 / 讨论末尾追加（老题 id 与序号不动），同一道题只收一条、其余记别名。
+
+| | 补录前 | 补录后 |
+|---|---|---|
+| 邮件库 / 真题专区 | 14 / 27 | 44 / 57 |
+| 讨论库 / 真题专区 | 7 / 132 | 37 / 162 |
+| 整卷槽位 email / disc | 9/69 · 7/69 | 67/69 · 58/69 |
+| 全库槽位 | 4327 (52.3%) | 4436 (53.6%) |
+
+核对发现旧抽取的错误集中在「OCR 漏掉的那一行」：截断、改写、学生帖串人、课程名错、指令句丢收件人身份。
+这类错 OCR 覆盖率闸查不出来（错的那句恰好不在 OCR 里），所以上线的 60 条全部对过原卷截图。
+写作整科被源料体检扣下的 6 套（扣留码只涉及答案页 / 造句题面）按用户拍板只放行邮件与讨论，造句照扣。

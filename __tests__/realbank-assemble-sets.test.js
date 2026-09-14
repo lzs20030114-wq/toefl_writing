@@ -342,3 +342,39 @@ describe("assemble_sets：consolidation.json 的别名", () => {
   });
 });
 
+
+describe("assemble_sets：写作补录的同一道题别名（writing/id-aliases.json）", () => {
+  // 第一来源邮件 / 讨论补录时同一道题只收一条（scripts/realbank/writing_recall.js），
+  // 其余考过它的卷记成别名。不读这份别名，这些卷的写作 Q11 / Q12 在 sets.json 里永远是空的，丢题账本也一直把它们算成缺题。
+  test("别名读得进来，并在别名卷的邮件 Q11 / 讨论 Q12 落一条指向保留那条的记录", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-walias-"));
+    const S1 = "1.21新托福真题A卷", S2 = "3.4新托福真题";
+    const banks = Object.fromEntries(Object.keys(asm.BANK_FILES).map((t) => [t, []]));
+    banks.ctw = [ctw("real_ctw_34_1_1", S2, "2026-03-04")]; // 让 slug 34 认得出是哪一卷
+    banks.email = [one("email_121a", S1, "2026-01-21")];
+    banks.disc = [one("disc_121a", S1, "2026-01-21", { professor: { name: "Dr. Achebe", text: "Why?" }, students: [] })];
+    for (const [type, rel] of Object.entries(asm.BANK_FILES)) {
+      const p = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, JSON.stringify({ items: banks[type] }));
+    }
+    fs.writeFileSync(path.join(dir, "writing", "id-aliases.json"), JSON.stringify({ aliases: [
+      { from: "email_34", to: "email_121a", from_type: "email", to_type: "email", reason: "duplicate_prompt" },
+      { from: "disc_34", to: "disc_121a", from_type: "disc", to_type: "disc", reason: "duplicate_prompt" },
+    ] }));
+
+    const aliases = asm.loadDupAliases(dir);
+    expect(aliases).toEqual(expect.arrayContaining([
+      { held: "email_34", canonical: "email_121a", source: null },
+      { held: "disc_34", canonical: "disc_121a", source: null },
+    ]));
+    const recs = asm.indexItems(asm.loadBanks(dir), aliases);
+    expect(recs.find((r) => r.id === "email_34")).toMatchObject({ type: "email", set: S2, module: 1, q: 11, anchorable: true, aliasOf: "email_121a" });
+    expect(recs.find((r) => r.id === "disc_34")).toMatchObject({ type: "disc", set: S2, module: 1, q: 12, anchorable: true, aliasOf: "disc_121a" });
+  });
+
+  test("没有 writing/id-aliases.json（还没补录过）→ 不报错、不多出别名", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-walias-none-"));
+    expect(asm.loadWritingAliases(dir)).toEqual([]);
+  });
+});
