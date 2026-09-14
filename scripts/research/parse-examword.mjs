@@ -6,11 +6,14 @@
 //   "Professor:<post><br/>" then "<Name>:<post>" for each student.
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve } from "path";
+import { extractExamDate } from "./examwordDate.mjs";
 
 const root = resolve(import.meta.dirname, "..", "..");
 const rawDir = resolve(root, ".research/raw");
 
-// dates known from the listing page (latest 20); others null
+// 兜底日期表：当初只从**列表页**（只显示最新 20 条）手抄了这些，其余记 null ——
+// 于是 recalled_supplement.json 里 24 条回忆版没日期，真题卡片上看着像随机漏标。
+// 现在日期优先从详情页解析（extractExamDate），这张表只在页面解析不出时兜底。
 const DATES = {
   1518: "2026-05-18", 1517: "2026-05-17", 1516: "2026-05-16", 1514: "2026-05-16",
   1515: "2026-04-23", 1543: "2026-04-12", 1542: "2026-04-11", 1541: "2026-04-10",
@@ -74,7 +77,7 @@ for (let p = 1500; p <= 1543; p++) {
   items.push({
     ...parsed,
     _source: `https://www.examword.com/writing/discussion-example?p=${p}`,
-    _date: DATES[p] || null,
+    _date: extractExamDate(html) || DATES[p] || null,
     _tier: "recalled",
   });
 }

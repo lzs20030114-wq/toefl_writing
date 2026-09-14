@@ -91,6 +91,15 @@ unverified — treat as `uncertain` for calibration purposes).
   from real 2026 administrations (examword.com, `p=1500`–`1543`; 20 carry exam
   dates 2026-03-29 … 2026-05-18). Kept **separate** from the style reference on
   purpose — see "Calibration notes".
+  - **The other 24 have `date: null` on purpose, not by oversight**: the original
+    scrape read dates off the *listing* page, which only shows the latest 20.
+    The real-questions picker prints `日期 · 来源分档` when a date exists and just
+    `来源分档` when it does not, so those 24 recalled cards look date-less next to
+    their dated siblings. To fill them in, run
+    `node scripts/research/backfill-examword-dates.mjs` from a machine that can
+    reach examword.com — it re-reads each *detail* page, refuses to write unless
+    it reproduces all 20 known dates first, and leaves `null` where the source
+    itself carries no date. Update the count in this line afterwards.
 - **Total authentic AD stored: 129** (was 81).
 
 ### Write an Email
