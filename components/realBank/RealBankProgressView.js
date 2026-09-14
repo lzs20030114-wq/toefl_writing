@@ -149,7 +149,8 @@ function describeEntry(entry, index) {
   let subtitle = "";
   if (sub === "email" || sub === "discussion") subtitle = obj.promptSummary || info?.label || "";
   else if (sub === "bs") subtitle = info?.label || (Array.isArray(d) ? `${d.length} 题` : "");
-  else if (sub === "lcr") subtitle = obj.items?.[0]?.speaker || info?.label || "";
+  // 整套（按考试日期打包）记录标题数；老记录是一题一条，仍显示那句口播。
+  else if (sub === "lcr") subtitle = (obj.items?.length > 1 ? `整套 ${obj.items.length} 题` : obj.items?.[0]?.speaker) || info?.label || "";
   else subtitle = obj.topic || obj.genre || info?.label || "";
 
   return { meta, tier, tierLabel: tier ? realTierLabel(tier) : "", examDate, subtitle: truncate(subtitle) };

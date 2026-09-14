@@ -227,7 +227,7 @@ describe("真题专区 section：三档模式（与常规练习同一限时口�
     expect(card.textContent).toContain("不限时");
   });
 
-  test("听力 lcr 卡标每题答题窗口（真题是单题，标整段 5 min 会骗人）", () => {
+  test("听力 lcr 卡标每题答题窗口（按日期整套练、各天题量不一，标固定总时长会骗人）", () => {
     const { container } = render(<RealExamSectionContent {...pro} />);
     const card = container.querySelector('a[href="/real-bank?type=lcr&mode=standard"]');
     expect(card.textContent).toContain("20s/题");
