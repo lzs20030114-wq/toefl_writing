@@ -53,6 +53,28 @@
   ③ `run_pipeline.mjs` 的 `SECTIONS` 放开到四科：**建议现在不动**，等 ② 的实测单价再说
   （`--only-failed` 直接调 structure_set 已够用，放开只省几行命令却把听力并进常规产线）。
 
+- [中] **造句真题：跨卷重复已还回原卷（2026-09-14），剩下 193 槽是真缺内容、都要本机跑**：
+  ETS 真实地循环出题（实测 4.1 有 9 道与 3.21 重复、5.6 有 7 道与 4.15 重复，132 条全是跨卷重复、
+  没有一条是同卷内重复），而 build_bank 的答案句去重**只丢不记** —— 那 132 槽被账本算成缺题、
+  前端那几卷少题、整卷都是重复题的卷（4.1 / 5.6 / rf0902 / 3.20）连卡片都不出现。
+  已按邮件 / 讨论同一套机制记别名：`scripts/realbank/bs_aliases.js` → `writing/id-aliases.json`
+  （造句那批多带 from_source / from_date —— 那几卷库里一条自己的题都没有，没有这两个字段
+  assemble_sets 的「slug → 卷名」表查不到、别名会被整条丢掉）。本次数据由
+  `bs_aliases_backfill.mjs` 从 drop-ledger 回填（云端没有 .codex-tmp 跑不了全量重建），
+  下次 `build_bank` 全量重建会原样重写这份文件。
+  结果：bs 槽位 351→497（50.9%→72.0%），真题专区造句 336→509 题 / 44→57 套，基线已重冻。
+  **剩余 193 槽（都要本机的 .codex-tmp 与源料）**：
+  ① 管线丢题 68：5.11 / 5.18 / 5.23 / 5.29 / rf0826 等 7 套的 flagged 块，
+  `node scripts/realbank/structure_set.mjs "<卷>" --section=writing --only-failed`；
+  其中 5.6_v2 / 5.10_v2 是同日重跑卷，补进来大概率又是重复题，别指望净增。
+  ② 字段不全 46：structured 里只有答案句、没有题面模板 / 词块 —— 要跑 `extract_bs_pages.py`
+  补那几页识图（写作 PDF 无文字层，题面只存在于考试界面截图里）。
+  ③ 源料缺陷 72：6 套写作整科被源料体检扣下（用户已拍板造句照扣），要改判得先看扣留码。
+  跑完任一项都要 `build_bank` → `assemble_sets` → `loss_ledger.mjs --freeze` 重冻基线。
+  **另有 8 题看得见摸不着**：3.6 / 2.1新托福真题C卷 两卷补齐后仍只有 4 题，卡在
+  `REAL_BS_MIN_BATCH=5` 不进专区。要么等 ①②③ 把这两卷补过线，要么把闸降到 4 ——
+  「造句要按套算」是用户拍过板的口径，没再拍板前不动。
+
 - [✅部分完成 2026-09-14] 阅读「选项残 = 整题作废」的死循环（2026-09-14，报告 REALBANK-INGEST-AUDIT-2026-09-14.md §7）：
   三层口径不一致——`PROMPTS.mcq` 明说「也可能是 3 个」、`verifyMcq` 放行 3~5 个（status=ok）、
   `build_bank.optionsMap` 却要求恰好 4 个否则整题作废。后果：被 OCR 吃掉一个选项的题

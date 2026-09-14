@@ -15,8 +15,9 @@ export const REAL_WRITING_COUNTS = {
   discussion: 162,
   /** 邮件：getRealEmailPrompts().length */
   email: 57,
-  /** 造句题数：getRealBSQuestions().length（少于 REAL_BS_MIN_BATCH=5 题的碎卷已过滤，不进专区） */
-  bs: 336,
+  /** 造句题数：getRealBSQuestions().length（少于 REAL_BS_MIN_BATCH=5 题的碎卷已过滤，不进专区；
+   *  含跨卷重复还回原卷的那一份 —— 同一道题在两场考试里都考过，见 lib/realBank.bsRecycledRaws） */
+  bs: 509,
   /** 造句卷数（一卷一张批次卡）：getRealBSBatches().length */
-  bsSets: 44,
+  bsSets: 57,
 };

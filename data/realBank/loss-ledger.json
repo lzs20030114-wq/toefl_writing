@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4783,
-    "missing": 3556,
+    "got": 4929,
+    "missing": 3410,
     "overfilled": 59,
-    "completeness": 0.5777,
+    "completeness": 0.5953,
     "causes": {
-      "source_defect": 737,
+      "source_defect": 736,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 488,
+      "bank_dropped": 345,
       "section_never_run": 1990,
       "section_lost": 0,
-      "pipeline_loss": 215
+      "pipeline_loss": 213
     },
-    "actionable": 215
+    "actionable": 213
   },
   "byType": {
     "ctw": {
@@ -119,18 +119,18 @@
     "bs": {
       "type": "bs",
       "need": 690,
-      "got": 351,
-      "missing": 339,
+      "got": 497,
+      "missing": 193,
       "causes": {
-        "source_defect": 73,
+        "source_defect": 72,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 196,
+        "bank_dropped": 53,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 70
+        "pipeline_loss": 68
       },
-      "completeness": 0.5087
+      "completeness": 0.7203
     },
     "email": {
       "type": "email",
@@ -281,18 +281,18 @@
     "writing": {
       "section": "writing",
       "need": 828,
-      "got": 476,
-      "missing": 352,
+      "got": 622,
+      "missing": 206,
       "causes": {
-        "source_defect": 76,
+        "source_defect": 75,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 202,
+        "bank_dropped": 59,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 72
+        "pipeline_loss": 70
       },
-      "completeness": 0.5749
+      "completeness": 0.7512
     },
     "listening": {
       "section": "listening",
@@ -845,20 +845,6 @@
       ]
     },
     {
-      "set": "rf0615",
-      "slug": "rf0615",
-      "date": "2026-06-15",
-      "section": "writing",
-      "missing": 2,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 2
-      },
-      "slots": [
-        "M1/bs_1(-2)"
-      ]
-    },
-    {
       "set": "rf0629",
       "slug": "rf0629",
       "date": "2026-06-29",
@@ -1061,12 +1047,12 @@
         10
       ],
       "need": 10,
-      "got": 2,
-      "missing": 8,
+      "got": 8,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 8
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -1579,17 +1565,12 @@
         10
       ],
       "need": 10,
-      "got": 3,
-      "missing": 7,
+      "got": 6,
+      "missing": 4,
       "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 5,
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 3
+        "source_defect": 4
       },
       "notes": []
     },
@@ -1782,33 +1763,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.21新托福真题C卷",
-      "slug": "121c",
-      "date": "2026-01-21",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 6,
-      "missing": 4,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 4
       },
       "notes": []
     },
@@ -2010,12 +1964,12 @@
         10
       ],
       "need": 10,
-      "got": 5,
-      "missing": 5,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -2193,12 +2147,12 @@
         10
       ],
       "need": 10,
-      "got": 5,
-      "missing": 5,
+      "got": 8,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -2922,12 +2876,12 @@
         10
       ],
       "need": 10,
-      "got": 6,
-      "missing": 4,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -3217,33 +3171,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "date": "2026-02-01",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 2
       },
       "notes": []
     },
@@ -3812,12 +3739,12 @@
         10
       ],
       "need": 10,
-      "got": 4,
-      "missing": 6,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 6
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -4353,12 +4280,12 @@
         10
       ],
       "need": 10,
-      "got": 4,
-      "missing": 6,
+      "got": 6,
+      "missing": 4,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 6
+        "bank_dropped": 4
       },
       "drop_codes": {
         "wSkippedThin": 4,
@@ -5377,12 +5304,12 @@
         10
       ],
       "need": 10,
-      "got": 3,
-      "missing": 7,
+      "got": 7,
+      "missing": 3,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 7
+        "bank_dropped": 3
       },
       "drop_codes": {
         "wSkippedThin": 3,
@@ -5404,12 +5331,12 @@
         10
       ],
       "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -5909,12 +5836,12 @@
         10
       ],
       "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -6319,35 +6246,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.4新托福真题",
-      "slug": "34",
-      "date": "2026-03-04",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -6796,13 +6694,13 @@
         10
       ],
       "need": 10,
-      "got": 3,
-      "missing": 7,
+      "got": 4,
+      "missing": 6,
       "status": "partial",
       "cause": "source_defect",
       "charged": {
         "source_defect": 4,
-        "bank_dropped": 3
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -8677,33 +8575,6 @@
       "notes": []
     },
     {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "date": "2026-03-14",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 2
-      },
-      "notes": []
-    },
-    {
       "set": "3.15新托福真题",
       "slug": "315",
       "date": "2026-03-15",
@@ -9571,12 +9442,12 @@
         10
       ],
       "need": 10,
-      "got": 7,
-      "missing": 3,
+      "got": 8,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -10518,12 +10389,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wDroppedDupSet": null
@@ -10928,35 +10799,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.21新托福真题",
-      "slug": "321",
-      "date": "2026-03-21",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -11619,12 +11461,12 @@
         10
       ],
       "need": 10,
-      "got": 3,
-      "missing": 7,
+      "got": 7,
+      "missing": 3,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 7
+        "bank_dropped": 3
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -12844,12 +12686,12 @@
         10
       ],
       "need": 10,
-      "got": 7,
-      "missing": 3,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -14013,35 +13855,6 @@
       "set": "4.1新托福真题",
       "slug": "41",
       "date": "2026-04-01",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 10
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.1新托福真题",
-      "slug": "41",
-      "date": "2026-04-01",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -14452,12 +14265,12 @@
         10
       ],
       "need": 10,
-      "got": 1,
-      "missing": 9,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 9
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -14953,12 +14766,12 @@
         10
       ],
       "need": 10,
-      "got": 5,
-      "missing": 5,
+      "got": 6,
+      "missing": 4,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 4
       },
       "drop_codes": {
         "wSkippedThin": 4,
@@ -15738,35 +15551,6 @@
       "set": "4.11新托福真题",
       "slug": "411",
       "date": "2026-04-11",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 7,
-      "missing": 3,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 3
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 3
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.11新托福真题",
-      "slug": "411",
-      "date": "2026-04-11",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -16167,33 +15951,6 @@
       "set": "4.13新托福真题",
       "slug": "413",
       "date": "2026-04-13",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.13新托福真题",
-      "slug": "413",
-      "date": "2026-04-13",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -16557,35 +16314,6 @@
         "section_never_run": 4
       },
       "notes": []
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 7,
-      "missing": 3,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 3
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 3
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
     },
     {
       "set": "4.15新托福真题",
@@ -17466,12 +17194,12 @@
         10
       ],
       "need": 10,
-      "got": 5,
-      "missing": 5,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -18326,12 +18054,12 @@
         10
       ],
       "need": 10,
-      "got": 6,
-      "missing": 4,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -18744,12 +18472,12 @@
         10
       ],
       "need": 10,
-      "got": 3,
-      "missing": 7,
+      "got": 8,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 7
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wSkippedThin": 2,
@@ -19208,12 +18936,12 @@
         10
       ],
       "need": 10,
-      "got": 7,
-      "missing": 3,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -19628,12 +19356,12 @@
         10
       ],
       "need": 10,
-      "got": 5,
-      "missing": 5,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -20066,35 +19794,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "5.6新托福真题",
-      "slug": "56",
-      "date": "2026-05-06",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "wSkippedThin": 0,
-        "wDroppedDupBs": 10
       },
       "notes": [
         "duplicate_cluster"
@@ -20956,12 +20655,12 @@
         10
       ],
       "need": 10,
-      "got": 6,
-      "missing": 4,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 1,
@@ -23474,34 +23173,6 @@
       "section": "writing",
       "module": "1",
       "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wDroppedDupBs": 2
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0610",
-      "slug": "rf0610",
-      "date": "2026-06-10",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
       "slotKey": "email_11",
       "type": "email",
       "band": [
@@ -23672,13 +23343,12 @@
         10
       ],
       "need": 10,
-      "got": 1,
-      "missing": 9,
+      "got": 8,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 7,
-        "pipeline_loss": 2
+        "bank_dropped": 2
       },
       "drop_codes": {
         "wDroppedDupBs": 7
@@ -23909,34 +23579,6 @@
       ]
     },
     {
-      "set": "rf0622",
-      "slug": "rf0622",
-      "date": "2026-06-22",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wDroppedDupBs": 3
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
       "set": "rf0629",
       "slug": "rf0629",
       "date": "2026-06-29",
@@ -24092,34 +23734,6 @@
       "cause": "held",
       "charged": {
         "held": 4
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0629",
-      "slug": "rf0629",
-      "date": "2026-06-29",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 5,
-      "missing": 5,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 5
-      },
-      "drop_codes": {
-        "wDroppedDupBs": 5
       },
       "notes": [
         "vendor_reformatted"
@@ -24284,34 +23898,6 @@
       "drop_codes": {
         "lDroppedDisagree": 1,
         "lDroppedInvalid": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0713",
-      "slug": "rf0713",
-      "date": "2026-07-13",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 6,
-      "missing": 4,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "wDroppedDupBs": 4
       },
       "notes": [
         "vendor_reformatted"
@@ -24899,12 +24485,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wDroppedDupSet": null
