@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-14，826 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-14，825 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,27 +20,27 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4753,
-    "missing": 3586,
+    "got": 4777,
+    "missing": 3562,
     "overfilled": 59,
-    "completeness": 0.574,
+    "completeness": 0.5769,
     "causes": {
       "source_defect": 738,
-      "held": 111,
-      "deduped": 29,
-      "bank_dropped": 488,
+      "held": 103,
+      "deduped": 27,
+      "bank_dropped": 489,
       "section_never_run": 1990,
       "section_lost": 0,
-      "pipeline_loss": 230
+      "pipeline_loss": 215
     },
-    "actionable": 230
+    "actionable": 215
   },
   "byType": {
     "ctw": {
       "type": "ctw",
       "need": 2070,
-      "got": 1969,
-      "missing": 101,
+      "got": 1979,
+      "missing": 91,
       "causes": {
         "source_defect": 50,
         "held": 0,
@@ -48,9 +48,9 @@
         "bank_dropped": 30,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 21
+        "pipeline_loss": 11
       },
-      "completeness": 0.9512
+      "completeness": 0.956
     },
     "rdl": {
       "type": "rdl",
@@ -71,18 +71,18 @@
     "ap": {
       "type": "ap",
       "need": 840,
-      "got": 749,
-      "missing": 91,
+      "got": 763,
+      "missing": 77,
       "causes": {
         "source_defect": 15,
-        "held": 28,
-        "deduped": 24,
-        "bank_dropped": 12,
+        "held": 20,
+        "deduped": 22,
+        "bank_dropped": 13,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 12
+        "pipeline_loss": 7
       },
-      "completeness": 0.8917
+      "completeness": 0.9083
     },
     "repeat": {
       "type": "repeat",
@@ -249,18 +249,18 @@
     "reading": {
       "section": "reading",
       "need": 3450,
-      "got": 3215,
-      "missing": 241,
+      "got": 3239,
+      "missing": 217,
       "causes": {
         "source_defect": 81,
-        "held": 43,
-        "deduped": 29,
-        "bank_dropped": 54,
+        "held": 35,
+        "deduped": 27,
+        "bank_dropped": 55,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 34
+        "pipeline_loss": 19
       },
-      "completeness": 0.9319
+      "completeness": 0.9388
     },
     "speaking": {
       "section": "speaking",
@@ -332,22 +332,6 @@
         "M2/lc_6(-2)",
         "M2/lat_8(-4)",
         "M2/lat_12(-4)"
-      ]
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "date": "2026-08-26",
-      "section": "reading",
-      "missing": 15,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 10,
-        "ap": 5
-      },
-      "slots": [
-        "M2/ctw_1(-10)",
-        "M2/ap_11(-5)"
       ]
     },
     {
@@ -2308,9 +2292,9 @@
       "got": 3,
       "missing": 2,
       "status": "partial",
-      "cause": "held",
+      "cause": "deduped",
       "charged": {
-        "held": 2
+        "deduped": 2
       },
       "notes": []
     },
@@ -2328,13 +2312,17 @@
         35
       ],
       "need": 5,
-      "got": 0,
-      "missing": 5,
-      "status": "empty",
-      "cause": "held",
+      "got": 3,
+      "missing": 2,
+      "status": "partial",
+      "cause": "deduped",
       "charged": {
-        "held": 3,
-        "deduped": 2
+        "deduped": 1,
+        "bank_dropped": 1
+      },
+      "drop_codes": {
+        "droppedDisagree": 1,
+        "droppedDupStem": 1
       },
       "notes": []
     },
@@ -2378,9 +2366,13 @@
       "got": 4,
       "missing": 1,
       "status": "near",
-      "cause": "deduped",
+      "cause": "bank_dropped",
       "charged": {
-        "deduped": 1
+        "bank_dropped": 1
+      },
+      "drop_codes": {
+        "droppedDisagree": 1,
+        "droppedDupStem": 1
       },
       "notes": []
     },
@@ -3275,29 +3267,6 @@
       "drop_codes": {
         "wSkippedThin": 0,
         "wDroppedDupBs": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题C卷",
-      "slug": "21c",
-      "date": "2026-02-01",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ap_26",
-      "type": "ap",
-      "band": [
-        26,
-        30
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "deduped",
-      "charged": {
-        "deduped": 1
       },
       "notes": []
     },
@@ -6373,31 +6342,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.4新托福真题",
-      "slug": "34",
-      "date": "2026-03-04",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ap_26",
-      "type": "ap",
-      "band": [
-        26,
-        30
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "deduped",
-      "charged": {
-        "deduped": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -15054,12 +14998,12 @@
         15
       ],
       "need": 5,
-      "got": 0,
-      "missing": 5,
-      "status": "empty",
+      "got": 3,
+      "missing": 2,
+      "status": "partial",
       "cause": "held",
       "charged": {
-        "held": 4,
+        "held": 1,
         "pipeline_loss": 1
       },
       "notes": []
@@ -21566,29 +21510,6 @@
       "slug": "510v2",
       "date": "2026-05-10",
       "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ap_31",
-      "type": "ap",
-      "band": [
-        31,
-        35
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "held",
-      "charged": {
-        "held": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "reading",
       "module": "2",
       "form": "A",
       "slotKey": "ap_11",
@@ -21601,12 +21522,9 @@
       "got": 4,
       "missing": 1,
       "status": "near",
-      "cause": "bank_dropped",
+      "cause": "held",
       "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "droppedDisagree": 1
+        "held": 1
       },
       "notes": []
     },
@@ -24944,56 +24862,6 @@
       "cause": "held",
       "charged": {
         "held": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "date": "2026-08-26",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "date": "2026-08-26",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ap_11",
-      "type": "ap",
-      "band": [
-        11,
-        15
-      ],
-      "need": 5,
-      "got": 0,
-      "missing": 5,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 5
       },
       "notes": [
         "vendor_reformatted"

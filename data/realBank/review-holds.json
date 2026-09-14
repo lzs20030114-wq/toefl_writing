@@ -2709,23 +2709,9 @@
     },
     {
       "file": "reading/ap",
-      "id": "real_ap_128a_1_31",
-      "scope": "unit",
-      "reason": "两处成分缺失（a handy are also incorporated into… / people who fear public their speech），第2段语义断裂",
-      "source": "recheck-2026-09-08"
-    },
-    {
-      "file": "reading/ap",
       "id": "real_ap_21a_2_11",
       "scope": "unit",
       "reason": "首段被截断串行，剧作名与论述主干丢失",
-      "source": "recheck-2026-09-08"
-    },
-    {
-      "file": "reading/ap",
-      "id": "real_ap_46_2_13",
-      "scope": "unit",
-      "reason": "P2 结尾 conveying events. 为 conveying context 被截，Q13 题干引用的 context 在材料中不存在",
       "source": "recheck-2026-09-08"
     },
     {
@@ -3699,6 +3685,24 @@
       "reason": "跨套重复：与 real_ctw_rp0830_5_1 同一份材料、挖空相同，保留 real_ctw_rp0830_5_1",
       "dup_of": "real_ctw_rp0830_5_1",
       "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_46_2_13",
+      "scope": "question",
+      "q": 1,
+      "stem": "The passage suggests which of the following about viewers",
+      "reason": "选项 D 后半句被原卷截图上的聊天浮窗挡住（OCR 到 videos can 为止），结构化产物里的 be edited to support a defense 是模型补的；源里读不到原文，不收",
+      "source": "recovery-2026-09-15"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_46_2_13",
+      "scope": "question",
+      "q": 3,
+      "stem": "The passage indicates that",
+      "reason": "选项 D 中间被浮窗挡住（overemphasizing the po… misinterpreting videos：potential for / possibility of 分不出），不拿模型补的词当原文，不收",
+      "source": "recovery-2026-09-15"
     }
   ],
   "patches": [
@@ -3725,6 +3729,16 @@
       "op": "trim_tail",
       "from": " Using transparent",
       "why": "结尾半句被截"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510v2_1_31",
+      "path": "passage",
+      "op": "replace",
+      "from": "interacting components. Using",
+      "to": "interacting components.",
+      "why": "结尾半句被截（插入句题那一屏截到 Using 为止；上一条 trim_tail 管的是截到 Using transparent 的那份）",
+      "source": "recovery-2026-09-15"
     },
     {
       "file": "reading/ap",
@@ -4618,6 +4632,24 @@
       "from": " Such activity not only sustains their growth but also benefits surrounding promote biodiversity.",
       "why": "本地 OCR 在 surrounding 后丢了一行，末句不成立（没有看图缓存可补）；十个空都在第 3 句，截掉末句不影响挖空",
       "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_46_2_13",
+      "path": "passage",
+      "op": "set",
+      "to": "Video Evidence in U.S. Courts\n\nIn the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly everyone carries a smartphone capable of recording high-quality videos. While such recordings are widely seen as reliable evidentiary tools, they have certain limitations.\n\nFor example, videos are usually taken from a single vantage point, potentially giving viewers a misleading impression of events. A single camera angle might fail to capture what occurs just outside the frame, leading observers to misinterpret what they see. Additionally, video footage has no way of conveying interpersonal and emotional context: A person's actions might appear antagonistic even if the person was acting in self-defense.\n\nDespite these limitations, legal experts emphasize that video evidence plays a significant role in courtrooms. Jurors (people chosen to consider evidence and decide a case) might dismiss eyewitness testimonies as unreliable or perceive oral accounts as inconsistent, while videos show events more directly. When multiple recordings are available from different angles, an even more reliable sense of an incident can emerge. Nevertheless, courts often remind jurors to evaluate video evidence cautiously.",
+      "why": "正文按原卷截图逐字重录（09-08 下架原因 conveying events 被截；另查出结构化正文有模型补写的句子：A video can be edited to emphasize one point / might seem aggressive when they are actually in self-defense，原文分别是 For example, videos are usually taken from a single vantage point / might appear antagonistic even if the person was acting in self-defense；并恢复三段分段）",
+      "source": "recovery-2026-09-15"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_128a_1_31",
+      "path": "passage",
+      "op": "set",
+      "to": "Stoicism in Ancient Philosophy\n\nStoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.\n\nA phrase that is commonly used today is \"Stoic pause.\" It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. They are taught to approach their fear rationally and ignore what is outside their control.",
+      "why": "正文按原卷截图逐字重录（09-08 下架原因：本地 OCR 丢了两整行 —— a handy trick employed by business leaders in high-stakes negotiations. Stoic principles / speaking can be taught to reframe their anxiety by focusing on preparing for）",
+      "source": "recovery-2026-09-15"
     }
   ]
 }

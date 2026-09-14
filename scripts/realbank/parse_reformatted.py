@@ -961,6 +961,18 @@ def pool_zone_base(name: str) -> int:
 Q_HEAD = re.compile(r"^Q\s*(\d+)\s*[.:]?\s*(.*)$")
 OPT_HEAD = re.compile(r"^([A-H])[.)]\s*(.+)$")
 AP_HEAD = re.compile(r"^Academic Reading\b\s*[:：]?\s*(.*)$", re.I)
+
+
+def module_ctw_header(t: str):
+    """`Reading Module 2 - Fill-in-the-Blank Questions 1-10` → (2, "Fill-in-the-Blank Questions 1-10")；
+    不是「模块头 + 填词题头」挤在一行的形态返回 None。"""
+    m = MODULE_HEAD.match(t or "")
+    if not m:
+        return None
+    rest = t[m.end():].strip(" \t-–—:：|")
+    return (int(m.group(1)), rest) if CTW_HEAD.match(rest) else None
+
+
 BLANK_RE = re.compile(r"([A-Za-z][A-Za-z'’]*)((?:\s*_)+)")
 INSERT_HINT = re.compile(r"four locations|where would the following sentence|best fit", re.I)
 # 重排版源的插入位就印成 `[A]`~`[D]`（旧的 ETS 截图源用 ■）。build_bank.hasInsertMarkers
@@ -1195,6 +1207,16 @@ def parse_reading(folder: str, setkey: str, ak: AnswerKey) -> list[dict]:
             close_block()
             module = int(m.group(1))
             pending_ctw = None
+            continue
+        # 模块头和填词题头挤在一行：`Reading Module 2 - Fill-in-the-Blank Questions 1-10`（8.26）。
+        # 上面那条要求 ≤4 词、下面 CTW_HEAD 要求行首就是 Fill-in-the-Blank，两边都认不出 ——
+        # 模块号停在 1，模块 2 的填词段没人认、学术阅读按模块 1 的 Q11 去找答案（答案页里当然没有），整个模块 2 颗粒无收。
+        mc = module_ctw_header(t)
+        if mc:
+            close_block()
+            module, rest = mc
+            title = rest.split(":", 1)[1].strip() if ":" in rest else ""
+            pending_ctw = {"title": title, "module": module}
             continue
 
         if POOL_MODE:

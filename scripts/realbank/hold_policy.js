@@ -203,7 +203,48 @@ function auditPassed(entry) {
   return !!(entry.second_vote && entry.second_vote.agree === true);
 }
 
+/* ── 人工核定放行（盲审两票都与答案页不同时的最后一道口子） ──────────────────────
+ *
+ * data/realBank/audit-overrides.json 的 entries：对着**原卷截图**逐题核过、确认「答案页是对的、模型解错了」的题。
+ * 为什么需要：插入句题四个插入位几乎等价、词汇题近义词难辨，flash 与 pro 两票会一起错（2026-09-10 人工核 8 道全是答案页对）。
+ * 两票都不认就永远丢，而答案页本身是官方键 —— 人核过的放行，比让题永久消失更接近真题。
+ *
+ * 口子收得很紧（任何一条对不上都不放行，fail-closed）：
+ *   · verdict 必须是 "key_correct"，且写了 reason（核对依据）；
+ *   · 卷名 / 科目 / 题号 / 答案页字母逐一相等 —— 重结构化换了题、答案页字母变了，旧核定自动失效；
+ *   · 题干前缀（≥12 字符）必须对得上当前产物的题干，防同题号换题。
+ */
+const AUDIT_OVERRIDES_FILE = path.join("data", "realBank", "audit-overrides.json");
+
+/** 读人工核定清单；文件不存在 / 坏了 = 空清单（fail-safe 到「不放行」）。 */
+function loadAuditOverrides(root) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(root || process.cwd(), AUDIT_OVERRIDES_FILE), "utf8"));
+    return Array.isArray(raw && raw.entries) ? raw.entries : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * 这道盲审不一致的题有没有人工核定放行。
+ * @param {Array} entries audit-overrides.json 的 entries
+ * @param {{set: string, section: string, q: number, stamped: string, stem: string}} at
+ */
+function manualAuditPass(entries, at) {
+  const a = at || {};
+  const letter = (x) => String(x == null ? "" : x).trim().toUpperCase();
+  return (entries || []).some((e) => e
+    && e.verdict === "key_correct" && typeof e.reason === "string" && e.reason.trim()
+    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q)
+    && letter(e.stamped) && letter(e.stamped) === letter(a.stamped)
+    && typeof e.stem === "string" && e.stem.trim().length >= 12 && String(a.stem || "").startsWith(e.stem.trim()));
+}
+
 module.exports = {
+  AUDIT_OVERRIDES_FILE,
+  loadAuditOverrides,
+  manualAuditPass,
   SECTION_GAP_MIN_AGREEMENT,
   INGEST_BLOCKER_RELAXABLE,
   OVERRIDES_FILE,

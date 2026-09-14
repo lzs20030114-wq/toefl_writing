@@ -1,0 +1,17 @@
+{
+  "_purpose": "盲审两票都与答案页不同、但人工对着原卷截图核过「答案页是对的」的题：build_bank 落库放行（判据 scripts/realbank/hold_policy.manualAuditPass）。每条必须写清核对依据；卷/题号/答案页字母/题干前缀任何一个对不上就自动失效。",
+  "_format": "entries[] = { set, section, q, stamped: 答案页字母, stem: 题干前缀(≥12字符), verdict: \"key_correct\", reason: 核对依据, checked_by, date }",
+  "entries": [
+    {
+      "set": "5.10新托福真题_v2",
+      "section": "reading",
+      "q": 35,
+      "stamped": "A",
+      "stem": "There are four locations in the passage that indicate where the following sentence could be added. The latter is concerned",
+      "verdict": "key_correct",
+      "reason": "插入句题 The latter is concerned with the comparative study of automatic control systems…：The latter 要求紧前面有两个并列项，只有 [A] 紧跟在 …merging sociology and cybernetics 之后（the latter = cybernetics），后一句 By applying principles… from cybernetics 顺接；[B]/[C]/[D] 前面都没有并列项。盲审 flash/pro 两票都选 D。独立盲解（Claude，不看答案页）选 A，主线程对着原卷截图复核同意。同一道题在 3.4 M1Q30 的答案页印成 B，两票与盲解都选 A，那份不收。",
+      "checked_by": "Claude 独立盲解 + 主线程对原卷截图复核",
+      "date": "2026-09-15"
+    }
+  ]
+}

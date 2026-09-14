@@ -255,3 +255,35 @@ describe("hold_policy.auditPassed：第二票只对显式跑过的题生效", ()
     expect(auditPassed(undefined)).toBe(false);
   });
 });
+
+/**
+ * 人工核定放行（data/realBank/audit-overrides.json）：盲审两票都与答案页不同、人对着原卷截图核过「答案页对」的题。
+ * 口子收得很紧 —— 卷 / 科 / 题号 / 答案页字母 / 题干前缀任何一个对不上都不放行。
+ */
+describe("hold_policy.manualAuditPass", () => {
+  const { manualAuditPass } = require("../scripts/realbank/hold_policy.js");
+  const E = {
+    set: "3.30新托福真题", section: "reading", q: 32, stamped: "A", verdict: "key_correct",
+    stem: "According to the passage, corn plants", reason: "原卷截图第 2 段：……答案页 A 成立，D 与原文相反",
+  };
+  const AT = { set: "3.30新托福真题", section: "reading", q: 32, stamped: "a", stem: "According to the passage, corn plants may release MBOA" };
+
+  test("逐项对上（答案页字母大小写不敏感）→ 放行", () => {
+    expect(manualAuditPass([E], AT)).toBe(true);
+  });
+
+  test("答案页字母变了 / 题干换了 / 题号或卷名不同 → 不放行（旧核定自动失效）", () => {
+    expect(manualAuditPass([E], { ...AT, stamped: "B" })).toBe(false);
+    expect(manualAuditPass([E], { ...AT, stem: "Which of the following is NOT mentioned" })).toBe(false);
+    expect(manualAuditPass([E], { ...AT, q: 33 })).toBe(false);
+    expect(manualAuditPass([E], { ...AT, set: "4.18新托福真题" })).toBe(false);
+  });
+
+  test("清单条目不合格（不是 key_correct / 没写核对依据 / 题干前缀太短）→ 不放行", () => {
+    expect(manualAuditPass([{ ...E, verdict: "key_wrong" }], AT)).toBe(false);
+    expect(manualAuditPass([{ ...E, reason: "" }], AT)).toBe(false);
+    expect(manualAuditPass([{ ...E, stem: "According" }], AT)).toBe(false);
+    expect(manualAuditPass([], AT)).toBe(false);
+    expect(manualAuditPass(undefined, AT)).toBe(false);
+  });
+});
