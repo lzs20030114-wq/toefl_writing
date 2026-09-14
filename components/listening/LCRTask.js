@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { useListeningAiExplain, ListeningAiExplainBlock } from "./useListeningAiExplain";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -145,6 +146,10 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     if (!isTimed || phase !== "choose" || finished || answerTimeLeft !== 0) return;
     completeCurrentAnswer(selected);
   }, [answerTimeLeft, completeCurrentAnswer, finished, isTimed, phase, selected]);
+
+  // 交卷后答错的题可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
+  // 必须在下面的 early return 之前调 —— hooks 不能写在条件返回之后。
+  const listeningAi = useListeningAiExplain();
 
   if (!currentItem) {
     return (
@@ -329,6 +334,25 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                         }}>
                           <strong>{reviewResult.isCorrect ? "Correct!" : "Explanation:"}</strong> {reviewItem.explanation}
                         </div>
+                      )}
+                      {/* AI 讲解：只给答错的题。应答题走语用那支（整道题只有说话人一句话，
+                          没有「原文定位」可讲），块独立于题库自带的 explanation 渲染。 */}
+                      {!reviewResult.isCorrect && (
+                        <ListeningAiExplainBlock
+                          explainKey={`${reviewItem.id || "lcr"}-${reviewIndex}`}
+                          detail={{
+                            subtype: "lcr",
+                            qid: reviewItem.id || `lcr-${reviewIndex}`,
+                            speaker: reviewItem.speaker,
+                            situation: reviewItem.situation || "",
+                            pragmaticFunction: reviewItem.pragmatic_function || "",
+                            options: reviewItem.options,
+                            selected: reviewResult.selected,
+                            correct: reviewItem.answer,
+                            isCorrect: reviewResult.isCorrect,
+                          }}
+                          {...listeningAi}
+                        />
                       )}
                     </div>
                   )}

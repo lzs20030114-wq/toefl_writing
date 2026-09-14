@@ -3,6 +3,9 @@ import { ListeningProgressView } from "../components/listening/ListeningProgress
 
 jest.mock("../lib/AuthContext", () => ({
   getSavedCode: jest.fn(() => null),
+  // 逐题回顾里的 AI 讲解块会读 tier；"free" 与真实实现的默认值一致
+  // （localStorage 为空时 getSavedTier 就返回 "free"），本文件不测 AI 那条路。
+  getSavedTier: jest.fn(() => "free"),
 }));
 
 // One LCR session saved exactly the way app/listening/page.js → saveListeningSession
