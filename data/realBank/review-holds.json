@@ -1889,14 +1889,6 @@
     },
     {
       "file": "reading/ap",
-      "id": "real_ap_22_1_34",
-      "scope": "unit",
-      "reason": "跨套重复：与 real_ap_rp0819_2001_200101 同一份材料（Jaccard>=0.8），每簇保留一条",
-      "dup_of": "real_ap_rp0819_2001_200101",
-      "source": "recheck-2026-09-08"
-    },
-    {
-      "file": "reading/ap",
       "id": "real_ap_22_2_11",
       "scope": "unit",
       "reason": "跨套重复：与 real_ap_rf0620_1_131 同一份材料（Jaccard>=0.8），每簇保留一条",
@@ -3658,6 +3650,54 @@
       "scope": "unit",
       "reason": "跨套重复：与 real_ctw_210_1_1 同一份材料、挖空相同，保留 real_ctw_210_1_1",
       "dup_of": "real_ctw_210_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_rp0819_2001_200101",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ap_22_1_31（2.2 M1 原卷 Dinosaur Feathers）同一份材料；本条是拼盘版，整篇无分段、只收 3 题（第 4 题因无分段已下架），原卷那份带标题分段、5 题全过盲审（含插入句题），改为保留原卷那份（2026-09-14 前是反过来留的拼盘版）",
+      "dup_of": "real_ap_22_1_31",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_121b_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_518_1_1 同一份材料、挖空相同，保留 real_ctw_518_1_1",
+      "dup_of": "real_ctw_518_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_127a_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_41_1_1 同一份材料、挖空相同，保留 real_ctw_41_1_1",
+      "dup_of": "real_ctw_41_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_34_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rp0711_2_1 同一份材料、挖空相同（本条末句是本地 OCR 丢行后模型拼接的，看图原文完整句在保留方里），保留 real_ctw_rp0711_2_1",
+      "dup_of": "real_ctw_rp0711_2_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_36_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_121b_2_1 同一份材料、挖空相同，保留 real_ctw_121b_2_1",
+      "dup_of": "real_ctw_121b_2_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_rf0808_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rp0830_5_1 同一份材料、挖空相同，保留 real_ctw_rp0830_5_1",
+      "dup_of": "real_ctw_rp0830_5_1",
       "source": "recovery-2026-09-14"
     }
   ],

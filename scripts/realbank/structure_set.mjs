@@ -67,30 +67,8 @@ function loadEnv() {
 }
 
 /* ── 1. 类型路由（确定性，看 OCR 正文里的官方指令语） ───────────────────── */
-// 真题每道题上方都有 ETS 的固定指令句，比任何启发式都可靠。
-const ROUTES = [
-  [/fill\s*in\s*the\s*missing\s*letters/i, "ctw"],
-  [/listen\s*and\s*repeat/i, "repeat"],
-  [/choose\s*the\s*best\s*response/i, "lcr"],
-  [/listen\s*to\s*a\s*conversation/i, "lc"],
-  [/listen\s*to\s*an?\s*announcement/i, "la"],
-  [/listen\s*to\s*an?\s*(academic\s*)?(talk|lecture|discussion)/i, "lat"],
-];
-
-function routeType(block) {
-  const body = block.body || "";
-  for (const [re, type] of ROUTES) if (re.test(body)) return type;
-  if (block.section === "writing") return "build";
-  if (block.section === "listening") return "listening_mcq"; // 归属段落在音频里，稍后按音频分段并回
-  if (block.section === "reading") {
-    // 学术短文 vs 日常阅读：真题里日常阅读的材料是海报/说明/网页，普遍短且带
-    // "Read a poster / Read some instructions" 这类指令；学术短文明显更长。
-    if (/read\s+(a|an|some)\s+(poster|instructions?|notice|advertisement|web\s*page|page\s*from|email|menu|schedule|flyer|message)/i.test(body)) return "rdl";
-    return countWords(body) >= 160 ? "ap" : "rdl";
-  }
-  if (block.section === "speaking") return "interview"; // 题干在音频里
-  return "unknown";
-}
+// 抽成纯函数可单测：./route_type.js —— 那里写着「一道题的块不可能是填词」「Fil in」两个口子为什么要补。
+const { routeType } = require("./route_type.js");
 
 const countWords = (s) => String(s || "").trim().split(/\s+/).filter(Boolean).length;
 
@@ -525,7 +503,7 @@ async function main() {
   const reverifyMcq = args.includes("--reverify-mcq");
   if (!setname) {
     console.error("用法: node scripts/realbank/structure_set.mjs <卷名> [--dry] [--limit N] [--force]"
-      + " [--sections a,b] [--types ctw] [--merge | --only-failed | --reverify-ctw | --reverify-mcq] [--ctw-vision-body]");
+      + " [--sections a,b] [--types ctw] [--keys k1,k2] [--merge | --only-failed | --reverify-ctw | --reverify-mcq] [--ctw-vision-body]");
     process.exit(2);
   }
   const scanPath = path.join(OUT_DIR, `${setname}.json`);
@@ -544,6 +522,16 @@ async function main() {
     const before = units.length;
     units = units.filter((u) => onlyTypes.has(u.type));
     console.log(`题型过滤 [${[...onlyTypes].join(",")}]：${before} → ${units.length} 块`);
+  }
+  // --keys "reading|1|35-35|35,reading|1|1-10|35"：只处理这几块（块 key 精确匹配）。
+  // 花钱的重扫按块拍板时用 —— --sections / --types 圈不小：同卷同题型里别的 flagged 块会被顺带重扫。
+  const keyIdx = args.indexOf("--keys");
+  if (keyIdx >= 0) {
+    const want = new Set(String(args[keyIdx + 1] || "").split(",").map((s) => s.trim()).filter(Boolean));
+    const before = units.length;
+    units = units.filter((u) => want.has(u.key));
+    const missing = [...want].filter((k) => !units.some((u) => u.key === k));
+    console.log(`块过滤 --keys：${before} → ${units.length} 块${missing.length ? `（对不上的 key：${missing.join(" / ")}）` : ""}`);
   }
   // --ctw-vision-body：填词块的输入换成 Qwen3-VL 看源截图的逐字转写
   // （scripts/realbank/ctw_vision_transcribe.py 写的缓存 .codex-tmp/ocr/ctwvis__<卷>_M<m>_<起>-<止>__img1.txt）。

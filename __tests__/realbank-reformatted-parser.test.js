@@ -210,3 +210,31 @@ maybe("重排版真题解析器", () => {
     expect(data.tally.ok).toBeGreaterThanOrEqual(5);
   });
 });
+
+/**
+ * 答案表逐行解析（parse_reformatted._row_pairs）。直接 import 真脚本调函数，不复刻实现。
+ * 2026-09-14：rf0808 答案页 PDF 抽出来是 `Q4(depicted | Q9 | remarkable` —— 题号格与答案格之间的竖线变成了左括号，
+ * 旧解析整格跳过，模块 2 填词 10 空只配上 9 个答案、整段作废。
+ */
+maybe("重排版答案表：_row_pairs", () => {
+  const rowPairs = (line) => {
+    const code = [
+      "import importlib.util, json, sys",
+      `spec = importlib.util.spec_from_file_location("pr", ${JSON.stringify(SCRIPT)})`,
+      "pr = importlib.util.module_from_spec(spec); spec.loader.exec_module(pr)",
+      "print(json.dumps(pr._row_pairs(sys.argv[1])))",
+    ].join("\n");
+    const out = execFileSync(PY, ["-c", code, line], { encoding: "utf8" });
+    return JSON.parse(out.trim().split(/\r?\n/).pop());
+  };
+
+  test("题号格与答案格粘成 `Q4(depicted`：照样认出 Q4 → depicted，同一行后面的格不受影响", () => {
+    expect(rowPairs("Q4(depicted | Q9 | remarkable")).toEqual([[4, "depicted"], [9, "remarkable"]]);
+  });
+
+  test("正常双栏行不变；粘连判据收得紧（要 Q 前缀 + 单个词）", () => {
+    expect(rowPairs("Q1 | small | Q6 | events")).toEqual([[1, "small"], [6, "events"]]);
+    expect(rowPairs("4(depicted | Q9 | remarkable")).toEqual([[9, "remarkable"]]);
+    expect(rowPairs("Q4(two words | Q9 | remarkable")).toEqual([[9, "remarkable"]]);
+  });
+});

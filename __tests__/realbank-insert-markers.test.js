@@ -470,6 +470,26 @@ describe("insert_markers · promoteInsertItem（0 选项被判 flagged 的插入
     expect(r.item.insert_restored.by).toBe("qwen3-vl");
   });
 
+  test("同一篇在几场考试里都有带 ■ 版本、按文本查不唯一 → 带上源料坐标就取这道题自己那条（2.2 / 4.13 / 5.6 实测形态）", () => {
+    // 这道题的 OCR 材料比两条带 ■ 正文都少一个词（逐字对不上，只能按覆盖率认）；
+    // 另一场考试同一篇的插入位在 12/22/32/42 —— 两条覆盖率都够，按文本查「不唯一不认」
+    const material = BODY_WORDS.filter((w, i) => i !== 5).join(" ") + ".";
+    const other = { set: "卷B", module: 2, q_number: 15, marked: markedFrom(BODY_WORDS, [12, 22, 32, 42]), by: "qwen3-vl" };
+    const table = [other, ...TABLE];
+    const item = { stem: STEM, material, options: [], answer_key: "c" };
+    expect(promoteInsertItem(item, table, "c").problems).toContain("no_entry");
+    const r = promoteInsertItem(item, table, "c", { set: "卷A", module: 1, q_number: 35 });
+    expect(r.ok).toBe(true);
+    // 取的是卷A 自己那条：与「表里只有卷A 那条」时的结果逐字相同，与只有卷B 那条时不同
+    expect(r.item.material).toBe(promoteInsertItem(item, TABLE, "c").item.material);
+    expect(r.item.material).not.toBe(promoteInsertItem(item, [other], "c").item.material);
+    // 坐标对不上表里任何一条 → 退回按文本查（照旧不唯一不认）
+    expect(promoteInsertItem(item, table, "c", { set: "卷C", module: 1, q_number: 35 }).ok).toBe(false);
+    // 坐标命中但那条与这道题的材料对不上（过不了 validateMarked）→ 当没有
+    const wrong = [{ set: "卷A", module: 1, q_number: 35, marked: markedFrom("totally different words about another topic entirely".repeat(6).split(" ")) }];
+    expect(promoteInsertItem(item, wrong, "c", { set: "卷A", module: 1, q_number: 35 }).ok).toBe(false);
+  });
+
   test("标记表里没有 → 不转正（与 build_bank 换材料同一套判据，fail-closed）", () => {
     const r = promoteInsertItem({ stem: STEM, material: PLAIN }, [], "c");
     expect(r.ok).toBe(false);

@@ -254,6 +254,28 @@ function applyMarkers(material, marked) {
 }
 
 /**
+ * 按「卷 + 模块 + 题号」取这道题自己那一屏看图找回的标记（insert_promote 转正时用；build_bank 不传 at，行为不变）。
+ *
+ * 为什么需要：同一篇文章在几场考试里都考过（4.13 / 5.6 / 3.27 同篇），表里就有好几条覆盖率都是 1.0、
+ * ■ 位置或空白略有出入的带 ■ 正文 —— findMarkedPassage 按文本查「不唯一就不认」，转正时报 no_entry，
+ * 明明表里就有**这道题自己**那条（2026-09-14 实测 3 道：2.2 M1 Q30 / 4.13 M1 Q35 / 5.6 M1 Q35）。
+ * 头注说「不按 id 匹配」是因为 id 里的簇首题号会漂；卷名 + 模块 + 题号是源料坐标，不漂。
+ * 取到的条目仍要过 validateMarked（恰好 4 个 ■、首个 ■ 前有正文、间隔 ≥3 词、与这道题的材料覆盖率 ≥0.92），过不了当没有。
+ *
+ * @param {string} material 这道题的材料
+ * @param {Array<object>} table insert-markers.json 的 entries
+ * @param {{set: string, module: number, q_number: number}|null} at
+ * @returns {object|null}
+ */
+function keyedMarkedPassage(material, table, at) {
+  if (!at || !at.set || !Array.isArray(table)) return null;
+  const hit = table.find((e) => e && typeof e.marked === "string" && e.set === at.set
+    && Number(e.module) === Number(at.module) && Number(e.q_number) === Number(at.q_number));
+  if (!hit) return null;
+  return validateMarked(hit.marked, material).ok ? hit : null;
+}
+
+/**
  * 查表 → 校验 → 套用，一把梭。build_bank.mjs 落库时调它，测试也调它。
  *
  * @param {string} material 库里的材料原文（无 ■）
@@ -261,9 +283,9 @@ function applyMarkers(material, marked) {
  * @returns {{material: string, restored: boolean, entry: object|null, problems: string[]}}
  *   restored=false 时 material 原样返回（调用方照旧丢弃插入题）。
  */
-function decideInsertMaterial(material, table) {
+function decideInsertMaterial(material, table, at = null) {
   const original = String(material == null ? "" : material);
-  const entry = findMarkedPassage(original, table);
+  const entry = keyedMarkedPassage(original, table, at) || findMarkedPassage(original, table);
   if (!entry) return { material: original, restored: false, entry: null, problems: ["no_entry"] };
 
   const v = validateMarked(entry.marked, original);
@@ -308,16 +330,17 @@ const WATERMARK = /闲鱼|盗卖|退款|店铺|甜茶|满分小屋|唯一闲/;
  * @param {object} item   structured 里那道题（要有 stem / material）
  * @param {Array<object>} table insert-markers.json 的 entries
  * @param {string} answerLetter 答案页字母（a~d，大小写不限）
+ * @param {{set: string, module: number, q_number: number}|null} [at] 这道题的源料坐标（优先取它自己那一屏的标记，见 keyedMarkedPassage）
  * @returns {{ok: boolean, item: object|null, problems: string[]}}
  */
-function promoteInsertItem(item, table, answerLetter) {
+function promoteInsertItem(item, table, answerLetter, at = null) {
   const problems = [];
   const letter = String(answerLetter == null ? "" : answerLetter).trim().toUpperCase();
   const idx = ["A", "B", "C", "D"].indexOf(letter);
   if (letter.length !== 1 || idx < 0) problems.push(`answer_not_a_to_d:${JSON.stringify(answerLetter)}`);
   const stem = String((item && item.stem) || "").trim();
   if (tokensForMatch(stem).length < 2) problems.push("stem_missing");
-  const d = decideInsertMaterial(String((item && item.material) || ""), table);
+  const d = decideInsertMaterial(String((item && item.material) || ""), table, at);
   if (!d.restored) problems.push(...d.problems);
   const blob = `${stem} ${d.material}`;
   if (CJK.test(blob)) problems.push("cjk_in_text");

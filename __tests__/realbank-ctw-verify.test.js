@@ -309,6 +309,17 @@ describe("structured_io.syncListeningToMergeBases", () => {
     expect(readJson(d, "卷A.structured.fs_parsed.json").results).toHaveLength(1);
   }));
 
+  test("writeStructured 不传 freshKeys（阅读侧就地修补：insert_promote / vision_restructure_mcq）→ 一条听力都不同步", () => withDir((d) => {
+    snapshot(d, "卷A.structured.fs_parsed.json", [
+      { key: "listening|1|13-14|32", section: "listening", status: "flagged", items: [] },
+    ]);
+    const merged = { key: "listening|1|lc:13-14", section: "listening", status: "ok", merged_by: "merge_first_source_asr", items: [] };
+    const res = writeStructured(d, "卷A", { set: "卷A", results: [merged, { key: "reading|1|35-35|35", section: "reading", status: "ok" }] });
+    expect(res.mergeBases).toEqual([]);
+    expect(readJson(d, "卷A.structured.fs_parsed.json").results).toHaveLength(1);
+    expect(fs.existsSync(path.join(d, "卷A.fsparsed.prev.json"))).toBe(false);
+  }));
+
   test("writeStructured 顺带把合流快照一起同步（这才是真正的调用路径）", () => withDir((d) => {
     snapshot(d, "卷A.structured.fs_parsed.json", [
       { key: "listening|1|13-14|32", section: "listening", status: "flagged", items: [] },

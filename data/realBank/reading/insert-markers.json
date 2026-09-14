@@ -4,6 +4,16 @@
   "_workflow": "1) python scripts/realbank/restore_insert_markers.py --list  → .codex-tmp/realbank/insert-markers.todo.json；2) --fill --dry-run 看要调几次 Qwen；3) --fill 真跑 → insert-markers.candidates.json；4) node scripts/realbank/insert_markers_apply.mjs（先 --dry-run）把过校验的合并进本表；5) node scripts/realbank/build_bank.mjs 重新落库，日志里看『找回 ■ 标记』的题数。build_bank 只读本表，永远不写。",
   "entries": [
     {
+      "set": "1.28新托福真题B卷",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_128b_1_32",
+      "marked": "The Flynn Effect\n\nResearchers have observed a phenomenon known as the Flynn Effect: a consistent increase in Intelligence Quotient (IQ) scores from one generation to the next. This trend, named after intelligence researcher James Flynn, shows that average IQ scores have risen by about three points per decade in many parts of the world.\n\nVarious theories have been proposed to explain this trend. One hypothesis is that improvements in nutrition and healthcare have enhanced brain development, leading to higher IQ scores. Another theory suggests that the complexity of modern life, with its increased cognitive demands, has driven this rise. The widespread use of technology and a more stimulating environment could also be contributing factors.\n\n■ However, the Flynn Effect does not necessarily indicate that people are becoming more intelligent. ■ Some researchers argue that the rise in IQ scores reflects better test-taking skills or familiarity with the types of tasks presented in IQ tests, rather than a genuine increase in cognitive abilities. ■ Recent studies have shown that the Flynn Effect may be slowing down or even reversing in some countries, challenging the notion of a universal and perpetual increase in intelligence. ■",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2.1新托福真题01.pdf p8 #3 / qwen3-vl-plus"
+    },
+    {
       "set": "2.1新托福真题B卷",
       "module": 2,
       "q_number": 15,
@@ -362,6 +372,16 @@
       "by": "qwen3-vl",
       "verified": true,
       "note": "源截图 5.6 阅读.pdf p8 #2 / qwen3-vl-plus"
+    },
+    {
+      "set": "2.2新托福真题",
+      "module": 1,
+      "q_number": 35,
+      "bank_id": "real_ap_22_1_31",
+      "marked": "Paleontologists once thought dinosaurs were completely covered in scales. Recent discoveries have overturned this idea. Fossils found in China reveal some dinosaurs had feathers. These fossils, dating back approximately 126 million years, show traces of feathered skeletons. The feathers were not for flight but likely for insulation or display.\n\nOne significant find was the feathered dinosaur Sinosauropteryx. This small, meat-eating dinosaur had simple, hairlike feathers on its body. This discovery showed that feathers were more common among dinosaurs than previously thought. Another discovery involved the larger, more complex feathers of Caudipteryx. These feathers were similar to those of modern birds, suggesting that feathers evolved in stages, becoming more sophisticated over time.\n\n■ Researchers are now studying how feathered dinosaurs might have used their plumage.  \n■ Some theories suggest that feathers helped regulate body temperature, while other theories propose that feathers were used for mating displays or camouflage. ■ Understanding feather function in dinosaurs provides insights into their behavior and evolution. ■\n\nThe idea that birds are direct descendants of dinosaurs has gained support from the findings about feathers. Fossil evidence reveals that many theropod dinosaurs, such as Velociraptor, had feathers similar to those of modern birds. These similarities in feather structures, including quill knobs and branching patterns, strengthen the link between dinosaurs and birds—supporting the theory that birds evolved from a group of feathered theropod dinosaurs.",
+      "by": "qwen3-vl",
+      "verified": true,
+      "note": "源截图 2026新托福真题08.pdf p8 #3 / qwen3-vl-plus；bank_id 原为拼盘版 real_ap_rp0819_2001_200101（2026-09-14 复核清单改留 2.2 原卷版），对保留方材料重新过 validateMarked"
     }
   ]
 }
