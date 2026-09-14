@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 
 const SYSTEM = "你是一位专业的英语语法老师。学生在拖拽造句练习中答错了一道题，请用中文简短解释（3-5句话）：1）学生的答案哪里有问题；2）正确答案为什么是对的。重点讲语法，不要重复题目内容。";
 
@@ -48,7 +48,7 @@ export function useBsAiExplain() {
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
       const message = `题目：${detail.prompt}\n学生答案：${detail.userAnswer}\n正确答案：${detail.correctAnswer}${detail.grammar_points?.length ? `\n涉及语法点：${detail.grammar_points.join(", ")}` : ""}`;
-      const text = await callAI(SYSTEM, message, 300, 60000, 0.3);
+      const text = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

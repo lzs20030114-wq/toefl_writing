@@ -5,6 +5,7 @@ import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
+import { VocabLinkCard } from "../vocab/VocabLinkCard";
 import { PromoBanner } from "./HomePageClient";
 import { READING_TOTAL_QUESTIONS, readingModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
@@ -284,6 +285,12 @@ function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, ses
           description={mistakeCount > 0 ? `已收录 ${mistakeCount} 道阅读错题，含 AI 解释。` : "做完阅读练习后，答错的题会自动收录在这里。"}
           badge={mistakeCount > 0 ? `${mistakeCount} 题` : "暂无错题"}
         />
+      </div>
+
+      {/* 单词本：阅读复盘里划词收藏的词都进这儿 —— 入口紧挨着错题本，
+          「这套题错在哪」和「这套题有哪些词不认识」本来就是一件事的两面。 */}
+      <div style={{ marginBottom: 12, ...fadeIn(380) }}>
+        <VocabLinkCard hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
       </div>
 
       {/* Progress link */}

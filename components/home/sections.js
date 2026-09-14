@@ -84,5 +84,6 @@ export const SECTION_ACCENTS = {
 export const TOOLS = [
   { id: "mistake-notebook", label: "拼句错题本", icon: "✗", href: "/mistake-notebook" },
   { id: "post-writing-practice", label: "拼写填空", icon: "Aa", href: "/post-writing-practice" },
+  { id: "vocab-notebook", label: "单词本", icon: "📕", href: "/vocab-notebook" },
   { id: "progress", label: "练习记录", icon: "📈", href: "/progress" },
 ];
