@@ -398,9 +398,10 @@ function ListeningPageClient() {
     );
   }
 
+  // 只存，不换题：onComplete 现在在交卷那一刻就触发（组件里），这里再 handleNewSet
+  // 会立刻把结果页换掉 —— 换题交给结果页的「换一题」（onNext）。
   const handleMCQComplete = (result) => {
     saveListeningSession(type, activeItem, result);
-    handleNewSet();
   };
 
   return (
@@ -410,6 +411,7 @@ function ListeningPageClient() {
       taskType={type}
       onComplete={handleMCQComplete}
       onExit={isPractice ? taskOnExit : onExit}
+      onNext={isPractice ? undefined : handleNewSet}
       isPractice={isPractice}
       title={labels.title}
       section={labels.section}

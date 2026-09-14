@@ -32,7 +32,7 @@ function conversationTurns(item) {
   });
 }
 
-export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractice = false, title = "Listening", section = "Listening" }) {
+export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, isPractice = false, title = "Listening", section = "Listening" }) {
   const questions = item?.questions || [];
   const totalQ = questions.length;
   const answerSeconds = listeningSecondsForType(taskType);
@@ -76,6 +76,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
   const [answerTimeLeft, setAnswerTimeLeft] = useState(answerSeconds);
 
   const resultsRef = useRef(null);
+  const completedRef = useRef(false);
   const isTimed = !isPractice;
 
   useDraftPersist(draftKey, { selections, currentQ, lockedQuestions }, { enabled: !submitted });
@@ -101,11 +102,19 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
     }));
   }, [questions, selections]);
 
+  // 交卷即回调（= 落库）。历史记录不能押在结果页那颗按钮上：调用方的 onComplete
+  // 只负责存不负责跳，用户点「退出」这次练习就白做了。completedRef 保证只回调一次。
   const handleSubmit = useCallback((overrideSelections = selections) => {
+    const results = buildResults(overrideSelections);
+    resultsRef.current = results;
     setSubmitted(true);
     clearDraft(draftKey);
-    resultsRef.current = buildResults(overrideSelections);
-  }, [buildResults, draftKey, selections]);
+    if (completedRef.current) return;
+    completedRef.current = true;
+    if (typeof onComplete === "function") {
+      onComplete({ correct: results.filter((r) => r.isCorrect).length, total: totalQ, results });
+    }
+  }, [buildResults, draftKey, onComplete, selections, totalQ]);
 
   const lockCurrentQuestion = useCallback(() => {
     setLockedQuestions((prev) => {
@@ -116,25 +125,19 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
     });
   }, [currentQ]);
 
-  const handleNext = () => {
-    if (currentQ < totalQ - 1) {
-      if (isTimed) lockCurrentQuestion();
-      setCurrentQ(currentQ + 1);
-    }
-  };
+  // 能不能离开当前题：练习模式只要选了（或已锁定）；计时模式同理——没作答不许走，
+  // 免得底部题号一点就把空白题锁死。
+  const canLeaveCurrent = selections[currentQ] !== null || lockedQuestions[currentQ];
 
-  const handlePrev = () => {
-    if (currentQ > 0) {
-      setCurrentQ(currentQ - 1);
+  // 上一题 / 下一题 / 底部题号统一走这里。计时模式「离开即锁定」：
+  // 回看的题一律只读，也因此永远回不到一道未锁定的题 —— 来回跳题刷不出新的答题时间。
+  const goToQuestion = (index) => {
+    if (submitted || index === currentQ || index < 0 || index > totalQ - 1) return;
+    if (isTimed) {
+      if (!canLeaveCurrent) return;
+      lockCurrentQuestion();
     }
-  };
-
-  const handleFinish = () => {
-    const results = resultsRef.current || [];
-    const correct = results.filter(r => r.isCorrect).length;
-    if (typeof onComplete === "function") {
-      onComplete({ correct, total: totalQ, results });
-    }
+    setCurrentQ(index);
   };
 
   useEffect(() => {
@@ -150,12 +153,15 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
   const handleQuestionTimeout = useCallback(() => {
     lockCurrentQuestion();
     if (currentQ < totalQ - 1) {
+      // 必须和 setCurrentQ 一起把倒计时拨回满格：否则下一次 commit 里
+      // 「归零即超时」那条 effect 会拿着旧的 answerTimeLeft=0 再触发一次，一超时连跳两题。
+      setAnswerTimeLeft(answerSeconds);
       setCurrentQ((idx) => Math.min(totalQ - 1, idx + 1));
       return;
     }
     handleSubmit(selections);
     setPhase("results");
-  }, [currentQ, handleSubmit, lockCurrentQuestion, selections, totalQ]);
+  }, [answerSeconds, currentQ, handleSubmit, lockCurrentQuestion, selections, totalQ]);
 
   useEffect(() => {
     if (!isTimed || phase !== "answer" || submitted || answerTimeLeft !== 0) return;
@@ -185,6 +191,8 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
   const q = questions[currentQ];
   const allAnswered = selections.every(s => s !== null);
   const canSubmitCurrent = selections[currentQ] !== null || (isTimed && lockedQuestions[currentQ]);
+  const isCurrentLocked = isTimed && !!lockedQuestions[currentQ];
+  const isUrgent = isTimed && !isCurrentLocked && answerTimeLeft <= 10;
 
   // ── LISTEN PHASE ──
   if (phase === "listen") {
@@ -284,9 +292,13 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
             );
           })}
 
+          {/* 成绩在交卷那一刻就已经回调保存了，这里两颗按钮都只管跳转。
+              旧版把保存挂在「完成」上，而调用方的 onComplete 只存不跳 —— 练习模式点了没反应。 */}
           <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 16 }}>
-            <Btn onClick={onExit} variant="secondary">退出</Btn>
-            <Btn onClick={handleFinish}>完成</Btn>
+            {typeof onNext === "function" && (
+              <Btn onClick={onNext} variant="secondary">换一题</Btn>
+            )}
+            <Btn onClick={onExit}>完成并返回</Btn>
           </div>
         </SurfaceCard>
       </PageShell>
@@ -308,13 +320,14 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             padding: "6px 12px", borderRadius: 999,
-            background: answerTimeLeft <= 10 ? "#FEE2E2" : ACCENT.soft,
-            border: `1px solid ${answerTimeLeft <= 10 ? "#FECACA" : "#E9D5FF"}`,
-            color: answerTimeLeft <= 10 ? "#DC2626" : "#5B21B6",
+            background: isCurrentLocked ? "#F3F4F6" : isUrgent ? "#FEE2E2" : ACCENT.soft,
+            border: `1px solid ${isCurrentLocked ? "#E5E7EB" : isUrgent ? "#FECACA" : "#E9D5FF"}`,
+            color: isCurrentLocked ? C.t2 : isUrgent ? "#DC2626" : "#5B21B6",
             fontSize: 12, fontWeight: 800,
             fontFamily: "Consolas, Menlo, 'Courier New', monospace",
           }}>
-            {isTimed ? `Time left ${formatAnswerTime(answerTimeLeft)}` : "Practice mode"}
+            {/* 回看已锁定的题时倒计时是冻住的，直说「已锁定」比摆个不走的钟清楚 */}
+            {!isTimed ? "Practice mode" : isCurrentLocked ? "本题已锁定 · 仅可回看" : `Time left ${formatAnswerTime(answerTimeLeft)}`}
           </div>
         </div>
         {/* Question */}
@@ -367,21 +380,30 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
           );
         })}
 
-        {/* Navigation */}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
-          {isPractice && <Btn onClick={handlePrev} variant="secondary" disabled={currentQ === 0}>上一题</Btn>}
+        {/* Navigation —— 主按钮（下一题/提交）一律靠右下角，左边留给上一题。
+            计时模式也能往回翻，只是翻回去的题已锁定，只能看不能改。 */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 20 }}>
+          <Btn
+            onClick={() => goToQuestion(currentQ - 1)}
+            variant="secondary"
+            disabled={currentQ === 0 || (isTimed && !canLeaveCurrent)}
+          >
+            上一题
+          </Btn>
           {currentQ < totalQ - 1 ? (
-            <Btn onClick={handleNext} disabled={selections[currentQ] === null}>下一题</Btn>
+            <Btn onClick={() => goToQuestion(currentQ + 1)} disabled={!canLeaveCurrent}>下一题</Btn>
           ) : (
             <Btn onClick={() => { lockCurrentQuestion(); handleSubmit(); setPhase("results"); }} disabled={isTimed ? !canSubmitCurrent : !allAnswered}>提交</Btn>
           )}
         </div>
 
-        {/* Progress dots */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16 }}>
+        {/* 题号导航：点序号直接跳题（以前只有练习模式能点，计时模式只能一题题按「下一题」）。 */}
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 6, marginTop: 16 }}>
           {questions.map((_, i) => {
             const isActive = i === currentQ;
             const isAnswered = selections[i] !== null;
+            // 计时模式下离开当前题即锁定，所以没作答时不给跳，免得把空白题锁死。
+            const canJump = isActive || !isTimed || canLeaveCurrent;
             let bg = "#E5E7EB";
             if (isActive) bg = ACCENT.color;
             else if (isAnswered) bg = ACCENT.soft;
@@ -389,12 +411,19 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
             return (
               <button
                 key={i}
-                onClick={() => { if (isPractice) setCurrentQ(i); }}
-                disabled={!isPractice}
+                onClick={() => goToQuestion(i)}
+                disabled={!canJump}
+                title={`第 ${i + 1} 题${isAnswered ? " · 已作答" : ""}`}
+                aria-label={`第 ${i + 1} 题${isAnswered ? " · 已作答" : ""}`}
+                aria-current={isActive ? "true" : undefined}
                 style={{
-                  width: 28, height: 28, borderRadius: "50%", border: "none",
-                  background: bg, fontSize: 12, fontWeight: 700, cursor: isPractice ? "pointer" : "default",
+                  width: 32, height: 32, borderRadius: "50%",
+                  border: isActive ? `2px solid ${ACCENT.color}` : `1px solid ${isAnswered ? "#E9D5FF" : "#E5E7EB"}`,
+                  background: bg, fontSize: 13, fontWeight: 700,
+                  cursor: canJump ? "pointer" : "not-allowed",
+                  opacity: canJump ? 1 : 0.5,
                   color: isActive ? "#fff" : isAnswered ? ACCENT.color : C.t3,
+                  fontFamily: FONT,
                   transition: "all 0.15s",
                 }}
               >
@@ -403,6 +432,11 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
             );
           })}
         </div>
+        {!isTimed && currentQ === totalQ - 1 && !allAnswered && (
+          <div style={{ textAlign: "center", marginTop: 10, fontSize: 12, color: C.t3 }}>
+            还有 {selections.filter((sel) => sel === null).length} 题没作答，点上面的题号回去补。
+          </div>
+        )}
       </SurfaceCard>
     </PageShell>
   );
