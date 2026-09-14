@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAIStream, mapAiHelperError, AI_EXPLAIN_BUDGET } from "../../lib/ai/client";
 import { isSentenceSelection, sentenceOptionKeys, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 
 // 阅读选择题（RDL / AP，含真题选句题）的 AI 讲解。与 useCtwAiExplain / useBsAiExplain
@@ -142,7 +142,12 @@ export function useReadingAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      const text = await callAI(SYSTEM, buildReadingExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAIStream(SYSTEM, buildReadingExplainMessage(detail), AI_EXPLAIN_BUDGET.passage, {
+        temperature: 0.3,
+        // 边收边渲染:正文一出现就往面板里填,用户不必对着「分析中...」干等到底。
+        onDelta: (partial) =>
+          setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: partial, error: null } })),
+      });
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

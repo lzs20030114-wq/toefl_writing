@@ -20,7 +20,7 @@ jest.mock("../lib/AuthContext", () => ({
   getSavedTier: jest.fn(() => "pro"),
 }));
 
-import { callAI, callAIMulti, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { callAI, callAIMulti, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_EXPLAIN_BUDGET } from "../lib/ai/client";
 
 const DETAIL = {
   prompt: "Will you be attending the conference next week?",
@@ -122,9 +122,28 @@ describe("AI 解释按钮：上游空正文时必须给出可见反馈", () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
     const body = JSON.parse(global.fetch.mock.calls[0][1].body);
-    expect(body.maxTokens).toBe(AI_HELPER_MAX_TOKENS);
-    // 推理型模型下 260-700 就是这次故障的量级，别再退回去。
+    // 造句是「单句」档；分档是 2026-09-14 加的（一刀切 2000 把查词这类快活儿也拖慢了）。
+    expect(body.maxTokens).toBe(AI_EXPLAIN_BUDGET.sentence);
+    // 关键：小预算必须配着「空正文自动升档」一起送，否则就是退回 09-13 那个故障。
+    expect(body.retryMaxTokens).toBe(AI_HELPER_MAX_TOKENS);
+    // 推理型模型下 260-700 就是这次故障的量级，升档上限别再退回去。
     expect(AI_HELPER_MAX_TOKENS).toBeGreaterThanOrEqual(1500);
+  });
+
+  test("满档调用不带 retryMaxTokens（同档重试是白花钱）", async () => {
+    mockAiResponse({ content: "讲解" });
+    const { callAIStream } = require("../lib/ai/client");
+    await callAIStream("s", "m", AI_EXPLAIN_BUDGET.passage, {});
+
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.maxTokens).toBe(AI_HELPER_MAX_TOKENS);
+    expect(body.retryMaxTokens).toBeUndefined();
+  });
+
+  test("分档表本身：快档要真的比满档小，且满档就是升档上限", () => {
+    expect(AI_EXPLAIN_BUDGET.word).toBeLessThan(AI_EXPLAIN_BUDGET.sentence);
+    expect(AI_EXPLAIN_BUDGET.sentence).toBeLessThan(AI_EXPLAIN_BUDGET.passage);
+    expect(AI_EXPLAIN_BUDGET.passage).toBe(AI_HELPER_MAX_TOKENS);
   });
 });
 
@@ -144,10 +163,12 @@ describe("所有 AI 辅助调用点都用共享预算", () => {
     const src = fs.readFileSync(path.join(process.cwd(), rel), "utf8");
     // 按行抓，别用 /callAI\([^)]*\)/ —— 实参里有 buildMessage(detail) 这类嵌套括号时
     // 那个正则会在第一个 ")" 提前截断，把已经改好的调用点误报成没改。
-    const calls = src.split("\n").filter((line) => /\bawait callAI\(/.test(line));
+    const calls = src.split("\n").filter((line) => /\bawait callAI(?:Stream)?\(/.test(line));
     expect(calls.length).toBeGreaterThan(0);
     calls.forEach((call) => {
-      expect(call).toContain("AI_HELPER_MAX_TOKENS");
+      // 2026-09-14 起预算按用途分档（AI_EXPLAIN_BUDGET.word/sentence/passage），
+      // 但仍必须来自那张表——就地写个数字就又回到「六份各调各的」的老路。
+      expect(call).toMatch(/AI_EXPLAIN_BUDGET\.(word|sentence|passage)/);
     });
   });
 

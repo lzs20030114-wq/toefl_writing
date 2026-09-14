@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAIStream, mapAiHelperError, AI_EXPLAIN_BUDGET } from "../../lib/ai/client";
 
 // 听力题的 AI 讲解。与 useReadingAiExplain / useCtwAiExplain / useBsAiExplain 同一骨架：
 // Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——而听力内部还要再分两支：
@@ -170,7 +170,12 @@ export function useListeningAiExplain() {
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
       const system = isRespondKind(detail?.subtype) ? SYSTEM_LCR : SYSTEM_MCQ;
-      const text = await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAIStream(system, buildListeningExplainMessage(detail), AI_EXPLAIN_BUDGET.passage, {
+        temperature: 0.3,
+        // 边收边渲染:正文一出现就往面板里填,用户不必对着「分析中...」干等到底。
+        onDelta: (partial) =>
+          setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: partial, error: null } })),
+      });
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

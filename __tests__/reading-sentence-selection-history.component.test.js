@@ -24,9 +24,12 @@ jest.mock("../lib/sessionStore", () => ({
   SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
-const callAI = jest.fn(async () => "AI 讲解：第二句点名了建筑与路面。");
+const callAIStream = jest.fn(async () => "AI 讲解：第二句点名了建筑与路面。");
 jest.mock("../lib/ai/client", () => ({
-  callAI: (...args) => callAI(...args),
+  // 照搬真模块再只替 callAIStream —— 整个模块替成字面量会让 AI_EXPLAIN_BUDGET
+  // 这类具名导出变成 undefined，调用点取 .sentence 时直接抛，测试却只看到「没调 AI」。
+  ...jest.requireActual("../lib/ai/client"),
+  callAIStream: (...args) => callAIStream(...args),
   mapAiHelperError: (e) => String(e?.message || e),
 }));
 
@@ -65,7 +68,7 @@ function session({ ssSelected = "S3", mcqSelected = "B" } = {}) {
 }
 
 beforeEach(() => {
-  callAI.mockClear();
+  callAIStream.mockClear();
   localStorage.clear();
 });
 
@@ -130,8 +133,8 @@ describe("错题本：选句题", () => {
     expect(screen.getByText(SS.options.S2)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "AI 解释" }));
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    const message = callAI.mock.calls[0][1];
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    const message = callAIStream.mock.calls[0][1];
     expect(message).toContain(`题目：${SS.stem}`);
     expect(message).toContain(`学生答案：${SS.options.S4}`);
     expect(message).toContain(`正确答案：${SS.options.S2}`);

@@ -37,13 +37,13 @@ jest.mock("../components/listening/AudioPlayer", () => ({
   default: () => null,
 }));
 
-const callAI = jest.fn(async () => "这是 AI 讲解：说话人在婉拒邀约。");
+const callAIStream = jest.fn(async () => "这是 AI 讲解：说话人在婉拒邀约。");
 jest.mock("../lib/ai/client", () => ({
   ...jest.requireActual("../lib/ai/client"),
-  callAI: (...args) => callAI(...args),
+  callAIStream: (...args) => callAIStream(...args),
 }));
 
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_EXPLAIN_BUDGET } from "../lib/ai/client";
 import { LCRDetail, LADetail, LCDetail } from "../components/listening/ListeningProgressView";
 import { ListeningMCQTask } from "../components/listening/ListeningMCQTask";
 import {
@@ -89,7 +89,7 @@ function aiButtons() {
 
 beforeEach(() => {
   TIER = "pro";
-  callAI.mockClear();
+  callAIStream.mockClear();
   localStorage.clear();
 });
 
@@ -118,17 +118,17 @@ describe("LCRDetail（应答题练习历史 / 真题记录）", () => {
     TIER = "free";
     render(<LCRDetail session={session()} />);
     expect(aiButtons()).toHaveLength(0);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
   });
 
   test("点了才调；走应答题那支 —— message 带说话人原话与语用功能，system 讲应答不讲定位", async () => {
     render(<LCRDetail session={session()} />);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
 
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
 
-    const [system, message, maxTokens, timeoutMs, temperature] = callAI.mock.calls[0];
+    const [system, message, maxTokens, opts] = callAIStream.mock.calls[0];
     expect(system).toContain("应答");
     expect(system).toContain("不要使用 markdown");
     // 应答题没有「原文第几段」可定位，不能套阅读/讲座那套话术
@@ -137,7 +137,9 @@ describe("LCRDetail（应答题练习历史 / 真题记录）", () => {
     expect(message).toContain("该句的语用功能：polite refusal with a reason");
     expect(message).toContain("学生选的回应：C. I didn't know you liked cooking.");
     expect(message).toContain("正确回应：B. That's too bad — maybe next week?");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, opts.temperature]).toEqual([AI_EXPLAIN_BUDGET.passage, 0.3]);
+    // 讲解走流式:超时判据在 callAIStream 里(静默超时),调用方不再自己传死的总时长。
+    expect(typeof opts.onDelta).toBe("function");
 
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
   });
@@ -146,12 +148,12 @@ describe("LCRDetail（应答题练习历史 / 真题记录）", () => {
     const { unmount } = render(<LCRDetail session={session()} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     unmount();
 
     render(<LCRDetail session={session()} />);
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -173,9 +175,9 @@ describe("LADetail（通知 / 讲座练习历史）", () => {
   test("答错的题有按钮；message 带讲座原文 + 题干 + 选项原文，走定位那支", async () => {
     render(<LADetail session={session()} />);
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
 
-    const [system, message] = callAI.mock.calls[0];
+    const [system, message] = callAIStream.mock.calls[0];
     expect(system).toContain("听力");
     expect(system).toContain("定位");
     expect(message).toContain(TRANSCRIPT);
@@ -192,8 +194,8 @@ describe("LADetail（通知 / 讲座练习历史）", () => {
   test("未作答：写「未作答」", async () => {
     render(<LADetail session={session({ results: [{ selected: null, correct: "B", isCorrect: false }] })} />);
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：未作答");
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    expect(callAIStream.mock.calls[0][1]).toContain("学生选择：未作答");
   });
 
   test("老记录没存题面（stem 与 options 都空）时不放按钮 —— 讲不了就不放", () => {
@@ -231,8 +233,8 @@ describe("LCDetail（对话练习历史）", () => {
       />
     );
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    const message = callAI.mock.calls[0][1];
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    const message = callAIStream.mock.calls[0][1];
     expect(message).toContain("Student: Do you know when the library closes tonight?");
     expect(message).toContain("Clerk: It closes at ten, but the study rooms stay open until midnight.");
     expect(message).toContain("学生选择：A. They close at ten");
@@ -267,11 +269,11 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
   test("交卷后答错的题有 AI 按钮；点了才计费，message 带讲座原文", async () => {
     answerWrong();
     expect(aiButtons()).toHaveLength(1);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
 
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    const message = callAI.mock.calls[0][1];
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    const message = callAIStream.mock.calls[0][1];
     expect(message).toContain(TRANSCRIPT);
     expect(message).toContain("学生选择：A. The age of the colony");
   });
@@ -303,21 +305,21 @@ describe("缓存不许跨题串味", () => {
   });
 
   test("两个 task 的第一题都是「选 A / 正确 B」，第二个 task 不会拿到第一个的解析", async () => {
-    callAI
+    callAIStream
       .mockImplementationOnce(async () => "第一个 task 的解析")
       .mockImplementationOnce(async () => "第二个 task 的解析");
 
     const first = render(<LADetail session={mockTask(Q1)} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText("第一个 task 的解析")).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     first.unmount();
 
     // 另一个 task：题目不同，但合成 id 会退化成同一个值
     render(<LADetail session={mockTask(Q2)} />);
     expect(screen.queryByText("第一个 task 的解析")).not.toBeInTheDocument();
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(2));
     expect(await screen.findByText("第二个 task 的解析")).toBeInTheDocument();
   });
 
@@ -325,12 +327,12 @@ describe("缓存不许跨题串味", () => {
     const first = render(<LADetail session={mockTask(Q1)} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     first.unmount();
 
     render(<LADetail session={mockTask(Q1)} />);
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
   });
 });
 

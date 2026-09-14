@@ -77,6 +77,12 @@
   另：RDL 盲审不一致 3、CTW 1.28A M2 第 6 空答案页重复、对齐层无块（3.2B·3.24·4.20 CTW、4.29 选择题答案页缺）未动。
 
 ## 进行中
+- [低] AI 讲解预算分档待用真实数据回校（2026-09-14 随「AI 深入解析超时」一起改）：
+  `lib/ai/client.js` 的 `AI_EXPLAIN_BUDGET` 现在按用途给 word 800 / sentence 1200 / passage 2000，
+  这三个数字是按「这次讲解要读多少东西」估的，**没有线上耗时数据支撑**。
+  空正文会由服务端在同一次请求里升档重来（`withBudgetEscalation`）并记一行
+  `errorType=budget_escalated`。攒一两周后看 /admin-api-errors：某一档升档频繁 = 给小了，
+  按那个频次调，别凭感觉改。反过来若某档几乎从不升档，可以再往下压换更快的响应。
 - [中] DeepSeek 余额告警（出处：2026-09-09 排查 502 时在 /admin-api-errors 看到 9/5 22:21–22:24 三条 **402 Insufficient Balance**，即账户欠费过一次，用户侧同样只看到「评分服务暂时不可用」）：建议 nightly-quality-monitor 或后台首页加余额/402 计数告警，欠费与网关故障要能分开。
 - [低] `/api/ai` 直连路径 2026-09-09 已改流式拼接 + 快速 5xx 单次重试 + `fail()` 不再丢上游原文（修前后台「详情」列一直为空）。**待验证**：下一次晚高峰观察 api_error_feedback 里 stage=deepseek 的 error_detail 是否带 `upstream 5xx:` 前缀；若仍成批出现且原文是 503 overloaded，下一步把 samples=3 在重试时降为 1 路。
 

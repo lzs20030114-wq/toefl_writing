@@ -31,13 +31,13 @@ jest.mock("../lib/sessionStore", () => ({
   SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
-const callAI = jest.fn(async () => "这是 AI 讲解：答案句在第二段末尾。");
+const callAIStream = jest.fn(async () => "这是 AI 讲解：答案句在第二段末尾。");
 jest.mock("../lib/ai/client", () => ({
   ...jest.requireActual("../lib/ai/client"),
-  callAI: (...args) => callAI(...args),
+  callAIStream: (...args) => callAIStream(...args),
 }));
 
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_EXPLAIN_BUDGET } from "../lib/ai/client";
 import { RDLDetail } from "../components/reading/ReadingProgressView";
 import { RDLTask } from "../components/reading/RDLTask";
 import { buildReadingExplainMessage } from "../components/reading/useReadingAiExplain";
@@ -91,7 +91,7 @@ function aiButtons() {
 
 beforeEach(() => {
   TIER = "pro";
-  callAI.mockClear();
+  callAIStream.mockClear();
   localStorage.clear();
 });
 
@@ -106,17 +106,17 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     render(<RDLDetail session={historySession()} />);
     expect(screen.getByText(Q_DETAIL.stem)).toBeInTheDocument();
     expect(aiButtons()).toHaveLength(0);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
   });
 
   test("渲染不自动调 API；点按钮才调，message 带原文 + 题干 + 选项原文 + 正确答案", async () => {
     render(<RDLDetail session={historySession()} />);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
 
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
 
-    const [system, message, maxTokens, timeoutMs, temperature] = callAI.mock.calls[0];
+    const [system, message, maxTokens, opts] = callAIStream.mock.calls[0];
     expect(system).toContain("TOEFL 阅读");
     // 面板是 pre-wrap 纯文本渲染，markdown 星号会原样显示
     expect(system).toContain("不要使用 markdown");
@@ -124,7 +124,9 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     expect(message).toContain(Q_DETAIL.stem);
     expect(message).toContain("学生选择：B. A flat fee of fifteen dollars each");
     expect(message).toContain("正确答案：A. Between three and twenty-five dollars");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, opts.temperature]).toEqual([AI_EXPLAIN_BUDGET.passage, 0.3]);
+    // 讲解走流式:超时判据在 callAIStream 里(静默超时),调用方不再自己传死的总时长。
+    expect(typeof opts.onDelta).toBe("function");
 
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
   });
@@ -135,8 +137,8 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
       questions: [Q_DETAIL],
     })} />);
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：未作答");
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    expect(callAIStream.mock.calls[0][1]).toContain("学生选择：未作答");
   });
 
   test("老记录没存题面（questions 缺失）时不放按钮 —— 讲不了就不放", () => {
@@ -148,12 +150,12 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     const { unmount } = render(<RDLDetail session={historySession()} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     unmount();
 
     render(<RDLDetail session={historySession()} />);
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -172,18 +174,18 @@ describe("RDLTask 交卷后的逐题复盘", () => {
   test("交卷前没有 AI 按钮（做题中不该出现答案线索）", () => {
     render(<RDLTask item={item} title="Read in Daily Life" onComplete={() => {}} onBack={() => {}} />);
     expect(aiButtons()).toHaveLength(0);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
   });
 
   test("交卷后答错的那题有 AI 按钮；点了才计费，message 带原文与学生选项", async () => {
     submitWrong();
     // 交卷后回到第 1 题（答错的那题）
     expect(aiButtons()).toHaveLength(1);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
 
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    const message = callAI.mock.calls[0][1];
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    const message = callAIStream.mock.calls[0][1];
     expect(message).toContain(PASSAGE);
     expect(message).toContain("学生选择：B. A flat fee of fifteen dollars each");
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
@@ -218,8 +220,8 @@ describe("RDLTask 交卷后的逐题复盘", () => {
     expect(aiButtons()).toHaveLength(1);
 
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    const message = callAI.mock.calls[0][1];
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    const message = callAIStream.mock.calls[0][1];
     expect(message).toContain("选句题");
     expect(message).toContain("学生选的句子：Beta sits still.");
     expect(message).toContain("正确句子：Alpha runs fast.");
@@ -270,20 +272,20 @@ describe("缓存不许跨题串味", () => {
   });
 
   test("两份记录的第一题都是「选 B / 正确 A」，第二份不会拿到第一份的解析", async () => {
-    callAI
+    callAIStream
       .mockImplementationOnce(async () => "第一份记录的解析")
       .mockImplementationOnce(async () => "第二份记录的解析");
 
     const first = render(<RDLDetail session={legacy(Q_A)} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText("第一份记录的解析")).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     first.unmount();
 
     render(<RDLDetail session={legacy(Q_B)} />);
     expect(screen.queryByText("第一份记录的解析")).not.toBeInTheDocument();
     fireEvent.click(aiButtons()[0]);
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(2));
     expect(await screen.findByText("第二份记录的解析")).toBeInTheDocument();
   });
 
@@ -291,12 +293,12 @@ describe("缓存不许跨题串味", () => {
     const first = render(<RDLDetail session={legacy(Q_A)} />);
     fireEvent.click(aiButtons()[0]);
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     first.unmount();
 
     render(<RDLDetail session={legacy(Q_A)} />);
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
   });
 });
 

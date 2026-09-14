@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAIStream, mapAiHelperError, AI_EXPLAIN_BUDGET } from "../../lib/ai/client";
 
 // CTW（阅读填词 / C-test）专用的 AI 讲解。与 useReadingAiExplain / useMcqAiExplain
 // 同一骨架（Pro 门 + localStorage 缓存 + 点了才计费），差别只在 prompt：
@@ -136,9 +136,15 @@ export function useCtwAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      // 预算见 AI_HELPER_MAX_TOKENS 的注释：这里曾单独调到 700（350 会把讲解截断在
-      // 句子中间），但同一个根因在 6 个辅助调用点各有一份,现已统一到共享常量。
-      const text = await callAI(SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      // 预算见 AI_EXPLAIN_BUDGET 的注释：这里曾单独调到 700（350 会把讲解截断在
+      // 句子中间），后来 6 个调用点统一到一个常量，现在按用途分档——CTW 原文才
+      // ~120 词，属短文档；万一推理吃光小预算，服务端会在同一次请求里升档重来。
+      const text = await callAIStream(SYSTEM, buildMessage(detail), AI_EXPLAIN_BUDGET.sentence, {
+        temperature: 0.3,
+        // 边收边渲染:正文一出现就往面板里填,用户不必对着「分析中...」干等到底。
+        onDelta: (partial) =>
+          setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: partial, error: null } })),
+      });
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

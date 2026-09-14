@@ -34,15 +34,15 @@ jest.mock("../lib/sessionStore", () => ({
   SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
-const callAI = jest.fn(async () => "这是 AI 讲解：被动语态要求过去分词。");
-// 只替换 callAI，其余照搬真模块 —— 整个模块替成一个字面量会让 AI_HELPER_MAX_TOKENS
+const callAIStream = jest.fn(async () => "这是 AI 讲解：被动语态要求过去分词。");
+// 只替换 callAIStream，其余照搬真模块 —— 整个模块替成一个字面量会让 AI_HELPER_MAX_TOKENS
 // 这类具名导出变成 undefined，测试便断言不到组件真正传出去的预算。
 jest.mock("../lib/ai/client", () => ({
   ...jest.requireActual("../lib/ai/client"),
-  callAI: (...args) => callAI(...args),
+  callAIStream: (...args) => callAIStream(...args),
 }));
 
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_EXPLAIN_BUDGET } from "../lib/ai/client";
 import { CTWDetail } from "../components/reading/ReadingProgressView";
 import { locateBlankSentence } from "../components/reading/useCtwAiExplain";
 
@@ -117,7 +117,7 @@ function wrongChips() {
 
 beforeEach(() => {
   TIER = "pro";
-  callAI.mockClear();
+  callAIStream.mockClear();
   try { localStorage.clear(); } catch {}
 });
 
@@ -265,7 +265,7 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     expect(within(panel).getByText("shaping")).toBeInTheDocument();
     expect(within(panel).queryByText(/AI 深入解析/)).not.toBeInTheDocument();
     expect(within(panel).queryAllByRole("button")).toHaveLength(0);
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
   });
 
   test("Pro：展开不自动调 API；点 AI 按钮才调，message 带正确答案 + 学生答案 + 所在句子", async () => {
@@ -273,12 +273,12 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     fireEvent.click(wrongChips()[0]);
     const panel = screen.getByTestId("ctw-blank-panel");
     // 展开本身零成本
-    expect(callAI).not.toHaveBeenCalled();
+    expect(callAIStream).not.toHaveBeenCalled();
 
     fireEvent.click(within(panel).getByRole("button", { name: /AI 深入解析/ }));
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
 
-    const [system, message, maxTokens, timeoutMs, temperature] = callAI.mock.calls[0];
+    const [system, message, maxTokens, opts] = callAIStream.mock.calls[0];
     expect(system).toContain("C-test");
     expect(message).toContain("正确答案：shaped");
     expect(message).toContain("学生填写：shaping");
@@ -288,7 +288,9 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     expect(message).toContain(PASSAGE);
     // 预算收口到共享常量（2026-09-13：260-700 会被 v4-flash 的推理 token 吃光，
     // 上游回空正文 → 「AI 解释点了不出内容」）。断言常量本身，别再写死数字。
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, opts.temperature]).toEqual([AI_EXPLAIN_BUDGET.sentence, 0.3]);
+    // 讲解走流式:超时判据在 callAIStream 里(静默超时),调用方不再自己传死的总时长。
+    expect(typeof opts.onDelta).toBe("function");
 
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
   });
@@ -297,9 +299,9 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     render(<CTWDetail session={liveSession()} />);
     fireEvent.click(wrongChips()[1]);
     fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
-    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    expect(callAI.mock.calls[0][1]).toContain("学生填写：未作答");
-    expect(callAI.mock.calls[0][1]).toContain("正确答案：changed");
+    await waitFor(() => expect(callAIStream).toHaveBeenCalledTimes(1));
+    expect(callAIStream.mock.calls[0][1]).toContain("学生填写：未作答");
+    expect(callAIStream.mock.calls[0][1]).toContain("正确答案：changed");
   });
 
   test("解析结果进 localStorage 缓存，重新展开时自动回填且不再计费", async () => {
@@ -307,12 +309,12 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     fireEvent.click(wrongChips()[0]);
     fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1);
+    expect(callAIStream).toHaveBeenCalledTimes(1);
     unmount();
 
     render(<CTWDetail session={liveSession()} />);
     fireEvent.click(wrongChips()[0]);
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
-    expect(callAI).toHaveBeenCalledTimes(1); // 缓存命中，没有二次计费
+    expect(callAIStream).toHaveBeenCalledTimes(1); // 缓存命中，没有二次计费
   });
 });

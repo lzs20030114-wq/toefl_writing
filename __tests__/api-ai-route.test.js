@@ -454,4 +454,270 @@ describe("/api/ai route", () => {
       expect(mockInsertCalls.filter((c) => c.table === "api_error_feedback")).toHaveLength(0);
     });
   });
+
+  // ——— 流式回传 ————————————————————————————————————————————————————
+  //
+  // 2026-09-14：讲解类调用点了几十秒弹「AI 响应超时，请重试」。根因是本路由把上游
+  // 整条 SSE 拼完才回 JSON，而 v4-flash 推理阶段不产 content —— 浏览器几十秒收不到
+  // 任何字节，客户端 60s 总时长超时必然误杀一次**成功**的调用（用量还照扣）。
+  // 这个 describe 锁「服务端确实在边收边转发，且推理阶段有心跳」。
+  describe("stream:true 边收边转发", () => {
+    // 造一个 SSE 形状的上游响应：body 是异步可迭代（route 用 for await 读）。
+    function upstreamSse(lines) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { get: () => "text/event-stream" },
+        body: (async function* () {
+          for (const line of lines) yield Buffer.from(line, "utf8");
+        })(),
+      };
+    }
+
+    function streamRequest(extra = {}) {
+      return new Request("http://localhost/api/ai", {
+        method: "POST",
+        body: JSON.stringify({ system: "s", message: "m", maxTokens: 2000, stream: true, ...extra }),
+      });
+    }
+
+    async function readAll(res) {
+      const decoder = new TextDecoder("utf-8");
+      let out = "";
+      for await (const chunk of res.body) {
+        out += typeof chunk === "string" ? chunk : decoder.decode(chunk, { stream: true });
+      }
+      return out;
+    }
+
+    test("正文增量逐段发给浏览器，最后一条 done", async () => {
+      global.fetch = jest.fn().mockResolvedValue(
+        upstreamSse([
+          'data: {"choices":[{"delta":{"content":"被动语态"}}]}\n\n',
+          'data: {"choices":[{"delta":{"content":"要求过去分词。"}}]}\n\n',
+          "data: [DONE]\n\n",
+        ]),
+      );
+
+      const res = await POST(streamRequest());
+      expect(res.status).toBe(200);
+      expect(res.headers.get("content-type")).toContain("text/event-stream");
+      // 中间层(Nginx 类)默认会缓冲响应，那样流式就退化回一次性返回了。
+      expect(res.headers.get("x-accel-buffering")).toBe("no");
+
+      const body = await readAll(res);
+      expect(body).toContain('data: {"delta":"被动语态"}');
+      expect(body).toContain('data: {"delta":"要求过去分词。"}');
+      expect(body).toContain('data: {"done":true}');
+    });
+
+    test("推理阶段（只有 reasoning_content）也发心跳——这正是旧版几十秒零字节的那一段", async () => {
+      global.fetch = jest.fn().mockResolvedValue(
+        upstreamSse([
+          'data: {"choices":[{"delta":{"reasoning_content":"先想想语法"}}]}\n\n',
+          'data: {"choices":[{"delta":{"reasoning_content":"再想想搭配"}}]}\n\n',
+          'data: {"choices":[{"delta":{"content":"正文"}}]}\n\n',
+          "data: [DONE]\n\n",
+        ]),
+      );
+
+      const body = await readAll(await POST(streamRequest()));
+      // 心跳是 SSE 注释行：客户端拿它清零静默计时器，但不当数据。
+      expect((body.match(/^: tick$/gm) || []).length).toBe(2);
+      // 推理内容本身绝不能漏给前端（那是模型的草稿，不是讲解）。
+      expect(body).not.toContain("先想想语法");
+      expect(body).toContain('data: {"delta":"正文"}');
+    });
+
+    test("上游回空正文 → 流里报错，不发 done（否则前端拿到「成功但没内容」）", async () => {
+      global.fetch = jest.fn().mockResolvedValue(upstreamSse(["data: [DONE]\n\n"]));
+
+      const body = await readAll(await POST(streamRequest()));
+      expect(body).toContain('"error"');
+      expect(body).toContain('"status":502');
+      expect(body).not.toContain('"done":true');
+    });
+
+    test("上游 5xx → 流里报错事件", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+        text: async () => "upstream down",
+        headers: { get: () => "application/json" },
+      });
+
+      const body = await readAll(await POST(streamRequest()));
+      expect(body).toContain('"status":502');
+      expect(body).not.toContain('"done":true');
+    });
+
+    test("上游忽略 stream 回整包 JSON 时，补发一条全文 delta", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: "整包回来的讲解" } }] }),
+      });
+
+      const body = await readAll(await POST(streamRequest()));
+      expect(body).toContain('data: {"delta":"整包回来的讲解"}');
+      expect(body).toContain('data: {"done":true}');
+    });
+
+    test("多采样（写作评分）不受影响，仍是一次性 JSON", async () => {
+      global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: "报告" } }] }),
+      });
+
+      const res = await POST(streamRequest({ samples: 3 }));
+      expect(res.headers.get("content-type")).toContain("application/json");
+      const parsed = await res.json();
+      expect(parsed.contents).toHaveLength(3);
+    });
+  });
+
+  // ——— 空正文自动升档 ————————————————————————————————————————————————
+  //
+  // 2026-09-14：讲解预算按用途分档（查词 800 / 单句 1200 / 整篇 2000）之后，快档
+  // 偶尔会被长推理吃光（这正是 09-13 那次「点了不出内容」的机制）。所以小预算必须
+  // 配一道升档：同一次请求里换大预算重来，用户只经历一次调用、也只扣一次用量。
+  // 没有这道保险，分档就等于把修好的故障放回去。
+  describe("retryMaxTokens：空正文在同一次请求里升档重来", () => {
+    function jsonUpstream(contents) {
+      const queue = [...contents];
+      return jest.fn().mockImplementation(async () => ({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: queue.shift() ?? "" } }] }),
+      }));
+    }
+
+    function req(extra = {}) {
+      return new Request("http://localhost/api/ai", {
+        method: "POST",
+        body: JSON.stringify({ system: "s", message: "m", maxTokens: 800, ...extra }),
+      });
+    }
+
+    test("第一次空 → 用 retryMaxTokens 再来一次，返回第二次的正文", async () => {
+      global.fetch = jsonUpstream(["", "升档后出来的讲解"]);
+
+      const res = await POST(req({ retryMaxTokens: 2000 }));
+      expect(res.status).toBe(200);
+      expect((await res.json()).content).toBe("升档后出来的讲解");
+
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body).max_tokens).toBe(800);
+      expect(JSON.parse(global.fetch.mock.calls[1][1].body).max_tokens).toBe(2000);
+    });
+
+    test("第一次就有正文 → 绝不多打一次（升档是兜底，不是常态）", async () => {
+      global.fetch = jsonUpstream(["一次就够"]);
+
+      const res = await POST(req({ retryMaxTokens: 2000 }));
+      expect((await res.json()).content).toBe("一次就够");
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    test("没带 retryMaxTokens（或不比 maxTokens 大）→ 维持原样回 502，不做同档重试", async () => {
+      global.fetch = jsonUpstream(["", "不该被用到"]);
+      const res = await POST(req({ retryMaxTokens: 800 }));
+
+      expect(res.status).toBe(502);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    test("非法 retryMaxTokens 被拒（别让它变成放大调用的口子）", async () => {
+      global.fetch = jsonUpstream(["x"]);
+      const res = await POST(req({ retryMaxTokens: 99999 }));
+      expect(res.status).toBe(400);
+    });
+
+    test("时间不够时不升档：两次各吃满预算会被 Vercel 在 maxDuration 处斩断", async () => {
+      // 第一次调用慢到把共享截止线几乎用光（内部 168s 预算 - 这里的 150s = 剩 15s，
+      // 低于 30s 的升档门槛），此时宁可回一条能看懂的 502，也不要开第二次然后被杀。
+      jest.useFakeTimers({ doNotFake: ["nextTick", "setImmediate"] });
+      try {
+        global.fetch = jest.fn().mockImplementation(async () => {
+          jest.advanceTimersByTime(150000);
+          return { ok: true, json: async () => ({ choices: [{ message: { content: "" } }] }) };
+        });
+
+        const res = await POST(req({ retryMaxTokens: 2000 }));
+        expect(res.status).toBe(502);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    test("升档两次都空 → 还是 502，不会伪装成成功", async () => {
+      global.fetch = jsonUpstream(["", ""]);
+      const res = await POST(req({ retryMaxTokens: 2000 }));
+      expect(res.status).toBe(502);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    test("流式路径同样升档，且对前端透明（第一次没发出任何 delta）", async () => {
+      let call = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        call += 1;
+        const lines =
+          call === 1
+            ? ['data: {"choices":[{"delta":{"reasoning_content":"想太久"}}]}\n\n', "data: [DONE]\n\n"]
+            : ['data: {"choices":[{"delta":{"content":"升档后的讲解"}}]}\n\n', "data: [DONE]\n\n"];
+        return {
+          ok: true,
+          status: 200,
+          headers: { get: () => "text/event-stream" },
+          body: (async function* () {
+            for (const l of lines) yield Buffer.from(l, "utf8");
+          })(),
+        };
+      });
+
+      const res = await POST(req({ retryMaxTokens: 2000, stream: true }));
+      const decoder = new TextDecoder("utf-8");
+      let out = "";
+      for await (const chunk of res.body) out += decoder.decode(chunk, { stream: true });
+
+      expect(call).toBe(2);
+      // 只有一条 delta：第一次是空的，用户不会看到半截讲解接另一半。
+      expect((out.match(/"delta"/g) || []).length).toBe(1);
+      expect(out).toContain('data: {"delta":"升档后的讲解"}');
+      expect(out).toContain('data: {"done":true}');
+    });
+  });
+
+  describe("升档要留痕（调档的唯一真实依据）", () => {
+    beforeEach(() => {
+      mockSupabaseConfigured = true;
+      mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };
+      mockInsertCalls.length = 0;
+    });
+    afterEach(() => {
+      mockSupabaseConfigured = false;
+      mockUsersRow = null;
+    });
+
+    test("升档成功时记一行 budget_escalated（某档频繁升档 = 给小了）", async () => {
+      const queue = ["", "升档后出来的讲解"];
+      global.fetch = jest.fn().mockImplementation(async () => ({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: queue.shift() ?? "" } }] }),
+      }));
+
+      const res = await POST(
+        new Request("http://localhost/api/ai", {
+          method: "POST",
+          body: JSON.stringify({ system: "s", message: "m", maxTokens: 800, retryMaxTokens: 2000, userCode: "ABC123" }),
+        }),
+      );
+      expect(res.status).toBe(200);
+
+      const logs = mockInsertCalls.filter((c) => c.table === "api_error_feedback");
+      expect(logs).toHaveLength(1);
+      expect(logs[0].row.error_type).toBe("budget_escalated");
+      expect(logs[0].row.error_message).toContain("800");
+      expect(logs[0].row.error_message).toContain("2000");
+    });
+  });
 });
