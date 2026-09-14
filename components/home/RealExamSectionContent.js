@@ -108,7 +108,7 @@ export const REAL_EXAM_TASKS = [
     href: "/real-bank?type=lcr",
     n: "Listening 1",
     t: "听力应答真题",
-    d: "回忆版 Choose a Response，配真题录音，一题一段。",
+    d: "回忆版 Choose a Response，按考试日期整套练，配真题录音。",
     it: `${REAL_LISTENING_COUNTS.lcr} 题`,
   },
   {

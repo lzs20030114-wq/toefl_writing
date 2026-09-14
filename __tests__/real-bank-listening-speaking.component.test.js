@@ -51,10 +51,14 @@ jest.mock("../lib/history/retry", () => ({ stashPromptSnapshot: jest.fn() }));
 
 // 听力 / 口语任务组件：只回显关键 props + 提供一个「交卷」按钮。
 jest.mock("../components/listening/LCRTask", () => ({
-  LCRTask: ({ item, isPractice, onComplete }) => (
+  LCRTask: ({ item, batchItems, isPractice, onComplete }) => (
     <div data-testid="lcr-task">
-      id={item.id} speaker={item.speaker} audio={String(item.audio_url)} practice={String(isPractice)}
-      <button data-testid="lcr-finish" onClick={() => onComplete({ correct: 1, total: 1, results: [{ correct: true }] })}>finish</button>
+      single={String(!!item)} n={batchItems.length} ids={batchItems.map((it) => it.id).join("|")}
+      audio={String(batchItems[0].audio_url)} practice={String(isPractice)}
+      <button data-testid="lcr-finish" onClick={() => onComplete({
+        correct: batchItems.length, total: batchItems.length,
+        results: batchItems.map((it) => ({ itemId: it.id, selected: it.answer, correct: it.answer, isCorrect: true })),
+      })}>finish</button>
     </div>
   ),
 }));
@@ -91,16 +95,33 @@ jest.mock("../components/speaking/InterviewTask", () => ({
 // jest.mock 工厂是 hoist 到文件顶部执行的，闭包外的常量在工厂里不可见 ——
 // 所以每份夹具都把 provenance / options / audio_url 原样写全，不抽公共常量。
 
+// LCR 夹具：同一天 2 道（库里顺序故意倒着放，验套内按 Module → 题号排）+ 另一天 1 道 → 应打包成 2 套。
 jest.mock("../data/realBank/listening/lcr.json", () => ({
-  tier: "recalled", count: 1,
-  items: [{
-    id: "real_lcr_fx_1", speaker: "How will you plan the weekend trip?",
-    options: { A: "Alpha option", B: "Bravo option", C: "Charlie option", D: "Delta option" },
-    answer: "D", context: "campus_academic", difficulty: "medium",
-    audio_url: "https://cdn.example.com/listening_audio/real/lcr_fx_1.mp3",
-    real: true, tier: "recalled", source: "rf0610", date: "2026-06-10",
-    source_flags: [{ code: "vendor_reformatted", severity: "warn", detail: "商家重排版 docx，答案 AI 补写" }],
-  }],
+  tier: "recalled", count: 3,
+  items: [
+    {
+      id: "real_lcr_fx_1_02", speaker: "Could you hold the door for me?",
+      options: { A: "Alpha option", B: "Bravo option", C: "Charlie option", D: "Delta option" },
+      answer: "A", context: "campus_daily", difficulty: "medium",
+      audio_url: "https://cdn.example.com/listening_audio/real/lcr_fx_1_02.mp3",
+      real: true, tier: "recalled", source: "rf0610", date: "2026-06-10", source_flags: [],
+    },
+    {
+      id: "real_lcr_fx_1_01", speaker: "How will you plan the weekend trip?",
+      options: { A: "Alpha option", B: "Bravo option", C: "Charlie option", D: "Delta option" },
+      answer: "D", context: "campus_academic", difficulty: "medium",
+      audio_url: "https://cdn.example.com/listening_audio/real/lcr_fx_1_01.mp3",
+      real: true, tier: "recalled", source: "rf0610", date: "2026-06-10",
+      source_flags: [{ code: "vendor_reformatted", severity: "warn", detail: "商家重排版 docx，答案 AI 补写" }],
+    },
+    {
+      id: "real_lcr_fy_1_01", speaker: "Is the library open late tonight?",
+      options: { A: "Alpha option", B: "Bravo option", C: "Charlie option", D: "Delta option" },
+      answer: "B", context: "campus_daily", difficulty: "medium",
+      audio_url: "https://cdn.example.com/listening_audio/real/lcr_fy_1_01.mp3",
+      real: true, tier: "recalled", source: "rf0615", date: "2026-06-15", source_flags: [],
+    },
+  ],
 }));
 jest.mock("../data/realBank/listening/lc.json", () => ({
   tier: "recalled", count: 1,
@@ -148,7 +169,7 @@ jest.mock("../data/realBank/listening/lat.json", () => ({
     source_flags: [{ code: "vendor_reformatted", severity: "warn", detail: "商家重排版 docx，答案 AI 补写" }],
   }],
 }));
-jest.mock("../data/realBank/listening/counts.json", () => ({ lcr: 1, lc: 1, la: 1, lat: 1 }));
+jest.mock("../data/realBank/listening/counts.json", () => ({ lcr: 3, lc: 1, la: 1, lat: 1 }));
 jest.mock("../data/realBank/speaking/repeat.json", () => ({
   tier: "recalled", count: 1,
   items: [{
@@ -190,8 +211,22 @@ beforeEach(() => {
 });
 
 describe("真题专区：听力 / 口语六个入口都有 picker", () => {
+  test("?type=lcr → 按考试日期打包：3 道题 = 2 套，卡片标题带题数", async () => {
+    mockSearch = new URLSearchParams("type=lcr");
+    render(<RealBankPage />);
+    expect(await screen.findByTestId("picker-title")).toHaveTextContent("听力应答真题");
+    expect(screen.getByTestId("picker-section").textContent).toBe("真题专区 | Choose a Response");
+    expect(screen.getByTestId("picker-count").textContent).toBe("2");
+    expect(screen.getByTestId("picker-first-title").textContent).toBe("第 1 套 · 2 题");
+    expect(screen.getByTestId("picker-first-subtitle").textContent).toContain("2026.06.10");
+    expect(screen.getByTestId("picker-first-subtitle").textContent).toContain("回忆版");
+    // 套里有一卷是重排版 → 整套亮徽章。
+    expect(screen.getByTestId("picker-first-badge")).toHaveTextContent("双票复核");
+    expect(screen.getByTestId("picker-first-tag").textContent).toBe("回忆版");
+    expect(screen.getByTestId("picker-desc").textContent).toContain("按考试日期整套练");
+  });
+
   test.each([
-    ["lcr", "听力应答真题", "真题专区 | Choose a Response"],
     ["lc", "听力对话真题", "真题专区 | Listen to a Conversation"],
     ["la", "听力通知真题", "真题专区 | Listen to an Announcement"],
     ["lat", "听力讲座真题", "真题专区 | Listen to an Academic Talk"],
@@ -237,14 +272,16 @@ describe("真题专区：听力 / 口语六个入口都有 picker", () => {
 });
 
 describe("真题专区：听力选题 → 任务组件", () => {
-  test("?type=lcr → LCRTask 拿到 item + 真题音频 URL（practice 不限次重听）", async () => {
+  test("?type=lcr → LCRTask 以 batchItems 拿到整套（同一天的题，按题号排）+ 真题音频 URL", async () => {
     mockSearch = new URLSearchParams("type=lcr");
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
 
     const task = screen.getByTestId("lcr-task");
-    expect(task.textContent).toContain("id=real_lcr_fx_1");
-    expect(task.textContent).toContain("audio=https://cdn.example.com/listening_audio/real/lcr_fx_1.mp3");
+    expect(task.textContent).toContain("single=false");
+    expect(task.textContent).toContain("n=2");
+    expect(task.textContent).toContain("ids=real_lcr_fx_1_01|real_lcr_fx_1_02");
+    expect(task.textContent).toContain("audio=https://cdn.example.com/listening_audio/real/lcr_fx_1_01.mp3");
     // 默认档 = standard → 每题限时作答（isPractice=false，倒计时由 LCRTask 自己走）。
     expect(task.textContent).toContain("practice=false");
   });
@@ -314,23 +351,34 @@ describe("真题专区：口语选题 → 任务组件（录音 + STT 链路复�
 });
 
 describe("真题专区：听力 / 口语做完 → 历史 + 已练", () => {
-  test("LCR 交卷 → listening 历史（details.items 形状照 app/listening/page.js）+ LISTENING_LCR 已练", async () => {
+  test("LCR 整套交卷 → 一条 listening 历史（details.items 装整套，形状照 app/listening/page.js）+ 每题打已练", async () => {
     mockSearch = new URLSearchParams("type=lcr");
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
     fireEvent.click(screen.getByTestId("lcr-finish"));
 
-    expect([...loadDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR)]).toContain("real_lcr_fx_1");
+    const done = [...loadDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR)];
+    expect(done).toEqual(expect.arrayContaining(["real_lcr_fx_1_01", "real_lcr_fx_1_02"]));
+    expect(done).not.toContain("real_lcr_fy_1_01");
 
-    const sess = (loadHist().sessions || []).find((s) => s.details?.itemIds?.includes("real_lcr_fx_1"));
-    expect(sess).toBeTruthy();
+    const sessions = (loadHist().sessions || []).filter((s) => s.details?.subtype === "lcr");
+    expect(sessions).toHaveLength(1);
+    const sess = sessions[0];
     expect(sess.type).toBe("listening");
-    expect(sess.details.subtype).toBe("lcr");
     expect(sess.details.real).toBe(true);
+    expect(sess.total).toBe(2);
     expect(sess.band).toBe(6);
+    expect(sess.details.itemIds).toEqual(["real_lcr_fx_1_01", "real_lcr_fx_1_02"]);
     // lib/listeningMistakes.js 抽 LCR 错题只认 details.items[]，缺了错题本捡不着。
-    expect(sess.details.items[0].id).toBe("real_lcr_fx_1");
+    expect(sess.details.items.map((it) => it.id)).toEqual(["real_lcr_fx_1_01", "real_lcr_fx_1_02"]);
     expect(sess.details.items[0].options.A).toBeTruthy();
+  });
+
+  test("LCR 套的已练：整套每题都练过才亮，只练过其中一题不算", async () => {
+    addDoneIds(DONE_STORAGE_KEYS.LISTENING_LCR, ["real_lcr_fx_1_01", "real_lcr_fy_1_01"]);
+    mockSearch = new URLSearchParams("type=lcr");
+    render(<RealBankPage />);
+    expect((await screen.findByTestId("picker-done")).textContent).toBe("real-lcr-set-2026-06-15");
   });
 
   test.each([

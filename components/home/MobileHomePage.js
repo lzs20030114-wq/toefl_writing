@@ -786,7 +786,7 @@ function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier
     { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", count: `${REAL_READING_COUNTS.ctw} 篇` },
     { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", count: `${REAL_READING_COUNTS.rdl} 篇` },
     { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", count: `${REAL_READING_COUNTS.ap} 篇` },
-    { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，配真题录音", count: `${REAL_LISTENING_COUNTS.lcr} 题` },
+    { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，按考试日期整套练", count: `${REAL_LISTENING_COUNTS.lcr} 题` },
     { g: "听力", type: "lc", n: "Listening 2", t: "听力对话真题", d: "回忆版校园对话，一段多题", count: `${REAL_LISTENING_COUNTS.lc} 段` },
     { g: "听力", type: "la", n: "Listening 3", t: "听力通知真题", d: "回忆版校园通知播报", count: `${REAL_LISTENING_COUNTS.la} 段` },
     { g: "听力", type: "lat", n: "Listening 4", t: "听力讲座真题", d: "回忆版学术讲座，一段多题", count: `${REAL_LISTENING_COUNTS.lat} 段` },

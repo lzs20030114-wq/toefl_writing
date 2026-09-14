@@ -26,12 +26,13 @@ import {
   getRealLATItems,
   getRealLCItems,
   getRealLCRItems,
+  getRealLCRSets,
   getRealRDLItems,
   getRealRepeatSets,
   mapRealInterviewToPicker,
   mapRealLAToPicker,
   mapRealLATToPicker,
-  mapRealLCRToPicker,
+  mapRealLCRSetsToPicker,
   mapRealLCToPicker,
   mapRealRepeatToPicker,
   REAL_LISTENING_COUNTS,
@@ -40,6 +41,7 @@ import {
 } from "../lib/realBank";
 
 const LCR = getRealLCRItems();
+const LCR_SETS = getRealLCRSets();
 const LC = getRealLCItems();
 const LA = getRealLAItems();
 const LAT = getRealLATItems();
@@ -195,9 +197,62 @@ describe("真题口语：任务组件吃的形状", () => {
   });
 });
 
+describe("真题 LCR：按考试日期打包成套（一天 = 一套，不是一题一套）", () => {
+  test("每道题恰好进一套，一题不丢不重", () => {
+    const ids = LCR_SETS.flatMap((s) => s.items.map((it) => it.id));
+    expect(ids.length).toBe(LCR.length);
+    expect(new Set(ids).size).toBe(LCR.length);
+  });
+
+  test("一套只含同一个考试日期，且不同套日期互不相同（按日期升序）", () => {
+    const dates = LCR_SETS.map((s) => s.date);
+    for (const s of LCR_SETS) {
+      expect(s.items.length).toBeGreaterThan(0);
+      expect(new Set(s.items.map((it) => it.date))).toEqual(new Set([s.date]));
+    }
+    expect(new Set(dates).size).toBe(dates.length);
+    expect([...dates].sort()).toEqual(dates);
+    // 真库里同一天常有十几道应答题 —— 套数必须远少于题数，否则就是退回了一题一套。
+    expect(LCR_SETS.length).toBeLessThan(LCR.length / 3);
+  });
+
+  test("套 id 由日期拼成（新增卷不会让老套 id 错位），不与题目 id 撞", () => {
+    for (const s of LCR_SETS) {
+      expect(s.id).toBe(`real-lcr-set-${s.date}`);
+      expect(s.items.some((it) => it.id === s.id)).toBe(false);
+    }
+  });
+
+  test("套内顺序 = 卷次 → Module → 题号（与原卷作答顺序一致）", () => {
+    const pos = (id) => /_(\d+)_(\d+)$/.exec(id).slice(1).map(Number);
+    for (const s of LCR_SETS) {
+      for (let i = 1; i < s.items.length; i++) {
+        const a = s.items[i - 1];
+        const b = s.items[i];
+        const bySource = a.source.localeCompare(b.source);
+        if (bySource !== 0) { expect(bySource).toBeLessThan(0); continue; }
+        const [ma, qa] = pos(a.id);
+        const [mb, qb] = pos(b.id);
+        expect(ma < mb || (ma === mb && qa < qb)).toBe(true);
+      }
+    }
+  });
+
+  test("picker 卡：标题带题数，tag 是来源分档（全库同一类 → 不出一排「(1)」的日期筛选）", () => {
+    const cards = mapRealLCRSetsToPicker(LCR_SETS);
+    cards.forEach((c, i) => {
+      expect(c.id).toBe(LCR_SETS[i].id);
+      expect(c.title).toBe(`第 ${i + 1} 套 · ${LCR_SETS[i].items.length} 题`);
+      expect(c.tag).toBe("回忆版");
+    });
+    // 脏套（没有 items）不出卡，不会点进去一个空任务。
+    expect(mapRealLCRSetsToPicker([{ id: "x", items: [] }, { id: "y" }])).toEqual([]);
+  });
+});
+
 describe("真题听力 / 口语：picker 卡片", () => {
   const cases = [
-    ["lcr", mapRealLCRToPicker(LCR), LCR.length],
+    ["lcr", mapRealLCRSetsToPicker(LCR_SETS), LCR_SETS.length],
     ["lc", mapRealLCToPicker(LC), LC.length],
     ["la", mapRealLAToPicker(LA), LA.length],
     ["lat", mapRealLATToPicker(LAT), LAT.length],
@@ -218,7 +273,7 @@ describe("真题听力 / 口语：picker 卡片", () => {
 
   test("空输入 / 脏输入不炸（picker 映射对上游产物零信任）", () => {
     for (const fn of [
-      mapRealLCRToPicker, mapRealLCToPicker, mapRealLAToPicker,
+      mapRealLCRSetsToPicker, mapRealLCToPicker, mapRealLAToPicker,
       mapRealLATToPicker, mapRealRepeatToPicker, mapRealInterviewToPicker,
     ]) {
       expect(fn(null)).toEqual([]);
