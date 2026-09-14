@@ -50,7 +50,7 @@ import {
   getRealLAItems,
   getRealLATItems,
   getRealLCItems,
-  getRealLCRItems,
+  getRealLCRSets,
   getRealRDLItems,
   getRealRepeatSets,
   mapRealAPToPicker,
@@ -61,7 +61,7 @@ import {
   mapRealInterviewToPicker,
   mapRealLAToPicker,
   mapRealLATToPicker,
-  mapRealLCRToPicker,
+  mapRealLCRSetsToPicker,
   mapRealLCToPicker,
   mapRealRDLToPicker,
   mapRealRepeatToPicker,
@@ -227,16 +227,19 @@ function saveRealReadingSession(subtype, itemData, result, mode) {
  * 唯一的增量是 details.real —— 真题记录在历史里可辨认（id 的 real_ 前缀之外多一道明标）。
  */
 function saveRealListeningSession(subtype, item, result, mode) {
+  // LCR 传进来的是一整套（按考试日期打包的 items[]），其余三题型是单条 item。
+  const lcrItems = subtype === "lcr" ? (Array.isArray(item) ? item : [item]) : null;
+  const itemIds = lcrItems ? lcrItems.map((it) => it.id) : [item.id];
   const pct = result.total > 0 ? result.correct / result.total : 0;
   const band = pct >= 1 ? 6 : pct >= 0.9 ? 5.5 : pct >= 0.8 ? 5 : pct >= 0.7 ? 4.5 : pct >= 0.6 ? 4 : pct >= 0.5 ? 3.5 : pct >= 0.4 ? 3 : pct >= 0.3 ? 2.5 : 2;
 
   const reviewData = {};
-  if (subtype === "lcr") {
-    reviewData.items = [{
-      id: item.id, speaker: item.speaker, options: item.options, answer: item.answer,
-      explanation: item.explanation, pragmatic_function: item.pragmatic_function,
-      audio_url: item.audio_url || null,
-    }];
+  if (lcrItems) {
+    reviewData.items = lcrItems.map((it) => ({
+      id: it.id, speaker: it.speaker, options: it.options, answer: it.answer,
+      explanation: it.explanation, pragmatic_function: it.pragmatic_function,
+      audio_url: it.audio_url || null,
+    }));
   } else {
     reviewData.transcript = item.transcript || item.announcement || "";
     reviewData.conversation = item.conversation || null;
@@ -253,13 +256,13 @@ function saveRealListeningSession(subtype, item, result, mode) {
     band,
     details: {
       subtype,
-      itemIds: [item.id],
+      itemIds,
       results: result.results,
       real: true,
       ...reviewData,
     },
   });
-  addDoneIds(LISTENING_DONE_KEYS[subtype] || DONE_STORAGE_KEYS.LISTENING_LCR, [item.id]);
+  addDoneIds(LISTENING_DONE_KEYS[subtype] || DONE_STORAGE_KEYS.LISTENING_LCR, itemIds);
 }
 
 /**
@@ -341,10 +344,10 @@ function RealBankPageClient() {
     return [];
   }, [type, readingItems]);
 
-  // 听力 / 口语：一条 item = 一屏（LCR 单题、LA/LC/LAT 一段音频多题、口语一整套）。
-  // 与常规练习的 practice 模式同构：picker 选一条 → 直接喂给任务组件。
+  // 听力 / 口语：一条 = 一屏（LCR 按考试日期打包的一整套、LA/LC/LAT 一段音频多题、口语一整套）。
+  // picker 选一条 → 直接喂给任务组件。
   const audioItems = useMemo(() => {
-    if (type === "lcr") return getRealLCRItems();
+    if (type === "lcr") return getRealLCRSets();
     if (type === "lc") return getRealLCItems();
     if (type === "la") return getRealLAItems();
     if (type === "lat") return getRealLATItems();
@@ -353,7 +356,7 @@ function RealBankPageClient() {
     return [];
   }, [type]);
   const audioPickerItems = useMemo(() => {
-    if (type === "lcr") return mapRealLCRToPicker(audioItems);
+    if (type === "lcr") return mapRealLCRSetsToPicker(audioItems);
     if (type === "lc") return mapRealLCToPicker(audioItems);
     if (type === "la") return mapRealLAToPicker(audioItems);
     if (type === "lat") return mapRealLATToPicker(audioItems);
@@ -438,7 +441,11 @@ function RealBankPageClient() {
     if (!pickedAudioId) {
       // 与阅读同理：读的正是 app/listening|speaking/page.js 写入的那把 key，
       // 常规练习做过的真题在这里也会亮「已练」（同一道题只有一个 id = 同一份进度）。
-      const doneIds = loadDoneIds(doneKey);
+      // LCR 的已练按题记（与常规练习共用一把 key），整套里每题都练过才算这一套已练。
+      const itemDoneIds = loadDoneIds(doneKey);
+      const doneIds = type === "lcr"
+        ? new Set(audioItems.filter((s) => s.items.every((it) => itemDoneIds.has(it.id))).map((s) => s.id))
+        : itemDoneIds;
       return (
         <UsageGateWrapper onExit={onExit} practiceMode={mode}>
           <TopicPicker
@@ -449,7 +456,7 @@ function RealBankPageClient() {
             description={
               isSpeaking
                 ? `2026 考生回忆整理的口语真题，配真人化 TTS 音频；录音 + AI 评分与常规练习一致。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`
-                : `2026 考生回忆整理的听力真题，配真题录音。${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`
+                : `2026 考生回忆整理的听力真题，配真题录音。${type === "lcr" ? "按考试日期整套练：同一天考到的应答题为一套，做完一起出分。" : ""}${getRealBankModeDescription(type, mode)}${REAL_TIER_NOTE}`
             }
             items={audioPickerItems}
             doneIds={doneIds}
@@ -471,8 +478,9 @@ function RealBankPageClient() {
         <>
           {type === "lcr" && (
             <LCRTask
-              item={audioItem}
-              onComplete={(result) => saveRealListeningSession("lcr", audioItem, result, mode)}
+              key={audioItem.id}
+              batchItems={audioItem.items}
+              onComplete={(result) => saveRealListeningSession("lcr", audioItem.items, result, mode)}
               onExit={backToAudioPicker}
               isPractice={isPractice}
             />
