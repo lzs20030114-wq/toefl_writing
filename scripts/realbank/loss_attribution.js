@@ -15,6 +15,9 @@
  *   source_defect      源料体检认领的缺口（source-flags.json）。补不了，除非找商家重出。
  *   held               复核清单主动扣下的（review-holds.json，非 dup_of）。设计行为，不是丢题。
  *   deduped            跨卷同篇合并时被丢掉的题（consolidation.json 的 skipped）。放宽判据可回收。
+ *   bank_dropped       **落库丢弃**：源里有、结构化也抽出来了，却在 build_bank 落库时被闸扔掉
+ *                      （选项残缺 / 盲审不一致 / 字段不全 / 跨卷重复 / 整科被扣…，明细见 drop-ledger.json）。
+ *                      与 pipeline_loss 分开是因为处置完全不同：这一桶要看闸判得对不对，重扫结构化治不了。
  *   section_lost       这一科**在管线覆盖范围内、这套卷也确实跑过**（同卷别的科有题），库里却一道都没有。
  *                      与 pipeline_loss 同性质、同处置，只是丢得更彻底（整科归零）。
  *   section_never_run  这一科压根没被跑过（不在管线覆盖范围，或这套卷没进过管线）。
@@ -32,11 +35,17 @@
  * assemble_sets 会按 dup_of 把 id 原位还回该场次（items[].alias_of），槽位并不空。
  */
 
+const { indexDropsForAttribution } = require("./drop_ledger.js");
+
+/** 没给落库丢弃账本时的空索引：行为与接线前完全一致。 */
+const EMPTY_DROP_INDEX = Object.freeze({ byTypeSlug: new Map(), sectionSlug: new Map(), codesByTypeSlug: new Map() });
+
 /** 归因桶。顺序即扣额度的优先级。 */
 const CAUSES = Object.freeze([
   "source_defect",
   "held",
   "deduped",
+  "bank_dropped",
   "section_never_run",
   "section_lost",
   "pipeline_loss",
@@ -46,6 +55,7 @@ const CAUSE_LABEL = Object.freeze({
   source_defect: "源料缺陷",
   held: "复核扣下",
   deduped: "跨卷合并丢弃",
+  bank_dropped: "落库丢弃",
   section_never_run: "整科没跑过",
   section_lost: "整科跑了归零",
   pipeline_loss: "管线丢题",
@@ -225,7 +235,7 @@ function chargeMissing(missing, budgets) {
  *   不补的话这些卷压根不进分母，账本会把「一科都没跑」显示成「没缺题」）。
  */
 function rowsForSet(set, ctx) {
-  const { holdIndex, dedupIndex, flagIndex, defaultSlots = {} } = ctx;
+  const { holdIndex, dedupIndex, flagIndex, dropIndex = EMPTY_DROP_INDEX, defaultSlots = {} } = ctx;
   const rows = [];
   const sections = set?.sections || {};
   const flagEntry = flagIndex.get(set?.set) || null;
@@ -234,6 +244,7 @@ function rowsForSet(set, ctx) {
   // 额度是「按卷按科」的，逐行扣：Map<type|slug, 剩余>
   const holdLeft = new Map();
   const dedupLeft = new Map();
+  const dropLeft = new Map();
   const takeFrom = (map, index, k) => {
     if (!map.has(k)) map.set(k, index.get(k) || 0);
     return map.get(k);
@@ -247,6 +258,14 @@ function rowsForSet(set, ctx) {
     const type = slot.type;
     const k = key(type, set.slug);
     const explainer = findExplainer(flagEntry, section, type);
+    // 落库丢弃额度：整科丢弃（整科被扣 / 整份源文件重复）不设上限；逐题 / 整组按题型扣，
+    // 阅读 ap / rdl 同卷互通（落库时还没按考卷位置归位，丢弃行上的题型可能与槽位题型对调）。
+    const sectionDropCodes = dropIndex.sectionSlug.get(`${section}|${set.slug}`) || null;
+    const dropKeys = [k, ...(section === "reading" && (type === "ap" || type === "rdl")
+      ? [key(type === "ap" ? "rdl" : "ap", set.slug)] : [])];
+    const dropBudget = () => (sectionDropCodes
+      ? missing
+      : dropKeys.reduce((a, dk) => a + Math.max(0, takeFrom(dropLeft, dropIndex.byTypeSlug, dk)), 0));
     // 整科缺席分两种：管线覆盖且这卷跑过 → 跑了归零（可扫）；否则 → 压根没跑（铺量决策）
     const absentCause = PIPELINE_SECTIONS.includes(section) && anySectionHasItems
       ? "section_lost" : "section_never_run";
@@ -254,11 +273,29 @@ function rowsForSet(set, ctx) {
       ["source_defect", () => (explainer ? explainer.remaining : 0)],
       ["held", () => takeFrom(holdLeft, holdIndex, k)],
       ["deduped", () => takeFrom(dedupLeft, dedupIndex, k)],
+      ["bank_dropped", dropBudget],
       [absentCause, () => (absent ? missing : 0)],
     ]);
     if (charged.source_defect && explainer) explainer.remaining -= charged.source_defect;
     if (charged.held) spend(holdLeft, k, charged.held);
     if (charged.deduped) spend(dedupLeft, k, charged.deduped);
+    let dropCodes = null;
+    if (charged.bank_dropped) {
+      if (sectionDropCodes) dropCodes = Object.fromEntries(sectionDropCodes.map((c) => [c, null]));
+      else {
+        dropCodes = {};
+        let left = charged.bank_dropped;
+        for (const dk of dropKeys) {
+          if (left <= 0) break;
+          const n = Math.min(left, Math.max(0, takeFrom(dropLeft, dropIndex.byTypeSlug, dk)));
+          if (n <= 0) continue;
+          spend(dropLeft, dk, n);
+          left -= n;
+          // 行上挂的是这卷这题型在账本里的全部丢弃原因（描述性，便于回头查是哪几道闸）
+          for (const [c, cnt] of Object.entries(dropIndex.codesByTypeSlug.get(dk) || {})) dropCodes[c] = (dropCodes[c] || 0) + cnt;
+        }
+      }
+    }
     rows.push({
       set: set.set,
       slug: set.slug,
@@ -275,6 +312,7 @@ function rowsForSet(set, ctx) {
       status: absent ? "absent" : slot.status,
       cause,
       charged,
+      ...(dropCodes ? { drop_codes: dropCodes } : {}),
       notes: (flagEntry?.notes || []).filter((n) => n.section === section || n.section === "*").map((n) => n.code),
     });
   };
@@ -309,13 +347,15 @@ function addCharged(tally, charged) {
  * @param {Array}  [input.holds]         review-holds.json 的 holds
  * @param {Array}  [input.clusters]      reading/consolidation.json 的 clusters
  * @param {object} [input.sourceFlags]   source-flags.json 的 sets
+ * @param {Array}  [input.drops]         drop-ledger.json 的 rows（build_bank 落库时扔掉的每一题）
  * @param {object} [input.defaultSlots]  蓝图默认版式槽位（见 rowsForSet）
  */
-function buildLedger({ sets, holds = [], clusters = [], sourceFlags = {}, defaultSlots = {} } = {}) {
+function buildLedger({ sets, holds = [], clusters = [], sourceFlags = {}, drops = [], defaultSlots = {} } = {}) {
   const ctx = {
     holdIndex: indexHolds(holds),
     dedupIndex: indexDeduped(clusters),
     flagIndex: indexSourceFlags(sourceFlags),
+    dropIndex: drops && drops.length ? indexDropsForAttribution(drops) : EMPTY_DROP_INDEX,
     defaultSlots,
   };
 

@@ -316,3 +316,73 @@ describe("actionableTasks", () => {
     expect(actionableTasks(rows)[0].missing).toBe(2);
   });
 });
+
+describe("落库丢弃（bank_dropped，读 drop-ledger.json）", () => {
+  // 2026-09-14 以前这一桶不存在：结构化抽出来了、却在 build_bank 被闸扔掉的题，全被笼统算成「管线丢题」，
+  // 于是作业单叫人去重扫结构化 —— 可重扫治不了盲审不一致、选项残缺、整科被扣。
+  const { makeDropRecorder, indexDropsForAttribution } = require("../scripts/realbank/drop_ledger.js");
+  const dropCtx = (rows) => ({ ...emptyCtx(), dropIndex: indexDropsForAttribution(rows) });
+
+  test("排在跨卷合并之后、管线丢题之前；额度按题扣，扣完的仍算管线丢题", () => {
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", type: "ap", q: 33, n: 1, code: "droppedDisagree" });
+    const ctx = { ...dropCtx(rec.rows), dedupIndex: new Map([["ap|318", 1]]) };
+    const [row] = rowsForSet(fixtureSet(), ctx);
+    expect(row.charged).toEqual({ deduped: 1, bank_dropped: 1, pipeline_loss: 1 });
+    expect(row.drop_codes).toEqual({ droppedDisagree: 1 });
+    expect(CAUSES.indexOf("bank_dropped")).toBe(CAUSES.indexOf("deduped") + 1);
+  });
+
+  test("阅读 ap / rdl 同卷额度互通（落库时还没按考卷位置归位，丢弃行上的题型可能与槽位对调）", () => {
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", type: "rdl", q: 33, n: 2, code: "droppedBadOptions" });
+    const [row] = rowsForSet(fixtureSet(), dropCtx(rec.rows));
+    expect(row.charged).toEqual({ bank_dropped: 2, pipeline_loss: 1 });
+  });
+
+  test("听力等别的科目不互通：lc 的丢弃不能认领 lat 的缺口", () => {
+    const set = fixtureSet({
+      sections: { listening: { got: 0, need: 4, modules: { 1: { form: "A", slots: [{ key: "lat_25", type: "lat", need: 4, got: 0, status: "empty" }] } } } },
+    });
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", section: "listening", type: "lc", n: 2, code: "lDroppedInvalid" });
+    const [row] = rowsForSet(set, dropCtx(rec.rows));
+    expect(row.charged.bank_dropped).toBeUndefined();
+  });
+
+  test("整科丢弃（整科被扣 / 整份源文件重复）不设上限，行上记原因码", () => {
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", section: "reading", code: "droppedDupSet", detail: "与 3.15 相同" });
+    const [row] = rowsForSet(fixtureSet(), dropCtx(rec.rows));
+    expect(row.charged).toEqual({ bank_dropped: 3 });
+    expect(row.drop_codes).toEqual({ droppedDupSet: null });
+  });
+
+  test("额度只能花一次：同卷同题型两个槽共用一份丢弃额度", () => {
+    const set = fixtureSet();
+    set.sections.reading.modules[1].slots.push({ key: "ap_26", type: "ap", band: [26, 30], need: 5, got: 3, status: "partial" });
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", type: "ap", n: 2, code: "droppedDisagree" });
+    const rows = rowsForSet(set, dropCtx(rec.rows)).filter((r) => r.type === "ap");
+    expect(rows.reduce((a, r) => a + (r.charged.bank_dropped || 0), 0)).toBe(2);
+  });
+
+  test("buildLedger 不给 drops 时行为与接线前完全一致（这一桶恒 0）；给了之后恒等式照样对得平", () => {
+    const sets = { sets: [fixtureSet()] };
+    const without = buildLedger({ sets });
+    expect(without.summary.causes.bank_dropped).toBe(0);
+    const rec = makeDropRecorder();
+    rec.drop({ set: "3.18新托福真题", slug: "318", type: "ap", n: 1, code: "droppedNoAudit" });
+    const withDrops = buildLedger({ sets, drops: rec.rows });
+    expect(withDrops.summary.causes).toMatchObject({ bank_dropped: 1, pipeline_loss: 2 });
+    const sum = CAUSES.reduce((a, c) => a + (withDrops.summary.causes[c] || 0), 0);
+    expect(sum).toBe(withDrops.summary.missing);
+  });
+
+  test("落库丢弃不算「重扫能捡」的可执行任务", () => {
+    const tasks = actionableTasks([
+      { set: "A", slug: "a", date: "1", section: "reading", module: "1", slotKey: "ap_31", type: "ap", missing: 3, charged: { bank_dropped: 3 } },
+    ]);
+    expect(tasks).toEqual([]);
+  });
+});

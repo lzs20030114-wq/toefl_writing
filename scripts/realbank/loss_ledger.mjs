@@ -13,6 +13,7 @@
  *   data/realBank/review-holds.json             复核扣下清单
  *   data/realBank/source-flags.json             源料体检
  *   data/realBank/reading/consolidation.json    跨卷合并账本
+ *   data/realBank/drop-ledger.json              落库丢弃账本（build_bank 每道闸扔掉的每一题；缺文件 = 不区分落库丢弃）
  *
  * 产物：
  *   data/realBank/loss-ledger.json              机器可读（byType / bySection / rows / tasks）
@@ -229,8 +230,10 @@ function main() {
   const holds = readJson(path.join(BANK, "review-holds.json"), {}).holds || [];
   const sourceFlags = readJson(path.join(BANK, "source-flags.json"), {}).sets || {};
   const clusters = readJson(path.join(BANK, "reading", "consolidation.json"), {}).clusters || [];
+  const dropLedger = readJson(path.join(BANK, "drop-ledger.json"), null);
+  const drops = dropLedger?.rows || [];
 
-  const ledger = buildLedger({ sets, holds, clusters, sourceFlags, defaultSlots: defaultSlotsBySection() });
+  const ledger = buildLedger({ sets, holds, clusters, sourceFlags, drops, defaultSlots: defaultSlotsBySection() });
   const rows = typeFilter ? ledger.rows.filter((r) => typeFilter.has(r.type)) : ledger.rows;
   const tasks = actionableTasks(rows);
 
@@ -241,6 +244,8 @@ function main() {
   // 两种缺口的处置完全不同，别加总成一个数字催人：
   //   管线丢题 = 源里有、这一科也跑过，重扫 flagged 块就能回收；
   //   整科缺席 = 这一科一道题都没进过库，先查源料在不在（无音频的卷是源缺，补不了）。
+  console.log(`  落库丢弃   ${s.causes.bank_dropped} 题（结构化抽出来了、落库时被闸扔掉 —— 看闸判得对不对，重扫治不了；`
+    + `${dropLedger ? `明细 drop-ledger.json（${dropLedger._generated}${dropLedger._dry_run ? "，--dry 跑出" : ""}）` : "没有 drop-ledger.json，这一桶恒 0：先跑 build_bank --dry"}）`);
   console.log(`  管线丢题   ${s.causes.pipeline_loss} 题（重扫 flagged 块可回收）`);
   console.log(`  整科跑了归零 ${s.causes.section_lost} 题（管线覆盖这科、这卷也跑过，却颗粒无收 —— 同上，重扫）`);
   console.log(`  整科没跑过 ${s.causes.section_never_run} 题（管线本来就没跑它；补不补是铺量决策，听力还要掏 TTS 的钱）\n`);
@@ -314,6 +319,7 @@ function main() {
       holds: "data/realBank/review-holds.json",
       source_flags: "data/realBank/source-flags.json",
       consolidation: "data/realBank/reading/consolidation.json",
+      drops: dropLedger ? `data/realBank/drop-ledger.json（${dropLedger._generated}，${drops.length} 行）` : null,
     },
     _causes: CAUSE_LABEL,
     summary: ledger.summary,

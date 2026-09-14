@@ -69,6 +69,17 @@ const SS = require("./sentence_select.js");
 const { apQuestionType } = require("./question_type.js");
 // 第一来源邮件 / 学术讨论补录（读 data/realBank/writing-recall.json）：scripts/realbank/writing_recall.js。
 const WR = require("./writing_recall.js");
+// 落库丢弃账本（每道闸扔掉的每一题记一行，原因码 = 下面 stats 的键名）：scripts/realbank/drop_ledger.js。
+const { makeDropRecorder, dropLedgerPayload, summarizeDrops } = require("./drop_ledger.js");
+
+/**
+ * 记一笔落库丢弃。计数器照旧在调用处 += 1（终端日志口径不变），这里只多落一行明细。
+ * 阅读 AP/RDL 归位后「按新题型重出一遍」用的是一份丢弃的计数器（没有 dropRecorder）——
+ * 那一遍的丢弃第一遍已经记过，这里自然跳过，不会重复记账。
+ */
+function recordDrop(stats, row) {
+  if (stats && stats.dropRecorder) stats.dropRecorder.drop(row);
+}
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const BANK_DIR = path.join(process.cwd(), "data", "realBank", "reading");
@@ -444,7 +455,16 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
   // 代表材料取簇里最长的那份（OCR 漏字只会变短），material_kind 也跟着它走。
   const first = (group.rep || group.records[0]).item;
   let material = String(first.material || "").trim();
-  if (words(material).length < 12) return null;      // 材料太短，多半没抽干净
+  const dropAt = (r, extra) => ({
+    set: meta.set, slug: meta.slug, section: "reading", type: r.type, module: meta.module, q: r.item.q_number ?? r.q, ...extra,
+  });
+  if (words(material).length < 12) {                  // 材料太短，多半没抽干净
+    recordDrop(stats, dropAt(group.records[0], {
+      n: group.records.length, code: "buildFailed",
+      detail: `材料太短（${words(material).length} 词 < 12），整组 ${group.records.length} 题不出组`,
+    }));
+    return null;
+  }
 
   // 这一簇里有插入句题、但代表材料被 OCR 抹掉了 ■ → 查 insert-markers.json 找回带标记的正文。
   // 表里没有 / 校验不过就什么都不变，插入题照旧被下面那一刀丢掉（fail-closed）。
@@ -464,6 +484,7 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
   }
 
   const collected = [];
+  const recOf = new Map();                            // collected 条目 → 它来自哪条记录（记账用，不进成品）
   for (const r of group.records) {
     const it = r.item;
     // RDLTask:262 硬编码渲染 A/B/C/D 四个键 —— 少一个选项，正确答案就可能压根渲染不出来，
@@ -473,6 +494,10 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
     const ai = it.answer_index;
     if (opts.length !== 4 || opts.some((o) => !o) || !Number.isInteger(ai) || ai < 0 || ai > 3) {
       stats.droppedBadOptions += 1;
+      recordDrop(stats, dropAt(r, {
+        n: 1, code: "droppedBadOptions",
+        detail: `选项 ${opts.length} 个${opts.some((o) => !o) ? "（有空选项）" : ""}，answer_index=${ai}`,
+      }));
       continue;
     }
     if (looksLikeInsertQuestion(it)) {
@@ -480,6 +505,7 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
       // 按题自己的材料放行会上线一道正文里没有插入位的死题。
       if (!hasInsertMarkers(material)) {
         stats.droppedInsert += 1;
+        recordDrop(stats, dropAt(r, { n: 1, code: "droppedInsert", detail: "代表材料里没有 [A]~[D] / ■，insert-markers.json 也没找回" }));
         continue;
       }
       // 代表材料已按标记表换成带标记版，或这道题是 insert_promote.mjs 转正的 → 算「找回」。
@@ -487,13 +513,15 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
     }
     const optMap = {};
     opts.forEach((o, i) => { optMap[LETTERS[i]] = o; });
-    collected.push({
+    const entry = {
       question_type: it.question_type || "detail",
       stem: String(it.stem).trim(),
       options: optMap,
       correct_answer: LETTERS[ai],
       q_number: it.q_number,
-    });
+    };
+    recOf.set(entry, r);
+    collected.push(entry);
   }
   // 归并把好几屏的题混到一起了，顺序要重排回真题屏序（题号升序，缺题号的垫到最后）。
   collected.sort((a, b) => (a.q_number ?? Infinity) - (b.q_number ?? Infinity));
@@ -502,7 +530,11 @@ function buildMcqGroup(group, meta, stats, { kind } = {}) {
   const questions = [];
   for (const q of collected) {
     const k = norm(q.stem);
-    if (k && seenStem.has(k)) { stats.droppedDupStem += 1; continue; }
+    if (k && seenStem.has(k)) {
+      stats.droppedDupStem += 1;
+      recordDrop(stats, dropAt(recOf.get(q), { n: 1, code: "droppedDupStem", detail: `题干与同组更小题号的一题相同：${q.stem.slice(0, 60)}` }));
+      continue;
+    }
     if (k) seenStem.add(k);
     questions.push(q);
   }
@@ -598,10 +630,15 @@ function writingSourceHashes(setname) {
  * 296 条被丢掉时光看总数说明不了问题 —— 是解析器漏抽了 chunks，还是源料本来就只有答案句，
  * 得靠这份 top 原因分布判断值不值得回头改解析器。
  */
-function thin(stats, type, missing) {
+function thin(stats, type, missing, at = {}) {
   stats.wSkippedThin += 1;
   const k = `${type}:${missing.join("+")}`;
   stats.wThinReasons[k] = (stats.wThinReasons[k] || 0) + 1;
+  recordDrop(stats, {
+    set: at.set, slug: at.set ? setSlug(at.set) : null, section: "writing",
+    type: type === "build" ? "bs" : type === "discussion" ? "disc" : type,
+    q: at.q ?? null, n: 1, code: "wSkippedThin", detail: `${type} 缺 ${missing.join("+")}`,
+  });
 }
 
 /**
@@ -648,6 +685,7 @@ function buildWriting(files, stats) {
     if (dup) {
       console.warn(`跳过 ${setname} 写作：与 ${seenHash.get(dup)} 内容相同(hash ${dup})`);
       stats.wDroppedDupSet += 1;
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "writing", code: "wDroppedDupSet", detail: `与 ${seenHash.get(dup)} 写作文件相同（hash ${dup}）；邮件 / 讨论按别名还槽位` });
       dupSets.push({ setname, kept: seenHash.get(dup) });
       continue;
     }
@@ -662,6 +700,10 @@ function buildWriting(files, stats) {
     if (wHold.held) {
       console.warn(`跳过 ${setname} 写作：源料体检标了 blocking（整科扣下待人工核对）`);
       stats.wDroppedHeld += 1;
+      recordDrop(stats, {
+        set: setname, slug: setSlug(setname), section: "writing", code: "wDroppedHeld",
+        detail: `${wHold.heldBy.join("/")}${WR.recallAllowedDespiteHold(wHold.heldBy) ? "（造句照扣；邮件 / 讨论补录照收）" : ""}`,
+      });
       // 扣留码只涉及答案页 / 造句题面时，邮件与讨论补录照收（判据与理由见 writing_recall.recallAllowedDespiteHold）；
       // 题上不挂这几条 blocking 标记 —— 它们说的不是这两道题，挂上前端会给题打上不相干的缺陷徽章。
       if (WR.recallAllowedDespiteHold(wHold.heldBy)) {
@@ -694,7 +736,7 @@ function buildWriting(files, stats) {
           if (!it.blanks) miss.push("blanks");
           if (!Array.isArray(it.chunks) || !it.chunks.length) miss.push("chunks");
           if (!it.answer) miss.push("answer");
-          if (miss.length) { thin(stats, "build", miss); continue; }
+          if (miss.length) { thin(stats, "build", miss, { set: setname, q: it.n }); continue; }
           out.bs.push({
             id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
             answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
@@ -705,7 +747,7 @@ function buildWriting(files, stats) {
           if (!it.scenario) missE.push("scenario");
           if (!Array.isArray(it.goals)) missE.push("goals");
           else if (it.goals.length < 3) missE.push(`goals<3(${it.goals.length})`);
-          if (missE.length) { thin(stats, "email", missE); continue; }
+          if (missE.length) { thin(stats, "email", missE, { set: setname }); continue; }
           out.email.push({
             id: it.id, to: it.to || "Professor", subject: it.subject || "",
             scenario: it.scenario, direction: it.direction || "", goals: it.goals.slice(0, 3), ...meta,
@@ -716,7 +758,7 @@ function buildWriting(files, stats) {
           const missD = [];
           if (!it.professor?.text) missD.push("professor.text");
           if (students.length < 2) missD.push(`students<2(${students.length})`);
-          if (missD.length) { thin(stats, "discussion", missD); continue; }
+          if (missD.length) { thin(stats, "discussion", missD, { set: setname }); continue; }
           out.discussion.push({
             id: it.id, course: it.course || "", professor: it.professor,
             students: students.slice(0, 2), ...meta,
@@ -734,8 +776,13 @@ function buildWriting(files, stats) {
   const bs = [];
   for (const q of out.bs) {
     const k = bsAnswerKey(q.answer);
+    const bsDrop = (code, detail) => recordDrop(stats, {
+      set: q.source, slug: q.source ? setSlug(q.source) : null, section: "writing", type: "bs",
+      q: Number((String(q.id).match(/_(\d+)$/) || [])[1]) || null, n: 1, id: q.id, code, detail,
+    });
     if (!k || seenAnswer.has(k)) {
       stats.wDroppedDupBs = (stats.wDroppedDupBs || 0) + 1;
+      bsDrop("wDroppedDupBs", k ? `答案句与更早收下的造句重复：${q.answer}` : "答案句为空");
       continue;
     }
     // 前端渲染闸：过不了 runtimeModel 的题进库也做不了（groupBsBatches 会静默丢），
@@ -744,6 +791,7 @@ function buildWriting(files, stats) {
     if (why) {
       stats.wDroppedBsRuntime = (stats.wDroppedBsRuntime || 0) + 1;
       stats.wBsRuntimeDetail.push(`${q.id}: ${why}`);
+      bsDrop("wDroppedBsRuntime", why);
       continue;
     }
     seenAnswer.add(k);
@@ -790,8 +838,11 @@ function recallWriting(out, eligible, dupSets, stats) {
       if (!entry) continue;
       const id = `${PREFIX[type]}_${setSlug(setname)}`;
       if (entry.verdict !== "ok") {
-        stats.wRecallDropped.push({
-          set: setname, id, type, code: `recall_${entry.verdict || "unknown"}`, detail: (entry.problems || []).join("；"),
+        const d = { set: setname, id, type, code: `recall_${entry.verdict || "unknown"}`, detail: (entry.problems || []).join("；") };
+        stats.wRecallDropped.push(d);
+        recordDrop(stats, {
+          set: setname, slug: setSlug(setname), section: "writing", type: PREFIX[type], n: 1, id,
+          code: "wRecallDropped", detail: `${d.code}：${d.detail}`,
         });
         continue;
       }
@@ -814,7 +865,16 @@ function recallWriting(out, eligible, dupSets, stats) {
     out[type].push(...plan.accepted);
     stats.wRecallAdded[type] = plan.accepted.length;
     aliases.push(...plan.aliases);
-    for (const d of plan.dropped) stats.wRecallDropped.push({ ...d, type });
+    for (const d of plan.dropped) {
+      stats.wRecallDropped.push({ ...d, type });
+      // 同一道题记了别名的不算丢（槽位由别名还回）；只有过不了闸的才落账
+      if (d.code === "recall_gate") {
+        recordDrop(stats, {
+          set: d.set, slug: setSlug(d.set), section: "writing", type: PREFIX[type], n: 1, id: d.id,
+          code: "wRecallDropped", detail: `recall_gate：${d.detail}`,
+        });
+      }
+    }
   }
   // 整份写作源文件与更早一套相同而被跳过的卷：它的邮件 / 讨论就是那一套的那两道题。
   for (const { setname, kept } of dupSets) {
@@ -880,11 +940,18 @@ function optionsMap(arr) {
   return o;
 }
 
-function buildQuestions(items, meta, stats) {
+function buildQuestions(items, meta, stats, at = {}) {
   const qs = [];
   for (const it of items) {
     const opts = optionsMap(it.options);
-    if (!opts || it.answer_index == null || it.answer_index > 3) { stats.lDroppedBadOptions += 1; continue; }
+    if (!opts || it.answer_index == null || it.answer_index > 3) {
+      stats.lDroppedBadOptions += 1;
+      recordDrop(stats, {
+        ...at, section: "listening", q: it.q_number, n: 1, code: "lDroppedBadOptions",
+        detail: `选项 ${Array.isArray(it.options) ? it.options.length : 0} 个，answer_index=${it.answer_index}`,
+      });
+      continue;
+    }
     qs.push({
       type: questionType(it.stem),
       stem: String(it.stem || "").trim(),
@@ -936,6 +1003,9 @@ function buildListeningSpeaking(files, stats) {
     if (lHold.held && sHold.held) {
       console.warn(`跳过 ${setname} 听力/口语：源料体检标了 blocking`);
       stats.lDroppedHeld += 1;
+      for (const [section, h] of [["listening", lHold], ["speaking", sHold]]) {
+        recordDrop(stats, { set: setname, slug: setSlug(setname), section, code: "lDroppedHeld", detail: `${h.heldBy.join("/")}（听力与口语同被扣，整卷跳过）` });
+      }
       continue;
     }
     const meta = {
@@ -957,6 +1027,7 @@ function buildListeningSpeaking(files, stats) {
     if (!passedKeys) {
       console.warn(`跳过 ${setname} 听力：没有可用的盲审结果`);
       stats.lDroppedNoAudit += 1;
+      recordDrop(stats, { set: setname, slug, section: "listening", code: "lDroppedNoAudit", detail: fs.existsSync(auditPath) ? "盲审结果是旧格式（没有 audited 明细）" : "没有 .audit.json" });
     }
 
     // ── 听力 ──────────────────────────────────────────────────────────
@@ -965,17 +1036,26 @@ function buildListeningSpeaking(files, stats) {
         if (r.section !== "listening" || r.status !== "ok") continue;
         if (!out[r.type]) continue;
         const kept = [];
+        const lAt = { set: setname, slug, section: "listening", type: r.type, module: r.module };
         for (const it of r.items || []) {
           const key = `listening#${it.q_number}`;
           stats.lItemsSeen += 1;
-          if (!auditedKeys.has(key)) { stats.lDroppedNoAuditQ += 1; continue; }
-          if (!passedKeys.has(key)) { stats.lDroppedDisagree += 1; continue; }
+          if (!auditedKeys.has(key)) {
+            stats.lDroppedNoAuditQ += 1;
+            recordDrop(stats, { ...lAt, q: it.q_number, n: 1, code: "lDroppedNoAuditQ", detail: "盲审没覆盖到这题" });
+            continue;
+          }
+          if (!passedKeys.has(key)) {
+            stats.lDroppedDisagree += 1;
+            recordDrop(stats, { ...lAt, q: it.q_number, n: 1, code: "lDroppedDisagree", detail: "盲审与答案页不一致" });
+            continue;
+          }
           stats.lKeptByAudit += 1;
           kept.push(it);
         }
         if (!kept.length) continue;
         const id = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
-        const questions = buildQuestions(kept, meta, stats);
+        const questions = buildQuestions(kept, meta, stats, { ...lAt, id });
         if (!questions.length) continue;
         const base = {
           id, difficulty: "medium", audio_url: null, audio_pending: true,
@@ -1005,6 +1085,7 @@ function buildListeningSpeaking(files, stats) {
           } else {
             console.warn(`跳过 ${setname} ${id}：口播内容与 ${seenL.get(dk)} 逐字相同`);
             stats.lDroppedDupItem += 1;
+            recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedDupItem", detail: `口播与 ${seenL.get(dk)} 逐字相同` });
             continue;
           }
         }
@@ -1014,6 +1095,7 @@ function buildListeningSpeaking(files, stats) {
           stats.lDroppedInvalid += 1;
           stats.lInvalidReasons[res.errors[0]] = (stats.lInvalidReasons[res.errors[0]] || 0) + 1;
           stats.lInvalidDetail.push({ set: setname, id, type: r.type, errors: res.errors });
+          recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedInvalid", detail: res.errors.slice(0, 3).join(" | ") });
           continue;
         }
         out[r.type].push(item);
@@ -1047,6 +1129,7 @@ function buildListeningSpeaking(files, stats) {
           } else {
             console.warn(`跳过 ${setname} ${id}：复述内容与 ${seenS.get(sk)} 逐字相同`);
             stats.sDroppedDupSet += 1;
+            recordDrop(stats, { set: setname, slug, section: "speaking", type: "repeat", n: sentences.length, id, code: "sDroppedDupSet", detail: `复述与 ${seenS.get(sk)} 逐字相同` });
             continue;
           }
         }
@@ -1055,6 +1138,7 @@ function buildListeningSpeaking(files, stats) {
         if (!v.valid) {
           stats.sDroppedInvalid += 1;
           stats.sInvalidDetail.push({ set: setname, id, type: "repeat", errors: v.errors });
+          recordDrop(stats, { set: setname, slug, section: "speaking", type: "repeat", n: sentences.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
           continue;
         }
         spk.repeat.push(set);
@@ -1082,6 +1166,7 @@ function buildListeningSpeaking(files, stats) {
           } else {
             console.warn(`跳过 ${setname} ${id}：面试内容与 ${seenS.get(sk)} 逐字相同`);
             stats.sDroppedDupSet += 1;
+            recordDrop(stats, { set: setname, slug, section: "speaking", type: "interview", n: questions.length, id, code: "sDroppedDupSet", detail: `面试与 ${seenS.get(sk)} 逐字相同` });
             continue;
           }
         }
@@ -1090,6 +1175,7 @@ function buildListeningSpeaking(files, stats) {
         if (!v.valid) {
           stats.sDroppedInvalid += 1;
           stats.sInvalidDetail.push({ set: setname, id, type: "interview", errors: v.errors });
+          recordDrop(stats, { set: setname, slug, section: "speaking", type: "interview", n: questions.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
           continue;
         }
         spk.interview.push(set);
@@ -1264,6 +1350,7 @@ function main() {
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
+    dropRecorder: makeDropRecorder(),
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
     lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
@@ -1293,12 +1380,14 @@ function main() {
     const secondVoteKeys = new Set(au.audited.filter((a) => a.agree !== true && auditPassed(a))
       .map((a) => `${a.section}#${a.q}`));
     const auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
+    const auditByKey = new Map(au.audited.map((a) => [`${a.section}#${a.q}`, a]));
     // 跨卷去重：这卷的阅读题目文件如果被更早的卷收过了，整科跳过
     const hashes = readingSourceHashes(setname);
     const dupHash = (hashes || []).find((h) => seenHash.has(h));
     if (dupHash) {
       console.warn(`跳过 ${setname} 阅读：与 ${seenHash.get(dupHash)} 内容相同(hash ${dupHash})`);
       stats.droppedDupSet += 1;
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "reading", code: "droppedDupSet", detail: `与 ${seenHash.get(dupHash)} 题目文件相同（hash ${dupHash}）` });
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
@@ -1310,6 +1399,7 @@ function main() {
     if (hold.held) {
       console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（${hold.heldBy.join("/")}，整科扣下待人工核对）`);
       stats.droppedHeld += 1;
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "reading", code: "droppedHeld", detail: hold.heldBy.join("/") });
       continue;
     }
     for (const n of hold.notes) console.warn(`放行 ${setname} 阅读：${n}`);
@@ -1337,10 +1427,17 @@ function main() {
     for (const r of recs) {
       if (r.type !== "ctw") continue;
       stats.itemsSeen += 1;
+      const ctwDrop = (code, detail) => recordDrop(stats, {
+        set: setname, slug: meta0.slug, section: "reading", type: "ctw", module: r.module, q: r.q,
+        n: (r.item.blanks || []).length || 10, code, detail,
+      });
       // 该卷答案 PDF 把填词答案词首砍掉 → CTW fail-closed 拒收（AP/RDL 不受影响）。
-      if (hold.dropCtw) { stats.droppedCtwTruncated += 1; continue; }
+      if (hold.dropCtw) { stats.droppedCtwTruncated += 1; ctwDrop("droppedCtwTruncated", "答案页砍掉词首，填词 fail-closed"); continue; }
       const built = buildCtw(r.item, { ...meta0, module: r.module, qStart: r.q });
-      if (built) { out.ctw.push(built); stats.built += 1; } else stats.buildFailed += 1;
+      if (built) { out.ctw.push(built); stats.built += 1; } else {
+        stats.buildFailed += 1;
+        ctwDrop("buildFailed", "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）");
+      }
     }
 
     // 选择题：先过盲审闸，再按材料归并
@@ -1349,8 +1446,16 @@ function main() {
     for (const r of mcq) {
       stats.itemsSeen += 1;
       const key = `reading#${r.item.q_number}`;
-      if (!auditedKeys.has(key)) { stats.droppedNoAudit += 1; continue; }
-      if (!passedKeys.has(key)) { stats.droppedDisagree += 1; continue; }
+      const qDrop = (code, detail) => recordDrop(stats, {
+        set: setname, slug: meta0.slug, section: "reading", type: r.type, module: r.module, q: r.item.q_number, n: 1, code, detail,
+      });
+      if (!auditedKeys.has(key)) { stats.droppedNoAudit += 1; qDrop("droppedNoAudit", "盲审没覆盖到这题"); continue; }
+      if (!passedKeys.has(key)) {
+        stats.droppedDisagree += 1;
+        const a = auditByKey.get(key) || {};
+        qDrop("droppedDisagree", `盲审选 ${a.model ?? "?"}${a.second_vote ? `、第二票选 ${a.second_vote.pick ?? "?"}` : ""}，答案页 ${a.stamped ?? "?"}`);
+        continue;
+      }
       stats.keptByAudit += 1;
       if (secondVoteKeys.has(key)) stats.keptBySecondVote += 1;
       passed.push(r);
@@ -1533,7 +1638,20 @@ function main() {
     });
   }
 
-  if (dry) { console.log("\n（--dry，未写文件）"); return; }
+  // 落库丢弃账本（scripts/realbank/drop_ledger.js）：--dry 也写 —— 这本账就是用来在落盘前看清题丢在哪一关的，
+  // 它不是题库文件。--only-* 三个口子不写：它们的契约是「其余文件一个字节都不动」。
+  const onlyMode = ["--only-bs", "--only-reading", "--only-writing-recall"].some((f) => process.argv.includes(f));
+  if (dry || !onlyMode) {
+    const dropRows = stats.dropRecorder.rows;
+    const dropPath = path.join(process.cwd(), "data", "realBank", "drop-ledger.json");
+    fs.writeFileSync(dropPath, `${JSON.stringify(dropLedgerPayload(dropRows, { dry }), null, 2)}\n`, "utf8");
+    const ds = summarizeDrops(dropRows);
+    console.log(`\n■ 落库丢弃账本 → ${path.relative(process.cwd(), dropPath)}：${ds.rows} 行 · ${ds.questions} 题 + 整科 ${ds.sections} 套·科`);
+    console.log(`  ${Object.values(ds.byCode).sort((a, b) => b.questions - a.questions || b.sections - a.sections)
+      .map((c) => `${c.code} ${c.questions} 题${c.sections ? ` + ${c.sections} 科` : ""}`).join(" / ")}`);
+  }
+
+  if (dry) { console.log("\n（--dry，未写题库文件）"); return; }
 
   // `--only-bs`：只落 data/realBank/writing/bs.json，其余文件一个字节都不动。
   //
