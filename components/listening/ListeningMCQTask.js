@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { listeningSecondsForType, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -161,6 +162,12 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
     handleQuestionTimeout();
   }, [answerTimeLeft, handleQuestionTimeout, isTimed, phase, submitted]);
 
+  // 交卷后答错的题可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
+  // 必须在下面几个 early return 之前调 —— hooks 不能写在条件返回之后。
+  const listeningAi = useListeningAiExplain();
+  const explainContext =
+    item?.transcript || item?.announcement || item?.lecture || conversationText(item?.conversation) || "";
+
   if (!item || totalQ === 0) {
     return (
       <PageShell>
@@ -254,6 +261,24 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, isPractic
                   <div style={{ marginTop: 8, fontSize: 12, color: C.t2, lineHeight: 1.5, padding: "8px 10px", background: "#FFFBEB", borderRadius: 6, border: "1px solid #FDE68A" }}>
                     <strong>Explanation:</strong> {q.explanation}
                   </div>
+                )}
+                {/* AI 讲解：只给答错的题。题库自带的 explanation 可能缺失，
+                    这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
+                {r && !r.isCorrect && (
+                  <ListeningAiExplainBlock
+                    explainKey={`${item.id || "task"}-q${i}`}
+                    detail={{
+                      subtype: taskType,
+                      qid: q.qid || `${item.id || "task"}-q${i}`,
+                      stem: q.stem,
+                      contextText: explainContext,
+                      options: q.options,
+                      selected: r.selected,
+                      correct: q.answer,
+                      isCorrect: r.isCorrect,
+                    }}
+                    {...listeningAi}
+                  />
                 )}
               </div>
             );

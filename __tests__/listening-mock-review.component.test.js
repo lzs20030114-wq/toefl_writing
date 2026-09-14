@@ -1,7 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ListeningProgressView } from "../components/listening/ListeningProgressView";
 
-jest.mock("../lib/AuthContext", () => ({ getSavedCode: jest.fn(() => null) }));
+// getSavedTier：逐题回顾里的 AI 讲解块会读 tier；"free" 与真实实现的默认值一致。
+jest.mock("../lib/AuthContext", () => ({
+  getSavedCode: jest.fn(() => null),
+  getSavedTier: jest.fn(() => "free"),
+}));
 
 // A listening MOCK session shaped the way AdaptiveExamShell → buildTaskSnapshots
 // persists it: per-task snapshots under details.m1.tasks / details.m2.tasks.

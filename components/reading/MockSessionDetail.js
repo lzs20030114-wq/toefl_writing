@@ -335,6 +335,8 @@ function McqTaskBody({ task, explainHook }) {
                     detail={{
                       qid: q.qid,
                       stem: q.stem || q.question,
+                      // 选句题（真题 AP）要把 S 键换成句子原文才讲得动，判据在 hook 里。
+                      question: q,
                       options: q.options,
                       selected,
                       correct: correctKey,

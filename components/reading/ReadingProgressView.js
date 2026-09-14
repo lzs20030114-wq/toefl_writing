@@ -13,6 +13,7 @@ import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { MockSessionDetail } from "./MockSessionDetail";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
+import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
 import { isSentenceSelection, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 
@@ -333,6 +334,8 @@ export function RDLDetail({ session }) {
   const results = session.details?.results;
   const passage = session.details?.passage;
   const questions = session.details?.questions;
+  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  const readingAi = useReadingAiExplain();
 
   return (
     <div>
@@ -401,6 +404,25 @@ export function RDLDetail({ session }) {
                 {!q && (
                   <div style={{ marginLeft: 20, fontSize: 12, color: P.textSec }}>
                     选择: {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {r.correct})</span>}
+                  </div>
+                )}
+                {/* AI 讲解：只给答错的题。没存题面（老记录 q 为空）时讲不了，不放按钮。 */}
+                {!r.isCorrect && q && (
+                  <div style={{ marginLeft: 20 }}>
+                    <ReadingAiExplainBlock
+                      explainKey={`${session.id}-q${i}`}
+                      detail={{
+                        qid: q.qid || `${session.details?.itemId || ""}-q${i}`,
+                        stem: q.stem,
+                        question: q,
+                        options: q.options,
+                        selected: r.selected,
+                        correct: r.correct || q.correct_answer,
+                        passage,
+                        isCorrect: r.isCorrect,
+                      }}
+                      {...readingAi}
+                    />
                   </div>
                 )}
               </div>

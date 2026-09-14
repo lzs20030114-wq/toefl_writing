@@ -5,6 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NE
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
+import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
@@ -224,6 +225,9 @@ function taskToReviewDetails(task) {
   const questions = Array.isArray(task.questions) ? task.questions : [];
   return {
     subtype,
+    // itemIds：给逐题回顾里的 AI 讲解一个稳定的题目身份。缺了它合成 id 会退化成
+    // "undefined-q0"（缓存 key 另有题干签名兜底，但带上它才能跨场次复用同一份解析）。
+    itemIds: task.itemId ? [task.itemId] : [],
     results: (task.results || []).map((r, i) => ({ ...r, correct: r.correct ?? questions[i]?.answer ?? null })),
     questions,
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
@@ -271,6 +275,8 @@ function MockTaskCard({ task, index }) {
 
 export function LCRDetail({ session }) {
   const results = session.details?.results || [];
+  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  const listeningAi = useListeningAiExplain();
   // LCR persists its per-item snapshot under details.items (parallel to
   // results) — see saveListeningSession in app/listening/page.js and the
   // matching reader in lib/listeningMistakes.js. Fall back to details.questions
@@ -340,6 +346,24 @@ export function LCRDetail({ session }) {
                 {explanation}
               </div>
             )}
+            {/* AI 讲解：只给答错的题。应答题走语用那支（没有原文定位可讲）。 */}
+            {!r.isCorrect && (speakerText || Object.keys(options).length > 0) && (
+              <ListeningAiExplainBlock
+                explainKey={`${session.id}-lcr${i}`}
+                detail={{
+                  subtype: "lcr",
+                  qid: q.id || `${session.id}-lcr${i}`,
+                  speaker: speakerText,
+                  situation: q.situation || session.details?.topic || "",
+                  pragmaticFunction: q.pragmatic_function || "",
+                  options,
+                  selected: r.selected,
+                  correct: correctKey,
+                  isCorrect: r.isCorrect,
+                }}
+                {...listeningAi}
+              />
+            )}
           </div>
         );
       })}
@@ -351,6 +375,8 @@ export function LCRDetail({ session }) {
 
 export function LADetail({ session }) {
   const results = session.details?.results || [];
+  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  const listeningAi = useListeningAiExplain();
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
   const audioUrl = session.details?.audio_url || null;
@@ -412,6 +438,25 @@ export function LADetail({ session }) {
                     {explanation}
                   </div>
                 )}
+                {/* AI 讲解：只给答错的题。老记录没存题面（stem 与 options 都空）时讲不了，不放。 */}
+                {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
+                  <div style={{ marginLeft: 20 }}>
+                    <ListeningAiExplainBlock
+                      explainKey={`${session.id}-q${i}`}
+                      detail={{
+                        subtype: session.details?.subtype || "lat",
+                        qid: q.qid || `${session.details?.itemIds?.[0] || session.id}-q${i}`,
+                        stem,
+                        contextText: transcript,
+                        options,
+                        selected: r.selected,
+                        correct: r.correct || q.answer,
+                        isCorrect: r.isCorrect,
+                      }}
+                      {...listeningAi}
+                    />
+                  </div>
+                )}
                 {/* Fallback */}
                 {Object.keys(options).length === 0 && !stem && (
                   <div style={{ marginLeft: 20, fontSize: 12, color: P.textSec }}>
@@ -433,6 +478,8 @@ export function LADetail({ session }) {
 
 export function LCDetail({ session }) {
   const results = session.details?.results || [];
+  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  const listeningAi = useListeningAiExplain();
   const questions = session.details?.questions || [];
   const conversation = session.details?.conversation || session.details?.turns || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
@@ -518,6 +565,25 @@ export function LCDetail({ session }) {
                 {explanation && (
                   <div style={{ marginTop: 6, marginLeft: 20, fontSize: 11, color: "#92400E", lineHeight: 1.5, padding: "6px 10px", background: "#FFFBEB", borderRadius: 6, border: "1px solid #FDE68A" }}>
                     {explanation}
+                  </div>
+                )}
+                {/* AI 讲解：只给答错的题。原文用对话逐行（没存 transcript 时按 turns 拼）。 */}
+                {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
+                  <div style={{ marginLeft: 20 }}>
+                    <ListeningAiExplainBlock
+                      explainKey={`${session.id}-q${i}`}
+                      detail={{
+                        subtype: "lc",
+                        qid: q.qid || `${session.details?.itemIds?.[0] || session.id}-q${i}`,
+                        stem,
+                        contextText: transcript || conversationText(conversation),
+                        options,
+                        selected: r.selected,
+                        correct: r.correct || q.answer,
+                        isCorrect: r.isCorrect,
+                      }}
+                      {...listeningAi}
+                    />
                   </div>
                 )}
                 {Object.keys(options).length === 0 && !stem && (
