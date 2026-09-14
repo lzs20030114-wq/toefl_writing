@@ -277,6 +277,63 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
   });
 });
 
+describe("缓存不许跨题串味", () => {
+  // 听力题库的 question 没有 qid，调用方只能拼合成 id；而模考详情 adapter 拼的
+  // session 既没有 id 也没有 itemIds —— 每个 task 的第一题都会拼成同一个
+  // "undefined-q0"。同一场模考里的两个 task 是两个独立组件，但 localStorage 缓存是
+  // 全局的：只靠合成 id 做 key，第二个 task 的第一题就会显示第一个 task 的解析。
+  const Q1 = {
+    stem: "What does the professor say the band thickness indicates?",
+    options: { A: "The age of the colony", B: "The water temperature that year" },
+    answer: "B",
+  };
+  const Q2 = {
+    stem: "Why does the professor mention tree rings?",
+    options: { A: "To correct a common error", B: "To draw an analogy" },
+    answer: "B",
+  };
+  // 模考 adapter（taskToReviewDetails）的形状：没有 session.id
+  const mockTask = (q) => ({
+    details: {
+      subtype: "lat",
+      transcript: TRANSCRIPT,
+      questions: [q],
+      results: [{ selected: "A", correct: "B", isCorrect: false }],
+    },
+  });
+
+  test("两个 task 的第一题都是「选 A / 正确 B」，第二个 task 不会拿到第一个的解析", async () => {
+    callAI
+      .mockImplementationOnce(async () => "第一个 task 的解析")
+      .mockImplementationOnce(async () => "第二个 task 的解析");
+
+    const first = render(<LADetail session={mockTask(Q1)} />);
+    fireEvent.click(aiButtons()[0]);
+    expect(await screen.findByText("第一个 task 的解析")).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    // 另一个 task：题目不同，但合成 id 会退化成同一个值
+    render(<LADetail session={mockTask(Q2)} />);
+    expect(screen.queryByText("第一个 task 的解析")).not.toBeInTheDocument();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(2));
+    expect(await screen.findByText("第二个 task 的解析")).toBeInTheDocument();
+  });
+
+  test("同一道题重新打开仍然命中缓存（收紧 key 没把正常复用也切断）", async () => {
+    const first = render(<LADetail session={mockTask(Q1)} />);
+    fireEvent.click(aiButtons()[0]);
+    expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    render(<LADetail session={mockTask(Q1)} />);
+    expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("buildListeningExplainMessage / 纯函数", () => {
   test("isRespondKind 只认 lcr", () => {
     expect(isRespondKind("lcr")).toBe(true);

@@ -31,10 +31,15 @@ const MAX_CACHE = 200;
 const MAX_PASSAGE_CHARS = 4000;
 
 function cacheKey(detail) {
-  // Stable key: question id (or stem) + selected + correct. Two students
-  // who answered the same question identically can share an explanation.
-  const qid = detail.qid || detail.stem || "";
-  return `${qid}|||${detail.selected || ""}|||${detail.correct || ""}`;
+  // Stable key: question id + 题干签名 + selected + correct。同一题同样的错答
+  // 共享一份解析（跨练习、跨入口复用，不重复计费）。
+  //
+  // 题干签名一律参与 key，不只在没有 qid 时兜底：调用方拿不到真 qid 时只能自己拼
+  // 合成 id，而缺 itemId 的老记录会把它拼成 "-q0" 这种退化值。只靠它做 key，
+  // 同一份记录里两道「答案组合相同」的不同题就会撞进同一条缓存。
+  const qid = detail.qid || "";
+  const stemSig = String(detail.stem || "").slice(0, 80);
+  return `${qid}|${stemSig}|||${detail.selected || ""}|||${detail.correct || ""}`;
 }
 
 function loadCache() {

@@ -241,6 +241,65 @@ describe("RDLTask 交卷后的逐题复盘", () => {
   });
 });
 
+describe("缓存不许跨题串味", () => {
+  // 缺 itemId 的老记录会把合成 id 拼成 "-q0" 这种退化值 —— 两份不同记录的第一题
+  // 都是这个值。localStorage 缓存是全局的：只靠合成 id 做 key，第二份记录的第一题
+  // 就会显示第一份记录的解析。
+  const Q_A = {
+    question_type: "detail",
+    stem: "According to the flyer, how much will the books cost?",
+    options: { A: "Between three and twenty-five dollars", B: "A flat fee of fifteen dollars" },
+    correct_answer: "A",
+  };
+  const Q_B = {
+    question_type: "inference",
+    stem: "What can be inferred about a buyer who arrives late?",
+    options: { A: "Fewer titles remain", B: "Prices double" },
+    correct_answer: "A",
+  };
+  // 老记录：没有 itemId
+  const legacy = (q) => ({
+    type: "reading",
+    date: "2026-09-13T10:00:00.000Z",
+    details: {
+      subtype: "rdl",
+      passage: PASSAGE,
+      questions: [q],
+      results: [{ selected: "B", correct: "A", isCorrect: false }],
+    },
+  });
+
+  test("两份记录的第一题都是「选 B / 正确 A」，第二份不会拿到第一份的解析", async () => {
+    callAI
+      .mockImplementationOnce(async () => "第一份记录的解析")
+      .mockImplementationOnce(async () => "第二份记录的解析");
+
+    const first = render(<RDLDetail session={legacy(Q_A)} />);
+    fireEvent.click(aiButtons()[0]);
+    expect(await screen.findByText("第一份记录的解析")).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    render(<RDLDetail session={legacy(Q_B)} />);
+    expect(screen.queryByText("第一份记录的解析")).not.toBeInTheDocument();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(2));
+    expect(await screen.findByText("第二份记录的解析")).toBeInTheDocument();
+  });
+
+  test("同一道题重新打开仍然命中缓存（收紧 key 没把正常复用也切断）", async () => {
+    const first = render(<RDLDetail session={legacy(Q_A)} />);
+    fireEvent.click(aiButtons()[0]);
+    expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+    first.unmount();
+
+    render(<RDLDetail session={legacy(Q_A)} />);
+    expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
+    expect(callAI).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("buildReadingExplainMessage 纯函数", () => {
   // 真题 AP 选句题：作答值是 S 键，讲解前提是把键换成句子原文。
   const SS_PASSAGE = "Intro paragraph.\n\nAlpha runs fast. Beta sits still. Gamma jumps high.";

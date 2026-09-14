@@ -49,8 +49,14 @@ export function isRespondKind(subtype) {
 
 function cacheKey(detail) {
   // 同一题 + 同样的错答 → 共享同一份解析（跨练习、跨入口复用，不重复计费）。
-  const qid = detail?.qid || detail?.stem || detail?.speaker || "";
-  return `${qid}|||${detail?.selected || ""}|||${detail?.correct || ""}`;
+  //
+  // 题干签名一律参与 key，不只在没有 qid 时兜底：听力题库的 question 没有 qid 字段，
+  // 调用方只能自己拼合成 id，而模考详情的 adapter 拼出来的 session 既没有 id 也没有
+  // itemIds —— 合成 id 会一起退化成 "undefined-q0"。只靠它做 key，同一场模考里
+  // 两道「答案组合相同」的不同题就会撞进同一条缓存，第二题显示第一题的解析。
+  const qid = detail?.qid || "";
+  const stemSig = String(detail?.stem || detail?.speaker || "").slice(0, 80);
+  return `${qid}|${stemSig}|||${detail?.selected || ""}|||${detail?.correct || ""}`;
 }
 
 function loadCache() {

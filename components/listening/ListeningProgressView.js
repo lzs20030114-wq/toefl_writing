@@ -225,6 +225,9 @@ function taskToReviewDetails(task) {
   const questions = Array.isArray(task.questions) ? task.questions : [];
   return {
     subtype,
+    // itemIds：给逐题回顾里的 AI 讲解一个稳定的题目身份。缺了它合成 id 会退化成
+    // "undefined-q0"（缓存 key 另有题干签名兜底，但带上它才能跨场次复用同一份解析）。
+    itemIds: task.itemId ? [task.itemId] : [],
     results: (task.results || []).map((r, i) => ({ ...r, correct: r.correct ?? questions[i]?.answer ?? null })),
     questions,
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
