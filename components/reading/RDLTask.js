@@ -13,6 +13,7 @@ import {
   sentenceSelectionLayout,
   sentenceSelectionSegments,
 } from "../../lib/reading/sentenceSelection";
+import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 
 const MCQ_KEYS = ["A", "B", "C", "D"];
 
@@ -88,6 +89,8 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     [isSelection, item.text, item.passage, item.paragraphs, question]
   );
   const [hoverSentence, setHoverSentence] = useState(null); // `${题号}:${S 键}`
+  // 交卷后答错的题可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
+  const readingAi = useReadingAiExplain();
   const leftPaneRef = useRef(null);
   const selectionParagraphRef = useRef(null);
 
@@ -591,6 +594,25 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                   </div>
                   <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5 }}>{question.explanation}</div>
                 </div>
+              )}
+
+              {/* AI 讲解：交卷后只给答错的题。题库自带的 explanation 可能缺失，
+                  这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
+              {submitted && !results[currentQ].isCorrect && (
+                <ReadingAiExplainBlock
+                  explainKey={`${item.id || "task"}-q${currentQ}`}
+                  detail={{
+                    qid: question.qid || `${item.id || "task"}-q${currentQ}`,
+                    stem: question.stem,
+                    question,
+                    options: question.options,
+                    selected: selections[currentQ],
+                    correct: question.correct_answer,
+                    passage: item.text || item.passage,
+                    isCorrect: results[currentQ].isCorrect,
+                  }}
+                  {...readingAi}
+                />
               )}
             </div>
 
