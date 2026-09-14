@@ -109,7 +109,14 @@ function changedKeys(before, after) {
   return new Set((after || []).filter((r) => r && prev.get(r.key) !== JSON.stringify(r)).map((r) => r.key));
 }
 
-/** 写 structured.json（先备份）并同步阅读基线 + 听力/口语合流快照。 */
+/**
+ * 写 structured.json（先备份）并同步阅读基线 + 听力/口语合流快照。
+ *
+ * 听力/口语只同步调用方**明说**是新跑出来的那几块（freshKeys）。不传 freshKeys 一律不同步 ——
+ * insert_promote / vision_restructure_mcq / gt_fallback_ap 这些阅读侧的就地修补都不传，旧默认「不传 = 全是新的」
+ * 会把这张卷上已经合流过的听力记录整科灌回合流快照（下一次合流拿自己的产出当输入，幂等就毁了）。
+ * 2026-09-14 补阅读插入题时撞见：转正 6 道插入题就要连带重写 6 卷的听力快照。
+ */
 function writeStructured(outDir, setname, data, { freshKeys } = {}) {
   const outPath = path.join(outDir, `${setname}.structured.json`);
   if (fs.existsSync(outPath)) {
@@ -120,7 +127,7 @@ function writeStructured(outDir, setname, data, { freshKeys } = {}) {
   return {
     outPath,
     synced: syncReadingToBase(outDir, setname, results),
-    mergeBases: syncListeningToMergeBases(outDir, setname, results, freshKeys),
+    mergeBases: syncListeningToMergeBases(outDir, setname, results, freshKeys instanceof Set ? freshKeys : new Set()),
   };
 }
 

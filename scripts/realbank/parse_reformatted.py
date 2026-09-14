@@ -378,6 +378,7 @@ _H_CTW = re.compile(r"(Complete the Words|Fill[- ]in[- ]the[- ]Blanks?|Missing L
 _H_MCQ = re.compile(r"(Multiple Choice|Academic)", re.I)
 _H_RANGE = re.compile(r"Q?(\d+)\s*-\s*Q?(\d+)")
 _ROW_CELL = re.compile(r"^Q?(\d+)$")
+_ROW_CELL_GLUED = re.compile(r"^Q(\d+)\s*[(（]\s*([A-Za-z][A-Za-z'\-]*)\s*[)）]?$")
 
 
 def classify_header(h: str, section: str | None, cur_module: int = 1, zone_seq: dict = None):
@@ -704,8 +705,14 @@ def _row_pairs(line: str) -> list:
             if m and i + 1 < len(cells):
                 out.append((int(m.group(1)), cells[i + 1].strip()))
                 i += 2
-            else:
-                i += 1
+                continue
+            # 表格抽文字时题号格与答案格之间的竖线偶尔变成左括号：`Q4(depicted | Q9 | remarkable`。
+            # 不认的话这一格整个被跳过，答案表少一个词 —— rf0808 模块 2 填词 10 空只配上 9 个答案，整段作废。
+            # 收得很紧：必须带 Q 前缀、括号后是单个词。
+            g = _ROW_CELL_GLUED.match(cells[i])
+            if g:
+                out.append((int(g.group(1)), g.group(2)))
+            i += 1
         return out
     # 「裸多栏」：答案表是 4 栏（Question|Answer|Question|Answer），但源里分隔符全丢了 ——
     # docx 表格被读成一段 `Q33 B Q34 D`，OCR 也常吐成这样。不认的话整行会被当成

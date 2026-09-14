@@ -78,7 +78,8 @@ function main() {
         continue;
       }
       const k = rec.items.findIndex(sameQ);
-      const res = promoteInsertItem(rec.items[k], table, e.answer_key || rec.items[k].answer_key);
+      const res = promoteInsertItem(rec.items[k], table, e.answer_key || rec.items[k].answer_key,
+        { set: setname, module: Number(e.module), q_number: Number(e.q_number) });
       if (!res.ok) {
         skipped.push({ key, why: res.problems.join(" / ") });
         continue;
