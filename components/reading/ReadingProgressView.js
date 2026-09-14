@@ -15,6 +15,7 @@ import { MockSessionDetail } from "./MockSessionDetail";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
 import { isSentenceSelection, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 
 const ACCENT = { color: "#3B82F6", soft: "#EFF6FF" };
@@ -336,6 +337,8 @@ export function RDLDetail({ session }) {
   const questions = session.details?.questions;
   // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
   const readingAi = useReadingAiExplain();
+  // 题干、选项也能点词查：上下文拼上题目文本，词只出现在选项里时 AI 讲解 / 收藏原句也有句可依。
+  const lookupContext = useMemo(() => questionLookupContext(passage, questions), [passage, questions]);
 
   return (
     <div>
@@ -347,7 +350,7 @@ export function RDLDetail({ session }) {
       )}
       {/* Per-question detail with full stem + options */}
       {Array.isArray(results) && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <WordLookupLayer passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions && questions[i];
             return (
@@ -408,7 +411,7 @@ export function RDLDetail({ session }) {
                 )}
                 {/* AI 讲解：只给答错的题。没存题面（老记录 q 为空）时讲不了，不放按钮。 */}
                 {!r.isCorrect && q && (
-                  <div style={{ marginLeft: 20 }}>
+                  <div data-no-dict style={{ marginLeft: 20 }}>
                     <ReadingAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
                       detail={{
@@ -428,7 +431,7 @@ export function RDLDetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       )}
     </div>
   );

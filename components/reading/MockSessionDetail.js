@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { formatLocalDateTime } from "../../lib/utils";
 import { getBandColor } from "../../lib/history/bandColor";
@@ -159,6 +160,8 @@ function McqTaskBody({ task, explainHook }) {
 
   const passage = task.passage || task.text || "";
   const [passageOpen, setPassageOpen] = useState(true);
+  // 题干、选项也能点词查，上下文拼上题目文本（原文在前，优先取原文里的那句）。
+  const lookupContext = useMemo(() => questionLookupContext(passage, renderable), [passage, renderable]);
 
   return (
     <div>
@@ -222,7 +225,7 @@ function McqTaskBody({ task, explainHook }) {
           🎧 原音频已记录
         </div>
       )}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <WordLookupLayer passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {renderable.map((q, i) => {
           const r = results[i];
           const correctKey = q.correct_answer || q.answer;
@@ -329,7 +332,7 @@ function McqTaskBody({ task, explainHook }) {
                 </div>
               )}
               {!isCorrect && (
-                <div style={{ marginLeft: 25 }}>
+                <div data-no-dict style={{ marginLeft: 25 }}>
                   <ReadingAiExplainBlock
                     explainKey={`${task.itemId || "task"}-${task.module || ""}-q${i}`}
                     detail={{
@@ -350,7 +353,7 @@ function McqTaskBody({ task, explainHook }) {
             </div>
           );
         })}
-      </div>
+      </WordLookupLayer>
     </div>
   );
 }
