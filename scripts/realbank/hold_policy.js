@@ -122,7 +122,8 @@ function sectionAgreement(audited, section) {
  *
  * @param {Array}  flags     该卷在 source-flags.json 里的 flag 数组（原始形状，含 severity/sections/code）
  * @param {string} section   "reading" | "writing" | "listening" | "speaking"
- * @param {object} ctx       { agreement: number|null } 该科盲审一致率，只有 reading 的 section_gap 用得上
+ * @param {object} ctx       { agreement: number|null } 该科盲审一致率，只有 reading 的 section_gap 用得上；
+ *                           { ctwOnly: true } 这卷阅读只有填词块（选择题一道没配上答案，见下方 section_gap 分支）
  * @returns {{held:boolean, heldBy:string[], dropCtw:boolean, notes:string[]}}
  *   held    —— 整科不收
  *   heldBy  —— 造成扣留的 code（用于日志）
@@ -161,6 +162,13 @@ function holdDecision(flags, section, ctx = {}) {
     if (f.code === "ingest_blocker" && !INGEST_BLOCKER_RELAXABLE.test(String(f.detail || ""))) {
       // 不是「题号重启块被忽略」那一种 —— 照旧整科扣下。
       heldBy.push(f.code);
+      continue;
+    }
+    // section_gap 的另一种形态（2026-09-14，4.29）：答案 PDF 只剩填词那几页，选择题一道都没配上答案。
+    // 没有选择题就没有盲审一致率可看（agreement=null），但这时放行也放不进任何选择题 —— 进得来的只有填词，
+    // 而填词的闸是逐空核答案页（ctw_verify.js）：真错位的话还原词对不上答案，块本来就 flagged、进不了库。
+    if (f.code === "section_gap" && agreement == null && ctx.ctwOnly === true) {
+      notes.push("section_gap：这卷阅读答案页只剩填词（选择题一道没配上答案、无从盲审），填词逐空核过答案页，只放行填词");
       continue;
     }
     // section_gap / ingest_blocker(题号重启块)：一致率够高就放行

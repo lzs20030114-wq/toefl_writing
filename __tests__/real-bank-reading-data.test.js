@@ -21,6 +21,7 @@ import RB_CTW from "../data/realBank/reading/ctw.json";
 import RB_RDL from "../data/realBank/reading/rdl.json";
 import RB_AP from "../data/realBank/reading/ap.json";
 import RB_COUNTS from "../data/realBank/reading/counts.json";
+import { splitBlankToken } from "../lib/reading/ctwToken";
 
 import {
   getRealAPItems,
@@ -214,7 +215,12 @@ describe("真题阅读：CTW 形状（CTWTask 硬契约）", () => {
         expect(b.position).toBeGreaterThan(prev);
         expect(b.position).toBeLessThan(tokens.length);
         // 屏幕上那个词必须以给定前缀开头，否则用户看到的灰底字母和答案对不上。
-        expect(tokens[b.position].toLowerCase().startsWith(b.displayed_fragment.toLowerCase())).toBe(true);
+        // token 可以粘着首标点（"(like"，真题原文带括号）—— 渲染按 lib/reading/ctwToken.js 切掉再印前缀，这里同口径。
+        const { lead } = splitBlankToken(tokens[b.position], b.original_word);
+        expect(tokens[b.position].slice(lead.length).toLowerCase().startsWith(b.displayed_fragment.toLowerCase())).toBe(true);
+        // 切出来的「前标点 + 词 + 后标点」必须拼回 token 原文：渲染一个字符都不丢
+        const core = tokens[b.position].slice(lead.length, lead.length + b.original_word.length);
+        expect(core.toLowerCase()).toBe(b.original_word.toLowerCase());
         prev = b.position;
       });
     });

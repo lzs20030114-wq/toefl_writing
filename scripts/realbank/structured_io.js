@@ -97,6 +97,18 @@ function syncListeningToMergeBases(outDir, setname, results, freshKeys) {
   return written;
 }
 
+/**
+ * 就地重判（--reverify-ctw / --reverify-mcq）前后，真正变了的记录的 key —— 传给 writeStructured 当 freshKeys。
+ *
+ * 为什么不能图省事把全部 key 传进去：syncListeningToMergeBases 会把 freshKeys 里的听力/口语记录灌回合流快照。
+ * 合流过的卷，structured.json 里的听力记录是合流**产出**（带 merged_by、key 格式都换了），灌回快照 =
+ * 下一次合流拿自己的产出当输入，幂等就毁了。重判只动它判过的那几块，没变的一条都不许算「新鲜」。
+ */
+function changedKeys(before, after) {
+  const prev = new Map((before || []).map((r) => [r && r.key, JSON.stringify(r)]));
+  return new Set((after || []).filter((r) => r && prev.get(r.key) !== JSON.stringify(r)).map((r) => r.key));
+}
+
 /** 写 structured.json（先备份）并同步阅读基线 + 听力/口语合流快照。 */
 function writeStructured(outDir, setname, data, { freshKeys } = {}) {
   const outPath = path.join(outDir, `${setname}.structured.json`);
@@ -112,4 +124,4 @@ function writeStructured(outDir, setname, data, { freshKeys } = {}) {
   };
 }
 
-module.exports = { tallyOf, syncReadingToBase, syncListeningToMergeBases, writeStructured, MERGE_BASES };
+module.exports = { tallyOf, syncReadingToBase, syncListeningToMergeBases, writeStructured, changedKeys, MERGE_BASES };

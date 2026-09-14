@@ -31,8 +31,8 @@
     "sDroppedInvalid": "validator 不收"
   },
   "summary": {
-    "rows": 828,
-    "questions": 544,
+    "rows": 822,
+    "questions": 484,
     "sections": 13,
     "byCode": {
       "wSkippedThin": {
@@ -140,13 +140,6 @@
         "questions": 32,
         "sections": 0
       },
-      "buildFailed": {
-        "code": "buildFailed",
-        "label": "构建失败（材料太短 / 一组题全丢 / 填词结构不合法）",
-        "rows": 8,
-        "questions": 71,
-        "sections": 0
-      },
       "droppedBadOptions": {
         "code": "droppedBadOptions",
         "label": "选项残缺（不是恰好 4 个 / 答案下标非法）",
@@ -167,6 +160,13 @@
         "rows": 3,
         "questions": 0,
         "sections": 3
+      },
+      "buildFailed": {
+        "code": "buildFailed",
+        "label": "构建失败（材料太短 / 一组题全丢 / 填词结构不合法）",
+        "rows": 2,
+        "questions": 11,
+        "sections": 0
       }
     },
     "bySection": {
@@ -187,7 +187,7 @@
       },
       "reading": {
         "section": "reading",
-        "questions": 108,
+        "questions": 48,
         "sections": 4
       }
     },
@@ -286,9 +286,9 @@
       },
       "ctw": {
         "type": "ctw",
-        "questions": 70,
+        "questions": 10,
         "byCode": {
-          "buildFailed": 70
+          "buildFailed": 10
         }
       }
     }
@@ -10555,19 +10555,6 @@
       "set": "2.1新托福真题A卷",
       "slug": "21a",
       "section": "reading",
-      "type": "ctw",
-      "module": 1,
-      "q": 1,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "reading",
       "type": "rdl",
       "module": 1,
       "q": 28,
@@ -10630,19 +10617,6 @@
       "detail": "盲审选 C、第二票选 C，答案页 A"
     },
     {
-      "set": "3.15新托福真题",
-      "slug": "315",
-      "section": "reading",
-      "type": "ctw",
-      "module": 2,
-      "q": 1,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
-    },
-    {
       "set": "3.16新托福真题",
       "slug": "316",
       "section": "reading",
@@ -10667,19 +10641,6 @@
       "id": null,
       "code": "droppedDisagree",
       "detail": "盲审选 D、第二票选 D，答案页 C"
-    },
-    {
-      "set": "3.18新托福真题",
-      "slug": "318",
-      "section": "reading",
-      "type": "ctw",
-      "module": 1,
-      "q": 1,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
     },
     {
       "set": "3.20新托福真题",
@@ -10719,19 +10680,6 @@
       "id": null,
       "code": "droppedDisagree",
       "detail": "盲审选 D、第二票选 D，答案页 A"
-    },
-    {
-      "set": "4.11新托福真题",
-      "slug": "411",
-      "section": "reading",
-      "type": "ctw",
-      "module": 1,
-      "q": 11,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
     },
     {
       "set": "4.15新托福真题",
@@ -10797,32 +10745,6 @@
       "id": null,
       "code": "droppedDisagree",
       "detail": "盲审选 B、第二票选 B，答案页 A"
-    },
-    {
-      "set": "4.5新托福真题",
-      "slug": "45",
-      "section": "reading",
-      "type": "ctw",
-      "module": 2,
-      "q": 1,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "section": "reading",
-      "type": "ctw",
-      "module": 1,
-      "q": 11,
-      "n": 10,
-      "scope": "unit",
-      "id": null,
-      "code": "buildFailed",
-      "detail": "填词结构不合法（答案词在正文里定位不到 / 给定前缀对不上 / 没有可填的空）"
     },
     {
       "set": "5.10新托福真题",

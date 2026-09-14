@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { formatLocalDateTime } from "../../lib/utils";
 import { getBandColor } from "../../lib/history/bandColor";
 
@@ -65,12 +66,14 @@ function CtwTaskBody({ task }) {
     const entry = blankByPos[wi];
     if (!entry) return <span key={wi}>{word} </span>;
     const { blank, result } = entry;
+    const { lead, tail } = splitBlankToken(word, blank.original_word);
     const isCorrect = result?.isCorrect;
     const userTyped = result?.userAnswer || `${blank.displayed_fragment}…`;
     const color = isCorrect ? C.correct : C.wrong;
     const bg = isCorrect ? C.correctSoft : C.wrongSoft;
     return (
       <span key={wi}>
+        {lead}
         <span
           title={isCorrect ? `✓ ${blank.original_word}` : `你输入: ${userTyped} · 正确: ${blank.original_word}`}
           style={{
@@ -87,7 +90,7 @@ function CtwTaskBody({ task }) {
         >
           {blank.original_word}
         </span>
-        {word.match(/[.,;:!?]+$/)?.[0] || ""}{" "}
+        {tail}{" "}
       </span>
     );
   });

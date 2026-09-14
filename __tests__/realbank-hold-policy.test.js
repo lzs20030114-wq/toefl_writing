@@ -86,6 +86,18 @@ describe("hold_policy.holdDecision：section_gap 按盲审一致率条件放行"
     expect(holdDecision([F("section_gap")], "reading", {}).held).toBe(true);
   });
 
+  test("阅读只有填词（选择题一道没配上答案，4.29 形态）→ 没有一致率也放行，只放得进核过答案页的填词", () => {
+    const d = holdDecision([F("section_gap")], "reading", { agreement: null, ctwOnly: true });
+    expect(d.held).toBe(false);
+    expect(d.notes.join("")).toMatch(/只剩填词/);
+    // 有选择题、只是没跑盲审 → 仍按老规矩扣下
+    expect(holdDecision([F("section_gap")], "reading", { agreement: null, ctwOnly: false }).held).toBe(true);
+    // 有一致率且太低：ctwOnly 不当免死金牌（那是真错位的信号）
+    expect(holdDecision([F("section_gap")], "reading", { agreement: 0.5, ctwOnly: true }).held).toBe(true);
+    // 只放宽 section_gap：同卷另有真 blocking 照扣
+    expect(holdDecision([F("section_gap"), F("answer_key_misaligned")], "reading", { agreement: null, ctwOnly: true }).held).toBe(true);
+  });
+
   test("阈值就在 0.85，边界取「≥ 放行」", () => {
     expect(SECTION_GAP_MIN_AGREEMENT).toBe(0.85);
     expect(holdDecision([F("section_gap")], "reading", { agreement: 0.85 }).held).toBe(false);

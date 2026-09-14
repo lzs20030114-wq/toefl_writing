@@ -26,6 +26,7 @@ import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
+import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { fmt } from "../../lib/utils";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -210,12 +211,15 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
     const blank = blankIdx < item.blanks.length && item.blanks[blankIdx].position === wi ? item.blanks[blankIdx] : null;
     if (blank) {
       const missingLen = blank.original_word.length - blank.displayed_fragment.length;
+      // token 上粘着的标点印在两边（此前这里连尾句号都没印，"...frag___" 后面的 "." 会丢）
+      const { lead, tail } = splitBlankToken(words[wi], blank.original_word);
       const bi = blankIdx;
       const isCorrect = submitted
         ? (blank.displayed_fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")
         : null;
       rendered.push(
         <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline", margin: "2px 3px" }}>
+          {lead && <span>{lead}</span>}
           {/* Given prefix — shaded "locked" chip so users don't re-type it. */}
           <span style={{
             fontWeight: 700,
@@ -251,6 +255,7 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
               {blank.original_word}
             </span>
           )}
+          {tail && <span>{tail}</span>}
         </span>
       );
       blankIdx++;

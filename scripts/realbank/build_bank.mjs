@@ -305,10 +305,31 @@ function jaccard(a, b) {
 // 所以 trim+split+filter 与裸 split 产出的数组逐位相同 —— blanks[].position 才能对上屏幕上的词。
 const words = (s) => String(s || "").trim().split(/\s+/).filter(Boolean);
 
-// 尾标点剥离口径与 lib/readingGen/cTestBlanker.js:122 一致（那边是 live 库的生成器）。
-// 必须剥：CTWTask 用 `original_word.length - displayed_fragment.length` 算输入框宽度 / maxLength，
-// 带着句号就会多算一位 —— 屏幕上多出一条下划线，用户填满了也对不上。
-const stripTrailingPunct = (w) => String(w || "").replace(/[.,;:!?]+$/, "");
+// 挖空词在正文 token 里的「词芯」。必须剥干净：CTWTask 用 `original_word.length - displayed_fragment.length`
+// 算输入框宽度 / maxLength，带着句号就会多算一位 —— 屏幕上多出一条下划线，用户填满了也对不上。
+//   · 尾标点：口径与 lib/readingGen/cTestBlanker.js:122 一致（"word." / "word,"），外加右括号 / 右引号（"like)"）；
+//   · 首标点：左括号 / 左引号（"(like"）—— 2026-09-14 前没剥，2.1A / 4.8 / 4.11 三篇真题整篇 buildFailed；
+//   · 破折号连写："region—not" / "events—such" 是一个 token，拆成几段各认各的（3.15 / 3.18 / 4.5 同样整篇丢）。
+// 撇号不剥（students' / don't 是词的一部分）。词芯必须是 token 里逐字出现的一段：
+// 前端 lib/reading/ctwToken.js 按它把 token 切回「前标点 + 词 + 后标点」渲染，一个字符都不丢。
+// 定位分两遍：先认整个 token（只剥首尾标点，与 2026-09-14 前的定位口径逐位相同），整段都认不到才拆破折号。
+// 顺序不能反：real_ctw_38_1_11 首句里有 "silk—a"、第 20 个词才是挖空的 "silk" —— 先拆就会定位到首句那个。
+const TRAIL_PUNCT = /[.,;:!?)\]}"”»]+$/;
+const LEAD_PUNCT = /^[^A-Za-z0-9]+/;
+const stripPunct = (w) => String(w || "").replace(LEAD_PUNCT, "").replace(TRAIL_PUNCT, "");
+const dashSegments = (tok) => (/[—–]/.test(tok) ? String(tok).split(/[—–]/).map(stripPunct).filter(Boolean) : []);
+const coreKey = (w) => String(w || "").toLowerCase().replace(/[^a-z0-9']/g, "");
+function locateBlankWord(toks, want, cursor) {
+  for (let i = cursor; i < toks.length; i += 1) {
+    const whole = stripPunct(toks[i]);
+    if (coreKey(whole) === want) return { at: i, word: whole };
+  }
+  for (let i = cursor; i < toks.length; i += 1) {
+    const seg = dashSegments(toks[i]).find((c) => coreKey(c) === want);
+    if (seg) return { at: i, word: seg };
+  }
+  return { at: -1, word: "" };
+}
 
 /* ── CTW：把 {passage, blanks:[{word,given}]} 展成库里的挖空结构 ───────────── */
 //
@@ -318,18 +339,13 @@ const stripTrailingPunct = (w) => String(w || "").replace(/[.,;:!?]+$/, "");
 function buildCtw(item, meta) {
   const passage = String(item.passage || "").trim();
   const toks = words(passage);
-  const lower = toks.map((t) => t.toLowerCase().replace(/[^a-z0-9']/g, ""));
   const blanks = [];
   let cursor = 0;
   for (const b of item.blanks || []) {
-    const want = String(b.word || "").toLowerCase().replace(/[^a-z0-9']/g, "");
+    const want = coreKey(b.word);
     const given = String(b.given || "");
-    let at = -1;
-    for (let i = cursor; i < lower.length; i += 1) {
-      if (lower[i] === want) { at = i; break; }
-    }
+    const { at, word: originalWord } = locateBlankWord(toks, want, cursor);
     if (at < 0) return null;                 // 定位不到就整题作废，不猜
-    const originalWord = stripTrailingPunct(toks[at]);
     // CTWTask 的硬契约：屏幕上先印 displayed_fragment，再开 (original_word.length - fragment.length)
     // 个字母的输入框。前缀对不上 = 宽度算错 = 这个空永远填不对，所以整题作废（宁可少题不许出死题）。
     if (!originalWord.toLowerCase().startsWith(given.toLowerCase())) return null;
@@ -1389,8 +1405,15 @@ function main() {
     const setname = f.replace(/\.structured\.json$/, "");
     const st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8"));
     const auditPath = path.join(OUT_DIR, `${setname}.audit.json`);
-    if (!fs.existsSync(auditPath)) { console.warn(`跳过 ${setname}：没有盲审结果`); continue; }
-    const au = JSON.parse(fs.readFileSync(auditPath, "utf8"));
+    // 没有盲审结果：选择题一道都不能收（没审过 = 不收），但**填词不走盲审** —— 它的闸是逐空核答案页（ctw_verify.js）。
+    // 4.29 就是这种卷：答案 PDF 只剩填词那几页，选择题一道都没配上答案，也就没东西可审、从没生成过 audit.json；
+    // 以前整卷跳过，三段核过答案页的填词跟着陪葬。只在「阅读里没有任何 ok 的选择题块、但有 ok 的填词块」时放它进来，
+    // 其余没有盲审结果的卷照旧整卷跳过（有选择题却没审 = 管线没跑完，不是这种源料形态）。
+    const readingOk = st.results.filter((r) => r.section === "reading" && r.status === "ok");
+    const ctwOnly = readingOk.length > 0 && readingOk.every((r) => r.type === "ctw");
+    if (!fs.existsSync(auditPath) && !ctwOnly) { console.warn(`跳过 ${setname}：没有盲审结果`); continue; }
+    const au = fs.existsSync(auditPath) ? JSON.parse(fs.readFileSync(auditPath, "utf8")) : { audited: [] };
+    if (!fs.existsSync(auditPath)) console.warn(`${setname}：没有盲审结果，但阅读只有填词（选择题一道没配上答案）→ 只收核过答案页的填词`);
     if (!Array.isArray(au.audited)) {
       console.warn(`跳过 ${setname}：盲审结果是旧格式（没有 audited 明细），无法区分「审过且一致」与「压根没审」`);
       continue;
@@ -1415,7 +1438,7 @@ function main() {
     // 扣留判定：ctw_answer_truncated 降级为只丢 CTW、section_gap 按盲审一致率条件放行，
     // 其余 blocking code 仍整科扣下（判据与理由见 hold_policy.js）。
     const readAgree = sectionAgreement(au.audited, "reading");
-    const hold = holdFor(setname, "reading", { agreement: readAgree });
+    const hold = holdFor(setname, "reading", { agreement: readAgree, ctwOnly });
     recordHold(setname, "reading", { ...hold, agreement: readAgree });
     if (hold.held) {
       console.warn(`跳过 ${setname} 阅读：源料体检标了 blocking（${hold.heldBy.join("/")}，整科扣下待人工核对）`);
@@ -1520,6 +1543,12 @@ function main() {
   // 上一版库的快照：id 沿用、材料原图沿用都拿它当基准，所以要在**任何落盘之前**读。
   // （--dry 也要读：不然 --dry 报的 id 与真跑不一致，看了等于没看。）
   const prevReading = readBundle(BANK_DIR, ["ap", "rdl"]);
+  // 上一版三个阅读库的条目顺序（落盘前按它排，理由见落盘处）。ctw 单独读：prevReading 只给 id 沿用 / 原图沿用用。
+  const PREV_READING_ORDER = {
+    ap: prevReading.ap.map((it) => String(it.id)),
+    rdl: prevReading.rdl.map((it) => String(it.id)),
+    ctw: readBundle(BANK_DIR, ["ctw"]).ctw.map((it) => String(it.id)),
+  };
 
   // id 沿用（scripts/realbank/id_carry.js）：AP/RDL 的 id 带着「组内最小题号」，
   // 而源料会长 —— 补回一道更靠前的题，27 就变 26，整条 item 改名。改名会让
@@ -1754,6 +1783,11 @@ function main() {
   const carriedImages = carryMaterialImages(prevReading, { ap: out.ap, rdl: out.rdl });
   console.log(`\n■ 材料原图沿用：${carriedImages} 条`);
 
+  // 列表顺序就是前端「第 N 套」的序号（lib/realBank.js compactCard 按数组下标编号，注释里写着「源库只追加不重排」）。
+  // 按卷名排序遍历会把补进来的卷插到中间：2026-09-13 那次重建，原有 116 段填词里 91 段序号整体后移，
+  // 用户记得的「第 30 套」换成了另一篇。与造句同一个办法（./bs_order.js）：上一版在线的条目按上一版顺序在前，
+  // 新条目按遍历顺序追加在后；这一步之后 applyReview 摘掉的下架条目不影响其余条目的相对顺序。
+  for (const k of ["ap", "rdl", "ctw"]) out[k] = orderByPrevious(out[k], PREV_READING_ORDER[k]);
   fs.mkdirSync(BANK_DIR, { recursive: true });
   for (const [k, v] of Object.entries(out)) {
     const p = path.join(BANK_DIR, `${k}.json`);

@@ -31,9 +31,12 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl, formatDeepSeekError } = require("../../lib/ai/deepseekHttp");
 // CTW 逐空校验抽成纯函数（可单测）：./ctw_verify.js —— 那里写着「答案页只给后半截」为什么能收。
-const { verifyCtw } = require("./ctw_verify.js");
+const { verifyCtwDetailed } = require("./ctw_verify.js");
+// 补充判据的词典（站内划词词典 public/dict）：答案页错字 / 残片糊字母要靠「是不是真词」判，见 ctw_verify.js 头注
+const { makeIsWord } = require("./word_list.js");
+const isWord = makeIsWord();
 // 就地修补（--merge / --only-failed / --reverify-ctw）写回时统一走这里：同步第一来源的 rw 阅读基线。
-const { writeStructured } = require("./structured_io.js");
+const { writeStructured, changedKeys } = require("./structured_io.js");
 // 调用预算（按题型给，超时从预算推导）+ 宽松 JSON 解析 + 解析失败文案，抽成纯函数可单测：./model_output.js ——
 // 那里写着「无法解析为 JSON」的真因（推理 token 吃光 max_tokens，正文为空或被截断），
 // 以及为什么 2026-09-14 把这条预算从只给 CTW 放开到全部题型。
@@ -433,8 +436,13 @@ async function processUnit(u) {
       `【OCR 文本】\n${u.body}\n\n【被挖掉的词（按顺序）】\n${words.map((w, i) => `${i + 1}. ${w}`).join("\n")}\n\n${CTW_ANSWER_NOTE}`,
       callBudget("ctw"));
     if (!obj) return { ...base, ...src, status: "flagged", problems: [unparsableProblem(raw)], items: [] };
-    const problems = verifyCtw(obj, words);
-    return { ...base, ...src, status: problems.length ? "flagged" : "ok", problems, items: [obj] };
+    // 屏幕 OCR（u.body）是补充判据的第二份证据：读出每个空实际露出的前缀，模型写错了以屏幕为准改正
+    const v = verifyCtwDetailed(obj, words, { isWord, body: u.body });
+    if (!v.problems.length) obj.blanks = v.blanks;
+    return {
+      ...base, ...src, status: v.problems.length ? "flagged" : "ok", problems: v.problems, items: [obj],
+      ...(v.relaxed.length ? { ctw_relaxed: v.relaxed } : {}),
+    };
   }
 
   // 材料屏本身不是题（它的题号只是页眉），交给后面的题块当 carryMaterial 用
@@ -567,20 +575,33 @@ async function main() {
   }
   if (reverifyCtw) {
     const byKey = new Map(collectUnits(scan).map((u) => [u.key, u]));
+    // 重判不调模型，屏幕 OCR 只当补充判据的证据（读每个空露出的前缀）。--ctw-vision-body 换过正文的块要用换过的那份：
+    // 重新 collectUnits 拿到的是本地 OCR，看图转写的前缀就白转了（5.11 本地 OCR 把 "ri" 吃掉，看图是 "the ri__ of"）。
+    for (const u of units) if (u.bodySource) byKey.set(u.key, u);
     let healed = 0, still = 0, orphan = 0;
     const results = existing.results.map((r) => {
       if (r.type !== "ctw" || !Array.isArray(r.items) || !r.items.length) return r;
       const u = byKey.get(r.key);
       if (!u) { orphan += 1; return r; }
-      const problems = verifyCtw(r.items[0], u.answers.map((a) => a.answer));
-      if (!problems.length && r.status !== "ok") healed += 1;
+      const v = verifyCtwDetailed(r.items[0], u.answers.map((a) => a.answer), { isWord, body: u.body });
+      const problems = v.problems;
+      if (!problems.length && r.status !== "ok") {
+        healed += 1;
+        console.log(`   ✓ ${r.key}${v.relaxed.map((x) => `  第 ${x.blank} 空 ${x.rule}：${x.word}（答案页 "${x.answer}"`
+          + `${x.given_was != null ? `，前缀 ${x.given_was} → ${x.given}` : ""}）`).join("")}`);
+      }
       if (problems.length) still += 1;
-      return { ...r, status: problems.length ? "flagged" : "ok", problems };
+      const next = { ...r, status: problems.length ? "flagged" : "ok", problems };
+      if (!problems.length) next.items = [{ ...r.items[0], blanks: v.blanks }, ...r.items.slice(1)];
+      if (!problems.length && v.relaxed.length) next.ctw_relaxed = v.relaxed; else delete next.ctw_relaxed;
+      return next;
     });
     console.log(`■ ${setname} 重判 CTW：转 ok ${healed} 块；仍 flagged ${still} 块；找不到对应答案块 ${orphan} 块`);
     if (dry) { console.log("（--dry，未写盘）"); return; }
+    // freshKeys 只给真改动过的记录：把全部 key 传进去会让合流产出的听力记录被灌回合流快照（毁掉合流幂等，
+    // 见 structured_io.syncListeningToMergeBases）。这里只改了阅读 CTW，所以一条听力都不该同步。
     const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results },
-      { freshKeys: new Set(results.map((r) => r.key)) });
+      { freshKeys: changedKeys(existing.results, results) });
     console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
     return;
   }
@@ -603,8 +624,9 @@ async function main() {
     detail.slice(0, 12).forEach((d) => console.log(`   ✗ ${d}`));
     if (!demoted) { console.log("  （没有需要降级的块，产物未改动）"); return; }
     if (dry) { console.log("（--dry，未写盘）"); return; }
+    // 同上：只同步真降级了的记录（跳过的合流产出一条都不许灌回合流快照）
     const { synced } = writeStructured(OUT_DIR, setname, { ...existing, results },
-      { freshKeys: new Set(results.map((r) => r.key)) });
+      { freshKeys: changedKeys(existing.results, results) });
     console.log(`产物 → ${outPath}${synced ? "（已同步 rw 阅读基线）" : ""}`);
     console.log("  降级的块现在会被 --only-failed 捡起来重扫。");
     return;

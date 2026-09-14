@@ -3579,6 +3579,86 @@
       "reason": "跨套重复：与 real_ap_325_1_26 同一份材料（本轮看图补回 Q11/Q13 后组 id 由 121a_2_12 变成 121a_2_11；与 121a_2_14 同为 1.21A M2 这篇的两份 OCR 变体），每簇保留一条",
       "dup_of": "real_ap_325_1_26",
       "source": "recovery-2026-09-13b"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_48_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_21a_1_1 同一份材料、挖空相同（三卷正文逐字相同，看图核对过 4.8 那份；保留考试日期最早的 2.1A），保留 real_ctw_21a_1_1",
+      "dup_of": "real_ctw_21a_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_411_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_21a_1_1 同一份材料、挖空相同（三卷正文逐字相同，看图核对过 4.8 那份；保留考试日期最早的 2.1A），保留 real_ctw_21a_1_1",
+      "dup_of": "real_ctw_21a_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_315_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_529_2_1 同一份材料、挖空相同，保留 real_ctw_529_2_1",
+      "dup_of": "real_ctw_529_2_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_45_2_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_529_2_1 同一份材料、挖空相同，保留 real_ctw_529_2_1",
+      "dup_of": "real_ctw_529_2_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_318_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rf0622_1_1 同一份材料、挖空相同（本条 events—such 的破折号是模型加的，看图原文无破折号；答案页 eruption/impact 单复数也与保留方不同，保留看图忠实、已上线的那份），保留 real_ctw_rf0622_1_1",
+      "dup_of": "real_ctw_rf0622_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_127b_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_330_1_1 同一份材料、挖空相同，保留 real_ctw_330_1_1",
+      "dup_of": "real_ctw_330_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_223_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_48_1_1 同一份材料、挖空相同，保留 real_ctw_48_1_1",
+      "dup_of": "real_ctw_48_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_38_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_rf0716_1_1 同一份材料、挖空相同，保留 real_ctw_rf0716_1_1",
+      "dup_of": "real_ctw_rf0716_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_511_1_1",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_529_1_1 同一份材料、挖空相同，保留 real_ctw_529_1_1",
+      "dup_of": "real_ctw_529_1_1",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_429_1_11",
+      "scope": "unit",
+      "reason": "跨套重复：与 real_ctw_210_1_1 同一份材料、挖空相同，保留 real_ctw_210_1_1",
+      "dup_of": "real_ctw_210_1_1",
+      "source": "recovery-2026-09-14"
     }
   ],
   "patches": [
@@ -4480,6 +4560,24 @@
       "to": ".",
       "why": "选项缺句末句号",
       "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_128a_1_11",
+      "path": "passage",
+      "op": "append",
+      "to": " aim to prevent human-induced extinctions and preserve remaining species.",
+      "why": "本地 OCR 丢了末句后半截（正文停在 Modern conservation efforts）；按看图转写（ctwvis 缓存）补回，最后一个空在第 5 句，补尾不动挖空",
+      "source": "recovery-2026-09-14"
+    },
+    {
+      "file": "reading/ctw",
+      "id": "real_ctw_429_1_1",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Such activity not only sustains their growth but also benefits surrounding promote biodiversity.",
+      "why": "本地 OCR 在 surrounding 后丢了一行，末句不成立（没有看图缓存可补）；十个空都在第 3 句，截掉末句不影响挖空",
+      "source": "recovery-2026-09-14"
     }
   ]
 }

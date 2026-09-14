@@ -5,6 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NE
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
+import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { buildDailyAveragePoints, getAccuracyPercent } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
 import { getBandColor } from "../../lib/history/bandColor";
@@ -166,12 +167,14 @@ export function CTWDetail({ session }) {
       if (!entry) return <span key={wi}>{word} </span>;
 
       const { blank, result } = entry;
+      const { lead, tail } = splitBlankToken(word, blank.original_word);
       const isCorrect = result?.isCorrect;
       const color = isCorrect ? "#059669" : "#DC2626";
       const bg = isCorrect ? "#D1FAE5" : "#FEE2E2";
 
       return (
         <span key={wi}>
+          {lead}
           <span style={{
             background: bg, color, fontWeight: 700,
             borderRadius: 4, padding: "1px 4px",
@@ -180,8 +183,8 @@ export function CTWDetail({ session }) {
           }}>
             {blank.original_word}
           </span>
-          {/* Preserve trailing punctuation + space */}
-          {word.match(/[.,;:!?]+$/)?.[0] || ""}{" "}
+          {/* 粘着的标点原样保留（尾句号 / 括号 / 破折号后半截，见 lib/reading/ctwToken.js）+ 空格 */}
+          {tail}{" "}
         </span>
       );
     });

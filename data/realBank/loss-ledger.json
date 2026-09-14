@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-14，828 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-14，822 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,37 +20,37 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4511,
-    "missing": 3828,
+    "got": 4681,
+    "missing": 3658,
     "overfilled": 59,
-    "completeness": 0.5448,
+    "completeness": 0.5653,
     "causes": {
-      "source_defect": 812,
+      "source_defect": 760,
       "held": 114,
-      "deduped": 37,
-      "bank_dropped": 535,
+      "deduped": 36,
+      "bank_dropped": 488,
       "section_never_run": 1990,
-      "section_lost": 30,
-      "pipeline_loss": 310
+      "section_lost": 0,
+      "pipeline_loss": 270
     },
-    "actionable": 340
+    "actionable": 270
   },
   "byType": {
     "ctw": {
       "type": "ctw",
       "need": 2070,
-      "got": 1739,
-      "missing": 331,
+      "got": 1909,
+      "missing": 161,
       "causes": {
-        "source_defect": 143,
+        "source_defect": 70,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 77,
+        "bank_dropped": 30,
         "section_never_run": 0,
-        "section_lost": 10,
-        "pipeline_loss": 101
+        "section_lost": 0,
+        "pipeline_loss": 61
       },
-      "completeness": 0.8401
+      "completeness": 0.9222
     },
     "rdl": {
       "type": "rdl",
@@ -58,12 +58,12 @@
       "got": 497,
       "missing": 49,
       "causes": {
-        "source_defect": 6,
+        "source_defect": 16,
         "held": 15,
         "deduped": 5,
         "bank_dropped": 12,
         "section_never_run": 0,
-        "section_lost": 10,
+        "section_lost": 0,
         "pipeline_loss": 1
       },
       "completeness": 0.9204
@@ -74,12 +74,12 @@
       "got": 737,
       "missing": 103,
       "causes": {
-        "source_defect": 6,
+        "source_defect": 17,
         "held": 31,
-        "deduped": 32,
+        "deduped": 31,
         "bank_dropped": 12,
         "section_never_run": 0,
-        "section_lost": 10,
+        "section_lost": 0,
         "pipeline_loss": 12
       },
       "completeness": 0.8774
@@ -249,18 +249,18 @@
     "reading": {
       "section": "reading",
       "need": 3450,
-      "got": 2973,
-      "missing": 483,
+      "got": 3143,
+      "missing": 313,
       "causes": {
-        "source_defect": 155,
+        "source_defect": 103,
         "held": 46,
-        "deduped": 37,
-        "bank_dropped": 101,
+        "deduped": 36,
+        "bank_dropped": 54,
         "section_never_run": 0,
-        "section_lost": 30,
-        "pipeline_loss": 114
+        "section_lost": 0,
+        "pipeline_loss": 74
       },
-      "completeness": 0.8617
+      "completeness": 0.911
     },
     "speaking": {
       "section": "speaking",
@@ -312,25 +312,6 @@
     }
   },
   "tasks": [
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "missing": 30,
-      "cause": "section_lost",
-      "types": {
-        "rdl": 10,
-        "ap": 10,
-        "ctw": 10
-      },
-      "slots": [
-        "M1/rdl_21(-10)",
-        "M1/ap_31(-5)",
-        "M2/ctw_1(-10)",
-        "M2/ap_11(-5)"
-      ]
-    },
     {
       "set": "1.28新托福真题A卷",
       "slug": "128a",
@@ -436,20 +417,6 @@
       ]
     },
     {
-      "set": "2.23新托福真题",
-      "slug": "223",
-      "date": "2026-02-23",
-      "section": "reading",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 10
-      },
-      "slots": [
-        "M1/ctw_11(-10)"
-      ]
-    },
-    {
       "set": "3.4新托福真题",
       "slug": "34",
       "date": "2026-03-04",
@@ -478,34 +445,6 @@
       ]
     },
     {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "date": "2026-03-08",
-      "section": "reading",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 10
-      },
-      "slots": [
-        "M1/ctw_1(-10)"
-      ]
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "reading",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 10
-      },
-      "slots": [
-        "M2/ctw_1(-10)"
-      ]
-    },
-    {
       "set": "5.10新托福真题_v2",
       "slug": "510v2",
       "date": "2026-05-10",
@@ -517,20 +456,6 @@
       },
       "slots": [
         "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
-      "section": "reading",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 10
-      },
-      "slots": [
-        "M1/ctw_1(-10)"
       ]
     },
     {
@@ -2231,29 +2156,6 @@
       "set": "1.27新托福真题B卷",
       "slug": "127b",
       "date": "2026-01-27",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "date": "2026-01-27",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -2453,52 +2355,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.28新托福真题A卷",
-      "slug": "128a",
-      "date": "2026-01-28",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "1.28新托福真题A卷",
-      "slug": "128a",
-      "date": "2026-01-28",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_11",
-      "type": "ctw",
-      "band": [
-        11,
-        20
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
       },
       "notes": []
     },
@@ -3220,29 +3076,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "date": "2026-02-01",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
       },
       "notes": []
     },
@@ -4766,29 +4599,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "2.23新托福真题",
-      "slug": "223",
-      "date": "2026-02-23",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_11",
-      "type": "ctw",
-      "band": [
-        11,
-        20
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
       },
       "notes": []
     },
@@ -7721,29 +7531,6 @@
       "slug": "38",
       "date": "2026-03-08",
       "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "date": "2026-03-08",
-      "section": "reading",
       "module": "2",
       "form": "A",
       "slotKey": "ap_11",
@@ -9107,29 +8894,6 @@
       "section": "reading",
       "module": "1",
       "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "date": "2026-03-14",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
       "slotKey": "rdl_21",
       "type": "rdl",
       "band": [
@@ -9257,35 +9021,6 @@
       "section": "reading",
       "module": "2",
       "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "source_defect": 3,
-        "bank_dropped": 7
-      },
-      "drop_codes": {
-        "buildFailed": 10
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.15新托福真题",
-      "slug": "315",
-      "date": "2026-03-15",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
       "slotKey": "ap_11",
       "type": "ap",
       "band": [
@@ -9296,9 +9031,9 @@
       "got": 4,
       "missing": 1,
       "status": "near",
-      "cause": "deduped",
+      "cause": "source_defect",
       "charged": {
-        "deduped": 1
+        "source_defect": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -10613,32 +10348,6 @@
         "duplicate_cluster",
         "identical_file"
       ]
-    },
-    {
-      "set": "3.18新托福真题",
-      "slug": "318",
-      "date": "2026-03-18",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "buildFailed": 10
-      },
-      "notes": []
     },
     {
       "set": "3.18新托福真题",
@@ -15143,34 +14852,6 @@
       "section": "reading",
       "module": "2",
       "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "buildFailed": 10
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.5新托福真题",
-      "slug": "45",
-      "date": "2026-04-05",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
       "slotKey": "ap_11",
       "type": "ap",
       "band": [
@@ -16089,34 +15770,6 @@
       "set": "4.8新托福真题",
       "slug": "48",
       "date": "2026-04-08",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_11",
-      "type": "ctw",
-      "band": [
-        11,
-        20
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "buildFailed": 10
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "date": "2026-04-08",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -16508,34 +16161,6 @@
       "cause": "source_defect",
       "charged": {
         "source_defect": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.11新托福真题",
-      "slug": "411",
-      "date": "2026-04-11",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_11",
-      "type": "ctw",
-      "band": [
-        11,
-        20
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "buildFailed": 10
       },
       "notes": [
         "duplicate_cluster"
@@ -20033,6 +19658,75 @@
       "set": "4.29新托福真题",
       "slug": "429",
       "date": "2026-04-29",
+      "section": "reading",
+      "module": "1",
+      "form": "A",
+      "slotKey": "rdl_21",
+      "type": "rdl",
+      "band": [
+        21,
+        30
+      ],
+      "need": 10,
+      "got": 0,
+      "missing": 10,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 10
+      },
+      "notes": []
+    },
+    {
+      "set": "4.29新托福真题",
+      "slug": "429",
+      "date": "2026-04-29",
+      "section": "reading",
+      "module": "1",
+      "form": "A",
+      "slotKey": "ap_31",
+      "type": "ap",
+      "band": [
+        31,
+        35
+      ],
+      "need": 5,
+      "got": 0,
+      "missing": 5,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 5
+      },
+      "notes": []
+    },
+    {
+      "set": "4.29新托福真题",
+      "slug": "429",
+      "date": "2026-04-29",
+      "section": "reading",
+      "module": "2",
+      "form": "A",
+      "slotKey": "ap_11",
+      "type": "ap",
+      "band": [
+        11,
+        15
+      ],
+      "need": 5,
+      "got": 0,
+      "missing": 5,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 5
+      },
+      "notes": []
+    },
+    {
+      "set": "4.29新托福真题",
+      "slug": "429",
+      "date": "2026-04-29",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -20053,144 +19747,6 @@
       "drop_codes": {
         "wSkippedThin": 1,
         "wDroppedDupBs": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_11",
-      "type": "ctw",
-      "band": [
-        11,
-        20
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "rdl_21",
-      "type": "rdl",
-      "band": [
-        21,
-        30
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "absent",
-      "cause": "section_lost",
-      "charged": {
-        "section_lost": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ap_31",
-      "type": "ap",
-      "band": [
-        31,
-        35
-      ],
-      "need": 5,
-      "got": 0,
-      "missing": 5,
-      "status": "absent",
-      "cause": "section_lost",
-      "charged": {
-        "section_lost": 5
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "absent",
-      "cause": "section_lost",
-      "charged": {
-        "section_lost": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ap_11",
-      "type": "ap",
-      "band": [
-        11,
-        15
-      ],
-      "need": 5,
-      "got": 0,
-      "missing": 5,
-      "status": "absent",
-      "cause": "section_lost",
-      "charged": {
-        "section_lost": 5
       },
       "notes": []
     },
@@ -22436,29 +21992,6 @@
       "section": "reading",
       "module": "2",
       "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
       "slotKey": "ap_11",
       "type": "ap",
       "band": [
@@ -22866,29 +22399,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
       },
       "notes": []
     },

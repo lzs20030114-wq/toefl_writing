@@ -10,8 +10,8 @@
   },
   "inventory": {
     "ctw": {
-      "items": 146,
-      "questions": 1459
+      "items": 153,
+      "questions": 1529
     },
     "rdl": {
       "items": 125,
@@ -70,7 +70,7 @@
   },
   "forms_observed": {
     "reading_m1": {
-      "A": 37,
+      "A": 38,
       "B": 30
     },
     "listening_m2": {
@@ -82,13 +82,13 @@
     "sets_total": 69,
     "per_section": {
       "reading": {
-        "sets_with_any": 67,
-        "native_complete": 41,
-        "native_half": 25,
-        "native_scraps": 1,
-        "skeletons": 67,
-        "composites_complete": 37,
-        "composites_pure": 37,
+        "sets_with_any": 68,
+        "native_complete": 52,
+        "native_half": 16,
+        "native_scraps": 0,
+        "skeletons": 68,
+        "composites_complete": 47,
+        "composites_pure": 47,
         "dissolved": 0
       },
       "listening": {
@@ -124,7 +124,7 @@
     },
     "exams_native": 0,
     "exams_mixed": 0,
-    "aliases_restored": 327,
+    "aliases_restored": 337,
     "type_sets": {
       "lcr": {
         "sets": 22,
@@ -151,10 +151,10 @@
         "partial": 5
       },
       "ctw": {
-        "sets": 66,
-        "full": 41,
+        "sets": 68,
+        "full": 54,
         "near": 1,
-        "partial": 24
+        "partial": 13
       },
       "rdl": {
         "sets": 67,
@@ -2227,13 +2227,13 @@
       "date": "2026-01-27",
       "sections": {
         "reading": {
-          "completeness": 0.8,
-          "got": 40,
+          "completeness": 1,
+          "got": 50,
           "need": 50,
           "modules": {
             "1": {
               "form": "A",
-              "got": 25,
+              "got": 35,
               "need": 35,
               "slots": [
                 {
@@ -2244,9 +2244,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_330_1_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_127b_1_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -2801,13 +2808,13 @@
       "date": "2026-01-28",
       "sections": {
         "reading": {
-          "completeness": 0.2,
-          "got": 10,
+          "completeness": 0.6,
+          "got": 30,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 6,
+              "got": 26,
               "need": 35,
               "slots": [
                 {
@@ -2818,9 +2825,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_128a_1_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -2830,9 +2843,15 @@
                     20
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_128a_1_11",
+                      "nq": 10,
+                      "q": 11
+                    }
+                  ]
                 },
                 {
                   "key": "rdl_21",
@@ -3918,13 +3937,13 @@
       "date": "2026-02-01",
       "sections": {
         "reading": {
-          "completeness": 0.58,
-          "got": 29,
+          "completeness": 0.78,
+          "got": 39,
           "need": 50,
           "modules": {
             "1": {
               "form": "A",
-              "got": 19,
+              "got": 29,
               "need": 35,
               "slots": [
                 {
@@ -3935,9 +3954,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_21a_1_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -6862,13 +6887,13 @@
       "date": "2026-02-23",
       "sections": {
         "reading": {
-          "completeness": 0.78,
-          "got": 39,
+          "completeness": 0.98,
+          "got": 49,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 24,
+              "got": 34,
               "need": 35,
               "slots": [
                 {
@@ -6897,9 +6922,16 @@
                     20
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_48_1_1",
+                      "nq": 10,
+                      "q": 11,
+                      "alias_of": "real_ctw_223_1_11"
+                    }
+                  ]
                 },
                 {
                   "key": "rdl_21",
@@ -8956,13 +8988,13 @@
       "date": "2026-03-08",
       "sections": {
         "reading": {
-          "completeness": 0.78,
-          "got": 39,
+          "completeness": 0.98,
+          "got": 49,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 25,
+              "got": 35,
               "need": 35,
               "slots": [
                 {
@@ -8973,9 +9005,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_rf0716_1_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_38_1_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -9635,13 +9674,13 @@
       "date": "2026-03-14",
       "sections": {
         "reading": {
-          "completeness": 0.74,
-          "got": 37,
+          "completeness": 0.94,
+          "got": 47,
           "need": 50,
           "modules": {
             "1": {
               "form": "A",
-              "got": 22,
+              "got": 32,
               "need": 35,
               "slots": [
                 {
@@ -9652,9 +9691,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_314_1_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -10250,8 +10295,8 @@
       "date": "2026-03-15",
       "sections": {
         "reading": {
-          "completeness": 0.78,
-          "got": 39,
+          "completeness": 0.98,
+          "got": 49,
           "need": 50,
           "modules": {
             "1": {
@@ -10354,7 +10399,7 @@
             },
             "2": {
               "form": "A",
-              "got": 4,
+              "got": 14,
               "need": 15,
               "slots": [
                 {
@@ -10365,9 +10410,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_529_2_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_315_2_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ap_11",
@@ -11046,13 +11098,13 @@
       "date": "2026-03-18",
       "sections": {
         "reading": {
-          "completeness": 0.76,
-          "got": 38,
+          "completeness": 0.96,
+          "got": 48,
           "need": 50,
           "modules": {
             "1": {
               "form": "A",
-              "got": 24,
+              "got": 34,
               "need": 35,
               "slots": [
                 {
@@ -11063,9 +11115,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_rf0622_1_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_318_1_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -13363,8 +13422,8 @@
       "date": "2026-04-05",
       "sections": {
         "reading": {
-          "completeness": 0.78,
-          "got": 39,
+          "completeness": 0.98,
+          "got": 49,
           "need": 50,
           "modules": {
             "1": {
@@ -13473,7 +13532,7 @@
             },
             "2": {
               "form": "A",
-              "got": 4,
+              "got": 14,
               "need": 15,
               "slots": [
                 {
@@ -13484,9 +13543,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_529_2_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_45_2_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ap_11",
@@ -13822,13 +13888,13 @@
       "date": "2026-04-08",
       "sections": {
         "reading": {
-          "completeness": 0.8,
-          "got": 40,
+          "completeness": 1,
+          "got": 50,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 25,
+              "got": 35,
               "need": 35,
               "slots": [
                 {
@@ -13857,9 +13923,16 @@
                     20
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_21a_1_1",
+                      "nq": 10,
+                      "q": 11,
+                      "alias_of": "real_ctw_48_1_11"
+                    }
+                  ]
                 },
                 {
                   "key": "rdl_21",
@@ -14096,13 +14169,13 @@
       "date": "2026-04-11",
       "sections": {
         "reading": {
-          "completeness": 0.8,
-          "got": 40,
+          "completeness": 1,
+          "got": 50,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 25,
+              "got": 35,
               "need": 35,
               "slots": [
                 {
@@ -14132,9 +14205,16 @@
                     20
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_21a_1_1",
+                      "nq": 10,
+                      "q": 11,
+                      "alias_of": "real_ctw_411_1_11"
+                    }
+                  ]
                 },
                 {
                   "key": "rdl_21",
@@ -16103,6 +16183,119 @@
       "slug": "429",
       "date": "2026-04-29",
       "sections": {
+        "reading": {
+          "completeness": 0.6,
+          "got": 30,
+          "need": 50,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 20,
+              "need": 35,
+              "slots": [
+                {
+                  "key": "ctw_1",
+                  "type": "ctw",
+                  "band": [
+                    1,
+                    10
+                  ],
+                  "need": 10,
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_429_1_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
+                },
+                {
+                  "key": "ctw_11",
+                  "type": "ctw",
+                  "band": [
+                    11,
+                    20
+                  ],
+                  "need": 10,
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_210_1_1",
+                      "nq": 10,
+                      "q": 11,
+                      "alias_of": "real_ctw_429_1_11"
+                    }
+                  ]
+                },
+                {
+                  "key": "rdl_21",
+                  "type": "rdl",
+                  "band": [
+                    21,
+                    30
+                  ],
+                  "need": 10,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "ap_31",
+                  "type": "ap",
+                  "band": [
+                    31,
+                    35
+                  ],
+                  "need": 5,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                }
+              ]
+            },
+            "2": {
+              "form": "A",
+              "got": 10,
+              "need": 15,
+              "slots": [
+                {
+                  "key": "ctw_1",
+                  "type": "ctw",
+                  "band": [
+                    1,
+                    10
+                  ],
+                  "need": 10,
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_429_2_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
+                },
+                {
+                  "key": "ap_11",
+                  "type": "ap",
+                  "band": [
+                    11,
+                    15
+                  ],
+                  "need": 5,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
         "writing": {
           "completeness": 0.75,
           "got": 9,
@@ -17160,8 +17353,8 @@
       "date": "2026-05-10",
       "sections": {
         "reading": {
-          "completeness": 0.76,
-          "got": 38,
+          "completeness": 0.96,
+          "got": 48,
           "need": 50,
           "modules": {
             "1": {
@@ -17262,7 +17455,7 @@
             },
             "2": {
               "form": "A",
-              "got": 4,
+              "got": 14,
               "need": 15,
               "slots": [
                 {
@@ -17273,9 +17466,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_510v2_2_1",
+                      "nq": 10,
+                      "q": 1
+                    }
+                  ]
                 },
                 {
                   "key": "ap_11",
@@ -17373,13 +17572,13 @@
       "date": "2026-05-11",
       "sections": {
         "reading": {
-          "completeness": 0.78,
-          "got": 39,
+          "completeness": 0.98,
+          "got": 49,
           "need": 50,
           "modules": {
             "1": {
               "form": "B",
-              "got": 25,
+              "got": 35,
               "need": 35,
               "slots": [
                 {
@@ -17390,9 +17589,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 10,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_ctw_529_1_1",
+                      "nq": 10,
+                      "q": 1,
+                      "alias_of": "real_ctw_511_1_1"
+                    }
+                  ]
                 },
                 {
                   "key": "ctw_11",
@@ -28842,6 +29048,39 @@
         ]
       },
       {
+        "id": "ctw:127b",
+        "type": "ctw",
+        "set": "1.27新托福真题B卷",
+        "date": "2026-01-27",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_330_1_1",
+            "alias_of": "real_ctw_127b_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_127b_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_127b_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
         "id": "ctw:128b",
         "type": "ctw",
         "set": "1.28新托福真题B卷",
@@ -28867,6 +29106,38 @@
           },
           {
             "id": "real_ctw_128b_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:21a",
+        "type": "ctw",
+        "set": "2.1新托福真题A卷",
+        "date": "2026-02-01",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_21a_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_21a_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_21a_2_1",
             "nq": 10,
             "module": 2,
             "q": 1,
@@ -29037,6 +29308,39 @@
         ]
       },
       {
+        "id": "ctw:223",
+        "type": "ctw",
+        "set": "2.23新托福真题",
+        "date": "2026-02-23",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_223_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_48_1_1",
+            "alias_of": "real_ctw_223_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_223_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
         "id": "ctw:225",
         "type": "ctw",
         "set": "2.25新托福真题",
@@ -29096,6 +29400,40 @@
           {
             "id": "real_ctw_rp0711_1_11",
             "alias_of": "real_ctw_32a_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:38",
+        "type": "ctw",
+        "set": "3.8新托福真题",
+        "date": "2026-03-08",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_rf0716_1_1",
+            "alias_of": "real_ctw_38_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_38_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_225_2_1",
+            "alias_of": "real_ctw_38_2_1",
             "nq": 10,
             "module": 2,
             "q": 1,
@@ -29170,6 +29508,72 @@
         ]
       },
       {
+        "id": "ctw:314",
+        "type": "ctw",
+        "set": "3.14新托福真题",
+        "date": "2026-03-14",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_314_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_314_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_314_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:315",
+        "type": "ctw",
+        "set": "3.15新托福真题",
+        "date": "2026-03-15",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_315_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_317_1_11",
+            "alias_of": "real_ctw_315_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_529_2_1",
+            "alias_of": "real_ctw_315_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
         "id": "ctw:316",
         "type": "ctw",
         "set": "3.16新托福真题",
@@ -29228,6 +29632,39 @@
           },
           {
             "id": "real_ctw_317_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:318",
+        "type": "ctw",
+        "set": "3.18新托福真题",
+        "date": "2026-03-18",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_rf0622_1_1",
+            "alias_of": "real_ctw_318_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_318_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_318_2_1",
             "nq": 10,
             "module": 2,
             "q": 1,
@@ -29475,6 +29912,40 @@
         ]
       },
       {
+        "id": "ctw:45",
+        "type": "ctw",
+        "set": "4.5新托福真题",
+        "date": "2026-04-05",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_316_1_11",
+            "alias_of": "real_ctw_45_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_45_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_529_2_1",
+            "alias_of": "real_ctw_45_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
         "id": "ctw:46",
         "type": "ctw",
         "set": "4.6新托福真题",
@@ -29500,6 +29971,75 @@
           },
           {
             "id": "real_ctw_46_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:48",
+        "type": "ctw",
+        "set": "4.8新托福真题",
+        "date": "2026-04-08",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_48_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_21a_1_1",
+            "alias_of": "real_ctw_48_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_rp0711_1_11",
+            "alias_of": "real_ctw_48_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:411",
+        "type": "ctw",
+        "set": "4.11新托福真题",
+        "date": "2026-04-11",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_48_1_1",
+            "alias_of": "real_ctw_411_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_21a_1_1",
+            "alias_of": "real_ctw_411_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_rp0822_6_1",
+            "alias_of": "real_ctw_411_2_1",
             "nq": 10,
             "module": 2,
             "q": 1,
@@ -29672,6 +30212,39 @@
         ]
       },
       {
+        "id": "ctw:429",
+        "type": "ctw",
+        "set": "4.29新托福真题",
+        "date": "2026-04-29",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_429_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_210_1_1",
+            "alias_of": "real_ctw_429_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_429_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
         "id": "ctw:53",
         "type": "ctw",
         "set": "5.3新托福真题",
@@ -29764,6 +30337,73 @@
           {
             "id": "real_ctw_rp0830_4_1",
             "alias_of": "real_ctw_510_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:510v2",
+        "type": "ctw",
+        "set": "5.10新托福真题_v2",
+        "date": "2026-05-10",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_510v2_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_rp0704_1_31",
+            "alias_of": "real_ctw_510v2_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_510v2_2_1",
+            "nq": 10,
+            "module": 2,
+            "q": 1,
+            "slot": "ctw_1"
+          }
+        ]
+      },
+      {
+        "id": "ctw:511",
+        "type": "ctw",
+        "set": "5.11新托福真题",
+        "date": "2026-05-11",
+        "need": 30,
+        "got": 30,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_ctw_529_1_1",
+            "alias_of": "real_ctw_511_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_22_1_11",
+            "alias_of": "real_ctw_511_1_11",
+            "nq": 10,
+            "module": 1,
+            "q": 11,
+            "slot": "ctw_11"
+          },
+          {
+            "id": "real_ctw_511_2_1",
             "nq": 10,
             "module": 2,
             "q": 1,
@@ -30272,77 +30912,27 @@
         ]
       },
       {
-        "id": "ctw:127b",
+        "id": "ctw:128a",
         "type": "ctw",
-        "set": "1.27新托福真题B卷",
-        "date": "2026-01-27",
+        "set": "1.28新托福真题A卷",
+        "date": "2026-01-28",
         "need": 30,
         "got": 20,
         "status": "partial",
         "items": [
           {
-            "id": "real_ctw_127b_1_11",
+            "id": "real_ctw_128a_1_1",
+            "nq": 10,
+            "module": 1,
+            "q": 1,
+            "slot": "ctw_1"
+          },
+          {
+            "id": "real_ctw_128a_1_11",
             "nq": 10,
             "module": 1,
             "q": 11,
             "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_127b_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
-        "id": "ctw:21a",
-        "type": "ctw",
-        "set": "2.1新托福真题A卷",
-        "date": "2026-02-01",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_21a_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_21a_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
-        "id": "ctw:223",
-        "type": "ctw",
-        "set": "2.23新托福真题",
-        "date": "2026-02-23",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_223_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_223_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
           }
         ]
       },
@@ -30450,108 +31040,6 @@
         ]
       },
       {
-        "id": "ctw:38",
-        "type": "ctw",
-        "set": "3.8新托福真题",
-        "date": "2026-03-08",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_38_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_225_2_1",
-            "alias_of": "real_ctw_38_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
-        "id": "ctw:314",
-        "type": "ctw",
-        "set": "3.14新托福真题",
-        "date": "2026-03-14",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_314_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_314_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
-        "id": "ctw:315",
-        "type": "ctw",
-        "set": "3.15新托福真题",
-        "date": "2026-03-15",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_315_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_317_1_11",
-            "alias_of": "real_ctw_315_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          }
-        ]
-      },
-      {
-        "id": "ctw:318",
-        "type": "ctw",
-        "set": "3.18新托福真题",
-        "date": "2026-03-18",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_318_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_318_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
         "id": "ctw:324",
         "type": "ctw",
         "set": "3.24新托福真题",
@@ -30574,85 +31062,6 @@
             "module": 1,
             "q": 11,
             "slot": "ctw_11"
-          }
-        ]
-      },
-      {
-        "id": "ctw:45",
-        "type": "ctw",
-        "set": "4.5新托福真题",
-        "date": "2026-04-05",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_316_1_11",
-            "alias_of": "real_ctw_45_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_45_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          }
-        ]
-      },
-      {
-        "id": "ctw:48",
-        "type": "ctw",
-        "set": "4.8新托福真题",
-        "date": "2026-04-08",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_48_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_rp0711_1_11",
-            "alias_of": "real_ctw_48_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
-          }
-        ]
-      },
-      {
-        "id": "ctw:411",
-        "type": "ctw",
-        "set": "4.11新托福真题",
-        "date": "2026-04-11",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_48_1_1",
-            "alias_of": "real_ctw_411_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_rp0822_6_1",
-            "alias_of": "real_ctw_411_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
           }
         ]
       },
@@ -30704,58 +31113,6 @@
             "module": 1,
             "q": 11,
             "slot": "ctw_11"
-          }
-        ]
-      },
-      {
-        "id": "ctw:510v2",
-        "type": "ctw",
-        "set": "5.10新托福真题_v2",
-        "date": "2026-05-10",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_510v2_1_1",
-            "nq": 10,
-            "module": 1,
-            "q": 1,
-            "slot": "ctw_1"
-          },
-          {
-            "id": "real_ctw_rp0704_1_31",
-            "alias_of": "real_ctw_510v2_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          }
-        ]
-      },
-      {
-        "id": "ctw:511",
-        "type": "ctw",
-        "set": "5.11新托福真题",
-        "date": "2026-05-11",
-        "need": 30,
-        "got": 20,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_ctw_22_1_11",
-            "alias_of": "real_ctw_511_1_11",
-            "nq": 10,
-            "module": 1,
-            "q": 11,
-            "slot": "ctw_11"
-          },
-          {
-            "id": "real_ctw_511_2_1",
-            "nq": 10,
-            "module": 2,
-            "q": 1,
-            "slot": "ctw_1"
           }
         ]
       },
@@ -38038,6 +38395,193 @@
   "composites": {
     "reading": [
       {
+        "id": "reading:127b",
+        "section": "reading",
+        "base_set": "1.27新托福真题B卷",
+        "date": "2026-01-27",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_330_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native",
+                    "alias_of": "real_ctw_127b_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_127b_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_127b_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_127b_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_127b_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_127b_1_28",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_510_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native",
+                    "alias_of": "real_ap_127b_1_31"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_127b_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_424_2_11",
+                    "nq": 5,
+                    "q": 11,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native",
+                    "alias_of": "real_ap_127b_2_11"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": []
+      },
+      {
         "id": "reading:32a",
         "section": "reading",
         "base_set": "3.2新托福真题A卷",
@@ -38603,6 +39147,400 @@
                     "from": "3.29新托福真题",
                     "via": "native",
                     "alias_of": "real_ap_329_2_11"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "reading:48",
+        "section": "reading",
+        "base_set": "4.8新托福真题",
+        "date": "2026-04-08",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_48_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.8新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_21a_1_1",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_48_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_411_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_48_1_21"
+                  },
+                  {
+                    "id": "real_rdl_411_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_48_1_23"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_121a_1_26",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_48_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_411_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_48_1_31"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rp0711_1_11",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_48_2_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_325_1_26",
+                    "nq": 5,
+                    "q": 11,
+                    "from": "4.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_48_2_11"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "reading:411",
+        "section": "reading",
+        "base_set": "4.11新托福真题",
+        "date": "2026-04-11",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_48_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_411_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_21a_1_1",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "4.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_411_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_411_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "4.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_411_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "4.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_121a_1_26",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "4.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_411_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_411_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "4.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rp0822_6_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_411_2_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_34_2_11",
+                    "nq": 5,
+                    "q": 11,
+                    "from": "4.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_411_2_11"
                   }
                 ],
                 "got": 5,
@@ -41473,6 +42411,401 @@
         ]
       },
       {
+        "id": "reading:223",
+        "section": "reading",
+        "base_set": "2.23新托福真题",
+        "date": "2026-02-23",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 0.98,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_223_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "2.23新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_48_1_1",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_223_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_rf0622_1_123",
+                    "nq": 2,
+                    "q": 22,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_223_1_22"
+                  },
+                  {
+                    "id": "real_rdl_223_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "2.23新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_510_1_31",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_223_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_223_1_31",
+                    "nq": 4,
+                    "q": 31,
+                    "from": "2.23新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 35,
+            "got": 34
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_223_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "2.23新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_411_1_31",
+                    "nq": 5,
+                    "q": 11,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_223_2_11"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": [
+          "M1/ap_31:4/5"
+        ]
+      },
+      {
+        "id": "reading:38",
+        "section": "reading",
+        "base_set": "3.8新托福真题",
+        "date": "2026-03-08",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 0.98,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rf0716_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_38_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_38_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "3.8新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_rf0610_1_123",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "3.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_38_1_21"
+                  },
+                  {
+                    "id": "real_rdl_325_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "3.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_38_1_23"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_510_1_26",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "3.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_38_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_38_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "3.8新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_225_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.8新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_38_2_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_38_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "3.8新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
         "id": "reading:310",
         "section": "reading",
         "base_set": "3.10新托福真题",
@@ -41846,6 +43179,197 @@
         },
         "missing": [
           "M1/ap_31:4/5"
+        ]
+      },
+      {
+        "id": "reading:315",
+        "section": "reading",
+        "base_set": "3.15新托福真题",
+        "date": "2026-03-15",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.98,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_315_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.15新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_317_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "3.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_315_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_315_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "3.15新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_420_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "3.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_315_1_23"
+                  },
+                  {
+                    "id": "real_rdl_rf0610_1_125",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "3.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_315_1_25"
+                  },
+                  {
+                    "id": "real_rdl_315_1_28",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "3.15新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_rf0713_1_131",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "3.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_315_1_31"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_529_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_315_2_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_315_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "3.15新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M2/ap_11:4/5"
         ]
       },
       {
@@ -42822,6 +44346,203 @@
         ]
       },
       {
+        "id": "reading:45",
+        "section": "reading",
+        "base_set": "4.5新托福真题",
+        "date": "2026-04-05",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 0.98,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_316_1_11",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_45_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_45_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "4.5新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_45_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "4.5新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_45_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "4.5新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_38_1_31",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_45_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_45_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "4.5新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_529_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_45_2_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_315_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_45_2_11"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
         "id": "reading:424",
         "section": "reading",
         "base_set": "4.24新托福真题",
@@ -43602,6 +45323,202 @@
         ]
       },
       {
+        "id": "reading:511",
+        "section": "reading",
+        "base_set": "5.11新托福真题",
+        "date": "2026-05-11",
+        "forms": {
+          "1": "B",
+          "2": "A"
+        },
+        "completeness_before": 0.98,
+        "completeness": 0.98,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "B",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_529_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "5.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_511_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_22_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "5.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_511_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  25
+                ],
+                "need": 5,
+                "units": [
+                  1,
+                  3
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_511_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "5.11新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_511_1_23",
+                    "nq": 3,
+                    "q": 23,
+                    "from": "5.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_26",
+                "type": "ap",
+                "band": [
+                  26,
+                  30
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_rf0610_1_131",
+                    "nq": 5,
+                    "q": 26,
+                    "from": "5.11新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_511_1_26"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_511_1_31",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "5.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 35
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_511_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "5.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_511_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "5.11新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
         "id": "reading:rf0610",
         "section": "reading",
         "base_set": "rf0610",
@@ -44364,6 +46281,196 @@
                     "from": "2.8新托福真题",
                     "via": "native",
                     "alias_of": "real_ap_28_2_11"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M1/ap_31:4/5",
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
+        "id": "reading:318",
+        "section": "reading",
+        "base_set": "3.18新托福真题",
+        "date": "2026-03-18",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.96,
+        "completeness": 0.96,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rf0622_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.18新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_318_1_1"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_318_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_rf0902_1_121",
+                    "nq": 2,
+                    "q": 22,
+                    "from": "3.18新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_318_1_22"
+                  },
+                  {
+                    "id": "real_rdl_318_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_318_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_415_1_25",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "3.18新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_318_1_28"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_318_1_31",
+                    "nq": 4,
+                    "q": 31,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 35,
+            "got": 34
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_318_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_318_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "3.18新托福真题",
+                    "via": "native"
                   }
                 ],
                 "got": 4,
@@ -45160,6 +47267,376 @@
         },
         "missing": [
           "M1/ap_31:3/5"
+        ]
+      },
+      {
+        "id": "reading:510v2",
+        "section": "reading",
+        "base_set": "5.10新托福真题_v2",
+        "date": "2026-05-10",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.96,
+        "completeness": 0.96,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_510v2_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_rp0704_1_31",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native",
+                    "alias_of": "real_ctw_510v2_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_rf0622_1_121",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native",
+                    "alias_of": "real_rdl_510v2_1_21"
+                  },
+                  {
+                    "id": "real_rdl_510v2_1_24",
+                    "nq": 2,
+                    "q": 24,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_510v2_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_510v2_1_28",
+                    "nq": 3,
+                    "q": 28,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_510v2_1_31",
+                    "nq": 4,
+                    "q": 31,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 35,
+            "got": 34
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_510v2_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_510v2_2_11",
+                    "nq": 4,
+                    "q": 11,
+                    "from": "5.10新托福真题_v2",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "near"
+              }
+            ],
+            "need": 15,
+            "got": 14
+          }
+        },
+        "missing": [
+          "M1/ap_31:4/5",
+          "M2/ap_11:4/5"
+        ]
+      },
+      {
+        "id": "reading:314",
+        "section": "reading",
+        "base_set": "3.14新托福真题",
+        "date": "2026-03-14",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.94,
+        "completeness": 0.94,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_314_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_314_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [
+                  {
+                    "id": "real_rdl_28_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "3.14新托福真题",
+                    "via": "native",
+                    "alias_of": "real_rdl_314_1_21"
+                  },
+                  {
+                    "id": "real_rdl_314_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_314_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 7,
+                "status": "partial"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_418_2_11",
+                    "nq": 5,
+                    "q": 31,
+                    "from": "3.14新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ap_314_1_31"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 35,
+            "got": 32
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_314_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ap_314_2_11",
+                    "nq": 5,
+                    "q": 11,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 5,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": [
+          "M1/rdl_21:7/10"
         ]
       },
       {
@@ -46094,566 +48571,6 @@
         ]
       },
       {
-        "id": "reading:127b",
-        "section": "reading",
-        "base_set": "1.27新托福真题B卷",
-        "date": "2026-01-27",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.8,
-        "completeness": 0.8,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_127b_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_127b_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_127b_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_127b_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_127b_1_28",
-                    "nq": 3,
-                    "q": 28,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_510_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native",
-                    "alias_of": "real_ap_127b_1_31"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 25
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_127b_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_424_2_11",
-                    "nq": 5,
-                    "q": 11,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native",
-                    "alias_of": "real_ap_127b_2_11"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 15
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10"
-        ]
-      },
-      {
-        "id": "reading:48",
-        "section": "reading",
-        "base_set": "4.8新托福真题",
-        "date": "2026-04-08",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.8,
-        "completeness": 0.8,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_48_1_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "4.8新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_411_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_48_1_21"
-                  },
-                  {
-                    "id": "real_rdl_411_1_23",
-                    "nq": 3,
-                    "q": 23,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_48_1_23"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_121a_1_26",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_48_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_411_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_48_1_31"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 25
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_rp0711_1_11",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_48_2_1"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_325_1_26",
-                    "nq": 5,
-                    "q": 11,
-                    "from": "4.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_48_2_11"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 15
-          }
-        },
-        "missing": [
-          "M1/ctw_11:0/10"
-        ]
-      },
-      {
-        "id": "reading:411",
-        "section": "reading",
-        "base_set": "4.11新托福真题",
-        "date": "2026-04-11",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.8,
-        "completeness": 0.8,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_48_1_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "4.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_411_1_1"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_411_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "4.11新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_411_1_23",
-                    "nq": 3,
-                    "q": 23,
-                    "from": "4.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_121a_1_26",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "4.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_411_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_411_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "4.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 25
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_rp0822_6_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "4.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_411_2_1"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_34_2_11",
-                    "nq": 5,
-                    "q": 11,
-                    "from": "4.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_411_2_11"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 15
-          }
-        },
-        "missing": [
-          "M1/ctw_11:0/10"
-        ]
-      },
-      {
         "id": "reading:rf0808",
         "section": "reading",
         "base_set": "rf0808",
@@ -47206,12 +49123,12 @@
         ]
       },
       {
-        "id": "reading:223",
+        "id": "reading:21a",
         "section": "reading",
-        "base_set": "2.23新托福真题",
-        "date": "2026-02-23",
+        "base_set": "2.1新托福真题A卷",
+        "date": "2026-02-01",
         "forms": {
-          "1": "B",
+          "1": "A",
           "2": "A"
         },
         "completeness_before": 0.78,
@@ -47222,7 +49139,7 @@
         "modules": {
           "1": {
             "module": 1,
-            "form": "B",
+            "form": "A",
             "slots": [
               {
                 "key": "ctw_1",
@@ -47235,10 +49152,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ctw_223_1_1",
+                    "id": "real_ctw_21a_1_1",
                     "nq": 10,
                     "q": 1,
-                    "from": "2.23新托福真题",
+                    "from": "2.1新托福真题A卷",
                     "via": "native"
                   }
                 ],
@@ -47254,63 +49171,64 @@
                 ],
                 "need": 10,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_ctw_21a_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "2.1新托福真题A卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
               },
               {
                 "key": "rdl_21",
                 "type": "rdl",
                 "band": [
                   21,
-                  25
+                  30
                 ],
-                "need": 5,
+                "need": 10,
                 "units": [
-                  1,
-                  3
+                  2,
+                  5
                 ],
                 "items": [
                   {
-                    "id": "real_rdl_rf0622_1_123",
+                    "id": "real_rdl_310_1_21",
                     "nq": 2,
-                    "q": 22,
-                    "from": "2.23新托福真题",
+                    "q": 23,
+                    "from": "2.1新托福真题A卷",
                     "via": "native",
-                    "alias_of": "real_rdl_223_1_22"
+                    "alias_of": "real_rdl_21a_1_23"
                   },
                   {
-                    "id": "real_rdl_223_1_23",
+                    "id": "real_rdl_310_1_21",
+                    "nq": 2,
+                    "q": 24,
+                    "from": "2.1新托福真题A卷",
+                    "via": "native",
+                    "alias_of": "real_rdl_21a_1_24"
+                  },
+                  {
+                    "id": "real_rdl_21a_1_25",
                     "nq": 3,
-                    "q": 23,
-                    "from": "2.23新托福真题",
+                    "q": 25,
+                    "from": "2.1新托福真题A卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_rdl_21a_1_29",
+                    "nq": 2,
+                    "q": 29,
+                    "from": "2.1新托福真题A卷",
                     "via": "native"
                   }
                 ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_510_1_31",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "2.23新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_223_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
+                "got": 9,
+                "status": "near"
               },
               {
                 "key": "ap_31",
@@ -47321,21 +49239,13 @@
                 ],
                 "need": 5,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_223_1_31",
-                    "nq": 4,
-                    "q": 31,
-                    "from": "2.23新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 35,
-            "got": 24
+            "got": 29
           },
           "2": {
             "module": 2,
@@ -47352,10 +49262,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_ctw_223_2_1",
+                    "id": "real_ctw_21a_2_1",
                     "nq": 10,
                     "q": 1,
-                    "from": "2.23新托福真题",
+                    "from": "2.1新托福真题A卷",
                     "via": "native"
                   }
                 ],
@@ -47371,27 +49281,19 @@
                 ],
                 "need": 5,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_411_1_31",
-                    "nq": 5,
-                    "q": 11,
-                    "from": "2.23新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_223_2_11"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 15,
-            "got": 15
+            "got": 10
           }
         },
         "missing": [
-          "M1/ctw_11:0/10",
-          "M1/ap_31:4/5"
+          "M1/rdl_21:9/10",
+          "M1/ap_31:0/5",
+          "M2/ap_11:0/5"
         ]
       },
       {
@@ -47962,568 +49864,6 @@
         ]
       },
       {
-        "id": "reading:38",
-        "section": "reading",
-        "base_set": "3.8新托福真题",
-        "date": "2026-03-08",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.78,
-        "completeness": 0.78,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_38_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "3.8新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_rf0610_1_123",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "3.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_38_1_21"
-                  },
-                  {
-                    "id": "real_rdl_325_1_23",
-                    "nq": 3,
-                    "q": 23,
-                    "from": "3.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_38_1_23"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_510_1_26",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "3.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_38_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_38_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "3.8新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 25
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_225_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "3.8新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_38_2_1"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_38_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "3.8新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 14
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:315",
-        "section": "reading",
-        "base_set": "3.15新托福真题",
-        "date": "2026-03-15",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.78,
-        "completeness": 0.78,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_315_1_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "3.15新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_317_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "3.15新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_315_1_11"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_315_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "3.15新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_420_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "3.15新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_315_1_23"
-                  },
-                  {
-                    "id": "real_rdl_rf0610_1_125",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "3.15新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_315_1_25"
-                  },
-                  {
-                    "id": "real_rdl_315_1_28",
-                    "nq": 3,
-                    "q": 28,
-                    "from": "3.15新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_rf0713_1_131",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "3.15新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_315_1_31"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 35
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_315_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "3.15新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 4
-          }
-        },
-        "missing": [
-          "M2/ctw_1:0/10",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:45",
-        "section": "reading",
-        "base_set": "4.5新托福真题",
-        "date": "2026-04-05",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.78,
-        "completeness": 0.78,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_316_1_11",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "4.5新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_45_1_1"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_45_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "4.5新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_45_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "4.5新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_45_1_23",
-                    "nq": 3,
-                    "q": 23,
-                    "from": "4.5新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_38_1_31",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "4.5新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_45_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_45_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "4.5新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 35
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_315_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "4.5新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_45_2_11"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 4
-          }
-        },
-        "missing": [
-          "M2/ctw_1:0/10",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
         "id": "reading:56v2",
         "section": "reading",
         "base_set": "5.6新托福真题_v2",
@@ -48707,194 +50047,6 @@
         },
         "missing": [
           "M2/ctw_1:0/10",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:511",
-        "section": "reading",
-        "base_set": "5.11新托福真题",
-        "date": "2026-05-11",
-        "forms": {
-          "1": "B",
-          "2": "A"
-        },
-        "completeness_before": 0.78,
-        "completeness": 0.78,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "B",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_22_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "5.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ctw_511_1_11"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  25
-                ],
-                "need": 5,
-                "units": [
-                  1,
-                  3
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_511_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "5.11新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_511_1_23",
-                    "nq": 3,
-                    "q": 23,
-                    "from": "5.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_26",
-                "type": "ap",
-                "band": [
-                  26,
-                  30
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_rf0610_1_131",
-                    "nq": 5,
-                    "q": 26,
-                    "from": "5.11新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_511_1_26"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_511_1_31",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "5.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 25
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_511_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "5.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_511_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "5.11新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 14
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10",
           "M2/ap_11:4/5"
         ]
       },
@@ -49089,188 +50241,6 @@
         ]
       },
       {
-        "id": "reading:318",
-        "section": "reading",
-        "base_set": "3.18新托福真题",
-        "date": "2026-03-18",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.76,
-        "completeness": 0.76,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_318_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_rf0902_1_121",
-                    "nq": 2,
-                    "q": 22,
-                    "from": "3.18新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_318_1_22"
-                  },
-                  {
-                    "id": "real_rdl_318_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_318_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_415_1_25",
-                    "nq": 3,
-                    "q": 28,
-                    "from": "3.18新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_318_1_28"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_318_1_31",
-                    "nq": 4,
-                    "q": 31,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 35,
-            "got": 24
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_318_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_318_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 14
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10",
-          "M1/ap_31:4/5",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
         "id": "reading:420",
         "section": "reading",
         "base_set": "4.20新托福真题",
@@ -49451,362 +50421,6 @@
           "M1/ctw_1:0/10",
           "M1/ap_31:4/5",
           "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:510v2",
-        "section": "reading",
-        "base_set": "5.10新托福真题_v2",
-        "date": "2026-05-10",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.76,
-        "completeness": 0.76,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_510v2_1_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_rp0704_1_31",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native",
-                    "alias_of": "real_ctw_510v2_1_11"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_rf0622_1_121",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native",
-                    "alias_of": "real_rdl_510v2_1_21"
-                  },
-                  {
-                    "id": "real_rdl_510v2_1_24",
-                    "nq": 2,
-                    "q": 24,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_510v2_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_510v2_1_28",
-                    "nq": 3,
-                    "q": 28,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_510v2_1_31",
-                    "nq": 4,
-                    "q": 31,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 35,
-            "got": 34
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_510v2_2_11",
-                    "nq": 4,
-                    "q": 11,
-                    "from": "5.10新托福真题_v2",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "near"
-              }
-            ],
-            "need": 15,
-            "got": 4
-          }
-        },
-        "missing": [
-          "M1/ap_31:4/5",
-          "M2/ctw_1:0/10",
-          "M2/ap_11:4/5"
-        ]
-      },
-      {
-        "id": "reading:314",
-        "section": "reading",
-        "base_set": "3.14新托福真题",
-        "date": "2026-03-14",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.74,
-        "completeness": 0.74,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_314_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "3.14新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_28_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "3.14新托福真题",
-                    "via": "native",
-                    "alias_of": "real_rdl_314_1_21"
-                  },
-                  {
-                    "id": "real_rdl_314_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "3.14新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_314_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "3.14新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 7,
-                "status": "partial"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_418_2_11",
-                    "nq": 5,
-                    "q": 31,
-                    "from": "3.14新托福真题",
-                    "via": "native",
-                    "alias_of": "real_ap_314_1_31"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 35,
-            "got": 22
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_314_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "3.14新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ap_314_2_11",
-                    "nq": 5,
-                    "q": 11,
-                    "from": "3.14新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 5,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 15
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10",
-          "M1/rdl_21:7/10"
         ]
       },
       {
@@ -50340,173 +50954,6 @@
         ]
       },
       {
-        "id": "reading:21a",
-        "section": "reading",
-        "base_set": "2.1新托福真题A卷",
-        "date": "2026-02-01",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.58,
-        "completeness": 0.58,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "ctw_11",
-                "type": "ctw",
-                "band": [
-                  11,
-                  20
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_21a_1_11",
-                    "nq": 10,
-                    "q": 11,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "rdl_21",
-                "type": "rdl",
-                "band": [
-                  21,
-                  30
-                ],
-                "need": 10,
-                "units": [
-                  2,
-                  5
-                ],
-                "items": [
-                  {
-                    "id": "real_rdl_310_1_21",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native",
-                    "alias_of": "real_rdl_21a_1_23"
-                  },
-                  {
-                    "id": "real_rdl_310_1_21",
-                    "nq": 2,
-                    "q": 24,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native",
-                    "alias_of": "real_rdl_21a_1_24"
-                  },
-                  {
-                    "id": "real_rdl_21a_1_25",
-                    "nq": 3,
-                    "q": 25,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_rdl_21a_1_29",
-                    "nq": 2,
-                    "q": 29,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 9,
-                "status": "near"
-              },
-              {
-                "key": "ap_31",
-                "type": "ap",
-                "band": [
-                  31,
-                  35
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 35,
-            "got": 19
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "ctw_1",
-                "type": "ctw",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_ctw_21a_2_1",
-                    "nq": 10,
-                    "q": 1,
-                    "from": "2.1新托福真题A卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "full"
-              },
-              {
-                "key": "ap_11",
-                "type": "ap",
-                "band": [
-                  11,
-                  15
-                ],
-                "need": 5,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 15,
-            "got": 10
-          }
-        },
-        "missing": [
-          "M1/ctw_1:0/10",
-          "M1/rdl_21:9/10",
-          "M1/ap_31:0/5",
-          "M2/ap_11:0/5"
-        ]
-      },
-      {
         "id": "reading:128a",
         "section": "reading",
         "base_set": "1.28新托福真题A卷",
@@ -50515,8 +50962,8 @@
           "1": "B",
           "2": "A"
         },
-        "completeness_before": 0.2,
-        "completeness": 0.2,
+        "completeness_before": 0.6,
+        "completeness": 0.6,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -50534,9 +50981,17 @@
                 ],
                 "need": 10,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_ctw_128a_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "1.28新托福真题A卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
               },
               {
                 "key": "ctw_11",
@@ -50547,9 +51002,17 @@
                 ],
                 "need": 10,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_ctw_128a_1_11",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "1.28新托福真题A卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
               },
               {
                 "key": "rdl_21",
@@ -50611,7 +51074,7 @@
               }
             ],
             "need": 35,
-            "got": 6
+            "got": 26
           },
           "2": {
             "module": 2,
@@ -50658,13 +51121,155 @@
           }
         },
         "missing": [
-          "M1/ctw_1:0/10",
-          "M1/ctw_11:0/10",
           "M1/rdl_21:3/5",
           "M1/ap_26:3/5",
           "M1/ap_31:0/5",
           "M2/ctw_1:0/10",
           "M2/ap_11:4/5"
+        ]
+      },
+      {
+        "id": "reading:429",
+        "section": "reading",
+        "base_set": "4.29新托福真题",
+        "date": "2026-04-29",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.6,
+        "completeness": 0.6,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_429_1_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ctw_11",
+                "type": "ctw",
+                "band": [
+                  11,
+                  20
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_210_1_1",
+                    "nq": 10,
+                    "q": 11,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "real_ctw_429_1_11"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "rdl_21",
+                "type": "rdl",
+                "band": [
+                  21,
+                  30
+                ],
+                "need": 10,
+                "units": [
+                  2,
+                  5
+                ],
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "ap_31",
+                "type": "ap",
+                "band": [
+                  31,
+                  35
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              }
+            ],
+            "need": 35,
+            "got": 20
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "ctw_1",
+                "type": "ctw",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_ctw_429_2_1",
+                    "nq": 10,
+                    "q": 1,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "ap_11",
+                "type": "ap",
+                "band": [
+                  11,
+                  15
+                ],
+                "need": 5,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              }
+            ],
+            "need": 15,
+            "got": 10
+          }
+        },
+        "missing": [
+          "M1/rdl_21:0/10",
+          "M1/ap_31:0/5",
+          "M2/ap_11:0/5"
         ]
       }
     ],
@@ -68574,15 +69179,20 @@
   "exam_leftover": {
     "reading": [
       "reading:121c",
+      "reading:127b",
       "reading:21b",
       "reading:21c",
       "reading:28",
       "reading:210",
+      "reading:223",
       "reading:32a",
+      "reading:38",
       "reading:310",
       "reading:311",
+      "reading:315",
       "reading:316",
       "reading:317",
+      "reading:318",
       "reading:320",
       "reading:323",
       "reading:325",
@@ -68590,6 +69200,9 @@
       "reading:329",
       "reading:330",
       "reading:41",
+      "reading:45",
+      "reading:48",
+      "reading:411",
       "reading:413",
       "reading:415",
       "reading:418",
@@ -68598,6 +69211,8 @@
       "reading:428",
       "reading:56",
       "reading:510",
+      "reading:510v2",
+      "reading:511",
       "reading:518",
       "reading:523",
       "reading:529",

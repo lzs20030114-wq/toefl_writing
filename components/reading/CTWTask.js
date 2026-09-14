@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, READING_FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { splitBlankToken } from "../../lib/reading/ctwToken";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
   const draftKey = buildDraftKey("ctw", item?.id || "");
@@ -119,14 +120,15 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
         const bi = blankIndex;
         const fragment = blank.displayed_fragment;
         const missingLen = blank.original_word.length - fragment.length;
-        // Strip trailing punctuation from the original word to check
-        const trailingPunct = allWords[wi].match(/[.,;:!?]+$/)?.[0] || "";
+        // token 上粘着的标点原样印在两边（"word." / "(like" / "region—not"，见 lib/reading/ctwToken.js）
+        const { lead, tail } = splitBlankToken(allWords[wi], blank.original_word);
 
         const isCorrect = submitted && (fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
         const isWrong = submitted && !isCorrect;
 
         elements.push(
           <span key={`blank-${bi}`} style={{ display: "inline", whiteSpace: "nowrap" }}>
+            {lead && <span style={{ fontSize: 16, color: C.t1 }}>{lead}</span>}
             {/* Given prefix — shown as a shaded "locked" chip so users see these
                 letters are PROVIDED and only the underscores need filling. */}
             <span style={{
@@ -183,8 +185,11 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 ({blank.original_word})
               </span>
             )}
-            {trailingPunct && <span style={{ fontSize: 16, color: C.t1 }}>{trailingPunct}</span>}
-          </span>
+            {tail && <span style={{ fontSize: 16, color: C.t1 }}>{tail}</span>}
+          </span>,
+          // 普通词自带尾空格（`{word} `），挖空这一段没有 —— 以前空后面跟着标点时就粘成 "under___,the" / "ra__).Usually"。
+          // 空格放在 nowrap 的 span 外面，才仍是断行点。
+          " ",
         );
         blankIndex++;
       } else {

@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 146,
+  "count": 153,
   "items": [
     {
       "id": "real_ctw_121a_1_11",
@@ -12231,6 +12231,595 @@
           "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
         }
       ]
+    },
+    {
+      "id": "real_ctw_128a_1_1",
+      "passage": "Human cognition refers to the mental processes involved in acquiring, processing, storing, and using knowledge. These include the ways that people interpret sensory signals (perception), how we store and retrieve information (memory), how language is produced (speech), and how humans analyze and solve problems. Researchers study cognitive functions to uncover how the brain processes information and how these processes influence behavior. Insights from cognitive science can improve educational methods and help develop interventions for cognitive disorders.",
+      "word_count": 76,
+      "topic": "psychology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 16,
+          "original_word": "include",
+          "displayed_fragment": "inc",
+          "hidden_length": 4
+        },
+        {
+          "position": 18,
+          "original_word": "ways",
+          "displayed_fragment": "wa",
+          "hidden_length": 2
+        },
+        {
+          "position": 20,
+          "original_word": "people",
+          "displayed_fragment": "peo",
+          "hidden_length": 3
+        },
+        {
+          "position": 23,
+          "original_word": "signals",
+          "displayed_fragment": "sig",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "how",
+          "displayed_fragment": "h",
+          "hidden_length": 2
+        },
+        {
+          "position": 27,
+          "original_word": "store",
+          "displayed_fragment": "st",
+          "hidden_length": 3
+        },
+        {
+          "position": 29,
+          "original_word": "retrieve",
+          "displayed_fragment": "retr",
+          "hidden_length": 4
+        },
+        {
+          "position": 31,
+          "original_word": "memory",
+          "displayed_fragment": "mem",
+          "hidden_length": 3
+        },
+        {
+          "position": 33,
+          "original_word": "language",
+          "displayed_fragment": "lang",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "produced",
+          "displayed_fragment": "prod",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Human cognition refers to the mental processes involved in acquiring, processing, storing, and using knowledge.",
+      "blanked_text": "Human cognition refers to the mental processes involved in acquiring, processing, storing, and using knowledge. These inc____ the wa__ that peo___ interpret sensory sig____ (perception), h__ we st___ and retr____ information mem___ how lang____ is prod____ (speech), and how humans analyze and solve problems. Researchers study cognitive functions to uncover how the brain processes information and how these processes influence behavior. Insights from cognitive science can improve educational methods and help develop interventions for cognitive disorders.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "1.28新托福真题A卷",
+      "date": "2026-01-28",
+      "source_hash": "532fdd72ba87",
+      "source_flags": [
+        {
+          "code": "ctw_answer_truncated",
+          "severity": "blocking",
+          "detail": "答案 PDF 把阅读填词答案词首砍掉：12/29 题为碎片（比例 0.41）。源 PDF 本身如此，已现场 OCR 复核。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_128a_1_11",
+      "passage": "Extinctions are a natural part of Earth's history, marking the end of species that die out and paving the way for new ones. These incidents can be caused by varying factors such as environmental changes, habitat loss, and catastrophic events. Studying extinctions helps scientists understand biodiversity and the resilience of ecosystems. Notable extinctions, like the one that wiped out most of the dinosaurs, offer insights into how life on Earth can dramatically shift. Modern conservation efforts aim to prevent human-induced extinctions and preserve remaining species.",
+      "word_count": 85,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 24,
+          "original_word": "incidents",
+          "displayed_fragment": "inci",
+          "hidden_length": 5
+        },
+        {
+          "position": 26,
+          "original_word": "be",
+          "displayed_fragment": "b",
+          "hidden_length": 1
+        },
+        {
+          "position": 28,
+          "original_word": "by",
+          "displayed_fragment": "b",
+          "hidden_length": 1
+        },
+        {
+          "position": 30,
+          "original_word": "factors",
+          "displayed_fragment": "fac",
+          "hidden_length": 4
+        },
+        {
+          "position": 32,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 34,
+          "original_word": "changes",
+          "displayed_fragment": "cha",
+          "hidden_length": 4
+        },
+        {
+          "position": 36,
+          "original_word": "loss",
+          "displayed_fragment": "lo",
+          "hidden_length": 2
+        },
+        {
+          "position": 38,
+          "original_word": "catastrophic",
+          "displayed_fragment": "catast",
+          "hidden_length": 6
+        },
+        {
+          "position": 40,
+          "original_word": "Studying",
+          "displayed_fragment": "Stud",
+          "hidden_length": 4
+        },
+        {
+          "position": 42,
+          "original_word": "helps",
+          "displayed_fragment": "he",
+          "hidden_length": 3
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Extinctions are a natural part of Earth's history, marking the end of species that die out and paving the way for new ones.",
+      "blanked_text": "Extinctions are a natural part of Earth's history, marking the end of species that die out and paving the way for new ones. These inci_____ can b_ caused b_ varying fac____ such a_ environmental cha____ habitat lo__ and catast______ events. Stud____ extinctions he___ scientists understand biodiversity and the resilience of ecosystems. Notable extinctions, like the one that wiped out most of the dinosaurs, offer insights into how life on Earth can dramatically shift. Modern conservation efforts aim to prevent human-induced extinctions and preserve remaining species.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "1.28新托福真题A卷",
+      "date": "2026-01-28",
+      "source_hash": "532fdd72ba87",
+      "source_flags": [
+        {
+          "code": "ctw_answer_truncated",
+          "severity": "blocking",
+          "detail": "答案 PDF 把阅读填词答案词首砍掉：12/29 题为碎片（比例 0.41）。源 PDF 本身如此，已现场 OCR 复核。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_21a_1_1",
+      "passage": "Mushrooms are made up of two main parts: the mycelium and the fruiting body. The mycelium is long-lived, while the fruiting body appears only when conditions are ideal for reproduction (like after rain). Usually underground, the mycelium consists of a network of thread-like structures that absorb nutrients from the soil. The fruiting body is above ground and responsible for producing and spreading spores. These spores are released into the air to help the mushroom reproduce.",
+      "word_count": 75,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 16,
+          "original_word": "is",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 18,
+          "original_word": "while",
+          "displayed_fragment": "wh",
+          "hidden_length": 3
+        },
+        {
+          "position": 22,
+          "original_word": "appears",
+          "displayed_fragment": "app",
+          "hidden_length": 4
+        },
+        {
+          "position": 24,
+          "original_word": "when",
+          "displayed_fragment": "wh",
+          "hidden_length": 2
+        },
+        {
+          "position": 26,
+          "original_word": "are",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 28,
+          "original_word": "for",
+          "displayed_fragment": "f",
+          "hidden_length": 2
+        },
+        {
+          "position": 30,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 32,
+          "original_word": "rain",
+          "displayed_fragment": "ra",
+          "hidden_length": 2
+        },
+        {
+          "position": 34,
+          "original_word": "underground",
+          "displayed_fragment": "under",
+          "hidden_length": 6
+        },
+        {
+          "position": 37,
+          "original_word": "consists",
+          "displayed_fragment": "cons",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Mushrooms are made up of two main parts: the mycelium and the fruiting body.",
+      "blanked_text": "Mushrooms are made up of two main parts: the mycelium and the fruiting body. The mycelium i_ long-lived, wh___ the fruiting body app____ only wh__ conditions a__ ideal f__ reproduction li__ after ra__ Usually under______ the mycelium cons____ of a network of thread-like structures that absorb nutrients from the soil. The fruiting body is above ground and responsible for producing and spreading spores. These spores are released into the air to help the mushroom reproduce.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "2.1新托福真题A卷",
+      "date": "2026-02-01",
+      "source_hash": "bfe4510f5f41",
+      "source_flags": [
+        {
+          "code": "ctw_answer_truncated",
+          "severity": "blocking",
+          "detail": "答案 PDF 把阅读填词答案词首砍掉：11/30 题为碎片（比例 0.37）。源 PDF 本身如此，已现场 OCR 复核。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_314_1_1",
+      "passage": "One of the topics psychologists investigate is our capacity to understand the mental states of others. This ability is fundamental for social interaction because it enables us to predict and explain the behavior of others. Is this skill innate or shaped by experience? Is understanding others' mental states a matter of simulation (imagining ourselves in their place) or theory (applying a set of rules or concepts)? These inquiries contribute to broader discussions about human cognition.",
+      "word_count": 75,
+      "topic": "psychology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 17,
+          "original_word": "ability",
+          "displayed_fragment": "abi",
+          "hidden_length": 4
+        },
+        {
+          "position": 19,
+          "original_word": "fundamental",
+          "displayed_fragment": "funda",
+          "hidden_length": 6
+        },
+        {
+          "position": 21,
+          "original_word": "social",
+          "displayed_fragment": "soc",
+          "hidden_length": 3
+        },
+        {
+          "position": 23,
+          "original_word": "because",
+          "displayed_fragment": "bec",
+          "hidden_length": 4
+        },
+        {
+          "position": 25,
+          "original_word": "enables",
+          "displayed_fragment": "ena",
+          "hidden_length": 4
+        },
+        {
+          "position": 27,
+          "original_word": "to",
+          "displayed_fragment": "t",
+          "hidden_length": 1
+        },
+        {
+          "position": 29,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 31,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 33,
+          "original_word": "of",
+          "displayed_fragment": "o",
+          "hidden_length": 1
+        },
+        {
+          "position": 35,
+          "original_word": "Is",
+          "displayed_fragment": "I",
+          "hidden_length": 1
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "One of the topics psychologists investigate is our capacity to understand the mental states of others.",
+      "blanked_text": "One of the topics psychologists investigate is our capacity to understand the mental states of others. This abi____ is funda______ for soc___ interaction bec____ it ena____ us t_ predict a__ explain t__ behavior o_ others. I_ this skill innate or shaped by experience? Is understanding others' mental states a matter of simulation (imagining ourselves in their place) or theory (applying a set of rules or concepts)? These inquiries contribute to broader discussions about human cognition.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "3.14新托福真题",
+      "date": "2026-03-14",
+      "source_hash": "66cf312a3112",
+      "source_flags": [
+        {
+          "code": "ctw_answer_truncated",
+          "severity": "blocking",
+          "detail": "答案 PDF 把阅读填词答案词首砍掉：14/30 题为碎片（比例 0.47）。源 PDF 本身如此，已现场 OCR 复核。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_429_1_1",
+      "passage": "Fungi play an important role in ecosystems due to their unique structures and functions. Unlike plants, which produce their food through photosynthesis, fungi obtain nutrients by decomposing dead or decaying organisms. By breaking down complex organic matter, they play a key role in nutrient cycling, returning essential elements like carbon back to the soil.",
+      "word_count": 54,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 32,
+          "original_word": "breaking",
+          "displayed_fragment": "brea",
+          "hidden_length": 4
+        },
+        {
+          "position": 34,
+          "original_word": "complex",
+          "displayed_fragment": "com",
+          "hidden_length": 4
+        },
+        {
+          "position": 36,
+          "original_word": "matter",
+          "displayed_fragment": "mat",
+          "hidden_length": 3
+        },
+        {
+          "position": 38,
+          "original_word": "play",
+          "displayed_fragment": "pl",
+          "hidden_length": 2
+        },
+        {
+          "position": 40,
+          "original_word": "key",
+          "displayed_fragment": "k",
+          "hidden_length": 2
+        },
+        {
+          "position": 42,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 44,
+          "original_word": "cycling",
+          "displayed_fragment": "cyc",
+          "hidden_length": 4
+        },
+        {
+          "position": 46,
+          "original_word": "essential",
+          "displayed_fragment": "esse",
+          "hidden_length": 5
+        },
+        {
+          "position": 48,
+          "original_word": "like",
+          "displayed_fragment": "li",
+          "hidden_length": 2
+        },
+        {
+          "position": 50,
+          "original_word": "back",
+          "displayed_fragment": "ba",
+          "hidden_length": 2
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Fungi play an important role in ecosystems due to their unique structures and functions.",
+      "blanked_text": "Fungi play an important role in ecosystems due to their unique structures and functions. Unlike plants, which produce their food through photosynthesis, fungi obtain nutrients by decomposing dead or decaying organisms. By brea____ down com____ organic mat___ they pl__ a k__ role i_ nutrient cyc____ returning esse_____ elements li__ carbon ba__ to the soil.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.29新托福真题",
+      "date": "2026-04-29",
+      "source_hash": "1ed1f2ab0277",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 20 题（配对 30／满分 50）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_429_2_1",
+      "passage": "Oceanography and hydrology are fields that study the dynamics of water on Earth, encompassing aspects like ocean currents, tides, and the hydrological cycle. Ocean currents, influenced by factors such as wind patterns and Earth's rotation, play a crucial role in regulating global climate since they redistribute heat across the planet. The hydrological cycle, on the other hand, describes the continuous movement of water between the Earth's surface and atmosphere, involving processes such as evaporation, condensation, and precipitation. Together, these phenomena illustrate the interconnected nature of Earth's water systems.",
+      "word_count": 88,
+      "topic": "earth science",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 25,
+          "original_word": "influenced",
+          "displayed_fragment": "influ",
+          "hidden_length": 5
+        },
+        {
+          "position": 27,
+          "original_word": "factors",
+          "displayed_fragment": "fac",
+          "hidden_length": 4
+        },
+        {
+          "position": 29,
+          "original_word": "as",
+          "displayed_fragment": "a",
+          "hidden_length": 1
+        },
+        {
+          "position": 31,
+          "original_word": "patterns",
+          "displayed_fragment": "patt",
+          "hidden_length": 4
+        },
+        {
+          "position": 34,
+          "original_word": "rotation",
+          "displayed_fragment": "rota",
+          "hidden_length": 4
+        },
+        {
+          "position": 37,
+          "original_word": "crucial",
+          "displayed_fragment": "cru",
+          "hidden_length": 4
+        },
+        {
+          "position": 39,
+          "original_word": "in",
+          "displayed_fragment": "i",
+          "hidden_length": 1
+        },
+        {
+          "position": 41,
+          "original_word": "global",
+          "displayed_fragment": "glo",
+          "hidden_length": 3
+        },
+        {
+          "position": 43,
+          "original_word": "since",
+          "displayed_fragment": "si",
+          "hidden_length": 3
+        },
+        {
+          "position": 45,
+          "original_word": "redistribute",
+          "displayed_fragment": "redist",
+          "hidden_length": 6
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "Oceanography and hydrology are fields that study the dynamics of water on Earth, encompassing aspects like ocean currents, tides, and the hydrological cycle.",
+      "blanked_text": "Oceanography and hydrology are fields that study the dynamics of water on Earth, encompassing aspects like ocean currents, tides, and the hydrological cycle. Ocean currents, influ_____ by fac____ such a_ wind patt____ and Earth's rota____ play a cru____ role i_ regulating glo___ climate si___ they redist______ heat across the planet. The hydrological cycle, on the other hand, describes the continuous movement of water between the Earth's surface and atmosphere, involving processes such as evaporation, condensation, and precipitation. Together, these phenomena illustrate the interconnected nature of Earth's water systems.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "4.29新托福真题",
+      "date": "2026-04-29",
+      "source_hash": "1ed1f2ab0277",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "blocking",
+          "detail": "reading 科缺 20 题（配对 30／满分 50）。"
+        }
+      ]
+    },
+    {
+      "id": "real_ctw_510v2_2_1",
+      "passage": "The human brain is an extraordinarily intricate organ, unrivaled in its complexity and function. Studying its anatomy reveals a remarkable internal architecture, composed of billions of neurons intricately interconnected by synapses. These neurons transmit electrical impulses, facilitating the brain's role in enabling cognition, processing information, regulating essential bodily functions, and facilitating emotions. The reflective nature of studying the brain encourages careful consideration of how its structure impacts behavior and thought.",
+      "word_count": 70,
+      "topic": "biology",
+      "subtopic": "",
+      "blanks": [
+        {
+          "position": 33,
+          "original_word": "transmit",
+          "displayed_fragment": "tran",
+          "hidden_length": 4
+        },
+        {
+          "position": 35,
+          "original_word": "impulses",
+          "displayed_fragment": "impu",
+          "hidden_length": 4
+        },
+        {
+          "position": 37,
+          "original_word": "the",
+          "displayed_fragment": "t",
+          "hidden_length": 2
+        },
+        {
+          "position": 39,
+          "original_word": "role",
+          "displayed_fragment": "ro",
+          "hidden_length": 2
+        },
+        {
+          "position": 41,
+          "original_word": "enabling",
+          "displayed_fragment": "enab",
+          "hidden_length": 4
+        },
+        {
+          "position": 43,
+          "original_word": "processing",
+          "displayed_fragment": "proce",
+          "hidden_length": 5
+        },
+        {
+          "position": 45,
+          "original_word": "regulating",
+          "displayed_fragment": "regul",
+          "hidden_length": 5
+        },
+        {
+          "position": 47,
+          "original_word": "bodily",
+          "displayed_fragment": "bod",
+          "hidden_length": 3
+        },
+        {
+          "position": 49,
+          "original_word": "and",
+          "displayed_fragment": "a",
+          "hidden_length": 2
+        },
+        {
+          "position": 51,
+          "original_word": "emotions",
+          "displayed_fragment": "emot",
+          "hidden_length": 4
+        }
+      ],
+      "blank_count": 10,
+      "first_sentence": "The human brain is an extraordinarily intricate organ, unrivaled in its complexity and function.",
+      "blanked_text": "The human brain is an extraordinarily intricate organ, unrivaled in its complexity and function. Studying its anatomy reveals a remarkable internal architecture, composed of billions of neurons intricately interconnected by synapses. These neurons tran____ electrical impu____ facilitating t__ brain's ro__ in enab____ cognition, proce_____ information, regul_____ essential bod___ functions, a__ facilitating emot____ The reflective nature of studying the brain encourages careful consideration of how its structure impacts behavior and thought.",
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "5.10新托福真题_v2",
+      "date": "2026-05-10",
+      "source_hash": "b02c40ffd830",
+      "source_flags": []
     }
   ]
 }
