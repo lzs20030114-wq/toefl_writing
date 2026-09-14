@@ -9,6 +9,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { TierBadge, BindEmailModal, FbStatusBadge } from "./sidebarWidgets";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
+import { VocabNavItem } from "../vocab/VocabNavItem";
 
 /* ── NavSidebar ── */
 
@@ -188,6 +189,8 @@ export function NavSidebar({
             </button>
           );
         })}
+        {/* 单词本：独立路由，挂在 section 列表末尾（原来在右栏页底，不显眼） */}
+        <VocabNavItem isChallenge={isChallenge} />
       </div>
 
       {/* ── Divider ── */}
