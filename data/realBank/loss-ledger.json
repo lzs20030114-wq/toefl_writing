@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-14，790 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-14，828 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4436,
-    "missing": 3903,
+    "got": 4511,
+    "missing": 3828,
     "overfilled": 59,
-    "completeness": 0.5357,
+    "completeness": 0.5448,
     "causes": {
       "source_defect": 812,
       "held": 114,
       "deduped": 37,
-      "bank_dropped": 611,
+      "bank_dropped": 535,
       "section_never_run": 1990,
       "section_lost": 30,
-      "pipeline_loss": 309
+      "pipeline_loss": 310
     },
-    "actionable": 339
+    "actionable": 340
   },
   "byType": {
     "ctw": {
@@ -119,18 +119,18 @@
     "bs": {
       "type": "bs",
       "need": 690,
-      "got": 276,
-      "missing": 414,
+      "got": 351,
+      "missing": 339,
       "causes": {
         "source_defect": 73,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 272,
+        "bank_dropped": 196,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 69
+        "pipeline_loss": 70
       },
-      "completeness": 0.4
+      "completeness": 0.5087
     },
     "email": {
       "type": "email",
@@ -281,18 +281,18 @@
     "writing": {
       "section": "writing",
       "need": 828,
-      "got": 401,
-      "missing": 427,
+      "got": 476,
+      "missing": 352,
       "causes": {
         "source_defect": 76,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 278,
+        "bank_dropped": 202,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 71
+        "pipeline_loss": 72
       },
-      "completeness": 0.4843
+      "completeness": 0.5749
     },
     "listening": {
       "section": "listening",
@@ -1065,6 +1065,20 @@
       ]
     },
     {
+      "set": "3.15新托福真题",
+      "slug": "315",
+      "date": "2026-03-15",
+      "section": "writing",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "bs": 1
+      },
+      "slots": [
+        "M1/bs_1(-1)"
+      ]
+    },
+    {
       "set": "4.20新托福真题",
       "slug": "420",
       "date": "2026-04-20",
@@ -1205,15 +1219,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 2,
+      "missing": 8,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 8
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 2,
+        "wDroppedDupBs": 6
       },
       "notes": []
     },
@@ -1745,16 +1760,17 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 3,
+      "missing": 7,
+      "status": "partial",
       "cause": "source_defect",
       "charged": {
         "source_defect": 5,
-        "bank_dropped": 5
+        "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 6
+        "wSkippedThin": 0,
+        "wDroppedDupBs": 3
       },
       "notes": []
     },
@@ -1964,15 +1980,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 6,
+      "missing": 4,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 4
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 0,
+        "wDroppedDupBs": 4
       },
       "notes": []
     },
@@ -2197,15 +2214,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 5,
+      "missing": 5,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 5
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1,
+        "wDroppedDupBs": 4
       },
       "notes": []
     },
@@ -2402,15 +2420,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 5,
+      "missing": 5,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 5
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 2,
+        "wDroppedDupBs": 3
       },
       "notes": []
     },
@@ -2992,16 +3011,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 7,
+      "missing": 3,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 9,
+        "bank_dropped": 2,
         "pipeline_loss": 1
       },
       "drop_codes": {
-        "wSkippedThin": 9
+        "wSkippedThin": 2
       },
       "notes": []
     },
@@ -3168,15 +3187,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 6,
+      "missing": 4,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 4
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1,
+        "wDroppedDupBs": 3
       },
       "notes": []
     },
@@ -3371,32 +3391,6 @@
       "set": "2.1新托福真题A卷",
       "slug": "21a",
       "date": "2026-02-01",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 10
-      },
-      "drop_codes": {
-        "wSkippedThin": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "date": "2026-02-01",
       "section": "speaking",
       "module": "1",
       "form": "A",
@@ -3528,15 +3522,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 8,
+      "missing": 2,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 0,
+        "wDroppedDupBs": 2
       },
       "notes": []
     },
@@ -3600,16 +3595,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "bank_dropped",
+      "got": 4,
+      "missing": 6,
+      "status": "partial",
+      "cause": "source_defect",
       "charged": {
         "source_defect": 4,
-        "bank_dropped": 6
+        "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 6
+        "wSkippedThin": 2
       },
       "notes": []
     },
@@ -4174,15 +4169,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 4,
+      "missing": 6,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 6
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1,
+        "wDroppedDupBs": 5
       },
       "notes": []
     },
@@ -4737,15 +4733,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 4,
+      "missing": 6,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 6
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 4,
+        "wDroppedDupBs": 2
       },
       "notes": []
     },
@@ -5301,7 +5298,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 2
       },
       "notes": []
     },
@@ -5783,15 +5780,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 3,
+      "missing": 7,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 7
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 3,
+        "wDroppedDupBs": 4
       },
       "notes": []
     },
@@ -5817,7 +5815,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -6322,7 +6320,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -6801,7 +6799,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -7260,7 +7258,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 6,
+        "wSkippedThin": 2,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -7786,7 +7784,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1
       },
       "notes": []
     },
@@ -8668,7 +8666,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -9239,15 +9237,16 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 8,
+      "missing": 2,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 0,
+        "wDroppedDupBs": 2
       },
       "notes": []
     },
@@ -9322,12 +9321,9 @@
       "got": 9,
       "missing": 1,
       "status": "near",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 9
+        "pipeline_loss": 1
       },
       "notes": [
         "duplicate_cluster",
@@ -10209,7 +10205,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 2,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -10712,7 +10708,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 1
       },
       "notes": []
     },
@@ -11611,7 +11607,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 1
       },
       "notes": [
@@ -12283,7 +12279,7 @@
         "bank_dropped": 7
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 2,
         "wDroppedDupBs": 4,
         "wDroppedBsRuntime": 1
       },
@@ -13531,7 +13527,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 2
       },
       "notes": []
@@ -14733,7 +14729,7 @@
         "bank_dropped": 10
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 10
       },
       "notes": [
@@ -15215,7 +15211,7 @@
         "bank_dropped": 9
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 8
       },
       "notes": [
@@ -15716,7 +15712,7 @@
         "bank_dropped": 5
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 4,
         "wDroppedDupBs": 1
       },
       "notes": []
@@ -16567,7 +16563,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 3
       },
       "notes": [
@@ -17042,7 +17038,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 2
       },
       "notes": []
@@ -17437,7 +17433,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 3
       },
       "notes": [
@@ -18382,7 +18378,7 @@
         "bank_dropped": 5
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 4
       },
       "notes": [
@@ -18848,7 +18844,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 10
+        "wSkippedThin": 2
       },
       "notes": []
     },
@@ -19242,7 +19238,7 @@
         "bank_dropped": 4
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 3
       },
       "notes": []
@@ -19660,7 +19656,7 @@
         "bank_dropped": 7
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 2,
         "wDroppedDupBs": 5
       },
       "notes": []
@@ -20055,7 +20051,7 @@
         "bank_dropped": 3
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 2
       },
       "notes": []
@@ -20613,7 +20609,7 @@
         "bank_dropped": 5
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 4
       },
       "notes": [
@@ -21095,7 +21091,7 @@
         "bank_dropped": 10
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 0,
         "wDroppedDupBs": 10
       },
       "notes": [
@@ -21989,7 +21985,7 @@
         "bank_dropped": 4
       },
       "drop_codes": {
-        "wSkippedThin": 10,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 3
       },
       "notes": [

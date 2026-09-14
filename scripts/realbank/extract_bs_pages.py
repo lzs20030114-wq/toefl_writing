@@ -2,6 +2,9 @@
 """
 第一来源（截图卷）造句题 —— 从「写作.pdf」的考试界面截图里拆出可练的题。
 
+1~2 月的合订卷没有单独的「写作.pdf」（一个 PDF 装整套四科）：按 ingest 阶段的 OCR 缓存找出造句那几页只送那几页，
+见 combined_writing_pages（2026-09-14 前这 14 套被整套跳过）。
+
 第一来源每套的写作 PDF 没有文字层，整份是考试界面截图：每页 2 题，一题包含
 「Make an appropriate sentence.」标题、上方人物说的题干句、下方一行带下划线空位的
 答题模板（模板里可能夹着已给定的词），再下方是打乱的词块。structured.json 的
@@ -349,8 +352,55 @@ def writing_pdf(folder: str) -> str | None:
     return os.path.join(folder, hits[0]) if hits else None
 
 
-def sets_with_writing(only: str | None) -> list[tuple[str, str]]:
-    """[(卷名, 写作pdf路径)]，只留有 structured.json 的卷（没跑过 ingest 的卷落不了库）。"""
+OCR_TEXT_DIR = os.path.join(REPO_ROOT, ".codex-tmp", "ocr")
+_BS_MARK = re.compile(r"makeanappropriatesentence")
+_WRITING_TAIL_MARK = re.compile(r"writeanemail|professoristeaching|writeapost")
+
+
+def combined_writing_pages(setname: str, folder: str) -> tuple[str, list[int]] | None:
+    """合订卷（一个 PDF 装整套四科、没有单独「写作.pdf」）→ (PDF 路径, 造句页码列表)。
+
+    2026-09-14 以前本脚本只认单独的「写作.pdf」，1~2 月 13 套合订卷 + 3.14 被整套跳过 ——
+    这些卷的造句题一道都没进库，丢题账本里记成「造句只有答案句」131 题。
+    合订卷的造句页不必整本送识图（60~80 页 × ¥0.01，还会让模型去读阅读听力页）：
+    用 ingest 阶段的 OCR 缓存按页找「Make an appropriate sentence」，取首个造句页到邮件/讨论页之前的整段
+    （中间某页标题没被 OCR 认出也会被带上）。缓存没有就跳过这卷 —— 不在这里现场 OCR，保证零意外调用。
+    """
+    try:
+        names = sorted(os.listdir(folder))
+    except OSError:
+        return None
+    for n in names:
+        if not n.lower().endswith(".pdf") or n.startswith("~$"):
+            continue
+        if any(k in n for k in ("答案", "听力原文")):
+            continue
+        txt = os.path.join(OCR_TEXT_DIR, f"{setname}__{n[:-4]}.txt")
+        if not os.path.exists(txt):
+            continue
+        parts = re.split(r"===== PAGE (\d+) =====", open(txt, "r", encoding="utf-8", errors="replace").read())
+        bs_pages, tail_pages = [], []
+        for i in range(1, len(parts) - 1, 2):
+            page_no = int(parts[i])
+            glued = re.sub(r"[^a-z0-9]", "", parts[i + 1].lower())
+            if _BS_MARK.search(glued):
+                bs_pages.append(page_no)
+            if _WRITING_TAIL_MARK.search(glued):
+                tail_pages.append(page_no)
+        if not bs_pages:
+            continue
+        start, end = min(bs_pages), max(bs_pages)
+        after = [p for p in tail_pages if p > end]
+        # 造句段之后紧跟邮件 / 讨论页：把两者之间没被认出标题的页也带上（最多多带 2 页）
+        if after:
+            end = max(end, min(after[0] - 1, end + 2))
+        return os.path.join(folder, n), list(range(start, end + 1))
+    return None
+
+
+def sets_with_writing(only: str | None) -> list[tuple[str, str, list[int] | None]]:
+    """[(卷名, 写作pdf路径, 页码列表或 None=整本)]，只留有 structured.json 的卷（没跑过 ingest 的卷落不了库）。
+    优先单独的「写作.pdf」（行为与改动前一致）；没有才去合订卷里按 OCR 缓存找造句页。"""
     out = []
     for name in sorted(os.listdir(SRC_ROOT)):
         folder = os.path.join(SRC_ROOT, name)
@@ -362,24 +412,32 @@ def sets_with_writing(only: str | None) -> list[tuple[str, str]]:
             continue
         pdf = writing_pdf(folder)
         if pdf:
-            out.append((name, pdf))
+            out.append((name, pdf, None))
+            continue
+        combined = combined_writing_pages(name, folder)
+        if combined:
+            out.append((name, combined[0], combined[1]))
     return out
 
 
-def render_pages(setname: str, pdf: str) -> list[str]:
-    """写作 PDF → 逐页 PNG（缓存命中不重渲染）。返回页图路径列表。"""
+def render_pages(setname: str, pdf: str, pages: list[int] | None = None) -> list[tuple[int, str]]:
+    """写作 PDF → 逐页 PNG（缓存命中不重渲染）。返回 [(PDF 页码, 页图路径)]。
+    页码就是 PDF 里的真实页码（单独写作.pdf 从 1 起，与改动前的缓存文件名一致；合订卷只渲染造句那几页）。"""
     import fitz
 
     d = os.path.join(PAGE_DIR, re.sub(r"[^\w.-]+", "_", setname))
     os.makedirs(d, exist_ok=True)
-    paths = []
+    out = []
     with fitz.open(pdf) as doc:
-        for i, page in enumerate(doc, start=1):
+        wanted = pages if pages is not None else list(range(1, doc.page_count + 1))
+        for i in wanted:
+            if i < 1 or i > doc.page_count:
+                continue
             p = os.path.join(d, f"p{i}.png")
             if not os.path.exists(p):
-                page.get_pixmap(dpi=DPI).save(p)
-            paths.append(p)
-    return paths
+                doc[i - 1].get_pixmap(dpi=DPI).save(p)
+            out.append((i, p))
+    return out
 
 
 def ocr_cache_path(setname: str, idx: int, img_hash: str) -> str:
@@ -522,18 +580,23 @@ def main() -> int:
         return 2
 
     # ① 渲染（本地零成本）
-    rendered: list[tuple[str, list[str]]] = []
-    for setname, pdf in sets:
-        rendered.append((setname, render_pages(setname, pdf)))
-    total_pages = sum(len(p) for _, p in rendered)
+    rendered: list[tuple[str, list[tuple[int, str]], str]] = []
+    for setname, pdf, page_nos in sets:
+        where = os.path.basename(pdf) if page_nos is None else f"{os.path.basename(pdf)} p{page_nos[0]}-{page_nos[-1]}（合订卷）"
+        rendered.append((setname, render_pages(setname, pdf, page_nos), where))
+    total_pages = sum(len(p) for _, p, _ in rendered)
 
     # ② 报数
     todo = 0
-    for setname, pages in rendered:
-        for i, p in enumerate(pages, start=1):
+    for setname, pages, where in rendered:
+        n_todo = 0
+        for i, p in pages:
             h = hashlib.sha1(open(p, "rb").read()).hexdigest()[:8]
             if not os.path.exists(ocr_cache_path(setname, i, h)):
-                todo += 1
+                n_todo += 1
+        todo += n_todo
+        if n_todo:
+            print(f"  待识图 {setname}：{n_todo} 张（{where}）")
     print(f"■ {len(sets)} 套，共渲染 {total_pages} 页；待识图 {todo} 张，"
           f"预计费用 ¥{todo * CNY_PER_IMAGE:.2f}（¥{CNY_PER_IMAGE}/张估）")
     if args.dry_run:
@@ -546,7 +609,7 @@ def main() -> int:
     # ③ 识图 + ④ 配答案校验
     report = []
     calls = 0
-    for setname, pages in rendered:
+    for setname, pages, where in rendered:
         answers = answers_for(setname)
         meta_flags = flags_for(setname)
         date = set_date(setname)
@@ -555,7 +618,7 @@ def main() -> int:
         seen_q: dict[int, dict] = {}
         rejects: dict[str, int] = {}
         n_seen = 0
-        for i, p in enumerate(pages, start=1):
+        for i, p in pages:
             try:
                 recs, cached = page_records(setname, i, p, args.model, args.no_ocr)
             except SystemicFailure as e:
@@ -612,13 +675,20 @@ def main() -> int:
                       open(out_p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
         elif os.path.exists(out_p):
             os.remove(out_p)
-        report.append({"set": setname, "pages": len(pages), "seen": n_seen,
+        report.append({"set": setname, "pages": len(pages), "from": where, "seen": n_seen,
                        "answers": len(answers), "ok": len(items), "rejects": rejects})
         print(f"  · {setname}: {len(pages)} 页 / 识图 {n_seen} 题 / 答案 {len(answers)} 条 "
               f"→ 通过 {len(items)}" + (f"  拒收 {rejects}" if rejects else ""))
 
-    json.dump(report, open(os.path.join(OUT_DIR, "_bs_pages_report.json"), "w", encoding="utf-8"),
-              ensure_ascii=False, indent=2)
+    # 报告按卷合并：--only 跑一部分卷时，不能把其余卷上一次的记录冲掉（事后要靠它查每套卷为什么缺题）
+    report_p = os.path.join(OUT_DIR, "_bs_pages_report.json")
+    try:
+        prev_report = json.load(open(report_p, "r", encoding="utf-8"))
+    except Exception:
+        prev_report = []
+    done = {r["set"] for r in report}
+    merged = sorted([r for r in prev_report if r.get("set") not in done] + report, key=lambda r: r.get("set", ""))
+    json.dump(merged, open(report_p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     tot_ok = sum(r["ok"] for r in report)
     agg: dict[str, int] = {}
     for r in report:

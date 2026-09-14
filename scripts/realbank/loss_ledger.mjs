@@ -175,9 +175,8 @@ function printPlan(tasks, limit) {
     console.log("题面来自 extract_bs_pages.py 看图产出的 `<卷>.bs.json`。");
     console.log("  D:/python/python scripts/realbank/extract_bs_pages.py --dry-run   # 先报「几张图 / 预计 ¥」(¥0.01/张)");
     console.log("  D:/python/python scripts/realbank/extract_bs_pages.py --only <卷名>");
-    console.log("⚠ 先看 docs/BACKLOG.md 里那条未决项：写作 PDF 上的词块边界已被 OCR 糊掉");
-    console.log("  （363 条 scrambled_ocr），只能做成「真题句子 + 本站切块」——");
-    console.log("  这种来源分档接不接受，是要你先拍板的，别先烧看图的钱。");
+    console.log("识图看的是截图（块与块之间有大间隔，读得出块边界），每题过机械校验：答案句须由模板给定词 + 词块按序恰好拼出。");
+    console.log("合订卷（没有单独写作.pdf）按 ingest 的 OCR 缓存找造句页，只送那几页。先 --dry-run 看张数和钱。");
   }
 
   // 听力/口语单独说清楚：它们的缺口在作业单里是**故意不出现**的

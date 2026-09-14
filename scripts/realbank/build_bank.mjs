@@ -159,6 +159,20 @@ const WRITING_RECALL = (() => {
   }
 })();
 
+/**
+ * 上一版造句库的 id 顺序（落盘前读）：新补的卷不许插到老卷前面、也不许在去重时抢走已上线那份的保留位 ——
+ * 前端按这个顺序给造句分批编号，已练标记挂在批次号上。判据与理由见 ./bs_order.js。
+ */
+const PREV_BS_IDS = (() => {
+  try {
+    return (JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "writing", "bs.json"), "utf8")).items || [])
+      .map((it) => String(it.id));
+  } catch {
+    return [];
+  }
+})();
+const { orderByPrevious } = require("./bs_order.js");
+
 /** 上一版 id 别名账本（跨重建累积：旧条目保留、重新收敛）。 */
 const PREV_ALIASES = (() => {
   try { return JSON.parse(fs.readFileSync(path.join(BANK_DIR, "id-aliases.json"), "utf8")); } catch { return null; }
@@ -637,7 +651,9 @@ function thin(stats, type, missing, at = {}) {
   recordDrop(stats, {
     set: at.set, slug: at.set ? setSlug(at.set) : null, section: "writing",
     type: type === "build" ? "bs" : type === "discussion" ? "disc" : type,
-    q: at.q ?? null, n: 1, code: "wSkippedThin", detail: `${type} 缺 ${missing.join("+")}`,
+    // 同题号已由看图题面收下（<卷>.bs.json）：这份只是答案句副本，不是丢题 —— 记 0 题，行留着便于对账
+    q: at.q ?? null, n: at.covered ? 0 : 1, code: "wSkippedThin",
+    detail: `${type} 缺 ${missing.join("+")}${at.covered ? "（同题已由看图题面收下，这份只是答案句副本）" : ""}`,
   });
 }
 
@@ -718,7 +734,10 @@ function buildWriting(files, stats) {
     }
     const has = { email: false, discussion: false };
     eligible.push({ setname, meta, has });
-    for (const it of readSetBsFile(setname)) {
+    const bsFileItems = readSetBsFile(setname);
+    // 这些题号已经从看图那条路拿到了题面：structured 里同题号的答案句副本被判 thin 不算丢题（记账记 0 题）
+    const bsNums = new Set(bsFileItems.map((it) => Number(it._q ?? (String(it.id).match(/_(\d+)$/) || [])[1])));
+    for (const it of bsFileItems) {
       out.bs.push({
         id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
         answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
@@ -736,7 +755,7 @@ function buildWriting(files, stats) {
           if (!it.blanks) miss.push("blanks");
           if (!Array.isArray(it.chunks) || !it.chunks.length) miss.push("chunks");
           if (!it.answer) miss.push("answer");
-          if (miss.length) { thin(stats, "build", miss, { set: setname, q: it.n }); continue; }
+          if (miss.length) { thin(stats, "build", miss, { set: setname, q: it.n, covered: bsNums.has(Number(it.n)) }); continue; }
           out.bs.push({
             id: it.id, prompt: it.prompt, blanks: it.blanks, chunks: it.chunks,
             answer: it.answer, distractors: Array.isArray(it.distractors) ? it.distractors : [],
@@ -770,8 +789,10 @@ function buildWriting(files, stats) {
   }
   // 造句跨卷去重：两个来源（截图卷 + 重排版卷）覆盖的考试日期有重叠，实测同一道题会
   // 两边各出一次。按答案句归一化去重（id/卷名都不行：两边的 id 规则和卷名都不一样），
-  // 先入库的留下 —— files 是按卷名排序遍历的，数字卷（1~5 月）排在 rf*（6~9 月）前面，
-  // 所以「留下的那份」= 日期早的那份，且与遍历顺序一样可复现。
+  // 先入库的留下。「先」的口径（2026-09-14 起）：先按上一版造句库的顺序排 —— 已上线的在前、新题追加
+  // （见 ./bs_order.js：前端批次号与已练标记靠这个顺序，重复题必须留已上线那份）；
+  // 都没上线过的新题之间才按卷名遍历顺序（数字卷 1~5 月排在 rf* 6~9 月前面 → 日期早的留下），与遍历一样可复现。
+  out.bs = orderByPrevious(out.bs, PREV_BS_IDS);
   const seenAnswer = new Set();
   const bs = [];
   for (const q of out.bs) {

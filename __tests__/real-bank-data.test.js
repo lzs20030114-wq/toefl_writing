@@ -2,7 +2,7 @@
  * 「真题专区」数据层契约测试（lib/realBank.js）。
  *
  * 锁三件事：
- *   1. 题量与来源分档（讨论 162 / 邮件 57 / 造句 281；来源标签不许把未核验语料吹成 ETS 官方）；
+ *   1. 题量与来源分档（讨论 162 / 邮件 57 / 造句 336；来源标签不许把未核验语料吹成 ETS 官方）；
  *   2. id 全部带 `real_` 前缀且全局唯一 —— real_tpo_reference.json 有 27 条 ad* id 与 live
  *      库 data/academicWriting/prompts.json 重叠，前缀是「已练 / 历史记录不互相污染」的唯一保障；
  *   3. 三种题型规范化后能被各自的消费方直接吃下（写作 normalizePrompt 的必填字段、
@@ -17,7 +17,7 @@ import AD_RECALLED from "../data/academicWriting/recalled_supplement.json";
 import EM_TPO_REFERENCE from "../data/emailWriting/tpo_reference.json";
 import BS_TPO_OFFICIAL from "../data/buildSentence/tpo_official.json";
 import AD_LIVE from "../data/academicWriting/prompts.json";
-// realBank 写作回忆版（build_bank.mjs 产物）：造句 272 / 邮件 44 / 讨论 37。
+// realBank 写作回忆版（build_bank.mjs 产物）：造句 347 / 邮件 44 / 讨论 37。
 // 邮件 / 讨论里 rf/rp 第二来源 14 / 7 条在前，其后是 2026-09-14 第一来源补录（writing-recall.json，逐条对过原卷）。
 import RB_BS from "../data/realBank/writing/bs.json";
 import RB_EMAIL from "../data/realBank/writing/email.json";
@@ -49,7 +49,11 @@ const RB_BS_DROPPED = 0;
 
 // 「造句要按套算」：题数 < REAL_BS_MIN_BATCH 的碎卷（源卷零星回忆，凑不成一套）不进真题专区。
 // 2026-09-08 实测命中 5 卷（3 题的 3.6/3.23/4.28，1 题的 4.5/rf0615），共 11 题被过滤。
-const RB_BS_SPARSE_SOURCES = ["3.6新托福真题", "3.23新托福真题", "4.28新托福真题", "4.5新托福真题", "rf0615"];
+// 2026-09-14 补进 1~2 月合订卷的造句后又多 6 卷：去重（已上线的同一道题优先保留）后只剩 2~4 题，共 20 题被过滤。
+const RB_BS_SPARSE_SOURCES = [
+  "3.6新托福真题", "3.23新托福真题", "4.28新托福真题", "4.5新托福真题", "rf0615",
+  "1.21新托福真题A卷", "1.21新托福真题B卷", "2.10新托福真题", "2.1新托福真题C卷", "2.28新托福真题", "2.2新托福真题",
+];
 const RB_BS_FILTERED_OUT = RB_BS.items.filter((q) =>
   RB_BS_SPARSE_SOURCES.includes(q.source || q.source_label)
 ).length;
@@ -68,10 +72,10 @@ describe("真题专区：题量", () => {
     expect(email.length).toBe(57);
   });
 
-  test("造句 281 题（20 官方 + 261 回忆版），官方 2 批各 10 题、批次号不动", () => {
+  test("造句 336 题（20 官方 + 316 回忆版），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(RB_BS.items.length).toBe(272);
-    expect(RB_BS_FILTERED_OUT).toBe(11);
+    expect(RB_BS.items.length).toBe(347);
+    expect(RB_BS_FILTERED_OUT).toBe(31);
     expect(bsQuestions.length).toBe(20 + RB_BS.items.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT);
     // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
     expect(bsBatches.length).toBeGreaterThan(2);
