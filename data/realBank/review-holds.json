@@ -4480,6 +4480,52 @@
       "to": ".",
       "why": "选项缺句末句号",
       "source": "recheck-2026-09-08"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121a_1_23",
+      "path": "text",
+      "op": "replace",
+      "from": " Whether you're a\n",
+      "to": "\n",
+      "why": "倒数第二段断在半句「Whether you're a」，后面直接跳到 RSVP 行；截掉残句（三道题都不依赖这半句）",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_324_1_31",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Another challenge is preserving these spaces\u2014it can be difficult to secure the funding necessary to maintain",
+      "why": "结尾半句被截（…necessary to maintain），截掉残句；Q4 依据的 rising rents 在前一句，保留",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_314_1",
+      "path": "scenario",
+      "op": "trim_tail",
+      "from": " in the",
+      "why": "指令语断在「for faculty to use in the」，截到 use 收句",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_314_1",
+      "path": "scenario",
+      "op": "append",
+      "to": ".",
+      "why": "trim_tail 后补句末句号",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_228_1",
+      "path": "scenario",
+      "op": "trim_tail",
+      "from": " Morning Afternoon Evening 84% 90% 0 93% 15-20 10 KM",
+      "why": "指令语尾巴串入天气图表的 OCR 数字残片",
+      "source": "truncation-sweep-2026-09-14"
     }
   ]
 }
