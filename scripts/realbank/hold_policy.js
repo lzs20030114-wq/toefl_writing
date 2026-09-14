@@ -241,10 +241,37 @@ function manualAuditPass(entries, at) {
     && typeof e.stem === "string" && e.stem.trim().length >= 12 && String(a.stem || "").startsWith(e.stem.trim()));
 }
 
+/**
+ * 人工核定「答案页印错」：返回核定后的正确字母（A~D），对不上返回 null。
+ *
+ * 比 manualAuditPass 多一道锁：**两票盲审都必须与核定的字母一致**。答案页是官方键，推翻它要三方互证 ——
+ * flash 第一票、pro 第二票各自独立选中同一个字母，人再对着原卷截图逐题核过（清单里写明依据）。
+ * 任何一票没跑、或与核定字母不同，都不改答案、照旧按盲审不一致丢弃。
+ *
+ * @param {Array} entries audit-overrides.json 的 entries
+ * @param {{set: string, section: string, q: number, stamped: string, stem: string, votes: string[]}} at
+ *   votes = [第一票字母, 第二票字母]
+ */
+function manualAnswerFix(entries, at) {
+  const a = at || {};
+  const letter = (x) => String(x == null ? "" : x).trim().toUpperCase();
+  const votes = Array.isArray(a.votes) ? a.votes.map(letter) : [];
+  const hit = (entries || []).find((e) => e
+    && e.verdict === "key_corrected" && typeof e.reason === "string" && e.reason.trim()
+    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q)
+    && letter(e.stamped) && letter(e.stamped) === letter(a.stamped)
+    && /^[A-D]$/.test(letter(e.corrected)) && letter(e.corrected) !== letter(e.stamped)
+    && typeof e.stem === "string" && e.stem.trim().length >= 12 && String(a.stem || "").startsWith(e.stem.trim()));
+  if (!hit) return null;
+  const fixed = letter(hit.corrected);
+  return votes.length >= 2 && votes.every((v) => v === fixed) ? fixed : null;
+}
+
 module.exports = {
   AUDIT_OVERRIDES_FILE,
   loadAuditOverrides,
   manualAuditPass,
+  manualAnswerFix,
   SECTION_GAP_MIN_AGREEMENT,
   INGEST_BLOCKER_RELAXABLE,
   OVERRIDES_FILE,

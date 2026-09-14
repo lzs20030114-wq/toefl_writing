@@ -499,3 +499,17 @@ Qwen 看图 3 张 ¥0.04 → **≈ ¥0.77**（比预估多 ¥0.2：插入题第�
 源里没有这题 2 / 点选句子题没挂上 1 / 本轮新发现的截图遮挡与源料缺陷 4（Stoicism Q32、Q35，4.6 Q12、Q14）。
 
 账本口径：阅读缺口 241 → 217（AP 91 → 77、CTW 101 → 91），基线重冻 4777；jest 2502 绿。本轮花费 ≈ ¥0.01（rf0826 盲审）。
+
+### 12.5 答案页印错的 4 题按核定答案收（2026-09-15，用户拍板「确认答案对就放，不用标注」）
+
+`audit-overrides.json` 新增 `verdict: "key_corrected"`（`hold_policy.manualAnswerFix`）：卷 / 题号 / 答案页字母 / 题干前缀对上，**且 flash、pro 两票盲审都选中核定字母**才按核定字母重盖答案 —— 推翻官方答案键要四方互证
+（答案页之外：主线程逐题对原卷截图作答、Opus 子代理不看答案页独立盲解、DeepSeek 两票）。插入句题另核了成品材料里 [A]~[D] 与原卷截图方块逐一对应。
+
+| 题 | 答案页 | 核定 | 依据（详见清单 reason） |
+|---|---|---|---|
+| 3.30 M1 Q32 | A | **D** | 触发 MBOA 的是别的玉米植株经根系分泌物发出的信号；it 单数指被咬的玉米，不是毛虫 |
+| 3.8 M2 Q15（插入） | B | **C** | these actions 须紧接 manipulation / interventions；插在 [B] 会拆散 Yet 的转折 |
+| 4.20 M2 Q13 | C | **B** | fundamentally reshaped = thoroughly；surprisingly / permanently 都不对 |
+| 5.11 M2 Q15（插入） | C | **B** | this phenomenon = 大气造成的闪烁，热浪类比紧接其后，下一句 corrects these distortions |
+
+结果：4 篇学术阅读补齐 5 题，AP 413 → 417；**AP 实际缺题 26 → 22**；账本 AP 缺口 77 → 71、阅读 217 → 211；基线 4783。

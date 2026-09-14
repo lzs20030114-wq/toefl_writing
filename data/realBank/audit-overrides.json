@@ -1,6 +1,6 @@
 {
   "_purpose": "盲审两票都与答案页不同、但人工对着原卷截图核过「答案页是对的」的题：build_bank 落库放行（判据 scripts/realbank/hold_policy.manualAuditPass）。每条必须写清核对依据；卷/题号/答案页字母/题干前缀任何一个对不上就自动失效。",
-  "_format": "entries[] = { set, section, q, stamped: 答案页字母, stem: 题干前缀(≥12字符), verdict: \"key_correct\", reason: 核对依据, checked_by, date }",
+  "_format": "entries[] = { set, section, q, stamped: 答案页字母, stem: 题干前缀(≥12字符), verdict: \"key_correct\"（答案页对、模型错，放行）| \"key_corrected\"（答案页印错，按 corrected 重盖答案；两票盲审都须选 corrected 才生效）, corrected?, reason: 核对依据, checked_by, date }",
   "entries": [
     {
       "set": "5.10新托福真题_v2",
@@ -12,6 +12,54 @@
       "reason": "插入句题 The latter is concerned with the comparative study of automatic control systems…：The latter 要求紧前面有两个并列项，只有 [A] 紧跟在 …merging sociology and cybernetics 之后（the latter = cybernetics），后一句 By applying principles… from cybernetics 顺接；[B]/[C]/[D] 前面都没有并列项。盲审 flash/pro 两票都选 D。独立盲解（Claude，不看答案页）选 A，主线程对着原卷截图复核同意。同一道题在 3.4 M1Q30 的答案页印成 B，两票与盲解都选 A，那份不收。",
       "checked_by": "Claude 独立盲解 + 主线程对原卷截图复核",
       "date": "2026-09-15"
+    },
+    {
+      "section": "reading",
+      "verdict": "key_corrected",
+      "checked_by": "主线程逐题对原卷截图作答 + Opus 子代理不看答案页独立盲解 + DeepSeek flash/pro 两票，四方一致",
+      "date": "2026-09-15",
+      "set": "3.30新托福真题",
+      "q": 32,
+      "stamped": "A",
+      "corrected": "D",
+      "stem": "According to the passage, corn plants may release MBOA",
+      "reason": "原卷第 2 段：when a corn plant is attacked by caterpillars, it can release specific chemicals that warn nearby corn plants（这些信号 often carried by root exudates）. In response, the neighboring corn plants may release … MBOA。触发的是别的玉米植株经根系分泌物发出的信号 → D root exudates produced by other corn plants；答案页 A harmful chemicals released by caterpillars 与原文相反（it 单数指被咬的玉米植株，不是毛虫）。"
+    },
+    {
+      "section": "reading",
+      "verdict": "key_corrected",
+      "checked_by": "主线程逐题对原卷截图作答 + Opus 子代理不看答案页独立盲解 + DeepSeek flash/pro 两票，四方一致",
+      "date": "2026-09-15",
+      "set": "3.8新托福真题",
+      "q": 15,
+      "stamped": "B",
+      "corrected": "C",
+      "stem": "There are four locations in the passage that indicate where the following sentence could be added. Ethicists worry",
+      "reason": "插入句 Ethicists worry that these actions may blur the line between healing and redesigning biological systems：these actions 须紧接具体行为 —— [C] 前一句是 manipulation of life … interventions could have unintended consequences，指代成立、之后 As the field evolves 收尾顺接；答案页 [B] 会插进 researchers identify processes ripe for intervention 与 Yet this provokes concerns 之间，拆散 Yet 的转折；[A][D] 前无可指代。材料 [A]~[D] 位置已与原卷截图方块逐一核对。"
+    },
+    {
+      "section": "reading",
+      "verdict": "key_corrected",
+      "checked_by": "主线程逐题对原卷截图作答 + Opus 子代理不看答案页独立盲解 + DeepSeek flash/pro 两票，四方一致",
+      "date": "2026-09-15",
+      "set": "4.20新托福真题",
+      "q": 13,
+      "stamped": "C",
+      "corrected": "B",
+      "stem": "The word \"fundamentally\" in the passage",
+      "reason": "原卷：These and other innovations … fundamentally reshaped the visual and emotional stage landscape —— fundamentally = 从根本上、彻底地 → B thoroughly；答案页 C surprisingly 与语义无关，D permanently 讲持续时间也不对。选项顺序已与截图核对。"
+    },
+    {
+      "section": "reading",
+      "verdict": "key_corrected",
+      "checked_by": "主线程逐题对原卷截图作答 + Opus 子代理不看答案页独立盲解 + DeepSeek flash/pro 两票，四方一致",
+      "date": "2026-09-15",
+      "set": "5.11新托福真题",
+      "q": 15,
+      "stamped": "C",
+      "corrected": "B",
+      "stem": "To understand this phenomenon, imagine looking through the heat waves",
+      "reason": "插入句 To understand this phenomenon, imagine looking through the heat waves seen over hot asphalt or desert sand：this phenomenon 须是自然现象 —— [B] 紧跟 Light waves … creating a shimmering effect that distorts them（热浪类比正是这种闪烁），之后 Adaptive optics corrects these distortions 顺接；答案页 [C] 前一句是可变形镜面与算法（技术，不是现象）；[A] 前尚未出现现象，[D] 前是镜面调整频率。材料 [A]~[D] 位置已与原卷截图方块逐一核对。"
     }
   ]
 }

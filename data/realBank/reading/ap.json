@@ -2258,6 +2258,18 @@
           "q_number": 31
         },
         {
+          "question_type": "factual_detail",
+          "stem": "According to the passage, corn plants may release MBOA into their tissues in response to",
+          "options": {
+            "A": "harmful chemicals released by caterpillars",
+            "B": "electrical signals in the soil",
+            "C": "human activities that affect the environment",
+            "D": "root exudates produced by other corn plants"
+          },
+          "correct_answer": "D",
+          "q_number": 32
+        },
+        {
           "question_type": "inference",
           "stem": "What can be inferred to be the purpose of electrical signals that plants release?",
           "options": {
@@ -2610,6 +2622,18 @@
           },
           "correct_answer": "B",
           "q_number": 14
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations in the passage that indicate where the following sentence could be added. Ethicists worry that these actions may blur the line between healing and redesigning biological systems. Where would the sentence best fit? Select a location to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -2621,12 +2645,11 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Biochemical Systems Theory\nChallenges and Implications\n\nBiochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers.\n\nWhile the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds' effects on metabolic pathways is crucial yet fraught with uncertainty.\n\nFurthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves.",
+      "passage": "Biochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory’s ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers.\n\nWhile the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory’s reliability, particularly in drug development, where predicting compounds’ effects on metabolic pathways is crucial yet fraught with uncertainty.\n\nFurthermore, biochemical systems theory has sparked debates over its ethical implications. [A] By scrutinizing biological systems, researchers identify processes ripe for intervention. [B] Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. [C] As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves. [D]",
       "paragraphs": [
-        "Biochemical Systems Theory\nChallenges and Implications",
-        "Biochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory's ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers.",
-        "While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory's reliability, particularly in drug development, where predicting compounds' effects on metabolic pathways is crucial yet fraught with uncertainty.",
-        "Furthermore, biochemical systems theory has sparked debates over its ethical implications. By scrutinizing biological systems, researchers identify processes ripe for intervention. Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves."
+        "Biochemical systems theory, a potent framework for simulating biochemical processes, hinges on mathematical models for predicting the interactions of molecules within cells. The theory’s ability to predict metabolic pathways regulated by enzymes (proteins facilitating and managing chemical reactions) offers significant potential for advancements in biotechnology. However, constructing accurate models demands a profound grasp of biology and mathematics, posing significant challenges to researchers.",
+        "While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs. Erroneous data can skew predictions, underscoring the delicate balance between mathematical precision and biological variability. That interplay raises questions about the theory’s reliability, particularly in drug development, where predicting compounds’ effects on metabolic pathways is crucial yet fraught with uncertainty.",
+        "Furthermore, biochemical systems theory has sparked debates over its ethical implications. [A] By scrutinizing biological systems, researchers identify processes ripe for intervention. [B] Yet this provokes concerns about the manipulation of life at a granular level, including the possibility that interventions could have unintended consequences or adversely affect future generations. [C] As the field evolves, ethical discussions are as dynamic as the biochemical networks themselves. [D]"
       ]
     },
     {
@@ -2997,6 +3020,18 @@
           },
           "correct_answer": "D",
           "q_number": 12
+        },
+        {
+          "question_type": "vocabulary_in_context",
+          "stem": "The word \"fundamentally\" in the passage is closest in meaning to",
+          "options": {
+            "A": "simply",
+            "B": "thoroughly",
+            "C": "surprisingly",
+            "D": "permanently"
+          },
+          "correct_answer": "B",
+          "q_number": 13
         },
         {
           "question_type": "rhetorical_purpose",
@@ -3742,6 +3777,18 @@
           },
           "correct_answer": "D",
           "q_number": 14
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "To understand this phenomenon, imagine looking through the heat waves seen over hot asphalt or desert sand. Where would the sentence best fit? Select a location to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "B",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -3753,9 +3800,11 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Optical Astronomy's Adaptive Revolution\nOptical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth's atmosphere, creating a shimmering effect that distorts them. Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second.\nHowever, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories' carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially hospitable to life.\nThe debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections.",
+      "passage": "Optical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. [A] This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth’s atmosphere, creating a shimmering effect that distorts them. [B] Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. [C] The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second. [D]\n\nHowever, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories’ carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially habitable to life.\n\nThe debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant",
       "paragraphs": [
-        "Optical Astronomy's Adaptive Revolution\nOptical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth's atmosphere, creating a shimmering effect that distorts them. Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second.\nHowever, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories' carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially hospitable to life.\nThe debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections."
+        "Optical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. [A] This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth’s atmosphere, creating a shimmering effect that distorts them. [B] Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. [C] The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second. [D]",
+        "However, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories’ carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially habitable to life.",
+        "The debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant"
       ]
     },
     {

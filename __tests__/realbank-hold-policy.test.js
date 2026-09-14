@@ -287,3 +287,35 @@ describe("hold_policy.manualAuditPass", () => {
     expect(manualAuditPass(undefined, AT)).toBe(false);
   });
 });
+
+/**
+ * 人工核定「答案页印错」（audit-overrides.json 的 verdict=key_corrected）：推翻官方答案键要三方互证 ——
+ * 两票盲审都选中核定的字母 + 人对着原卷截图核过（清单写依据）。缺一不改。
+ */
+describe("hold_policy.manualAnswerFix", () => {
+  const { manualAnswerFix } = require("../scripts/realbank/hold_policy.js");
+  const E = {
+    set: "4.20新托福真题", section: "reading", q: 13, stamped: "C", corrected: "B", verdict: "key_corrected",
+    stem: "The word \"fundamentally\" in the passage", reason: "原卷截图：…fundamentally reshaped the visual and emotional stage landscape → thoroughly",
+  };
+  const AT = { set: "4.20新托福真题", section: "reading", q: 13, stamped: "c", stem: "The word \"fundamentally\" in the passage is closest in meaning to", votes: ["B", "b"] };
+
+  test("逐项对上、两票都选核定字母 → 返回核定字母", () => {
+    expect(manualAnswerFix([E], AT)).toBe("B");
+  });
+
+  test("两票里有一票不同 / 只跑了一票 → 不改", () => {
+    expect(manualAnswerFix([E], { ...AT, votes: ["B", "D"] })).toBeNull();
+    expect(manualAnswerFix([E], { ...AT, votes: ["B", undefined] })).toBeNull();
+    expect(manualAnswerFix([E], { ...AT, votes: ["B"] })).toBeNull();
+  });
+
+  test("答案页字母变了 / 题干换了 / 核定字母非法或与答案页相同 / 不是 key_corrected → 不改", () => {
+    expect(manualAnswerFix([E], { ...AT, stamped: "A" })).toBeNull();
+    expect(manualAnswerFix([E], { ...AT, stem: "What is the main purpose of the passage?" })).toBeNull();
+    expect(manualAnswerFix([{ ...E, corrected: "E" }], AT)).toBeNull();
+    expect(manualAnswerFix([{ ...E, corrected: "C" }], { ...AT, votes: ["C", "C"] })).toBeNull();
+    expect(manualAnswerFix([{ ...E, verdict: "key_correct" }], AT)).toBeNull();
+    expect(manualAnswerFix([{ ...E, reason: " " }], AT)).toBeNull();
+  });
+});

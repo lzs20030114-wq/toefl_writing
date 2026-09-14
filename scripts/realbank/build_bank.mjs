@@ -50,7 +50,7 @@ const require = createRequire(import.meta.url);
 
 // 扣留判据抽成纯函数放隔壁（无 IO，可单测）：见 scripts/realbank/hold_policy.js 顶部注释，
 // 那里写着 ctw_answer_truncated / section_gap 两条为什么在阅读科被放宽。
-const { holdDecision, sectionAgreement, auditPassed, loadAuditOverrides, manualAuditPass } = require("./hold_policy.js");
+const { holdDecision, sectionAgreement, auditPassed, loadAuditOverrides, manualAuditPass, manualAnswerFix } = require("./hold_policy.js");
 // 盲审两票都不认、人工对着原卷截图核过「答案页对」的题（data/realBank/audit-overrides.json，判据见 hold_policy.manualAuditPass）
 const AUDIT_OVERRIDES = loadAuditOverrides();
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
@@ -1384,7 +1384,7 @@ function main() {
   // 按考卷位置换了题型（ap ↔ rdl）的条目：落 id-aliases.json 的 reclassified 边、打印清单都用它
   const RECLASSIFIED = [];
   const stats = {
-    sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, keptByManual: 0, droppedNoAudit: 0, droppedDisagree: 0,
+    sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, keptByManual: 0, keptByAnswerFix: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
@@ -1496,6 +1496,19 @@ function main() {
         set: setname, slug: meta0.slug, section: "reading", type: r.type, module: r.module, q: r.item.q_number, n: 1, code, detail,
       });
       if (!auditedKeys.has(key)) { stats.droppedNoAudit += 1; qDrop("droppedNoAudit", "盲审没覆盖到这题"); continue; }
+      // 答案页印错、人工核定改正（两票盲审都与核定字母一致才生效，见 hold_policy.manualAnswerFix）：按核定字母重盖答案
+      const audit = auditByKey.get(key) || {};
+      const fixed = !passedKeys.has(key) && manualAnswerFix(AUDIT_OVERRIDES, {
+        set: setname, section: "reading", q: r.item.q_number, stamped: audit.stamped, stem: r.item.stem,
+        votes: [audit.model, audit.second_vote && audit.second_vote.pick],
+      });
+      if (fixed) {
+        const idx = LETTERS.indexOf(fixed);
+        r.item = { ...r.item, answer_index: idx, answer_text: (r.item.options || [])[idx], answer_key: fixed.toLowerCase() };
+        stats.keptByAnswerFix += 1;
+        passed.push(r);
+        continue;
+      }
       if (!passedKeys.has(key) && manualAuditPass(AUDIT_OVERRIDES, {
         set: setname, section: "reading", q: r.item.q_number, stamped: (auditByKey.get(key) || {}).stamped, stem: r.item.stem,
       })) {
@@ -1627,7 +1640,7 @@ function main() {
 
   console.log("■ 真题阅读落库");
   console.log(`卷 ${stats.sets} 套；结构化产物里的阅读条目 ${stats.itemsSeen}`);
-  console.log(`  盲审通过收下 ${stats.keptByAudit}（其中第二票放行 ${stats.keptBySecondVote}）；人工核定放行 ${stats.keptByManual}（audit-overrides.json 表里 ${AUDIT_OVERRIDES.length} 条）；`
+  console.log(`  盲审通过收下 ${stats.keptByAudit}（其中第二票放行 ${stats.keptBySecondVote}）；人工核定放行 ${stats.keptByManual} / 答案页印错改正 ${stats.keptByAnswerFix}（audit-overrides.json 表里 ${AUDIT_OVERRIDES.length} 条）；`
     + `盲审不一致丢弃 ${stats.droppedDisagree}；没被盲审覆盖丢弃 ${stats.droppedNoAudit}`);
   console.log(`  跨卷重复跳过 ${stats.droppedDupSet} 套；源料体检 blocking 扣下 ${stats.droppedHeld} 套`);
   console.log(`  闸门放宽：ctw_answer_truncated 降级 ${stats.releasedCtwTruncated} 套（丢弃 CTW ${stats.droppedCtwTruncated} 段，AP/RDL 照收）；`

@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-14，825 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-14，821 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,15 +20,15 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4777,
-    "missing": 3562,
+    "got": 4783,
+    "missing": 3556,
     "overfilled": 59,
-    "completeness": 0.5769,
+    "completeness": 0.5777,
     "causes": {
-      "source_defect": 738,
-      "held": 103,
-      "deduped": 27,
-      "bank_dropped": 489,
+      "source_defect": 737,
+      "held": 102,
+      "deduped": 24,
+      "bank_dropped": 488,
       "section_never_run": 1990,
       "section_lost": 0,
       "pipeline_loss": 215
@@ -71,18 +71,18 @@
     "ap": {
       "type": "ap",
       "need": 840,
-      "got": 763,
-      "missing": 77,
+      "got": 769,
+      "missing": 71,
       "causes": {
-        "source_defect": 15,
-        "held": 20,
-        "deduped": 22,
-        "bank_dropped": 13,
+        "source_defect": 14,
+        "held": 19,
+        "deduped": 19,
+        "bank_dropped": 12,
         "section_never_run": 0,
         "section_lost": 0,
         "pipeline_loss": 7
       },
-      "completeness": 0.9083
+      "completeness": 0.9155
     },
     "repeat": {
       "type": "repeat",
@@ -249,18 +249,18 @@
     "reading": {
       "section": "reading",
       "need": 3450,
-      "got": 3239,
-      "missing": 217,
+      "got": 3245,
+      "missing": 211,
       "causes": {
-        "source_defect": 81,
-        "held": 35,
-        "deduped": 27,
-        "bank_dropped": 55,
+        "source_defect": 80,
+        "held": 34,
+        "deduped": 24,
+        "bank_dropped": 54,
         "section_never_run": 0,
         "section_lost": 0,
         "pipeline_loss": 19
       },
-      "completeness": 0.9388
+      "completeness": 0.9406
     },
     "speaking": {
       "section": "speaking",
@@ -940,7 +940,7 @@
         "ap": 1
       },
       "slots": [
-        "M2/ap_11(-1)"
+        "M1/ap_31(-1)"
       ]
     },
     {
@@ -1021,29 +1021,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "1.21新托福真题A卷",
-      "slug": "121a",
-      "date": "2026-01-21",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ap_31",
-      "type": "ap",
-      "band": [
-        31,
-        35
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "deduped",
-      "charged": {
-        "deduped": 1
       },
       "notes": []
     },
@@ -7260,29 +7237,6 @@
       "notes": [
         "duplicate_cluster"
       ]
-    },
-    {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "date": "2026-03-08",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ap_11",
-      "type": "ap",
-      "band": [
-        11,
-        15
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "deduped",
-      "charged": {
-        "deduped": 1
-      },
-      "notes": []
     },
     {
       "set": "3.8新托福真题",
@@ -13666,29 +13620,6 @@
       "set": "3.30新托福真题",
       "slug": "330",
       "date": "2026-03-30",
-      "section": "reading",
-      "module": "1",
-      "form": "B",
-      "slotKey": "ap_31",
-      "type": "ap",
-      "band": [
-        31,
-        35
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "deduped",
-      "charged": {
-        "deduped": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "3.30新托福真题",
-      "slug": "330",
-      "date": "2026-03-30",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -17083,29 +17014,6 @@
       "set": "4.18新托福真题",
       "slug": "418",
       "date": "2026-04-18",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ap_31",
-      "type": "ap",
-      "band": [
-        31,
-        35
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "4.18新托福真题",
-      "slug": "418",
-      "date": "2026-04-18",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -17531,34 +17439,6 @@
       "band": [
         31,
         35
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "droppedDisagree": 1
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.20新托福真题",
-      "slug": "420",
-      "date": "2026-04-20",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ap_11",
-      "type": "ap",
-      "band": [
-        11,
-        15
       ],
       "need": 5,
       "got": 4,
@@ -21916,29 +21796,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
-      "section": "reading",
-      "module": "2",
-      "form": "A",
-      "slotKey": "ap_11",
-      "type": "ap",
-      "band": [
-        11,
-        15
-      ],
-      "need": 5,
-      "got": 4,
-      "missing": 1,
-      "status": "near",
-      "cause": "held",
-      "charged": {
-        "held": 1
       },
       "notes": []
     },
