@@ -8,6 +8,10 @@
  * 最硬的一条：**用 App 真正在用的那几个 validator 跑全部产出，必须一条不落地通过**。
  * 这不是「再写一份形状断言」，而是拿生产代码当判据 —— 库里一旦躺着 App 渲染不了的题，
  * 用户点进去就是白屏/缺选项，而这在落库那一刻就该被拦住，不该等线上反馈。
+ * 判据要与 build_bank 落库时**同一个口径**：真题走 `{ realExam: true }`（长度类下限按
+ * data/realExam2026 的真实分布放宽，见 __tests__/realbank-real-exam-gate.test.js）。
+ * 拿生成库口径来量这批产物，红的是「对话只有 55 词」这种真题本来就有的形态，
+ * 不是 App 渲染不了 —— 长度从来不是渲染的前提，结构才是，而结构类的闸两边一样严。
  *
  * 另外两条同样是「上线前必须为真」的：
  *   · audio_url 要么是真 URL，要么是 null 且带 audio_pending —— 半个都不能少。
@@ -49,6 +53,9 @@ const S_COUNTS = readBank(S_DIR, "counts");
 const VALIDATORS = { lcr: validateLCR, lc: validateLC, la: validateLA, lat: validateLAT };
 
 const items = (b) => (b && b.items) || [];
+// 与 scripts/realbank/build_bank.mjs 的 REAL_EXAM 同一个口径
+const REAL_EXAM = { realExam: true };
+
 const allListening = Object.values(BANKS).flatMap(items);
 const allSpeakingSets = Object.values(SPEAKING).flatMap(items);
 // 落库产物还没生成时（本地没跑过 build_bank）跳过，而不是红一片。
@@ -60,7 +67,7 @@ maybe("真题听力：App validator 必须原样收下", () => {
     test(`${type}.json 每条都通过 ${type} validator 的 schema 校验`, () => {
       const bad = [];
       for (const it of items(BANKS[type])) {
-        const res = VALIDATORS[type](it);
+        const res = VALIDATORS[type](it, REAL_EXAM);
         if (!res.valid) bad.push({ id: it.id, errors: res.errors });
       }
       expect(bad).toEqual([]);
@@ -71,7 +78,7 @@ maybe("真题听力：App validator 必须原样收下", () => {
 maybe("真题口语：App validator 必须原样收下", () => {
   test("repeat.json 每套都通过 validateRepeatSet", () => {
     const bad = items(SPEAKING.repeat)
-      .map((s) => ({ id: s.id, ...validateRepeatSet(s) }))
+      .map((s) => ({ id: s.id, ...validateRepeatSet(s, REAL_EXAM) }))
       .filter((r) => !r.valid)
       .map((r) => ({ id: r.id, errors: r.errors }));
     expect(bad).toEqual([]);
@@ -79,7 +86,7 @@ maybe("真题口语：App validator 必须原样收下", () => {
 
   test("interview.json 每套都通过 validateInterviewSet", () => {
     const bad = items(SPEAKING.interview)
-      .map((s) => ({ id: s.id, ...validateInterviewSet(s) }))
+      .map((s) => ({ id: s.id, ...validateInterviewSet(s, REAL_EXAM) }))
       .filter((r) => !r.valid)
       .map((r) => ({ id: r.id, errors: r.errors }));
     expect(bad).toEqual([]);
