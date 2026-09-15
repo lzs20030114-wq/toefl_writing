@@ -148,9 +148,22 @@ describe("真题复核清单：holds 已落地", () => {
   });
 
   test("counts.json 与成品题量一致（apply_review 重算过）", () => {
+    // 听力 / 口语的 counts 从 2026-09-15 起还含「跨卷重出还回原卷」的那些（`<科目>/id-aliases.json`）——
+    // 它们不在库文件里，但前端 withRecycled 会摆进各自那一场，counts 是「题库覆盖」的分母。
+    // 这条测试本来要防的是「复核下架了、counts 没跟着减」，把别名计进来后那个保护照旧成立。
+    // 只有听力 / 口语的别名是「同一道题在另一场也考过、还回那一场」= 多出来的题量。
+    // 阅读那份 id-aliases.json 语义完全不同（reclassified 归位 / consolidated 合并，都是**改名**，
+    // 不是多出来的条目），算进去会把分母吹大。
+    const RECYCLING_DIRS = new Set(["listening", "speaking"]);
+    const aliasN = (dir, type) => {
+      if (!RECYCLING_DIRS.has(dir)) return 0;
+      const p = path.join(ROOT, `data/realBank/${dir}/id-aliases.json`);
+      if (!fs.existsSync(p)) return 0;
+      return (JSON.parse(fs.readFileSync(p, "utf8")).aliases || []).filter((a) => a.from_type === type).length;
+    };
     for (const [dir, keys] of Object.entries({ reading: ["ctw", "rdl", "ap"], listening: ["lcr", "lc", "la", "lat"], speaking: ["repeat", "interview"] })) {
       const c = JSON.parse(fs.readFileSync(path.join(ROOT, `data/realBank/${dir}/counts.json`), "utf8"));
-      for (const k of keys) expect(c[k]).toBe(items(`${dir}/${k}`).length);
+      for (const k of keys) expect(c[k]).toBe(items(`${dir}/${k}`).length + aliasN(dir, k));
     }
   });
 });

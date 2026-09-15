@@ -63,8 +63,9 @@ function bsIdForSlug(keptId, slug) {
 }
 
 /**
- * 边 → 账本条目。
- * @param {Array<{from, to, reason, fromSource, fromDate}>} edges
+ * 边 → 账本条目。造句之外，听力（lcr/lc/la/lat）与口语（repeat/interview）的跨卷重复
+ * 走同一支函数 —— 病是同一个：去重留一条是对的，丢掉之后什么都不记才是 bug。
+ * @param {Array<{from, to, type, reason, fromSource, fromDate}>} edges  type 缺省 "bs"
  * @returns {Array<{from, to, from_type, to_type, reason, from_source, from_date}>}
  *   同一个 from 只留第一条（先记的赢，与 build_bank 的「先入库者留下」同向）；自指边丢掉。
  */
@@ -75,11 +76,12 @@ function bsAliasEntries(edges = []) {
     const from = String(e.from);
     const to = String(e.to);
     if (from === to || byFrom.has(from)) continue;
+    const type = String(e.type || e.from_type || "bs");
     byFrom.set(from, {
       from,
       to,
-      from_type: "bs",
-      to_type: "bs",
+      from_type: type,
+      to_type: type,
       reason: e.reason || BS_ALIAS_REASON.DUP_ANSWER,
       // 边用驼峰（fromSource），落库的条目用下划线（from_source）—— 两种都认：
       // 把条目再喂回来是很容易犯的错，认错一次就是整批别名 from_source 变 null、前端全丢。
@@ -180,7 +182,14 @@ function bsGroundTruthEdges({ gtItems = [], items = [], aliases = [], slugOf, da
   return edges;
 }
 
+/** 听力 / 口语的别名账本 _purpose（与写作那份同一套契约，只是落在各自科目的目录下）。 */
+const ITEM_ALIAS_PURPOSE = "跨卷重复的 id 别名：同一道题在别的卷里的那份（from）→ 库里留下的那条（to）。"
+  + "机经里同一段材料会在多场考试里重出，去重只留一条是对的，但不记别名的话那几场的槽位会被"
+  + "丢题账本算成缺题、前端那一场也少题。assemble_sets.mjs 按 from_source / from_date 把槽位还回原卷。";
+
 module.exports = {
-  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
+  WRITING_ALIAS_PURPOSE, ITEM_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
   bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges, bsIdSuffix, bsIdForSlug,
+  /** 泛化别名：听力 / 口语用同一支（边上带 type 即可） */
+  aliasEntries: bsAliasEntries,
 };

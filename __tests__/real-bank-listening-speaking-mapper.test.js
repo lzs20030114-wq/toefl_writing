@@ -242,7 +242,10 @@ describe("真题 LCR：按考试日期打包成套（一天 = 一套，不是一
     const cards = mapRealLCRSetsToPicker(LCR_SETS);
     cards.forEach((c, i) => {
       expect(c.id).toBe(LCR_SETS[i].id);
-      expect(c.title).toBe(`第 ${i + 1} 套 · ${LCR_SETS[i].items.length} 题`);
+      // 套里有跨场重出的题时，标题后面如实加一段（写在标题而不是徽章位：徽章被
+      // ETS官方 / 双票复核 占着，回收题继承保留方的源料标记、多半正好带着双票复核）
+      const recycled = LCR_SETS[i].items.some((it) => it.recycled_of);
+      expect(c.title).toBe(`第 ${i + 1} 套 · ${LCR_SETS[i].items.length} 题${recycled ? " · 含跨场重复" : ""}`);
       expect(c.tag).toBe("回忆版");
     });
     // 脏套（没有 items）不出卡，不会点进去一个空任务。

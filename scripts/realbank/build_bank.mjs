@@ -67,7 +67,8 @@ const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js"
 const { buildIdAliases } = require("./id_aliases.js");
 // 造句跨卷重复的别名（同一道题在后面的卷里又考了一次）：scripts/realbank/bs_aliases.js。
 const {
-  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey, bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges,
+  WRITING_ALIAS_PURPOSE, ITEM_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
+  bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges, aliasEntries,
 } = require("./bs_aliases.js");
 // 点选句子题（账本 → 挂题 → 落盘后按盲审哈希放行）：scripts/realbank/sentence_select.js。
 const SS = require("./sentence_select.js");
@@ -142,6 +143,24 @@ const REVIEW = (() => {
   }
 })();
 const DUP_KEEPER = new Map((REVIEW.holds || []).filter((h) => h && h.id && h.dup_of).map((h) => [h.id, h.dup_of]));
+
+/**
+ * 被复核**整条下架且没有保留方**的 id（scope=unit 且无 dup_of）—— 这类是「内容真的不要了」，
+ * 与 dup_of 那类（内容在保留方上）性质相反。
+ *
+ * 为什么要单列出来：跨卷重复去重时，先收的那条若后来被整卷下架，去重又把后收的那条丢了，
+ * 结果是**两边都没了** —— 而后收的那一卷本身没被下架，它那份是好的。2026-09-15 实测
+ * 1.21A 听力整卷因盲审一致率 63.9% 下架，1.21B / 1.21C 里与它逐字相同的 26 题就这么一起消失了。
+ * DUP_KEEPER 那条老规则只认清单里**显式写明**的保留方，这类漏网没人手工写。
+ */
+const HELD_DOWN = new Set((REVIEW.holds || [])
+  .filter((h) => h && h.id && h.scope === "unit" && !h.dup_of)
+  .map((h) => String(h.id)));
+
+/** 先收的那条是不是已被整条下架（内容将随 applyReview 消失）→ 本条必须留下，否则两边都没了。 */
+function canonicalHeldDown(seenEntry) {
+  return HELD_DOWN.has(String(seenEntry || "").split("/").pop());
+}
 
 /**
  * 点选句子题账本（data/realBank/reading/sentence-select.json）：题干 / 段号 / 答案开头词 / 盲审记录。
@@ -1055,11 +1074,22 @@ function speakingSetKey(set) {
 const REPEAT_DIFF = (n) => (n <= 7 ? "easy" : n <= 12 ? "medium" : "hard");
 const IV_DIFF = ["personal", "descriptive", "analytical", "evaluative"];
 
+/**
+ * 跨卷重复 → 别名边。seenL / seenS 里存的是「卷名/id」，取斜杠后那半当保留方。
+ * 不记别名的话，这些槽位会被丢题账本算成缺题、前端那一场也少题 —— 题其实就在保留的那条上
+ * （2026-09-15 实测听力 111 题 + 口语 11 题这么丢的，与造句当初一模一样的病）。
+ */
+function dupEdge(fromId, keptRef, type, setname) {
+  const to = String(keptRef || "").split("/").pop();
+  return { from: fromId, to, type, reason: "duplicate_item", fromSource: setname, fromDate: setDate(setname) };
+}
+
 function buildListeningSpeaking(files, stats) {
   const out = { lcr: [], lc: [], la: [], lat: [] };
   const spk = { repeat: [], interview: [] };
   const seenL = new Map();
   const seenS = new Map();
+  const itemAliasEdges = [];
 
   for (const f of files.sort()) {
     const setname = f.replace(/\.structured\.json$/, "");
@@ -1149,12 +1179,16 @@ function buildListeningSpeaking(files, stats) {
         }
         const dk = `${r.type}#${spokenKey(item)}`;
         if (seenL.has(dk)) {
-          if (reviewKeepsLater(seenL.get(dk), id)) {
+          if (canonicalHeldDown(seenL.get(dk))) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenL.get(dk)} 口播逐字相同，但那条已被复核整卷下架 —— 丢了本条就两边都没了`);
+            stats.dupKeptOverHeld = (stats.dupKeptOverHeld || 0) + 1;
+          } else if (reviewKeepsLater(seenL.get(dk), id)) {
             console.warn(`放行 ${setname} ${id}：与 ${seenL.get(dk)} 口播逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
           } else {
             console.warn(`跳过 ${setname} ${id}：口播内容与 ${seenL.get(dk)} 逐字相同`);
             stats.lDroppedDupItem += 1;
             recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedDupItem", detail: `口播与 ${seenL.get(dk)} 逐字相同` });
+            itemAliasEdges.push(dupEdge(id, seenL.get(dk), r.type, setname));
             continue;
           }
         }
@@ -1193,12 +1227,16 @@ function buildListeningSpeaking(files, stats) {
         const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
         const sk = `repeat#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
-          if (reviewKeepsLater(seenS.get(sk), id)) {
+          if (canonicalHeldDown(seenS.get(sk))) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 复述逐字相同，但那条已被复核整卷下架 —— 丢了本条就两边都没了`);
+            stats.dupKeptOverHeld = (stats.dupKeptOverHeld || 0) + 1;
+          } else if (reviewKeepsLater(seenS.get(sk), id)) {
             console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 复述逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
           } else {
             console.warn(`跳过 ${setname} ${id}：复述内容与 ${seenS.get(sk)} 逐字相同`);
             stats.sDroppedDupSet += 1;
             recordDrop(stats, { set: setname, slug, section: "speaking", type: "repeat", n: sentences.length, id, code: "sDroppedDupSet", detail: `复述与 ${seenS.get(sk)} 逐字相同` });
+            itemAliasEdges.push(dupEdge(id, seenS.get(sk), "repeat", setname));
             continue;
           }
         }
@@ -1230,12 +1268,16 @@ function buildListeningSpeaking(files, stats) {
         const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
         const sk = `interview#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
-          if (reviewKeepsLater(seenS.get(sk), id)) {
+          if (canonicalHeldDown(seenS.get(sk))) {
+            console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 面试逐字相同，但那条已被复核整卷下架 —— 丢了本条就两边都没了`);
+            stats.dupKeptOverHeld = (stats.dupKeptOverHeld || 0) + 1;
+          } else if (reviewKeepsLater(seenS.get(sk), id)) {
             console.warn(`放行 ${setname} ${id}：与 ${seenS.get(sk)} 面试逐字相同，但复核清单指定保留本条（先收的那条由 applyReview 下架）`);
           } else {
             console.warn(`跳过 ${setname} ${id}：面试内容与 ${seenS.get(sk)} 逐字相同`);
             stats.sDroppedDupSet += 1;
             recordDrop(stats, { set: setname, slug, section: "speaking", type: "interview", n: questions.length, id, code: "sDroppedDupSet", detail: `面试与 ${seenS.get(sk)} 逐字相同` });
+            itemAliasEdges.push(dupEdge(id, seenS.get(sk), "interview", setname));
             continue;
           }
         }
@@ -1251,6 +1293,7 @@ function buildListeningSpeaking(files, stats) {
       }
     }
   }
+  stats.itemAliases = aliasEntries(itemAliasEdges);
   return { listening: out, speaking: spk };
 }
 
@@ -1419,7 +1462,7 @@ function main() {
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
-    wBsAliases: [],
+    wBsAliases: [], itemAliases: [],
     dropRecorder: makeDropRecorder(),
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
@@ -1744,7 +1787,7 @@ function main() {
 
   // 落库丢弃账本（scripts/realbank/drop_ledger.js）：--dry 也写 —— 这本账就是用来在落盘前看清题丢在哪一关的，
   // 它不是题库文件。--only-* 三个口子不写：它们的契约是「其余文件一个字节都不动」。
-  const onlyMode = ["--only-bs", "--only-reading", "--only-writing-recall"].some((f) => process.argv.includes(f));
+  const onlyMode = ["--only-bs", "--only-reading", "--only-writing-recall", "--only-audio"].some((f) => process.argv.includes(f));
   if (dry || !onlyMode) {
     const dropRows = stats.dropRecorder.rows;
     const dropPath = path.join(process.cwd(), "data", "realBank", "drop-ledger.json");
@@ -1797,6 +1840,66 @@ function main() {
     if (restored) console.log(`  （--only-bs）已把 applyReview 顺手重写的 ${restored} 个非 bs 文件按字节还原`);
     if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
     console.log(`  → 复核后 ${JSON.parse(fs.readFileSync(p, "utf8")).items.length} 条`);
+    return;
+  }
+
+  // `--only-audio`：只落 listening/ 与 speaking/ 下的题库与别名账本，其余文件一个字节都不动。
+  //
+  // 与 --only-bs 同一个理由、同一套办法：全量重建会一次改掉四科（阅读那边还牵着跨卷同篇合并、
+  // 归位、复核清单一整套），那是另一个要拍板的决定，不该由「找回听力重复题」这件事顺手带出去。
+  // **注意**：这一步会让听力 / 口语追上 .codex-tmp 里已结构化但还没铺进库的量，
+  // 不只是找回被去重丢掉的那些 —— 跑之前先看它打印的前后条数。
+  if (process.argv.includes("--only-audio")) {
+    const keep = new Set();
+    for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
+      fs.mkdirSync(dir, { recursive: true });
+      for (const [k, v] of Object.entries(bundle)) {
+        const q = path.join(dir, `${k}.json`);
+        fs.writeFileSync(q, JSON.stringify({
+          tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v,
+        }, null, 2), "utf8");
+        keep.add(q);
+        console.log(`  → ${path.relative(process.cwd(), q)}  ${v.length} 条`);
+      }
+      const types = dir === LISTENING_DIR ? ["lcr", "lc", "la", "lat"] : ["repeat", "interview"];
+      const rows = (stats.itemAliases || []).filter((a) => types.includes(a.from_type));
+      const counts = Object.fromEntries(Object.entries(bundle).map(([k, v]) =>
+        [k, v.length + rows.filter((a) => a.from_type === k).length]));
+      const cp = path.join(dir, "counts.json");
+      fs.writeFileSync(cp, JSON.stringify(counts, null, 2), "utf8");
+      keep.add(cp);
+      console.log(`  → ${path.relative(process.cwd(), cp)}  ${JSON.stringify(counts)}`);
+      const ap = path.join(dir, "id-aliases.json");
+      fs.writeFileSync(ap, JSON.stringify({
+        generated_by: "scripts/realbank/build_bank.mjs", _purpose: ITEM_ALIAS_PURPOSE, aliases: rows,
+      }, null, 2), "utf8");
+      keep.add(ap);
+      console.log(`  → ${path.relative(process.cwd(), ap)}  ${rows.length} 条别名`);
+    }
+    if (stats.dupKeptOverHeld) {
+      console.log(`  跨卷重复改留后收的那条（先收的已被复核整卷下架）：${stats.dupKeptOverHeld} 条 —— 不这么做两边都没了`);
+    }
+    const bankRoot = path.join(process.cwd(), "data", "realBank");
+    const snap = new Map();
+    const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
+      const q = path.join(d, e.name);
+      if (e.isDirectory()) walk(q);
+      else if (e.isFile() && !keep.has(q)) snap.set(q, fs.readFileSync(q));
+    });
+    walk(bankRoot);
+    const r = applyReview({ dry: false });
+    let restored = 0;
+    for (const [q, buf] of snap) {
+      if (!fs.existsSync(q) || !fs.readFileSync(q).equals(buf)) { fs.writeFileSync(q, buf); restored += 1; }
+    }
+    if (restored) console.log(`  （--only-audio）已把 applyReview 顺手重写的 ${restored} 个其余文件按字节还原`);
+    if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
+    for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
+      for (const k of Object.keys(bundle)) {
+        const q = path.join(dir, `${k}.json`);
+        console.log(`  → 复核后 ${k} ${JSON.parse(fs.readFileSync(q, "utf8")).items.length} 条`);
+      }
+    }
     return;
   }
 
@@ -1932,6 +2035,15 @@ function main() {
   console.log(`
 ■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）；`
     + `其余 audio_pending 的交给 render_real_audio.mjs`);
+  // 跨卷重复的别名各落各科目：listening/ 收 lcr/lc/la/lat，speaking/ 收 repeat/interview。
+  for (const [dir, types] of [[LISTENING_DIR, ["lcr", "lc", "la", "lat"]], [SPEAKING_DIR, ["repeat", "interview"]]]) {
+    const rows = (stats.itemAliases || []).filter((a) => types.includes(a.from_type));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "id-aliases.json"), JSON.stringify({
+      generated_by: "scripts/realbank/build_bank.mjs", _purpose: ITEM_ALIAS_PURPOSE, aliases: rows,
+    }, null, 2), "utf8");
+    console.log(`  → ${path.relative(process.cwd(), path.join(dir, "id-aliases.json"))}  ${rows.length} 条`);
+  }
   for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
     fs.mkdirSync(dir, { recursive: true });
     const c = {};
@@ -1939,7 +2051,9 @@ function main() {
       const p = path.join(dir, `${k}.json`);
       fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
       console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
-      c[k] = v.length;
+      // 题量要把跨卷重出还回去的那些算上：前端 withRecycled 会把它们摆进各自那一场，
+      // counts.json 是「题库覆盖」的分母（RealBankProgressView 的 BANK_TOTALS），只数库里的条数会少算。
+      c[k] = v.length + (stats.itemAliases || []).filter((a) => a.from_type === k).length;
     }
     const cp = path.join(dir, "counts.json");
     fs.writeFileSync(cp, JSON.stringify(c, null, 2), "utf8");

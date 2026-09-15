@@ -20,16 +20,16 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4990,
-    "missing": 3349,
+    "got": 5083,
+    "missing": 3256,
     "overfilled": 59,
-    "completeness": 0.6027,
+    "completeness": 0.6139,
     "causes": {
       "source_defect": 705,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 317,
-      "section_never_run": 1990,
+      "bank_dropped": 228,
+      "section_never_run": 1986,
       "section_lost": 0,
       "pipeline_loss": 211
     },
@@ -87,34 +87,34 @@
     "repeat": {
       "type": "repeat",
       "need": 483,
-      "got": 210,
-      "missing": 326,
+      "got": 217,
+      "missing": 319,
       "causes": {
         "source_defect": 105,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 7,
+        "bank_dropped": 0,
         "section_never_run": 210,
         "section_lost": 0,
         "pipeline_loss": 4
       },
-      "completeness": 0.4348
+      "completeness": 0.4493
     },
     "interview": {
       "type": "interview",
       "need": 276,
-      "got": 27,
-      "missing": 249,
+      "got": 31,
+      "missing": 245,
       "causes": {
         "source_defect": 60,
         "held": 4,
         "deduped": 0,
-        "bank_dropped": 4,
+        "bank_dropped": 0,
         "section_never_run": 120,
         "section_lost": 0,
         "pipeline_loss": 61
       },
-      "completeness": 0.0978
+      "completeness": 0.1123
     },
     "bs": {
       "type": "bs",
@@ -167,66 +167,66 @@
     "lcr": {
       "type": "lcr",
       "need": 1039,
-      "got": 259,
-      "missing": 780,
+      "got": 309,
+      "missing": 730,
       "causes": {
         "source_defect": 151,
         "held": 24,
         "deduped": 0,
-        "bank_dropped": 85,
+        "bank_dropped": 39,
         "section_never_run": 509,
         "section_lost": 0,
-        "pipeline_loss": 11
+        "pipeline_loss": 7
       },
-      "completeness": 0.2493
+      "completeness": 0.2974
     },
     "lc": {
       "type": "lc",
       "need": 686,
-      "got": 136,
-      "missing": 550,
+      "got": 146,
+      "missing": 540,
       "causes": {
         "source_defect": 89,
         "held": 16,
         "deduped": 0,
-        "bank_dropped": 52,
-        "section_never_run": 357,
+        "bank_dropped": 42,
+        "section_never_run": 355,
         "section_lost": 0,
-        "pipeline_loss": 36
+        "pipeline_loss": 38
       },
-      "completeness": 0.1983
+      "completeness": 0.2128
     },
     "la": {
       "type": "la",
       "need": 414,
-      "got": 116,
-      "missing": 298,
+      "got": 126,
+      "missing": 288,
       "causes": {
         "source_defect": 48,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 30,
-        "section_never_run": 218,
+        "bank_dropped": 20,
+        "section_never_run": 216,
         "section_lost": 0,
-        "pipeline_loss": 0
+        "pipeline_loss": 2
       },
-      "completeness": 0.2802
+      "completeness": 0.3043
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 310,
-      "missing": 790,
+      "got": 322,
+      "missing": 778,
       "causes": {
         "source_defect": 128,
         "held": 20,
         "deduped": 0,
-        "bank_dropped": 54,
+        "bank_dropped": 42,
         "section_never_run": 576,
         "section_lost": 0,
         "pipeline_loss": 12
       },
-      "completeness": 0.2818
+      "completeness": 0.2927
     },
     "mcq2": {
       "type": "mcq2",
@@ -265,18 +265,18 @@
     "speaking": {
       "section": "speaking",
       "need": 759,
-      "got": 237,
-      "missing": 575,
+      "got": 248,
+      "missing": 564,
       "causes": {
         "source_defect": 165,
         "held": 4,
         "deduped": 0,
-        "bank_dropped": 11,
+        "bank_dropped": 0,
         "section_never_run": 330,
         "section_lost": 0,
         "pipeline_loss": 65
       },
-      "completeness": 0.3123
+      "completeness": 0.3267
     },
     "writing": {
       "section": "writing",
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 825,
-      "missing": 2418,
+      "got": 907,
+      "missing": 2336,
       "causes": {
         "source_defect": 416,
         "held": 62,
         "deduped": 0,
-        "bank_dropped": 221,
-        "section_never_run": 1660,
+        "bank_dropped": 143,
+        "section_never_run": 1656,
         "section_lost": 0,
         "pipeline_loss": 59
       },
-      "completeness": 0.2544
+      "completeness": 0.2797
     }
   },
   "tasks": [
@@ -473,14 +473,14 @@
       "slug": "rf0620",
       "date": "2026-06-20",
       "section": "listening",
-      "missing": 7,
+      "missing": 6,
       "cause": "pipeline_loss",
       "types": {
-        "lcr": 3,
+        "lcr": 2,
         "lc": 4
       },
       "slots": [
-        "M1/lcr_1(-3)",
+        "M1/lcr_1(-2)",
         "M1/lc_17(-2)",
         "M2/lc_4(-2)"
       ]
@@ -640,6 +640,22 @@
       ]
     },
     {
+      "set": "2.1新托福真题C卷",
+      "slug": "21c",
+      "date": "2026-02-01",
+      "section": "listening",
+      "missing": 4,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 2,
+        "lc": 2
+      },
+      "slots": [
+        "M1/la_23(-2)",
+        "M2/lc_6(-2)"
+      ]
+    },
+    {
       "set": "2.28新托福真题",
       "slug": "228",
       "date": "2026-02-28",
@@ -707,22 +723,6 @@
       },
       "slots": [
         "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "rf0622",
-      "slug": "rf0622",
-      "date": "2026-06-22",
-      "section": "listening",
-      "missing": 3,
-      "cause": "pipeline_loss",
-      "types": {
-        "lcr": 1,
-        "lc": 2
-      },
-      "slots": [
-        "M2/lcr_1(-1)",
-        "M2/lc_4(-2)"
       ]
     },
     {
@@ -845,6 +845,20 @@
       ]
     },
     {
+      "set": "rf0622",
+      "slug": "rf0622",
+      "date": "2026-06-22",
+      "section": "listening",
+      "missing": 2,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 2
+      },
+      "slots": [
+        "M2/lc_4(-2)"
+      ]
+    },
+    {
       "set": "rf0629",
       "slug": "rf0629",
       "date": "2026-06-29",
@@ -856,21 +870,6 @@
       },
       "slots": [
         "M2/lc_6(-2)"
-      ]
-    },
-    {
-      "set": "rf0808",
-      "slug": "rf0808",
-      "date": "2026-08-08",
-      "section": "listening",
-      "missing": 2,
-      "cause": "pipeline_loss",
-      "types": {
-        "lcr": 2
-      },
-      "slots": [
-        "M1/lcr_1(-1)",
-        "M2/lcr_1(-1)"
       ]
     },
     {
@@ -930,20 +929,6 @@
       ]
     },
     {
-      "set": "rf0615",
-      "slug": "rf0615",
-      "date": "2026-06-15",
-      "section": "listening",
-      "missing": 1,
-      "cause": "pipeline_loss",
-      "types": {
-        "lcr": 1
-      },
-      "slots": [
-        "M2/lcr_1(-1)"
-      ]
-    },
-    {
       "set": "rf0716",
       "slug": "rf0716",
       "date": "2026-07-16",
@@ -955,6 +940,20 @@
       },
       "slots": [
         "M1/bs_1(-1)"
+      ]
+    },
+    {
+      "set": "rf0808",
+      "slug": "rf0808",
+      "date": "2026-08-08",
+      "section": "listening",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "lcr": 1
+      },
+      "slots": [
+        "M2/lcr_1(-1)"
       ]
     }
   ],
@@ -1644,32 +1643,6 @@
       "slug": "121c",
       "date": "2026-01-21",
       "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_23",
-      "type": "la",
-      "band": [
-        23,
-        24
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "1.21新托福真题C卷",
-      "slug": "121c",
-      "date": "2026-01-21",
-      "section": "listening",
       "module": "2",
       "form": "B",
       "slotKey": "lat_8",
@@ -1936,12 +1909,12 @@
         12
       ],
       "need": 12,
-      "got": 7,
-      "missing": 5,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 5
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 4,
@@ -2005,32 +1978,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "la_19",
-      "type": "la",
-      "band": [
-        19,
-        20
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "date": "2026-01-27",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lat_25",
       "type": "lat",
       "band": [
@@ -2044,33 +1991,6 @@
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDupItem": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "date": "2026-01-27",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_29",
-      "type": "lat",
-      "band": [
-        29,
-        32
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
       },
       "drop_codes": {
         "lDroppedNoAuditQ": 1,
@@ -2718,16 +2638,12 @@
         12
       ],
       "need": 12,
-      "got": 10,
-      "missing": 2,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "held",
       "charged": {
-        "held": 1,
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2
+        "held": 1
       },
       "notes": []
     },
@@ -2932,32 +2848,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 11,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "date": "2026-02-01",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lc_13",
       "type": "lc",
       "band": [
@@ -3040,32 +2930,6 @@
       "cause": "held",
       "charged": {
         "held": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "date": "2026-02-01",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 7,
-      "missing": 5,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 5
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 5
       },
       "notes": []
     },
@@ -3201,13 +3065,13 @@
         12
       ],
       "need": 12,
-      "got": 0,
-      "missing": 12,
-      "status": "absent",
+      "got": 2,
+      "missing": 10,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
         "held": 4,
-        "bank_dropped": 8
+        "bank_dropped": 6
       },
       "drop_codes": {
         "lDroppedDupItem": 4,
@@ -3232,7 +3096,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "held",
       "charged": {
         "held": 2
@@ -3255,7 +3119,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "held",
       "charged": {
         "held": 2
@@ -3278,7 +3142,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
@@ -3305,7 +3169,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
@@ -3332,7 +3196,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
@@ -3359,10 +3223,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 2
       },
       "notes": []
     },
@@ -3382,7 +3246,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "held",
       "charged": {
         "held": 4
@@ -3405,7 +3269,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "held",
       "charged": {
         "held": 4
@@ -3426,12 +3290,12 @@
         3
       ],
       "need": 3,
-      "got": 0,
-      "missing": 3,
-      "status": "absent",
+      "got": 2,
+      "missing": 1,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 4,
@@ -3456,7 +3320,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
@@ -3483,10 +3347,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 2
       },
       "notes": []
     },
@@ -3506,7 +3370,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "held",
       "charged": {
         "held": 4
@@ -3529,7 +3393,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 4
@@ -8389,12 +8253,12 @@
         12
       ],
       "need": 12,
-      "got": 10,
-      "missing": 2,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 1,
@@ -22860,17 +22724,12 @@
         12
       ],
       "need": 12,
-      "got": 10,
-      "missing": 2,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "held",
       "charged": {
-        "held": 1,
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1,
-        "lDroppedDisagree": 1
+        "held": 1
       },
       "notes": [
         "vendor_reformatted"
@@ -22923,8 +22782,7 @@
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
+        "bank_dropped": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 1,
@@ -23001,13 +22859,13 @@
         12
       ],
       "need": 12,
-      "got": 8,
-      "missing": 4,
+      "got": 9,
+      "missing": 3,
       "status": "partial",
       "cause": "pipeline_loss",
       "charged": {
         "bank_dropped": 1,
-        "pipeline_loss": 3
+        "pipeline_loss": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 1
@@ -23108,13 +22966,13 @@
         12
       ],
       "need": 12,
-      "got": 9,
-      "missing": 3,
+      "got": 10,
+      "missing": 2,
       "status": "partial",
-      "cause": "bank_dropped",
+      "cause": "held",
       "charged": {
         "held": 1,
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 2,
@@ -23172,8 +23030,7 @@
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
+        "bank_dropped": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 2,
@@ -23247,44 +23104,16 @@
         12
       ],
       "need": 12,
-      "got": 2,
-      "missing": 10,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 10
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 11,
         "lDroppedDisagree": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0629",
-      "slug": "rf0629",
-      "date": "2026-06-29",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_19",
-      "type": "la",
-      "band": [
-        19,
-        20
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2
       },
       "notes": [
         "vendor_reformatted"
@@ -23304,12 +23133,12 @@
         3
       ],
       "need": 3,
-      "got": 1,
-      "missing": 2,
+      "got": 2,
+      "missing": 1,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 11,
@@ -23364,34 +23193,6 @@
       "cause": "held",
       "charged": {
         "held": 4
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0708",
-      "slug": "rf0708",
-      "date": "2026-07-08",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 11,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1
       },
       "notes": [
         "vendor_reformatted"
@@ -23540,35 +23341,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 8,
-      "missing": 4,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "held": 1,
-        "bank_dropped": 3
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 4
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0716",
-      "slug": "rf0716",
-      "date": "2026-07-16",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lc_17",
       "type": "lc",
       "band": [
@@ -23632,12 +23404,9 @@
       "got": 2,
       "missing": 1,
       "status": "partial",
-      "cause": "bank_dropped",
+      "cause": "held",
       "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 4
+        "held": 1
       },
       "notes": [
         "vendor_reformatted"
@@ -23682,14 +23451,13 @@
         12
       ],
       "need": 12,
-      "got": 8,
-      "missing": 4,
+      "got": 9,
+      "missing": 3,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
         "held": 1,
-        "bank_dropped": 2,
-        "pipeline_loss": 1
+        "bank_dropped": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 1,
@@ -23945,63 +23713,6 @@
       "slug": "rf0826",
       "date": "2026-08-26",
       "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 11,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "date": "2026-08-26",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_13",
-      "type": "lc",
-      "band": [
-        13,
-        14
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2,
-        "lDroppedInvalid": 2
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "date": "2026-08-26",
-      "section": "listening",
       "module": "2",
       "form": "A",
       "slotKey": "lc_6",
@@ -24136,90 +23847,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 0,
-      "missing": 12,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 12
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 15
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_13",
-      "type": "lc",
-      "band": [
-        13,
-        14
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_15",
-      "type": "lc",
-      "band": [
-        15,
-        16
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lc_17",
       "type": "lc",
       "band": [
@@ -24229,41 +23856,13 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_19",
-      "type": "la",
-      "band": [
-        19,
-        20
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 6
       },
       "notes": [
         "vendor_reformatted"
@@ -24285,35 +23884,7 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 6
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_23",
-      "type": "la",
-      "band": [
-        23,
-        24
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 2
@@ -24341,7 +23912,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 4
@@ -24369,7 +23940,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 4
@@ -24395,183 +23966,15 @@
         3
       ],
       "need": 3,
-      "got": 0,
-      "missing": 3,
-      "status": "absent",
+      "got": 2,
+      "missing": 1,
+      "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 15
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_4",
-      "type": "lc",
-      "band": [
-        4,
-        5
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_6",
-      "type": "lc",
-      "band": [
-        6,
-        7
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 10
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_8",
-      "type": "lat",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 16
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_12",
-      "type": "lat",
-      "band": [
-        12,
-        15
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 16
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 7
-      },
-      "drop_codes": {
-        "sDroppedDupSet": 7
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "sDroppedDupSet": 4
       },
       "notes": [
         "vendor_reformatted"

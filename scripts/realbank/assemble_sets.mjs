@@ -172,7 +172,32 @@ export function loadDupAliases(bankDir) {
   const fromHolds = holds
     .filter((h) => h && h.scope === "unit" && h.dup_of && h.id && h.dup_of !== h.id)
     .map((h) => ({ held: String(h.id), canonical: String(h.dup_of), source: h.source ? String(h.source) : null }));
-  return resolveAliasChains([...fromHolds, ...loadConsolidationAliases(bankDir), ...loadWritingAliases(bankDir)]);
+  return resolveAliasChains([
+    ...fromHolds, ...loadConsolidationAliases(bankDir), ...loadWritingAliases(bankDir),
+    ...loadItemAliases(bankDir, "listening"), ...loadItemAliases(bankDir, "speaking"),
+  ]);
+}
+
+/**
+ * 听力 / 口语的跨卷重复别名：`<科目>/id-aliases.json`（build_bank 落，见 scripts/realbank/bs_aliases.js）。
+ * 机经里同一段材料会在多场考试重出，去重只留一条；不记别名那几场的槽位就一直空着。
+ * 与写作那份同一套契约，from_source / from_date 同样是必需的 —— 整套都是重复题的卷
+ * （rf0902 的复述 / 面试）库里一条自己的题都没有，slug → 卷名表查不到它。
+ */
+export function loadItemAliases(bankDir, section) {
+  const p = path.join(bankDir, section, "id-aliases.json");
+  if (!fs.existsSync(p)) return [];
+  try {
+    return (JSON.parse(fs.readFileSync(p, "utf8")).aliases || [])
+      .filter((a) => a && a.from && a.to && String(a.from) !== String(a.to))
+      .map((a) => ({
+        held: String(a.from), canonical: String(a.to),
+        source: a.from_source ? String(a.from_source).trim() : null,
+        date: a.from_date ? String(a.from_date).trim() : null,
+      }));
+  } catch {
+    return [];
+  }
 }
 
 /* ── 逐题建索引 ────────────────────────────────────────────────────────── */

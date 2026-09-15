@@ -187,17 +187,26 @@ maybe("真题听力 / 口语：id 空间与来源分档", () => {
 });
 
 maybe("真题听力 / 口语：counts.json 镜像", () => {
-  test("listening/counts.json 与四个库的实际条数一致", () => {
+  // 2026-09-15 起 counts.json = 库里条数 **+ 跨卷重出还回去的那些**（`<科目>/id-aliases.json`）：
+  // 前端 withRecycled 把它们摆进各自那一场，而 counts 是「题库覆盖」的分母
+  // （RealBankProgressView 的 BANK_TOTALS），只数库里的条数会把分母算小、覆盖率虚高。
+  const ALIAS_ROWS = [
+    ...(readBank(L_DIR, "id-aliases").aliases || []),
+    ...(readBank(S_DIR, "id-aliases").aliases || []),
+  ];
+  const aliasN = (t) => ALIAS_ROWS.filter((a) => a.from_type === t).length;
+
+  test("listening/counts.json = 四个库的条数 + 还回去的跨场重复", () => {
     expect(L_COUNTS).toEqual({
-      lcr: items(BANKS.lcr).length, lc: items(BANKS.lc).length,
-      la: items(BANKS.la).length, lat: items(BANKS.lat).length,
+      lcr: items(BANKS.lcr).length + aliasN("lcr"), lc: items(BANKS.lc).length + aliasN("lc"),
+      la: items(BANKS.la).length + aliasN("la"), lat: items(BANKS.lat).length + aliasN("lat"),
     });
   });
 
-  test("speaking/counts.json 与两个库的实际套数一致", () => {
+  test("speaking/counts.json = 两个库的套数 + 还回去的跨场重复", () => {
     expect(S_COUNTS).toEqual({
-      repeat: items(SPEAKING.repeat).length,
-      interview: items(SPEAKING.interview).length,
+      repeat: items(SPEAKING.repeat).length + aliasN("repeat"),
+      interview: items(SPEAKING.interview).length + aliasN("interview"),
     });
   });
 
