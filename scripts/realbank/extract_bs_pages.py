@@ -643,6 +643,8 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="只报将调用张数与预计费用")
     ap.add_argument("--only", help="只处理卷名含该子串的卷")
     ap.add_argument("--no-ocr", action="store_true", help="只用已有缓存跑校验，零调用")
+    ap.add_argument("--report-out", default=None,
+                    help="把逐条拒收明细另存一份到这个路径（.codex-tmp 不进 git，要离线分析就写到 data/ 下）")
     ap.add_argument("--model", default=os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus")
     ap.add_argument("--max-images", type=int, default=400)
     ap.add_argument("--src", default=None,
@@ -701,6 +703,9 @@ def main() -> int:
         shash = source_hash(setname)
         seen_q: dict[int, dict] = {}
         rejects: dict[str, int] = {}
+        # 逐条拒收明细：只有计数说明不了「这 37 条 no_solution 到底是识图漏块还是答案句对不上」，
+        # 得把那一屏的模板 + 词块 + 用过的答案句一起留下来，事后离线看。
+        rej_rows: list[dict] = []
         n_seen = 0
         for i, p in pages:
             try:
@@ -724,16 +729,31 @@ def main() -> int:
                     q = int(rec.get("q"))
                 except Exception:
                     rejects["bad_q"] = rejects.get("bad_q", 0) + 1
+                    rej_rows.append({"q": None, "page": os.path.basename(p), "reason": "bad_q",
+                                     "prompt": str(rec.get("prompt") or "")[:160],
+                                     "template": str(rec.get("template") or "")[:160],
+                                     "chunks": [str(c or "")[:40] for c in (rec.get("chunks") or [])],
+                                     "answer_tried": ""})
                     continue
+                note = lambda reason, qq=None, ans=None: rej_rows.append({
+                    "q": qq, "page": os.path.basename(p), "reason": reason,
+                    "prompt": str(rec.get("prompt") or "")[:160],
+                    "template": str(rec.get("template") or "")[:160],
+                    "chunks": [str(c or "")[:40] for c in (rec.get("chunks") or [])],
+                    "answer_tried": str(ans or "")[:200],
+                })
                 if q in seen_q:
                     rejects["duplicate_q"] = rejects.get("duplicate_q", 0) + 1
+                    note("duplicate_q", q)
                     continue
                 if q not in answers:
                     rejects["no_answer_sentence"] = rejects.get("no_answer_sentence", 0) + 1
+                    note("no_answer_sentence", q)
                     continue
                 core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects, gt_answers)
                 if core is None:
                     rejects[why] = rejects.get(why, 0) + 1
+                    note(why, q, answers[q])
                     continue
                 if fz:
                     rejects["_fuzzy_word_ok"] = rejects.get("_fuzzy_word_ok", 0) + 1
@@ -758,7 +778,8 @@ def main() -> int:
         elif os.path.exists(out_p):
             os.remove(out_p)
         report.append({"set": setname, "pages": len(pages), "from": where, "seen": n_seen,
-                       "answers": len(answers), "ok": len(items), "rejects": rejects})
+                       "answers": len(answers), "ok": len(items), "rejects": rejects,
+                       "reject_rows": rej_rows})
         # "_" 开头的键是**通过**的标记（模糊匹配救回 / GT 答案句救回），不是拒收 —— 分开打，
         # 否则读的人会把 _fuzzy_word_ok 当成丢题（2026-09-15 实测把人绕进去过）。
         marks = {k: v for k, v in rejects.items() if k.startswith("_")}
@@ -783,6 +804,16 @@ def main() -> int:
             agg[k] = agg.get(k, 0) + v
     print(f"\n完成：{len(report)} 套，通过 {tot_ok} 题，本次实际调用 {calls} 张 "
           f"（约 ¥{calls * CNY_PER_IMAGE:.2f}）")
+    if args.report_out:
+        rows = [dict(r, set=rep["set"]) for rep in merged for r in (rep.get("reject_rows") or [])]
+        os.makedirs(os.path.dirname(os.path.abspath(args.report_out)) or ".", exist_ok=True)
+        json.dump({"generated_by": "scripts/realbank/extract_bs_pages.py --report-out",
+                   "_purpose": "识图拿到题面、却过不了机械校验的每一条：那一屏的模板 + 词块 + 试过的答案句。"
+                               "只有计数说明不了是识图漏块还是答案句对不上。",
+                   "count": len(rows), "rows": rows},
+                  open(args.report_out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        print(f"逐条拒收明细 → {args.report_out}（{len(rows)} 条）")
+
     marks = {k: v for k, v in agg.items() if k.startswith("_")}
     hard = {k: v for k, v in agg.items() if not k.startswith("_")}
     if marks:
