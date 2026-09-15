@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 71,
+  "count": 73,
   "items": [
     {
       "id": "real_lc_121b_1_13",
@@ -3109,6 +3109,190 @@
             "D": "It does not accept reservations."
           },
           "answer": "C",
+          "explanation": "",
+          "source_q": 7
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_316_1_17",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_316_1_17.mp3?v=mu35kwmd",
+      "asr_similarity": 0.93,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 137Hz / 246Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.16新托福真题",
+      "date": "2026-03-16",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "I think we need to meet again to discuss the group project."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Definitely. Still a lot to talk about."
+        },
+        {
+          "speaker": "Man",
+          "text": "Are you free Thursday afternoon? We can meet at the cafe near the library."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Does Friday work for you? I don't have classes on Thursdays, so I'm not planning to come over to campus."
+        },
+        {
+          "speaker": "Man",
+          "text": "Sure, but I thought you lived in a dorm on campus."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I did, but I just moved last weekend. I still have lots of boxes piled up in my new apartment."
+        },
+        {
+          "speaker": "Man",
+          "text": "Moving is always a lot of work."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "Why does the woman suggest meeting on Friday instead of Thursday?",
+          "options": {
+            "A": "She is busy with work on Thursday.",
+            "B": "She needs more time to prepare for the discussion.",
+            "C": "She does not want to come to campus on Thursday.",
+            "D": "The cafe is not open on Thursday."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 17
+        },
+        {
+          "type": "inference",
+          "stem": "What does the woman suggest about her move?",
+          "options": {
+            "A": "She has not finished unpacking.",
+            "B": "She does not like her new apartment.",
+            "C": "She is moving this weekend.",
+            "D": "Her new dorm is close to the library."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 18
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_316_2_06",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_316_2_06.mp3?v=mu35kwwv",
+      "asr_similarity": 0.939,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 129Hz / 203Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.16新托福真题",
+      "date": "2026-03-16",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Caroline, I've got a question for you."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Sure, professor."
+        },
+        {
+          "speaker": "Man",
+          "text": "I'm not sure if you're aware, but the university is redesigning its website and I'm involved in the process for the academic pages."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's great. It's long overdue if you ask me."
+        },
+        {
+          "speaker": "Man",
+          "text": "I agree. We're looking for some students to be testers for us. Try out the new site. Point out things you like and things that aren't working properly. Make suggestions. Those sorts of things. Would you be interested?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I don't see why not."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What does the woman most likely think of the current university website?",
+          "options": {
+            "A": "It provides a lot of useful information.",
+            "B": "It is easy to use.",
+            "C": "It is not frequently used by students.",
+            "D": "It is not at the quality level it should be."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 6
+        },
+        {
+          "type": "inference",
+          "stem": "What will the woman most likely do?",
+          "options": {
+            "A": "Provide some feedback",
+            "B": "Contact some other students",
+            "C": "Take a test on web design",
+            "D": "Learn web design from the man"
+          },
+          "answer": "A",
           "explanation": "",
           "source_q": 7
         }

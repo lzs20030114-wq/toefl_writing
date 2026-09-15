@@ -61,6 +61,14 @@ const IDS = flag("ids") ? new Set(flag("ids").split(",").map((s) => s.trim())) :
 const LIMIT = flag("limit") ? parseInt(flag("limit"), 10) || Infinity : Infinity;
 const SKIP_TTS_NARRATION = argv.includes("--skip-tts-narration");
 const REDO_TTS_NARRATION = argv.includes("--redo-tts-narration");
+/**
+ * `--cached-narration-only`：旁白只用 narration-tts/ 里**已经合成过**的句子，一次 TTS 都不调。
+ * 本轮还原出来的场景旁白没缓存 → 退回该题型的通用句（"Listen to an announcement."，早已缓存）；
+ * 通用句也没缓存 → 不拼旁白。隐含 --skip-tts-narration（TTS 兜底补旁白那一步同样可能现合成）。
+ * 用于「不许花 TTS 钱」的铺量轮次（2026-09-16 整块录音卷：录音转写出来的场景旁白常带听错的词，
+ * "at a university clinic" 被听成 "cleaning"，现合成反而会让播音员念错）。
+ */
+const CACHED_NARRATION_ONLY = argv.includes("--cached-narration-only");
 
 /** 本轮是否带了收窄范围的开关（--set / --ids / --only）。 */
 const SCOPED = !!(SET || IDS || ONLY);
@@ -601,6 +609,9 @@ async function ensureNarrations(texts, { dry }) {
   log(`\n■ 旁白合成：需要 ${uniq.length} 句（去重后），其中 ${todo.length} 句要出成品`
     + `（${paid.length} 句要真调 TTS / ${words} 口播词 / 预估 ≈ ${cost.toFixed(2)} 元，`
     + `口径 ${CNY_PER_140_WORDS} 元 per 140 词）`);
+  if (CACHED_NARRATION_ONLY && paid.length) {
+    throw new Error(`--cached-narration-only 下仍有 ${paid.length} 句要真调 TTS（${paid.slice(0, 3).join(" / ")}）—— 已停下`);
+  }
   if (dry) { log("  （--dry-run：未合成）"); return { uniq: uniq.length, todo: todo.length, words, cost, made: 0 }; }
   if (cost > NARRATION_COST_CEILING_CNY) {
     throw new Error(`旁白合成预估 ${cost.toFixed(2)} 元 超过护栏 ${NARRATION_COST_CEILING_CNY} 元 —— 已停下，先查是不是句子表异常`);
@@ -637,10 +648,22 @@ async function main() {
 
   /* 3a. 旁白：真考 lcr 没有旁白，lc/la/lat 有（见 original_audio.js 的 narrationTextFor）。
    * 切片时把源头那段旁白剥掉了，这里按实测原句自己配回来、再拼到正文前面。 */
+  const narrationCached = (t) => !!t && (fs.existsSync(narrationCachePath(t))
+    || fs.existsSync(narrationCachePath(t).replace(/\.mp3$/, ".raw.mp3")));
+  let narrFellBack = 0;
   for (const e of plan) {
     if (e.type === "lcr") { e.narrationText = null; continue; }
     if (!e.narrationRaw) e.narrationRaw = recoverNarrationRaw(e);
     e.narrationText = OA.narrationTextFor(e.type, e.narrationRaw);
+    if (CACHED_NARRATION_ONLY && e.narrationText && !narrationCached(e.narrationText)) {
+      const generic = OA.NARRATION_DEFAULTS[e.type] || null;
+      e.narrationFallbackFrom = e.narrationText;
+      e.narrationText = narrationCached(generic) ? generic : null;
+      if (e.selected) narrFellBack += 1;
+    }
+  }
+  if (CACHED_NARRATION_ONLY) {
+    log(`■ --cached-narration-only：${narrFellBack} 条场景旁白没缓存，退回通用句（不调 TTS）`);
   }
   const narrStat = await ensureNarrations(
     plan.filter((e) => e.selected).map((e) => e.narrationText), { dry: DRY });
@@ -1015,7 +1038,10 @@ async function narrateTtsFallbacks(plan, manifest, results, uploadAudio, version
   // 范围判据要按卷名过滤，而 plan 在 --set 时已经把别的卷剔掉了 —— 卷名得从 structured 索引里取。
   const setnameById = new Map();
   for (const [id, hit] of buildIndex().idx) setnameById.set(id, hit.setname);
-  if (SKIP_TTS_NARRATION) { log("\n■ TTS 兜底补旁白：--skip-tts-narration，跳过"); return; }
+  if (SKIP_TTS_NARRATION || CACHED_NARRATION_ONLY) {
+    log(`\n■ TTS 兜底补旁白：${CACHED_NARRATION_ONLY ? "--cached-narration-only" : "--skip-tts-narration"}，跳过`);
+    return;
+  }
   const survey = loadNarrationSurvey();
   let ledger = { entries: {} };
   if (fs.existsSync(TTS_NARRATION_LEDGER)) {

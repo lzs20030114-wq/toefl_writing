@@ -58,7 +58,7 @@ const { carryMaterialImages } = require("./material_image_carry.js");
 // 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
 const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 // 听力原声回挂判据同样抽成纯函数（无 IO，可单测）：scripts/realbank/original_audio.js。
-const { applyOriginalAudio } = require("./original_audio.js");
+const { applyOriginalAudio, sha1: originalAudioSha1 } = require("./original_audio.js");
 // 跨卷同篇合并（AP/RDL）同样抽成纯函数：scripts/realbank/consolidate_reading.js。
 const { consolidateReading } = require("./consolidate_reading.js");
 // 条目 id 沿用（题号会随补题变，id 不能跟着变）同样抽成纯函数：scripts/realbank/id_carry.js。
@@ -1169,6 +1169,22 @@ const IV_DIFF = ["personal", "descriptive", "analytical", "evaluative"];
  * 不记别名的话，这些槽位会被丢题账本算成缺题、前端那一场也少题 —— 题其实就在保留的那条上
  * （2026-09-15 实测听力 111 题 + 口语 11 题这么丢的，与造句当初一模一样的病）。
  */
+/** 整块录音合流器的 merged_asr.merger（scripts/realbank/merge_recording_asr.py 的 MERGER_ID）。 */
+const RECORDING_MERGER = "merge_recording_asr-v1";
+/** 先落库、再给 bind_original_audio 切片时用：这一轮不按原声清单拦整块录音来源的题。 */
+const KEEP_UNBOUND_RECORDING = process.argv.includes("--keep-unbound-recording");
+let originalAudioEntries = null;
+/** 原声清单里有这条、且口播指纹与清单一致（与 mountOriginalAudio → applyOriginalAudio 同一把尺）。 */
+function hasOriginalAudio(kind, item) {
+  if (!originalAudioEntries) {
+    try {
+      originalAudioEntries = JSON.parse(fs.readFileSync(path.join(LISTENING_DIR, "original-audio.json"), "utf8")).entries || {};
+    } catch { originalAudioEntries = {}; }
+  }
+  const e = originalAudioEntries[item.id];
+  return Boolean(e && e.url && originalAudioSha1(spokenText(kind, item)) === e.text_sha1);
+}
+
 function dupEdge(fromId, keptRef, type, setname) {
   const to = String(keptRef || "").split("/").pop();
   return { from: fromId, to, type, reason: "duplicate_item", fromSource: setname, fromDate: setDate(setname) };
@@ -1220,10 +1236,25 @@ function buildListeningSpeaking(files, stats) {
     }
 
     // ── 听力 ──────────────────────────────────────────────────────────
+    // 整块录音合流（scripts/realbank/merge_recording_asr.py）的卷：没有文档逐字稿，音频只能从那条录音里切。
+    const recordingMerged = (st.merged_asr && st.merged_asr.merger) === RECORDING_MERGER;
     if (passedKeys) {
       for (const r of st.results || []) {
         if (r.section !== "listening" || r.status !== "ok") continue;
         if (!out[r.type]) continue;
+        // 合流时认出的跨卷近似重复（ASR 文本与库里那条不会逐字相同，下面的逐字去重拦不住）：只记别名，
+        // 槽位照样算这套卷的，不再收一份 ASR 版。放在盲审闸之前 —— 保留方早已审过、在库里。
+        // **不登记进 seenL**：卷名排在保留方之前时（"3.16…" < "rf0610"），登记了会反过来把线上那条
+        // （带原声的）当成重复丢掉，id 连同音频一起换掉。
+        if (r.dup_of) {
+          const dupId = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
+          console.warn(`跳过 ${setname} ${dupId}：录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）→ 记别名`);
+          stats.lDroppedDupItem += 1;
+          recordDrop(stats, { set: setname, slug, section: "listening", type: r.type, module: r.module, q: r.q_start,
+            n: (r.items || []).length, id: dupId, code: "lDroppedDupItem", detail: `录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）` });
+          itemAliasEdges.push(dupEdge(dupId, r.dup_of, r.type, setname));
+          continue;
+        }
         const kept = [];
         const lAt = { set: setname, slug, section: "listening", type: r.type, module: r.module };
         for (const it of r.items || []) {
@@ -1295,6 +1326,15 @@ function buildListeningSpeaking(files, stats) {
             itemAliasEdges.push(dupEdge(id, seenL.get(dk), r.type, setname));
             continue;
           }
+        }
+        // 整块录音来源只收挂得上真人原声的：切不出原声就不上线，不许退回 TTS / 浏览器朗读。
+        // 判据是原声清单（original-audio.json）里有这条、且口播指纹对得上 —— 与 mountOriginalAudio 回挂同一把尺。
+        // 先落库再切片（bind_original_audio 按库里的条目做计划）时带 --keep-unbound-recording，切完不带它再重建一遍。
+        if (recordingMerged && !KEEP_UNBOUND_RECORDING && !hasOriginalAudio(r.type, item)) {
+          stats.lDroppedNoOriginalAudio += 1;
+          recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedNoOriginalAudio",
+            detail: "整块录音来源，原声清单里没有这一条（没切出来 / 口播文本变了）" });
+          continue;
         }
         seenL.set(dk, `${setname}/${id}`);
         out[r.type].push(item);
@@ -1570,7 +1610,7 @@ function main() {
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
     lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
-    lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0,
+    lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0, lDroppedNoOriginalAudio: 0,
     lInvalidReasons: {}, lInvalidDetail: [],
     sDroppedDupSet: 0, sDroppedInvalid: 0, sInvalidDetail: [],
   };
@@ -1861,6 +1901,7 @@ function main() {
   console.log(`  结构化产物里的听力条目 ${stats.lItemsSeen}；盲审通过 ${stats.lKeptByAudit}；`
     + `不一致丢弃 ${stats.lDroppedDisagree}；没被盲审覆盖丢弃 ${stats.lDroppedNoAuditQ}`);
   console.log(`  跨卷逐条内容重复跳过 ${stats.lDroppedDupItem} 组；无盲审结果跳过 ${stats.lDroppedNoAudit} 套；选项残缺丢弃 ${stats.lDroppedBadOptions} 题`);
+  console.log(`  整块录音来源没挂上原声不收 ${stats.lDroppedNoOriginalAudio} 组${KEEP_UNBOUND_RECORDING ? "（--keep-unbound-recording：本轮不拦，给 bind_original_audio 切片用）" : ""}`);
   console.log(`  validator 不收丢弃 ${stats.lDroppedInvalid} 组：${JSON.stringify(stats.lInvalidReasons)}`);
   console.log(`  成品：LCR ${L.lcr.length} / LC ${L.lc.length} / LA ${L.la.length} / LAT ${L.lat.length}`);
 
@@ -1956,6 +1997,13 @@ function main() {
   // **注意**：这一步会让听力 / 口语追上 .codex-tmp 里已结构化但还没铺进库的量，
   // 不只是找回被去重丢掉的那些 —— 跑之前先看它打印的前后条数。
   if (process.argv.includes("--only-audio")) {
+    // 音频沿用 / 复核后二次沿用 / 面试拆套 / 原声回挂 —— 与全量路径同一套、同一顺序（见下方全量路径的注释）。
+    // 这个口子最初漏了这四步：跑一次就把库里全部听力的 audio_url 清成 null（2026-09-16 实测
+    // 388 条原声 + 68 条 TTS 全部变成 audio_pending），面试也少拆 15 套（45 → 30）。
+    const prevL = readBundle(LISTENING_DIR, Object.keys(L));
+    const prevS = readBundle(SPEAKING_DIR, Object.keys(S));
+    const carried = carryAudioUrls(prevL, L) + carryAudioUrls(prevS, S);
+    console.log(`\n■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）`);
     const keep = new Set();
     for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
       fs.mkdirSync(dir, { recursive: true });
@@ -2000,6 +2048,14 @@ function main() {
     }
     if (restored) console.log(`  （--only-audio）已把 applyReview 顺手重写的 ${restored} 个其余文件按字节还原`);
     if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
+    const recarried = recarryOnDisk(LISTENING_DIR, prevL) + recarryOnDisk(SPEAKING_DIR, prevS);
+    if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
+    const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
+    if (sp && sp.changed) {
+      console.log(`■ 拼盘面试切分：${sp.stats.split} 条大集 → ${sp.stats.chunks} 套 4 问；尾巴 ${sp.stats.dropped_questions} 问不入库；interview 共 ${sp.count} 套`);
+      for (const k of sp.stats.skipped) console.warn(`  ⚠ 跳过 ${k.id} #${k.chunk}：${k.why}`);
+    }
+    mountOriginalAudio();
     for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
       for (const k of Object.keys(bundle)) {
         const q = path.join(dir, `${k}.json`);
