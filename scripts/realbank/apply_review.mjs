@@ -176,7 +176,7 @@ export function applyReview({ root = process.cwd(), dry = false, aliases } = {})
   if (!fs.existsSync(holdsFile)) { console.warn(`[apply_review] 没有 ${holdsFile}，跳过`); return null; }
   const review = JSON.parse(fs.readFileSync(holdsFile, "utf8"));
   const log = [];
-  const stats = { patched: 0, patchGone: 0, holdGone: 0, audioStale: 0, units: 0, questions: 0, sentences: 0, iqs: 0, redirected: 0 };
+  const stats = { patched: 0, patchGone: 0, holdGone: 0, audioStale: 0, units: 0, questions: 0, sentences: 0, iqs: 0, redirected: 0, aliasesDropped: 0 };
 
   // ── 阅读条目被归位（ap ↔ rdl）后，清单里记在旧 file+id 上的条目顺着账本搬到新 file+id ──
   // 只搬「旧 id 在它原来的文件里已经找不到」的：同一个 id 两边都在（归位前的旧库还没重建）时不动。
@@ -288,12 +288,42 @@ export function applyReview({ root = process.cwd(), dry = false, aliases } = {})
     if (!dry) fs.writeFileSync(p, JSON.stringify(bank, null, 2), "utf8");
   }
 
-  // counts.json 镜像（首页卡片只 import 这几十字节）
+  // 听力/口语的「跨卷重出」别名账本收敛到**最终**产物。保留方可能在这一轮被下架，
+  // 指向它的那条边就成了悬空：assemble_sets 会按它造一个填不出内容的虚拟条目，
+  // 前端 withRecycled 克隆不出东西，账本自己也自相矛盾。摘掉并记一笔。
+  // （阅读的 id-aliases.json 是**改名**账本，不是多出来的条目，不走这一套。）
+  const aliasExtra = {};
+  for (const dir of ["listening", "speaking"]) {
+    const live = new Set();
+    for (const k of COUNTS[dir] || []) {
+      const p = path.join(bankDir, dir, `${k}.json`);
+      if (fs.existsSync(p)) for (const it of JSON.parse(fs.readFileSync(p, "utf8")).items || []) live.add(String(it.id));
+    }
+    const ap = path.join(bankDir, dir, "id-aliases.json");
+    if (!fs.existsSync(ap)) continue;
+    const doc = JSON.parse(fs.readFileSync(ap, "utf8"));
+    const rows = doc.aliases || [];
+    const kept = rows.filter((a) => live.has(String(a.to)));
+    if (kept.length !== rows.length) {
+      stats.aliasesDropped += rows.length - kept.length;
+      for (const a of rows) if (!live.has(String(a.to))) log.push(`  别名摘掉 ${a.from} → ${a.to}：保留方已不在库里`);
+      if (!dry) fs.writeFileSync(ap, JSON.stringify({ ...doc, aliases: kept }, null, 2), "utf8");
+    }
+    const per = {};
+    for (const a of kept) per[a.from_type] = (per[a.from_type] || 0) + 1;
+    aliasExtra[dir] = per;
+  }
+
+  // counts.json 镜像（首页卡片只 import 这几十字节）。
+  // 听力/口语要把还回原卷的别名算上 —— 前端 withRecycled 会把保留方克隆进另一场，
+  // 用户练得到的条数 = 库里条数 + 活着的别名条数，counts.json 又是「题库覆盖」的分母。
+  // 本脚本在 build_bank 之后整份重写 counts.json，不加这一项就把别名悄悄抹掉
+  // （2026-09-15：听力少记 74、口语少记 2）。
   for (const [dir, keys] of Object.entries(COUNTS)) {
     const c = {};
     for (const k of keys) {
       const p = path.join(bankDir, dir, `${k}.json`);
-      if (fs.existsSync(p)) c[k] = JSON.parse(fs.readFileSync(p, "utf8")).items.length;
+      if (fs.existsSync(p)) c[k] = JSON.parse(fs.readFileSync(p, "utf8")).items.length + ((aliasExtra[dir] || {})[k] || 0);
     }
     if (!dry) fs.writeFileSync(path.join(bankDir, dir, "counts.json"), JSON.stringify(c, null, 2), "utf8");
   }
@@ -309,6 +339,7 @@ if (isMain) {
       + `（清单里已不在库的 ${r.stats.holdGone} 条、随整条下架作废的 patch ${r.stats.patchGone} 处；`
       + `顺着 id-aliases.json 归位搬到新 file+id 的 ${r.stats.redirected} 条）`);
     if (r.stats.audioStale) console.log(`  口播文本改动 → ${r.stats.audioStale} 条音频作废（audio_pending），本机跑 render_real_audio.mjs 补配`);
+    if (r.stats.aliasesDropped) console.log(`  跨卷重出别名摘掉 ${r.stats.aliasesDropped} 条（保留方已不在库里）`);
     for (const l of r.log) console.log(l);
   }
 }

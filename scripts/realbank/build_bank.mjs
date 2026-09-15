@@ -1263,6 +1263,17 @@ function buildListeningSpeaking(files, stats) {
         } else if (r.type === "lat") {
           item = { ...base, subject: "general", topic: "", transcript: String(r.transcript_final || "").trim(), questions };
         }
+        // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
+        // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
+        // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
+        const res = V[r.type](item);
+        if (!res.valid) {
+          stats.lDroppedInvalid += 1;
+          stats.lInvalidReasons[res.errors[0]] = (stats.lInvalidReasons[res.errors[0]] || 0) + 1;
+          stats.lInvalidDetail.push({ set: setname, id, type: r.type, errors: res.errors });
+          recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedInvalid", detail: res.errors.slice(0, 3).join(" | ") });
+          continue;
+        }
         const dk = `${r.type}#${spokenKey(item)}`;
         if (seenL.has(dk)) {
           if (canonicalHeldDown(seenL.get(dk))) {
@@ -1279,14 +1290,6 @@ function buildListeningSpeaking(files, stats) {
           }
         }
         seenL.set(dk, `${setname}/${id}`);
-        const res = V[r.type](item);
-        if (!res.valid) {
-          stats.lDroppedInvalid += 1;
-          stats.lInvalidReasons[res.errors[0]] = (stats.lInvalidReasons[res.errors[0]] || 0) + 1;
-          stats.lInvalidDetail.push({ set: setname, id, type: r.type, errors: res.errors });
-          recordDrop(stats, { ...lAt, q: r.q_start, n: questions.length, id, code: "lDroppedInvalid", detail: res.errors.slice(0, 3).join(" | ") });
-          continue;
-        }
         out[r.type].push(item);
       }
     }
@@ -1311,6 +1314,16 @@ function buildListeningSpeaking(files, stats) {
             };
           });
         const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
+        // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
+        // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
+        // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
+        const v = SPV.validateRepeatSet(set);
+        if (!v.valid) {
+          stats.sDroppedInvalid += 1;
+          stats.sInvalidDetail.push({ set: setname, id, type: "repeat", errors: v.errors });
+          recordDrop(stats, { set: setname, slug, section: "speaking", type: "repeat", n: sentences.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
+          continue;
+        }
         const sk = `repeat#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
           if (canonicalHeldDown(seenS.get(sk))) {
@@ -1327,13 +1340,6 @@ function buildListeningSpeaking(files, stats) {
           }
         }
         seenS.set(sk, `${setname}/${id}`);
-        const v = SPV.validateRepeatSet(set);
-        if (!v.valid) {
-          stats.sDroppedInvalid += 1;
-          stats.sInvalidDetail.push({ set: setname, id, type: "repeat", errors: v.errors });
-          recordDrop(stats, { set: setname, slug, section: "speaking", type: "repeat", n: sentences.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
-          continue;
-        }
         spk.repeat.push(set);
       } else if (r.type === "interview") {
         const id = `real_interview_${slug}_1`;
@@ -1352,6 +1358,16 @@ function buildListeningSpeaking(files, stats) {
             };
           });
         const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
+        // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
+        // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
+        // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
+        const v = SPV.validateInterviewSet(set);
+        if (!v.valid) {
+          stats.sDroppedInvalid += 1;
+          stats.sInvalidDetail.push({ set: setname, id, type: "interview", errors: v.errors });
+          recordDrop(stats, { set: setname, slug, section: "speaking", type: "interview", n: questions.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
+          continue;
+        }
         const sk = `interview#${speakingSetKey(set)}`;
         if (seenS.has(sk)) {
           if (canonicalHeldDown(seenS.get(sk))) {
@@ -1368,13 +1384,6 @@ function buildListeningSpeaking(files, stats) {
           }
         }
         seenS.set(sk, `${setname}/${id}`);
-        const v = SPV.validateInterviewSet(set);
-        if (!v.valid) {
-          stats.sDroppedInvalid += 1;
-          stats.sInvalidDetail.push({ set: setname, id, type: "interview", errors: v.errors });
-          recordDrop(stats, { set: setname, slug, section: "speaking", type: "interview", n: questions.length, id, code: "sDroppedInvalid", detail: v.errors.slice(0, 3).join(" | ") });
-          continue;
-        }
         spk.interview.push(set);
       }
     }
@@ -2165,7 +2174,8 @@ function main() {
   if (recarriedImages) console.log(`■ 复核 patch 后二次沿用：${recarriedImages} 条 material_image 接回（patch 后材料文本与上一版逐字相同）`);
   if (r) {
     console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
-      + `（顺着归位别名搬到新 file+id ${r.stats.redirected} 条）`);
+      + `（顺着归位别名搬到新 file+id ${r.stats.redirected} 条）`
+      + (r.stats.aliasesDropped ? `；跨卷重出别名摘掉 ${r.stats.aliasesDropped} 条（保留方已不在库里）` : ""));
     for (const l of r.log) console.log(l);
   }
   finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending);
