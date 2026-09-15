@@ -16,6 +16,17 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(SCRIPT_DIR, "..", "..");
 export const DEFAULT_SPEAKING_DIR = path.join(ROOT, "data", "realBank", "speaking");
 
+/** id-aliases.json 里指向**本次产物里活着的**那条的别名条数（与 apply_review 的口径一致）。 */
+function liveAliasCount(speakingDir, type, items) {
+  const p = path.join(speakingDir, "id-aliases.json");
+  if (!fs.existsSync(p)) return 0;
+  const live = new Set((items || []).map((it) => String(it.id)));
+  try {
+    const rows = JSON.parse(fs.readFileSync(p, "utf8")).aliases || [];
+    return rows.filter((a) => a && a.from_type === type && live.has(String(a.to))).length;
+  } catch { return 0; }
+}
+
 export function applyInterviewSplitsOnDisk(speakingDir = DEFAULT_SPEAKING_DIR, { dryRun = false } = {}) {
   const bankPath = path.join(speakingDir, "interview.json");
   const manifestPath = path.join(speakingDir, "interview-splits.json");
@@ -29,7 +40,10 @@ export function applyInterviewSplitsOnDisk(speakingDir = DEFAULT_SPEAKING_DIR, {
     const countsPath = path.join(speakingDir, "counts.json");
     if (fs.existsSync(countsPath)) {
       const counts = JSON.parse(fs.readFileSync(countsPath, "utf8"));
-      counts.interview = items.length;
+      // 题量 = 库里套数 + **还回原卷**的跨卷重出别名（前端 withRecycled 会把保留方克隆进那一场）。
+      // 本模块是 build_bank 的最后一步、整份重写 counts.json，只写 items.length 就把 apply_review
+      // 刚算进去的别名项再抹掉一次（2026-09-15：面试少记 1，__tests__/realbank-item-aliases.test.js 会红）。
+      counts.interview = items.length + liveAliasCount(speakingDir, "interview", items);
       fs.writeFileSync(countsPath, JSON.stringify(counts, null, 2), "utf8");
     }
   }
