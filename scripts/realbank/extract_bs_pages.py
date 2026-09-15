@@ -265,13 +265,18 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
     return solutions
 
 
-def build_with_gt_retry(rec: dict, primary: str, alt: str | None, rejects: dict):
-    """先用答案页那条答案句；只在 **no_solution**（拼不回来）时，用 GT 的转写再试一次。
+def build_with_gt_retry(rec: dict, primary: str, alt: str | None, rejects: dict,
+                        gt_all: dict[int, str] | None = None):
+    """答案句三级回退：答案页那条 → 同题号的 GT → 同卷全部 GT 里唯一能拼出的那条。
 
     为什么值得重试：答案页是 OCR 出来的（全小写、无标点，实测还带 "broshure" 这类错字），
     而 GT 是按卷逐题人工转写的校准锚 —— 同一道题，答案页的那条拼不出解，GT 那条常常能拼出。
-    为什么安全：机械校验一视同仁（答案句必须由模板固定词 + 词块按序恰好拼出，多余块 ≤1），
-    换答案句拼不出照样拒收 —— 绝不会因此放进一道拼不出的题，也不会让模型猜答案。
+
+    为什么敢扫同卷全部（第三级）：两个来源的**题号**会错位（实测 3.6 两边同一个题号说的不是
+    同一道题），这时同题号的 GT 也拼不出，可正确的那条往往就躺在同一卷的别的题号上。
+    机械闸足够严 —— 答案句必须由模板固定词 + 词块**按序恰好**拼出、多余块 ≤1 —— 所以
+    「同卷里恰好只有一条能拼出」这件事本身就是强证据。**拼出多条就作废**（ambiguous_gt_scan）：
+    宁可少收，不许猜。题号仍以截图那一屏为准（题面为准），GT 只当拼接顺序的裁判。
 
     只在 no_solution 时重试：其余拒收码（缺模板 / 词块重复 / 多余块太多）是题面那一侧的毛病，
     换答案句解决不了，重试只是白跑。
@@ -281,14 +286,36 @@ def build_with_gt_retry(rec: dict, primary: str, alt: str | None, rejects: dict)
         return core, fz, None
     except ValueError as e:
         first = str(e)
-    if first != "no_solution" or not alt or norm_answer_key(alt) == norm_answer_key(primary or ""):
+    if first != "no_solution":
         return None, False, first
-    try:
-        core, fz = build_item(rec, alt)
-    except ValueError as e2:
-        return None, False, str(e2)
-    rejects["_gt_answer_ok"] = rejects.get("_gt_answer_ok", 0) + 1
-    return core, fz, None
+
+    tried = {norm_answer_key(primary or "")}
+    if alt and norm_answer_key(alt) not in tried:
+        tried.add(norm_answer_key(alt))
+        try:
+            core, fz = build_item(rec, alt)
+            rejects["_gt_answer_ok"] = rejects.get("_gt_answer_ok", 0) + 1
+            return core, fz, None
+        except ValueError:
+            pass
+
+    hits = []
+    for cand in (gt_all or {}).values():
+        k = norm_answer_key(cand or "")
+        if not k or k in tried:
+            continue
+        tried.add(k)
+        try:
+            hits.append(build_item(rec, cand))
+        except ValueError:
+            continue
+    if len(hits) > 1:
+        return None, False, "ambiguous_gt_scan"
+    if hits:
+        rejects["_gt_scan_ok"] = rejects.get("_gt_scan_ok", 0) + 1
+        core, fz = hits[0]
+        return core, fz, None
+    return None, False, first
 
 
 def build_item(rec: dict, answer_sentence: str):
@@ -704,7 +731,7 @@ def main() -> int:
                 if q not in answers:
                     rejects["no_answer_sentence"] = rejects.get("no_answer_sentence", 0) + 1
                     continue
-                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects)
+                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects, gt_answers)
                 if core is None:
                     rejects[why] = rejects.get(why, 0) + 1
                     continue
