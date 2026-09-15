@@ -21,6 +21,7 @@
 | `feedback-status-migration.sql` | 2026-03-01 | 历史迁移,状态未知(建库早期) | 反馈状态追踪 + 管理员回复系统 |
 | `iap-schema.sql` | 2026-02-28 | 历史迁移,状态未知(建库早期) | IAP 支付相关表(entitlements/webhook_events 等) |
 | `login-code-management.sql` | 2026-02-19 | 历史迁移,状态未知(建库早期) | 管理员可管理的登录码 + 登录流程加固 |
+| `manual-legacy-code-xxy123.sql` | 2026-09-15 | 已跑(用户 2026-09-15 确认) | 手动发放自定义登录码 `XXY123`，`users.tier='legacy'`（永久 Pro 级，`tier_expires_at` 留 NULL —— 过期检查只对 `tier='pro'` 生效）。后台 /admin-codes 产不出这个码：generate 字符集不含 "1"、issue 只能改已存在的 available 码、且无设 legacy 的入口。一次性数据发放，带 ON CONFLICT DO UPDATE 可重复执行 |
 | `mistake-favorites.sql` | 2026-05-07 | 历史迁移,状态未知(建库早期) | 错题本收藏(⭐)功能 |
 | `pro-codes-batch-2026-03-23.sql` | 2026-03-23 | 历史迁移,状态未知(建库早期) | 可变时长 Pro 登录码 + 首次登录激活 |
 | `pro-trial-migration.sql` | 2026-03-19 | 历史迁移,状态未知(建库早期) | 新用户自动赠送 3 天 Pro 试用 |
