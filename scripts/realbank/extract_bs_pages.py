@@ -99,8 +99,12 @@ Rules:
 
 
 # ── 词口径（与 lib/realBank.js 的 bsNormWord / stripEdgePunct 同口径）────────
+# 答案页/截图里混着全角标点（实测 "interesting ？"），不归一就会当成一个多出来的词，整题拼不出
+FULLWIDTH = str.maketrans("？！，。：；（）", "?!,.:;()")
+
+
 def norm_word(s: str) -> str:
-    s = str(s or "").replace("\u2019", "'")
+    s = str(s or "").replace("\u2019", "'").translate(FULLWIDTH)
     return re.sub(r"[.,!?;:]", "", s).strip().lower()
 
 
@@ -229,10 +233,27 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
     chunk_words = [norm_words(c) for c in chunks]
     solutions = []
 
-    def match(ai: int, ws: list[str]) -> bool:
-        if ai + len(ws) > len(answer_words):
-            return False
-        return all(_eqw(answer_words[ai + j], ws[j], fuzzy) for j in range(len(ws)))
+    def match(ai: int, ws: list[str]):
+        """对上了返回**吃掉几个答案词**，对不上返回 None。
+
+        先逐词比；不行再按「去掉空格后的字母序列」整体比 —— 答案页是 OCR 出来的，空格位置经常
+        放错（实测 "tha thas" ← "that has"），字母序列却一模一样。这是**严格相等**、不是模糊匹配：
+        字母不同照样对不上，所以不会放宽错字那道闸。
+        """
+        if ai + len(ws) <= len(answer_words) and all(
+                _eqw(answer_words[ai + j], ws[j], fuzzy) for j in range(len(ws))):
+            return len(ws)
+        target = "".join(ws)
+        if not target:
+            return None
+        acc = ""
+        for k in range(ai, len(answer_words)):
+            acc += answer_words[k]
+            if len(acc) > len(target):
+                return None
+            if acc == target:
+                return k - ai + 1
+        return None
 
     def dfs(ti: int, ai: int, used: tuple, plan: tuple):
         if len(solutions) >= limit:
@@ -244,8 +265,9 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
         tok = tokens[ti]
         if tok[0] == "lit":
             target = [norm_word(w) for w in tok[1]]
-            if match(ai, target):
-                dfs(ti + 1, ai + len(target), used, plan)
+            n = match(ai, target)
+            if n is not None:
+                dfs(ti + 1, ai + n, used, plan)
             return
         # gap：吃掉 1..N 个还没用过的词块（顺序即拼句顺序）
         def eat(ai2: int, used2: tuple, taken: tuple):
@@ -256,8 +278,9 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
             for ci, cw in enumerate(chunk_words):
                 if ci in used2 or not cw:
                     continue
-                if match(ai2, cw):
-                    eat(ai2 + len(cw), used2 + (ci,), taken + (ci,))
+                n = match(ai2, cw)
+                if n is not None:
+                    eat(ai2 + n, used2 + (ci,), taken + (ci,))
 
         eat(ai, used, ())
 
@@ -496,17 +519,27 @@ def render_pages(setname: str, pdf: str, pages: list[int] | None = None) -> list
     return out
 
 
-def ocr_cache_path(setname: str, idx: int, img_hash: str) -> str:
+DEFAULT_VL_MODEL = os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus"
+
+
+def ocr_cache_path(setname: str, idx: int, img_hash: str, model: str | None = None) -> str:
+    """识图缓存路径。**默认模型沿用老路径**（否则 333 张已有缓存一次作废、白花 ¥3.33），
+    换了模型才另起一份 —— 不同模型的识图结果必须分开存，否则换模型重识会直接命中旧缓存。"""
     d = os.path.join(OCR_DIR, re.sub(r"[^\w.-]+", "_", setname))
-    return os.path.join(d, f"p{idx}.{img_hash}.json")
+    suffix = "" if not model or model == DEFAULT_VL_MODEL else "." + re.sub(r"[^\w.-]+", "_", model)
+    return os.path.join(d, f"p{idx}.{img_hash}{suffix}.json")
 
 
-def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool):
-    """一页 → 识图出的题记录列表（缓存优先；no_ocr 时缓存未命中就返回 None）。"""
+def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool, refresh: bool = False):
+    """一页 → 识图出的题记录列表（缓存优先；no_ocr 时缓存未命中就返回 None）。
+
+    refresh=True 时跳过缓存重识这一页 —— 上一轮在这页上出过拒收（多半是漏认了一个词块），
+    重识一次有机会认全。一页 ¥0.01，比整库重扫便宜三个数量级。
+    """
     data = open(img_path, "rb").read()
     h = hashlib.sha1(data).hexdigest()[:8]
-    cp = ocr_cache_path(setname, idx, h)
-    if os.path.exists(cp):
+    cp = ocr_cache_path(setname, idx, h, model)
+    if os.path.exists(cp) and not refresh:
         try:
             return json.load(open(cp, "r", encoding="utf-8")), True
         except Exception:
@@ -643,6 +676,8 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="只报将调用张数与预计费用")
     ap.add_argument("--only", help="只处理卷名含该子串的卷")
     ap.add_argument("--no-ocr", action="store_true", help="只用已有缓存跑校验，零调用")
+    ap.add_argument("--refresh-rejects", action="store_true",
+                    help="只重识上一轮出过拒收的那些页（跳过缓存）—— 多半是漏认了一个词块，¥0.01/张")
     ap.add_argument("--report-out", default=None,
                     help="把逐条拒收明细另存一份到这个路径（.codex-tmp 不进 git，要离线分析就写到 data/ 下）")
     ap.add_argument("--model", default=os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus")
@@ -664,6 +699,25 @@ def main() -> int:
         print("没有匹配到任何卷", file=sys.stderr)
         return 2
 
+    # --refresh-rejects：从上一轮报告里挑出「出过硬拒收」的页。duplicate_q / no_answer_sentence
+    # 不是识图的锅（一个是同页重复抽到、一个是答案页没给答案句），重识它们纯属烧钱。
+    refresh_pages: set[tuple[str, str]] = set()
+    if args.refresh_rejects:
+        try:
+            prev = json.load(open(os.path.join(OUT_DIR, "_bs_pages_report.json"), "r", encoding="utf-8"))
+        except Exception:
+            prev = []
+        for rep in prev:
+            for row in rep.get("reject_rows") or []:
+                if row.get("reason") in ("duplicate_q", "no_answer_sentence"):
+                    continue
+                if row.get("page"):
+                    refresh_pages.add((rep.get("set"), row["page"]))
+        print(f"■ --refresh-rejects：上一轮出过拒收的 {len(refresh_pages)} 页要重识"
+              f"（约 ¥{len(refresh_pages) * CNY_PER_IMAGE:.2f}）")
+        if not refresh_pages:
+            print("  （上一轮报告里没有拒收记录 —— 先跑一次 --no-ocr 生成报告）")
+
     # ① 渲染（本地零成本）
     rendered: list[tuple[str, list[tuple[int, str]], str]] = []
     for setname, pdf, page_nos in sets:
@@ -677,7 +731,8 @@ def main() -> int:
         n_todo = 0
         for i, p in pages:
             h = hashlib.sha1(open(p, "rb").read()).hexdigest()[:8]
-            if not os.path.exists(ocr_cache_path(setname, i, h)):
+            if (setname, os.path.basename(p)) in refresh_pages \
+                    or not os.path.exists(ocr_cache_path(setname, i, h, args.model)):
                 n_todo += 1
         todo += n_todo
         if n_todo:
@@ -709,7 +764,8 @@ def main() -> int:
         n_seen = 0
         for i, p in pages:
             try:
-                recs, cached = page_records(setname, i, p, args.model, args.no_ocr)
+                recs, cached = page_records(setname, i, p, args.model, args.no_ocr,
+                                            refresh=(setname, os.path.basename(p)) in refresh_pages)
             except SystemicFailure as e:
                 print(f"\n[中止] 系统性 API 失败：{e}", file=sys.stderr)
                 return EXIT_SYSTEMIC
