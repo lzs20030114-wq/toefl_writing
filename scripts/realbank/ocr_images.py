@@ -240,10 +240,14 @@ def _is_systemic(status: int | None, body: str) -> bool:
 
 
 def call_qwen(image_bytes: bytes, ext: str, model: str, timeout: int = 120,
-              prompt: str | None = None) -> str:
+              prompt: str | None = None, temperature: float = 0.0) -> str:
     """`prompt` 缺省 = 逐字转写（本脚本的老行为）。传别的 system prompt 就能让同一个
     客户端做别的视觉任务（extract_bs_pages.py 用它抽造句题的题面结构）——
-    调用、鉴权、估价、错误分类只此一份。"""
+    调用、鉴权、估价、错误分类只此一份。
+
+    `temperature` 缺省 0（转写要可复现）。extract_bs_pages 重读漏块的那一页时会传非零值：
+    温度 0 时同一张图必然读出同样结果，重识等于白花钱；调高才拿得到第二种读法，
+    而读错的会被那边的机械校验拒掉（答案句必须由模板固定词 + 词块恰好拼出），所以调高是安全的。"""
     import base64
 
     api_key = os.environ.get("DASHSCOPE_API_KEY")
@@ -254,7 +258,7 @@ def call_qwen(image_bytes: bytes, ext: str, model: str, timeout: int = 120,
     data_url = f"data:{mime};base64,{base64.b64encode(image_bytes).decode('ascii')}"
     payload = {
         "model": model,
-        "temperature": 0.0,
+        "temperature": float(temperature),
         "max_tokens": 4096,
         "stream": False,
         "messages": [

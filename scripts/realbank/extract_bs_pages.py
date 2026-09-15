@@ -530,28 +530,37 @@ def ocr_cache_path(setname: str, idx: int, img_hash: str, model: str | None = No
     return os.path.join(d, f"p{idx}.{img_hash}{suffix}.json")
 
 
-def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool, refresh: bool = False):
+def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool, refresh: bool = False,
+                 samples: int = 1, temperature: float = 0.6):
     """一页 → 识图出的题记录列表（缓存优先；no_ocr 时缓存未命中就返回 None）。
 
     refresh=True 时跳过缓存重识这一页 —— 上一轮在这页上出过拒收（多半是漏认了一个词块），
-    重识一次有机会认全。一页 ¥0.01，比整库重扫便宜三个数量级。
+    重识有机会认全。一页 ¥0.01，比整库重扫便宜三个数量级。
+
+    重识**必须调高温度**：call_qwen 缺省 temperature=0，同一张图必然读出同样结果，
+    照原样重识纯属白花钱。samples 次读数直接首尾相接返回 —— 主循环按题号收题、
+    **第一个过机械校验的读法胜出**（没过的不占位），所以多读几遍只会多救几题，不会放低标准。
     """
     data = open(img_path, "rb").read()
     h = hashlib.sha1(data).hexdigest()[:8]
     cp = ocr_cache_path(setname, idx, h, model)
     if os.path.exists(cp) and not refresh:
         try:
-            return json.load(open(cp, "r", encoding="utf-8")), True
+            return json.load(open(cp, "r", encoding="utf-8")), True, 0
         except Exception:
             pass
     if no_ocr:
-        return None, False
+        return None, False, 0
     body, ext = shrink(data, "png")
-    text = call_qwen(body, ext, model, prompt=EXTRACT_PROMPT)
-    recs = parse_json_array(text)
+    n = max(1, samples) if refresh else 1
+    recs = []
+    for k in range(n):
+        text = call_qwen(body, ext, model, prompt=EXTRACT_PROMPT,
+                         temperature=(temperature if (refresh and k > 0) else 0.0))
+        recs.extend(parse_json_array(text))
     os.makedirs(os.path.dirname(cp), exist_ok=True)
     json.dump(recs, open(cp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    return recs, False
+    return recs, False, n
 
 
 def parse_json_array(text: str) -> list:
@@ -676,6 +685,10 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="只报将调用张数与预计费用")
     ap.add_argument("--only", help="只处理卷名含该子串的卷")
     ap.add_argument("--no-ocr", action="store_true", help="只用已有缓存跑校验，零调用")
+    ap.add_argument("--samples", type=int, default=3,
+                    help="重识时同一页读几遍（只对 --refresh-rejects 的页生效，默认 3）")
+    ap.add_argument("--temperature", type=float, default=0.6,
+                    help="重识第 2 遍起用的温度（默认 0.6；0 会读出和上次一模一样的结果）")
     ap.add_argument("--refresh-rejects", action="store_true",
                     help="只重识上一轮出过拒收的那些页（跳过缓存）—— 多半是漏认了一个词块，¥0.01/张")
     ap.add_argument("--report-out", default=None,
@@ -714,7 +727,8 @@ def main() -> int:
                 if row.get("page"):
                     refresh_pages.add((rep.get("set"), row["page"]))
         print(f"■ --refresh-rejects：上一轮出过拒收的 {len(refresh_pages)} 页要重识"
-              f"（约 ¥{len(refresh_pages) * CNY_PER_IMAGE:.2f}）")
+              f"，每页读 {args.samples} 遍（温度 {args.temperature}）"
+              f"，约 ¥{len(refresh_pages) * args.samples * CNY_PER_IMAGE:.2f}")
         if not refresh_pages:
             print("  （上一轮报告里没有拒收记录 —— 先跑一次 --no-ocr 生成报告）")
 
@@ -737,8 +751,12 @@ def main() -> int:
         todo += n_todo
         if n_todo:
             print(f"  待识图 {setname}：{n_todo} 张（{where}）")
-    print(f"■ {len(sets)} 套，共渲染 {total_pages} 页；待识图 {todo} 张，"
-          f"预计费用 ¥{todo * CNY_PER_IMAGE:.2f}（¥{CNY_PER_IMAGE}/张估）")
+    n_refresh = sum(1 for setname, pages, _ in rendered for i, p in pages
+                    if (setname, os.path.basename(p)) in refresh_pages)
+    billed = (todo - n_refresh) + n_refresh * max(1, args.samples)
+    print(f"■ {len(sets)} 套，共渲染 {total_pages} 页；待识图 {todo} 张"
+          f"（其中重识 {n_refresh} 张 ×{max(1, args.samples)} 遍），"
+          f"预计费用 ¥{billed * CNY_PER_IMAGE:.2f}（¥{CNY_PER_IMAGE}/张估）")
     if args.dry_run:
         print("（--dry-run，未发任何请求）")
         return 0
@@ -764,8 +782,10 @@ def main() -> int:
         n_seen = 0
         for i, p in pages:
             try:
-                recs, cached = page_records(setname, i, p, args.model, args.no_ocr,
-                                            refresh=(setname, os.path.basename(p)) in refresh_pages)
+                recs, cached, n_calls = page_records(
+                    setname, i, p, args.model, args.no_ocr,
+                    refresh=(setname, os.path.basename(p)) in refresh_pages,
+                    samples=args.samples, temperature=args.temperature)
             except SystemicFailure as e:
                 print(f"\n[中止] 系统性 API 失败：{e}", file=sys.stderr)
                 return EXIT_SYSTEMIC
@@ -775,8 +795,7 @@ def main() -> int:
                 continue
             if recs is None:
                 continue
-            if not cached:
-                calls += 1
+            calls += n_calls
             for rec in recs:
                 if not isinstance(rec, dict):
                     continue
@@ -826,6 +845,17 @@ def main() -> int:
                     "_page": os.path.relpath(p, REPO_ROOT).replace("\\", "/"),
                     "_q": q,
                 }
+        # 同一页读多遍时，同一题会「先失败后成功」（第一个过机械校验的读法胜出）——
+        # 已经收下的题不该再留在拒收账里，否则报告会把救回来的题也算成丢题。
+        if rej_rows:
+            fixed = {r["q"] for r in rej_rows if r.get("q") is not None and r["q"] in seen_q}
+            if fixed:
+                for r in rej_rows:
+                    if r.get("q") in fixed and rejects.get(r["reason"]):
+                        rejects[r["reason"]] -= 1
+                rej_rows = [r for r in rej_rows if r.get("q") not in fixed]
+                rejects = {k: v for k, v in rejects.items() if v}
+
         items = [seen_q[k] for k in sorted(seen_q)]
         out_p = os.path.join(OUT_DIR, f"{setname}.bs.json")
         if items:
