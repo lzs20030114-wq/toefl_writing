@@ -1,9 +1,9 @@
 {
-  "_generated": "2026-09-14",
+  "_generated": "2026-09-15",
   "_generated_by": "scripts/realbank/loss_ledger.mjs",
   "_purpose": "全科真题缺口账本：每个没填满的槽位 + 归因。口径见 scripts/realbank/loss_attribution.js",
   "_source": {
-    "sets": "data/realBank/sets.json（2026-09-14，蓝图 2026.1）",
+    "sets": "data/realBank/sets.json（2026-09-15，蓝图 2026.1）",
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
@@ -20,15 +20,15 @@
   },
   "summary": {
     "need": 8280,
-    "got": 4929,
-    "missing": 3410,
+    "got": 4965,
+    "missing": 3374,
     "overfilled": 59,
-    "completeness": 0.5953,
+    "completeness": 0.5996,
     "causes": {
-      "source_defect": 736,
+      "source_defect": 711,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 345,
+      "bank_dropped": 334,
       "section_never_run": 1990,
       "section_lost": 0,
       "pipeline_loss": 213
@@ -119,18 +119,18 @@
     "bs": {
       "type": "bs",
       "need": 690,
-      "got": 497,
-      "missing": 193,
+      "got": 533,
+      "missing": 157,
       "causes": {
-        "source_defect": 72,
+        "source_defect": 47,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 53,
+        "bank_dropped": 42,
         "section_never_run": 0,
         "section_lost": 0,
         "pipeline_loss": 68
       },
-      "completeness": 0.7203
+      "completeness": 0.7725
     },
     "email": {
       "type": "email",
@@ -281,18 +281,18 @@
     "writing": {
       "section": "writing",
       "need": 828,
-      "got": 622,
-      "missing": 206,
+      "got": 658,
+      "missing": 170,
       "causes": {
-        "source_defect": 75,
+        "source_defect": 50,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 59,
+        "bank_dropped": 48,
         "section_never_run": 0,
         "section_lost": 0,
         "pipeline_loss": 70
       },
-      "completeness": 0.7512
+      "completeness": 0.7947
     },
     "listening": {
       "section": "listening",
@@ -3789,12 +3789,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 5,
+      "missing": 5,
+      "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 10
+        "source_defect": 5
       },
       "notes": []
     },
@@ -4353,12 +4353,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 3,
+      "missing": 7,
+      "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 10
+        "source_defect": 7
       },
       "notes": []
     },
@@ -6694,17 +6694,12 @@
         10
       ],
       "need": 10,
-      "got": 4,
-      "missing": 6,
+      "got": 7,
+      "missing": 3,
       "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4,
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 2,
-        "wDroppedDupBs": 1
+        "source_defect": 3
       },
       "notes": [
         "duplicate_cluster"
@@ -9432,35 +9427,6 @@
       "set": "3.17新托福真题",
       "slug": "317",
       "date": "2026-03-17",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "wSkippedThin": 2,
-        "wDroppedDupBs": 1
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.17新托福真题",
-      "slug": "317",
-      "date": "2026-03-17",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -9902,32 +9868,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "3.18新托福真题",
-      "slug": "318",
-      "date": "2026-03-18",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 1
       },
       "notes": []
     },
@@ -11927,12 +11867,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 6,
+      "missing": 4,
+      "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 10
+        "source_defect": 4
       },
       "notes": []
     },
@@ -13081,12 +13021,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 1,
+      "missing": 9,
+      "status": "partial",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 10
+        "source_defect": 9
       },
       "notes": []
     },
@@ -14255,35 +14195,6 @@
       "set": "4.5新托福真题",
       "slug": "45",
       "date": "2026-04-05",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 1,
-        "wDroppedDupBs": 8
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.5新托福真题",
-      "slug": "45",
-      "date": "2026-04-05",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -14766,12 +14677,12 @@
         10
       ],
       "need": 10,
-      "got": 6,
-      "missing": 4,
+      "got": 7,
+      "missing": 3,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 3
       },
       "drop_codes": {
         "wSkippedThin": 4,
@@ -16752,12 +16663,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 10
+        "source_defect": 1
       },
       "notes": []
     },
@@ -17660,12 +17571,12 @@
         10
       ],
       "need": 10,
-      "got": 8,
-      "missing": 2,
-      "status": "partial",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "wSkippedThin": 2
@@ -18037,33 +17948,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "4.27新托福真题",
-      "slug": "427",
-      "date": "2026-04-27",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 1,
-        "wDroppedDupBs": 3
       },
       "notes": []
     },
@@ -18919,33 +18803,6 @@
       "cause": "source_defect",
       "charged": {
         "source_defect": 5
-      },
-      "notes": []
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "date": "2026-04-29",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 1,
-        "wDroppedDupBs": 2
       },
       "notes": []
     },
@@ -20636,35 +20493,6 @@
       },
       "drop_codes": {
         "droppedDisagree": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wSkippedThin": 1,
-        "wDroppedDupBs": 3
       },
       "notes": [
         "duplicate_cluster"

@@ -66,7 +66,9 @@ const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js"
 // id 别名账本（合并 / 归位之后旧 id 指到哪）：scripts/realbank/id_aliases.js。
 const { buildIdAliases } = require("./id_aliases.js");
 // 造句跨卷重复的别名（同一道题在后面的卷里又考了一次）：scripts/realbank/bs_aliases.js。
-const { WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAliasEntries, bsDupSetEdges } = require("./bs_aliases.js");
+const {
+  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey, bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges,
+} = require("./bs_aliases.js");
 // 点选句子题（账本 → 挂题 → 落盘后按盲审哈希放行）：scripts/realbank/sentence_select.js。
 const SS = require("./sentence_select.js");
 // AP 题型推断（结构化产物不带 question_type，落库前按题干句式推回）：scripts/realbank/question_type.js。
@@ -698,14 +700,7 @@ function readSetBsFile(setname) {
 }
 
 /** 造句题的跨卷去重键：答案句归一化（与 lib/realBank.js bsNormWord 同口径）。 */
-function bsAnswerKey(answer) {
-  return String(answer || "")
-    .toLowerCase()
-    .replace(/[.,!?;:]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .join(" ");
-}
+
 
 function buildWriting(files, stats) {
   const out = { bs: [], email: [], discussion: [] };
@@ -846,11 +841,25 @@ function buildWriting(files, stats) {
   out.bs = bs;
   stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
   // 整份写作源文件与更早一套相同而被跳过的卷：造句按题号逐题对应（邮件 / 讨论在 recallWriting 里已按同一口径记过）。
-  stats.wBsAliases = bsAliasEntries([
+  const bsEdges = bsAliasEntries([
     ...bsAliasEdges,
     ...bsDupSetEdges({ dupSets, items: out.bs, slugOf: setSlug, dateOf: setDate }),
   ]);
+  // 源料体检把写作整科扣下的卷（2.8 / 2.23 / 3.24 / 3.29 / 4.18）在库里一条题都没有，
+  // 但 GT 记着它们考过的句子 —— 多数早就从别的卷收进库了，按别名还回去（判据见 ./bs_aliases.js）。
+  stats.wBsAliases = bsAliasEntries([
+    ...bsEdges,
+    ...bsGroundTruthEdges({
+      gtItems: readGtBuildSentence(), items: out.bs, aliases: bsEdges, slugOf: setSlug, dateOf: setDate,
+    }),
+  ]);
   return out;
+}
+
+/** 真题 ground truth 的造句（按卷逐题转写的校准锚）。文件缺了就当没有，只影响 GT 那批别名。 */
+function readGtBuildSentence() {
+  const p = path.join(process.cwd(), "data", "realExam2026", "writing", "buildSentence.json");
+  try { return JSON.parse(fs.readFileSync(p, "utf8")).items || []; } catch { return []; }
 }
 
 /** 邮件 / 讨论（补录 + 整卷重复）与造句（跨卷重复）的别名合成一份账本，顺序固定：先写作补录、后造句。 */

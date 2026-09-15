@@ -19,16 +19,14 @@ import path from "path";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAliasEntries, bsDupSetEdges } = require("./bs_aliases.js");
+const {
+  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey, bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges,
+} = require("./bs_aliases.js");
 
 const ROOT = process.cwd();
 const BANK = path.join(ROOT, "data", "realBank");
 const ALIAS_FILE = path.join(BANK, "writing", "id-aliases.json");
 const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
-
-/** build_bank.mjs 的 bsAnswerKey —— 去重判据，一字不差照搬（改了这里要同步那边）。 */
-const bsAnswerKey = (answer) => String(answer || "")
-  .toLowerCase().replace(/[.,!?;:]/g, "").split(/\s+/).filter(Boolean).join(" ");
 
 const dropLedger = readJson(path.join(BANK, "drop-ledger.json"));
 const lossLedger = readJson(path.join(BANK, "loss-ledger.json"));
@@ -75,7 +73,19 @@ edges.push(...bsDupSetEdges({
   dateOf: (s) => setDate.get(s) || null,
 }));
 
-const bsAliases = bsAliasEntries(edges);
+/* ③ 真题 ground truth 记着这一卷考过、库里也有那个答案句的（源料体检扣下的几卷全靠这条路） */
+const gt = (() => {
+  try { return readJson(path.join(ROOT, "data", "realExam2026", "writing", "buildSentence.json")).items || []; }
+  catch { return []; }
+})();
+const baseAliases = bsAliasEntries(edges);
+const gtEdges = bsGroundTruthEdges({
+  gtItems: gt, items: bank, aliases: baseAliases,
+  slugOf: (s) => setSlugOf.get(s) || null,
+  dateOf: (s) => setDate.get(s) || null,
+});
+
+const bsAliases = bsAliasEntries([...edges, ...gtEdges]);
 
 /* ── 体检：别名必须指向库里活着的题，from 不能与库里已有 id 撞车 ── */
 const problems = [];
@@ -93,9 +103,10 @@ for (const a of bsAliases) {
 const kept = (prev.aliases || []).filter((a) => a && a.from_type !== "bs");
 const aliases = [...kept, ...bsAliases];
 
-console.log(`造句别名回填：边 ${edges.length} 条 → 账本 ${bsAliases.length} 条`);
+console.log(`造句别名回填：边 ${edges.length + gtEdges.length} 条 → 账本 ${bsAliases.length} 条`);
 console.log(`  按答案句重复 ${bsAliases.filter((a) => a.reason === BS_ALIAS_REASON.DUP_ANSWER).length} 条`
   + `／整卷源文件相同 ${bsAliases.filter((a) => a.reason === BS_ALIAS_REASON.DUP_SET).length} 条`
+  + `／真题 ground truth 对照 ${bsAliases.filter((a) => a.reason === BS_ALIAS_REASON.GT_SAME_ITEM).length} 条`
   + `（涉及 ${new Set(bsAliases.map((a) => a.from_source)).size} 套卷）`);
 console.log(`  邮件 / 讨论原有别名保留 ${kept.length} 条 → 合计 ${aliases.length} 条`);
 if (unmatched.length) console.log(`  ⚠ 对不上保留方的 ${unmatched.length} 条：\n    ${unmatched.slice(0, 5).join("\n    ")}`);

@@ -5,8 +5,10 @@
  * assemble_sets 那一槽就空着、丢题账本把它算成缺题、前端那一卷就少一道题。
  */
 const {
-  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAliasEntries, bsDupSetEdges, bsIdSuffix, bsIdForSlug,
+  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
+  bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges, bsIdSuffix, bsIdForSlug,
 } = require("../scripts/realbank/bs_aliases.js");
+const GT = require("../data/realExam2026/writing/buildSentence.json");
 const ALIASES = require("../data/realBank/writing/id-aliases.json");
 const BS = require("../data/realBank/writing/bs.json");
 
@@ -70,6 +72,59 @@ describe("bsDupSetEdges（整份写作源文件与更早一套相同的卷）", 
   });
 });
 
+describe("bsGroundTruthEdges（真题 ground truth 对照）", () => {
+  const items = [
+    { id: "bs_34_01", source: "3.4新托福真题", answer: "I missed the class this morning." },
+    { id: "bs_34_02", source: "3.4新托福真题", answer: "Can you send me the notes?" },
+    { id: "bs_223_02", source: "2.23新托福真题", answer: "The workshop was canceled." },
+  ];
+  const args = { items, slugOf: (s) => ({ "2.23新托福真题": "223", "3.4新托福真题": "34" }[s] || null), dateOf: () => null };
+
+  test("GT 说这一卷考过、库里又有这个答案句 → 记别名，题号取 GT 的 n", () => {
+    const edges = bsGroundTruthEdges({
+      ...args,
+      gtItems: [{ source: "2.23新托福真题", date: "2026-02-23", n: 7, target: "i missed the class this morning" }],
+    });
+    expect(edges).toEqual([{
+      from: "bs_223_07", to: "bs_34_01", reason: BS_ALIAS_REASON.GT_SAME_ITEM,
+      fromSource: "2.23新托福真题", fromDate: "2026-02-23",
+    }]);
+  });
+
+  test("这一卷已经有同一道题（原生或别名）→ 不重复记", () => {
+    expect(bsGroundTruthEdges({
+      ...args,
+      gtItems: [{ source: "2.23新托福真题", n: 2, target: "The workshop was canceled" }],
+    })).toEqual([]);
+    expect(bsGroundTruthEdges({
+      ...args,
+      aliases: [{ from: "bs_223_05", to: "bs_34_02", from_source: "2.23新托福真题" }],
+      gtItems: [{ source: "2.23新托福真题", n: 6, target: "can you send me the notes?" }],
+    })).toEqual([]);
+  });
+
+  test("库里根本没有这个答案句 → 不记（那是真缺题，别名补不了）", () => {
+    expect(bsGroundTruthEdges({
+      ...args,
+      gtItems: [{ source: "2.23新托福真题", n: 3, target: "a sentence nobody has" }],
+    })).toEqual([]);
+  });
+
+  test("题号已被这一卷的现有 id 占了 → 跳过，不抢号也不另编号（两来源说法不一，留给人工对原卷）", () => {
+    expect(bsGroundTruthEdges({
+      ...args,
+      gtItems: [{ source: "2.23新托福真题", n: 2, target: "i missed the class this morning" }],
+    })).toEqual([]);
+  });
+
+  test("卷不在源卷清单里（slugOf 返回 null）→ 不给它造槽位", () => {
+    expect(bsGroundTruthEdges({
+      ...args, slugOf: () => null,
+      gtItems: [{ source: "9.9某卷", n: 1, target: "i missed the class this morning" }],
+    })).toEqual([]);
+  });
+});
+
 describe("落库的账本（data/realBank/writing/id-aliases.json）", () => {
   const bsAliases = (ALIASES.aliases || []).filter((a) => a.from_type === "bs");
   const byId = new Map(BS.items.map((it) => [it.id, it]));
@@ -95,6 +150,22 @@ describe("落库的账本（data/realBank/writing/id-aliases.json）", () => {
       expect(a.from).not.toBe(a.to);
       expect(slugOf(a.to)).not.toBe(slug);          // 保留方来自别的卷（跨卷重复才记别名）
     }
+  });
+
+  test("GT 对照那批：每条都能在 ground truth 里查到「这一卷考过这个答案句」", () => {
+    const gtBySet = new Map();
+    for (const g of GT.items || []) {
+      const k = bsAnswerKey(g.target);
+      if (!gtBySet.has(g.source)) gtBySet.set(g.source, new Set());
+      gtBySet.get(g.source).add(k);
+    }
+    const fromGt = bsAliases.filter((a) => a.reason === BS_ALIAS_REASON.GT_SAME_ITEM);
+    expect(fromGt.length).toBeGreaterThan(0);
+    const unsupported = fromGt.filter((a) => {
+      const kept = byId.get(a.to);
+      return !kept || !(gtBySet.get(a.from_source) || new Set()).has(bsAnswerKey(kept.answer));
+    });
+    expect(unsupported.map((a) => a.from)).toEqual([]);
   });
 
   test("邮件 / 讨论的别名没被造句这一批挤掉，_purpose 与生成器一致", () => {

@@ -32,7 +32,23 @@ const BS_ALIAS_REASON = Object.freeze({
   DUP_ANSWER: "duplicate_bs",
   /** 整份写作源文件与更早一套相同（3.20 ↔ 3.15），造句按题号逐题对应 */
   DUP_SET: "duplicate_set",
+  /** 真题 ground truth（data/realExam2026）记了这一卷考过这道题，题面取库里那条 */
+  GT_SAME_ITEM: "same_item_ground_truth",
 });
+
+/**
+ * 造句去重判据：答案句归一化（只剥 .,!?;: ，大小写与多余空白不算差别）。
+ * build_bank 的跨卷去重、别名回填、GT 对照都必须用同一把尺 —— 各写各的尺，
+ * 去重丢掉的那条和别名认回来的那条就会对不上，槽位白空着。
+ */
+function bsAnswerKey(answer) {
+  return String(answer || "")
+    .toLowerCase()
+    .replace(/[.,!?;:]/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .join(" ");
+}
 
 /** 造句 id 的题号后缀（bs_225_03 → "03"，bs_rf0610_1 → "1"）—— 补位宽度按源卷原样保留。 */
 function bsIdSuffix(id) {
@@ -99,4 +115,70 @@ function bsDupSetEdges({ dupSets = [], items = [], slugOf, dateOf }) {
   return edges;
 }
 
-module.exports = { WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAliasEntries, bsDupSetEdges, bsIdSuffix, bsIdForSlug };
+/**
+ * 真题 ground truth（data/realExam2026/writing/buildSentence.json）对照出来的别名。
+ *
+ * 为什么这条路值得走：GT 是按卷逐题转写的**校准锚**（CLAUDE.md：唯一标准锚点），它记了
+ * 「哪一场考了哪道句子」。而管线那一侧因为源料体检 blocking 整科扣下（2.8 / 2.23 / 3.24 /
+ * 3.29 / 4.18）或题面识图没覆盖，这些卷在库里一条题都没有 —— 可那些句子多数早就从**别的卷**
+ * 收进库了。把它们按别名还回去，等于零成本复原这几卷，而且用户做到的题面全部来自干净卷。
+ *
+ * 实测两个来源的卷归属对得上 196/212 = 92.5%，对不上的 16 条集中在源料本来就有问题的那几卷。
+ * 所以这里按**不冲突才落**：
+ *   · 这一卷已经有同一道题（原生或别名）→ 跳过；
+ *   · 库里根本没有这个答案句 → 跳过（那是真缺题，要靠识图/重扫抽题面，不是别名能补的）；
+ *   · GT 的题号已经被这一卷的现有 id 占了 → 跳过，不抢号也不另编号
+ *     （号被占 = 两个来源对这一卷的第 n 题说法不一致，该人工对原卷，不该在这里替它拍板）。
+ *
+ * @param {{gtItems, items, aliases, slugOf, dateOf}} args
+ *   gtItems  GT 的 buildSentence items（{source, date, n, target}）
+ *   items    落库后的造句（别名的保留方只能从这里挑）
+ *   aliases  已经记下的别名（去重 / 整卷同源那两批），用来判「这一卷已经有了」与「题号被占」
+ */
+function bsGroundTruthEdges({ gtItems = [], items = [], aliases = [], slugOf, dateOf } = {}) {
+  const byAnswer = new Map();
+  const byId = new Map();
+  for (const it of items) {
+    byId.set(String(it.id), it);
+    const k = bsAnswerKey(it.answer);
+    if (k && !byAnswer.has(k)) byAnswer.set(k, it);
+  }
+  // 这一卷已经有的答案句（原生 + 别名）
+  const owned = new Map();
+  const own = (set, k) => {
+    const s = String(set || "").trim();
+    if (!s || !k) return;
+    if (!owned.has(s)) owned.set(s, new Set());
+    owned.get(s).add(k);
+  };
+  for (const it of items) own(it.source, bsAnswerKey(it.answer));
+  const taken = new Set(byId.keys());
+  for (const a of aliases) {
+    taken.add(String(a.from));
+    const kept = byId.get(String(a.to));
+    if (kept) own(a.from_source, bsAnswerKey(kept.answer));
+  }
+
+  const edges = [];
+  for (const g of gtItems) {
+    const set = String(g?.source || "").trim();
+    const k = bsAnswerKey(g?.target);
+    if (!set || !k || g?.n == null) continue;
+    if ((owned.get(set) || new Set()).has(k)) continue;
+    const kept = byAnswer.get(k);
+    if (!kept || String(kept.source || "").trim() === set) continue;
+    const slug = slugOf(set);
+    if (!slug) continue;                                  // 不是 69 套源卷之一，不给它造槽位
+    const from = `bs_${slug}_${String(g.n).padStart(2, "0")}`;
+    if (taken.has(from)) continue;                        // 题号被占：两个来源说法不一，留给人工对原卷
+    taken.add(from);
+    own(set, k);
+    edges.push({ from, to: kept.id, reason: BS_ALIAS_REASON.GT_SAME_ITEM, fromSource: set, fromDate: g.date || dateOf(set) });
+  }
+  return edges;
+}
+
+module.exports = {
+  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
+  bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges, bsIdSuffix, bsIdForSlug,
+};

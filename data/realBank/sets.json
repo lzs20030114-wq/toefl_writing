@@ -1,6 +1,6 @@
 {
   "blueprint_version": "2026.1",
-  "generated": "2026-09-14",
+  "generated": "2026-09-15",
   "generated_by": "scripts/realbank/assemble_sets.mjs",
   "params": {
     "skeleton_min": 0.3,
@@ -113,18 +113,18 @@
       },
       "writing": {
         "sets_with_any": 68,
-        "native_complete": 36,
+        "native_complete": 40,
         "native_half": 21,
-        "native_scraps": 11,
+        "native_scraps": 7,
         "skeletons": 68,
-        "composites_complete": 34,
-        "composites_pure": 34,
+        "composites_complete": 37,
+        "composites_pure": 37,
         "dissolved": 0
       }
     },
     "exams_native": 0,
     "exams_mixed": 0,
-    "aliases_restored": 488,
+    "aliases_restored": 524,
     "type_sets": {
       "lcr": {
         "sets": 22,
@@ -169,10 +169,10 @@
         "partial": 4
       },
       "bs": {
-        "sets": 57,
-        "full": 21,
-        "near": 19,
-        "partial": 17
+        "sets": 62,
+        "full": 27,
+        "near": 16,
+        "partial": 19
       }
     }
   },
@@ -6414,13 +6414,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.167,
-          "got": 2,
+          "completeness": 0.583,
+          "got": 7,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 2,
+              "got": 7,
               "need": 12,
               "slots": [
                 {
@@ -6431,9 +6431,40 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 5,
+                  "status": "partial",
+                  "items": [
+                    {
+                      "id": "bs_314_06",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "bs_28_01"
+                    },
+                    {
+                      "id": "bs_424_05",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "bs_28_02"
+                    },
+                    {
+                      "id": "bs_314_08",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_28_03"
+                    },
+                    {
+                      "id": "bs_314_09",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_28_04"
+                    },
+                    {
+                      "id": "bs_314_10",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_28_05"
+                    }
+                  ]
                 },
                 {
                   "key": "email_11",
@@ -7264,13 +7295,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.083,
-          "got": 1,
+          "completeness": 0.333,
+          "got": 4,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 1,
+              "got": 4,
               "need": 12,
               "slots": [
                 {
@@ -7281,9 +7312,28 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 3,
+                  "status": "partial",
+                  "items": [
+                    {
+                      "id": "bs_317_01",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_223_03"
+                    },
+                    {
+                      "id": "bs_323_07",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_223_04"
+                    },
+                    {
+                      "id": "bs_427_10",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "bs_223_09"
+                    }
+                  ]
                 },
                 {
                   "key": "email_11",
@@ -9016,13 +9066,13 @@
       "date": "2026-03-06",
       "sections": {
         "writing": {
-          "completeness": 0.5,
-          "got": 6,
+          "completeness": 0.75,
+          "got": 9,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 6,
+              "got": 9,
               "need": 12,
               "slots": [
                 {
@@ -9033,9 +9083,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 4,
+                  "got": 7,
                   "status": "partial",
                   "items": [
+                    {
+                      "id": "bs_121c_01",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "bs_36_01"
+                    },
                     {
                       "id": "bs_36_03",
                       "nq": 1,
@@ -9045,6 +9101,18 @@
                       "id": "bs_36_04",
                       "nq": 1,
                       "q": 4
+                    },
+                    {
+                      "id": "bs_121c_05",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_36_05"
+                    },
+                    {
+                      "id": "bs_53_04",
+                      "nq": 1,
+                      "q": 6,
+                      "alias_of": "bs_36_06"
                     },
                     {
                       "id": "bs_36_07",
@@ -11285,13 +11353,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.833,
-          "got": 10,
+          "completeness": 1,
+          "got": 12,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 10,
+              "got": 12,
               "need": 12,
               "slots": [
                 {
@@ -11302,8 +11370,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 8,
-                  "status": "partial",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_317_01",
@@ -11316,9 +11384,21 @@
                       "q": 2
                     },
                     {
+                      "id": "bs_45_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_317_03"
+                    },
+                    {
                       "id": "bs_317_04",
                       "nq": 1,
                       "q": 4
+                    },
+                    {
+                      "id": "bs_323_03",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_317_05"
                     },
                     {
                       "id": "bs_317_06",
@@ -11546,13 +11626,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.833,
-          "got": 10,
+          "completeness": 0.917,
+          "got": 11,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 10,
+              "got": 11,
               "need": 12,
               "slots": [
                 {
@@ -11563,8 +11643,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 9,
-                  "status": "near",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_318_01",
@@ -11590,6 +11670,12 @@
                       "id": "bs_318_05",
                       "nq": 1,
                       "q": 5
+                    },
+                    {
+                      "id": "bs_411_08",
+                      "nq": 1,
+                      "q": 6,
+                      "alias_of": "bs_318_06"
                     },
                     {
                       "id": "bs_318_07",
@@ -12469,13 +12555,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.167,
-          "got": 2,
+          "completeness": 0.667,
+          "got": 8,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 2,
+              "got": 8,
               "need": 12,
               "slots": [
                 {
@@ -12486,9 +12572,46 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 6,
+                  "status": "partial",
+                  "items": [
+                    {
+                      "id": "bs_21b_09",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "bs_324_02"
+                    },
+                    {
+                      "id": "bs_225_06",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_324_03"
+                    },
+                    {
+                      "id": "bs_225_04",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_324_04"
+                    },
+                    {
+                      "id": "bs_225_07",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_324_05"
+                    },
+                    {
+                      "id": "bs_318_03",
+                      "nq": 1,
+                      "q": 7,
+                      "alias_of": "bs_324_07"
+                    },
+                    {
+                      "id": "bs_325_09",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "bs_324_09"
+                    }
+                  ]
                 },
                 {
                   "key": "email_11",
@@ -13245,13 +13368,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.167,
-          "got": 2,
+          "completeness": 0.25,
+          "got": 3,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 2,
+              "got": 3,
               "need": 12,
               "slots": [
                 {
@@ -13262,9 +13385,16 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 1,
+                  "status": "partial",
+                  "items": [
+                    {
+                      "id": "bs_21c_08",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_329_05"
+                    }
+                  ]
                 },
                 {
                   "key": "email_11",
@@ -14037,13 +14167,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.917,
-          "got": 11,
+          "completeness": 1,
+          "got": 12,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 11,
+              "got": 12,
               "need": 12,
               "slots": [
                 {
@@ -14054,8 +14184,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 9,
-                  "status": "near",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_317_01",
@@ -14079,6 +14209,12 @@
                       "nq": 1,
                       "q": 4,
                       "alias_of": "bs_45_04"
+                    },
+                    {
+                      "id": "bs_323_03",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_45_05"
                     },
                     {
                       "id": "bs_317_06",
@@ -14304,13 +14440,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.667,
-          "got": 8,
+          "completeness": 0.75,
+          "got": 9,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 8,
+              "got": 9,
               "need": 12,
               "slots": [
                 {
@@ -14321,9 +14457,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 6,
+                  "got": 7,
                   "status": "partial",
                   "items": [
+                    {
+                      "id": "bs_121c_09",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "bs_46_02"
+                    },
                     {
                       "id": "bs_46_04",
                       "nq": 1,
@@ -15673,13 +15815,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.167,
-          "got": 2,
+          "completeness": 0.917,
+          "got": 11,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 2,
+              "got": 11,
               "need": 12,
               "slots": [
                 {
@@ -15690,9 +15832,64 @@
                     10
                   ],
                   "need": 10,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 9,
+                  "status": "near",
+                  "items": [
+                    {
+                      "id": "bs_316_01",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "bs_418_01"
+                    },
+                    {
+                      "id": "bs_316_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_418_03"
+                    },
+                    {
+                      "id": "bs_316_04",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_418_04"
+                    },
+                    {
+                      "id": "bs_316_05",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_418_05"
+                    },
+                    {
+                      "id": "bs_316_06",
+                      "nq": 1,
+                      "q": 6,
+                      "alias_of": "bs_418_06"
+                    },
+                    {
+                      "id": "bs_316_07",
+                      "nq": 1,
+                      "q": 7,
+                      "alias_of": "bs_418_07"
+                    },
+                    {
+                      "id": "bs_316_08",
+                      "nq": 1,
+                      "q": 8,
+                      "alias_of": "bs_418_08"
+                    },
+                    {
+                      "id": "bs_316_09",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "bs_418_09"
+                    },
+                    {
+                      "id": "bs_316_10",
+                      "nq": 1,
+                      "q": 10,
+                      "alias_of": "bs_418_10"
+                    }
+                  ]
                 },
                 {
                   "key": "email_11",
@@ -16157,13 +16354,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.833,
-          "got": 10,
+          "completeness": 0.917,
+          "got": 11,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 10,
+              "got": 11,
               "need": 12,
               "slots": [
                 {
@@ -16174,9 +16371,15 @@
                     10
                   ],
                   "need": 10,
-                  "got": 8,
-                  "status": "partial",
+                  "got": 9,
+                  "status": "near",
                   "items": [
+                    {
+                      "id": "bs_21c_10",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "bs_424_02"
+                    },
                     {
                       "id": "bs_424_03",
                       "nq": 1,
@@ -16428,13 +16631,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.917,
-          "got": 11,
+          "completeness": 1,
+          "got": 12,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 11,
+              "got": 12,
               "need": 12,
               "slots": [
                 {
@@ -16445,8 +16648,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 9,
-                  "status": "near",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_32b_09",
@@ -16464,6 +16667,12 @@
                       "id": "bs_427_03",
                       "nq": 1,
                       "q": 3
+                    },
+                    {
+                      "id": "bs_rf0622_01",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_427_04"
                     },
                     {
                       "id": "bs_427_05",
@@ -16935,13 +17144,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.917,
-          "got": 11,
+          "completeness": 1,
+          "got": 12,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 11,
+              "got": 12,
               "need": 12,
               "slots": [
                 {
@@ -16952,8 +17161,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 9,
-                  "status": "near",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_429_01",
@@ -16965,6 +17174,12 @@
                       "nq": 1,
                       "q": 2,
                       "alias_of": "bs_429_02"
+                    },
+                    {
+                      "id": "bs_rf0615_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "bs_429_03"
                     },
                     {
                       "id": "bs_429_04",
@@ -17991,13 +18206,13 @@
           "unplaced": []
         },
         "writing": {
-          "completeness": 0.917,
-          "got": 11,
+          "completeness": 1,
+          "got": 12,
           "need": 12,
           "modules": {
             "1": {
               "form": "A",
-              "got": 11,
+              "got": 12,
               "need": 12,
               "slots": [
                 {
@@ -18008,8 +18223,8 @@
                     10
                   ],
                   "need": 10,
-                  "got": 9,
-                  "status": "near",
+                  "got": 10,
+                  "status": "full",
                   "items": [
                     {
                       "id": "bs_510_01",
@@ -18053,6 +18268,12 @@
                       "id": "bs_510_08",
                       "nq": 1,
                       "q": 8
+                    },
+                    {
+                      "id": "bs_128b_06",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "bs_510_09"
                     },
                     {
                       "id": "bs_510_10",
@@ -36869,6 +37090,172 @@
         ]
       },
       {
+        "id": "bs:317",
+        "type": "bs",
+        "set": "3.17新托福真题",
+        "date": "2026-03-17",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_317_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_45_03",
+            "alias_of": "bs_317_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_323_03",
+            "alias_of": "bs_317_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_225_04",
+            "alias_of": "bs_317_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:318",
+        "type": "bs",
+        "set": "3.18新托福真题",
+        "date": "2026-03-18",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_318_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_411_08",
+            "alias_of": "bs_318_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_318_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
         "id": "bs:321",
         "type": "bs",
         "set": "3.21新托福真题",
@@ -37196,6 +37583,96 @@
           {
             "id": "bs_321_10",
             "alias_of": "bs_41_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:45",
+        "type": "bs",
+        "set": "4.5新托福真题",
+        "date": "2026-04-05",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_317_01",
+            "alias_of": "bs_45_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_02",
+            "alias_of": "bs_45_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_45_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_04",
+            "alias_of": "bs_45_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_323_03",
+            "alias_of": "bs_45_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_06",
+            "alias_of": "bs_45_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_07",
+            "alias_of": "bs_45_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_225_04",
+            "alias_of": "bs_45_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_09",
+            "alias_of": "bs_45_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_10",
+            "alias_of": "bs_45_10",
             "nq": 1,
             "module": 1,
             "q": 10,
@@ -37536,6 +38013,175 @@
         ]
       },
       {
+        "id": "bs:427",
+        "type": "bs",
+        "set": "4.27新托福真题",
+        "date": "2026-04-27",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_32b_09",
+            "alias_of": "bs_427_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_413_07",
+            "alias_of": "bs_427_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_rf0622_01",
+            "alias_of": "bs_427_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_36_04",
+            "alias_of": "bs_427_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:429",
+        "type": "bs",
+        "set": "4.29新托福真题",
+        "date": "2026-04-29",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_429_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_427_10",
+            "alias_of": "bs_429_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_rf0615_03",
+            "alias_of": "bs_429_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_317_06",
+            "alias_of": "bs_429_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_429_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
         "id": "bs:56",
         "type": "bs",
         "set": "5.6新托福真题",
@@ -37619,6 +38265,91 @@
           {
             "id": "bs_415_10",
             "alias_of": "bs_56_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:510",
+        "type": "bs",
+        "set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "need": 10,
+        "got": 10,
+        "status": "full",
+        "items": [
+          {
+            "id": "bs_510_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_510_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_32a_03",
+            "alias_of": "bs_510_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_316_03",
+            "alias_of": "bs_510_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_510_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_510_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_34_09",
+            "alias_of": "bs_510_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_510_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_128b_06",
+            "alias_of": "bs_510_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_510_10",
             "nq": 1,
             "module": 1,
             "q": 10,
@@ -38734,80 +39465,6 @@
         ]
       },
       {
-        "id": "bs:318",
-        "type": "bs",
-        "set": "3.18新托福真题",
-        "date": "2026-03-18",
-        "need": 10,
-        "got": 9,
-        "status": "near",
-        "items": [
-          {
-            "id": "bs_318_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_03",
-            "nq": 1,
-            "module": 1,
-            "q": 3,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_04",
-            "nq": 1,
-            "module": 1,
-            "q": 4,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_318_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "bs_1"
-          }
-        ]
-      },
-      {
         "id": "bs:320",
         "type": "bs",
         "set": "3.20新托福真题",
@@ -38967,80 +39624,81 @@
         ]
       },
       {
-        "id": "bs:45",
+        "id": "bs:418",
         "type": "bs",
-        "set": "4.5新托福真题",
-        "date": "2026-04-05",
+        "set": "4.18新托福真题",
+        "date": "2026-04-18",
         "need": 10,
         "got": 9,
         "status": "near",
         "items": [
           {
-            "id": "bs_317_01",
-            "alias_of": "bs_45_01",
+            "id": "bs_316_01",
+            "alias_of": "bs_418_01",
             "nq": 1,
             "module": 1,
             "q": 1,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_02",
-            "alias_of": "bs_45_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_45_03",
+            "id": "bs_316_03",
+            "alias_of": "bs_418_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_04",
-            "alias_of": "bs_45_04",
+            "id": "bs_316_04",
+            "alias_of": "bs_418_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_06",
-            "alias_of": "bs_45_06",
+            "id": "bs_316_05",
+            "alias_of": "bs_418_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_316_06",
+            "alias_of": "bs_418_06",
             "nq": 1,
             "module": 1,
             "q": 6,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_07",
-            "alias_of": "bs_45_07",
+            "id": "bs_316_07",
+            "alias_of": "bs_418_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "bs_1"
           },
           {
-            "id": "bs_225_04",
-            "alias_of": "bs_45_08",
+            "id": "bs_316_08",
+            "alias_of": "bs_418_08",
             "nq": 1,
             "module": 1,
             "q": 8,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_09",
-            "alias_of": "bs_45_09",
+            "id": "bs_316_09",
+            "alias_of": "bs_418_09",
             "nq": 1,
             "module": 1,
             "q": 9,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_10",
-            "alias_of": "bs_45_10",
+            "id": "bs_316_10",
+            "alias_of": "bs_418_10",
             "nq": 1,
             "module": 1,
             "q": 10,
@@ -39127,151 +39785,73 @@
         ]
       },
       {
-        "id": "bs:427",
+        "id": "bs:424",
         "type": "bs",
-        "set": "4.27新托福真题",
-        "date": "2026-04-27",
+        "set": "4.24新托福真题",
+        "date": "2026-04-24",
         "need": 10,
         "got": 9,
         "status": "near",
         "items": [
           {
-            "id": "bs_32b_09",
-            "alias_of": "bs_427_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_413_07",
-            "alias_of": "bs_427_02",
+            "id": "bs_21c_10",
+            "alias_of": "bs_424_02",
             "nq": 1,
             "module": 1,
             "q": 2,
             "slot": "bs_1"
           },
           {
-            "id": "bs_427_03",
+            "id": "bs_424_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "bs_1"
           },
           {
-            "id": "bs_427_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_36_04",
-            "alias_of": "bs_427_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_427_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_427_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_427_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_427_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "bs_1"
-          }
-        ]
-      },
-      {
-        "id": "bs:429",
-        "type": "bs",
-        "set": "4.29新托福真题",
-        "date": "2026-04-29",
-        "need": 10,
-        "got": 9,
-        "status": "near",
-        "items": [
-          {
-            "id": "bs_429_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_427_10",
-            "alias_of": "bs_429_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_429_04",
+            "id": "bs_424_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "bs_1"
           },
           {
-            "id": "bs_429_05",
+            "id": "bs_424_05",
             "nq": 1,
             "module": 1,
             "q": 5,
             "slot": "bs_1"
           },
           {
-            "id": "bs_429_06",
+            "id": "bs_424_06",
             "nq": 1,
             "module": 1,
             "q": 6,
             "slot": "bs_1"
           },
           {
-            "id": "bs_317_06",
-            "alias_of": "bs_429_07",
+            "id": "bs_424_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "bs_1"
           },
           {
-            "id": "bs_429_08",
+            "id": "bs_424_08",
             "nq": 1,
             "module": 1,
             "q": 8,
             "slot": "bs_1"
           },
           {
-            "id": "bs_429_09",
+            "id": "bs_424_09",
             "nq": 1,
             "module": 1,
             "q": 9,
             "slot": "bs_1"
           },
           {
-            "id": "bs_429_10",
+            "id": "bs_424_10",
             "nq": 1,
             "module": 1,
             "q": 10,
@@ -39350,83 +39930,6 @@
           {
             "id": "bs_315_05",
             "alias_of": "bs_53_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "bs_1"
-          }
-        ]
-      },
-      {
-        "id": "bs:510",
-        "type": "bs",
-        "set": "5.10新托福真题",
-        "date": "2026-05-10",
-        "need": 10,
-        "got": 9,
-        "status": "near",
-        "items": [
-          {
-            "id": "bs_510_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_510_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_32a_03",
-            "alias_of": "bs_510_03",
-            "nq": 1,
-            "module": 1,
-            "q": 3,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_316_03",
-            "alias_of": "bs_510_04",
-            "nq": 1,
-            "module": 1,
-            "q": 4,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_510_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_510_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_34_09",
-            "alias_of": "bs_510_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_510_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_510_10",
             "nq": 1,
             "module": 1,
             "q": 10,
@@ -39802,141 +40305,6 @@
         ]
       },
       {
-        "id": "bs:317",
-        "type": "bs",
-        "set": "3.17新托福真题",
-        "date": "2026-03-17",
-        "need": 10,
-        "got": 8,
-        "status": "partial",
-        "items": [
-          {
-            "id": "bs_317_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_04",
-            "nq": 1,
-            "module": 1,
-            "q": 4,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_225_04",
-            "alias_of": "bs_317_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_317_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "bs_1"
-          }
-        ]
-      },
-      {
-        "id": "bs:424",
-        "type": "bs",
-        "set": "4.24新托福真题",
-        "date": "2026-04-24",
-        "need": 10,
-        "got": 8,
-        "status": "partial",
-        "items": [
-          {
-            "id": "bs_424_03",
-            "nq": 1,
-            "module": 1,
-            "q": 3,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_04",
-            "nq": 1,
-            "module": 1,
-            "q": 4,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_424_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "bs_1"
-          }
-        ]
-      },
-      {
         "id": "bs:428",
         "type": "bs",
         "set": "4.28新托福真题",
@@ -40276,6 +40644,70 @@
         ]
       },
       {
+        "id": "bs:36",
+        "type": "bs",
+        "set": "3.6新托福真题",
+        "date": "2026-03-06",
+        "need": 10,
+        "got": 7,
+        "status": "partial",
+        "items": [
+          {
+            "id": "bs_121c_01",
+            "alias_of": "bs_36_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_36_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_36_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_121c_05",
+            "alias_of": "bs_36_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_53_04",
+            "alias_of": "bs_36_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_36_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_315_05",
+            "alias_of": "bs_36_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
         "id": "bs:323",
         "type": "bs",
         "set": "3.23新托福真题",
@@ -40335,6 +40767,68 @@
             "nq": 1,
             "module": 1,
             "q": 9,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:46",
+        "type": "bs",
+        "set": "4.6新托福真题",
+        "date": "2026-04-06",
+        "need": 10,
+        "got": 7,
+        "status": "partial",
+        "items": [
+          {
+            "id": "bs_121c_09",
+            "alias_of": "bs_46_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_46_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_46_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_46_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_316_01",
+            "alias_of": "bs_46_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_46_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_46_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
             "slot": "bs_1"
           }
         ]
@@ -40451,55 +40945,111 @@
         ]
       },
       {
-        "id": "bs:46",
+        "id": "bs:324",
         "type": "bs",
-        "set": "4.6新托福真题",
-        "date": "2026-04-06",
+        "set": "3.24新托福真题",
+        "date": "2026-03-24",
         "need": 10,
         "got": 6,
         "status": "partial",
         "items": [
           {
-            "id": "bs_46_04",
+            "id": "bs_21b_09",
+            "alias_of": "bs_324_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_225_06",
+            "alias_of": "bs_324_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_225_04",
+            "alias_of": "bs_324_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "bs_1"
           },
           {
-            "id": "bs_46_05",
+            "id": "bs_225_07",
+            "alias_of": "bs_324_05",
             "nq": 1,
             "module": 1,
             "q": 5,
             "slot": "bs_1"
           },
           {
-            "id": "bs_46_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "bs_1"
-          },
-          {
-            "id": "bs_316_01",
-            "alias_of": "bs_46_07",
+            "id": "bs_318_03",
+            "alias_of": "bs_324_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "bs_1"
           },
           {
-            "id": "bs_46_08",
+            "id": "bs_325_09",
+            "alias_of": "bs_324_09",
             "nq": 1,
             "module": 1,
-            "q": 8,
+            "q": 9,
+            "slot": "bs_1"
+          }
+        ]
+      },
+      {
+        "id": "bs:28",
+        "type": "bs",
+        "set": "2.8新托福真题",
+        "date": "2026-02-08",
+        "need": 10,
+        "got": 5,
+        "status": "partial",
+        "items": [
+          {
+            "id": "bs_314_06",
+            "alias_of": "bs_28_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
             "slot": "bs_1"
           },
           {
-            "id": "bs_46_10",
+            "id": "bs_424_05",
+            "alias_of": "bs_28_02",
             "nq": 1,
             "module": 1,
-            "q": 10,
+            "q": 2,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_314_08",
+            "alias_of": "bs_28_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_314_09",
+            "alias_of": "bs_28_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "bs_1"
+          },
+          {
+            "id": "bs_314_10",
+            "alias_of": "bs_28_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
             "slot": "bs_1"
           }
         ]
@@ -40590,41 +41140,55 @@
         ]
       },
       {
-        "id": "bs:36",
+        "id": "bs:223",
         "type": "bs",
-        "set": "3.6新托福真题",
-        "date": "2026-03-06",
+        "set": "2.23新托福真题",
+        "date": "2026-02-23",
         "need": 10,
-        "got": 4,
+        "got": 3,
         "status": "partial",
         "items": [
           {
-            "id": "bs_36_03",
+            "id": "bs_317_01",
+            "alias_of": "bs_223_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "bs_1"
           },
           {
-            "id": "bs_36_04",
+            "id": "bs_323_07",
+            "alias_of": "bs_223_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "bs_1"
           },
           {
-            "id": "bs_36_07",
+            "id": "bs_427_10",
+            "alias_of": "bs_223_09",
             "nq": 1,
             "module": 1,
-            "q": 7,
+            "q": 9,
             "slot": "bs_1"
-          },
+          }
+        ]
+      },
+      {
+        "id": "bs:329",
+        "type": "bs",
+        "set": "3.29新托福真题",
+        "date": "2026-03-29",
+        "need": 10,
+        "got": 1,
+        "status": "partial",
+        "items": [
           {
-            "id": "bs_315_05",
-            "alias_of": "bs_36_08",
+            "id": "bs_21c_08",
+            "alias_of": "bs_329_05",
             "nq": 1,
             "module": 1,
-            "q": 8,
+            "q": 5,
             "slot": "bs_1"
           }
         ]
@@ -64171,6 +64735,161 @@
         "missing": []
       },
       {
+        "id": "writing:317",
+        "section": "writing",
+        "base_set": "3.17新托福真题",
+        "date": "2026-03-17",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_317_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_317_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_45_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "3.17新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_317_03"
+                  },
+                  {
+                    "id": "bs_317_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_323_03",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "3.17新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_317_05"
+                  },
+                  {
+                    "id": "bs_317_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_317_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_225_04",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "3.17新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_317_08"
+                  },
+                  {
+                    "id": "bs_317_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_317_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_317",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "3.17新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_127a",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "3.17新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_317"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 12
+          }
+        },
+        "missing": []
+      },
+      {
         "id": "writing:321",
         "section": "writing",
         "base_set": "3.21新托福真题",
@@ -64776,6 +65495,168 @@
                     "from": "4.1新托福真题",
                     "via": "native",
                     "alias_of": "disc_41"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 12
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "writing:45",
+        "section": "writing",
+        "base_set": "4.5新托福真题",
+        "date": "2026-04-05",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_317_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_01"
+                  },
+                  {
+                    "id": "bs_317_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_02"
+                  },
+                  {
+                    "id": "bs_45_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "4.5新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_317_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_04"
+                  },
+                  {
+                    "id": "bs_323_03",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_05"
+                  },
+                  {
+                    "id": "bs_317_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_06"
+                  },
+                  {
+                    "id": "bs_317_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_07"
+                  },
+                  {
+                    "id": "bs_225_04",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_08"
+                  },
+                  {
+                    "id": "bs_317_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_09"
+                  },
+                  {
+                    "id": "bs_317_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_45_10"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_317",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "email_45"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_127a",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "4.5新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_45"
                   }
                 ],
                 "got": 1,
@@ -65405,6 +66286,318 @@
         "missing": []
       },
       {
+        "id": "writing:427",
+        "section": "writing",
+        "base_set": "4.27新托福真题",
+        "date": "2026-04-27",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_32b_09",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "4.27新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_427_01"
+                  },
+                  {
+                    "id": "bs_413_07",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "4.27新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_427_02"
+                  },
+                  {
+                    "id": "bs_427_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_rf0622_01",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "4.27新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_427_04"
+                  },
+                  {
+                    "id": "bs_427_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_36_04",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "4.27新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_427_06"
+                  },
+                  {
+                    "id": "bs_427_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_427_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_427_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_427_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_427",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "4.27新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_128b",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "4.27新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_427"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 12
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "writing:429",
+        "section": "writing",
+        "base_set": "4.29新托福真题",
+        "date": "2026-04-29",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_429_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_427_10",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_429_02"
+                  },
+                  {
+                    "id": "bs_rf0615_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_429_03"
+                  },
+                  {
+                    "id": "bs_429_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_429_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_429_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_317_06",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_429_07"
+                  },
+                  {
+                    "id": "bs_429_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_429_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_429_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "4.29新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_rf0615",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "email_429"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_rf0615",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "4.29新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_429"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 12
+          }
+        },
+        "missing": []
+      },
+      {
         "id": "writing:56",
         "section": "writing",
         "base_set": "5.6新托福真题",
@@ -65555,6 +66748,163 @@
                     "from": "5.6新托福真题",
                     "via": "native",
                     "alias_of": "disc_56"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 12
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "writing:510",
+        "section": "writing",
+        "base_set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_510_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_510_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_32a_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_510_03"
+                  },
+                  {
+                    "id": "bs_316_03",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_510_04"
+                  },
+                  {
+                    "id": "bs_510_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_510_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_34_09",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_510_07"
+                  },
+                  {
+                    "id": "bs_510_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_128b_06",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_510_09"
+                  },
+                  {
+                    "id": "bs_510_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "5.10新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_127a",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "email_510"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_321",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_510"
                   }
                 ],
                 "got": 1,
@@ -67371,6 +68721,153 @@
         ]
       },
       {
+        "id": "writing:318",
+        "section": "writing",
+        "base_set": "3.18新托福真题",
+        "date": "2026-03-18",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 0.917,
+        "completeness": 0.917,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_318_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_411_08",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "3.18新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_318_06"
+                  },
+                  {
+                    "id": "bs_318_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_318_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "3.18新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 10,
+                "status": "full"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_rp0711",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "3.18新托福真题",
+                    "via": "native",
+                    "alias_of": "email_318"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              }
+            ],
+            "need": 12,
+            "got": 11
+          }
+        },
+        "missing": [
+          "M1/disc_12:0/1"
+        ]
+      },
+      {
         "id": "writing:320",
         "section": "writing",
         "base_set": "3.20新托福真题",
@@ -67677,10 +69174,10 @@
         ]
       },
       {
-        "id": "writing:45",
+        "id": "writing:418",
         "section": "writing",
-        "base_set": "4.5新托福真题",
-        "date": "2026-04-05",
+        "base_set": "4.18新托福真题",
+        "date": "2026-04-18",
         "forms": {
           "1": "A"
         },
@@ -67705,75 +69202,76 @@
                 "units": 10,
                 "items": [
                   {
-                    "id": "bs_317_01",
+                    "id": "bs_316_01",
                     "nq": 1,
                     "q": 1,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_01"
+                    "alias_of": "bs_418_01"
                   },
                   {
-                    "id": "bs_317_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "4.5新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_45_02"
-                  },
-                  {
-                    "id": "bs_45_03",
+                    "id": "bs_316_03",
                     "nq": 1,
                     "q": 3,
-                    "from": "4.5新托福真题",
-                    "via": "native"
+                    "from": "4.18新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_418_03"
                   },
                   {
-                    "id": "bs_317_04",
+                    "id": "bs_316_04",
                     "nq": 1,
                     "q": 4,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_04"
+                    "alias_of": "bs_418_04"
                   },
                   {
-                    "id": "bs_317_06",
+                    "id": "bs_316_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "4.18新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_418_05"
+                  },
+                  {
+                    "id": "bs_316_06",
                     "nq": 1,
                     "q": 6,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_06"
+                    "alias_of": "bs_418_06"
                   },
                   {
-                    "id": "bs_317_07",
+                    "id": "bs_316_07",
                     "nq": 1,
                     "q": 7,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_07"
+                    "alias_of": "bs_418_07"
                   },
                   {
-                    "id": "bs_225_04",
+                    "id": "bs_316_08",
                     "nq": 1,
                     "q": 8,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_08"
+                    "alias_of": "bs_418_08"
                   },
                   {
-                    "id": "bs_317_09",
+                    "id": "bs_316_09",
                     "nq": 1,
                     "q": 9,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_09"
+                    "alias_of": "bs_418_09"
                   },
                   {
-                    "id": "bs_317_10",
+                    "id": "bs_316_10",
                     "nq": 1,
                     "q": 10,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "bs_45_10"
+                    "alias_of": "bs_418_10"
                   }
                 ],
                 "got": 9,
@@ -67790,12 +69288,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "email_317",
+                    "id": "email_316",
                     "nq": 1,
                     "q": 11,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "email_45"
+                    "alias_of": "email_418"
                   }
                 ],
                 "got": 1,
@@ -67812,12 +69310,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "disc_127a",
+                    "id": "disc_316",
                     "nq": 1,
                     "q": 12,
-                    "from": "4.5新托福真题",
+                    "from": "4.18新托福真题",
                     "via": "native",
-                    "alias_of": "disc_45"
+                    "alias_of": "disc_418"
                   }
                 ],
                 "got": 1,
@@ -67984,10 +69482,10 @@
         ]
       },
       {
-        "id": "writing:427",
+        "id": "writing:424",
         "section": "writing",
-        "base_set": "4.27新托福真题",
-        "date": "2026-04-27",
+        "base_set": "4.24新托福真题",
+        "date": "2026-04-24",
         "forms": {
           "1": "A"
         },
@@ -68012,218 +69510,67 @@
                 "units": 10,
                 "items": [
                   {
-                    "id": "bs_32b_09",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "4.27新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_427_01"
-                  },
-                  {
-                    "id": "bs_413_07",
+                    "id": "bs_21c_10",
                     "nq": 1,
                     "q": 2,
-                    "from": "4.27新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native",
-                    "alias_of": "bs_427_02"
+                    "alias_of": "bs_424_02"
                   },
                   {
-                    "id": "bs_427_03",
+                    "id": "bs_424_03",
                     "nq": 1,
                     "q": 3,
-                    "from": "4.27新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_427_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_36_04",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "4.27新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_427_06"
-                  },
-                  {
-                    "id": "bs_427_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_427_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_427_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_427_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 9,
-                "status": "near"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_427",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "4.27新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_128b",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "4.27新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_427"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 11
-          }
-        },
-        "missing": [
-          "M1/bs_1:9/10"
-        ]
-      },
-      {
-        "id": "writing:429",
-        "section": "writing",
-        "base_set": "4.29新托福真题",
-        "date": "2026-04-29",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.917,
-        "completeness": 0.917,
-        "complete": true,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_429_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "4.29新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_427_10",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "4.29新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_429_02"
-                  },
-                  {
-                    "id": "bs_429_04",
+                    "id": "bs_424_04",
                     "nq": 1,
                     "q": 4,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_429_05",
+                    "id": "bs_424_05",
                     "nq": 1,
                     "q": 5,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_429_06",
+                    "id": "bs_424_06",
                     "nq": 1,
                     "q": 6,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_317_06",
+                    "id": "bs_424_07",
                     "nq": 1,
                     "q": 7,
-                    "from": "4.29新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_429_07"
-                  },
-                  {
-                    "id": "bs_429_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_429_09",
+                    "id": "bs_424_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "4.24新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_424_09",
                     "nq": 1,
                     "q": 9,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "bs_429_10",
+                    "id": "bs_424_10",
                     "nq": 1,
                     "q": 10,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
                   }
                 ],
@@ -68241,12 +69588,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "email_rf0615",
+                    "id": "email_21b",
                     "nq": 1,
                     "q": 11,
-                    "from": "4.29新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native",
-                    "alias_of": "email_429"
+                    "alias_of": "email_424"
                   }
                 ],
                 "got": 1,
@@ -68263,163 +69610,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "disc_rf0615",
+                    "id": "disc_424",
                     "nq": 1,
                     "q": 12,
-                    "from": "4.29新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_429"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 11
-          }
-        },
-        "missing": [
-          "M1/bs_1:9/10"
-        ]
-      },
-      {
-        "id": "writing:510",
-        "section": "writing",
-        "base_set": "5.10新托福真题",
-        "date": "2026-05-10",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.917,
-        "completeness": 0.917,
-        "complete": true,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_510_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "5.10新托福真题",
+                    "from": "4.24新托福真题",
                     "via": "native"
-                  },
-                  {
-                    "id": "bs_510_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "5.10新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_32a_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "5.10新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_510_03"
-                  },
-                  {
-                    "id": "bs_316_03",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "5.10新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_510_04"
-                  },
-                  {
-                    "id": "bs_510_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "5.10新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_510_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "5.10新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_34_09",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "5.10新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_510_07"
-                  },
-                  {
-                    "id": "bs_510_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "5.10新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_510_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "5.10新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 9,
-                "status": "near"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_127a",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "5.10新托福真题",
-                    "via": "native",
-                    "alias_of": "email_510"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_321",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "5.10新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_510"
                   }
                 ],
                 "got": 1,
@@ -69451,427 +70646,6 @@
         ]
       },
       {
-        "id": "writing:317",
-        "section": "writing",
-        "base_set": "3.17新托福真题",
-        "date": "2026-03-17",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.833,
-        "completeness": 0.833,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_317_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_317_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_317_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_317_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_317_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_225_04",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "3.17新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_317_08"
-                  },
-                  {
-                    "id": "bs_317_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_317_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 8,
-                "status": "partial"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_317",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "3.17新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_127a",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "3.17新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_317"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 10
-          }
-        },
-        "missing": [
-          "M1/bs_1:8/10"
-        ]
-      },
-      {
-        "id": "writing:318",
-        "section": "writing",
-        "base_set": "3.18新托福真题",
-        "date": "2026-03-18",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.833,
-        "completeness": 0.833,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_318_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_318_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "3.18新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 9,
-                "status": "near"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_rp0711",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "3.18新托福真题",
-                    "via": "native",
-                    "alias_of": "email_318"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 12,
-            "got": 10
-          }
-        },
-        "missing": [
-          "M1/bs_1:9/10",
-          "M1/disc_12:0/1"
-        ]
-      },
-      {
-        "id": "writing:424",
-        "section": "writing",
-        "base_set": "4.24新托福真题",
-        "date": "2026-04-24",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.833,
-        "completeness": 0.833,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_424_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_424_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 8,
-                "status": "partial"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_21b",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "4.24新托福真题",
-                    "via": "native",
-                    "alias_of": "email_424"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_424",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "4.24新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 10
-          }
-        },
-        "missing": [
-          "M1/bs_1:8/10"
-        ]
-      },
-      {
         "id": "writing:428",
         "section": "writing",
         "base_set": "4.28新托福真题",
@@ -70715,6 +71489,144 @@
         ]
       },
       {
+        "id": "writing:36",
+        "section": "writing",
+        "base_set": "3.6新托福真题",
+        "date": "2026-03-06",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 0.75,
+        "completeness": 0.75,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_121c_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_36_01"
+                  },
+                  {
+                    "id": "bs_36_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "3.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_36_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "3.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_121c_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_36_05"
+                  },
+                  {
+                    "id": "bs_53_04",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_36_06"
+                  },
+                  {
+                    "id": "bs_36_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "3.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_315_05",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_36_08"
+                  }
+                ],
+                "got": 7,
+                "status": "partial"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_121b",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "email_36"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_121b",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "3.6新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_36"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 9
+          }
+        },
+        "missing": [
+          "M1/bs_1:7/10"
+        ]
+      },
+      {
         "id": "writing:323",
         "section": "writing",
         "base_set": "3.23新托福真题",
@@ -70837,6 +71749,140 @@
                     "from": "3.23新托福真题",
                     "via": "native",
                     "alias_of": "disc_323"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 9
+          }
+        },
+        "missing": [
+          "M1/bs_1:7/10"
+        ]
+      },
+      {
+        "id": "writing:46",
+        "section": "writing",
+        "base_set": "4.6新托福真题",
+        "date": "2026-04-06",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 0.75,
+        "completeness": 0.75,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_121c_09",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "4.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_46_02"
+                  },
+                  {
+                    "id": "bs_46_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_46_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_46_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_316_01",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "4.6新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_46_07"
+                  },
+                  {
+                    "id": "bs_46_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "bs_46_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 7,
+                "status": "partial"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_46",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "4.6新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_46",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "4.6新托福真题",
+                    "via": "native"
                   }
                 ],
                 "got": 1,
@@ -71241,10 +72287,10 @@
         ]
       },
       {
-        "id": "writing:46",
+        "id": "writing:324",
         "section": "writing",
-        "base_set": "4.6新托福真题",
-        "date": "2026-04-06",
+        "base_set": "3.24新托福真题",
+        "date": "2026-03-24",
         "forms": {
           "1": "A"
         },
@@ -71269,47 +72315,52 @@
                 "units": 10,
                 "items": [
                   {
-                    "id": "bs_46_04",
+                    "id": "bs_21b_09",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_324_02"
+                  },
+                  {
+                    "id": "bs_225_06",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_324_03"
+                  },
+                  {
+                    "id": "bs_225_04",
                     "nq": 1,
                     "q": 4,
-                    "from": "4.6新托福真题",
-                    "via": "native"
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_324_04"
                   },
                   {
-                    "id": "bs_46_05",
+                    "id": "bs_225_07",
                     "nq": 1,
                     "q": 5,
-                    "from": "4.6新托福真题",
-                    "via": "native"
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_324_05"
                   },
                   {
-                    "id": "bs_46_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "4.6新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_316_01",
+                    "id": "bs_318_03",
                     "nq": 1,
                     "q": 7,
-                    "from": "4.6新托福真题",
+                    "from": "3.24新托福真题",
                     "via": "native",
-                    "alias_of": "bs_46_07"
+                    "alias_of": "bs_324_07"
                   },
                   {
-                    "id": "bs_46_08",
+                    "id": "bs_325_09",
                     "nq": 1,
-                    "q": 8,
-                    "from": "4.6新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_46_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "4.6新托福真题",
-                    "via": "native"
+                    "q": 9,
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_324_09"
                   }
                 ],
                 "got": 6,
@@ -71326,11 +72377,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "email_46",
+                    "id": "email_22",
                     "nq": 1,
                     "q": 11,
-                    "from": "4.6新托福真题",
-                    "via": "native"
+                    "from": "3.24新托福真题",
+                    "via": "native",
+                    "alias_of": "email_324"
                   }
                 ],
                 "got": 1,
@@ -71347,10 +72399,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "disc_46",
+                    "id": "disc_324",
                     "nq": 1,
                     "q": 12,
-                    "from": "4.6新托福真题",
+                    "from": "3.24新托福真题",
                     "via": "native"
                   }
                 ],
@@ -71364,6 +72416,131 @@
         },
         "missing": [
           "M1/bs_1:6/10"
+        ]
+      },
+      {
+        "id": "writing:28",
+        "section": "writing",
+        "base_set": "2.8新托福真题",
+        "date": "2026-02-08",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 0.583,
+        "completeness": 0.583,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "bs_1",
+                "type": "bs",
+                "band": [
+                  1,
+                  10
+                ],
+                "need": 10,
+                "units": 10,
+                "items": [
+                  {
+                    "id": "bs_314_06",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_28_01"
+                  },
+                  {
+                    "id": "bs_424_05",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_28_02"
+                  },
+                  {
+                    "id": "bs_314_08",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_28_03"
+                  },
+                  {
+                    "id": "bs_314_09",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_28_04"
+                  },
+                  {
+                    "id": "bs_314_10",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_28_05"
+                  }
+                ],
+                "got": 5,
+                "status": "partial"
+              },
+              {
+                "key": "email_11",
+                "type": "email",
+                "band": [
+                  11,
+                  11
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "email_314",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "email_28"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              },
+              {
+                "key": "disc_12",
+                "type": "disc",
+                "band": [
+                  12,
+                  12
+                ],
+                "need": 1,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "disc_314",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "2.8新托福真题",
+                    "via": "native",
+                    "alias_of": "disc_28"
+                  }
+                ],
+                "got": 1,
+                "status": "full"
+              }
+            ],
+            "need": 12,
+            "got": 7
+          }
+        },
+        "missing": [
+          "M1/bs_1:5/10"
         ]
       },
       {
@@ -71486,120 +72663,6 @@
         ]
       },
       {
-        "id": "writing:36",
-        "section": "writing",
-        "base_set": "3.6新托福真题",
-        "date": "2026-03-06",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.5,
-        "completeness": 0.5,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [
-                  {
-                    "id": "bs_36_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "3.6新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_36_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "3.6新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_36_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "3.6新托福真题",
-                    "via": "native"
-                  },
-                  {
-                    "id": "bs_315_05",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "3.6新托福真题",
-                    "via": "native",
-                    "alias_of": "bs_36_08"
-                  }
-                ],
-                "got": 4,
-                "status": "partial"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_121b",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "3.6新托福真题",
-                    "via": "native",
-                    "alias_of": "email_36"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_121b",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "3.6新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_36"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 6
-          }
-        },
-        "missing": [
-          "M1/bs_1:4/10"
-        ]
-      },
-      {
         "id": "writing:21c",
         "section": "writing",
         "base_set": "2.1新托福真题C卷",
@@ -71704,15 +72767,15 @@
         ]
       },
       {
-        "id": "writing:28",
+        "id": "writing:223",
         "section": "writing",
-        "base_set": "2.8新托福真题",
-        "date": "2026-02-08",
+        "base_set": "2.23新托福真题",
+        "date": "2026-02-23",
         "forms": {
           "1": "A"
         },
-        "completeness_before": 0.167,
-        "completeness": 0.167,
+        "completeness_before": 0.333,
+        "completeness": 0.333,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -71730,9 +72793,34 @@
                 ],
                 "need": 10,
                 "units": 10,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "bs_317_01",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_223_03"
+                  },
+                  {
+                    "id": "bs_323_07",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_223_04"
+                  },
+                  {
+                    "id": "bs_427_10",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "2.23新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_223_09"
+                  }
+                ],
+                "got": 3,
+                "status": "partial"
               },
               {
                 "key": "email_11",
@@ -71745,12 +72833,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "email_314",
+                    "id": "email_511",
                     "nq": 1,
                     "q": 11,
-                    "from": "2.8新托福真题",
+                    "from": "2.23新托福真题",
                     "via": "native",
-                    "alias_of": "email_28"
+                    "alias_of": "email_223"
                   }
                 ],
                 "got": 1,
@@ -71765,109 +72853,18 @@
                 ],
                 "need": 1,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "disc_314",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "2.8新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_28"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 2
-          }
-        },
-        "missing": [
-          "M1/bs_1:0/10"
-        ]
-      },
-      {
-        "id": "writing:324",
-        "section": "writing",
-        "base_set": "3.24新托福真题",
-        "date": "2026-03-24",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.167,
-        "completeness": 0.167,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
                 "items": [],
                 "got": 0,
                 "status": "empty"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_22",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "3.24新托福真题",
-                    "via": "native",
-                    "alias_of": "email_324"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_324",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "3.24新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
               }
             ],
             "need": 12,
-            "got": 2
+            "got": 4
           }
         },
         "missing": [
-          "M1/bs_1:0/10"
+          "M1/bs_1:3/10",
+          "M1/disc_12:0/1"
         ]
       },
       {
@@ -71878,8 +72875,8 @@
         "forms": {
           "1": "A"
         },
-        "completeness_before": 0.167,
-        "completeness": 0.167,
+        "completeness_before": 0.25,
+        "completeness": 0.25,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -71897,9 +72894,18 @@
                 ],
                 "need": 10,
                 "units": 10,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "bs_21c_08",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "3.29新托福真题",
+                    "via": "native",
+                    "alias_of": "bs_329_05"
+                  }
+                ],
+                "got": 1,
+                "status": "partial"
               },
               {
                 "key": "email_11",
@@ -71946,95 +72952,11 @@
               }
             ],
             "need": 12,
-            "got": 2
+            "got": 3
           }
         },
         "missing": [
-          "M1/bs_1:0/10"
-        ]
-      },
-      {
-        "id": "writing:418",
-        "section": "writing",
-        "base_set": "4.18新托福真题",
-        "date": "2026-04-18",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.167,
-        "completeness": 0.167,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_316",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "4.18新托福真题",
-                    "via": "native",
-                    "alias_of": "email_418"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "disc_316",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "4.18新托福真题",
-                    "via": "native",
-                    "alias_of": "disc_418"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              }
-            ],
-            "need": 12,
-            "got": 2
-          }
-        },
-        "missing": [
-          "M1/bs_1:0/10"
+          "M1/bs_1:1/10"
         ]
       },
       {
@@ -72453,82 +73375,6 @@
         ]
       },
       {
-        "id": "writing:223",
-        "section": "writing",
-        "base_set": "2.23新托福真题",
-        "date": "2026-02-23",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.083,
-        "completeness": 0.083,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "bs_1",
-                "type": "bs",
-                "band": [
-                  1,
-                  10
-                ],
-                "need": 10,
-                "units": 10,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "email_11",
-                "type": "email",
-                "band": [
-                  11,
-                  11
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "email_511",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "2.23新托福真题",
-                    "via": "native",
-                    "alias_of": "email_223"
-                  }
-                ],
-                "got": 1,
-                "status": "full"
-              },
-              {
-                "key": "disc_12",
-                "type": "disc",
-                "band": [
-                  12,
-                  12
-                ],
-                "need": 1,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 12,
-            "got": 1
-          }
-        },
-        "missing": [
-          "M1/bs_1:0/10",
-          "M1/disc_12:0/1"
-        ]
-      },
-      {
         "id": "writing:523",
         "section": "writing",
         "base_set": "5.23新托福真题",
@@ -72685,6 +73531,7 @@
       "writing:314",
       "writing:315",
       "writing:316",
+      "writing:317",
       "writing:320",
       "writing:321",
       "writing:325",
@@ -72696,7 +73543,9 @@
       "writing:411",
       "writing:413",
       "writing:415",
+      "writing:418",
       "writing:420",
+      "writing:424",
       "writing:427",
       "writing:429",
       "writing:56",
