@@ -81,8 +81,10 @@ function bsAliasEntries(edges = []) {
       from_type: "bs",
       to_type: "bs",
       reason: e.reason || BS_ALIAS_REASON.DUP_ANSWER,
-      from_source: e.fromSource ? String(e.fromSource) : null,
-      from_date: e.fromDate ? String(e.fromDate) : null,
+      // 边用驼峰（fromSource），落库的条目用下划线（from_source）—— 两种都认：
+      // 把条目再喂回来是很容易犯的错，认错一次就是整批别名 from_source 变 null、前端全丢。
+      from_source: e.fromSource || e.from_source ? String(e.fromSource || e.from_source) : null,
+      from_date: e.fromDate || e.from_date ? String(e.fromDate || e.from_date) : null,
     });
   }
   return [...byFrom.values()].sort((a, b) => (a.from < b.from ? -1 : a.from > b.from ? 1 : 0));

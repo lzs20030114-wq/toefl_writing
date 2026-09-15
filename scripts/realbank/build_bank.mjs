@@ -841,16 +841,21 @@ function buildWriting(files, stats) {
   out.bs = bs;
   stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
   // 整份写作源文件与更早一套相同而被跳过的卷：造句按题号逐题对应（邮件 / 讨论在 recallWriting 里已按同一口径记过）。
-  const bsEdges = bsAliasEntries([
+  // 边（fromSource 驼峰）与条目（from_source 下划线）是两种形状，**别把条目再当边喂回去** ——
+  // 那样 bsAliasEntries 读不到 e.fromSource，from_source 会全写成 null，
+  // 前端的 bsRecycledRaws 靠这个字段定位卷，null 就等于这条别名整条作废
+  // （2026-09-15 实测：197 条里 168 条这么丢的，专区造句从 545 掉回 386）。
+  const bsEdges = [
     ...bsAliasEdges,
     ...bsDupSetEdges({ dupSets, items: out.bs, slugOf: setSlug, dateOf: setDate }),
-  ]);
+  ];
   // 源料体检把写作整科扣下的卷（2.8 / 2.23 / 3.24 / 3.29 / 4.18）在库里一条题都没有，
   // 但 GT 记着它们考过的句子 —— 多数早就从别的卷收进库了，按别名还回去（判据见 ./bs_aliases.js）。
   stats.wBsAliases = bsAliasEntries([
     ...bsEdges,
     ...bsGroundTruthEdges({
-      gtItems: readGtBuildSentence(), items: out.bs, aliases: bsEdges, slugOf: setSlug, dateOf: setDate,
+      gtItems: readGtBuildSentence(), items: out.bs,
+      aliases: bsAliasEntries(bsEdges), slugOf: setSlug, dateOf: setDate,
     }),
   ]);
   return out;
