@@ -97,7 +97,24 @@ async function splitInterview(qs) {
 
 const words = (s) => String(s || "").trim().split(/\s+/).filter(Boolean).length;
 
+/**
+ * 本机跑要靠 .env.local 里的 DEEPSEEK_API_KEY —— 与 audit_answers / structure_set /
+ * render_real_audio 同一份读法。少了它，面试那半边一开口就 "Missing DEEPSEEK_API_KEY"，
+ * 而复述那半边（零 token）已经算完却还没落盘，等于整条命令白跑。
+ */
+function loadEnv() {
+  for (const p of [".env.local", ".env"]) {
+    try {
+      fs.readFileSync(path.join(process.cwd(), p), "utf8").split(/\r?\n/).forEach((line) => {
+        const m = line.match(/^\s*(\w+)\s*=\s*(.*)$/);
+        if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, "");
+      });
+    } catch { /* 靠进程环境变量 */ }
+  }
+}
+
 async function main() {
+  loadEnv();
   const prev = readJson(OUT, {});
   const out = { interview: { ...(prev.interview || {}) }, repeat: { ...(prev.repeat || {}) } };
 
@@ -130,13 +147,24 @@ async function main() {
     + `（约 ¥${(todo.length * 0.004).toFixed(3)}，每次几百 token）`);
   if (DRY) { console.log("（--dry，未调 API、未写文件）"); return; }
 
+  // 复述那半边是零 token 算完的，面试半边一旦系统性失败（缺 key / 401 / 代理坏了）就整条
+  // 命令抛栈退出 —— 白算一遍还不落盘。改成：记下失败原因、停掉剩余调用，照样把已有结果写盘。
+  let apiDown = null;
   for (const x of todo) {
+    if (apiDown) break;
     const qs = (x.questions || []).map((q) => String(q || "").trim()).filter(Boolean);
     let entry;
     if (qs.length < 3) {
       entry = { verdict: "review", problems: [`GT 只有 ${qs.length} 句，合不出 3 题`] };
     } else {
-      const { groups, why } = await splitInterview(qs);
+      let groups = null;
+      let why = "";
+      try {
+        ({ groups, why } = await splitInterview(qs));
+      } catch (e) {
+        apiDown = e && e.message ? e.message : String(e);
+        break;
+      }
       if (!groups) {
         entry = { verdict: "review", problems: [`分组不过机械校验：${why}`] };
       } else {
@@ -167,6 +195,11 @@ async function main() {
   const okI = Object.values(out.interview).filter((v) => v.verdict === "ok").length;
   const okR = Object.values(out.repeat).filter((v) => v.verdict === "ok").length;
   console.log(`\n→ ${path.relative(ROOT, OUT)}：面试 ${okI}/${Object.keys(out.interview).length} 套 ok，复述 ${okR}/${Object.keys(out.repeat).length} 套 ok`);
+  if (apiDown) {
+    console.error(`\n⚠ 面试那半边没跑完：${apiDown}`);
+    console.error("  复述的结果已经落盘（零 token，不用重跑）。把 DEEPSEEK_API_KEY 放进 .env.local 再跑一次，只补面试。");
+    process.exitCode = 1;
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
