@@ -82,6 +82,7 @@ AUDIO_EXT = (".m4a", ".mp3", ".wav", ".aac", ".flac")
 ISLAND_GAP = 4.0        # 岛与岛之间的最短静音（秒）
 MAT_MIN_WORDS = 40      # 没认出旁白时，够这么长才当材料
 LCR_MAX_WORDS = 25      # LCR 刺激句的最长词数
+NOISE_MAX_WORDS = 2     # 一两个词的孤岛 = ASR 残片（真题最短刺激句 3 词）
 CUE_MAX_WORDS = 16      # 旁白句的最长词数
 # 开场音量说明的最长词数：2.25 那段「To adjust the volume, select the volume icon…」71 词，旧上限 60 把它当成了材料，
 # 整个 M1 平白多出一段。真材料里不会出现音量调试的说法，放宽不会误吞材料。
@@ -321,6 +322,11 @@ def tag_islands(words):
             rec["tag"] = "intro"
         elif len(ws) >= MAT_MIN_WORDS:
             rec.update(tag="mat", body=sents)
+        elif len(ws) <= NOISE_MAX_WORDS:
+            # 一两个词的孤岛是 ASR 在开场提示 / 静音上掉出来的残片（5.10_v2 开头的 "green."），
+            # 真题最短刺激句也有 3 个词（data/realExam2026：The classroom's cold.）—— 当噪声丢掉，
+            # 否则会被当成多出来的一句 LCR，整个 M1 对不上蓝图。
+            rec["tag"] = "noise"
         elif len(ws) <= LCR_MAX_WORDS:
             rec["tag"] = "lcr"
         else:
@@ -369,6 +375,8 @@ def parse_modules(islands):
 
     for isl in islands:
         t = isl["tag"]
+        if t == "noise":
+            continue
         if t == "intro":
             if cur and cur["mats"]:
                 close()

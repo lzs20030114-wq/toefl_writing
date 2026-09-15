@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 85,
+  "count": 89,
   "items": [
     {
       "id": "real_lat_121b_1_25",
@@ -2867,36 +2867,41 @@
       "audio_source": "original"
     },
     {
-      "id": "real_lat_48_2_08",
+      "id": "real_lat_45_2_08",
       "difficulty": "medium",
-      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_48_2_08.mp3?v=mu37nczn",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_45_2_08.mp3?v=mu39hwhk",
       "asr_similarity": 1,
       "source_notes": [
         "stem_duplicate:Q9/Q10 同组题干逐字相同（剔 Q10）"
       ],
       "real": true,
       "tier": "recalled",
-      "source": "4.8新托福真题",
-      "date": "2026-04-08",
+      "source": "4.5新托福真题",
+      "date": "2026-04-05",
       "source_flags": [
         {
           "code": "duplicate_cluster",
           "severity": "warn",
-          "detail": "与 3.2新托福真题A卷、3.2新托福真题B卷、4.11新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+          "detail": "与 3.11新托福真题、3.15新托福真题、3.16新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "section_gap",
+          "severity": "warn",
+          "detail": "listening 科缺 5 题（配对 42／满分 47）。"
         }
       ],
       "subject": "general",
       "topic": "",
-      "transcript": "Nanoparticles are particles whose size is less than one ten-thousandth of a millimeter. Super tiny. Nanoparticles have numerous applications. My family had a picnic last Saturday. We used sunscreen to avoid sunburn. Our sunscreen contains titanium dioxide, which has been used in sunscreen for decades. You used to end up with these horrible-looking white smears all over your skin while wearing it. But our new sunscreen's titanium dioxide comes in nanoparticles. They block ultraviolet sunlight, but are transparent. The sun blocks completely invisible on your skin, not smeary white. Another example, the metal silver has antimicrobial properties. The problem is, you can't put regular metal on a wound. But in ointment with silver nanoparticles, we can actually apply that to stop bacterial growth. We did it when my son scraped his knee at the picnic. Humans have actually used nanoparticles for millennia. Take ancient Rome's tesserae. Tesserae are tiny bits of highly colorful glass that the Romans arranged to create various images. Many Roman tesserae, especially pink ones, contain gold nanoparticles. The particles affect how light interacts with the glass and create the color. Did the Romans know what they were doing? Well, they probably didn't understand the physics of it. But some glass workshop could realize that gold foil, beaten to an extremely thin layer, produces bright colors when heated between glass layers. And the technique was perfected and spread. All pink tesserae contain gold nanoparticles at between 10 and 30 parts per million. That's so consistent, so it's definitely not random.",
+      "transcript": "Imagine working in an office where every employee is smiling and enthusiastic. How would it affect your productivity? You'd probably be more productive. But why? See, happy individuals can spread their positive energy, influencing the mood of those around them. This is called emotional contagion. You know when somebody yawns because they're tired or bored? It can make others around them yawn. Well, in this case, instead of yawns, optimism and motivation are spreading. Emotional contagion can happen because of mirror neurons. Mirror neurons fire when you notice someone else's emotion, which makes you feel it too. Importantly, this happens subconsciously. You aren't aware of it or thinking about it when it happens. Now, happiness doesn't just come from perks. Sure, free snacks can help office morale. But real happiness stems from meaningful work, autonomy, and a culture of appreciation. Leadership really sets the tone for that. In turn, happiness enhances creativity, problem-solving skills, things like that. So, when you're happy, you're not just feeling good, you're thinking better, which motivates you to work better. A study in a leading business magazine takes this further. The authors found that happiness, yes, from a company's leaders to its employees. But what I find remarkable is that the study found that it also extends to the customers or clients. With a positive work environment, the employees feel more committed and engaged. They serve clients better, improving their sense of well-being. And in healthcare settings, that means better health outcomes for clients.",
       "questions": [
         {
-          "type": "main_idea",
-          "stem": "What is the talk mainly about?",
+          "type": "detail",
+          "stem": "What does the speaker mainly discuss?",
           "options": {
-            "A": "Recent advances in nanotechnology",
-            "B": "A problem with nanotechnology",
-            "C": "The physics of nanotechnology",
-            "D": "Various uses of nanotechnology"
+            "A": "A new way to help employees be happy at work",
+            "B": "A study about the kinds of jobs that people enjoy the most",
+            "C": "A strategy to increase productivity through office design",
+            "D": "A factor that can increase people's effectiveness at work"
           },
           "answer": "D",
           "explanation": "",
@@ -2904,12 +2909,12 @@
         },
         {
           "type": "detail",
-          "stem": "What advantage of a new sunscreen does the speaker mention?",
+          "stem": "Why does the speaker mention yawning?",
           "options": {
-            "A": "It is invisible when applied on skin.",
-            "B": "It can be used in any weather.",
-            "C": "It does not contain titanium dioxide.",
-            "D": "It is effective when used in tiny amounts."
+            "A": "To illustrate how emotions spread in a workplace",
+            "B": "To suggest that certain emotions are difficult to control",
+            "C": "To highlight the difficulty of motivating tired workers",
+            "D": "To explain a common cause of low productivity"
           },
           "answer": "A",
           "explanation": "",
@@ -2917,16 +2922,283 @@
         },
         {
           "type": "detail",
-          "stem": "Why does the speaker mention the amount of gold nanoparticles in pink tesserae?",
+          "stem": "What is the speaker's attitude while describing a study in a business magazine?",
           "options": {
-            "A": "To help explain why most of the tesserae were very expensive",
-            "B": "To help people understand what ancient Roman tesserae looked like",
-            "C": "To emphasize an effect of heating gold nanoparticles between layers of glass",
-            "D": "To argue that the Romans knew how to use tiny particles for coloring tesserae"
+            "A": "Excited by the idea that well-rested workers make better decisions",
+            "B": "Unsure whether happy leaders have a long-lasting effect on employees",
+            "C": "Impressed by the extended effects of a happy workplace",
+            "D": "Hopeful that leaders will pay more attention to customer service"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 11
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lat_510v2_2_08",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_510v2_2_08.mp3?v=mu39hwyz",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.10新托福真题_v2",
+      "date": "2026-05-10",
+      "source_flags": [],
+      "subject": "general",
+      "topic": "",
+      "transcript": "I'm sure you're familiar with ostriches, the large, flightless birds from Africa, and you've heard of Australian emus. There are several species of large, flightless birds on different continents. They're all from the same group called Palaeognaths and are genetically related, meaning they're descendants of the same ancestor species evolved over time into the present-day species. But how did they end up on different continents? One theory was rooted in Earth's geological together as one giant supercontinent. Later, they slowly drifted apart. So maybe Palaeognaths' flightless ancestor species lived on that supercontinent, and the descendants evolved into separate species after it split into today's land masses? However, recent genetic research has found that the ancestor Palaeognath hadn't appeared until many million years after the supercontinent had already broken apart. There goes that idea. So how did the birds end up this way? Well, in 2025, researchers studied the fossilized bone of an ancient Palaeognath called the Lithornis, which could be the ancestor of today's Palaeognaths. And from the breastbone's shape, they determined the Lithornis could fly great distances. It must have established populations on Africa, Australia, and elsewhere. Initially, the thornis used flight to escape predatory dinosaurs. But after the dinosaurs went extinct, it no longer needed to waste its energy flying. It could use its specialized beak to find food in the ground. Over time, in different ways on each land mass, its descendants' species lost the ability to fly.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What question about paleognaths does the speaker mainly discuss?",
+          "options": {
+            "A": "How researchers studied adaptations of modern paleognaths",
+            "B": "When ancient paleognaths began to evolve separately",
+            "C": "Whether different paleognaths are genetically related",
+            "D": "How paleognath species ended up on different continents"
           },
           "answer": "D",
           "explanation": "",
-          "source_q": 11
+          "source_q": 8
+        },
+        {
+          "type": "detail",
+          "stem": "What attitude regarding paleognaths does the speaker express at the beginning of the talk?",
+          "options": {
+            "A": "He is confident that listeners know some species of them.",
+            "B": "He is concerned that some species of them can go extinct.",
+            "C": "He is impressed with how long they have existed.",
+            "D": "He is eager to find out the results of a future study about them."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 9
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker emphasize about the supercontinent?",
+          "options": {
+            "A": "It may have been smaller than previously thought.",
+            "B": "It may have destroyed fossil evidence of paleognaths.",
+            "C": "It existed long before the ancestor species of paleognaths appeared.",
+            "D": "Its conditions were not ideal for paleognath survival."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 10
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lat_511_1_25",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_511_1_25.mp3?v=mu39hxai",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.11新托福真题",
+      "date": "2026-05-11",
+      "source_flags": [],
+      "subject": "general",
+      "topic": "",
+      "transcript": "Let's talk about a classic example of land art. Spiral Jetty by Robert Smithson. Picture yourself at the edge of the Great Salt Lake in the state of Utah in the United States. Stretching out into the water is a massive spiral made of dark basalt rocks about 1,500 feet long. The title tells you a lot. A jetty is a structure that sticks out into a body of water, usually to protect a shoreline or dock. Smithson took that idea and twisted it, literally, into a spiral. Land art is an art movement that wanted to break free from museums and galleries and put art directly into nature. Smithson was fascinated by big concepts like geological time and change. He never intended Spiral Jetty to be permanent. The lake rises and falls, salt crystals form on the rocks, and the spiral slowly transforms. He wanted people to experience that reality firsthand, to make the journey and see the work in its natural setting. Here's the irony, though. Relatively few people have actually seen Spiral Jetty firsthand. Most people know it only through photographs and films that have been made about it. All this undermines Smithson's idea because the work is supposedly about being there, about sensing its scale and its shifting relationship with the Great Salt Lake. When we only see pictures, it becomes a static image, raising questions about whether land art, or at least this particular example of land art, can actually ever fulfill its intent.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the location of the artwork by Robert Smithson that the speaker discusses?",
+          "options": {
+            "A": "A forest",
+            "B": "A lake",
+            "C": "A mountain top",
+            "D": "A desert"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 25
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker emphasize about the physical nature of Spiral Jetty?",
+          "options": {
+            "A": "It was constructed using materials meant to resist weathering.",
+            "B": "It was designed without consideration of its surrounding environment.",
+            "C": "It requires frequent human maintenance to preserve its form.",
+            "D": "It is shaped by its ongoing interaction with its natural environment."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 26
+        },
+        {
+          "type": "inference",
+          "stem": "What does the speaker imply was Smithson's attitude toward art museums?",
+          "options": {
+            "A": "He believed that they were the only way to give large numbers of people access to great art.",
+            "B": "He felt that they were necessary to preserve artworks from the effects of time.",
+            "C": "He felt that they limited people's experience of art.",
+            "D": "He believed that they should be located far from big cities."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 27
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker mention that Spiral Jetty is mainly known through photographs and movies?",
+          "options": {
+            "A": "To point out that Smithson was an artist of wide-ranging talents",
+            "B": "To emphasize the enormous fame that the work enjoys",
+            "C": "To introduce a criticism that is made of the work",
+            "D": "To suggest that Smithson's views about Land Art changed since he created the work"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 28
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lat_523_1_25",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_523_1_25.mp3?v=mu39hxlr",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.23新托福真题",
+      "date": "2026-05-23",
+      "source_flags": [],
+      "subject": "general",
+      "topic": "",
+      "transcript": "Today, let's talk about the ancient Maya civilization and explore a fascinating revelation about its decline, a vast civilization with impressive cities and flourishing culture that suddenly crumbled into history. For years, scholars have debated what might have happened. And now, recent research has brought stalagmites into the spotlight. Stalagmites, those formations rising up from the floor of a cave, are more than just geological wonders. They serve as climate records, capturing changes in precipitation over thousands of years. In 2025, scientists analyzed stalagmites from caves near the former Maya heartlands. The data revealed a series of prolonged droughts that coincided with periods of decline for the Maya society. Now, Maya were heavily dependent on agriculture, with water being a critical resource for their survival. When these droughts occurred, the scarcity of water likely put immense pressure on their food production and societal structures. Imagine cities struggling without enough water for crops, leading to food shortages and social unrest. It's important to note, though, that while these climate changes were significant, they weren't the sole cause. Other factors like warfare and politics played a role, too. Yet, the revelation from these stalagmites provides a clearer picture of how environmental changes can trigger societal shifts. This discovery not only sheds light on the past, but also serves as a reminder of our vulnerability to climate change today.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the talk mainly about?",
+          "options": {
+            "A": "The advanced agricultural practices of the Maya civilization",
+            "B": "The use of stalagmites to study ancient cave formations",
+            "C": "Environmental factors in the decline of the Maya civilization",
+            "D": "Reasons for political instability in the Maya civilization"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 25
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker mention stalagmites?",
+          "options": {
+            "A": "To compare them to other geological formations",
+            "B": "To explain how they can reveal changes in precipitation over time",
+            "C": "To argue against the idea that climate change affected ancient civilizations",
+            "D": "To illustrate the beauty of natural cave formations"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 26
+        },
+        {
+          "type": "detail",
+          "stem": "What point does the speaker make about food production in the Maya society?",
+          "options": {
+            "A": "It was supported by food imports from neighboring regions.",
+            "B": "It relied on stable water supplies.",
+            "C": "It was less affected by climate changes than by political conflicts.",
+            "D": "It increased over time as the Maya developed better farming technologies."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 27
+        },
+        {
+          "type": "detail",
+          "stem": "What point does the speaker emphasize at the end of the talk?",
+          "options": {
+            "A": "Geological formations are the most reliable historical records.",
+            "B": "The Maya civilization was more advanced than previously believed.",
+            "C": "Modern research has resolved all questions about the Maya decline.",
+            "D": "Changes in natural conditions can have broad effects on societies"
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 28
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lat_523_2_12",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_523_2_12.mp3?v=mu39hy08",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "5.23新托福真题",
+      "date": "2026-05-23",
+      "source_flags": [],
+      "subject": "general",
+      "topic": "",
+      "transcript": "Today we're diving into the dynamic and often unpredictable world of viral marketing. Viral marketing is a strategy that has redefined how brands connect with audiences in the digital age. Viral marketing, of course, harnesses the power of social networks, relying on individuals to share content that resonates, entertains, or provokes thought. When executed effectively, a viral campaign can generate massive exposure. This amplifies brand visibility at a fraction of the cost of traditional advertising methods. You don't need to pay for ads when the video or meme is exploding on its own. What makes viral marketing so compelling is its potential for exponential reach. A single post, video, or meme can cascade through online communities, crossing geographic and demographic boundaries in mere hours. But this strategy is far from foolproof. One of the biggest challenges is unpredictability. There's no guaranteed formula for virality. What resonates with one audience may be ignored by another. And content that's edgy or controversial may be more likely to go viral, but it can also spark backlash and damage a company's reputation. Another risk is loss of control. Once content goes viral, it's no longer in the hands of the brand. Memes, remixes, and commentary can distort the original message, sometimes in ways that conflict with the brand's values or goals. But despite these risks, viral marketing remains an invaluable tool, particularly for startups and emerging brands seeking rapid traction. Next, let's talk about some case studies of particularly effective viral marketing campaigns.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the talk mainly about?",
+          "options": {
+            "A": "The importance of brand reputation for the brand's success",
+            "B": "A new method by which brands gain attention",
+            "C": "The marketing of a drug for a virus",
+            "D": "A cultural effect of social networks"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 12
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker say about the cost of viral marketing?",
+          "options": {
+            "A": "It is cost-effective compared to traditional advertising methods.",
+            "B": "It is more expensive than other forms of advertising.",
+            "C": "It involves higher costs at first but lower costs later.",
+            "D": "Its costs are similar to those of other advertising methods."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 13
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker say about content that is more likely to become viral?",
+          "options": {
+            "A": "It requires a large amount of research to produce.",
+            "B": "It is usually produced by young people.",
+            "C": "It often includes a powerful moral message.",
+            "D": "It can often be risky for a brand."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 14
+        },
+        {
+          "type": "inference",
+          "stem": "What will the speaker most likely discuss next?",
+          "options": {
+            "A": "Successful examples of viral marketing",
+            "B": "The role of traditional media in viral marketing",
+            "C": "The future of viral marketing",
+            "D": "The impact of viral marketing on consumer behavior"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 15
         }
       ],
       "audio_source": "original"
