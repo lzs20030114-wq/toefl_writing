@@ -38,6 +38,7 @@ writing/build 段只有 `{n, sentence}`（答案句，来自答案页），拼�
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import json
 import os
@@ -66,6 +67,8 @@ PAGE_DIR = os.path.join(OUT_DIR, "bs-pages")
 OCR_DIR = os.path.join(OUT_DIR, "bs-ocr")
 FLAGS_FILE = os.path.join(REPO_ROOT, "data", "realBank", "source-flags.json")
 TARGETS_FILE = os.path.join(REPO_ROOT, "data", "realExam2026", "writing", "buildSentence-targets.json")
+# 第二份 GT：条数少些，但有 targets 没有的 8 条（2.8 五条 / 4.20 三条）
+GT_ITEMS_FILE = os.path.join(REPO_ROOT, "data", "realExam2026", "writing", "buildSentence.json")
 DPI = 120
 
 EXTRACT_PROMPT = """You are reading a screenshot of a TOEFL "Build a Sentence" writing task interface.
@@ -96,8 +99,12 @@ Rules:
 
 
 # ── 词口径（与 lib/realBank.js 的 bsNormWord / stripEdgePunct 同口径）────────
+# 答案页/截图里混着全角标点（实测 "interesting ？"），不归一就会当成一个多出来的词，整题拼不出
+FULLWIDTH = str.maketrans("？！，。：；（）", "?!,.:;()")
+
+
 def norm_word(s: str) -> str:
-    s = str(s or "").replace("\u2019", "'")
+    s = str(s or "").replace("\u2019", "'").translate(FULLWIDTH)
     return re.sub(r"[.,!?;:]", "", s).strip().lower()
 
 
@@ -226,10 +233,27 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
     chunk_words = [norm_words(c) for c in chunks]
     solutions = []
 
-    def match(ai: int, ws: list[str]) -> bool:
-        if ai + len(ws) > len(answer_words):
-            return False
-        return all(_eqw(answer_words[ai + j], ws[j], fuzzy) for j in range(len(ws)))
+    def match(ai: int, ws: list[str]):
+        """对上了返回**吃掉几个答案词**，对不上返回 None。
+
+        先逐词比；不行再按「去掉空格后的字母序列」整体比 —— 答案页是 OCR 出来的，空格位置经常
+        放错（实测 "tha thas" ← "that has"），字母序列却一模一样。这是**严格相等**、不是模糊匹配：
+        字母不同照样对不上，所以不会放宽错字那道闸。
+        """
+        if ai + len(ws) <= len(answer_words) and all(
+                _eqw(answer_words[ai + j], ws[j], fuzzy) for j in range(len(ws))):
+            return len(ws)
+        target = "".join(ws)
+        if not target:
+            return None
+        acc = ""
+        for k in range(ai, len(answer_words)):
+            acc += answer_words[k]
+            if len(acc) > len(target):
+                return None
+            if acc == target:
+                return k - ai + 1
+        return None
 
     def dfs(ti: int, ai: int, used: tuple, plan: tuple):
         if len(solutions) >= limit:
@@ -241,8 +265,9 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
         tok = tokens[ti]
         if tok[0] == "lit":
             target = [norm_word(w) for w in tok[1]]
-            if match(ai, target):
-                dfs(ti + 1, ai + len(target), used, plan)
+            n = match(ai, target)
+            if n is not None:
+                dfs(ti + 1, ai + n, used, plan)
             return
         # gap：吃掉 1..N 个还没用过的词块（顺序即拼句顺序）
         def eat(ai2: int, used2: tuple, taken: tuple):
@@ -253,13 +278,67 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
             for ci, cw in enumerate(chunk_words):
                 if ci in used2 or not cw:
                     continue
-                if match(ai2, cw):
-                    eat(ai2 + len(cw), used2 + (ci,), taken + (ci,))
+                n = match(ai2, cw)
+                if n is not None:
+                    eat(ai2 + n, used2 + (ci,), taken + (ci,))
 
         eat(ai, used, ())
 
     dfs(0, 0, (), ())
     return solutions
+
+
+def build_with_gt_retry(rec: dict, primary: str, alt: str | None, rejects: dict,
+                        gt_all: dict[int, str] | None = None):
+    """答案句三级回退：答案页那条 → 同题号的 GT → 同卷全部 GT 里唯一能拼出的那条。
+
+    为什么值得重试：答案页是 OCR 出来的（全小写、无标点，实测还带 "broshure" 这类错字），
+    而 GT 是按卷逐题人工转写的校准锚 —— 同一道题，答案页的那条拼不出解，GT 那条常常能拼出。
+
+    为什么敢扫同卷全部（第三级）：两个来源的**题号**会错位（实测 3.6 两边同一个题号说的不是
+    同一道题），这时同题号的 GT 也拼不出，可正确的那条往往就躺在同一卷的别的题号上。
+    机械闸足够严 —— 答案句必须由模板固定词 + 词块**按序恰好**拼出、多余块 ≤1 —— 所以
+    「同卷里恰好只有一条能拼出」这件事本身就是强证据。**拼出多条就作废**（ambiguous_gt_scan）：
+    宁可少收，不许猜。题号仍以截图那一屏为准（题面为准），GT 只当拼接顺序的裁判。
+
+    只在 no_solution 时重试：其余拒收码（缺模板 / 词块重复 / 多余块太多）是题面那一侧的毛病，
+    换答案句解决不了，重试只是白跑。
+    """
+    try:
+        core, fz = build_item(rec, primary)
+        return core, fz, None
+    except ValueError as e:
+        first = str(e)
+    if first != "no_solution":
+        return None, False, first
+
+    tried = {norm_answer_key(primary or "")}
+    if alt and norm_answer_key(alt) not in tried:
+        tried.add(norm_answer_key(alt))
+        try:
+            core, fz = build_item(rec, alt)
+            rejects["_gt_answer_ok"] = rejects.get("_gt_answer_ok", 0) + 1
+            return core, fz, None
+        except ValueError:
+            pass
+
+    hits = []
+    for cand in (gt_all or {}).values():
+        k = norm_answer_key(cand or "")
+        if not k or k in tried:
+            continue
+        tried.add(k)
+        try:
+            hits.append(build_item(rec, cand))
+        except ValueError:
+            continue
+    if len(hits) > 1:
+        return None, False, "ambiguous_gt_scan"
+    if hits:
+        rejects["_gt_scan_ok"] = rejects.get("_gt_scan_ok", 0) + 1
+        core, fz = hits[0]
+        return core, fz, None
+    return None, False, first
 
 
 def build_item(rec: dict, answer_sentence: str):
@@ -274,8 +353,8 @@ def build_item(rec: dict, answer_sentence: str):
         raise ValueError("missing_template")
     if len(chunks) < 2:
         raise ValueError("missing_chunks")
-    if len({norm_answer_key(c) for c in chunks}) != len(chunks):
-        raise ValueError("duplicate_chunks")
+    # 词块允许重复：真题里同一个词块真的会摆两块（"…find my charger" 那屏有两块 my）。
+    # runtime 侧已按多重集判定（lib/questionBank/runtimeModel.js），这里不再一刀切拒收。
 
     raw_tokens, tail = parse_template(template)
     if not any(t[0] == "blank" for t in raw_tokens):
@@ -292,7 +371,9 @@ def build_item(rec: dict, answer_sentence: str):
         fuzzy_used = bool(sols)
         if not sols:
             raise ValueError("no_solution")
-    if len({tuple(sorted(i for g in s for i in g)) for s in sols}) > 1:
+    # 歧义按**拼出来的词块文本**判，不按下标：两块文本相同时，用哪一块都拼出同一个句子，
+    # 那不是歧义（按下标算会把每道含重复块的题都误判成 ambiguous_solution）。
+    if len({tuple(tuple(chunks[i] for i in g) for g in s) for s in sols}) > 1:
         raise ValueError("ambiguous_solution")
     plan = sols[0]
     used = [i for g in plan for i in g]
@@ -440,29 +521,48 @@ def render_pages(setname: str, pdf: str, pages: list[int] | None = None) -> list
     return out
 
 
-def ocr_cache_path(setname: str, idx: int, img_hash: str) -> str:
+DEFAULT_VL_MODEL = os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus"
+
+
+def ocr_cache_path(setname: str, idx: int, img_hash: str, model: str | None = None) -> str:
+    """识图缓存路径。**默认模型沿用老路径**（否则 333 张已有缓存一次作废、白花 ¥3.33），
+    换了模型才另起一份 —— 不同模型的识图结果必须分开存，否则换模型重识会直接命中旧缓存。"""
     d = os.path.join(OCR_DIR, re.sub(r"[^\w.-]+", "_", setname))
-    return os.path.join(d, f"p{idx}.{img_hash}.json")
+    suffix = "" if not model or model == DEFAULT_VL_MODEL else "." + re.sub(r"[^\w.-]+", "_", model)
+    return os.path.join(d, f"p{idx}.{img_hash}{suffix}.json")
 
 
-def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool):
-    """一页 → 识图出的题记录列表（缓存优先；no_ocr 时缓存未命中就返回 None）。"""
+def page_records(setname: str, idx: int, img_path: str, model: str, no_ocr: bool, refresh: bool = False,
+                 samples: int = 1, temperature: float = 0.6):
+    """一页 → 识图出的题记录列表（缓存优先；no_ocr 时缓存未命中就返回 None）。
+
+    refresh=True 时跳过缓存重识这一页 —— 上一轮在这页上出过拒收（多半是漏认了一个词块），
+    重识有机会认全。一页 ¥0.01，比整库重扫便宜三个数量级。
+
+    重识**必须调高温度**：call_qwen 缺省 temperature=0，同一张图必然读出同样结果，
+    照原样重识纯属白花钱。samples 次读数直接首尾相接返回 —— 主循环按题号收题、
+    **第一个过机械校验的读法胜出**（没过的不占位），所以多读几遍只会多救几题，不会放低标准。
+    """
     data = open(img_path, "rb").read()
     h = hashlib.sha1(data).hexdigest()[:8]
-    cp = ocr_cache_path(setname, idx, h)
-    if os.path.exists(cp):
+    cp = ocr_cache_path(setname, idx, h, model)
+    if os.path.exists(cp) and not refresh:
         try:
-            return json.load(open(cp, "r", encoding="utf-8")), True
+            return json.load(open(cp, "r", encoding="utf-8")), True, 0
         except Exception:
             pass
     if no_ocr:
-        return None, False
+        return None, False, 0
     body, ext = shrink(data, "png")
-    text = call_qwen(body, ext, model, prompt=EXTRACT_PROMPT)
-    recs = parse_json_array(text)
+    n = max(1, samples) if refresh else 1
+    recs = []
+    for k in range(n):
+        text = call_qwen(body, ext, model, prompt=EXTRACT_PROMPT,
+                         temperature=(temperature if (refresh and k > 0) else 0.0))
+        recs.extend(parse_json_array(text))
     os.makedirs(os.path.dirname(cp), exist_ok=True)
     json.dump(recs, open(cp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    return recs, False
+    return recs, False, n
 
 
 def parse_json_array(text: str) -> list:
@@ -497,8 +597,48 @@ def set_slug(setname: str) -> str:
     return base + (v.group(1).lower() if v else "") + (f"v{rev.group(1)}" if rev else "")
 
 
+@functools.lru_cache(maxsize=1)
+def _gt_by_set() -> dict[str, dict[int, str]]:
+    """真题 ground truth 的答案句：{卷名: {题号: 目标句}}。
+
+    两份 GT 都读 —— `buildSentence-targets.json`（504 条）与 `buildSentence.json`（363 条，
+    其中 8 条前者没有：2.8 五条、4.20 三条）。
+
+    **按 source（卷名）精确匹配**，不再靠「日期 + 卷别后缀」反推 id：A 卷那几套的 id 根本不带
+    `-A` 后缀（2026-01-21 的 27 条里，A 卷 9 条是光身 `2026-01-21_bsN`，只有 B/C 带后缀），
+    旧口径要求后缀相等，实测 1.21A / 1.27A / 1.28A / 2.1A / 3.2A 五套一条都取不到，
+    1.21C 也少一条 —— 合计 49 条 GT 答案句被白白吞掉（454 → 504）。
+    """
+    out: dict[str, dict[int, str]] = {}
+    for f in (TARGETS_FILE, GT_ITEMS_FILE):
+        try:
+            raw = json.load(open(f, "r", encoding="utf-8"))
+        except Exception:
+            continue
+        items = raw if isinstance(raw, list) else (raw.get("items") or [])
+        for t in items:
+            if not isinstance(t, dict):
+                continue
+            src = str(t.get("source") or "").strip()
+            tgt = t.get("target")
+            if not src or not tgt:
+                continue
+            n = t.get("n")
+            if not isinstance(n, int):
+                m = re.match(r"^\d{4}-\d{2}-\d{2}_bs(\d+)(-[ABC])?$", str(t.get("id") or ""))
+                n = int(m.group(1)) if m else None
+            if isinstance(n, int):
+                out.setdefault(src, {}).setdefault(n, str(tgt))
+    return out
+
+
+def gt_answers_for(setname: str) -> dict[int, str]:
+    """这一卷的 GT 答案句。答案页拼不出时拿它再试一次（见 build_with_gt_retry）。"""
+    return dict(_gt_by_set().get(setname) or {})
+
+
 def answers_for(setname: str) -> dict[int, str]:
-    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 targets 补。"""
+    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 的 GT 补。"""
     out: dict[int, str] = {}
     p = os.path.join(OUT_DIR, f"{setname}.structured.json")
     try:
@@ -512,21 +652,8 @@ def answers_for(setname: str) -> dict[int, str]:
             n, s = it.get("n"), it.get("sentence")
             if isinstance(n, int) and s and n not in out:
                 out[n] = str(s)
-    date = set_date(setname)
-    suffix = ""
-    v = re.search(r"([ABC])卷", setname)
-    if v:
-        suffix = f"-{v.group(1)}"
-    try:
-        for t in json.load(open(TARGETS_FILE, "r", encoding="utf-8")):
-            m = re.match(r"^(\d{4}-\d{2}-\d{2})_bs(\d+)(-[ABC])?$", str(t.get("id") or ""))
-            if not m or m.group(1) != date or (m.group(3) or "") != suffix:
-                continue
-            n = int(m.group(2))
-            if n not in out and t.get("target"):
-                out[n] = str(t["target"])
-    except Exception:
-        pass
+    for n, t in gt_answers_for(setname).items():
+        out.setdefault(n, t)
     return out
 
 
@@ -560,6 +687,14 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="只报将调用张数与预计费用")
     ap.add_argument("--only", help="只处理卷名含该子串的卷")
     ap.add_argument("--no-ocr", action="store_true", help="只用已有缓存跑校验，零调用")
+    ap.add_argument("--samples", type=int, default=3,
+                    help="重识时同一页读几遍（只对 --refresh-rejects 的页生效，默认 3）")
+    ap.add_argument("--temperature", type=float, default=0.6,
+                    help="重识第 2 遍起用的温度（默认 0.6；0 会读出和上次一模一样的结果）")
+    ap.add_argument("--refresh-rejects", action="store_true",
+                    help="只重识上一轮出过拒收的那些页（跳过缓存）—— 多半是漏认了一个词块，¥0.01/张")
+    ap.add_argument("--report-out", default=None,
+                    help="把逐条拒收明细另存一份到这个路径（.codex-tmp 不进 git，要离线分析就写到 data/ 下）")
     ap.add_argument("--model", default=os.environ.get("QWEN_VL_MODEL") or "qwen3-vl-plus")
     ap.add_argument("--max-images", type=int, default=400)
     ap.add_argument("--src", default=None,
@@ -579,6 +714,26 @@ def main() -> int:
         print("没有匹配到任何卷", file=sys.stderr)
         return 2
 
+    # --refresh-rejects：从上一轮报告里挑出「出过硬拒收」的页。duplicate_q / no_answer_sentence
+    # 不是识图的锅（一个是同页重复抽到、一个是答案页没给答案句），重识它们纯属烧钱。
+    refresh_pages: set[tuple[str, str]] = set()
+    if args.refresh_rejects:
+        try:
+            prev = json.load(open(os.path.join(OUT_DIR, "_bs_pages_report.json"), "r", encoding="utf-8"))
+        except Exception:
+            prev = []
+        for rep in prev:
+            for row in rep.get("reject_rows") or []:
+                if row.get("reason") in ("duplicate_q", "no_answer_sentence"):
+                    continue
+                if row.get("page"):
+                    refresh_pages.add((rep.get("set"), row["page"]))
+        print(f"■ --refresh-rejects：上一轮出过拒收的 {len(refresh_pages)} 页要重识"
+              f"，每页读 {args.samples} 遍（温度 {args.temperature}）"
+              f"，约 ¥{len(refresh_pages) * args.samples * CNY_PER_IMAGE:.2f}")
+        if not refresh_pages:
+            print("  （上一轮报告里没有拒收记录 —— 先跑一次 --no-ocr 生成报告）")
+
     # ① 渲染（本地零成本）
     rendered: list[tuple[str, list[tuple[int, str]], str]] = []
     for setname, pdf, page_nos in sets:
@@ -592,13 +747,18 @@ def main() -> int:
         n_todo = 0
         for i, p in pages:
             h = hashlib.sha1(open(p, "rb").read()).hexdigest()[:8]
-            if not os.path.exists(ocr_cache_path(setname, i, h)):
+            if (setname, os.path.basename(p)) in refresh_pages \
+                    or not os.path.exists(ocr_cache_path(setname, i, h, args.model)):
                 n_todo += 1
         todo += n_todo
         if n_todo:
             print(f"  待识图 {setname}：{n_todo} 张（{where}）")
-    print(f"■ {len(sets)} 套，共渲染 {total_pages} 页；待识图 {todo} 张，"
-          f"预计费用 ¥{todo * CNY_PER_IMAGE:.2f}（¥{CNY_PER_IMAGE}/张估）")
+    n_refresh = sum(1 for setname, pages, _ in rendered for i, p in pages
+                    if (setname, os.path.basename(p)) in refresh_pages)
+    billed = (todo - n_refresh) + n_refresh * max(1, args.samples)
+    print(f"■ {len(sets)} 套，共渲染 {total_pages} 页；待识图 {todo} 张"
+          f"（其中重识 {n_refresh} 张 ×{max(1, args.samples)} 遍），"
+          f"预计费用 ¥{billed * CNY_PER_IMAGE:.2f}（¥{CNY_PER_IMAGE}/张估）")
     if args.dry_run:
         print("（--dry-run，未发任何请求）")
         return 0
@@ -611,16 +771,23 @@ def main() -> int:
     calls = 0
     for setname, pages, where in rendered:
         answers = answers_for(setname)
+        gt_answers = gt_answers_for(setname)
         meta_flags = flags_for(setname)
         date = set_date(setname)
         slug = set_slug(setname)
         shash = source_hash(setname)
         seen_q: dict[int, dict] = {}
         rejects: dict[str, int] = {}
+        # 逐条拒收明细：只有计数说明不了「这 37 条 no_solution 到底是识图漏块还是答案句对不上」，
+        # 得把那一屏的模板 + 词块 + 用过的答案句一起留下来，事后离线看。
+        rej_rows: list[dict] = []
         n_seen = 0
         for i, p in pages:
             try:
-                recs, cached = page_records(setname, i, p, args.model, args.no_ocr)
+                recs, cached, n_calls = page_records(
+                    setname, i, p, args.model, args.no_ocr,
+                    refresh=(setname, os.path.basename(p)) in refresh_pages,
+                    samples=args.samples, temperature=args.temperature)
             except SystemicFailure as e:
                 print(f"\n[中止] 系统性 API 失败：{e}", file=sys.stderr)
                 return EXIT_SYSTEMIC
@@ -630,8 +797,7 @@ def main() -> int:
                 continue
             if recs is None:
                 continue
-            if not cached:
-                calls += 1
+            calls += n_calls
             for rec in recs:
                 if not isinstance(rec, dict):
                     continue
@@ -640,21 +806,34 @@ def main() -> int:
                     q = int(rec.get("q"))
                 except Exception:
                     rejects["bad_q"] = rejects.get("bad_q", 0) + 1
+                    rej_rows.append({"q": None, "page": os.path.basename(p), "reason": "bad_q",
+                                     "prompt": str(rec.get("prompt") or "")[:160],
+                                     "template": str(rec.get("template") or "")[:160],
+                                     "chunks": [str(c or "")[:40] for c in (rec.get("chunks") or [])],
+                                     "answer_tried": ""})
                     continue
+                note = lambda reason, qq=None, ans=None: rej_rows.append({
+                    "q": qq, "page": os.path.basename(p), "reason": reason,
+                    "prompt": str(rec.get("prompt") or "")[:160],
+                    "template": str(rec.get("template") or "")[:160],
+                    "chunks": [str(c or "")[:40] for c in (rec.get("chunks") or [])],
+                    "answer_tried": str(ans or "")[:200],
+                })
                 if q in seen_q:
                     rejects["duplicate_q"] = rejects.get("duplicate_q", 0) + 1
+                    note("duplicate_q", q)
                     continue
                 if q not in answers:
                     rejects["no_answer_sentence"] = rejects.get("no_answer_sentence", 0) + 1
+                    note("no_answer_sentence", q)
                     continue
-                try:
-                    core, fz = build_item(rec, answers[q])
-                    if fz:
-                        rejects["_fuzzy_word_ok"] = rejects.get("_fuzzy_word_ok", 0) + 1
-                except ValueError as e:
-                    k = str(e)
-                    rejects[k] = rejects.get(k, 0) + 1
+                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects, gt_answers)
+                if core is None:
+                    rejects[why] = rejects.get(why, 0) + 1
+                    note(why, q, answers[q])
                     continue
+                if fz:
+                    rejects["_fuzzy_word_ok"] = rejects.get("_fuzzy_word_ok", 0) + 1
                 seen_q[q] = {
                     "id": f"bs_{slug}_{q:02d}",
                     **core,
@@ -668,6 +847,26 @@ def main() -> int:
                     "_page": os.path.relpath(p, REPO_ROOT).replace("\\", "/"),
                     "_q": q,
                 }
+        # 同一页读多遍时，同一题会「先失败后成功」（第一个过机械校验的读法胜出）——
+        # 已经收下的题不该再留在拒收账里，否则报告会把救回来的题也算成丢题。
+        if rej_rows:
+            # ① 已经收下的题不该再留在拒收账里（多遍读时同一题会先失败后成功）
+            fixed = {r["q"] for r in rej_rows if r.get("q") is not None and r["q"] in seen_q}
+            # ② 一道题只算一次：读了 3 遍都没过就记 3 条的话，no_solution 会凭空翻倍
+            #    （2026-09-15 实测 37 虚涨到 74，看报告的人还以为补题把题补丢了）
+            kept, counted = [], set()
+            for r in rej_rows:
+                q = r.get("q")
+                if q in fixed or (q is not None and q in counted):
+                    if rejects.get(r["reason"]):
+                        rejects[r["reason"]] -= 1
+                    continue
+                if q is not None:
+                    counted.add(q)
+                kept.append(r)
+            rej_rows = kept
+            rejects = {k: v for k, v in rejects.items() if v}
+
         items = [seen_q[k] for k in sorted(seen_q)]
         out_p = os.path.join(OUT_DIR, f"{setname}.bs.json")
         if items:
@@ -676,9 +875,15 @@ def main() -> int:
         elif os.path.exists(out_p):
             os.remove(out_p)
         report.append({"set": setname, "pages": len(pages), "from": where, "seen": n_seen,
-                       "answers": len(answers), "ok": len(items), "rejects": rejects})
+                       "answers": len(answers), "ok": len(items), "rejects": rejects,
+                       "reject_rows": rej_rows})
+        # "_" 开头的键是**通过**的标记（模糊匹配救回 / GT 答案句救回），不是拒收 —— 分开打，
+        # 否则读的人会把 _fuzzy_word_ok 当成丢题（2026-09-15 实测把人绕进去过）。
+        marks = {k: v for k, v in rejects.items() if k.startswith("_")}
+        hard = {k: v for k, v in rejects.items() if not k.startswith("_")}
         print(f"  · {setname}: {len(pages)} 页 / 识图 {n_seen} 题 / 答案 {len(answers)} 条 "
-              f"→ 通过 {len(items)}" + (f"  拒收 {rejects}" if rejects else ""))
+              f"→ 通过 {len(items)}" + (f"（救回 {marks}）" if marks else "")
+              + (f"  拒收 {hard}" if hard else ""))
 
     # 报告按卷合并：--only 跑一部分卷时，不能把其余卷上一次的记录冲掉（事后要靠它查每套卷为什么缺题）
     report_p = os.path.join(OUT_DIR, "_bs_pages_report.json")
@@ -696,7 +901,21 @@ def main() -> int:
             agg[k] = agg.get(k, 0) + v
     print(f"\n完成：{len(report)} 套，通过 {tot_ok} 题，本次实际调用 {calls} 张 "
           f"（约 ¥{calls * CNY_PER_IMAGE:.2f}）")
-    print(f"拒收原因分布：{json.dumps(agg, ensure_ascii=False)}")
+    if args.report_out:
+        rows = [dict(r, set=rep["set"]) for rep in merged for r in (rep.get("reject_rows") or [])]
+        os.makedirs(os.path.dirname(os.path.abspath(args.report_out)) or ".", exist_ok=True)
+        json.dump({"generated_by": "scripts/realbank/extract_bs_pages.py --report-out",
+                   "_purpose": "识图拿到题面、却过不了机械校验的每一条：那一屏的模板 + 词块 + 试过的答案句。"
+                               "只有计数说明不了是识图漏块还是答案句对不上。",
+                   "count": len(rows), "rows": rows},
+                  open(args.report_out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        print(f"逐条拒收明细 → {args.report_out}（{len(rows)} 条）")
+
+    marks = {k: v for k, v in agg.items() if k.startswith("_")}
+    hard = {k: v for k, v in agg.items() if not k.startswith("_")}
+    if marks:
+        print(f"其中救回（已计入通过）：{json.dumps(marks, ensure_ascii=False)}")
+    print(f"拒收原因分布：{json.dumps(hard, ensure_ascii=False)}")
     return 0
 
 

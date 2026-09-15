@@ -65,6 +65,10 @@ const { consolidateReading } = require("./consolidate_reading.js");
 const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js");
 // id 别名账本（合并 / 归位之后旧 id 指到哪）：scripts/realbank/id_aliases.js。
 const { buildIdAliases } = require("./id_aliases.js");
+// 造句跨卷重复的别名（同一道题在后面的卷里又考了一次）：scripts/realbank/bs_aliases.js。
+const {
+  WRITING_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey, bsAliasEntries, bsDupSetEdges, bsGroundTruthEdges,
+} = require("./bs_aliases.js");
 // 点选句子题（账本 → 挂题 → 落盘后按盲审哈希放行）：scripts/realbank/sentence_select.js。
 const SS = require("./sentence_select.js");
 // AP 题型推断（结构化产物不带 question_type，落库前按题干句式推回）：scripts/realbank/question_type.js。
@@ -696,14 +700,7 @@ function readSetBsFile(setname) {
 }
 
 /** 造句题的跨卷去重键：答案句归一化（与 lib/realBank.js bsNormWord 同口径）。 */
-function bsAnswerKey(answer) {
-  return String(answer || "")
-    .toLowerCase()
-    .replace(/[.,!?;:]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .join(" ");
-}
+
 
 function buildWriting(files, stats) {
   const out = { bs: [], email: [], discussion: [] };
@@ -719,7 +716,7 @@ function buildWriting(files, stats) {
     if (dup) {
       console.warn(`跳过 ${setname} 写作：与 ${seenHash.get(dup)} 内容相同(hash ${dup})`);
       stats.wDroppedDupSet += 1;
-      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "writing", code: "wDroppedDupSet", detail: `与 ${seenHash.get(dup)} 写作文件相同（hash ${dup}）；邮件 / 讨论按别名还槽位` });
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "writing", code: "wDroppedDupSet", detail: `与 ${seenHash.get(dup)} 写作文件相同（hash ${dup}）；邮件 / 讨论 / 造句按别名还槽位` });
       dupSets.push({ setname, kept: seenHash.get(dup) });
       continue;
     }
@@ -811,7 +808,10 @@ function buildWriting(files, stats) {
   // （见 ./bs_order.js：前端批次号与已练标记靠这个顺序，重复题必须留已上线那份）；
   // 都没上线过的新题之间才按卷名遍历顺序（数字卷 1~5 月排在 rf* 6~9 月前面 → 日期早的留下），与遍历一样可复现。
   out.bs = orderByPrevious(out.bs, PREV_BS_IDS);
-  const seenAnswer = new Set();
+  // 被去重丢掉的那一份不是「没有这道题」，是「这一卷也考了库里已有的那道」—— 逐条记别名（见 ./bs_aliases.js），
+  // assemble_sets 靠它把槽位还回原卷，前端靠它把那一卷的批次补齐。不记的话这 132 题会一直被当成缺题。
+  const bsAliasEdges = [];
+  const seenAnswer = new Map();
   const bs = [];
   for (const q of out.bs) {
     const k = bsAnswerKey(q.answer);
@@ -821,7 +821,9 @@ function buildWriting(files, stats) {
     });
     if (!k || seenAnswer.has(k)) {
       stats.wDroppedDupBs = (stats.wDroppedDupBs || 0) + 1;
+      const kept = k ? seenAnswer.get(k) : null;
       bsDrop("wDroppedDupBs", k ? `答案句与更早收下的造句重复：${q.answer}` : "答案句为空");
+      if (kept) bsAliasEdges.push({ from: q.id, to: kept.id, reason: BS_ALIAS_REASON.DUP_ANSWER, fromSource: q.source, fromDate: q.date });
       continue;
     }
     // 前端渲染闸：过不了 runtimeModel 的题进库也做不了（groupBsBatches 会静默丢），
@@ -833,12 +835,41 @@ function buildWriting(files, stats) {
       bsDrop("wDroppedBsRuntime", why);
       continue;
     }
-    seenAnswer.add(k);
+    seenAnswer.set(k, q);
     bs.push(q);
   }
   out.bs = bs;
   stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
+  // 整份写作源文件与更早一套相同而被跳过的卷：造句按题号逐题对应（邮件 / 讨论在 recallWriting 里已按同一口径记过）。
+  // 边（fromSource 驼峰）与条目（from_source 下划线）是两种形状，**别把条目再当边喂回去** ——
+  // 那样 bsAliasEntries 读不到 e.fromSource，from_source 会全写成 null，
+  // 前端的 bsRecycledRaws 靠这个字段定位卷，null 就等于这条别名整条作废
+  // （2026-09-15 实测：197 条里 168 条这么丢的，专区造句从 545 掉回 386）。
+  const bsEdges = [
+    ...bsAliasEdges,
+    ...bsDupSetEdges({ dupSets, items: out.bs, slugOf: setSlug, dateOf: setDate }),
+  ];
+  // 源料体检把写作整科扣下的卷（2.8 / 2.23 / 3.24 / 3.29 / 4.18）在库里一条题都没有，
+  // 但 GT 记着它们考过的句子 —— 多数早就从别的卷收进库了，按别名还回去（判据见 ./bs_aliases.js）。
+  stats.wBsAliases = bsAliasEntries([
+    ...bsEdges,
+    ...bsGroundTruthEdges({
+      gtItems: readGtBuildSentence(), items: out.bs,
+      aliases: bsAliasEntries(bsEdges), slugOf: setSlug, dateOf: setDate,
+    }),
+  ]);
   return out;
+}
+
+/** 真题 ground truth 的造句（按卷逐题转写的校准锚）。文件缺了就当没有，只影响 GT 那批别名。 */
+function readGtBuildSentence() {
+  const p = path.join(process.cwd(), "data", "realExam2026", "writing", "buildSentence.json");
+  try { return JSON.parse(fs.readFileSync(p, "utf8")).items || []; } catch { return []; }
+}
+
+/** 邮件 / 讨论（补录 + 整卷重复）与造句（跨卷重复）的别名合成一份账本，顺序固定：先写作补录、后造句。 */
+function writingAliasList(stats) {
+  return [...(stats.wRecallAliases || []), ...(stats.wBsAliases || [])];
 }
 
 /** 写作侧 id 别名账本。刻意不写生成日期：每次重建都会产生无意义 diff（与 counts.json 同一个理由）。 */
@@ -847,8 +878,7 @@ function writeWritingAliases(aliases) {
   fs.mkdirSync(WRITING_DIR, { recursive: true });
   fs.writeFileSync(p, JSON.stringify({
     generated_by: "scripts/realbank/build_bank.mjs",
-    _purpose: "写作侧 id 别名：同一道邮件 / 讨论题在别的卷里的那份（from）→ 库里留下的那条（to）。"
-      + "assemble_sets.mjs 用它把槽位还回原卷；见 scripts/realbank/writing_recall.js。",
+    _purpose: WRITING_ALIAS_PURPOSE,
     aliases,
   }, null, 2), "utf8");
   return p;
@@ -1389,6 +1419,7 @@ function main() {
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
+    wBsAliases: [],
     dropRecorder: makeDropRecorder(),
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
@@ -1673,7 +1704,7 @@ function main() {
   if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
   const recallDrops = stats.wRecallDropped.reduce((m, d) => { const k = `${d.type}:${d.code}`; m[k] = (m[k] || 0) + 1; return m; }, {});
   console.log(`  第一来源补录（writing-recall.json）：邮件 +${stats.wRecallAdded.email} / 讨论 +${stats.wRecallAdded.discussion}；`
-    + `同一道题记别名 ${stats.wRecallAliases.length} 条；未收 ${JSON.stringify(recallDrops)}`
+    + `同一道题记别名 ${stats.wRecallAliases.length} 条（另：造句跨卷重复记别名 ${stats.wBsAliases.length} 条）；未收 ${JSON.stringify(recallDrops)}`
     + `${stats.wRecallReleased.length ? `；写作整科被扣但照收补录 ${stats.wRecallReleased.length} 套：${stats.wRecallReleased.join("、")}` : ""}`);
   for (const d of stats.wRecallDropped.filter((x) => String(x.code).startsWith("recall_"))) {
     console.log(`    ✗ ${d.type} ${d.set}（${d.code}）: ${d.detail}`);
@@ -1740,7 +1771,12 @@ function main() {
       tier: TIER, generated_by: "scripts/realbank/build_bank.mjs",
       count: writing.bs.length, items: writing.bs,
     }, null, 2), "utf8");
-    console.log(`\n（--only-bs）→ ${path.relative(process.cwd(), p)}  ${writing.bs.length} 条；其余文件未动`);
+    // 别名账本必须跟着重写：补进新题后，原先记别名的那些槽位有的变成这一卷自己的题了
+    // （bsGroundTruthEdges 的「题号被占就跳过」判据依赖最新的 bs.json）。不同步重写，
+    // assemble_sets 会拿旧账本给同一个 id 既造虚拟条目又收原生条目，同一槽位填两次。
+    const aliasPath = writeWritingAliases(writingAliasList(stats));
+    console.log(`\n（--only-bs）→ ${path.relative(process.cwd(), p)}  ${writing.bs.length} 条`
+      + `；→ ${path.relative(process.cwd(), aliasPath)}  ${writingAliasList(stats).length} 条（造句 ${stats.wBsAliases.length}）；其余文件未动`);
     // 人工复核清单照常生效：writing/bs 上已有 4 条下架 + 1 处 patch，跳过 applyReview
     // 会让下架过的题随重建复活。但 applyReview 没有按科目收窄的入口，它会把**所有**库文件
     // 重写一遍 —— 内容虽然一模一样（holds 早就应用过），字节却会变（行尾/末尾换行），
@@ -1750,7 +1786,7 @@ function main() {
     const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
       const q = path.join(d, e.name);
       if (e.isDirectory()) walk(q);
-      else if (e.isFile() && q !== p) snap.set(q, fs.readFileSync(q));
+      else if (e.isFile() && q !== p && q !== aliasPath) snap.set(q, fs.readFileSync(q));
     });
     walk(bankRoot);
     const r = applyReview({ dry: false });
@@ -1777,7 +1813,7 @@ function main() {
       }, null, 2), "utf8");
       keep.add(p);
     }
-    keep.add(writeWritingAliases(stats.wRecallAliases));
+    keep.add(writeWritingAliases(writingAliasList(stats)));
     const bankRoot = path.join(process.cwd(), "data", "realBank");
     const snap = new Map();
     const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
@@ -1797,7 +1833,7 @@ function main() {
       const q = path.join(WRITING_DIR, `${k}.json`);
       console.log(`  → 复核后 ${k} ${JSON.parse(fs.readFileSync(q, "utf8")).items.length} 条`);
     }
-    console.log(`  → writing/id-aliases.json  ${stats.wRecallAliases.length} 条`);
+    console.log(`  → writing/id-aliases.json  ${writingAliasList(stats).length} 条（其中造句跨卷重复 ${stats.wBsAliases.length} 条）`);
     return;
   }
 
@@ -1885,7 +1921,7 @@ function main() {
     fs.writeFileSync(p, JSON.stringify({ tier: TIER, generated_by: "scripts/realbank/build_bank.mjs", count: v.length, items: v }, null, 2), "utf8");
     console.log(`  → ${path.relative(process.cwd(), p)}  ${v.length} 条`);
   }
-  console.log(`  → ${path.relative(process.cwd(), writeWritingAliases(stats.wRecallAliases))}  ${stats.wRecallAliases.length} 条`);
+  console.log(`  → ${path.relative(process.cwd(), writeWritingAliases(writingAliasList(stats)))}  ${writingAliasList(stats).length} 条（其中造句跨卷重复 ${stats.wBsAliases.length} 条）`);
 
   // 听力 / 口语：同一套写法（每个题型一个文件 + 一份计数），音频先留空。
   // 落库前先把**口播文本没变**的条目的 audio_url 从上一版接过来（见 carryAudioUrls）。

@@ -2,7 +2,7 @@
  * 「真题专区」数据层契约测试（lib/realBank.js）。
  *
  * 锁三件事：
- *   1. 题量与来源分档（讨论 162 / 邮件 57 / 造句 336；来源标签不许把未核验语料吹成 ETS 官方）；
+ *   1. 题量与来源分档（讨论 162 / 邮件 57 / 造句 573；来源标签不许把未核验语料吹成 ETS 官方）；
  *   2. id 全部带 `real_` 前缀且全局唯一 —— real_tpo_reference.json 有 27 条 ad* id 与 live
  *      库 data/academicWriting/prompts.json 重叠，前缀是「已练 / 历史记录不互相污染」的唯一保障；
  *   3. 三种题型规范化后能被各自的消费方直接吃下（写作 normalizePrompt 的必填字段、
@@ -20,6 +20,7 @@ import AD_LIVE from "../data/academicWriting/prompts.json";
 // realBank 写作回忆版（build_bank.mjs 产物）：造句 347 / 邮件 44 / 讨论 37。
 // 邮件 / 讨论里 rf/rp 第二来源 14 / 7 条在前，其后是 2026-09-14 第一来源补录（writing-recall.json，逐条对过原卷）。
 import RB_BS from "../data/realBank/writing/bs.json";
+import RB_WRITING_ALIASES from "../data/realBank/writing/id-aliases.json";
 import RB_EMAIL from "../data/realBank/writing/email.json";
 import RB_DISCUSSION from "../data/realBank/writing/discussion.json";
 
@@ -47,16 +48,22 @@ const bsBatches = getRealBSBatches();
 // 由前端 groupBsBatches 静默丢，导致「库里的条数」比「能做的题数」多。现在两者相等。
 const RB_BS_DROPPED = 0;
 
+// 跨卷重复还回原卷的那一份（writing/id-aliases.json 里的 bs 别名，怎么来的见 scripts/realbank/bs_aliases.js）：
+// ETS 真实地循环出题，同一道题在后面的场次又考一次 —— 库里只留先入库的那条，其余卷靠别名把这道题
+// 还回自己那一批。不还的话这 197 道会一直被算成「那几卷缺题」，整卷都是重复题的卷连卡片都不出现。
+// 三个来源：管线去重丢的 150 条 + 整卷源文件相同的 18 条 + 真题 ground truth 对照出的 29 条
+// （源料体检把写作整科扣下的 2.8 / 2.23 / 3.24 / 3.29 / 4.18 全靠最后这条路才有题）。
+const RB_BS_ALIASES = (RB_WRITING_ALIASES.aliases || []).filter((a) => a.from_type === "bs");
+const RB_BS_BANK_IDS = new Set(RB_BS.items.map((q) => q.id));
+const RB_BS_RECYCLED = RB_BS_ALIASES.filter((a) => RB_BS_BANK_IDS.has(a.to) && !RB_BS_BANK_IDS.has(a.from));
+
 // 「造句要按套算」：题数 < REAL_BS_MIN_BATCH 的碎卷（源卷零星回忆，凑不成一套）不进真题专区。
-// 2026-09-08 实测命中 5 卷（3 题的 3.6/3.23/4.28，1 题的 4.5/rf0615），共 11 题被过滤。
-// 2026-09-14 补进 1~2 月合订卷的造句后又多 6 卷：去重（已上线的同一道题优先保留）后只剩 2~4 题，共 20 题被过滤。
-const RB_BS_SPARSE_SOURCES = [
-  "3.6新托福真题", "3.23新托福真题", "4.28新托福真题", "4.5新托福真题", "rf0615",
-  "1.21新托福真题A卷", "1.21新托福真题B卷", "2.10新托福真题", "2.1新托福真题C卷", "2.28新托福真题", "2.2新托福真题",
-];
-const RB_BS_FILTERED_OUT = RB_BS.items.filter((q) =>
-  RB_BS_SPARSE_SOURCES.includes(q.source || q.source_label)
-).length;
+// 2026-09-15 补题重建之后只剩这两卷：2.23 三题、3.29 两题（缺的在「源料缺陷」那一桶，要补源料才过线）。
+const RB_BS_SPARSE_SOURCES = ["2.23新托福真题", "3.29新托福真题"];
+const bsSourceSize = (src) =>
+  RB_BS.items.filter((q) => (q.source || q.source_label) === src).length
+  + RB_BS_RECYCLED.filter((a) => a.from_source === src).length;
+const RB_BS_FILTERED_OUT = RB_BS_SPARSE_SOURCES.reduce((n, src) => n + bsSourceSize(src), 0);
 
 describe("真题专区：题量", () => {
   test("学术讨论 162 题（81 参考版 + 44 + 37 回忆版），一条不丢", () => {
@@ -72,11 +79,15 @@ describe("真题专区：题量", () => {
     expect(email.length).toBe(57);
   });
 
-  test("造句 336 题（20 官方 + 316 回忆版），官方 2 批各 10 题、批次号不动", () => {
+  test("造句 573 题（20 官方 + 361 回忆版 + 197 跨卷重复还回原卷 − 5 碎卷），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(RB_BS.items.length).toBe(347);
-    expect(RB_BS_FILTERED_OUT).toBe(31);
-    expect(bsQuestions.length).toBe(20 + RB_BS.items.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT);
+    expect(RB_BS.items.length).toBe(361);
+    expect(RB_BS_RECYCLED.length).toBe(197);
+    expect(RB_BS_FILTERED_OUT).toBe(5);
+    expect(bsQuestions.length).toBe(
+      20 + RB_BS.items.length + RB_BS_RECYCLED.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
+    );
+    expect(bsQuestions.length).toBe(573);
     // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
     expect(bsBatches.length).toBeGreaterThan(2);
     expect(bsBatches.slice(0, 2).map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);
@@ -90,13 +101,62 @@ describe("真题专区：题量", () => {
     expect(bsBatches.every((b) => b.questions.length >= REAL_BS_MIN_BATCH)).toBe(true);
     // 回忆版按考试套次（source）分批，一批 = 一场考试；碎卷（< REAL_BS_MIN_BATCH 题）已被过滤。
     const recalledBatches = bsBatches.slice(2);
-    const recalledSources = new Set(RB_BS.items.map((q) => q.source));
+    // 一卷一批：原生题 ∪ 别名还回来的那一份（整卷都是重复题的 4.1 / 5.6 / rf0902 全靠后者才有卡片）
+    const recalledSources = new Set([
+      ...RB_BS.items.map((q) => q.source),
+      ...RB_BS_RECYCLED.map((a) => a.from_source),
+    ]);
     expect(recalledBatches.length).toBe(recalledSources.size - RB_BS_SPARSE_SOURCES.length);
     expect(recalledBatches.every((b) => b.tier === "recalled")).toBe(true);
     expect(recalledBatches.every((b) => b.questions.length >= REAL_BS_MIN_BATCH)).toBe(true);
     expect(recalledBatches.reduce((n, b) => n + b.questions.length, 0)).toBe(
-      RB_BS.items.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
+      RB_BS.items.length + RB_BS_RECYCLED.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
     );
+  });
+
+  test("老批次的序号一条都不许漂（回收题只许追加在原生题之后）", () => {
+    // 「第 N 套」= 用户的已练标记（DONE_STORAGE_KEYS.BUILD_SENTENCE_GP 按 groupId 写）。
+    // 把跨卷重复还回原卷时，只要有一卷插到中间，后面所有卷的序号就整体后移、老用户的已练全错位。
+    const order = [];
+    const seen = new Set();
+    for (const it of RB_BS.items) {
+      const k = it.source || it.source_label;
+      if (!seen.has(k)) { seen.add(k); order.push(k); }
+    }
+    const idBySource = new Map(bsBatches.slice(2).map((b) => [b.questions[0].source, b.id]));
+    // 官方两批永远 set-1 / set-2，回忆版按 bs.json 里 source 首次出现的顺序从 set-3 起
+    order.forEach((src, i) => {
+      if (idBySource.has(src)) expect(idBySource.get(src)).toBe(`real-bs-set-${i + 3}`);
+    });
+    // 整卷都是重复题的卷（库里一条自己的题都没有）只能排在所有老卷之后
+    const newOnly = [...idBySource.keys()].filter((src) => !order.includes(src));
+    expect(newOnly.length).toBeGreaterThan(0);
+    newOnly.forEach((src) => {
+      expect(Number(idBySource.get(src).replace("real-bs-set-", ""))).toBeGreaterThan(order.length + 2);
+    });
+  });
+
+  test("跨卷重复的那一份如实标注：内容取保留的那条，id 归自己那一卷", () => {
+    const rawById = new Map(RB_BS.items.map((r) => [`real_${r.id}`, r]));
+    const recycled = bsQuestions.filter((q) => q.recycled_of);
+    // 碎卷过滤之后剩下的回收题都在（3.6 那一卷的 1 道随整卷一起被过滤）
+    expect(recycled.length).toBe(
+      RB_BS_RECYCLED.filter((a) => !RB_BS_SPARSE_SOURCES.includes(a.from_source)).length
+    );
+    recycled.forEach((q) => {
+      const kept = rawById.get(q.recycled_of);
+      expect(kept).toBeTruthy();                       // 指向库里活着的那条
+      expect(q.id).not.toBe(q.recycled_of);            // id 是自己这一卷的（做题记录按卷分开）
+      expect(q.answer).toBe(String(kept.answer).trim());
+      expect(q.source).not.toBe(q.recycled_from);      // 出自另一场考试
+      expect(q.recycled_from).toBe(String(kept.source).trim());
+      expect(q.tier).toBe("recalled");
+    });
+    // 一道题在同一批里不会出现两次（别名不能把保留方那一卷自己的题顶掉）
+    bsBatches.forEach((b) => {
+      const canon = b.questions.map((q) => q.recycled_of || q.id);
+      expect(new Set(canon).size).toBe(canon.length);
+    });
   });
 
   test("所有回忆版造句批次题数 ≥ REAL_BS_MIN_BATCH（碎卷不进真题专区）", () => {
@@ -243,8 +303,10 @@ describe("真题专区：造句题适配 runtime 形状", () => {
     const withPrefilled = bsQuestions.filter((q) => q.prefilled.length > 0);
     expect(withPrefilled.length).toBeGreaterThan(0);
     const rawById = new Map([...BS_TPO_OFFICIAL, ...RB_BS.items].map((r) => [`real_${r.id}`, r]));
+    // 跨卷重复还回原卷的那一份内容取保留的那条，源文件里按 recycled_of 查
     bsQuestions.forEach((q) => {
-      const blanksHasLiteral = /[A-Za-z']/.test(String(rawById.get(q.id).blanks).replace(/_{2,}/g, " "));
+      const raw = rawById.get(q.recycled_of || q.id);
+      const blanksHasLiteral = /[A-Za-z']/.test(String(raw.blanks).replace(/_{2,}/g, " "));
       expect(q.prefilled.length > 0).toBe(blanksHasLiteral);
       // 每个 prefilled 都有位置，且位置在 answer 词数范围内。
       const answerWordCount = String(q.answer).trim().split(/\s+/).length;
@@ -263,9 +325,9 @@ describe("真题专区：造句题适配 runtime 形状", () => {
       expect(Array.isArray(q.grammar_points)).toBe(true);
     });
     // 源文件带 distractor 的题数量必须原样传导（不多不少；被丢掉的那题不计）。
-    const keptIds = new Set(bsQuestions.map((q) => q.id));
-    const srcWith = [...BS_TPO_OFFICIAL, ...RB_BS.items]
-      .filter((r) => keptIds.has(`real_${r.id}`) && (r.distractors || []).length > 0).length;
+    const srcById = new Map([...BS_TPO_OFFICIAL, ...RB_BS.items].map((r) => [`real_${r.id}`, r]));
+    const srcWith = bsQuestions
+      .filter((q) => ((srcById.get(q.recycled_of || q.id) || {}).distractors || []).length > 0).length;
     expect(bsQuestions.filter((q) => q.distractor).length).toBe(srcWith);
   });
 
@@ -348,7 +410,11 @@ describe("真题专区：TopicPicker 映射", () => {
     items.forEach((it, i) => {
       expect(it.title).toContain(`${bsBatches[i].questions.length} 题`);
       expect(it.tag).toBe(realTierLabel(bsBatches[i].tier));
-      expect(it.subtitle).toBe(bsBatches[i].label);
+      // 含跨卷重复的批次在 subtitle 后面如实加一句（卡片不说，用户会以为题库灌水）
+      const recycled = bsBatches[i].questions.filter((q) => q.recycled_of).length;
+      expect(it.subtitle).toBe(
+        recycled > 0 ? `${bsBatches[i].label} · 含 ${recycled} 题与其他场次重复` : bsBatches[i].label
+      );
       // 徽章只给 ETS 官方，回忆版不许带。
       expect(it.badge).toBe(bsBatches[i].tier === "official" ? REAL_TIER_LABELS.official : undefined);
     });

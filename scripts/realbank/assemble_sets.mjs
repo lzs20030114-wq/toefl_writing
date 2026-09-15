@@ -117,7 +117,12 @@ export function loadConsolidationAliases(bankDir) {
 /**
  * 写作侧 id 别名：writing/id-aliases.json（build_bank 落）。第一来源邮件 / 讨论补录时，
  * 同一道题只收一条，其余考过它的卷记成 from → to（见 scripts/realbank/writing_recall.js）；
- * 整份写作源文件与更早一套相同而被跳过的卷也记在这里。没有这份文件 = 还没补录过，忽略。
+ * 整份写作源文件与更早一套相同而被跳过的卷、以及造句的跨卷重复（scripts/realbank/bs_aliases.js）
+ * 也记在这里。没有这份文件 = 还没补录过，忽略。
+ *
+ * from_source / from_date 是造句那一批带的：整卷都是重复题的卷（4.1 / 5.6 / rf0902）库里一条自己的
+ * 题都没有，indexItems 的「slug → 卷名」表是从库里的题反推的、查不到这个 slug —— 没有这两个字段，
+ * 别名会在 indexItems 里被 `if (!set) continue` 整条丢掉，槽位照样空着。
  */
 export function loadWritingAliases(bankDir) {
   const p = path.join(bankDir, "writing", "id-aliases.json");
@@ -125,7 +130,11 @@ export function loadWritingAliases(bankDir) {
   try {
     return (JSON.parse(fs.readFileSync(p, "utf8")).aliases || [])
       .filter((a) => a && a.from && a.to && String(a.from) !== String(a.to))
-      .map((a) => ({ held: String(a.from), canonical: String(a.to), source: null }));
+      .map((a) => ({
+        held: String(a.from), canonical: String(a.to),
+        source: a.from_source ? String(a.from_source).trim() : null,
+        date: a.from_date ? String(a.from_date).trim() : null,
+      }));
   } catch {
     return [];
   }
@@ -188,9 +197,14 @@ export function indexItems(banks, aliases = []) {
     const can = byId.get(a.canonical);
     const parsed = parseRealBankId(a.held);
     if (!can || !parsed || can.type !== parsed.type) continue;
+    // held 已经是库里活着的题：账本比题库旧（那一卷后来自己把这道题补进来了）。
+    // 再造虚拟条目会让同一个 id 出现两条 record，同一槽位填两次 —— 以题库为准，跳过。
+    if (byId.has(a.held)) continue;
     const set = slugSet.get(parsed.slug) || a.source;
     if (!set) continue;
-    virtual.push({ type: can.type, item: { ...can.item, id: a.held, source: set, date: slugDate.get(parsed.slug) || can.item.date }, aliasOf: a.canonical });
+    // 日期优先用别名自带的（那一卷的考试日期）：库里一条自己的题都没有的卷查不到 slugDate，
+    // 退到保留方的日期会把 4.1 的槽位标成 3.21 —— 卷面日期错了，前端卡片和账本都跟着错。
+    virtual.push({ type: can.type, item: { ...can.item, id: a.held, source: set, date: slugDate.get(parsed.slug) || a.date || can.item.date }, aliasOf: a.canonical });
   }
   const all = [];
   for (const [type, items] of Object.entries(banks)) for (const item of items) all.push({ type, item, aliasOf: null });

@@ -365,12 +365,59 @@ describe("assemble_sets：写作补录的同一道题别名（writing/id-aliases
 
     const aliases = asm.loadDupAliases(dir);
     expect(aliases).toEqual(expect.arrayContaining([
-      { held: "email_34", canonical: "email_121a", source: null },
-      { held: "disc_34", canonical: "disc_121a", source: null },
+      { held: "email_34", canonical: "email_121a", source: null, date: null },
+      { held: "disc_34", canonical: "disc_121a", source: null, date: null },
     ]));
     const recs = asm.indexItems(asm.loadBanks(dir), aliases);
     expect(recs.find((r) => r.id === "email_34")).toMatchObject({ type: "email", set: S2, module: 1, q: 11, anchorable: true, aliasOf: "email_121a" });
     expect(recs.find((r) => r.id === "disc_34")).toMatchObject({ type: "disc", set: S2, module: 1, q: 12, anchorable: true, aliasOf: "disc_121a" });
+  });
+
+  test("造句跨卷重复：整卷都是重复题的卷（库里一条自己的题都没有）靠 from_source / from_date 还槽位", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-bsalias-"));
+    const S1 = "3.21新托福真题", S2 = "4.1新托福真题";
+    const banks = Object.fromEntries(Object.keys(asm.BANK_FILES).map((t) => [t, []]));
+    // 4.1 这一卷库里一条题都没有（十道全是 3.21 考过的同一道）—— slug 41 在「slug → 卷名」表里查不到，
+    // 只能靠别名自带的 from_source / from_date 定位，否则 indexItems 会把这条别名整条丢掉。
+    banks.bs = [one("bs_321_02", S1, "2026-03-21", { prompt: "p", blanks: "_____", chunks: ["a"], answer: "a" })];
+    for (const [type, rel] of Object.entries(asm.BANK_FILES)) {
+      const p = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, JSON.stringify({ items: banks[type] }));
+    }
+    fs.writeFileSync(path.join(dir, "writing", "id-aliases.json"), JSON.stringify({ aliases: [
+      { from: "bs_41_03", to: "bs_321_02", from_type: "bs", to_type: "bs", reason: "duplicate_bs", from_source: S2, from_date: "2026-04-01" },
+    ] }));
+
+    const aliases = asm.loadDupAliases(dir);
+    expect(aliases).toEqual([{ held: "bs_41_03", canonical: "bs_321_02", source: S2, date: "2026-04-01" }]);
+    const recs = asm.indexItems(asm.loadBanks(dir), aliases);
+    // 槽位还回 4.1（不是保留方那一卷），日期也是 4.1 自己的考试日期
+    expect(recs.find((r) => r.id === "bs_41_03")).toMatchObject({
+      type: "bs", set: S2, date: "2026-04-01", module: 1, q: 3, anchorable: true, aliasOf: "bs_321_02",
+    });
+  });
+
+  test("账本比题库旧：held 已经是库里活着的题 → 不再造虚拟条目（否则同一槽位填两次）", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-staleal-"));
+    const S1 = "3.21新托福真题", S2 = "4.1新托福真题";
+    const banks = Object.fromEntries(Object.keys(asm.BANK_FILES).map((t) => [t, []]));
+    const bs = (id, src, date, ans) => one(id, src, date, { prompt: "p", blanks: "_____", chunks: ["a"], answer: ans });
+    // 4.1 后来自己把 q3 补进来了（重扫/识图），可账本里还留着 bs_41_03 → bs_321_02 的别名
+    banks.bs = [bs("bs_321_02", S1, "2026-03-21", "a"), bs("bs_41_03", S2, "2026-04-01", "b")];
+    for (const [type, rel] of Object.entries(asm.BANK_FILES)) {
+      const p = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, JSON.stringify({ items: banks[type] }));
+    }
+    fs.writeFileSync(path.join(dir, "writing", "id-aliases.json"), JSON.stringify({ aliases: [
+      { from: "bs_41_03", to: "bs_321_02", from_type: "bs", to_type: "bs", reason: "duplicate_bs", from_source: S2, from_date: "2026-04-01" },
+    ] }));
+
+    const recs = asm.indexItems(asm.loadBanks(dir), asm.loadDupAliases(dir));
+    const hit = recs.filter((r) => r.id === "bs_41_03");
+    expect(hit.length).toBe(1);            // 只有原生那一条
+    expect(hit[0].aliasOf).toBeUndefined();
   });
 
   test("没有 writing/id-aliases.json（还没补录过）→ 不报错、不多出别名", () => {
