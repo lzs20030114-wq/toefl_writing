@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 52,
+  "count": 53,
   "items": [
     {
       "id": "real_la_121b_1_19",
@@ -1495,6 +1495,62 @@
           "answer": "A",
           "explanation": "",
           "source_q": 24
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_la_420_1_21",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/la/real_la_420_1_21.mp3?v=mu36l14g",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.20新托福真题",
+      "date": "2026-04-20",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.10新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        },
+        {
+          "code": "identical_file",
+          "severity": "warn",
+          "detail": "文件 4.20  听力.pdf 与 5.10新托福真题 内容哈希完全一致。"
+        }
+      ],
+      "context": "announcement",
+      "situation": "",
+      "speaker_role": "staff",
+      "announcement": "Beginning next Monday, shuttle service will operate on a new extended schedule in the mornings, starting at 7 a .m. It will also add two additional stops to its route, the Campus Art Museum and the Zimmerman Theatre. These changes are in response to student feedback. We're always working to improve. Please check the updated schedule on the Transportation Office website and plan your travel accordingly.",
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the shuttle's previous start time?",
+          "options": {
+            "A": "It was at seven a.m.",
+            "B": "It was after seven a.m.",
+            "C": "It was in the evening.",
+            "D": "It was too early for students."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 21
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker mention student feedback?",
+          "options": {
+            "A": "To provide a reason for the changes to the shuttle service",
+            "B": "To invite students to submit their thoughts about the new schedule",
+            "C": "To explain why the shuttle service is being discontinued",
+            "D": "To describe the process for hiring shuttle drivers"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 22
         }
       ],
       "audio_source": "original"

@@ -203,10 +203,15 @@ function firstSourceAudio(setname, module) {
   let res = { err: "asr缓存缺失" };
   const p = path.join(OUT_DIR, "asr", setname, `listening_m${module}.json`);
   if (fs.existsSync(p)) {
-    const base = JSON.parse(fs.readFileSync(p, "utf8")).file;
+    const cache = JSON.parse(fs.readFileSync(p, "utf8"));
+    const base = cache.file;
     const dir = path.join(SRC_ROOT, setname);
     res = { err: `源音频缺失(${base})` };
-    if (fs.existsSync(dir)) {
+    // 整块录音合流（merge_recording_asr.py）在缓存里记了录音的绝对路径：5 月第二来源的录音
+    // 躺在 .codex-tmp/realbank/src-converted/<卷>/ 下，不在桌面源根目录里，按文件名搜不到。
+    if (cache.path && path.basename(cache.path) === base && fs.existsSync(cache.path)) {
+      res = { file: cache.path };
+    } else if (fs.existsSync(dir)) {
       const stack = [dir];
       while (stack.length) {
         const cur = stack.pop();

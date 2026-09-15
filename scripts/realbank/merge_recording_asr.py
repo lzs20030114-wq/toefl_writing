@@ -327,17 +327,78 @@ def option_key(opts):
     return " | ".join(sorted(V.norm(o) for o in vals))
 
 
-def load_bank(bank_dir=LISTENING_BANK):
+LISTENING_TYPES = ("lcr", "lc", "la", "lat")
+
+
+def recording_sets(out_dir=OUT_DIR):
+    """已被本管线合流过的卷 → {卷名: structured}。"""
     out = {}
-    for typ in ("lcr", "lc", "la", "lat"):
+    for fn in sorted(os.listdir(out_dir)):
+        if not fn.endswith(".structured.json"):
+            continue
+        try:
+            with open(os.path.join(out_dir, fn), encoding="utf-8") as fh:
+                st = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        if (st.get("merged_asr") or {}).get("merger") == MERGER_ID:
+            out[fn[:-len(".structured.json")]] = st
+    return out
+
+
+def may_keep(cand_set, cand_is_recording, current_set):
+    """谁有资格当「保留方」（与处理顺序无关，重跑结果稳定）。
+
+    文档 / 商家逐题音频来源的条目永远可以；整块录音来源的只有**卷名排在本卷之前**才可以 ——
+    否则两套互为重复的录音卷（4.20 与 5.10 的听力 PDF 哈希都一样）会互相记别名，两边都没了。
+    """
+    if not cand_set or cand_set == current_set:
+        return False
+    return (not cand_is_recording) or cand_set < current_set
+
+
+def load_bank(bank_dir=LISTENING_BANK, current_set=None, rec_sets=None):
+    """可当保留方的候选 {题型: [{id, set, words, options}]}。
+
+    两路：库里已有的条目；以及同一批里**先合流、还没落库**的录音卷（id 按 build_bank 的规则推）。
+    后者万一落库时没过闸（盲审 / 原声），这条别名会被 apply_review 当「保留方不在库里」摘掉 —— 只丢槽位，不串题。
+    """
+    rec_sets = recording_sets() if rec_sets is None else rec_sets
+    out = {t: [] for t in LISTENING_TYPES}
+    seen = set()
+    for typ in LISTENING_TYPES:
         p = os.path.join(bank_dir, "%s.json" % typ)
         try:
             with open(p, encoding="utf-8") as fh:
                 items = json.load(fh).get("items") or []
         except (OSError, ValueError):
             items = []
-        out[typ] = [{"id": it.get("id"), "words": V.norm(spoken_text(typ, it)).split(),
-                     "options": option_key(it.get("options")) if typ == "lcr" else ""} for it in items]
+        for it in items:
+            src = str(it.get("source") or "").strip()
+            if current_set is not None and not may_keep(src, src in rec_sets, current_set):
+                continue
+            seen.add(it.get("id"))
+            out[typ].append({"id": it.get("id"), "set": src, "words": V.norm(spoken_text(typ, it)).split(),
+                             "options": option_key(it.get("options")) if typ == "lcr" else ""})
+    for name, st in sorted(rec_sets.items()):
+        if current_set is None or not may_keep(name, True, current_set):
+            continue
+        slug = set_slug(name)
+        for r in st.get("results") or []:
+            if r.get("section") != "listening" or r.get("status") != "ok" or r.get("dup_of"):
+                continue
+            if r.get("type") not in out:
+                continue
+            rid = "real_%s_%s_%d_%02d" % (r["type"], slug, int(r.get("module") or 1), int(r["q_start"]))
+            if rid in seen:
+                continue
+            if r["type"] == "lc" and r.get("turns"):
+                text = " ".join(t.get("text", "") for t in r["turns"])
+            else:
+                text = r.get("transcript_final") or ""
+            opts = ((r.get("items") or [{}])[0] or {}).get("options") if r["type"] == "lcr" else None
+            out[r["type"]].append({"id": rid, "set": name, "words": V.norm(text).split(),
+                                   "options": option_key(opts) if opts else "", "pending": True})
     return out
 
 
@@ -530,46 +591,45 @@ def lc_body(audio_path, sents):
     return "\n".join("%s: %s" % (t["speaker"], t["text"]) for t in turns), "turns_from_asr_diarization:%s" % why
 
 
-def process_set(setkey, args, totals, bank=None):
+CONVERTED_DIR = os.path.join(OUT_DIR, "src-converted")
+
+
+def source_dir(setkey):
+    """源目录：第一来源在桌面根目录；5 月第二来源的 docx 卷在 convert_docx_set.py 转出来的 src-converted 下。"""
+    for d in (os.path.join(asr_cache.SRC_ROOT, setkey), os.path.join(CONVERTED_DIR, setkey)):
+        if os.path.isdir(d):
+            return d
+    return None
+
+
+def plan_path(setkey):
+    return os.path.join(REC_DIR, setkey, "structure-plan.json")
+
+
+def prepare(setkey):
+    """公共前半段：找录音 → 转写（缓存）→ 切岛 → 分 module。→ (ctx, None) 或 (None, 跳过原因)。"""
     scan_path = os.path.join(OUT_DIR, "%s.json" % setkey)
     st_path = os.path.join(OUT_DIR, "%s.structured.json" % setkey)
-    fs_path = os.path.join(OUT_DIR, "%s.structured.fs_parsed.json" % setkey)
     for p in (scan_path, st_path):
         if not os.path.exists(p):
-            print("  跳过 %s：缺 %s" % (setkey, os.path.basename(p)))
-            return None
-    setdir = os.path.join(asr_cache.SRC_ROOT, setkey)
-    if not os.path.isdir(setdir):
-        print("  跳过 %s：找不到源目录 %s" % (setkey, setdir))
-        return None
+            return None, "缺 %s" % os.path.basename(p)
+    setdir = source_dir(setkey)
+    if not setdir:
+        return None, "找不到源目录"
     with open(scan_path, encoding="utf-8") as fh:
         scan = json.load(fh)
     with open(st_path, encoding="utf-8") as fh:
         current = json.load(fh)
     if current.get("merged_asr") and (current["merged_asr"].get("merger") or "") != MERGER_ID:
-        print("  跳过 %s：已被 %s 合流过，不是这条管线的卷" % (setkey, current["merged_asr"].get("merger")))
-        return None
-    parsed = current
-    if os.path.exists(fs_path):
-        with open(fs_path, encoding="utf-8") as fh:
-            parsed = json.load(fh)
-    if not any(r.get("section") == "listening" for r in parsed.get("results", [])):
-        print("  跳过 %s：structured 里没有听力产物（先跑 structure_set --sections listening --merge）" % setkey)
-        return None
+        return None, "已被 %s 合流过，不是这条管线的卷" % current["merged_asr"].get("merger")
     if F.load_pdf_text(setdir):
-        print("  跳过 %s：这卷有「听力原文」PDF，该走 merge_first_source_asr.py" % setkey)
-        return None
+        return None, "这卷有「听力原文」PDF，该走 merge_first_source_asr.py"
     recs = listening_recordings(setdir)
     if len(recs) != 1:
-        print("  跳过 %s：听力录音 %d 条（%s）—— 这条管线只认一整条录音"
-              % (setkey, len(recs), ", ".join(os.path.basename(r) for r in recs) or "无"))
-        return None
+        return None, "听力录音 %d 条（%s）—— 这条管线只认一整条录音" % (
+            len(recs), ", ".join(os.path.basename(r) for r in recs) or "无")
     audio = recs[0]
-    # 转写是本机 faster-whisper、零 API 费用，--dry-run 也照转（只落 asr-recording 缓存，不写产物）
-    rec, cached = transcribe_recording(setkey, audio)
-    if not getattr(V.decode_pcm, "cache_info", None):
-        V.decode_pcm = functools.lru_cache(maxsize=2)(V.decode_pcm)   # 每段对话都要解同一条录音，缓存住
-
+    rec, cached = transcribe_recording(setkey, audio)      # 本机 faster-whisper，零 API 费用
     islands = tag_islands(rec["words"])
     mods = parse_modules(islands)
     la = (scan.get("alignment") or {}).get("listening") or {}
@@ -578,9 +638,107 @@ def process_set(setkey, args, totals, bank=None):
     tail_noise = []
     while len(mods) > len(totals_by_mod) and not mods[-1]["mats"] and len(mods[-1]["lcr"]) + len(mods[-1]["odd"]) <= 2:
         tail_noise.append(mods.pop())
+    return {"scan": scan, "current": current, "setdir": setdir, "audio": audio, "rec": rec, "cached": cached,
+            "islands": islands, "mods": mods, "totals_by_mod": totals_by_mod, "tail_noise": tail_noise}, None
+
+
+def screen_keys_by_q(scan):
+    """屏幕侧每道听力题 → structure_set 的块 key（`listening|module|起-止|总题数`，与 collectUnits 同口径）。"""
+    out = {}
+    for m in ((scan.get("alignment") or {}).get("listening") or {}).get("modules", []):
+        for mm in m.get("matched", []):
+            b = mm["block"]
+            key = "listening|%d|%d-%d|%d" % (m["module"], b["start"], b["end"], b["total"])
+            for q in range(int(b["start"]), int(b["end"]) + 1):
+                out[(m["module"], q)] = key
+    return out
+
+
+def plan_structure(setkey, write=True):
+    """先转写后结构化：只把「值得花钱结构化」的题块 key 列出来，写 asr-recording/<卷>/structure-plan.json。
+
+    不送 DeepSeek 的两类（按 3.16 实测约省一半结构化 + 盲审费用）：
+      · 录音结构没自证通过的 module（版式 / 题材 / 校验和不对）—— 没有分段就没有材料，结构化出题面也落不了库；
+      · 已判定为跨卷重复的题组：对话 / 通知 / 讲座按录音全文与保留方比词级相似度；LCR 只认逐字相同
+        （听错一词的 LCR 要靠选项认，选项得先结构化，所以照送）。
+    重复组落库只记别名、用不到本卷的题面，合流时照样认得出来（见 process_set 的 dup 判据）。
+    """
+    ctx, why = prepare(setkey)
+    if not ctx:
+        print("  跳过 %s：%s" % (setkey, why))
+        return None
+    bank = load_bank(current_set=setkey)
+    keys_by_q = screen_keys_by_q(ctx["scan"])
+    want, dup_groups, bad_mods = set(), [], []
+    mods, totals_by_mod = ctx["mods"], ctx["totals_by_mod"]
+    for i, mod in enumerate(mods[:2]):
+        mod_no = i + 1
+        types, form, problems = resolve_module(mod_no, mod, totals_by_mod.get(mod_no))
+        if len(mods) != len(totals_by_mod):
+            problems = problems + ["recording_module_count:录音分出 %d 个 module、屏幕 %d 个"
+                                   % (len(mods), len(totals_by_mod))]
+            types = None
+        if types is None:
+            bad_mods.append({"module": mod_no, "problems": problems})
+            continue
+        q = 1
+        for isl in mod["lcr"]:
+            text = " ".join(s["text"] for s in isl["sents"])
+            hit = find_dup("lcr", text, bank, "\0")
+            if hit and hit[0] >= 1.0:
+                dup_groups.append({"module": mod_no, "q_start": q, "type": "lcr", "dup_of": hit[1]})
+            elif keys_by_q.get((mod_no, q)):
+                want.add(keys_by_q[(mod_no, q)])
+            q += 1
+        for typ, mat in zip(types, mod["mats"]):
+            k = F.QS_PER_TYPE[typ]
+            hit = find_dup(typ, " ".join(s["text"] for s in mat["body"]), bank, "\0")
+            if hit:
+                dup_groups.append({"module": mod_no, "q_start": q, "type": typ, "dup_of": hit[1], "sim": hit[0]})
+            else:
+                want.update(keys_by_q[(mod_no, x)] for x in range(q, q + k) if keys_by_q.get((mod_no, x)))
+            q += k
+    for mod_no in sorted(totals_by_mod):
+        if mod_no > len(mods[:2]):
+            bad_mods.append({"module": mod_no, "problems": ["recording_module_missing:录音里没分出这个 module"]})
+    all_keys = sorted(set(keys_by_q.values()))
+    plan = {"set": setkey, "merger": MERGER_ID, "recording": os.path.basename(ctx["audio"]),
+            "keys": sorted(want), "screen_keys": len(all_keys), "dup_groups": dup_groups, "bad_modules": bad_mods}
+    if write:
+        os.makedirs(os.path.dirname(plan_path(setkey)), exist_ok=True)
+        with open(plan_path(setkey), "w", encoding="utf-8") as fh:
+            json.dump(plan, fh, ensure_ascii=False, indent=1)
+    print("  %s：屏幕 %d 块 → 要结构化 %d 块（跨卷重复 %d 组不送；结构没自证的 module %s）"
+          % (setkey, len(all_keys), len(want), len(dup_groups),
+             "、".join("M%d" % b["module"] for b in bad_mods) or "无"))
+    for b in bad_mods:
+        for p in b["problems"]:
+            print("     M%d %s" % (b["module"], p))
+    return plan
+
+
+def process_set(setkey, args, totals, bank=None):
+    st_path = os.path.join(OUT_DIR, "%s.structured.json" % setkey)
+    fs_path = os.path.join(OUT_DIR, "%s.structured.fs_parsed.json" % setkey)
+    ctx, why = prepare(setkey)
+    if not ctx:
+        print("  跳过 %s：%s" % (setkey, why))
+        return None
+    scan, current, audio, rec, cached = ctx["scan"], ctx["current"], ctx["audio"], ctx["rec"], ctx["cached"]
+    islands, mods, totals_by_mod, tail_noise = ctx["islands"], ctx["mods"], ctx["totals_by_mod"], ctx["tail_noise"]
+    parsed = current
+    if os.path.exists(fs_path):
+        with open(fs_path, encoding="utf-8") as fh:
+            parsed = json.load(fh)
+    # 全卷都是跨卷重复（plan 一块都没送结构化）时 structured 里本来就没有听力 —— 有 plan 就照样合流记别名
+    if not any(r.get("section") == "listening" for r in parsed.get("results", [])) and not os.path.exists(plan_path(setkey)):
+        print("  跳过 %s：structured 里没有听力产物（先跑 --plan-structure 再 structure_set --keys）" % setkey)
+        return None
+    if not getattr(V.decode_pcm, "cache_info", None):
+        V.decode_pcm = functools.lru_cache(maxsize=2)(V.decode_pcm)   # 每段对话都要解同一条录音，缓存住
     by_q = F.collect_items(parsed)
     slug = set_slug(setkey)
-    bank = bank if bank is not None else load_bank()
+    bank = load_bank(current_set=setkey) if bank is None else bank
 
     stats = F.new_stats()
     stats.update({"recording": os.path.basename(audio), "islands": len(islands),
@@ -646,9 +804,10 @@ def process_set(setkey, args, totals, bank=None):
         r["problems"] = extra + r["problems"]
         if extra and any(p.startswith(("recording_", "speaker_quote_mismatch")) for p in extra):
             r["status"] = "flagged"
-        # 近似重复：只在 module 结构自证过（没有 recording_* 问题）时才认 —— 结构坏了题号就不可信，别名会挂错槽
+        # 近似重复：只在 module 结构自证过（没有 recording_* 问题）时才认 —— 结构坏了题号就不可信，别名会挂错槽。
+        # 角色判不出 / 原话对不上角色 / 题面没结构化（plan 判重复后没送）都不妨碍记别名：落库用的是保留方那条。
         structural = [p for p in r["problems"] if p.startswith(F.BLOCKING_PREFIX + ("recording_",))
-                      and not p.startswith(DIARIZE_PREFIX + ("speaker_quote_mismatch",))]
+                      and not p.startswith(DIARIZE_PREFIX + ("speaker_quote_mismatch", "screen_items_missing"))]
         if not structural:
             opts = None
             if r["type"] == "lcr" and r.get("items"):
@@ -844,6 +1003,12 @@ def self_test():
     check("卷名 slug", [set_slug(x) for x in ("3.16新托福真题", "3.2新托福真题A卷", "5.6新托福真题_v2", "rf0610")]
           == ["316", "32a", "56v2", "rf0610"])
 
+    # 保留方先后：文档来源永远可当；录音来源只认卷名在前的；自己不算
+    check("文档来源可当保留方", may_keep("rf0610", False, "3.16新托福真题"))
+    check("卷名在前的录音卷可当", may_keep("4.20新托福真题", True, "5.10新托福真题"))
+    check("卷名在后的录音卷不可当（防互相记别名）", not may_keep("5.10新托福真题", True, "4.20新托福真题"))
+    check("自己不算", not may_keep("3.16新托福真题", False, "3.16新托福真题"))
+
     if fails:
         print("SELF-TEST FAILED:")
         for f in fails:
@@ -860,17 +1025,23 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--dump-islands", action="store_true", help="打印切岛结果（排查用）")
+    ap.add_argument("--plan-structure", action="store_true",
+                    help="只转写 + 查重，列出值得送结构化的题块 key（写 asr-recording/<卷>/structure-plan.json）")
     args = ap.parse_args()
     if args.self_test:
         return self_test()
     if not args.set:
-        print("用法: merge_recording_asr.py --set <卷名> [--set …] [--dry-run] [--dump-islands]")
+        print("用法: merge_recording_asr.py --set <卷名> [--set …] [--plan-structure | --dry-run] [--dump-islands]")
         return 2
+    if args.plan_structure:
+        print("■ 数字卷整块录音：结构化计划（只转写 + 查重，不调 API）")
+        for s in args.set:
+            plan_structure(s)
+        return 0
     print("■ 数字卷整块录音听力合流%s" % ("（--dry-run）" if args.dry_run else ""))
     totals = []
-    bank = load_bank()
     for s in args.set:
-        process_set(s, args, totals, bank)
+        process_set(s, args, totals)
         if args.dump_islands:
             p = os.path.join(REC_DIR, s, "listening.json")
             if os.path.exists(p):
