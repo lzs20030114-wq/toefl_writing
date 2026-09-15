@@ -31,8 +31,8 @@
     "sDroppedInvalid": "validator 不收"
   },
   "summary": {
-    "rows": 840,
-    "questions": 505,
+    "rows": 823,
+    "questions": 458,
     "sections": 13,
     "byCode": {
       "wSkippedThin": {
@@ -87,8 +87,8 @@
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 35,
-        "questions": 53,
+        "rows": 24,
+        "questions": 33,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -108,8 +108,8 @@
       "lDroppedDupItem": {
         "code": "lDroppedDupItem",
         "label": "跨卷逐条内容重复",
-        "rows": 72,
-        "questions": 98,
+        "rows": 74,
+        "questions": 101,
         "sections": 0
       },
       "sDroppedDupSet": {
@@ -125,13 +125,6 @@
         "rows": 1,
         "questions": 0,
         "sections": 1
-      },
-      "sDroppedInvalid": {
-        "code": "sDroppedInvalid",
-        "label": "validator 不收",
-        "rows": 8,
-        "questions": 30,
-        "sections": 0
       },
       "droppedDupStem": {
         "code": "droppedDupStem",
@@ -184,12 +177,12 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 228,
+        "questions": 211,
         "sections": 1
       },
       "speaking": {
         "section": "speaking",
-        "questions": 48,
+        "questions": 18,
         "sections": 0
       },
       "reading": {
@@ -217,24 +210,23 @@
       },
       "lcr": {
         "type": "lcr",
-        "questions": 80,
+        "questions": 79,
         "byCode": {
           "lDroppedDisagree": 14,
           "lDroppedBadOptions": 7,
-          "lDroppedDupItem": 56,
-          "lDroppedInvalid": 2,
+          "lDroppedDupItem": 57,
           "lDroppedNoAuditQ": 1
         }
       },
       "lc": {
         "type": "lc",
-        "questions": 52,
+        "questions": 36,
         "byCode": {
           "lDroppedDisagree": 8,
-          "lDroppedInvalid": 32,
+          "lDroppedInvalid": 14,
           "lDroppedBadOptions": 1,
           "lDroppedNoAuditQ": 1,
-          "lDroppedDupItem": 10
+          "lDroppedDupItem": 12
         }
       },
       "la": {
@@ -267,10 +259,9 @@
       },
       "interview": {
         "type": "interview",
-        "questions": 34,
+        "questions": 4,
         "byCode": {
-          "sDroppedDupSet": 4,
-          "sDroppedInvalid": 30
+          "sDroppedDupSet": 4
         }
       },
       "rdl": {
@@ -8428,19 +8419,6 @@
       "detail": "too_few_questions: 2 (min 3)"
     },
     {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 17,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_121b_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6)"
-    },
-    {
       "set": "1.21新托福真题C卷",
       "slug": "121c",
       "section": "listening",
@@ -8600,19 +8578,6 @@
       "set": "1.27新托福真题B卷",
       "slug": "127b",
       "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 17,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_127b_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6)"
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "section": "listening",
       "type": "la",
       "module": 1,
       "q": 19,
@@ -8647,19 +8612,6 @@
       "id": "real_lat_127b_1_29",
       "code": "lDroppedDupItem",
       "detail": "口播与 1.27新托福真题A卷/real_lat_127a_1_29 逐字相同"
-    },
-    {
-      "set": "1.28新托福真题A卷",
-      "slug": "128a",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 2,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_128a_1_02",
-      "code": "lDroppedInvalid",
-      "detail": "speaker_too_short: 3 words (min 4)"
     },
     {
       "set": "1.28新托福真题A卷",
@@ -8711,7 +8663,7 @@
       "scope": "unit",
       "id": "real_lc_128a_1_13",
       "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6) | wrong_question_count: 1 (must be exactly 2)"
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "1.28新托福真题A卷",
@@ -8905,8 +8857,8 @@
       "n": 1,
       "scope": "unit",
       "id": "real_lcr_128b_1_02",
-      "code": "lDroppedInvalid",
-      "detail": "speaker_too_short: 3 words (min 4)"
+      "code": "lDroppedDupItem",
+      "detail": "口播与 1.28新托福真题A卷/real_lcr_128a_1_02 逐字相同"
     },
     {
       "set": "1.28新托福真题B卷",
@@ -8927,25 +8879,12 @@
       "section": "listening",
       "type": "lc",
       "module": 2,
-      "q": 4,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_128b_2_04",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6)"
-    },
-    {
-      "set": "1.28新托福真题B卷",
-      "slug": "128b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
       "q": 6,
       "n": 2,
       "scope": "unit",
       "id": "real_lc_128b_2_06",
       "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 3 (min 6) | speaker_Man_too_few_turns: 1 (min 2)"
+      "detail": "too_few_turns: 3 (min 4) | speaker_Man_too_few_turns: 1 (min 2)"
     },
     {
       "set": "2.10新托福真题",
@@ -9078,19 +9017,6 @@
       "detail": "口播与 1.28新托福真题B卷/real_lcr_128b_1_12 逐字相同"
     },
     {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 13,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_21b_1_13",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6)"
-    },
-    {
       "set": "2.1新托福真题C卷",
       "slug": "21c",
       "section": "listening",
@@ -9218,7 +9144,7 @@
       "scope": "unit",
       "id": "real_lc_21c_1_15",
       "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 3 (min 6) | speaker_Man_too_few_turns: 1 (min 2)"
+      "detail": "too_few_turns: 3 (min 4) | speaker_Man_too_few_turns: 1 (min 2)"
     },
     {
       "set": "2.1新托福真题C卷",
@@ -9494,19 +9420,6 @@
       "detail": "选项 3 个，answer_index=0"
     },
     {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 17,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_314_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6) | conversation_too_short: 54 words (min 80)"
-    },
-    {
       "set": "rf0610",
       "slug": "rf0610",
       "section": "listening",
@@ -9582,7 +9495,7 @@
       "scope": "unit",
       "id": "real_lc_rf0620_1_17",
       "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 3 (min 6) | speaker_Woman_too_few_turns: 1 (min 2)"
+      "detail": "too_few_turns: 3 (min 4) | speaker_Woman_too_few_turns: 1 (min 2)"
     },
     {
       "set": "rf0622",
@@ -9832,19 +9745,6 @@
       "detail": "口播与 rf0622/real_lcr_rf0622_1_09 逐字相同"
     },
     {
-      "set": "rf0708",
-      "slug": "rf0708",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 17,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_rf0708_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "conversation_too_short: 57 words (min 80)"
-    },
-    {
       "set": "rf0713",
       "slug": "rf0713",
       "section": "listening",
@@ -9947,19 +9847,6 @@
       "id": "real_lcr_rf0716_1_11",
       "code": "lDroppedDupItem",
       "detail": "口播与 rf0629/real_lcr_rf0629_1_05 逐字相同"
-    },
-    {
-      "set": "rf0716",
-      "slug": "rf0716",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 17,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_rf0716_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "conversation_too_short: 59 words (min 80)"
     },
     {
       "set": "rf0808",
@@ -10090,19 +9977,6 @@
       "id": "real_lc_rf0826_1_13",
       "code": "lDroppedDupItem",
       "detail": "口播与 rf0708/real_lc_rf0708_2_04 逐字相同"
-    },
-    {
-      "set": "rf0826",
-      "slug": "rf0826",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 6,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lc_rf0826_2_06",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_turns: 4 (min 6)"
     },
     {
       "set": "rf0902",
@@ -10296,8 +10170,8 @@
       "n": 2,
       "scope": "unit",
       "id": "real_lc_rf0902_1_17",
-      "code": "lDroppedInvalid",
-      "detail": "conversation_too_short: 59 words (min 80)"
+      "code": "lDroppedDupItem",
+      "detail": "口播与 rf0716/real_lc_rf0716_1_17 逐字相同"
     },
     {
       "set": "rf0902",
@@ -10571,110 +10445,6 @@
       "id": "real_repeat_21c_1",
       "code": "sDroppedDupSet",
       "detail": "补录内容与 rf0622/real_repeat_rf0622_1 逐字相同"
-    },
-    {
-      "set": "1.21新托福真题A卷",
-      "slug": "121a",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_121a_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[3]: word_count: 9 (absolute range 10-60)"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_121b_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[3]: word_count: 9 (absolute range 10-60)"
-    },
-    {
-      "set": "1.27新托福真题A卷",
-      "slug": "127a",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 3,
-      "scope": "unit",
-      "id": "real_interview_127a_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[2]: word_count: 9 (absolute range 10-60)"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 3,
-      "scope": "unit",
-      "id": "real_interview_21a_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[1]: word_count: 6 (absolute range 10-60)"
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_21b_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[0]: question: must be a non-empty string (min 15 chars)"
-    },
-    {
-      "set": "2.1新托福真题C卷",
-      "slug": "21c",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_21c_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[3]: word_count: 8 (absolute range 10-60)"
-    },
-    {
-      "set": "2.28新托福真题",
-      "slug": "228",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_228_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[2]: word_count: 4 (absolute range 10-60) | question[3]: word_count: 6 (absolute range 10-60)"
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "section": "speaking",
-      "type": "interview",
-      "module": null,
-      "q": null,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_interview_22_1",
-      "code": "sDroppedInvalid",
-      "detail": "补录：question[2]: word_count: 7 (absolute range 10-60) | question[3]: word_count: 9 (absolute range 10-60)"
     },
     {
       "set": "1.21新托福真题A卷",
