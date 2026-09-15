@@ -176,6 +176,20 @@ const SENTENCE_PASSES = SS.passingHashes(SENTENCE_LEDGER);
  * 第一来源邮件 / 学术讨论补录账本（data/realBank/writing-recall.json）：recall_writing.mjs 生成并对着该卷 OCR 核过，
  * **build_bank 只读不写**，只收 verdict=ok 的条目。缺文件 = 空账本 = 行为与接线前完全一致（第一来源卷照旧没有邮件 / 讨论）。
  */
+/**
+ * 口语补录账本（data/realBank/speaking-recall.json，scripts/realbank/recall_speaking.mjs 产）。
+ * 库里的面试 / 复述全部来自 rf* / rp* 第二来源，1–5 月的数字卷一套面试都没有，
+ * 而真题 GT 里按卷逐题转写着 14 套面试 + 13 套复述 —— 与邮件 / 讨论同一条补录路子。
+ * 缺文件 = 还没补录过，行为与接线前完全一致。
+ */
+const SPEAKING_RECALL = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "speaking-recall.json"), "utf8"));
+  } catch {
+    return { interview: {}, repeat: {} };
+  }
+})();
+
 const WRITING_RECALL = (() => {
   try {
     return JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "realBank", "writing-recall.json"), "utf8"));
@@ -1071,6 +1085,78 @@ function speakingSetKey(set) {
   return sha1(list.join("|").toLowerCase().replace(/[^a-z0-9|]+/g, " ").trim());
 }
 
+/**
+ * 口语补录：把账本里 verdict=ok、且库里这一卷还没有的那几套追加进来。
+ *
+ * 只追加、不顶替：库里已有同卷的（`has`）跳过；内容与已收下的某套逐字相同的（speakingSetKey）
+ * 也跳过并记别名 —— 与管线自己的跨卷去重同一把尺，免得补录把重复题灌进来。
+ * 题面一个字不改：账本里的文本就是 GT 的原句（面试那批由 recall_speaking 按模型给的**边界**
+ * 拼接原句得到，模型没有产出文本的口子）。音频一律没有 —— 前端 InterviewTask / RepeatTask
+ * 缺 audio_url 时退回浏览器朗读，题照样能做。
+ */
+function recallSpeaking(spk, seenS, stats) {
+  const added = { repeat: 0, interview: 0 };
+  const have = {
+    repeat: new Set(spk.repeat.map((x) => String(x.source || "").trim())),
+    interview: new Set(spk.interview.map((x) => String(x.source || "").trim())),
+  };
+  for (const type of ["repeat", "interview"]) {
+    for (const [setname, entry] of Object.entries(SPEAKING_RECALL[type] || {})) {
+      if (!entry || entry.verdict !== "ok" || !entry.content) continue;
+      if (have[type].has(String(setname).trim())) continue;
+      const slug = setSlug(setname);
+      const id = `real_${type}_${slug}_1`;
+      const meta = {
+        real: true, tier: TIER, source: setname, date: setDate(setname),
+        source_hash: null, source_flags: flagsFor(setname, "speaking"),
+      };
+      const set = type === "repeat"
+        ? {
+          id, scenario: String(entry.content.scenario || "").trim(), speaker_role: "staff", topic: "",
+          sentences: (entry.content.sentences || []).map((sentence, i) => ({
+            id: `${id}_s${i + 1}`, sentence: String(sentence).trim(),
+            difficulty: REPEAT_DIFF(String(sentence).trim().split(/\s+/).filter(Boolean).length),
+            word_count: String(sentence).trim().split(/\s+/).filter(Boolean).length,
+            structure: "", phonetic_focus: "", timing_seconds: 8, audio_url: null, from_asr: true,
+          })),
+          ...meta,
+        }
+        : {
+          id, topic: "", intro: String(entry.content.intro || "").trim(),
+          questions: (entry.content.questions || []).map((q, i) => ({
+            id: `${id}_q${i + 1}`, position: q.position || `Q${i + 1}`,
+            question: String(q.question || "").trim(),
+            difficulty: q.difficulty || IV_DIFF[Math.min(i, IV_DIFF.length - 1)],
+            word_count: Number(q.word_count) || 0, expected_response_topics: [], audio_url: null,
+          })),
+          ...meta,
+        };
+      const sk = `${type}#${speakingSetKey(set)}`;
+      if (seenS.has(sk)) {
+        recordDrop(stats, {
+          set: setname, slug, section: "speaking", type, n: (set.sentences || set.questions).length, id,
+          code: "sDroppedDupSet", detail: `补录内容与 ${seenS.get(sk)} 逐字相同`,
+        });
+        continue;
+      }
+      const res = type === "repeat" ? SPV.validateRepeatSet(set) : SPV.validateInterviewSet(set);
+      if (!res.valid) {
+        stats.sDroppedInvalid += 1;
+        stats.sInvalidDetail.push({ set: setname, id, type, errors: res.errors });
+        recordDrop(stats, {
+          set: setname, slug, section: "speaking", type, n: (set.sentences || set.questions).length, id,
+          code: "sDroppedInvalid", detail: `补录：${res.errors.join(" | ")}`,
+        });
+        continue;
+      }
+      seenS.set(sk, `${setname}/${id}`);
+      spk[type].push(set);
+      added[type] += 1;
+    }
+  }
+  stats.sRecallAdded = added;
+}
+
 const REPEAT_DIFF = (n) => (n <= 7 ? "easy" : n <= 12 ? "medium" : "hard");
 const IV_DIFF = ["personal", "descriptive", "analytical", "evaluative"];
 
@@ -1294,6 +1380,7 @@ function buildListeningSpeaking(files, stats) {
     }
   }
   stats.itemAliases = aliasEntries(itemAliasEdges);
+  recallSpeaking(spk, seenS, stats);
   return { listening: out, speaking: spk };
 }
 
@@ -1462,7 +1549,7 @@ function main() {
     mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
-    wBsAliases: [], itemAliases: [],
+    wBsAliases: [], itemAliases: [], sRecallAdded: { repeat: 0, interview: 0 },
     dropRecorder: makeDropRecorder(),
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
@@ -1763,6 +1850,9 @@ function main() {
 
   console.log("\n■ 真题口语落库（无客观答案，不走盲审；闸门是合流阶段的结构校验 + validator）");
   console.log(`  跨卷内容重复跳过 ${stats.sDroppedDupSet} 套；validator 不收丢弃 ${stats.sDroppedInvalid} 组`);
+  if (stats.sRecallAdded.repeat || stats.sRecallAdded.interview) {
+    console.log(`  真题 GT 补录（speaking-recall.json，只收 verdict=ok）：复述 +${stats.sRecallAdded.repeat} 套 / 面试 +${stats.sRecallAdded.interview} 套`);
+  }
   console.log(`  成品：复述 ${S.repeat.length} 套（${S.repeat.reduce((n, x) => n + x.sentences.length, 0)} 句）`
     + ` / 面试 ${S.interview.length} 套（${S.interview.reduce((n, x) => n + x.questions.length, 0)} 题）`);
   for (const d of [...stats.lInvalidDetail, ...stats.sInvalidDetail]) {

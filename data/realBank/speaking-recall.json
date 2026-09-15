@@ -1,0 +1,113 @@
+{
+  "_purpose": "口语补录账本：真题 GT（data/realExam2026/speaking/）里库里没有的那些卷。build_bank 只收 verdict=ok 的。",
+  "_generated_by": "scripts/realbank/recall_speaking.mjs",
+  "_how_to_edit": "改了内容就加 \"locked\": true（重跑不覆盖）；verdict=review 的条目人看过原卷再改成 ok。判据见脚本头注。",
+  "interview": {},
+  "repeat": {
+    "1.27新托福真题B卷": {
+      "content": {
+        "scenario": "You're learning to assist visitors at a university open house.",
+        "sentences": [
+          "Welcome to our campus tour.",
+          "The enrollment office is straight ahead.",
+          "Next door, you will see the library.",
+          "The cafeteria has many meal options available.",
+          "The university lecture halls are located over here.",
+          "If you have any questions, please stop by the information desk.",
+          "Lastly, please also remember to check the event schedule at the entrance."
+        ]
+      },
+      "provenance": {
+        "gt_id": "2026-01-27_repeat_audio-B",
+        "date": "2026-01-27",
+        "source_kind": "audio-asr"
+      },
+      "verdict": "ok",
+      "problems": []
+    },
+    "1.28新托福真题B卷": {
+      "content": {
+        "scenario": "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.",
+        "sentences": [
+          "Enter your name and student ID number.",
+          "Browse the course catalog to choose your classes.",
+          "You can use the schedule planner tool to avoid time conflicts.",
+          "If a class is already full, a pop-up message will appear.",
+          "Contact the instructor to see if more seats can be added.",
+          "You can still add or drop classes up until the second week of the new semester.",
+          "For your records, print out a list of your classes or email a copy to yourself."
+        ]
+      },
+      "provenance": {
+        "gt_id": "2026-01-28_repeat_audio-B",
+        "date": "2026-01-28",
+        "source_kind": "audio-asr"
+      },
+      "verdict": "ok",
+      "problems": []
+    },
+    "2.10新托福真题": {
+      "content": {
+        "scenario": "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.",
+        "sentences": [
+          "The computer lab has free Wi-Fi access.",
+          "The reading room is a quiet space for patrons.",
+          "The children's section has books and activities for kids.",
+          "The reference desk can provide assistance for research projects.",
+          "Study rooms can be reserved for group work and other meetings.",
+          "Library staff are available for help finding resources here or at other locations.",
+          "If you are looking for other specific locations and services, please use our guide."
+        ]
+      },
+      "provenance": {
+        "gt_id": "2026-02-10_repeat_audio",
+        "date": "2026-02-10",
+        "source_kind": "audio-asr"
+      },
+      "verdict": "ok",
+      "problems": []
+    },
+    "2.1新托福真题A卷": {
+      "content": {
+        "scenario": "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.",
+        "sentences": [
+          "You will see birds living in their treetop homes.",
+          "This space houses animals from Africa.",
+          "Many reptiles live here, including snakes, lizards and turtles.",
+          "Brightly colored butterflies are found in this peaceful area.",
+          "Staff are available to explain the displays in more detail.",
+          "Guides lead nature walks, highlighting native species and protected habitats.",
+          "To explore locations, trail paths and key features, you can download the map for free."
+        ]
+      },
+      "provenance": {
+        "gt_id": "2026-02-01_repeat_audio",
+        "date": "2026-02-01",
+        "source_kind": "audio-asr"
+      },
+      "verdict": "ok",
+      "problems": []
+    },
+    "2.1新托福真题C卷": {
+      "content": {
+        "scenario": "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.",
+        "sentences": [
+          "You can select your section and seat.",
+          "We have many different snacks and drinks for sale.",
+          "Family toilets are located by each of the sections.",
+          "Tickets and season passes are available near the front gate.",
+          "The visitor entrance to the stadium is through here.",
+          "Should you have questions about maps or event times, there are staff that can assist you.",
+          "You can download the map to your phone or tablet if you need any help navigating."
+        ]
+      },
+      "provenance": {
+        "gt_id": "2026-02-01_repeat_audio-C",
+        "date": "2026-02-01",
+        "source_kind": "audio-asr"
+      },
+      "verdict": "ok",
+      "problems": []
+    }
+  }
+}
