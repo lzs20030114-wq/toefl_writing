@@ -94,7 +94,10 @@ LCR_DUP_OPT_SIM = 0.9
 INTRO_RE = re.compile(
     r"(?i)(select the volume|volume (icon|control)|listening section|you will (answer|now hear|hear|listen)"
     r"|types of tasks|return to previous|\bmodule\s*\d|\bdirections\b|in this (part|section)"
-    r"|now (begin|start)|this is the end)")
+    r"|now (begin|start)|this is the end"
+    # 另一种音量调试的说法（4.8 "You'll be able to change the volume during the test…"；
+    # 3.20 同一句被转写成 "You now have the option to adjust all."）——漏认会被当成第 13 句 LCR，整个 M1 对不上蓝图
+    r"|change the volume|adjust the volume|option to adjust|during the test if you need)")
 CUE_HEAD_RE = re.compile(r"(?i)^\s*(?:now\s*,?\s*)?(?:listen\b|to\s+(?:a|an|the|part)\b)")
 KIND_WORDS = (("conversation", "lc"), ("announcement", "la"), ("talk", "lat"), ("lecture", "lat"),
               ("discussion", "lat"), ("podcast", "lat"), ("presentation", "lat"), ("class", "lat"))
@@ -120,6 +123,21 @@ def is_sentence_end(tok):
     return bool(END_RE.search(t))
 
 
+GLUE_RE = re.compile(r"^(?:[-.,%?!:;)\]]|'(?:s|re|ve|ll|d|t|m)\b)", re.I)
+
+
+def join_words(ws):
+    """词级 token 拼回文本。转写缓存里的 token 去掉了前导空格，续写片段（"-hop"、".m."、"'s"）
+    再用空格一拼就成了 "Hip -hop" / "7 a .m."；这几类前面不加空格。"""
+    out = ""
+    for w in ws:
+        t = w["w"]
+        if out and not GLUE_RE.match(t) and not out.endswith(("-", "(", "$", "/")):
+            out += " "
+        out += t
+    return out.strip()
+
+
 def sentences(words):
     """词序列 → 句 [{start, end, text}]（按词尾标点断句）。"""
     out, cur = [], []
@@ -130,8 +148,7 @@ def sentences(words):
             cur = []
     if cur:
         out.append(cur)
-    return [{"start": s[0]["start"], "end": s[-1]["end"],
-             "text": " ".join(x["w"] for x in s).strip()} for s in out]
+    return [{"start": s[0]["start"], "end": s[-1]["end"], "text": join_words(s)} for s in out]
 
 
 def split_islands(words, gap=ISLAND_GAP):
@@ -182,7 +199,10 @@ def reattach_cues(islands):
         if not cur or not nxt:
             continue
         sents = sentences(cur)
-        if len(sents) >= 2 and parse_cue(sents[-1:])[0]:
+        # 下一岛自己就以旁白开头 → 上一岛的尾句只是正文里恰好像旁白的一句
+        # （通知结尾 "Listen to the lecture recording before class."），不挪，否则通知丢了末句
+        nxt_has_cue = bool(parse_cue(sentences(nxt))[0]) or bool(split_unpunctuated_cue(nxt))
+        if len(sents) >= 2 and not nxt_has_cue and parse_cue(sents[-1:])[0]:
             k = len(cur) - len([w for w in cur if w["start"] >= sents[-1]["start"]])
             out[i + 1] = cur[k:] + nxt
             out[i] = cur[:k]
@@ -196,16 +216,42 @@ def reattach_cues(islands):
     return [ws for ws in out if ws]
 
 
+CUE_GAP_SEC = 0.5
+
+
+def split_unpunctuated_cue(ws):
+    """旁白和正文之间没转写出句号（4.8 "Listen to a talk on a science podcast When you think of Siberia, …"）：
+    按停顿切 —— 播音员念完旁白换人开讲，中间总有一口气。只在前 CUE_MAX_WORDS 个词里找
+    「停顿 ≥0.5s 且停顿之前的那几个词本身就是一句完整旁白（认得出题材）」的切点，找不到就不切。
+    不切的代价是这一段没有旁白题材（按蓝图位置补），切错的代价是讲座首句被剥掉 —— 所以宁可不切。
+    → (旁白词数, 题材, 旁白原句) 或 None。
+    """
+    if len(ws) < 4 or not CUE_HEAD_RE.match(join_words(ws[:3])):
+        return None
+    for i in range(min(len(ws) - 1, CUE_MAX_WORDS)):
+        if ws[i + 1]["start"] - ws[i]["end"] < CUE_GAP_SEC:
+            continue
+        typ, cue = parse_cue([{"text": join_words(ws[:i + 1]).rstrip(",;:") + "."}])
+        if typ:
+            return i + 1, typ, cue
+    return None
+
+
 def tag_islands(words):
     """整条录音的词 → 岛 [{tag: intro|lcr|mat|odd, start, end, words, sents, cue_type, cue, body}]。"""
     raw = []
     for ws in reattach_cues(split_islands(words)):
         sents = sentences(ws)
-        text = " ".join(w["w"] for w in ws)
+        text = join_words(ws)
         rec = {"start": ws[0]["start"], "end": ws[-1]["end"], "words": list(ws), "sents": sents,
                "n": len(ws), "text": text, "cue_type": None, "cue": "", "body": []}
         typ, cue = parse_cue(sents)
-        if typ:
+        unp = None if typ else split_unpunctuated_cue(ws)
+        if unp:
+            k, utyp, ucue = unp
+            rest = sentences(ws[k:])
+            rec.update(tag="mat" if rest else "cue_only", cue_type=utyp, cue=ucue, body=rest)
+        elif typ:
             rec.update(tag="mat" if len(sents) > 1 else "cue_only", cue_type=typ, cue=cue, body=sents[1:])
         elif INTRO_RE.search(text) and len(ws) <= 60:
             rec["tag"] = "intro"
@@ -479,15 +525,32 @@ def transcribe_recording(setkey, audio):
     return data, False
 
 
+def merge_glue(words):
+    """续写片段并回前一个词（"Hip" + "-hop" → "Hip-hop"，"5" + ",800" → "5,800"）。
+
+    bind_original_audio 拿每个词的 normTokens 首个 token 与题库口播文本对齐；题库文本是 join_words 拼的
+    （"Hip-hop" 归一化成 "hiphop"），词级缓存要是还拆成两个词，就对不上了。
+    """
+    out = []
+    for w in words:
+        if out and GLUE_RE.match(w["w"]):
+            p = out[-1]
+            out[-1] = {"w": p["w"] + w["w"], "start": p["start"], "end": w["end"]}
+        else:
+            out.append(dict(w))
+    return out
+
+
 def write_module_caches(setkey, rec, mod_no, words, segments):
     """按 module 切开的段级 / 词级缓存（bind_original_audio 第一来源分支的输入形状）。"""
+    words = merge_glue(words)
     base = {"set": setkey, "role": "listening_m%d" % mod_no, "file": rec["file"], "path": rec["path"],
             "model": rec["model"], "device": rec.get("device"), "from": MERGER_ID,
             "window_sec": [words[0]["start"], words[-1]["end"]] if words else None}
     for d, payload in ((ASR_DIR, {**base, "segments": segments,
                                   "text": " ".join(s["text"] for s in segments)}),
                        (WORDS_DIR, {**base, "vad": True, "words": words, "segments": segments,
-                                    "text": " ".join(w["w"] for w in words)})):
+                                    "text": join_words(words)})):
         p = os.path.join(d, setkey, "listening_m%d.json" % mod_no)
         os.makedirs(os.path.dirname(p), exist_ok=True)
         with open(p, "w", encoding="utf-8") as fh:
@@ -893,6 +956,20 @@ def self_test():
     # 断句：缩写不断、问号断
     ss = sentences(_w("Dr. Smith said hello. Are you there? Yes", 0))
     check("断句", [s["text"] for s in ss] == ["Dr. Smith said hello.", "Are you there?", "Yes"], ss)
+    # 续写片段不加空格
+    check("拼词", join_words(_w("Hip -hop starts at 7 a .m. with 5 ,800 fans ' s", 0))
+          == "Hip-hop starts at 7 a.m. with 5,800 fans ' s", join_words(_w("Hip -hop starts at 7 a .m. with 5 ,800 fans", 0)))
+    check("并词", [w["w"] for w in merge_glue(_w("Hip -hop at 5 ,800", 0))] == ["Hip-hop", "at", "5,800"])
+    # 音量调试的另一种说法也是开场提示
+    check("开场提示变体", bool(INTRO_RE.search("You'll be able to change the volume during the test if you need to."))
+          and bool(INTRO_RE.search("You now have the option to adjust all."))
+          and not INTRO_RE.search("Can you turn down the volume?"))
+    # 旁白与正文之间没有句号：按停顿切，停顿前那几个词得是完整旁白
+    ws = _w("Listen to a talk on a science podcast", 0) + _w("When you think of Siberia, you picture a cold place.", 3.5)
+    cut = split_unpunctuated_cue(ws)
+    check("无句号旁白按停顿切", cut and cut[0] == 8 and cut[1] == "lat", cut)
+    ws = _w("Listen to the students talk about when you think of Siberia", 0)
+    check("没有停顿不切", split_unpunctuated_cue(ws) is None)
 
     # 旁白：题材取最先出现的关键词；VAD 削掉 Listen 也认；问句不认
     check("旁白 conversation", parse_cue([{"text": "Listen to a conversation."}])[0] == "lc")
@@ -927,6 +1004,10 @@ def self_test():
           [" ".join(w["w"] for w in x) for x in fixed])
     fixed = reattach_cues([_w("Did you listen", 0), _w("to the radio yesterday?", 100)])
     check("问句里的 listen 不挪", " ".join(w["w"] for w in fixed[0]) == "Did you listen", fixed)
+    fixed = reattach_cues([_w("The library closes early. Listen to the lecture recording before class.", 0),
+                           _w("Listen to a conversation. I have a question for you.", 100)])
+    check("下一岛自带旁白时，上一岛像旁白的尾句不挪",
+          " ".join(w["w"] for w in fixed[0]).endswith("recording before class."), fixed)
 
     # 句级基频分离（合成正弦：120Hz 男 / 220Hz 女）
     import numpy as np
