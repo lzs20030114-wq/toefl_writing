@@ -67,7 +67,6 @@ export function bsRuntimeReject(raw) {
     const dropped = new Set(ds.slice(1));
     const chunks = (Array.isArray(raw?.chunks) ? raw.chunks : [])
       .map((c) => String(c || "").trim()).filter((c) => c && !dropped.has(c));
-    if (new Set(chunks).size !== chunks.length) return "词块重复";
     const { prefilled, positions } = deriveBsPrefilled(raw.answer, raw.blanks);
     const q = runtimeModel.normalizeRuntimeQuestion({
       ...raw, chunks, prefilled, prefilled_positions: positions, distractor: ds[0] || null,

@@ -353,8 +353,8 @@ def build_item(rec: dict, answer_sentence: str):
         raise ValueError("missing_template")
     if len(chunks) < 2:
         raise ValueError("missing_chunks")
-    if len({norm_answer_key(c) for c in chunks}) != len(chunks):
-        raise ValueError("duplicate_chunks")
+    # 词块允许重复：真题里同一个词块真的会摆两块（"…find my charger" 那屏有两块 my）。
+    # runtime 侧已按多重集判定（lib/questionBank/runtimeModel.js），这里不再一刀切拒收。
 
     raw_tokens, tail = parse_template(template)
     if not any(t[0] == "blank" for t in raw_tokens):
@@ -371,7 +371,9 @@ def build_item(rec: dict, answer_sentence: str):
         fuzzy_used = bool(sols)
         if not sols:
             raise ValueError("no_solution")
-    if len({tuple(sorted(i for g in s for i in g)) for s in sols}) > 1:
+    # 歧义按**拼出来的词块文本**判，不按下标：两块文本相同时，用哪一块都拼出同一个句子，
+    # 那不是歧义（按下标算会把每道含重复块的题都误判成 ambiguous_solution）。
+    if len({tuple(tuple(chunks[i] for i in g) for g in s) for s in sols}) > 1:
         raise ValueError("ambiguous_solution")
     plan = sols[0]
     used = [i for g in plan for i in g]
