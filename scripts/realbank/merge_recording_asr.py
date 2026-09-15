@@ -623,6 +623,10 @@ def find_dup(typ, text, bank, own_prefix, options=None):
 
 
 # ══ IO：找录音 / 转写 / 写缓存 ═══════════════════════════════════════════
+PART_RE = re.compile(r"(?i)part\s*(\d+)")
+JOINED_DIR = os.path.join(OUT_DIR, "src-joined")
+
+
 def listening_recordings(setdir):
     hits = []
     for dirpath, _dirs, files in os.walk(setdir):
@@ -635,6 +639,41 @@ def listening_recordings(setdir):
             if "听力" in fn or "listen" in low:
                 hits.append(os.path.join(dirpath, fn))
     return sorted(hits)
+
+
+def join_parts(setkey, files):
+    """商家把一场录音切成 part1 / part2 两条（5.29）：按 part 号拼成一条缓存文件，时间轴连续。
+
+    只在**每条都带 part 号、号码连续从 1 开始**时拼 —— 少一截或号码对不上就不拼（宁可这卷不跑）。
+    ffmpeg concat 直接拷流不重编码；拼出来的文件进 .codex-tmp/src-joined/，
+    合流与 bind_original_audio 都用它（词级时间戳与切片是同一条时间轴）。
+    """
+    parts = []
+    for f in files:
+        m = PART_RE.search(os.path.basename(f))
+        if not m:
+            return None
+        parts.append((int(m.group(1)), f))
+    parts.sort()
+    if [n for n, _ in parts] != list(range(1, len(parts) + 1)):
+        return None
+    out = os.path.join(JOINED_DIR, setkey, "listening" + os.path.splitext(parts[0][1])[1])
+    if os.path.exists(out) and os.path.getmtime(out) >= max(os.path.getmtime(f) for _, f in parts):
+        return out
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    listing = out + ".txt"
+    with open(listing, "w", encoding="utf-8") as fh:
+        for _, f in parts:
+            fh.write("file '%s'\n" % f.replace("\\", "/").replace("'", "'\\''"))
+    import subprocess
+    r = subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-f", "concat", "-safe", "0",
+                        "-i", listing, "-c", "copy", out], capture_output=True)
+    os.remove(listing)
+    if r.returncode != 0 or not os.path.exists(out):
+        print("  ✗ 拼接失败：%s" % (r.stderr or b"").decode("utf-8", "replace")[:200])
+        return None
+    print("  · %s：录音分 %d 段，已拼成一条 → %s" % (setkey, len(parts), os.path.relpath(out, ROOT)))
+    return out
 
 
 def transcribe_recording(setkey, audio):
@@ -896,8 +935,12 @@ def prepare(setkey):
     if F.load_pdf_text(setdir):
         return None, "这卷有「听力原文」PDF，该走 merge_first_source_asr.py"
     recs = listening_recordings(setdir)
+    if len(recs) > 1:
+        joined = join_parts(setkey, recs)
+        if joined:
+            recs = [joined]
     if len(recs) != 1:
-        return None, "听力录音 %d 条（%s）—— 这条管线只认一整条录音" % (
+        return None, "听力录音 %d 条（%s）—— 这条管线只认一整条录音（带 part 号且连续的会自动拼接）" % (
             len(recs), ", ".join(os.path.basename(r) for r in recs) or "无")
     audio = recs[0]
     rec, cached = transcribe_recording(setkey, audio)      # 本机 faster-whisper，零 API 费用

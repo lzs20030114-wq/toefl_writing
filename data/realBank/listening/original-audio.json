@@ -13523,6 +13523,27 @@
       "clip_duration_sec": 2.58,
       "verified": true,
       "on": "2026-09-15"
+    },
+    "real_lcr_529_2_02": {
+      "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_529_2_02.mp3?v=mu39vr75",
+      "source": "first",
+      "set": "5.29新托福真题",
+      "source_file": "listening.m4a",
+      "span_sec": [
+        1008.32,
+        1012.08
+      ],
+      "duration_sec": 3.76,
+      "text_sha1": "639012367e7c56581b4cde65f8bc296fe5b75388",
+      "coverage": 1,
+      "wpm": 239,
+      "lufs_in": -14.32,
+      "narration_text": null,
+      "narration_source": null,
+      "narration_gap_sec": null,
+      "clip_duration_sec": 3.76,
+      "verified": true,
+      "on": "2026-09-15"
     }
   },
   "skipped": {
@@ -13753,8 +13774,12 @@
     "real_lcr_518_1_07": {
       "reason": "wpm_out_of_range",
       "coverage": 1
+    },
+    "real_lcr_529_2_01": {
+      "reason": "tail_not_clean",
+      "coverage": 1
     }
   },
   "_purpose": "真题听力原声切片清单：build_bank.mjs 重建时按 text_sha1 回挂 audio_url（见 scripts/realbank/original_audio.js）",
-  "generated_at": "2026-09-15T22:50:34.704Z"
+  "generated_at": "2026-09-15T22:57:56.393Z"
 }
