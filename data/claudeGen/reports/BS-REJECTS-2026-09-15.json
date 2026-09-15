@@ -1,0 +1,977 @@
+{
+  "generated_by": "scripts/realbank/extract_bs_pages.py --report-out",
+  "_purpose": "识图拿到题面、却过不了机械校验的每一条：那一屏的模板 + 词块 + 试过的答案句。只有计数说明不了是识图漏块还是答案句对不上。",
+  "count": 54,
+  "rows": [
+    {
+      "q": 4,
+      "page": "p40.png",
+      "reason": "no_solution",
+      "prompt": "The lecture on ancient civilizations was fascinating.",
+      "template": "_____ aspects _____ _____ _____ _____ ?",
+      "chunks": [
+        "what",
+        "interesting",
+        "find",
+        "you",
+        "did",
+        "most"
+      ],
+      "answer_tried": "what aspects did you find most interesting ？",
+      "set": "1.21新托福真题A卷"
+    },
+    {
+      "q": 9,
+      "page": "p60.png",
+      "reason": "no_answer_sentence",
+      "prompt": "Did you get a chance to review the report?",
+      "template": "Sorry, but I _____ _____ _____ _____ _____ yet.",
+      "chunks": [
+        "to look",
+        "not",
+        "at",
+        "time",
+        "have",
+        "had",
+        "it"
+      ],
+      "answer_tried": "",
+      "set": "1.21新托福真题B卷"
+    },
+    {
+      "q": 10,
+      "page": "p56.png",
+      "reason": "no_solution",
+      "prompt": "What did Jee-Wha ask you after class?",
+      "template": "She wanted _____ _____ _____ _____ to _____ to.",
+      "chunks": [
+        "to find out",
+        "there",
+        "Konrad",
+        "is",
+        "what",
+        "moving",
+        "city"
+      ],
+      "answer_tried": "She wanted to find out what city Konrad is moving to.",
+      "set": "1.27新托福真题A卷"
+    },
+    {
+      "q": 2,
+      "page": "p53.png",
+      "reason": "no_solution",
+      "prompt": "I hear you're thinking of changing your course of study.",
+      "template": "I _____ _____ _____ _____ _____ _____ .",
+      "chunks": [
+        "sure",
+        "to do",
+        "not",
+        "want",
+        "what",
+        "I",
+        "in the future",
+        "why"
+      ],
+      "answer_tried": "That's right. I am not sure what I want to do in the future .",
+      "set": "1.27新托福真题B卷"
+    },
+    {
+      "q": 10,
+      "page": "p57.png",
+      "reason": "no_solution",
+      "prompt": "Did you see the latest episode of the series?",
+      "template": "No, _____ it _____ _____ _____ _____ .",
+      "chunks": [
+        "class",
+        "late",
+        "because",
+        "of",
+        "a",
+        "I missed"
+      ],
+      "answer_tried": "No,I missed it because of a late class .",
+      "set": "1.27新托福真题B卷"
+    },
+    {
+      "q": 3,
+      "page": "p37.png",
+      "reason": "no_solution",
+      "prompt": "Which project are you working on with your internship?",
+      "template": "_____ _____ _____ _____ _____ _____",
+      "chunks": [
+        "community outreach",
+        "that involves",
+        "the one",
+        "is my",
+        "and education",
+        "focus right"
+      ],
+      "answer_tried": "the one that involves community outreach and education is my focus right now.",
+      "set": "1.28新托福真题A卷"
+    },
+    {
+      "q": 7,
+      "page": "p47.png",
+      "reason": "no_solution",
+      "prompt": "I heard that the gallery has an exhibition of student work.",
+      "template": "_____ _____ _____ _____ _____ ?",
+      "chunks": [
+        "if",
+        "the",
+        "do you",
+        "public yet",
+        "it's",
+        "open to"
+      ],
+      "answer_tried": "do you know if it's open to the public yet ?",
+      "set": "1.28新托福真题B卷"
+    },
+    {
+      "q": 2,
+      "page": "p60.png",
+      "reason": "no_solution",
+      "prompt": "I finished reading the textbook you lent me.",
+      "template": "_____ _____ _____ _____ _____",
+      "chunks": [
+        "I",
+        "it",
+        "back",
+        "can",
+        "have"
+      ],
+      "answer_tried": "can I have it back now?",
+      "set": "2.10新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p62.png",
+      "reason": "duplicate_chunks",
+      "prompt": "I'm thinking about moving off campus next semester.",
+      "template": "Have _____ _____ _____ _____ _____ _____ ?",
+      "chunks": [
+        "place",
+        "you",
+        "a",
+        "like",
+        "found",
+        "you"
+      ],
+      "answer_tried": "Have you found a place you like ?",
+      "set": "2.10新托福真题"
+    },
+    {
+      "q": 10,
+      "page": "p64.png",
+      "reason": "too_many_spare_chunks(2)",
+      "prompt": "What time does the library close today?",
+      "template": "_____ _____ _____ _____ _____ .",
+      "chunks": [
+        "at",
+        "the",
+        "Sundays",
+        "closes",
+        "library",
+        "8 o'clock on"
+      ],
+      "answer_tried": "the library closes at",
+      "set": "2.10新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p39.png",
+      "reason": "no_solution",
+      "prompt": "Why are you studying so late?",
+      "template": "_____ _____ need _____ _____ _____ .",
+      "chunks": [
+        "morning",
+        "to",
+        "by",
+        "finish",
+        "I have",
+        "an assignment",
+        "tomorrow"
+      ],
+      "answer_tried": "I have an assignment I need to finish by tomorrow morning .",
+      "set": "2.1新托福真题C卷"
+    },
+    {
+      "q": 3,
+      "page": "p40.png",
+      "reason": "no_solution",
+      "prompt": "Is there any chance that you can finish the class project early?",
+      "template": "_____ _____ _____ _____ _____ allotting.",
+      "chunks": [
+        "to",
+        "the",
+        "take",
+        "no,",
+        "of time",
+        "full amount",
+        "it's going"
+      ],
+      "answer_tried": "no, it's going to take the full amount of time allotted.",
+      "set": "2.1新托福真题C卷"
+    },
+    {
+      "q": 6,
+      "page": "p41.png",
+      "reason": "no_solution",
+      "prompt": "Are you planning to buy a new couch for your dorm room?",
+      "template": "_____ _____ .",
+      "chunks": [
+        "their",
+        "to",
+        "next",
+        "until",
+        "no, I'm",
+        "sale",
+        "waiting"
+      ],
+      "answer_tried": "no, I'm waiting until their next sale to decide.",
+      "set": "2.1新托福真题C卷"
+    },
+    {
+      "q": 2,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "Why didn't you come to the literature symposium yesterday?",
+      "template": "_____ _____ _____ _____ _____ .",
+      "chunks": [
+        "received",
+        "email",
+        "I",
+        "the wrong",
+        "had",
+        "time listed"
+      ],
+      "answer_tried": "the email i received had the wrong time listed",
+      "set": "2.23新托福真题"
+    },
+    {
+      "q": 10,
+      "page": "p5.png",
+      "reason": "no_solution",
+      "prompt": "What is the best place to get coffee off campus?",
+      "template": "_____ _____ _____ _____ _____.",
+      "chunks": [
+        "that is",
+        "has the",
+        "next to",
+        "the café",
+        "best coffee",
+        "the office towers"
+      ],
+      "answer_tried": "the cafe that is next to the office tower has the best office",
+      "set": "2.23新托福真题"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "too_many_spare_chunks(2)",
+      "prompt": "Are you going to the class dinner tonight?",
+      "template": "I'm sorry, but _____ _____ _____ _____ _____.",
+      "chunks": [
+        "do",
+        "none",
+        "have",
+        "time",
+        "not",
+        "I",
+        "to attend"
+      ],
+      "answer_tried": "I'm sorry, but I do not have to attend",
+      "set": "2.25新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "Did you attend the team-building exercise last weekend?",
+      "template": "_____ _____ _____ _____.",
+      "chunks": [
+        "able",
+        "participate",
+        "to",
+        "wasn't",
+        "I"
+      ],
+      "answer_tried": "i wasn't able to partipate",
+      "set": "2.25新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p63.png",
+      "reason": "no_solution",
+      "prompt": "I heard there will be a meeting next week for the student interns.",
+      "template": "_____ _____ _____ _____ _____?",
+      "chunks": [
+        "do you",
+        "for",
+        "is mandatory",
+        "know",
+        "if",
+        "the meeting"
+      ],
+      "answer_tried": "do you know if the meeting is mandatory for everyone?",
+      "set": "2.28新托福真题"
+    },
+    {
+      "q": 7,
+      "page": "p63.png",
+      "reason": "no_solution",
+      "prompt": "The workshop on time management was very helpful.",
+      "template": "_____ _____ _____ _____ _____?",
+      "chunks": [
+        "know",
+        "if there",
+        "do",
+        "you",
+        "another session",
+        "will be"
+      ],
+      "answer_tried": "do you know if there will be another session next month?",
+      "set": "2.28新托福真题"
+    },
+    {
+      "q": 8,
+      "page": "p64.png",
+      "reason": "no_solution",
+      "prompt": "Why did you vote for that candidate?",
+      "template": "_____ is _____ the most reliable.",
+      "chunks": [
+        "education",
+        "who",
+        "seemed",
+        "promised to improve",
+        "the one"
+      ],
+      "answer_tried": "the one who promised to improve education seemed the most reliable.",
+      "set": "2.28新托福真题"
+    },
+    {
+      "q": 8,
+      "page": "p63.png",
+      "reason": "no_solution",
+      "prompt": "Did you finish reading that book?",
+      "template": "I have no time _____ ?",
+      "chunks": [
+        "I told",
+        "have",
+        "the reason",
+        "for reading anymore",
+        "why",
+        "you"
+      ],
+      "answer_tried": "why I told you have the reason I have no time for reading anymore ?",
+      "set": "2.2新托福真题"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "missing_template",
+      "prompt": "Why didn't you go to the class yesterday?",
+      "template": "I had an urgent deadline to meet work .",
+      "chunks": [
+        "had",
+        "an",
+        "to",
+        "meet",
+        "I",
+        "urgent",
+        "deadline"
+      ],
+      "answer_tried": "i had an urgent work deadline to meet",
+      "set": "2.8新托福真题"
+    },
+    {
+      "q": 4,
+      "page": "p4.png",
+      "reason": "no_solution",
+      "prompt": "Where is the best place to eat around campus?",
+      "template": "What type _____ _____ _____ _____ _____ _____ of restaurant?",
+      "chunks": [
+        "of restaurant",
+        "me",
+        "you're",
+        "looking",
+        "for",
+        "what type",
+        "can you tell"
+      ],
+      "answer_tried": "can you tell me what type of restaurant you're looking for",
+      "set": "2.8新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "I spoke with the professor about the assignment. What would you like to know?",
+      "template": "Could you _____ _____ _____ _____ _____ our group project?",
+      "chunks": [
+        "tell",
+        "if she",
+        "proposal for",
+        "me",
+        "approved our"
+      ],
+      "answer_tried": "can you tell me if she approved our proposal for our group project",
+      "set": "3.11新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p2.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Where did you find the article you used in your presentation?",
+      "template": "_____ _____ magazine that _____ _____ _____ _____.",
+      "chunks": [
+        "I",
+        "it",
+        "was",
+        "at",
+        "read",
+        "the",
+        "library",
+        "in",
+        "the"
+      ],
+      "answer_tried": "it was in the magazine that i read at the library",
+      "set": "3.17新托福真题"
+    },
+    {
+      "q": 5,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "The presentation you gave was very insightful.",
+      "template": "_____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "know",
+        "had",
+        "any questions",
+        "do you",
+        "if",
+        "the audience"
+      ],
+      "answer_tried": "do you know if the audience had any questions afterward?",
+      "set": "3.17新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p4.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Why are you carrying that heavy bag?",
+      "template": "It has _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "that",
+        "I",
+        "return",
+        "to",
+        "the",
+        "some",
+        "books",
+        "need",
+        "to",
+        "campus",
+        "library"
+      ],
+      "answer_tried": "it has some books that i need to return to the campus library",
+      "set": "3.18新托福真题"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "What is your favorite place to relax?",
+      "template": "_____ _____ _____ _____ _____ favorite spot.",
+      "chunks": [
+        "my",
+        "park",
+        "that",
+        "the",
+        "is",
+        "close",
+        "to",
+        "campus"
+      ],
+      "answer_tried": "the park that is close to campus is my favorite spot",
+      "set": "3.23新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p1.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Where did you find the instructions for the class assignment?",
+      "template": "_____ _____ _____ _____ gave _____ _____ _____.",
+      "chunks": [
+        "includes",
+        "professor",
+        "the",
+        "instructions",
+        "that",
+        "the",
+        "syllabus",
+        "us",
+        "our"
+      ],
+      "answer_tried": "the syllabus that our professor gave us includes the instructions",
+      "set": "3.23新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "Do you have a question about the interview process for the research position at the Chemistry Department?",
+      "template": "Do _____ _____ _____ _____ _____ the head of the department?",
+      "chunks": [
+        "will",
+        "stopped",
+        "know",
+        "if",
+        "I",
+        "you",
+        "speak with"
+      ],
+      "answer_tried": "yes. do you know if i will speak with the head of the department?",
+      "set": "3.24新托福真题"
+    },
+    {
+      "q": 8,
+      "page": "p4.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Why do you prefer that off-campus park for jogging?",
+      "template": "_____ _____ _____ _____ _____ favorite.",
+      "chunks": [
+        "is",
+        "my",
+        "the",
+        "best",
+        "that",
+        "trails",
+        "the",
+        "park",
+        "has"
+      ],
+      "answer_tried": "the park that has the best trails is my favorite",
+      "set": "3.27新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "Why didn't you call me back after class?",
+      "template": "_____ _____ _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "charger",
+        "I",
+        "couldn't",
+        "find",
+        "died",
+        "and",
+        "my",
+        "phone",
+        "battery"
+      ],
+      "answer_tried": "my phone battery died and i couldn't find my charger",
+      "set": "3.29新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p3.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Can we reschedule the meeting to after our afternoon classes?",
+      "template": "No, _____ _____ _____ _____ _____ _____ .",
+      "chunks": [
+        "changed",
+        "and",
+        "is",
+        "the",
+        "fixed",
+        "be",
+        "the",
+        "time",
+        "meeting",
+        "can't"
+      ],
+      "answer_tried": "no, the meeting can't be changed and the time is fixed",
+      "set": "3.29新托福真题"
+    },
+    {
+      "q": 10,
+      "page": "p5.png",
+      "reason": "no_solution",
+      "prompt": "Did you enjoy the student film festival?",
+      "template": "_____ _____ _____ _____ _____ me.",
+      "chunks": [
+        "movies",
+        "to",
+        "the",
+        "none of",
+        "were",
+        "of interest"
+      ],
+      "answer_tried": "non of the movies were of interest to me",
+      "set": "3.2新托福真题A卷"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "What are you looking for in a new laptop?",
+      "template": "_____ _____ _____ _____ _____ choice.",
+      "chunks": [
+        "is my",
+        "battery life",
+        "top",
+        "the model",
+        "that has",
+        "the longest"
+      ],
+      "answer_tried": "the model tha thas the longest battery life is my top choice",
+      "set": "3.2新托福真题B卷"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "I saw a job posting for a part-time position at the student bookstore.",
+      "template": "_____ _____ _____ _____ yet?",
+      "chunks": [
+        "for",
+        "you",
+        "have",
+        "it",
+        "applied"
+      ],
+      "answer_tried": "it's the one that has the software that i need for my project",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "I'm thinking of applying for a scholarship.",
+      "template": "_____ _____ _____ _____ _____?",
+      "chunks": [
+        "application",
+        "started",
+        "you",
+        "have",
+        "the",
+        "process"
+      ],
+      "answer_tried": "i bought the one taht has a built-in charger",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 5,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "I need to finish my essay by Friday.",
+      "template": "_____ _____ are _____ _____ ?",
+      "chunks": [
+        "writing",
+        "you",
+        "about",
+        "topic",
+        "what"
+      ],
+      "answer_tried": "i do not usually go to those events",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "Tomorrow is the big game between our school and the rival team.",
+      "template": "_____ _____ does _____ _____ ?",
+      "chunks": [
+        "the",
+        "what",
+        "game",
+        "start",
+        "time"
+      ],
+      "answer_tried": "i haven't decided yet, but it does sound interesting",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p5.png",
+      "reason": "duplicate_q",
+      "prompt": "Did you get a chance to review the report?",
+      "template": "Sorry, but I _____ _____ _____ _____ _____ yet.",
+      "chunks": [
+        "to look",
+        "not",
+        "at",
+        "time",
+        "have",
+        "had",
+        "it"
+      ],
+      "answer_tried": "",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 4,
+      "page": "p5.png",
+      "reason": "duplicate_q",
+      "prompt": "Why aren't you attending the conference?",
+      "template": "The dates _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "it",
+        "conflict with",
+        "other commitments",
+        "when",
+        "is scheduled",
+        "my"
+      ],
+      "answer_tried": "",
+      "set": "3.6新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "Why are you not coming to the class picnic?",
+      "template": "_____ _____ _____ _____ _____ _____ _____.",
+      "chunks": [
+        "can't",
+        "I",
+        "have",
+        "out",
+        "of",
+        "get",
+        "a",
+        "prior",
+        "commitment"
+      ],
+      "answer_tried": "i have a prior commitment i can't get out of",
+      "set": "3.8新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "I just received my acceptance letter from the university.",
+      "template": "Can _____ _____ _____ ?",
+      "chunks": [
+        "was successful as well",
+        "tell",
+        "whether",
+        "your scholarship application",
+        "you",
+        "me"
+      ],
+      "answer_tried": "can you tell me whethery our scholarship application was successful as well?",
+      "set": "4.18新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "Where is the best place to study on campus?",
+      "template": "_____ _____ _____ 24 hours _____.",
+      "chunks": [
+        "is the most convenient",
+        "is open",
+        "the library",
+        "that"
+      ],
+      "answer_tried": "the library that is open",
+      "set": "4.20新托福真题"
+    },
+    {
+      "q": 1,
+      "page": "p1.png",
+      "reason": "no_solution",
+      "prompt": "What is your favorite place to relax?",
+      "template": "_____ _____ _____ _____ _____ favorite spot.",
+      "chunks": [
+        "my",
+        "park",
+        "that",
+        "the",
+        "is",
+        "close",
+        "to",
+        "campus"
+      ],
+      "answer_tried": "the park that is close to campus is my favourite spot",
+      "set": "4.24新托福真题"
+    },
+    {
+      "q": 2,
+      "page": "p1.png",
+      "reason": "too_many_spare_chunks(2)",
+      "prompt": "Why didn't you answer your phone?",
+      "template": "I was _____ _____ _____ _____ _____ .",
+      "chunks": [
+        "the",
+        "call",
+        "I",
+        "was",
+        "couldn't",
+        "a",
+        "class",
+        "and",
+        "take",
+        "in"
+      ],
+      "answer_tried": "i was in a class and couldn't take the call",
+      "set": "4.24新托福真题"
+    },
+    {
+      "q": 4,
+      "page": "p2.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Which laptop are you planning to buy?",
+      "template": "_____ perfectly.",
+      "chunks": [
+        "processor",
+        "will",
+        "fit",
+        "has",
+        "that",
+        "the",
+        "one",
+        "the",
+        "fastest",
+        "my",
+        "needs"
+      ],
+      "answer_tried": "the one that has the fastest processor will fit my needs perfectly",
+      "set": "4.27新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p2.png",
+      "reason": "no_solution",
+      "prompt": "I just returned from a semester abroad in Japan.",
+      "template": "Can _____ _____ _____ _____ ?",
+      "chunks": [
+        "you",
+        "me",
+        "if",
+        "you visited",
+        "Tokyo"
+      ],
+      "answer_tried": "can you tell me if you visited tokyo",
+      "set": "4.28新托福真题"
+    },
+    {
+      "q": 6,
+      "page": "p3.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Did you know that I applied for a student internship?",
+      "template": "Can _____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "you",
+        "me",
+        "whether",
+        "tell",
+        "they",
+        "offered",
+        "you",
+        "the",
+        "position"
+      ],
+      "answer_tried": "can you tell me whether they offered you the position",
+      "set": "4.28新托福真题"
+    },
+    {
+      "q": 3,
+      "page": "p1.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Our school is planning a retreat next month.",
+      "template": "_____ _____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "at",
+        "the",
+        "do",
+        "you",
+        "It's",
+        "going",
+        "beach",
+        "or",
+        "in",
+        "the",
+        "mountains",
+        "know",
+        "if",
+        "to",
+        "be"
+      ],
+      "answer_tried": "do you know if it's going to be at the beach or in the mountains",
+      "set": "4.29新托福真题"
+    },
+    {
+      "q": 5,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "The presentation you gave was very insightful.",
+      "template": "_____ _____ _____ _____ _____ _____?",
+      "chunks": [
+        "know",
+        "had",
+        "any questions",
+        "do you",
+        "if",
+        "the audience"
+      ],
+      "answer_tried": "do you know if the audience had any questions afterward?",
+      "set": "4.5新托福真题"
+    },
+    {
+      "q": 9,
+      "page": "p3.png",
+      "reason": "no_solution",
+      "prompt": "Why didn't you come to the literature symposium yesterday?",
+      "template": "_____ _____ _____ _____ _____.",
+      "chunks": [
+        "received",
+        "email",
+        "the",
+        "the wrong",
+        "had",
+        "time listed"
+      ],
+      "answer_tried": "the email i received had the wrong time listed",
+      "set": "4.6新托福真题"
+    },
+    {
+      "q": 9,
+      "page": "p5.png",
+      "reason": "duplicate_chunks",
+      "prompt": "Why didn't you attend the biology lecture yesterday?",
+      "template": "_____ _____ _____ _____ _____ miss.",
+      "chunks": [
+        "had",
+        "I",
+        "gathering",
+        "that",
+        "I",
+        "couldn't",
+        "a family"
+      ],
+      "answer_tried": "i had a family gathering that i couldn't miss",
+      "set": "5.10新托福真题"
+    },
+    {
+      "q": 7,
+      "page": "p4.png",
+      "reason": "no_solution",
+      "prompt": "The university is hosting a networking event next Friday.",
+      "template": "_____ _____ _____ _____ _____?",
+      "chunks": [
+        "know whether",
+        "do you",
+        "in the",
+        "it will",
+        "main",
+        "be held"
+      ],
+      "answer_tried": "do you know whether it will be held in the main auditorium",
+      "set": "5.3新托福真题"
+    }
+  ]
+}
