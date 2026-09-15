@@ -1766,7 +1766,12 @@ function main() {
       tier: TIER, generated_by: "scripts/realbank/build_bank.mjs",
       count: writing.bs.length, items: writing.bs,
     }, null, 2), "utf8");
-    console.log(`\n（--only-bs）→ ${path.relative(process.cwd(), p)}  ${writing.bs.length} 条；其余文件未动`);
+    // 别名账本必须跟着重写：补进新题后，原先记别名的那些槽位有的变成这一卷自己的题了
+    // （bsGroundTruthEdges 的「题号被占就跳过」判据依赖最新的 bs.json）。不同步重写，
+    // assemble_sets 会拿旧账本给同一个 id 既造虚拟条目又收原生条目，同一槽位填两次。
+    const aliasPath = writeWritingAliases(writingAliasList(stats));
+    console.log(`\n（--only-bs）→ ${path.relative(process.cwd(), p)}  ${writing.bs.length} 条`
+      + `；→ ${path.relative(process.cwd(), aliasPath)}  ${writingAliasList(stats).length} 条（造句 ${stats.wBsAliases.length}）；其余文件未动`);
     // 人工复核清单照常生效：writing/bs 上已有 4 条下架 + 1 处 patch，跳过 applyReview
     // 会让下架过的题随重建复活。但 applyReview 没有按科目收窄的入口，它会把**所有**库文件
     // 重写一遍 —— 内容虽然一模一样（holds 早就应用过），字节却会变（行尾/末尾换行），
@@ -1776,7 +1781,7 @@ function main() {
     const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).forEach((e) => {
       const q = path.join(d, e.name);
       if (e.isDirectory()) walk(q);
-      else if (e.isFile() && q !== p) snap.set(q, fs.readFileSync(q));
+      else if (e.isFile() && q !== p && q !== aliasPath) snap.set(q, fs.readFileSync(q));
     });
     walk(bankRoot);
     const r = applyReview({ dry: false });

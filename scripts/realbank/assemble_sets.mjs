@@ -197,6 +197,9 @@ export function indexItems(banks, aliases = []) {
     const can = byId.get(a.canonical);
     const parsed = parseRealBankId(a.held);
     if (!can || !parsed || can.type !== parsed.type) continue;
+    // held 已经是库里活着的题：账本比题库旧（那一卷后来自己把这道题补进来了）。
+    // 再造虚拟条目会让同一个 id 出现两条 record，同一槽位填两次 —— 以题库为准，跳过。
+    if (byId.has(a.held)) continue;
     const set = slugSet.get(parsed.slug) || a.source;
     if (!set) continue;
     // 日期优先用别名自带的（那一卷的考试日期）：库里一条自己的题都没有的卷查不到 slugDate，

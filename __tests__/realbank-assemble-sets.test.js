@@ -398,6 +398,28 @@ describe("assemble_sets：写作补录的同一道题别名（writing/id-aliases
     });
   });
 
+  test("账本比题库旧：held 已经是库里活着的题 → 不再造虚拟条目（否则同一槽位填两次）", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-staleal-"));
+    const S1 = "3.21新托福真题", S2 = "4.1新托福真题";
+    const banks = Object.fromEntries(Object.keys(asm.BANK_FILES).map((t) => [t, []]));
+    const bs = (id, src, date, ans) => one(id, src, date, { prompt: "p", blanks: "_____", chunks: ["a"], answer: ans });
+    // 4.1 后来自己把 q3 补进来了（重扫/识图），可账本里还留着 bs_41_03 → bs_321_02 的别名
+    banks.bs = [bs("bs_321_02", S1, "2026-03-21", "a"), bs("bs_41_03", S2, "2026-04-01", "b")];
+    for (const [type, rel] of Object.entries(asm.BANK_FILES)) {
+      const p = path.join(dir, rel);
+      fs.mkdirSync(path.dirname(p), { recursive: true });
+      fs.writeFileSync(p, JSON.stringify({ items: banks[type] }));
+    }
+    fs.writeFileSync(path.join(dir, "writing", "id-aliases.json"), JSON.stringify({ aliases: [
+      { from: "bs_41_03", to: "bs_321_02", from_type: "bs", to_type: "bs", reason: "duplicate_bs", from_source: S2, from_date: "2026-04-01" },
+    ] }));
+
+    const recs = asm.indexItems(asm.loadBanks(dir), asm.loadDupAliases(dir));
+    const hit = recs.filter((r) => r.id === "bs_41_03");
+    expect(hit.length).toBe(1);            // 只有原生那一条
+    expect(hit[0].aliasOf).toBeUndefined();
+  });
+
   test("没有 writing/id-aliases.json（还没补录过）→ 不报错、不多出别名", () => {
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-walias-none-"));
     expect(asm.loadWritingAliases(dir)).toEqual([]);
