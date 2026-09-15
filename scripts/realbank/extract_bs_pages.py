@@ -38,6 +38,7 @@ writing/build 段只有 `{n, sentence}`（答案句，来自答案页），拼�
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import json
 import os
@@ -66,6 +67,8 @@ PAGE_DIR = os.path.join(OUT_DIR, "bs-pages")
 OCR_DIR = os.path.join(OUT_DIR, "bs-ocr")
 FLAGS_FILE = os.path.join(REPO_ROOT, "data", "realBank", "source-flags.json")
 TARGETS_FILE = os.path.join(REPO_ROOT, "data", "realExam2026", "writing", "buildSentence-targets.json")
+# 第二份 GT：条数少些，但有 targets 没有的 8 条（2.8 五条 / 4.20 三条）
+GT_ITEMS_FILE = os.path.join(REPO_ROOT, "data", "realExam2026", "writing", "buildSentence.json")
 DPI = 120
 
 EXTRACT_PROMPT = """You are reading a screenshot of a TOEFL "Build a Sentence" writing task interface.
@@ -260,6 +263,32 @@ def solve(tokens, chunks: list[str], answer_words: list[str], fuzzy: bool = Fals
 
     dfs(0, 0, (), ())
     return solutions
+
+
+def build_with_gt_retry(rec: dict, primary: str, alt: str | None, rejects: dict):
+    """先用答案页那条答案句；只在 **no_solution**（拼不回来）时，用 GT 的转写再试一次。
+
+    为什么值得重试：答案页是 OCR 出来的（全小写、无标点，实测还带 "broshure" 这类错字），
+    而 GT 是按卷逐题人工转写的校准锚 —— 同一道题，答案页的那条拼不出解，GT 那条常常能拼出。
+    为什么安全：机械校验一视同仁（答案句必须由模板固定词 + 词块按序恰好拼出，多余块 ≤1），
+    换答案句拼不出照样拒收 —— 绝不会因此放进一道拼不出的题，也不会让模型猜答案。
+
+    只在 no_solution 时重试：其余拒收码（缺模板 / 词块重复 / 多余块太多）是题面那一侧的毛病，
+    换答案句解决不了，重试只是白跑。
+    """
+    try:
+        core, fz = build_item(rec, primary)
+        return core, fz, None
+    except ValueError as e:
+        first = str(e)
+    if first != "no_solution" or not alt or norm_answer_key(alt) == norm_answer_key(primary or ""):
+        return None, False, first
+    try:
+        core, fz = build_item(rec, alt)
+    except ValueError as e2:
+        return None, False, str(e2)
+    rejects["_gt_answer_ok"] = rejects.get("_gt_answer_ok", 0) + 1
+    return core, fz, None
 
 
 def build_item(rec: dict, answer_sentence: str):
@@ -497,8 +526,48 @@ def set_slug(setname: str) -> str:
     return base + (v.group(1).lower() if v else "") + (f"v{rev.group(1)}" if rev else "")
 
 
+@functools.lru_cache(maxsize=1)
+def _gt_by_set() -> dict[str, dict[int, str]]:
+    """真题 ground truth 的答案句：{卷名: {题号: 目标句}}。
+
+    两份 GT 都读 —— `buildSentence-targets.json`（504 条）与 `buildSentence.json`（363 条，
+    其中 8 条前者没有：2.8 五条、4.20 三条）。
+
+    **按 source（卷名）精确匹配**，不再靠「日期 + 卷别后缀」反推 id：A 卷那几套的 id 根本不带
+    `-A` 后缀（2026-01-21 的 27 条里，A 卷 9 条是光身 `2026-01-21_bsN`，只有 B/C 带后缀），
+    旧口径要求后缀相等，实测 1.21A / 1.27A / 1.28A / 2.1A / 3.2A 五套一条都取不到，
+    1.21C 也少一条 —— 合计 49 条 GT 答案句被白白吞掉（454 → 504）。
+    """
+    out: dict[str, dict[int, str]] = {}
+    for f in (TARGETS_FILE, GT_ITEMS_FILE):
+        try:
+            raw = json.load(open(f, "r", encoding="utf-8"))
+        except Exception:
+            continue
+        items = raw if isinstance(raw, list) else (raw.get("items") or [])
+        for t in items:
+            if not isinstance(t, dict):
+                continue
+            src = str(t.get("source") or "").strip()
+            tgt = t.get("target")
+            if not src or not tgt:
+                continue
+            n = t.get("n")
+            if not isinstance(n, int):
+                m = re.match(r"^\d{4}-\d{2}-\d{2}_bs(\d+)(-[ABC])?$", str(t.get("id") or ""))
+                n = int(m.group(1)) if m else None
+            if isinstance(n, int):
+                out.setdefault(src, {}).setdefault(n, str(tgt))
+    return out
+
+
+def gt_answers_for(setname: str) -> dict[int, str]:
+    """这一卷的 GT 答案句。答案页拼不出时拿它再试一次（见 build_with_gt_retry）。"""
+    return dict(_gt_by_set().get(setname) or {})
+
+
 def answers_for(setname: str) -> dict[int, str]:
-    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 targets 补。"""
+    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 的 GT 补。"""
     out: dict[int, str] = {}
     p = os.path.join(OUT_DIR, f"{setname}.structured.json")
     try:
@@ -512,21 +581,8 @@ def answers_for(setname: str) -> dict[int, str]:
             n, s = it.get("n"), it.get("sentence")
             if isinstance(n, int) and s and n not in out:
                 out[n] = str(s)
-    date = set_date(setname)
-    suffix = ""
-    v = re.search(r"([ABC])卷", setname)
-    if v:
-        suffix = f"-{v.group(1)}"
-    try:
-        for t in json.load(open(TARGETS_FILE, "r", encoding="utf-8")):
-            m = re.match(r"^(\d{4}-\d{2}-\d{2})_bs(\d+)(-[ABC])?$", str(t.get("id") or ""))
-            if not m or m.group(1) != date or (m.group(3) or "") != suffix:
-                continue
-            n = int(m.group(2))
-            if n not in out and t.get("target"):
-                out[n] = str(t["target"])
-    except Exception:
-        pass
+    for n, t in gt_answers_for(setname).items():
+        out.setdefault(n, t)
     return out
 
 
@@ -611,6 +667,7 @@ def main() -> int:
     calls = 0
     for setname, pages, where in rendered:
         answers = answers_for(setname)
+        gt_answers = gt_answers_for(setname)
         meta_flags = flags_for(setname)
         date = set_date(setname)
         slug = set_slug(setname)
@@ -647,14 +704,12 @@ def main() -> int:
                 if q not in answers:
                     rejects["no_answer_sentence"] = rejects.get("no_answer_sentence", 0) + 1
                     continue
-                try:
-                    core, fz = build_item(rec, answers[q])
-                    if fz:
-                        rejects["_fuzzy_word_ok"] = rejects.get("_fuzzy_word_ok", 0) + 1
-                except ValueError as e:
-                    k = str(e)
-                    rejects[k] = rejects.get(k, 0) + 1
+                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects)
+                if core is None:
+                    rejects[why] = rejects.get(why, 0) + 1
                     continue
+                if fz:
+                    rejects["_fuzzy_word_ok"] = rejects.get("_fuzzy_word_ok", 0) + 1
                 seen_q[q] = {
                     "id": f"bs_{slug}_{q:02d}",
                     **core,
@@ -677,8 +732,13 @@ def main() -> int:
             os.remove(out_p)
         report.append({"set": setname, "pages": len(pages), "from": where, "seen": n_seen,
                        "answers": len(answers), "ok": len(items), "rejects": rejects})
+        # "_" 开头的键是**通过**的标记（模糊匹配救回 / GT 答案句救回），不是拒收 —— 分开打，
+        # 否则读的人会把 _fuzzy_word_ok 当成丢题（2026-09-15 实测把人绕进去过）。
+        marks = {k: v for k, v in rejects.items() if k.startswith("_")}
+        hard = {k: v for k, v in rejects.items() if not k.startswith("_")}
         print(f"  · {setname}: {len(pages)} 页 / 识图 {n_seen} 题 / 答案 {len(answers)} 条 "
-              f"→ 通过 {len(items)}" + (f"  拒收 {rejects}" if rejects else ""))
+              f"→ 通过 {len(items)}" + (f"（救回 {marks}）" if marks else "")
+              + (f"  拒收 {hard}" if hard else ""))
 
     # 报告按卷合并：--only 跑一部分卷时，不能把其余卷上一次的记录冲掉（事后要靠它查每套卷为什么缺题）
     report_p = os.path.join(OUT_DIR, "_bs_pages_report.json")
@@ -696,7 +756,11 @@ def main() -> int:
             agg[k] = agg.get(k, 0) + v
     print(f"\n完成：{len(report)} 套，通过 {tot_ok} 题，本次实际调用 {calls} 张 "
           f"（约 ¥{calls * CNY_PER_IMAGE:.2f}）")
-    print(f"拒收原因分布：{json.dumps(agg, ensure_ascii=False)}")
+    marks = {k: v for k, v in agg.items() if k.startswith("_")}
+    hard = {k: v for k, v in agg.items() if not k.startswith("_")}
+    if marks:
+        print(f"其中救回（已计入通过）：{json.dumps(marks, ensure_ascii=False)}")
+    print(f"拒收原因分布：{json.dumps(hard, ensure_ascii=False)}")
     return 0
 
 
