@@ -79,15 +79,15 @@ describe("真题专区：题量", () => {
     expect(email.length).toBe(57);
   });
 
-  test("造句 573 题（20 官方 + 361 回忆版 + 197 跨卷重复还回原卷 − 5 碎卷），官方 2 批各 10 题、批次号不动", () => {
+  test("造句 629 题（20 官方 + 401 回忆版 + 213 跨卷重复还回原卷 − 5 碎卷），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(RB_BS.items.length).toBe(361);
-    expect(RB_BS_RECYCLED.length).toBe(197);
+    expect(RB_BS.items.length).toBe(401);
+    expect(RB_BS_RECYCLED.length).toBe(213);
     expect(RB_BS_FILTERED_OUT).toBe(5);
     expect(bsQuestions.length).toBe(
       20 + RB_BS.items.length + RB_BS_RECYCLED.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
     );
-    expect(bsQuestions.length).toBe(573);
+    expect(bsQuestions.length).toBe(629);
     // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
     expect(bsBatches.length).toBeGreaterThan(2);
     expect(bsBatches.slice(0, 2).map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);

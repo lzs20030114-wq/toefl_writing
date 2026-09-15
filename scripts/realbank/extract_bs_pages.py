@@ -637,8 +637,60 @@ def gt_answers_for(setname: str) -> dict[int, str]:
     return dict(_gt_by_set().get(setname) or {})
 
 
+CONVERTED_DIR = os.path.join(OUT_DIR, "src-converted")
+_SECTION_HEAD = re.compile(r"^\s*(阅读|听力|写作|口语|答案)\s*[:：]?\s*$")
+
+
+@functools.lru_cache(maxsize=None)
+def docx_writing_answers(setname: str) -> dict[int, str]:
+    """5 月第二来源（docx 卷）的造句答案句：答案页写作段是「一段一句、**不编号**」。
+
+    ingest 的答案解析器只认带题号的写法（`1. what type of work…`），这 6 套一条都认不出，structured 里
+    写作段为空 —— 识图拿到了题面也没有答案句可配，整卷 10 题全丢（丢题账本记成「管线丢题」60 题）。
+    convert_docx_set.py 把 docx 转成了 PDF，PDF 里中文表头是乱码、长句被折行，不能当源；
+    这里顺着转换记录（src-converted/_convert_<日期>.json）找回原始「答案.docx」，按段落读：
+    「写作」表头之后、下一个科目表头之前的非空英文段落，**恰好 10 句**才采用，顺序即题号。
+    万一顺序与题面错位也不会上错题：下游机械校验要求答案句被模板 + 词块按序恰好拼出，
+    拼不出时 build_with_gt_retry 会在同卷 10 句里找**唯一**能拼出的那条（见 main 里的 scan_pool）。
+    """
+    try:
+        names = sorted(os.listdir(CONVERTED_DIR))
+    except OSError:
+        return {}
+    for fn in names:
+        if not (fn.startswith("_convert_") and fn.endswith(".json")):
+            continue
+        try:
+            conv = json.load(open(os.path.join(CONVERTED_DIR, fn), "r", encoding="utf-8"))
+        except Exception:
+            continue
+        if os.path.basename(os.path.normpath(str(conv.get("out_dir") or ""))) != setname:
+            continue
+        for f in conv.get("files") or []:
+            src = str(f.get("src") or "")
+            if f.get("kind") != "answer-text-pdf" or not src.lower().endswith(".docx"):
+                continue
+            try:
+                import docx  # python-docx
+                paras = [p.text.strip() for p in docx.Document(os.path.join(conv["src_dir"], src)).paragraphs]
+            except Exception:
+                return {}
+            out, inside = [], False
+            for p in paras:
+                h = _SECTION_HEAD.match(p)
+                if h:
+                    if inside:
+                        break
+                    inside = h.group(1) == "写作"
+                    continue
+                if inside and p and re.search(r"[A-Za-z]", p):
+                    out.append(p)
+            return {i + 1: s for i, s in enumerate(out)} if len(out) == 10 else {}
+    return {}
+
+
 def answers_for(setname: str) -> dict[int, str]:
-    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 的 GT 补。"""
+    """答案页给的 {题号: 答案句}。structured 优先，缺的用 realExam2026 的 GT 补；都没有再退到 docx 卷的不编号写法。"""
     out: dict[int, str] = {}
     p = os.path.join(OUT_DIR, f"{setname}.structured.json")
     try:
@@ -654,6 +706,8 @@ def answers_for(setname: str) -> dict[int, str]:
                 out[n] = str(s)
     for n, t in gt_answers_for(setname).items():
         out.setdefault(n, t)
+    if not out:
+        out = dict(docx_writing_answers(setname))
     return out
 
 
@@ -772,6 +826,9 @@ def main() -> int:
     for setname, pages, where in rendered:
         answers = answers_for(setname)
         gt_answers = gt_answers_for(setname)
+        # 同卷全扫（build_with_gt_retry 第三级）的候选池：有 GT 用 GT；docx 卷没有 GT、答案句又是按段落顺序认的，
+        # 就拿这 10 句自己当池子 —— 顺序万一错位，只收唯一能拼出的那条。
+        scan_pool = gt_answers or (answers if answers and answers == docx_writing_answers(setname) else {})
         meta_flags = flags_for(setname)
         date = set_date(setname)
         slug = set_slug(setname)
@@ -827,7 +884,7 @@ def main() -> int:
                     rejects["no_answer_sentence"] = rejects.get("no_answer_sentence", 0) + 1
                     note("no_answer_sentence", q)
                     continue
-                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects, gt_answers)
+                core, fz, why = build_with_gt_retry(rec, answers[q], gt_answers.get(q), rejects, scan_pool)
                 if core is None:
                     rejects[why] = rejects.get(why, 0) + 1
                     note(why, q, answers[q])

@@ -20,10 +20,10 @@
   },
   "summary": {
     "need": 8280,
-    "got": 5356,
-    "missing": 2983,
+    "got": 5412,
+    "missing": 2927,
     "overfilled": 59,
-    "completeness": 0.6469,
+    "completeness": 0.6536,
     "causes": {
       "source_defect": 705,
       "held": 101,
@@ -31,9 +31,9 @@
       "bank_dropped": 200,
       "section_never_run": 1693,
       "section_lost": 0,
-      "pipeline_loss": 260
+      "pipeline_loss": 204
     },
-    "actionable": 260
+    "actionable": 204
   },
   "byType": {
     "ctw": {
@@ -119,8 +119,8 @@
     "bs": {
       "type": "bs",
       "need": 690,
-      "got": 558,
-      "missing": 132,
+      "got": 614,
+      "missing": 76,
       "causes": {
         "source_defect": 40,
         "held": 0,
@@ -128,9 +128,9 @@
         "bank_dropped": 26,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 66
+        "pipeline_loss": 10
       },
-      "completeness": 0.8087
+      "completeness": 0.8899
     },
     "email": {
       "type": "email",
@@ -281,8 +281,8 @@
     "writing": {
       "section": "writing",
       "need": 828,
-      "got": 683,
-      "missing": 145,
+      "got": 739,
+      "missing": 89,
       "causes": {
         "source_defect": 44,
         "held": 2,
@@ -290,9 +290,9 @@
         "bank_dropped": 31,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 68
+        "pipeline_loss": 12
       },
-      "completeness": 0.8249
+      "completeness": 0.8925
     },
     "listening": {
       "section": "listening",
@@ -435,90 +435,6 @@
         "M1/lc_17(-2)",
         "M2/lc_4(-2)",
         "M2/lc_6(-2)"
-      ]
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.18新托福真题",
-      "slug": "518",
-      "date": "2026-05-18",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.23新托福真题",
-      "slug": "523",
-      "date": "2026-05-23",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.29新托福真题",
-      "slug": "529",
-      "date": "2026-05-29",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
-      ]
-    },
-    {
-      "set": "5.6新托福真题_v2",
-      "slug": "56v2",
-      "date": "2026-05-06",
-      "section": "writing",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "bs": 10
-      },
-      "slots": [
-        "M1/bs_1(-10)"
       ]
     },
     {
@@ -939,6 +855,48 @@
       ]
     },
     {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "date": "2026-05-10",
+      "section": "writing",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "bs": 1
+      },
+      "slots": [
+        "M1/bs_1(-1)"
+      ]
+    },
+    {
+      "set": "5.23新托福真题",
+      "slug": "523",
+      "date": "2026-05-23",
+      "section": "writing",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "bs": 1
+      },
+      "slots": [
+        "M1/bs_1(-1)"
+      ]
+    },
+    {
+      "set": "5.29新托福真题",
+      "slug": "529",
+      "date": "2026-05-29",
+      "section": "writing",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "bs": 1
+      },
+      "slots": [
+        "M1/bs_1(-1)"
+      ]
+    },
+    {
       "set": "5.6新托福真题_v2",
       "slug": "56v2",
       "date": "2026-05-06",
@@ -950,6 +908,20 @@
       },
       "slots": [
         "M2/ap_11(-1)"
+      ]
+    },
+    {
+      "set": "5.6新托福真题_v2",
+      "slug": "56v2",
+      "date": "2026-05-06",
+      "section": "writing",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "bs": 1
+      },
+      "slots": [
+        "M1/bs_1(-1)"
       ]
     },
     {
@@ -18136,12 +18108,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 10
+        "pipeline_loss": 1
       },
       "notes": []
     },
@@ -18992,12 +18964,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 10
+        "pipeline_loss": 1
       },
       "notes": []
     },
@@ -19373,29 +19345,6 @@
       "set": "5.11新托福真题",
       "slug": "511",
       "date": "2026-05-11",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
-      },
-      "notes": []
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -19757,29 +19706,6 @@
       "cause": "section_never_run",
       "charged": {
         "section_never_run": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "5.18新托福真题",
-      "slug": "518",
-      "date": "2026-05-18",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 10
       },
       "notes": []
     },
@@ -20165,12 +20091,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 10
+        "pipeline_loss": 1
       },
       "notes": []
     },
@@ -20582,12 +20508,12 @@
         10
       ],
       "need": 10,
-      "got": 0,
-      "missing": 10,
-      "status": "empty",
+      "got": 9,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 10
+        "pipeline_loss": 1
       },
       "notes": []
     },
