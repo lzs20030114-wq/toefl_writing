@@ -87,8 +87,8 @@
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 33,
-        "questions": 50,
+        "rows": 35,
+        "questions": 53,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -108,8 +108,8 @@
       "lDroppedDupItem": {
         "code": "lDroppedDupItem",
         "label": "跨卷逐条内容重复",
-        "rows": 74,
-        "questions": 101,
+        "rows": 72,
+        "questions": 98,
         "sections": 0
       },
       "sDroppedDupSet": {
@@ -214,8 +214,8 @@
         "byCode": {
           "lDroppedDisagree": 14,
           "lDroppedBadOptions": 7,
-          "lDroppedDupItem": 57,
-          "lDroppedInvalid": 1,
+          "lDroppedDupItem": 56,
+          "lDroppedInvalid": 2,
           "lDroppedNoAuditQ": 1
         }
       },
@@ -224,10 +224,10 @@
         "questions": 52,
         "byCode": {
           "lDroppedDisagree": 8,
-          "lDroppedInvalid": 30,
+          "lDroppedInvalid": 32,
           "lDroppedBadOptions": 1,
           "lDroppedNoAuditQ": 1,
-          "lDroppedDupItem": 12
+          "lDroppedDupItem": 10
         }
       },
       "la": {
@@ -8897,8 +8897,8 @@
       "n": 1,
       "scope": "unit",
       "id": "real_lcr_128b_1_02",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 1.28新托福真题A卷/real_lcr_128a_1_02 逐字相同"
+      "code": "lDroppedInvalid",
+      "detail": "speaker_too_short: 3 words (min 4)"
     },
     {
       "set": "1.28新托福真题B卷",
@@ -10288,8 +10288,8 @@
       "n": 2,
       "scope": "unit",
       "id": "real_lc_rf0902_1_17",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 rf0716/real_lc_rf0716_1_17 逐字相同"
+      "code": "lDroppedInvalid",
+      "detail": "conversation_too_short: 59 words (min 80)"
     },
     {
       "set": "rf0902",

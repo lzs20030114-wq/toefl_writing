@@ -20,15 +20,15 @@
   },
   "summary": {
     "need": 8280,
-    "got": 5105,
-    "missing": 3234,
+    "got": 5099,
+    "missing": 3240,
     "overfilled": 59,
-    "completeness": 0.6165,
+    "completeness": 0.6158,
     "causes": {
       "source_defect": 705,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 213,
+      "bank_dropped": 219,
       "section_never_run": 1979,
       "section_lost": 0,
       "pipeline_loss": 211
@@ -199,34 +199,34 @@
     "la": {
       "type": "la",
       "need": 414,
-      "got": 128,
-      "missing": 286,
+      "got": 126,
+      "missing": 288,
       "causes": {
         "source_defect": 48,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 18,
+        "bank_dropped": 20,
         "section_never_run": 216,
         "section_lost": 0,
         "pipeline_loss": 2
       },
-      "completeness": 0.3092
+      "completeness": 0.3043
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 330,
-      "missing": 770,
+      "got": 326,
+      "missing": 774,
       "causes": {
         "source_defect": 128,
         "held": 20,
         "deduped": 0,
-        "bank_dropped": 34,
+        "bank_dropped": 38,
         "section_never_run": 576,
         "section_lost": 0,
         "pipeline_loss": 12
       },
-      "completeness": 0.3
+      "completeness": 0.2964
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 929,
-      "missing": 2314,
+      "got": 923,
+      "missing": 2320,
       "causes": {
         "source_defect": 416,
         "held": 62,
         "deduped": 0,
-        "bank_dropped": 121,
+        "bank_dropped": 127,
         "section_never_run": 1656,
         "section_lost": 0,
         "pipeline_loss": 59
       },
-      "completeness": 0.2865
+      "completeness": 0.2846
     }
   },
   "tasks": [
@@ -23749,7 +23749,64 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "lDroppedDupItem": 10
+        "lDroppedDupItem": 8,
+        "lDroppedInvalid": 2
+      },
+      "notes": [
+        "vendor_reformatted"
+      ]
+    },
+    {
+      "set": "rf0902",
+      "slug": "rf0902",
+      "date": "2026-09-02",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "la_21",
+      "type": "la",
+      "band": [
+        21,
+        22
+      ],
+      "need": 2,
+      "got": 0,
+      "missing": 2,
+      "status": "empty",
+      "cause": "bank_dropped",
+      "charged": {
+        "bank_dropped": 2
+      },
+      "drop_codes": {
+        "lDroppedDupItem": 6
+      },
+      "notes": [
+        "vendor_reformatted"
+      ]
+    },
+    {
+      "set": "rf0902",
+      "slug": "rf0902",
+      "date": "2026-09-02",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "lat_25",
+      "type": "lat",
+      "band": [
+        25,
+        28
+      ],
+      "need": 4,
+      "got": 0,
+      "missing": 4,
+      "status": "empty",
+      "cause": "bank_dropped",
+      "charged": {
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "lDroppedDupItem": 12
       },
       "notes": [
         "vendor_reformatted"
