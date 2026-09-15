@@ -850,13 +850,22 @@ def main() -> int:
         # 同一页读多遍时，同一题会「先失败后成功」（第一个过机械校验的读法胜出）——
         # 已经收下的题不该再留在拒收账里，否则报告会把救回来的题也算成丢题。
         if rej_rows:
+            # ① 已经收下的题不该再留在拒收账里（多遍读时同一题会先失败后成功）
             fixed = {r["q"] for r in rej_rows if r.get("q") is not None and r["q"] in seen_q}
-            if fixed:
-                for r in rej_rows:
-                    if r.get("q") in fixed and rejects.get(r["reason"]):
+            # ② 一道题只算一次：读了 3 遍都没过就记 3 条的话，no_solution 会凭空翻倍
+            #    （2026-09-15 实测 37 虚涨到 74，看报告的人还以为补题把题补丢了）
+            kept, counted = [], set()
+            for r in rej_rows:
+                q = r.get("q")
+                if q in fixed or (q is not None and q in counted):
+                    if rejects.get(r["reason"]):
                         rejects[r["reason"]] -= 1
-                rej_rows = [r for r in rej_rows if r.get("q") not in fixed]
-                rejects = {k: v for k, v in rejects.items() if v}
+                    continue
+                if q is not None:
+                    counted.add(q)
+                kept.append(r)
+            rej_rows = kept
+            rejects = {k: v for k, v in rejects.items() if v}
 
         items = [seen_q[k] for k in sorted(seen_q)]
         out_p = os.path.join(OUT_DIR, f"{setname}.bs.json")

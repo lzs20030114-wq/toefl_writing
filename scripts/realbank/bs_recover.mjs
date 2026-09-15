@@ -32,6 +32,9 @@
 import fs from "fs";
 import path from "path";
 import { spawnSync } from "child_process";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 const ROOT = process.cwd();
 const BANK = path.join(ROOT, "data", "realBank");
@@ -46,9 +49,22 @@ const PY = val("--py", process.env.REALBANK_PY || "python");
 const LIMIT = Number(val("--limit", "0")) || 0;
 
 const readJson = (p, fallback = null) => { try { return JSON.parse(fs.readFileSync(p, "utf8")); } catch { return fallback; } };
+
+/**
+ * 当前入库的造句槽位数。**从 sets.json 现算**，不读 loss-ledger.json ——
+ * 那份账本要到第 ⑤ 步 loss_ledger --freeze 才重写，而对账发生在第 ④ 步之后：
+ * 读它永远读到上一轮的旧值，于是每次都报 "+0"（2026-09-15 连骗了三轮）。
+ * buildLedger 是 loss_ledger 自己用的那支纯函数，口径一致。
+ */
+const { buildLedger } = require("./loss_attribution.js");
 const bsGot = () => {
-  const l = readJson(path.join(BANK, "loss-ledger.json"));
-  return l?.byType?.bs?.got ?? (Object.values(l?.byType || {}).find((b) => b.type === "bs") || {}).got ?? null;
+  const sets = readJson(path.join(BANK, "sets.json"));
+  if (!sets) return null;
+  try {
+    const byType = buildLedger({ sets }).byType || {};
+    const bs = byType.bs || Object.values(byType).find((b) => b.type === "bs");
+    return bs ? bs.got : null;
+  } catch { return null; }
 };
 
 /* ── 目标清单：全部从账本现算，不写死 ────────────────────────────────── */
