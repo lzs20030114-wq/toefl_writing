@@ -22,8 +22,8 @@
       "questions": 417
     },
     "lcr": {
-      "items": 253,
-      "questions": 253
+      "items": 259,
+      "questions": 259
     },
     "lc": {
       "items": 63,
@@ -34,8 +34,8 @@
       "questions": 100
     },
     "lat": {
-      "items": 74,
-      "questions": 294
+      "items": 75,
+      "questions": 298
     },
     "repeat": {
       "items": 30,
@@ -62,7 +62,7 @@
     "ctw": 37,
     "ap": 23,
     "la": 1,
-    "lat": 16,
+    "lat": 17,
     "repeat": 11,
     "interview": 25,
     "email": 6,
@@ -93,8 +93,8 @@
       },
       "listening": {
         "sets_with_any": 24,
-        "native_complete": 10,
-        "native_half": 12,
+        "native_complete": 12,
+        "native_half": 10,
         "native_scraps": 2,
         "skeletons": 24,
         "composites_complete": 0,
@@ -124,13 +124,13 @@
     },
     "exams_native": 0,
     "exams_mixed": 0,
-    "aliases_restored": 600,
+    "aliases_restored": 608,
     "type_sets": {
       "lcr": {
         "sets": 24,
-        "full": 7,
-        "near": 4,
-        "partial": 13
+        "full": 10,
+        "near": 3,
+        "partial": 11
       },
       "lc": {
         "sets": 20,
@@ -140,15 +140,15 @@
       },
       "la": {
         "sets": 22,
-        "full": 19,
+        "full": 20,
         "near": 0,
-        "partial": 3
+        "partial": 2
       },
       "lat": {
         "sets": 22,
-        "full": 15,
+        "full": 16,
         "near": 2,
-        "partial": 5
+        "partial": 4
       },
       "ctw": {
         "sets": 68,
@@ -665,13 +665,13 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.83,
-          "got": 39,
+          "completeness": 0.915,
+          "got": 43,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 26,
+              "got": 30,
               "need": 32,
               "slots": [
                 {
@@ -682,8 +682,8 @@
                     12
                   ],
                   "need": 12,
-                  "got": 8,
-                  "status": "partial",
+                  "got": 12,
+                  "status": "full",
                   "items": [
                     {
                       "id": "real_lcr_121b_1_01",
@@ -694,6 +694,16 @@
                       "id": "real_lcr_121b_1_02",
                       "nq": 1,
                       "q": 2
+                    },
+                    {
+                      "id": "real_lcr_121b_1_03",
+                      "nq": 1,
+                      "q": 3
+                    },
+                    {
+                      "id": "real_lcr_121b_1_04",
+                      "nq": 1,
+                      "q": 4
                     },
                     {
                       "id": "real_lcr_121b_1_05",
@@ -711,6 +721,11 @@
                       "q": 7
                     },
                     {
+                      "id": "real_lcr_121b_1_08",
+                      "nq": 1,
+                      "q": 8
+                    },
+                    {
                       "id": "real_lcr_121b_1_09",
                       "nq": 1,
                       "q": 9
@@ -719,6 +734,11 @@
                       "id": "real_lcr_121b_1_10",
                       "nq": 1,
                       "q": 10
+                    },
+                    {
+                      "id": "real_lcr_121b_1_11",
+                      "nq": 1,
+                      "q": 11
                     },
                     {
                       "id": "real_lcr_121b_1_12",
@@ -1289,13 +1309,13 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.66,
-          "got": 31,
+          "completeness": 0.745,
+          "got": 35,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 20,
+              "got": 24,
               "need": 32,
               "slots": [
                 {
@@ -1306,13 +1326,25 @@
                     12
                   ],
                   "need": 12,
-                  "got": 6,
+                  "got": 10,
                   "status": "partial",
                   "items": [
                     {
                       "id": "real_lcr_121c_1_01",
                       "nq": 1,
                       "q": 1
+                    },
+                    {
+                      "id": "real_lcr_121b_1_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_121c_1_03"
+                    },
+                    {
+                      "id": "real_lcr_121b_1_04",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "real_lcr_121c_1_04"
                     },
                     {
                       "id": "real_lcr_121c_1_05",
@@ -1330,9 +1362,21 @@
                       "q": 7
                     },
                     {
+                      "id": "real_lcr_121b_1_08",
+                      "nq": 1,
+                      "q": 8,
+                      "alias_of": "real_lcr_121c_1_08"
+                    },
+                    {
                       "id": "real_lcr_121c_1_09",
                       "nq": 1,
                       "q": 9
+                    },
+                    {
+                      "id": "real_lcr_121b_1_11",
+                      "nq": 1,
+                      "q": 11,
+                      "alias_of": "real_lcr_121c_1_11"
                     },
                     {
                       "id": "real_lcr_121c_1_12",
@@ -20025,13 +20069,13 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.936,
-          "got": 44,
+          "completeness": 0.957,
+          "got": 45,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 29,
+              "got": 30,
               "need": 32,
               "slots": [
                 {
@@ -20042,8 +20086,8 @@
                     12
                   ],
                   "need": 12,
-                  "got": 11,
-                  "status": "near",
+                  "got": 12,
+                  "status": "full",
                   "items": [
                     {
                       "id": "real_lcr_rf0610_1_01",
@@ -20079,6 +20123,12 @@
                       "id": "real_lcr_rf0610_1_07",
                       "nq": 1,
                       "q": 7
+                    },
+                    {
+                      "id": "real_lcr_121b_1_08",
+                      "nq": 1,
+                      "q": 8,
+                      "alias_of": "real_lcr_rf0610_1_08"
                     },
                     {
                       "id": "real_lcr_rf0610_1_09",
@@ -21938,13 +21988,13 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.83,
-          "got": 39,
+          "completeness": 0.851,
+          "got": 40,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 28,
+              "got": 29,
               "need": 32,
               "slots": [
                 {
@@ -21955,8 +22005,8 @@
                     12
                   ],
                   "need": 12,
-                  "got": 10,
-                  "status": "partial",
+                  "got": 11,
+                  "status": "near",
                   "items": [
                     {
                       "id": "real_lcr_rf0622_1_01",
@@ -21967,6 +22017,11 @@
                       "id": "real_lcr_rf0622_1_02",
                       "nq": 1,
                       "q": 2
+                    },
+                    {
+                      "id": "real_lcr_rf0622_1_03",
+                      "nq": 1,
+                      "q": 3
                     },
                     {
                       "id": "real_lcr_rf0622_1_04",
@@ -22579,13 +22634,13 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.915,
-          "got": 43,
+          "completeness": 0.936,
+          "got": 44,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 31,
+              "got": 32,
               "need": 32,
               "slots": [
                 {
@@ -22596,8 +22651,8 @@
                     12
                   ],
                   "need": 12,
-                  "got": 11,
-                  "status": "near",
+                  "got": 12,
+                  "status": "full",
                   "items": [
                     {
                       "id": "real_lcr_rf0622_1_01",
@@ -22610,6 +22665,12 @@
                       "nq": 1,
                       "q": 2,
                       "alias_of": "real_lcr_rf0629_1_02"
+                    },
+                    {
+                      "id": "real_lcr_rf0622_1_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_rf0629_1_03"
                     },
                     {
                       "id": "real_lcr_rf0622_1_04",
@@ -26427,134 +26488,14 @@
           },
           "unplaced": []
         },
-        "writing": {
-          "completeness": 0.917,
-          "got": 11,
-          "need": 12,
-          "modules": {
-            "1": {
-              "form": "A",
-              "got": 11,
-              "need": 12,
-              "slots": [
-                {
-                  "key": "bs_1",
-                  "type": "bs",
-                  "band": [
-                    1,
-                    10
-                  ],
-                  "need": 10,
-                  "got": 9,
-                  "status": "near",
-                  "items": [
-                    {
-                      "id": "bs_rf0716_01",
-                      "nq": 1,
-                      "q": 1,
-                      "alias_of": "bs_rf0902_01"
-                    },
-                    {
-                      "id": "bs_rf0716_02",
-                      "nq": 1,
-                      "q": 2,
-                      "alias_of": "bs_rf0902_02"
-                    },
-                    {
-                      "id": "bs_rf0716_04",
-                      "nq": 1,
-                      "q": 4,
-                      "alias_of": "bs_rf0902_04"
-                    },
-                    {
-                      "id": "bs_rf0716_05",
-                      "nq": 1,
-                      "q": 5,
-                      "alias_of": "bs_rf0902_05"
-                    },
-                    {
-                      "id": "bs_rf0716_06",
-                      "nq": 1,
-                      "q": 6,
-                      "alias_of": "bs_rf0902_06"
-                    },
-                    {
-                      "id": "bs_rf0716_07",
-                      "nq": 1,
-                      "q": 7,
-                      "alias_of": "bs_rf0902_07"
-                    },
-                    {
-                      "id": "bs_rf0716_08",
-                      "nq": 1,
-                      "q": 8,
-                      "alias_of": "bs_rf0902_08"
-                    },
-                    {
-                      "id": "bs_rf0716_09",
-                      "nq": 1,
-                      "q": 9,
-                      "alias_of": "bs_rf0902_09"
-                    },
-                    {
-                      "id": "bs_rf0716_10",
-                      "nq": 1,
-                      "q": 10,
-                      "alias_of": "bs_rf0902_10"
-                    }
-                  ]
-                },
-                {
-                  "key": "email_11",
-                  "type": "email",
-                  "band": [
-                    11,
-                    11
-                  ],
-                  "need": 1,
-                  "got": 1,
-                  "status": "full",
-                  "items": [
-                    {
-                      "id": "email_rf0713",
-                      "nq": 1,
-                      "q": 11,
-                      "alias_of": "email_rf0902"
-                    }
-                  ]
-                },
-                {
-                  "key": "disc_12",
-                  "type": "disc",
-                  "band": [
-                    12,
-                    12
-                  ],
-                  "need": 1,
-                  "got": 1,
-                  "status": "full",
-                  "items": [
-                    {
-                      "id": "disc_rf0716",
-                      "nq": 1,
-                      "q": 12,
-                      "alias_of": "disc_rf0902"
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          "unplaced": []
-        },
         "listening": {
-          "completeness": 0.723,
-          "got": 34,
+          "completeness": 0.957,
+          "got": 45,
           "need": 47,
           "modules": {
             "1": {
               "form": "A",
-              "got": 20,
+              "got": 30,
               "need": 32,
               "slots": [
                 {
@@ -26719,9 +26660,16 @@
                     22
                   ],
                   "need": 2,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_la_rf0622_1_23",
+                      "nq": 2,
+                      "q": 21,
+                      "alias_of": "real_la_rf0902_1_21"
+                    }
+                  ]
                 },
                 {
                   "key": "la_23",
@@ -26750,9 +26698,16 @@
                     28
                   ],
                   "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_rp0711_2_08",
+                      "nq": 4,
+                      "q": 25,
+                      "alias_of": "real_lat_rf0902_1_25"
+                    }
+                  ]
                 },
                 {
                   "key": "lat_29",
@@ -26762,15 +26717,21 @@
                     32
                   ],
                   "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_rf0902_1_29",
+                      "nq": 4,
+                      "q": 29
+                    }
+                  ]
                 }
               ]
             },
             "2": {
               "form": "A",
-              "got": 14,
+              "got": 15,
               "need": 15,
               "slots": [
                 {
@@ -26781,9 +26742,14 @@
                     3
                   ],
                   "need": 3,
-                  "got": 2,
-                  "status": "partial",
+                  "got": 3,
+                  "status": "full",
                   "items": [
+                    {
+                      "id": "real_lcr_rf0902_2_01",
+                      "nq": 1,
+                      "q": 1
+                    },
                     {
                       "id": "real_lcr_rf0716_2_02",
                       "nq": 1,
@@ -26879,6 +26845,126 @@
           },
           "unplaced": []
         },
+        "writing": {
+          "completeness": 0.917,
+          "got": 11,
+          "need": 12,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 11,
+              "need": 12,
+              "slots": [
+                {
+                  "key": "bs_1",
+                  "type": "bs",
+                  "band": [
+                    1,
+                    10
+                  ],
+                  "need": 10,
+                  "got": 9,
+                  "status": "near",
+                  "items": [
+                    {
+                      "id": "bs_rf0716_01",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "bs_rf0902_01"
+                    },
+                    {
+                      "id": "bs_rf0716_02",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "bs_rf0902_02"
+                    },
+                    {
+                      "id": "bs_rf0716_04",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "bs_rf0902_04"
+                    },
+                    {
+                      "id": "bs_rf0716_05",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "bs_rf0902_05"
+                    },
+                    {
+                      "id": "bs_rf0716_06",
+                      "nq": 1,
+                      "q": 6,
+                      "alias_of": "bs_rf0902_06"
+                    },
+                    {
+                      "id": "bs_rf0716_07",
+                      "nq": 1,
+                      "q": 7,
+                      "alias_of": "bs_rf0902_07"
+                    },
+                    {
+                      "id": "bs_rf0716_08",
+                      "nq": 1,
+                      "q": 8,
+                      "alias_of": "bs_rf0902_08"
+                    },
+                    {
+                      "id": "bs_rf0716_09",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "bs_rf0902_09"
+                    },
+                    {
+                      "id": "bs_rf0716_10",
+                      "nq": 1,
+                      "q": 10,
+                      "alias_of": "bs_rf0902_10"
+                    }
+                  ]
+                },
+                {
+                  "key": "email_11",
+                  "type": "email",
+                  "band": [
+                    11,
+                    11
+                  ],
+                  "need": 1,
+                  "got": 1,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "email_rf0713",
+                      "nq": 1,
+                      "q": 11,
+                      "alias_of": "email_rf0902"
+                    }
+                  ]
+                },
+                {
+                  "key": "disc_12",
+                  "type": "disc",
+                  "band": [
+                    12,
+                    12
+                  ],
+                  "need": 1,
+                  "got": 1,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "disc_rf0716",
+                      "nq": 1,
+                      "q": 12,
+                      "alias_of": "disc_rf0902"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
         "speaking": {
           "completeness": 1,
           "got": 11,
@@ -26937,6 +27023,122 @@
   ],
   "type_sets": {
     "lcr": [
+      {
+        "id": "lcr:121b",
+        "type": "lcr",
+        "set": "1.21新托福真题B卷",
+        "date": "2026-01-21",
+        "need": 15,
+        "got": 15,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_lcr_121b_1_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_11",
+            "nq": 1,
+            "module": 1,
+            "q": 11,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_12",
+            "nq": 1,
+            "module": 1,
+            "q": 12,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_2_01",
+            "nq": 1,
+            "module": 2,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_2_03",
+            "nq": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          }
+        ]
+      },
       {
         "id": "lcr:127a",
         "type": "lcr",
@@ -27408,6 +27610,123 @@
         ]
       },
       {
+        "id": "lcr:rf0610",
+        "type": "lcr",
+        "set": "rf0610",
+        "date": "2026-06-10",
+        "need": 15,
+        "got": 15,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_lcr_rf0610_1_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_08",
+            "alias_of": "real_lcr_rf0610_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_11",
+            "nq": 1,
+            "module": 1,
+            "q": 11,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_1_12",
+            "nq": 1,
+            "module": 1,
+            "q": 12,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_2_01",
+            "nq": 1,
+            "module": 2,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0610_2_03",
+            "nq": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          }
+        ]
+      },
+      {
         "id": "lcr:rf0708",
         "type": "lcr",
         "set": "rf0708",
@@ -27758,6 +28077,136 @@
         ]
       },
       {
+        "id": "lcr:rf0902",
+        "type": "lcr",
+        "set": "rf0902",
+        "date": "2026-09-02",
+        "need": 15,
+        "got": 15,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_lcr_rf0716_1_01",
+            "alias_of": "real_lcr_rf0902_1_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_02",
+            "alias_of": "real_lcr_rf0902_1_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_03",
+            "alias_of": "real_lcr_rf0902_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_04",
+            "alias_of": "real_lcr_rf0902_1_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_128b_1_03",
+            "alias_of": "real_lcr_rf0902_1_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_06",
+            "alias_of": "real_lcr_rf0902_1_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121b_1_02",
+            "alias_of": "real_lcr_rf0902_1_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_08",
+            "alias_of": "real_lcr_rf0902_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_09",
+            "alias_of": "real_lcr_rf0902_1_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_128b_1_12",
+            "alias_of": "real_lcr_rf0902_1_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0629_1_05",
+            "alias_of": "real_lcr_rf0902_1_11",
+            "nq": 1,
+            "module": 1,
+            "q": 11,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_1_12",
+            "alias_of": "real_lcr_rf0902_1_12",
+            "nq": 1,
+            "module": 1,
+            "q": 12,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0902_2_01",
+            "nq": 1,
+            "module": 2,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_2_02",
+            "alias_of": "real_lcr_rf0902_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0716_2_03",
+            "alias_of": "real_lcr_rf0902_2_03",
+            "nq": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          }
+        ]
+      },
+      {
         "id": "lcr:127b",
         "type": "lcr",
         "set": "1.27新托福真题B卷",
@@ -28091,107 +28540,119 @@
         ]
       },
       {
-        "id": "lcr:rf0610",
+        "id": "lcr:rf0629",
         "type": "lcr",
-        "set": "rf0610",
-        "date": "2026-06-10",
+        "set": "rf0629",
+        "date": "2026-06-29",
         "need": 15,
         "got": 14,
-        "status": "near",
+        "status": "partial",
         "items": [
           {
-            "id": "real_lcr_rf0610_1_01",
+            "id": "real_lcr_rf0622_1_01",
+            "alias_of": "real_lcr_rf0629_1_01",
             "nq": 1,
             "module": 1,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_02",
+            "id": "real_lcr_rf0622_1_02",
+            "alias_of": "real_lcr_rf0629_1_02",
             "nq": 1,
             "module": 1,
             "q": 2,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_03",
+            "id": "real_lcr_rf0622_1_03",
+            "alias_of": "real_lcr_rf0629_1_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_04",
+            "id": "real_lcr_rf0622_1_04",
+            "alias_of": "real_lcr_rf0629_1_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_05",
+            "id": "real_lcr_rf0629_1_05",
             "nq": 1,
             "module": 1,
             "q": 5,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_06",
+            "id": "real_lcr_rf0622_1_06",
+            "alias_of": "real_lcr_rf0629_1_06",
             "nq": 1,
             "module": 1,
             "q": 6,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_07",
+            "id": "real_lcr_rf0622_1_07",
+            "alias_of": "real_lcr_rf0629_1_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_09",
+            "id": "real_lcr_rf0622_1_08",
+            "alias_of": "real_lcr_rf0629_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0622_1_09",
+            "alias_of": "real_lcr_rf0629_1_09",
             "nq": 1,
             "module": 1,
             "q": 9,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_10",
+            "id": "real_lcr_rf0622_1_10",
+            "alias_of": "real_lcr_rf0629_1_10",
             "nq": 1,
             "module": 1,
             "q": 10,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_11",
+            "id": "real_lcr_210_1_02",
+            "alias_of": "real_lcr_rf0629_1_11",
             "nq": 1,
             "module": 1,
             "q": 11,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_1_12",
+            "id": "real_lcr_rf0622_1_12",
+            "alias_of": "real_lcr_rf0629_1_12",
             "nq": 1,
             "module": 1,
             "q": 12,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_2_01",
+            "id": "real_lcr_rf0622_2_01",
+            "alias_of": "real_lcr_rf0629_2_01",
             "nq": 1,
             "module": 2,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0610_2_02",
-            "nq": 1,
-            "module": 2,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0610_2_03",
+            "id": "real_lcr_rf0629_2_03",
             "nq": 1,
             "module": 2,
             "q": 3,
@@ -28313,237 +28774,135 @@
         ]
       },
       {
-        "id": "lcr:rf0902",
+        "id": "lcr:121c",
         "type": "lcr",
-        "set": "rf0902",
-        "date": "2026-09-02",
-        "need": 15,
-        "got": 14,
+        "set": "1.21新托福真题C卷",
+        "date": "2026-01-21",
+        "need": 19,
+        "got": 17,
         "status": "partial",
         "items": [
           {
-            "id": "real_lcr_rf0716_1_01",
-            "alias_of": "real_lcr_rf0902_1_01",
+            "id": "real_lcr_121c_1_01",
             "nq": 1,
             "module": 1,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_02",
-            "alias_of": "real_lcr_rf0902_1_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0716_1_03",
-            "alias_of": "real_lcr_rf0902_1_03",
+            "id": "real_lcr_121b_1_03",
+            "alias_of": "real_lcr_121c_1_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_04",
-            "alias_of": "real_lcr_rf0902_1_04",
+            "id": "real_lcr_121b_1_04",
+            "alias_of": "real_lcr_121c_1_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_128b_1_03",
-            "alias_of": "real_lcr_rf0902_1_05",
+            "id": "real_lcr_121c_1_05",
             "nq": 1,
             "module": 1,
             "q": 5,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_06",
-            "alias_of": "real_lcr_rf0902_1_06",
+            "id": "real_lcr_121c_1_06",
             "nq": 1,
             "module": 1,
             "q": 6,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_121b_1_02",
-            "alias_of": "real_lcr_rf0902_1_07",
+            "id": "real_lcr_121c_1_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_08",
-            "alias_of": "real_lcr_rf0902_1_08",
+            "id": "real_lcr_121b_1_08",
+            "alias_of": "real_lcr_121c_1_08",
             "nq": 1,
             "module": 1,
             "q": 8,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_09",
-            "alias_of": "real_lcr_rf0902_1_09",
+            "id": "real_lcr_121c_1_09",
             "nq": 1,
             "module": 1,
             "q": 9,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_128b_1_12",
-            "alias_of": "real_lcr_rf0902_1_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0629_1_05",
-            "alias_of": "real_lcr_rf0902_1_11",
+            "id": "real_lcr_121b_1_11",
+            "alias_of": "real_lcr_121c_1_11",
             "nq": 1,
             "module": 1,
             "q": 11,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_1_12",
-            "alias_of": "real_lcr_rf0902_1_12",
+            "id": "real_lcr_121c_1_12",
             "nq": 1,
             "module": 1,
             "q": 12,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0716_2_02",
-            "alias_of": "real_lcr_rf0902_2_02",
+            "id": "real_lcr_121c_2_01",
             "nq": 1,
             "module": 2,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0716_2_03",
-            "alias_of": "real_lcr_rf0902_2_03",
-            "nq": 1,
-            "module": 2,
-            "q": 3,
-            "slot": "lcr_1"
-          }
-        ]
-      },
-      {
-        "id": "lcr:rf0629",
-        "type": "lcr",
-        "set": "rf0629",
-        "date": "2026-06-29",
-        "need": 15,
-        "got": 13,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_lcr_rf0622_1_01",
-            "alias_of": "real_lcr_rf0629_1_01",
-            "nq": 1,
-            "module": 1,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0622_1_02",
-            "alias_of": "real_lcr_rf0629_1_02",
+            "id": "real_lcr_121c_2_02",
             "nq": 1,
-            "module": 1,
+            "module": 2,
             "q": 2,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0622_1_04",
-            "alias_of": "real_lcr_rf0629_1_04",
+            "id": "real_lcr_121c_2_03",
             "nq": 1,
-            "module": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_121c_2_04",
+            "nq": 1,
+            "module": 2,
             "q": 4,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0629_1_05",
+            "id": "real_lcr_121c_2_05",
             "nq": 1,
-            "module": 1,
+            "module": 2,
             "q": 5,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0622_1_06",
-            "alias_of": "real_lcr_rf0629_1_06",
+            "id": "real_lcr_121c_2_06",
             "nq": 1,
-            "module": 1,
+            "module": 2,
             "q": 6,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_rf0622_1_07",
-            "alias_of": "real_lcr_rf0629_1_07",
+            "id": "real_lcr_121c_2_07",
             "nq": 1,
-            "module": 1,
+            "module": 2,
             "q": 7,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0622_1_08",
-            "alias_of": "real_lcr_rf0629_1_08",
-            "nq": 1,
-            "module": 1,
-            "q": 8,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0622_1_09",
-            "alias_of": "real_lcr_rf0629_1_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0622_1_10",
-            "alias_of": "real_lcr_rf0629_1_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_210_1_02",
-            "alias_of": "real_lcr_rf0629_1_11",
-            "nq": 1,
-            "module": 1,
-            "q": 11,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0622_1_12",
-            "alias_of": "real_lcr_rf0629_1_12",
-            "nq": 1,
-            "module": 1,
-            "q": 12,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0622_2_01",
-            "alias_of": "real_lcr_rf0629_2_01",
-            "nq": 1,
-            "module": 2,
-            "q": 1,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0629_2_03",
-            "nq": 1,
-            "module": 2,
-            "q": 3,
             "slot": "lcr_1"
           }
         ]
@@ -28932,100 +29291,12 @@
         ]
       },
       {
-        "id": "lcr:121b",
-        "type": "lcr",
-        "set": "1.21新托福真题B卷",
-        "date": "2026-01-21",
-        "need": 15,
-        "got": 11,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_lcr_121b_1_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_02",
-            "nq": 1,
-            "module": 1,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_10",
-            "nq": 1,
-            "module": 1,
-            "q": 10,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_1_12",
-            "nq": 1,
-            "module": 1,
-            "q": 12,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_2_01",
-            "nq": 1,
-            "module": 2,
-            "q": 1,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_2_02",
-            "nq": 1,
-            "module": 2,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121b_2_03",
-            "nq": 1,
-            "module": 2,
-            "q": 3,
-            "slot": "lcr_1"
-          }
-        ]
-      },
-      {
         "id": "lcr:rf0622",
         "type": "lcr",
         "set": "rf0622",
         "date": "2026-06-22",
         "need": 15,
-        "got": 11,
+        "got": 12,
         "status": "partial",
         "items": [
           {
@@ -29040,6 +29311,13 @@
             "nq": 1,
             "module": 1,
             "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0622_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
             "slot": "lcr_1"
           },
           {
@@ -29193,108 +29471,6 @@
             "nq": 1,
             "module": 2,
             "q": 2,
-            "slot": "lcr_1"
-          }
-        ]
-      },
-      {
-        "id": "lcr:121c",
-        "type": "lcr",
-        "set": "1.21新托福真题C卷",
-        "date": "2026-01-21",
-        "need": 19,
-        "got": 13,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_lcr_121c_1_01",
-            "nq": 1,
-            "module": 1,
-            "q": 1,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_1_05",
-            "nq": 1,
-            "module": 1,
-            "q": 5,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_1_06",
-            "nq": 1,
-            "module": 1,
-            "q": 6,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_1_07",
-            "nq": 1,
-            "module": 1,
-            "q": 7,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_1_09",
-            "nq": 1,
-            "module": 1,
-            "q": 9,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_1_12",
-            "nq": 1,
-            "module": 1,
-            "q": 12,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_01",
-            "nq": 1,
-            "module": 2,
-            "q": 1,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_02",
-            "nq": 1,
-            "module": 2,
-            "q": 2,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_03",
-            "nq": 1,
-            "module": 2,
-            "q": 3,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_04",
-            "nq": 1,
-            "module": 2,
-            "q": 4,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_05",
-            "nq": 1,
-            "module": 2,
-            "q": 5,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_06",
-            "nq": 1,
-            "module": 2,
-            "q": 6,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_121c_2_07",
-            "nq": 1,
-            "module": 2,
-            "q": 7,
             "slot": "lcr_1"
           }
         ]
@@ -30799,6 +30975,41 @@
         ]
       },
       {
+        "id": "la:rf0902",
+        "type": "la",
+        "set": "rf0902",
+        "date": "2026-09-02",
+        "need": 6,
+        "got": 6,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_la_rf0716_1_19",
+            "alias_of": "real_la_rf0902_1_19",
+            "nq": 2,
+            "module": 1,
+            "q": 19,
+            "slot": "la_19"
+          },
+          {
+            "id": "real_la_rf0622_1_23",
+            "alias_of": "real_la_rf0902_1_21",
+            "nq": 2,
+            "module": 1,
+            "q": 21,
+            "slot": "la_21"
+          },
+          {
+            "id": "real_la_rf0716_1_23",
+            "alias_of": "real_la_rf0902_1_23",
+            "nq": 2,
+            "module": 1,
+            "q": 23,
+            "slot": "la_23"
+          }
+        ]
+      },
+      {
         "id": "la:rf0713",
         "type": "la",
         "set": "rf0713",
@@ -30844,33 +31055,6 @@
           },
           {
             "id": "real_la_rf0808_1_23",
-            "nq": 2,
-            "module": 1,
-            "q": 23,
-            "slot": "la_23"
-          }
-        ]
-      },
-      {
-        "id": "la:rf0902",
-        "type": "la",
-        "set": "rf0902",
-        "date": "2026-09-02",
-        "need": 6,
-        "got": 4,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_la_rf0716_1_19",
-            "alias_of": "real_la_rf0902_1_19",
-            "nq": 2,
-            "module": 1,
-            "q": 19,
-            "slot": "la_19"
-          },
-          {
-            "id": "real_la_rf0716_1_23",
-            "alias_of": "real_la_rf0902_1_23",
             "nq": 2,
             "module": 1,
             "q": 23,
@@ -31480,6 +31664,48 @@
         ]
       },
       {
+        "id": "lat:rf0902",
+        "type": "lat",
+        "set": "rf0902",
+        "date": "2026-09-02",
+        "need": 16,
+        "got": 16,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_lat_rp0711_2_08",
+            "alias_of": "real_lat_rf0902_1_25",
+            "nq": 4,
+            "module": 1,
+            "q": 25,
+            "slot": "lat_25"
+          },
+          {
+            "id": "real_lat_rf0902_1_29",
+            "nq": 4,
+            "module": 1,
+            "q": 29,
+            "slot": "lat_29"
+          },
+          {
+            "id": "real_lat_rf0716_2_08",
+            "alias_of": "real_lat_rf0902_2_08",
+            "nq": 4,
+            "module": 2,
+            "q": 8,
+            "slot": "lat_8"
+          },
+          {
+            "id": "real_lat_rf0716_2_12",
+            "alias_of": "real_lat_rf0902_2_12",
+            "nq": 4,
+            "module": 2,
+            "q": 12,
+            "slot": "lat_12"
+          }
+        ]
+      },
+      {
         "id": "lat:127b",
         "type": "lat",
         "set": "1.27新托福真题B卷",
@@ -31680,33 +31906,6 @@
             "module": 1,
             "q": 29,
             "slot": "lat_29"
-          }
-        ]
-      },
-      {
-        "id": "lat:rf0902",
-        "type": "lat",
-        "set": "rf0902",
-        "date": "2026-09-02",
-        "need": 16,
-        "got": 8,
-        "status": "partial",
-        "items": [
-          {
-            "id": "real_lat_rf0716_2_08",
-            "alias_of": "real_lat_rf0902_2_08",
-            "nq": 4,
-            "module": 2,
-            "q": 8,
-            "slot": "lat_8"
-          },
-          {
-            "id": "real_lat_rf0716_2_12",
-            "alias_of": "real_lat_rf0902_2_12",
-            "nq": 4,
-            "module": 2,
-            "q": 12,
-            "slot": "lat_12"
           }
         ]
       }
@@ -56252,6 +56451,422 @@
         ]
       },
       {
+        "id": "listening:rf0610",
+        "section": "listening",
+        "base_set": "rf0610",
+        "date": "2026-06-10",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.957,
+        "completeness": 0.957,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0610_1_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "rf0610",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0610_1_08"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_11",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_12",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 12,
+                "status": "full"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0610_1_13",
+                    "nq": 2,
+                    "q": 13,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0610_1_17",
+                    "nq": 2,
+                    "q": 17,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0610_1_19",
+                    "nq": 2,
+                    "q": 19,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_21a_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "rf0610",
+                    "via": "native",
+                    "alias_of": "real_la_rf0610_1_21"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0610_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0610_1_25",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0610_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 30
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0610_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "rf0610",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_2_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 3,
+                "status": "full"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_210_1_13",
+                    "nq": 2,
+                    "q": 4,
+                    "from": "rf0610",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0610_2_04"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0610_2_06",
+                    "nq": 2,
+                    "q": 6,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0610_2_08",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0610_2_12",
+                    "nq": 4,
+                    "q": 12,
+                    "from": "rf0610",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": [
+          "M1/lc_15:0/2"
+        ]
+      },
+      {
         "id": "listening:rf0708",
         "section": "listening",
         "base_set": "rf0708",
@@ -57085,6 +57700,443 @@
         ]
       },
       {
+        "id": "listening:rf0902",
+        "section": "listening",
+        "base_set": "rf0902",
+        "date": "2026-09-02",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.957,
+        "completeness": 0.957,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0716_1_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_01"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_02"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_03"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_04"
+                  },
+                  {
+                    "id": "real_lcr_128b_1_03",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_05"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_06"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_02",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_07"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_08"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_09"
+                  },
+                  {
+                    "id": "real_lcr_128b_1_12",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_10"
+                  },
+                  {
+                    "id": "real_lcr_rf0629_1_05",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_11"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_1_12",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_1_12"
+                  }
+                ],
+                "got": 12,
+                "status": "full"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0716_1_13",
+                    "nq": 2,
+                    "q": 13,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0902_1_13"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0716_1_15",
+                    "nq": 2,
+                    "q": 15,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0902_1_15"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0716_1_19",
+                    "nq": 2,
+                    "q": 19,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_la_rf0902_1_19"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0622_1_23",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_la_rf0902_1_21"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0716_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_la_rf0902_1_23"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rp0711_2_08",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0902_1_25"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0902_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "rf0902",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 30
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0902_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0902",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_2_02"
+                  },
+                  {
+                    "id": "real_lcr_rf0716_2_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0902_2_03"
+                  }
+                ],
+                "got": 3,
+                "status": "full"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0716_2_04",
+                    "nq": 2,
+                    "q": 4,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0902_2_04"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0716_2_06",
+                    "nq": 2,
+                    "q": 6,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0902_2_06"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0716_2_08",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0902_2_08"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0716_2_12",
+                    "nq": 4,
+                    "q": 12,
+                    "from": "rf0902",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0902_2_12"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 15
+          }
+        },
+        "missing": [
+          "M1/lc_17:0/2"
+        ]
+      },
+      {
         "id": "listening:228",
         "section": "listening",
         "base_set": "2.28新托福真题",
@@ -57895,10 +58947,10 @@
         ]
       },
       {
-        "id": "listening:rf0610",
+        "id": "listening:rf0629",
         "section": "listening",
-        "base_set": "rf0610",
-        "date": "2026-06-10",
+        "base_set": "rf0629",
+        "date": "2026-06-29",
         "forms": {
           "1": "A",
           "2": "A"
@@ -57924,85 +58976,103 @@
                 "units": 12,
                 "items": [
                   {
-                    "id": "real_lcr_rf0610_1_01",
+                    "id": "real_lcr_rf0622_1_01",
                     "nq": 1,
                     "q": 1,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_01"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_02",
+                    "id": "real_lcr_rf0622_1_02",
                     "nq": 1,
                     "q": 2,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_02"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_03",
+                    "id": "real_lcr_rf0622_1_03",
                     "nq": 1,
                     "q": 3,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_03"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_04",
+                    "id": "real_lcr_rf0622_1_04",
                     "nq": 1,
                     "q": 4,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_04"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_05",
+                    "id": "real_lcr_rf0629_1_05",
                     "nq": 1,
                     "q": 5,
-                    "from": "rf0610",
+                    "from": "rf0629",
                     "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_06",
+                    "id": "real_lcr_rf0622_1_06",
                     "nq": 1,
                     "q": 6,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_06"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_07",
+                    "id": "real_lcr_rf0622_1_07",
                     "nq": 1,
                     "q": 7,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_07"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_09",
+                    "id": "real_lcr_rf0622_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_08"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_09",
                     "nq": 1,
                     "q": 9,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_09"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_10",
+                    "id": "real_lcr_rf0622_1_10",
                     "nq": 1,
                     "q": 10,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_10"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_11",
+                    "id": "real_lcr_210_1_02",
                     "nq": 1,
                     "q": 11,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_11"
                   },
                   {
-                    "id": "real_lcr_rf0610_1_12",
+                    "id": "real_lcr_rf0622_1_12",
                     "nq": 1,
                     "q": 12,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_1_12"
                   }
                 ],
-                "got": 11,
-                "status": "near"
+                "got": 12,
+                "status": "full"
               },
               {
                 "key": "lc_13",
@@ -58015,10 +59085,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lc_rf0610_1_13",
+                    "id": "real_lc_rf0629_1_13",
                     "nq": 2,
                     "q": 13,
-                    "from": "rf0610",
+                    "from": "rf0629",
                     "via": "native"
                   }
                 ],
@@ -58034,9 +59104,17 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_lc_rf0629_1_15",
+                    "nq": 2,
+                    "q": 15,
+                    "from": "rf0629",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
               },
               {
                 "key": "lc_17",
@@ -58049,11 +59127,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lc_rf0610_1_17",
+                    "id": "real_lc_rf0622_1_17",
                     "nq": 2,
                     "q": 17,
-                    "from": "rf0610",
-                    "via": "native"
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0629_1_17"
                   }
                 ],
                 "got": 2,
@@ -58070,10 +59149,416 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_la_rf0610_1_19",
+                    "id": "real_la_rf0622_1_19",
                     "nq": 2,
                     "q": 19,
-                    "from": "rf0610",
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_la_rf0629_1_19"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0629_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "rf0629",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0622_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_la_rf0629_1_23"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0826_1_25",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0629_1_25"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0629_1_29"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 32
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0622_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0629_2_01"
+                  },
+                  {
+                    "id": "real_lcr_rf0629_2_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0629",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "partial"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0629_2_04",
+                    "nq": 2,
+                    "q": 4,
+                    "from": "rf0629",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_2_08",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0629_2_08"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_2_12",
+                    "nq": 4,
+                    "q": 12,
+                    "from": "rf0629",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0629_2_12"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 12
+          }
+        },
+        "missing": [
+          "M2/lcr_1:2/3",
+          "M2/lc_6:0/2"
+        ]
+      },
+      {
+        "id": "listening:121b",
+        "section": "listening",
+        "base_set": "1.21新托福真题B卷",
+        "date": "2026-01-21",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.915,
+        "completeness": 0.915,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_121b_1_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_11",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_12",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 12,
+                "status": "full"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_121b_1_13",
+                    "nq": 2,
+                    "q": 13,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_121b_1_15",
+                    "nq": 2,
+                    "q": 15,
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_121b_1_19",
+                    "nq": 2,
+                    "q": 19,
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58091,12 +59576,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_la_21a_1_21",
+                    "id": "real_la_121b_1_21",
                     "nq": 2,
                     "q": 21,
-                    "from": "rf0610",
-                    "via": "native",
-                    "alias_of": "real_la_rf0610_1_21"
+                    "from": "1.21新托福真题B卷",
+                    "via": "native"
                   }
                 ],
                 "got": 2,
@@ -58113,10 +59597,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_la_rf0610_1_23",
+                    "id": "real_la_121b_1_23",
                     "nq": 2,
                     "q": 23,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58134,10 +59618,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0610_1_25",
+                    "id": "real_lat_121b_1_25",
                     "nq": 4,
                     "q": 25,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58155,10 +59639,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0610_1_29",
+                    "id": "real_lat_121b_1_29",
                     "nq": 4,
                     "q": 29,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58167,7 +59651,7 @@
               }
             ],
             "need": 32,
-            "got": 29
+            "got": 30
           },
           "2": {
             "module": 2,
@@ -58184,24 +59668,24 @@
                 "units": 3,
                 "items": [
                   {
-                    "id": "real_lcr_rf0610_2_01",
+                    "id": "real_lcr_121b_2_01",
                     "nq": 1,
                     "q": 1,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0610_2_02",
+                    "id": "real_lcr_121b_2_02",
                     "nq": 1,
                     "q": 2,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0610_2_03",
+                    "id": "real_lcr_121b_2_03",
                     "nq": 1,
                     "q": 3,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58217,18 +59701,9 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_210_1_13",
-                    "nq": 2,
-                    "q": 4,
-                    "from": "rf0610",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0610_2_04"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               },
               {
                 "key": "lc_6",
@@ -58241,10 +59716,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lc_rf0610_2_06",
+                    "id": "real_lc_121b_2_06",
                     "nq": 2,
                     "q": 6,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58262,10 +59737,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0610_2_08",
+                    "id": "real_lat_121b_2_08",
                     "nq": 4,
                     "q": 8,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58283,10 +59758,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0610_2_12",
+                    "id": "real_lat_121b_2_12",
                     "nq": 4,
                     "q": 12,
-                    "from": "rf0610",
+                    "from": "1.21新托福真题B卷",
                     "via": "native"
                   }
                 ],
@@ -58295,12 +59770,12 @@
               }
             ],
             "need": 15,
-            "got": 15
+            "got": 13
           }
         },
         "missing": [
-          "M1/lcr_1:11/12",
-          "M1/lc_15:0/2"
+          "M1/lc_17:0/2",
+          "M2/lc_4:0/2"
         ]
       },
       {
@@ -59120,425 +60595,6 @@
           "M1/lcr_1:11/12",
           "M1/lat_25:3/4",
           "M2/lcr_1:1/3"
-        ]
-      },
-      {
-        "id": "listening:rf0629",
-        "section": "listening",
-        "base_set": "rf0629",
-        "date": "2026-06-29",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.915,
-        "completeness": 0.915,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  12
-                ],
-                "need": 12,
-                "units": 12,
-                "items": [
-                  {
-                    "id": "real_lcr_rf0622_1_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_01"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_02"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_04"
-                  },
-                  {
-                    "id": "real_lcr_rf0629_1_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "rf0629",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_06"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_07"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_08"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_09"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_10"
-                  },
-                  {
-                    "id": "real_lcr_210_1_02",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_11"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_12",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_1_12"
-                  }
-                ],
-                "got": 11,
-                "status": "near"
-              },
-              {
-                "key": "lc_13",
-                "type": "lc",
-                "band": [
-                  13,
-                  14
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0629_1_13",
-                    "nq": 2,
-                    "q": 13,
-                    "from": "rf0629",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_15",
-                "type": "lc",
-                "band": [
-                  15,
-                  16
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0629_1_15",
-                    "nq": 2,
-                    "q": 15,
-                    "from": "rf0629",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_17",
-                "type": "lc",
-                "band": [
-                  17,
-                  18
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0622_1_17",
-                    "nq": 2,
-                    "q": 17,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0629_1_17"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_19",
-                "type": "la",
-                "band": [
-                  19,
-                  20
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0622_1_19",
-                    "nq": 2,
-                    "q": 19,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_la_rf0629_1_19"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_21",
-                "type": "la",
-                "band": [
-                  21,
-                  22
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0629_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "rf0629",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_23",
-                "type": "la",
-                "band": [
-                  23,
-                  24
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0622_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_la_rf0629_1_23"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_25",
-                "type": "lat",
-                "band": [
-                  25,
-                  28
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0826_1_25",
-                    "nq": 4,
-                    "q": 25,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0629_1_25"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_29",
-                "type": "lat",
-                "band": [
-                  29,
-                  32
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_1_29",
-                    "nq": 4,
-                    "q": 29,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0629_1_29"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 32,
-            "got": 31
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  3
-                ],
-                "need": 3,
-                "units": 3,
-                "items": [
-                  {
-                    "id": "real_lcr_rf0622_2_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0629_2_01"
-                  },
-                  {
-                    "id": "real_lcr_rf0629_2_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "rf0629",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "partial"
-              },
-              {
-                "key": "lc_4",
-                "type": "lc",
-                "band": [
-                  4,
-                  5
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0629_2_04",
-                    "nq": 2,
-                    "q": 4,
-                    "from": "rf0629",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_6",
-                "type": "lc",
-                "band": [
-                  6,
-                  7
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lat_8",
-                "type": "lat",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_2_08",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0629_2_08"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_12",
-                "type": "lat",
-                "band": [
-                  12,
-                  15
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_2_12",
-                    "nq": 4,
-                    "q": 12,
-                    "from": "rf0629",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0629_2_12"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 12
-          }
-        },
-        "missing": [
-          "M1/lcr_1:11/12",
-          "M2/lcr_1:2/3",
-          "M2/lc_6:0/2"
         ]
       },
       {
@@ -61557,6 +62613,397 @@
         ]
       },
       {
+        "id": "listening:rf0622",
+        "section": "listening",
+        "base_set": "rf0622",
+        "date": "2026-06-22",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.851,
+        "completeness": 0.851,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0622_1_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "rf0622",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_210_1_02",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "rf0622",
+                    "via": "native",
+                    "alias_of": "real_lcr_rf0622_1_11"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_12",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 11,
+                "status": "near"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0629_1_15",
+                    "nq": 2,
+                    "q": 15,
+                    "from": "rf0622",
+                    "via": "native",
+                    "alias_of": "real_lc_rf0622_1_15"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0622_1_17",
+                    "nq": 2,
+                    "q": 17,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0622_1_19",
+                    "nq": 2,
+                    "q": 19,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0629_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "rf0622",
+                    "via": "native",
+                    "alias_of": "real_la_rf0622_1_21"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_rf0622_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0826_1_25",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "rf0622",
+                    "via": "native",
+                    "alias_of": "real_lat_rf0622_1_25"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 29
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0622_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 1,
+                "status": "partial"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0622_2_06",
+                    "nq": 2,
+                    "q": 6,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_2_08",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0622_2_12",
+                    "nq": 4,
+                    "q": 12,
+                    "from": "rf0622",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 11
+          }
+        },
+        "missing": [
+          "M1/lcr_1:11/12",
+          "M1/lc_13:0/2",
+          "M2/lcr_1:1/3",
+          "M2/lc_4:0/2"
+        ]
+      },
+      {
         "id": "listening:rf0716",
         "section": "listening",
         "base_set": "rf0716",
@@ -61960,769 +63407,6 @@
           "M1/lc_17:0/2",
           "M1/lat_29:0/4",
           "M2/lcr_1:2/3"
-        ]
-      },
-      {
-        "id": "listening:121b",
-        "section": "listening",
-        "base_set": "1.21新托福真题B卷",
-        "date": "2026-01-21",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.83,
-        "completeness": 0.83,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  12
-                ],
-                "need": 12,
-                "units": 12,
-                "items": [
-                  {
-                    "id": "real_lcr_121b_1_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_1_12",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 8,
-                "status": "partial"
-              },
-              {
-                "key": "lc_13",
-                "type": "lc",
-                "band": [
-                  13,
-                  14
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_121b_1_13",
-                    "nq": 2,
-                    "q": 13,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_15",
-                "type": "lc",
-                "band": [
-                  15,
-                  16
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_121b_1_15",
-                    "nq": 2,
-                    "q": 15,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_17",
-                "type": "lc",
-                "band": [
-                  17,
-                  18
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "la_19",
-                "type": "la",
-                "band": [
-                  19,
-                  20
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121b_1_19",
-                    "nq": 2,
-                    "q": 19,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_21",
-                "type": "la",
-                "band": [
-                  21,
-                  22
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121b_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_23",
-                "type": "la",
-                "band": [
-                  23,
-                  24
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121b_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_25",
-                "type": "lat",
-                "band": [
-                  25,
-                  28
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121b_1_25",
-                    "nq": 4,
-                    "q": 25,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_29",
-                "type": "lat",
-                "band": [
-                  29,
-                  32
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121b_1_29",
-                    "nq": 4,
-                    "q": 29,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 32,
-            "got": 26
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  3
-                ],
-                "need": 3,
-                "units": 3,
-                "items": [
-                  {
-                    "id": "real_lcr_121b_2_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_2_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121b_2_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 3,
-                "status": "full"
-              },
-              {
-                "key": "lc_4",
-                "type": "lc",
-                "band": [
-                  4,
-                  5
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lc_6",
-                "type": "lc",
-                "band": [
-                  6,
-                  7
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_121b_2_06",
-                    "nq": 2,
-                    "q": 6,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_8",
-                "type": "lat",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121b_2_08",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_12",
-                "type": "lat",
-                "band": [
-                  12,
-                  15
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121b_2_12",
-                    "nq": 4,
-                    "q": 12,
-                    "from": "1.21新托福真题B卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 13
-          }
-        },
-        "missing": [
-          "M1/lcr_1:8/12",
-          "M1/lc_17:0/2",
-          "M2/lc_4:0/2"
-        ]
-      },
-      {
-        "id": "listening:rf0622",
-        "section": "listening",
-        "base_set": "rf0622",
-        "date": "2026-06-22",
-        "forms": {
-          "1": "A",
-          "2": "A"
-        },
-        "completeness_before": 0.83,
-        "completeness": 0.83,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  12
-                ],
-                "need": 12,
-                "units": 12,
-                "items": [
-                  {
-                    "id": "real_lcr_rf0622_1_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_08",
-                    "nq": 1,
-                    "q": 8,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_10",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "rf0622",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_210_1_02",
-                    "nq": 1,
-                    "q": 11,
-                    "from": "rf0622",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0622_1_11"
-                  },
-                  {
-                    "id": "real_lcr_rf0622_1_12",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 10,
-                "status": "partial"
-              },
-              {
-                "key": "lc_13",
-                "type": "lc",
-                "band": [
-                  13,
-                  14
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lc_15",
-                "type": "lc",
-                "band": [
-                  15,
-                  16
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0629_1_15",
-                    "nq": 2,
-                    "q": 15,
-                    "from": "rf0622",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0622_1_15"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_17",
-                "type": "lc",
-                "band": [
-                  17,
-                  18
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0622_1_17",
-                    "nq": 2,
-                    "q": 17,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_19",
-                "type": "la",
-                "band": [
-                  19,
-                  20
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0622_1_19",
-                    "nq": 2,
-                    "q": 19,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_21",
-                "type": "la",
-                "band": [
-                  21,
-                  22
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0629_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "rf0622",
-                    "via": "native",
-                    "alias_of": "real_la_rf0622_1_21"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_23",
-                "type": "la",
-                "band": [
-                  23,
-                  24
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_rf0622_1_23",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_25",
-                "type": "lat",
-                "band": [
-                  25,
-                  28
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0826_1_25",
-                    "nq": 4,
-                    "q": 25,
-                    "from": "rf0622",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0622_1_25"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_29",
-                "type": "lat",
-                "band": [
-                  29,
-                  32
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_1_29",
-                    "nq": 4,
-                    "q": 29,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 32,
-            "got": 28
-          },
-          "2": {
-            "module": 2,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  3
-                ],
-                "need": 3,
-                "units": 3,
-                "items": [
-                  {
-                    "id": "real_lcr_rf0622_2_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 1,
-                "status": "partial"
-              },
-              {
-                "key": "lc_4",
-                "type": "lc",
-                "band": [
-                  4,
-                  5
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lc_6",
-                "type": "lc",
-                "band": [
-                  6,
-                  7
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0622_2_06",
-                    "nq": 2,
-                    "q": 6,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_8",
-                "type": "lat",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_2_08",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_12",
-                "type": "lat",
-                "band": [
-                  12,
-                  15
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0622_2_12",
-                    "nq": 4,
-                    "q": 12,
-                    "from": "rf0622",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 11
-          }
-        },
-        "missing": [
-          "M1/lcr_1:10/12",
-          "M1/lc_13:0/2",
-          "M2/lcr_1:1/3",
-          "M2/lc_4:0/2"
         ]
       },
       {
@@ -63492,16 +64176,16 @@
         ]
       },
       {
-        "id": "listening:rf0902",
+        "id": "listening:121c",
         "section": "listening",
-        "base_set": "rf0902",
-        "date": "2026-09-02",
+        "base_set": "1.21新托福真题C卷",
+        "date": "2026-01-21",
         "forms": {
           "1": "A",
-          "2": "A"
+          "2": "B"
         },
-        "completeness_before": 0.723,
-        "completeness": 0.723,
+        "completeness_before": 0.745,
+        "completeness": 0.745,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -63521,104 +64205,82 @@
                 "units": 12,
                 "items": [
                   {
-                    "id": "real_lcr_rf0716_1_01",
+                    "id": "real_lcr_121c_1_01",
                     "nq": 1,
                     "q": 1,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_01"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_02"
-                  },
-                  {
-                    "id": "real_lcr_rf0716_1_03",
+                    "id": "real_lcr_121b_1_03",
                     "nq": 1,
                     "q": 3,
-                    "from": "rf0902",
+                    "from": "1.21新托福真题C卷",
                     "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_03"
+                    "alias_of": "real_lcr_121c_1_03"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_04",
+                    "id": "real_lcr_121b_1_04",
                     "nq": 1,
                     "q": 4,
-                    "from": "rf0902",
+                    "from": "1.21新托福真题C卷",
                     "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_04"
+                    "alias_of": "real_lcr_121c_1_04"
                   },
                   {
-                    "id": "real_lcr_128b_1_03",
+                    "id": "real_lcr_121c_1_05",
                     "nq": 1,
                     "q": 5,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_05"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_06",
+                    "id": "real_lcr_121c_1_06",
                     "nq": 1,
                     "q": 6,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_06"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_121b_1_02",
+                    "id": "real_lcr_121c_1_07",
                     "nq": 1,
                     "q": 7,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_07"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_08",
+                    "id": "real_lcr_121b_1_08",
                     "nq": 1,
                     "q": 8,
-                    "from": "rf0902",
+                    "from": "1.21新托福真题C卷",
                     "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_08"
+                    "alias_of": "real_lcr_121c_1_08"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_09",
+                    "id": "real_lcr_121c_1_09",
                     "nq": 1,
                     "q": 9,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_09"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_128b_1_12",
-                    "nq": 1,
-                    "q": 10,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_10"
-                  },
-                  {
-                    "id": "real_lcr_rf0629_1_05",
+                    "id": "real_lcr_121b_1_11",
                     "nq": 1,
                     "q": 11,
-                    "from": "rf0902",
+                    "from": "1.21新托福真题C卷",
                     "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_11"
+                    "alias_of": "real_lcr_121c_1_11"
                   },
                   {
-                    "id": "real_lcr_rf0716_1_12",
+                    "id": "real_lcr_121c_1_12",
                     "nq": 1,
                     "q": 12,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_1_12"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   }
                 ],
-                "got": 12,
-                "status": "full"
+                "got": 10,
+                "status": "partial"
               },
               {
                 "key": "lc_13",
@@ -63629,18 +64291,9 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0716_1_13",
-                    "nq": 2,
-                    "q": 13,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0902_1_13"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               },
               {
                 "key": "lc_15",
@@ -63651,18 +64304,9 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0716_1_15",
-                    "nq": 2,
-                    "q": 15,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0902_1_15"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               },
               {
                 "key": "lc_17",
@@ -63688,12 +64332,11 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_la_rf0716_1_19",
+                    "id": "real_la_121c_1_19",
                     "nq": 2,
                     "q": 19,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_la_rf0902_1_19"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   }
                 ],
                 "got": 2,
@@ -63708,9 +64351,17 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_la_121c_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
               },
               {
                 "key": "la_23",
@@ -63723,12 +64374,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_la_rf0716_1_23",
+                    "id": "real_la_121b_1_21",
                     "nq": 2,
                     "q": 23,
-                    "from": "rf0902",
+                    "from": "1.21新托福真题C卷",
                     "via": "native",
-                    "alias_of": "real_la_rf0902_1_23"
+                    "alias_of": "real_la_121c_1_23"
                   }
                 ],
                 "got": 2,
@@ -63743,9 +64394,17 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_lat_121c_1_25",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               },
               {
                 "key": "lat_29",
@@ -63756,90 +64415,88 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_lat_121b_1_25",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native",
+                    "alias_of": "real_lat_121c_1_29"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
               }
             ],
             "need": 32,
-            "got": 20
+            "got": 24
           },
           "2": {
             "module": 2,
-            "form": "A",
+            "form": "B",
             "slots": [
               {
                 "key": "lcr_1",
                 "type": "lcr",
                 "band": [
                   1,
-                  3
-                ],
-                "need": 3,
-                "units": 3,
-                "items": [
-                  {
-                    "id": "real_lcr_rf0716_2_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_2_02"
-                  },
-                  {
-                    "id": "real_lcr_rf0716_2_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lcr_rf0902_2_03"
-                  }
-                ],
-                "got": 2,
-                "status": "partial"
-              },
-              {
-                "key": "lc_4",
-                "type": "lc",
-                "band": [
-                  4,
-                  5
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lc_rf0716_2_04",
-                    "nq": 2,
-                    "q": 4,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0902_2_04"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lc_6",
-                "type": "lc",
-                "band": [
-                  6,
                   7
                 ],
-                "need": 2,
-                "units": 1,
+                "need": 7,
+                "units": 7,
                 "items": [
                   {
-                    "id": "real_lc_rf0716_2_06",
-                    "nq": 2,
+                    "id": "real_lcr_121c_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_05",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_06",
+                    "nq": 1,
                     "q": 6,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lc_rf0902_2_06"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_121c_2_07",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   }
                 ],
-                "got": 2,
+                "got": 7,
                 "status": "full"
               },
               {
@@ -63851,52 +64508,63 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0716_2_08",
-                    "nq": 4,
-                    "q": 8,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0902_2_08"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               },
               {
-                "key": "lat_12",
-                "type": "lat",
+                "key": "mcq2_12",
+                "type": "mcq2",
                 "band": [
                   12,
-                  15
+                  13
                 ],
-                "need": 4,
+                "need": 2,
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0716_2_12",
-                    "nq": 4,
+                    "id": "real_la_121c_2_12",
+                    "nq": 2,
                     "q": 12,
-                    "from": "rf0902",
-                    "via": "native",
-                    "alias_of": "real_lat_rf0902_2_12"
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
                   }
                 ],
-                "got": 4,
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "mcq2_14",
+                "type": "mcq2",
+                "band": [
+                  14,
+                  15
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_121c_2_14",
+                    "nq": 2,
+                    "q": 14,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
                 "status": "full"
               }
             ],
             "need": 15,
-            "got": 14
+            "got": 11
           }
         },
         "missing": [
+          "M1/lcr_1:10/12",
+          "M1/lc_13:0/2",
+          "M1/lc_15:0/2",
           "M1/lc_17:0/2",
-          "M1/la_21:0/2",
-          "M1/lat_25:0/4",
-          "M1/lat_29:0/4",
-          "M2/lcr_1:2/3"
+          "M2/lat_8:0/4"
         ]
       },
       {
@@ -64259,366 +64927,6 @@
           "M2/lcr_1:2/3",
           "M2/lc_4:0/2",
           "M2/lc_6:0/2"
-        ]
-      },
-      {
-        "id": "listening:121c",
-        "section": "listening",
-        "base_set": "1.21新托福真题C卷",
-        "date": "2026-01-21",
-        "forms": {
-          "1": "A",
-          "2": "B"
-        },
-        "completeness_before": 0.66,
-        "completeness": 0.66,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  12
-                ],
-                "need": 12,
-                "units": 12,
-                "items": [
-                  {
-                    "id": "real_lcr_121c_1_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_1_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_1_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_1_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_1_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_1_12",
-                    "nq": 1,
-                    "q": 12,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 6,
-                "status": "partial"
-              },
-              {
-                "key": "lc_13",
-                "type": "lc",
-                "band": [
-                  13,
-                  14
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lc_15",
-                "type": "lc",
-                "band": [
-                  15,
-                  16
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "lc_17",
-                "type": "lc",
-                "band": [
-                  17,
-                  18
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "la_19",
-                "type": "la",
-                "band": [
-                  19,
-                  20
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121c_1_19",
-                    "nq": 2,
-                    "q": 19,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_21",
-                "type": "la",
-                "band": [
-                  21,
-                  22
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121c_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "la_23",
-                "type": "la",
-                "band": [
-                  23,
-                  24
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121b_1_21",
-                    "nq": 2,
-                    "q": 23,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native",
-                    "alias_of": "real_la_121c_1_23"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "lat_25",
-                "type": "lat",
-                "band": [
-                  25,
-                  28
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121c_1_25",
-                    "nq": 4,
-                    "q": 25,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              },
-              {
-                "key": "lat_29",
-                "type": "lat",
-                "band": [
-                  29,
-                  32
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_121b_1_25",
-                    "nq": 4,
-                    "q": 29,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native",
-                    "alias_of": "real_lat_121c_1_29"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
-              }
-            ],
-            "need": 32,
-            "got": 20
-          },
-          "2": {
-            "module": 2,
-            "form": "B",
-            "slots": [
-              {
-                "key": "lcr_1",
-                "type": "lcr",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 7,
-                "items": [
-                  {
-                    "id": "real_lcr_121c_2_01",
-                    "nq": 1,
-                    "q": 1,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_02",
-                    "nq": 1,
-                    "q": 2,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_03",
-                    "nq": 1,
-                    "q": 3,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_04",
-                    "nq": 1,
-                    "q": 4,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_05",
-                    "nq": 1,
-                    "q": 5,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_06",
-                    "nq": 1,
-                    "q": 6,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  },
-                  {
-                    "id": "real_lcr_121c_2_07",
-                    "nq": 1,
-                    "q": 7,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 7,
-                "status": "full"
-              },
-              {
-                "key": "lat_8",
-                "type": "lat",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              },
-              {
-                "key": "mcq2_12",
-                "type": "mcq2",
-                "band": [
-                  12,
-                  13
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121c_2_12",
-                    "nq": 2,
-                    "q": 12,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              },
-              {
-                "key": "mcq2_14",
-                "type": "mcq2",
-                "band": [
-                  14,
-                  15
-                ],
-                "need": 2,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_121c_2_14",
-                    "nq": 2,
-                    "q": 14,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
-              }
-            ],
-            "need": 15,
-            "got": 11
-          }
-        },
-        "missing": [
-          "M1/lcr_1:6/12",
-          "M1/lc_13:0/2",
-          "M1/lc_15:0/2",
-          "M1/lc_17:0/2",
-          "M2/lat_8:0/4"
         ]
       },
       {

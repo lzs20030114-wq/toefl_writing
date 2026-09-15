@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-14，821 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-15，832 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,16 +20,16 @@
   },
   "summary": {
     "need": 8280,
-    "got": 5083,
-    "missing": 3256,
+    "got": 5105,
+    "missing": 3234,
     "overfilled": 59,
-    "completeness": 0.6139,
+    "completeness": 0.6165,
     "causes": {
       "source_defect": 705,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 228,
-      "section_never_run": 1986,
+      "bank_dropped": 213,
+      "section_never_run": 1979,
       "section_lost": 0,
       "pipeline_loss": 211
     },
@@ -93,8 +93,8 @@
         "source_defect": 105,
         "held": 0,
         "deduped": 0,
-        "bank_dropped": 0,
-        "section_never_run": 210,
+        "bank_dropped": 7,
+        "section_never_run": 203,
         "section_lost": 0,
         "pipeline_loss": 4
       },
@@ -167,18 +167,18 @@
     "lcr": {
       "type": "lcr",
       "need": 1039,
-      "got": 309,
-      "missing": 730,
+      "got": 321,
+      "missing": 718,
       "causes": {
         "source_defect": 151,
         "held": 24,
         "deduped": 0,
-        "bank_dropped": 39,
+        "bank_dropped": 27,
         "section_never_run": 509,
         "section_lost": 0,
         "pipeline_loss": 7
       },
-      "completeness": 0.2974
+      "completeness": 0.309
     },
     "lc": {
       "type": "lc",
@@ -199,34 +199,34 @@
     "la": {
       "type": "la",
       "need": 414,
-      "got": 126,
-      "missing": 288,
+      "got": 128,
+      "missing": 286,
       "causes": {
         "source_defect": 48,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 20,
+        "bank_dropped": 18,
         "section_never_run": 216,
         "section_lost": 0,
         "pipeline_loss": 2
       },
-      "completeness": 0.3043
+      "completeness": 0.3092
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 322,
-      "missing": 778,
+      "got": 330,
+      "missing": 770,
       "causes": {
         "source_defect": 128,
         "held": 20,
         "deduped": 0,
-        "bank_dropped": 42,
+        "bank_dropped": 34,
         "section_never_run": 576,
         "section_lost": 0,
         "pipeline_loss": 12
       },
-      "completeness": 0.2927
+      "completeness": 0.3
     },
     "mcq2": {
       "type": "mcq2",
@@ -271,8 +271,8 @@
         "source_defect": 165,
         "held": 4,
         "deduped": 0,
-        "bank_dropped": 0,
-        "section_never_run": 330,
+        "bank_dropped": 7,
+        "section_never_run": 323,
         "section_lost": 0,
         "pipeline_loss": 65
       },
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 907,
-      "missing": 2336,
+      "got": 929,
+      "missing": 2314,
       "causes": {
         "source_defect": 416,
         "held": 62,
         "deduped": 0,
-        "bank_dropped": 143,
+        "bank_dropped": 121,
         "section_never_run": 1656,
         "section_lost": 0,
         "pipeline_loss": 59
       },
-      "completeness": 0.2797
+      "completeness": 0.2865
     }
   },
   "tasks": [
@@ -1404,32 +1404,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 8,
-      "missing": 4,
-      "status": "partial",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "date": "2026-01-21",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lc_17",
       "type": "lc",
       "band": [
@@ -1555,12 +1529,12 @@
         12
       ],
       "need": 12,
-      "got": 6,
-      "missing": 6,
+      "got": 10,
+      "missing": 2,
       "status": "partial",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 6
+        "bank_dropped": 2
       },
       "drop_codes": {
         "lDroppedBadOptions": 1,
@@ -2020,7 +1994,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 2,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 3
       },
       "notes": []
@@ -2573,7 +2547,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 2
+        "wSkippedThin": 1
       },
       "notes": []
     },
@@ -3421,9 +3395,12 @@
       "got": 0,
       "missing": 7,
       "status": "absent",
-      "cause": "section_never_run",
+      "cause": "bank_dropped",
       "charged": {
-        "section_never_run": 7
+        "bank_dropped": 7
+      },
+      "drop_codes": {
+        "sDroppedDupSet": 7
       },
       "notes": []
     },
@@ -4089,7 +4066,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 4,
+        "wSkippedThin": 2,
         "wDroppedDupBs": 2
       },
       "notes": []
@@ -5113,8 +5090,8 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 3,
-        "wDroppedDupBs": 4
+        "wSkippedThin": 1,
+        "wDroppedDupBs": 5
       },
       "notes": []
     },
@@ -11129,7 +11106,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "wSkippedThin": 2,
+        "wSkippedThin": 1,
         "wDroppedDupBs": 4,
         "wDroppedBsRuntime": 1
       },
@@ -14378,7 +14355,7 @@
         "bank_dropped": 4
       },
       "drop_codes": {
-        "wSkippedThin": 4,
+        "wSkippedThin": 5,
         "wDroppedDupBs": 1
       },
       "notes": []
@@ -17272,7 +17249,8 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wSkippedThin": 2
+        "wSkippedThin": 1,
+        "wDroppedDupBs": 1
       },
       "notes": []
     },
@@ -22614,34 +22592,6 @@
       "section": "listening",
       "module": "1",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 11,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0610",
-      "slug": "rf0610",
-      "date": "2026-06-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
       "slotKey": "lc_15",
       "type": "lc",
       "band": [
@@ -22966,17 +22916,12 @@
         12
       ],
       "need": 12,
-      "got": 10,
-      "missing": 2,
-      "status": "partial",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
       "cause": "held",
       "charged": {
-        "held": 1,
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 2,
-        "lDroppedDisagree": 1
+        "held": 1
       },
       "notes": [
         "vendor_reformatted"
@@ -23033,7 +22978,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "lDroppedDupItem": 2,
+        "lDroppedDupItem": 1,
         "lDroppedDisagree": 1
       },
       "notes": [
@@ -23085,35 +23030,6 @@
       "cause": "deduped",
       "charged": {
         "deduped": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0629",
-      "slug": "rf0629",
-      "date": "2026-06-29",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 11,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 11,
-        "lDroppedDisagree": 1
       },
       "notes": [
         "vendor_reformatted"
@@ -23676,7 +23592,6 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "wDroppedBsRuntime": 1,
         "wDroppedDupBs": 2
       },
       "notes": [
@@ -23816,34 +23731,6 @@
       "set": "rf0902",
       "slug": "rf0902",
       "date": "2026-09-02",
-      "section": "writing",
-      "module": "1",
-      "form": "A",
-      "slotKey": "bs_1",
-      "type": "bs",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 1
-      },
-      "drop_codes": {
-        "wDroppedDupSet": null
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
       "section": "listening",
       "module": "1",
       "form": "A",
@@ -23872,109 +23759,25 @@
       "set": "rf0902",
       "slug": "rf0902",
       "date": "2026-09-02",
-      "section": "listening",
+      "section": "writing",
       "module": "1",
       "form": "A",
-      "slotKey": "la_21",
-      "type": "la",
-      "band": [
-        21,
-        22
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 2
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 6
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_25",
-      "type": "lat",
-      "band": [
-        25,
-        28
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 16
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_29",
-      "type": "lat",
-      "band": [
-        29,
-        32
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
-      "charged": {
-        "bank_dropped": 4
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 16
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "date": "2026-09-02",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
+      "slotKey": "bs_1",
+      "type": "bs",
       "band": [
         1,
-        3
+        10
       ],
-      "need": 3,
-      "got": 2,
+      "need": 10,
+      "got": 9,
       "missing": 1,
-      "status": "partial",
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
         "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 15
+        "wDroppedDupSet": null
       },
       "notes": [
         "vendor_reformatted"

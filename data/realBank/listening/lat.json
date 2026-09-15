@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 74,
+  "count": 75,
   "items": [
     {
       "id": "real_lat_121b_1_25",
@@ -4366,6 +4366,82 @@
         }
       ],
       "audio_source": "original"
+    },
+    {
+      "id": "real_lat_rf0902_1_29",
+      "difficulty": "medium",
+      "audio_url": null,
+      "audio_pending": true,
+      "asr_similarity": 0.795,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0902",
+      "date": "2026-09-02",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ],
+      "subject": "general",
+      "topic": "",
+      "transcript": "In the end, when it's shut, it pumps the water out, which propels the squid through water quite quickly. It's like a little jetpack. And, uh, flying squid are able to propel themselves right up through the ocean's surface and into the air above. Another unexpected flying creature is the flying squirrel, which can simply glide, sometimes quickly and for long distances, between tree branches. However, unlike the flying squirrel, flying squid not only glide, but can actually propel themselves upward. And, well, a flying squid can accelerate as fast as a car, getting up to 100 kilometers per hour in about a second. Then the squid extends its tentacles and arms, and it has membranes between them that spread out and help the squid glide for several seconds, a bit like temporary wings. A squid in flight is likely to be fleeing from an underwater predator or a ship. There are some alternative theories though. One is that it's a migration strategy, since moving through the air takes less energy and time than moving through water. Listening Module 2 Q1. What did you think of the presentation? Q2. Could you review these questions? Q3. Do you know when the library closes?",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the main focus of the talk?",
+          "options": {
+            "A": "The adaptations of various marine mammals",
+            "B": "The surprising behavior of a sea creature",
+            "C": "The benefit of flying instead of swimming",
+            "D": "The ways that animals escape flying predators"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 129
+        },
+        {
+          "type": "detail",
+          "stem": "What difference between flying squid and flying squirrels does the speaker mention?",
+          "options": {
+            "A": "Flying squid can propel themselves upward.",
+            "B": "Flying squid benefit from tree branches above the water.",
+            "C": "Flying squid can breathe underwater and in the air.",
+            "D": "Flying squid can travel long distances in the air."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 130
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker compare the membranes between the flying squid's tentacles and arms to?",
+          "options": {
+            "A": "Fins",
+            "B": "Engines",
+            "C": "Propellers",
+            "D": "Wings"
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 131
+        },
+        {
+          "type": "detail",
+          "stem": "What does the speaker point out about squid migration?",
+          "options": {
+            "A": "It can be affected by the presence of ships.",
+            "B": "It takes a very long time.",
+            "C": "It occurs seasonally.",
+            "D": "It is more efficient through the air than through the water."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 132
+        }
+      ]
     },
     {
       "id": "real_lat_rp0704_1_01",

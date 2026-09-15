@@ -1,9 +1,9 @@
 {
-  "_generated": "2026-09-14",
+  "_generated": "2026-09-15",
   "_generated_by": "scripts/realbank/build_bank.mjs",
   "_purpose": "落库这一步被闸扔掉的每一题：(卷, 科, 题型, module, 题号, 题数, 原因码, 详情)。原因码 = build_bank 的 stats 键名。丢题账本（loss_ledger.mjs）据此把缺口里的「落库丢弃」和「管线丢题」分开。",
   "_scope": "question = 逐题；unit = 整组 / 整段；section = 整科（题数不可知，n=null）",
-  "_dry_run": true,
+  "_dry_run": false,
   "_codes": {
     "droppedDupSet": "阅读题目文件与更早一套卷相同，整科跳过",
     "droppedHeld": "源料体检 blocking，阅读整科扣下",
@@ -31,15 +31,15 @@
     "sDroppedInvalid": "validator 不收"
   },
   "summary": {
-    "rows": 821,
-    "questions": 483,
+    "rows": 832,
+    "questions": 475,
     "sections": 13,
     "byCode": {
       "wSkippedThin": {
         "code": "wSkippedThin",
         "label": "字段不全（造句缺模板 / 词块，邮件缺情境 / 要求，讨论缺教授 / 学生帖）",
         "rows": 436,
-        "questions": 46,
+        "questions": 24,
         "sections": 0
       },
       "wDroppedHeld": {
@@ -59,15 +59,15 @@
       "wDroppedDupBs": {
         "code": "wDroppedDupBs",
         "label": "造句答案句跨卷重复",
-        "rows": 132,
-        "questions": 132,
+        "rows": 150,
+        "questions": 150,
         "sections": 0
       },
       "wDroppedBsRuntime": {
         "code": "wDroppedBsRuntime",
         "label": "造句过不了前端 runtime 校验",
-        "rows": 2,
-        "questions": 2,
+        "rows": 1,
+        "questions": 1,
         "sections": 0
       },
       "wRecallDropped": {
@@ -108,15 +108,15 @@
       "lDroppedDupItem": {
         "code": "lDroppedDupItem",
         "label": "跨卷逐条内容重复",
-        "rows": 81,
-        "questions": 111,
+        "rows": 74,
+        "questions": 101,
         "sections": 0
       },
       "sDroppedDupSet": {
         "code": "sDroppedDupSet",
         "label": "口语内容与更早一套卷重复",
-        "rows": 2,
-        "questions": 11,
+        "rows": 3,
+        "questions": 18,
         "sections": 0
       },
       "lDroppedNoAudit": {
@@ -172,17 +172,17 @@
     "bySection": {
       "writing": {
         "section": "writing",
-        "questions": 187,
+        "questions": 182,
         "sections": 8
       },
       "listening": {
         "section": "listening",
-        "questions": 238,
+        "questions": 228,
         "sections": 1
       },
       "speaking": {
         "section": "speaking",
-        "questions": 11,
+        "questions": 18,
         "sections": 0
       },
       "reading": {
@@ -194,11 +194,11 @@
     "byType": {
       "bs": {
         "type": "bs",
-        "questions": 180,
+        "questions": 175,
         "byCode": {
-          "wSkippedThin": 46,
-          "wDroppedDupBs": 132,
-          "wDroppedBsRuntime": 2
+          "wSkippedThin": 24,
+          "wDroppedDupBs": 150,
+          "wDroppedBsRuntime": 1
         }
       },
       "disc": {
@@ -210,11 +210,11 @@
       },
       "lcr": {
         "type": "lcr",
-        "questions": 86,
+        "questions": 80,
         "byCode": {
           "lDroppedDisagree": 14,
-          "lDroppedDupItem": 63,
           "lDroppedBadOptions": 7,
+          "lDroppedDupItem": 57,
           "lDroppedInvalid": 1,
           "lDroppedNoAuditQ": 1
         }
@@ -242,20 +242,20 @@
       },
       "lat": {
         "type": "lat",
-        "questions": 70,
+        "questions": 66,
         "byCode": {
           "lDroppedNoAuditQ": 7,
           "lDroppedDisagree": 23,
           "lDroppedBadOptions": 3,
           "lDroppedInvalid": 13,
-          "lDroppedDupItem": 24
+          "lDroppedDupItem": 20
         }
       },
       "repeat": {
         "type": "repeat",
-        "questions": 7,
+        "questions": 14,
         "byCode": {
-          "sDroppedDupSet": 7
+          "sDroppedDupSet": 14
         }
       },
       "interview": {
@@ -340,11 +340,11 @@
       "type": "bs",
       "module": null,
       "q": 4,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "1.21新托福真题A卷",
@@ -392,11 +392,11 @@
       "type": "bs",
       "module": null,
       "q": 8,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "1.21新托福真题A卷",
@@ -782,11 +782,11 @@
       "type": "bs",
       "module": null,
       "q": 2,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "1.27新托福真题B卷",
@@ -912,11 +912,11 @@
       "type": "bs",
       "module": null,
       "q": 3,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "1.28新托福真题A卷",
@@ -1211,11 +1211,11 @@
       "type": "bs",
       "module": null,
       "q": 6,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "2.10新托福真题",
@@ -1237,11 +1237,11 @@
       "type": "bs",
       "module": null,
       "q": 8,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "2.10新托福真题",
@@ -1536,11 +1536,11 @@
       "type": "bs",
       "module": null,
       "q": 3,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "2.1新托福真题C卷",
@@ -1822,11 +1822,11 @@
       "type": "bs",
       "module": null,
       "q": 6,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "2.28新托福真题",
@@ -1835,11 +1835,11 @@
       "type": "bs",
       "module": null,
       "q": 7,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "2.28新托福真题",
@@ -2576,11 +2576,11 @@
       "type": "bs",
       "module": null,
       "q": 3,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.17新托福真题",
@@ -2602,11 +2602,11 @@
       "type": "bs",
       "module": null,
       "q": 5,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.17新托福真题",
@@ -2745,11 +2745,11 @@
       "type": "bs",
       "module": null,
       "q": 6,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.18新托福真题",
@@ -2814,7 +2814,7 @@
       "scope": "section",
       "id": null,
       "code": "wDroppedDupSet",
-      "detail": "与 3.15新托福真题 写作文件相同（hash ff6e924c6ef1）；邮件 / 讨论按别名还槽位"
+      "detail": "与 3.15新托福真题 写作文件相同（hash ff6e924c6ef1）；邮件 / 讨论 / 造句按别名还槽位"
     },
     {
       "set": "3.21新托福真题",
@@ -2966,11 +2966,11 @@
       "type": "bs",
       "module": null,
       "q": 2,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.23新托福真题",
@@ -3317,11 +3317,11 @@
       "type": "bs",
       "module": null,
       "q": 8,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.27新托福真题",
@@ -3499,11 +3499,11 @@
       "type": "bs",
       "module": null,
       "q": 1,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.2新托福真题B卷",
@@ -3980,11 +3980,11 @@
       "type": "bs",
       "module": null,
       "q": 2,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "3.8新托福真题",
@@ -4773,11 +4773,11 @@
       "type": "bs",
       "module": null,
       "q": 2,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.24新托福真题",
@@ -4929,11 +4929,11 @@
       "type": "bs",
       "module": null,
       "q": 4,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.27新托福真题",
@@ -5046,11 +5046,11 @@
       "type": "bs",
       "module": null,
       "q": 3,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.28新托福真题",
@@ -5085,11 +5085,11 @@
       "type": "bs",
       "module": null,
       "q": 6,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.28新托福真题",
@@ -5176,11 +5176,11 @@
       "type": "bs",
       "module": null,
       "q": 3,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.29新托福真题",
@@ -5332,11 +5332,11 @@
       "type": "bs",
       "module": null,
       "q": 5,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "4.5新托福真题",
@@ -5501,11 +5501,11 @@
       "type": "bs",
       "module": null,
       "q": 8,
-      "n": 0,
+      "n": 1,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
+      "detail": "build 缺 prompt+blanks+chunks+answer"
     },
     {
       "set": "4.6新托福真题",
@@ -5774,11 +5774,11 @@
       "type": "bs",
       "module": null,
       "q": 9,
-      "n": 1,
+      "n": 0,
       "scope": "question",
       "id": null,
       "code": "wSkippedThin",
-      "detail": "build 缺 prompt+blanks+chunks+answer"
+      "detail": "build 缺 prompt+blanks+chunks+answer（同题已由看图题面收下，这份只是答案句副本）"
     },
     {
       "set": "5.10新托福真题",
@@ -6064,7 +6064,7 @@
       "scope": "section",
       "id": null,
       "code": "wDroppedDupSet",
-      "detail": "与 rf0716 写作文件相同（hash e863863b9514）；邮件 / 讨论按别名还槽位"
+      "detail": "与 rf0716 写作文件相同（hash e863863b9514）；邮件 / 讨论 / 造句按别名还槽位"
     },
     {
       "set": "1.21新托福真题A卷",
@@ -6111,12 +6111,38 @@
       "section": "writing",
       "type": "bs",
       "module": null,
+      "q": 4,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_121a_04",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：What aspects did you find most interesting?"
+    },
+    {
+      "set": "1.21新托福真题A卷",
+      "slug": "121a",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
       "q": 5,
       "n": 1,
       "scope": "question",
       "id": "bs_121a_05",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：I haven't received any emails today."
+    },
+    {
+      "set": "1.21新托福真题A卷",
+      "slug": "121a",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 8,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_121a_08",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：What places do you plan to visit?"
     },
     {
       "set": "1.21新托福真题A卷",
@@ -6182,6 +6208,45 @@
       "id": "bs_121b_04",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：What will you be discussing?"
+    },
+    {
+      "set": "1.21新托福真题B卷",
+      "slug": "121b",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 6,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_121b_06",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：What time does the game start?"
+    },
+    {
+      "set": "1.21新托福真题B卷",
+      "slug": "121b",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 7,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_121b_07",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：I was not able to complete it before the deadline."
+    },
+    {
+      "set": "1.21新托福真题B卷",
+      "slug": "121b",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 8,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_121b_08",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：Do you know if the new due date has been announced?"
     },
     {
       "set": "1.21新托福真题C卷",
@@ -6418,6 +6483,32 @@
       "detail": "答案句与更早收下的造句重复：Have you made a study plan yet?"
     },
     {
+      "set": "2.1新托福真题C卷",
+      "slug": "21c",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 1,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_21c_01",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：I had a doctor's appointment at the same time."
+    },
+    {
+      "set": "2.1新托福真题C卷",
+      "slug": "21c",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 5,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_21c_05",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：I was caught up in my biology class."
+    },
+    {
       "set": "2.28新托福真题",
       "slug": "228",
       "section": "writing",
@@ -6455,6 +6546,19 @@
       "id": "bs_228_05",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：The one that has the fastest processor will fit my needs perfectly."
+    },
+    {
+      "set": "2.28新托福真题",
+      "slug": "228",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 7,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_228_07",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：Do you know if there will be another session next month?"
     },
     {
       "set": "2.28新托福真题",
@@ -6561,6 +6665,45 @@
       "detail": "答案句与更早收下的造句重复：I don't know who arranged the flowers."
     },
     {
+      "set": "3.15新托福真题",
+      "slug": "315",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 9,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_315_09",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：My classmate who majors in marketing will attend."
+    },
+    {
+      "set": "3.17新托福真题",
+      "slug": "317",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 3,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_317_03",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：It was in the magazine that I read at the library."
+    },
+    {
+      "set": "3.17新托福真题",
+      "slug": "317",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 5,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_317_05",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：Do you know if the audience had any questions afterward?"
+    },
+    {
       "set": "3.17新托福真题",
       "slug": "317",
       "section": "writing",
@@ -6572,6 +6715,19 @@
       "id": "bs_317_08",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：I read it in the research paper that was published last week."
+    },
+    {
+      "set": "3.18新托福真题",
+      "slug": "318",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 6,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_318_06",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：It has some books that I need to return to the campus library."
     },
     {
       "set": "3.21新托福真题",
@@ -6689,6 +6845,19 @@
       "id": "bs_32a_05",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：I took lessons at the music school that is on campus."
+    },
+    {
+      "set": "3.2新托福真题B卷",
+      "slug": "32b",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 1,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_32b_01",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：The model that has the longest battery life is my top choice."
     },
     {
       "set": "3.2新托福真题B卷",
@@ -7016,6 +7185,19 @@
       "detail": "答案句与更早收下的造句重复：Have you decided which biology course you'd like to take?"
     },
     {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 2,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_424_02",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：I was in a class and couldn't take the call."
+    },
+    {
       "set": "4.27新托福真题",
       "slug": "427",
       "section": "writing",
@@ -7040,6 +7222,19 @@
       "id": "bs_427_02",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：Do you know if it starts in the morning or afternoon?"
+    },
+    {
+      "set": "4.27新托福真题",
+      "slug": "427",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 4,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_427_04",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：The one that has the fastest processor will fit my needs perfectly."
     },
     {
       "set": "4.27新托福真题",
@@ -7138,6 +7333,19 @@
       "section": "writing",
       "type": "bs",
       "module": null,
+      "q": 3,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_429_03",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：Do you know if it's going to be at the beach or in the mountains?"
+    },
+    {
+      "set": "4.29新托福真题",
+      "slug": "429",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
       "q": 7,
       "n": 1,
       "scope": "question",
@@ -7183,6 +7391,19 @@
       "id": "bs_45_04",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：The email I received said it was canceled."
+    },
+    {
+      "set": "4.5新托福真题",
+      "slug": "45",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 5,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_45_05",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：Do you know if the audience had any questions afterward?"
     },
     {
       "set": "4.5新托福真题",
@@ -7300,6 +7521,19 @@
       "id": "bs_510_07",
       "code": "wDroppedDupBs",
       "detail": "答案句与更早收下的造句重复：Do you need to buy tickets in advance?"
+    },
+    {
+      "set": "5.10新托福真题",
+      "slug": "510",
+      "section": "writing",
+      "type": "bs",
+      "module": null,
+      "q": 9,
+      "n": 1,
+      "scope": "question",
+      "id": "bs_510_09",
+      "code": "wDroppedDupBs",
+      "detail": "答案句与更早收下的造句重复：I had a family gathering that I couldn't miss."
     },
     {
       "set": "5.3新托福真题",
@@ -7775,19 +8009,6 @@
       "section": "writing",
       "type": "bs",
       "module": null,
-      "q": 1,
-      "n": 1,
-      "scope": "question",
-      "id": "bs_rf0808_01",
-      "code": "wDroppedBsRuntime",
-      "detail": "词块重复"
-    },
-    {
-      "set": "rf0808",
-      "slug": "rf0808",
-      "section": "writing",
-      "type": "bs",
-      "module": null,
       "q": 3,
       "n": 1,
       "scope": "question",
@@ -8202,58 +8423,6 @@
       "set": "1.21新托福真题B卷",
       "slug": "121b",
       "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 3,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_121b_1_03",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_03 逐字相同"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 4,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_121b_1_04",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_04 逐字相同"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 8,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_121b_1_08",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_08 逐字相同"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 11,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_121b_1_11",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_11 逐字相同"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
       "type": "lc",
       "module": 1,
       "q": 17,
@@ -8287,7 +8456,7 @@
       "scope": "unit",
       "id": "real_lcr_121c_1_03",
       "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_03 逐字相同"
+      "detail": "口播与 1.21新托福真题B卷/real_lcr_121b_1_03 逐字相同"
     },
     {
       "set": "1.21新托福真题C卷",
@@ -8300,7 +8469,7 @@
       "scope": "unit",
       "id": "real_lcr_121c_1_04",
       "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_04 逐字相同"
+      "detail": "口播与 1.21新托福真题B卷/real_lcr_121b_1_04 逐字相同"
     },
     {
       "set": "1.21新托福真题C卷",
@@ -8313,7 +8482,7 @@
       "scope": "unit",
       "id": "real_lcr_121c_1_08",
       "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_08 逐字相同"
+      "detail": "口播与 1.21新托福真题B卷/real_lcr_121b_1_08 逐字相同"
     },
     {
       "set": "1.21新托福真题C卷",
@@ -8339,7 +8508,7 @@
       "scope": "unit",
       "id": "real_lcr_121c_1_11",
       "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_11 逐字相同"
+      "detail": "口播与 1.21新托福真题B卷/real_lcr_121b_1_11 逐字相同"
     },
     {
       "set": "1.21新托福真题C卷",
@@ -9340,7 +9509,7 @@
       "scope": "unit",
       "id": "real_lcr_rf0610_1_08",
       "code": "lDroppedDupItem",
-      "detail": "口播与 1.21新托福真题A卷/real_lcr_121a_1_08 逐字相同"
+      "detail": "口播与 1.21新托福真题B卷/real_lcr_121b_1_08 逐字相同"
     },
     {
       "set": "rf0615",
@@ -9406,19 +9575,6 @@
       "id": "real_lc_rf0620_1_17",
       "code": "lDroppedInvalid",
       "detail": "too_few_turns: 3 (min 6) | speaker_Woman_too_few_turns: 1 (min 2)"
-    },
-    {
-      "set": "rf0622",
-      "slug": "rf0622",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 3,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_rf0622_1_03",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 2.1新托福真题C卷/real_lcr_21c_1_01 逐字相同"
     },
     {
       "set": "rf0622",
@@ -9496,7 +9652,7 @@
       "scope": "unit",
       "id": "real_lcr_rf0629_1_03",
       "code": "lDroppedDupItem",
-      "detail": "口播与 2.1新托福真题C卷/real_lcr_21c_1_01 逐字相同"
+      "detail": "口播与 rf0622/real_lcr_rf0622_1_03 逐字相同"
     },
     {
       "set": "rf0629",
@@ -10191,32 +10347,6 @@
       "set": "rf0902",
       "slug": "rf0902",
       "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 29,
-      "n": 4,
-      "scope": "unit",
-      "id": "real_lat_rf0902_1_29",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 rf0716/real_lat_rf0716_1_29 逐字相同"
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "section": "listening",
-      "type": "lcr",
-      "module": 2,
-      "q": 1,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_rf0902_2_01",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 rf0716/real_lcr_rf0716_2_01 逐字相同"
-    },
-    {
-      "set": "rf0902",
-      "slug": "rf0902",
-      "section": "listening",
       "type": "lcr",
       "module": 2,
       "q": 2,
@@ -10420,6 +10550,19 @@
       "id": "real_lat_rp0830_9_01",
       "code": "lDroppedDupItem",
       "detail": "口播与 rf0629/real_lat_rf0629_1_29 逐字相同"
+    },
+    {
+      "set": "2.1新托福真题C卷",
+      "slug": "21c",
+      "section": "speaking",
+      "type": "repeat",
+      "module": null,
+      "q": null,
+      "n": 7,
+      "scope": "unit",
+      "id": "real_repeat_21c_1",
+      "code": "sDroppedDupSet",
+      "detail": "补录内容与 rf0622/real_repeat_rf0622_1 逐字相同"
     },
     {
       "set": "1.21新托福真题A卷",
