@@ -93,6 +93,7 @@ function saveAiCache(key, text) {
 export function WordLookupLayer({ passage, children, style, source = "reading" }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
+  const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
   const [saved, setSaved] = useState(false); // 当前这个词在不在单词本里
@@ -101,6 +102,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
   const isPro = tier === "legacy" || tier === "pro";
 
   const close = useCallback(() => {
+    wordRef.current = null;
     setPop(null);
     setAi(null);
     setSaved(false);
@@ -120,6 +122,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     if (!word || !/[a-z]/.test(word)) return;
     // 记住这个词的 Range：页面滚动时据此重算位置，弹窗才跟得住词。
     rangeRef.current = range;
+    wordRef.current = word;
     setAi(null);
     setSaved(isSaved(word));
     setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
@@ -214,6 +217,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
 
   const askAi = useCallback(async () => {
     if (!pop) return;
+    const word = pop.word;
     const sentence = sentenceAround(passage, pop.word) || pop.word;
     const key = `${pop.word}|||${sentence.slice(0, 80)}`;
     const cached = loadAiCache()[key];
@@ -229,10 +233,18 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
         (pop.entry && pop.entry.t
           ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}`
           : "词典未收录这个词。");
-      const text = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const raw = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      if (wordRef.current !== word) return; // 等的时候换了词或关了弹窗，别把旧词的讲解贴到新词上
+      const text = String(raw || "").trim();
+      if (!text) {
+        // 空正文不缓存、也别悄悄退回按钮——得让用户知道这次没成功
+        setAi({ loading: false, text: null, error: "AI 这次没返回内容，再点一次试试" });
+        return;
+      }
       saveAiCache(key, text);
       setAi({ loading: false, text, error: null });
     } catch (e) {
+      if (wordRef.current !== word) return;
       setAi({ loading: false, text: null, error: mapAiHelperError(e) });
     }
   }, [pop, passage]);

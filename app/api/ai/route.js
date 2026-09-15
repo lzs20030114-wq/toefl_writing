@@ -346,13 +346,14 @@ async function fail(meta, status, payload) {
 // 空正文一律按上游失败回 502(与其他 upstream 失败同一套文案/状态码),并且**不计用量**
 // —— 与本路由既有原则一致:失败的调用不扣次数。errorType 单列 empty_content,好让后台
 // /admin-api-errors 一眼区分「上游报错」和「上游回了 200 但正文是空的」。
-function failEmptyContent(requestMeta, path) {
+function failEmptyContent(requestMeta, path, maxTokens) {
   return fail(
     {
       ...requestMeta,
       stage: "deepseek",
       errorType: "empty_content",
-      errorDetail: `upstream returned empty content (${path}, samples=1)`,
+      // 详情里带上预算：v4-flash 的推理 token 计入 max_tokens，后台一眼能看出是不是给少了。
+      errorDetail: `upstream returned empty content (${path}, samples=1); max_tokens=${maxTokens} (reasoning tokens count toward it)`,
     },
     502,
     { error: "AI service temporarily unavailable. Please retry." },
@@ -511,7 +512,7 @@ export async function POST(request) {
         return Response.json({ content: contents[0], contents });
       }
       const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
-      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "proxy");
+      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "proxy", maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     }
@@ -546,7 +547,7 @@ export async function POST(request) {
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
     try {
       const content = await callDirectOnce(apiKey, upstreamParams);
-      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct");
+      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct", maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {

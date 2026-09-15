@@ -147,6 +147,29 @@ describe("/api/ai server-side usage metering", () => {
     expect(mockUpdateCalls).toHaveLength(0);
   });
 
+  // 2026-09-13：deepseek-v4-flash 的推理 token 计入 max_tokens，预算小时推理吃光、正文为空串。
+  // 以前单采样路径照常扣次数并返回 {content:""}，前端表现为「点了没反应」还白扣一次。
+  test.each([
+    ["空串", ""],
+    ["纯空白", "  \n\t "],
+  ])("上游 200 但正文为%s：不扣次数、留痕、返回 502", async (_label, blank) => {
+    mockUsageRow = { usage_count: 1 };
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: blank } }] }),
+    });
+    const res = await POST(aiRequest({ maxTokens: 300 }));
+    expect(res.status).toBe(502);
+    expect((await res.json()).content).toBeUndefined();
+    expect(mockRpcCalls).toHaveLength(0);
+    expect(mockUpdateCalls).toHaveLength(0);
+    const logged = mockInsertCalls.find((c) => c.table === "api_error_feedback");
+    expect(logged).toBeTruthy();
+    expect(logged.row.error_type).toBe("empty_content");
+    // 详情里带上预算，后台一眼能看出是不是 token 给少了
+    expect(logged.row.error_detail).toContain("max_tokens=300");
+  });
+
   test("falls back to a non-atomic upsert when the increment RPC is missing", async () => {
     mockUsageRow = { usage_count: 1 };
     mockRpcImpl = () => ({ data: null, error: { message: "function increment_daily_usage does not exist" } });
