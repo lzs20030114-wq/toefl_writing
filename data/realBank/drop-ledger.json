@@ -31,8 +31,8 @@
     "sDroppedInvalid": "validator 不收"
   },
   "summary": {
-    "rows": 832,
-    "questions": 475,
+    "rows": 840,
+    "questions": 505,
     "sections": 13,
     "byCode": {
       "wSkippedThin": {
@@ -126,6 +126,13 @@
         "questions": 0,
         "sections": 1
       },
+      "sDroppedInvalid": {
+        "code": "sDroppedInvalid",
+        "label": "validator 不收",
+        "rows": 8,
+        "questions": 30,
+        "sections": 0
+      },
       "droppedDupStem": {
         "code": "droppedDupStem",
         "label": "同组题干重复（相邻两屏抽到同一题），留题号小的",
@@ -182,7 +189,7 @@
       },
       "speaking": {
         "section": "speaking",
-        "questions": 18,
+        "questions": 48,
         "sections": 0
       },
       "reading": {
@@ -260,9 +267,10 @@
       },
       "interview": {
         "type": "interview",
-        "questions": 4,
+        "questions": 34,
         "byCode": {
-          "sDroppedDupSet": 4
+          "sDroppedDupSet": 4,
+          "sDroppedInvalid": 30
         }
       },
       "rdl": {
@@ -10563,6 +10571,110 @@
       "id": "real_repeat_21c_1",
       "code": "sDroppedDupSet",
       "detail": "补录内容与 rf0622/real_repeat_rf0622_1 逐字相同"
+    },
+    {
+      "set": "1.21新托福真题A卷",
+      "slug": "121a",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_121a_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[3]: word_count: 9 (absolute range 10-60)"
+    },
+    {
+      "set": "1.21新托福真题B卷",
+      "slug": "121b",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_121b_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[3]: word_count: 9 (absolute range 10-60)"
+    },
+    {
+      "set": "1.27新托福真题A卷",
+      "slug": "127a",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 3,
+      "scope": "unit",
+      "id": "real_interview_127a_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[2]: word_count: 9 (absolute range 10-60)"
+    },
+    {
+      "set": "2.1新托福真题A卷",
+      "slug": "21a",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 3,
+      "scope": "unit",
+      "id": "real_interview_21a_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[1]: word_count: 6 (absolute range 10-60)"
+    },
+    {
+      "set": "2.1新托福真题B卷",
+      "slug": "21b",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_21b_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[0]: question: must be a non-empty string (min 15 chars)"
+    },
+    {
+      "set": "2.1新托福真题C卷",
+      "slug": "21c",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_21c_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[3]: word_count: 8 (absolute range 10-60)"
+    },
+    {
+      "set": "2.28新托福真题",
+      "slug": "228",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_228_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[2]: word_count: 4 (absolute range 10-60) | question[3]: word_count: 6 (absolute range 10-60)"
+    },
+    {
+      "set": "2.2新托福真题",
+      "slug": "22",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_22_1",
+      "code": "sDroppedInvalid",
+      "detail": "补录：question[2]: word_count: 7 (absolute range 10-60) | question[3]: word_count: 9 (absolute range 10-60)"
     },
     {
       "set": "1.21新托福真题A卷",

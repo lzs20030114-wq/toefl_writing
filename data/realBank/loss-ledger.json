@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-15，832 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-15，840 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 5099,
-    "missing": 3240,
+    "got": 5119,
+    "missing": 3220,
     "overfilled": 59,
-    "completeness": 0.6158,
+    "completeness": 0.6182,
     "causes": {
       "source_defect": 705,
       "held": 102,
       "deduped": 24,
-      "bank_dropped": 219,
-      "section_never_run": 1979,
+      "bank_dropped": 249,
+      "section_never_run": 1975,
       "section_lost": 0,
-      "pipeline_loss": 211
+      "pipeline_loss": 165
     },
-    "actionable": 211
+    "actionable": 165
   },
   "byType": {
     "ctw": {
@@ -103,18 +103,18 @@
     "interview": {
       "type": "interview",
       "need": 276,
-      "got": 31,
-      "missing": 245,
+      "got": 51,
+      "missing": 225,
       "causes": {
         "source_defect": 60,
         "held": 4,
         "deduped": 0,
-        "bank_dropped": 0,
-        "section_never_run": 120,
+        "bank_dropped": 30,
+        "section_never_run": 116,
         "section_lost": 0,
-        "pipeline_loss": 61
+        "pipeline_loss": 15
       },
-      "completeness": 0.1123
+      "completeness": 0.1848
     },
     "bs": {
       "type": "bs",
@@ -265,18 +265,18 @@
     "speaking": {
       "section": "speaking",
       "need": 759,
-      "got": 248,
-      "missing": 564,
+      "got": 268,
+      "missing": 544,
       "causes": {
         "source_defect": 165,
         "held": 4,
         "deduped": 0,
-        "bank_dropped": 7,
-        "section_never_run": 323,
+        "bank_dropped": 37,
+        "section_never_run": 319,
         "section_lost": 0,
-        "pipeline_loss": 65
+        "pipeline_loss": 19
       },
-      "completeness": 0.3267
+      "completeness": 0.3531
     },
     "writing": {
       "section": "writing",
@@ -500,135 +500,9 @@
       ]
     },
     {
-      "set": "1.21新托福真题A卷",
-      "slug": "121a",
-      "date": "2026-01-21",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "date": "2026-01-21",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "1.21新托福真题C卷",
-      "slug": "121c",
-      "date": "2026-01-21",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "1.27新托福真题A卷",
-      "slug": "127a",
-      "date": "2026-01-27",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "date": "2026-01-27",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "1.28新托福真题A卷",
-      "slug": "128a",
-      "date": "2026-01-28",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
       "set": "1.28新托福真题B卷",
       "slug": "128b",
       "date": "2026-01-28",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "date": "2026-02-10",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "date": "2026-02-01",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "date": "2026-02-01",
       "section": "speaking",
       "missing": 4,
       "cause": "pipeline_loss",
@@ -653,48 +527,6 @@
       "slots": [
         "M1/la_23(-2)",
         "M2/lc_6(-2)"
-      ]
-    },
-    {
-      "set": "2.28新托福真题",
-      "slug": "228",
-      "date": "2026-02-28",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "date": "2026-02-02",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
-      ]
-    },
-    {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "date": "2026-03-14",
-      "section": "speaking",
-      "missing": 4,
-      "cause": "pipeline_loss",
-      "types": {
-        "interview": 4
-      },
-      "slots": [
-        "M1/interview_8(-4)"
       ]
     },
     {
@@ -873,6 +705,34 @@
       ]
     },
     {
+      "set": "1.27新托福真题A卷",
+      "slug": "127a",
+      "date": "2026-01-27",
+      "section": "speaking",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "interview": 1
+      },
+      "slots": [
+        "M1/interview_8(-1)"
+      ]
+    },
+    {
+      "set": "2.1新托福真题A卷",
+      "slug": "21a",
+      "date": "2026-02-01",
+      "section": "speaking",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "interview": 1
+      },
+      "slots": [
+        "M1/interview_8(-1)"
+      ]
+    },
+    {
       "set": "2.28新托福真题",
       "slug": "228",
       "date": "2026-02-28",
@@ -998,9 +858,12 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -1463,9 +1326,12 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -1621,29 +1487,6 @@
       "form": "B",
       "slotKey": "lat_8",
       "type": "lat",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.21新托福真题C卷",
-      "slug": "121c",
-      "date": "2026-01-21",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
       "band": [
         8,
         11
@@ -1836,9 +1679,13 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 3,
+        "pipeline_loss": 1
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 3
       },
       "notes": []
     },
@@ -1996,29 +1843,6 @@
       "drop_codes": {
         "wSkippedThin": 1,
         "wDroppedDupBs": 3
-      },
-      "notes": []
-    },
-    {
-      "set": "1.27新托福真题B卷",
-      "slug": "127b",
-      "date": "2026-01-27",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 4
       },
       "notes": []
     },
@@ -2506,29 +2330,6 @@
       "set": "1.28新托福真题A卷",
       "slug": "128a",
       "date": "2026-01-28",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "1.28新托福真题A卷",
-      "slug": "128a",
-      "date": "2026-01-28",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -2878,9 +2679,13 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 3,
+        "pipeline_loss": 1
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 3
       },
       "notes": []
     },
@@ -2950,9 +2755,12 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -3421,9 +3229,12 @@
       "got": 0,
       "missing": 4,
       "status": "absent",
-      "cause": "section_never_run",
+      "cause": "bank_dropped",
       "charged": {
-        "section_never_run": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -3497,9 +3308,12 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -4068,29 +3882,6 @@
       "drop_codes": {
         "wSkippedThin": 2,
         "wDroppedDupBs": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "date": "2026-02-10",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 4
       },
       "notes": []
     },
@@ -5062,9 +4853,12 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "pipeline_loss",
+      "cause": "bank_dropped",
       "charged": {
-        "pipeline_loss": 4
+        "bank_dropped": 4
+      },
+      "drop_codes": {
+        "sDroppedInvalid": 4
       },
       "notes": []
     },
@@ -8266,29 +8060,6 @@
       },
       "drop_codes": {
         "lDroppedInvalid": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "date": "2026-03-14",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 4
       },
       "notes": []
     },

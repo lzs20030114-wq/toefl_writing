@@ -42,8 +42,8 @@
       "questions": 333
     },
     "interview": {
-      "items": 32,
-      "questions": 127
+      "items": 37,
+      "questions": 147
     },
     "bs": {
       "items": 361,
@@ -103,12 +103,12 @@
       },
       "speaking": {
         "sets_with_any": 24,
-        "native_complete": 6,
-        "native_half": 18,
+        "native_complete": 11,
+        "native_half": 13,
         "native_scraps": 0,
         "skeletons": 24,
-        "composites_complete": 6,
-        "composites_pure": 6,
+        "composites_complete": 11,
+        "composites_pure": 11,
         "dissolved": 0
       },
       "writing": {
@@ -1622,13 +1622,13 @@
           "unplaced": []
         },
         "speaking": {
-          "completeness": 0.636,
-          "got": 7,
+          "completeness": 1,
+          "got": 11,
           "need": 11,
           "modules": {
             "1": {
               "form": "A",
-              "got": 7,
+              "got": 11,
               "need": 11,
               "slots": [
                 {
@@ -1657,9 +1657,15 @@
                     11
                   ],
                   "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_interview_121c_1",
+                      "nq": 4,
+                      "q": 8
+                    }
+                  ]
                 }
               ]
             }
@@ -2900,6 +2906,58 @@
           },
           "unplaced": []
         },
+        "speaking": {
+          "completeness": 1,
+          "got": 11,
+          "need": 11,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 11,
+              "need": 11,
+              "slots": [
+                {
+                  "key": "repeat_1",
+                  "type": "repeat",
+                  "band": [
+                    1,
+                    7
+                  ],
+                  "need": 7,
+                  "got": 14,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_repeat_rp0822_1",
+                      "nq": 14,
+                      "q": 1,
+                      "alias_of": "real_repeat_127b_1"
+                    }
+                  ]
+                },
+                {
+                  "key": "interview_8",
+                  "type": "interview",
+                  "band": [
+                    8,
+                    11
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_interview_127b_1",
+                      "nq": 4,
+                      "q": 8
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
         "writing": {
           "completeness": 0.917,
           "got": 11,
@@ -3006,52 +3064,6 @@
                       "q": 12
                     }
                   ]
-                }
-              ]
-            }
-          },
-          "unplaced": []
-        },
-        "speaking": {
-          "completeness": 0.636,
-          "got": 7,
-          "need": 11,
-          "modules": {
-            "1": {
-              "form": "A",
-              "got": 7,
-              "need": 11,
-              "slots": [
-                {
-                  "key": "repeat_1",
-                  "type": "repeat",
-                  "band": [
-                    1,
-                    7
-                  ],
-                  "need": 7,
-                  "got": 14,
-                  "status": "full",
-                  "items": [
-                    {
-                      "id": "real_repeat_rp0822_1",
-                      "nq": 14,
-                      "q": 1,
-                      "alias_of": "real_repeat_127b_1"
-                    }
-                  ]
-                },
-                {
-                  "key": "interview_8",
-                  "type": "interview",
-                  "band": [
-                    8,
-                    11
-                  ],
-                  "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
                 }
               ]
             }
@@ -3449,13 +3461,13 @@
           "unplaced": []
         },
         "speaking": {
-          "completeness": 0.636,
-          "got": 7,
+          "completeness": 1,
+          "got": 11,
           "need": 11,
           "modules": {
             "1": {
               "form": "A",
-              "got": 7,
+              "got": 11,
               "need": 11,
               "slots": [
                 {
@@ -3484,9 +3496,15 @@
                     11
                   ],
                   "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_interview_128a_1",
+                      "nq": 4,
+                      "q": 8
+                    }
+                  ]
                 }
               ]
             }
@@ -7407,6 +7425,58 @@
           },
           "unplaced": []
         },
+        "speaking": {
+          "completeness": 1,
+          "got": 11,
+          "need": 11,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 11,
+              "need": 11,
+              "slots": [
+                {
+                  "key": "repeat_1",
+                  "type": "repeat",
+                  "band": [
+                    1,
+                    7
+                  ],
+                  "need": 7,
+                  "got": 8,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_repeat_rp0819_1",
+                      "nq": 8,
+                      "q": 1,
+                      "alias_of": "real_repeat_210_1"
+                    }
+                  ]
+                },
+                {
+                  "key": "interview_8",
+                  "type": "interview",
+                  "band": [
+                    8,
+                    11
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_interview_210_1",
+                      "nq": 4,
+                      "q": 8
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
         "writing": {
           "completeness": 0.833,
           "got": 10,
@@ -7507,52 +7577,6 @@
                       "q": 12
                     }
                   ]
-                }
-              ]
-            }
-          },
-          "unplaced": []
-        },
-        "speaking": {
-          "completeness": 0.636,
-          "got": 7,
-          "need": 11,
-          "modules": {
-            "1": {
-              "form": "A",
-              "got": 7,
-              "need": 11,
-              "slots": [
-                {
-                  "key": "repeat_1",
-                  "type": "repeat",
-                  "band": [
-                    1,
-                    7
-                  ],
-                  "need": 7,
-                  "got": 8,
-                  "status": "full",
-                  "items": [
-                    {
-                      "id": "real_repeat_rp0819_1",
-                      "nq": 8,
-                      "q": 1,
-                      "alias_of": "real_repeat_210_1"
-                    }
-                  ]
-                },
-                {
-                  "key": "interview_8",
-                  "type": "interview",
-                  "band": [
-                    8,
-                    11
-                  ],
-                  "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
                 }
               ]
             }
@@ -10946,13 +10970,13 @@
           "unplaced": []
         },
         "speaking": {
-          "completeness": 0.636,
-          "got": 7,
+          "completeness": 1,
+          "got": 11,
           "need": 11,
           "modules": {
             "1": {
               "form": "A",
-              "got": 7,
+              "got": 11,
               "need": 11,
               "slots": [
                 {
@@ -10981,9 +11005,15 @@
                     11
                   ],
                   "need": 4,
-                  "got": 0,
-                  "status": "empty",
-                  "items": []
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_interview_314_1",
+                      "nq": 4,
+                      "q": 8
+                    }
+                  ]
                 }
               ]
             }
@@ -65450,6 +65480,343 @@
     ],
     "speaking": [
       {
+        "id": "speaking:121c",
+        "section": "speaking",
+        "base_set": "1.21新托福真题C卷",
+        "date": "2026-01-21",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "repeat_1",
+                "type": "repeat",
+                "band": [
+                  1,
+                  7
+                ],
+                "need": 7,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_repeat_121c_1",
+                    "nq": 7,
+                    "q": 1,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 7,
+                "status": "full"
+              },
+              {
+                "key": "interview_8",
+                "type": "interview",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_interview_121c_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "1.21新托福真题C卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 11,
+            "got": 11
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "speaking:127b",
+        "section": "speaking",
+        "base_set": "1.27新托福真题B卷",
+        "date": "2026-01-27",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "repeat_1",
+                "type": "repeat",
+                "band": [
+                  1,
+                  7
+                ],
+                "need": 7,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_repeat_rp0822_1",
+                    "nq": 14,
+                    "q": 1,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native",
+                    "alias_of": "real_repeat_127b_1"
+                  }
+                ],
+                "got": 14,
+                "status": "full"
+              },
+              {
+                "key": "interview_8",
+                "type": "interview",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_interview_127b_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "1.27新托福真题B卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 11,
+            "got": 11
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "speaking:128a",
+        "section": "speaking",
+        "base_set": "1.28新托福真题A卷",
+        "date": "2026-01-28",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "repeat_1",
+                "type": "repeat",
+                "band": [
+                  1,
+                  7
+                ],
+                "need": 7,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_repeat_128a_1",
+                    "nq": 7,
+                    "q": 1,
+                    "from": "1.28新托福真题A卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 7,
+                "status": "full"
+              },
+              {
+                "key": "interview_8",
+                "type": "interview",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_interview_128a_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "1.28新托福真题A卷",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 11,
+            "got": 11
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "speaking:210",
+        "section": "speaking",
+        "base_set": "2.10新托福真题",
+        "date": "2026-02-10",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "repeat_1",
+                "type": "repeat",
+                "band": [
+                  1,
+                  7
+                ],
+                "need": 7,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_repeat_rp0819_1",
+                    "nq": 8,
+                    "q": 1,
+                    "from": "2.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_repeat_210_1"
+                  }
+                ],
+                "got": 8,
+                "status": "full"
+              },
+              {
+                "key": "interview_8",
+                "type": "interview",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_interview_210_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "2.10新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 11,
+            "got": 11
+          }
+        },
+        "missing": []
+      },
+      {
+        "id": "speaking:314",
+        "section": "speaking",
+        "base_set": "3.14新托福真题",
+        "date": "2026-03-14",
+        "forms": {
+          "1": "A"
+        },
+        "completeness_before": 1,
+        "completeness": 1,
+        "complete": true,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "repeat_1",
+                "type": "repeat",
+                "band": [
+                  1,
+                  7
+                ],
+                "need": 7,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_repeat_314_1",
+                    "nq": 7,
+                    "q": 1,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 7,
+                "status": "full"
+              },
+              {
+                "key": "interview_8",
+                "type": "interview",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_interview_314_1",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "3.14新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 11,
+            "got": 11
+          }
+        },
+        "missing": []
+      },
+      {
         "id": "speaking:rf0610",
         "section": "speaking",
         "base_set": "rf0610",
@@ -66115,67 +66482,6 @@
         ]
       },
       {
-        "id": "speaking:121c",
-        "section": "speaking",
-        "base_set": "1.21新托福真题C卷",
-        "date": "2026-01-21",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "repeat_1",
-                "type": "repeat",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_repeat_121c_1",
-                    "nq": 7,
-                    "q": 1,
-                    "from": "1.21新托福真题C卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 7,
-                "status": "full"
-              },
-              {
-                "key": "interview_8",
-                "type": "interview",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 11,
-            "got": 7
-          }
-        },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
-      },
-      {
         "id": "speaking:127a",
         "section": "speaking",
         "base_set": "1.27新托福真题A卷",
@@ -66208,129 +66514,6 @@
                     "nq": 7,
                     "q": 1,
                     "from": "1.27新托福真题A卷",
-                    "via": "native"
-                  }
-                ],
-                "got": 7,
-                "status": "full"
-              },
-              {
-                "key": "interview_8",
-                "type": "interview",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 11,
-            "got": 7
-          }
-        },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
-      },
-      {
-        "id": "speaking:127b",
-        "section": "speaking",
-        "base_set": "1.27新托福真题B卷",
-        "date": "2026-01-27",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "repeat_1",
-                "type": "repeat",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_repeat_rp0822_1",
-                    "nq": 14,
-                    "q": 1,
-                    "from": "1.27新托福真题B卷",
-                    "via": "native",
-                    "alias_of": "real_repeat_127b_1"
-                  }
-                ],
-                "got": 14,
-                "status": "full"
-              },
-              {
-                "key": "interview_8",
-                "type": "interview",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 11,
-            "got": 7
-          }
-        },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
-      },
-      {
-        "id": "speaking:128a",
-        "section": "speaking",
-        "base_set": "1.28新托福真题A卷",
-        "date": "2026-01-28",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "repeat_1",
-                "type": "repeat",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_repeat_128a_1",
-                    "nq": 7,
-                    "q": 1,
-                    "from": "1.28新托福真题A卷",
                     "via": "native"
                   }
                 ],
@@ -66606,68 +66789,6 @@
         ]
       },
       {
-        "id": "speaking:210",
-        "section": "speaking",
-        "base_set": "2.10新托福真题",
-        "date": "2026-02-10",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "repeat_1",
-                "type": "repeat",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_repeat_rp0819_1",
-                    "nq": 8,
-                    "q": 1,
-                    "from": "2.10新托福真题",
-                    "via": "native",
-                    "alias_of": "real_repeat_210_1"
-                  }
-                ],
-                "got": 8,
-                "status": "full"
-              },
-              {
-                "key": "interview_8",
-                "type": "interview",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 11,
-            "got": 7
-          }
-        },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
-      },
-      {
         "id": "speaking:228",
         "section": "speaking",
         "base_set": "2.28新托福真题",
@@ -66700,67 +66821,6 @@
                     "nq": 7,
                     "q": 1,
                     "from": "2.28新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 7,
-                "status": "full"
-              },
-              {
-                "key": "interview_8",
-                "type": "interview",
-                "band": [
-                  8,
-                  11
-                ],
-                "need": 4,
-                "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
-              }
-            ],
-            "need": 11,
-            "got": 7
-          }
-        },
-        "missing": [
-          "M1/interview_8:0/4"
-        ]
-      },
-      {
-        "id": "speaking:314",
-        "section": "speaking",
-        "base_set": "3.14新托福真题",
-        "date": "2026-03-14",
-        "forms": {
-          "1": "A"
-        },
-        "completeness_before": 0.636,
-        "completeness": 0.636,
-        "complete": false,
-        "purity": 1,
-        "borrowed": [],
-        "modules": {
-          "1": {
-            "module": 1,
-            "form": "A",
-            "slots": [
-              {
-                "key": "repeat_1",
-                "type": "repeat",
-                "band": [
-                  1,
-                  7
-                ],
-                "need": 7,
-                "units": 1,
-                "items": [
-                  {
-                    "id": "real_repeat_314_1",
-                    "nq": 7,
-                    "q": 1,
-                    "from": "3.14新托福真题",
                     "via": "native"
                   }
                 ],
@@ -76690,6 +76750,11 @@
     ],
     "listening": [],
     "speaking": [
+      "speaking:121c",
+      "speaking:127b",
+      "speaking:128a",
+      "speaking:210",
+      "speaking:314",
       "speaking:rf0610",
       "speaking:rf0620",
       "speaking:rf0622",
