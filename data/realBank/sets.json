@@ -22,12 +22,12 @@
       "questions": 417
     },
     "lcr": {
-      "items": 333,
-      "questions": 333
+      "items": 338,
+      "questions": 338
     },
     "lc": {
-      "items": 90,
-      "questions": 180
+      "items": 91,
+      "questions": 182
     },
     "la": {
       "items": 58,
@@ -74,7 +74,7 @@
       "B": 30
     },
     "listening_m2": {
-      "A": 33,
+      "A": 35,
       "B": 1
     }
   },
@@ -92,11 +92,11 @@
         "dissolved": 0
       },
       "listening": {
-        "sets_with_any": 35,
+        "sets_with_any": 37,
         "native_complete": 17,
-        "native_half": 15,
+        "native_half": 17,
         "native_scraps": 3,
-        "skeletons": 35,
+        "skeletons": 37,
         "composites_complete": 4,
         "composites_pure": 4,
         "dissolved": 0
@@ -124,31 +124,31 @@
     },
     "exams_native": 1,
     "exams_mixed": 3,
-    "aliases_restored": 765,
+    "aliases_restored": 806,
     "type_sets": {
       "lcr": {
-        "sets": 35,
-        "full": 18,
-        "near": 3,
-        "partial": 14
+        "sets": 37,
+        "full": 19,
+        "near": 5,
+        "partial": 13
       },
       "lc": {
-        "sets": 31,
+        "sets": 33,
         "full": 12,
         "near": 0,
-        "partial": 19
+        "partial": 21
       },
       "la": {
-        "sets": 32,
+        "sets": 34,
         "full": 21,
         "near": 0,
-        "partial": 11
+        "partial": 13
       },
       "lat": {
-        "sets": 33,
+        "sets": 35,
         "full": 17,
         "near": 6,
-        "partial": 10
+        "partial": 12
       },
       "ctw": {
         "sets": 68,
@@ -18212,6 +18212,329 @@
           },
           "unplaced": []
         },
+        "listening": {
+          "completeness": 0.766,
+          "got": 36,
+          "need": 47,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 23,
+              "need": 32,
+              "slots": [
+                {
+                  "key": "lcr_1",
+                  "type": "lcr",
+                  "band": [
+                    1,
+                    12
+                  ],
+                  "need": 12,
+                  "got": 11,
+                  "status": "near",
+                  "items": [
+                    {
+                      "id": "real_lcr_415_1_01",
+                      "nq": 1,
+                      "q": 1
+                    },
+                    {
+                      "id": "real_lcr_415_1_02",
+                      "nq": 1,
+                      "q": 2
+                    },
+                    {
+                      "id": "real_lcr_413_1_08",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_415_1_03"
+                    },
+                    {
+                      "id": "real_lcr_127a_1_02",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "real_lcr_415_1_04"
+                    },
+                    {
+                      "id": "real_lcr_22_1_01",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "real_lcr_415_1_05"
+                    },
+                    {
+                      "id": "real_lcr_415_1_06",
+                      "nq": 1,
+                      "q": 6
+                    },
+                    {
+                      "id": "real_lcr_21b_1_05",
+                      "nq": 1,
+                      "q": 7,
+                      "alias_of": "real_lcr_415_1_07"
+                    },
+                    {
+                      "id": "real_lcr_415_1_08",
+                      "nq": 1,
+                      "q": 8
+                    },
+                    {
+                      "id": "real_lcr_415_1_10",
+                      "nq": 1,
+                      "q": 10
+                    },
+                    {
+                      "id": "real_lcr_314_1_10",
+                      "nq": 1,
+                      "q": 11,
+                      "alias_of": "real_lcr_415_1_11"
+                    },
+                    {
+                      "id": "real_lcr_415_1_12",
+                      "nq": 1,
+                      "q": 12
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_13",
+                  "type": "lc",
+                  "band": [
+                    13,
+                    14
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_415_1_13",
+                      "nq": 2,
+                      "q": 13
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_15",
+                  "type": "lc",
+                  "band": [
+                    15,
+                    16
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_rf0615_1_13",
+                      "nq": 2,
+                      "q": 15,
+                      "alias_of": "real_lc_415_1_15"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_17",
+                  "type": "lc",
+                  "band": [
+                    17,
+                    18
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_415_1_17",
+                      "nq": 2,
+                      "q": 17
+                    }
+                  ]
+                },
+                {
+                  "key": "la_19",
+                  "type": "la",
+                  "band": [
+                    19,
+                    20
+                  ],
+                  "need": 2,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "la_21",
+                  "type": "la",
+                  "band": [
+                    21,
+                    22
+                  ],
+                  "need": 2,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "la_23",
+                  "type": "la",
+                  "band": [
+                    23,
+                    24
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_la_22_1_23",
+                      "nq": 2,
+                      "q": 23,
+                      "alias_of": "real_la_415_1_23"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_25",
+                  "type": "lat",
+                  "band": [
+                    25,
+                    28
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_rf0615_1_29",
+                      "nq": 4,
+                      "q": 25,
+                      "alias_of": "real_lat_415_1_25"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_29",
+                  "type": "lat",
+                  "band": [
+                    29,
+                    32
+                  ],
+                  "need": 4,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                }
+              ]
+            },
+            "2": {
+              "form": "A",
+              "got": 13,
+              "need": 15,
+              "slots": [
+                {
+                  "key": "lcr_1",
+                  "type": "lcr",
+                  "band": [
+                    1,
+                    3
+                  ],
+                  "need": 3,
+                  "got": 3,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lcr_rf0615_1_12",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "real_lcr_415_2_01"
+                    },
+                    {
+                      "id": "real_lcr_415_2_02",
+                      "nq": 1,
+                      "q": 2
+                    },
+                    {
+                      "id": "real_lcr_228_1_07",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_415_2_03"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_4",
+                  "type": "lc",
+                  "band": [
+                    4,
+                    5
+                  ],
+                  "need": 2,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "lc_6",
+                  "type": "lc",
+                  "band": [
+                    6,
+                    7
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_316_2_06",
+                      "nq": 2,
+                      "q": 6,
+                      "alias_of": "real_lc_415_2_06"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_8",
+                  "type": "lat",
+                  "band": [
+                    8,
+                    11
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_21a_1_25",
+                      "nq": 4,
+                      "q": 8,
+                      "alias_of": "real_lat_415_2_08"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_12",
+                  "type": "lat",
+                  "band": [
+                    12,
+                    15
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_21b_2_08",
+                      "nq": 4,
+                      "q": 12,
+                      "alias_of": "real_lat_415_2_12"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
         "writing": {
           "completeness": 1,
           "got": 12,
@@ -18837,9 +19160,10 @@
                       "alias_of": "real_lcr_420_1_11"
                     },
                     {
-                      "id": "real_lcr_420_1_12",
+                      "id": "real_lcr_415_1_12",
                       "nq": 1,
-                      "q": 12
+                      "q": 12,
+                      "alias_of": "real_lcr_420_1_12"
                     }
                   ]
                 },
@@ -21205,8 +21529,8 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.255,
-          "got": 12,
+          "completeness": 0.277,
+          "got": 13,
           "need": 47,
           "modules": {
             "1": {
@@ -21326,7 +21650,7 @@
             },
             "2": {
               "form": "A",
-              "got": 12,
+              "got": 13,
               "need": 15,
               "slots": [
                 {
@@ -21337,14 +21661,20 @@
                     3
                   ],
                   "need": 3,
-                  "got": 2,
-                  "status": "partial",
+                  "got": 3,
+                  "status": "full",
                   "items": [
                     {
                       "id": "real_lcr_rf0615_1_12",
                       "nq": 1,
                       "q": 1,
                       "alias_of": "real_lcr_53_2_01"
+                    },
+                    {
+                      "id": "real_lcr_415_2_02",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "real_lcr_53_2_02"
                     },
                     {
                       "id": "real_lcr_228_1_07",
@@ -21594,8 +21924,8 @@
           "unplaced": []
         },
         "listening": {
-          "completeness": 0.787,
-          "got": 37,
+          "completeness": 0.809,
+          "got": 38,
           "need": 47,
           "modules": {
             "1": {
@@ -21644,9 +21974,10 @@
                       "alias_of": "real_lcr_56_1_05"
                     },
                     {
-                      "id": "real_lcr_56_1_06",
+                      "id": "real_lcr_415_1_06",
                       "nq": 1,
-                      "q": 6
+                      "q": 6,
+                      "alias_of": "real_lcr_56_1_06"
                     },
                     {
                       "id": "real_lcr_128b_1_09",
@@ -21714,9 +22045,10 @@
                   "status": "full",
                   "items": [
                     {
-                      "id": "real_lc_56_1_15",
+                      "id": "real_lc_415_1_17",
                       "nq": 2,
-                      "q": 15
+                      "q": 15,
+                      "alias_of": "real_lc_56_1_15"
                     }
                   ]
                 },
@@ -21816,7 +22148,7 @@
             },
             "2": {
               "form": "A",
-              "got": 12,
+              "got": 13,
               "need": 15,
               "slots": [
                 {
@@ -21827,14 +22159,20 @@
                     3
                   ],
                   "need": 3,
-                  "got": 2,
-                  "status": "partial",
+                  "got": 3,
+                  "status": "full",
                   "items": [
                     {
                       "id": "real_lcr_rf0615_1_12",
                       "nq": 1,
                       "q": 1,
                       "alias_of": "real_lcr_56_2_01"
+                    },
+                    {
+                      "id": "real_lcr_415_2_02",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "real_lcr_56_2_02"
                     },
                     {
                       "id": "real_lcr_228_1_07",
@@ -22593,6 +22931,345 @@
                       "alias_of": "disc_510"
                     }
                   ]
+                }
+              ]
+            }
+          },
+          "unplaced": []
+        },
+        "listening": {
+          "completeness": 0.809,
+          "got": 38,
+          "need": 47,
+          "modules": {
+            "1": {
+              "form": "A",
+              "got": 27,
+              "need": 32,
+              "slots": [
+                {
+                  "key": "lcr_1",
+                  "type": "lcr",
+                  "band": [
+                    1,
+                    12
+                  ],
+                  "need": 12,
+                  "got": 11,
+                  "status": "near",
+                  "items": [
+                    {
+                      "id": "real_lcr_420_1_01",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "real_lcr_510_1_01"
+                    },
+                    {
+                      "id": "real_lcr_420_1_02",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "real_lcr_510_1_02"
+                    },
+                    {
+                      "id": "real_lcr_rf0610_1_03",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_510_1_03"
+                    },
+                    {
+                      "id": "real_lcr_rf0622_1_09",
+                      "nq": 1,
+                      "q": 4,
+                      "alias_of": "real_lcr_510_1_04"
+                    },
+                    {
+                      "id": "real_lcr_rf0610_1_04",
+                      "nq": 1,
+                      "q": 5,
+                      "alias_of": "real_lcr_510_1_05"
+                    },
+                    {
+                      "id": "real_lcr_121b_1_08",
+                      "nq": 1,
+                      "q": 6,
+                      "alias_of": "real_lcr_510_1_06"
+                    },
+                    {
+                      "id": "real_lcr_127b_1_01",
+                      "nq": 1,
+                      "q": 7,
+                      "alias_of": "real_lcr_510_1_07"
+                    },
+                    {
+                      "id": "real_lcr_420_1_08",
+                      "nq": 1,
+                      "q": 8,
+                      "alias_of": "real_lcr_510_1_08"
+                    },
+                    {
+                      "id": "real_lcr_420_1_09",
+                      "nq": 1,
+                      "q": 9,
+                      "alias_of": "real_lcr_510_1_09"
+                    },
+                    {
+                      "id": "real_lcr_420_1_10",
+                      "nq": 1,
+                      "q": 10,
+                      "alias_of": "real_lcr_510_1_10"
+                    },
+                    {
+                      "id": "real_lcr_rf0610_1_11",
+                      "nq": 1,
+                      "q": 11,
+                      "alias_of": "real_lcr_510_1_11"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_13",
+                  "type": "lc",
+                  "band": [
+                    13,
+                    14
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_21b_1_13",
+                      "nq": 2,
+                      "q": 13,
+                      "alias_of": "real_lc_510_1_13"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_15",
+                  "type": "lc",
+                  "band": [
+                    15,
+                    16
+                  ],
+                  "need": 2,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "lc_17",
+                  "type": "lc",
+                  "band": [
+                    17,
+                    18
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_413_1_13",
+                      "nq": 2,
+                      "q": 17,
+                      "alias_of": "real_lc_510_1_17"
+                    }
+                  ]
+                },
+                {
+                  "key": "la_19",
+                  "type": "la",
+                  "band": [
+                    19,
+                    20
+                  ],
+                  "need": 2,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
+                },
+                {
+                  "key": "la_21",
+                  "type": "la",
+                  "band": [
+                    21,
+                    22
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_la_420_1_21",
+                      "nq": 2,
+                      "q": 21,
+                      "alias_of": "real_la_510_1_21"
+                    }
+                  ]
+                },
+                {
+                  "key": "la_23",
+                  "type": "la",
+                  "band": [
+                    23,
+                    24
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_la_21a_1_21",
+                      "nq": 2,
+                      "q": 23,
+                      "alias_of": "real_la_510_1_23"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_25",
+                  "type": "lat",
+                  "band": [
+                    25,
+                    28
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_rf0610_1_25",
+                      "nq": 4,
+                      "q": 25,
+                      "alias_of": "real_lat_510_1_25"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_29",
+                  "type": "lat",
+                  "band": [
+                    29,
+                    32
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_rf0620_1_29",
+                      "nq": 4,
+                      "q": 29,
+                      "alias_of": "real_lat_510_1_29"
+                    }
+                  ]
+                }
+              ]
+            },
+            "2": {
+              "form": "A",
+              "got": 11,
+              "need": 15,
+              "slots": [
+                {
+                  "key": "lcr_1",
+                  "type": "lcr",
+                  "band": [
+                    1,
+                    3
+                  ],
+                  "need": 3,
+                  "got": 3,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lcr_420_2_01",
+                      "nq": 1,
+                      "q": 1,
+                      "alias_of": "real_lcr_510_2_01"
+                    },
+                    {
+                      "id": "real_lcr_420_2_02",
+                      "nq": 1,
+                      "q": 2,
+                      "alias_of": "real_lcr_510_2_02"
+                    },
+                    {
+                      "id": "real_lcr_128b_2_02",
+                      "nq": 1,
+                      "q": 3,
+                      "alias_of": "real_lcr_510_2_03"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_4",
+                  "type": "lc",
+                  "band": [
+                    4,
+                    5
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_420_2_04",
+                      "nq": 2,
+                      "q": 4,
+                      "alias_of": "real_lc_510_2_04"
+                    }
+                  ]
+                },
+                {
+                  "key": "lc_6",
+                  "type": "lc",
+                  "band": [
+                    6,
+                    7
+                  ],
+                  "need": 2,
+                  "got": 2,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lc_rf0622_2_06",
+                      "nq": 2,
+                      "q": 6,
+                      "alias_of": "real_lc_510_2_06"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_8",
+                  "type": "lat",
+                  "band": [
+                    8,
+                    11
+                  ],
+                  "need": 4,
+                  "got": 4,
+                  "status": "full",
+                  "items": [
+                    {
+                      "id": "real_lat_420_2_08",
+                      "nq": 4,
+                      "q": 8,
+                      "alias_of": "real_lat_510_2_08"
+                    }
+                  ]
+                },
+                {
+                  "key": "lat_12",
+                  "type": "lat",
+                  "band": [
+                    12,
+                    15
+                  ],
+                  "need": 4,
+                  "got": 0,
+                  "status": "empty",
+                  "items": []
                 }
               ]
             }
@@ -32498,7 +33175,8 @@
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_420_1_12",
+            "id": "real_lcr_415_1_12",
+            "alias_of": "real_lcr_420_1_12",
             "nq": 1,
             "module": 1,
             "q": 12,
@@ -32645,6 +33323,134 @@
           },
           {
             "id": "real_lcr_427_2_03",
+            "nq": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          }
+        ]
+      },
+      {
+        "id": "lcr:56",
+        "type": "lcr",
+        "set": "5.6新托福真题",
+        "date": "2026-05-06",
+        "need": 15,
+        "got": 15,
+        "status": "full",
+        "items": [
+          {
+            "id": "real_lcr_316_1_09",
+            "alias_of": "real_lcr_56_1_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_314_1_06",
+            "alias_of": "real_lcr_56_1_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_413_1_08",
+            "alias_of": "real_lcr_56_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_56_1_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_318_1_11",
+            "alias_of": "real_lcr_56_1_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_06",
+            "alias_of": "real_lcr_56_1_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_128b_1_09",
+            "alias_of": "real_lcr_56_1_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_320_1_08",
+            "alias_of": "real_lcr_56_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_56_1_09",
+            "nq": 1,
+            "module": 1,
+            "q": 9,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_428_1_08",
+            "alias_of": "real_lcr_56_1_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_314_1_10",
+            "alias_of": "real_lcr_56_1_11",
+            "nq": 1,
+            "module": 1,
+            "q": 11,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_56_1_12",
+            "nq": 1,
+            "module": 1,
+            "q": 12,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0615_1_12",
+            "alias_of": "real_lcr_56_2_01",
+            "nq": 1,
+            "module": 2,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_2_02",
+            "alias_of": "real_lcr_56_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_228_1_07",
+            "alias_of": "real_lcr_56_2_03",
             "nq": 1,
             "module": 2,
             "q": 3,
@@ -33584,6 +34390,122 @@
         ]
       },
       {
+        "id": "lcr:415",
+        "type": "lcr",
+        "set": "4.15新托福真题",
+        "date": "2026-04-15",
+        "need": 15,
+        "got": 14,
+        "status": "near",
+        "items": [
+          {
+            "id": "real_lcr_415_1_01",
+            "nq": 1,
+            "module": 1,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_02",
+            "nq": 1,
+            "module": 1,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_413_1_08",
+            "alias_of": "real_lcr_415_1_03",
+            "nq": 1,
+            "module": 1,
+            "q": 3,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_127a_1_02",
+            "alias_of": "real_lcr_415_1_04",
+            "nq": 1,
+            "module": 1,
+            "q": 4,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_22_1_01",
+            "alias_of": "real_lcr_415_1_05",
+            "nq": 1,
+            "module": 1,
+            "q": 5,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_06",
+            "nq": 1,
+            "module": 1,
+            "q": 6,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_21b_1_05",
+            "alias_of": "real_lcr_415_1_07",
+            "nq": 1,
+            "module": 1,
+            "q": 7,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_08",
+            "nq": 1,
+            "module": 1,
+            "q": 8,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_10",
+            "nq": 1,
+            "module": 1,
+            "q": 10,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_314_1_10",
+            "alias_of": "real_lcr_415_1_11",
+            "nq": 1,
+            "module": 1,
+            "q": 11,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_1_12",
+            "nq": 1,
+            "module": 1,
+            "q": 12,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_rf0615_1_12",
+            "alias_of": "real_lcr_415_2_01",
+            "nq": 1,
+            "module": 2,
+            "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_228_1_07",
+            "alias_of": "real_lcr_415_2_03",
+            "nq": 1,
+            "module": 2,
+            "q": 3,
+            "slot": "lcr_1"
+          }
+        ]
+      },
+      {
         "id": "lcr:428",
         "type": "lcr",
         "set": "4.28新托福真题",
@@ -33698,117 +34620,121 @@
         ]
       },
       {
-        "id": "lcr:56",
+        "id": "lcr:510",
         "type": "lcr",
-        "set": "5.6新托福真题",
-        "date": "2026-05-06",
+        "set": "5.10新托福真题",
+        "date": "2026-05-10",
         "need": 15,
         "got": 14,
-        "status": "partial",
+        "status": "near",
         "items": [
           {
-            "id": "real_lcr_316_1_09",
-            "alias_of": "real_lcr_56_1_01",
+            "id": "real_lcr_420_1_01",
+            "alias_of": "real_lcr_510_1_01",
             "nq": 1,
             "module": 1,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_314_1_06",
-            "alias_of": "real_lcr_56_1_02",
+            "id": "real_lcr_420_1_02",
+            "alias_of": "real_lcr_510_1_02",
             "nq": 1,
             "module": 1,
             "q": 2,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_413_1_08",
-            "alias_of": "real_lcr_56_1_03",
+            "id": "real_lcr_rf0610_1_03",
+            "alias_of": "real_lcr_510_1_03",
             "nq": 1,
             "module": 1,
             "q": 3,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_56_1_04",
+            "id": "real_lcr_rf0622_1_09",
+            "alias_of": "real_lcr_510_1_04",
             "nq": 1,
             "module": 1,
             "q": 4,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_318_1_11",
-            "alias_of": "real_lcr_56_1_05",
+            "id": "real_lcr_rf0610_1_04",
+            "alias_of": "real_lcr_510_1_05",
             "nq": 1,
             "module": 1,
             "q": 5,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_56_1_06",
+            "id": "real_lcr_121b_1_08",
+            "alias_of": "real_lcr_510_1_06",
             "nq": 1,
             "module": 1,
             "q": 6,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_128b_1_09",
-            "alias_of": "real_lcr_56_1_07",
+            "id": "real_lcr_127b_1_01",
+            "alias_of": "real_lcr_510_1_07",
             "nq": 1,
             "module": 1,
             "q": 7,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_320_1_08",
-            "alias_of": "real_lcr_56_1_08",
+            "id": "real_lcr_420_1_08",
+            "alias_of": "real_lcr_510_1_08",
             "nq": 1,
             "module": 1,
             "q": 8,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_56_1_09",
+            "id": "real_lcr_420_1_09",
+            "alias_of": "real_lcr_510_1_09",
             "nq": 1,
             "module": 1,
             "q": 9,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_428_1_08",
-            "alias_of": "real_lcr_56_1_10",
+            "id": "real_lcr_420_1_10",
+            "alias_of": "real_lcr_510_1_10",
             "nq": 1,
             "module": 1,
             "q": 10,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_314_1_10",
-            "alias_of": "real_lcr_56_1_11",
+            "id": "real_lcr_rf0610_1_11",
+            "alias_of": "real_lcr_510_1_11",
             "nq": 1,
             "module": 1,
             "q": 11,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_56_1_12",
-            "nq": 1,
-            "module": 1,
-            "q": 12,
-            "slot": "lcr_1"
-          },
-          {
-            "id": "real_lcr_rf0615_1_12",
-            "alias_of": "real_lcr_56_2_01",
+            "id": "real_lcr_420_2_01",
+            "alias_of": "real_lcr_510_2_01",
             "nq": 1,
             "module": 2,
             "q": 1,
             "slot": "lcr_1"
           },
           {
-            "id": "real_lcr_228_1_07",
-            "alias_of": "real_lcr_56_2_03",
+            "id": "real_lcr_420_2_02",
+            "alias_of": "real_lcr_510_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_128b_2_02",
+            "alias_of": "real_lcr_510_2_03",
             "nq": 1,
             "module": 2,
             "q": 3,
@@ -34886,7 +35812,7 @@
         "set": "5.3新托福真题",
         "date": "2026-05-03",
         "need": 15,
-        "got": 2,
+        "got": 3,
         "status": "partial",
         "items": [
           {
@@ -34895,6 +35821,14 @@
             "nq": 1,
             "module": 2,
             "q": 1,
+            "slot": "lcr_1"
+          },
+          {
+            "id": "real_lcr_415_2_02",
+            "alias_of": "real_lcr_53_2_02",
+            "nq": 1,
+            "module": 2,
+            "q": 2,
             "slot": "lcr_1"
           },
           {
@@ -35671,6 +36605,47 @@
         ]
       },
       {
+        "id": "lc:415",
+        "type": "lc",
+        "set": "4.15新托福真题",
+        "date": "2026-04-15",
+        "need": 10,
+        "got": 8,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_lc_415_1_13",
+            "nq": 2,
+            "module": 1,
+            "q": 13,
+            "slot": "lc_13"
+          },
+          {
+            "id": "real_lc_rf0615_1_13",
+            "alias_of": "real_lc_415_1_15",
+            "nq": 2,
+            "module": 1,
+            "q": 15,
+            "slot": "lc_15"
+          },
+          {
+            "id": "real_lc_415_1_17",
+            "nq": 2,
+            "module": 1,
+            "q": 17,
+            "slot": "lc_17"
+          },
+          {
+            "id": "real_lc_316_2_06",
+            "alias_of": "real_lc_415_2_06",
+            "nq": 2,
+            "module": 2,
+            "q": 6,
+            "slot": "lc_6"
+          }
+        ]
+      },
+      {
         "id": "lc:420",
         "type": "lc",
         "set": "4.20新托福真题",
@@ -35747,6 +36722,49 @@
           },
           {
             "id": "real_lc_427_2_06",
+            "nq": 2,
+            "module": 2,
+            "q": 6,
+            "slot": "lc_6"
+          }
+        ]
+      },
+      {
+        "id": "lc:510",
+        "type": "lc",
+        "set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "need": 10,
+        "got": 8,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_lc_21b_1_13",
+            "alias_of": "real_lc_510_1_13",
+            "nq": 2,
+            "module": 1,
+            "q": 13,
+            "slot": "lc_13"
+          },
+          {
+            "id": "real_lc_413_1_13",
+            "alias_of": "real_lc_510_1_17",
+            "nq": 2,
+            "module": 1,
+            "q": 17,
+            "slot": "lc_17"
+          },
+          {
+            "id": "real_lc_420_2_04",
+            "alias_of": "real_lc_510_2_04",
+            "nq": 2,
+            "module": 2,
+            "q": 4,
+            "slot": "lc_4"
+          },
+          {
+            "id": "real_lc_rf0622_2_06",
+            "alias_of": "real_lc_510_2_06",
             "nq": 2,
             "module": 2,
             "q": 6,
@@ -35991,7 +37009,8 @@
             "slot": "lc_13"
           },
           {
-            "id": "real_lc_56_1_15",
+            "id": "real_lc_415_1_17",
+            "alias_of": "real_lc_56_1_15",
             "nq": 2,
             "module": 1,
             "q": 15,
@@ -37016,6 +38035,33 @@
         ]
       },
       {
+        "id": "la:510",
+        "type": "la",
+        "set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "need": 6,
+        "got": 4,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_la_420_1_21",
+            "alias_of": "real_la_510_1_21",
+            "nq": 2,
+            "module": 1,
+            "q": 21,
+            "slot": "la_21"
+          },
+          {
+            "id": "real_la_21a_1_21",
+            "alias_of": "real_la_510_1_23",
+            "nq": 2,
+            "module": 1,
+            "q": 23,
+            "slot": "la_23"
+          }
+        ]
+      },
+      {
         "id": "la:rf0713",
         "type": "la",
         "set": "rf0713",
@@ -37088,6 +38134,25 @@
           {
             "id": "real_la_rf0716_1_23",
             "alias_of": "real_la_rf0902_1_23",
+            "nq": 2,
+            "module": 1,
+            "q": 23,
+            "slot": "la_23"
+          }
+        ]
+      },
+      {
+        "id": "la:415",
+        "type": "la",
+        "set": "4.15新托福真题",
+        "date": "2026-04-15",
+        "need": 6,
+        "got": 2,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_la_22_1_23",
+            "alias_of": "real_la_415_1_23",
             "nq": 2,
             "module": 1,
             "q": 23,
@@ -38114,6 +39179,41 @@
         ]
       },
       {
+        "id": "lat:415",
+        "type": "lat",
+        "set": "4.15新托福真题",
+        "date": "2026-04-15",
+        "need": 16,
+        "got": 12,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_lat_rf0615_1_29",
+            "alias_of": "real_lat_415_1_25",
+            "nq": 4,
+            "module": 1,
+            "q": 25,
+            "slot": "lat_25"
+          },
+          {
+            "id": "real_lat_21a_1_25",
+            "alias_of": "real_lat_415_2_08",
+            "nq": 4,
+            "module": 2,
+            "q": 8,
+            "slot": "lat_8"
+          },
+          {
+            "id": "real_lat_21b_2_08",
+            "alias_of": "real_lat_415_2_12",
+            "nq": 4,
+            "module": 2,
+            "q": 12,
+            "slot": "lat_12"
+          }
+        ]
+      },
+      {
         "id": "lat:420",
         "type": "lat",
         "set": "4.20新托福真题",
@@ -38214,6 +39314,41 @@
             "module": 2,
             "q": 12,
             "slot": "lat_12"
+          }
+        ]
+      },
+      {
+        "id": "lat:510",
+        "type": "lat",
+        "set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "need": 16,
+        "got": 12,
+        "status": "partial",
+        "items": [
+          {
+            "id": "real_lat_rf0610_1_25",
+            "alias_of": "real_lat_510_1_25",
+            "nq": 4,
+            "module": 1,
+            "q": 25,
+            "slot": "lat_25"
+          },
+          {
+            "id": "real_lat_rf0620_1_29",
+            "alias_of": "real_lat_510_1_29",
+            "nq": 4,
+            "module": 1,
+            "q": 29,
+            "slot": "lat_29"
+          },
+          {
+            "id": "real_lat_420_2_08",
+            "alias_of": "real_lat_510_2_08",
+            "nq": 4,
+            "module": 2,
+            "q": 8,
+            "slot": "lat_8"
           }
         ]
       },
@@ -73051,11 +74186,12 @@
                     "alias_of": "real_lcr_420_1_11"
                   },
                   {
-                    "id": "real_lcr_420_1_12",
+                    "id": "real_lcr_415_1_12",
                     "nq": 1,
                     "q": 12,
                     "from": "4.20新托福真题",
-                    "via": "native"
+                    "via": "native",
+                    "alias_of": "real_lcr_420_1_12"
                   }
                 ],
                 "got": 12,
@@ -73345,6 +74481,833 @@
           }
         },
         "missing": [
+          "M1/lc_15:0/2",
+          "M1/la_19:0/2",
+          "M2/lat_12:0/4"
+        ]
+      },
+      {
+        "id": "listening:56",
+        "section": "listening",
+        "base_set": "5.6新托福真题",
+        "date": "2026-05-06",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.809,
+        "completeness": 0.809,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_316_1_09",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_01"
+                  },
+                  {
+                    "id": "real_lcr_314_1_06",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_02"
+                  },
+                  {
+                    "id": "real_lcr_413_1_08",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_03"
+                  },
+                  {
+                    "id": "real_lcr_56_1_04",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "5.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_318_1_11",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_05"
+                  },
+                  {
+                    "id": "real_lcr_415_1_06",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_06"
+                  },
+                  {
+                    "id": "real_lcr_128b_1_09",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_07"
+                  },
+                  {
+                    "id": "real_lcr_320_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_08"
+                  },
+                  {
+                    "id": "real_lcr_56_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "5.6新托福真题",
+                    "via": "native"
+                  },
+                  {
+                    "id": "real_lcr_428_1_08",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_10"
+                  },
+                  {
+                    "id": "real_lcr_314_1_10",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_1_11"
+                  },
+                  {
+                    "id": "real_lcr_56_1_12",
+                    "nq": 1,
+                    "q": 12,
+                    "from": "5.6新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 12,
+                "status": "full"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_56_1_13",
+                    "nq": 2,
+                    "q": 13,
+                    "from": "5.6新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_415_1_17",
+                    "nq": 2,
+                    "q": 15,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_56_1_15"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_56_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "5.6新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0615_1_25",
+                    "nq": 3,
+                    "q": 25,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_56_1_25"
+                  }
+                ],
+                "got": 3,
+                "status": "near"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0615_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_56_1_29"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 25
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_rf0615_1_12",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_2_01"
+                  },
+                  {
+                    "id": "real_lcr_415_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_2_02"
+                  },
+                  {
+                    "id": "real_lcr_228_1_07",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_56_2_03"
+                  }
+                ],
+                "got": 3,
+                "status": "full"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_316_2_06",
+                    "nq": 2,
+                    "q": 6,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_56_2_06"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_21a_1_25",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_56_2_08"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_21b_2_08",
+                    "nq": 4,
+                    "q": 12,
+                    "from": "5.6新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_56_2_12"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 15,
+            "got": 13
+          }
+        },
+        "missing": [
+          "M1/lc_17:0/2",
+          "M1/la_19:0/2",
+          "M1/la_23:0/2",
+          "M1/lat_25:3/4",
+          "M2/lc_4:0/2"
+        ]
+      },
+      {
+        "id": "listening:510",
+        "section": "listening",
+        "base_set": "5.10新托福真题",
+        "date": "2026-05-10",
+        "forms": {
+          "1": "A",
+          "2": "A"
+        },
+        "completeness_before": 0.809,
+        "completeness": 0.809,
+        "complete": false,
+        "purity": 1,
+        "borrowed": [],
+        "modules": {
+          "1": {
+            "module": 1,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  12
+                ],
+                "need": 12,
+                "units": 12,
+                "items": [
+                  {
+                    "id": "real_lcr_420_1_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_01"
+                  },
+                  {
+                    "id": "real_lcr_420_1_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_02"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_03",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_03"
+                  },
+                  {
+                    "id": "real_lcr_rf0622_1_09",
+                    "nq": 1,
+                    "q": 4,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_04"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_04",
+                    "nq": 1,
+                    "q": 5,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_05"
+                  },
+                  {
+                    "id": "real_lcr_121b_1_08",
+                    "nq": 1,
+                    "q": 6,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_06"
+                  },
+                  {
+                    "id": "real_lcr_127b_1_01",
+                    "nq": 1,
+                    "q": 7,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_07"
+                  },
+                  {
+                    "id": "real_lcr_420_1_08",
+                    "nq": 1,
+                    "q": 8,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_08"
+                  },
+                  {
+                    "id": "real_lcr_420_1_09",
+                    "nq": 1,
+                    "q": 9,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_09"
+                  },
+                  {
+                    "id": "real_lcr_420_1_10",
+                    "nq": 1,
+                    "q": 10,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_10"
+                  },
+                  {
+                    "id": "real_lcr_rf0610_1_11",
+                    "nq": 1,
+                    "q": 11,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_1_11"
+                  }
+                ],
+                "got": 11,
+                "status": "near"
+              },
+              {
+                "key": "lc_13",
+                "type": "lc",
+                "band": [
+                  13,
+                  14
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_21b_1_13",
+                    "nq": 2,
+                    "q": 13,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_510_1_13"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_15",
+                "type": "lc",
+                "band": [
+                  15,
+                  16
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "lc_17",
+                "type": "lc",
+                "band": [
+                  17,
+                  18
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_413_1_13",
+                    "nq": 2,
+                    "q": 17,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_510_1_17"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_19",
+                "type": "la",
+                "band": [
+                  19,
+                  20
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              },
+              {
+                "key": "la_21",
+                "type": "la",
+                "band": [
+                  21,
+                  22
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_420_1_21",
+                    "nq": 2,
+                    "q": 21,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_la_510_1_21"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "la_23",
+                "type": "la",
+                "band": [
+                  23,
+                  24
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_la_21a_1_21",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_la_510_1_23"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_25",
+                "type": "lat",
+                "band": [
+                  25,
+                  28
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0610_1_25",
+                    "nq": 4,
+                    "q": 25,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_510_1_25"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_29",
+                "type": "lat",
+                "band": [
+                  29,
+                  32
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_rf0620_1_29",
+                    "nq": 4,
+                    "q": 29,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_510_1_29"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              }
+            ],
+            "need": 32,
+            "got": 27
+          },
+          "2": {
+            "module": 2,
+            "form": "A",
+            "slots": [
+              {
+                "key": "lcr_1",
+                "type": "lcr",
+                "band": [
+                  1,
+                  3
+                ],
+                "need": 3,
+                "units": 3,
+                "items": [
+                  {
+                    "id": "real_lcr_420_2_01",
+                    "nq": 1,
+                    "q": 1,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_2_01"
+                  },
+                  {
+                    "id": "real_lcr_420_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_2_02"
+                  },
+                  {
+                    "id": "real_lcr_128b_2_02",
+                    "nq": 1,
+                    "q": 3,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_510_2_03"
+                  }
+                ],
+                "got": 3,
+                "status": "full"
+              },
+              {
+                "key": "lc_4",
+                "type": "lc",
+                "band": [
+                  4,
+                  5
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_420_2_04",
+                    "nq": 2,
+                    "q": 4,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_510_2_04"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lc_6",
+                "type": "lc",
+                "band": [
+                  6,
+                  7
+                ],
+                "need": 2,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lc_rf0622_2_06",
+                    "nq": 2,
+                    "q": 6,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_510_2_06"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
+              },
+              {
+                "key": "lat_8",
+                "type": "lat",
+                "band": [
+                  8,
+                  11
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [
+                  {
+                    "id": "real_lat_420_2_08",
+                    "nq": 4,
+                    "q": 8,
+                    "from": "5.10新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lat_510_2_08"
+                  }
+                ],
+                "got": 4,
+                "status": "full"
+              },
+              {
+                "key": "lat_12",
+                "type": "lat",
+                "band": [
+                  12,
+                  15
+                ],
+                "need": 4,
+                "units": 1,
+                "items": [],
+                "got": 0,
+                "status": "empty"
+              }
+            ],
+            "need": 15,
+            "got": 11
+          }
+        },
+        "missing": [
+          "M1/lcr_1:11/12",
           "M1/lc_15:0/2",
           "M1/la_19:0/2",
           "M2/lat_12:0/4"
@@ -74117,16 +76080,16 @@
         ]
       },
       {
-        "id": "listening:56",
+        "id": "listening:415",
         "section": "listening",
-        "base_set": "5.6新托福真题",
-        "date": "2026-05-06",
+        "base_set": "4.15新托福真题",
+        "date": "2026-04-15",
         "forms": {
           "1": "A",
           "2": "A"
         },
-        "completeness_before": 0.787,
-        "completeness": 0.787,
+        "completeness_before": 0.766,
+        "completeness": 0.766,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -74146,100 +76109,90 @@
                 "units": 12,
                 "items": [
                   {
-                    "id": "real_lcr_316_1_09",
+                    "id": "real_lcr_415_1_01",
                     "nq": 1,
                     "q": 1,
-                    "from": "5.6新托福真题",
-                    "via": "native",
-                    "alias_of": "real_lcr_56_1_01"
+                    "from": "4.15新托福真题",
+                    "via": "native"
                   },
                   {
-                    "id": "real_lcr_314_1_06",
+                    "id": "real_lcr_415_1_02",
                     "nq": 1,
                     "q": 2,
-                    "from": "5.6新托福真题",
-                    "via": "native",
-                    "alias_of": "real_lcr_56_1_02"
+                    "from": "4.15新托福真题",
+                    "via": "native"
                   },
                   {
                     "id": "real_lcr_413_1_08",
                     "nq": 1,
                     "q": 3,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_1_03"
+                    "alias_of": "real_lcr_415_1_03"
                   },
                   {
-                    "id": "real_lcr_56_1_04",
+                    "id": "real_lcr_127a_1_02",
                     "nq": 1,
                     "q": 4,
-                    "from": "5.6新托福真题",
-                    "via": "native"
+                    "from": "4.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_415_1_04"
                   },
                   {
-                    "id": "real_lcr_318_1_11",
+                    "id": "real_lcr_22_1_01",
                     "nq": 1,
                     "q": 5,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_1_05"
+                    "alias_of": "real_lcr_415_1_05"
                   },
                   {
-                    "id": "real_lcr_56_1_06",
+                    "id": "real_lcr_415_1_06",
                     "nq": 1,
                     "q": 6,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "real_lcr_128b_1_09",
+                    "id": "real_lcr_21b_1_05",
                     "nq": 1,
                     "q": 7,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_1_07"
+                    "alias_of": "real_lcr_415_1_07"
                   },
                   {
-                    "id": "real_lcr_320_1_08",
+                    "id": "real_lcr_415_1_08",
                     "nq": 1,
                     "q": 8,
-                    "from": "5.6新托福真题",
-                    "via": "native",
-                    "alias_of": "real_lcr_56_1_08"
-                  },
-                  {
-                    "id": "real_lcr_56_1_09",
-                    "nq": 1,
-                    "q": 9,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native"
                   },
                   {
-                    "id": "real_lcr_428_1_08",
+                    "id": "real_lcr_415_1_10",
                     "nq": 1,
                     "q": 10,
-                    "from": "5.6新托福真题",
-                    "via": "native",
-                    "alias_of": "real_lcr_56_1_10"
+                    "from": "4.15新托福真题",
+                    "via": "native"
                   },
                   {
                     "id": "real_lcr_314_1_10",
                     "nq": 1,
                     "q": 11,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_1_11"
+                    "alias_of": "real_lcr_415_1_11"
                   },
                   {
-                    "id": "real_lcr_56_1_12",
+                    "id": "real_lcr_415_1_12",
                     "nq": 1,
                     "q": 12,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native"
                   }
                 ],
-                "got": 12,
-                "status": "full"
+                "got": 11,
+                "status": "near"
               },
               {
                 "key": "lc_13",
@@ -74252,10 +76205,10 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lc_56_1_13",
+                    "id": "real_lc_415_1_13",
                     "nq": 2,
                     "q": 13,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native"
                   }
                 ],
@@ -74273,11 +76226,12 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lc_56_1_15",
+                    "id": "real_lc_rf0615_1_13",
                     "nq": 2,
                     "q": 15,
-                    "from": "5.6新托福真题",
-                    "via": "native"
+                    "from": "4.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lc_415_1_15"
                   }
                 ],
                 "got": 2,
@@ -74292,9 +76246,17 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_lc_415_1_17",
+                    "nq": 2,
+                    "q": 17,
+                    "from": "4.15新托福真题",
+                    "via": "native"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
               },
               {
                 "key": "la_19",
@@ -74318,17 +76280,9 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_la_56_1_21",
-                    "nq": 2,
-                    "q": 21,
-                    "from": "5.6新托福真题",
-                    "via": "native"
-                  }
-                ],
-                "got": 2,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               },
               {
                 "key": "la_23",
@@ -74339,9 +76293,18 @@
                 ],
                 "need": 2,
                 "units": 1,
-                "items": [],
-                "got": 0,
-                "status": "empty"
+                "items": [
+                  {
+                    "id": "real_la_22_1_23",
+                    "nq": 2,
+                    "q": 23,
+                    "from": "4.15新托福真题",
+                    "via": "native",
+                    "alias_of": "real_la_415_1_23"
+                  }
+                ],
+                "got": 2,
+                "status": "full"
               },
               {
                 "key": "lat_25",
@@ -74354,16 +76317,16 @@
                 "units": 1,
                 "items": [
                   {
-                    "id": "real_lat_rf0615_1_25",
-                    "nq": 3,
+                    "id": "real_lat_rf0615_1_29",
+                    "nq": 4,
                     "q": 25,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lat_56_1_25"
+                    "alias_of": "real_lat_415_1_25"
                   }
                 ],
-                "got": 3,
-                "status": "near"
+                "got": 4,
+                "status": "full"
               },
               {
                 "key": "lat_29",
@@ -74374,22 +76337,13 @@
                 ],
                 "need": 4,
                 "units": 1,
-                "items": [
-                  {
-                    "id": "real_lat_rf0615_1_29",
-                    "nq": 4,
-                    "q": 29,
-                    "from": "5.6新托福真题",
-                    "via": "native",
-                    "alias_of": "real_lat_56_1_29"
-                  }
-                ],
-                "got": 4,
-                "status": "full"
+                "items": [],
+                "got": 0,
+                "status": "empty"
               }
             ],
             "need": 32,
-            "got": 25
+            "got": 23
           },
           "2": {
             "module": 2,
@@ -74409,21 +76363,28 @@
                     "id": "real_lcr_rf0615_1_12",
                     "nq": 1,
                     "q": 1,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_2_01"
+                    "alias_of": "real_lcr_415_2_01"
+                  },
+                  {
+                    "id": "real_lcr_415_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "4.15新托福真题",
+                    "via": "native"
                   },
                   {
                     "id": "real_lcr_228_1_07",
                     "nq": 1,
                     "q": 3,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lcr_56_2_03"
+                    "alias_of": "real_lcr_415_2_03"
                   }
                 ],
-                "got": 2,
-                "status": "partial"
+                "got": 3,
+                "status": "full"
               },
               {
                 "key": "lc_4",
@@ -74452,9 +76413,9 @@
                     "id": "real_lc_316_2_06",
                     "nq": 2,
                     "q": 6,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lc_56_2_06"
+                    "alias_of": "real_lc_415_2_06"
                   }
                 ],
                 "got": 2,
@@ -74474,9 +76435,9 @@
                     "id": "real_lat_21a_1_25",
                     "nq": 4,
                     "q": 8,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lat_56_2_08"
+                    "alias_of": "real_lat_415_2_08"
                   }
                 ],
                 "got": 4,
@@ -74496,9 +76457,9 @@
                     "id": "real_lat_21b_2_08",
                     "nq": 4,
                     "q": 12,
-                    "from": "5.6新托福真题",
+                    "from": "4.15新托福真题",
                     "via": "native",
-                    "alias_of": "real_lat_56_2_12"
+                    "alias_of": "real_lat_415_2_12"
                   }
                 ],
                 "got": 4,
@@ -74506,15 +76467,14 @@
               }
             ],
             "need": 15,
-            "got": 12
+            "got": 13
           }
         },
         "missing": [
-          "M1/lc_17:0/2",
+          "M1/lcr_1:11/12",
           "M1/la_19:0/2",
-          "M1/la_23:0/2",
-          "M1/lat_25:3/4",
-          "M2/lcr_1:2/3",
+          "M1/la_21:0/2",
+          "M1/lat_29:0/4",
           "M2/lc_4:0/2"
         ]
       },
@@ -76074,8 +78034,8 @@
           "1": "A",
           "2": "A"
         },
-        "completeness_before": 0.255,
-        "completeness": 0.255,
+        "completeness_before": 0.277,
+        "completeness": 0.277,
         "complete": false,
         "purity": 1,
         "borrowed": [],
@@ -76228,6 +78188,14 @@
                     "alias_of": "real_lcr_53_2_01"
                   },
                   {
+                    "id": "real_lcr_415_2_02",
+                    "nq": 1,
+                    "q": 2,
+                    "from": "5.3新托福真题",
+                    "via": "native",
+                    "alias_of": "real_lcr_53_2_02"
+                  },
+                  {
                     "id": "real_lcr_228_1_07",
                     "nq": 1,
                     "q": 3,
@@ -76236,8 +78204,8 @@
                     "alias_of": "real_lcr_53_2_03"
                   }
                 ],
-                "got": 2,
-                "status": "partial"
+                "got": 3,
+                "status": "full"
               },
               {
                 "key": "lc_4",
@@ -76320,7 +78288,7 @@
               }
             ],
             "need": 15,
-            "got": 12
+            "got": 13
           }
         },
         "missing": [
@@ -76333,7 +78301,6 @@
           "M1/la_23:0/2",
           "M1/lat_25:0/4",
           "M1/lat_29:0/4",
-          "M2/lcr_1:2/3",
           "M2/lc_4:0/2"
         ]
       },

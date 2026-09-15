@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 90,
+  "count": 91,
   "items": [
     {
       "id": "real_lc_121b_1_13",
@@ -3874,6 +3874,170 @@
       "audio_source": "original"
     },
     {
+      "id": "real_lc_415_1_13",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_415_1_13.mp3?v=mu37zp5q",
+      "asr_similarity": 0.951,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 140Hz / 246Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.15新托福真题",
+      "date": "2026-04-15",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.3新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "How's your job at the campus bookstore going?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Pretty good. It was really hectic last week, which is no surprise because the semester is just starting."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Right. I actually avoided all that by ordering my books online. It was a smart move."
+        },
+        {
+          "speaker": "Man",
+          "text": "Things have calmed down, thankfully. I think this actually might be my last semester at the bookstore, though. I heard that the tutoring center is looking for biology tutors. That's my major, so..."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What does the woman imply when she mentions ordering books online?",
+          "options": {
+            "A": "She did it to avoid crowds at a bookstore.",
+            "B": "She was able to find cheaper books online.",
+            "C": "She could not find all the books she needed online.",
+            "D": "She waited for a week to receive her books."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 13
+        },
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man?",
+          "options": {
+            "A": "He has been receiving biology tutoring.",
+            "B": "He will graduate at the end of the semester.",
+            "C": "He will receive a promotion at the bookstore.",
+            "D": "He might be changing jobs soon."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 14
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_415_1_17",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_415_1_17.mp3?v=mu37zpty",
+      "asr_similarity": 0.954,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 152Hz / 252Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.15新托福真题",
+      "date": "2026-04-15",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 5.3新托福真题、5.6新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Have you gone out to get the food and drinks we need for the Astronomy Club meeting tomorrow? It's our first meeting of the year."
+        },
+        {
+          "speaker": "Man",
+          "text": "Not yet. I've been working on setting up the outdoor space behind the student center for our stargazing activities. There was more to do than I thought."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That actually works out perfectly. I've got a few more things to add to the list."
+        },
+        {
+          "speaker": "Man",
+          "text": "Alright. Jot them down. And I'll take care of that now."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What has the man been doing?",
+          "options": {
+            "A": "Tending to the student garden",
+            "B": "Putting up posters in the student center",
+            "C": "Preparing for a club meeting",
+            "D": "Putting groceries away"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 17
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man most likely do next?",
+          "options": {
+            "A": "Help the woman prepare some snacks",
+            "B": "Call the student center",
+            "C": "Contact some club members",
+            "D": "Go shopping for food"
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 18
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
       "id": "real_lc_420_2_04",
       "difficulty": "medium",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_420_2_04.mp3?v=mu37nei1",
@@ -4658,88 +4822,6 @@
           "answer": "B",
           "explanation": "",
           "source_q": 14
-        }
-      ],
-      "audio_source": "original"
-    },
-    {
-      "id": "real_lc_56_1_15",
-      "difficulty": "medium",
-      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_56_1_15.mp3?v=mu37ngw5",
-      "asr_similarity": 0.955,
-      "source_notes": [
-        "turns_from_asr_diarization:逐句两簇 133Hz / 254Hz",
-        "labels"
-      ],
-      "real": true,
-      "tier": "recalled",
-      "source": "5.6新托福真题",
-      "date": "2026-05-06",
-      "source_flags": [
-        {
-          "code": "duplicate_cluster",
-          "severity": "warn",
-          "detail": "与 4.15新托福真题、5.3新托福真题 属同题簇（部分科目共题，机经正常形态）。"
-        }
-      ],
-      "context": "campus_daily",
-      "situation": "",
-      "speakers": [
-        {
-          "name": "Man",
-          "role": "student",
-          "gender": "male"
-        },
-        {
-          "name": "Woman",
-          "role": "student",
-          "gender": "female"
-        }
-      ],
-      "conversation": [
-        {
-          "speaker": "Woman",
-          "text": "Have you gone out to get the food and drinks we need for the astronomy club meeting tomorrow? It's our first meeting of the year."
-        },
-        {
-          "speaker": "Man",
-          "text": "Not yet. I've been working on setting up the outdoor space behind the student center for our stargazing activities. There was more to do than I thought."
-        },
-        {
-          "speaker": "Woman",
-          "text": "That actually works out perfectly. I've got a few more things to add to the list."
-        },
-        {
-          "speaker": "Man",
-          "text": "All right, jot them down and I'll take care of that now."
-        }
-      ],
-      "questions": [
-        {
-          "type": "detail",
-          "stem": "What has the man been doing?",
-          "options": {
-            "A": "Tending to the student garden",
-            "B": "Putting up posters in the student center",
-            "C": "Preparing for a club meeting",
-            "D": "Putting groceries away"
-          },
-          "answer": "C",
-          "explanation": "",
-          "source_q": 15
-        },
-        {
-          "type": "inference",
-          "stem": "What will the man most likely do next?",
-          "options": {
-            "A": "Help the woman prepare some snacks",
-            "B": "Call the student center",
-            "C": "Contact some club members",
-            "D": "Go shopping for food"
-          },
-          "answer": "D",
-          "explanation": "",
-          "source_q": 16
         }
       ],
       "audio_source": "original"

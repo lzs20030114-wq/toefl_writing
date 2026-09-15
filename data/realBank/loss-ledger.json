@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 5638,
-    "missing": 2701,
+    "got": 5714,
+    "missing": 2625,
     "overfilled": 59,
-    "completeness": 0.6809,
+    "completeness": 0.6901,
     "causes": {
       "source_defect": 705,
       "held": 101,
       "deduped": 24,
       "bank_dropped": 200,
-      "section_never_run": 1458,
+      "section_never_run": 1364,
       "section_lost": 0,
-      "pipeline_loss": 213
+      "pipeline_loss": 231
     },
-    "actionable": 213
+    "actionable": 231
   },
   "byType": {
     "ctw": {
@@ -167,66 +167,66 @@
     "lcr": {
       "type": "lcr",
       "need": 1039,
-      "got": 472,
-      "missing": 567,
+      "got": 502,
+      "missing": 537,
       "causes": {
         "source_defect": 151,
         "held": 23,
         "deduped": 0,
         "bank_dropped": 26,
-        "section_never_run": 344,
+        "section_never_run": 314,
         "section_lost": 0,
         "pipeline_loss": 23
       },
-      "completeness": 0.4543
+      "completeness": 0.4832
     },
     "lc": {
       "type": "lc",
       "need": 686,
-      "got": 242,
-      "missing": 444,
+      "got": 258,
+      "missing": 428,
       "causes": {
         "source_defect": 89,
         "held": 16,
         "deduped": 0,
         "bank_dropped": 24,
-        "section_never_run": 245,
+        "section_never_run": 225,
         "section_lost": 0,
-        "pipeline_loss": 70
+        "pipeline_loss": 74
       },
-      "completeness": 0.3528
+      "completeness": 0.3761
     },
     "la": {
       "type": "la",
       "need": 414,
-      "got": 168,
-      "missing": 246,
+      "got": 174,
+      "missing": 240,
       "causes": {
         "source_defect": 48,
         "held": 2,
         "deduped": 0,
         "bank_dropped": 20,
-        "section_never_run": 150,
+        "section_never_run": 138,
         "section_lost": 0,
-        "pipeline_loss": 26
+        "pipeline_loss": 32
       },
-      "completeness": 0.4058
+      "completeness": 0.4203
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 473,
-      "missing": 627,
+      "got": 497,
+      "missing": 603,
       "causes": {
         "source_defect": 128,
         "held": 20,
         "deduped": 0,
         "bank_dropped": 38,
-        "section_never_run": 400,
+        "section_never_run": 368,
         "section_lost": 0,
-        "pipeline_loss": 41
+        "pipeline_loss": 49
       },
-      "completeness": 0.43
+      "completeness": 0.4518
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 1359,
-      "missing": 1884,
+      "got": 1435,
+      "missing": 1808,
       "causes": {
         "source_defect": 416,
         "held": 61,
         "deduped": 0,
         "bank_dropped": 108,
-        "section_never_run": 1139,
+        "section_never_run": 1045,
         "section_lost": 0,
-        "pipeline_loss": 160
+        "pipeline_loss": 178
       },
-      "completeness": 0.4191
+      "completeness": 0.4425
     }
   },
   "tasks": [
@@ -317,10 +317,10 @@
       "slug": "53",
       "date": "2026-05-03",
       "section": "listening",
-      "missing": 35,
+      "missing": 34,
       "cause": "pipeline_loss",
       "types": {
-        "lcr": 13,
+        "lcr": 12,
         "lc": 8,
         "la": 6,
         "lat": 8
@@ -335,7 +335,6 @@
         "M1/la_23(-2)",
         "M1/lat_25(-4)",
         "M1/lat_29(-4)",
-        "M2/lcr_1(-1)",
         "M2/lc_4(-2)"
       ]
     },
@@ -380,6 +379,27 @@
         "M1/lat_25(-1)",
         "M2/lc_6(-2)",
         "M2/lat_12(-4)"
+      ]
+    },
+    {
+      "set": "4.15新托福真题",
+      "slug": "415",
+      "date": "2026-04-15",
+      "section": "listening",
+      "missing": 11,
+      "cause": "pipeline_loss",
+      "types": {
+        "lcr": 1,
+        "la": 4,
+        "lat": 4,
+        "lc": 2
+      },
+      "slots": [
+        "M1/lcr_1(-1)",
+        "M1/la_19(-2)",
+        "M1/la_21(-2)",
+        "M1/lat_29(-4)",
+        "M2/lc_4(-2)"
       ]
     },
     {
@@ -454,24 +474,42 @@
       ]
     },
     {
+      "set": "5.10新托福真题",
+      "slug": "510",
+      "date": "2026-05-10",
+      "section": "listening",
+      "missing": 9,
+      "cause": "pipeline_loss",
+      "types": {
+        "lcr": 1,
+        "lc": 2,
+        "la": 2,
+        "lat": 4
+      },
+      "slots": [
+        "M1/lcr_1(-1)",
+        "M1/lc_15(-2)",
+        "M1/la_19(-2)",
+        "M2/lat_12(-4)"
+      ]
+    },
+    {
       "set": "5.6新托福真题",
       "slug": "56",
       "date": "2026-05-06",
       "section": "listening",
-      "missing": 10,
+      "missing": 9,
       "cause": "pipeline_loss",
       "types": {
         "lc": 4,
         "la": 4,
-        "lat": 1,
-        "lcr": 1
+        "lat": 1
       },
       "slots": [
         "M1/lc_17(-2)",
         "M1/la_19(-2)",
         "M1/la_23(-2)",
         "M1/lat_25(-1)",
-        "M2/lcr_1(-1)",
         "M2/lc_4(-2)"
       ]
     },
@@ -14027,87 +14065,12 @@
         12
       ],
       "need": 12,
-      "got": 0,
-      "missing": 12,
-      "status": "absent",
-      "cause": "section_never_run",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 12
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_13",
-      "type": "lc",
-      "band": [
-        13,
-        14
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_15",
-      "type": "lc",
-      "band": [
-        15,
-        16
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_17",
-      "type": "lc",
-      "band": [
-        17,
-        18
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -14129,10 +14092,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -14154,60 +14117,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_23",
-      "type": "la",
-      "band": [
-        23,
-        24
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_25",
-      "type": "lat",
-      "band": [
-        25,
-        28
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -14229,35 +14142,10 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        3
-      ],
-      "need": 3,
-      "got": 0,
-      "missing": 3,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 3
+        "pipeline_loss": 4
       },
       "notes": [
         "duplicate_cluster"
@@ -14279,85 +14167,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_6",
-      "type": "lc",
-      "band": [
-        6,
-        7
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_8",
-      "type": "lat",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_12",
-      "type": "lat",
-      "band": [
-        12,
-        15
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -16480,31 +16293,6 @@
       "section": "listening",
       "module": "2",
       "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        3
-      ],
-      "need": 3,
-      "got": 2,
-      "missing": 1,
-      "status": "partial",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 1
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "5.3新托福真题",
-      "slug": "53",
-      "date": "2026-05-03",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
       "slotKey": "lc_4",
       "type": "lc",
       "band": [
@@ -16665,31 +16453,6 @@
       "got": 3,
       "missing": 1,
       "status": "near",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 1
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "5.6新托福真题",
-      "slug": "56",
-      "date": "2026-05-06",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        3
-      ],
-      "need": 3,
-      "got": 2,
-      "missing": 1,
-      "status": "partial",
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 1
@@ -17229,38 +16992,12 @@
         12
       ],
       "need": 12,
-      "got": 0,
-      "missing": 12,
-      "status": "absent",
-      "cause": "section_never_run",
+      "got": 11,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 12
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_13",
-      "type": "lc",
-      "band": [
-        13,
-        14
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 1
       },
       "notes": [
         "duplicate_cluster",
@@ -17283,36 +17020,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_17",
-      "type": "lc",
-      "band": [
-        17,
-        18
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster",
@@ -17335,218 +17046,10 @@
       "need": 2,
       "got": 0,
       "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_21",
-      "type": "la",
-      "band": [
-        21,
-        22
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_23",
-      "type": "la",
-      "band": [
-        23,
-        24
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_25",
-      "type": "lat",
-      "band": [
-        25,
-        28
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_29",
-      "type": "lat",
-      "band": [
-        29,
-        32
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        3
-      ],
-      "need": 3,
-      "got": 0,
-      "missing": 3,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 3
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_4",
-      "type": "lc",
-      "band": [
-        4,
-        5
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_6",
-      "type": "lc",
-      "band": [
-        6,
-        7
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 2
-      },
-      "notes": [
-        "duplicate_cluster",
-        "identical_file"
-      ]
-    },
-    {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_8",
-      "type": "lat",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster",
@@ -17569,10 +17072,10 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 4
       },
       "notes": [
         "duplicate_cluster",
