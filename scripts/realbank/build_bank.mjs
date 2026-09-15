@@ -1014,6 +1014,10 @@ function recallWriting(out, eligible, dupSets, stats) {
 const LISTENING_DIR = path.join(process.cwd(), "data", "realBank", "listening");
 const SPEAKING_DIR = path.join(process.cwd(), "data", "realBank", "speaking");
 
+// 真题走 realExam 口径：长度类下限按 data/realExam2026 的真实分布放宽（对话 ≥50 词、
+// 刺激句 ≥3 词、面试题面 ≥5 词），题数 / 选项 / 说话人结构那些一个没动。生成库仍用原口径。
+const REAL_EXAM = { realExam: true };
+
 const V = {
   lcr: require("../../lib/listeningGen/lcrValidator.js").validateLCR,
   lc: require("../../lib/listeningGen/lcValidator.js").validateLC,
@@ -1139,7 +1143,7 @@ function recallSpeaking(spk, seenS, stats) {
         });
         continue;
       }
-      const res = type === "repeat" ? SPV.validateRepeatSet(set) : SPV.validateInterviewSet(set);
+      const res = type === "repeat" ? SPV.validateRepeatSet(set, REAL_EXAM) : SPV.validateInterviewSet(set, REAL_EXAM);
       if (!res.valid) {
         stats.sDroppedInvalid += 1;
         stats.sInvalidDetail.push({ set: setname, id, type, errors: res.errors });
@@ -1266,7 +1270,10 @@ function buildListeningSpeaking(files, stats) {
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
         // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
-        const res = V[r.type](item);
+        // 真题走 realExam 口径：生成库的下限是照着「一段像样的对话/刺激句该有多长」定的，
+        // 真题的真实分布比那条线低（GT 里最短对话 53 词、最短刺激句 3 词，都是完整题）。
+        // 只放宽长度类下限，题数、选项、说话人结构那些一个没动。
+        const res = V[r.type](item, REAL_EXAM);
         if (!res.valid) {
           stats.lDroppedInvalid += 1;
           stats.lInvalidReasons[res.errors[0]] = (stats.lInvalidReasons[res.errors[0]] || 0) + 1;
@@ -1317,7 +1324,7 @@ function buildListeningSpeaking(files, stats) {
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
         // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
-        const v = SPV.validateRepeatSet(set);
+        const v = SPV.validateRepeatSet(set, REAL_EXAM);
         if (!v.valid) {
           stats.sDroppedInvalid += 1;
           stats.sInvalidDetail.push({ set: setname, id, type: "repeat", errors: v.errors });
@@ -1361,7 +1368,7 @@ function buildListeningSpeaking(files, stats) {
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
         // （2026-09-15 实测 5 条这么丢的，__tests__/realbank-item-aliases.test.js 卡这一条）。
-        const v = SPV.validateInterviewSet(set);
+        const v = SPV.validateInterviewSet(set, REAL_EXAM);
         if (!v.valid) {
           stats.sDroppedInvalid += 1;
           stats.sInvalidDetail.push({ set: setname, id, type: "interview", errors: v.errors });

@@ -32,6 +32,7 @@
 import fs from "fs";
 import path from "path";
 import { createRequire } from "module";
+import { fileURLToPath } from "url";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../lib/ai/deepseekHttp");
@@ -71,6 +72,34 @@ function checkGroups(groups, n) {
   return null;
 }
 
+/** 一道面试题的口播词数（题面由组内 GT 原句按序拼成）。 */
+function groupWords(group, qs) {
+  return group.map((n) => qs[n - 1]).join(" ").trim().split(/\s+/).filter(Boolean).length;
+}
+
+/**
+ * 短组并进上一组。真题里追问就是一两个词 —— GT 的 91 条原句里 "Why?" 单独成句出现 8 次，
+ * 21 条不到 5 词。5 词以上的（"What is your opinion and why?"）是完整题面，不并 —— 那条靠
+ * speakingValidator 的 realExam 口径放行。模型偶尔把这种追问单独划成一组，拼出来就是一道只有 "Why?" 的题：
+ * 既过不了 speakingValidator 的词数闸（2026-09-15 实测 8 套 30 题这么丢的），
+ * 作为口语题面本身也没法答。合并是确定性的、零 token，并完之后组数可能掉到 3 以下 ——
+ * 那种就老老实实判 review，不硬凑。
+ */
+const MIN_Q_WORDS = 5;
+function mergeShortGroups(groups, qs) {
+  const out = [];
+  for (const g of groups) {
+    if (out.length && groupWords(g, qs) < MIN_Q_WORDS) out[out.length - 1] = out[out.length - 1].concat(g);
+    else out.push(g.slice());
+  }
+  // 首组自己太短（后面没东西可并）就把它并进第二组，保持「按序、不重叠、全覆盖」
+  while (out.length > 1 && groupWords(out[0], qs) < MIN_Q_WORDS) {
+    out[1] = out[0].concat(out[1]);
+    out.shift();
+  }
+  return out;
+}
+
 async function splitInterview(qs) {
   const raw = await callDeepSeekViaCurl({
     apiKey: process.env.DEEPSEEK_API_KEY,
@@ -87,9 +116,14 @@ async function splitInterview(qs) {
   const m = String(raw || "").match(/\{[\s\S]*\}/);
   if (!m) return { groups: null, why: "模型没给出 JSON" };
   try {
-    const groups = (JSON.parse(m[0]).groups || []).map((g) => (Array.isArray(g) ? g.map(Number) : []));
+    const raw = (JSON.parse(m[0]).groups || []).map((g) => (Array.isArray(g) ? g.map(Number) : []));
+    // 先按原样过一遍机械校验（覆盖 / 顺序 / 不重叠），确认模型给的边界本身合法；
+    // 再把短到当不成一道题的组并进上一组，并完重新校验一次（组数可能掉出 3~4）。
+    const first = checkGroups(raw, qs.length);
+    if (first) return { groups: null, why: first };
+    const groups = mergeShortGroups(raw, qs);
     const why = checkGroups(groups, qs.length);
-    return why ? { groups: null, why } : { groups, why: null };
+    return why ? { groups: null, why: `${why}（短组并入上一组之后）` } : { groups, why: null };
   } catch (e) {
     return { groups: null, why: `JSON 解析失败：${String(e.message || e).slice(0, 60)}` };
   }
@@ -202,4 +236,8 @@ async function main() {
   }
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// 只有直接 node 跑本文件才执行；被 import（单测拿 mergeShortGroups / checkGroups）时不跑。
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) main().catch((e) => { console.error(e); process.exit(1); });
+
+export { checkGroups, mergeShortGroups, groupWords, MIN_Q_WORDS };
