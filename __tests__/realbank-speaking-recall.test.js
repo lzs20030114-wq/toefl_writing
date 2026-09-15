@@ -15,13 +15,32 @@ import BANK_INTERVIEW from "../data/realBank/speaking/interview.json";
 const LEDGER_PATH = path.join(__dirname, "..", "data/realBank/speaking-recall.json");
 const ledger = fs.existsSync(LEDGER_PATH) ? JSON.parse(fs.readFileSync(LEDGER_PATH, "utf8")) : null;
 const gtItems = (j) => (Array.isArray(j) ? j : j.items || []);
-const sources = (bank) => new Set((bank.items || []).map((x) => String(x.source || "").trim()));
 
 describe("口语补录账本", () => {
-  test("账本在，且只收库里没有的那些卷（只追加、不顶替）", () => {
+  // 原先这里断言「账本里的卷都不在库里」—— 那是**记账那一刻**的条件，不是长期不变量：
+  // 账本是 build_bank 的输入，verdict=ok 的条目被收进库正是它的用途，收完再断言「不在库里」
+  // 必然红（2026-09-15 面试补录落库后就红了）。事后能验的是「卷名不是凭空冒出来的」。
+  test("账本在，每一卷都来自真题 GT（不许凭空出现的卷名）", () => {
     expect(ledger).toBeTruthy();
-    for (const set of Object.keys(ledger.repeat || {})) expect(sources(BANK_REPEAT).has(set)).toBe(false);
-    for (const set of Object.keys(ledger.interview || {})) expect(sources(BANK_INTERVIEW).has(set)).toBe(false);
+    const gtR = new Set(gtItems(GT_REPEAT).map((x) => String(x.source).trim()));
+    const gtI = new Set(gtItems(GT_INTERVIEW).map((x) => String(x.source).trim()));
+    const repeatSets = Object.keys(ledger.repeat || {});
+    const interviewSets = Object.keys(ledger.interview || {});
+    expect(repeatSets.length + interviewSets.length).toBeGreaterThan(0);
+    for (const set of repeatSets) expect(gtR.has(set)).toBe(true);
+    for (const set of interviewSets) expect(gtI.has(set)).toBe(true);
+  });
+
+  test("同一卷在库里只有一条补录来源（补录不与源料产出并存）", () => {
+    for (const [bank, bucket] of [[BANK_REPEAT, "repeat"], [BANK_INTERVIEW, "interview"]]) {
+      for (const set of Object.keys(ledger[bucket] || {})) {
+        // 面试大集会被 interview-splits 拆成 _cN 的若干套，按**根 id** 归一再数
+        const roots = new Set((bank.items || [])
+          .filter((x) => String(x.source || "").trim() === set)
+          .map((x) => String(x.id).replace(/_c\d+$/, "")));
+        expect(roots.size).toBeLessThanOrEqual(1);
+      }
+    }
   });
 
   test("复述：句子逐字来自 GT，一个字不改", () => {
