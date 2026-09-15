@@ -10,7 +10,10 @@
  *   · 断句（缩写不断）、ETS 旁白认题材（最先出现的关键词 / 缺 "Listen" 也认 / 问句与长句不认）
  *   · 按静音切岛 → 开场提示 / LCR / 材料三类标签；"Can you turn down the volume?" 不被当成音量提示
  *   · 按「LCR → 材料」切 module；蓝图对照：缺旁白按位置补、旁白与蓝图矛盾 / LCR 数不对 / 校验和不对 / 怪岛 各自扣下
- *   · 旁白被词级时间戳错挂到上一岛尾巴 → 挪回下一岛
+ *   · 旁白被词级时间戳错挂到上一岛尾巴 → 挪回下一岛（下一岛自带旁白时不挪）；没说完的尾巴挪到下一岛
+ *   · 开场音量提示的变体说法；旁白与正文之间没句号时按停顿切；续写片段拼词不加空格
+ *   · 录音暂停切开（句末收尾 + 大写开头）并回、半句断开（断流）不并；正文缺失 / 幻觉循环 / 远短于真题下限 → 单组扣下
+ *   · 录音整段缺一条材料：唯一异常空档（对话/通知/LCR 之后 >60s）处插占位；两处空档不猜、讲座后的长留白不当缺段
  *   · 句级基频分角色：同一人连说 7 句不误杀、只有一个人 / 连说 10 句判不出
  *   · 题干引原话反查角色：原话落在另一个人那一轮 → 扣下
  *   · 跨卷近似重复：LCR 逐字 / 听错一词但选项一致；对话词级相似度 + 长度比；本卷自己的条目不算
@@ -62,11 +65,15 @@ describe("build_bank 与整块录音合流的配套约定", () => {
     }
   });
 
-  test("dup_of 只记别名、不登记去重锚点；没挂上原声的整块录音题不收", () => {
+  test("dup_of 只记别名、不登记去重锚点、不依赖本卷盲审；没挂上原声的整块录音题不收", () => {
     expect(src).toContain('const RECORDING_MERGER = "merge_recording_asr-v1"');
-    const dup = src.slice(src.indexOf("if (r.dup_of) {"), src.indexOf("const kept = [];", src.indexOf("if (r.dup_of) {")));
+    const start = src.indexOf("|| !r.dup_of || !out[r.type]) continue;");
+    expect(start).toBeGreaterThan(0);
+    const dup = src.slice(start, src.indexOf("const kept = [];", start));
     expect(dup).toContain("itemAliasEdges.push(dupEdge(");
     expect(dup).not.toContain("seenL.set(");
+    // 别名循环在盲审闸（if (passedKeys)）之前
+    expect(dup.indexOf("itemAliasEdges.push(dupEdge(")).toBeLessThan(dup.indexOf("if (passedKeys) {"));
     expect(src).toContain('code: "lDroppedNoOriginalAudio"');
     const { DROP_CODES } = require("../scripts/realbank/drop_ledger.js");
     expect(DROP_CODES.lDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "listening" });

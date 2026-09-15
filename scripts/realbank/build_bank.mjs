@@ -1238,23 +1238,24 @@ function buildListeningSpeaking(files, stats) {
     // ── 听力 ──────────────────────────────────────────────────────────
     // 整块录音合流（scripts/realbank/merge_recording_asr.py）的卷：没有文档逐字稿，音频只能从那条录音里切。
     const recordingMerged = (st.merged_asr && st.merged_asr.merger) === RECORDING_MERGER;
+    // 合流时认出的跨卷近似重复（ASR 文本与库里那条不会逐字相同，下面的逐字去重拦不住）：只记别名，
+    // 槽位照样算这套卷的，不再收一份 ASR 版。放在**盲审闸外面**：别名不依赖本卷盲审（保留方早已审过、在库里），
+    // 4.29 从没生成过 .audit.json（阅读只有填词），放在里面会连它 22 组重复题的别名一起丢掉。
+    // **不登记进 seenL**：卷名排在保留方之前时（"3.16…" < "rf0610"），登记了会反过来把线上那条
+    // （带原声的）当成重复丢掉，id 连同音频一起换掉。
+    for (const r of st.results || []) {
+      if (r.section !== "listening" || r.status !== "ok" || !r.dup_of || !out[r.type]) continue;
+      const dupId = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
+      console.warn(`跳过 ${setname} ${dupId}：录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）→ 记别名`);
+      stats.lDroppedDupItem += 1;
+      recordDrop(stats, { set: setname, slug, section: "listening", type: r.type, module: r.module, q: r.q_start,
+        n: (r.items || []).length, id: dupId, code: "lDroppedDupItem", detail: `录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）` });
+      itemAliasEdges.push(dupEdge(dupId, r.dup_of, r.type, setname));
+    }
     if (passedKeys) {
       for (const r of st.results || []) {
-        if (r.section !== "listening" || r.status !== "ok") continue;
+        if (r.section !== "listening" || r.status !== "ok" || r.dup_of) continue;
         if (!out[r.type]) continue;
-        // 合流时认出的跨卷近似重复（ASR 文本与库里那条不会逐字相同，下面的逐字去重拦不住）：只记别名，
-        // 槽位照样算这套卷的，不再收一份 ASR 版。放在盲审闸之前 —— 保留方早已审过、在库里。
-        // **不登记进 seenL**：卷名排在保留方之前时（"3.16…" < "rf0610"），登记了会反过来把线上那条
-        // （带原声的）当成重复丢掉，id 连同音频一起换掉。
-        if (r.dup_of) {
-          const dupId = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
-          console.warn(`跳过 ${setname} ${dupId}：录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）→ 记别名`);
-          stats.lDroppedDupItem += 1;
-          recordDrop(stats, { set: setname, slug, section: "listening", type: r.type, module: r.module, q: r.q_start,
-            n: (r.items || []).length, id: dupId, code: "lDroppedDupItem", detail: `录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）` });
-          itemAliasEdges.push(dupEdge(dupId, r.dup_of, r.type, setname));
-          continue;
-        }
         const kept = [];
         const lAt = { set: setname, slug, section: "listening", type: r.type, module: r.module };
         for (const it of r.items || []) {

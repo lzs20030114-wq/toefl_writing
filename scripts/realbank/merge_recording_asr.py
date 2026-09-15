@@ -83,7 +83,9 @@ ISLAND_GAP = 4.0        # 岛与岛之间的最短静音（秒）
 MAT_MIN_WORDS = 40      # 没认出旁白时，够这么长才当材料
 LCR_MAX_WORDS = 25      # LCR 刺激句的最长词数
 CUE_MAX_WORDS = 16      # 旁白句的最长词数
-MAT_JOIN_GAP = 8.0      # 材料被一次长停顿劈开：无旁白长岛紧跟材料、间隔不到这个数 → 同一段的后半截
+# 开场音量说明的最长词数：2.25 那段「To adjust the volume, select the volume icon…」71 词，旧上限 60 把它当成了材料，
+# 整个 M1 平白多出一段。真材料里不会出现音量调试的说法，放宽不会误吞材料。
+INTRO_MAX_WORDS = 120
 
 DUP_MIN_SIM = 0.9
 DUP_LEN_RATIO = (0.8, 1.25)
@@ -213,10 +215,72 @@ def reattach_cues(islands):
                 and re.match(r"(?i)^(a|an|the|part)$", nxt[1]["w"])):
             out[i + 1] = [cur[-1]] + nxt
             out[i] = cur[:-1]
+    return reattach_fragments([ws for ws in out if ws])
+
+
+def reattach_fragments(islands):
+    """句子没说完的尾巴被词级时间戳挂到了上一岛：挪到下一岛开头。
+
+    实测 4.29 第 1 句 LCR「The garden has been beautifully landscaped.」首词 "The" 自成一岛（多出一句 LCR，
+    整个 M1 对不上蓝图）；5.3 「What's your favorite way to spend a day off? Does」+「this campus have a grocery store?」。
+    判据：上一岛最后一句没有句末标点、只有 ≤3 个词，且下一岛以小写词开头（接着说的证据）。
+    """
+    out = [list(ws) for ws in islands]
+    for i in range(len(out) - 1):
+        cur, nxt = out[i], out[i + 1]
+        if not cur or not nxt or is_sentence_end(cur[-1]["w"]):
+            continue
+        if not re.match(r"^[a-z]", nxt[0]["w"]):
+            continue
+        k = len(cur)
+        while k > 0 and not is_sentence_end(cur[k - 1]["w"]):
+            k -= 1
+        if len(cur) - k > 3:
+            continue
+        # 挪过来的首词打标记：半句断开更像录音断流，这一岛不许再被当成「暂停切开」并回上一段（见 tag_islands）
+        moved = [dict(w, frag=True) for w in cur[k:]]
+        out[i + 1] = moved + nxt
+        out[i] = cur[:k]
     return [ws for ws in out if ws]
 
 
 CUE_GAP_SEC = 0.5
+MAT_JOIN_GAP = 8.0      # 录音暂停把一段材料切开的最长停顿（再长就是做题留白）
+GARBLED_MIN_WORDS = 20  # 材料正文（去旁白）少于这么多词 = 录音里正文丢了
+
+
+# 按题材的「正文疑似缺失」下限：data/realExam2026 文档来源的真题里通知最短 46 词、讲座最短 193 词、对话最短 54 词
+# （2026-09-16 统计，库里现有条目同分布）。低于这条线的录音分段多半是录音缺头 / 缺尾 —— 4.11 M1 第三条通知只剩
+# 最后三句 33 词，validator 的硬下限（通知 30 词）拦不住，会落出一条前半截没了的题。
+TYPE_MIN_WORDS = {"la": 40, "lat": 150, "lc": 45}
+
+
+def material_problem(typ, mat):
+    """这一段材料能不能用：→ 扣下原因 或 None（录音缺失 / 幻觉循环 / 远短于真题下限）。"""
+    if mat.get("garbled"):
+        return mat["garbled"]
+    n = sum(len(V.norm(s["text"]).split()) for s in mat.get("body") or [])
+    if n < TYPE_MIN_WORDS.get(typ, 0):
+        return "正文 %d 词，远低于真题 %s 下限 %d 词（录音缺头/缺尾）" % (n, typ, TYPE_MIN_WORDS[typ])
+    return None
+
+
+def garbled_body(body):
+    """材料正文是不是录音缺失 / Whisper 幻觉：→ 原因 或 None。
+
+    实测 4.11 M1 第三条通知只剩「Listen to an announcement at a school event.」重复几遍 ——
+    商家录音这一段断了，Whisper 在静音上把旁白幻觉成循环。这种组要单独扣下（其余题照常），
+    否则会拿几句重复旁白去结构化、盲审，白花钱还可能落出一条空壳题。
+    """
+    sents = [V.norm(s["text"]) for s in body if V.norm(s["text"])]
+    n = sum(len(s.split()) for s in sents)
+    if n < GARBLED_MIN_WORDS:
+        return "正文只有 %d 词" % n
+    if len(sents) >= 3 and len(set(sents)) / float(len(sents)) < 0.5:
+        return "正文 %d 句里只有 %d 句不重复（ASR 幻觉循环）" % (len(sents), len(set(sents)))
+    if sum(1 for s in sents if parse_cue([{"text": s + "."}])[0]) >= max(2, len(sents) // 2):
+        return "正文大半是旁白句（ASR 幻觉循环）"
+    return None
 
 
 def split_unpunctuated_cue(ws):
@@ -253,7 +317,7 @@ def tag_islands(words):
             rec.update(tag="mat" if rest else "cue_only", cue_type=utyp, cue=ucue, body=rest)
         elif typ:
             rec.update(tag="mat" if len(sents) > 1 else "cue_only", cue_type=typ, cue=cue, body=sents[1:])
-        elif INTRO_RE.search(text) and len(ws) <= 60:
+        elif INTRO_RE.search(text) and len(ws) <= INTRO_MAX_WORDS:
             rec["tag"] = "intro"
         elif len(ws) >= MAT_MIN_WORDS:
             rec.update(tag="mat", body=sents)
@@ -271,13 +335,22 @@ def tag_islands(words):
             prev.update(tag="mat", body=rec["sents"], end=rec["end"], words=prev["words"] + rec["words"],
                         n=prev["n"] + rec["n"])
             continue
-        # 材料被一次长停顿劈成两截
+        # 材料被录音暂停切成两截：只在「前一截以句末标点收尾、后一截大写开头」时并回，并记一笔 pause_joined。
+        # 4.11 M1 的 art exhibit 通知停了 6.9s，与 4.8 同一条逐字比对一个词不缺 —— 该并；
+        # 4.11 M2 录音断流是半句断开（"Yes, you've be" / "of our current students…"，中间缺词）—— 不许并，
+        # 合起来就是一段缺句的讲座，宁可让整个 module 对不上蓝图被扣下。
         if (prev and prev["tag"] == "mat" and rec["tag"] == "mat" and not rec["cue_type"]
-                and rec["start"] - prev["end"] < MAT_JOIN_GAP):
+                and rec["start"] - prev["end"] < MAT_JOIN_GAP
+                and prev["words"] and is_sentence_end(prev["words"][-1]["w"])
+                and rec["words"] and re.match(r"^[A-Z]", rec["words"][0]["w"]) and not rec["words"][0].get("frag")):
+            prev.setdefault("joins", []).append(round(rec["start"] - prev["end"], 1))
             prev.update(body=prev["body"] + rec["sents"], end=rec["end"], words=prev["words"] + rec["words"],
                         n=prev["n"] + rec["n"])
             continue
         out.append(rec)
+    for rec in out:
+        if rec["tag"] == "mat":
+            rec["garbled"] = garbled_body(rec["body"])
     for rec in out:
         if rec["tag"] == "cue_only":
             rec["tag"] = "odd"
@@ -310,14 +383,77 @@ def parse_modules(islands):
     return mods
 
 
-def resolve_module(mod_no, mod, module_total):
+MISSING_GAP_SEC = 60.0   # 对话 / 通知 / LCR 之后的留白超过这个数 = 中间整段材料没录上
+
+
+def insert_missing_material(mod, n_lcr, forms):
+    """录音里整段缺了一条材料：在唯一的异常空档处插占位，让其余材料按蓝图对上题号。→ 插了没有。
+
+    判据（2026-09-16 用 19 套录音校准）：LCR / 对话 / 通知之后的正常做题留白最长 40s，
+    5.3 M1 三段对话后空了 96.8s、全卷只少一段 —— 缺的正是那里。讲座之后的留白本来就长（最长 117s），
+    不拿它判。只在「蓝图恰好比录音多一段、恰好只有一处异常空档」时插，且插完仍要过题材 + 校验和；
+    占位那组在 material_problem 里扣下（正文 0 词），其余组照常结构化、盲审、落库。
+    """
+    if not any(f["lcr"] == n_lcr and len(f["mats"]) == len(mod["mats"]) + 1 for f in forms):
+        return False
+    seq = ([("lcr", mod["lcr"][-1])] if mod["lcr"] else []) + [(m.get("cue_type"), m) for m in mod["mats"]]
+    offset = 1 if mod["lcr"] else 0
+    spots = []
+    for j in range(1, len(seq)):
+        (ptype, prev), (_, nxt) = seq[j - 1], seq[j]
+        if ptype in ("lcr", "lc", "la") and nxt["start"] - prev["end"] > MISSING_GAP_SEC:
+            spots.append((j - offset, prev["end"], nxt["start"]))
+    if len(spots) != 1:
+        return False
+    idx, t0, t1 = spots[0]
+    mod["mats"].insert(idx, {"tag": "mat", "missing": True, "cue_type": None, "cue": "", "body": [], "sents": [],
+                             "words": [], "n": 0, "text": "", "start": t0, "end": t1,
+                             "garbled": "录音里缺这一段（前一段之后空了 %.0fs）" % (t1 - t0)})
+    mod.setdefault("notes", []).append("recording_material_missing_at:%d" % (idx + 1))
+    return True
+
+
+def pad_leading_lcr(mod, mod_no, screen_first_q):
+    """录音与屏幕都从第 N 题才开始（3.10「听力（q4开始）」、3.6「(q8开始)」）：前面补 N-1 句空位 LCR。→ 补了没有。
+
+    只在两边**恰好对得上**时补：屏幕侧这个 module 最小题号是 N，录音的 LCR 句数正好比蓝图少 N-1 句，
+    材料段数与蓝图一致。空位 LCR 在屏幕上本来就没有题，合流时自然扣下（lcr_no_stimulus），不会落库；
+    补上只是为了让后面的题号按蓝图对齐，校验和照样按屏幕总题数算。
+    """
+    lead = int(screen_first_q or 1) - 1
+    if lead <= 0 or mod.get("lcr_padded"):
+        return False
+    n_lcr = len(mod["lcr"])
+    if not any(f["lcr"] == n_lcr + lead and lead < f["lcr"] and len(f["mats"]) == len(mod["mats"])
+               for f in BLUEPRINT.get(mod_no, ())):
+        return False
+    mod["lcr"] = [{"missing": True, "sents": [], "words": [], "start": 0.0, "end": 0.0, "text": "", "n": 0}
+                  for _ in range(lead)] + mod["lcr"]
+    mod["lcr_padded"] = lead
+    mod.setdefault("notes", []).append("recording_starts_at_q%d" % screen_first_q)
+    return True
+
+
+def screen_first_q(scan, mod_no):
+    """屏幕侧这个听力 module 配上答案的最小题号（默认 1）。"""
+    for m in ((scan.get("alignment") or {}).get("listening") or {}).get("modules", []):
+        if m.get("module") == mod_no and m.get("matched"):
+            return min(int(mm["n"]) for mm in m["matched"])
+    return 1
+
+
+def resolve_module(mod_no, mod, module_total, first_q=1):
     """一个录音 module ↔ 蓝图：→ (逐段题材 list 或 None, 蓝图版式名 或 None, problems)。"""
     problems = []
     if mod["odd"]:
         problems.append("recording_odd_island:%s" % " / ".join(
             "%.0fs「%s」" % (x["start"], x["text"][:40]) for x in mod["odd"][:3]))
+    if not mod["odd"]:
+        pad_leading_lcr(mod, mod_no, first_q)
     n_lcr = len(mod["lcr"])
     cands = [f for f in BLUEPRINT.get(mod_no, ()) if f["lcr"] == n_lcr and len(f["mats"]) == len(mod["mats"])]
+    if not cands and not mod["odd"] and insert_missing_material(mod, n_lcr, BLUEPRINT.get(mod_no, ())):
+        cands = [f for f in BLUEPRINT.get(mod_no, ()) if f["lcr"] == n_lcr and len(f["mats"]) == len(mod["mats"])]
     if len(cands) != 1:
         problems.append("recording_form_mismatch:M%d 录音分出 LCR %d 句 + 材料 %d 段，蓝图里没有这种版式"
                         % (mod_no, n_lcr, len(mod["mats"])))
@@ -636,6 +772,70 @@ def quote_speaker_problems(turns, items):
     return out
 
 
+STEM_STOP = set("""what which why when where who whom whose how does did do is are was were will would can could should
+the and that this with from about into their there they them than then have has had been being for not but his her
+him she he its it's man woman speaker speakers professor student students talk lecture conversation announcement
+mention mentions mentioned say says said imply implies implied mean means suggest suggests main purpose most likely
+probably according point points discuss discusses discussed next doing something someone people""".split())
+
+
+def stem_keywords(stem):
+    return {w for w in V.norm(stem).split() if len(w) >= 4 and w not in STEM_STOP}
+
+
+def stem_problems(listening, repaired=frozenset()):
+    """structure_set 把邻题题干串错位的两种形状 → {(module, q_start): [(q, 原因)]}。
+
+    repaired = 修复轮（合并邻块重切）救回来的题 {(module, q)}。2026-09-16 六套逐题对过盲审：成对重复里总是
+    「修复过的 Qn 盲审一致、紧挨着没修复的 Qn+1 不一致」—— 首轮 OCR 把 Qn 的题干串进了 Qn+1 那一块，
+    Qn 那块读坏了才进修复轮、反倒被救对。所以：
+      · **同一组**里题干逐字相同：剔没修复的那份（都修复过 / 都没修复就都剔 —— 分不清哪份才是真的）；
+        跨组相同不管（两段讲座都问「What is the main topic of the talk?」是正常的）；
+      · 修复过的题，题干关键词在本组材料里一个都没有、却出现在同 module 别的组里：配错了材料，剔掉
+        （3.2B M2 Q6 拿到了晚宴对话的「Why does the woman mention her guests?」却配着木工课的转写）。
+        只查修复过的题：没修复的题用泛化的题干词（describe / reason / focus…）会大量误报。
+    盲审仍是主闸；这里剔的是「题干配错材料时模型等于瞎选、有 1/4 机会恰好等于答案页」的那部分漏网风险。
+    """
+    out = {}
+    by_mod = {}
+    for r in listening:
+        if r["type"] == "lcr" or not r.get("items"):
+            continue
+        text = r.get("transcript_final") or ""
+        if r["type"] == "lc" and r.get("turns"):
+            text = " ".join(t.get("text", "") for t in r["turns"])
+        by_mod.setdefault(r["module"], []).append((r, set(V.norm(text).split())))
+    for mod, groups in by_mod.items():
+        for r, words in groups:
+            seen = {}
+            for it in r["items"]:
+                k = V.norm(it.get("stem"))
+                if k:
+                    seen.setdefault(k, []).append(it)
+            for k, its in seen.items():
+                if len(its) < 2:
+                    continue
+                fixed = [it for it in its if (mod, it.get("q_number")) in repaired]
+                drop = [it for it in its if it not in fixed] if len(fixed) == 1 else its
+                qs = "/".join("Q%s" % it.get("q_number") for it in its)
+                for it in drop:
+                    out.setdefault((mod, r["q_start"]), []).append(
+                        (it.get("q_number"), "stem_duplicate:%s 同组题干逐字相同（剔 Q%s）" % (qs, it.get("q_number"))))
+            others = [(o, ow) for o, ow in groups if o is not r]
+            for it in r["items"]:
+                if (mod, it.get("q_number")) not in repaired:
+                    continue
+                kw = stem_keywords(it.get("stem"))
+                if not kw or kw & words:
+                    continue
+                elsewhere = [o for o, ow in others if kw & ow]
+                if elsewhere:
+                    out.setdefault((mod, r["q_start"]), []).append((it.get("q_number"),
+                        "stem_mismatch:Q%s 题干关键词「%s」不在本组材料里、在 M%d Q%s 那组里" % (
+                            it.get("q_number"), "/".join(sorted(kw))[:40], mod, elsewhere[0]["q_start"])))
+    return out
+
+
 def lc_body(audio_path, sents):
     """对话正文句 → ("Man: …\\nWoman: …", 备注) 或 (None, 扣下原因)。"""
     units = [s for s in sents if s["text"]]
@@ -733,14 +933,12 @@ def plan_structure(setkey, write=True):
     bank = load_bank(current_set=setkey)
     keys_by_q = screen_keys_by_q(ctx["scan"])
     want, dup_groups, bad_mods = set(), [], []
-    mods, totals_by_mod = ctx["mods"], ctx["totals_by_mod"]
+    scan, mods, totals_by_mod = ctx["scan"], ctx["mods"], ctx["totals_by_mod"]
     for i, mod in enumerate(mods[:2]):
         mod_no = i + 1
-        types, form, problems = resolve_module(mod_no, mod, totals_by_mod.get(mod_no))
-        if len(mods) != len(totals_by_mod):
-            problems = problems + ["recording_module_count:录音分出 %d 个 module、屏幕 %d 个"
-                                   % (len(mods), len(totals_by_mod))]
-            types = None
+        # 逐 module 独立校验（蓝图版式 + 题材 + 屏幕总题数校验和），不再因为「录音分出的 module 数 ≠ 屏幕」一刀切：
+        # 4.11 的 M2 录音断流被切成好几截，M1 完好 —— 一刀切会连 M1 的 32 题一起扣掉。校验和足够严，错位的 module 过不了。
+        types, form, problems = resolve_module(mod_no, mod, totals_by_mod.get(mod_no), screen_first_q(scan, mod_no))
         if types is None:
             bad_mods.append({"module": mod_no, "problems": problems})
             continue
@@ -755,6 +953,11 @@ def plan_structure(setkey, write=True):
             q += 1
         for typ, mat in zip(types, mod["mats"]):
             k = F.QS_PER_TYPE[typ]
+            why = material_problem(typ, mat)
+            if why:                         # 录音里这段正文丢了：不送结构化（合流时单独扣下这一组）
+                bad_mods.append({"module": mod_no, "group_q_start": q, "problems": ["asr_garbled:%s" % why]})
+                q += k
+                continue
             hit = find_dup(typ, " ".join(s["text"] for s in mat["body"]), bank, "\0")
             if hit:
                 dup_groups.append({"module": mod_no, "q_start": q, "type": typ, "dup_of": hit[1], "sim": hit[0]})
@@ -808,17 +1011,20 @@ def process_set(setkey, args, totals, bank=None):
                   "modules_found": len(mods), "dup_of": 0, "diarization_failed": 0,
                   "tail_noise": [x["text"][:60] for m in tail_noise for x in (m["lcr"] + m["odd"])]})
     mod_problems, pdf_mods, asr, apaths, forms, lc_notes, cues = {}, {}, {}, {}, {}, {}, {}
+    garbled, joins = {}, {}
+    # module 数与屏幕不符只记一笔，逐 module 独立校验（见 plan_structure 同处注释）；录音里整个缺掉的 module 由下面标扣
     if len(mods) != len(totals_by_mod):
-        for m in totals_by_mod:
-            mod_problems.setdefault(m, []).append(
-                "recording_module_count:录音分出 %d 个 module、屏幕 %d 个" % (len(mods), len(totals_by_mod)))
+        stats["module_count_note"] = "录音分出 %d 个 module、屏幕 %d 个" % (len(mods), len(totals_by_mod))
+    for mod_no in totals_by_mod:
+        if mod_no > len(mods):
+            mod_problems.setdefault(mod_no, []).append("recording_module_missing:录音里没分出这个 module")
     for i, mod in enumerate(mods[:2]):
         mod_no = i + 1
         mwords = [w for isl in (mod["lcr"] + mod["mats"] + mod["odd"]) for w in isl["words"]]
         mwords.sort(key=lambda w: w["start"])
         msents = [s for isl in sorted(mod["lcr"] + mod["mats"] + mod["odd"], key=lambda x: x["start"])
                   for s in isl["sents"]]
-        types, form, problems = resolve_module(mod_no, mod, totals_by_mod.get(mod_no))
+        types, form, problems = resolve_module(mod_no, mod, totals_by_mod.get(mod_no), screen_first_q(scan, mod_no))
         forms[mod_no] = form
         if problems:
             mod_problems.setdefault(mod_no, []).extend(problems)
@@ -840,11 +1046,27 @@ def process_set(setkey, args, totals, bank=None):
             kind = {"lc": "conversation", "la": "announcement", "lat": "talk"}[typ]
             doc["sections"].append({"kind": kind, "type": typ, "ordinal": k + 1, "body": body})
             cues[(mod_no, k)] = mat.get("cue") or ""
+            why = material_problem(typ, mat)
+            if why:
+                garbled[(mod_no, k)] = why
+            if mat.get("joins"):
+                joins[(mod_no, k)] = mat["joins"]
         pdf_mods[mod_no] = doc
 
     listening = F.build_listening(scan, parsed, pdf_mods, asr, apaths, stats, F.load_lc_overrides(setkey))
 
     # ── 回写本管线自己的判据：module 级问题、对话角色原因、旁白原句、近似重复 ──────────
+    repaired_q = {(int(r.get("module") or 1), it.get("q_number")) for r in parsed.get("results", [])
+                  if r.get("section") == "listening" and r.get("repaired") for it in (r.get("items") or [])}
+    bad_stems = stem_problems(listening, repaired_q)
+    for r in listening:
+        drops = bad_stems.get((r["module"], r["q_start"])) or []
+        if not drops:
+            continue
+        gone = {q for q, _ in drops}
+        r["items"] = [it for it in r["items"] if it.get("q_number") not in gone]
+        r["problems"] = r["problems"] + sorted({why for _, why in drops})
+        stats["stem_dropped"] = stats.get("stem_dropped", 0) + len(gone)
     groups_by_mod = {}
     for mod_no, doc in pdf_mods.items():
         g = F.derive_groups(doc["sections"], len(doc["lcr"]), totals_by_mod.get(mod_no)) or []
@@ -856,6 +1078,10 @@ def process_set(setkey, args, totals, bank=None):
         if r["type"] != "lcr" and k is not None:
             if cues.get((mod_no, k)):
                 r["framing"] = cues[(mod_no, k)]
+            if joins.get((mod_no, k)):
+                extra.append("pause_joined:%s" % "/".join("%ss" % g for g in joins[(mod_no, k)]))
+            if garbled.get((mod_no, k)):
+                extra.append("asr_garbled:%s" % garbled[(mod_no, k)])
             note = lc_notes.get((mod_no, k))
             if note:
                 r["problems"] = [p for p in r["problems"] if not p.startswith("diarization_failed:no_turns")]
@@ -865,11 +1091,11 @@ def process_set(setkey, args, totals, bank=None):
         if r["type"] == "lc" and r.get("turns"):
             extra.extend(quote_speaker_problems(r["turns"], r.get("items")))
         r["problems"] = extra + r["problems"]
-        if extra and any(p.startswith(("recording_", "speaker_quote_mismatch")) for p in extra):
+        if extra and any(p.startswith(("recording_", "speaker_quote_mismatch", "asr_garbled")) for p in extra):
             r["status"] = "flagged"
         # 近似重复：只在 module 结构自证过（没有 recording_* 问题）时才认 —— 结构坏了题号就不可信，别名会挂错槽。
         # 角色判不出 / 原话对不上角色 / 题面没结构化（plan 判重复后没送）都不妨碍记别名：落库用的是保留方那条。
-        structural = [p for p in r["problems"] if p.startswith(F.BLOCKING_PREFIX + ("recording_",))
+        structural = [p for p in r["problems"] if p.startswith(F.BLOCKING_PREFIX + ("recording_", "asr_garbled"))
                       and not p.startswith(DIARIZE_PREFIX + ("speaker_quote_mismatch", "screen_items_missing"))]
         if not structural:
             opts = None
@@ -1003,11 +1229,40 @@ def self_test():
           and " ".join(w["w"] for w in fixed[1]).startswith("Listen to a conversation. I have"),
           [" ".join(w["w"] for w in x) for x in fixed])
     fixed = reattach_cues([_w("Did you listen", 0), _w("to the radio yesterday?", 100)])
-    check("问句里的 listen 不挪", " ".join(w["w"] for w in fixed[0]) == "Did you listen", fixed)
+    check("问句里的 listen 不当旁白挪，被切断的问句整句接回",
+          [join_words(x) for x in fixed] == ["Did you listen to the radio yesterday?"], [join_words(x) for x in fixed])
     fixed = reattach_cues([_w("The library closes early. Listen to the lecture recording before class.", 0),
                            _w("Listen to a conversation. I have a question for you.", 100)])
     check("下一岛自带旁白时，上一岛像旁白的尾句不挪",
           " ".join(w["w"] for w in fixed[0]).endswith("recording before class."), fixed)
+
+    # 没说完的尾巴挪到下一岛（下一岛小写开头为证）
+    fixed = reattach_fragments([_w("The", 0), _w("garden has been beautifully landscaped.", 5)])
+    check("首词自成一岛并回下一句", len(fixed) == 1 and fixed[0][0]["w"] == "The", [join_words(x) for x in fixed])
+    fixed = reattach_fragments([_w("What's your favorite way to spend a day off? Does", 0),
+                                _w("this campus have a grocery store?", 13)])
+    check("上一句尾巴 Does 挪到下一句", join_words(fixed[0]).endswith("day off?")
+          and join_words(fixed[1]).startswith("Does this campus"), [join_words(x) for x in fixed])
+    fixed = reattach_fragments([_w("I think so", 0), _w("Maybe later.", 13)])
+    check("下一岛大写开头不挪", join_words(fixed[0]) == "I think so", [join_words(x) for x in fixed])
+    # 录音暂停切开（前一截句末收尾、后一截大写开头、停顿 <8s）→ 并回并留痕；半句断开（断流）→ 不并
+    pw = _w("Listen to an announcement at a school art exhibit. " + "Thank you for touring this special collection. " * 6, 0)
+    pw += _w("We will then proceed to the next room and finish upstairs. " * 5, pw[-1]["end"] + 6.9)
+    pisl = [x for x in tag_islands(pw) if x["tag"] == "mat"]
+    check("暂停切开并回", len(pisl) == 1 and pisl[0].get("joins") == [6.9], [(x["tag"], x.get("joins")) for x in pisl])
+    pw = _w("Listen to a conversation. " + "This bakery has been here for years. " * 6 + "Yes, you've be", 0)
+    pw += _w("of our current students were customers there when young. " * 5, pw[-1]["end"] + 6.0)
+    pisl = [x for x in tag_islands(pw) if x["tag"] == "mat"]
+    check("半句断开（断流）不并", len(pisl) == 2, [(x["text"][:30], x.get("joins")) for x in pisl])
+    # 正文丢了、只剩幻觉旁白
+    check("正文缺失认得出", garbled_body(sentences(_w("Listen to an announcement at a school event. " * 4, 0))) is not None)
+    check("通知只剩后半截（33 词）扣下", material_problem("la", {"body": sentences(_w(
+        "Your tickets are available at the gate for five dollars. We hope you'll stay all day each day for a fun "
+        "and educational experience. Contact the event organizers with any questions.", 0))}) is not None)
+    check("正常长度的讲座不扣", material_problem("lat", {"body": sentences(_w("word " * 180 + "end.", 0))}) is None)
+    check("正常正文不误判", garbled_body(sentences(_w(
+        "The library will close early today for maintenance. Students can use the study rooms in the student center. "
+        "Regular hours resume tomorrow morning at eight.", 0))) is None)
 
     # 句级基频分离（合成正弦：120Hz 男 / 220Hz 女）
     import numpy as np
@@ -1046,6 +1301,30 @@ def self_test():
     check("B 型 mcq2 有旁白", types == ["lat", "la", "lc"] and form == "B", (types, form, p))
     types, form, p = resolve_module(2, fake(3, ["lc", "lc", "lat", "lat"]), 17)
     check("校验和不符扣下", types is None and p[0].startswith("recording_checksum"), p)
+    # 录音与屏幕都从第 N 题开始：前面补空位 LCR
+    m = fake(9, ["lc"] * 3 + ["la"] * 3 + ["lat"] * 2)
+    types, form, p = resolve_module(1, m, 32, first_q=4)
+    check("从 Q4 开始的录音补 3 句空位", types and m["lcr_padded"] == 3 and len(m["lcr"]) == 12, (types, p))
+    m = fake(9, ["lc"] * 3 + ["la"] * 3 + ["lat"] * 2)
+    check("屏幕没缺前几题就不补", resolve_module(1, m, 32)[0] is None and not m.get("lcr_padded"))
+
+    # 录音整段缺一条材料：唯一异常空档处插占位
+    def timed(n_lcr, spec):
+        t, lcrs, mats = 0.0, [], []
+        for _ in range(n_lcr):
+            lcrs.append({"start": t, "end": t + 3}); t += 18
+        for cue, dur, gap in spec:
+            mats.append({"cue_type": cue, "start": t, "end": t + dur, "body": [{"text": "x " * 60}]}); t += dur + gap
+        return {"lcr": lcrs, "mats": mats, "odd": []}
+    m = timed(12, [("lc", 30, 28), ("lc", 30, 28), ("lc", 30, 97), ("la", 30, 30), ("la", 30, 30), ("lat", 100, 60), ("lat", 100, 0)])
+    types, form, p = resolve_module(1, m, 32)
+    check("缺一段通知 → 插占位对上蓝图", types == ["lc", "lc", "lc", "la", "la", "la", "lat", "lat"]
+          and m["mats"][3].get("missing") and material_problem("la", m["mats"][3]), (types, p))
+    m = timed(12, [("lc", 30, 97), ("lc", 30, 28), ("lc", 30, 97), ("la", 30, 30), ("la", 30, 30), ("lat", 100, 60), ("lat", 100, 0)])
+    check("两处异常空档不猜", resolve_module(1, m, 32)[0] is None)
+    m = timed(12, [("lc", 30, 28), ("lc", 30, 28), ("lc", 30, 28), ("la", 30, 30), ("la", 30, 30), ("lat", 100, 110), ("lat", 100, 0)])
+    check("讲座后的长留白不当缺段", resolve_module(1, m, 32)[0] is None)
+
     m = fake(3, ["lc", "lc", "lat", "lat"])
     m["odd"] = [{"start": 5.0, "text": "something odd"}]
     types, form, p = resolve_module(2, m, 15)
@@ -1061,6 +1340,21 @@ def self_test():
     check("原话在另一个人那一轮扣下", p and p[0].startswith("speaker_quote_mismatch:Q14"), p)
     items = [{"q_number": 14, "stem": 'What does the woman mean when she says, "something never said"?'}]
     check("原话找不到不判", quote_speaker_problems(turns, items) == [])
+
+    # 修复轮抄错位的题干
+    lst = [{"type": "lc", "module": 2, "q_start": 4, "turns": [{"text": "I'm planning a dinner party for my guests. "
+                                                                       "The chocolate mousse cake was made by a new chef."}],
+            "items": [{"q_number": 4, "stem": "What does the man say about the chocolate mousse cake?"},
+                      {"q_number": 5, "stem": "What does the man say about the chocolate mousse cake?"}]},
+           {"type": "lc", "module": 2, "q_start": 6, "turns": [{"text": "You're taking a woodworking class with Professor Williams."}],
+            "items": [{"q_number": 6, "stem": "Why does the woman mention her guests?"},
+                      {"q_number": 7, "stem": "What is the man's attitude toward his woodworking class?"}]}]
+    sp = stem_problems(lst, repaired={(2, 4), (2, 6)})
+    check("同组题干重复剔没修复的那份", [q for q, _ in sp.get((2, 4), [])] == [5], sp)
+    check("修复过的题配错材料剔掉", [q for q, _ in sp.get((2, 6), [])] == [6]
+          and sp[(2, 6)][0][1].startswith("stem_mismatch"), sp)
+    check("没修复的题不查配错（泛化题干词误报多）", not stem_problems(lst, repaired={(2, 4)}).get((2, 6)))
+    check("两份都没修复就都剔", sorted(q for q, _ in stem_problems(lst).get((2, 4), [])) == [4, 5])
 
     # 近似重复
     bank = {"lcr": [{"id": "real_lcr_121b_1_11", "words": V.norm("Can you turn down the volume?").split(),

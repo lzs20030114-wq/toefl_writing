@@ -151,7 +151,10 @@ if (!LAND_ONLY) {
     const mg = step(`merge ${set}`, PY, ["-X", "utf8", "scripts/realbank/merge_recording_asr.py", "--set", set]);
     const mline = (mg.out.match(/^\s+\S+：录音.*$/m) || [""])[0].trim();
     console.log(`    合流：${mline || tail(mg.out, 2).trim()}`);
-    const au = step(`audit ${set}`, process.execPath, ["scripts/realbank/audit_answers.mjs", set, "--section=listening", "--only-missing"]);
+    // --only-missing 要求既有 .audit.json；从没审过的卷（4.29 阅读只有填词，从来没生成过）就整科审
+    const hasAudit = fs.existsSync(path.join(TMP, `${set}.audit.json`));
+    const au = step(`audit ${set}`, process.execPath, ["scripts/realbank/audit_answers.mjs", set, "--section=listening",
+      ...(hasAudit ? ["--only-missing"] : [])]);
     if (au.status === 3) { stopped = `盲审系统性失败（${set}）`; console.log(`  ■ 停：${stopped}\n${tail(au.out)}`); break; }
     const auditLine = ((au.out.match(/一致 \d+\/\d+ = [\d.]+%/) || [""])[0]) || ((au.out.match(/--only-missing：[^\n]*/) || [""])[0]) || tail(au.out, 1).trim();
     const cost = spentSinceStart() - spent0;
