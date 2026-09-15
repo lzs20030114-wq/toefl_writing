@@ -8,6 +8,7 @@ import { buildRepeatIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
+import { levelMeanToBand } from "../../lib/mockExam/speakingBand";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
@@ -524,12 +525,18 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
     const avgScore = validScores.length
       ? Math.round((validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length) * 2) / 2
       : null;
+    // Band estimate runs off the UNROUNDED level mean (rounding twice would drift).
+    const avgLevel = validScores.length
+      ? validScores.reduce((sum, s) => sum + s.score.score, 0) / validScores.length
+      : null;
+    const band = levelMeanToBand(avgLevel);
     onComplete({
       type: "speaking-repeat",
       total,
       attempted: recordings.filter(Boolean).length + (recordings[current] ? 0 : 1),
       elapsed,
       averageScore: avgScore,
+      band,
       items: scoredItems,
     });
   }, [current, total, recordings, elapsed, items, onComplete, transcripts, scores]);
@@ -657,10 +664,18 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
     const avgAccuracy = validScores.length
       ? Math.round(validScores.reduce((sum, s) => sum + s.accuracy, 0) / validScores.length)
       : null;
-    const avgScore = validScores.length
-      ? Math.round((validScores.reduce((sum, s) => sum + s.score, 0) / validScores.length) * 2) / 2
+    // Unrounded level mean → the same 1-6 band scale the mock exam reports.
+    const avgLevel = validScores.length
+      ? validScores.reduce((sum, s) => sum + s.score, 0) / validScores.length
       : null;
+    const estBand = levelMeanToBand(avgLevel);
     const accuracyColor = (acc) => acc >= 80 ? "#16A34A" : acc >= 60 ? "#D97706" : "#DC2626";
+    const bandColor = (band) =>
+      band >= 5.5 ? "#16A34A"
+      : band >= 4.5 ? "#2563EB"
+      : band >= 3.5 ? "#D97706"
+      : band >= 2.5 ? "#EA580C"
+      : "#DC2626";
 
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -695,16 +710,21 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
                   </div>
                 </>
               )}
-              {avgScore != null && (
+              {estBand != null && (
                 <>
                   <div style={{ width: 1, background: "#FDE68A" }} />
                   <div style={{ textAlign: "center" }}>
-                    <div style={{ fontSize: 24, fontWeight: 800, color: SPK.color }}>{avgScore}</div>
-                    <div style={{ fontSize: 11, color: C.t3 }}>Score /5</div>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: bandColor(estBand) }}>{estBand.toFixed(1)}</div>
+                    <div style={{ fontSize: 11, color: C.t3 }}>Est. Band /6</div>
                   </div>
                 </>
               )}
             </div>
+            {estBand != null && (
+              <div style={{ fontSize: 12, color: C.t3, marginTop: 10, lineHeight: 1.5 }}>
+                Avg level {avgLevel.toFixed(1)}/5 across {validScores.length} sentences · band estimated from Listen &amp; Repeat only, not an official ETS score
+              </div>
+            )}
           </SurfaceCard>
 
           {/* Sentence list with replay + scores */}
