@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 64,
+  "count": 65,
   "items": [
     {
       "id": "real_la_121b_1_19",
@@ -1786,6 +1786,57 @@
             "D": "That it will be operated by award-winning chefs"
           },
           "answer": "A",
+          "explanation": "",
+          "source_q": 22
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_la_46_1_21",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/la/real_la_46_1_21.mp3?v=mu3wi9xp",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.6新托福真题",
+      "date": "2026-04-06",
+      "source_flags": [
+        {
+          "code": "audio_partial",
+          "severity": "warn",
+          "detail": "音频文件名自注残缺：4.6 听力(缺q1).m4a"
+        }
+      ],
+      "context": "announcement",
+      "situation": "",
+      "speaker_role": "staff",
+      "announcement": "Attention students. We apologize for the lack of clarity related to the recent changes to our recycling program. Some of the bin labels were misleading, which led to some misunderstandings about where to dispose of certain items. Please make sure to check the updated labels on the bins. Please also see the new detailed guidelines that have been posted on every floor in each dormitory.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the speaker indicate about the previous bin labels?",
+          "options": {
+            "A": "They were created by students.",
+            "B": "They were missing.",
+            "C": "They were confusing.",
+            "D": "They were made from recycled materials."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 21
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker refer to \"every floor in each dormitory\"?",
+          "options": {
+            "A": "To highlight the number of students participating in the recycling program",
+            "B": "To point out where students can find some instructions",
+            "C": "To identify a possible problem",
+            "D": "To explain the importance of having easily available recycling bins"
+          },
+          "answer": "B",
           "explanation": "",
           "source_q": 22
         }

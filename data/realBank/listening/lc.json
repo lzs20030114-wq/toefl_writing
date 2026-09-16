@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 110,
+  "count": 112,
   "items": [
     {
       "id": "real_lc_121b_1_13",
@@ -5218,6 +5218,186 @@
           "answer": "A",
           "explanation": "",
           "source_q": 7
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_46_1_17",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_46_1_17.mp3?v=mu3wib35",
+      "asr_similarity": 0.885,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 147Hz / 254Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.6新托福真题",
+      "date": "2026-04-06",
+      "source_flags": [
+        {
+          "code": "audio_partial",
+          "severity": "warn",
+          "detail": "音频文件名自注残缺：4.6 听力(缺q1).m4a"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Man",
+          "text": "Where are you off to?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "We're about to try the new cafe next to the bookstore. Have you been there yet?"
+        },
+        {
+          "speaker": "Man",
+          "text": "No, is it any good?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "They have the most amazing pastries."
+        },
+        {
+          "speaker": "Man",
+          "text": "Good coffee?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Of course."
+        },
+        {
+          "speaker": "Man",
+          "text": "I was just on my way to the library. I have to review my notes before class."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the woman say about the cafe?",
+          "options": {
+            "A": "It is going out of business.",
+            "B": "It was built on the site of a former bookstore.",
+            "C": "It serves good pastries and coffee.",
+            "D": "It is not a good place to study."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 17
+        },
+        {
+          "type": "inference",
+          "stem": "What will the man probably do next?",
+          "options": {
+            "A": "Go to the library",
+            "B": "Buy a book",
+            "C": "Record a lecture",
+            "D": "Read some emails"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 18
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_46_2_04",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_46_2_04.mp3?v=mu3wibnb",
+      "asr_similarity": 0.953,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 144Hz / 235Hz",
+        "labels"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "4.6新托福真题",
+      "date": "2026-04-06",
+      "source_flags": [
+        {
+          "code": "audio_partial",
+          "severity": "warn",
+          "detail": "音频文件名自注残缺：4.6 听力(缺q1).m4a"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "Are you still working on that project for your ecology class?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, but I'm almost finished. I just have to present my findings to the class next week."
+        },
+        {
+          "speaker": "Woman",
+          "text": "I see. Well, I'm glad I'm not in your shoes. Talking in front of people makes me nervous."
+        },
+        {
+          "speaker": "Man",
+          "text": "Really? I had an internship as a tour guide at Dawson State Park last summer, so I think I can handle this."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Oh, okay. Speaking of internships, I'm still waiting to hear back from the History Museum downtown. I set my application in last month, but I still haven't heard anything."
+        }
+      ],
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the man?",
+          "options": {
+            "A": "He is confident speaking to groups of people",
+            "B": "He is planning to quit his job at Dawson State Park.",
+            "C": "He is not prepared to give his presentation.",
+            "D": "He is not interested in taking another ecology class."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 4
+        },
+        {
+          "type": "detail",
+          "stem": "What attitude does the woman express about an internship?",
+          "options": {
+            "A": "She is nervous that she will not like her colleagues at the history museum.",
+            "B": "She is concerned that she will not be offered the internship.",
+            "C": "She is confident that the internship will work well with her schedule.",
+            "D": "She is happy that she lives close to the history museum."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 5
         }
       ],
       "audio_source": "original"
