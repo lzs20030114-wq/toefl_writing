@@ -1190,17 +1190,24 @@ function hasOriginalAudio(kind, item) {
  * 与听力那道 lDroppedNoOriginalAudio 同一条口径：只拦整块录音来源的卷 —— 存量 rf/rp 卷早已上线，
  * 这一轮不动；`--keep-unbound-recording` 是「先落库再切片」那一趟用的，那趟不拦。
  */
-function keepWithOriginalAudio(kind, units, recordingMerged, at) {
-  if (!recordingMerged || KEEP_UNBOUND_RECORDING) return units;
+function keepSpeaking(kind, set, field, units, recordingMerged, at, validate) {
+  if (!recordingMerged || KEEP_UNBOUND_RECORDING) return true;
   const kept = units.filter((u) => hasOriginalAudio(kind, u));
   const lost = units.length - kept.length;
-  if (lost) {
-    at.stats.sDroppedNoOriginalAudio += lost;
-    recordDrop(at.stats, { set: at.set, slug: at.slug, section: at.section, type: kind,
-      n: lost, id: at.id, code: "sDroppedNoOriginalAudio",
-      detail: units.filter((u) => !hasOriginalAudio(kind, u)).map((u) => u.id).join(",").slice(0, 200) });
-  }
-  return kept;
+  if (!lost) return true;
+  at.stats.sDroppedNoOriginalAudio += lost;
+  recordDrop(at.stats, { set: at.set, slug: at.slug, section: at.section, type: kind,
+    n: lost, id: at.id, code: "sDroppedNoOriginalAudio",
+    detail: units.filter((u) => !hasOriginalAudio(kind, u)).map((u) => u.id).join(",").slice(0, 200) });
+  set[field] = kept;
+  const v = validate(set);
+  if (v.valid) return true;
+  // 闸完剩不下一套（复述少于 5 句）：整套不收，原因记成没挂上原声而不是 validator 不收
+  at.stats.sDroppedNoOriginalAudio += kept.length;
+  recordDrop(at.stats, { set: at.set, slug: at.slug, section: at.section, type: kind,
+    n: kept.length, id: at.id, code: "sDroppedNoOriginalAudio",
+    detail: `闸剩 ${kept.length} 条不成套：${v.errors.slice(0, 2).join(" | ")}` });
+  return false;
 }
 
 function dupEdge(fromId, keptRef, type, setname) {
@@ -1366,7 +1373,7 @@ function buildListeningSpeaking(files, stats) {
       if (r.section !== "speaking" || r.status !== "ok") continue;
       if (r.type === "repeat") {
         const id = `real_repeat_${slug}_1`;
-        let sentences = (r.items || [])
+        const sentences = (r.items || [])
           .filter((it) => it.usable !== false && String(it.sentence_final || "").trim())
           .map((it, i) => {
             const text = String(it.sentence_final).trim();
@@ -1379,8 +1386,6 @@ function buildListeningSpeaking(files, stats) {
               from_asr: (it.problems || []).includes("sentence_from_asr"),
             };
           });
-        sentences = keepWithOriginalAudio("repeat", sentences, recordingMerged,
-                                          { stats, set: setname, slug, id, section: "speaking" });
         const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
@@ -1408,10 +1413,15 @@ function buildListeningSpeaking(files, stats) {
           }
         }
         seenS.set(sk, `${setname}/${id}`);
+        // 原声闸放在**去重之后**：放前面的话，整套被闸空的重复卷连别名都记不上，
+        // 那一卷的槽位反而更空（保留方明明有内容）。2026-09-16 实测 8 套这么丢的。
+        if (!keepSpeaking("repeat", set, "sentences", sentences, recordingMerged,
+                          { stats, set: setname, slug, id, section: "speaking" },
+                          (x) => SPV.validateRepeatSet(x, REAL_EXAM))) continue;
         spk.repeat.push(set);
       } else if (r.type === "interview") {
         const id = `real_interview_${slug}_1`;
-        let questions = (r.items || [])
+        const questions = (r.items || [])
           .filter((it) => it.usable !== false && String(it.stem_final || "").trim())
           .map((it, i) => {
             const text = String(it.stem_final).trim();
@@ -1425,8 +1435,6 @@ function buildListeningSpeaking(files, stats) {
               from_asr: (it.problems || []).includes("stem_from_asr"),
             };
           });
-        questions = keepWithOriginalAudio("interview", questions, recordingMerged,
-                                          { stats, set: setname, slug, id, section: "speaking" });
         const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
@@ -1454,6 +1462,9 @@ function buildListeningSpeaking(files, stats) {
           }
         }
         seenS.set(sk, `${setname}/${id}`);
+        if (!keepSpeaking("interview", set, "questions", questions, recordingMerged,
+                          { stats, set: setname, slug, id, section: "speaking" },
+                          (x) => SPV.validateInterviewSet(x, REAL_EXAM))) continue;
         spk.interview.push(set);
       }
     }
