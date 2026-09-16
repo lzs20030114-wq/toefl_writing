@@ -3,6 +3,42 @@
   "_purpose": "跨卷重复的 id 别名：同一道题在别的卷里的那份（from）→ 库里留下的那条（to）。机经里同一段材料会在多场考试里重出，去重只留一条是对的，但不记别名的话那几场的槽位会被丢题账本算成缺题、前端那一场也少题。assemble_sets.mjs 按 from_source / from_date 把槽位还回原卷。",
   "aliases": [
     {
+      "from": "real_interview_317_1",
+      "to": "real_interview_315_1",
+      "from_type": "interview",
+      "to_type": "interview",
+      "reason": "duplicate_item",
+      "from_source": "3.17新托福真题",
+      "from_date": "2026-03-17"
+    },
+    {
+      "from": "real_interview_41_1",
+      "to": "real_interview_321_1",
+      "from_type": "interview",
+      "to_type": "interview",
+      "reason": "duplicate_item",
+      "from_source": "4.1新托福真题",
+      "from_date": "2026-04-01"
+    },
+    {
+      "from": "real_interview_428_1",
+      "to": "real_interview_320_1",
+      "from_type": "interview",
+      "to_type": "interview",
+      "reason": "duplicate_item",
+      "from_source": "4.28新托福真题",
+      "from_date": "2026-04-28"
+    },
+    {
+      "from": "real_interview_45_1",
+      "to": "real_interview_315_1",
+      "from_type": "interview",
+      "to_type": "interview",
+      "reason": "duplicate_item",
+      "from_source": "4.5新托福真题",
+      "from_date": "2026-04-05"
+    },
+    {
       "from": "real_interview_rf0902_1",
       "to": "real_interview_rf0716_1",
       "from_type": "interview",

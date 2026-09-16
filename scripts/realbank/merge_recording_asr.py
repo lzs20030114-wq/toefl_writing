@@ -1389,6 +1389,138 @@ def repeat_from_audio(sents, units):
     return out, diffs
 
 
+# ── 面试题：题干只在音频里（屏幕只印场景、答案页只抄复述句）─────────────────
+# 2026-09-16 用户拍板收 ASR 题干，条件是四道机械闸（见下）。收的理由：这批卷的听力
+# lc/la/lat 正文本来就是 ASR 转的（整块录音卷没有逐字稿），口径上已经开过口子；面试是
+# 开放题、没有客观答案，一个词转错的代价远小于选择题；而且每道题都要能从同一条录音里
+# 切出真人原声，bind 的覆盖率 / 锚点 / 语速三道闸会机械验证「这段文字确实是这个位置说的」。
+INTERVIEW_CUE_RE = re.compile(r"(?i)take an interview|an interviewer will ask you")
+# ETS 的固定指令 + 场景屏（考生听到的是屏幕上那段的朗读，不是题干）
+IV_DIRECTIONS_RE = re.compile(
+    r"(?i)^(take an interview|an interviewer will ask|i'?ll ask you question"
+    r"|answer the questions and be sure|the clock will indicate|no time for preparation"
+    r"|(you'?ll|you will) have a short|(the |a )?researcher (will ask|is studying)"
+    r"|you have (volunteered|signed up|agreed|been (invited|asked))"
+    r"|you received an email|you'?ve been (invited|asked)|volunteer for a research study)")
+# 面试官的应答词（「好的」「有意思」「谢谢」）—— 只在**没有问号且不超过 8 词**时剥
+IV_ACK_RE = re.compile(
+    r"(?i)^(thanks?|great|interesting|okay|ok|noted|fair enough|good points?|i see|understood"
+    r"|alright|all right|got it|wonderful|nice|sure|right|excellent|perfect|makes sense"
+    r"|very good|mm|uh|yeah|yes|cool|good|that'?s (interesting|helpful|great|good))\b")
+# 「谢谢你参加本研究 / 谢谢你今天来」这类整句寒暄可以长一些，单独一条（仍只剥没有问号的整句）
+IV_GREETING_RE = re.compile(
+    r"(?i)^(thanks?|thank you)\b.*\b(participat|take part|joining|speaking with me|for (your )?time"
+    r"|agreeing|for coming|for a great talk|being here)")
+# 面试官的转场铺垫（同样只剥没有问号的整句）
+IV_FRAMING_RE = re.compile(
+    r"(?i)^(i'?d like to (ask|talk)|i would like to (ask|talk)|today,? i'?d like|let'?s (start|begin)"
+    r"|next question|final question|and finally|one (more|last) question|moving on"
+    r"|i'?m going to ask|we'?ll (start|begin) with)")
+IV_MIN_WORDS, IV_MAX_WORDS = 5, 60      # validator 的绝对区间；库里 174 道真题实测 6~51 词
+IV_ACK_MAX_WORDS = 8
+
+
+def trim_interview_stem(sents):
+    """剥掉题干前面的指令 / 场景 / 应答词，剥到第一句「不是这三类」的为止。
+
+    只从**前面**剥、且只剥**没有问号**的整句 —— 带问号的句子和「Some people believe that …」
+    这种前提句一律留着（前提剥掉题就残了）。剥到哪停由句子本身决定，不猜边界。
+    """
+    i = 0
+    while i < len(sents):
+        t = sents[i]["text"].strip()
+        if "?" in t:
+            break
+        if IV_DIRECTIONS_RE.match(t) or IV_FRAMING_RE.match(t) or IV_GREETING_RE.match(t):
+            i += 1
+            continue
+        if len(t.split()) <= IV_ACK_MAX_WORDS and IV_ACK_RE.match(t):
+            i += 1
+            continue
+        break
+    return sents[i:]
+
+
+CJK_RE = F.CJK_RE
+
+
+IV_SCENARIO_RE = re.compile(r"(?i)\b(you (have|'ve|received)\b[^.]*\.)")
+
+
+def interview_intro(scan):
+    """面试的场景屏（"You have volunteered for a research study…"）——**文档来源**，取自屏幕块。
+
+    不能用 merge_first_source_asr.speaking_context：它整块跳过带「Listen and repeat」的块，
+    而数字卷的场景屏常与复述指令同在一块（3.18 实测），跳过后只剩「Listenand repeatonlyonce.」这种糊字。
+    """
+    best = ""
+    for b in scan.get("blocks", []):
+        if b.get("section") != "speaking":
+            continue
+        body = " ".join(l.strip() for l in (b.get("body") or "").split("\n")
+                        if l.strip() and not CJK_RE.search(l))
+        body = re.sub(r"=+\s*PAGE\s*\d+\s*=+", " ", body)
+        body = re.sub(r"(?i)\b(speaking|listen ?and ?repeat ?only ?once\.?)\b", " ", body)
+        body = re.sub(r"\s+", " ", body).strip()
+        m = IV_SCENARIO_RE.search(body)
+        if not m:
+            continue
+        run = body[m.start():]
+        if V.nwords(run) >= 12 and V.nwords(run) > V.nwords(best):
+            best = run
+    return fix_orthography(best[:300]) if best else ""
+
+
+def build_interview(rec, ctx, stats):
+    """整段口语录音 → 面试 4 道题干。→ (results 条目 或 None, 扣下原因 或 None)。
+
+    闸一：录音里认得出「Take an interview / An interviewer will ask you」这段旁白；
+    闸二：旁白之后**恰好 4 段带问号的内容**（按 ≥4s 静音切段 —— 每道题后面都有考生的作答时间，
+          所以停顿天然把 4 道题分开；第 1 题常与旁白同段，按句从第一句带问号处起算）；
+    闸三：每道题剥完应答词后仍带问号、5~60 词、以句末标点收尾；
+    闸四（在 build_bank）：每道题都要能切出真人原声，切不出的不上线。
+    """
+    islands = split_islands(merge_glue(rec["words"]))
+    ci = next((i for i, w in enumerate(islands) if INTERVIEW_CUE_RE.search(join_words(w))), None)
+    if ci is None:
+        return None, "interview_cue_missing:录音里没有面试旁白"
+    # 场景屏抓不到（屏幕这一块被 OCR 糊了）就退到录音里那段朗读 —— 场景只用于展示、不判分
+    if not ctx or V.nwords(ctx) < 8 or re.search(r"(?i)listen ?and ?repeat", ctx):
+        say = [x["text"] for x in sentences(islands[ci])
+               if IV_DIRECTIONS_RE.match(x["text"].strip())]
+        k = next((j for j, t in enumerate(say) if IV_SCENARIO_RE.search(t)), None)
+        ctx = " ".join(say[k:])[:300] if k is not None else ctx
+    cands = []
+    for k, w in enumerate(islands[ci:]):
+        ss = trim_interview_stem(sentences(w))
+        if ss and any("?" in x["text"] for x in ss):
+            cands.append(ss)
+    if len(cands) != 4:
+        return None, "interview_count:旁白后分出 %d 道题（应为 4）" % len(cands)
+    items = []
+    for n, ss in enumerate(cands, 1):
+        text = " ".join(x["text"] for x in ss).strip()
+        probs, usable = ["stem_from_asr"], True
+        nw = V.nwords(text)
+        if not (IV_MIN_WORDS <= nw <= IV_MAX_WORDS):
+            usable = False
+            probs.append("stem_word_count:%d" % nw)
+        if not END_PUNCT_RE.search(text):
+            usable = False
+            probs.append("stem_truncated:no_end_punct")
+        items.append({"n": n, "q_number": n, "stem": text, "stem_final": text if usable else "",
+                      "usable": usable, "problems": probs})
+    ok = sum(1 for it in items if it["usable"])
+    stats["interview_from_asr"] = stats.get("interview_from_asr", 0) + ok
+    return {"key": "speaking|1|interview|1", "section": "speaking", "module": 1, "type": "interview",
+            "q_start": 1, "q_end": len(items), "tier": "recalled",
+            "status": "ok" if ok >= 3 else "flagged", "merged_by": MERGER_ID,
+            "problems": ([] if ok == len(items) else
+                         ["不可用题 %d 道（%s）" % (len(items) - ok,
+                          ",".join("Q%d" % it["n"] for it in items if not it["usable"]))]),
+            "context": ctx, "items": items}, None
+
+
 def process_speaking(setkey, args, totals):
     """数字卷的口语合流 —— 与听力那半段互不相干（两条录音、两套缓存），所以单独一条路。
 
@@ -1475,15 +1607,29 @@ def process_speaking(setkey, args, totals):
     for it in (rep or {}).get("items", []):        # 与答案页有出入的留痕（定稿取的是录音那一句）
         if it["n"] in diffs:
             it["problems"] = list(it["problems"]) + ["repeat_text_from_audio:答案页有出入（%s）" % diffs[it["n"]]]
+
+    # 面试题：build_speaking 按第一来源口径整组扣下（没有文档来源），这条管线改收 ASR 题干 + 四道机械闸
+    iv, iv_why = build_interview(rec, interview_intro(scan) or F.speaking_context(scan), stats)
+    if iv:
+        speaking = [r for r in speaking if r["type"] != "interview"] + [iv]
+    else:
+        for r in speaking:
+            if r["type"] == "interview":
+                r["problems"] = [p for p in r["problems"] if not p.startswith("no_stem_in_doc")] + [iv_why]
     ok_n = sum(1 for it in (rep or {}).get("items", []) if it.get("usable"))
-    line = ("  %s：口语录音 %s（%s）· 复述 %d 句可落库 %d · 面试 %d 组按口径扣下"
+    line = ("  %s：口语录音 %s（%s）· 复述 %d 句可落库 %d · 面试 %s"
             % (setkey, os.path.basename(audio), "缓存" if cached else "新转写",
-               len((rep or {}).get("items", [])), ok_n, stats.get("interview_held", 0)))
+               len((rep or {}).get("items", [])), ok_n,
+               ("%d 道可落库 %d" % (len(iv["items"]), sum(1 for x in iv["items"] if x["usable"])))
+               if iv else ("扣下（%s）" % iv_why.split(":")[0])))
     bad = [it for it in (rep or {}).get("items", []) if not it.get("usable")]
+    bad += [it for it in (iv or {}).get("items", []) if not it.get("usable")]
     if args.dry_run:
         print(line + "（--dry-run，未写盘）")
         for it in bad:
             print("     Q%d 扣下：%s" % (it["n"], ",".join(it["problems"])))
+        if not iv:
+            print("     面试：%s" % iv_why)
         totals.append((setkey, stats, speaking))
         return stats
 
@@ -1512,6 +1658,8 @@ def process_speaking(setkey, args, totals):
     print(line + " → 已写回")
     for it in bad:
         print("     Q%d 扣下：%s" % (it["n"], ",".join(it["problems"])))
+    if not iv:
+        print("     面试：%s" % iv_why)
     totals.append((setkey, stats, speaking))
     return stats
 
@@ -1781,6 +1929,28 @@ def self_test():
     # 没停顿的接着说不切
     pw = _w("Select the volume icon at the top of the screen.", 0) + _w("Did you find the lecture interesting?", 3.0)
     check("没停顿不切", split_intro_tail(pw, sentences(pw)) is None)
+
+    # ── 面试题干（ASR + 四道机械闸）──────────────────────────────────────
+    st = lambda t: [x["text"] for x in trim_interview_stem(sentences(_w(t, 0)))]   # noqa: E731
+    check("剥指令与场景", st("Take an interview. An interviewer will ask you questions. "
+                             "You have volunteered for a research study about music. "
+                             "First, how important is music in your life?")
+          == ["First, how important is music in your life?"], st("Take an interview. An interviewer will ask you questions. "
+              "You have volunteered for a research study about music. First, how important is music in your life?"))
+    check("剥应答词与铺垫", st("Great. That's interesting. Now, would you rather create music or listen to it?")
+          == ["Now, would you rather create music or listen to it?"])
+    # 前提句一个字都不许剥 —— 剥掉题就残了
+    check("留前提句", st("Great. Some people say a healthy diet is hard to keep. What do you think about that?")
+          == ["Some people say a healthy diet is hard to keep.", "What do you think about that?"])
+    check("没有可剥的就原样", st("Tell me about a time you changed your diet. What motivated you?")
+          == ["Tell me about a time you changed your diet.", "What motivated you?"])
+    # 闸一：认不出旁白整组不收
+    iv, why = build_interview({"words": _w("Hello there. How are you today?", 0)}, "", {})
+    check("没有面试旁白不收", iv is None and why.startswith("interview_cue_missing"), why)
+    # 闸二：旁白后不是恰好 4 段带问号的内容 → 整组不收
+    ws = _w("Take an interview. An interviewer will ask you questions.", 0) + _w("Do you like music?", 20)
+    iv, why = build_interview({"words": ws}, "", {})
+    check("题数不是 4 不收", iv is None and why.startswith("interview_count"), why)
 
     if fails:
         print("SELF-TEST FAILED:")

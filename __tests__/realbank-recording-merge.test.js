@@ -98,3 +98,18 @@ describe("build_bank 与整块录音合流的配套约定", () => {
     expect(DROP_CODES.sDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "speaking" });
   });
 });
+
+maybe("面试题干（ASR + 四道机械闸）", () => {
+  test("闸都在 --self-test 里（认旁白 / 恰好 4 道 / 剥应答词不剥前提句 / 词数与句末标点）", () => {
+    const out = execFileSync(PY, ["-X", "utf8", SCRIPT, "--self-test"], {
+      encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1" },
+    });
+    expect(out).toContain("SELF-TEST OK");
+  });
+
+  test("落库时 from_asr 立旗，且第四道闸（切不出原声不上线）对面试同样生效", () => {
+    const src = fs.readFileSync(BUILD_BANK, "utf8");
+    expect(src).toContain('from_asr: (it.problems || []).includes("stem_from_asr")');
+    expect(src).toContain('keepSpeaking("interview"');
+  });
+});
