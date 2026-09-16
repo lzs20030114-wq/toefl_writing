@@ -24,7 +24,7 @@
         "sections": [
           "writing"
         ],
-        "detail": "writing 科缺 5 题（配对 5／满分 10）。",
+        "detail": "writing 科缺 6 题（配对 6／满分 12）。",
         "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
       }
     ],
@@ -132,20 +132,11 @@
         "sections": [
           "writing"
         ],
-        "detail": "writing 科缺 4 题（配对 6／满分 10）。",
+        "detail": "writing 科缺 6 题（配对 6／满分 12）。",
         "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
       }
     ],
     "2.23新托福真题": [
-      {
-        "code": "section_gap",
-        "severity": "blocking",
-        "sections": [
-          "listening"
-        ],
-        "detail": "listening 科缺 16 题（配对 31／满分 47）。",
-        "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
-      },
       {
         "code": "section_no_stems",
         "severity": "blocking",
@@ -246,15 +237,6 @@
       }
     ],
     "2.8新托福真题": [
-      {
-        "code": "section_gap",
-        "severity": "blocking",
-        "sections": [
-          "reading"
-        ],
-        "detail": "reading 科缺 15 题（配对 35／满分 50）。",
-        "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
-      },
       {
         "code": "section_no_stems",
         "severity": "blocking",
@@ -379,15 +361,6 @@
         ],
         "detail": "文件 3.15  口语.pdf 与 3.17新托福真题 内容哈希完全一致。",
         "action": "同一份材料只入库一次。"
-      },
-      {
-        "code": "section_gap",
-        "severity": "warn",
-        "sections": [
-          "reading"
-        ],
-        "detail": "reading 科缺 3 题（配对 47／满分 50）。",
-        "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
       },
       {
         "code": "section_gap",
@@ -617,15 +590,6 @@
         ],
         "detail": "与 3.6新托福真题 属同题簇（部分科目共题，机经正常形态）。",
         "action": "铺量时按题内容去重，不要按套丢弃。"
-      },
-      {
-        "code": "section_gap",
-        "severity": "blocking",
-        "sections": [
-          "listening"
-        ],
-        "detail": "listening 科缺 15 题（配对 32／满分 47）。",
-        "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
       }
     ],
     "3.6新托福真题": [
@@ -662,7 +626,7 @@
         "sections": [
           "writing"
         ],
-        "detail": "writing 科缺 4 题（配对 6／满分 10）。",
+        "detail": "writing 科缺 6 题（配对 6／满分 12）。",
         "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
       }
     ],
@@ -709,15 +673,6 @@
       }
     ],
     "4.18新托福真题": [
-      {
-        "code": "section_gap",
-        "severity": "blocking",
-        "sections": [
-          "listening"
-        ],
-        "detail": "listening 科缺 15 题（配对 32／满分 47）。",
-        "action": "缺口 ≥10 题的科目入库前必须人工核；3–9 题可入库但要记账。"
-      },
       {
         "code": "section_blocked",
         "severity": "blocking",
@@ -1344,5 +1299,6 @@
         "action": "阅读/听力选择题必须过 audit_answers 盲审；口语没有音频的题用自家 TTS 重配；tier 一律 recalled，不许标 official；前端不得把这些题当成「完整一套真题」呈现。"
       }
     ]
-  }
+  },
+  "_section_gap_refreshed": "2026-09-16"
 }
