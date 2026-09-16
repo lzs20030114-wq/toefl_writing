@@ -1185,6 +1185,24 @@ function hasOriginalAudio(kind, item) {
   return Boolean(e && e.url && originalAudioSha1(spokenText(kind, item)) === e.text_sha1);
 }
 
+/**
+ * 口语按**子条目**过「切不出真人原声就不上线」这道闸（听力是整条题一段音频，口语一套里每句各一段）。
+ * 与听力那道 lDroppedNoOriginalAudio 同一条口径：只拦整块录音来源的卷 —— 存量 rf/rp 卷早已上线，
+ * 这一轮不动；`--keep-unbound-recording` 是「先落库再切片」那一趟用的，那趟不拦。
+ */
+function keepWithOriginalAudio(kind, units, recordingMerged, at) {
+  if (!recordingMerged || KEEP_UNBOUND_RECORDING) return units;
+  const kept = units.filter((u) => hasOriginalAudio(kind, u));
+  const lost = units.length - kept.length;
+  if (lost) {
+    at.stats.sDroppedNoOriginalAudio += lost;
+    recordDrop(at.stats, { set: at.set, slug: at.slug, section: at.section, type: kind,
+      n: lost, id: at.id, code: "sDroppedNoOriginalAudio",
+      detail: units.filter((u) => !hasOriginalAudio(kind, u)).map((u) => u.id).join(",").slice(0, 200) });
+  }
+  return kept;
+}
+
 function dupEdge(fromId, keptRef, type, setname) {
   const to = String(keptRef || "").split("/").pop();
   return { from: fromId, to, type, reason: "duplicate_item", fromSource: setname, fromDate: setDate(setname) };
@@ -1348,7 +1366,7 @@ function buildListeningSpeaking(files, stats) {
       if (r.section !== "speaking" || r.status !== "ok") continue;
       if (r.type === "repeat") {
         const id = `real_repeat_${slug}_1`;
-        const sentences = (r.items || [])
+        let sentences = (r.items || [])
           .filter((it) => it.usable !== false && String(it.sentence_final || "").trim())
           .map((it, i) => {
             const text = String(it.sentence_final).trim();
@@ -1361,6 +1379,8 @@ function buildListeningSpeaking(files, stats) {
               from_asr: (it.problems || []).includes("sentence_from_asr"),
             };
           });
+        sentences = keepWithOriginalAudio("repeat", sentences, recordingMerged,
+                                          { stats, set: setname, slug, id, section: "speaking" });
         const set = { id, scenario: String(r.context || "").slice(0, 300) || "You will hear a series of short instructions. Listen carefully and repeat each sentence exactly as you hear it.", speaker_role: "staff", sentences, ...sMeta };
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
@@ -1391,7 +1411,7 @@ function buildListeningSpeaking(files, stats) {
         spk.repeat.push(set);
       } else if (r.type === "interview") {
         const id = `real_interview_${slug}_1`;
-        const questions = (r.items || [])
+        let questions = (r.items || [])
           .filter((it) => it.usable !== false && String(it.stem_final || "").trim())
           .map((it, i) => {
             const text = String(it.stem_final).trim();
@@ -1405,6 +1425,8 @@ function buildListeningSpeaking(files, stats) {
               from_asr: (it.problems || []).includes("stem_from_asr"),
             };
           });
+        questions = keepWithOriginalAudio("interview", questions, recordingMerged,
+                                          { stats, set: setname, slug, id, section: "speaking" });
         const set = { id, topic: "", intro: String(r.context || "").slice(0, 300), questions, ...sMeta };
         // 先过 validator 再认去重锚点：反过来的话，先收的那条被 validator 毙掉时，
         // 后收的那条早已按「与它重复」跳掉了 —— 两边都没有，别名还指着一个不存在的 id
@@ -1616,7 +1638,7 @@ function main() {
     lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
     lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0, lDroppedNoOriginalAudio: 0,
     lInvalidReasons: {}, lInvalidDetail: [],
-    sDroppedDupSet: 0, sDroppedInvalid: 0, sInvalidDetail: [],
+    sDroppedDupSet: 0, sDroppedInvalid: 0, sDroppedNoOriginalAudio: 0, sInvalidDetail: [],
   };
   const writing = buildWriting(files, stats);
   const ls = buildListeningSpeaking(files, stats);
@@ -1910,7 +1932,7 @@ function main() {
   console.log(`  成品：LCR ${L.lcr.length} / LC ${L.lc.length} / LA ${L.la.length} / LAT ${L.lat.length}`);
 
   console.log("\n■ 真题口语落库（无客观答案，不走盲审；闸门是合流阶段的结构校验 + validator）");
-  console.log(`  跨卷内容重复跳过 ${stats.sDroppedDupSet} 套；validator 不收丢弃 ${stats.sDroppedInvalid} 组`);
+  console.log(`  跨卷内容重复跳过 ${stats.sDroppedDupSet} 套；validator 不收丢弃 ${stats.sDroppedInvalid} 组；整块录音来源没挂上原声不收 ${stats.sDroppedNoOriginalAudio} 条${KEEP_UNBOUND_RECORDING ? "（--keep-unbound-recording：本轮不拦）" : ""}`);
   if (stats.sRecallAdded.repeat || stats.sRecallAdded.interview) {
     console.log(`  真题 GT 补录（speaking-recall.json，只收 verdict=ok）：复述 +${stats.sRecallAdded.repeat} 套 / 面试 +${stats.sRecallAdded.interview} 套`);
   }

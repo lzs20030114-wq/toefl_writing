@@ -52,6 +52,7 @@ const DROP_CODES = Object.freeze({
   // 口语
   sDroppedDupSet: { label: "口语内容与更早一套卷重复", scope: "unit", section: "speaking" },
   sDroppedInvalid: { label: "validator 不收", scope: "unit", section: "speaking" },
+  sDroppedNoOriginalAudio: { label: "整块录音来源没切出真人原声（不许退回 TTS 上线）", scope: "unit", section: "speaking" },
 });
 
 /**

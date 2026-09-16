@@ -78,4 +78,21 @@ describe("build_bank 与整块录音合流的配套约定", () => {
     const { DROP_CODES } = require("../scripts/realbank/drop_ledger.js");
     expect(DROP_CODES.lDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "listening" });
   });
+  test("口语也过「切不出原声就不上线」这道闸（复述按句、面试按题）", () => {
+    // 闸只拦整块录音来源，且 --keep-unbound-recording 那一趟（先落库再切片）不拦
+    const fn = src.slice(src.indexOf("function keepWithOriginalAudio("),
+                         src.indexOf("function dupEdge("));
+    expect(fn).toContain("if (!recordingMerged || KEEP_UNBOUND_RECORDING) return units;");
+    expect(fn).toContain("hasOriginalAudio(kind, u)");
+    expect(fn).toContain('code: "sDroppedNoOriginalAudio"');
+    // 复述与面试两条落库路径都接上了，且在 validator 之前（句子少于 5 句就该被 validator 毙掉）
+    for (const kind of ["repeat", "interview"]) {
+      const at = src.indexOf(`keepWithOriginalAudio("${kind}"`);
+      expect([kind, at > 0]).toEqual([kind, true]);
+      const tail = src.slice(at, at + 1200);
+      expect([kind, tail.indexOf("validate") > 0]).toEqual([kind, true]);
+    }
+    const { DROP_CODES } = require("../scripts/realbank/drop_ledger.js");
+    expect(DROP_CODES.sDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "speaking" });
+  });
 });

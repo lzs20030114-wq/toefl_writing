@@ -627,6 +627,19 @@ PART_RE = re.compile(r"(?i)part\s*(\d+)")
 JOINED_DIR = os.path.join(OUT_DIR, "src-joined")
 
 
+def speaking_recordings(setdir):
+    """口语整段录音（复述 7 句 + 面试 4 问在同一条里，与听力那条完全分开）。"""
+    hits = []
+    for dirpath, _dirs, files in os.walk(setdir):
+        for fn in files:
+            low = fn.lower()
+            if not low.endswith(AUDIO_EXT) or fn.startswith("~$"):
+                continue
+            if "口语" in fn or "speak" in low:
+                hits.append(os.path.join(dirpath, fn))
+    return sorted(hits)
+
+
 def listening_recordings(setdir):
     hits = []
     for dirpath, _dirs, files in os.walk(setdir):
@@ -641,7 +654,7 @@ def listening_recordings(setdir):
     return sorted(hits)
 
 
-def join_parts(setkey, files):
+def join_parts(setkey, files, role="listening"):
     """商家把一场录音切成 part1 / part2 两条（5.29）：按 part 号拼成一条缓存文件，时间轴连续。
 
     只在**每条都带 part 号、号码连续从 1 开始**时拼 —— 少一截或号码对不上就不拼（宁可这卷不跑）。
@@ -657,7 +670,7 @@ def join_parts(setkey, files):
     parts.sort()
     if [n for n, _ in parts] != list(range(1, len(parts) + 1)):
         return None
-    out = os.path.join(JOINED_DIR, setkey, "listening" + os.path.splitext(parts[0][1])[1])
+    out = os.path.join(JOINED_DIR, setkey, role + os.path.splitext(parts[0][1])[1])
     if os.path.exists(out) and os.path.getmtime(out) >= max(os.path.getmtime(f) for _, f in parts):
         return out
     os.makedirs(os.path.dirname(out), exist_ok=True)
@@ -676,9 +689,9 @@ def join_parts(setkey, files):
     return out
 
 
-def transcribe_recording(setkey, audio):
+def transcribe_recording(setkey, audio, role="listening"):
     """整条录音 → {file, path, model, vad, words, segments}（缓存命中零成本）。"""
-    out = os.path.join(REC_DIR, setkey, "listening.json")
+    out = os.path.join(REC_DIR, setkey, "%s.json" % role)
     if os.path.exists(out):
         with open(out, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -724,20 +737,30 @@ def merge_glue(words):
     return out
 
 
-def write_module_caches(setkey, rec, mod_no, words, segments):
-    """按 module 切开的段级 / 词级缓存（bind_original_audio 第一来源分支的输入形状）。"""
+def write_role_caches(setkey, rec, role, words, segments):
+    """某一角色（listening_m1 / listening_m2 / speaking）的段级 + 词级缓存。
+
+    bind_original_audio 的第一来源分支就吃这两份：`asr/<卷>/<role>.json` 认源音频
+    （`path` 是绝对路径，因为整块录音常躺在 src-converted/ 而不是桌面源根目录），
+    `asr-words/<卷>/<role>.json` 给词级定位切片。
+    """
     words = merge_glue(words)
-    base = {"set": setkey, "role": "listening_m%d" % mod_no, "file": rec["file"], "path": rec["path"],
+    base = {"set": setkey, "role": role, "file": rec["file"], "path": rec["path"],
             "model": rec["model"], "device": rec.get("device"), "from": MERGER_ID,
             "window_sec": [words[0]["start"], words[-1]["end"]] if words else None}
     for d, payload in ((ASR_DIR, {**base, "segments": segments,
                                   "text": " ".join(s["text"] for s in segments)}),
                        (WORDS_DIR, {**base, "vad": True, "words": words, "segments": segments,
                                     "text": join_words(words)})):
-        p = os.path.join(d, setkey, "listening_m%d.json" % mod_no)
+        p = os.path.join(d, setkey, "%s.json" % role)
         os.makedirs(os.path.dirname(p), exist_ok=True)
         with open(p, "w", encoding="utf-8") as fh:
             json.dump(payload, fh, ensure_ascii=False)
+
+
+def write_module_caches(setkey, rec, mod_no, words, segments):
+    """按 module 切开的段级 / 词级缓存（bind_original_audio 第一来源分支的输入形状）。"""
+    write_role_caches(setkey, rec, "listening_m%d" % mod_no, words, segments)
 
 
 # ══ 组装 ═════════════════════════════════════════════════════════════════
@@ -1211,6 +1234,237 @@ def process_set(setkey, args, totals, bank=None):
     return stats
 
 
+# ══ 口语：整段口语录音 + 答案页复述句 ═══════════════════════════════════
+def word_tokens(words):
+    """词对象列表 → (归一化 token 列表, 每个 token 属于第几个词)。"""
+    toks, owner = [], []
+    for i, w in enumerate(words):
+        for t in V.norm(w["w"]).split():
+            toks.append(t)
+            owner.append(i)
+    return toks, owner
+
+
+REPEAT_PICK_SIM_MIN = 0.6     # 在录音里挑「就是这一句」的相似度下限（低于此判没找到）
+def repeat_diff_budget(n):
+    """允许答案页与录音差几个词：短句只许差 1 个，长句 2 个。
+
+    差异词数比相似度稳：5 词的句子错 1 个词相似度就掉到 0.8，13 词的句子错 2 个还有 0.92，
+    一条相似度线要么放走长句里的整片胡说，要么卡死短句里的一个错字（实测 3.18 两种都撞上了）。
+    """
+    return 1 if n <= 6 else 2
+
+
+def token_diff(doc, asr):
+    """两串归一化 token 的差异：(答案页多出的词数, 录音多出的词数, 对上的词数)。"""
+    ta, tb = V.norm(doc).split(), V.norm(asr).split()
+    m = sum(b.size for b in difflib.SequenceMatcher(None, ta, tb, autojunk=False).get_matching_blocks())
+    return len(ta) - m, len(tb) - m, m
+
+
+TAIL_SLACK = 1                # 句尾允许差几个词（最后一个词听错很常见）
+END_PUNCT_RE = re.compile(r"""[.?!"'”’)]$""")
+
+
+def covers_tail(doc, unit_text):
+    """答案页这一句是不是**说到了录音这一句的结尾**（用来分辨「换行截半句」和「本来就没标点」）。
+
+    第一来源那道 `sentence_truncated:no_end_punct` 闸拦的是答案 PDF 换行把长句砍半
+    （"…call us on the helpline and we will"，后面还有 "get back to you"）。
+    数字卷的答案页是**通篇没有句末标点**的手打转写，拿同一条闸去卡就整批误杀 ——
+    所以改成直接查尾巴：答案页这句最后对上的词已经在录音这句的末尾，就是完整句。
+    """
+    ta, tb = V.norm(doc).split(), V.norm(unit_text).split()
+    if not ta or not tb:
+        return False
+    sm = difflib.SequenceMatcher(None, ta, tb, autojunk=False)
+    last = max((b + size - 1 for _a, b, size in sm.get_matching_blocks() if size), default=-1)
+    return last >= len(tb) - 1 - TAIL_SLACK
+
+
+def fix_orthography(s):
+    """只补书写形态：首字母大写 + 句末补句号。一个词都不改。"""
+    s = (s or "").strip()
+    if not s:
+        return s
+    if s[0].islower():
+        s = s[0].upper() + s[1:]
+    return s if END_PUNCT_RE.search(s) else s + "."
+
+
+def repeat_from_audio(sents, units):
+    """复述句以**录音里那一句**定稿，答案页只当锚（证明是这一句、在这个位置）。
+
+    为什么不是「文档优先」：跟读题的刺激物就是那段音频，考生听到什么就该复述什么，
+    判分是拿考生的 STT 逐词比这句话 —— 句子与音频不一致，说对的人反而被扣分。
+    而数字卷的答案页是商家手打的转写，实测 3.18 七句里错三句：
+    tire 打成 tier（两处）、pen 打成 pin、"reattach the wheel tightly back on" 漏成
+    "reattach the wheel back to"，而且整批全小写无句末标点。
+
+    fail-closed 的部分在「锚」上：逐句按**单调游标**在录音里找相似度最高的一句，
+    低于 REPEAT_DOC_SIM_MIN 就认作没找到 → 这句不换、按老规矩被下游的闸扣下。
+    也就是说 ASR 只能改**已经被文档证明存在的那一句**的字面，不能凭空加一句。
+
+    返回 ({n: 定稿句子}, {n: 与答案页有出入的那些的 sim})。
+    """
+    ns = sorted(sents)
+    out, diffs, cur = {}, {}, 0
+    for n in ns:
+        best = None
+        for j in range(cur, len(units)):
+            s = V.sim(units[j]["text"], sents[n])
+            if best is None or s > best[0]:
+                best = (s, j)
+        if not best or best[0] < REPEAT_PICK_SIM_MIN:
+            continue
+        text = (units[best[1]]["text"] or "").strip()
+        da, db, m = token_diff(sents[n], text)
+        if max(da, db) > repeat_diff_budget(min(da + m, db + m)):
+            # 差太多 = 两边有一边听/打错了。答案页这句说到了录音这句的结尾就算完整句，
+            # 只补大小写与句号照旧上线（内容仍是文档的）；没说到结尾就是真截断，不动，等下游扣下。
+            if covers_tail(sents[n], text):
+                cur = best[1] + 1
+                fixed = fix_orthography(sents[n])
+                if fixed != sents[n]:
+                    out[n] = fixed
+            continue
+        cur = best[1] + 1
+        text = fix_orthography(text)
+        if not text or text == sents[n]:
+            continue
+        out[n] = text
+        if da or db:
+            diffs[n] = "差%d词 sim=%.3f" % (max(da, db), best[0])
+    return out, diffs
+
+
+def process_speaking(setkey, args, totals):
+    """数字卷的口语合流 —— 与听力那半段互不相干（两条录音、两套缓存），所以单独一条路。
+
+    为什么不并进 process_set：听力那半段最贵的是逐句基频判角色（每段对话都要解一遍 PCM），
+    而听力早就合完了；口语只需要「口语录音转写一遍 + 复述句对齐」，重跑听力纯属白烧几分钟。
+
+    ground truth 与第一来源完全一致，所以直接复用 `merge_first_source_asr.build_speaking`：
+      · 复述句 = 答案 PDF 的编号句（**文档来源**，不是 ASR），逐句与口语录音做词级对齐核对；
+      · 面试题干只在音频里、没有任何文档来源 → 按既定口径整组扣下（不拿 ASR 顶）。
+    """
+    scan_path = os.path.join(OUT_DIR, "%s.json" % setkey)
+    st_path = os.path.join(OUT_DIR, "%s.structured.json" % setkey)
+    for p in (scan_path, st_path):
+        if not os.path.exists(p):
+            print("  跳过 %s：缺 %s" % (setkey, os.path.basename(p)))
+            return None
+    setdir = source_dir(setkey)
+    if not setdir:
+        print("  跳过 %s：找不到源目录" % setkey)
+        return None
+    with open(scan_path, encoding="utf-8") as fh:
+        scan = json.load(fh)
+    with open(st_path, encoding="utf-8") as fh:
+        current = json.load(fh)
+    merger = (current.get("merged_asr") or {}).get("merger") or ""
+    if merger and merger != MERGER_ID:
+        print("  跳过 %s：已被 %s 合流过，不是这条管线的卷" % (setkey, merger))
+        return None
+    if F.load_pdf_text(setdir):
+        print("  跳过 %s：这卷有「听力原文」PDF，该走 merge_first_source_asr.py" % setkey)
+        return None
+    recs = speaking_recordings(setdir)
+    if len(recs) > 1:
+        joined = join_parts(setkey, recs, role="speaking")
+        if joined:
+            recs = [joined]
+    if len(recs) != 1:
+        print("  跳过 %s：口语录音 %d 条（%s）—— 只认一整条" % (
+            setkey, len(recs), ", ".join(os.path.basename(r) for r in recs) or "无"))
+        return None
+    audio = recs[0]
+
+    # 复述句的来源是 structure_set 的原始产物：优先 fs_parsed 快照（幂等），
+    # 快照里还没有口语（听力先合的那批）时退回现产物 —— 合流只加字段不改 sentence，重跑仍幂等。
+    fs_path = os.path.join(OUT_DIR, "%s.structured.fs_parsed.json" % setkey)
+    parsed = current
+    if os.path.exists(fs_path):
+        with open(fs_path, encoding="utf-8") as fh:
+            snap = json.load(fh)
+        if any(r.get("section") == "speaking" for r in snap.get("results", [])):
+            parsed = snap
+    if not any(r.get("section") == "speaking" for r in parsed.get("results", [])):
+        print("  跳过 %s：structured 里没有口语产物（先跑 structure_set --sections speaking）" % setkey)
+        return None
+
+    rec, cached = transcribe_recording(setkey, audio, role="speaking")   # 本机 faster-whisper，零 API 费用
+    stats = F.new_stats()
+    asr = {"speaking": {"segments": rec["segments"]}}
+
+    # 复述句定稿：答案页续行拼回 → 逐词一致时取回录音里的书写形态。两步都做完再交给
+    # build_speaking（所以那边的 answer_sents 传 None，否则它会拿小写原文把形态又换回去）。
+    sents, _ctx = F.collect_repeat(parsed)
+    for n, full in (F.answer_pdf_repeat(setdir) or {}).items():
+        cur = sents.get(n)
+        if cur and full and full != cur and V.norm(full).startswith(V.norm(cur)):
+            sents[n] = full
+            stats["repeat_unwrapped"] += 1
+        elif not cur and full:
+            sents[n] = full
+            stats["repeat_from_answer_pdf"] += 1
+    fixed, diffs = repeat_from_audio(sents, sentences(merge_glue(rec["words"])))
+    stats["repeat_retyped_from_audio"] = len(fixed)
+    stats["repeat_doc_disagreed"] = len(diffs)
+    sents.update(fixed)
+    patched = dict(parsed)
+    patched["results"] = [
+        r if not (r.get("section") == "speaking" and r.get("type") == "repeat")
+        else {**r, "items": [{**it, "sentence": sents.get(int(it.get("n") or it.get("q_number") or 0),
+                                                          it.get("sentence"))}
+                             for it in (r.get("items") or [])]}
+        for r in parsed.get("results", [])]
+    speaking = F.build_speaking(scan, patched, asr, stats, None)
+    rep = next((r for r in speaking if r["type"] == "repeat"), None)
+    for it in (rep or {}).get("items", []):        # 与答案页有出入的留痕（定稿取的是录音那一句）
+        if it["n"] in diffs:
+            it["problems"] = list(it["problems"]) + ["repeat_text_from_audio:答案页有出入（%s）" % diffs[it["n"]]]
+    ok_n = sum(1 for it in (rep or {}).get("items", []) if it.get("usable"))
+    line = ("  %s：口语录音 %s（%s）· 复述 %d 句可落库 %d · 面试 %d 组按口径扣下"
+            % (setkey, os.path.basename(audio), "缓存" if cached else "新转写",
+               len((rep or {}).get("items", [])), ok_n, stats.get("interview_held", 0)))
+    bad = [it for it in (rep or {}).get("items", []) if not it.get("usable")]
+    if args.dry_run:
+        print(line + "（--dry-run，未写盘）")
+        for it in bad:
+            print("     Q%d 扣下：%s" % (it["n"], ",".join(it["problems"])))
+        totals.append((setkey, stats, speaking))
+        return stats
+
+    write_role_caches(setkey, rec, "speaking", rec["words"], rec["segments"])
+    if os.path.exists(fs_path) and parsed is current:
+        # 听力先合的那批：快照里缺口语，把**合流前**的口语原始产物补进去（下次重跑就从快照出发）
+        with open(fs_path, encoding="utf-8") as fh:
+            snap = json.load(fh)
+        snap["results"] = [r for r in snap.get("results", []) if r.get("section") != "speaking"] + \
+                          [r for r in current.get("results", []) if r.get("section") == "speaking"]
+        with open(fs_path, "w", encoding="utf-8") as fh:
+            json.dump(snap, fh, ensure_ascii=False, indent=1)
+    results = [r for r in current.get("results", []) if r.get("section") != "speaking"] + speaking
+    tally = {}
+    for r in results:
+        tally[r.get("status")] = tally.get(r.get("status"), 0) + 1
+    merged = dict(current.get("merged_asr") or {})
+    merged["merger"] = MERGER_ID
+    merged["speaking"] = {"recording": os.path.basename(audio), "asr_model": rec["model"],
+                          "repeat_sentences": len((rep or {}).get("items", [])), "repeat_ok": ok_n,
+                          "interview_held": stats.get("interview_held", 0)}
+    out = {**current, "tally": tally, "results": results, "merged_asr": merged}
+    shutil.copyfile(st_path, os.path.join(OUT_DIR, "%s.structured.prev.json" % setkey))
+    with open(st_path, "w", encoding="utf-8") as fh:
+        json.dump(out, fh, ensure_ascii=False, indent=1)
+    print(line + " → 已写回")
+    for it in bad:
+        print("     Q%d 扣下：%s" % (it["n"], ",".join(it["problems"])))
+    totals.append((setkey, stats, speaking))
+    return stats
+
+
 # ══ 自检（__tests__/realbank-recording-merge.test.js 调这个） ════════════
 def _w(text, t0, step=0.3):
     out = []
@@ -1435,6 +1689,38 @@ def self_test():
     check("卷名在后的录音卷不可当（防互相记别名）", not may_keep("5.10新托福真题", True, "4.20新托福真题"))
     check("自己不算", not may_keep("3.16新托福真题", False, "3.16新托福真题"))
 
+    # ── 口语复述定稿 ────────────────────────────────────────────────────
+    U = lambda *ts: [{"text": t} for t in ts]        # noqa: E731（自检内的小构造器）
+    # ① 商家答案页错字（tier/tire）：差 1 个词在预算内 → 以录音那一句定稿，并留痕
+    got, diffs = repeat_from_audio({1: "next, deflate the tier completely"},
+                                   U("Next, deflate the tire completely."))
+    check("错字按录音定稿", got.get(1) == "Next, deflate the tire completely." and 1 in diffs, (got, diffs))
+    # ② 两边逐词一致：只补大小写与句号，内容一个字不动
+    got, diffs = repeat_from_audio({1: "first, select the right tool"},
+                                   U("First, select the right tool."))
+    check("一致时只补形态", got.get(1) == "First, select the right tool." and not diffs, (got, diffs))
+    # ③ 录音听错但答案页说到了这句的结尾 → 内容留答案页的，只补形态
+    got, diffs = repeat_from_audio({1: "be sure to reserve a court in advance to play tennis"},
+                                   U("Be sure to record in advance to play tennis."))
+    check("录音听错时留答案页", got.get(1) == "Be sure to reserve a court in advance to play tennis."
+          and not diffs, (got, diffs))
+    # ④ 答案页换行截半句（后面还有 4 个词）→ 不动，交给下游的 no_end_punct 扣下
+    got, _ = repeat_from_audio({1: "call us on the helpline and we will"},
+                               U("Call us on the helpline and we will get back to you."))
+    check("真截断不补句号", 1 not in got, got)
+    # ⑤ 找不到对应的那一句（旁白 / 别的题）→ 不动
+    got, _ = repeat_from_audio({1: "the library closes at nine on weekdays"},
+                               U("Listen to the manager and repeat what the manager says."))
+    check("对不上就不换", 1 not in got, got)
+    # ⑥ 单调游标：第二句只在第一句之后找，不许回头
+    got, _ = repeat_from_audio({1: "open the door", 2: "open the door"},
+                               U("Open the door.", "Open the door."))
+    check("游标单调", got.get(1) == "Open the door." and got.get(2) == "Open the door.", got)
+    check("尾巴判据", covers_tail("a b c d", "a b c d e f") is False        # 后面还有两个词 = 截断
+          and covers_tail("a b c d", "a b c d e") is True               # 只差一个词 = 听错最后一个词
+          and covers_tail("a b c d", "a b c x") is True)
+    check("形态补全", fix_orthography("first, go") == "First, go." and fix_orthography("Go!") == "Go!")
+
     if fails:
         print("SELF-TEST FAILED:")
         for f in fails:
@@ -1453,6 +1739,8 @@ def main():
     ap.add_argument("--dump-islands", action="store_true", help="打印切岛结果（排查用）")
     ap.add_argument("--plan-structure", action="store_true",
                     help="只转写 + 查重，列出值得送结构化的题块 key（写 asr-recording/<卷>/structure-plan.json）")
+    ap.add_argument("--speaking", action="store_true",
+                    help="只合口语（整段口语录音 + 答案页复述句），不碰听力")
     args = ap.parse_args()
     if args.self_test:
         return self_test()
@@ -1463,6 +1751,19 @@ def main():
         print("■ 数字卷整块录音：结构化计划（只转写 + 查重，不调 API）")
         for s in args.set:
             plan_structure(s)
+        return 0
+    if args.speaking:
+        print("■ 数字卷整段口语录音合流%s" % ("（--dry-run）" if args.dry_run else ""))
+        totals = []
+        for s in args.set:
+            process_speaking(s, args, totals)
+        if totals:
+            sents = sum(len(next((r for r in rs if r["type"] == "repeat"), {}).get("items", []))
+                        for _, _, rs in totals)
+            ok = sum(1 for _, _, rs in totals for r in rs if r["type"] == "repeat"
+                     for it in r.get("items", []) if it.get("usable"))
+            print("\n合计：%d 套 · 复述 %d 句可落库 %d · 面试 %d 组按口径扣下 · DeepSeek 调用 0 次 · TTS 0 次"
+                  % (len(totals), sents, ok, sum(x.get("interview_held", 0) for _, x, _ in totals)))
         return 0
     print("■ 数字卷整块录音听力合流%s" % ("（--dry-run）" if args.dry_run else ""))
     totals = []
