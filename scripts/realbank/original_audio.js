@@ -69,9 +69,20 @@ function normTokens(text) {
 }
 
 /**
+ * 口语两个题型的「一套 → 逐条」结构：kind → [数组字段, 口播文本字段]。
+ * 听力一条题一段音频，口语是**一套里每句 / 每题各一段**（复述 7 句、面试 4 问各自一条 mp3），
+ * 所以原声清单按**子条目 id** 记（real_repeat_rf0610_1_s3 / real_interview_rf0610_1_q2）。
+ */
+const SPEAKING_SUBITEMS = Object.freeze({
+  repeat: Object.freeze(["sentences", "sentence"]),
+  interview: Object.freeze(["questions", "question"]),
+});
+
+/**
  * 题库条目里**会被念出来**的那段纯文本（用于对齐 / 覆盖率）。
  * 注意与 build_bank.mjs 的 `spokenText()` 不是一回事：那个是**指纹**（lc 还把
  * speakers[].gender 拼进去，因为音色由性别决定），这个是**口播内容**（lc 只要台词）。
+ * 口语传进来的是**子条目**（一句复述 / 一道面试题），见 SPEAKING_SUBITEMS。
  */
 function spokenPlainText(kind, item) {
   if (!item) return "";
@@ -79,6 +90,8 @@ function spokenPlainText(kind, item) {
   if (kind === "la") return String(item.announcement || "");
   if (kind === "lat") return String(item.transcript || "");
   if (kind === "lc") return (item.conversation || []).map((t) => t.text).join(" ");
+  const sub = SPEAKING_SUBITEMS[kind];
+  if (sub) return String(item[sub[1]] || "");     // 传进来的是子条目（一句复述 / 一道面试题）
   return "";
 }
 
@@ -609,16 +622,22 @@ function applyOriginalAudio(bundle, manifest, spokenTextFn) {
   const entries = (manifest && manifest.entries) || {};
   const out = { mounted: 0, mismatched: [], missing: [] };
   const seen = new Set();
+  const mount = (kind, unit) => {
+    const e = entries[unit.id];
+    if (!e || !e.url) return;
+    seen.add(unit.id);
+    if (sha1(spokenTextFn(kind, unit)) !== e.text_sha1) { out.mismatched.push(unit.id); return; }
+    unit.audio_url = e.url;
+    unit.audio_source = "original";
+    delete unit.audio_pending;
+    out.mounted += 1;
+  };
   for (const [kind, items] of Object.entries(bundle || {})) {
+    const sub = SPEAKING_SUBITEMS[kind];
     for (const it of items || []) {
-      const e = entries[it.id];
-      if (!e || !e.url) continue;
-      seen.add(it.id);
-      if (sha1(spokenTextFn(kind, it)) !== e.text_sha1) { out.mismatched.push(it.id); continue; }
-      it.audio_url = e.url;
-      it.audio_source = "original";
-      delete it.audio_pending;
-      out.mounted += 1;
+      // 口语按子条目挂（一套复述 7 句各一条原声）；听力一条题一段，直接挂条目本身
+      if (sub) for (const unit of it[sub[0]] || []) mount(kind, unit);
+      else mount(kind, it);
     }
   }
   for (const id of Object.keys(entries)) if (!seen.has(id)) out.missing.push(id);
@@ -627,6 +646,7 @@ function applyOriginalAudio(bundle, manifest, spokenTextFn) {
 
 module.exports = {
   DEFAULTS,
+  SPEAKING_SUBITEMS,
   NARRATION_MAX_WORDS,
   NARRATION_DEFAULTS,
   cleanNarration,

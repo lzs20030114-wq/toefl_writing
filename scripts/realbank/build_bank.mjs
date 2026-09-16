@@ -1449,6 +1449,9 @@ function buildListeningSpeaking(files, stats) {
  * 判据只看「会被念出来的那段文本」：选项、参考答案、难度标签改了不该重配音。
  */
 function spokenText(kind, it) {
+  // 口语传进来的是**子条目**（一句复述 / 一道面试题）：原声按子条目切、清单按子条目 id 记
+  if (kind === "repeat") return String(it.sentence || "");
+  if (kind === "interview") return String(it.question || "");
   if (kind === "lcr") return String(it.speaker || "");
   if (kind === "la") return String(it.announcement || "");
   if (kind === "lat") return String(it.transcript || "");
@@ -2328,18 +2331,20 @@ function mountOriginalAudio() {
     console.warn(`⚠ 原声清单读不了，跳过回挂：${e.message}`);
     return;
   }
-  const kinds = ["lcr", "lc", "la", "lat"];
+  // 口语也回挂：复述 / 面试的原声是**逐句、逐题**切的，清单按子条目 id 记（见 original_audio.SPEAKING_SUBITEMS）
+  const kinds = ["lcr", "lc", "la", "lat", "repeat", "interview"];
+  const dirOf = (k) => (k === "repeat" || k === "interview" ? SPEAKING_DIR : LISTENING_DIR);
   const files = {};
   const bundle = {};
   for (const k of kinds) {
-    const q = path.join(LISTENING_DIR, `${k}.json`);
+    const q = path.join(dirOf(k), `${k}.json`);
     if (!fs.existsSync(q)) continue;
     files[k] = JSON.parse(fs.readFileSync(q, "utf8"));
     bundle[k] = files[k].items || [];
   }
   const res = applyOriginalAudio(bundle, manifest, spokenText);
   for (const [k, doc] of Object.entries(files)) {
-    fs.writeFileSync(path.join(LISTENING_DIR, `${k}.json`), JSON.stringify(doc, null, 2), "utf8");
+    fs.writeFileSync(path.join(dirOf(k), `${k}.json`), JSON.stringify(doc, null, 2), "utf8");
   }
   console.log(`\n■ 听力原声回挂：${res.mounted} 条挂上真人原声`
     + `（清单 ${Object.keys(manifest.entries || {}).length} 条）`);

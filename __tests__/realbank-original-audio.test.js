@@ -541,3 +541,68 @@ describe("applyOriginalAudio ⑤ 回挂", () => {
     expect(res.missing).toEqual(["gone_id"]);
   });
 });
+
+/**
+ * 口语原声（2026-09-16 立项）：复述 / 面试的原声是**逐句、逐题**切的，
+ * 清单按子条目 id 记（real_repeat_x_1_s3 / real_interview_x_1_q2），回挂也要挂到子条目上 ——
+ * 挂到「一套」上等于整套 7 句共用一条音频，前端会一句话播七遍。
+ */
+describe("applyOriginalAudio ⑥ 口语按子条目回挂", () => {
+  const spokenText = (kind, it) => OA.spokenPlainText(kind, it);
+
+  test("口播文本取子条目的句子 / 题面", () => {
+    expect(OA.spokenPlainText("repeat", { sentence: "Bring your card." })).toBe("Bring your card.");
+    expect(OA.spokenPlainText("interview", { question: "Do you agree?" })).toBe("Do you agree?");
+    expect(OA.SPEAKING_SUBITEMS.repeat).toEqual(["sentences", "sentence"]);
+    expect(OA.SPEAKING_SUBITEMS.interview).toEqual(["questions", "question"]);
+  });
+
+  test("逐句挂：sha1 对上的挂原声，改过文本的那句留在 TTS", () => {
+    const set = {
+      id: "real_repeat_x_1",
+      sentences: [
+        { id: "real_repeat_x_1_s1", sentence: "Use keywords when you look for books.", audio_url: "https://cdn/real/repeat/s1.mp3" },
+        { id: "real_repeat_x_1_s2", sentence: "Rewritten.", audio_url: "https://cdn/real/repeat/s2.mp3" },
+      ],
+    };
+    const manifest = { entries: {
+      real_repeat_x_1_s1: { url: "https://cdn/real_orig/repeat/s1.mp3?v=1", text_sha1: OA.sha1("Use keywords when you look for books.") },
+      real_repeat_x_1_s2: { url: "https://cdn/real_orig/repeat/s2.mp3?v=1", text_sha1: OA.sha1("Original.") },
+    } };
+    const res = OA.applyOriginalAudio({ repeat: [set] }, manifest, spokenText);
+    expect(res.mounted).toBe(1);
+    expect(res.mismatched).toEqual(["real_repeat_x_1_s2"]);
+    expect(set.sentences[0].audio_url).toBe("https://cdn/real_orig/repeat/s1.mp3?v=1");
+    expect(set.sentences[0].audio_source).toBe("original");
+    expect(set.sentences[1].audio_url).toBe("https://cdn/real/repeat/s2.mp3");   // 保持 TTS
+    expect(set.audio_source).toBeUndefined();                                     // 不挂在「一套」上
+  });
+
+  test("面试逐题挂", () => {
+    const set = { id: "real_interview_x_1", questions: [{ id: "real_interview_x_1_q2", question: "Why is that?" }] };
+    const manifest = { entries: { real_interview_x_1_q2: { url: "u", text_sha1: OA.sha1("Why is that?") } } };
+    expect(OA.applyOriginalAudio({ interview: [set] }, manifest, spokenText).mounted).toBe(1);
+    expect(set.questions[0].audio_source).toBe("original");
+  });
+});
+
+describe("口语原声的两处接线（源码级，改名/删掉会红）", () => {
+  const fs = require("fs");
+  const path = require("path");
+  const read = (p) => fs.readFileSync(path.join(__dirname, "..", "scripts", "realbank", p), "utf8");
+
+  test("bind_original_audio：口语进计划，面试整体加偏移（与复述共用一条整段录音，顺序单调定位）", () => {
+    const src = read("bind_original_audio.mjs");
+    expect(src).toContain('const SPEAKING_TYPES = ["repeat", "interview"]');
+    expect(src).toContain('qStart: (type === "interview" ? 1000 : 0) + order');
+    // 定位分组按「卷#角色」而不是「卷#module」：听力两个 module 与口语整段各自一组
+    expect(src).toContain("const k = `${e.set}#${e.role}`");
+  });
+
+  test("build_bank：原声回挂把口语两个题型也带上，指纹取子条目文本", () => {
+    const src = read("build_bank.mjs");
+    expect(src).toContain('const kinds = ["lcr", "lc", "la", "lat", "repeat", "interview"]');
+    expect(src).toContain('if (kind === "repeat") return String(it.sentence || "")');
+    expect(src).toContain('if (kind === "interview") return String(it.question || "")');
+  });
+});

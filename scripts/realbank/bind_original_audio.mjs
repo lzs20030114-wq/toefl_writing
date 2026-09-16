@@ -48,6 +48,10 @@ const MANIFEST = path.join(LISTENING_DIR, "original-audio.json");
 const TTS_NARRATION_LEDGER = path.join(LISTENING_DIR, "tts-narration.json");
 const SRC_ROOT = process.env.REALBANK_SRC_ROOT || "D:\\桌面\\【2026改后全科真题】（持续更新中）";
 const TYPES = ["lcr", "lc", "la", "lat"];
+// 口语两个题型：一套里每句复述 / 每道面试题各是一段音频（见 original_audio.SPEAKING_SUBITEMS），
+// 所以计划、清单、切片一律按**子条目 id** 走。
+const SPEAKING_TYPES = ["repeat", "interview"];
+const SPEAKING_DIR = path.join(ROOT, "data", "realBank", "speaking");
 const STORAGE_PREFIX = "real_orig";
 const CONCURRENCY = Number(process.env.REALBANK_ORIG_CONCURRENCY || 4);
 
@@ -104,6 +108,8 @@ function setSlug(s) {
 
 /** build_bank.mjs 的口播**指纹**（清单 text_sha1 用它，回挂时逐字比对）。 */
 function spokenFingerprint(kind, it) {
+  if (kind === "repeat") return String(it.sentence || "");
+  if (kind === "interview") return String(it.question || "");
   if (kind === "lcr") return String(it.speaker || "");
   if (kind === "la") return String(it.announcement || "");
   if (kind === "lat") return String(it.transcript || "");
@@ -195,13 +201,13 @@ function buildIndex() {
   return { idx, setJson };
 }
 
-/** 第一来源：卷名 + module → 整块 mp3 的绝对路径（文件名取自 asr 缓存的 file 字段）。 */
+/** 第一来源：卷名 + 角色（listening_m1 / listening_m2 / speaking）→ 整块 mp3 的绝对路径（文件名取自 asr 缓存）。 */
 const firstAudioCache = new Map();
-function firstSourceAudio(setname, module) {
-  const key = `${setname}#${module}`;
+function firstSourceAudio(setname, role) {
+  const key = `${setname}#${role}`;
   if (firstAudioCache.has(key)) return firstAudioCache.get(key);
   let res = { err: "asr缓存缺失" };
-  const p = path.join(OUT_DIR, "asr", setname, `listening_m${module}.json`);
+  const p = path.join(OUT_DIR, "asr", setname, `${role}.json`);
   if (fs.existsSync(p)) {
     const cache = JSON.parse(fs.readFileSync(p, "utf8"));
     const base = cache.file;
@@ -225,6 +231,87 @@ function firstSourceAudio(setname, module) {
   }
   firstAudioCache.set(key, res);
   return res;
+}
+
+/**
+ * 口语的音源索引：卷名 → { 逐条音频路径（按口播文本归一化后当键）, 整段录音的角色 }。
+ *
+ * 两类源：
+ *   · rf/rp（第二来源）：商家把复述每句、面试每题都切好了（`audio/item_level/speaking_listen_repeat_q01.mp3`），
+ *     structured 的 items[].audio_path 记着。**按文本认而不是按下标认** —— 落库时
+ *     `usable=false` 的句子会被丢掉，下标早就对不上了。
+ *   · 第一来源：只有整块 `SpeakingModule1.mp3`，与听力整块 module 同一套定位办法（词级时间戳 + 顺序单调）。
+ */
+function buildSpeakingIndex() {
+  const out = new Map();
+  for (const f of fs.readdirSync(OUT_DIR).filter((x) => x.endsWith(".structured.json"))) {
+    const setname = f.replace(/\.structured\.json$/, "");
+    let st;
+    try { st = JSON.parse(fs.readFileSync(path.join(OUT_DIR, f), "utf8")); } catch { continue; }
+    const byText = new Map();
+    for (const r of st.results || []) {
+      if (r.section !== "speaking" || !Array.isArray(r.items)) continue;
+      for (const it of r.items) {
+        const text = String(it.sentence_final || it.sentence || it.stem_final || it.stem || "");
+        const key = OA.normTokens(text).join(" ");
+        if (key && it.audio_path && !byText.has(key)) byText.set(key, it.audio_path);
+      }
+    }
+    let sd = st.source_dir || null;
+    if (!sd) { try { sd = JSON.parse(fs.readFileSync(path.join(OUT_DIR, `${setname}.json`), "utf8")).source_dir || null; } catch { /* 没有就没有 */ } }
+    out.set(setname, { byText, sourceDir: sd });
+  }
+  return out;
+}
+
+/** 口语：一套复述 / 一套面试里的**每句、每题**各进一条计划（id 用子条目 id）。 */
+function buildSpeakingPlan(plan, skipped) {
+  const index = buildSpeakingIndex();
+  for (const type of SPEAKING_TYPES) {
+    const p = path.join(SPEAKING_DIR, `${type}.json`);
+    if (!fs.existsSync(p)) continue;
+    const [arrField] = OA.SPEAKING_SUBITEMS[type];
+    for (const set of JSON.parse(fs.readFileSync(p, "utf8")).items || []) {
+      const setname = String(set.source || "").trim();
+      if (SET && !(SET.has(setname) || SET.has(setSlug(setname)))) continue;
+      const hit = index.get(setname) || { byText: new Map(), sourceDir: null };
+      let order = 0;
+      for (const unit of set[arrField] || []) {
+        order += 1;
+        const id = unit.id;
+        const selected = (!ONLY || ONLY.has(type)) && (!IDS || IDS.has(id));
+        const text = OA.spokenPlainText(type, unit);
+        const tokens = OA.normTokens(text);
+        if (!tokens.length) { skipped[id] = { type, set: setname, reason: "empty_spoken_text" }; continue; }
+        const rel = hit.byText.get(tokens.join(" "));
+        let audioFile = null;
+        let source = "first";
+        let srcDirName = setname;
+        let role = "speaking";
+        if (rel && hit.sourceDir) {          // 商家逐条切好的
+          const fp = path.join(hit.sourceDir, rel);
+          if (!fs.existsSync(fp)) { skipped[id] = { type, set: setname, reason: "source_missing:file" }; continue; }
+          audioFile = fp;
+          source = /^rp/.test(setname) ? "rp" : "rf";
+          srcDirName = path.basename(hit.sourceDir.replace(/[\/]+$/, ""));
+        } else {                              // 整段录音
+          const res = firstSourceAudio(setname, "speaking");
+          if (res.err) { skipped[id] = { type, set: setname, reason: `source_missing:${res.err}` }; continue; }
+          audioFile = res.file;
+        }
+        plan.push({
+          id, type, set: setname, source, audioFile, srcDirName, selected,
+          // 复述与面试**共用同一条整段录音**（第一来源的 SpeakingModule）：定位是顺序单调的，
+          // 两边都从 1 编号会让光标在录音里来回跳（面试题在后半段，跳过去之后剩下的复述句就再也找不到）。
+          // 真考顺序是复述在前、面试在后，所以面试整体加 1000 的偏移。
+          module: 1, role, qStart: (type === "interview" ? 1000 : 0) + order, span: null,
+          words: tokens.length, targetTokens: tokens,
+          textSha1: OA.sha1(spokenFingerprint(type, unit)),
+          narrationRaw: null,                 // 口语没有旁白（与 lcr 同）
+        });
+      }
+    }
+  }
 }
 
 function buildPlan() {
@@ -259,7 +346,7 @@ function buildPlan() {
         audioFile = fp;
         srcDirName = path.basename(sd.replace(/[\\/]+$/, ""));
       } else {
-        const res = firstSourceAudio(setname, r.module);
+        const res = firstSourceAudio(setname, `listening_m${r.module}`);
         if (res.err) { skipped[it.id] = { type, set: setname, reason: `source_missing:${res.err}` }; continue; }
         audioFile = res.file;
       }
@@ -269,7 +356,7 @@ function buildPlan() {
       if (!tokens.length) { skipped[it.id] = { type, set: setname, reason: "empty_spoken_text" }; continue; }
       plan.push({
         id: it.id, type, set: setname, source, audioFile, srcDirName, selected,
-        module: r.module, qStart: r.q_start,
+        module: r.module, role: `listening_m${r.module}`, qStart: r.q_start,
         span: Array.isArray(r.audio_span_sec) ? r.audio_span_sec : null,
         words: tokens.length,
         targetTokens: tokens,
@@ -278,8 +365,9 @@ function buildPlan() {
       });
     }
   }
+  buildSpeakingPlan(plan, skipped);
   plan.sort((a, b) => (a.set === b.set
-    ? (a.module - b.module) || (a.qStart - b.qStart)
+    ? String(a.role).localeCompare(String(b.role)) || (a.qStart - b.qStart)
     : a.set.localeCompare(b.set)));
   if (LIMIT !== Infinity) {
     let n = 0;
@@ -292,7 +380,7 @@ function buildPlan() {
 
 function wordsCachePath(entry) {
   if (entry.source === "first") {
-    return path.join(WORDS_DIR, entry.set, `listening_m${entry.module}.json`);
+    return path.join(WORDS_DIR, entry.set, `${entry.role}.json`);
   }
   // 与 .codex-tmp/realbank/asr-vendor/ 同布局：<源目录名>/<文件名去扩展>.json。
   // 不能用 audioFile 的父目录 —— 逐题 mp3 一律躺在 <源目录>/audio/item_level/ 下，
@@ -328,11 +416,11 @@ async function runAsrWords(jobs) {
 async function ensureWords(plan) {
   // 第一来源是整块 module：只要这个 module 里有一条要评估，整块就得转写（同组互为切点边界）。
   const liveModules = new Set(plan.filter((e) => e.selected && e.source === "first")
-    .map((e) => `${e.set}#${e.module}`));
+    .map((e) => `${e.set}#${e.role}`));
   const jobs = new Map();
   for (const e of plan) {
     e.wordsPath = wordsCachePath(e);
-    const needed = e.source === "first" ? liveModules.has(`${e.set}#${e.module}`) : e.selected;
+    const needed = e.source === "first" ? liveModules.has(`${e.set}#${e.role}`) : e.selected;
     if (needed && !jobs.has(e.wordsPath)) jobs.set(e.wordsPath, { audio: e.audioFile, out: e.wordsPath });
   }
   const list = [...jobs.values()];
@@ -657,7 +745,7 @@ async function main() {
     || fs.existsSync(narrationCachePath(t).replace(/\.mp3$/, ".raw.mp3")));
   let narrFellBack = 0;
   for (const e of plan) {
-    if (e.type === "lcr") { e.narrationText = null; continue; }
+    if (e.type === "lcr" || SPEAKING_TYPES.includes(e.type)) { e.narrationText = null; continue; }
     if (!e.narrationRaw) e.narrationRaw = recoverNarrationRaw(e);
     e.narrationText = OA.narrationTextFor(e.type, e.narrationRaw);
     if (CACHED_NARRATION_ONLY && e.narrationText && !narrationCached(e.narrationText)) {
@@ -729,7 +817,7 @@ function locateAll(plan, durations) {
   const groups = new Map();
   for (const e of plan) {
     if (e.source !== "first") continue;
-    const k = `${e.set}#${e.module}`;
+    const k = `${e.set}#${e.role}`;
     if (!groups.has(k)) groups.set(k, []);
     groups.get(k).push(e);
   }
@@ -982,9 +1070,13 @@ async function report(plan, skipped, results, asrStat, narrStat, t0) {
   log(`\n■ 清单 → ${path.relative(ROOT, MANIFEST)}（${up} 条原声 / ${Object.keys(manifest.skipped).length} 条保持 TTS）`);
 
   const bundle = {};
-  for (const t of TYPES) {
-    const p = path.join(LISTENING_DIR, `${t}.json`);
-    if (fs.existsSync(p)) bundle[t] = JSON.parse(fs.readFileSync(p, "utf8"));
+  const bundleDir = {};
+  for (const t of [...TYPES, ...SPEAKING_TYPES]) {
+    const dir = SPEAKING_TYPES.includes(t) ? SPEAKING_DIR : LISTENING_DIR;
+    const p = path.join(dir, `${t}.json`);
+    if (!fs.existsSync(p)) continue;
+    bundle[t] = JSON.parse(fs.readFileSync(p, "utf8"));
+    bundleDir[t] = dir;
   }
   const mounted = OA.applyOriginalAudio(
     Object.fromEntries(Object.entries(bundle).map(([k, v]) => [k, v.items || []])),
@@ -992,7 +1084,7 @@ async function report(plan, skipped, results, asrStat, narrStat, t0) {
   for (const [t, b] of Object.entries(bundle)) {
     // 落盘格式必须与 build_bank.mjs 逐字节一致（JSON.stringify(…, null, 2)，无尾换行），
     // 否则「重建前后文件相同」这条验收会因为一个换行符假红。
-    fs.writeFileSync(path.join(LISTENING_DIR, `${t}.json`), JSON.stringify(b, null, 2), "utf8");
+    fs.writeFileSync(path.join(bundleDir[t], `${t}.json`), JSON.stringify(b, null, 2), "utf8");
   }
   log(`■ 回挂：${mounted.mounted} 条挂上原声；${mounted.mismatched.length} 条口播文本对不上（保持 TTS）`);
 
