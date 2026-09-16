@@ -384,6 +384,13 @@ def tag_islands(words):
             rec["tag"] = "odd"
         raw.append(rec)
 
+    # 录音开录晚了，第一句从半截开始（4.24 的 "button at the top of the screen." 是
+    # "Select the volume button…" 掉了前半截）—— 它不含 volume 二字，INTRO_RE 认不出来，
+    # 就被当成一句 LCR，M1 于是数出 13 句、整个 module 对不上蓝图、32 道题全丢。
+    # 判据只认「**整条录音的第一个岛**且从小写开头」：真题的刺激句都是完整句子，不会从半句起头。
+    if raw and raw[0]["tag"] in ("lcr", "odd") and raw[0]["words"]             and re.match(r"^[a-z]", raw[0]["words"][0]["w"]):
+        raw[0]["tag"] = "noise"
+
     out = []
     for rec in raw:
         prev = out[-1] if out else None
@@ -400,6 +407,21 @@ def tag_islands(words):
                 and rec["start"] - prev["end"] < MAT_JOIN_GAP
                 and prev["words"] and is_sentence_end(prev["words"][-1]["w"])
                 and rec["words"] and re.match(r"^[A-Z]", rec["words"][0]["w"]) and not rec["words"][0].get("frag")):
+            prev.setdefault("joins", []).append(round(rec["start"] - prev["end"], 1))
+            prev.update(body=prev["body"] + rec["sents"], end=rec["end"], words=prev["words"] + rec["words"],
+                        n=prev["n"] + rec["n"])
+            continue
+        # 材料在**句子中间**被暂停切开：前一截没有句末标点收尾、后一截小写开头
+        # （4.24 "…a lightning ‖ bolt." / 4.18 "…damage during ‖ transit."）。材料不可能从半句开始，
+        # 两截本来就是一段。只在**两截都够材料长度**（都被标成 mat）时并 —— 录音断流是每隔 8~11s
+        # 掉一截，碎出来的是 odd / lcr 那种短片（3.15 / 4.11 / 5.11 实测 19 处句中切口没有一处是
+        # mat→mat），而整段只被暂停切一次，留下的是两个长半截。断流卷照旧对不上蓝图被扣下。
+        if (prev and prev["tag"] == "mat" and rec["tag"] == "mat" and not rec["cue_type"]
+                and rec["start"] - prev["end"] < MAT_JOIN_GAP
+                and prev["words"] and not is_sentence_end(prev["words"][-1]["w"])
+                and not prev["words"][-1].get("frag")
+                and rec["words"] and re.match(r"^[a-z]", rec["words"][0]["w"])
+                and not rec["words"][0].get("frag")):
             prev.setdefault("joins", []).append(round(rec["start"] - prev["end"], 1))
             prev.update(body=prev["body"] + rec["sents"], end=rec["end"], words=prev["words"] + rec["words"],
                         n=prev["n"] + rec["n"])
@@ -1940,6 +1962,23 @@ def self_test():
           and covers_tail("a b c d", "a b c d e") is True               # 只差一个词 = 听错最后一个词
           and covers_tail("a b c d", "a b c x") is True)
     check("形态补全", fix_orthography("first, go") == "First, go." and fix_orthography("Go!") == "Go!")
+
+    # ── 录音开录晚了：第一个岛从半句开始 → 丢掉，别当成一句 LCR（4.24 的 M1 靠这条才对上蓝图）
+    head = _w("button at the top of the screen.", 0) + _w("What time will you arrive on campus?", 20)
+    tags = [x["tag"] for x in tag_islands(head)]
+    check("开头半句当噪声", tags == ["noise", "lcr"], tags)
+    tags = [x["tag"] for x in tag_islands(_w("What time will you arrive?", 0) + _w("Who forgot the lights?", 20))]
+    check("完整句照旧当 LCR", tags == ["lcr", "lcr"], tags)
+    # ── 材料被暂停从句中切开（两截都够材料长度）→ 并；断流碎出来的短片不并
+    body = " ".join(["the storm can start from a single tree a key or a lightning"] * 4)
+    cont = " ".join(["bolt. A typical set could have nine six sided dice and the magic keeps it fresh"] * 4)
+    a = _w("Listen to a talk in a science class. " + body, 0)
+    b = _w(cont, a[-1]["end"] + 5.0)                       # 停 5s（< MAT_JOIN_GAP）
+    isls = tag_islands(a + b)
+    check("句中切开的材料并回来", len(isls) == 1 and isls[0].get("joins"), [x["tag"] for x in isls])
+    # 断流碎出来的短片（够不上材料长度）不并 —— 合起来就是一段缺句的讲座
+    c = _w("its budget messaging and product development on the urban segment", a[-1]["end"] + 5.0)
+    check("短碎片不并", len(tag_islands(a + c)) == 2, [x["tag"] for x in tag_islands(a + c)])
 
     # ── 开场提示后面粘着第一句 LCR（3.2A）────────────────────────────────
     pw = _w("Select the volume icon at the top of the screen.", 0) + _w("Did you find the lecture interesting?", 15.6)

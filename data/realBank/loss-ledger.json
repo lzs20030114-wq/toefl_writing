@@ -20,12 +20,12 @@
   },
   "summary": {
     "need": 8280,
-    "got": 6810,
-    "missing": 1529,
+    "got": 6833,
+    "missing": 1506,
     "overfilled": 59,
-    "completeness": 0.8225,
+    "completeness": 0.8252,
     "causes": {
-      "source_defect": 602,
+      "source_defect": 579,
       "held": 101,
       "deduped": 24,
       "bank_dropped": 197,
@@ -167,10 +167,10 @@
     "lcr": {
       "type": "lcr",
       "need": 1039,
-      "got": 803,
-      "missing": 236,
+      "got": 814,
+      "missing": 225,
       "causes": {
-        "source_defect": 111,
+        "source_defect": 100,
         "held": 23,
         "deduped": 0,
         "bank_dropped": 25,
@@ -178,15 +178,15 @@
         "section_lost": 0,
         "pipeline_loss": 65
       },
-      "completeness": 0.7729
+      "completeness": 0.7834
     },
     "lc": {
       "type": "lc",
       "need": 686,
-      "got": 432,
-      "missing": 254,
+      "got": 436,
+      "missing": 250,
       "causes": {
-        "source_defect": 69,
+        "source_defect": 65,
         "held": 16,
         "deduped": 0,
         "bank_dropped": 22,
@@ -194,15 +194,15 @@
         "section_lost": 0,
         "pipeline_loss": 136
       },
-      "completeness": 0.6297
+      "completeness": 0.6356
     },
     "la": {
       "type": "la",
       "need": 414,
-      "got": 260,
-      "missing": 154,
+      "got": 264,
+      "missing": 150,
       "causes": {
-        "source_defect": 42,
+        "source_defect": 38,
         "held": 2,
         "deduped": 0,
         "bank_dropped": 20,
@@ -210,15 +210,15 @@
         "section_lost": 0,
         "pipeline_loss": 84
       },
-      "completeness": 0.628
+      "completeness": 0.6377
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 769,
-      "missing": 331,
+      "got": 773,
+      "missing": 327,
       "causes": {
-        "source_defect": 121,
+        "source_defect": 117,
         "held": 20,
         "deduped": 0,
         "bank_dropped": 38,
@@ -226,7 +226,7 @@
         "section_lost": 0,
         "pipeline_loss": 136
       },
-      "completeness": 0.6991
+      "completeness": 0.7027
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,10 +297,10 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 2268,
-      "missing": 975,
+      "got": 2291,
+      "missing": 952,
       "causes": {
-        "source_defect": 343,
+        "source_defect": 320,
         "held": 61,
         "deduped": 0,
         "bank_dropped": 105,
@@ -308,7 +308,7 @@
         "section_lost": 0,
         "pipeline_loss": 421
       },
-      "completeness": 0.6994
+      "completeness": 0.7064
     }
   },
   "tasks": [
@@ -11272,6 +11272,213 @@
       "set": "4.24新托福真题",
       "slug": "424",
       "date": "2026-04-24",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "lcr_1",
+      "type": "lcr",
+      "band": [
+        1,
+        12
+      ],
+      "need": 12,
+      "got": 11,
+      "missing": 1,
+      "status": "near",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 1
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "lc_15",
+      "type": "lc",
+      "band": [
+        15,
+        16
+      ],
+      "need": 2,
+      "got": 0,
+      "missing": 2,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 2
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "la_23",
+      "type": "la",
+      "band": [
+        23,
+        24
+      ],
+      "need": 2,
+      "got": 0,
+      "missing": 2,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 2
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "1",
+      "form": "A",
+      "slotKey": "lat_25",
+      "type": "lat",
+      "band": [
+        25,
+        28
+      ],
+      "need": 4,
+      "got": 0,
+      "missing": 4,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 4
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "2",
+      "form": "A",
+      "slotKey": "lcr_1",
+      "type": "lcr",
+      "band": [
+        1,
+        3
+      ],
+      "need": 3,
+      "got": 0,
+      "missing": 3,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 3
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "2",
+      "form": "A",
+      "slotKey": "lc_4",
+      "type": "lc",
+      "band": [
+        4,
+        5
+      ],
+      "need": 2,
+      "got": 0,
+      "missing": 2,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 2
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "2",
+      "form": "A",
+      "slotKey": "lc_6",
+      "type": "lc",
+      "band": [
+        6,
+        7
+      ],
+      "need": 2,
+      "got": 0,
+      "missing": 2,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 2
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "2",
+      "form": "A",
+      "slotKey": "lat_8",
+      "type": "lat",
+      "band": [
+        8,
+        11
+      ],
+      "need": 4,
+      "got": 0,
+      "missing": 4,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 4
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
+      "section": "listening",
+      "module": "2",
+      "form": "A",
+      "slotKey": "lat_12",
+      "type": "lat",
+      "band": [
+        12,
+        15
+      ],
+      "need": 4,
+      "got": 0,
+      "missing": 4,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 4
+      },
+      "notes": []
+    },
+    {
+      "set": "4.24新托福真题",
+      "slug": "424",
+      "date": "2026-04-24",
       "section": "speaking",
       "module": "1",
       "form": "A",
@@ -11315,328 +11522,6 @@
       "drop_codes": {
         "wSkippedThin": 1,
         "wDroppedDupBs": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        12
-      ],
-      "need": 12,
-      "got": 0,
-      "missing": 12,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 12
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_13",
-      "type": "lc",
-      "band": [
-        13,
-        14
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_15",
-      "type": "lc",
-      "band": [
-        15,
-        16
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lc_17",
-      "type": "lc",
-      "band": [
-        17,
-        18
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_19",
-      "type": "la",
-      "band": [
-        19,
-        20
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_21",
-      "type": "la",
-      "band": [
-        21,
-        22
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "la_23",
-      "type": "la",
-      "band": [
-        23,
-        24
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_25",
-      "type": "lat",
-      "band": [
-        25,
-        28
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "1",
-      "form": "A",
-      "slotKey": "lat_29",
-      "type": "lat",
-      "band": [
-        29,
-        32
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lcr_1",
-      "type": "lcr",
-      "band": [
-        1,
-        3
-      ],
-      "need": 3,
-      "got": 0,
-      "missing": 3,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 3
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_4",
-      "type": "lc",
-      "band": [
-        4,
-        5
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lc_6",
-      "type": "lc",
-      "band": [
-        6,
-        7
-      ],
-      "need": 2,
-      "got": 0,
-      "missing": 2,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 2
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_8",
-      "type": "lat",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
-      },
-      "notes": []
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "listening",
-      "module": "2",
-      "form": "A",
-      "slotKey": "lat_12",
-      "type": "lat",
-      "band": [
-        12,
-        15
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
       },
       "notes": []
     },
