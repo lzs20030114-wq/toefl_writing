@@ -1221,6 +1221,13 @@ function buildListeningSpeaking(files, stats) {
   const seenL = new Map();
   const seenS = new Map();
   const itemAliasEdges = [];
+  // 过不了原声闸的整套口语：{sk → [{id, setname}]}。后面同内容的卷登记为保留方时把它们补记成别名（见 keepSpeaking 调用处）
+  const gatedOutS = new Map();
+  /** 同内容的卷刚登记为保留方：把之前过不了原声闸的那几卷补记成指向它的别名（它们那一卷的槽位也就回来了）。 */
+  const adoptGatedOut = (sk, keptRef, type) => {
+    for (const g of gatedOutS.get(sk) || []) itemAliasEdges.push(dupEdge(g.id, keptRef, type, g.setname));
+    gatedOutS.delete(sk);
+  };
 
   for (const f of files.sort()) {
     const setname = f.replace(/\.structured\.json$/, "");
@@ -1412,12 +1419,18 @@ function buildListeningSpeaking(files, stats) {
             continue;
           }
         }
-        seenS.set(sk, `${setname}/${id}`);
-        // 原声闸放在**去重之后**：放前面的话，整套被闸空的重复卷连别名都记不上，
-        // 那一卷的槽位反而更空（保留方明明有内容）。2026-09-16 实测 8 套这么丢的。
+        // 原声闸在**去重之后、登记保留方之前**，两头都栽过：
+        //  · 放在去重之前 → 整套被闸空的重复卷连别名都记不上，那一卷的槽位反而更空（2026-09-16 实测 8 套）；
+        //  · 放在登记之后 → 过不了闸的卷照样占着保留方位置，后面内容相同、自带干净原声的卷被当重复跳过，
+        //    两边都没了（3.27 只切出 3 句干净原声 → 挡掉了 rf0808 整套 7 句，2026-09-17 发现）。
         if (!keepSpeaking("repeat", set, "sentences", sentences, recordingMerged,
                           { stats, set: setname, slug, id, section: "speaking" },
-                          (x) => SPV.validateRepeatSet(x, REAL_EXAM))) continue;
+                          (x) => SPV.validateRepeatSet(x, REAL_EXAM))) {
+          gatedOutS.set(sk, [...(gatedOutS.get(sk) || []), { id, setname }]);
+          continue;
+        }
+        seenS.set(sk, `${setname}/${id}`);
+        adoptGatedOut(sk, `${setname}/${id}`, "repeat");
         spk.repeat.push(set);
       } else if (r.type === "interview") {
         const id = `real_interview_${slug}_1`;
@@ -1461,10 +1474,14 @@ function buildListeningSpeaking(files, stats) {
             continue;
           }
         }
-        seenS.set(sk, `${setname}/${id}`);
         if (!keepSpeaking("interview", set, "questions", questions, recordingMerged,
                           { stats, set: setname, slug, id, section: "speaking" },
-                          (x) => SPV.validateInterviewSet(x, REAL_EXAM))) continue;
+                          (x) => SPV.validateInterviewSet(x, REAL_EXAM))) {
+          gatedOutS.set(sk, [...(gatedOutS.get(sk) || []), { id, setname }]);
+          continue;
+        }
+        seenS.set(sk, `${setname}/${id}`);
+        adoptGatedOut(sk, `${setname}/${id}`, "interview");
         spk.interview.push(set);
       }
     }

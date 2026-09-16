@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 6833,
-    "missing": 1506,
+    "got": 6847,
+    "missing": 1492,
     "overfilled": 59,
-    "completeness": 0.8252,
+    "completeness": 0.8269,
     "causes": {
-      "source_defect": 579,
+      "source_defect": 572,
       "held": 101,
       "deduped": 24,
       "bank_dropped": 197,
-      "section_never_run": 78,
+      "section_never_run": 67,
       "section_lost": 0,
-      "pipeline_loss": 527
+      "pipeline_loss": 531
     },
-    "actionable": 527
+    "actionable": 531
   },
   "byType": {
     "ctw": {
@@ -87,18 +87,18 @@
     "repeat": {
       "type": "repeat",
       "need": 483,
-      "got": 359,
-      "missing": 177,
+      "got": 373,
+      "missing": 163,
       "causes": {
-        "source_defect": 98,
+        "source_defect": 91,
         "held": 0,
         "deduped": 0,
         "bank_dropped": 7,
-        "section_never_run": 21,
+        "section_never_run": 14,
         "section_lost": 0,
         "pipeline_loss": 51
       },
-      "completeness": 0.7433
+      "completeness": 0.7723
     },
     "interview": {
       "type": "interview",
@@ -110,9 +110,9 @@
         "held": 4,
         "deduped": 0,
         "bank_dropped": 0,
-        "section_never_run": 12,
+        "section_never_run": 8,
         "section_lost": 0,
-        "pipeline_loss": 24
+        "pipeline_loss": 28
       },
       "completeness": 0.721
     },
@@ -265,18 +265,18 @@
     "speaking": {
       "section": "speaking",
       "need": 759,
-      "got": 558,
-      "missing": 254,
+      "got": 572,
+      "missing": 240,
       "causes": {
-        "source_defect": 135,
+        "source_defect": 128,
         "held": 4,
         "deduped": 0,
         "bank_dropped": 7,
-        "section_never_run": 33,
+        "section_never_run": 22,
         "section_lost": 0,
-        "pipeline_loss": 75
+        "pipeline_loss": 79
       },
-      "completeness": 0.7352
+      "completeness": 0.7536
     },
     "writing": {
       "section": "writing",
@@ -1177,6 +1177,20 @@
       "set": "rf0708",
       "slug": "rf0708",
       "date": "2026-07-08",
+      "section": "speaking",
+      "missing": 4,
+      "cause": "pipeline_loss",
+      "types": {
+        "interview": 4
+      },
+      "slots": [
+        "M1/interview_8(-4)"
+      ]
+    },
+    {
+      "set": "rf0808",
+      "slug": "rf0808",
+      "date": "2026-08-08",
       "section": "speaking",
       "missing": 4,
       "cause": "pipeline_loss",
@@ -8757,29 +8771,6 @@
       "section": "speaking",
       "module": "1",
       "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "3.27新托福真题",
-      "slug": "327",
-      "date": "2026-03-27",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
       "slotKey": "interview_8",
       "type": "interview",
       "band": [
@@ -8789,7 +8780,7 @@
       "need": 4,
       "got": 0,
       "missing": 4,
-      "status": "absent",
+      "status": "empty",
       "cause": "source_defect",
       "charged": {
         "source_defect": 4
@@ -14404,6 +14395,31 @@
       "set": "rf0808",
       "slug": "rf0808",
       "date": "2026-08-08",
+      "section": "speaking",
+      "module": "1",
+      "form": "A",
+      "slotKey": "interview_8",
+      "type": "interview",
+      "band": [
+        8,
+        11
+      ],
+      "need": 4,
+      "got": 0,
+      "missing": 4,
+      "status": "empty",
+      "cause": "pipeline_loss",
+      "charged": {
+        "pipeline_loss": 4
+      },
+      "notes": [
+        "vendor_reformatted"
+      ]
+    },
+    {
+      "set": "rf0808",
+      "slug": "rf0808",
+      "date": "2026-08-08",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -14448,56 +14464,6 @@
       "cause": "held",
       "charged": {
         "held": 1
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0808",
-      "slug": "rf0808",
-      "date": "2026-08-08",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 7
-      },
-      "notes": [
-        "vendor_reformatted"
-      ]
-    },
-    {
-      "set": "rf0808",
-      "slug": "rf0808",
-      "date": "2026-08-08",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
       },
       "notes": [
         "vendor_reformatted"

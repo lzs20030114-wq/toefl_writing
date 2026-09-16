@@ -89,10 +89,17 @@ describe("build_bank 与整块录音合流的配套约定", () => {
     for (const kind of ["repeat", "interview"]) {
       const at = src.indexOf(`keepSpeaking("${kind}"`);
       expect([kind, at > 0]).toEqual([kind, true]);
-      // 闸必须在**去重记别名之后**：放前面会把整套被闸空的重复卷的别名也丢掉，
-      // 那一卷的槽位反而更空（2026-09-16 实测 8 套这么丢的）
-      const dedup = src.indexOf(`seenS.set(sk, \`${"${setname}"}/${"${id}"}\`);`, src.indexOf(`real_${kind}_`));
-      expect([kind, dedup > 0 && dedup < at]).toEqual([kind, true]);
+      const branch = src.slice(src.lastIndexOf(`real_${kind}_`, at), at + 900);
+      const gateAt = branch.indexOf(`keepSpeaking("${kind}"`);
+      // ① 查重复在原声闸之前：重复卷只记别名，不需要自己的音频 —— 闸放前面会把它们的别名一起丢
+      //   （2026-09-16 实测 8 套）
+      expect([kind, branch.indexOf("if (seenS.has(sk))") >= 0 && branch.indexOf("if (seenS.has(sk))") < gateAt]).toEqual([kind, true]);
+      // ② 登记保留方在原声闸之后：过不了闸的卷不许占着保留方位置 —— 否则后面内容相同、自带干净原声的卷
+      //   被当重复跳过，两边都没了（3.27 只切出 3 句 → 挡掉 rf0808 整套 7 句，2026-09-17）
+      const regAt = branch.indexOf("seenS.set(sk,");
+      expect([kind, regAt > gateAt]).toEqual([kind, true]);
+      // ③ 过不了闸的卷记下来，等同内容的保留方登记时补成别名（它那一卷的槽位也能回来）
+      expect([kind, branch.indexOf("gatedOutS.set(sk,") > gateAt && branch.indexOf("adoptGatedOut(sk,") > regAt]).toEqual([kind, true]);
     }
     const { DROP_CODES } = require("../scripts/realbank/drop_ledger.js");
     expect(DROP_CODES.sDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "speaking" });

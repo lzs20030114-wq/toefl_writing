@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 44,
+  "count": 45,
   "items": [
     {
       "id": "real_repeat_121a_1",
@@ -3130,6 +3130,108 @@
       "tier": "recalled",
       "source": "rf0716",
       "date": "2026-07-16",
+      "source_flags": [
+        {
+          "code": "vendor_reformatted",
+          "severity": "warn",
+          "detail": "第二来源「重排版」文字 docx。商家把原卷重新排版并用 AI 补写了答案页，源文件夹自带「排版实验中有问题反馈」字样 —— 题面可信度高于截图版（文字原生、无 OCR 噪声），但答案不是 ETS 官方答案。"
+        }
+      ]
+    },
+    {
+      "id": "real_repeat_rf0808_1",
+      "scenario": "You are volunteering at the local community center near campus. A chef is training you how to teach children the steps for baking cookies. Listen to the chef and repeat what the chef says. Repeat only once.",
+      "speaker_role": "staff",
+      "sentences": [
+        {
+          "id": "real_repeat_rf0808_1_s1",
+          "sentence": "Begin by mixing the butter and sugar.",
+          "difficulty": "easy",
+          "word_count": 7,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 8,
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/repeat/real_repeat_rf0808_1_s1.mp3?v=mu3nkcgx",
+          "from_asr": false,
+          "audio_source": "original"
+        },
+        {
+          "id": "real_repeat_rf0808_1_s2",
+          "sentence": "Spread the dough so the cookies bake evenly.",
+          "difficulty": "medium",
+          "word_count": 8,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 8,
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/repeat/real_repeat_rf0808_1_s2.mp3?v=mu3nkcxk",
+          "from_asr": false,
+          "audio_source": "original"
+        },
+        {
+          "id": "real_repeat_rf0808_1_s3",
+          "sentence": "Preheat the oven to the appropriate temperature.",
+          "difficulty": "easy",
+          "word_count": 7,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 8,
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/repeat/real_repeat_rf0808_1_s3.mp3?v=mu3nkdec",
+          "from_asr": false,
+          "audio_source": "original"
+        },
+        {
+          "id": "real_repeat_rf0808_1_s4",
+          "sentence": "Evenly space the cookie shapes onto the baking sheet.",
+          "difficulty": "medium",
+          "word_count": 9,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 8,
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/repeat/real_repeat_rf0808_1_s4.mp3?v=mu3nkdnb",
+          "from_asr": false,
+          "audio_source": "original"
+        },
+        {
+          "id": "real_repeat_rf0808_1_s5",
+          "sentence": "Insert the tray and bake until the cookie edges are golden.",
+          "difficulty": "medium",
+          "word_count": 11,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 10,
+          "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/repeat/real_repeat_rf0808_1_s5.mp3?v=mu3nkdy0",
+          "from_asr": false,
+          "audio_source": "original"
+        },
+        {
+          "id": "real_repeat_rf0808_1_s6",
+          "sentence": "After the baking time is complete, cool the cookies on the rack for five minutes.",
+          "difficulty": "hard",
+          "word_count": 15,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 14,
+          "audio_url": null,
+          "audio_pending": true,
+          "from_asr": false
+        },
+        {
+          "id": "real_repeat_rf0808_1_s7",
+          "sentence": "Pour yourself a glass of milk and enjoy warm cookies fresh out of the oven.",
+          "difficulty": "hard",
+          "word_count": 15,
+          "structure": "",
+          "phonetic_focus": "",
+          "timing_seconds": 14,
+          "audio_url": null,
+          "audio_pending": true,
+          "from_asr": false
+        }
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "rf0808",
+      "date": "2026-08-08",
       "source_flags": [
         {
           "code": "vendor_reformatted",
