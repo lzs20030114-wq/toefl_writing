@@ -678,13 +678,18 @@ PART_RE = re.compile(r"(?i)part\s*(\d+)")
 JOINED_DIR = os.path.join(OUT_DIR, "src-joined")
 
 
+# 口语这半段还认 .mp4：商家有八套卷的口语是录屏（2.8 / 3.6 / 3.11 …），ffmpeg 一样能读，
+# 切片与词级时间戳都不受影响。听力那半段不动 —— 那批已经跑完，不在这一轮里重算。
+SPEAKING_EXT = AUDIO_EXT + (".mp4", ".m4v", ".mov")
+
+
 def speaking_recordings(setdir):
     """口语整段录音（复述 7 句 + 面试 4 问在同一条里，与听力那条完全分开）。"""
     hits = []
     for dirpath, _dirs, files in os.walk(setdir):
         for fn in files:
             low = fn.lower()
-            if not low.endswith(AUDIO_EXT) or fn.startswith("~$"):
+            if not low.endswith(SPEAKING_EXT) or fn.startswith("~$"):
                 continue
             if "口语" in fn or "speak" in low:
                 hits.append(os.path.join(dirpath, fn))
@@ -1398,9 +1403,12 @@ INTERVIEW_CUE_RE = re.compile(r"(?i)take an interview|an interviewer will ask yo
 # ETS 的固定指令 + 场景屏（考生听到的是屏幕上那段的朗读，不是题干）
 IV_DIRECTIONS_RE = re.compile(
     r"(?i)^(take an interview|an interviewer will ask|i'?ll ask you question"
-    r"|answer the questions and be sure|the clock will indicate|no time for preparation"
+    r"|answer the questions and be sure|(the|a) (clock|block) will indicate"
+    r"|no (time|type) (for|of) preparation|as part of an? [a-z ]{0,20}(project|study|research)"
+    r"|a graduate student"
     r"|(you'?ll|you will) have a short|(the |a )?researcher (will ask|is studying)"
-    r"|you have (volunteered|signed up|agreed|been (invited|asked))"
+    r"|you have (volunteered|signed up|agreed|been (invited|asked))|you are participating"
+    r"|(no time for preparation |interview |preparation )?will be provided"
     r"|you received an email|you'?ve been (invited|asked)|volunteer for a research study)")
 # 面试官的应答词（「好的」「有意思」「谢谢」）—— 只在**没有问号且不超过 8 词**时剥
 IV_ACK_RE = re.compile(
@@ -1410,10 +1418,11 @@ IV_ACK_RE = re.compile(
 # 「谢谢你参加本研究 / 谢谢你今天来」这类整句寒暄可以长一些，单独一条（仍只剥没有问号的整句）
 IV_GREETING_RE = re.compile(
     r"(?i)^(thanks?|thank you)\b.*\b(participat|take part|joining|speaking with me|for (your )?time"
-    r"|agreeing|for coming|for a great talk|being here)")
+    r"|agreeing|for coming|for a great talk|being here|being involved|your involvement)")
 # 面试官的转场铺垫（同样只剥没有问号的整句）
 IV_FRAMING_RE = re.compile(
-    r"(?i)^(i'?d like to (ask|talk)|i would like to (ask|talk)|today,? i'?d like|let'?s (start|begin)"
+    r"(?i)^(i'?d like to (ask|talk|discuss|hear|know)|i would like to (ask|talk|discuss)"
+    r"|today,? i'?d like|let'?s (start|begin)"
     r"|next question|final question|and finally|one (more|last) question|moving on"
     r"|i'?m going to ask|we'?ll (start|begin) with)")
 IV_MIN_WORDS, IV_MAX_WORDS = 5, 60      # validator 的绝对区间；库里 174 道真题实测 6~51 词
@@ -1521,6 +1530,37 @@ def build_interview(rec, ctx, stats):
             "context": ctx, "items": items}, None
 
 
+def _build_repeat(scan, parsed, setdir, rec, asr, stats):
+    """复述那一半：答案页续行拼回 → 以录音那一句定稿 → build_speaking。→ (results, repeat 条目, 出入记录)。"""
+    sents, _ctx = F.collect_repeat(parsed)
+    for n, full in (F.answer_pdf_repeat(setdir) or {}).items():
+        cur = sents.get(n)
+        if cur and full and full != cur and V.norm(full).startswith(V.norm(cur)):
+            sents[n] = full
+            stats["repeat_unwrapped"] += 1
+        elif not cur and full:
+            sents[n] = full
+            stats["repeat_from_answer_pdf"] += 1
+    fixed, diffs = repeat_from_audio(sents, sentences(merge_glue(rec["words"])))
+    stats["repeat_retyped_from_audio"] = len(fixed)
+    stats["repeat_doc_disagreed"] = len(diffs)
+    sents.update(fixed)
+    patched = dict(parsed)
+    patched["results"] = [
+        r if not (r.get("section") == "speaking" and r.get("type") == "repeat")
+        else {**r, "items": [{**it, "sentence": sents.get(int(it.get("n") or it.get("q_number") or 0),
+                                                          it.get("sentence"))}
+                             for it in (r.get("items") or [])]}
+        for r in parsed.get("results", [])]
+    speaking = F.build_speaking(scan, patched, asr, stats, None)
+    rep = next((r for r in speaking if r["type"] == "repeat"), None)
+    for it in (rep or {}).get("items", []):        # 与答案页有出入的留痕（定稿取的是录音那一句）
+        if it["n"] in diffs:
+            it["problems"] = list(it["problems"]) + ["repeat_text_from_audio:答案页有出入（%s）" % diffs[it["n"]]]
+
+    return speaking, rep, diffs
+
+
 def process_speaking(setkey, args, totals):
     """数字卷的口语合流 —— 与听力那半段互不相干（两条录音、两套缓存），所以单独一条路。
 
@@ -1572,9 +1612,9 @@ def process_speaking(setkey, args, totals):
             snap = json.load(fh)
         if any(r.get("section") == "speaking" for r in snap.get("results", [])):
             parsed = snap
-    if not any(r.get("section") == "speaking" for r in parsed.get("results", [])):
-        print("  跳过 %s：structured 里没有口语产物（先跑 structure_set --sections speaking）" % setkey)
-        return None
+    # 答案页没有复述句的卷（section_no_stems / 整张答案页缺失）照样跑：复述做不了，
+    # 但面试题干本来就只在音频里，不靠答案页 —— 这些卷的 4 道面试题一样能收。
+    has_doc = any(r.get("section") == "speaking" for r in parsed.get("results", []))
 
     rec, cached = transcribe_recording(setkey, audio, role="speaking")   # 本机 faster-whisper，零 API 费用
     stats = F.new_stats()
@@ -1582,31 +1622,9 @@ def process_speaking(setkey, args, totals):
 
     # 复述句定稿：答案页续行拼回 → 逐词一致时取回录音里的书写形态。两步都做完再交给
     # build_speaking（所以那边的 answer_sents 传 None，否则它会拿小写原文把形态又换回去）。
-    sents, _ctx = F.collect_repeat(parsed)
-    for n, full in (F.answer_pdf_repeat(setdir) or {}).items():
-        cur = sents.get(n)
-        if cur and full and full != cur and V.norm(full).startswith(V.norm(cur)):
-            sents[n] = full
-            stats["repeat_unwrapped"] += 1
-        elif not cur and full:
-            sents[n] = full
-            stats["repeat_from_answer_pdf"] += 1
-    fixed, diffs = repeat_from_audio(sents, sentences(merge_glue(rec["words"])))
-    stats["repeat_retyped_from_audio"] = len(fixed)
-    stats["repeat_doc_disagreed"] = len(diffs)
-    sents.update(fixed)
-    patched = dict(parsed)
-    patched["results"] = [
-        r if not (r.get("section") == "speaking" and r.get("type") == "repeat")
-        else {**r, "items": [{**it, "sentence": sents.get(int(it.get("n") or it.get("q_number") or 0),
-                                                          it.get("sentence"))}
-                             for it in (r.get("items") or [])]}
-        for r in parsed.get("results", [])]
-    speaking = F.build_speaking(scan, patched, asr, stats, None)
-    rep = next((r for r in speaking if r["type"] == "repeat"), None)
-    for it in (rep or {}).get("items", []):        # 与答案页有出入的留痕（定稿取的是录音那一句）
-        if it["n"] in diffs:
-            it["problems"] = list(it["problems"]) + ["repeat_text_from_audio:答案页有出入（%s）" % diffs[it["n"]]]
+    speaking, rep, diffs = [], None, {}
+    if has_doc:
+        speaking, rep, diffs = _build_repeat(scan, parsed, setdir, rec, asr, stats)
 
     # 面试题：build_speaking 按第一来源口径整组扣下（没有文档来源），这条管线改收 ASR 题干 + 四道机械闸
     iv, iv_why = build_interview(rec, interview_intro(scan) or F.speaking_context(scan), stats)
@@ -1616,6 +1634,9 @@ def process_speaking(setkey, args, totals):
         for r in speaking:
             if r["type"] == "interview":
                 r["problems"] = [p for p in r["problems"] if not p.startswith("no_stem_in_doc")] + [iv_why]
+    if not speaking:
+        print("  跳过 %s：复述没有答案页、面试也没收下（%s）" % (setkey, iv_why or "-"))
+        return None
     ok_n = sum(1 for it in (rep or {}).get("items", []) if it.get("usable"))
     line = ("  %s：口语录音 %s（%s）· 复述 %d 句可落库 %d · 面试 %s"
             % (setkey, os.path.basename(audio), "缓存" if cached else "新转写",

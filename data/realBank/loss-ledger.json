@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 6669,
-    "missing": 1670,
+    "got": 6705,
+    "missing": 1634,
     "overfilled": 59,
-    "completeness": 0.8054,
+    "completeness": 0.8098,
     "causes": {
-      "source_defect": 674,
+      "source_defect": 658,
       "held": 101,
       "deduped": 24,
       "bank_dropped": 200,
-      "section_never_run": 186,
+      "section_never_run": 131,
       "section_lost": 0,
-      "pipeline_loss": 485
+      "pipeline_loss": 520
     },
-    "actionable": 485
+    "actionable": 520
   },
   "byType": {
     "ctw": {
@@ -94,27 +94,27 @@
         "held": 0,
         "deduped": 0,
         "bank_dropped": 7,
-        "section_never_run": 49,
+        "section_never_run": 14,
         "section_lost": 0,
-        "pipeline_loss": 18
+        "pipeline_loss": 53
       },
       "completeness": 0.764
     },
     "interview": {
       "type": "interview",
       "need": 276,
-      "got": 159,
-      "missing": 117,
+      "got": 195,
+      "missing": 81,
       "causes": {
-        "source_defect": 57,
+        "source_defect": 41,
         "held": 4,
         "deduped": 0,
         "bank_dropped": 0,
-        "section_never_run": 28,
+        "section_never_run": 8,
         "section_lost": 0,
         "pipeline_loss": 28
       },
-      "completeness": 0.5761
+      "completeness": 0.7065
     },
     "bs": {
       "type": "bs",
@@ -265,18 +265,18 @@
     "speaking": {
       "section": "speaking",
       "need": 759,
-      "got": 528,
-      "missing": 284,
+      "got": 564,
+      "missing": 248,
       "causes": {
-        "source_defect": 150,
+        "source_defect": 134,
         "held": 4,
         "deduped": 0,
         "bank_dropped": 7,
-        "section_never_run": 77,
+        "section_never_run": 22,
         "section_lost": 0,
-        "pipeline_loss": 46
+        "pipeline_loss": 81
       },
-      "completeness": 0.6957
+      "completeness": 0.7431
     },
     "writing": {
       "section": "writing",
@@ -870,6 +870,76 @@
         "M1/lat_25(-1)",
         "M2/lc_4(-2)",
         "M2/lat_12(-4)"
+      ]
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "date": "2026-05-10",
+      "section": "speaking",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "repeat": 7
+      },
+      "slots": [
+        "M1/repeat_1(-7)"
+      ]
+    },
+    {
+      "set": "5.11新托福真题",
+      "slug": "511",
+      "date": "2026-05-11",
+      "section": "speaking",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "repeat": 7
+      },
+      "slots": [
+        "M1/repeat_1(-7)"
+      ]
+    },
+    {
+      "set": "5.18新托福真题",
+      "slug": "518",
+      "date": "2026-05-18",
+      "section": "speaking",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "repeat": 7
+      },
+      "slots": [
+        "M1/repeat_1(-7)"
+      ]
+    },
+    {
+      "set": "5.29新托福真题",
+      "slug": "529",
+      "date": "2026-05-29",
+      "section": "speaking",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "repeat": 7
+      },
+      "slots": [
+        "M1/repeat_1(-7)"
+      ]
+    },
+    {
+      "set": "5.6新托福真题_v2",
+      "slug": "56v2",
+      "date": "2026-05-06",
+      "section": "speaking",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "repeat": 7
+      },
+      "slots": [
+        "M1/repeat_1(-7)"
       ]
     },
     {
@@ -6011,6 +6081,31 @@
       "set": "3.6新托福真题",
       "slug": "36",
       "date": "2026-03-06",
+      "section": "speaking",
+      "module": "1",
+      "form": "A",
+      "slotKey": "repeat_1",
+      "type": "repeat",
+      "band": [
+        1,
+        7
+      ],
+      "need": 7,
+      "got": 0,
+      "missing": 7,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 7
+      },
+      "notes": [
+        "duplicate_cluster"
+      ]
+    },
+    {
+      "set": "3.6新托福真题",
+      "slug": "36",
+      "date": "2026-03-06",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -6127,56 +6222,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 4
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.6新托福真题",
-      "slug": "36",
-      "date": "2026-03-06",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 7
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.6新托福真题",
-      "slug": "36",
-      "date": "2026-03-06",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
       },
       "notes": [
         "duplicate_cluster"
@@ -6982,6 +7027,31 @@
       "set": "3.11新托福真题",
       "slug": "311",
       "date": "2026-03-11",
+      "section": "speaking",
+      "module": "1",
+      "form": "A",
+      "slotKey": "repeat_1",
+      "type": "repeat",
+      "band": [
+        1,
+        7
+      ],
+      "need": 7,
+      "got": 0,
+      "missing": 7,
+      "status": "empty",
+      "cause": "source_defect",
+      "charged": {
+        "source_defect": 7
+      },
+      "notes": [
+        "duplicate_cluster"
+      ]
+    },
+    {
+      "set": "3.11新托福真题",
+      "slug": "311",
+      "date": "2026-03-11",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -7029,56 +7099,6 @@
       },
       "drop_codes": {
         "wRecallDropped": 1
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "date": "2026-03-11",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 7
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "date": "2026-03-11",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
       },
       "notes": [
         "duplicate_cluster"
@@ -10770,35 +10790,10 @@
       "need": 7,
       "got": 0,
       "missing": 7,
-      "status": "absent",
+      "status": "empty",
       "cause": "source_defect",
       "charged": {
         "source_defect": 7
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "date": "2026-04-08",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
       },
       "notes": [
         "duplicate_cluster"
@@ -13061,35 +13056,10 @@
       "need": 7,
       "got": 0,
       "missing": 7,
-      "status": "absent",
+      "status": "empty",
       "cause": "source_defect",
       "charged": {
         "source_defect": 7
-      },
-      "notes": [
-        "duplicate_cluster"
-      ]
-    },
-    {
-      "set": "5.6新托福真题",
-      "slug": "56",
-      "date": "2026-05-06",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "source_defect",
-      "charged": {
-        "source_defect": 4
       },
       "notes": [
         "duplicate_cluster"
@@ -13352,6 +13322,29 @@
       "set": "5.6新托福真题_v2",
       "slug": "56v2",
       "date": "2026-05-06",
+      "section": "speaking",
+      "module": "1",
+      "form": "A",
+      "slotKey": "repeat_1",
+      "type": "repeat",
+      "band": [
+        1,
+        7
+      ],
+      "need": 7,
+      "got": 0,
+      "missing": 7,
+      "status": "empty",
+      "cause": "pipeline_loss",
+      "charged": {
+        "pipeline_loss": 7
+      },
+      "notes": []
+    },
+    {
+      "set": "5.6新托福真题_v2",
+      "slug": "56v2",
+      "date": "2026-05-06",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -13368,52 +13361,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "5.6新托福真题_v2",
-      "slug": "56v2",
-      "date": "2026-05-06",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "5.6新托福真题_v2",
-      "slug": "56v2",
-      "date": "2026-05-06",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
       },
       "notes": []
     },
@@ -13694,6 +13641,29 @@
       "set": "5.10新托福真题_v2",
       "slug": "510v2",
       "date": "2026-05-10",
+      "section": "speaking",
+      "module": "1",
+      "form": "A",
+      "slotKey": "repeat_1",
+      "type": "repeat",
+      "band": [
+        1,
+        7
+      ],
+      "need": 7,
+      "got": 0,
+      "missing": 7,
+      "status": "empty",
+      "cause": "pipeline_loss",
+      "charged": {
+        "pipeline_loss": 7
+      },
+      "notes": []
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "date": "2026-05-10",
       "section": "writing",
       "module": "1",
       "form": "A",
@@ -13710,52 +13680,6 @@
       "cause": "pipeline_loss",
       "charged": {
         "pipeline_loss": 1
-      },
-      "notes": []
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "repeat_1",
-      "type": "repeat",
-      "band": [
-        1,
-        7
-      ],
-      "need": 7,
-      "got": 0,
-      "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "date": "2026-05-10",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
       },
       "notes": []
     },
@@ -13936,33 +13860,10 @@
       "need": 7,
       "got": 0,
       "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "date": "2026-05-11",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 7
       },
       "notes": []
     },
@@ -14051,33 +13952,10 @@
       "need": 7,
       "got": 0,
       "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "5.18新托福真题",
-      "slug": "518",
-      "date": "2026-05-18",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 7
       },
       "notes": []
     },
@@ -14399,33 +14277,10 @@
       "need": 7,
       "got": 0,
       "missing": 7,
-      "status": "absent",
-      "cause": "section_never_run",
+      "status": "empty",
+      "cause": "pipeline_loss",
       "charged": {
-        "section_never_run": 7
-      },
-      "notes": []
-    },
-    {
-      "set": "5.29新托福真题",
-      "slug": "529",
-      "date": "2026-05-29",
-      "section": "speaking",
-      "module": "1",
-      "form": "A",
-      "slotKey": "interview_8",
-      "type": "interview",
-      "band": [
-        8,
-        11
-      ],
-      "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "absent",
-      "cause": "section_never_run",
-      "charged": {
-        "section_never_run": 4
+        "pipeline_loss": 7
       },
       "notes": []
     },
