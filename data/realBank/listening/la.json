@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 63,
+  "count": 64,
   "items": [
     {
       "id": "real_la_121b_1_19",
@@ -1591,6 +1591,57 @@
           "answer": "A",
           "explanation": "",
           "source_q": 20
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_la_32a_1_23",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/la/real_la_32a_1_23.mp3?v=mu3psdx0",
+      "asr_similarity": 1,
+      "source_notes": [],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.2新托福真题A卷",
+      "date": "2026-03-02",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题B卷、4.11新托福真题、4.8新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "announcement",
+      "situation": "",
+      "speaker_role": "staff",
+      "announcement": "Hello, students. Please come to the annual student fair this Friday and Saturday. The event lasts from 10am until 7pm each day. There will be booths showcasing various cultures and international street cuisine, plus stage performances of traditional music from around the world. Please present your student ID for free entry. Tickets for non-students are available at the gate for $5. We hope you'll stay all day each day for a fun and educational experience. Contact the event organizers with any questions.",
+      "questions": [
+        {
+          "type": "inference",
+          "stem": "What can be inferred about the purpose of the student fair?",
+          "options": {
+            "A": "Its purpose is to promote awareness of diverse cultures.",
+            "B": "Its purpose is to give students a study break during exams.",
+            "C": "Its purpose is to provide exposure to local artists.",
+            "D": "Its purpose is to honor student excellence."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 23
+        },
+        {
+          "type": "detail",
+          "stem": "Why should students present their student IDs?",
+          "options": {
+            "A": "To receive a commemorative T-shirt",
+            "B": "To receive free entry",
+            "C": "To receive international street food",
+            "D": "To receive a guest pass for a friend"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 24
         }
       ],
       "audio_source": "original"

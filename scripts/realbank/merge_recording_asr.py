@@ -302,10 +302,61 @@ def split_unpunctuated_cue(ws):
     return None
 
 
+INTRO_TAIL_MIN_GAP = 1.5      # 开场提示与紧跟的第一句 LCR 之间至少这么久的停顿才算两段
+
+
+def split_intro_islands(islands):
+    """把「开场提示 + 第一句 LCR」粘在一起的岛切成两个（见 split_intro_tail）。"""
+    out = []
+    for ws in islands:
+        sents = sentences(ws)
+        text = join_words(ws)
+        intro = INTRO_RE.search(text) and len(ws) <= INTRO_MAX_WORDS and not parse_cue(sents)[0]
+        i = split_intro_tail(ws, sents) if intro else None
+        if i:
+            out.append(ws[:i])
+            out.append(ws[i:])
+        else:
+            out.append(ws)
+    return out
+
+
+def split_intro_tail(ws, sents):
+    """开场提示后面紧跟着第一句短应答、中间的停顿又不到 4s（粘成一个岛）→ 按句切开的下标。
+
+    实测 3.2A：音量提示 12.1s 说完，2.9s 后就是第 1 句 LCR「Did you find the lecture
+    interesting?」，切岛看不见这条缝，于是 M1 只数出 11 句 LCR、整个 module 对不上蓝图、
+    32 道题全丢。fail-closed 的部分：只在**前半截每一句都是开场提示、后半截短得像 LCR**
+    时切，切点取句边界（不猜词），切不出就照旧整岛当 intro。
+    """
+    if len(sents) < 2:
+        return None
+    k = 0
+    while k < len(sents) and INTRO_RE.search(sents[k]["text"]):
+        k += 1
+    if not k or k >= len(sents):
+        return None
+    tail = sents[k:]
+    if any(INTRO_RE.search(s["text"]) for s in tail):
+        return None
+    text = " ".join(s["text"] for s in tail).strip()
+    # 尾巴必须是**说完的一句**：开场提示常被 ASR 截半句（"You now have the…" / "Move the
+    # volume indicator to…"），那种残片切出来会多一句 LCR，反而把本来认得出来的 M1 顶坏
+    # （实测 3.30 / 4.15 / 4.27 / 5.23 四套都这么栽）。省略号结尾就是没说完。
+    if text.endswith("...") or text.endswith("…") or not re.search(r"[.?!]$", text):
+        return None
+    i = next(i for i, w in enumerate(ws) if w["start"] >= tail[0]["start"])
+    if not (NOISE_MAX_WORDS < len(ws) - i <= LCR_MAX_WORDS):
+        return None
+    if ws[i]["start"] - ws[i - 1]["end"] < INTRO_TAIL_MIN_GAP:
+        return None                        # 紧接着说下去的不是下一题，是同一段话
+    return i
+
+
 def tag_islands(words):
     """整条录音的词 → 岛 [{tag: intro|lcr|mat|odd, start, end, words, sents, cue_type, cue, body}]。"""
     raw = []
-    for ws in reattach_cues(split_islands(words)):
+    for ws in split_intro_islands(reattach_cues(split_islands(words))):
         sents = sentences(ws)
         text = join_words(ws)
         rec = {"start": ws[0]["start"], "end": ws[-1]["end"], "words": list(ws), "sents": sents,
@@ -1720,6 +1771,16 @@ def self_test():
           and covers_tail("a b c d", "a b c d e") is True               # 只差一个词 = 听错最后一个词
           and covers_tail("a b c d", "a b c x") is True)
     check("形态补全", fix_orthography("first, go") == "First, go." and fix_orthography("Go!") == "Go!")
+
+    # ── 开场提示后面粘着第一句 LCR（3.2A）────────────────────────────────
+    pw = _w("Select the volume icon at the top of the screen.", 0) + _w("Did you find the lecture interesting?", 15.6)
+    check("粘着的第一句 LCR 切得出来", split_intro_tail(pw, sentences(pw)) == 10, split_intro_tail(pw, sentences(pw)))
+    # 截半的开场提示残片不切（否则多一句 LCR，把本来认得出的 M1 顶坏 —— 3.30/4.15/4.27/5.23）
+    pw = _w("Select the volume icon at the top of the screen.", 0) + _w("You now have the...", 15.6)
+    check("截半的提示不切", split_intro_tail(pw, sentences(pw)) is None)
+    # 没停顿的接着说不切
+    pw = _w("Select the volume icon at the top of the screen.", 0) + _w("Did you find the lecture interesting?", 3.0)
+    check("没停顿不切", split_intro_tail(pw, sentences(pw)) is None)
 
     if fails:
         print("SELF-TEST FAILED:")
