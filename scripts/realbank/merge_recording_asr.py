@@ -1552,9 +1552,35 @@ def build_interview(rec, ctx, stats):
             "context": ctx, "items": items}, None
 
 
+def docx_speaking_answers(setkey):
+    """5 月第二来源（docx 卷）答案页里的复述句 —— 上游解析器认不出的那一路兜底。
+
+    那几套的「答案.docx」在「口语」表头下是**一段一句、不编号**的 7 句；ingest 的答案解析器只认
+    `1. xxx` 编号写法 → structured 里压根没有 repeat 段，整卷 7 句一条不落库。造句那科同病
+    （`extract_bs_pages.docx_writing_answers`）早就这么救过，这里复用同一支读法（同一条转换记录、
+    同一套表头判据，只是换个科目、换个句数）。
+
+    **不是新口径**：读出来的句子仍然只当**锚**（证明这一句存在、在这个位置），定稿照旧由录音那一句
+    决定（repeat_from_audio），对不上录音的照旧 fail-closed 扣下。恰好 7 句才采用。
+
+    延迟 import：extract_bs_pages 会连带拉起 Qwen3-VL 客户端（ocr_images），合流这条路用不上它。
+    """
+    try:
+        import extract_bs_pages as BS
+    except Exception as e:                            # 缺 python-docx / 缺依赖：当作没有这一路
+        print("  （docx 复述兜底不可用：%s）" % e)
+        return {}
+    try:
+        return BS.docx_speaking_answers(setkey) or {}
+    except Exception as e:
+        print("  （docx 复述兜底读失败：%s）" % e)
+        return {}
+
+
 def _build_repeat(scan, parsed, setdir, rec, asr, stats):
     """复述那一半：答案页续行拼回 → 以录音那一句定稿 → build_speaking。→ (results, repeat 条目, 出入记录)。"""
     sents, _ctx = F.collect_repeat(parsed)
+    from_docx = set()                                 # docx 兜底新认出来的那几句（structured 里连 repeat 段都没有）
     for n, full in (F.answer_pdf_repeat(setdir) or {}).items():
         cur = sents.get(n)
         if cur and full and full != cur and V.norm(full).startswith(V.norm(cur)):
@@ -1563,6 +1589,12 @@ def _build_repeat(scan, parsed, setdir, rec, asr, stats):
         elif not cur and full:
             sents[n] = full
             stats["repeat_from_answer_pdf"] += 1
+    if not sents:                                     # 答案 PDF 那一路也空 → 试 docx 卷的不编号写法
+        # setdir 的末级目录名就是 setkey（source_dir 的两条分支都是 join(<root>, setkey)）
+        for n, sent in docx_speaking_answers(os.path.basename(setdir)).items():
+            sents[n] = sent
+            from_docx.add(n)
+            stats["repeat_from_answer_docx"] = stats.get("repeat_from_answer_docx", 0) + 1
     fixed, diffs = repeat_from_audio(sents, sentences(merge_glue(rec["words"])))
     stats["repeat_retyped_from_audio"] = len(fixed)
     stats["repeat_doc_disagreed"] = len(diffs)
@@ -1574,7 +1606,10 @@ def _build_repeat(scan, parsed, setdir, rec, asr, stats):
                                                           it.get("sentence"))}
                              for it in (r.get("items") or [])]}
         for r in parsed.get("results", [])]
-    speaking = F.build_speaking(scan, patched, asr, stats, None)
+    # docx 兜底认出来的句子走 build_speaking 的 answer_sents 口子：上面那段 patch 只能改**已存在**的
+    # 条目，而这一路 structured 里连 repeat 段都没有。只交这一批 —— 答案 PDF 那一路的行为一个字不动。
+    extra = {n: sents[n] for n in sorted(from_docx) if n in sents}
+    speaking = F.build_speaking(scan, patched, asr, stats, extra or None)
     rep = next((r for r in speaking if r["type"] == "repeat"), None)
     for it in (rep or {}).get("items", []):        # 与答案页有出入的留痕（定稿取的是录音那一句）
         if it["n"] in diffs:

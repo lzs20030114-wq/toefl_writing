@@ -642,16 +642,22 @@ _SECTION_HEAD = re.compile(r"^\s*(阅读|听力|写作|口语|答案)\s*[:：]?\
 
 
 @functools.lru_cache(maxsize=None)
-def docx_writing_answers(setname: str) -> dict[int, str]:
-    """5 月第二来源（docx 卷）的造句答案句：答案页写作段是「一段一句、**不编号**」。
+def docx_section_answers(setname: str, section: str, expect: int) -> dict[int, str]:
+    """5 月第二来源（docx 卷）答案页某一科的句子：那份答案页是「一段一句、**不编号**」。
 
-    ingest 的答案解析器只认带题号的写法（`1. what type of work…`），这 6 套一条都认不出，structured 里
-    写作段为空 —— 识图拿到了题面也没有答案句可配，整卷 10 题全丢（丢题账本记成「管线丢题」60 题）。
-    convert_docx_set.py 把 docx 转成了 PDF，PDF 里中文表头是乱码、长句被折行，不能当源；
-    这里顺着转换记录（src-converted/_convert_<日期>.json）找回原始「答案.docx」，按段落读：
-    「写作」表头之后、下一个科目表头之前的非空英文段落，**恰好 10 句**才采用，顺序即题号。
-    万一顺序与题面错位也不会上错题：下游机械校验要求答案句被模板 + 词块按序恰好拼出，
-    拼不出时 build_with_gt_retry 会在同卷 10 句里找**唯一**能拼出的那条（见 main 里的 scan_pool）。
+    ingest 的答案解析器只认带题号的写法（`1. what type of work…`），这几套一条都认不出，
+    structured 里对应科目为空。convert_docx_set.py 把 docx 转成了 PDF，PDF 里中文表头是乱码、
+    长句被折行，不能当源；这里顺着转换记录（src-converted/_convert_<日期>.json）找回原始
+    「答案.docx」，按段落读：`section` 表头之后、下一个科目表头之前的非空英文段落，
+    **恰好 expect 句**才采用，顺序即题号。
+
+    「恰好 expect 句」是这条路唯一的结构闸：多一段少一段都说明表头之间混进了别的东西，
+    宁可整科不收，也不拿一份对不齐的清单去顶题号。
+
+    · 写作（expect=10）：万一顺序与题面错位也不会上错题 —— 下游机械校验要求答案句被模板 +
+      词块按序恰好拼出，拼不出时 build_with_gt_retry 会在同卷 10 句里找**唯一**能拼出的那条。
+    · 口语（expect=7）：复述句进 merge_recording_asr 后仍只当**锚**（证明这一句存在、在这个位置），
+      定稿由录音那一句决定（repeat_text_from_audio），对不上录音的照旧 fail-closed 扣下。
     """
     try:
         names = sorted(os.listdir(CONVERTED_DIR))
@@ -681,12 +687,22 @@ def docx_writing_answers(setname: str) -> dict[int, str]:
                 if h:
                     if inside:
                         break
-                    inside = h.group(1) == "写作"
+                    inside = h.group(1) == section
                     continue
                 if inside and p and re.search(r"[A-Za-z]", p):
                     out.append(p)
-            return {i + 1: s for i, s in enumerate(out)} if len(out) == 10 else {}
+            return {i + 1: s for i, s in enumerate(out)} if len(out) == expect else {}
     return {}
+
+
+def docx_writing_answers(setname: str) -> dict[int, str]:
+    """造句那一科的答案句（恰好 10 句）。"""
+    return docx_section_answers(setname, "写作", 10)
+
+
+def docx_speaking_answers(setname: str) -> dict[int, str]:
+    """复述那一科的答案句（恰好 7 句）—— merge_recording_asr._build_repeat 的兜底来源。"""
+    return docx_section_answers(setname, "口语", 7)
 
 
 def answers_for(setname: str) -> dict[int, str]:

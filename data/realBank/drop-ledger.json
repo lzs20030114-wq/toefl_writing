@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1602,
-    "questions": 833,
+    "rows": 1603,
+    "questions": 840,
     "sections": 21,
     "byCode": {
       "wSkippedThin": {
@@ -131,8 +131,8 @@
       "sDroppedDupSet": {
         "code": "sDroppedDupSet",
         "label": "口语内容与更早一套卷重复",
-        "rows": 17,
-        "questions": 96,
+        "rows": 18,
+        "questions": 103,
         "sections": 0
       },
       "lDroppedBadOptions": {
@@ -205,7 +205,7 @@
       },
       "speaking": {
         "section": "speaking",
-        "questions": 111,
+        "questions": 118,
         "sections": 4
       },
       "reading": {
@@ -274,10 +274,10 @@
       },
       "repeat": {
         "type": "repeat",
-        "questions": 79,
+        "questions": 86,
         "byCode": {
           "sDroppedNoOriginalAudio": 11,
-          "sDroppedDupSet": 68
+          "sDroppedDupSet": 75
         }
       },
       "interview": {
@@ -18924,6 +18924,19 @@
       "set": "5.29新托福真题",
       "slug": "529",
       "section": "speaking",
+      "type": "repeat",
+      "module": null,
+      "q": null,
+      "n": 7,
+      "scope": "unit",
+      "id": "real_repeat_529_1",
+      "code": "sDroppedDupSet",
+      "detail": "复述与 5.11新托福真题/real_repeat_511_1 逐字相同"
+    },
+    {
+      "set": "5.29新托福真题",
+      "slug": "529",
+      "section": "speaking",
       "type": "interview",
       "module": null,
       "q": null,
@@ -20855,7 +20868,7 @@
       "scope": "section",
       "id": null,
       "code": "droppedDupSet",
-      "detail": "与 3.11新托福真题 题目文件相同（hash 0addbd9ad3a0）"
+      "detail": "与 3.11新托福真题 题目文件相同（hash 0addbd9ad3a0）；槽位按别名指向保留方"
     },
     {
       "set": "3.4新托福真题",
