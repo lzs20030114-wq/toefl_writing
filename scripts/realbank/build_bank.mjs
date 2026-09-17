@@ -1254,12 +1254,25 @@ function buildListeningSpeaking(files, stats) {
     //     ingest_blocker）说的全是答案页或题面屏，说的不是它。2.8 / 3.24 / 4.18 的 ingest_blocker
     //     detail 写的更是**阅读 / 听力**答案页的题号重启块，连科目都不是口语。
     //     它自己那四道机械闸（旁白 / 恰好 4 段 / 词数与标点 / 切得出原声）照旧一道不少。
-    const listeningHeld = lHold.held;
+    // 扣留还可以**按 module 收窄**（2026-09-17）：source-flags 的 flag 带 `modules: [2]` 时只扣那个 module
+    //（3.8 的听力 M2 在答案源里整个缺席、M1 的 32 题逐题配满 —— 见 refresh_source_flags.mjs）。
+    // 不带 modules 的 flag 逐 module 问出来的结果与整科问完全一样，老行为一个字没变。
+    const _lHoldMod = new Map();
+    const listeningHeldIn = (mod) => {
+      const k = String(mod);
+      if (!_lHoldMod.has(k)) _lHoldMod.set(k, holdFor(setname, "listening", { module: Number(mod) }));
+      return _lHoldMod.get(k).held;
+    };
+    const LISTENING_MODULES = [1, 2];
+    const listeningHeld = lHold.held && LISTENING_MODULES.every((m) => listeningHeldIn(m));
     const repeatHeld = lHold.held && sHold.held;
     if (listeningHeld) {
       console.warn(`跳过 ${setname} 听力：源料体检标了 blocking（${lHold.heldBy.join("/")}）`);
       stats.lDroppedHeld += 1;
       recordDrop(stats, { set: setname, slug: setSlug(setname), section: "listening", code: "lDroppedHeld", detail: lHold.heldBy.join("/") });
+    } else if (lHold.held) {
+      const heldMods = LISTENING_MODULES.filter((m) => listeningHeldIn(m));
+      console.warn(`${setname} 听力：只扣下 module ${heldMods.join("/")}（${lHold.heldBy.join("/")}），其余 module 照常收`);
     }
     if (repeatHeld) {
       console.warn(`跳过 ${setname} 复述：源料体检标了 blocking（${sHold.heldBy.join("/")}；面试不受这条拦）`);
@@ -1302,6 +1315,7 @@ function buildListeningSpeaking(files, stats) {
     // （带原声的）当成重复丢掉，id 连同音频一起换掉。
     for (const r of listeningHeld ? [] : st.results || []) {
       if (r.section !== "listening" || r.status !== "ok" || !r.dup_of || !out[r.type]) continue;
+      if (listeningHeldIn(r.module)) continue;             // 这个 module 被收窄扣下
       const dupId = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
       console.warn(`跳过 ${setname} ${dupId}：录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）→ 记别名`);
       stats.lDroppedDupItem += 1;
@@ -1315,6 +1329,11 @@ function buildListeningSpeaking(files, stats) {
         if (!out[r.type]) continue;
         const kept = [];
         const lAt = { set: setname, slug, section: "listening", type: r.type, module: r.module };
+        if (listeningHeldIn(r.module)) {                    // 这个 module 被收窄扣下（其余 module 照常收）
+          recordDrop(stats, { ...lAt, q: r.q_start, n: (r.items || []).length, code: "lDroppedHeld",
+            detail: `${lHold.heldBy.join("/")}（扣留范围收窄到 module ${r.module}）` });
+          continue;
+        }
         for (const it of r.items || []) {
           const key = auditKey("listening", r.module, it.q_number);
           stats.lItemsSeen += 1;

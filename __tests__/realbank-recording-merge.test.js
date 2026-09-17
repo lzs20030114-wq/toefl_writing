@@ -131,8 +131,10 @@ describe("build_bank：听力 / 复述 / 面试逐科判 blocking", () => {
   const src = fs.readFileSync(BUILD_BANK, "utf8");
   const block = src.slice(src.indexOf("const lHold = holdFor(setname"), src.indexOf("// ── 口语 ──"));
 
-  test("听力按自己的 lHold 判，复述沿用原来那条整卷条件（口径不放宽）", () => {
-    expect(block).toContain("const listeningHeld = lHold.held;");
+  test("听力按自己的 lHold 判（并可逐 module 收窄），复述沿用原来那条整卷条件（口径不放宽）", () => {
+    // 2026-09-17 再加一层：flag 带 `modules: [2]` 时只扣那个 module（3.8 听力 M2 在答案源里整个缺席）。
+    // 「整科扣下」= 每个 module 都被扣 —— 没有 modules 字段的 flag 逐 module 问结果与整科问一样，老行为不变。
+    expect(block).toContain("const listeningHeld = lHold.held && LISTENING_MODULES.every((m) => listeningHeldIn(m));");
     expect(block).toContain("const repeatHeld = lHold.held && sHold.held;");
     // 听力三处出口都带上 listeningHeld：盲审缺失的记账、dup_of 别名循环、盲审闸主循环
     expect(block).toContain("if (!passedKeys && !listeningHeld) {");

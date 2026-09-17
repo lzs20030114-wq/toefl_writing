@@ -493,6 +493,21 @@ def _shapes_fit(shape, free):
     return True
 
 
+def _chain_is_pure_letters(mods):
+    """这条孤儿链的答案是不是**清一色 a–d 单字母**。
+
+    为什么这是可用的签名：2026 真题的阅读 module 必含填词题（C-test），答案是**单词**；
+    听力 module 全是四选一，答案是单字母。84 套扫描产物实测：
+      · 阅读 116 个 module，**0 个**是纯字母（116/116 都含单词）；
+      · 听力 117 个 module，115 个是纯字母（两个例外：3.6 M2 的 `b`` 是 OCR 多带一个反引号、
+        5.20 M1 是已知的答案页串科卷）。
+    所以「纯字母 ⇒ 不是阅读」这一侧没有反例，可以当硬断言用；反过来
+    「含单词 ⇒ 是阅读」有反例，不能用。
+    """
+    vals = [str(v).strip() for m in mods for v in m.values() if str(v).strip()]
+    return bool(vals) and all(re.fullmatch(r"[a-dA-D]", v) for v in vals)
+
+
 def resolve_orphan_chains(orphans, answer_modules, blocks):
     """把答案页里「没写科目名」的整块答案定科（B1），并逐条留痕。
 
@@ -512,6 +527,18 @@ def resolve_orphan_chains(orphans, answer_modules, blocks):
         cands = [s for s in SECTIONS if _order_ok(ch, s)
                  and _shapes_fit(shape, [n for n in groups[s]
                                          if n not in {max(m) for m in answer_modules[s] if m}])]
+        if len(cands) == 1 and cands[0] == "reading" and _chain_is_pure_letters(mods):
+            # fail-closed：题号形状推断说是阅读，但整块答案是清一色 a–d 单字母 —— 阅读 module 必含
+            # 填词题的**单词**答案（84 套 116/116 无例外，见 _chain_is_pure_letters）。两个信号矛盾时不采用。
+            notes.append({
+                "adopted": False, "section": None, "line": ch["line"], "modules": len(mods),
+                "answers": sum(len(m) for m in mods),
+                "message": (f"答案页第 {ch['line'] + 1} 行起有 {len(mods)} 块答案没写科目头，"
+                            f"题号形状（{shape_txt}）指向 reading，但整块答案是清一色 a–d 单字母 —— "
+                            f"阅读 module 的答案必含填词单词，两个信号矛盾 → fail-closed 继续扣下（共 "
+                            f"{sum(len(m) for m in mods)} 条答案），请人工指认"),
+            })
+            continue
         if len(cands) == 1:
             sec = cands[0]
             first = len(answer_modules[sec]) + 1
@@ -713,3 +740,50 @@ def align(blocks, answer_modules, section):
             "matched_count": sum(len(m["matched"]) for m in mods), "note": note,
             "stem_groups": sorted(groups), "orphan_groups": orphan,
             "self_check": self_check}
+
+
+# ── 自检（零 IO / 零网络，接进 __tests__/realbank-source-flags-refresh.test.js） ──────
+def _self_test():
+    """钉住「纯 a–d 字母块不可能是阅读」这条 fail-closed 断言，以及它不误伤别的推断。"""
+    def chain(prev, nxt, *mods):
+        return {"prev_sec": prev, "next_sec": nxt, "line": 8,
+                "modules": [dict(m) for m in mods]}
+
+    letters32 = {n: "abcd"[n % 4] for n in range(1, 33)}
+    letters15 = {n: "abcd"[n % 4] for n in range(1, 16)}
+    words35 = {n: ("carve" if n <= 10 else "abcd"[n % 4]) for n in range(1, 36)}
+
+    # 签名本身
+    assert _chain_is_pure_letters([letters32, letters15]) is True
+    assert _chain_is_pure_letters([words35]) is False
+    assert _chain_is_pure_letters([{}]) is False
+
+    blocks_l = ([{"section": "listening", "total": 32}, {"section": "listening", "total": 15}]
+                + [{"section": "reading", "total": 35}])
+
+    # ① 3.29 形态：阅读已有答案、听力还空着 → 唯一推断为 listening，照常采用
+    am = {"reading": [words35], "listening": [], "speaking": [], "writing": []}
+    notes = resolve_orphan_chains([chain("reading", "writing", letters32, letters15)], am, blocks_l)
+    assert notes[0]["adopted"] is True and notes[0]["section"] == "listening", notes
+    assert len(am["listening"]) == 2
+
+    # ② 唯一候选是 reading 但整块是纯字母 → fail-closed 不采用
+    blocks_r = [{"section": "reading", "total": 32}]
+    am2 = {"reading": [], "listening": [], "speaking": [], "writing": []}
+    notes = resolve_orphan_chains([chain(None, "listening", letters32)], am2, blocks_r)
+    assert notes[0]["adopted"] is False and "清一色 a–d 单字母" in notes[0]["message"], notes
+    assert am2["reading"] == []
+
+    # ③ 同样是 reading，但答案里有填词单词 → 照常采用（断言只拦纯字母那一种）
+    blocks_r2 = [{"section": "reading", "total": 35}]
+    am3 = {"reading": [], "listening": [], "speaking": [], "writing": []}
+    notes = resolve_orphan_chains([chain(None, "listening", words35)], am3, blocks_r2)
+    assert notes[0]["adopted"] is True and notes[0]["section"] == "reading", notes
+
+    print("SELF-TEST OK")
+
+
+if __name__ == "__main__":
+    import sys
+    if "--self-test" in sys.argv:
+        _self_test()

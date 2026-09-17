@@ -123,7 +123,8 @@ function sectionAgreement(audited, section) {
  * @param {Array}  flags     该卷在 source-flags.json 里的 flag 数组（原始形状，含 severity/sections/code）
  * @param {string} section   "reading" | "writing" | "listening" | "speaking"
  * @param {object} ctx       { agreement: number|null } 该科盲审一致率，只有 reading 的 section_gap 用得上；
- *                           { ctwOnly: true } 这卷阅读只有填词块（选择题一道没配上答案，见下方 section_gap 分支）
+ *                           { ctwOnly: true } 这卷阅读只有填词块（选择题一道没配上答案，见下方 section_gap 分支）；
+ *                           { module: 1|2 } 问的是哪个 module —— 带 `modules: [...]` 的 flag 只扣那几个；不给就整科扣
  * @returns {{held:boolean, heldBy:string[], dropCtw:boolean, notes:string[]}}
  *   held    —— 整科不收
  *   heldBy  —— 造成扣留的 code（用于日志）
@@ -147,6 +148,15 @@ function holdDecision(flags, section, ctx = {}) {
   for (const f of blocking) {
     if (allowed(f.code)) {
       notes.push(`${f.code}：后台复核已放行（review-overrides.json）`);
+      continue;
+    }
+    // 按 module 收窄的扣留（2026-09-17）：flag 带 `modules: [2]` 时只扣那几个 module。
+    // 由 scripts/realbank/refresh_source_flags.mjs 机械算出来 —— 只在「某个 module 在答案源里
+    // 整个缺席、其余 module 逐题配满」时才写（3.8 听力 M2），是算术不是放宽判据。
+    // ctx.module 不给（按整科问）时**照旧整科扣下**，fail-closed 到老行为。
+    if (Array.isArray(f.modules) && f.modules.length
+        && ctx.module != null && !f.modules.map(Number).includes(Number(ctx.module))) {
+      notes.push(`${f.code}：扣留范围只含 module ${f.modules.join("/")}，module ${ctx.module} 不受这条拦`);
       continue;
     }
     if (section !== "reading" || !READING_RELAXED.has(f.code)) {

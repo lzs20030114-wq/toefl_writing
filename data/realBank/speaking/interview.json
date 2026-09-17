@@ -132,11 +132,6 @@
           "code": "section_no_stems",
           "severity": "blocking",
           "detail": "speaking 科状态=no_stems，只配对 0 题（满分 7）。OCR 里没有该科题块"
-        },
-        {
-          "code": "ingest_blocker",
-          "severity": "blocking",
-          "detail": "[2.8 套一 答案.pdf] 答案页第 8 行出现无科目头的题号重启块（当前科目 reading），已忽略(fail-closed)：1driven 2natural 3like 4eruptions 5human 6such 7burning 8fue"
         }
       ]
     },
@@ -398,11 +393,6 @@
           "code": "duplicate_cluster",
           "severity": "warn",
           "detail": "与 3.11新托福真题、3.15新托福真题、3.17新托福真题、3.20新托福真题、3.21新托福真题、4.1新托福真题、4.5新托福真题 属同题簇（部分科目共题，机经正常形态）。"
-        },
-        {
-          "code": "section_blocked",
-          "severity": "blocking",
-          "detail": "speaking 科状态=blocked，只配对 0 题（满分 7）。答案 1 个 module；题块组 of-[11]；有题干无答案的组 of-[11]"
         }
       ]
     },
@@ -716,13 +706,7 @@
       "tier": "recalled",
       "source": "3.24新托福真题",
       "date": "2026-03-24",
-      "source_flags": [
-        {
-          "code": "ingest_blocker",
-          "severity": "blocking",
-          "detail": "[3.24 套一 答案.pdf] 答案页第 9 行出现无科目头的题号重启块（当前科目 reading），已忽略(fail-closed)：1era 2significant 3most 4the 5of 6and 7establishment 8powerf"
-        }
-      ]
+      "source_flags": []
     },
     {
       "id": "real_interview_32b_1",
@@ -1231,18 +1215,7 @@
       "tier": "recalled",
       "source": "4.18新托福真题",
       "date": "2026-04-18",
-      "source_flags": [
-        {
-          "code": "section_blocked",
-          "severity": "blocking",
-          "detail": "speaking 科状态=blocked，只配对 0 题（满分 7）。答案 1 个 module；题块组 of-[1, 11]；有题干无答案的组 of-[1, 11]"
-        },
-        {
-          "code": "ingest_blocker",
-          "severity": "blocking",
-          "detail": "[4.18 答案.pdf] 答案页第 12 行出现无科目头的题号重启块（当前科目 listening），已忽略(fail-closed)：1d 2c 3c 4d 5c 6a 7b 8b 9a 10c 11b 12b 13a 14d 15a"
-        }
-      ]
+      "source_flags": []
     },
     {
       "id": "real_interview_424_1",

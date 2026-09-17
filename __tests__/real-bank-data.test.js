@@ -58,11 +58,17 @@ const RB_BS_BANK_IDS = new Set(RB_BS.items.map((q) => q.id));
 const RB_BS_RECYCLED = RB_BS_ALIASES.filter((a) => RB_BS_BANK_IDS.has(a.to) && !RB_BS_BANK_IDS.has(a.from));
 
 // 「造句要按套算」：题数 < REAL_BS_MIN_BATCH 的碎卷（源卷零星回忆，凑不成一套）不进真题专区。
-// 2026-09-15 补题重建之后只剩这两卷：2.23 三题、3.29 两题（缺的在「源料缺陷」那一桶，要补源料才过线）。
-const RB_BS_SPARSE_SOURCES = ["2.23新托福真题", "3.29新托福真题"];
+// **从数据里算出来**，不写死卷名 —— 写死的那版每次补题都要人跟着改，改漏了这条断言就变成摆设
+// （2026-09-17 第 2 层就撞上了：原来卡线的 2.23 / 3.29 正是被 ingest_blocker / section_no_stems
+//  扣着写作的两卷，陈旧 flag 一解封各自补过 5 题，清单里一卷都不剩）。
 const bsSourceSize = (src) =>
   RB_BS.items.filter((q) => (q.source || q.source_label) === src).length
   + RB_BS_RECYCLED.filter((a) => a.from_source === src).length;
+const RB_BS_ALL_SOURCES = [...new Set([
+  ...RB_BS.items.map((q) => q.source || q.source_label),
+  ...RB_BS_RECYCLED.map((a) => a.from_source),
+])];
+const RB_BS_SPARSE_SOURCES = RB_BS_ALL_SOURCES.filter((s) => bsSourceSize(s) < REAL_BS_MIN_BATCH);
 const RB_BS_FILTERED_OUT = RB_BS_SPARSE_SOURCES.reduce((n, src) => n + bsSourceSize(src), 0);
 
 describe("真题专区：题量", () => {
@@ -79,15 +85,17 @@ describe("真题专区：题量", () => {
     expect(email.length).toBe(57);
   });
 
-  test("造句 629 题（20 官方 + 401 回忆版 + 213 跨卷重复还回原卷 − 5 碎卷），官方 2 批各 10 题、批次号不动", () => {
+  // 2026-09-17 第 2 层：2.8 / 2.23 / 3.24 / 3.29 的陈旧 blocking flag 重算后解封（refresh_source_flags.mjs），
+  // 这四套的写作造句随之落库 401 → 417，跨卷重复还回原卷的那一份 213 → 221。
+  test("造句 658 题（20 官方 + 417 回忆版 + 221 跨卷重复还回原卷，碎卷 0），官方 2 批各 10 题、批次号不动", () => {
     expect(BS_TPO_OFFICIAL.length).toBe(20);
-    expect(RB_BS.items.length).toBe(401);
-    expect(RB_BS_RECYCLED.length).toBe(213);
-    expect(RB_BS_FILTERED_OUT).toBe(5);
+    expect(RB_BS.items.length).toBe(417);
+    expect(RB_BS_RECYCLED.length).toBe(221);
+    expect(RB_BS_FILTERED_OUT).toBe(0);
     expect(bsQuestions.length).toBe(
       20 + RB_BS.items.length + RB_BS_RECYCLED.length - RB_BS_DROPPED - RB_BS_FILTERED_OUT
     );
-    expect(bsQuestions.length).toBe(629);
+    expect(bsQuestions.length).toBe(658);
     // 官方两批永远是 set-1 / set-2（老用户的「已练」标记靠它对齐），回忆版从 set-3 起。
     expect(bsBatches.length).toBeGreaterThan(2);
     expect(bsBatches.slice(0, 2).map((b) => b.id)).toEqual(["real-bs-set-1", "real-bs-set-2"]);
@@ -165,8 +173,10 @@ describe("真题专区：题量", () => {
     recalledBatches.forEach((b) => {
       expect(b.questions.length).toBeGreaterThanOrEqual(REAL_BS_MIN_BATCH);
     });
-    // 反向核实：源文件里确有 < REAL_BS_MIN_BATCH 题的卷（否则这条断言测不出回归）。
-    expect(RB_BS_SPARSE_SOURCES.length).toBeGreaterThan(0);
+    // 反向核实：碎卷清单是**从库里算出来的**，不是写死的名单 —— 每一卷要么成套上线、要么在清单里，
+    // 两边加起来必须等于源卷总数（写死名单的那版会在补题后静默失效，2026-09-17 实测）。
+    expect(recalledBatches.length + RB_BS_SPARSE_SOURCES.length).toBe(RB_BS_ALL_SOURCES.length);
+    RB_BS_SPARSE_SOURCES.forEach((s) => expect(bsSourceSize(s)).toBeLessThan(REAL_BS_MIN_BATCH));
   });
 
   test("回忆版造句每题都能被 runtime 消费：prefilled_positions 齐全 + 词块能拼回 answer", () => {
