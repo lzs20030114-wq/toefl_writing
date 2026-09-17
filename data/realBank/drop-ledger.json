@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1757,
-    "questions": 930,
+    "rows": 1718,
+    "questions": 887,
     "sections": 10,
     "byCode": {
       "wSkippedThin": {
@@ -82,29 +82,29 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 114,
-        "questions": 114,
+        "rows": 87,
+        "questions": 87,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
         "rows": 72,
-        "questions": 87,
+        "questions": 90,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
         "code": "lDroppedNoAuditQ",
         "label": "没被盲审覆盖",
-        "rows": 35,
-        "questions": 35,
+        "rows": 23,
+        "questions": 23,
         "sections": 0
       },
       "lDroppedDupItem": {
         "code": "lDroppedDupItem",
         "label": "跨卷逐条内容重复",
         "rows": 749,
-        "questions": 265,
+        "questions": 258,
         "sections": 0
       },
       "lDroppedNoOriginalAudio": {
@@ -207,7 +207,7 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 509,
+        "questions": 466,
         "sections": 2
       },
       "speaking": {
@@ -251,32 +251,32 @@
       },
       "lc": {
         "type": "lc",
-        "questions": 82,
+        "questions": 80,
         "byCode": {
-          "lDroppedDisagree": 12,
-          "lDroppedInvalid": 28,
-          "lDroppedNoAuditQ": 4,
-          "lDroppedDupItem": 38
+          "lDroppedDisagree": 11,
+          "lDroppedInvalid": 29,
+          "lDroppedNoAuditQ": 3,
+          "lDroppedDupItem": 37
         }
       },
       "la": {
         "type": "la",
-        "questions": 89,
+        "questions": 80,
         "byCode": {
-          "lDroppedDisagree": 19,
-          "lDroppedInvalid": 23,
-          "lDroppedNoAuditQ": 10,
-          "lDroppedDupItem": 37
+          "lDroppedDisagree": 12,
+          "lDroppedInvalid": 30,
+          "lDroppedNoAuditQ": 5,
+          "lDroppedDupItem": 33
         }
       },
       "lat": {
         "type": "lat",
-        "questions": 163,
+        "questions": 131,
         "byCode": {
-          "lDroppedNoAuditQ": 17,
-          "lDroppedDisagree": 54,
-          "lDroppedInvalid": 36,
-          "lDroppedDupItem": 56
+          "lDroppedNoAuditQ": 11,
+          "lDroppedDisagree": 35,
+          "lDroppedInvalid": 31,
+          "lDroppedDupItem": 54
         }
       },
       "repeat": {
@@ -10778,45 +10778,6 @@
       "detail": "too_few_turns: 3 (min 4) | speaker_Woman_too_few_turns: 1 (min 2) | wrong_question_count: 1 (must be exactly 2)"
     },
     {
-      "set": "2.23新托福真题",
-      "slug": "223",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "2.23新托福真题",
-      "slug": "223",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "2.23新托福真题",
-      "slug": "223",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_223_2_12",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
       "set": "2.25新托福真题",
       "slug": "225",
       "section": "listening",
@@ -11305,23 +11266,10 @@
       "module": 1,
       "q": 19,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.8新托福真题",
-      "slug": "28",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 20,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_28_1_19",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "2.8新托福真题",
@@ -11483,45 +11431,6 @@
       "set": "3.10新托福真题",
       "slug": "310",
       "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 31,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 32,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 29,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_310_1_29",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
       "type": "lcr",
       "module": 2,
       "q": 1,
@@ -11550,75 +11459,10 @@
       "section": "listening",
       "type": "lat",
       "module": 2,
-      "q": 10,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 11,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
       "q": 8,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_310_2_08",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
       "n": 2,
       "scope": "unit",
-      "id": "real_lat_310_2_12",
+      "id": "real_lat_310_2_08",
       "code": "lDroppedInvalid",
       "detail": "too_few_questions: 2 (min 3)"
     },
@@ -11773,23 +11617,10 @@
       "module": 1,
       "q": 23,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 24,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_311_1_23",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.11新托福真题",
@@ -11810,38 +11641,12 @@
       "section": "listening",
       "type": "lat",
       "module": 1,
-      "q": 31,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 32,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
       "q": 29,
-      "n": 1,
+      "n": 2,
       "scope": "unit",
       "id": "real_lat_311_1_29",
       "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
+      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "3.14新托福真题",
@@ -12057,12 +11862,12 @@
       "section": "listening",
       "type": "la",
       "module": 1,
-      "q": 24,
+      "q": 23,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_315_1_23",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.15新托福真题",
@@ -12474,7 +12279,7 @@
       "type": "la",
       "module": 1,
       "q": 21,
-      "n": 2,
+      "n": 1,
       "scope": "unit",
       "id": "real_la_317_1_21",
       "code": "lDroppedDupItem",
@@ -12787,23 +12592,10 @@
       "module": 1,
       "q": 19,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.18新托福真题",
-      "slug": "318",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 20,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_318_1_19",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.18新托福真题",
@@ -12916,7 +12708,7 @@
       "type": "la",
       "module": 1,
       "q": 19,
-      "n": 2,
+      "n": 1,
       "scope": "unit",
       "id": "real_la_320_1_19",
       "code": "lDroppedDupItem",
@@ -13032,38 +12824,12 @@
       "section": "listening",
       "type": "lat",
       "module": 2,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.20新托福真题",
-      "slug": "320",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.20新托福真题",
-      "slug": "320",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
       "q": 12,
-      "n": 1,
+      "n": 2,
       "scope": "unit",
       "id": "real_lat_320_2_12",
       "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
+      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "3.21新托福真题",
@@ -13852,7 +13618,7 @@
       "type": "lat",
       "module": 2,
       "q": 12,
-      "n": 4,
+      "n": 3,
       "scope": "unit",
       "id": "real_lat_325_2_12",
       "code": "lDroppedDupItem",
@@ -13890,25 +13656,12 @@
       "section": "listening",
       "type": "lat",
       "module": 1,
-      "q": 32,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.25新托福真题",
-      "slug": "325",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
       "q": 29,
-      "n": 1,
+      "n": 2,
       "scope": "unit",
       "id": "real_lat_325_1_29",
       "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
+      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "3.25新托福真题",
@@ -14099,7 +13852,7 @@
       "type": "la",
       "module": 1,
       "q": 19,
-      "n": 2,
+      "n": 1,
       "scope": "unit",
       "id": "real_la_327_1_19",
       "code": "lDroppedDupItem",
@@ -14151,7 +13904,7 @@
       "type": "lat",
       "module": 1,
       "q": 29,
-      "n": 4,
+      "n": 3,
       "scope": "unit",
       "id": "real_lat_327_1_29",
       "code": "lDroppedDupItem",
@@ -14451,23 +14204,10 @@
       "module": 1,
       "q": 19,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.29新托福真题",
-      "slug": "329",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 20,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_329_1_19",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.29新托福真题",
@@ -14821,45 +14561,6 @@
       "detail": "录音转写与 real_lat_rp0830_10_01 近似重复（sim=0.979）"
     },
     {
-      "set": "3.2新托福真题A卷",
-      "slug": "32a",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 10,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.2新托福真题A卷",
-      "slug": "32a",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 11,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.2新托福真题A卷",
-      "slug": "32a",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 8,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_32a_2_08",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
       "set": "3.2新托福真题B卷",
       "slug": "32b",
       "section": "listening",
@@ -15035,7 +14736,7 @@
       "type": "lc",
       "module": 1,
       "q": 15,
-      "n": 2,
+      "n": 1,
       "scope": "unit",
       "id": "real_lc_32b_1_15",
       "code": "lDroppedDupItem",
@@ -15164,25 +14865,12 @@
       "section": "listening",
       "type": "lc",
       "module": 2,
-      "q": 7,
+      "q": 6,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.2新托福真题B卷",
-      "slug": "32b",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "scope": "unit",
+      "id": "real_lc_32b_2_06",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.2新托福真题B卷",
@@ -15376,19 +15064,6 @@
       "n": 1,
       "scope": "question",
       "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.30新托福真题",
-      "slug": "330",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 16,
-      "n": 1,
-      "scope": "question",
-      "id": null,
       "code": "lDroppedDisagree",
       "detail": "盲审与答案页不一致"
     },
@@ -15400,23 +15075,10 @@
       "module": 1,
       "q": 23,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.30新托福真题",
-      "slug": "330",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 24,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
+      "scope": "unit",
+      "id": "real_la_330_1_23",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.4新托福真题",
@@ -16134,45 +15796,6 @@
       "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 31,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 32,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.8新托福真题",
-      "slug": "38",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 29,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_38_1_29",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
       "set": "4.11新托福真题",
       "slug": "411",
       "section": "listening",
@@ -16682,32 +16305,6 @@
     {
       "set": "4.13新托福真题",
       "slug": "413",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 10,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.13新托福真题",
-      "slug": "413",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 8,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lat_413_2_08",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 2 (min 3)"
-    },
-    {
-      "set": "4.13新托福真题",
-      "slug": "413",
       "section": "speaking",
       "type": "repeat",
       "module": null,
@@ -16971,25 +16568,12 @@
       "section": "listening",
       "type": "la",
       "module": 1,
-      "q": 22,
+      "q": 21,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
-      "q": 29,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "scope": "unit",
+      "id": "real_la_415_1_21",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "4.15新托福真题",
@@ -17010,25 +16594,12 @@
       "section": "listening",
       "type": "lat",
       "module": 1,
-      "q": 31,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "section": "listening",
-      "type": "lat",
-      "module": 1,
       "q": 29,
-      "n": 1,
+      "n": 2,
       "scope": "unit",
       "id": "real_lat_415_1_29",
       "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
+      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "4.15新托福真题",
@@ -17120,45 +16691,6 @@
       "id": "real_lat_418_2_08",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_121c_1_25 近似重复（sim=0.965）"
-    },
-    {
-      "set": "4.18新托福真题",
-      "slug": "418",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.18新托福真题",
-      "slug": "418",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.18新托福真题",
-      "slug": "418",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_418_2_12",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
     },
     {
       "set": "4.18新托福真题",
@@ -18836,45 +18368,6 @@
       "id": null,
       "code": "lDroppedDisagree",
       "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.29新托福真题",
-      "slug": "429",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_429_2_12",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
     },
     {
       "set": "4.5新托福真题",
@@ -21483,7 +20976,7 @@
       "type": "la",
       "module": 1,
       "q": 23,
-      "n": 2,
+      "n": 1,
       "scope": "unit",
       "id": "real_la_56_1_23",
       "code": "lDroppedDupItem",

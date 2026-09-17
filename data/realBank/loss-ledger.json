@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-17，1757 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-17，1718 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 7108,
-    "missing": 1231,
+    "got": 7147,
+    "missing": 1192,
     "overfilled": 59,
-    "completeness": 0.8585,
+    "completeness": 0.8632,
     "causes": {
-      "source_defect": 308,
+      "source_defect": 299,
       "held": 103,
       "deduped": 25,
-      "bank_dropped": 348,
+      "bank_dropped": 309,
       "section_never_run": 51,
       "section_lost": 0,
-      "pipeline_loss": 396
+      "pipeline_loss": 405
     },
-    "actionable": 396
+    "actionable": 405
   },
   "byType": {
     "ctw": {
@@ -189,10 +189,10 @@
         "source_defect": 23,
         "held": 16,
         "deduped": 0,
-        "bank_dropped": 61,
+        "bank_dropped": 59,
         "section_never_run": 14,
         "section_lost": 0,
-        "pipeline_loss": 112
+        "pipeline_loss": 114
       },
       "completeness": 0.6706
     },
@@ -205,28 +205,28 @@
         "source_defect": 18,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 67,
+        "bank_dropped": 58,
         "section_never_run": 6,
         "section_lost": 0,
-        "pipeline_loss": 59
+        "pipeline_loss": 68
       },
       "completeness": 0.6329
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 809,
-      "missing": 291,
+      "got": 848,
+      "missing": 252,
       "causes": {
-        "source_defect": 46,
+        "source_defect": 37,
         "held": 20,
         "deduped": 0,
-        "bank_dropped": 104,
+        "bank_dropped": 76,
         "section_never_run": 16,
         "section_lost": 0,
-        "pipeline_loss": 105
+        "pipeline_loss": 103
       },
-      "completeness": 0.7355
+      "completeness": 0.7709
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 2411,
-      "missing": 832,
+      "got": 2450,
+      "missing": 793,
       "causes": {
-        "source_defect": 115,
+        "source_defect": 106,
         "held": 62,
         "deduped": 0,
-        "bank_dropped": 282,
+        "bank_dropped": 243,
         "section_never_run": 51,
         "section_lost": 0,
-        "pipeline_loss": 322
+        "pipeline_loss": 331
       },
-      "completeness": 0.7434
+      "completeness": 0.7555
     }
   },
   "tasks": [
@@ -359,9 +359,9 @@
         "M1/la_19(-2)",
         "M1/la_21(-2)",
         "M1/la_23(-2)",
-        "M1/lat_25(-1)",
+        "M1/lat_25(-4)",
         "M1/lat_29(-4)",
-        "M2/lat_12(-4)"
+        "M2/lat_12(-1)"
       ]
     },
     {
@@ -531,27 +531,6 @@
       ]
     },
     {
-      "set": "5.10新托福真题",
-      "slug": "510",
-      "date": "2026-05-10",
-      "section": "listening",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "lcr": 1,
-        "lc": 2,
-        "la": 2,
-        "lat": 5
-      },
-      "slots": [
-        "M1/lcr_1(-1)",
-        "M1/lc_15(-2)",
-        "M1/la_19(-2)",
-        "M2/lat_8(-1)",
-        "M2/lat_12(-4)"
-      ]
-    },
-    {
       "set": "5.3新托福真题",
       "slug": "53",
       "date": "2026-05-03",
@@ -568,6 +547,47 @@
         "M1/la_21(-2)",
         "M1/lat_29(-4)",
         "M2/lc_4(-1)"
+      ]
+    },
+    {
+      "set": "3.17新托福真题",
+      "slug": "317",
+      "date": "2026-03-17",
+      "section": "listening",
+      "missing": 8,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 3,
+        "la": 3,
+        "lat": 2
+      },
+      "slots": [
+        "M1/lc_13(-1)",
+        "M1/lc_15(-2)",
+        "M1/la_21(-1)",
+        "M1/la_23(-2)",
+        "M2/lat_8(-1)",
+        "M2/lat_12(-1)"
+      ]
+    },
+    {
+      "set": "3.29新托福真题",
+      "slug": "329",
+      "date": "2026-03-29",
+      "section": "listening",
+      "missing": 8,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 1,
+        "lat": 6,
+        "lc": 1
+      },
+      "slots": [
+        "M1/la_19(-1)",
+        "M1/lat_25(-1)",
+        "M1/lat_29(-4)",
+        "M2/lc_6(-1)",
+        "M2/lat_8(-1)"
       ]
     },
     {
@@ -589,41 +609,24 @@
       ]
     },
     {
-      "set": "3.17新托福真题",
-      "slug": "317",
-      "date": "2026-03-17",
+      "set": "5.10新托福真题",
+      "slug": "510",
+      "date": "2026-05-10",
       "section": "listening",
       "missing": 7,
       "cause": "pipeline_loss",
       "types": {
-        "lc": 3,
+        "lcr": 1,
+        "lc": 2,
         "la": 2,
         "lat": 2
       },
       "slots": [
-        "M1/lc_13(-1)",
+        "M1/lcr_1(-1)",
         "M1/lc_15(-2)",
-        "M1/la_23(-2)",
+        "M1/la_19(-2)",
         "M2/lat_8(-1)",
         "M2/lat_12(-1)"
-      ]
-    },
-    {
-      "set": "3.29新托福真题",
-      "slug": "329",
-      "date": "2026-03-29",
-      "section": "listening",
-      "missing": 7,
-      "cause": "pipeline_loss",
-      "types": {
-        "lat": 6,
-        "lc": 1
-      },
-      "slots": [
-        "M1/lat_25(-1)",
-        "M1/lat_29(-4)",
-        "M2/lc_6(-1)",
-        "M2/lat_8(-1)"
       ]
     },
     {
@@ -708,6 +711,24 @@
       ]
     },
     {
+      "set": "3.11新托福真题",
+      "slug": "311",
+      "date": "2026-03-11",
+      "section": "listening",
+      "missing": 5,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 1,
+        "la": 2,
+        "lat": 2
+      },
+      "slots": [
+        "M1/lc_15(-1)",
+        "M1/la_23(-2)",
+        "M1/lat_29(-2)"
+      ]
+    },
+    {
       "set": "3.25新托福真题",
       "slug": "325",
       "date": "2026-03-25",
@@ -739,6 +760,23 @@
         "M1/lc_13(-2)",
         "M2/lc_6(-2)",
         "M2/lat_8(-1)"
+      ]
+    },
+    {
+      "set": "3.2新托福真题B卷",
+      "slug": "32b",
+      "date": "2026-03-02",
+      "section": "listening",
+      "missing": 5,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 3,
+        "lat": 2
+      },
+      "slots": [
+        "M2/lc_4(-1)",
+        "M2/lc_6(-2)",
+        "M2/lat_12(-2)"
       ]
     },
     {
@@ -806,6 +844,24 @@
       ]
     },
     {
+      "set": "5.6新托福真题",
+      "slug": "56",
+      "date": "2026-05-06",
+      "section": "listening",
+      "missing": 5,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 2,
+        "lat": 1,
+        "lc": 2
+      },
+      "slots": [
+        "M1/la_23(-2)",
+        "M1/lat_25(-1)",
+        "M2/lc_4(-2)"
+      ]
+    },
+    {
       "set": "rf0826",
       "slug": "rf0826",
       "date": "2026-08-26",
@@ -850,6 +906,40 @@
       ]
     },
     {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "date": "2026-02-08",
+      "section": "listening",
+      "missing": 4,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 2,
+        "lat": 2
+      },
+      "slots": [
+        "M1/la_23(-2)",
+        "M1/lat_25(-1)",
+        "M2/lat_8(-1)"
+      ]
+    },
+    {
+      "set": "3.20新托福真题",
+      "slug": "320",
+      "date": "2026-03-20",
+      "section": "listening",
+      "missing": 4,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 3,
+        "la": 1
+      },
+      "slots": [
+        "M1/lc_15(-1)",
+        "M1/la_19(-1)",
+        "M2/lc_6(-2)"
+      ]
+    },
+    {
       "set": "3.25新托福真题",
       "slug": "325",
       "date": "2026-03-25",
@@ -864,20 +954,19 @@
       ]
     },
     {
-      "set": "5.6新托福真题",
-      "slug": "56",
-      "date": "2026-05-06",
+      "set": "3.27新托福真题",
+      "slug": "327",
+      "date": "2026-03-27",
       "section": "listening",
       "missing": 4,
       "cause": "pipeline_loss",
       "types": {
-        "la": 1,
-        "lat": 1,
-        "lc": 2
+        "lc": 3,
+        "la": 1
       },
       "slots": [
-        "M1/la_23(-1)",
-        "M1/lat_25(-1)",
+        "M1/lc_15(-1)",
+        "M1/la_19(-1)",
         "M2/lc_4(-2)"
       ]
     },
@@ -896,56 +985,6 @@
       ]
     },
     {
-      "set": "2.8新托福真题",
-      "slug": "28",
-      "date": "2026-02-08",
-      "section": "listening",
-      "missing": 3,
-      "cause": "pipeline_loss",
-      "types": {
-        "la": 1,
-        "lat": 2
-      },
-      "slots": [
-        "M1/la_23(-1)",
-        "M1/lat_25(-1)",
-        "M2/lat_8(-1)"
-      ]
-    },
-    {
-      "set": "3.11新托福真题",
-      "slug": "311",
-      "date": "2026-03-11",
-      "section": "listening",
-      "missing": 3,
-      "cause": "pipeline_loss",
-      "types": {
-        "lc": 1,
-        "la": 1,
-        "lat": 1
-      },
-      "slots": [
-        "M1/lc_15(-1)",
-        "M1/la_23(-1)",
-        "M1/lat_29(-1)"
-      ]
-    },
-    {
-      "set": "3.20新托福真题",
-      "slug": "320",
-      "date": "2026-03-20",
-      "section": "listening",
-      "missing": 3,
-      "cause": "pipeline_loss",
-      "types": {
-        "lc": 3
-      },
-      "slots": [
-        "M1/lc_15(-1)",
-        "M2/lc_6(-2)"
-      ]
-    },
-    {
       "set": "3.23新托福真题",
       "slug": "323",
       "date": "2026-03-23",
@@ -961,50 +1000,35 @@
       ]
     },
     {
-      "set": "3.27新托福真题",
-      "slug": "327",
-      "date": "2026-03-27",
+      "set": "3.30新托福真题",
+      "slug": "330",
+      "date": "2026-03-30",
       "section": "listening",
       "missing": 3,
       "cause": "pipeline_loss",
       "types": {
-        "lc": 3
+        "lc": 1,
+        "la": 2
       },
       "slots": [
         "M1/lc_15(-1)",
-        "M2/lc_4(-2)"
+        "M1/la_23(-2)"
       ]
     },
     {
-      "set": "3.2新托福真题B卷",
-      "slug": "32b",
-      "date": "2026-03-02",
+      "set": "4.15新托福真题",
+      "slug": "415",
+      "date": "2026-04-15",
       "section": "listening",
       "missing": 3,
       "cause": "pipeline_loss",
       "types": {
-        "lc": 2,
+        "la": 2,
         "lat": 1
       },
       "slots": [
-        "M2/lc_6(-2)",
-        "M2/lat_12(-1)"
-      ]
-    },
-    {
-      "set": "4.20新托福真题",
-      "slug": "420",
-      "date": "2026-04-20",
-      "section": "listening",
-      "missing": 3,
-      "cause": "pipeline_loss",
-      "types": {
-        "la": 1,
-        "lat": 2
-      },
-      "slots": [
-        "M1/la_19(-1)",
-        "M2/lat_12(-2)"
+        "M1/la_21(-2)",
+        "M1/lat_29(-1)"
       ]
     },
     {
@@ -1080,20 +1104,6 @@
       "slots": [
         "M1/la_23(-1)",
         "M1/lat_29(-1)"
-      ]
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "date": "2026-04-15",
-      "section": "listening",
-      "missing": 2,
-      "cause": "pipeline_loss",
-      "types": {
-        "la": 2
-      },
-      "slots": [
-        "M1/la_21(-2)"
       ]
     },
     {
@@ -1387,6 +1397,20 @@
       ]
     },
     {
+      "set": "3.18新托福真题",
+      "slug": "318",
+      "date": "2026-03-18",
+      "section": "listening",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 1
+      },
+      "slots": [
+        "M1/la_19(-1)"
+      ]
+    },
+    {
       "set": "3.24新托福真题",
       "slug": "324",
       "date": "2026-03-24",
@@ -1398,20 +1422,6 @@
       },
       "slots": [
         "M1/repeat_1(-1)"
-      ]
-    },
-    {
-      "set": "3.30新托福真题",
-      "slug": "330",
-      "date": "2026-03-30",
-      "section": "listening",
-      "missing": 1,
-      "cause": "pipeline_loss",
-      "types": {
-        "la": 1
-      },
-      "slots": [
-        "M1/la_23(-1)"
       ]
     },
     {
@@ -1454,6 +1464,20 @@
       },
       "slots": [
         "M1/ap_31(-1)"
+      ]
+    },
+    {
+      "set": "4.20新托福真题",
+      "slug": "420",
+      "date": "2026-04-20",
+      "section": "listening",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 1
+      },
+      "slots": [
+        "M1/la_19(-1)"
       ]
     },
     {
@@ -3952,9 +3976,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "lDroppedInvalid": 2
       },
       "notes": []
     },
@@ -3975,15 +3997,9 @@
       "got": 0,
       "missing": 2,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "pipeline_loss": 2
       },
       "notes": []
     },
@@ -4246,18 +4262,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 3,
         "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -4808,18 +4818,12 @@
         11
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 3,
         "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -5002,9 +5006,8 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "lDroppedDupItem": 2,
-        "lDroppedInvalid": 1,
-        "lDroppedDisagree": 1
+        "lDroppedDupItem": 1,
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -5029,12 +5032,12 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 2,
-        "lDroppedInvalid": 1,
-        "lDroppedDisagree": 1
+        "lDroppedDupItem": 1,
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -5088,7 +5091,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 2,
+        "lDroppedNoAuditQ": 1,
         "lDroppedInvalid": 2
       },
       "notes": [
@@ -5114,12 +5117,12 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3,
-        "pipeline_loss": 1
+        "bank_dropped": 2,
+        "pipeline_loss": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 2,
+        "lDroppedNoAuditQ": 1,
         "lDroppedInvalid": 2
       },
       "notes": [
@@ -5480,12 +5483,12 @@
         32
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
@@ -5575,15 +5578,10 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "source_defect",
       "charged": {
-        "bank_dropped": 3,
+        "source_defect": 3,
         "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -5739,12 +5737,12 @@
         32
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
@@ -5831,12 +5829,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
@@ -5988,9 +5986,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedInvalid": 1,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -6013,16 +6009,9 @@
       "got": 0,
       "missing": 2,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedInvalid": 1,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -6051,9 +6040,8 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 2,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "lDroppedNoAuditQ": 1,
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -6078,14 +6066,13 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 3,
-        "pipeline_loss": 1
+        "bank_dropped": 2,
+        "pipeline_loss": 2
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 2,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "lDroppedNoAuditQ": 1,
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -6721,10 +6708,11 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 2
+        "lDroppedDupItem": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -6927,12 +6915,12 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -7118,10 +7106,11 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 2
+        "lDroppedDupItem": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -7150,9 +7139,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 3,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -7206,9 +7193,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 3,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 1
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -8017,9 +8002,9 @@
         "bank_dropped": 4
       },
       "drop_codes": {
-        "lDroppedDupItem": 4,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDupItem": 3,
+        "lDroppedDisagree": 1,
+        "lDroppedInvalid": 2
       },
       "notes": []
     },
@@ -8094,9 +8079,9 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 4,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDupItem": 3,
+        "lDroppedDisagree": 1,
+        "lDroppedInvalid": 2
       },
       "notes": []
     },
@@ -8122,9 +8107,9 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 4,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDupItem": 3,
+        "lDroppedDisagree": 1,
+        "lDroppedInvalid": 2
       },
       "notes": []
     },
@@ -8198,10 +8183,11 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 2
+        "lDroppedDupItem": 1
       },
       "notes": []
     },
@@ -8219,15 +8205,15 @@
         32
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 4
+        "lDroppedDupItem": 3
       },
       "notes": []
     },
@@ -8350,12 +8336,12 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -8522,11 +8508,11 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 1,
         "lDroppedDisagree": 1
       },
       "notes": []
@@ -8554,8 +8540,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 1,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -8576,15 +8561,9 @@
       "got": 0,
       "missing": 2,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 1,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "pipeline_loss": 2
       },
       "notes": []
     },
@@ -9296,12 +9275,12 @@
         28
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
@@ -9802,18 +9781,12 @@
         11
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 3,
         "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 1,
-        "lDroppedInvalid": 2
       },
       "notes": []
     },
@@ -9870,8 +9843,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedInvalid": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -9921,13 +9893,13 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 3,
+        "pipeline_loss": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDisagree": 1,
+        "lDroppedInvalid": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -10246,15 +10218,9 @@
       "got": 0,
       "missing": 4,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 3,
-        "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "pipeline_loss": 4
       },
       "notes": []
     },
@@ -10295,12 +10261,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 4
+        "pipeline_loss": 1
       },
       "notes": []
     },
@@ -10511,13 +10477,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2,
-        "pipeline_loss": 2
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 3
@@ -11194,8 +11159,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 0,
-        "lDroppedDisagree": 3,
-        "lDroppedInvalid": 1
+        "lDroppedDisagree": 1
       },
       "notes": []
     },
@@ -11241,18 +11205,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
-      "cause": "bank_dropped",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 3,
         "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 0,
-        "lDroppedDisagree": 3,
-        "lDroppedInvalid": 1
       },
       "notes": []
     },
@@ -11573,7 +11531,7 @@
         "bank_dropped": 2
       },
       "drop_codes": {
-        "lDroppedDupItem": 3
+        "lDroppedDupItem": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -11596,13 +11554,9 @@
       "got": 0,
       "missing": 2,
       "status": "empty",
-      "cause": "bank_dropped",
+      "cause": "pipeline_loss",
       "charged": {
-        "bank_dropped": 1,
-        "pipeline_loss": 1
-      },
-      "drop_codes": {
-        "lDroppedDupItem": 3
+        "pipeline_loss": 2
       },
       "notes": [
         "duplicate_cluster"
@@ -12136,12 +12090,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 4
+        "pipeline_loss": 1
       },
       "notes": [
         "duplicate_cluster",
@@ -12608,12 +12562,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 4

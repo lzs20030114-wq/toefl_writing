@@ -1639,7 +1639,10 @@
       "difficulty": "medium",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/la/real_la_323_1_19.mp3?v=mu41wn6j",
       "asr_similarity": 1,
-      "source_notes": [],
+      "source_notes": [
+        "listening_renumber:Q19→Q20，答案不变（屏幕相似度 1.000）",
+        "listening_renumber:Q20→Q19，答案不变（屏幕相似度 1.000）"
+      ],
       "real": true,
       "tier": "recalled",
       "source": "3.23新托福真题",
@@ -1651,19 +1654,6 @@
       "announcement": "Hey everyone, we've got some important updates to our lab safety protocols that you need to know about. Starting next week, there will be a mandatory training session for lab users. This is to ensure everyone's up to speed with the new safety measures and can work safely. Only those of you who first trained last semester or before need to attend. The rest of you have already received updated procedures. The training will take place next Thursday at 3 p.m. in lab room 204. If you have any questions or need more details, please drop by my office or send me an email.",
       "questions": [
         {
-          "type": "detail",
-          "stem": "Why is the training session being held?",
-          "options": {
-            "A": "Safety requirements have changed.",
-            "B": "It is a regular annual requirement.",
-            "C": "There was a recent lab accident.",
-            "D": "It is part of new students' orientation."
-          },
-          "answer": "A",
-          "explanation": "",
-          "source_q": 19
-        },
-        {
           "type": "inference",
           "stem": "What does the speaker imply about students who had recent training?",
           "options": {
@@ -1671,6 +1661,19 @@
             "B": "They must conduct training for other students.",
             "C": "They have not been following lab procedures.",
             "D": "They must attend Thursday's training"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 19
+        },
+        {
+          "type": "detail",
+          "stem": "Why is the training session being held?",
+          "options": {
+            "A": "Safety requirements have changed.",
+            "B": "It is a regular annual requirement.",
+            "C": "There was a recent lab accident.",
+            "D": "It is part of new students' orientation."
           },
           "answer": "A",
           "explanation": "",
