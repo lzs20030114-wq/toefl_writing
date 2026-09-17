@@ -1103,7 +1103,7 @@ function speakingSetKey(set) {
  * 拼接原句得到，模型没有产出文本的口子）。音频一律没有 —— 前端 InterviewTask / RepeatTask
  * 缺 audio_url 时退回浏览器朗读，题照样能做。
  */
-function recallSpeaking(spk, seenS, stats) {
+function recallSpeaking(spk, seenS, stats, itemAliasEdges = []) {
   const added = { repeat: 0, interview: 0 };
   const have = {
     repeat: new Set(spk.repeat.map((x) => String(x.source || "").trim())),
@@ -1146,6 +1146,9 @@ function recallSpeaking(spk, seenS, stats) {
           set: setname, slug, section: "speaking", type, n: (set.sentences || set.questions).length, id,
           code: "sDroppedDupSet", detail: `补录内容与 ${seenS.get(sk)} 逐字相同`,
         });
+        // 主路径的跨卷重复早就记别名了，补录这一路以前只 continue —— 那一卷的槽位白空着
+        // （2026-09-17 实测 2.1C 的复述 7 句就是这么丢的，内容一直躺在 rf0622 上）。
+        itemAliasEdges.push(dupEdge(id, seenS.get(sk), type, setname));
         continue;
       }
       const res = type === "repeat" ? SPV.validateRepeatSet(set, REAL_EXAM) : SPV.validateInterviewSet(set, REAL_EXAM);
@@ -1242,13 +1245,25 @@ function buildListeningSpeaking(files, stats) {
     const sHold = holdFor(setname, "speaking");
     recordHold(setname, "listening", lHold);
     recordHold(setname, "speaking", sHold);
-    if (lHold.held && sHold.held) {
-      console.warn(`跳过 ${setname} 听力/口语：源料体检标了 blocking`);
+    // 扣留判定**逐科**（2026-09-17 之前是「两科都被扣才整卷跳过」，面试被顺带扣着）：
+    //   · 听力：按 lHold 判，被扣就整科不收；
+    //   · 复述：口径**一个字不放宽** —— 仍按原来那条整卷条件（两科都被扣）扣下。
+    //     这几套的复述要不要收，取决于「没有答案页锚的复述收不收 ASR」，那是待拍板的口径，不在这里拍；
+    //   · 面试：**不受 sHold 拦**。面试题干既不在答案页、也不在题面屏上，只在录音里（2026-09-16 用户拍板
+    //     收 ASR + 四道机械闸）—— 这些 blocking 码（section_no_stems / section_blocked / section_gap /
+    //     ingest_blocker）说的全是答案页或题面屏，说的不是它。2.8 / 3.24 / 4.18 的 ingest_blocker
+    //     detail 写的更是**阅读 / 听力**答案页的题号重启块，连科目都不是口语。
+    //     它自己那四道机械闸（旁白 / 恰好 4 段 / 词数与标点 / 切得出原声）照旧一道不少。
+    const listeningHeld = lHold.held;
+    const repeatHeld = lHold.held && sHold.held;
+    if (listeningHeld) {
+      console.warn(`跳过 ${setname} 听力：源料体检标了 blocking（${lHold.heldBy.join("/")}）`);
       stats.lDroppedHeld += 1;
-      for (const [section, h] of [["listening", lHold], ["speaking", sHold]]) {
-        recordDrop(stats, { set: setname, slug: setSlug(setname), section, code: "lDroppedHeld", detail: `${h.heldBy.join("/")}（听力与口语同被扣，整卷跳过）` });
-      }
-      continue;
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "listening", code: "lDroppedHeld", detail: lHold.heldBy.join("/") });
+    }
+    if (repeatHeld) {
+      console.warn(`跳过 ${setname} 复述：源料体检标了 blocking（${sHold.heldBy.join("/")}；面试不受这条拦）`);
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "speaking", type: "repeat", code: "lDroppedHeld", detail: `${sHold.heldBy.join("/")}（复述扣下；面试题干只在录音里，不受这条拦）` });
     }
     const meta = {
       real: true, tier: TIER, source: setname, date: setDate(setname),
@@ -1271,7 +1286,7 @@ function buildListeningSpeaking(files, stats) {
         }
       }
     }
-    if (!passedKeys) {
+    if (!passedKeys && !listeningHeld) {
       console.warn(`跳过 ${setname} 听力：没有可用的盲审结果`);
       stats.lDroppedNoAudit += 1;
       recordDrop(stats, { set: setname, slug, section: "listening", code: "lDroppedNoAudit", detail: fs.existsSync(auditPath) ? "盲审结果是旧格式（没有 audited 明细）" : "没有 .audit.json" });
@@ -1285,7 +1300,7 @@ function buildListeningSpeaking(files, stats) {
     // 4.29 从没生成过 .audit.json（阅读只有填词），放在里面会连它 22 组重复题的别名一起丢掉。
     // **不登记进 seenL**：卷名排在保留方之前时（"3.16…" < "rf0610"），登记了会反过来把线上那条
     // （带原声的）当成重复丢掉，id 连同音频一起换掉。
-    for (const r of st.results || []) {
+    for (const r of listeningHeld ? [] : st.results || []) {
       if (r.section !== "listening" || r.status !== "ok" || !r.dup_of || !out[r.type]) continue;
       const dupId = `real_${r.type}_${slug}_${r.module}_${pad2(r.q_start)}`;
       console.warn(`跳过 ${setname} ${dupId}：录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）→ 记别名`);
@@ -1294,7 +1309,7 @@ function buildListeningSpeaking(files, stats) {
         n: (r.items || []).length, id: dupId, code: "lDroppedDupItem", detail: `录音转写与 ${r.dup_of} 近似重复（sim=${r.dup_sim}）` });
       itemAliasEdges.push(dupEdge(dupId, r.dup_of, r.type, setname));
     }
-    if (passedKeys) {
+    if (passedKeys && !listeningHeld) {
       for (const r of st.results || []) {
         if (r.section !== "listening" || r.status !== "ok" || r.dup_of) continue;
         if (!out[r.type]) continue;
@@ -1388,6 +1403,7 @@ function buildListeningSpeaking(files, stats) {
     const sMeta = { ...meta, source_flags: flagsFor(setname, "speaking") };
     for (const r of st.results || []) {
       if (r.section !== "speaking" || r.status !== "ok") continue;
+      if (r.type === "repeat" && repeatHeld) continue;   // 复述照旧扣下（口径不放宽，见上）；面试不受这条拦
       if (r.type === "repeat") {
         const id = `real_repeat_${slug}_1`;
         const sentences = (r.items || [])
@@ -1496,8 +1512,10 @@ function buildListeningSpeaking(files, stats) {
       }
     }
   }
+  // 补录路径也会撞上跨卷重复（2.1C 的补录与 rf0622 逐字相同）—— 它记的别名边也得算进账本，
+  // 所以 aliasEntries 必须排在 recallSpeaking **之后**：排在前面那一版，补录撞重复的槽位一直空着。
+  recallSpeaking(spk, seenS, stats, itemAliasEdges);
   stats.itemAliases = aliasEntries(itemAliasEdges);
-  recallSpeaking(spk, seenS, stats);
   return { listening: out, speaking: spk };
 }
 

@@ -33,9 +33,9 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1603,
+    "rows": 1601,
     "questions": 840,
-    "sections": 21,
+    "sections": 22,
     "byCode": {
       "wSkippedThin": {
         "code": "wSkippedThin",
@@ -82,15 +82,15 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 117,
-        "questions": 117,
+        "rows": 114,
+        "questions": 114,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 71,
-        "questions": 87,
+        "rows": 70,
+        "questions": 86,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -117,9 +117,9 @@
       "lDroppedHeld": {
         "code": "lDroppedHeld",
         "label": "源料体检 blocking，听力整科扣下",
-        "rows": 8,
+        "rows": 9,
         "questions": 0,
-        "sections": 8
+        "sections": 9
       },
       "sDroppedNoOriginalAudio": {
         "code": "sDroppedNoOriginalAudio",
@@ -131,8 +131,8 @@
       "sDroppedDupSet": {
         "code": "sDroppedDupSet",
         "label": "口语内容与更早一套卷重复",
-        "rows": 18,
-        "questions": 103,
+        "rows": 19,
+        "questions": 107,
         "sections": 0
       },
       "lDroppedBadOptions": {
@@ -200,12 +200,12 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 477,
-        "sections": 5
+        "questions": 473,
+        "sections": 6
       },
       "speaking": {
         "section": "speaking",
-        "questions": 118,
+        "questions": 122,
         "sections": 4
       },
       "reading": {
@@ -264,11 +264,11 @@
       },
       "lat": {
         "type": "lat",
-        "questions": 167,
+        "questions": 163,
         "byCode": {
           "lDroppedNoAuditQ": 21,
-          "lDroppedDisagree": 61,
-          "lDroppedInvalid": 42,
+          "lDroppedDisagree": 58,
+          "lDroppedInvalid": 41,
           "lDroppedDupItem": 43
         }
       },
@@ -282,9 +282,9 @@
       },
       "interview": {
         "type": "interview",
-        "questions": 32,
+        "questions": 36,
         "byCode": {
-          "sDroppedDupSet": 28,
+          "sDroppedDupSet": 32,
           "sDroppedNoOriginalAudio": 4
         }
       },
@@ -10117,20 +10117,20 @@
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "ingest_blocker"
     },
     {
       "set": "2.8新托福真题",
       "slug": "28",
       "section": "speaking",
-      "type": null,
+      "type": "repeat",
       "module": null,
       "q": null,
       "n": null,
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "section_no_stems/ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "section_no_stems/ingest_blocker（复述扣下；面试题干只在录音里，不受这条拦）"
     },
     {
       "set": "3.10新托福真题",
@@ -12249,20 +12249,20 @@
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "ingest_blocker"
     },
     {
       "set": "3.24新托福真题",
       "slug": "324",
       "section": "speaking",
-      "type": null,
+      "type": "repeat",
       "module": null,
       "q": null,
       "n": null,
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "ingest_blocker（复述扣下；面试题干只在录音里，不受这条拦）"
     },
     {
       "set": "3.25新托福真题",
@@ -14238,20 +14238,20 @@
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "section_gap（听力与口语同被扣，整卷跳过）"
+      "detail": "section_gap"
     },
     {
       "set": "3.8新托福真题",
       "slug": "38",
       "section": "speaking",
-      "type": null,
+      "type": "repeat",
       "module": null,
       "q": null,
       "n": null,
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "section_no_stems（听力与口语同被扣，整卷跳过）"
+      "detail": "section_no_stems（复述扣下；面试题干只在录音里，不受这条拦）"
     },
     {
       "set": "4.11新托福真题",
@@ -15148,20 +15148,20 @@
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "ingest_blocker"
     },
     {
       "set": "4.18新托福真题",
       "slug": "418",
       "section": "speaking",
-      "type": null,
+      "type": "repeat",
       "module": null,
       "q": null,
       "n": null,
       "scope": "section",
       "id": null,
       "code": "lDroppedHeld",
-      "detail": "section_blocked/ingest_blocker（听力与口语同被扣，整卷跳过）"
+      "detail": "section_blocked/ingest_blocker（复述扣下；面试题干只在录音里，不受这条拦）"
     },
     {
       "set": "4.1新托福真题",
@@ -16202,6 +16202,19 @@
       "id": "real_lat_427_2_12",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_128b_2_08 近似重复（sim=0.924）"
+    },
+    {
+      "set": "4.27新托福真题",
+      "slug": "427",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_427_1",
+      "code": "sDroppedDupSet",
+      "detail": "面试与 3.24新托福真题/real_interview_324_1 逐字相同"
     },
     {
       "set": "4.28新托福真题",
@@ -20523,53 +20536,14 @@
       "set": "rp0812",
       "slug": "rp0812",
       "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 205,
-      "n": 1,
-      "scope": "question",
+      "type": null,
+      "module": null,
+      "q": null,
+      "n": null,
+      "scope": "section",
       "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "rp0812",
-      "slug": "rp0812",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 206,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "rp0812",
-      "slug": "rp0812",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 207,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "rp0812",
-      "slug": "rp0812",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 5,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_rp0812_2_05",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
+      "code": "lDroppedHeld",
+      "detail": "answer_key_misaligned/audit_low_agreement"
     },
     {
       "set": "rp0812",

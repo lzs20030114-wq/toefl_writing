@@ -72,8 +72,8 @@ describe("build_bank 与整块录音合流的配套约定", () => {
     const dup = src.slice(start, src.indexOf("const kept = [];", start));
     expect(dup).toContain("itemAliasEdges.push(dupEdge(");
     expect(dup).not.toContain("seenL.set(");
-    // 别名循环在盲审闸（if (passedKeys)）之前
-    expect(dup.indexOf("itemAliasEdges.push(dupEdge(")).toBeLessThan(dup.indexOf("if (passedKeys) {"));
+    // 别名循环在盲审闸（if (passedKeys && !listeningHeld)）之前
+    expect(dup.indexOf("itemAliasEdges.push(dupEdge(")).toBeLessThan(dup.indexOf("if (passedKeys && !listeningHeld) {"));
     expect(src).toContain('code: "lDroppedNoOriginalAudio"');
     const { DROP_CODES } = require("../scripts/realbank/drop_ledger.js");
     expect(DROP_CODES.lDroppedNoOriginalAudio).toMatchObject({ scope: "unit", section: "listening" });
@@ -118,5 +118,58 @@ maybe("面试题干（ASR + 四道机械闸）", () => {
     const src = fs.readFileSync(BUILD_BANK, "utf8");
     expect(src).toContain('from_asr: (it.problems || []).includes("stem_from_asr")');
     expect(src).toContain('keepSpeaking("interview"');
+  });
+});
+
+/**
+ * 源料体检 blocking 的**逐科**判定（2026-09-17）。
+ * 以前是 `lHold.held && sHold.held` 一条整卷条件，面试被顺带扣着：2.8 / 3.24 / 4.18 的
+ * ingest_blocker detail 写的是**阅读 / 听力**答案页的题号重启块，3.8 是 section_gap[listening]，
+ * 说的都不是口语面试 —— 而面试题干既不在答案页也不在题面屏上，只在录音里。
+ */
+describe("build_bank：听力 / 复述 / 面试逐科判 blocking", () => {
+  const src = fs.readFileSync(BUILD_BANK, "utf8");
+  const block = src.slice(src.indexOf("const lHold = holdFor(setname"), src.indexOf("// ── 口语 ──"));
+
+  test("听力按自己的 lHold 判，复述沿用原来那条整卷条件（口径不放宽）", () => {
+    expect(block).toContain("const listeningHeld = lHold.held;");
+    expect(block).toContain("const repeatHeld = lHold.held && sHold.held;");
+    // 听力三处出口都带上 listeningHeld：盲审缺失的记账、dup_of 别名循环、盲审闸主循环
+    expect(block).toContain("if (!passedKeys && !listeningHeld) {");
+    expect(block).toContain("for (const r of listeningHeld ? [] : st.results || []) {");
+    expect(block).toContain("if (passedKeys && !listeningHeld) {");
+  });
+
+  test("复述被 repeatHeld 拦、面试不被任何 hold 拦（题干只在录音里，四道机械闸照旧）", () => {
+    const spk = src.slice(src.indexOf("// ── 口语 ──"), src.indexOf("stats.itemAliases = aliasEntries("));
+    expect(spk).toContain('if (r.type === "repeat" && repeatHeld) continue;');
+    expect(spk).not.toContain("interview\" && repeatHeld");
+    expect(spk).not.toContain("sHold");        // 面试那一支不许再挂上 speaking 的 hold
+  });
+
+  test("整卷跳过那条 continue 已经拆掉（否则面试还是被连坐）", () => {
+    expect(src).not.toContain("if (lHold.held && sHold.held) {");
+  });
+});
+
+/**
+ * 口语补录路径撞上跨卷重复时也要记别名（2026-09-17）。
+ * 主路径（dupEdge / adoptGatedOut）早就记了，补录那一路以前只 continue ——
+ * 2.1C 的复述 7 句就是这么丢的（内容一直躺在 rf0622 上）。
+ */
+describe("build_bank：口语补录的跨卷重复也记别名", () => {
+  const src = fs.readFileSync(BUILD_BANK, "utf8");
+
+  test("recallSpeaking 收到别名数组，撞重复时 push 一条 dupEdge", () => {
+    expect(src).toContain("function recallSpeaking(spk, seenS, stats, itemAliasEdges = []) {");
+    const fn = src.slice(src.indexOf("function recallSpeaking("), src.indexOf("const REPEAT_DIFF ="));
+    const dupAt = fn.indexOf('code: "sDroppedDupSet", detail: `补录内容与');
+    expect(dupAt).toBeGreaterThan(0);
+    expect(fn.indexOf("itemAliasEdges.push(dupEdge(id, seenS.get(sk), type, setname));")).toBeGreaterThan(dupAt);
+  });
+
+  test("账本在 recallSpeaking 之后才结算（排在前面补录那几条会被漏掉）", () => {
+    expect(src.indexOf("recallSpeaking(spk, seenS, stats, itemAliasEdges);"))
+      .toBeLessThan(src.indexOf("stats.itemAliases = aliasEntries(itemAliasEdges);"));
   });
 });
