@@ -69,7 +69,7 @@ const { consolidateReading } = require("./consolidate_reading.js");
 // 条目 id 沿用（题号会随补题变，id 不能跟着变）同样抽成纯函数：scripts/realbank/id_carry.js。
 const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js");
 // id 别名账本（合并 / 归位之后旧 id 指到哪）：scripts/realbank/id_aliases.js。
-const { buildIdAliases } = require("./id_aliases.js");
+const { buildIdAliases, dupSetReadingEdges } = require("./id_aliases.js");
 // 造句跨卷重复的别名（同一道题在后面的卷里又考了一次）：scripts/realbank/bs_aliases.js。
 const {
   WRITING_ALIAS_PURPOSE, ITEM_ALIAS_PURPOSE, BS_ALIAS_REASON, bsAnswerKey,
@@ -1663,6 +1663,8 @@ function main() {
   const out = { ap: [], rdl: [], ctw: [] };
   // 按考卷位置换了题型（ap ↔ rdl）的条目：落 id-aliases.json 的 reclassified 边、打印清单都用它
   const RECLASSIFIED = [];
+  // 整份阅读题目文件与更早一套相同、整科跳过的卷：{setname, kept}。槽位按别名还回去（见 dupSetReadingEdges）
+  const READING_DUP_SETS = [];
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, keptByManual: 0, keptByAnswerFix: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
@@ -1715,7 +1717,8 @@ function main() {
     if (dupHash) {
       console.warn(`跳过 ${setname} 阅读：与 ${seenHash.get(dupHash)} 内容相同(hash ${dupHash})`);
       stats.droppedDupSet += 1;
-      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "reading", code: "droppedDupSet", detail: `与 ${seenHash.get(dupHash)} 题目文件相同（hash ${dupHash}）` });
+      recordDrop(stats, { set: setname, slug: setSlug(setname), section: "reading", code: "droppedDupSet", detail: `与 ${seenHash.get(dupHash)} 题目文件相同（hash ${dupHash}）；槽位按别名指向保留方` });
+      READING_DUP_SETS.push({ setname, kept: seenHash.get(dupHash) });
       continue;
     }
     for (const h of hashes || []) seenHash.set(h, setname);
@@ -2237,7 +2240,7 @@ function main() {
     if (reImages) console.log(`■ 复核 patch 后二次沿用：${reImages} 条 material_image 接回`);
     if (rr) console.log(`  apply_review：patch ${rr.stats.patched} 处；下架 整条 ${rr.stats.units} / 单题 ${rr.stats.questions}`
       + `（顺着归位别名搬到新 file+id ${rr.stats.redirected} 条）`);
-    finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending);
+    finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending, READING_DUP_SETS);
     for (const k of ["ap", "rdl", "ctw"]) {
       const q = path.join(BANK_DIR, `${k}.json`);
       console.log(`  → 复核后 ${k} ${JSON.parse(fs.readFileSync(q, "utf8")).items.length} 条`);
@@ -2306,7 +2309,7 @@ function main() {
       + (r.stats.aliasesDropped ? `；跨卷重出别名摘掉 ${r.stats.aliasesDropped} 条（保留方已不在库里）` : ""));
     for (const l of r.log) console.log(l);
   }
-  finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending);
+  finishReadingOnDisk(edgesThisBuild, consolidated.sentencePending, READING_DUP_SETS);
   // 最后一步：拼盘面试大集按人工切分表拆成 4 问一套（data/realBank/speaking/interview-splits.json）。
   // 必须排在 applyReview 之后 —— 切分表里的问题 id 是按下架之后的库选的。
   const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
@@ -2326,7 +2329,7 @@ function main() {
  *     `node scripts/realbank/audit_sentence_select.mjs` 只审这些哈希失配的。
  *  2. id 别名账本 id-aliases.json：本次的合并 / 归位边 + 上一版账本，按**最终**产物收敛。
  */
-function finishReadingOnDisk(edges, mergeCandidates = []) {
+function finishReadingOnDisk(edges, mergeCandidates = [], dupSets = []) {
   const apPath = path.join(BANK_DIR, "ap.json");
   const apDoc = JSON.parse(fs.readFileSync(apPath, "utf8"));
   const before = JSON.stringify(apDoc.items);
@@ -2367,9 +2370,27 @@ function finishReadingOnDisk(edges, mergeCandidates = []) {
     + `合并时待代表段落审过才能搬的 ${mergePending.length} 道（待审清单 → ${path.relative(process.cwd(), pendingPath)}）`);
 
   const rdlDoc = JSON.parse(fs.readFileSync(path.join(BANK_DIR, "rdl.json"), "utf8"));
-  const live = new Set([...apDoc.items, ...(rdlDoc.items || [])].map((it) => String(it.id)));
+  const ctwDoc = JSON.parse(fs.readFileSync(path.join(BANK_DIR, "ctw.json"), "utf8"));
+  // 填词也进 liveIds：整份题目文件重复的卷（下面 dupSetReadingEdges）连填词段一起按别名还槽位，
+  // 只收 ap+rdl 的话那几条边会收敛成 to:null，assemble_sets 直接丢掉、填词槽位照样空着。
+  const live = new Set([...apDoc.items, ...(rdlDoc.items || []), ...(ctwDoc.items || [])].map((it) => String(it.id)));
   // 复核清单里「跨套重复、有保留方」的整条下架也是边：内容在保留方上，不能收敛成 null 让前端当成题下线
-  const ledger = buildIdAliases({ prev: PREV_ALIASES, edges, holds: REVIEW.holds, liveIds: live });
+  let ledger = buildIdAliases({ prev: PREV_ALIASES, edges, holds: REVIEW.holds, liveIds: live });
+  // 「整份阅读题目文件与更早一套相同」的卷：拿上面这份**收敛完的**账本 + 活着的条目，把保留方的每个
+  // 槽位按 slug 换一个 id 记成别名（写作那路的 dupSets 分支同款）。必须排在收敛之后 ——
+  // 保留方自己也有被合并 / 归位掉的槽位，直接指向它那个已经不在库里的 id 会白记一条。
+  const dupEdges = dupSetReadingEdges({
+    dupSets, liveItems: [...apDoc.items, ...(rdlDoc.items || []), ...(ctwDoc.items || [])],
+    ledger, holds: REVIEW.holds, slugOf: setSlug,
+  });
+  if (dupEdges.length) {
+    ledger = buildIdAliases({ prev: PREV_ALIASES, edges: [...edges, ...dupEdges], holds: REVIEW.holds, liveIds: live });
+    const perSet = dupSets.map(({ setname, kept }) => {
+      const n = dupEdges.filter((e) => (/^real_(?:ap|rdl|ctw)_([^_]+)_/.exec(e.from) || [])[1] === setSlug(setname)).length;
+      return `${setname}←${kept} ${n} 条`;
+    });
+    console.log(`■ 阅读整份题目文件重复的卷：按别名还回 ${dupEdges.length} 条（${perSet.join(" / ")}）`);
+  }
   const aliasPath = path.join(BANK_DIR, "id-aliases.json");
   fs.writeFileSync(aliasPath, JSON.stringify(ledger, null, 2), "utf8");
   const byReason = {};

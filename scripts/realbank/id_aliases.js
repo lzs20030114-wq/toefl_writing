@@ -28,6 +28,111 @@ const typeOfId = (id) => {
 };
 
 /**
+ * 条目上的题型标签：填词也是阅读的一类（前端 lib/realBankAliases 按 ctw|rdl|ap 认 id 前缀）。
+ * **只用来给条目打 from_type / to_type 标签**，holds 那条分支仍只认 ap|rdl ——
+ * 填词的跨套重复早已由 assemble_sets 直接读 review-holds 的 dup_of 还槽位，
+ * 在这里再记一遍只会给账本添 80 条无用条目，还会改掉前端对填词旧 id 的判定。
+ */
+const labelTypeOfId = (id) => {
+  const m = /^real_(ap|rdl|ctw)_/.exec(String(id || ""));
+  return m ? m[1] : null;
+};
+
+/** 真题阅读 id 换个卷 slug（real_ap_311_1_31 + "321" → real_ap_321_1_31）；形状认不出返回 null。 */
+function readingIdForSlug(id, slug) {
+  const m = /^(real_(?:ap|rdl|ctw)_)([^_]+)(_.+)$/.exec(String(id || ""));
+  return m && slug ? `${m[1]}${slug}${m[3]}` : null;
+}
+
+/** 真题阅读 id 的卷 slug（real_ctw_311_2_1 → "311"）；形状认不出返回 null。 */
+function readingSlugOfId(id) {
+  const m = /^real_(?:ap|rdl|ctw)_([^_]+)_/.exec(String(id || ""));
+  return m ? m[1] : null;
+}
+
+/**
+ * 「整份阅读题目文件与更早一套相同」的卷（build_bank 的 droppedDupSet）：它的每个槽位就是
+ * 保留方的那一条，按 id 逐条记别名 —— 与写作那路 `recallWriting` 的 dupSets 分支同一个道理。
+ *
+ * 不记别名的后果（2026-09-17 实测 3.21 阅读 0/50，内容全在 3.11 上）：assemble_sets 那一卷
+ * 阅读整科空着、loss_ledger 把 49 道算成缺题、前端真题专区那一场根本不露面。
+ *
+ * 保留方自己的槽位有三种来源，三种都要跟着换 slug 才不漏：
+ *   · 库里活着的条目（id 就是它自己）；
+ *   · 账本里 from 是保留方那一卷的条目（它那一篇被跨卷合并到别的卷上了）；
+ *   · 复核清单里 scope=unit 且带 dup_of 的下架条目（**填词的跨套重复只有这一条路** ——
+ *     ctw 不进 buildIdAliases 的 holds 分支，3.11 的 M1 前十空就是这么指到 real_ctw_41_1_1 的）。
+ * 三种来源合成一张 from → to 表，顺着链收敛到库里还活着的那条再换 slug。
+ *
+ * 两条守紧的：
+ *   · **归位（ap↔rdl）那种边不跟着换** —— from 是已经作废的 id 形状，换出来的 real_ap_321_1_25
+ *     在 assemble_sets.indexItems 会因题型对不上被丢掉，而同一个槽位早由 real_rdl_321_1_25 认领了；
+ *     判据 = from 与收敛后的 to 题型一致才记。
+ *   · 已经活着的 from、或账本 / 清单里已有的 from 一律跳过（不抢号、不覆盖）。
+ *
+ * @param {{dupSets: Array<{setname, kept}>, liveItems: Array<{id, source}>, ledger?: {aliases?: Array},
+ *          holds?: object[], slugOf: (setname: string) => string}} args
+ * @returns {Array<{from, to, reason: "consolidated"}>}
+ */
+function dupSetReadingEdges({ dupSets = [], liveItems = [], ledger = null, holds = [], slugOf } = {}) {
+  const bySource = new Map();
+  const liveIds = new Set();
+  for (const it of liveItems || []) {
+    const id = String(it?.id || "");
+    if (!id) continue;
+    liveIds.add(id);
+    const src = String(it?.source || "").trim();
+    if (!src) continue;
+    if (!bySource.has(src)) bySource.set(src, []);
+    bySource.get(src).push(id);
+  }
+  // from → to 表：账本优先，复核清单的 dup_of 补缺
+  const jump = new Map();
+  for (const a of (ledger && ledger.aliases) || []) {
+    if (!a || !a.from || !a.to || a.from === a.to || jump.has(String(a.from))) continue;
+    jump.set(String(a.from), String(a.to));
+  }
+  for (const h of holds || []) {
+    if (!h || h.scope !== "unit" || !h.id || !h.dup_of || String(h.id) === String(h.dup_of)) continue;
+    if (!readingSlugOfId(h.id) || jump.has(String(h.id))) continue;
+    jump.set(String(h.id), String(h.dup_of));
+  }
+  /** 顺着链走到库里活着的那条；走不到返回 null（那是真下线，不该给重复卷造一个指向空的槽位）。 */
+  const resolve = (id) => {
+    let cur = String(id);
+    const seen = new Set([cur]);
+    while (!liveIds.has(cur) && jump.has(cur)) {
+      cur = jump.get(cur);
+      if (seen.has(cur)) return null;
+      seen.add(cur);
+    }
+    return liveIds.has(cur) ? cur : null;
+  };
+  const known = new Set(jump.keys());
+  const edges = [];
+  for (const { setname, kept } of dupSets || []) {
+    const slug = slugOf ? slugOf(setname) : null;
+    const keptSet = String(kept || "").trim();
+    if (!slug || !keptSet) continue;
+    const keptSlug = slugOf ? slugOf(keptSet) : null;
+    const slotIds = [
+      ...(bySource.get(keptSet) || []),
+      ...[...jump.keys()].filter((id) => keptSlug && readingSlugOfId(id) === keptSlug),
+    ];
+    for (const slotId of slotIds) {
+      const to = resolve(slotId);
+      const from = readingIdForSlug(slotId, slug);
+      if (!to || !from || from === to || liveIds.has(from) || known.has(from)) continue;
+      // 归位边（ap→rdl）不跟着换：换出来的 id 题型对不上，assemble_sets 会整条丢掉
+      if (labelTypeOfId(slotId) !== labelTypeOfId(to)) continue;
+      known.add(from);
+      edges.push({ from, to, reason: "consolidated" });
+    }
+  }
+  return edges;
+}
+
+/**
  * @param {{prev?: object|null, edges?: Array<{from,to,reason}>, holds?: object[], liveIds: Iterable<string>, generated?: string}} args
  *   prev   上一版账本（缺省 = 空）
  *   edges  本次重建产生的直接边（合并 dropped→kept、归位 旧id→新id）
@@ -89,7 +194,7 @@ function buildIdAliases({ prev = null, edges = [], holds = [], liveIds, generate
     const reason = reasons.includes("consolidated") || (!reasons.length && own === "consolidated")
       ? "consolidated"
       : (reasons[0] || own || "reclassified");
-    aliases.push({ from, to, from_type: typeOfId(from), to_type: to ? typeOfId(to) : null, reason });
+    aliases.push({ from, to, from_type: labelTypeOfId(from), to_type: to ? labelTypeOfId(to) : null, reason });
   }
   aliases.sort((a, b) => a.from.localeCompare(b.from));
   return {
@@ -109,4 +214,7 @@ function reclassifiedRedirects(ledger) {
   return out;
 }
 
-module.exports = { typeOfId, buildIdAliases, reclassifiedRedirects };
+module.exports = {
+  typeOfId, buildIdAliases, reclassifiedRedirects,
+  readingIdForSlug, readingSlugOfId, dupSetReadingEdges,
+};

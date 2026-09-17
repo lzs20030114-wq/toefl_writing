@@ -8,7 +8,7 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { buildIdAliases, reclassifiedRedirects, typeOfId } = require("../scripts/realbank/id_aliases.js");
+const { buildIdAliases, reclassifiedRedirects, typeOfId, dupSetReadingEdges } = require("../scripts/realbank/id_aliases.js");
 
 const by = (ledger) => Object.fromEntries(ledger.aliases.map((a) => [a.from, a]));
 
@@ -285,4 +285,100 @@ describe("按题号认领的清单 id：补题改名 / 换了题型之后，下�
     buildLike(bundle, review);
     expect(read("reading/ap.json").items[0]).toMatchObject({ id: "real_ap_325_1_23", passage: "Award Winner Returns" });
   });
+});
+
+/**
+ * 「整份阅读题目文件与更早一套相同」的卷（build_bank 的 droppedDupSet）按别名还槽位。
+ * 2026-09-17 之前这一路直接整科跳过、什么都不记 —— 3.21 阅读因此 0/50，内容全躺在 3.11 上。
+ * 写作那路（recallWriting 的 dupSets 分支）早就这么记了，这里是把阅读接上同一条。
+ */
+describe("dupSetReadingEdges", () => {
+  const slugOf = (s) => String(s).replace(/新托福真题.*$/, "").replace(/\./g, "");
+  const dupSets = [{ setname: "3.21新托福真题", kept: "3.11新托福真题" }];
+
+  test("活着的条目：逐条换 slug 指回保留方", () => {
+    const edges = dupSetReadingEdges({
+      dupSets,
+      liveItems: [
+        { id: "real_ap_311_1_31", source: "3.11新托福真题" },
+        { id: "real_rdl_311_1_21", source: "3.11新托福真题" },
+        { id: "real_ctw_311_2_1", source: "3.11新托福真题" },
+        { id: "real_ap_415_1_31", source: "4.15新托福真题" },   // 别的卷，不该被牵连
+      ],
+      slugOf,
+    });
+    expect(edges).toEqual([
+      { from: "real_ap_321_1_31", to: "real_ap_311_1_31", reason: "consolidated" },
+      { from: "real_rdl_321_1_21", to: "real_rdl_311_1_21", reason: "consolidated" },
+      { from: "real_ctw_321_2_1", to: "real_ctw_311_2_1", reason: "consolidated" },
+    ]);
+  });
+
+  test("保留方自己那一篇被跨卷合并走了：顺着账本收敛到活着的那条", () => {
+    const edges = dupSetReadingEdges({
+      dupSets,
+      liveItems: [{ id: "real_ap_rp0704_2005_200511", source: "rp0704" }],
+      ledger: { aliases: [{ from: "real_ap_311_2_11", to: "real_ap_rp0704_2005_200511", reason: "consolidated" }] },
+      slugOf,
+    });
+    expect(edges).toEqual([
+      { from: "real_ap_321_2_11", to: "real_ap_rp0704_2005_200511", reason: "consolidated" },
+    ]);
+  });
+
+  test("填词的跨套重复只记在复核清单里（ctw 不进 buildIdAliases 的 holds 分支）：也要跟着换", () => {
+    const edges = dupSetReadingEdges({
+      dupSets,
+      liveItems: [{ id: "real_ctw_41_1_1", source: "4.1新托福真题" }],
+      holds: [{ file: "reading/ctw", id: "real_ctw_311_1_1", scope: "unit", dup_of: "real_ctw_41_1_1" }],
+      slugOf,
+    });
+    expect(edges).toEqual([
+      { from: "real_ctw_321_1_1", to: "real_ctw_41_1_1", reason: "consolidated" },
+    ]);
+  });
+
+  test("归位边（ap→rdl）不跟着换：换出来的 id 题型对不上，assemble_sets 会整条丢掉", () => {
+    const edges = dupSetReadingEdges({
+      dupSets,
+      liveItems: [{ id: "real_rdl_311_1_25", source: "3.11新托福真题" }],
+      ledger: { aliases: [{ from: "real_ap_311_1_25", to: "real_rdl_311_1_25", reason: "reclassified" }] },
+      slugOf,
+    });
+    // rdl 那条（活着的条目那一路）照记，ap 那条作废的 id 形状不记
+    expect(edges.map((e) => e.from)).toEqual(["real_rdl_321_1_25"]);
+  });
+
+  test("收敛不到活着的 id（真下线）不记：宁可空着也不指向一个不存在的条目", () => {
+    const edges = dupSetReadingEdges({
+      dupSets,
+      liveItems: [],
+      ledger: { aliases: [{ from: "real_ap_311_1_31", to: "real_ap_gone_1_31", reason: "consolidated" }] },
+      slugOf,
+    });
+    expect(edges).toEqual([]);
+  });
+
+  test("重复卷自己已经有这个 id（活着的 / 账本里已有的）一律不抢号", () => {
+    const live = [
+      { id: "real_ap_311_1_31", source: "3.11新托福真题" },
+      { id: "real_ap_321_1_31", source: "3.21新托福真题" },
+    ];
+    expect(dupSetReadingEdges({ dupSets, liveItems: live, slugOf })).toEqual([]);
+    expect(dupSetReadingEdges({
+      dupSets,
+      liveItems: [{ id: "real_ap_311_1_31", source: "3.11新托福真题" }],
+      ledger: { aliases: [{ from: "real_ap_321_1_31", to: "real_ap_something_1_1", reason: "consolidated" }] },
+      slugOf,
+    })).toEqual([]);
+  });
+});
+
+/** 填词也是阅读的一类：条目上的 from_type / to_type 要认得出 ctw（前端 lib/realBankAliases 按 id 前缀认）。 */
+test("buildIdAliases：ctw 条目带得上题型标签", () => {
+  const l = buildIdAliases({
+    edges: [{ from: "real_ctw_321_1_1", to: "real_ctw_41_1_1", reason: "consolidated" }],
+    liveIds: ["real_ctw_41_1_1"],
+  });
+  expect(l.aliases[0]).toMatchObject({ from_type: "ctw", to_type: "ctw", to: "real_ctw_41_1_1" });
 });

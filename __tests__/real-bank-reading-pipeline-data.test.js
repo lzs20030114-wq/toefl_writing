@@ -14,6 +14,7 @@ const ROOT = path.join(__dirname, "..");
 const readJ = (rel) => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8")); } catch { return null; } };
 const AP = (readJ("data/realBank/reading/ap.json") || { items: [] }).items || [];
 const RDL = (readJ("data/realBank/reading/rdl.json") || { items: [] }).items || [];
+const CTW = (readJ("data/realBank/reading/ctw.json") || { items: [] }).items || [];
 const SS = require("../scripts/realbank/sentence_select.js");
 
 describe("真题阅读：点选句子题契约（前端按 paragraph_index 顺序 indexOf 定位高亮）", () => {
@@ -113,15 +114,16 @@ describe("真题阅读：id 别名账本（前端靠它把旧 id 的练习记录
   const ledger = readJ("data/realBank/reading/id-aliases.json");
   const t = ledger ? test : test.skip;
 
+  // 填词也在账本里（2026-09-17 起）：整份阅读题目文件与更早一套相同的卷按别名还槽位，ctw 段一起还。
   t("契约形状 + 按 from 升序 + to 收敛到活着的条目（题型与所在文件一致）", () => {
-    const live = { ap: new Set(AP.map((x) => x.id)), rdl: new Set(RDL.map((x) => x.id)) };
+    const live = { ap: new Set(AP.map((x) => x.id)), rdl: new Set(RDL.map((x) => x.id)), ctw: new Set(CTW.map((x) => x.id)) };
     const bad = [];
     const froms = ledger.aliases.map((a) => a.from);
     expect(froms).toEqual([...froms].sort((a, b) => a.localeCompare(b)));
     expect(new Set(froms).size).toBe(froms.length);
     for (const a of ledger.aliases) {
       if (!["reclassified", "consolidated"].includes(a.reason)) bad.push(`${a.from} reason=${a.reason}`);
-      if (a.from_type !== (/^real_(ap|rdl)_/.exec(a.from) || [])[1]) bad.push(`${a.from} from_type`);
+      if (a.from_type !== (/^real_(ap|rdl|ctw)_/.exec(a.from) || [])[1]) bad.push(`${a.from} from_type`);
       if (a.to == null) { if (a.to_type != null) bad.push(`${a.from} to_type 应为 null`); continue; }
       if (!live[a.to_type] || !live[a.to_type].has(a.to)) bad.push(`${a.from} → ${a.to} 不在 ${a.to_type}.json 里`);
     }
@@ -129,7 +131,7 @@ describe("真题阅读：id 别名账本（前端靠它把旧 id 的练习记录
   });
 
   t("被别名接走的旧 id 不再以原 id 活在库里（to 指向自己的例外：那条又活过来了）", () => {
-    const live = new Set([...AP, ...RDL].map((x) => x.id));
+    const live = new Set([...AP, ...RDL, ...CTW].map((x) => x.id));
     expect(ledger.aliases.filter((a) => a.to && a.to !== a.from && live.has(a.from)).map((a) => a.from)).toEqual([]);
   });
 });
