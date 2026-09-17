@@ -237,16 +237,32 @@ function loadAuditOverrides(root) {
 }
 
 /**
+ * 题号定位：卷 + 科目 + 题号，外加 **module**。
+ *
+ * 听力 M1/M2 的题号都从 1 起编（阅读同理），光凭 `q` 指不到具体是哪一道 ——
+ * 这正是 2026-09-17 查实的「盲审闸撞号误放行 20 题」的病根（修法是 audit_key 的 `section#module#q`）。
+ * 人工核定放行比盲审闸更该收紧，所以：
+ *   · 条目写了 `module` → 必须逐一相等；
+ *   · 条目没写 `module` → **只有阅读**沿用老行为（2026-09-15 那 5 条历史条目就是这么写的，
+ *     它们逐条对过原卷、已在库里生效；不为它们补 module 是免得改动引发既有放行失效）。
+ *     听力一律要求写 module，没写就不放行（fail-closed）。
+ */
+function overrideAt(e, a) {
+  if (e.module == null) return a.section === "reading";
+  return Number(e.module) === Number(a.module);
+}
+
+/**
  * 这道盲审不一致的题有没有人工核定放行。
  * @param {Array} entries audit-overrides.json 的 entries
- * @param {{set: string, section: string, q: number, stamped: string, stem: string}} at
+ * @param {{set: string, section: string, module?: number, q: number, stamped: string, stem: string}} at
  */
 function manualAuditPass(entries, at) {
   const a = at || {};
   const letter = (x) => String(x == null ? "" : x).trim().toUpperCase();
   return (entries || []).some((e) => e
     && e.verdict === "key_correct" && typeof e.reason === "string" && e.reason.trim()
-    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q)
+    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q) && overrideAt(e, a)
     && letter(e.stamped) && letter(e.stamped) === letter(a.stamped)
     && typeof e.stem === "string" && e.stem.trim().length >= 12 && String(a.stem || "").startsWith(e.stem.trim()));
 }
@@ -259,7 +275,7 @@ function manualAuditPass(entries, at) {
  * 任何一票没跑、或与核定字母不同，都不改答案、照旧按盲审不一致丢弃。
  *
  * @param {Array} entries audit-overrides.json 的 entries
- * @param {{set: string, section: string, q: number, stamped: string, stem: string, votes: string[]}} at
+ * @param {{set: string, section: string, module?: number, q: number, stamped: string, stem: string, votes: string[]}} at
  *   votes = [第一票字母, 第二票字母]
  */
 function manualAnswerFix(entries, at) {
@@ -268,7 +284,7 @@ function manualAnswerFix(entries, at) {
   const votes = Array.isArray(a.votes) ? a.votes.map(letter) : [];
   const hit = (entries || []).find((e) => e
     && e.verdict === "key_corrected" && typeof e.reason === "string" && e.reason.trim()
-    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q)
+    && e.set === a.set && e.section === a.section && Number(e.q) === Number(a.q) && overrideAt(e, a)
     && letter(e.stamped) && letter(e.stamped) === letter(a.stamped)
     && /^[A-D]$/.test(letter(e.corrected)) && letter(e.corrected) !== letter(e.stamped)
     && typeof e.stem === "string" && e.stem.trim().length >= 12 && String(a.stem || "").startsWith(e.stem.trim()));

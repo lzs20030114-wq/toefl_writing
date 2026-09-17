@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1718,
-    "questions": 887,
+    "rows": 1716,
+    "questions": 884,
     "sections": 10,
     "byCode": {
       "wSkippedThin": {
@@ -82,15 +82,15 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 87,
-        "questions": 87,
+        "rows": 86,
+        "questions": 86,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 72,
-        "questions": 90,
+        "rows": 71,
+        "questions": 88,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -207,7 +207,7 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 466,
+        "questions": 463,
         "sections": 2
       },
       "speaking": {
@@ -271,11 +271,11 @@
       },
       "lat": {
         "type": "lat",
-        "questions": 131,
+        "questions": 128,
         "byCode": {
           "lDroppedNoAuditQ": 11,
-          "lDroppedDisagree": 35,
-          "lDroppedInvalid": 31,
+          "lDroppedDisagree": 34,
+          "lDroppedInvalid": 29,
           "lDroppedDupItem": 54
         }
       },
@@ -18654,32 +18654,6 @@
       "id": "real_la_46_1_19",
       "code": "lDroppedInvalid",
       "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "4.6新托福真题",
-      "slug": "46",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 8,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "4.6新托福真题",
-      "slug": "46",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 8,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lat_46_2_08",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "4.8新托福真题",

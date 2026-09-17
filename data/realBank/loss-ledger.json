@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-17，1718 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-17，1716 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,12 +20,12 @@
   },
   "summary": {
     "need": 8280,
-    "got": 7147,
-    "missing": 1192,
+    "got": 7150,
+    "missing": 1189,
     "overfilled": 59,
-    "completeness": 0.8632,
+    "completeness": 0.8635,
     "causes": {
-      "source_defect": 299,
+      "source_defect": 296,
       "held": 103,
       "deduped": 25,
       "bank_dropped": 309,
@@ -215,10 +215,10 @@
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 848,
-      "missing": 252,
+      "got": 851,
+      "missing": 249,
       "causes": {
-        "source_defect": 37,
+        "source_defect": 34,
         "held": 20,
         "deduped": 0,
         "bank_dropped": 76,
@@ -226,7 +226,7 @@
         "section_lost": 0,
         "pipeline_loss": 103
       },
-      "completeness": 0.7709
+      "completeness": 0.7736
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,10 +297,10 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 2450,
-      "missing": 793,
+      "got": 2453,
+      "missing": 790,
       "causes": {
-        "source_defect": 106,
+        "source_defect": 103,
         "held": 62,
         "deduped": 0,
         "bank_dropped": 243,
@@ -308,7 +308,7 @@
         "section_lost": 0,
         "pipeline_loss": 331
       },
-      "completeness": 0.7555
+      "completeness": 0.7564
     }
   },
   "tasks": [
@@ -9344,12 +9344,12 @@
         11
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },

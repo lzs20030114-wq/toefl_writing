@@ -1286,13 +1286,14 @@ function buildListeningSpeaking(files, stats) {
 
     // 盲审闸（与阅读同一份 .audit.json）
     const auditPath = path.join(OUT_DIR, `${setname}.audit.json`);
-    let passedKeys = null, auditedKeys = null;
+    let passedKeys = null, auditedKeys = null, lAuditByKey = new Map();
     if (fs.existsSync(auditPath)) {
       const au = JSON.parse(fs.readFileSync(auditPath, "utf8"));
       if (Array.isArray(au.audited)) {
         const idx = buildAuditIndex(au.audited, auditPassed);
         passedKeys = idx.passedKeys;
         auditedKeys = idx.auditedKeys;
+        lAuditByKey = idx.byKey;
         if (idx.legacy) {
           console.warn(`${setname} 听力：${idx.legacy} 条盲审明细没有 module，按「没审过」处理`
             + `（跑 scripts/realbank/audit_backfill_module.mjs 回填）`);
@@ -1343,6 +1344,26 @@ function buildListeningSpeaking(files, stats) {
             continue;
           }
           if (!passedKeys.has(key)) {
+            // 人工核定（data/realBank/audit-overrides.json，判据 hold_policy.manualAnswerFix / manualAuditPass）。
+            // 听力的条目**必须写 module**：M1/M2 题号都从 1 起编，光凭 q 指不到是哪一道（overrideAt fail-closed）。
+            const la = lAuditByKey.get(key) || {};
+            const lFixed = manualAnswerFix(AUDIT_OVERRIDES, {
+              set: setname, section: "listening", module: r.module, q: it.q_number, stamped: la.stamped, stem: it.stem,
+              votes: [la.model, la.second_vote && la.second_vote.pick],
+            });
+            if (lFixed) {
+              const li = LETTERS.indexOf(lFixed);
+              stats.lKeptByAnswerFix += 1;
+              kept.push({ ...it, answer_index: li, answer_text: (it.options || [])[li], answer_key: lFixed.toLowerCase() });
+              continue;
+            }
+            if (manualAuditPass(AUDIT_OVERRIDES, {
+              set: setname, section: "listening", module: r.module, q: it.q_number, stamped: la.stamped, stem: it.stem,
+            })) {
+              stats.lKeptByManual += 1;
+              kept.push(it);
+              continue;
+            }
             stats.lDroppedDisagree += 1;
             recordDrop(stats, { ...lAt, q: it.q_number, n: 1, code: "lDroppedDisagree", detail: "盲审与答案页不一致" });
             continue;
@@ -1720,7 +1741,7 @@ function main() {
     dropRecorder: makeDropRecorder(),
     droppedCtwTruncated: 0, releasedCtwTruncated: 0, releasedSectionGap: 0, releasedIngestBlocker: 0,
     wThinReasons: {},
-    lItemsSeen: 0, lKeptByAudit: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
+    lItemsSeen: 0, lKeptByAudit: 0, lKeptByAnswerFix: 0, lKeptByManual: 0, lDroppedNoAudit: 0, lDroppedNoAuditQ: 0,
     lDroppedDisagree: 0, lDroppedDupItem: 0, lDroppedBadOptions: 0, lDroppedInvalid: 0, lDroppedNoOriginalAudio: 0,
     lInvalidReasons: {}, lInvalidDetail: [],
     sDroppedDupSet: 0, sDroppedInvalid: 0, sDroppedNoOriginalAudio: 0, sInvalidDetail: [],
@@ -2012,6 +2033,7 @@ function main() {
   const L = ls.listening, S = ls.speaking;
   console.log("\n■ 真题听力落库（材料 = 商家音频的 Whisper 逐字稿 + 文档转写合流后的 transcript_final）");
   console.log(`  结构化产物里的听力条目 ${stats.lItemsSeen}；盲审通过 ${stats.lKeptByAudit}；`
+    + `人工核定放行 ${stats.lKeptByManual} / 答案页印错改正 ${stats.lKeptByAnswerFix}；`
     + `不一致丢弃 ${stats.lDroppedDisagree}；没被盲审覆盖丢弃 ${stats.lDroppedNoAuditQ}`);
   console.log(`  跨卷逐条内容重复跳过 ${stats.lDroppedDupItem} 组；无盲审结果跳过 ${stats.lDroppedNoAudit} 套；选项残缺丢弃 ${stats.lDroppedBadOptions} 题`);
   console.log(`  整块录音来源没挂上原声不收 ${stats.lDroppedNoOriginalAudio} 组${KEEP_UNBOUND_RECORDING ? "（--keep-unbound-recording：本轮不拦，给 bind_original_audio 切片用）" : ""}`);

@@ -319,3 +319,81 @@ describe("hold_policy.manualAnswerFix", () => {
     expect(manualAnswerFix([{ ...E, reason: " " }], AT)).toBeNull();
   });
 });
+
+/**
+ * 人工核定的 module 定位（2026-09-17 扩到听力时加）。
+ *
+ * 听力 M1/M2 的题号都从 1 起编，光凭 `q` 指不到具体是哪一道 —— 盲审闸就是这么误放行过 20 题的
+ * （病根与修法见 scripts/realbank/audit_key.js）。人工核定比盲审闸更该收紧，所以听力条目**必须**写 module；
+ * 阅读的 5 条历史条目没写 module，沿用老行为（它们逐条对过原卷、已经在库里生效，不动）。
+ */
+describe("hold_policy 人工核定的 module 定位", () => {
+  const { manualAnswerFix, manualAuditPass } = require("../scripts/realbank/hold_policy.js");
+  const L = {
+    set: "4.6新托福真题", section: "listening", module: 2, q: 8, stamped: "B", corrected: "C", verdict: "key_corrected",
+    stem: "What does the speaker mainly discuss?", reason: "转写：Kahlo's drawings, however, are rather obscure → C",
+  };
+  const AT = {
+    set: "4.6新托福真题", section: "listening", module: 2, q: 8, stamped: "b",
+    stem: "What does the speaker mainly discuss?", votes: ["C", "c"],
+  };
+
+  test("听力：module 对上才改", () => {
+    expect(manualAnswerFix([L], AT)).toBe("C");
+    expect(manualAnswerFix([L], { ...AT, module: 1 })).toBeNull();
+  });
+
+  test("听力条目没写 module → 一律不放行（撞号的另一个 module 不能蹭进来）", () => {
+    const noMod = { ...L }; delete noMod.module;
+    expect(manualAnswerFix([noMod], AT)).toBeNull();
+    expect(manualAnswerFix([noMod], { ...AT, module: 1 })).toBeNull();
+    const pass = { ...noMod, verdict: "key_correct" };
+    expect(manualAuditPass([pass], { ...AT, stamped: "b" })).toBe(false);
+  });
+
+  test("阅读历史条目没写 module → 老行为不变（照旧只认卷/科目/题号/字母/题干）", () => {
+    const R = {
+      set: "3.30新托福真题", section: "reading", q: 32, stamped: "A", corrected: "D", verdict: "key_corrected",
+      stem: "According to the passage, corn plants", reason: "原卷第 2 段：信号由别的玉米植株经根系分泌物发出 → D",
+    };
+    const at = {
+      set: "3.30新托福真题", section: "reading", q: 32, stamped: "a",
+      stem: "According to the passage, corn plants may release MBOA", votes: ["D", "d"],
+    };
+    expect(manualAnswerFix([R], at)).toBe("D");
+    expect(manualAnswerFix([R], { ...at, module: 1 })).toBe("D");
+    expect(manualAnswerFix([R], { ...at, module: 2 })).toBe("D");
+    // 写了 module 的阅读条目仍要逐一相等
+    expect(manualAnswerFix([{ ...R, module: 1 }], { ...at, module: 2 })).toBeNull();
+    expect(manualAnswerFix([{ ...R, module: 1 }], { ...at, module: 1 })).toBe("D");
+  });
+});
+
+/**
+ * 在线清单 data/realBank/audit-overrides.json 的形状闸：听力条目漏写 module 会静默失效
+ * （fail-closed 到「不放行」），肉眼看不出来，所以这里直接查真文件。
+ */
+describe("audit-overrides.json 形状", () => {
+  const fs = require("fs");
+  const path = require("path");
+  const entries = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data/realBank/audit-overrides.json"), "utf8")).entries;
+
+  test("每条都写了依据、卷、科目、题号、答案页字母、题干前缀 ≥12 字符", () => {
+    for (const e of entries) {
+      expect(typeof e.set).toBe("string");
+      expect(["reading", "listening"]).toContain(e.section);
+      expect(Number.isFinite(Number(e.q))).toBe(true);
+      expect(String(e.stamped)).toMatch(/^[A-D]$/);
+      expect(String(e.stem).trim().length).toBeGreaterThanOrEqual(12);
+      expect(String(e.reason).trim().length).toBeGreaterThan(20);
+      expect(["key_correct", "key_corrected"]).toContain(e.verdict);
+      if (e.verdict === "key_corrected") expect(String(e.corrected)).toMatch(/^[A-D]$/);
+    }
+  });
+
+  test("听力条目必须写 module", () => {
+    for (const e of entries.filter((x) => x.section === "listening")) {
+      expect([1, 2]).toContain(Number(e.module));
+    }
+  });
+});

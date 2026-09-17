@@ -1,7 +1,21 @@
 {
   "_purpose": "盲审两票都与答案页不同、但人工对着原卷截图核过「答案页是对的」的题：build_bank 落库放行（判据 scripts/realbank/hold_policy.manualAuditPass）。每条必须写清核对依据；卷/题号/答案页字母/题干前缀任何一个对不上就自动失效。",
-  "_format": "entries[] = { set, section, q, stamped: 答案页字母, stem: 题干前缀(≥12字符), verdict: \"key_correct\"（答案页对、模型错，放行）| \"key_corrected\"（答案页印错，按 corrected 重盖答案；两票盲审都须选 corrected 才生效）, corrected?, reason: 核对依据, checked_by, date }",
+  "_format": "entries[] = { set, section, module?, q, stamped: 答案页字母, stem: 题干前缀(≥12字符), verdict: \"key_correct\"（答案页对、模型错，放行）| \"key_corrected\"（答案页印错，按 corrected 重盖答案；两票盲审都须选 corrected 才生效）, corrected?, reason: 核对依据, checked_by, date }",
+  "_module": "听力条目**必须**写 module（M1/M2 题号都从 1 起编，光凭 q 指不到是哪一道）；阅读的历史条目没写 module，沿用老行为（判据 hold_policy.overrideAt）。",
   "entries": [
+    {
+      "set": "4.6新托福真题",
+      "section": "listening",
+      "module": 2,
+      "q": 8,
+      "stamped": "B",
+      "corrected": "C",
+      "stem": "What does the speaker mainly discuss?",
+      "verdict": "key_corrected",
+      "reason": "讲座全篇讲的是 Kahlo 的一幅**素描**，且开篇就点明它冷门：'These days, Frida Kahlo's best-known artworks are her paintings … Kahlo's drawings, however, are rather obscure, even now. One drawing, a self-portrait from 1946, …' 之后整段都在讲这幅素描（眉毛成蜂鸟形、头发一边麻花辫一边散开）。→ C An example of a lesser-known form of Frida Kahlo's art。答案页写的 B One of Frida Kahlo's most well-respected paintings 两处都反了：不是 painting（是 drawing），也不是 well-respected（原文 rather obscure）。题号已对屏幕原文核过：M2 第 8 屏就是这道题（'00:00:27 HideTime What does the speaker mainly discuss? …'，本条已被 listening_renumber 按屏幕顺序从 Q9 搬回 Q8，相似度 1.000）；同组邻题的答案页字母与转写逐题相符（Q9=c 'A film increased many people's awareness of her' ↔ 'Probably not until a Hollywood movie about her life in 2002'；Q10=d 'To point out a common element in her work' ↔ 'Similar to her paintings, Kahlo drew herself with a serious facial expression'；Q11=b 'Her hair' ↔ 'My favorite part of this drawing is Kahlo's hair … it shows her inner struggle'），四题里只有 Q8 的字母对不上，是印错不是错位。盲审 flash 第一票 C、pro 第二票 C。",
+      "checked_by": "主线程对屏幕原文 + 录音转写逐题核定 + DeepSeek flash/pro 两票一致",
+      "date": "2026-09-17"
+    },
     {
       "set": "5.10新托福真题_v2",
       "section": "reading",
