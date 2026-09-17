@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1676,
-    "questions": 894,
+    "rows": 1713,
+    "questions": 910,
     "sections": 10,
     "byCode": {
       "wSkippedThin": {
@@ -82,15 +82,15 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 114,
-        "questions": 114,
+        "rows": 115,
+        "questions": 115,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
         "rows": 70,
-        "questions": 86,
+        "questions": 87,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -103,15 +103,15 @@
       "lDroppedDupItem": {
         "code": "lDroppedDupItem",
         "label": "跨卷逐条内容重复",
-        "rows": 670,
-        "questions": 223,
+        "rows": 709,
+        "questions": 240,
         "sections": 0
       },
       "lDroppedNoOriginalAudio": {
         "code": "lDroppedNoOriginalAudio",
         "label": "整块录音来源没切出真人原声（不许退回 TTS 上线）",
-        "rows": 9,
-        "questions": 9,
+        "rows": 6,
+        "questions": 6,
         "sections": 0
       },
       "sDroppedNoOriginalAudio": {
@@ -200,7 +200,7 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 473,
+        "questions": 489,
         "sections": 2
       },
       "speaking": {
@@ -233,43 +233,43 @@
       },
       "lcr": {
         "type": "lcr",
-        "questions": 165,
+        "questions": 168,
         "byCode": {
-          "lDroppedDisagree": 28,
-          "lDroppedDupItem": 122,
+          "lDroppedDisagree": 30,
+          "lDroppedDupItem": 126,
           "lDroppedNoAuditQ": 4,
-          "lDroppedNoOriginalAudio": 9,
+          "lDroppedNoOriginalAudio": 6,
           "lDroppedBadOptions": 2
         }
       },
       "lc": {
         "type": "lc",
-        "questions": 74,
+        "questions": 78,
         "byCode": {
           "lDroppedDisagree": 11,
-          "lDroppedInvalid": 25,
+          "lDroppedInvalid": 27,
           "lDroppedNoAuditQ": 4,
-          "lDroppedDupItem": 34
+          "lDroppedDupItem": 36
         }
       },
       "la": {
         "type": "la",
-        "questions": 71,
+        "questions": 80,
         "byCode": {
-          "lDroppedDisagree": 17,
+          "lDroppedDisagree": 18,
           "lDroppedInvalid": 20,
-          "lDroppedNoAuditQ": 10,
-          "lDroppedDupItem": 24
+          "lDroppedNoAuditQ": 11,
+          "lDroppedDupItem": 31
         }
       },
       "lat": {
         "type": "lat",
         "questions": 163,
         "byCode": {
-          "lDroppedNoAuditQ": 21,
-          "lDroppedDisagree": 58,
-          "lDroppedInvalid": 41,
-          "lDroppedDupItem": 43
+          "lDroppedNoAuditQ": 20,
+          "lDroppedDisagree": 56,
+          "lDroppedInvalid": 40,
+          "lDroppedDupItem": 47
         }
       },
       "repeat": {
@@ -11082,6 +11082,266 @@
       "detail": "too_few_questions: 1 (min 3)"
     },
     {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 2,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_02",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_314_1_09 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 5,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_05",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_314_1_10 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 6,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_28_1_06",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_121c_1_07 近似重复（sim=0.833）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 7,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_07",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_128b_1_10 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 8,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_08",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_314_1_11 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 9,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_09",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_314_1_12 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 11,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_1_11",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_128b_1_11 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lc",
+      "module": 1,
+      "q": 13,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_28_1_13",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_223_1_15 近似重复（sim=0.981）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lat",
+      "module": 1,
+      "q": 25,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lat_28_1_25",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_225_1_29 近似重复（sim=0.992）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lat",
+      "module": 1,
+      "q": 29,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lat_28_1_29",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_rf0708_1_25 近似重复（sim=0.982）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 2,
+      "q": 1,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_2_01",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_228_2_03 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 2,
+      "q": 2,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_28_2_02",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_22_2_03 近似重复（sim=1）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lc",
+      "module": 2,
+      "q": 4,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_28_2_04",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_rf0629_2_04 近似重复（sim=0.99）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lat",
+      "module": 2,
+      "q": 12,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lat_28_2_12",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_rf0622_2_08 近似重复（sim=0.986）"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 1,
+      "n": 1,
+      "scope": "question",
+      "id": null,
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 12,
+      "n": 1,
+      "scope": "question",
+      "id": null,
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "lc",
+      "module": 1,
+      "q": 17,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_lc_28_1_17",
+      "code": "lDroppedInvalid",
+      "detail": "conversation_too_short: 48 words (min 50)"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 19,
+      "n": 1,
+      "scope": "question",
+      "id": null,
+      "code": "lDroppedNoAuditQ",
+      "detail": "盲审没覆盖到这题"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 20,
+      "n": 1,
+      "scope": "question",
+      "id": null,
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
+    },
+    {
+      "set": "2.8新托福真题",
+      "slug": "28",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 23,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_la_28_1_23",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
+    },
+    {
       "set": "3.10新托福真题",
       "slug": "310",
       "section": "listening",
@@ -11956,6 +12216,19 @@
       "set": "3.17新托福真题",
       "slug": "317",
       "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 11,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_317_1_11",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_223_1_08 近似重复（sim=1）"
+    },
+    {
+      "set": "3.17新托福真题",
+      "slug": "317",
+      "section": "listening",
       "type": "lc",
       "module": 1,
       "q": 17,
@@ -12107,19 +12380,6 @@
       "id": "real_lat_317_2_12",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_316_2_12 近似重复（sim=0.988）"
-    },
-    {
-      "set": "3.17新托福真题",
-      "slug": "317",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 11,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_317_1_11",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 2.23新托福真题/real_lcr_223_1_08 逐字相同"
     },
     {
       "set": "3.17新托福真题",
@@ -12972,6 +13232,19 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
+      "q": 6,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_323_1_06",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_28_2_03 近似重复（sim=1）"
+    },
+    {
+      "set": "3.23新托福真题",
+      "slug": "323",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
       "q": 7,
       "n": 0,
       "scope": "unit",
@@ -13258,6 +13531,19 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
+      "q": 7,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_325_1_07",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_28_1_04 近似重复（sim=1）"
+    },
+    {
+      "set": "3.25新托福真题",
+      "slug": "325",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
       "q": 9,
       "n": 0,
       "scope": "unit",
@@ -13373,14 +13659,14 @@
       "set": "3.25新托福真题",
       "slug": "325",
       "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 7,
-      "n": 1,
+      "type": "lat",
+      "module": 2,
+      "q": 12,
+      "n": 4,
       "scope": "unit",
-      "id": "real_lcr_325_1_07",
-      "code": "lDroppedNoOriginalAudio",
-      "detail": "整块录音来源，原声清单里没有这一条（没切出来 / 口播文本变了）"
+      "id": "real_lat_325_2_12",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_28_2_08 近似重复（sim=0.994）"
     },
     {
       "set": "3.25新托福真题",
@@ -13431,58 +13717,6 @@
       "n": 1,
       "scope": "unit",
       "id": "real_lat_325_1_29",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
-      "set": "3.25新托福真题",
-      "slug": "325",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.25新托福真题",
-      "slug": "325",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.25新托福真题",
-      "slug": "325",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedDisagree",
-      "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.25新托福真题",
-      "slug": "325",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lat_325_2_12",
       "code": "lDroppedInvalid",
       "detail": "too_few_questions: 1 (min 3)"
     },
@@ -14498,7 +14732,7 @@
       "scope": "unit",
       "id": "real_lcr_330_1_11",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lcr_325_1_07 近似重复（sim=1）"
+      "detail": "录音转写与 real_lcr_28_1_04 近似重复（sim=1）"
     },
     {
       "set": "3.30新托福真题",
@@ -14525,6 +14759,19 @@
       "id": "real_lc_330_1_13",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lc_21a_1_17 近似重复（sim=1）"
+    },
+    {
+      "set": "3.30新托福真题",
+      "slug": "330",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 19,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_la_330_1_19",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_28_1_19 近似重复（sim=1）"
     },
     {
       "set": "3.30新托福真题",
@@ -14623,19 +14870,6 @@
       "section": "listening",
       "type": "la",
       "module": 1,
-      "q": 19,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_la_330_1_19",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "3.30新托福真题",
-      "slug": "330",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
       "q": 23,
       "n": 1,
       "scope": "question",
@@ -14706,7 +14940,7 @@
       "scope": "unit",
       "id": "real_lcr_34_1_06",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lcr_325_1_07 近似重复（sim=1）"
+      "detail": "录音转写与 real_lcr_28_1_04 近似重复（sim=1）"
     },
     {
       "set": "3.4新托福真题",
@@ -14824,6 +15058,19 @@
       "id": "real_lcr_34_2_03",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lcr_121b_2_03 近似重复（sim=1）"
+    },
+    {
+      "set": "3.4新托福真题",
+      "slug": "34",
+      "section": "listening",
+      "type": "lc",
+      "module": 2,
+      "q": 4,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_34_2_04",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_28_2_06 近似重复（sim=0.954）"
     },
     {
       "set": "3.4新托福真题",
@@ -15190,6 +15437,136 @@
       "detail": "section_no_stems（复述扣下；面试题干只在录音里，不受这条拦）"
     },
     {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 2,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_38_1_02",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_210_1_03 近似重复（sim=1）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 4,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_38_1_04",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_rf0610_1_03 近似重复（sim=1）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 6,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_38_1_06",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_210_1_09 近似重复（sim=1）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 7,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_38_1_07",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_rf0629_1_05 近似重复（sim=1）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 10,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_38_1_10",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_21a_1_02 近似重复（sim=1）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lc",
+      "module": 1,
+      "q": 13,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_38_1_13",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_225_1_17 近似重复（sim=0.995）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lc",
+      "module": 1,
+      "q": 15,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_38_1_15",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_121b_1_13 近似重复（sim=0.984）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 19,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_la_38_1_19",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_210_1_21 近似重复（sim=0.974）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 23,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_la_38_1_23",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_225_1_19 近似重复（sim=0.994）"
+    },
+    {
+      "set": "3.8新托福真题",
+      "slug": "38",
+      "section": "listening",
+      "type": "lat",
+      "module": 1,
+      "q": 25,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lat_38_1_25",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_210_1_25 近似重复（sim=0.98）"
+    },
+    {
       "set": "4.11新托福真题",
       "slug": "411",
       "section": "listening",
@@ -15200,7 +15577,7 @@
       "scope": "unit",
       "id": "real_lcr_411_1_01",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lcr_32b_1_01 近似重复（sim=1）"
+      "detail": "录音转写与 real_lcr_32a_1_01 近似重复（sim=1）"
     },
     {
       "set": "4.11新托福真题",
@@ -15291,7 +15668,7 @@
       "scope": "unit",
       "id": "real_lcr_411_1_08",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lcr_32b_1_08 近似重复（sim=1）"
+      "detail": "录音转写与 real_lcr_32a_1_08 近似重复（sim=1）"
     },
     {
       "set": "4.11新托福真题",
@@ -15304,7 +15681,7 @@
       "scope": "unit",
       "id": "real_lcr_411_1_09",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lcr_32b_1_09 近似重复（sim=1）"
+      "detail": "录音转写与 real_lcr_32a_1_09 近似重复（sim=1）"
     },
     {
       "set": "4.11新托福真题",
@@ -15949,19 +16326,6 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
-      "q": 9,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_415_1_09",
-      "code": "lDroppedNoOriginalAudio",
-      "detail": "整块录音来源，原声清单里没有这一条（没切出来 / 口播文本变了）"
-    },
-    {
-      "set": "4.15新托福真题",
-      "slug": "415",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
       "q": 10,
       "n": 1,
       "scope": "unit",
@@ -16072,6 +16436,71 @@
       "id": "real_repeat_415_1",
       "code": "sDroppedNoOriginalAudio",
       "detail": "real_repeat_415_1_s4"
+    },
+    {
+      "set": "4.18新托福真题",
+      "slug": "418",
+      "section": "listening",
+      "type": "lcr",
+      "module": 2,
+      "q": 2,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_418_2_02",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_rf0826_2_01 近似重复（sim=1）"
+    },
+    {
+      "set": "4.18新托福真题",
+      "slug": "418",
+      "section": "listening",
+      "type": "lcr",
+      "module": 2,
+      "q": 3,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lcr_418_2_03",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_320_2_03 近似重复（sim=1）"
+    },
+    {
+      "set": "4.18新托福真题",
+      "slug": "418",
+      "section": "listening",
+      "type": "lc",
+      "module": 2,
+      "q": 4,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_418_2_04",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_314_2_06 近似重复（sim=0.989）"
+    },
+    {
+      "set": "4.18新托福真题",
+      "slug": "418",
+      "section": "listening",
+      "type": "lc",
+      "module": 2,
+      "q": 6,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lc_418_2_06",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_rf0615_2_06 近似重复（sim=0.93）"
+    },
+    {
+      "set": "4.18新托福真题",
+      "slug": "418",
+      "section": "listening",
+      "type": "lat",
+      "module": 2,
+      "q": 8,
+      "n": 0,
+      "scope": "unit",
+      "id": "real_lat_418_2_08",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lat_121c_1_25 近似重复（sim=0.965）"
     },
     {
       "set": "4.18新托福真题",
@@ -17247,6 +17676,32 @@
       "set": "4.28新托福真题",
       "slug": "428",
       "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 19,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_la_428_1_19",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_34_1_23 近似重复（sim=0.97）"
+    },
+    {
+      "set": "4.28新托福真题",
+      "slug": "428",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 21,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_la_428_1_21",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_223_1_21 近似重复（sim=0.988）"
+    },
+    {
+      "set": "4.28新托福真题",
+      "slug": "428",
+      "section": "listening",
       "type": "lat",
       "module": 1,
       "q": 29,
@@ -17918,6 +18373,19 @@
       "id": "real_lc_46_1_15",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lc_311_1_17 近似重复（sim=1）"
+    },
+    {
+      "set": "4.6新托福真题",
+      "slug": "46",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 21,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_la_46_1_21",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_28_1_23 近似重复（sim=1）"
     },
     {
       "set": "4.6新托福真题",
@@ -18770,6 +19238,19 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
+      "q": 2,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_510v2_1_02",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_424_1_01 近似重复（sim=1）"
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
       "q": 3,
       "n": 0,
       "scope": "unit",
@@ -18796,6 +19277,19 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
+      "q": 7,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_510v2_1_07",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_46_1_05 近似重复（sim=1）"
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
       "q": 8,
       "n": 0,
       "scope": "unit",
@@ -18809,12 +19303,38 @@
       "section": "listening",
       "type": "lcr",
       "module": 1,
+      "q": 9,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_510v2_1_09",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_424_1_05 近似重复（sim=0.909）"
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
       "q": 11,
       "n": 0,
       "scope": "unit",
       "id": "real_lcr_510v2_1_11",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lcr_128b_1_08 近似重复（sim=1）"
+    },
+    {
+      "set": "5.10新托福真题_v2",
+      "slug": "510v2",
+      "section": "listening",
+      "type": "lc",
+      "module": 1,
+      "q": 13,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_lc_510v2_1_13",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lc_46_1_17 近似重复（sim=0.981）"
     },
     {
       "set": "5.10新托福真题_v2",
@@ -18898,32 +19418,6 @@
       "set": "5.10新托福真题_v2",
       "slug": "510v2",
       "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 2,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_510v2_1_02",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 4.24新托福真题/real_lcr_424_1_01 逐字相同"
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 7,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_510v2_1_07",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 4.6新托福真题/real_lcr_46_1_05 逐字相同"
-    },
-    {
-      "set": "5.10新托福真题_v2",
-      "slug": "510v2",
-      "section": "listening",
       "type": "lat",
       "module": 2,
       "q": 11,
@@ -18945,6 +19439,19 @@
       "id": "real_lcr_511_1_01",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lcr_311_1_03 近似重复（sim=1）"
+    },
+    {
+      "set": "5.11新托福真题",
+      "slug": "511",
+      "section": "listening",
+      "type": "lcr",
+      "module": 1,
+      "q": 4,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_lcr_511_1_04",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_lcr_46_1_04 近似重复（sim=1）"
     },
     {
       "set": "5.11新托福真题",
@@ -19035,7 +19542,20 @@
       "scope": "unit",
       "id": "real_lc_511_1_17",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_lc_510v2_1_13 近似重复（sim=0.981）"
+      "detail": "录音转写与 real_lc_46_1_17 近似重复（sim=1）"
+    },
+    {
+      "set": "5.11新托福真题",
+      "slug": "511",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
+      "q": 19,
+      "n": 2,
+      "scope": "unit",
+      "id": "real_la_511_1_19",
+      "code": "lDroppedDupItem",
+      "detail": "录音转写与 real_la_223_1_19 近似重复（sim=1）"
     },
     {
       "set": "5.11新托福真题",
@@ -19075,32 +19595,6 @@
       "id": "real_lat_511_1_29",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_rf0622_1_29 近似重复（sim=0.977）"
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 4,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_511_1_04",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 4.6新托福真题/real_lcr_46_1_04 逐字相同"
-    },
-    {
-      "set": "5.11新托福真题",
-      "slug": "511",
-      "section": "listening",
-      "type": "la",
-      "module": 1,
-      "q": 19,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_la_511_1_19",
-      "code": "lDroppedDupItem",
-      "detail": "口播与 2.23新托福真题/real_la_223_1_19 逐字相同"
     },
     {
       "set": "5.18新托福真题",
@@ -19204,7 +19698,7 @@
       "scope": "unit",
       "id": "real_la_518_1_23",
       "code": "lDroppedDupItem",
-      "detail": "录音转写与 real_la_511_1_19 近似重复（sim=0.922）"
+      "detail": "录音转写与 real_la_223_1_19 近似重复（sim=0.922）"
     },
     {
       "set": "5.18新托福真题",
@@ -19855,19 +20349,6 @@
       "id": "real_lcr_529_1_07",
       "code": "lDroppedBadOptions",
       "detail": "选项 3 个，answer_index=2"
-    },
-    {
-      "set": "5.29新托福真题",
-      "slug": "529",
-      "section": "listening",
-      "type": "lcr",
-      "module": 2,
-      "q": 2,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lcr_529_2_02",
-      "code": "lDroppedNoOriginalAudio",
-      "detail": "整块录音来源，原声清单里没有这一条（没切出来 / 口播文本变了）"
     },
     {
       "set": "5.29新托福真题",
