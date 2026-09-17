@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1639,
-    "questions": 870,
+    "rows": 1602,
+    "questions": 833,
     "sections": 21,
     "byCode": {
       "wSkippedThin": {
@@ -82,22 +82,22 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 115,
-        "questions": 115,
+        "rows": 117,
+        "questions": 117,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 75,
-        "questions": 91,
+        "rows": 71,
+        "questions": 87,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
         "code": "lDroppedNoAuditQ",
         "label": "没被盲审覆盖",
-        "rows": 75,
-        "questions": 75,
+        "rows": 39,
+        "questions": 39,
         "sections": 0
       },
       "lDroppedDupItem": {
@@ -110,8 +110,8 @@
       "lDroppedNoOriginalAudio": {
         "code": "lDroppedNoOriginalAudio",
         "label": "整块录音来源没切出真人原声（不许退回 TTS 上线）",
-        "rows": 8,
-        "questions": 8,
+        "rows": 9,
+        "questions": 9,
         "sections": 0
       },
       "lDroppedHeld": {
@@ -200,7 +200,7 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 514,
+        "questions": 477,
         "sections": 5
       },
       "speaking": {
@@ -233,22 +233,22 @@
       },
       "lcr": {
         "type": "lcr",
-        "questions": 172,
+        "questions": 165,
         "byCode": {
           "lDroppedDisagree": 28,
           "lDroppedDupItem": 122,
-          "lDroppedNoAuditQ": 12,
-          "lDroppedNoOriginalAudio": 8,
+          "lDroppedNoAuditQ": 4,
+          "lDroppedNoOriginalAudio": 9,
           "lDroppedBadOptions": 2
         }
       },
       "lc": {
         "type": "lc",
-        "questions": 104,
+        "questions": 74,
         "byCode": {
-          "lDroppedDisagree": 9,
-          "lDroppedInvalid": 29,
-          "lDroppedNoAuditQ": 32,
+          "lDroppedDisagree": 11,
+          "lDroppedInvalid": 25,
+          "lDroppedNoAuditQ": 4,
           "lDroppedDupItem": 34
         }
       },
@@ -8677,84 +8677,6 @@
       "detail": "too_few_questions: 1 (min 3)"
     },
     {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_121b_1_15",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 6,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.21新托福真题B卷",
-      "slug": "121b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 7,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
       "set": "1.21新托福真题C卷",
       "slug": "121c",
       "section": "listening",
@@ -9214,32 +9136,6 @@
       "slug": "128b",
       "section": "listening",
       "type": "lc",
-      "module": 1,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.28新托福真题B卷",
-      "slug": "128b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "1.28新托福真题B卷",
-      "slug": "128b",
-      "section": "listening",
-      "type": "lc",
       "module": 2,
       "q": 6,
       "n": 2,
@@ -9260,32 +9156,6 @@
       "id": null,
       "code": "lDroppedDisagree",
       "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_210_1_15",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "2.10新托福真题",
@@ -9314,32 +9184,6 @@
       "detail": "盲审与答案页不一致"
     },
     {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 4,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.10新托福真题",
-      "slug": "210",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 5,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
       "set": "2.1新托福真题A卷",
       "slug": "21a",
       "section": "listening",
@@ -9351,84 +9195,6 @@
       "id": "real_lcr_21a_1_11",
       "code": "lDroppedDupItem",
       "detail": "口播与 2.10新托福真题/real_lcr_210_1_12 逐字相同"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_21a_1_15",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 4,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 5,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 6,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题A卷",
-      "slug": "21a",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 7,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
     },
     {
       "set": "2.1新托福真题A卷",
@@ -9533,58 +9299,6 @@
       "id": "real_lcr_21b_1_11",
       "code": "lDroppedDupItem",
       "detail": "口播与 1.28新托福真题B卷/real_lcr_128b_1_12 逐字相同"
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 4,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.1新托福真题B卷",
-      "slug": "21b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 5,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
     },
     {
       "set": "2.1新托福真题C卷",
@@ -9843,8 +9557,8 @@
       "n": 1,
       "scope": "question",
       "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
     },
     {
       "set": "2.1新托福真题C卷",
@@ -9856,8 +9570,8 @@
       "n": 1,
       "scope": "question",
       "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
     },
     {
       "set": "2.1新托福真题C卷",
@@ -10341,58 +10055,6 @@
       "detail": "盲审与答案页不一致"
     },
     {
-      "set": "2.28新托福真题",
-      "slug": "228",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.28新托福真题",
-      "slug": "228",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_228_1_15",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 13,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 14,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
       "set": "2.2新托福真题",
       "slug": "22",
       "section": "listening",
@@ -10443,32 +10105,6 @@
       "id": "real_lat_22_1_29",
       "code": "lDroppedInvalid",
       "detail": "too_few_questions: 1 (min 3)"
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 6,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "2.2新托福真题",
-      "slug": "22",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 7,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
     },
     {
       "set": "2.8新托福真题",
@@ -11028,32 +10664,6 @@
       "id": null,
       "code": "lDroppedDisagree",
       "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.14新托福真题",
-      "slug": "314",
-      "section": "listening",
-      "type": "lc",
-      "module": 1,
-      "q": 15,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_314_1_15",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.15新托福真题",
@@ -12008,40 +11618,14 @@
       "set": "3.20新托福真题",
       "slug": "320",
       "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 1,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.20新托福真题",
-      "slug": "320",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 12,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.20新托福真题",
-      "slug": "320",
-      "section": "listening",
       "type": "lc",
       "module": 1,
       "q": 15,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "scope": "unit",
+      "id": "real_lc_320_1_15",
+      "code": "lDroppedInvalid",
+      "detail": "wrong_question_count: 1 (must be exactly 2)"
     },
     {
       "set": "3.20新托福真题",
@@ -13537,32 +13121,6 @@
       "id": "real_lat_32a_2_12",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_rp0830_10_01 近似重复（sim=0.979）"
-    },
-    {
-      "set": "3.2新托福真题A卷",
-      "slug": "32a",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 1,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.2新托福真题A卷",
-      "slug": "32a",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 8,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
     },
     {
       "set": "3.2新托福真题A卷",
@@ -15457,10 +15015,10 @@
       "module": 1,
       "q": 9,
       "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
+      "scope": "unit",
+      "id": "real_lcr_415_1_09",
+      "code": "lDroppedNoOriginalAudio",
+      "detail": "整块录音来源，原声清单里没有这一条（没切出来 / 口播文本变了）"
     },
     {
       "set": "4.15新托福真题",
@@ -17905,45 +17463,6 @@
       "id": "real_lat_48_2_12",
       "code": "lDroppedDupItem",
       "detail": "录音转写与 real_lat_121b_2_12 近似重复（sim=0.969）"
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 7,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 8,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "4.8新托福真题",
-      "slug": "48",
-      "section": "listening",
-      "type": "lcr",
-      "module": 1,
-      "q": 11,
-      "n": 1,
-      "scope": "question",
-      "id": null,
-      "code": "lDroppedNoAuditQ",
-      "detail": "盲审没覆盖到这题"
     },
     {
       "set": "4.8新托福真题",
