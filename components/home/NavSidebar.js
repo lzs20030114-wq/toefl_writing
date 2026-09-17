@@ -1,27 +1,37 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { checkCanPractice, FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
-import { WechatQrImage } from "../shared/WechatQrImage";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
-import { TierBadge, BindEmailModal, FbStatusBadge } from "./sidebarWidgets";
+import { TierBadge, BindEmailModal } from "./sidebarWidgets";
+import { SupportModal } from "./SupportModal";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 import { VocabNavItem } from "../vocab/VocabNavItem";
+import { countUnseenReplies, loadSeenReplyIds, repliedIds, saveSeenReplyIds } from "../../lib/feedback/replySeen";
 
-/* ── NavSidebar ── */
+/* ── NavSidebar ──
+ *
+ * 结构（自上而下）：Sections 导航 → 账户卡 → 入口列表。
+ * 设计约束：侧栏 sticky 贴顶，内容必须能在一屏内放下 —— 所以这里不再放任何折叠展开区
+ * （反馈表单 / 微信群二维码以前都塞在这里，展开就掉出视口）。会长高的内容一律走弹窗：
+ *   - 反馈 / 反馈记录 / 微信群 → SupportModal
+ *   - 绑定邮箱 / 续费 / 退出登录 → 账户「···」菜单（portal 浮层）
+ * 兜底：侧栏本身限高 + 内部可滚，小窗口下也不会再被裁掉。
+ */
 
-/* 侧栏安静列表项：促销/入口统一用这个中性样式，避免各处内联复制后漂移 */
-function SidebarActionItem({ emoji, title, sub, onClick, navBdr, navItemHover, t1, t3, style }) {
+/* 侧栏安静列表项：入口统一用这个中性样式，避免各处内联复制后漂移 */
+function SidebarActionItem({ emoji, title, sub, badge, onClick, navBdr, navItemHover, t1, t3, style, testId }) {
   return (
     <button
       onClick={onClick}
+      data-testid={testId}
       style={{
         width: "100%",
         display: "flex", alignItems: "center", gap: 8,
-        padding: "9px 11px",
+        padding: "8px 10px",
         background: "transparent",
         border: `1px solid ${navBdr}`,
         borderRadius: 8,
@@ -36,12 +46,93 @@ function SidebarActionItem({ emoji, title, sub, onClick, navBdr, navItemHover, t
     >
       <span style={{ fontSize: 14, flexShrink: 0 }}>{emoji}</span>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: t1, lineHeight: 1.3 }}>{title}</div>
-        <div style={{ fontSize: 10, color: t3, marginTop: 1 }}>{sub}</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: t1, lineHeight: 1.3 }}>{title}</div>
+        {sub && <div style={{ fontSize: 10, color: t3, marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</div>}
       </div>
-      <span style={{ fontSize: 11, color: t3, flexShrink: 0 }}>›</span>
+      {badge ? (
+        <span style={{ fontSize: 10, fontWeight: 800, color: "#fff", background: T.indigo, borderRadius: 999, padding: "2px 7px", flexShrink: 0 }}>{badge}</span>
+      ) : (
+        <span style={{ fontSize: 11, color: t3, flexShrink: 0 }}>›</span>
+      )}
     </button>
   );
+}
+
+/* 账户「···」菜单：portal 到 body 的定位浮层（侧栏 overflow 裁剪，不能内联渲染） */
+function AccountMenu({ anchorRef, open, onClose, items }) {
+  const menuRef = useRef(null);
+  const [pos, setPos] = useState(null);
+
+  useEffect(() => {
+    if (!open) { setPos(null); return; }
+    const r = anchorRef.current?.getBoundingClientRect();
+    const width = 188;
+    if (r) setPos({ top: r.bottom + 6, left: Math.max(8, Math.min(r.right - width, window.innerWidth - width - 8)) });
+    function onDown(e) {
+      if (anchorRef.current?.contains(e.target) || menuRef.current?.contains(e.target)) return;
+      onClose();
+    }
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", onClose, true);
+    window.addEventListener("resize", onClose);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("resize", onClose);
+    };
+  }, [open, anchorRef, onClose]);
+
+  if (!open || !pos || typeof document === "undefined") return null;
+
+  return createPortal(
+    <div
+      ref={menuRef}
+      role="menu"
+      data-testid="account-menu"
+      style={{
+        position: "fixed", top: pos.top, left: pos.left, width: 188, zIndex: 9000,
+        background: "#fff", border: `1px solid ${T.bdr}`, borderRadius: 10,
+        boxShadow: "0 10px 30px rgba(15,23,42,0.14)", padding: 6, fontFamily: HOME_FONT,
+      }}
+    >
+      {items.map((it, i) => (
+        it.divider ? (
+          <div key={`d${i}`} style={{ height: 1, background: T.bdrSubtle, margin: "4px 4px" }} />
+        ) : (
+          <button
+            key={it.label}
+            role="menuitem"
+            onClick={() => { onClose(); it.onClick(); }}
+            style={{
+              width: "100%", display: "flex", alignItems: "center", gap: 8,
+              padding: "8px 10px", borderRadius: 7, border: "none", background: "transparent",
+              cursor: "pointer", textAlign: "left", fontFamily: HOME_FONT,
+              fontSize: 13, fontWeight: 600, color: it.danger ? T.rose : T.t1,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = it.danger ? T.roseSoft : T.navItemHover; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+          >
+            <span style={{ width: 18, textAlign: "center", fontSize: 13, flexShrink: 0 }}>{it.icon}</span>
+            <span style={{ flex: 1, minWidth: 0 }}>{it.label}</span>
+            {it.hint && <span style={{ fontSize: 10, color: T.t3, flexShrink: 0 }}>{it.hint}</span>}
+          </button>
+        )
+      ))}
+    </div>,
+    document.body
+  );
+}
+
+/* Pro 到期前多少天把「续费」提到账户卡上（其余时间只在菜单里） */
+export const RENEW_NUDGE_DAYS = 14;
+
+function daysUntil(iso) {
+  if (!iso) return null;
+  const diff = Math.ceil((new Date(iso).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  return Number.isFinite(diff) ? diff : null;
 }
 
 export function NavSidebar({
@@ -52,10 +143,9 @@ export function NavSidebar({
   userCode, userTier, userEmail, authMethod, isLoggedIn, showLoginModal, onLogout,
   // feedback
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
-  fbHistory,
+  fbHistory = [],
   // code copy
   copied, copyCode,
-  logoutHover, setLogoutHover,
   // referral
   onOpenReferral,
   // style helpers
@@ -68,12 +158,17 @@ export function NavSidebar({
   const [tierExpiresAt, setTierExpiresAt] = useState(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [codeHidden, setCodeHidden] = useState(true);
-  const [wechatOpen, setWechatOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [supportTab, setSupportTab] = useState("feedback");
+  const [seenReplyIds, setSeenReplyIds] = useState([]);
+  const menuAnchorRef = useRef(null);
 
   const tier = userTier || "free";
   const email = boundEmail || userEmail;
   const isCodeUser = authMethod === "code" || authMethod === "both";
   const isEmailUser = authMethod === "email" || authMethod === "both";
+
+  useEffect(() => { setSeenReplyIds(loadSeenReplyIds()); }, []);
 
   useEffect(() => {
     if (!isLoggedIn || !userCode) return;
@@ -88,6 +183,25 @@ export function NavSidebar({
     }
   }, [isLoggedIn, tier, userCode]);
 
+  const unseenReplies = isLoggedIn ? countUnseenReplies(fbHistory, seenReplyIds) : 0;
+  const markRepliesSeen = useCallback(() => {
+    const ids = repliedIds(fbHistory);
+    if (!ids.length) return;
+    setSeenReplyIds((prev) => {
+      const next = Array.from(new Set([...prev, ...ids]));
+      if (next.length === prev.length) return prev;
+      saveSeenReplyIds(next);
+      return next;
+    });
+  }, [fbHistory]);
+
+  function openSupport(tabId) {
+    setSupportTab(tabId);
+    setFbOpen(true);
+  }
+  const closeSupport = useCallback(() => setFbOpen(false), [setFbOpen]);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
   const navBg = isChallenge ? CH.navBg : T.navBg;
   const navBdr = isChallenge ? CH.navBdr : T.navBdr;
   const navItemActive = isChallenge ? CH.navItemActive : T.navItemActive;
@@ -96,17 +210,29 @@ export function NavSidebar({
   const t2 = isChallenge ? CH.t2 : T.t2;
   const t3 = isChallenge ? CH.t2 : T.t3;
 
+  const proDaysLeft = tier === "pro" ? daysUntil(tierExpiresAt) : null;
+  const showRenewOnCard = tier === "pro" && proDaysLeft !== null && proDaysLeft <= RENEW_NUDGE_DAYS;
+
+  const menuItems = [
+    ...(isCodeUser && !email ? [{ icon: "✉️", label: "绑定邮箱", hint: "防丢账号", onClick: () => setBindEmailOpen(true) }] : []),
+    ...(tier === "pro" ? [{ icon: "💎", label: "续费 Pro", hint: proDaysLeft !== null ? `剩 ${Math.max(proDaysLeft, 0)} 天` : "", onClick: () => setUpgradeOpen(true) }] : []),
+    ...(tier === "free" ? [{ icon: "💎", label: "升级 Pro", onClick: () => setUpgradeOpen(true) }] : []),
+    { divider: true },
+    { icon: "⏏", label: "退出登录", danger: true, onClick: () => setLogoutConfirm(true) },
+  ];
+
   return (
     <div
       className="home-nav-sidebar"
       style={{
         width: 220, minWidth: 220, flexShrink: 0,
         position: "sticky", top: 80, alignSelf: "flex-start",
+        // 兜底：矮视口下侧栏自己滚，不再被视口底部裁掉
+        maxHeight: "calc(100vh - 96px)", overflowY: "auto", scrollbarWidth: "thin",
         display: "flex", flexDirection: "column",
         background: navBg,
         borderRight: `1px solid ${navBdr}`,
         borderRadius: 14,
-        overflow: "hidden",
         fontFamily: HOME_FONT,
         ...fadeIn(80),
       }}
@@ -134,6 +260,14 @@ export function NavSidebar({
         document.body
       )}
       {upgradeOpen && <UpgradeModal userCode={userCode} currentTier={tier} onClose={() => setUpgradeOpen(false)} onUpgraded={() => window.location.reload()} />}
+      <AccountMenu anchorRef={menuAnchorRef} open={menuOpen} onClose={closeMenu} items={menuItems} />
+      <SupportModal
+        open={!!fbOpen} onClose={closeSupport} initialTab={supportTab}
+        isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
+        fbText={fbText} setFbText={setFbText} fbBusy={fbBusy} fbSent={fbSent}
+        feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
+        fbHistory={fbHistory} unseenReplies={unseenReplies} onHistoryViewed={markRepliesSeen}
+      />
 
       {/* ── Section navigation ── */}
       <div style={{ padding: "16px 12px 8px" }}>
@@ -196,10 +330,9 @@ export function NavSidebar({
       {/* ── Divider ── */}
       <div style={{ height: 1, background: navBdr, margin: "4px 16px" }} />
 
-      {/* ── User section ── */}
-      <div style={{ padding: "12px 14px", flex: 1 }}>
+      {/* ── Account card ── */}
+      <div style={{ padding: "12px 14px 6px" }}>
         {!isLoggedIn ? (
-          /* Not logged in */
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -213,34 +346,23 @@ export function NavSidebar({
             <button onClick={showLoginModal} style={{ width: "100%", padding: "8px 0", fontSize: 12, fontWeight: 700, border: "none", background: T.primary, color: "#fff", borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT }}>
               登录 / 注册
             </button>
-            {/* 未登录也保留邀请入口（点击会先弹登录），否则桌面端整个邀请漏斗对访客不可见 */}
-            {onOpenReferral && (
-              <SidebarActionItem
-                emoji="🎁" title="邀请备考搭子" sub="每人 +3 天 Pro · 无上限"
-                onClick={onOpenReferral}
-                navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
-                style={{ marginTop: 8 }}
-              />
-            )}
           </div>
         ) : (
-          /* Logged in */
           <div>
-            {/* Compact user row */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#087355,#0891B2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <span style={{ color: "#fff", fontSize: 14, fontWeight: 700 }}>T</span>
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                   {email ? (
-                    <span style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{email}</span>
+                    <span title={email} style={{ fontSize: 12, fontWeight: 700, color: t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{email}</span>
                   ) : userCode ? (
                     <>
                       <span style={{ fontSize: 12, fontWeight: 700, color: t1, fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace", letterSpacing: "0.04em" }}>
                         {codeHidden ? "******" : userCode}
                       </span>
-                      <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: t3, fontSize: 11, cursor: "pointer", padding: "1px 2px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示" : "隐藏"}>{codeHidden ? "\u{1F441}" : "\u{1F648}"}</button>
+                      <button onClick={() => setCodeHidden((v) => !v)} style={{ border: "none", background: "none", color: t3, fontSize: 11, cursor: "pointer", padding: "1px 2px", lineHeight: 1, fontFamily: HOME_FONT }} title={codeHidden ? "显示登录码" : "隐藏登录码"}>{codeHidden ? "👁" : "🙈"}</button>
                       <button onClick={copyCode} style={{ border: `1px solid ${copied ? T.primary : navBdr}`, background: copied ? T.primarySoft : "transparent", color: copied ? T.primary : t3, borderRadius: 4, padding: "1px 6px", fontSize: 10, fontWeight: 600, cursor: "pointer", fontFamily: HOME_FONT }}>{copied ? "已复制" : "复制"}</button>
                     </>
                   ) : (
@@ -256,123 +378,68 @@ export function NavSidebar({
                   )}
                 </div>
               </div>
+              {/* 账户菜单：绑定邮箱 / 续费 / 退出登录 */}
+              <button
+                ref={menuAnchorRef}
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label="账户菜单" aria-haspopup="menu" aria-expanded={menuOpen}
+                title="账户设置"
+                data-testid="account-menu-btn"
+                style={{
+                  width: 26, height: 26, borderRadius: 7, flexShrink: 0,
+                  border: `1px solid ${menuOpen ? T.primary : navBdr}`,
+                  background: menuOpen ? T.primarySoft : "transparent",
+                  color: menuOpen ? T.primary : t3,
+                  cursor: "pointer", fontFamily: HOME_FONT, fontSize: 14, fontWeight: 800, lineHeight: 1, letterSpacing: 1,
+                }}
+              >···</button>
             </div>
 
-            {/* Bind email prompt */}
-            {isCodeUser && !email && (
-              <button onClick={() => setBindEmailOpen(true)} style={{ fontSize: 11, color: T.primary, background: T.primarySoft, border: `1px solid ${T.primary}`, borderRadius: 6, padding: "3px 8px", cursor: "pointer", fontFamily: HOME_FONT, fontWeight: 600, marginBottom: 6 }}>
-                绑定邮箱
-              </button>
-            )}
-
-            {/* Upgrade button */}
+            {/* 只有需要动作时才在卡上放按钮：免费→升级；Pro 快到期→续费；绑邮箱是账号安全提醒 */}
             {tier === "free" && (
-              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", padding: "7px 0", fontSize: 11, fontWeight: 700, border: "none", background: T.primary, color: "#fff", borderRadius: 6, cursor: "pointer", fontFamily: HOME_FONT, marginBottom: 6 }}>
+              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", marginTop: 10, padding: "7px 0", fontSize: 12, fontWeight: 700, border: "none", background: T.primary, color: "#fff", borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT }}>
                 升级 Pro
               </button>
             )}
-            {tier === "pro" && (
-              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", padding: "6px 0", fontSize: 11, fontWeight: 600, border: `1px solid ${navBdr}`, background: "transparent", color: t2, borderRadius: 6, cursor: "pointer", fontFamily: HOME_FONT, marginBottom: 6 }}>
-                续费
+            {showRenewOnCard && (
+              <button onClick={() => setUpgradeOpen(true)} style={{ width: "100%", marginTop: 10, padding: "7px 0", fontSize: 12, fontWeight: 700, border: `1px solid ${T.amber}`, background: T.amberSoft, color: T.amber, borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT }}>
+                {proDaysLeft > 0 ? `Pro 还剩 ${proDaysLeft} 天 · 续费` : "Pro 已到期 · 续费"}
               </button>
             )}
-
-            {/* Referral entry */}
-            {onOpenReferral && (
-              <SidebarActionItem
-                emoji="🎁" title="邀请备考搭子" sub="每人 +3 天 Pro · 无上限"
-                onClick={onOpenReferral}
-                navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
-                style={{ marginBottom: 8 }}
-              />
+            {isCodeUser && !email && (
+              <button onClick={() => setBindEmailOpen(true)} style={{ width: "100%", marginTop: 8, padding: "6px 0", fontSize: 11, fontWeight: 600, border: `1px dashed ${T.primary}`, background: T.primarySoft, color: T.primaryDeep, borderRadius: 8, cursor: "pointer", fontFamily: HOME_FONT }}>
+                ✉️ 绑定邮箱，防止账号丢失
+              </button>
             )}
-
-            {/* Feedback toggle */}
-            <button onClick={() => setFbOpen((v) => !v)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 6, padding: "6px 4px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: t2, flex: 1, textAlign: "left" }}>反馈</span>
-              <span style={{ fontSize: 10, color: t3, display: "inline-block", transform: fbOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
-            </button>
-            <div style={{ maxHeight: fbOpen ? 500 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
-              <div style={{ paddingTop: 6 }}>
-                <textarea value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="遇到问题或建议..." style={{ width: "100%", height: 70, resize: "none", background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg, border: `1px solid ${navBdr}`, borderRadius: 8, padding: "6px 8px", fontSize: 11, lineHeight: 1.5, color: t1, fontFamily: HOME_FONT, outline: "none", boxSizing: "border-box" }} />
-                <button onClick={submitFeedback} disabled={!fbText.trim() || fbBusy || fbSent} style={{ width: "100%", marginTop: 4, padding: "6px 0", fontSize: 11, fontWeight: 700, borderRadius: 6, border: "none", cursor: fbText.trim() && !fbBusy && !fbSent ? "pointer" : "default", background: fbSent ? T.primarySoft : (fbText.trim() ? T.primary : (isChallenge ? "rgba(255,255,255,0.07)" : T.navItemHover)), color: fbSent ? T.primary : (fbText.trim() ? "#fff" : t3), fontFamily: HOME_FONT }}>
-                  {fbSent ? "已提交" : fbBusy ? "提交中..." : "提交"}
-                </button>
-                {feedbackMsg && <div style={{ marginTop: 4, fontSize: 10, color: feedbackMsg.ok ? T.primary : T.rose }}>{feedbackMsg.text}</div>}
-                {fbHistory.length > 0 && (
-                  <div style={{ marginTop: 8, borderTop: `1px solid ${navBdr}`, paddingTop: 6 }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: t3, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>历史</div>
-                    {fbHistory.slice(0, 3).map((item) => (
-                      <div key={item.id} style={{ marginBottom: 6, background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg, borderRadius: 6, padding: "5px 7px", border: `1px solid ${navBdr}` }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
-                          <span style={{ fontSize: 10, color: t3 }}>{new Date(item.created_at).toLocaleDateString("zh-CN")}</span>
-                          <FbStatusBadge status={item.status} hasReply={!!item.admin_reply} />
-                        </div>
-                        <div style={{ fontSize: 10, color: t2, lineHeight: 1.4 }}>{String(item.content || "").slice(0, 50)}{item.content?.length > 50 ? "..." : ""}</div>
-                        {item.admin_reply && (
-                          <div style={{ marginTop: 3, padding: "3px 5px", background: isChallenge ? "rgba(99,102,241,0.12)" : T.indigoSoft, borderRadius: 4, fontSize: 10, color: isChallenge ? "#a5b4fc" : T.indigo, lineHeight: 1.4 }}>
-                            <b>回复:</b> {item.admin_reply}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Logout */}
-            <button
-              onClick={() => setLogoutConfirm(true)}
-              onMouseEnter={() => setLogoutHover(true)}
-              onMouseLeave={() => setLogoutHover(false)}
-              style={{ width: "100%", marginTop: 8, padding: "6px 0", fontSize: 11, fontWeight: 600, border: `1px solid ${logoutHover ? T.rose : navBdr}`, color: logoutHover ? T.rose : t3, background: logoutHover ? T.roseSoft : "transparent", borderRadius: 6, cursor: "pointer", transition: "all .15s", fontFamily: HOME_FONT }}
-            >
-              退出登录
-            </button>
           </div>
         )}
       </div>
 
-      {/* ── WeChat group (visible to all users) ── */}
-      <div style={{ borderTop: `1px solid ${navBdr}`, padding: "8px 14px 12px" }}>
-        <button
-          onClick={() => setWechatOpen((v) => !v)}
-          style={{ width: "100%", display: "flex", alignItems: "center", gap: 6, padding: "6px 4px", background: "transparent", border: "none", cursor: "pointer", fontFamily: HOME_FONT, textAlign: "left" }}
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={t3} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-          </svg>
-          <span style={{ fontSize: 12, fontWeight: 600, color: t2, flex: 1 }}>微信交流群</span>
-          <span style={{ fontSize: 10, color: t3, display: "inline-block", transform: wechatOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }}>v</span>
-        </button>
-        <div style={{ maxHeight: wechatOpen ? 260 : 0, overflow: "hidden", transition: "max-height 0.35s cubic-bezier(0.25,1,0.5,1)" }}>
-          <div style={{ paddingTop: 6 }}>
-            <div style={{ fontSize: 10, color: t3, lineHeight: 1.5, marginBottom: 6 }}>
-              扫码加群,反馈问题与接收更新
-            </div>
-            <div style={{
-              background: isChallenge ? "rgba(255,255,255,0.04)" : T.navBg,
-              border: `1px solid ${navBdr}`,
-              borderRadius: 8, padding: 6,
-              display: "flex", justifyContent: "center",
-            }}>
-              <WechatQrImage size={170} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Survey re-open entry (logged-in only) ── */}
-      {isLoggedIn && (
-        <div style={{ borderTop: `1px solid ${navBdr}`, padding: "10px 14px 12px" }}>
+      {/* ── Entry list：反馈与交流 / 邀请 / 问卷（都是打开弹窗，不在侧栏内展开） ── */}
+      <div style={{ padding: "8px 14px 14px", display: "flex", flexDirection: "column", gap: 6 }}>
+        <SidebarActionItem
+          emoji="💬" title="反馈与交流"
+          sub={unseenReplies > 0 ? "作者回复了你的反馈" : "提反馈 · 微信群"}
+          badge={unseenReplies > 0 ? String(unseenReplies) : ""}
+          onClick={() => openSupport(unseenReplies > 0 ? "history" : "feedback")}
+          navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
+          testId="support-entry"
+        />
+        {onOpenReferral && (
           <SidebarActionItem
-            emoji="📝" title="填写题库体验问卷" sub="说说新题感受 · 得 +1 天 Pro"
+            emoji="🎁" title="邀请备考搭子" sub="每人 +3 天 Pro · 无上限"
+            onClick={onOpenReferral}
+            navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
+          />
+        )}
+        {isLoggedIn && (
+          <SidebarActionItem
+            emoji="📝" title="题库体验问卷" sub="说说新题感受 · 得 +1 天 Pro"
             onClick={openFirstSetSurvey}
             navBdr={navBdr} navItemHover={navItemHover} t1={t1} t3={t3}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
