@@ -179,8 +179,10 @@ export function refreshSetAll(setname, flags, scan) {
       if (absent) {
         changes.push({ set: setname, code: f.code, section, action: "收窄", from: f.severity,
           why: `缺口全在 module ${absent.join("/")}（整个 module 在源料里没有），其余 module 逐题配满 → 只扣这几个 module` });
+        // 说明写进自己的字段，**不动 detail** —— detail 归 refresh_section_gap 重写，
+        // 往里面追加会让两个脚本来回改同一行（实测 --dry 不幂等）。
         out.push({ ...f, modules: absent,
-          detail: `${f.detail || ""}扣留范围收窄到 module ${absent.join("/")}（该 module 在源料里整个缺席，其余 module 已逐题配满）。` });
+          modules_why: `该 module 在源料里整个缺席（答案源连这个 module 都没有），其余 module 已逐题配满 —— 扣留范围收窄到 module ${absent.join("/")}。` });
         continue;
       }
     }
