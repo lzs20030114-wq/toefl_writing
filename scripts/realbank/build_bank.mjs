@@ -78,6 +78,8 @@ const { apQuestionType } = require("./question_type.js");
 const WR = require("./writing_recall.js");
 // 落库丢弃账本（每道闸扔掉的每一题记一行，原因码 = 下面 stats 的键名）：scripts/realbank/drop_ledger.js。
 const { makeDropRecorder, dropLedgerPayload, summarizeDrops } = require("./drop_ledger.js");
+// 造句句首词块照抄答案句的大写（"Which"）= 白送排序提示，落库前改回小写：lib/questionBank/bsChunkCase.js。
+const { normalizeSentenceInitialChunkCase, findSentenceInitialCapChunks } = require("../../lib/questionBank/bsChunkCase.js");
 
 /**
  * 记一笔落库丢弃。计数器照旧在调用处 += 1（终端日志口径不变），这里只多落一行明细。
@@ -846,8 +848,10 @@ function buildWriting(files, stats) {
   const bsAliasEdges = [];
   const seenAnswer = new Map();
   const bs = [];
-  for (const q of out.bs) {
-    const k = bsAnswerKey(q.answer);
+  for (const raw of out.bs) {
+    const k = bsAnswerKey(raw.answer);
+    const caseFixes = findSentenceInitialCapChunks(raw);
+    const q = normalizeSentenceInitialChunkCase(raw);
     const bsDrop = (code, detail) => recordDrop(stats, {
       set: q.source, slug: q.source ? setSlug(q.source) : null, section: "writing", type: "bs",
       q: Number((String(q.id).match(/_(\d+)$/) || [])[1]) || null, n: 1, id: q.id, code, detail,
@@ -870,6 +874,7 @@ function buildWriting(files, stats) {
     }
     seenAnswer.set(k, q);
     bs.push(q);
+    if (caseFixes.length) stats.wBsCaseLowered.push(`${q.id}: ${caseFixes.map((f) => `${f.from}→${f.to}`).join(", ")}`);
   }
   out.bs = bs;
   stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
@@ -1639,7 +1644,7 @@ function main() {
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, keptByManual: 0, keptByAnswerFix: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
-    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
+    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wBsCaseLowered: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
     wBsAliases: [], itemAliases: [], sRecallAdded: { repeat: 0, interview: 0 },
@@ -1923,6 +1928,7 @@ function main() {
   console.log(`  造句 ${writing.bs.length} 题 / 邮件 ${writing.email.length} 题 / 学术讨论 ${writing.discussion.length} 题`);
   console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条；造句答案句跨卷重复丢弃 ${stats.wDroppedDupBs} 题；造句过不了 runtime 丢弃 ${stats.wDroppedBsRuntime} 题`);
   for (const d of stats.wBsRuntimeDetail) console.log(`    ✗ ${d}`);
+  console.log(`  造句句首词块大写改回小写 ${stats.wBsCaseLowered.length} 题`);
   const thinTop = Object.entries(stats.wThinReasons).sort((a, b) => b[1] - a[1]);
   if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
   const recallDrops = stats.wRecallDropped.reduce((m, d) => { const k = `${d.type}:${d.code}`; m[k] = (m[k] || 0) + 1; return m; }, {});
