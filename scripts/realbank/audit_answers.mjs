@@ -28,6 +28,10 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 const { callDeepSeekViaCurl, resolveProxyUrl } = require("../../lib/ai/deepseekHttp");
+// 明细的题目标识（`section#module#q`，不带 module 的旧条目 fail-closed）：scripts/realbank/audit_key.js。
+// 听力 M1/M2 题号都从 1 起编，老键 `section#q` 会把两个 module 的题混成一条 —— 那就是
+// 2026-09-17 查实的「误放行 20 题 + 第二票解错题」的病根。
+const { auditKey, entryKey } = require("./audit_key.js");
 
 const OUT_DIR = path.join(process.cwd(), ".codex-tmp", "realbank");
 const MODEL = "deepseek-v4-flash";
@@ -39,6 +43,8 @@ const LETTERS = "ABCDEFGH";
 const EXIT_SYSTEMIC = 3;
 // 没有可审题目时打印的固定文案：run_pipeline 靠它把「审了但一致率低」和「压根没审成」分开。
 const NO_RESULT_TAG = "盲审无结果";
+// Map.get 的哨兵：没有 module 的旧明细算不出键（audit_key.entryKey → null），用它去查必然落空。
+const NO_KEY = "<no-module>";
 
 function loadEnv() {
   for (const p of [".env.local", ".env"]) {
@@ -161,16 +167,22 @@ async function main() {
   // --only-q=215,135：只审这些题号（可与上面叠加）。
   // --second-vote[=模型]：不重做第一票，只给「第一票不一致 / 没作答」的题补一票更强模型的独立盲解
   //   （默认 deepseek-v4-pro），记在该条 second_vote 上；build_bank 按 hold_policy.auditPassed 认。
+  // --only-key=listening#2#10,...：只审这些**带 module 的题目标识**（audit_key.auditKey 的形状）。
+  //   --only-q= 只认题号，撞号时（听力 M1/M2 都从 1 起编）指不到具体是哪一道；要精确指题用这个。
   const onlyMissing = args.includes("--only-missing");
   const onlyQ = (() => {
     const a = args.find((x) => x.startsWith("--only-q="));
     return a ? new Set(a.slice("--only-q=".length).split(",").map((s) => s.trim()).filter(Boolean)) : null;
   })();
+  const onlyKey = (() => {
+    const a = args.find((x) => x.startsWith("--only-key="));
+    return a ? new Set(a.slice("--only-key=".length).split(",").map((s) => s.trim()).filter(Boolean)) : null;
+  })();
   const secondVoteArg = args.find((a) => a === "--second-vote" || a.startsWith("--second-vote="));
   const secondVoteModel = secondVoteArg ? (secondVoteArg.split("=")[1] || SECOND_VOTE_MODEL) : null;
   if (!setname) {
     console.error("用法: node scripts/realbank/audit_answers.mjs <卷名> [--section=listening]"
-      + " [--only-missing] [--only-q=215,135] [--second-vote[=deepseek-v4-pro]]");
+      + " [--only-missing] [--only-q=215,135] [--only-key=listening#2#10] [--second-vote[=deepseek-v4-pro]]");
     process.exit(2);
   }
   const p = path.join(OUT_DIR, `${setname}.structured.json`);
@@ -210,7 +222,7 @@ async function main() {
       const fromAudio = (!perItem && onScreen.length < 40) ? (transcripts[r.section] || "") : "";
       const material = onScreen.length >= 40 ? onScreen : (perItem || fromAudio);
       const rec = {
-        section: r.section, type: r.type, key: r.key, item: it,
+        section: r.section, type: r.type, key: r.key, module: r.module, item: it,
         materialSource: onScreen.length >= 40 ? "屏幕"
           : (perItem ? "音频转写(逐题)" : (fromAudio ? "音频转写" : "无")),
         material,
@@ -219,7 +231,9 @@ async function main() {
     }
   }
   const auditFile = path.join(OUT_DIR, `${setname}.audit.json`);
-  const qKey = (section, q) => `${section}#${q}`;
+  // 一条可审记录的键（= 明细里那条的键）。旧明细没有 module，entryKey 返回 null ——
+  // 那条既配不上任何题，也不会被当成「审过」，一律 fail-closed，不许退回 `section#q` 兜底。
+  const recKey = (r) => auditKey(r.section, r.module, r.item.q_number);
   const readOldAudit = (flag) => {
     const old = fs.existsSync(auditFile) ? JSON.parse(fs.readFileSync(auditFile, "utf8")) : null;
     if (!old || !Array.isArray(old.audited)) {
@@ -231,11 +245,16 @@ async function main() {
 
   if (secondVoteModel) {
     const old = readOldAudit("--second-vote");
-    const recByKey = new Map(auditable.map((r) => [qKey(r.section, r.item.q_number), r]));
+    const recByKey = new Map(auditable.map((r) => [recKey(r), r]));
     const targets = old.audited.filter((a) => a.agree !== true && !a.second_vote
       && (!onlySection || a.section === onlySection)
-      && (!onlyQ || onlyQ.has(String(a.q))));
-    const runnable = targets.map((a) => ({ a, r: recByKey.get(qKey(a.section, a.q)) })).filter((x) => x.r);
+      && (!onlyQ || onlyQ.has(String(a.q)))
+      && (!onlyKey || onlyKey.has(entryKey(a) || "")));
+    const runnable = targets.map((a) => ({ a, r: recByKey.get(entryKey(a) || NO_KEY) })).filter((x) => x.r);
+    const legacy = targets.filter((a) => !entryKey(a)).length;
+    if (legacy) {
+      console.warn(`  跳过 ${legacy} 条没有 module 的旧明细（先跑 audit_backfill_module.mjs 回填）`);
+    }
     console.log(`■ ${setname} 第二票（${secondVoteModel}）：第一票不一致/没作答 ${targets.length} 题，可审 ${runnable.length} 题`);
     if (!runnable.length) return;
     const votes = await runPool(runnable, (x) => solve(x.r, secondVoteModel), CONCURRENCY);
@@ -246,7 +265,7 @@ async function main() {
       const stamped = LETTERS[x.r.item.answer_index];
       x.a.second_vote = { model: secondVoteModel, pick, agree: pick === stamped };
       if (pick === stamped) pass += 1;
-      console.log(`  [${x.a.section}/${x.a.type} Q${x.a.q}] 答案页=${stamped} 第一票=${x.a.model || "未作答"}`
+      console.log(`  [${x.a.section}/${x.a.type} M${x.a.module} Q${x.a.q}] 答案页=${stamped} 第一票=${x.a.model || "未作答"}`
         + ` 第二票=${pick || "未作答"}${pick === stamped ? "  → 放行" : ""}`);
     });
     fs.copyFileSync(auditFile, path.join(OUT_DIR, `${setname}.audit.prev.json`));
@@ -258,10 +277,11 @@ async function main() {
   let oldForMissing = null;
   if (onlyMissing) {
     oldForMissing = readOldAudit("--only-missing");
-    const seen = new Set(oldForMissing.audited.map((a) => qKey(a.section, a.q)));
+    // 没有 module 的旧条目进不了 seen（entryKey=null）：那条既然定位不到题，就不能替任何题挡住重审。
+    const seen = new Set(oldForMissing.audited.map((a) => entryKey(a)).filter(Boolean));
     const before = auditable.length;
     for (let i = auditable.length - 1; i >= 0; i -= 1) {
-      if (seen.has(qKey(auditable[i].section, auditable[i].item.q_number))) auditable.splice(i, 1);
+      if (seen.has(recKey(auditable[i]))) auditable.splice(i, 1);
     }
     console.log(`--only-missing：${before} → ${auditable.length} 题（已审过的沿用旧明细）`);
   }
@@ -271,6 +291,13 @@ async function main() {
       if (!onlyQ.has(String(auditable[i].item.q_number))) auditable.splice(i, 1);
     }
     console.log(`--only-q：${before} → ${auditable.length} 题`);
+  }
+  if (onlyKey) {
+    const before = auditable.length;
+    for (let i = auditable.length - 1; i >= 0; i -= 1) {
+      if (!onlyKey.has(recKey(auditable[i]))) auditable.splice(i, 1);
+    }
+    console.log(`--only-key：${before} → ${auditable.length} 题`);
   }
 
   const bySrc = auditable.reduce((m, r) => { m[r.materialSource] = (m[r.materialSource] || 0) + 1; return m; }, {});
@@ -307,7 +334,7 @@ async function main() {
   if (disagree.length) {
     console.log(`-- 需人工复核 ${disagree.length} 题 --`);
     for (const d of disagree) {
-      console.log(`\n[${d.section}/${d.type} Q${d.item.q_number}] 答案页=${d.stamped} 模型=${d.model} 材料来自${d.materialSource}`);
+      console.log(`\n[${d.section}/${d.type} M${d.module} Q${d.item.q_number}] 答案页=${d.stamped} 模型=${d.model} 材料来自${d.materialSource}`);
       console.log(`  ${String(d.item.stem).slice(0, 100)}`);
       d.item.options.forEach((o, i) => {
         const tag = [LETTERS[i] === d.stamped ? "答案页" : "", LETTERS[i] === d.model ? "模型" : ""].filter(Boolean).join("+");
@@ -319,7 +346,9 @@ async function main() {
   // 落库时的闸门需要区分「审过且一致」和「压根没审」——只给 disagree 列表的话，
   // 两者都表现为「不在列表里」，没审过的题会被当成通过悄悄放行。
   let audited = auditable.map((r, i) => ({
-    section: r.section, type: r.type, q: r.item.q_number,
+    // module 是键的一部分（audit_key.js）：听力 M1/M2 题号都从 1 起编，不带它就分不出是哪一道。
+    // groupKey = structured 里那个块的 key（`section|module|q_start`），留着好回溯。
+    section: r.section, type: r.type, module: r.module, q: r.item.q_number, groupKey: r.key,
     stamped: LETTERS[r.item.answer_index], model: picks[i] || null,
     agree: picks[i] === LETTERS[r.item.answer_index],
     materialSource: r.materialSource,
@@ -358,7 +387,7 @@ async function main() {
     set: setname, model: MODEL, auditable: audited.length, skipped: skipped.length,
     agree: totalAgree, nulls: totalNulls, audited,
     disagree: carriedDisagree.concat(disagree.map((d) => ({
-      section: d.section, type: d.type, q: d.item.q_number,
+      section: d.section, type: d.type, module: d.module, q: d.item.q_number,
       stamped: d.stamped, model: d.model, stem: d.item.stem, options: d.item.options,
     }))),
   }, null, 2), "utf8");

@@ -51,6 +51,11 @@ const require = createRequire(import.meta.url);
 // 扣留判据抽成纯函数放隔壁（无 IO，可单测）：见 scripts/realbank/hold_policy.js 顶部注释，
 // 那里写着 ctw_answer_truncated / section_gap 两条为什么在阅读科被放宽。
 const { holdDecision, sectionAgreement, auditPassed, loadAuditOverrides, manualAuditPass, manualAnswerFix } = require("./hold_policy.js");
+// 盲审明细的题目标识（`section#module#q`）：scripts/realbank/audit_key.js。
+// 老键 `section#q` 不带 module，听力 M1/M2 题号都从 1 起编 → passedKeys 成了两个 module 的并集，
+// M2 的 Q1~15 只要 M1 同号题过审就被放行（2026-09-17 查实误放行 20 题）。没有 module 的旧条目
+// **fail-closed**（既不算过审也不算审过），旧明细走 audit_backfill_module.mjs 一次性回填。
+const { buildAuditIndex, auditKey } = require("./audit_key.js");
 // 盲审两票都不认、人工对着原卷截图核过「答案页对」的题（data/realBank/audit-overrides.json，判据见 hold_policy.manualAuditPass）
 const AUDIT_OVERRIDES = loadAuditOverrides();
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
@@ -1257,8 +1262,13 @@ function buildListeningSpeaking(files, stats) {
     if (fs.existsSync(auditPath)) {
       const au = JSON.parse(fs.readFileSync(auditPath, "utf8"));
       if (Array.isArray(au.audited)) {
-        passedKeys = new Set(au.audited.filter(auditPassed).map((a) => `${a.section}#${a.q}`));
-        auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
+        const idx = buildAuditIndex(au.audited, auditPassed);
+        passedKeys = idx.passedKeys;
+        auditedKeys = idx.auditedKeys;
+        if (idx.legacy) {
+          console.warn(`${setname} 听力：${idx.legacy} 条盲审明细没有 module，按「没审过」处理`
+            + `（跑 scripts/realbank/audit_backfill_module.mjs 回填）`);
+        }
       }
     }
     if (!passedKeys) {
@@ -1291,7 +1301,7 @@ function buildListeningSpeaking(files, stats) {
         const kept = [];
         const lAt = { set: setname, slug, section: "listening", type: r.type, module: r.module };
         for (const it of r.items || []) {
-          const key = `listening#${it.q_number}`;
+          const key = auditKey("listening", r.module, it.q_number);
           stats.lItemsSeen += 1;
           if (!auditedKeys.has(key)) {
             stats.lDroppedNoAuditQ += 1;
@@ -1693,11 +1703,12 @@ function main() {
     }
     // 只有 agree===true 的题号才放行。没出现在 audited 里的 = 没审过 = 不收。
     // 盲审闸判据在 hold_policy.auditPassed：第一票一致，或第一票不一致但显式跑过且一致的第二票。
-    const passedKeys = new Set(au.audited.filter(auditPassed).map((a) => `${a.section}#${a.q}`));
-    const secondVoteKeys = new Set(au.audited.filter((a) => a.agree !== true && auditPassed(a))
-      .map((a) => `${a.section}#${a.q}`));
-    const auditedKeys = new Set(au.audited.map((a) => `${a.section}#${a.q}`));
-    const auditByKey = new Map(au.audited.map((a) => [`${a.section}#${a.q}`, a]));
+    const rIdx = buildAuditIndex(au.audited, auditPassed);
+    const { passedKeys, secondVoteKeys, auditedKeys, byKey: auditByKey } = rIdx;
+    if (rIdx.legacy) {
+      console.warn(`${setname} 阅读：${rIdx.legacy} 条盲审明细没有 module，按「没审过」处理`
+        + `（跑 scripts/realbank/audit_backfill_module.mjs 回填）`);
+    }
     // 跨卷去重：这卷的阅读题目文件如果被更早的卷收过了，整科跳过
     const hashes = readingSourceHashes(setname);
     const dupHash = (hashes || []).find((h) => seenHash.has(h));
@@ -1762,7 +1773,7 @@ function main() {
     const passed = [];
     for (const r of mcq) {
       stats.itemsSeen += 1;
-      const key = `reading#${r.item.q_number}`;
+      const key = auditKey("reading", r.module, r.item.q_number);
       const qDrop = (code, detail) => recordDrop(stats, {
         set: setname, slug: meta0.slug, section: "reading", type: r.type, module: r.module, q: r.item.q_number, n: 1, code, detail,
       });
