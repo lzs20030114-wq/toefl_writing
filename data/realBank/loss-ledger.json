@@ -7,7 +7,7 @@
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
-    "drops": "data/realBank/drop-ledger.json（2026-09-17，1768 行）"
+    "drops": "data/realBank/drop-ledger.json（2026-09-17，1757 行）"
   },
   "_causes": {
     "source_defect": "源料缺陷",
@@ -20,20 +20,20 @@
   },
   "summary": {
     "need": 8280,
-    "got": 7096,
-    "missing": 1243,
+    "got": 7108,
+    "missing": 1231,
     "overfilled": 59,
-    "completeness": 0.857,
+    "completeness": 0.8585,
     "causes": {
-      "source_defect": 314,
+      "source_defect": 308,
       "held": 103,
       "deduped": 25,
-      "bank_dropped": 352,
+      "bank_dropped": 348,
       "section_never_run": 51,
       "section_lost": 0,
-      "pipeline_loss": 398
+      "pipeline_loss": 396
     },
-    "actionable": 398
+    "actionable": 396
   },
   "byType": {
     "ctw": {
@@ -205,28 +205,28 @@
         "source_defect": 18,
         "held": 2,
         "deduped": 0,
-        "bank_dropped": 68,
+        "bank_dropped": 67,
         "section_never_run": 6,
         "section_lost": 0,
-        "pipeline_loss": 58
+        "pipeline_loss": 59
       },
       "completeness": 0.6329
     },
     "lat": {
       "type": "lat",
       "need": 1100,
-      "got": 797,
-      "missing": 303,
+      "got": 809,
+      "missing": 291,
       "causes": {
-        "source_defect": 52,
+        "source_defect": 46,
         "held": 20,
         "deduped": 0,
-        "bank_dropped": 107,
+        "bank_dropped": 104,
         "section_never_run": 16,
         "section_lost": 0,
-        "pipeline_loss": 108
+        "pipeline_loss": 105
       },
-      "completeness": 0.7245
+      "completeness": 0.7355
     },
     "mcq2": {
       "type": "mcq2",
@@ -297,18 +297,18 @@
     "listening": {
       "section": "listening",
       "need": 3243,
-      "got": 2399,
-      "missing": 844,
+      "got": 2411,
+      "missing": 832,
       "causes": {
-        "source_defect": 121,
+        "source_defect": 115,
         "held": 62,
         "deduped": 0,
-        "bank_dropped": 286,
+        "bank_dropped": 282,
         "section_never_run": 51,
         "section_lost": 0,
-        "pipeline_loss": 324
+        "pipeline_loss": 322
       },
-      "completeness": 0.7397
+      "completeness": 0.7434
     }
   },
   "tasks": [
@@ -531,26 +531,6 @@
       ]
     },
     {
-      "set": "3.17新托福真题",
-      "slug": "317",
-      "date": "2026-03-17",
-      "section": "listening",
-      "missing": 10,
-      "cause": "pipeline_loss",
-      "types": {
-        "lc": 3,
-        "la": 2,
-        "lat": 5
-      },
-      "slots": [
-        "M1/lc_13(-1)",
-        "M1/lc_15(-2)",
-        "M1/la_23(-2)",
-        "M2/lat_8(-4)",
-        "M2/lat_12(-1)"
-      ]
-    },
-    {
       "set": "5.10新托福真题",
       "slug": "510",
       "date": "2026-05-10",
@@ -606,6 +586,26 @@
         "M1/la_21(-2)",
         "M2/lc_4(-2)",
         "M2/lc_6(-2)"
+      ]
+    },
+    {
+      "set": "3.17新托福真题",
+      "slug": "317",
+      "date": "2026-03-17",
+      "section": "listening",
+      "missing": 7,
+      "cause": "pipeline_loss",
+      "types": {
+        "lc": 3,
+        "la": 2,
+        "lat": 2
+      },
+      "slots": [
+        "M1/lc_13(-1)",
+        "M1/lc_15(-2)",
+        "M1/la_23(-2)",
+        "M2/lat_8(-1)",
+        "M2/lat_12(-1)"
       ]
     },
     {
@@ -1356,6 +1356,20 @@
       },
       "slots": [
         "M1/repeat_1(-1)"
+      ]
+    },
+    {
+      "set": "3.16新托福真题",
+      "slug": "316",
+      "date": "2026-03-16",
+      "section": "listening",
+      "missing": 1,
+      "cause": "pipeline_loss",
+      "types": {
+        "la": 1
+      },
+      "slots": [
+        "M1/la_21(-1)"
       ]
     },
     {
@@ -6517,8 +6531,7 @@
       },
       "drop_codes": {
         "lDroppedDupItem": 2,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -6543,12 +6556,12 @@
       "status": "empty",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 2
+        "bank_dropped": 1,
+        "pipeline_loss": 1
       },
       "drop_codes": {
         "lDroppedDupItem": 2,
-        "lDroppedNoAuditQ": 1,
-        "lDroppedDisagree": 1
+        "lDroppedInvalid": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -6568,17 +6581,15 @@
         11
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "bank_dropped",
       "charged": {
-        "bank_dropped": 4
+        "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 7,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDupItem": 6
       },
       "notes": [
         "duplicate_cluster"
@@ -6606,9 +6617,7 @@
         "bank_dropped": 1
       },
       "drop_codes": {
-        "lDroppedDupItem": 7,
-        "lDroppedDisagree": 2,
-        "lDroppedInvalid": 1
+        "lDroppedDupItem": 6
       },
       "notes": [
         "duplicate_cluster"
@@ -6760,12 +6769,12 @@
         11
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "pipeline_loss",
       "charged": {
-        "pipeline_loss": 4
+        "pipeline_loss": 1
       },
       "notes": [
         "duplicate_cluster"
@@ -9310,12 +9319,12 @@
         32
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
@@ -9379,12 +9388,12 @@
         15
       ],
       "need": 4,
-      "got": 0,
-      "missing": 4,
-      "status": "empty",
+      "got": 3,
+      "missing": 1,
+      "status": "near",
       "cause": "source_defect",
       "charged": {
-        "source_defect": 4
+        "source_defect": 1
       },
       "notes": []
     },
