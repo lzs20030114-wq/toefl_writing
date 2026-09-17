@@ -1422,54 +1422,16 @@ def repeat_from_audio(sents, units):
 # 开放题、没有客观答案，一个词转错的代价远小于选择题；而且每道题都要能从同一条录音里
 # 切出真人原声，bind 的覆盖率 / 锚点 / 语速三道闸会机械验证「这段文字确实是这个位置说的」。
 INTERVIEW_CUE_RE = re.compile(r"(?i)take an interview|an interviewer will ask you")
-# ETS 的固定指令 + 场景屏（考生听到的是屏幕上那段的朗读，不是题干）
-IV_DIRECTIONS_RE = re.compile(
-    r"(?i)^(take an interview|an interviewer will ask|i'?ll ask you question"
-    r"|answer the questions and be sure|(the|a) (clock|block) will indicate"
-    r"|no (time|type) (for|of) preparation|as part of an? [a-z ]{0,20}(project|study|research)"
-    r"|a graduate student"
-    r"|(you'?ll|you will) have a short|(the |a )?researcher (will ask|is studying)"
-    r"|you have (volunteered|signed up|agreed|been (invited|asked))|you are participating"
-    r"|(no time for preparation |interview |preparation )?will be provided"
-    r"|you received an email|you'?ve been (invited|asked)|volunteer for a research study)")
-# 面试官的应答词（「好的」「有意思」「谢谢」）—— 只在**没有问号且不超过 8 词**时剥
-IV_ACK_RE = re.compile(
-    r"(?i)^(thanks?|great|interesting|okay|ok|noted|fair enough|good points?|i see|understood"
-    r"|alright|all right|got it|wonderful|nice|sure|right|excellent|perfect|makes sense"
-    r"|very good|mm|uh|yeah|yes|cool|good|that'?s (interesting|helpful|great|good))\b")
-# 「谢谢你参加本研究 / 谢谢你今天来」这类整句寒暄可以长一些，单独一条（仍只剥没有问号的整句）
-IV_GREETING_RE = re.compile(
-    r"(?i)^(thanks?|thank you)\b.*\b(participat|take part|joining|speaking with me|for (your )?time"
-    r"|agreeing|for coming|for a great talk|being here|being involved|your involvement)")
-# 面试官的转场铺垫（同样只剥没有问号的整句）
-IV_FRAMING_RE = re.compile(
-    r"(?i)^(i'?d like to (ask|talk|discuss|hear|know)|i would like to (ask|talk|discuss)"
-    r"|today,? i'?d like|let'?s (start|begin)"
-    r"|next question|final question|and finally|one (more|last) question|moving on"
-    r"|i'?m going to ask|we'?ll (start|begin) with)")
-IV_MIN_WORDS, IV_MAX_WORDS = 5, 60      # validator 的绝对区间；库里 174 道真题实测 6~51 词
-IV_ACK_MAX_WORDS = 8
-
-
-def trim_interview_stem(sents):
-    """剥掉题干前面的指令 / 场景 / 应答词，剥到第一句「不是这三类」的为止。
-
-    只从**前面**剥、且只剥**没有问号**的整句 —— 带问号的句子和「Some people believe that …」
-    这种前提句一律留着（前提剥掉题就残了）。剥到哪停由句子本身决定，不猜边界。
-    """
-    i = 0
-    while i < len(sents):
-        t = sents[i]["text"].strip()
-        if "?" in t:
-            break
-        if IV_DIRECTIONS_RE.match(t) or IV_FRAMING_RE.match(t) or IV_GREETING_RE.match(t):
-            i += 1
-            continue
-        if len(t.split()) <= IV_ACK_MAX_WORDS and IV_ACK_RE.match(t):
-            i += 1
-            continue
-        break
-    return sents[i:]
+# 题干剥离的判据与区间搬去了 merge_vendor_asr（两条来源共用同一把尺：整段录音卷按静音切段，
+# 商家卷是逐题 mp3，但「剥什么、留什么、多长算数」必须一模一样）。这里按原名再导出一遍，
+# 下面的 build_interview 与 --self-test 一个字都不用改。
+IV_DIRECTIONS_RE = V.IV_DIRECTIONS_RE
+IV_ACK_RE = V.IV_ACK_RE
+IV_GREETING_RE = V.IV_GREETING_RE
+IV_FRAMING_RE = V.IV_FRAMING_RE
+IV_MIN_WORDS, IV_MAX_WORDS = V.IV_MIN_WORDS, V.IV_MAX_WORDS
+IV_ACK_MAX_WORDS = V.IV_ACK_MAX_WORDS
+trim_interview_stem = V.trim_interview_stem
 
 
 CJK_RE = F.CJK_RE
@@ -1502,6 +1464,31 @@ def interview_intro(scan):
     return fix_orthography(best[:300]) if best else ""
 
 
+# 收卷寒暄（"Are you all done?" / "That's all for today."）—— 它在录音里长得和一道题一样：
+# 独立一段、带问号、跟在 Q4 之后。真题面试固定 4 道，多出来的这一段会把整组判成 5 道扣下。
+# 判据卡得极窄（全库实测只对 5.3 一套生效）：只看**最后一段**、必须短、必须命中闭合词表，
+# 而且只在「去掉它正好剩 4 道」时才去 —— 去掉之后不是 4 道说明分段本来就不对，宁可整组扣下。
+IV_CLOSING_RE = re.compile(
+    r"(?i)^(are|is)\s+(you|that|we|there)\b[^?]*\b(done|finished|all set|anything else|everything)\b"
+    r"|^(that'?s|that is|this is)\s+(all|it|everything)\b"
+    r"|^(that|this)\s+(concludes|ends)\b"
+    r"|^thank you( so much)? for your time\b"
+    r"|^(we'?re|we are|you'?re|you are)\s+(all\s+)?(done|finished)\b"
+    r"|^do you have any( other)? questions for me\b")
+IV_CLOSING_MAX_WORDS = 10
+
+
+def drop_interview_closing(cands, stats):
+    """恰好多出一段、且那一段是收卷寒暄 → 去掉它。其余情况原样返回（不猜）。"""
+    if len(cands) != 5:
+        return cands
+    tail = " ".join(x["text"] for x in cands[-1]).strip()
+    if V.nwords(tail) <= IV_CLOSING_MAX_WORDS and IV_CLOSING_RE.search(tail):
+        stats["interview_closing_trimmed"] = stats.get("interview_closing_trimmed", 0) + 1
+        return cands[:4]
+    return cands
+
+
 def build_interview(rec, ctx, stats):
     """整段口语录音 → 面试 4 道题干。→ (results 条目 或 None, 扣下原因 或 None)。
 
@@ -1526,6 +1513,7 @@ def build_interview(rec, ctx, stats):
         ss = trim_interview_stem(sentences(w))
         if ss and any("?" in x["text"] for x in ss):
             cands.append(ss)
+    cands = drop_interview_closing(cands, stats)
     if len(cands) != 4:
         return None, "interview_count:旁白后分出 %d 道题（应为 4）" % len(cands)
     items = []
@@ -1671,7 +1659,10 @@ def process_speaking(setkey, args, totals):
             parsed = snap
     # 答案页没有复述句的卷（section_no_stems / 整张答案页缺失）照样跑：复述做不了，
     # 但面试题干本来就只在音频里，不靠答案页 —— 这些卷的 4 道面试题一样能收。
-    has_doc = any(r.get("section") == "speaking" for r in parsed.get("results", []))
+    # docx 卷另有一路：上游解析器认不出「不编号」的答案页，structured 里连 speaking 段都没有，
+    # 但原始「答案.docx」的口语表头下印着完整 7 句 —— 有这一路也算有文档来源（判据见 docx_speaking_answers）。
+    has_doc = (any(r.get("section") == "speaking" for r in parsed.get("results", []))
+               or bool(docx_speaking_answers(setkey)))
 
     rec, cached = transcribe_recording(setkey, audio, role="speaking")   # 本机 faster-whisper，零 API 费用
     stats = F.new_stats()
@@ -2046,6 +2037,18 @@ def self_test():
     ws = _w("Take an interview. An interviewer will ask you questions.", 0) + _w("Do you like music?", 20)
     iv, why = build_interview({"words": ws}, "", {})
     check("题数不是 4 不收", iv is None and why.startswith("interview_count"), why)
+    # 收卷寒暄：只在「恰好多出一段、那一段短且命中闭合词表」时去掉（5.3 的 "Are you all done?"）
+    q = lambda t: [{"text": t}]                                                   # noqa: E731
+    four = [q("Do you like A?"), q("Do you like B?"), q("Do you like C?"), q("Do you like D?")]
+    check("收卷寒暄去掉", len(drop_interview_closing(four + [q("Are you all done?")], {})) == 4)
+    check("最后一段不是寒暄就不去", len(drop_interview_closing(four + [q("Which season do you prefer and why?")], {})) == 5)
+    check("寒暄太长不去", len(drop_interview_closing(
+        four + [q("Are you done thinking about everything we discussed today in this long interview?")], {})) == 5)
+    check("只多一段才去（3 段 / 6 段原样）",
+          len(drop_interview_closing(four[:2] + [q("Are you all done?")], {})) == 3
+          and len(drop_interview_closing(four + [q("Do you like E?"), q("Are you all done?")], {})) == 6)
+    check("寒暄只看最后一段", len(drop_interview_closing(
+        [q("Are you all done?")] + four, {})) == 5)
 
     if fails:
         print("SELF-TEST FAILED:")

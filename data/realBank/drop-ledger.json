@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1601,
-    "questions": 840,
+    "rows": 1604,
+    "questions": 848,
     "sections": 22,
     "byCode": {
       "wSkippedThin": {
@@ -124,15 +124,15 @@
       "sDroppedNoOriginalAudio": {
         "code": "sDroppedNoOriginalAudio",
         "label": "整块录音来源没切出真人原声（不许退回 TTS 上线）",
-        "rows": 8,
-        "questions": 15,
+        "rows": 10,
+        "questions": 19,
         "sections": 0
       },
       "sDroppedDupSet": {
         "code": "sDroppedDupSet",
         "label": "口语内容与更早一套卷重复",
-        "rows": 19,
-        "questions": 107,
+        "rows": 20,
+        "questions": 111,
         "sections": 0
       },
       "lDroppedBadOptions": {
@@ -205,7 +205,7 @@
       },
       "speaking": {
         "section": "speaking",
-        "questions": 122,
+        "questions": 130,
         "sections": 4
       },
       "reading": {
@@ -282,10 +282,10 @@
       },
       "interview": {
         "type": "interview",
-        "questions": 36,
+        "questions": 44,
         "byCode": {
-          "sDroppedDupSet": 32,
-          "sDroppedNoOriginalAudio": 4
+          "sDroppedDupSet": 36,
+          "sDroppedNoOriginalAudio": 8
         }
       },
       "rdl": {
@@ -19298,6 +19298,19 @@
       "detail": "录音转写与 real_lat_21b_2_08 近似重复（sim=1）"
     },
     {
+      "set": "5.3新托福真题",
+      "slug": "53",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 4,
+      "scope": "unit",
+      "id": "real_interview_53_1",
+      "code": "sDroppedDupSet",
+      "detail": "面试与 4.18新托福真题/real_interview_418_1 逐字相同"
+    },
+    {
       "set": "5.6新托福真题",
       "slug": "56",
       "section": "listening",
@@ -19920,6 +19933,32 @@
       "id": "real_lcr_rf0708_1_05",
       "code": "lDroppedDupItem",
       "detail": "口播与 rf0622/real_lcr_rf0622_1_09 逐字相同"
+    },
+    {
+      "set": "rf0708",
+      "slug": "rf0708",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 3,
+      "scope": "unit",
+      "id": "real_interview_rf0708_1",
+      "code": "sDroppedNoOriginalAudio",
+      "detail": "real_interview_rf0708_1_q1,real_interview_rf0708_1_q3,real_interview_rf0708_1_q4"
+    },
+    {
+      "set": "rf0708",
+      "slug": "rf0708",
+      "section": "speaking",
+      "type": "interview",
+      "module": null,
+      "q": null,
+      "n": 1,
+      "scope": "unit",
+      "id": "real_interview_rf0708_1",
+      "code": "sDroppedNoOriginalAudio",
+      "detail": "闸剩 1 条不成套：questions: need 4, got 1"
     },
     {
       "set": "rf0713",

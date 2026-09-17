@@ -82,6 +82,61 @@ LISTEN_FILE_RE = re.compile(r"^listening_m(\d+)_q(\d+)(?:_q(\d+))?_(.+)\.mp3$", 
 REPEAT_FILE_RE = re.compile(r"^speaking_listen_repeat_q(\d+)\.mp3$", re.I)
 INTERVIEW_FILE_RE = re.compile(r"^speaking_take_interview_q(\d+)\.mp3$", re.I)
 
+# ── 面试题干的剥离判据（两条来源共用）────────────────────────────────────────
+# 2026-09-16 用户拍板「面试题干收 ASR + 四道机械闸」。判据本来写在 merge_recording_asr（整段
+# 录音卷），但商家逐题 mp3 的卷同样需要它 —— 两边必须是同一把尺，所以放在这个两边都 import
+# 的模块里。merge_recording_asr 按原名再导出一遍，它那边的调用点一个字都不用改。
+# ETS 的固定指令 + 场景屏（考生听到的是屏幕上那段的朗读，不是题干）
+IV_DIRECTIONS_RE = re.compile(
+    r"(?i)^(take an interview|an interviewer will ask|i'?ll ask you question"
+    r"|answer the questions and be sure|(the|a) (clock|block) will indicate"
+    r"|no (time|type) (for|of) preparation|as part of an? [a-z ]{0,20}(project|study|research)"
+    r"|a graduate student"
+    r"|(you'?ll|you will) have a short|(the |a )?researcher (will ask|is studying)"
+    r"|you have (volunteered|signed up|agreed|been (invited|asked))|you are participating"
+    r"|(no time for preparation |interview |preparation )?will be provided"
+    r"|you received an email|you'?ve been (invited|asked)|volunteer for a research study)")
+# 面试官的应答词（「好的」「有意思」「谢谢」）—— 只在**没有问号且不超过 8 词**时剥
+IV_ACK_RE = re.compile(
+    r"(?i)^(thanks?|great|interesting|okay|ok|noted|fair enough|good points?|i see|understood"
+    r"|alright|all right|got it|wonderful|nice|sure|right|excellent|perfect|makes sense"
+    r"|very good|mm|uh|yeah|yes|cool|good|that'?s (interesting|helpful|great|good))\b")
+# 「谢谢你参加本研究 / 谢谢你今天来」这类整句寒暄可以长一些，单独一条（仍只剥没有问号的整句）
+IV_GREETING_RE = re.compile(
+    r"(?i)^(thanks?|thank you)\b.*\b(participat|take part|joining|speaking with me|for (your )?time"
+    r"|agreeing|for coming|for a great talk|being here|being involved|your involvement)")
+# 面试官的转场铺垫（同样只剥没有问号的整句）
+IV_FRAMING_RE = re.compile(
+    r"(?i)^(i'?d like to (ask|talk|discuss|hear|know)|i would like to (ask|talk|discuss)"
+    r"|today,? i'?d like|let'?s (start|begin)"
+    r"|next question|final question|and finally|one (more|last) question|moving on"
+    r"|i'?m going to ask|we'?ll (start|begin) with)")
+IV_MIN_WORDS, IV_MAX_WORDS = 5, 60      # validator 的绝对区间；库里 174 道真题实测 6~51 词
+IV_ACK_MAX_WORDS = 8
+
+
+def trim_interview_stem(sents):
+    """剥掉题干前面的指令 / 场景 / 应答词，剥到第一句「不是这三类」的为止。
+
+    只从**前面**剥、且只剥**没有问号**的整句 —— 带问号的句子和「Some people believe that …」
+    这种前提句一律留着（前提剥掉题就残了）。剥到哪停由句子本身决定，不猜边界。
+    """
+    i = 0
+    while i < len(sents):
+        t = sents[i]["text"].strip()
+        if "?" in t:
+            break
+        if IV_DIRECTIONS_RE.match(t) or IV_FRAMING_RE.match(t) or IV_GREETING_RE.match(t):
+            i += 1
+            continue
+        if len(t.split()) <= IV_ACK_MAX_WORDS and IV_ACK_RE.match(t):
+            i += 1
+            continue
+        break
+    return sents[i:]
+
+
+
 MALE_LABELS = {"man", "male", "m", "speaker a", "student a", "boy"}
 FEMALE_LABELS = {"woman", "female", "f", "speaker b", "student b", "girl"}
 NARRATOR_LABELS = {"narrator", "announcer"}
@@ -700,6 +755,53 @@ def interview_stem_from_asr(a):
     return sentence_case(body)
 
 
+# 逐题 mp3 的卷「文档没印题干」时才走的一路：与整段录音卷同一把尺剥题干（trim_interview_stem），
+# 再过同一组机械闸。不改 interview_stem_from_asr —— 那一支是给**交叉核对**用的（与文档题干比相似度、
+# 从候选里挑一条），换了剥法会连带改掉已上线那批卷的 stem_mismatch 判定。
+IV_END_PUNCT_RE = re.compile(r"""[.?!"'”’)]$""")
+
+
+def interview_stem_from_asr_strict(a):
+    """面试音频 ASR → 题干（**收 ASR 那一路专用**，剥法与整段录音卷完全一致）。
+
+    只从前面剥、且只剥没有问号的整句：ETS 固定指令 / 场景屏朗读 / 「谢谢参加」寒暄 / 转场铺垫 /
+    ≤8 词的应答词。带问号的句子和「Some people believe that …」这种前提句一个字都不剥。
+    剥不出东西（整段都像指令）返回 ""，交给上面的闸扣下。
+    """
+    # 先把 segment 拼成一整段再断句：Whisper 会把一句话断在词中间（"…investigating public" /
+    # "parks and recreation."），逐 segment 断句会留下 "Parks and recreation." 这种残片 ——
+    # 它既不是指令也不是应答词，剥到它就停住，整条指令因此原样留在题干里（实测 rf0708 Q1）。
+    text = " ".join(x["text"].strip() for x in (a or {}).get("segments") or [] if x.get("text"))
+    sents = [{"text": x.strip()} for x in re.split(r"(?<=[.!?])\s+", text) if x.strip()]
+    if not sents:
+        return ""
+    body = " ".join(x["text"] for x in trim_interview_stem(sents)).strip()
+    body = INTERVIEW_LEAD_RE.sub("", body).strip()
+    return sentence_case(body)
+
+
+def interview_asr_group(iv_files, iv_n, asr):
+    """整组面试题干收 ASR —— 四道机械闸，任一道不过**整组**扣下（返回 {} = 不收）。
+
+    这四道与整段录音卷那一路一一对应（2026-09-16 用户拍板的口径，一条都没放宽）：
+      闸一：源料就是「一题一个 mp3」的 `speaking_take_interview_qNN.mp3` —— 商家已经按题切好，
+            旁白与分段这两件事天生成立，不需要再从录音里认旁白、数停顿；
+      闸二：**恰好 4 个**这样的文件（真题面试固定 4 题；多一个少一个说明源料形态不对）；
+      闸三：每道题剥完指令 / 场景 / 应答词后仍带问号、5~60 词、以句末标点收尾；
+      闸四（在 bind_original_audio）：每道题都要能从自己那条 mp3 里切出真人原声并过闸。
+    """
+    if len(iv_files) != 4:
+        return {}
+    out = {}
+    for fn in iv_files:
+        text = interview_stem_from_asr_strict(asr.get(fn))
+        if (not text or "?" not in text or not IV_END_PUNCT_RE.search(text)
+                or not (IV_MIN_WORDS <= nwords(text) <= IV_MAX_WORDS)):
+            return {}
+        out[iv_n[fn]] = text
+    return out
+
+
 def build_speaking(setkey, structured, asr, audio, stats):
     sp = collect_speaking(structured)
     results = []
@@ -809,6 +911,12 @@ def build_speaking(setkey, structured, asr, audio, stats):
 
     iv_files, iv_n, iv_units = _speak_files("interview")
     iv_res, iv_cands = audio_names.align_speaking_groups(iv_units, _doc_groups("interview"))
+    # 文档一道题干都没印时才启用的 ASR 一路（四道机械闸见 interview_asr_group；整组过或整组不过）
+    iv_asr_only = ({} if any((sp["interview"].get(iv_n[fn]) or {}).get("stem")
+                             or (iv_res.get(iv_n[fn]) or {}).get("stem") for fn in iv_files)
+                   else interview_asr_group(iv_files, iv_n, asr))
+    if iv_asr_only:
+        stats["interview_from_asr"] = stats.get("interview_from_asr", 0) + len(iv_asr_only)
     if iv_files:
         items, problems = [], []
         for fn in iv_files:
@@ -846,14 +954,22 @@ def build_speaking(setkey, structured, asr, audio, stats):
                 s = None
                 text = doc
                 ip.append("asr_empty_no_crosscheck")
+            elif iv_asr_only.get(n):
+                # 文档一道题干都没印（商家 docx 只印场景与复述句）：按 2026-09-16 拍板的口径收 ASR，
+                # 前提是整组过了 interview_asr_group 那四道机械闸。与整段录音卷同一把尺、同一组闸。
+                s = None
+                text = iv_asr_only[n]
+                ip.append("stem_from_asr")
             else:
                 # 题干同理：文档没有就 hold，不用 ASR 顶（同上）。
                 s = None
                 text = ""
                 usable = False
                 ip.append("no_stem_in_doc" if asr_stem else "no_stem")
-            # validator 的绝对区间是 10~60 词；越界的单题剔掉，别拖垮整套。
-            if usable and text and not (10 <= nwords(text) <= 60):
+            # 绝对区间：文档题干沿用 10~60（<10 词的多半是 OCR 残片），ASR 那一路用 validator 自己的
+            # 5~60 —— 组闸已经按这条线整组判过了，这里再用一条更严的线会把整组判成「过了 3 道」。
+            lo = IV_MIN_WORDS if "stem_from_asr" in ip else 10
+            if usable and text and not (lo <= nwords(text) <= IV_MAX_WORDS):
                 usable = False
                 ip.append("stem_word_count:%d" % nwords(text))
             items.append({"n": n, "q_number": n,

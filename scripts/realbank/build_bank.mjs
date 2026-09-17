@@ -1500,7 +1500,12 @@ function buildListeningSpeaking(files, stats) {
             continue;
           }
         }
-        if (!keepSpeaking("interview", set, "questions", questions, recordingMerged,
+        // 题干来自 ASR 的组，不管哪条来源都要过「切不出真人原声就不上线」这道闸 ——
+        // 它是 2026-09-16 拍板收 ASR 题干时定下的第四道机械闸（前三道在合流脚本里），
+        // 唯一能机械验证「这段文字确实是这个位置说的」的一道。商家逐题 mp3 的卷（merge_vendor_asr）
+        // 不是 recordingMerged，早先只靠 recordingMerged 判会让这种组绕过它。
+        const ivFromAsr = questions.some((q) => q.from_asr);
+        if (!keepSpeaking("interview", set, "questions", questions, recordingMerged || ivFromAsr,
                           { stats, set: setname, slug, id, section: "speaking" },
                           (x) => SPV.validateInterviewSet(x, REAL_EXAM))) {
           gatedOutS.set(sk, [...(gatedOutS.get(sk) || []), { id, setname }]);

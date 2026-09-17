@@ -173,3 +173,85 @@ describe("build_bank：口语补录的跨卷重复也记别名", () => {
       .toBeLessThan(src.indexOf("stats.itemAliases = aliasEntries(itemAliasEdges);"));
   });
 });
+
+/**
+ * 商家逐题 mp3 的卷「文档没印题干」时也收 ASR（2026-09-17）——
+ * 与整段录音卷同一把尺（trim_interview_stem 已搬到 merge_vendor_asr，两边共用），四道机械闸整组判。
+ */
+const VENDOR = path.join(__dirname, "..", "scripts", "realbank", "merge_vendor_asr.py");
+const IV_PROBE = String.raw`
+import json, sys
+sys.dont_write_bytecode = True
+sys.path.insert(0, sys.argv[1])
+import merge_vendor_asr as V
+
+def seg(*texts):
+    return {"segments": [{"text": t} for t in texts]}
+
+files = ["speaking_take_interview_q%02d.mp3" % i for i in range(1, 5)]
+n = {f: i + 1 for i, f in enumerate(files)}
+good = [
+    seg("Take an interview. An interviewer will ask you questions.",
+        "You have volunteered for a research study about public parks.",
+        "Thank you for participating in this study.",
+        "First, can you tell me about a memorable visit you made to a park?"),
+    seg("I see. Do you think parks matter more for adults or for children? Why?"),
+    seg("Interesting. Some people believe parks promote community health.",
+        "What are your thoughts on this? Do you agree or disagree?"),
+    seg("Good points. Finally, cities must choose between parks and housing.",
+        "Do you think housing matters more than parks? Why?"),
+]
+out = {}
+out["ok"] = V.interview_asr_group(files, n, dict(zip(files, good)))
+out["only3"] = V.interview_asr_group(files[:3], {f: n[f] for f in files[:3]},
+                                     dict(zip(files[:3], good[:3])))
+noq = list(good); noq[1] = seg("I see. Describe a park you like.")
+out["no_question_mark"] = V.interview_asr_group(files, n, dict(zip(files, noq)))
+short = list(good); short[1] = seg("I see. Why?")
+out["too_short"] = V.interview_asr_group(files, n, dict(zip(files, short)))
+long_ = list(good); long_[1] = seg("I see. " + " ".join(["word"] * 70) + " right?")
+out["too_long"] = V.interview_asr_group(files, n, dict(zip(files, long_)))
+split = list(good)
+# Whisper 把一句话断在词中间：拼成整段再断句才剥得干净（rf0708 Q1 实测）
+split[0] = seg("You have signed up for a study run by a university group that is investigating public",
+               "parks and recreation.",
+               "Thank you for participating in this study.",
+               "First, can you tell me about a memorable visit you made to a park?")
+out["glued"] = V.interview_asr_group(files, n, dict(zip(files, split)))
+print(json.dumps(out, ensure_ascii=False))
+`;
+
+maybe("商家逐题 mp3 的面试题干（文档没印时收 ASR）", () => {
+  let r;
+  beforeAll(() => {
+    const out = execFileSync(PY, ["-X", "utf8", "-c", IV_PROBE, path.dirname(VENDOR)], {
+      encoding: "utf8", env: { ...process.env, PYTHONDONTWRITEBYTECODE: "1", PYTHONIOENCODING: "utf-8" },
+    });
+    r = JSON.parse(out.trim().split(/\r?\n/).pop());
+  });
+
+  test("四道题都过闸才收，剥掉指令 / 场景 / 应答词，前提句留着", () => {
+    expect(Object.keys(r.ok)).toEqual(["1", "2", "3", "4"]);
+    expect(r.ok["1"]).toBe("Can you tell me about a memorable visit you made to a park?");
+    expect(r.ok["2"]).toBe("Do you think parks matter more for adults or for children? Why?");
+    expect(r.ok["3"]).toMatch(/^Some people believe parks promote community health\./);
+  });
+
+  test("不是恰好 4 个逐题文件 / 少一个问号 / 词数越界 → 整组不收（不给半套）", () => {
+    for (const k of ["only3", "no_question_mark", "too_short", "too_long"]) {
+      expect([k, r[k]]).toEqual([k, {}]);
+    }
+  });
+
+  test("Whisper 把句子断在词中间也剥得干净（拼成整段再断句）", () => {
+    expect(r.glued["1"]).toBe("Can you tell me about a memorable visit you made to a park?");
+  });
+});
+
+describe("build_bank：题干来自 ASR 的面试组一律过原声闸", () => {
+  test("不再只看 recordingMerged —— 商家逐题 mp3 的卷不是它，早先会绕过第四道闸", () => {
+    const src = fs.readFileSync(BUILD_BANK, "utf8");
+    expect(src).toContain("const ivFromAsr = questions.some((q) => q.from_asr);");
+    expect(src).toContain('keepSpeaking("interview", set, "questions", questions, recordingMerged || ivFromAsr,');
+  });
+});

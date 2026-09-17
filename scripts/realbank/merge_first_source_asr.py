@@ -785,6 +785,13 @@ def build_speaking(scan, structured, asr, stats, answer_sents=None):
         if usable and not re.search(r"[.?!\"'”’)]$", text.strip()):
             usable = False
             ip.append("sentence_truncated:no_end_punct")
+        # 句**首**被砍同理，而且对齐那一关一样查不出来（尾巴对得上就算「说到了结尾」）：
+        # 5.23 的第 5 句答案页只印了 "? or purchase tickets at the entrance desk."，录音里是
+        # "Guests can check in or purchase tickets at the entrance desk."。一句完整的话不会以
+        # 标点开头 —— 这是纯形态判据，全库 0 条现有复述句命中（2026-09-17 实测）。
+        if usable and not re.match(r"[A-Za-z0-9\"'“‘]", text.strip()):
+            usable = False
+            ip.append("sentence_truncated:no_head")
         items.append({"n": n, "q_number": n, "sentence": text,
                       "sentence_final": text if usable else "", "usable": usable,
                       "transcript_final": text if usable else "",
@@ -1062,6 +1069,24 @@ def self_test():
     check("Man/Woman 标签", sty == "gender" and len(tr) == 2, (tr, sty))
     gm, why = genders_for_turns(tr, sty, None, [])
     check("按标签定性别", gm == {"man": "male", "woman": "female"}, (gm, why))
+
+    # 复述句的两道形态闸：句尾被换行砍掉、句首被答案页砍掉（后者对齐那关查不出来 ——
+    # 尾巴对得上就算「说到了结尾」；5.23 的 "? or purchase tickets at the entrance desk." 实测）
+    ws = "Guests can check in or purchase tickets at the entrance desk".split()
+    st = {"results": [{"section": "speaking", "type": "repeat", "items": [
+        {"n": 1, "sentence": "? or purchase tickets at the entrance desk."},
+    ]}]}
+    stats = new_stats()
+    rs = build_speaking({}, st, {"speaking": {"segments": [{"text": " ".join(ws), "words": [
+        {"word": w, "start": i, "end": i + 0.5} for i, w in enumerate(ws)]}]}}, stats)
+    it = rs[0]["items"][0] if rs else {}
+    check("句首被砍扣下", it.get("usable") is False and "sentence_truncated:no_head" in it.get("problems", []), it)
+    st["results"][0]["items"] = [{"n": 1, "sentence": "Guests can check in or purchase tickets"}]
+    stats = new_stats()
+    rs = build_speaking({}, st, {"speaking": {"segments": [{"text": " ".join(ws), "words": [
+        {"word": w, "start": i, "end": i + 0.5} for i, w in enumerate(ws)]}]}}, stats)
+    it = rs[0]["items"][0] if rs else {}
+    check("句尾被砍扣下", it.get("usable") is False and "sentence_truncated:no_end_punct" in it.get("problems", []), it)
 
     if fails:
         print("SELF-TEST FAILED:")
