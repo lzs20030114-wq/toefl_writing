@@ -424,6 +424,23 @@ function planSet({ scan, structured, auditIndex }) {
   return out;
 }
 
+/**
+ * 计划签名 —— 同一份产物被重复重排时，用来判断「这次的计划与上次逐字相同」。
+ *
+ * 为什么需要：`--write` 会**作废**被动过的题的盲审明细（旧号、新号两边都删），好让紧随其后的
+ * `audit_answers --only-missing` 重审。但重跑合流会把 structured 打回旧题号，于是同一份计划要再落一次 ——
+ * 这时盲审明细已经是按**新题号**记的、而且是重排之后审出来的，再删一遍就是把刚审完的结果扔掉。
+ * 签名相同 ⇒ 明细与本次计划同源，保留（见 listening_renumber_run.mjs 的 stampPath）。
+ *
+ * 只取会写进 structured 的那部分（题号迁移 + 新答案字母 + 清掉的空题）。相似度分数不进签名：
+ * 它是浮点、随 OCR 文本一一对应，纳进来只会让签名无谓地抖动。
+ */
+function planSignature(plan) {
+  const moves = ((plan && plan.moves) || []).map((m) => `${m.module}#${m.fromQ}>${m.toQ}:${m.toLetter}`).sort();
+  const removed = ((plan && plan.removed) || []).map((r) => `${r.module}#${r.q}-`).sort();
+  return [...moves, ...removed].join("|");
+}
+
 /** 把规划应用到 structured 数据（就地改传入对象）。返回改了几处。 */
 function applyPlan(structured, plan) {
   let renumbered = 0;
@@ -462,6 +479,6 @@ function applyPlan(structured, plan) {
 
 module.exports = {
   TIMER_RE, normText, gramScore, splitScreens, blocksByModule, buildScreenMap,
-  dedupeItems, itemScreenScore, planModule, planSet, applyPlan,
+  dedupeItems, itemScreenScore, planModule, planSet, applyPlan, planSignature,
   MIN_SCORE, MIN_MARGIN, HEAD_MIN_CHARS, GRAM,
 };

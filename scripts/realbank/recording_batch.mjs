@@ -151,6 +151,10 @@ if (!LAND_ONLY) {
     const mg = step(`merge ${set}`, PY, ["-X", "utf8", "scripts/realbank/merge_recording_asr.py", "--set", set]);
     const mline = (mg.out.match(/^\s+\S+：录音.*$/m) || [""])[0].trim();
     console.log(`    合流：${mline || tail(mg.out, 2).trim()}`);
+    // ③′ 听力题号重排（零 API，幂等）。必须在盲审之前：重排会改题号+答案字母，审早了审的是错位的题。
+    const rn = step(`renumber ${set}`, process.execPath, ["scripts/realbank/listening_renumber_run.mjs", set, "--write"]);
+    const rnline = (rn.out.match(/✔ 写盘：[^\n]*/) || rn.out.match(/-- 无题可重排 --/) || [""])[0].trim();
+    if (rnline) console.log(`    重排：${rnline}`);
     // --only-missing 要求既有 .audit.json；从没审过的卷（4.29 阅读只有填词，从来没生成过）就整科审
     const hasAudit = fs.existsSync(path.join(TMP, `${set}.audit.json`));
     const au = step(`audit ${set}`, process.execPath, ["scripts/realbank/audit_answers.mjs", set, "--section=listening",
@@ -173,8 +177,11 @@ if (!NO_LAND) {
   for (const { set } of recs) {
     const mg = step(`remerge ${set}`, PY, ["-X", "utf8", "scripts/realbank/merge_recording_asr.py", "--set", set]);
     if (mg.status !== 0) console.log(`  ⚠ 重合流 ${set} 失败：${tail(mg.out, 1).trim()}`);
+    // 重合流把 structured 打回旧题号 → 同一份重排要再落一遍（签名相同，盲审明细不会被作废）。
+    const rn = step(`renumber ${set}`, process.execPath, ["scripts/realbank/listening_renumber_run.mjs", set, "--write"]);
+    if (rn.status !== 0) console.log(`  ⚠ 重排 ${set} 失败：${tail(rn.out, 1).trim()}`);
   }
-  console.log(`  重合流 ${recs.length} 套录音卷（按卷名顺序，查重先后稳定）`);
+  console.log(`  重合流 + 重排 ${recs.length} 套录音卷（按卷名顺序，查重先后稳定）`);
   const b1 = step("build keep-unbound", process.execPath, ["scripts/realbank/build_bank.mjs", "--only-audio", "--keep-unbound-recording"]);
   if (b1.status !== 0) { console.log(`  ✗ build_bank 失败\n${tail(b1.out, 6)}`); process.exit(1); }
   const ids = unboundRecordingIds(new Set(recs.map((x) => x.set)));

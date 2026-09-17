@@ -1702,6 +1702,9 @@ function writeReport(reportPath, files, extra) {
 function main() {
   const dry = process.argv.includes("--dry");
   const files = fs.readdirSync(OUT_DIR).filter((f) => f.endsWith(".structured.json"));
+  // 只读校验：重跑合流会把听力题号重排冲掉（重排是就地改 structured.json 的），
+  // 冲掉之后这些题配不上盲审明细 → 静默少题。落库是唯一不漏的口子，所以闸放这里（零 API，全库 < 1s）。
+  require("./listening_renumber_guard.js").warnPendingRenumber(OUT_DIR, files);
   const out = { ap: [], rdl: [], ctw: [] };
   // 按考卷位置换了题型（ap ↔ rdl）的条目：落 id-aliases.json 的 reclassified 边、打印清单都用它
   const RECLASSIFIED = [];

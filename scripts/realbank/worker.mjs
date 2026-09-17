@@ -397,6 +397,22 @@ async function tailStages(job, { setKey, result, opts }) {
 /* ── ingest 分支（按 detected_kind 选脚本） ─────────────────────────────── */
 
 /**
+ * 合流之后的听力题号重排（零 API，幂等；算法见 scripts/realbank/listening_renumber.js 头注）。
+ *
+ * 必须跟在合流后面：合流会整份重写 `<卷>.structured.json`，重排是就地改那份文件的，
+ * 不跟着跑就等于没重排。重排会动题号与答案字母，所以动过的题要**重新盲审**
+ * （`--only-missing` 只审被作废的那些，一套通常几毛钱都不到）；没动任何题就不再审。
+ */
+async function renumberListening(job, setKey, env) {
+  const rn = await run("node", ["scripts/realbank/listening_renumber_run.mjs", setKey, "--write"], { env });
+  for (const l of digest(rn.out, 10)) await job.log(l, rn.code === 0 ? "info" : "warn");
+  if (rn.code !== 0) { await job.log("听力题号重排没跑成——动过号的题会按「没审过」不收", "warn"); return; }
+  if (!/✔ 写盘/.test(rn.out)) return;
+  const au = await run("node", ["scripts/realbank/audit_answers.mjs", setKey, "--section=listening", "--only-missing"], { env });
+  for (const l of digest(au.out, 10)) await job.log(l, au.code === 0 ? "info" : "warn");
+}
+
+/**
  * 第一来源（五份 PDF）与截图套壳 docx 转换之后，走的是同一条链路。
  * srcRoot 是**套目录的父目录** —— ingest_set.py / asr_cache.py / extract_bs_pages.py
  * 都按「源根目录/套名」找文件。
@@ -417,6 +433,7 @@ async function runFirstPdf(job, setKey, srcRoot, result) {
   const mg = await run(PY, ["scripts/realbank/merge_first_source_asr.py", "--set", setKey], { env });
   for (const l of digest(mg.out, 20)) await job.log(l, mg.code === 0 ? "info" : "warn");
   if (mg.code !== 0) await job.log("听力/口语合流没成功——本套只落阅读与写作", "warn");
+  if (mg.code === 0) await renumberListening(job, setKey, env);
 
   // 造句题在写作 PDF 里是图，只能识图抽（Qwen3-VL，按张计费但很便宜）。
   await job.enter("bs_extract");
@@ -450,6 +467,7 @@ async function runVendorDocx(job, setDir, result) {
   const mg = await run(PY, ["scripts/realbank/merge_vendor_asr.py", "--set", setKey]);
   for (const l of digest(mg.out, 20)) await job.log(l, mg.code === 0 ? "info" : "warn");
   if (mg.code !== 0) await job.log("听力/口语合流没成功——本套只落阅读与写作", "warn");
+  if (mg.code === 0) await renumberListening(job, setKey, {});
 }
 
 /* ── 主流程 ─────────────────────────────────────────────────────────────── */

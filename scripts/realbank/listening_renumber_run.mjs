@@ -120,14 +120,21 @@ function printPlan(setname, ctx) {
   return { unclaimed };
 }
 
-/** 作废受影响题目的旧盲审明细：旧号、新号两边都删，另清掉指不到任何题的孤儿条目。 */
-function pruneAudit(setname, structured, plan) {
+/**
+ * 作废受影响题目的旧盲审明细：旧号、新号两边都删，另清掉指不到任何题的孤儿条目。
+ *
+ * `keepAudited=true`（计划与上次逐字相同，见 R.planSignature）时只清孤儿：那份明细本来就是
+ * 重排之后审出来的、按新题号记的，再删一遍等于把刚花钱审完的结果扔掉。
+ */
+function pruneAudit(setname, structured, plan, keepAudited) {
   const auditPath = path.join(OUT_DIR, `${setname}.audit.json`);
   const audit = readJson(auditPath);
   if (!audit || !Array.isArray(audit.audited)) return { pruned: 0, orphans: 0, path: null };
   const touched = new Set();
-  for (const m of plan.moves) { touched.add(`${m.module}#${m.fromQ}`); touched.add(`${m.module}#${m.toQ}`); }
-  for (const r of plan.removed) touched.add(`${r.module}#${r.q}`);
+  if (!keepAudited) {
+    for (const m of plan.moves) { touched.add(`${m.module}#${m.fromQ}`); touched.add(`${m.module}#${m.toQ}`); }
+    for (const r of plan.removed) touched.add(`${r.module}#${r.q}`);
+  }
   const live = new Set();
   for (const r of (structured.results || [])) {
     if (r.section !== "listening") continue;
@@ -192,12 +199,22 @@ async function main() {
     if (!ctx.plan.moves.length && !ctx.plan.removed.length) { console.log("  没有要写的改动。"); continue; }
     const p = path.join(OUT_DIR, `${setname}.structured.json`);
     fs.copyFileSync(p, path.join(OUT_DIR, `${setname}.structured.prev.json`));
+    // 计划签名：与上次逐字相同 = 这次只是在重跑合流之后把同一份重排再落一遍，盲审明细不能再作废一次。
+    const stampPath = path.join(OUT_DIR, `${setname}.renumber.json`);
+    const sig = R.planSignature(ctx.plan);
+    const stamp = readJson(stampPath);
+    const replay = Boolean(stamp && stamp.signature && stamp.signature === sig);
     const applied = R.applyPlan(ctx.structured, ctx.plan);
     fs.writeFileSync(p, JSON.stringify(ctx.structured, null, 2), "utf8");
-    const pr = pruneAudit(setname, ctx.structured, ctx.plan);
+    const pr = pruneAudit(setname, ctx.structured, ctx.plan, replay);
+    fs.writeFileSync(stampPath, JSON.stringify({
+      at: new Date().toISOString(), signature: sig, moves: ctx.plan.moves.length, removed: ctx.plan.removed.length,
+    }, null, 2), "utf8");
     console.log(`  ✔ 写盘：重排 ${applied.renumbered} 题、清掉 ${applied.removed} 条空题；`
-      + `盲审明细作废 ${pr.pruned} 条（另清孤儿 ${pr.orphans} 条）`);
-    console.log(`    下一步：node scripts/realbank/audit_answers.mjs "${setname}" --section=listening --only-missing`);
+      + (replay
+        ? `计划与上次（${stamp.at}）逐字相同 → 盲审明细保留（只清孤儿 ${pr.orphans} 条）`
+        : `盲审明细作废 ${pr.pruned} 条（另清孤儿 ${pr.orphans} 条）`));
+    if (!replay) console.log(`    下一步：node scripts/realbank/audit_answers.mjs "${setname}" --section=listening --only-missing`);
   }
 
   if (all) {
