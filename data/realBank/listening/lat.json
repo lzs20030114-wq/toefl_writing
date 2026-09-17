@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 101,
+  "count": 103,
   "items": [
     {
       "id": "real_lat_121b_1_25",
@@ -2275,7 +2275,8 @@
       "source_notes": [
         "stem_duplicate:Q29/Q30 同组题干逐字相同（剔 Q30）",
         "listening_renumber:Q31→Q30，答案 C→B（屏幕相似度 1.000）",
-        "listening_renumber:Q32→Q31，答案 A→C（屏幕相似度 1.000）"
+        "listening_renumber:Q32→Q31，答案 A→C（屏幕相似度 1.000）",
+        "listening_rescreen:Q32 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
       ],
       "real": true,
       "tier": "recalled",
@@ -2335,6 +2336,106 @@
           "answer": "C",
           "explanation": "",
           "source_q": 31
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker describe kinetic art as \"a multisensory experience\"?",
+          "options": {
+            "A": "To summarize the way kinetic art engages its viewers",
+            "B": "To emphasize that kinetic art is hard to understand",
+            "C": "To highlight an advantage of using video in kinetic art",
+            "D": "To explain the technical requirements of kinetic art installations"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 32
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lat_310_2_08",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_310_2_08.mp3?v=mu5m194h",
+      "asr_similarity": 1,
+      "source_notes": [
+        "stem_duplicate:Q8/Q9 同组题干逐字相同（剔 Q9）",
+        "listening_renumber:Q11→Q10，答案 C→A（屏幕相似度 1.000）",
+        "listening_renumber_dropped:Q10 空题/残题与重排后的题号撞车",
+        "listening_rescreen:Q9 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）",
+        "listening_rescreen:Q11 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.10新托福真题",
+      "date": "2026-03-10",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "warn",
+          "detail": "listening 科缺 3 题（配对 44／满分 47）。"
+        },
+        {
+          "code": "audio_partial",
+          "severity": "warn",
+          "detail": "音频文件名自注残缺：3.10 听力（q4开始）.m4a"
+        }
+      ],
+      "subject": "general",
+      "topic": "",
+      "transcript": "Let's move on in our renewable energy series to discuss solar power, which is arguably the most abundant resource available. Solar power takes energy from the sun's rays and converts it to electricity or heat. The primary technology for this is solar panels made up of photovoltaic cells, which generate an electric current when sunlight hits them. The advantages of solar power are well known, and the most important may be the fact that it produces zero harmful pollutants. Any industrial endeavor will produce carbon dioxide in one way or another, and manufacturing solar panels itself requires energy sourced from fossil fuels. But on the whole, the industry has a much lower carbon footprint than coal or natural gas, and this makes it key to reducing greenhouse gas emissions. Another advantage, and one we don't talk about enough, is that solar power can provide energy access in remote and underserved areas far from the grid. So what are the disadvantages? Solar panel efficiency is affected by cloud cover and other weather, which of course reduces the amount of sunlight reaching the panels. That said, innovations in battery storage systems do allow for the storage of solar energy for use during non-sunny periods. Panel lifespan is quite good at 25 to 30 years, but improvements in efficiency are paradoxically driving panels to be replaced much earlier than that, so waste is increasing faster than expected. This is a problem because recycling them is expensive, and most panels end up in landfills.",
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "How does the speaker organize the talk on solar power?",
+          "options": {
+            "A": "She outlines solar power's history as an alternative energy resource.",
+            "B": "She lists the technologies involved in generating solar energy.",
+            "C": "She offers case studies of successful solar power projects",
+            "D": "She compares and contrasts the benefits and challenges of solar power."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 8
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker mention photovoltaic cells?",
+          "options": {
+            "A": "To describe how solar panels convert solar energy into electricity",
+            "B": "To discuss innovations in the storage of solar energy",
+            "C": "To explain the cost of installing solar electric systems",
+            "D": "To explain the difficulty and expense of recycling solar panels"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 9
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker note that all industries produce some carbon dioxide?",
+          "options": {
+            "A": "To provide context for a discussion of the solar industry's low carbon footprint",
+            "B": "To suggest that there are reasons for skepticism of the solar industry",
+            "C": "To introduce a discussion about the harmful pollutants given off by solar panels",
+            "D": "To support the claim that solar power provides energy to underserved areas"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 10
+        },
+        {
+          "type": "detail",
+          "stem": "According to the speaker, what is causing a rapid increase in waste from used solar panels?",
+          "options": {
+            "A": "Solar panels produced in the last decade cannot be recycled.",
+            "B": "Solar panels in regions with heavy cloud cover are scrapped due to disuse.",
+            "C": "Improvements in panel efficiency are leading to frequent replacement.",
+            "D": "Overuse of solar power is overwhelming panel-recycling systems."
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 11
         }
       ],
       "audio_source": "original"
@@ -2346,7 +2447,8 @@
       "asr_similarity": 1,
       "source_notes": [
         "listening_renumber:Q14→Q13，答案 D→A（屏幕相似度 1.000）",
-        "listening_renumber_dropped:Q13 空题/残题与重排后的题号撞车"
+        "listening_renumber_dropped:Q13 空题/残题与重排后的题号撞车",
+        "listening_rescreen:Q14 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
       ],
       "real": true,
       "tier": "recalled",
@@ -2393,6 +2495,19 @@
           "answer": "A",
           "explanation": "",
           "source_q": 13
+        },
+        {
+          "type": "detail",
+          "stem": "What is a reference site in the work that the speaker describes?",
+          "options": {
+            "A": "A laboratory where microbes are grown.",
+            "B": "A location where restoration efforts have previously failed.",
+            "C": "A degraded area that is used for testing interventions.",
+            "D": "A healthy ecosystem used as a model."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 14
         },
         {
           "type": "detail",
@@ -3143,6 +3258,73 @@
       "audio_source": "original"
     },
     {
+      "id": "real_lat_32b_2_12",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_32b_2_12.mp3?v=mu5m19vc",
+      "asr_similarity": 1,
+      "source_notes": [
+        "listening_renumber:Q15→Q13，答案不变（屏幕相似度 1.000）",
+        "listening_renumber_dropped:Q13 空题/残题与重排后的题号撞车",
+        "listening_rescreen:Q15 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.2新托福真题B卷",
+      "date": "2026-03-02",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、4.11新托福真题、4.8新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "subject": "general",
+      "topic": "",
+      "transcript": "I once saw a video of a lionfish with its intimidating long spikes. Then it suddenly turned into a snake. Well, it turns out I was actually watching a mimic octopus. The mimic octopus lives in relatively shallow ocean water, and it's the first animal known to show dynamic mimicry, which means it can shift quickly between multiple imitations. Now other creatures use mimicry. The owl butterfly's wings have markings resembling an owl's eye, which may keep the butterfly's predators away. But that's how the owl butterfly always looks. With dynamic mimicry, by contrast, an animal can shift its shape in real time. It contorts its body into different formations, often to confuse predators. A mimic octopus can imitate a lionfish or a snake. And it can quickly extend its arms and glide across the seafloor like a flat fish. But what use is changing shape if you can't also change color to look like a flat fish? Well, this octopus has cells called chromatophores just under its skin. Each chromatophore has a pigment inside it that could be red, yellow, etc. Picture thousands of tiny balloons of different colors. If you stretch a balloon, it gets bigger, right? Well, the mimic octopus has muscles surrounding these chromatophores. They tighten to pull the necessary colors bigger and relax to make other colors smaller, making each color more or less visible. While this helps it hide from predators, it also aids in hunting, as unsuspecting prey often perceives the octopus as a non-threatening species.",
+      "questions": [
+        {
+          "type": "main_idea",
+          "stem": "What is the main topic of the talk?",
+          "options": {
+            "A": "The ways that a sea creature changes its appearance",
+            "B": "The ways that predators react to surprising behaviors",
+            "C": "The ways that different animals capture prey",
+            "D": "The ways that different species use dynamic mimicry"
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 12
+        },
+        {
+          "type": "main_idea",
+          "stem": "Why does the speaker discuss the owl butterfly?",
+          "options": {
+            "A": "To point out a limitation of dynamic mimicry",
+            "B": "To highlight a hunting technique used by owls",
+            "C": "To distinguish between two kinds of mimicry",
+            "D": "To explain how mimicry can confuse experienced researchers"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 13
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the speaker mention balloons?",
+          "options": {
+            "A": "To describe the pattern on a butterfly's wing",
+            "B": "To show how camera equipment was raised and lowered",
+            "C": "To explain how certain cells function in the mimic octopus",
+            "D": "To emphasize how flexible the flatfish's muscles are"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 15
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
       "id": "real_lat_34_1_29",
       "difficulty": "medium",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lat/real_lat_34_1_29.mp3?v=mu41xgp8",
@@ -3601,7 +3783,8 @@
       "asr_similarity": 1,
       "source_notes": [
         "listening_renumber:Q32→Q30，答案 B→A（屏幕相似度 1.000）",
-        "listening_renumber_dropped:Q30 空题/残题与重排后的题号撞车"
+        "listening_renumber_dropped:Q30 空题/残题与重排后的题号撞车",
+        "listening_rescreen:Q32 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
       ],
       "real": true,
       "tier": "recalled",
@@ -3656,6 +3839,19 @@
           "answer": "C",
           "explanation": "",
           "source_q": 31
+        },
+        {
+          "type": "inference",
+          "stem": "What does the speaker imply about the relationship between different forms of art?",
+          "options": {
+            "A": "Different forms of art are strictly independent.",
+            "B": "Music and art can inspire and transform each other.",
+            "C": "Visual art has had a minor influence on musical composition.",
+            "D": "Traditional art forms tend to remain unchanged over time."
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 32
         }
       ],
       "audio_source": "original"
@@ -3736,7 +3932,8 @@
         "listening_renumber:Q13→Q12，答案 C→B（屏幕相似度 1.000）",
         "listening_renumber:Q14→Q13，答案 B→C（屏幕相似度 1.000）",
         "listening_renumber:Q15→Q14，答案不变（屏幕相似度 1.000）",
-        "listening_renumber_dropped:Q12 空题/残题与重排后的题号撞车"
+        "listening_renumber_dropped:Q12 空题/残题与重排后的题号撞车",
+        "listening_rescreen:Q15 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
       ],
       "real": true,
       "tier": "recalled",
@@ -3791,6 +3988,19 @@
           "answer": "B",
           "explanation": "",
           "source_q": 14
+        },
+        {
+          "type": "inference",
+          "stem": "What does the speaker suggest about the long-term impact of electrophones?",
+          "options": {
+            "A": "Their contribution to music was short lived.",
+            "B": "They were important in musical experimentation.",
+            "C": "They were too difficult to play for most musicians",
+            "D": "They were exclusively utilized in soundtracks to popular movies,"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 15
         }
       ],
       "audio_source": "original"

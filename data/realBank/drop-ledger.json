@@ -33,8 +33,8 @@
     "sDroppedNoOriginalAudio": "整块录音来源没切出真人原声（不许退回 TTS 上线）"
   },
   "summary": {
-    "rows": 1716,
-    "questions": 884,
+    "rows": 1712,
+    "questions": 878,
     "sections": 10,
     "byCode": {
       "wSkippedThin": {
@@ -82,15 +82,15 @@
       "lDroppedDisagree": {
         "code": "lDroppedDisagree",
         "label": "盲审不一致",
-        "rows": 86,
-        "questions": 86,
+        "rows": 87,
+        "questions": 87,
         "sections": 0
       },
       "lDroppedInvalid": {
         "code": "lDroppedInvalid",
         "label": "validator 不收（段数 / 轮次 / 时长不达标）",
-        "rows": 71,
-        "questions": 88,
+        "rows": 66,
+        "questions": 81,
         "sections": 0
       },
       "lDroppedNoAuditQ": {
@@ -207,7 +207,7 @@
       },
       "listening": {
         "section": "listening",
-        "questions": 463,
+        "questions": 457,
         "sections": 2
       },
       "speaking": {
@@ -251,19 +251,19 @@
       },
       "lc": {
         "type": "lc",
-        "questions": 80,
+        "questions": 77,
         "byCode": {
           "lDroppedDisagree": 11,
-          "lDroppedInvalid": 29,
+          "lDroppedInvalid": 26,
           "lDroppedNoAuditQ": 3,
           "lDroppedDupItem": 37
         }
       },
       "la": {
         "type": "la",
-        "questions": 80,
+        "questions": 81,
         "byCode": {
-          "lDroppedDisagree": 12,
+          "lDroppedDisagree": 13,
           "lDroppedInvalid": 30,
           "lDroppedNoAuditQ": 5,
           "lDroppedDupItem": 33
@@ -271,11 +271,11 @@
       },
       "lat": {
         "type": "lat",
-        "questions": 128,
+        "questions": 124,
         "byCode": {
           "lDroppedNoAuditQ": 11,
           "lDroppedDisagree": 34,
-          "lDroppedInvalid": 29,
+          "lDroppedInvalid": 25,
           "lDroppedDupItem": 54
         }
       },
@@ -11420,6 +11420,19 @@
       "section": "listening",
       "type": "la",
       "module": 1,
+      "q": 20,
+      "n": 1,
+      "scope": "question",
+      "id": null,
+      "code": "lDroppedDisagree",
+      "detail": "盲审与答案页不一致"
+    },
+    {
+      "set": "3.10新托福真题",
+      "slug": "310",
+      "section": "listening",
+      "type": "la",
+      "module": 1,
       "q": 19,
       "n": 1,
       "scope": "unit",
@@ -11439,32 +11452,6 @@
       "id": null,
       "code": "lDroppedDisagree",
       "detail": "盲审与答案页不一致"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 4,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_310_2_04",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "3.10新托福真题",
-      "slug": "310",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 8,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lat_310_2_08",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "3.11新托福真题",
@@ -14850,32 +14837,6 @@
       "set": "3.2新托福真题B卷",
       "slug": "32b",
       "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 4,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_32b_2_04",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "3.2新托福真题B卷",
-      "slug": "32b",
-      "section": "listening",
-      "type": "lc",
-      "module": 2,
-      "q": 6,
-      "n": 1,
-      "scope": "unit",
-      "id": "real_lc_32b_2_06",
-      "code": "lDroppedInvalid",
-      "detail": "wrong_question_count: 1 (must be exactly 2)"
-    },
-    {
-      "set": "3.2新托福真题B卷",
-      "slug": "32b",
-      "section": "listening",
       "type": "lat",
       "module": 2,
       "q": 14,
@@ -14884,19 +14845,6 @@
       "id": null,
       "code": "lDroppedNoAuditQ",
       "detail": "盲审没覆盖到这题"
-    },
-    {
-      "set": "3.2新托福真题B卷",
-      "slug": "32b",
-      "section": "listening",
-      "type": "lat",
-      "module": 2,
-      "q": 12,
-      "n": 2,
-      "scope": "unit",
-      "id": "real_lat_32b_2_12",
-      "code": "lDroppedInvalid",
-      "detail": "too_few_questions: 2 (min 3)"
     },
     {
       "set": "3.30新托福真题",

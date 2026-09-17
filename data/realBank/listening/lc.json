@@ -1,7 +1,7 @@
 {
   "tier": "recalled",
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "count": 122,
+  "count": 125,
   "items": [
     {
       "id": "real_lc_121b_1_13",
@@ -3449,6 +3449,95 @@
       "audio_source": "original"
     },
     {
+      "id": "real_lc_310_2_04",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_310_2_04.mp3?v=mu5m1aop",
+      "asr_similarity": 0.96,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 109Hz / 188Hz",
+        "labels",
+        "stem_duplicate:Q4/Q5 同组题干逐字相同（剔 Q5）",
+        "listening_rescreen:Q5 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.10新托福真题",
+      "date": "2026-03-10",
+      "source_flags": [
+        {
+          "code": "section_gap",
+          "severity": "warn",
+          "detail": "listening 科缺 3 题（配对 44／满分 47）。"
+        },
+        {
+          "code": "audio_partial",
+          "severity": "warn",
+          "detail": "音频文件名自注残缺：3.10 听力（q4开始）.m4a"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I was training a new employee yesterday, and I noticed that several pieces of info in the documents we use don't reflect our current practices here in the computer lab. Would you be able to help me update everything and print new copies? Sure."
+        },
+        {
+          "speaker": "Man",
+          "text": "Do you want to work on it together or split it up so you do half and I do half?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "Which do you think will be faster? We have three new staff members starting next week, so we should have it done by then."
+        },
+        {
+          "speaker": "Man",
+          "text": "Let's divide and conquer then."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What did the woman notice yesterday?",
+          "options": {
+            "A": "Some content is outdated.",
+            "B": "Some computers are getting old.",
+            "C": "A computer lab was closed.",
+            "D": "A document did not print."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 4
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the woman mention three new staff members?",
+          "options": {
+            "A": "To correct the man's misunderstanding",
+            "B": "To suggest revising a training schedule",
+            "C": "To communicate a sense of urgency",
+            "D": "To point out some errors that were made"
+          },
+          "answer": "C",
+          "explanation": "",
+          "source_q": 5
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
       "id": "real_lc_310_2_06",
       "difficulty": "medium",
       "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_310_2_06.mp3?v=mu41yfp5",
@@ -5120,6 +5209,187 @@
           "answer": "A",
           "explanation": "",
           "source_q": 16
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_32b_2_04",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_32b_2_04.mp3?v=mu5m1b3s",
+      "asr_similarity": 0.952,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 137Hz / 235Hz",
+        "labels",
+        "stem_duplicate:Q4/Q5 同组题干逐字相同（剔 Q5）",
+        "listening_rescreen:Q5 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.2新托福真题B卷",
+      "date": "2026-03-02",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、4.11新托福真题、4.8新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "I'm planning a dinner party and need to find a good bakery for desserts."
+        },
+        {
+          "speaker": "Man",
+          "text": "Have you tried Buttercup Lane on Sargent Street?"
+        },
+        {
+          "speaker": "Woman",
+          "text": "I have, but it was disappointing. Smaller portions, higher prices, and not as tasty. Did they get a new chef or change owners?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Not that I know of, but they've replaced some long-time favorites, like No More Chocolate Moose Cake. It was always a hit at my parties."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's too bad. A couple of my guests are picky about desserts, and one already asked what I'm serving. I'll need to keep looking."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What does the man say about the chocolate mousse cake?",
+          "options": {
+            "A": "It was sold out.",
+            "B": "It was created by a new chef.",
+            "C": "Its price went up recently.",
+            "D": "It was a popular item."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 4
+        },
+        {
+          "type": "detail",
+          "stem": "Why does the woman mention her guests?",
+          "options": {
+            "A": "To suggest that one of them is bringing dessert",
+            "B": "To show why she is careful about choosing desserts",
+            "C": "To note that she received a cake recipe from one of them",
+            "D": "To explain where she heard about a bakery"
+          },
+          "answer": "B",
+          "explanation": "",
+          "source_q": 5
+        }
+      ],
+      "audio_source": "original"
+    },
+    {
+      "id": "real_lc_32b_2_06",
+      "difficulty": "medium",
+      "audio_url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/listening_audio/real_orig/lc/real_lc_32b_2_06.mp3?v=mu5m1bl4",
+      "asr_similarity": 0.945,
+      "source_notes": [
+        "turns_from_asr_diarization:逐句两簇 143Hz / 208Hz",
+        "labels",
+        "stem_mismatch:Q6 题干关键词「guests」不在本组材料里、在 M2 Q4 那组里",
+        "listening_renumber:Q7→Q6，答案 D→A（屏幕相似度 1.000）",
+        "listening_rescreen:Q7 屏上有题、结构化漏抽，按屏幕原文补抽（模型只恢复空格）"
+      ],
+      "real": true,
+      "tier": "recalled",
+      "source": "3.2新托福真题B卷",
+      "date": "2026-03-02",
+      "source_flags": [
+        {
+          "code": "duplicate_cluster",
+          "severity": "warn",
+          "detail": "与 3.2新托福真题A卷、4.11新托福真题、4.8新托福真题 属同题簇（部分科目共题，机经正常形态）。"
+        }
+      ],
+      "context": "campus_daily",
+      "situation": "",
+      "speakers": [
+        {
+          "name": "Man",
+          "role": "student",
+          "gender": "male"
+        },
+        {
+          "name": "Woman",
+          "role": "student",
+          "gender": "female"
+        }
+      ],
+      "conversation": [
+        {
+          "speaker": "Woman",
+          "text": "You're taking a woodworking class, right? In the fine arts department?"
+        },
+        {
+          "speaker": "Man",
+          "text": "Yes, with Professor Williams. I'm building a bookshelf right now."
+        },
+        {
+          "speaker": "Woman",
+          "text": "Cool. Do you like the class? I do."
+        },
+        {
+          "speaker": "Man",
+          "text": "I was a little skeptical about the lectures I'd have to sit through, but there's a nice balance between theory and practice. I actually appreciate the lectures as much as working in the studio."
+        },
+        {
+          "speaker": "Woman",
+          "text": "That's good. Maybe you could take another class next semester with Professor Williams."
+        },
+        {
+          "speaker": "Man",
+          "text": "Well, I'd really like to be exposed to lots of different teaching styles. The fine arts department has so many great teachers."
+        }
+      ],
+      "questions": [
+        {
+          "type": "detail",
+          "stem": "What is the man's attitude toward his woodworking class?",
+          "options": {
+            "A": "He is surprised that he enjoys the lectures.",
+            "B": "He is hopeful that future classes will be in a studio.",
+            "C": "He is doubtful that the university will continue to offer the class.",
+            "D": "He is disappointed that the class has a large number of students."
+          },
+          "answer": "A",
+          "explanation": "",
+          "source_q": 6
+        },
+        {
+          "type": "inference",
+          "stem": "What does the man imply about next semester?",
+          "options": {
+            "A": "He will take classes with lots of studio time.",
+            "B": "He will take fewer classes than this semester.",
+            "C": "He will probably transfer to another university.",
+            "D": "He is unlikely to take another class with Professor Williams."
+          },
+          "answer": "D",
+          "explanation": "",
+          "source_q": 7
         }
       ],
       "audio_source": "original"
