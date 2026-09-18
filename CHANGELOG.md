@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-09-19 — v1.22.0
+
+> 听力「逐句点播」：复盘原文点一句 → 播放器只放音频里那一句。契约 docs/listening-sentence-timings.md。
+> 无迁移、无新 flag、无新 env。
+
+- **字段与产线**（`a5fd1288`）。听力条目新增 `sentence_timings: [{ text, start, end, turn?, speaker? }]`，与 `audio_url` 同生同灭。
+  persona 渲染本来就是一句一次 TTS 再 `concatWavSegmentsTimed` 拼接，拼接那一刻的采样数即精确起止；
+  `backfill-tts` / `rerender-listening-audio` / `render_real_audio` 三个写入口顺带写出，edge 整条渲染则删掉旧的。
+  体检口 `lib/listening/sentenceTimings.js#normalizeSentenceTimings`：任何一条不合格整份判 null（半份错位比没有更糟）。
+- **播放器**（`4ce16d94`）。`components/listening/SentenceTranscript.js` 直接渲染存好的句子列表、前端不重切句；
+  `AudioPlayer` 增 `ref.playRange(start, end)` 与 `onTime`。seek 提前 60ms 吃掉 MP3 编解码前置延迟，
+  停点主刹车用 rAF 轮询（`timeupdate` 约 250ms 粒度太粗，仅作后台标签页兜底）。句子 span 在无选区时截住
+  mouseup/touchend，外层 WordLookupLayer 不会把点句当点词。接线：LADetail / LCDetail（含真题记录、模考复盘卡）+
+  练习结果页 ListeningMCQTask；三处落历史的地方把 `sentence_timings` 随 `audio_url` 存进 details，老记录无此键按原样整段展示。
+- **存量补齐**（`3c7f656e` 工具 / `d360e992` + `c0494675` 数据）。`scripts/align-sentence-timings.mjs` 三段可续跑
+  （fetch → `asr_words.py` 本地 faster-whisper 词级转写 → `lib/listening/alignSentences.js` 按句对齐，定位率 <80% 不写），零 API 费。
+  本机 GPU medium.en 跑 1473 条：首轮写入 1460 / 拒绝 13；被拒的 13 条全是真题原声 —— whisper 念完开头旁白
+  「Listen to a…」就提前收工，按旁白句末词级时间戳裁掉开头重转写、时间戳加回偏移后 13/13 写入。
+  生成库 753 + 真题库 720 现均 100% 覆盖；真题原声 663 条同步写进 `original-audio.json`（build_bank 重建时回挂）。
+  已知：`real_lcr_128a_1_04/11/12` 清单里无同 id 条目，全量重建会丢这三条的时间戳（BACKLOG 已记）。
+  体积：题库 JSON raw +820KB / gzip 约 +84KB。
+- **个人题库**（`9f25c138`）。edge-tts 逐段合成、mp3 按字节拼接；时间戳取 Edge 的 WordBoundary，
+  各段按「前面各段 mp3 帧时长之和」平移（`lib/tts/mp3Frames`）后过同一套对齐，写回 `user_question_banks.data.sentence_timings`
+  （JSONB，无需迁移）；客户端自带的该字段与 `audio_url` 一起被剥掉，读取时过白名单 + 体检才透传。
+- **Replay 进度条**（`0201fa80`）。练习记录的听力 Replay 加可拖动进度条。
+
 ## 2026-09-18 — v1.21.1
 
 > 词典两处扩展：弹窗加发音钮（三处共用一个组件），划词词典从阅读铺到听力复盘。
