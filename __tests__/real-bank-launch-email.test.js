@@ -42,6 +42,8 @@ describe("buildRealBankLaunchEmail", () => {
 
   test("in-app announcement carries the same total", () => {
     // 题量会随补录增长；公告不回头改，所以看「最新一条提到真题题量的公告」是否与快照一致。
+    // 这条红了 = 发版时公告写了新题量、却没同步 REAL_BANK_LAUNCH_COUNTS（v1.20.0 就漏过一次，
+    // main 的 CI 连红 5 次推送）。修法是改常量不是改公告：各分项出处见 realBankLaunch.js 头注。
     const entry = announcements.find((a) => a.items.some((t) => /共 \d+ 题/.test(t)));
     expect(entry).toBeTruthy();
     expect(entry.items.join("\n")).toContain(`共 ${REAL_BANK_LAUNCH_COUNTS.total} 题`);
