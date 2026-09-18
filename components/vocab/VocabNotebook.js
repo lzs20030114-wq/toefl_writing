@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { C, FONT, PageShell, SurfaceCard } from "../shared/ui";
+import { SpeakButton } from "../shared/SpeakButton";
 import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
@@ -103,7 +104,7 @@ export default function VocabNotebook({ onBack }) {
         <div style={{ minWidth: 0 }}>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: C.t1, letterSpacing: -0.4 }}>单词本</h1>
           <div style={{ fontSize: 12, color: C.t2, marginTop: 2 }}>
-            阅读复盘时点原文里的词 → 词典弹窗点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。
+            阅读/听力复盘时点原文里的词 → 词典弹窗点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。
           </div>
         </div>
         <button
@@ -300,6 +301,7 @@ export default function VocabNotebook({ onBack }) {
                           /{card.phonetic}/
                         </span>
                       )}
+                      <SpeakButton word={card.display || card.word} size={26} style={{ alignSelf: "center" }} />
                       <span style={{
                         fontSize: 10, fontWeight: 700, color: st.color, background: st.bg,
                         borderRadius: 5, padding: "1px 7px",

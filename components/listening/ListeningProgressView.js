@@ -5,6 +5,8 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NE
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
+import { WordLookupLayer } from "../reading/WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
@@ -282,13 +284,19 @@ export function LCRDetail({ session }) {
   // matching reader in lib/listeningMistakes.js. Fall back to details.questions
   // for any legacy/alternate shape.
   const items = session.details?.items || session.details?.questions || [];
+  // 点词查词典的上下文：刺激句在前、选项在后。收藏进单词本时存的「所在原句」
+  // 和 AI 讲解都靠它定位。
+  const lookupContext = questionLookupContext(
+    results.map((r, i) => (items[i] || {}).speaker || (items[i] || {}).stem || r.stem || "").filter(Boolean).join(" "),
+    results.map((r, i) => ({ options: (items[i] || {}).options || r.options || {} }))
+  );
 
   if (results.length === 0 && items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>;
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {results.map((r, i) => {
         const q = items[i] || {};
         const speakerText = q.speaker || q.stem || r.stem || "";
@@ -307,7 +315,7 @@ export function LCRDetail({ session }) {
             )}
             {/* Replay the recording for 精听 (TTS fallback off speaker text) */}
             {(q.audio_url || speakerText) && (
-              <div style={{ marginBottom: 8 }}>
+              <div data-no-dict style={{ marginBottom: 8 }}>
                 <AudioPlayer compact src={q.audio_url || null} text={speakerText} isPractice />
               </div>
             )}
@@ -348,6 +356,7 @@ export function LCRDetail({ session }) {
             )}
             {/* AI 讲解：只给答错的题。应答题走语用那支（没有原文定位可讲）。 */}
             {!r.isCorrect && (speakerText || Object.keys(options).length > 0) && (
+              <div data-no-dict>
               <ListeningAiExplainBlock
                 explainKey={`${session.id}-lcr${i}`}
                 detail={{
@@ -363,11 +372,12 @@ export function LCRDetail({ session }) {
                 }}
                 {...listeningAi}
               />
+              </div>
             )}
           </div>
         );
       })}
-    </div>
+    </WordLookupLayer>
   );
 }
 
@@ -380,6 +390,8 @@ export function LADetail({ session }) {
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
   const audioUrl = session.details?.audio_url || null;
+  // 题干、选项也能点词查：上下文拼上题目文本，词只出现在选项里时也有句可依。
+  const lookupContext = questionLookupContext(transcript, questions.length ? questions : results);
 
   return (
     <div>
@@ -392,13 +404,13 @@ export function LADetail({ session }) {
       )}
       {/* Transcript / announcement text */}
       {transcript && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           {transcript}
-        </div>
+        </WordLookupLayer>
       )}
       {/* Per-question detail */}
       {results.length > 0 ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -440,7 +452,7 @@ export function LADetail({ session }) {
                 )}
                 {/* AI 讲解：只给答错的题。老记录没存题面（stem 与 options 都空）时讲不了，不放。 */}
                 {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
-                  <div style={{ marginLeft: 20 }}>
+                  <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
                       detail={{
@@ -466,7 +478,7 @@ export function LADetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}
@@ -485,6 +497,8 @@ export function LCDetail({ session }) {
   const transcript = session.details?.transcript || session.details?.passage || "";
   const audioUrl = session.details?.audio_url || null;
   const audioText = transcript || conversation.map(t => t.text || t.content || "").join(" ");
+  // 查词上下文：对话逐行拼平（不带 Speaker 前缀，免得收藏进单词本的原句多一截人名）。
+  const lookupContext = questionLookupContext(audioText, questions.length ? questions : results);
 
   return (
     <div>
@@ -497,7 +511,7 @@ export function LCDetail({ session }) {
       )}
       {/* Conversation turns as chat bubbles */}
       {conversation.length > 0 ? (
-        <div style={{ marginBottom: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+        <WordLookupLayer passage={audioText} source="listening" style={{ marginBottom: 12, display: "flex", flexDirection: "column", gap: 6 }}>
           {conversation.map((turn, i) => {
             const isLeft = i % 2 === 0;
             const speaker = turn.speaker || turn.name || (isLeft ? "Speaker A" : "Speaker B");
@@ -520,17 +534,17 @@ export function LCDetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       ) : transcript ? (
         /* Fallback: show transcript as plain text block */
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           {transcript}
-        </div>
+        </WordLookupLayer>
       ) : null}
 
       {/* Questions (same pattern as LA/LAT) */}
       {results.length > 0 ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -569,7 +583,7 @@ export function LCDetail({ session }) {
                 )}
                 {/* AI 讲解：只给答错的题。原文用对话逐行（没存 transcript 时按 turns 拼）。 */}
                 {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
-                  <div style={{ marginLeft: 20 }}>
+                  <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
                       detail={{
@@ -594,7 +608,7 @@ export function LCDetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}

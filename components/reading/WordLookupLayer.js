@@ -6,7 +6,7 @@ import { sentenceAround } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { isSaved, saveWord, removeWord } from "../../lib/vocab/vocabStore";
-import { canSpeak, speakWord } from "../../lib/audio/speakWord";
+import { SpeakButton } from "../shared/SpeakButton";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -95,23 +95,18 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
-  const speakTokenRef = useRef(0); // 第几次朗读；被下一次掐掉的那次别再回来关按钮
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
   const [saved, setSaved] = useState(false); // 当前这个词在不在单词本里
-  const [speaking, setSpeaking] = useState(false); // 发音按钮的「播放中」态
 
   const tier = typeof window !== "undefined" ? getSavedTier() : null;
   const isPro = tier === "legacy" || tier === "pro";
-  // 浏览器没有语音合成（部分 WebView）就别给一个按不响的钮
-  const speechSupported = canSpeak();
 
   const close = useCallback(() => {
     wordRef.current = null;
     setPop(null);
     setAi(null);
     setSaved(false);
-    setSpeaking(false);
   }, []);
 
   // 文章用到哪些首字母就预热哪些分片，点词时不必等网络。
@@ -131,7 +126,6 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     wordRef.current = word;
     setAi(null);
     setSaved(isSaved(word));
-    setSpeaking(false);
     setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
     const entry = await lookupWord(word);
     setPop((prev) =>
@@ -265,18 +259,6 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     setSaved(isSaved(saveWordForm));
   }, [saveWordForm]);
 
-  // 念的是标题上那个词（词典命中的原形 study，而不是学生点的 studies），
-  // 这样念出来的和旁边显示的音标是同一个词。
-  const playWord = useCallback(() => {
-    if (!saveWordForm) return;
-    const token = (speakTokenRef.current += 1);
-    const stop = () => {
-      if (speakTokenRef.current === token) setSpeaking(false);
-    };
-    setSpeaking(true);
-    if (!speakWord(saveWordForm, { onDone: stop })) stop();
-  }, [saveWordForm]);
-
   const toggleSave = useCallback(() => {
     if (!pop || !saveWordForm) return;
     if (isSaved(saveWordForm)) {
@@ -368,31 +350,14 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
                   /{pop.entry.p}/
                 </span>
               )}
-              {speechSupported && (
-                <button
-                  onClick={playWord}
-                  aria-label="朗读这个词"
-                  title="朗读这个词"
-                  style={{
-                    alignSelf: "center",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 24,
-                    height: 24,
-                    flexShrink: 0,
-                    padding: 0,
-                    border: `1px solid ${speaking ? "#9ed3b8" : "#dbe3dd"}`,
-                    background: speaking ? "#e8f5ee" : "#fff",
-                    borderRadius: 999,
-                    fontSize: 12,
-                    lineHeight: 1,
-                    cursor: "pointer",
-                  }}
-                >
-                  🔊
-                </button>
-              )}
+              {/* 念的是标题上这个词（词典命中的原形 study，而不是学生点的 studies），
+                  和旁边显示的音标才对得上。 */}
+              <SpeakButton
+                word={saveWordForm}
+                size={24}
+                palette={{ border: "#dbe3dd" }}
+                style={{ alignSelf: "center" }}
+              />
               {pop.entry && pop.entry.g && (
                 <span
                   style={{

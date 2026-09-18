@@ -11,7 +11,7 @@ export function VocabLinkCard({ hoverKey, setHoverKey, isChallenge }) {
   const description = !ready
     ? "查词时点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。"
     : total === 0
-      ? "阅读复盘里点原文的词，词典弹窗点「☆ 收藏到单词本」就能收进来。"
+      ? "阅读/听力复盘里点原文的词，词典弹窗点「☆ 收藏到单词本」就能收进来。"
       : todo > 0
         ? `今天有 ${todo} 个词该过一遍，共收藏 ${total} 词。`
         : `今天的词都过完了，共收藏 ${total} 词。`;

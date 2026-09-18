@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
 import { cardDirection, clozeSentence, sourceLabel } from "../../lib/vocab/book";
-import { speakWord } from "../../lib/audio/speakWord";
+import { SpeakButton } from "../shared/SpeakButton";
 
 /**
  * 一场复习。
@@ -61,23 +61,6 @@ function highlight(sentence, word) {
   );
 }
 
-function SpeakBtn({ word }) {
-  return (
-    <button
-      onClick={(e) => { e.stopPropagation(); speakWord(word); }}
-      aria-label="朗读"
-      title="朗读"
-      style={{
-        border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2,
-        borderRadius: 999, width: 30, height: 30, cursor: "pointer",
-        fontSize: 14, lineHeight: 1, flexShrink: 0,
-      }}
-    >
-      🔊
-    </button>
-  );
-}
-
 function WordLine({ card, size = 30 }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -89,7 +72,7 @@ function WordLine({ card, size = 30 }) {
           /{card.phonetic}/
         </span>
       )}
-      <SpeakBtn word={card.display || card.word} />
+      <SpeakButton word={card.display || card.word} size={30} />
     </div>
   );
 }
