@@ -49,14 +49,24 @@
 - `applyOriginalAudio` 挂原声：丢掉 TTS 留下的时间戳，改用清单条目自带的（没有就不带）。
 - `lib/realBank.js`：只在有真实 `audio_url` 且整份通过体检时透传。
 
-## 播放器该怎么用（第 3 步）
+## 播放器（第 3 步，已落地）
 
-- 时间戳量的是 MP3 编码前的 WAV。MP3 编解码会带最多约 46ms 的前置延迟（LAME 编码器 576 +
-  解码器 529 采样 @24kHz），浏览器不一定剥掉，所以 seek 到 `start - SENTENCE_SEEK_LEAD_SEC`（60ms）。
-  上一句后面至少有 120ms 静音，这个提前量吃不到上一句。
-- 播到 `end` 停下：`timeupdate` 事件粒度约 250ms，用 `requestAnimationFrame` 轮询 `currentTime` 更准。
-- 只在练习复盘 / 历史页开放；考试态不开放。
-- 没有该字段、或体检不过 → 原文照常整段展示，只是没有逐句功能。
+- `components/listening/SentenceTranscript.js`：原文逐句渲染（存好的句子列表，不重切）；
+  `AudioPlayer` 多了 `ref.playRange(start, end)` 与 `onTime` 回调。接线在历史页 `LADetail` / `LCDetail`
+  （含真题练习记录、模考复盘卡）与练习模式的结果页（`ListeningMCQTask`，考试态不展示原文）。
+  三个落历史的地方（listening / real-bank 页、AdaptiveExamShell）把 `sentence_timings` 随 `audio_url` 一起存进
+  `details`，老记录没有这个键就按原样整段展示。
+- 手势：**点句子 = 播放这一句；划词或双击 = 查词**。句子 span 在没有选区时截住 mouseup/touchend，
+  外层 WordLookupLayer 不会把这一下当成点词；有选区时不截、不播。
+- seek 到 `start - SENTENCE_SEEK_LEAD_SEC`（60ms）：时间戳量的是 MP3 编码前的 WAV，MP3 编解码会带最多约 46ms
+  的前置延迟（LAME 编码器 576 + 解码器 529 采样 @24kHz），浏览器不一定剥掉；上一句后面至少 120ms 静音，
+  提前量吃不到上一句。
+- 播到 `end` 停：主刹车是 `requestAnimationFrame` 轮询（`timeupdate` 粒度约 250ms，一句只有一两秒），
+  `timeupdate` 作后台标签页的兜底。整段播放 / 续播会清掉句子刹车。
+- 高亮跟着播放头走；落进句间静音（含一句刚放完）时留在上一句。
+- 没有该字段、有字段但没有真实音频（TTS 兜底）、或体检不过 → 原文照常整段展示，只是没有逐句功能。
+- 2026-09-18 真浏览器验证（合成 4 句 mp3 + 真实 LADetail，headless Chromium）：点第三句从 2.181s 起放、
+  3.849s 停（end 3.84）；停后点「继续」续到结尾 5.016s 不再被掐；播放中点第一句跳回 0、1.213s 停。
 
 ## 体积
 

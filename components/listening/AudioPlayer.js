@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { C, FONT } from "../shared/ui";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
+import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
@@ -51,6 +52,9 @@ function pickVoice(voices, gender) {
  *           紧凑模式 + 真实 src（非考试共享元素）还会带一条可拖动的进度条：
  *           练习记录里精听要反复听某一句/某一段，只有「从头再放一遍」不够用。
  *  - taskType/itemId: telemetry labels, only used in exam-controller mode
+ *  - onTime(sec): 播放位置回调（timeupdate + 逐句播放时的 rAF 节流），复盘页用它高亮当前句
+ *  - ref: 命令式句柄 { playRange(start, end), pause(), seekable }——逐句点播
+ *         （docs/listening-sentence-timings.md）：只在紧凑 + 真实音频 + 非考试共享元素时可用
  *
  * Exam-controller mode: when an ExamAudioProvider is mounted above (exam
  * shells only) AND autoPlay is set, playback goes through the shared
@@ -59,7 +63,7 @@ function pickVoice(voices, gender) {
  * iOS Safari / WeChat per-element autoplay rules. With no provider (all
  * practice pages) every code path below is exactly the legacy one.
  */
-export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null }) {
+export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null, onTime = null }, ref) {
   const examAudio = useExamAudio();
   const controller = examAudio ? examAudio.controller : null;
   const controllerMode = !!(controller && autoPlay);
@@ -90,6 +94,13 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   // Multi-turn TTS: bumped on every stop so a cancelled utterance's onend can't
   // schedule the next turn of a playback that was already torn down.
   const ttsSessionRef = useRef(0);
+  // 逐句播放：playRange 设下的「播到这一秒就停」；null = 整段正常播放。
+  const rangeEndRef = useRef(null);
+  const rangeRafRef = useRef(null);
+  const rangeLastTickRef = useRef(0);
+  // onTime 走 ref：timeupdate 监听器挂在 [src] effect 里，不能因回调 identity 变化重挂。
+  const onTimeRef = useRef(onTime);
+  onTimeRef.current = onTime;
 
   const replayLimit = isPractice ? Infinity : maxReplays;
   const canReplay = replays < replayLimit;
@@ -110,8 +121,14 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   // 只在共享模式的播放路径里写入，所以它非空就意味着共享模式，无需再判模式。
   const sharedPlaySrcRef = useRef(null);
 
+  const clearRange = useCallback(() => {
+    rangeEndRef.current = null;
+    if (rangeRafRef.current) { cancelAnimationFrame(rangeRafRef.current); rangeRafRef.current = null; }
+  }, []);
+
   const stopPlayback = useCallback(() => {
     ttsSessionRef.current += 1;
+    clearRange();
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (audioRef.current) {
@@ -131,7 +148,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     if (typeof speechSynthesis !== "undefined") {
       speechSynthesis.cancel();
     }
-  }, []);
+  }, [clearRange]);
 
   // Stop this instance and reset its button. Called directly, or by another
   // instance taking over the single playback slot.
@@ -167,6 +184,14 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     const onTimeUpdate = () => {
       if (audio.duration > 0) {
         setProgress(audio.currentTime / audio.duration);
+      }
+      if (onTimeRef.current) onTimeRef.current(audio.currentTime);
+      // 逐句播放的兜底刹车（主刹车是 rAF 循环；后台标签页 rAF 会被挂起，timeupdate 还在走）。
+      if (rangeEndRef.current != null && audio.currentTime >= rangeEndRef.current) {
+        rangeEndRef.current = null;
+        audio.pause();
+        setPlaying(false);
+        setBuffering(false);
       }
     };
     const onEnd = () => {
@@ -407,6 +432,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     // can't sound at once.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    clearRange(); // 整段播放不受上一次逐句播放的 end 约束
     // Exam-controller mode: route through the shared unlocked element. The
     // controller emits loading/playing/ended/error/blocked — the subscription
     // effect above maps those back onto this component's UI state.
@@ -439,7 +465,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     }
     // No audio src — speak the text directly.
     startTTS();
-  }, [src, startTTS, stopSelf, controllerMode, controller, audioSrc, taskType, itemId]);
+  }, [src, startTTS, stopSelf, controllerMode, controller, audioSrc, taskType, itemId, clearRange]);
 
   useEffect(() => {
     if (!autoPlay) return;
@@ -474,21 +500,90 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     if (!audio) return;
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    clearRange();
     setPlaying(true);
     setBuffering(true);
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.then === "function") {
       playPromise.catch(() => { setPlaying(false); setBuffering(false); });
     }
-  }, [stopSelf]);
+  }, [stopSelf, clearRange]);
 
   // 暂停 ≠ 停止：stopPlayback 会把 currentTime 归零，而「反复听同一句」要求
   // 再点一下是从原处接着放。
   const pausePlayback = useCallback(() => {
+    clearRange();
     if (audioRef.current) audioRef.current.pause();
     setPlaying(false);
     setBuffering(false);
+  }, [clearRange]);
+
+  // ── 逐句播放（docs/listening-sentence-timings.md）────────────────────────
+  // playRange(start, end)：定位到 start（提前 SENTENCE_SEEK_LEAD_SEC 盖住 MP3 编解码的
+  // 前置延迟），开声，播到 end 就停。刹车走 rAF 轮询（timeupdate 事件粒度约 250ms，
+  // 一句只有一两秒，靠它会多放半句）；onTime 也在这条循环里按 ~100ms 节流回调。
+  const tickRange = useCallback(() => {
+    rangeRafRef.current = null;
+    const audio = audioRef.current;
+    const end = rangeEndRef.current;
+    if (!audio || end == null) return;
+    const t = audio.currentTime;
+    if (t >= end || audio.ended) {
+      rangeEndRef.current = null;
+      audio.pause();
+      setPlaying(false);
+      setBuffering(false);
+      if (onTimeRef.current) onTimeRef.current(t);
+      return;
+    }
+    const now = Date.now();
+    if (onTimeRef.current && now - rangeLastTickRef.current >= 100) {
+      rangeLastTickRef.current = now;
+      onTimeRef.current(t);
+    }
+    rangeRafRef.current = requestAnimationFrame(tickRange);
   }, []);
+
+  const playRange = useCallback((start, end) => {
+    const audio = audioRef.current;
+    if (!seekable || !audio) return false;
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return false;
+    if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
+    activePlayerStop = stopSelf;
+    clearRange();
+    rangeEndRef.current = end;
+    const target = Math.max(0, start - SENTENCE_SEEK_LEAD_SEC);
+    const go = () => {
+      audio.currentTime = target;
+      const dur = audio.duration;
+      if (Number.isFinite(dur) && dur > 0) setProgress(Math.min(target / dur, 1));
+      setCompleted(false);
+      setPlaying(true);
+      setBuffering(true);
+      const p = audio.play();
+      if (p && typeof p.then === "function") {
+        p.catch(() => { clearRange(); setPlaying(false); setBuffering(false); });
+      }
+      rangeLastTickRef.current = 0;
+      if (rangeRafRef.current) cancelAnimationFrame(rangeRafRef.current);
+      rangeRafRef.current = requestAnimationFrame(tickRange);
+    };
+    // 元数据还没到时 currentTime 设不进去（老 WebKit 直接抛错）：等一次 loadedmetadata 再定位。
+    if (audio.readyState >= 1) go();
+    else {
+      const once = () => { audio.removeEventListener("loadedmetadata", once); if (rangeEndRef.current === end) go(); };
+      audio.addEventListener("loadedmetadata", once);
+      setPlaying(true);
+      setBuffering(true);
+    }
+    return true;
+  }, [seekable, stopSelf, clearRange, tickRange]);
+
+  useImperativeHandle(ref, () => ({
+    playRange,
+    pause: pausePlayback,
+    seekable,
+  }), [playRange, pausePlayback, seekable]);
 
   // ratio(0~1) → 定位。元数据还没到（duration 是 NaN）时定位不了，返回 false。
   const seekToRatio = useCallback((ratio) => {
@@ -768,4 +863,4 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
       )}
     </div>
   );
-}
+});

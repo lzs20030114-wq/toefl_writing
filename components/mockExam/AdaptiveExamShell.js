@@ -846,6 +846,7 @@ function buildTaskSnapshots(results) {
       lecture: item.lecture || null,
       transcript: item.transcript || null,
       conversation: item.conversation || null,
+      sentence_timings: item.sentence_timings || null, // 复盘逐句点播（与 audio_url 同一次配音）
       // Performance
       correct: r.correct ?? 0,
       total: r.total ?? 0,

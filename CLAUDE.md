@@ -50,7 +50,7 @@ app/                          # Next.js App Router
 
 components/                   # 分科任务 UI + 后台
 ├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask)
-├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer
+├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer(ref.playRange 逐句), SentenceTranscript(点句播放)
 ├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT)
 ├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook

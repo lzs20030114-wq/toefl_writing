@@ -160,16 +160,14 @@
 ## 可派工
 
 - [中] **听力逐句点播（点原文一句 → 只放音频那一句）**，契约 docs/listening-sentence-timings.md。
-  第 1 步已完成（2026-09-18）：产线一句一次 TTS 的拼接偏移随 `audio_url` 写入 `sentence_timings`
-  （backfill-tts / rerender-listening-audio / render_real_audio 三个写入口 + build_bank 沿用 + 原声回挂作废
-  + lib/realBank 透传），新配的音频从此自带。剩余：
-  ②存量对齐脚本——复用 `scripts/realbank/asr_words.py` 的词级时间戳把已知原文按句对齐，覆盖生成库 753 条、
-  真题 TTS 54 条、真题原声 666 条（写进 original-audio.json 条目的 `sentence_timings`），约 2000 分钟音频本机 CPU 几小时、零 API 费；
-  ③前端：历史页 / 结果页原文改逐句可点 span（渲染存好的句子列表、不重切；与划词查词手势共存），
-  seek 到 `start - SENTENCE_SEEK_LEAD_SEC`、rAF 轮询到 `end` 停；考试态不开；
-  ④个人题库：edge-tts `getWordBoundaries` + 按 MP3 帧数累积各段偏移。
-  ⚠ 第 2 步之前拍板体积：`text` 是原文再抄一遍，全量约 660KB，而听力页是静态 import 进客户端 bundle（现 1.9MB），
-  要么接受，要么搬到 sidecar 按需 fetch（契约不变）。
+  2026-09-18 代码侧已做完：①产线随 `audio_url` 写 `sentence_timings`；②存量对齐工具
+  `scripts/align-sentence-timings.mjs`（fetch → asr_words.py 词级转写 → 对齐写回）；③前端逐句可点
+  （历史页 LADetail/LCDetail + 练习结果页，真浏览器验过）。**数据侧一步没跑**：存量 1473 条音频
+  （生成库 753 / 真题 TTS 54 / 真题原声 666）的时间戳要在本机跑 `node scripts/align-sentence-timings.mjs`
+  （云端容器出网策略挡住 Supabase 音频桶与 whisper 模型源），跑完 `--dry-run` 看拒绝清单再推。
+  体积：`text` 是原文再抄一遍，全量 raw +820KB / gzip 仅 +84KB（同文件里的原文让 gzip 基本抵消），
+  已按「直接进题库 JSON」实施；若日后嫌大再搬 sidecar，契约不变。
+  剩余 ④个人题库（edge-tts `getWordBoundaries` + 按 MP3 帧数累积各段偏移）。
 
 - [中] 真题阅读缺题找回残余（2026-09-13，报告 data/claudeGen/reports/REALBANK-AP-RECOVERY-2026-09-13.md）：①第二来源 rf*/rp* 22 卷的 13 个 flagged ap/rdl 块，`<卷>.json` alignment 为空、`structure_set --only-failed` 够不着且 GT 不覆盖，要走 parse_reformatted 侧另立方案；②AP 每篇上限 5 挡下 11 道跨卷并入的真题（consolidation.json 的 over_cap 清单），要「并集全留」改 consolidate_reading.js 的 MAX_QUESTIONS.ap；③（09-13 第二轮已按考卷位置归位 26 篇，此项关闭）；④5 条曾下架的题干因别卷同篇副本被救回而重现（非 hold 失配），复核清单补跨套重复条目；⑤`audit_answers --second-vote` 走 pro 模型但台账按 ¥5.24/M 估价，偏低。**第二轮残余（同一报告第二部分）**：⑥选择题 7 道找不到源截图、插入题 29 道找不到那一屏且 14 道标记表无对应正文、点选句子候选多数卡在宿主段落结构（无分段/多切一刀）或保留方是拼盘副本；⑦基线 CTW 13 簇跨卷重复未下架（需先给 CTW 做旧 id 别名兼容）、基线 116 段 CTW 正文未做看图忠实度核对（第二轮发现模型会编补丢失的句子）；⑧`/progress/reading` 通用历史页对归位的旧记录仍显示旧题型，后台 `lib/admin/realBankStats.js` 仍按旧 id/题型统计；⑨合并判据盲区：标题与首段粘连（3.29 Opal）时聚不成簇，若清单没下架另一份会双份在线；⑩工具坑：`audit_answers.mjs --only-q` 不带 `--only-missing` 会清空该卷全部阅读盲审条目。
 

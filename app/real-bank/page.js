@@ -246,6 +246,7 @@ function saveRealListeningSession(subtype, item, result, mode) {
     reviewData.questions = item.questions || [];
     reviewData.topic = item.topic || item.context || "";
     reviewData.audio_url = item.audio_url || null;
+    reviewData.sentence_timings = item.sentence_timings || null; // 与 audio_url 同一次配音，历史页逐句点播
   }
 
   saveSess({

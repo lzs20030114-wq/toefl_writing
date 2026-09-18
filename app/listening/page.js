@@ -341,6 +341,8 @@ function ListeningPageClient() {
       reviewData.questions = firstItem.questions || [];
       reviewData.topic = firstItem.topic || firstItem.context || "";
       reviewData.audio_url = firstItem.audio_url || null;
+      // 句级时间戳与 audio_url 同一次配音；历史页据此逐句点播（docs/listening-sentence-timings.md）
+      reviewData.sentence_timings = firstItem.sentence_timings || null;
     }
 
     saveSess({

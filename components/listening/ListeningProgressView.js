@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
+import { SentenceTranscript, activeSentenceIndex } from "./SentenceTranscript";
 import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { questionLookupContext } from "../../lib/dict/core";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
@@ -235,7 +236,25 @@ function taskToReviewDetails(task) {
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
     conversation: task.conversation || null,
     audio_url: task.audio_url || null,
+    sentence_timings: task.sentence_timings || null,
   };
+}
+
+// 逐句点播（docs/listening-sentence-timings.md）：播放器 ref + 「正在放哪一句」的高亮下标。
+// 只在有真实音频时认时间戳；只在当前句变了才 setState，播放中不会每帧重渲染。
+function useSentencePlayback(timings, audioUrl) {
+  const playerRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const usable = audioUrl ? timings : null;
+  const onTime = useCallback((t) => {
+    const i = activeSentenceIndex(usable, t);
+    // 落在句间静音（含一句刚放完）时高亮留在上一句：精听时「刚才放的是哪句」比空白有用。
+    setActiveIndex((prev) => (i === -1 || prev === i ? prev : i));
+  }, [usable]);
+  const onPick = useCallback((i, s) => {
+    if (playerRef.current && playerRef.current.playRange(s.start, s.end)) setActiveIndex(i);
+  }, []);
+  return { playerRef, activeIndex, onTime, onPick, timings: usable };
 }
 
 // One collapsible card per mock task, reusing the practice-review renderers.
@@ -392,6 +411,8 @@ export function LADetail({ session }) {
   const audioUrl = session.details?.audio_url || null;
   // 题干、选项也能点词查：上下文拼上题目文本，词只出现在选项里时也有句可依。
   const lookupContext = questionLookupContext(transcript, questions.length ? questions : results);
+  // 逐句点播：记录里存了 sentence_timings（与 audio_url 同一次配音）时原文逐句可点。
+  const sp = useSentencePlayback(session.details?.sentence_timings || null, audioUrl);
 
   return (
     <div>
@@ -399,13 +420,13 @@ export function LADetail({ session }) {
       {(audioUrl || transcript) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer compact src={audioUrl} text={transcript} isPractice />
+          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={transcript} isPractice onTime={sp.onTime} />
         </div>
       )}
-      {/* Transcript / announcement text */}
+      {/* Transcript / announcement text（有句级时间戳时逐句可点） */}
       {transcript && (
         <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
-          {transcript}
+          <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       )}
       {/* Per-question detail */}
@@ -499,6 +520,8 @@ export function LCDetail({ session }) {
   const audioText = transcript || conversation.map(t => t.text || t.content || "").join(" ");
   // 查词上下文：对话逐行拼平（不带 Speaker 前缀，免得收藏进单词本的原句多一截人名）。
   const lookupContext = questionLookupContext(audioText, questions.length ? questions : results);
+  // 逐句点播：记录里存了 sentence_timings（与 audio_url 同一次配音）时气泡里每句可点。
+  const sp = useSentencePlayback(session.details?.sentence_timings || null, audioUrl);
 
   return (
     <div>
@@ -506,34 +529,13 @@ export function LCDetail({ session }) {
       {(audioUrl || audioText) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer compact src={audioUrl} text={audioText} isPractice />
+          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={audioText} isPractice onTime={sp.onTime} />
         </div>
       )}
-      {/* Conversation turns as chat bubbles */}
+      {/* Conversation turns as chat bubbles（有句级时间戳时逐句可点；气泡样式在 SentenceTranscript 里） */}
       {conversation.length > 0 ? (
-        <WordLookupLayer passage={audioText} source="listening" style={{ marginBottom: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-          {conversation.map((turn, i) => {
-            const isLeft = i % 2 === 0;
-            const speaker = turn.speaker || turn.name || (isLeft ? "Speaker A" : "Speaker B");
-            const text = turn.text || turn.content || "";
-            return (
-              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: isLeft ? "flex-start" : "flex-end" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: isLeft ? "#6366F1" : "#0891B2", marginBottom: 2, paddingLeft: isLeft ? 8 : 0, paddingRight: isLeft ? 0 : 8 }}>
-                  {speaker}
-                </div>
-                <div style={{
-                  maxWidth: "85%", fontSize: 12, lineHeight: 1.6, color: P.text,
-                  padding: "8px 12px", borderRadius: 12,
-                  borderTopLeftRadius: isLeft ? 4 : 12,
-                  borderTopRightRadius: isLeft ? 12 : 4,
-                  background: isLeft ? "#F3E8FF" : "#ECFEFF",
-                  border: `1px solid ${isLeft ? "#DDD6FE" : "#CFFAFE"}`,
-                }}>
-                  {text}
-                </div>
-              </div>
-            );
-          })}
+        <WordLookupLayer passage={audioText} source="listening" style={{ marginBottom: 12 }}>
+          <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       ) : transcript ? (
         /* Fallback: show transcript as plain text block */
