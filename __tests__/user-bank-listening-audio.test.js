@@ -89,3 +89,18 @@ describe("userAudioStoragePath (security patch B — DELETE path resolution)", (
     expect(userAudioStoragePath(CODE, null)).toBeNull();
   });
 });
+
+// sentence_timings 是服务端配音的附属物（docs/listening-sentence-timings.md）：客户端自带的一并剥掉。
+describe("stripClientAudioUrl 也剥 sentence_timings", () => {
+  test("听力题：audio_url 与 sentence_timings 一起去掉，其余字段保留", () => {
+    const out = stripClientAudioUrl("lat", { transcript: "t", audio_url: "x", sentence_timings: [{ text: "t", start: 0, end: 1 }] });
+    expect(out).toEqual({ transcript: "t" });
+  });
+  test("只带 sentence_timings 没带 audio_url 也去掉", () => {
+    expect(stripClientAudioUrl("lc", { conversation: [], sentence_timings: [] })).toEqual({ conversation: [] });
+  });
+  test("非听力题不动", () => {
+    const data = { text: "p", sentence_timings: [1] };
+    expect(stripClientAudioUrl("rdl", data)).toEqual(data);
+  });
+});

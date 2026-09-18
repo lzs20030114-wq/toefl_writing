@@ -20,12 +20,12 @@ import { createRateLimiter, getIp } from "../../../../lib/rateLimit";
 import { jsonError } from "../../../../lib/apiResponse";
 import { gateUserBankRequest } from "../../../../lib/userBankAuth";
 
-const { generateSpeech } = require("../../../../lib/tts/edgeTts");
+const { generateSpeechTimed } = require("../../../../lib/tts/edgeTts");
 const { uploadAudio } = require("../../../../lib/tts/storage");
 const {
-  renderSpokenAudio,
+  renderSpokenAudioTimed,
   isSegmentedType,
-  renderConversationAudio,
+  renderConversationAudioTimed,
 } = require("../../../../lib/userBank/listeningAudioRender");
 
 // LAT lecture transcripts run 250-800 words; a single edge-tts synth of a 700-word稿 can brush the
@@ -124,27 +124,33 @@ export async function POST(request) {
     // Render (edge-tts, in-memory Buffer — proven by scripts/spike-edge-tts.mjs). Any failure →
     // softFail (browser TTS). LC = two-voice conversation (each turn synthesized with its speaker's
     // preset, mp3 frames concatenated); lcr/la = one synth call; lat = segmented + mp3-frame concat.
+    // *Timed 渲染顺带拿到句级时间戳（edge WordBoundary → 各段按 mp3 帧时长平移 → 与句子对齐，
+    // docs/listening-sentence-timings.md）；对不上就是 null，音频照常。
     let buffer;
+    let sentenceTimings = null;
     try {
+      let rendered;
       if (row.type === "lc") {
         const data = row.data && typeof row.data === "object" ? row.data : {};
         const conversation = Array.isArray(data.conversation) ? data.conversation : [];
         if (conversation.length === 0) return softFail("no conversation to render");
-        buffer = await renderConversationAudio(
+        rendered = await renderConversationAudioTimed(
           conversation,
           data.speakers,
-          (text, preset) => generateSpeech(text, { preset, format: "mp3" })
+          (text, preset) => generateSpeechTimed(text, { preset, format: "mp3" })
         );
       } else {
         const text = LISTENING_TEXT_EXTRACTORS[row.type](row.data);
         if (!text) return softFail("no spoken text to render");
         const preset = LISTENING_PRESET[row.type] || "default";
-        buffer = await renderSpokenAudio(
+        rendered = await renderSpokenAudioTimed(
           text,
-          (seg) => generateSpeech(seg, { preset, format: "mp3" }),
+          (seg) => generateSpeechTimed(seg, { preset, format: "mp3" }),
           { segmented: isSegmentedType(row.type) }
         );
       }
+      buffer = rendered && rendered.buffer;
+      sentenceTimings = (rendered && rendered.sentences) || null;
     } catch (e) {
       return softFail(`tts failed: ${(e && e.message) || "unknown"}`);
     }
@@ -164,7 +170,10 @@ export async function POST(request) {
 
     // Write audio_url back into data. Store the raw bucket URL uploadAudio returned — AudioPlayer's
     // sameOriginAudio rewrites it to /api/audio/… at play time (国内可达). Merge, don't overwrite data.
+    // sentence_timings 与 audio_url 同生同灭：这次对齐失败就删掉上一次配音留下的旧时间戳。
     const nextData = { ...(row.data && typeof row.data === "object" ? row.data : {}), audio_url: publicUrl };
+    if (sentenceTimings) nextData.sentence_timings = sentenceTimings;
+    else delete nextData.sentence_timings;
     const { error: upErr } = await supabaseAdmin
       .from("user_question_banks")
       .update({ data: nextData })
@@ -172,7 +181,7 @@ export async function POST(request) {
       .eq("item_id", itemId);
     if (upErr) return softFail(`db write failed: ${upErr.message}`);
 
-    return Response.json({ ok: true, audio_url: publicUrl });
+    return Response.json({ ok: true, audio_url: publicUrl, sentence_timings: sentenceTimings });
   } catch (e) {
     // Best-effort contract: even an unexpected error is a soft fail (browser TTS covers it).
     return softFail((e && e.message) || "unexpected error");

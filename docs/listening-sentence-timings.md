@@ -75,6 +75,16 @@
 全量补完会涨约三分之一。存量补齐（第 2 步）之前先拍板：接受，或把 `sentence_timings` 移到
 `data/listening/timings/<type>.json` 这类 sidecar、只在打开原文时按需 fetch。契约不变，只是搬家。
 
+## 个人题库（第 4 步，已落地）
+
+个人题库的听力配音走 `/api/user-bank/render-audio`（edge-tts，逐段 / 逐轮合成后 mp3 **按字节拼接**）。
+时间戳来自 Edge 报回来的 WordBoundary（`edgeTts.generateSpeechTimed`，100ns 刻度 → 秒，相对该段开头）：
+各段的词按「前面各段的 mp3 帧时长之和」平移（`lib/tts/mp3Frames`，播放器就是按帧顺序解码的），
+再与产线同一把刀切出来的句子做对齐（`alignSentences`）。对不上就不写，音频照常。
+写回 `user_question_banks.data.sentence_timings`（JSONB，无需迁移），与 `audio_url` 同生同灭；
+客户端 POST 自带的 `sentence_timings` 与 `audio_url` 一起被剥掉（`stripClientAudioUrl`），
+读取时 `personalBank` 只在 `audio_url` 通过白名单且整份过体检时透传。
+
 ## 存量怎么补
 
 产线只保证**新配的音频**自带时间戳。已上线的 753 条生成库 + 54 条真题 TTS 音频不重配，

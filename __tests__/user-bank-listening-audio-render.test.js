@@ -176,3 +176,83 @@ describe("renderConversationAudio (edge-tts injected, multi-voice)", () => {
     await expect(renderConversationAudio(conversation, speakers, synth)).rejects.toThrow();
   });
 });
+
+// ── 句级时间戳（docs/listening-sentence-timings.md）────────────────────────
+// *Timed 渲染：注入的 synth 返回 { buffer, words }；各段 mp3 按帧时长平移词时刻再与句子对齐。
+// 这里的 mp3 是 lamejs 真编码的静音（帧数真实），词时刻是按词数造的。
+const { renderSpokenAudioTimed, renderConversationAudioTimed } = require("../lib/userBank/listeningAudioRender");
+const { encodeWavToMp3 } = require("../lib/tts/mp3Encode");
+const { buildWav } = require("../lib/tts/wavTools");
+const { mp3DurationSec } = require("../lib/tts/mp3Frames");
+
+async function silentMp3(sec) {
+  return encodeWavToMp3(buildWav(new Int16Array(Math.round(24000 * sec)), 24000, 1));
+}
+// 假词时刻（相对该段开头）：第 i 个词 [lead + i*step, lead + i*step + dur]
+function fakeWords(text, { lead = 0.05, step = 0.25, dur = 0.2 } = {}) {
+  return String(text).split(/\s+/).filter(Boolean).map((w, i) => ({ text: w, start: lead + i * step, end: lead + i * step + dur }));
+}
+
+describe("renderSpokenAudioTimed / renderConversationAudioTimed —— 句级时间戳", () => {
+  test("非分段：句子起止来自该次合成的词时刻", async () => {
+    const text = "Hello there, students. The pool reopens Monday!";
+    const synth = async (t) => ({ buffer: await silentMp3(0.8), words: fakeWords(t) });
+    const { buffer, sentences } = await renderSpokenAudioTimed(text, synth, { segmented: false });
+    expect(mp3DurationSec(buffer)).toBeGreaterThan(0.7);
+    expect(sentences.map((s) => s.text)).toEqual(["Hello there, students.", "The pool reopens Monday!"]);
+    expect(sentences[0]).toMatchObject({ start: 0.05, end: 0.75 });      // 3 词：0.05 → 0.05+2*0.25+0.2
+    expect(sentences[1]).toMatchObject({ start: 0.8, end: 1.75 });       // 第 4~7 词：0.05+3*0.25 → 0.05+6*0.25+0.2
+  });
+
+  test("分段（lat）：第二段的句子按第一段 mp3 的帧时长平移", async () => {
+    const long = Array.from({ length: 30 }, (_, i) => `Sentence number ${i} has several words in it here.`).join(" ");
+    const segs = segmentSpokenText(long);
+    expect(segs.length).toBeGreaterThan(1);
+    const bufs = [];
+    // 每段约 100 个词要落在 1.0s 的片段里：词步 8ms
+    const synth = async (t) => { const buffer = await silentMp3(1.0); bufs.push(buffer); return { buffer, words: fakeWords(t, { lead: 0.005, step: 0.008, dur: 0.006 }) }; };
+    const { buffer, sentences } = await renderSpokenAudioTimed(long, synth, { segmented: true });
+    expect(buffer.length).toBe(bufs.reduce((n, b) => n + b.length, 0));
+    expect(sentences).toHaveLength(30);
+    const firstSegSentences = segs[0].match(/[^.!?]+[.!?]+/g).length;
+    const seg1 = mp3DurationSec(bufs[0]);
+    expect(sentences[firstSegSentences - 1].end).toBeLessThan(seg1);          // 第一段最后一句在第一段里
+    expect(sentences[firstSegSentences].start).toBeCloseTo(seg1 + 0.005, 3);  // 第二段第一句 = 平移量 + 首词
+    // 单调不重叠
+    for (let i = 1; i < sentences.length; i++) expect(sentences[i].start).toBeGreaterThanOrEqual(sentences[i - 1].end);
+  });
+
+  test("对话：逐轮平移，每句带 turn / speaker；旧接口 renderConversationAudio 仍只返回 Buffer", async () => {
+    const conv = [
+      { speaker: "Woman", text: "Hi there. Quick question?" },
+      { speaker: "Man", text: "Sure, go ahead." },
+    ];
+    const speakers = [{ name: "Woman", gender: "female", role: "student" }, { name: "Man", gender: "male", role: "staff" }];
+    const bufs = [];
+    const synth = async (t) => { const buffer = await silentMp3(0.9); bufs.push(buffer); return { buffer, words: fakeWords(t) }; };
+    const { buffer, sentences } = await renderConversationAudioTimed(conv, speakers, synth);
+    expect(buffer.length).toBe(bufs[0].length + bufs[1].length);
+    expect(sentences.map((s) => [s.turn, s.speaker, s.text])).toEqual([
+      [0, "Woman", "Hi there."], [0, "Woman", "Quick question?"], [1, "Man", "Sure, go ahead."],
+    ]);
+    expect(sentences[2].start).toBeCloseTo(mp3DurationSec(bufs[0]) + 0.05, 3);
+
+    const plain = await renderConversationAudio(conv, speakers, async () => Buffer.from("x"));
+    expect(Buffer.isBuffer(plain)).toBe(true);
+  });
+
+  test("合成没报词（或对不上）→ sentences 为 null，音频照常", async () => {
+    const synth = async () => ({ buffer: await silentMp3(0.5), words: [] });
+    const { buffer, sentences } = await renderSpokenAudioTimed("Hello there. Bye now.", synth, { segmented: false });
+    expect(buffer.length).toBeGreaterThan(0);
+    expect(sentences).toBeNull();
+    const garbled = async (t) => ({ buffer: await silentMp3(0.5), words: fakeWords(t).map((w) => ({ ...w, text: "zzz" })) });
+    expect((await renderSpokenAudioTimed("Hello there. Bye now.", garbled, { segmented: false })).sentences).toBeNull();
+  });
+
+  test("旧接口 renderSpokenAudio 的错误语义不变（空 buffer 抛「empty audio」/「empty segment audio」）", async () => {
+    await expect(renderSpokenAudio("hello", async () => Buffer.alloc(0), { segmented: false })).rejects.toThrow("empty audio");
+    const long = Array.from({ length: 40 }, (_, i) => `Sentence number ${i} has several words in it here.`).join(" ");
+    await expect(renderSpokenAudio(long, async () => Buffer.alloc(0), { segmented: true })).rejects.toThrow("empty segment audio");
+  });
+});

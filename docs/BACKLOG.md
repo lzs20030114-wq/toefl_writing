@@ -167,7 +167,7 @@
   （云端容器出网策略挡住 Supabase 音频桶与 whisper 模型源），跑完 `--dry-run` 看拒绝清单再推。
   体积：`text` 是原文再抄一遍，全量 raw +820KB / gzip 仅 +84KB（同文件里的原文让 gzip 基本抵消），
   已按「直接进题库 JSON」实施；若日后嫌大再搬 sidecar，契约不变。
-  剩余 ④个人题库（edge-tts `getWordBoundaries` + 按 MP3 帧数累积各段偏移）。
+  ④个人题库也已做完（edge WordBoundary + 按 mp3 帧时长平移各段，写回 data.sentence_timings，无需迁移）。
 
 - [中] 真题阅读缺题找回残余（2026-09-13，报告 data/claudeGen/reports/REALBANK-AP-RECOVERY-2026-09-13.md）：①第二来源 rf*/rp* 22 卷的 13 个 flagged ap/rdl 块，`<卷>.json` alignment 为空、`structure_set --only-failed` 够不着且 GT 不覆盖，要走 parse_reformatted 侧另立方案；②AP 每篇上限 5 挡下 11 道跨卷并入的真题（consolidation.json 的 over_cap 清单），要「并集全留」改 consolidate_reading.js 的 MAX_QUESTIONS.ap；③（09-13 第二轮已按考卷位置归位 26 篇，此项关闭）；④5 条曾下架的题干因别卷同篇副本被救回而重现（非 hold 失配），复核清单补跨套重复条目；⑤`audit_answers --second-vote` 走 pro 模型但台账按 ¥5.24/M 估价，偏低。**第二轮残余（同一报告第二部分）**：⑥选择题 7 道找不到源截图、插入题 29 道找不到那一屏且 14 道标记表无对应正文、点选句子候选多数卡在宿主段落结构（无分段/多切一刀）或保留方是拼盘副本；⑦基线 CTW 13 簇跨卷重复未下架（需先给 CTW 做旧 id 别名兼容）、基线 116 段 CTW 正文未做看图忠实度核对（第二轮发现模型会编补丢失的句子）；⑧`/progress/reading` 通用历史页对归位的旧记录仍显示旧题型，后台 `lib/admin/realBankStats.js` 仍按旧 id/题型统计；⑨合并判据盲区：标题与首段粘连（3.29 Opal）时聚不成簇，若清单没下架另一份会双份在线；⑩工具坑：`audit_answers.mjs --only-q` 不带 `--only-missing` 会清空该卷全部阅读盲审条目。
 

@@ -208,7 +208,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 
 ```
 my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
-  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读)
+  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读，
+  随 WordBoundary 写 sentence_timings 供复盘逐句点播)
 → user_question_banks 表 → lib/userBank/personalBank.js 运行时拉取
 → 只并入各科 practice picker(带「我的」标签)，不进 standard 随机池。
 ```
