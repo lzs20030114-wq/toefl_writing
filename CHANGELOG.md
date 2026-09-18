@@ -1,5 +1,45 @@
 # Changelog
 
+## 2026-09-18 — v1.21.0
+
+> 首页三处改动 + 一处真题修复：右栏新增**「今日任务」**（自定每日练习量，可二选一、可隔天/每周 N 次），
+> 真题专区 12 张卡收成四个科目折叠面板，真题造句词块不再泄漏句首。无迁移、无新 flag、无新 env。
+
+- **首页右栏「今日任务」**（`90bc9585` 一期 / `056ccb0b` 二期）。右栏从两张卡变三张：
+  备考目标（压缩）/ 今日任务（新）/ 学习打卡（火苗 + 周历，**原样未动**）。
+  - 备考目标卡：134px 倒计时大环改 64px 小环横排，右侧放考试日一行 + `ScoreProgress`；
+    整列高度 ~1000px → 761px（900 视口一屏放下，sticky 列不再掉出视口）。鼓励语加 `textWrap: balance` 治孤字换行。
+  - 数据层 `lib/dailyTasks.js`：照 `lib/studyPlan.js` 骨架，localStorage 按用户隔离
+    （`toefl-daily-tasks::user:CODE|guest`）+ `toefl-daily-tasks-updated` 事件，**不建表、不云同步**。
+    任务形状 `{ id, keys:[k1]|[k1,k2], target:1..10, freq:"daily"|"alternate"|"weekly" }`；
+    一期旧形状 `{key,target}` 在 `sanitizeTasks` 读入时迁成 `freq:"daily"`。最多 8 条，
+    `sorted(keys)+"@"+freq` 签名重复丢后者。
+  - 计数口径：**一条 session = 1 次**，从首页已加载的 `loadHist().sessions` 派生，日期走
+    `studyStreak.toLocalDateKey`（与打卡同口径）。各写入点的真实形状已核实并写进文件头注：
+    写作 `type: bs|email|discussion`；阅读/听力/口语 `type` + `details.subtype`；
+    真题专区照抄常规形状只多 `details.real`，天然计入；三科模考 `details.subtype === "mock"`，
+    只落进「模考（任意科目）」一项，不污染练习题型。
+  - 频率：`alternate` = 「昨日计数 ≥ target 且今天还没练」→ `restToday`（不设单双日锚点，漏练自动顺延）；
+    `weekly` 周一 00:00 本地起算（与 `buildHeatmapColumns` 同算法），永不休息；二选一按 keys 求和。
+    总计 `dueCount` 排除休息项，另有 `allComplete` / `allRest`。昨日/本周计数按需才扫。
+  - `components/home/DailyTasksCard.js`：每行 done/target + 6px 进度条；单题型整行 `next/link`，
+    二选一「A 或 B」各自独立链接，题型名 `nowrap` 只在「或」处换行；休息行用静音字色而非 opacity。
+    编辑弹窗 `createPortal` 到 body（任务列表式：逐条删 / 每天·隔天·每周分段 / 步进器，弹窗内就地展开
+    题型选择区并 `scrollIntoView`）。Pro 角标只在弹窗里出现，卡片行不挂。
+    `StudyPlanColumn` 导出 `Icon`/`IconBadge`/`PressButton` 供复用。
+  - `__tests__/daily-tasks.test.js` 44 条，锚在固定的 2026-09-16 周三（迁移 / sanitize 全分支 /
+    二选一相加 / alternate 四种组合 / weekly 跨周一边界 / dueCount 与 allRest）。
+  - 遗留：手机端 `MobileHomePage` 未接；任务不跨设备；「指定星期几」未做。
+- **真题专区改成四个科目折叠面板**（`75c16c73`）。12 张真题卡平铺要拉两屏多，改为
+  写作 / 阅读 / 听力 / 口语四个面板：默认只展开写作，一次只开一个；标题行带题型概览（收起也看得到
+  里面有什么）。展开用 `grid-template-rows 0fr↔1fr` 过渡，不用 JS 量高度；收起后 `visibility: hidden`
+  移出 Tab 序但卡片仍在 DOM（深链 / 测试可取）。网格列改 `minmax(0,1fr)`。
+- **真题造句句首词块不再大写**（`37315a92`，回填 172 处）。真题造句照抄原卷，答案句首词的大写被原样
+  抄进词块（"Which" / "Do you"），考生一眼就知道哪块放第一个；真考界面词块全小写。
+  `lib/questionBank/bsChunkCase.js` 只改「首词 = 答案句首词」且大写的词块（I 系列、星期月份、
+  语言国籍、人名地名保留）；`build_bank` 造句出口落库前统一处理，重建不会冲回去；个人题库读取时同样处理。
+  守门测试 `__tests__/bs-chunk-case.regression.test.js` 扫真题库 + 主库。
+
 ## 2026-09-17 — v1.20.0
 
 > 两条线：**真题专区 1746 → 2687 题**（听力 516 → 1340 段、口语 69 → 130 套、造句 573 → 629 题），
