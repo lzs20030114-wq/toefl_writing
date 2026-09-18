@@ -162,9 +162,12 @@
 - [中] **听力逐句点播（点原文一句 → 只放音频那一句）**，契约 docs/listening-sentence-timings.md。
   2026-09-18 代码侧已做完：①产线随 `audio_url` 写 `sentence_timings`；②存量对齐工具
   `scripts/align-sentence-timings.mjs`（fetch → asr_words.py 词级转写 → 对齐写回）；③前端逐句可点
-  （历史页 LADetail/LCDetail + 练习结果页，真浏览器验过）。**数据侧一步没跑**：存量 1473 条音频
-  （生成库 753 / 真题 TTS 54 / 真题原声 666）的时间戳要在本机跑 `node scripts/align-sentence-timings.mjs`
-  （云端容器出网策略挡住 Supabase 音频桶与 whisper 模型源），跑完 `--dry-run` 看拒绝清单再推。
+  （历史页 LADetail/LCDetail + 练习结果页，真浏览器验过）。**数据侧已完成（2026-09-18 本机跑完）**：存量 1473 条音频
+  （生成库 753 / 真题 TTS 54 / 真题原声 666）用 `node scripts/align-sentence-timings.mjs` 补齐，
+  写入 1460 / 拒绝 13 / 缺转写 0（GPU medium.en 转写 109 分钟）；生成库四个库 100%，真题 lcr 100% / lc 96.6% / la 90.9% / lat 96.8%。
+  遗留：①拒绝的 13 条全是真题原声（lc 4 / la 6 / lat 3），whisper 带 VAD 只转出开头旁白「Listen to a…」、正文被吞，
+  对齐器 fail-closed 不写——可试对这 13 条关 VAD 重转（jobs.json 里加 `no_vad`）再 `--phase=apply`；
+  ②`real_lcr_128a_1_04/11/12` 三条原声在 original-audio.json 里没有同 id 条目，时间戳只写在题库上，build_bank 全量重建会丢。
   体积：`text` 是原文再抄一遍，全量 raw +820KB / gzip 仅 +84KB（同文件里的原文让 gzip 基本抵消），
   已按「直接进题库 JSON」实施；若日后嫌大再搬 sidecar，契约不变。
   ④个人题库也已做完（edge WordBoundary + 按 mp3 帧时长平移各段，写回 data.sentence_timings，无需迁移）。
