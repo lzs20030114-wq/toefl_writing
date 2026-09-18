@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
 import { cardDirection, clozeSentence, sourceLabel } from "../../lib/vocab/book";
+import { speakWord } from "../../lib/audio/speakWord";
 
 /**
  * 一场复习。
@@ -39,17 +40,6 @@ const DIRECTION_META = {
   recall: { label: "拼写", tip: "这个意思怎么写" },
 };
 
-function speak(word) {
-  try {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(word);
-    u.lang = "en-US";
-    u.rate = 0.9;
-    window.speechSynthesis.speak(u);
-  } catch {}
-}
-
 /** 把句子里的目标词标出来。匹配不到就原样返回。 */
 function highlight(sentence, word) {
   if (!sentence) return null;
@@ -74,7 +64,7 @@ function highlight(sentence, word) {
 function SpeakBtn({ word }) {
   return (
     <button
-      onClick={(e) => { e.stopPropagation(); speak(word); }}
+      onClick={(e) => { e.stopPropagation(); speakWord(word); }}
       aria-label="朗读"
       title="朗读"
       style={{
