@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-09-18 — v1.21.1
+
+> 词典两处扩展：弹窗加发音钮（三处共用一个组件），划词词典从阅读铺到听力复盘。
+> 无迁移、无新 flag、无新 env。
+
+- **单词发音**（`4c7d07c` / `df037a2`）。走 Web Speech API，零成本、不联网、不走 TTS 账单。
+  - 新增 `lib/audio/speakWord.js`：挑 voice（点名 Samantha/Aria/Google US English/Alex/Karen，
+    退而求其次任何 `en-`）→ Safari 首次 `getVoices()` 返回空表时等 `voiceschanged`，600ms 兜底照念；
+    `onDone` 只回调一次（念完 / 出错 / 兜底超时三选一），voice 赋值失败不连累出声。
+    `VocabReview` 原先自带一份不挑 voice 的 `speak()`，在中文系统上会拿中文音色念英文，已并过来。
+  - 新增 `components/shared/SpeakButton.js`：词典弹窗（24px）、复习卡（30px）、单词本列表（26px）共用。
+    `canSpeak()` 为假时整颗不渲染；点击一律 `stopPropagation`（这颗钮常坐在「点一下就翻面 / 就展开」的行里）。
+  - 弹窗念的是**词典命中的原形**（查 studies 念 study），与旁边显示的音标同源。
+  - 弹窗标题行由「一整排 + `marginLeft:auto`」改成「词条块（可换行）+ 关闭钮（兄弟节点）」：
+    加钮后长词会把 × 顶到第二行（真浏览器实测 `symbiosis` 标题行 24px → 50px）。
+- **听力复盘接入划词词典**（`df037a2`）。`LCRDetail` / `LADetail` / `LCDetail` 的原文、对话气泡、
+  题干选项各包一层 `WordLookupLayer`（与阅读同一组件，`source="listening"`）。
+  - 这三个组件是练习历史、听力模考（`MockTaskCard`）、真题专区听力记录（`RealBankProgressView`）
+    共用的渲染层，改一处三处覆盖。
+  - `AudioPlayer` 与 `ListeningAiExplainBlock` 标 `data-no-dict`：点播放键弹出词典弹窗是纯干扰。
+  - 查词上下文用 `questionLookupContext`（原文在前、题干选项在后）；LCR 没有 passage，用各题刺激句拼。
+    **没包 `useMemo`**：依赖的 `results`/`questions` 都是 `|| []` 的新数组，memo 每次都重算，
+    白搭一层还招 `exhaustive-deps` 警告。
+  - 收藏进单词本时 `source: "listening"`（`SOURCE_LABELS` 早就留了这个位）+ 词所在的那一句
+    （挖空卡的原料）。三处入口文案从「阅读复盘」改成「阅读/听力复盘」。
+- 新增测试：`__tests__/dict-speak-word.test.js`（10 条，发音模块 + 弹窗按钮）、
+  `__tests__/listening-word-lookup.component.test.js`（7 条，三种听力记录的查词 + 豁免区 + 列表发音钮）。
+
 ## 2026-09-18 — v1.21.0
 
 > 首页三处改动 + 一处真题修复：右栏新增**「今日任务」**（自定每日练习量，可二选一、可隔天/每周 N 次），
