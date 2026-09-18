@@ -26,6 +26,7 @@ import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { TopicPicker } from "../../components/shared/TopicPicker";
+import { apPassageText } from "../../lib/reading/passageLayout";
 import { AssetPreloadGate } from "../../components/shared/AssetPreloadGate";
 import { C, FONT } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
@@ -576,7 +577,7 @@ function RealBankPageClient() {
     const backToPicker = () => setPickedReadingId(null);
     // AP 复用 RDLTask（同一套交互，四选一 + 选句题），只把字段名对上：passage→text、topic→genre。
     // 适配对象只喂给组件；存历史 / 打已练一律用原 item（details.passage 那一支自己会挑）。
-    const apAsRdl = { ...item, text: item.passage, genre: item.topic };
+    const apAsRdl = { ...item, text: apPassageText(item), genre: item.topic };
 
     // 材料原图先在加载页拉完再挂任务组件 —— RDLTask 一挂载就起计时，不能让用户
     // 盯着空白材料框等图。没图的题（CTW / 老库形状）数组为空，门原样透传。
