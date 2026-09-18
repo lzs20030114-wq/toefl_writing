@@ -1,4 +1,4 @@
-const { parseWav, buildWav, concatWavSegments, splitSentences } = require("../lib/tts/wavTools");
+const { parseWav, buildWav, concatWavSegments, concatWavSegmentsTimed, splitSentences } = require("../lib/tts/wavTools");
 
 function makeWav(samples, sampleRate = 24000) {
   return buildWav(Int16Array.from(samples), sampleRate, 1);
@@ -24,6 +24,41 @@ describe("wavTools", () => {
 
   test("concatWavSegments throws on no segments", () => {
     expect(() => concatWavSegments([])).toThrow();
+  });
+
+  // 句级时间戳的地基：拼接时每段落在输出里的秒数必须是精确的采样数换算，间隙不算进句内。
+  test("concatWavSegmentsTimed reports each segment's start/end in seconds, gaps excluded", () => {
+    const a = makeWav(new Array(2400).fill(100)); // 0.1s
+    const b = makeWav(new Array(4800).fill(100)); // 0.2s
+    const c = makeWav(new Array(1200).fill(100)); // 0.05s
+    const { wav, sampleRate, channels, segments } = concatWavSegmentsTimed([a, b, c], { gapMs: 120 });
+    expect(sampleRate).toBe(24000);
+    expect(channels).toBe(1);
+    expect(segments).toEqual([
+      { start: 0, end: 0.1 },
+      { start: 0.22, end: 0.42 }, // 0.1 + 0.12 gap
+      { start: 0.54, end: 0.59 }, // 0.42 + 0.12 gap
+    ]);
+    // Total length = last end (no trailing gap).
+    expect(parseWav(wav).pcm.length).toBe(Math.round(0.59 * 24000));
+  });
+
+  test("concatWavSegmentsTimed: gapMs 0 makes segments back-to-back; a single segment starts at 0", () => {
+    const a = makeWav(new Array(240).fill(5));
+    const b = makeWav(new Array(240).fill(5));
+    expect(concatWavSegmentsTimed([a, b], { gapMs: 0 }).segments).toEqual([
+      { start: 0, end: 0.01 },
+      { start: 0.01, end: 0.02 },
+    ]);
+    expect(concatWavSegmentsTimed([a]).segments).toEqual([{ start: 0, end: 0.01 }]);
+  });
+
+  test("concatWavSegments is byte-identical to concatWavSegmentsTimed().wav", () => {
+    const a = makeWav([100, 200, 300, 400]);
+    const b = makeWav([500, 600]);
+    const plain = concatWavSegments([a, b], { gapMs: 100 });
+    const timed = concatWavSegmentsTimed([a, b], { gapMs: 100 }).wav;
+    expect(Buffer.compare(plain, timed)).toBe(0);
   });
 
   test("splitSentences splits on . ? ! and keeps terminators", () => {

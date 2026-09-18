@@ -31,11 +31,22 @@ describe("backfill-tts provider routing", () => {
       expect(src).toMatch(/if \(OPENAI\)/);
     });
 
-    test("openai listening path uses the persona render + .p1.mp3 naming", () => {
-      expect(src).toMatch(/renderSingleSpeaker\(/);
-      expect(src).toMatch(/renderConversation\(/);
+    test("openai listening path uses the TIMED persona render + .p1.mp3 naming", () => {
+      expect(src).toMatch(/renderSingleSpeakerTimed\(/);
+      expect(src).toMatch(/renderConversationTimed\(/);
       expect(src).toMatch(/encodeWavToMp3\(/);
       expect(src).toMatch(/\.p1\.mp3/);
+    });
+
+    // 句级时间戳与 audio_url 同生同灭：persona 渲染写入，edge 渲染（整条不可分）删掉旧的。
+    test("sentence_timings is written next to audio_url in both listening paths, and cleared on edge", () => {
+      const single = src.slice(src.indexOf("async function backfillSingle"), src.indexOf("async function backfillConversation"));
+      const conv = src.slice(src.indexOf("async function backfillConversation"), src.indexOf("async function backfillRepeat"));
+      for (const block of [single, conv]) {
+        expect(block).toMatch(/const \{ wav, sentences \} = await render(SingleSpeaker|Conversation)Timed\(/);
+        expect(block).toMatch(/it\.audio_url = versionedAudioUrl\(url\)/);
+        expect(block).toMatch(/if \(timings\) it\.sentence_timings = timings; else delete it\.sentence_timings;/);
+      }
     });
 
     test("speaking (repeat/interview) stays edge — those functions never touch the persona path", () => {

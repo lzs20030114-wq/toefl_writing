@@ -156,7 +156,8 @@ UpgradeModal → XorPay(扫码/webhook) 或 Afdian(跳转 ifdian.net/webhook)
   文本生成走 Claude 订阅(边际~¥0)；只有听力 TTS 配音按量掏钱。
   R3 prompt 存档: docs/routine-prompts/audit-r3-v2.md (改 routine 先改这份再手动粘贴)。
 
-【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS。
+【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS；persona 渲染一句一次 TTS，
+  拼接时顺带写 `sentence_timings`（每句起止秒，与 audio_url 同生同灭，契约见 docs/listening-sentence-timings.md）。
 
 【后备/手动】.github/workflows/nightly-bank-refresh.yml 是手动 fallback(仅当 routine 挂了);
   nightly-quality-monitor.yml 是唯一还在自动 cron 的 workflow(质量监控, 非生成)。

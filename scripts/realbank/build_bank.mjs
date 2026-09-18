@@ -1485,6 +1485,8 @@ function buildListeningSpeaking(files, stats) {
  * 所以落盘前拿上一版的库比一次：**口播文本逐字没变**就把 audio_url 接过来，
  * 变了的（或新增的）才留 audio_pending 给 render_real_audio.mjs 去配。
  * 判据只看「会被念出来的那段文本」：选项、参考答案、难度标签改了不该重配音。
+ * `sentence_timings`（句级时间戳，docs/listening-sentence-timings.md）是那条音频的
+ * 附属物：口播文本没变就随 audio_url 一起接过来，否则一起作废。
  */
 function spokenText(kind, it) {
   // 口语传进来的是**子条目**（一句复述 / 一道面试题）：原声按子条目切、清单按子条目 id 记
@@ -1526,7 +1528,7 @@ function carryAudioUrls(prevBundle, bundle) {
           if (u.audio_url) old.set(u.id, { url: u.audio_url, text: String(text || "") });
         }
       } else if (it.audio_url) {
-        old.set(it.id, { url: it.audio_url, text: spokenText(kind, it) });
+        old.set(it.id, { url: it.audio_url, text: spokenText(kind, it), timings: it.sentence_timings });
       }
     }
     for (const it of list) {
@@ -1541,6 +1543,7 @@ function carryAudioUrls(prevBundle, bundle) {
         const hit = old.get(it.id);
         if (hit && hit.text === spokenText(kind, it)) {
           it.audio_url = hit.url; delete it.audio_pending; n += 1;
+          if (Array.isArray(hit.timings)) it.sentence_timings = hit.timings; else delete it.sentence_timings;
         }
       }
     }

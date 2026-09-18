@@ -24,7 +24,7 @@ import { createRequire } from 'module';
 import { loadEnv } from './ops/_shared.mjs';
 
 const require = createRequire(import.meta.url);
-const { renderSingleSpeaker, renderConversation } = require('../lib/tts/renderListening.js');
+const { renderSingleSpeakerTimed, renderConversationTimed } = require('../lib/tts/renderListening.js');
 const { encodeWavToMp3 } = require('../lib/tts/mp3Encode.js');
 const { uploadAudio, versionedAudioUrl } = require('../lib/tts/storage.js');
 const { estimateCost } = require('../lib/tts/openaiTts.js');
@@ -71,11 +71,15 @@ async function uploadChecked(storagePath, buffer) {
   return res;
 }
 
+// Returns { url, sentences }: the uploaded clip plus where each sentence sits in it
+// (persisted as item.sentence_timings — see docs/listening-sentence-timings.md).
 async function renderItem(bank, it) {
-  const wav = bank.type === 'lc' ? await renderConversation(it) : await renderSingleSpeaker(it, bank.type);
+  const { wav, sentences } = bank.type === 'lc'
+    ? await renderConversationTimed(it)
+    : await renderSingleSpeakerTimed(it, bank.type);
   const mp3 = await encodeWavToMp3(wav);
   const { url } = await uploadChecked(`${bank.prefix}/${it.id}.p1.mp3`, mp3);
-  return url;
+  return { url, sentences };
 }
 
 // Exponential backoff on 429 / 5xx / transient socket errors.
@@ -133,8 +137,9 @@ async function withBackoff(fn, label) {
         if (my >= willDo.length) return;
         const it = willDo[my];
         try {
-          const url = await withBackoff(() => renderItem(bank, it), `${bank.type} ${it.id}`);
+          const { url, sentences } = await withBackoff(() => renderItem(bank, it), `${bank.type} ${it.id}`);
           it.audio_url = versionedAudioUrl(url);
+          it.sentence_timings = sentences; // always paired with the audio_url just written
           totalRendered++; doneCount++;
         } catch (e) {
           console.log(`   ✗ ${it.id}: ${String(e.message).slice(0, 80)}`);

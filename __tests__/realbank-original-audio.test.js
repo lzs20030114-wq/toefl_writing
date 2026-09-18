@@ -540,6 +540,35 @@ describe("applyOriginalAudio ⑤ 回挂", () => {
     const res = OA.applyOriginalAudio({ lcr: [] }, manifest, spokenText);
     expect(res.missing).toEqual(["gone_id"]);
   });
+
+  // 句级时间戳是音频的附属物（docs/listening-sentence-timings.md）：挂原声 = 换音频，
+  // TTS 配音量出来的时间戳对不上原声，必须作废；原声自己的（对齐产物）从清单条目带进来。
+  test("挂原声时丢掉 TTS 配音留下的 sentence_timings", () => {
+    const item = {
+      id: "real_lcr_x_1_01", speaker: "Hello there.", audio_url: "https://cdn/real/lcr/a.mp3",
+      sentence_timings: [{ text: "Hello there.", start: 0, end: 0.9 }],
+    };
+    const manifest = { entries: { real_lcr_x_1_01: { url: "https://cdn/real_orig/lcr/a.mp3?v=1", text_sha1: OA.sha1("Hello there.") } } };
+    OA.applyOriginalAudio({ lcr: [item] }, manifest, spokenText);
+    expect(item.audio_url).toBe("https://cdn/real_orig/lcr/a.mp3?v=1");
+    expect(item.sentence_timings).toBeUndefined();
+  });
+
+  test("清单条目自带 sentence_timings 时随原声一起挂上", () => {
+    const item = { id: "real_la_x_1_19", announcement: "Original text.", audio_url: null, audio_pending: true };
+    const timings = [{ text: "Original text.", start: 1.25, end: 2.5 }];
+    const manifest = { entries: { real_la_x_1_19: { url: "https://cdn/real_orig/la/x.mp3", text_sha1: OA.sha1("Original text."), sentence_timings: timings } } };
+    OA.applyOriginalAudio({ la: [item] }, manifest, spokenText);
+    expect(item.sentence_timings).toEqual(timings);
+  });
+
+  test("sha1 不一致不挂原声时，原有的 sentence_timings 也原样保留", () => {
+    const timings = [{ text: "Rewritten text.", start: 0, end: 1 }];
+    const item = { id: "real_la_x_1_20", announcement: "Rewritten text.", audio_url: "https://cdn/real/la/x.mp3", sentence_timings: timings };
+    const manifest = { entries: { real_la_x_1_20: { url: "https://cdn/real_orig/la/x.mp3", text_sha1: OA.sha1("Original text.") } } };
+    OA.applyOriginalAudio({ la: [item] }, manifest, spokenText);
+    expect(item.sentence_timings).toBe(timings);
+  });
 });
 
 /**
