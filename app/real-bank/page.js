@@ -513,6 +513,10 @@ function RealBankPageClient() {
                 // 原卷提示语自带「Listen to the manager … Repeat only once.」，
                 // 不再叠加生成的指令句（空串 = 该行不渲染）。
                 instructionText: "",
+                // 场景插图（真考里一套 N 句共用一张图常驻屏幕，逐句高亮）。
+                // 只有抠过图的套才带这两个键，其余为 undefined → RepeatTask 一个节点都不多渲染。
+                scene_image: audioItem.scene_image,
+                sentence_frames: audioItem.sentence_frames,
               }}
               onComplete={(result) => saveRealSpeakingSession("repeat", audioItem, result, mode)}
               onExit={backToAudioPicker}

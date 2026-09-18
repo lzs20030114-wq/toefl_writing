@@ -1,0 +1,180 @@
+{
+  "_readme": [
+    "真题复述题场景插图 —— 人工放行 / 排除清单（仿 audit-overrides.json：每条写依据）。",
+    "allow=true 只写「人眼看过且四件事(框准/题号对/同底图同尺寸/清晰度够)全过」的被拦图；",
+    "sha1 绑定当前裁图，框一变哈希就变、放行自动失效。",
+    "exclude 用来把「过了 Qwen 但人眼判定不该上」的图挡掉（商家自绘 / 源图本身残缺）。",
+    "本地尺寸闸(size_cut/shape_mismatch)拦下的不给放行 —— 那是框真的歪了。"
+  ],
+  "121b": {
+    "1": {
+      "allow": true,
+      "sha1": "950f1d67711d582a6178ee4f1dce344bb9a2345a",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "2": {
+      "allow": true,
+      "sha1": "c05b598bf244917d65203439c6f613092c03cc8a",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "3": {
+      "allow": true,
+      "sha1": "a4de2c765ac4c3ae355684c6ceffc071f3e73133",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "4": {
+      "allow": true,
+      "sha1": "cb687356caca20e0c02df7d365cb6dd023b372ab",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "5": {
+      "allow": true,
+      "sha1": "e27b070cde1d147cd7bf67d08a82bd2dfa1cf4a7",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "6": {
+      "allow": true,
+      "sha1": "6a47a741073bb9870ac9db1f66e3a9c5807feec9",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    },
+    "7": {
+      "allow": true,
+      "sha1": "44e1601679b5cb8ee0955263167feed2a4ffb7a8",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 has_ui_text 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（超市俯视图右下角那个购物车 App 图标是插图自带的）",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "121c": {
+    "1": {
+      "allow": true,
+      "sha1": "cb59e5fe70fc4ed88b9e43b4f9630096a13c7eca",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 not_scene 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（画的是显示器上的邮件客户端；同一套的 Q3/Q6/Q7 Qwen 又判过了，判读本身不稳）",
+      "reviewed": "2026-09-19"
+    },
+    "2": {
+      "allow": true,
+      "sha1": "c17db0e1445851c1014031b0a73769d5021dfe79",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 not_scene 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（画的是显示器上的邮件客户端；同一套的 Q3/Q6/Q7 Qwen 又判过了，判读本身不稳）",
+      "reviewed": "2026-09-19"
+    },
+    "4": {
+      "allow": true,
+      "sha1": "ce88c8b9f569e8f64dc6050553be1fa1ee2bba13",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 not_scene 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（画的是显示器上的邮件客户端；同一套的 Q3/Q6/Q7 Qwen 又判过了，判读本身不稳）",
+      "reviewed": "2026-09-19"
+    },
+    "5": {
+      "allow": true,
+      "sha1": "8a1b2477a3a769f825f4e29390c884f463955484",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 not_scene 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（画的是显示器上的邮件客户端；同一套的 Q3/Q6/Q7 Qwen 又判过了，判读本身不稳）",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "323": {
+    "1": {
+      "allow": true,
+      "sha1": "c515166deead1c454aebadd958f6d3cb199b1710",
+      "reason": "人眼核过 contact sheet：裁框贴着插图、无考试界面文字/题头/播放器条/水印，高亮物件与该题句子对得上；Qwen 判 not_scene 的原因是**插图本身画的就是电脑界面/带店内图标的俯视图**，属判读口径误伤。（画的是显示器上的课程门户；同套 Q2-Q7 全部判过）",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "rf0610": {
+    "base": {
+      "allow": false,
+      "exclude": "source_defect",
+      "sha1": "b90ca575d7a1c785f4a64994d1cf9dbe158c6a17",
+      "reason": "人眼核过：商家 docx 里这张图本身就是被裁掉左边和下边的浏览器窗口示意图，且带着一处红圈高亮，不是干净底图。按指示不放行。",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "rf0629": {
+    "base": {
+      "allow": false,
+      "exclude": "vendor_drawn",
+      "sha1": "2783030f75203f5bc9e9a0caf152d16c8206ab98",
+      "reason": "人眼核过：商家自绘示意图（标题 'Watercolor Painting Supplies' + water cup/brush/eraser 等英文标注），非考场原图。",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "rf0708": {
+    "base": {
+      "allow": false,
+      "exclude": "vendor_drawn",
+      "sha1": "4b36cb9eb26f6c393f874e4be4209b95564fc681",
+      "reason": "人眼核过：商家自绘粗糙示意图（标题 'Community Cooking Class - Bread Station'，只有几个灰块），非考场原图。",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "rf0808": {
+    "base": {
+      "allow": false,
+      "exclude": "vendor_drawn",
+      "sha1": "b4ce607d80f18ff5fd2aa0db20c26b795e5b4ed9",
+      "reason": "人眼核过：商家自绘示意图（mixing counter / oven and stovetop / cooling rack / baking sheet / milk 等英文标注），非考场原图。",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "rf0716": {
+    "base": {
+      "allow": false,
+      "exclude": "source_defect",
+      "sha1": "b3e201172e77cac2fa69d848693beb323bbbd330",
+      "reason": "人眼核过：docx 内嵌图底部被裁断（露出半截橙色高亮块），且带高亮，不是干净底图。",
+      "reviewed": "2026-09-19"
+    }
+  },
+  "_low_contrast_readme": [
+    "manifest 里标 low_contrast_highlight 的套：源是灰度扫描件，高亮肉眼不可辨。",
+    "upload_repeat_scenes.mjs 按这个标记通用处理 —— 有标记且没有可用底图时，取题号最小的那一帧",
+    "当无高亮底图（scene_image），一条 sentence_frames 都不写：逐句摆出来用户只会以为图没变。",
+    "目前命中的只有 21b（real_repeat_21b_1），取的是它的 Q1 帧。"
+  ],
+  "_pairing_readme": [
+    "题库句子 id 的 `_s<n>` 后缀**不一定**等于真题题号：有些套在录入时丢了靠前的句子、",
+    "剩下的又被连号重排，于是整体错位。裁图一律按**真题题号**命名（`<set>_s<真题题号>.webp`），",
+    "下面这张表是人眼逐帧核过的『题库句子号 → 真题题号』映射；表里没有的套按 1:1 对应。",
+    "证据都写在 evidence 里。前端/写库必须查这张表，不能拿文件名直接当句子号用。"
+  ],
+  "_pairing": {
+    "315": {
+      "map": {
+        "1": 2,
+        "3": 4,
+        "4": 5,
+        "5": 6,
+        "6": 7
+      },
+      "evidence": "同一张体育馆平面图的完整版是 3.16（7 句齐全）：316 的 Q1 足球场/Q2 篮球场/Q3 网球/Q4 泳池/Q5 器械/Q6 私教/Q7 整图。315 题库 s1『basketball』对上的是真题 Q2，s6『check the map』对上的是真题 Q7（整图高亮）。315 题库丢了真题 Q1『Soccer matches…』那一句，其余连号顺移。",
+      "reviewed": "2026-09-19"
+    },
+    "420": {
+      "map": {
+        "1": 2,
+        "2": 3,
+        "3": 4,
+        "5": 6,
+        "6": 7
+      },
+      "evidence": "同一只工具箱的完整版是 1.27A（7 句齐全，Q1『welcome to the wood shop』无高亮、Q2 整箱、Q3 锯、Q4 螺丝刀）。420 真题 Q2=整箱↔题库 s1『This toolbox contains everything』、Q3=锯↔s2、Q4=螺丝刀↔s3（已单独渲染 Q4 核对）、Q7=整箱↔s6『put all your tools back』。420 题库丢了真题 Q1 那句开场白。",
+      "reviewed": "2026-09-19"
+    },
+    "523": {
+      "map": {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 6,
+        "6": 7
+      },
+      "evidence": "s1-s4（雕塑/绘画/触摸屏/宣传册）与真题 Q1-Q4 一一对上；真题 Q5 高亮的是服务台、Q6 是画旁的说明牌、Q7 是耳机（已单独渲染 Q7 核对）。所以 s5『wall labels』↔Q6、s6『audio device』↔Q7，真题 Q5 那句题库没有。",
+      "reviewed": "2026-09-19"
+    }
+  }
+}

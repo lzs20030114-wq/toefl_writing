@@ -196,12 +196,15 @@ SECTION_WORDS = ("阅读", "写作", "口语", "听力")
 NOT_QUESTION_PAPER = re.compile(r"答案|原文|参考|answer|script", re.I)
 
 
-def first_source_pdf(source: str) -> str | None:
-    """第一来源套名（"3.10新托福真题" / "5.10新托福真题_v2"）→ 阅读题面 PDF。
+def first_source_pdf(source: str, section: str = "阅读") -> str | None:
+    """第一来源套名（"3.10新托福真题" / "5.10新托福真题_v2"）→ 该科题面 PDF。
 
     两种目录形态：分科的（`3.10 阅读.pdf`）和整卷一份的（1 月的
     `新托福真题01.pdf` 一份装下四科）。前者认「阅读」，后者认「排除答案/听力原文
     之后剩下的那份主文档」—— 整卷 PDF 里混着别科的截图不影响，定位本来就靠覆盖率。
+
+    `section` 默认 "阅读"（本脚本的既有行为，一个字没变）；复述题场景图体检
+    （crop_repeat_scenes.py）传 "口语" 复用同一套目录形态判断。
     """
     for root in (CONVERTED_SRC, DESKTOP_SRC):
         folder = os.path.join(root, source)
@@ -214,7 +217,7 @@ def first_source_pdf(source: str) -> str | None:
             continue
         named = [fn for fn in cand if any(w in fn for w in SECTION_WORDS)]
         if named:
-            hit = next((fn for fn in named if "阅读" in fn), None)
+            hit = next((fn for fn in named if section in fn), None)
             return os.path.join(folder, hit) if hit else None
         pick = max(cand, key=lambda fn: os.path.getsize(os.path.join(folder, fn)))
         return os.path.join(folder, pick)

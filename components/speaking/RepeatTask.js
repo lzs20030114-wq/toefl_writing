@@ -4,6 +4,8 @@ import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
+import { AssetPreloadGate } from "../shared/AssetPreloadGate";
+import { SceneImage } from "./SceneImage";
 import { buildRepeatIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
@@ -14,6 +16,41 @@ import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
+
+/**
+ * 真考的 Listen & Repeat：一套 N 句共用一张场景插图常驻屏幕，每念一句图上高亮该句物件。
+ * 真题专区的题库可能带两个可选字段（见 lib/realBank.js mapRealRepeatSet）：
+ *   setInfo.scene_image     = { url, w, h }                        无高亮底图
+ *   setInfo.sentence_frames = [ { sentence_id, n, url, w, h } ]    逐句高亮帧
+ *
+ * **对齐只认 sentence_id**（题库里该句的 id），既不是数组下标、也不是 id 的 `_s<k>` 后缀：
+ * 后缀不等于真题题号 —— 3.15 / 4.20 / 5.23 这几套录入时丢了靠前的句子、剩下的又连号重排，
+ * 题库 s1 对的是真题 Q2。帧里的 n 只留档（真题题号），匹配一律不看它。
+ * 找不到对应帧就退底图，底图也没有就什么都不渲染
+ * （生成库 / 个人题库 / 无图真题：UI 一个像素都不变）。
+ */
+export function pickSceneFrame(setInfo, sentenceId) {
+  const frames = Array.isArray(setInfo?.sentence_frames) ? setInfo.sentence_frames : [];
+  const sid = typeof sentenceId === "string" ? sentenceId : "";
+  if (sid) {
+    const hit = frames.find((f) => f && f.sentence_id === sid && f.url);
+    if (hit) return hit;
+  }
+  const base = setInfo?.scene_image;
+  return base && base.url ? base : null;
+}
+
+/** 进任务前要预热的图（底图 + 全部逐句帧）；没图返回空数组，AssetPreloadGate 原样透传。 */
+export function sceneImagePreloadUrls(setInfo) {
+  const out = [];
+  const base = setInfo?.scene_image;
+  if (base && base.url) out.push(base.url);
+  for (const f of Array.isArray(setInfo?.sentence_frames) ? setInfo.sentence_frames : []) {
+    if (f && f.url) out.push(f.url);
+  }
+  return out;
+}
+
 
 // Shared single playback slot for the "Original" replays on the review / summary
 // screens. Prefer the pre-rendered MP3 (served through our same-origin /api/audio
@@ -63,7 +100,7 @@ function playOriginalSentence(sentence) {
  *   onExit      — back navigation
  *   isPractice  — if true, show elapsed instead of countdown
  */
-export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
+function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
   // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so sentence clips play through
   // the shared persistent element unlocked on the first gesture. examController
@@ -640,6 +677,12 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
     setStarted(true);
   }, [examController]);
 
+  // 当前句该显示哪一帧（逐句帧按题号对齐，找不到退底图，都没有则 null）。
+  const sceneFrame = useMemo(
+    () => pickSceneFrame(setInfo, sentence?.id),
+    [setInfo, sentence?.id],
+  );
+
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   const difficultyBadge = (diff) => {
@@ -795,6 +838,8 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
       <SpeakingIntroScreen
         title="Listen & Repeat"
         section="Speaking | Task 1"
+        // 真考的场景插图在设定屏就已经在了；没图时 image 为空，引入屏一个节点都不多。
+        image={setInfo?.scene_image || null}
         lines={[intro.settingText, intro.instructionText]}
         onStart={handleStart}
         onExit={onExit}
@@ -833,6 +878,10 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
 
         {/* Main card */}
         <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
+          {/* 场景插图：听句 / 录音 / 复盘三阶段都常驻卡片顶部，按当前句切高亮帧。
+              key 带上 url —— 换帧时重新挂载，上一帧的加载失败状态不会粘在新帧上。 */}
+          {sceneFrame && <SceneImage key={sceneFrame.url} frame={sceneFrame} />}
+
           {/* Phase: Listen */}
           {phase === "listen" && (
             <div>
@@ -1053,6 +1102,25 @@ export function RepeatTask({ items, setInfo = null, onComplete, onExit, isPracti
         onGranted={handleConsentGranted}
       />
     </div>
+  );
+}
+
+/**
+ * 对外的 RepeatTask：只在**有图**时多一层预加载门（底图 + 全部逐句帧先拉完再挂任务组件），
+ * 免得用户刚进第一句、图还在路上。没图的套（生成库 / 个人题库 / 无图真题）images 为空，
+ * AssetPreloadGate 原样透传 children —— DOM 与改动前逐字一致。
+ * 图坏了 / 超时（15s）门也会放行，绝不把人锁在加载页。
+ */
+export function RepeatTask(props) {
+  return (
+    <AssetPreloadGate
+      images={sceneImagePreloadUrls(props.setInfo)}
+      title="Listen & Repeat"
+      section="Speaking | Task 1"
+      onExit={props.onExit}
+    >
+      <RepeatTaskInner {...props} />
+    </AssetPreloadGate>
   );
 }
 

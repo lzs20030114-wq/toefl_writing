@@ -55,6 +55,8 @@ const { holdDecision, sectionAgreement, auditPassed, loadAuditOverrides, manualA
 const AUDIT_OVERRIDES = loadAuditOverrides();
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
 const { carryMaterialImages } = require("./material_image_carry.js");
+// 复述题场景插图（scene_image / sentence_frames）的沿用判据，同样是纯函数：scripts/realbank/scene_image_carry.js。
+const { carrySceneImages } = require("./scene_image_carry.js");
 // 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
 const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 // 听力原声回挂判据同样抽成纯函数（无 IO，可单测）：scripts/realbank/original_audio.js。
@@ -1572,6 +1574,25 @@ function recarryOnDisk(dir, prevBundle) {
 }
 
 /**
+ * applyReview 落盘之后再跑一遍复述题场景插图沿用（与 recarryOnDisk / recarryMaterialImagesOnDisk
+ * 同一套理由：复核清单会下架复述句、patch 句子文本，第一遍沿用比的是没打 patch 的新句子序列）。
+ */
+function recarrySceneImagesOnDisk(dir, prevBundle) {
+  let n = 0;
+  for (const kind of Object.keys(prevBundle || {})) {
+    const p = path.join(dir, `${kind}.json`);
+    if (!fs.existsSync(p)) continue;
+    let cur;
+    try { cur = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const got = carrySceneImages({ [kind]: prevBundle[kind] }, { [kind]: cur.items || [] });
+    if (!got) continue;
+    n += got;
+    fs.writeFileSync(p, JSON.stringify(cur, null, 2), "utf8");
+  }
+  return n;
+}
+
+/**
  * applyReview 落盘之后再跑一遍材料原图沿用（与 recarryOnDisk 同一套理由：复核清单的 patch
  * 可能改了材料正文，第一遍沿用比对用的是没打 patch 的新文本，需要再比一次已打 patch 的成品）。
  */
@@ -2050,6 +2071,10 @@ function main() {
     const prevS = readBundle(SPEAKING_DIR, Object.keys(S));
     const carried = carryAudioUrls(prevL, L) + carryAudioUrls(prevS, S);
     console.log(`\n■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）`);
+    // 复述题场景插图同理：全量重建的新对象不带 scene_image / sentence_frames，不接回就等于
+    // 把抠图 + 上传的成果清零（图还在 Supabase 桶里，只能重跑上传脚本白传一次）。
+    const carriedScenes = carrySceneImages(prevS, S);
+    if (carriedScenes) console.log(`■ 场景插图沿用：${carriedScenes} 套（句子文本序列逐字未变）`);
     const keep = new Set();
     for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
       fs.mkdirSync(dir, { recursive: true });
@@ -2096,6 +2121,8 @@ function main() {
     if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
     const recarried = recarryOnDisk(LISTENING_DIR, prevL) + recarryOnDisk(SPEAKING_DIR, prevS);
     if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
+    const recarriedScenes = recarrySceneImagesOnDisk(SPEAKING_DIR, prevS);
+    if (recarriedScenes) console.log(`■ 复核 patch 后二次沿用：${recarriedScenes} 套场景插图接回（patch 后句子序列与上一版逐字相同）`);
     const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
     if (sp && sp.changed) {
       console.log(`■ 拼盘面试切分：${sp.stats.split} 条大集 → ${sp.stats.chunks} 套 4 问；尾巴 ${sp.stats.dropped_questions} 问不入库；interview 共 ${sp.count} 套`);
@@ -2243,6 +2270,9 @@ function main() {
   console.log(`
 ■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）；`
     + `其余 audio_pending 的交给 render_real_audio.mjs`);
+  // 复述题场景插图沿用（同 id 且句子文本序列逐字未变）：见 scripts/realbank/scene_image_carry.js。
+  const carriedScenes = carrySceneImages(prevS, S);
+  if (carriedScenes) console.log(`■ 场景插图沿用：${carriedScenes} 套（句子文本序列逐字未变）`);
   // 跨卷重复的别名各落各科目：listening/ 收 lcr/lc/la/lat，speaking/ 收 repeat/interview。
   for (const [dir, types] of [[LISTENING_DIR, ["lcr", "lc", "la", "lat"]], [SPEAKING_DIR, ["repeat", "interview"]]]) {
     const rows = (stats.itemAliases || []).filter((a) => types.includes(a.from_type));
@@ -2281,6 +2311,8 @@ function main() {
   if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
   const recarriedImages = recarryMaterialImagesOnDisk(BANK_DIR, prevReading);
   if (recarriedImages) console.log(`■ 复核 patch 后二次沿用：${recarriedImages} 条 material_image 接回（patch 后材料文本与上一版逐字相同）`);
+  const recarriedScenes = recarrySceneImagesOnDisk(SPEAKING_DIR, prevS);
+  if (recarriedScenes) console.log(`■ 复核 patch 后二次沿用：${recarriedScenes} 套场景插图接回（patch 后句子序列与上一版逐字相同）`);
   if (r) {
     console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
       + `（顺着归位别名搬到新 file+id ${r.stats.redirected} 条）`
