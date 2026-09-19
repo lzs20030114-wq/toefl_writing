@@ -8,6 +8,7 @@ import { AudioPlayer } from "./AudioPlayer";
 import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
 import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { questionLookupContext } from "../../lib/dict/core";
+import { findSentenceTimingsByAudioUrl } from "../../lib/listening/timingsLookup";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
@@ -245,7 +246,16 @@ function taskToReviewDetails(task) {
 function useSentencePlayback(timings, audioUrl) {
   const playerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const usable = audioUrl ? timings : null;
+  // 老记录（时间戳上线前做的）快照里没有 sentence_timings，但有 audio_url：按音频到题库里现查同一份。
+  const [looked, setLooked] = useState(null);
+  useEffect(() => {
+    setLooked(null);
+    if (timings || !audioUrl) return undefined;
+    let alive = true;
+    findSentenceTimingsByAudioUrl(audioUrl).then((found) => { if (alive && found) setLooked(found); });
+    return () => { alive = false; };
+  }, [timings, audioUrl]);
+  const usable = audioUrl ? (timings || looked) : null;
   // 点播的那一句（pinnedSentenceIndex）：停在句末那一下不让高亮滑到下一句。
   const pinRef = useRef(null);
   const onTime = useCallback((t) => {

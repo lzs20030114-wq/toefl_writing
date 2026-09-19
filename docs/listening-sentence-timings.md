@@ -55,7 +55,9 @@
   `AudioPlayer` 多了 `ref.playRange(start, end)` 与 `onTime` 回调。接线在历史页 `LADetail` / `LCDetail`
   （含真题练习记录、模考复盘卡）与练习模式的结果页（`ListeningMCQTask`，考试态不展示原文）。
   三个落历史的地方（listening / real-bank 页、AdaptiveExamShell）把 `sentence_timings` 随 `audio_url` 一起存进
-  `details`，老记录没有这个键就按原样整段展示。
+  `details`。老记录（2026-09-18 之前做的）快照里没有这个键但有 `audio_url`：历史页按 `audio_url` 到题库里现查同一份
+  （`lib/listening/timingsLookup.js`，题库 JSON 动态 import，只有打开这种老记录才拉，不进首屏包）；音频已不在题库里
+  （题被下架 / 重配过）才按原样整段展示。
 - 手势：**每句前面一个小播放键（▶）= 播放这一句；文字本身只管查词**（单击一个词、划词、双击都弹词典）。
   播放键带 `data-no-dict`，外层 WordLookupLayer 见到就跳过，因此一次点击只会有一个响应；
   文字上不再挂任何事件，听力原文和题干、阅读复盘的查词手势就此统一。
