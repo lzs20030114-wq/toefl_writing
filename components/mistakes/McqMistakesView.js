@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { C, SurfaceCard, DisclosureSection } from "../shared/ui";
 import { formatLocalDateTime } from "../../lib/utils";
 import { useMcqAiExplain, McqAiExplainBlock } from "./useMcqAiExplain";
+import { insertStemParts } from "../../lib/reading/insertSentence";
+import { InsertSentenceStem } from "../reading/InsertSentenceStem";
 
 function buildSubtypeStats(groups) {
   const map = {};
@@ -108,6 +110,8 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
   const hasOptions = mistake.options && mistake.optionsKey && mistake.optionsKey.length > 0;
   // 真题 AP 选句题：答案是原文里的一句（lib/readingMistakes 已把 S 键换成句子原文）。
   const isSentenceSelection = mistake.kind === "sentence_selection";
+  // 插入句题：待插入句单独成段（type 由 lib/readingMistakes 从 question_type 带过来）。
+  const insertParts = insertStemParts({ question_type: mistake.type, stem: mistake.stem });
   // AI 讲解上下文给「第 N 段」而不是整篇 —— 讲解 hook 只取文章前 1500 字，长文的后几段会被截掉。
   const explainContext = isSentenceSelection && mistake.paragraphText
     ? { ...context, passage: mistake.paragraphText }
@@ -122,11 +126,13 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
       marginBottom: 10,
     }}>
       {/* stem */}
-      {mistake.stem && (
+      {mistake.stem && (insertParts ? (
+        <InsertSentenceStem parts={insertParts} compact accent="#1d4ed8" soft="#EFF6FF" style={{ marginBottom: 10 }} />
+      ) : (
         <div style={{ fontSize: 13.5, color: C.t1, lineHeight: 1.55, marginBottom: 10, fontWeight: 600 }}>
           {mistake.stem}
         </div>
-      )}
+      ))}
 
       {hasOptions ? (
         <div style={{ marginBottom: 8 }}>

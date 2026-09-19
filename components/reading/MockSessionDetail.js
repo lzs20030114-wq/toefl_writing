@@ -5,6 +5,8 @@ import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplai
 import { WordLookupLayer } from "./WordLookupLayer";
 import { questionLookupContext } from "../../lib/dict/core";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
+import { insertStemParts } from "../../lib/reading/insertSentence";
+import { InsertSentenceStem } from "./InsertSentenceStem";
 import { formatLocalDateTime } from "../../lib/utils";
 import { getBandColor } from "../../lib/history/bandColor";
 
@@ -231,6 +233,7 @@ function McqTaskBody({ task, explainHook }) {
           const correctKey = q.correct_answer || q.answer;
           const selected = r?.selected ?? null;
           const isCorrect = !!r?.isCorrect;
+          const insertParts = insertStemParts(q);
           return (
             <div
               key={i}
@@ -263,7 +266,11 @@ function McqTaskBody({ task, explainHook }) {
                 >
                   {isCorrect ? "✓" : "✗"}
                 </span>
-                <span style={{ flex: 1 }}>{q.stem || q.question || `第 ${i + 1} 题`}</span>
+                {insertParts ? (
+                  <InsertSentenceStem parts={insertParts} compact style={{ flex: 1 }} />
+                ) : (
+                  <span style={{ flex: 1 }}>{q.stem || q.question || `第 ${i + 1} 题`}</span>
+                )}
               </div>
               {q.options && (
                 <div style={{ marginLeft: 25, display: "flex", flexDirection: "column", gap: 5 }}>

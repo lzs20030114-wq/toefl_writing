@@ -49,7 +49,7 @@ app/                          # Next.js App Router
     ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
 
 components/                   # 分科任务 UI + 后台
-├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask)
+├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask), InsertSentenceStem(插入句题干拆三段, 拆法在 lib/reading/insertSentence)
 ├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer(ref.playRange 逐句), SentenceTranscript(每句前 ▶ 键播放, 文字留给划词词典)
 ├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT)
 ├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
