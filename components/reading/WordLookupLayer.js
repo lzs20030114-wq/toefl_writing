@@ -66,6 +66,20 @@ function wordRangeFromPoint(x, y) {
   return r;
 }
 
+/**
+ * 被查的词落在听力原文的哪一句里（SentenceTranscript 渲染的 data-sentence-index）。
+ * 只认可定位的句子（playable="1"）；不在句子里、或调用方根本没渲染句子时返回 -1。
+ */
+function sentenceIndexOf(range) {
+  if (!range) return -1;
+  let node = range.startContainer;
+  if (node && node.nodeType === 3) node = node.parentElement;
+  const el = node && node.closest ? node.closest('[data-sentence-index][data-sentence-playable="1"]') : null;
+  if (!el) return -1;
+  const i = Number(el.getAttribute("data-sentence-index"));
+  return Number.isInteger(i) && i >= 0 ? i : -1;
+}
+
 function loadAiCache() {
   try {
     return JSON.parse(localStorage.getItem(AI_CACHE_KEY) || "{}");
@@ -90,8 +104,10 @@ function saveAiCache(key, text) {
  * 用法：<WordLookupLayer passage={passage}>…原文…</WordLookupLayer>
  * 带 data-no-dict 属性的子节点（例如 CTW 里点开解析的填空 chip）不触发查词。
  * source 会记进单词本，用来在 /vocab-notebook 里显示这个词是从哪儿收藏的。
+ * onPlaySentence(index) 可选：听力复盘传进来后，词落在某一句里时弹窗多一颗「听这一句」
+ * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
  */
-export function WordLookupLayer({ passage, children, style, source = "reading" }) {
+export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
@@ -126,7 +142,14 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     wordRef.current = word;
     setAi(null);
     setSaved(isSaved(word));
-    setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
+    setPop({
+      word,
+      rect: range.getBoundingClientRect(),
+      entry: null,
+      loading: true,
+      notFound: false,
+      sentenceIndex: sentenceIndexOf(range),
+    });
     const entry = await lookupWord(word);
     setPop((prev) =>
       prev && prev.word === word
@@ -358,6 +381,34 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
                 palette={{ border: "#dbe3dd" }}
                 style={{ alignSelf: "center" }}
               />
+              {/* 听力复盘专属：这个词所在的那一句可以直接放一遍（弹窗不关，边听边看释义）。
+                  阅读等没传 onPlaySentence 的调用方，以及词不在可播放句里时，都不渲染。 */}
+              {typeof onPlaySentence === "function" && pop.sentenceIndex >= 0 && (
+                <button
+                  type="button"
+                  onClick={() => onPlaySentence(pop.sentenceIndex)}
+                  aria-label="听这一句"
+                  title="播放原文里的这一句"
+                  style={{
+                    alignSelf: "center",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 3,
+                    border: "1px solid #dbe3dd",
+                    background: "#fff",
+                    color: "#5a6b62",
+                    borderRadius: 999,
+                    padding: "2px 9px",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    lineHeight: 1.5,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ▶ 听这一句
+                </button>
+              )}
               {pop.entry && pop.entry.g && (
                 <span
                   style={{

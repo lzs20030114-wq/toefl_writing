@@ -5,7 +5,7 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NE
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
-import { SentenceTranscript, activeSentenceIndex } from "./SentenceTranscript";
+import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
 import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { questionLookupContext } from "../../lib/dict/core";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
@@ -246,15 +246,27 @@ function useSentencePlayback(timings, audioUrl) {
   const playerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   const usable = audioUrl ? timings : null;
+  // 点播的那一句（pinnedSentenceIndex）：停在句末那一下不让高亮滑到下一句。
+  const pinRef = useRef(null);
   const onTime = useCallback((t) => {
-    const i = activeSentenceIndex(usable, t);
+    const pinned = pinnedSentenceIndex(pinRef.current, t);
+    if (pinned === -1) pinRef.current = null;
+    const i = pinned !== -1 ? pinned : activeSentenceIndex(usable, t);
     // 落在句间静音（含一句刚放完）时高亮留在上一句：精听时「刚才放的是哪句」比空白有用。
     setActiveIndex((prev) => (i === -1 || prev === i ? prev : i));
   }, [usable]);
   const onPick = useCallback((i, s) => {
-    if (playerRef.current && playerRef.current.playRange(s.start, s.end)) setActiveIndex(i);
+    if (playerRef.current && playerRef.current.playRange(s.start, s.end)) {
+      pinRef.current = { index: i, start: s.start, end: s.end };
+      setActiveIndex(i);
+    }
   }, []);
-  return { playerRef, activeIndex, onTime, onPick, timings: usable };
+  // 词典弹窗里的「听这一句」只给得出下标，句子从同一份列表里换回来。
+  const onPlaySentence = useCallback((i) => {
+    const s = sentenceAt(usable, i);
+    if (s) onPick(i, s);
+  }, [usable, onPick]);
+  return { playerRef, activeIndex, onTime, onPick, onPlaySentence, timings: usable };
 }
 
 // One collapsible card per mock task, reusing the practice-review renderers.
@@ -425,7 +437,7 @@ export function LADetail({ session }) {
       )}
       {/* Transcript / announcement text（有句级时间戳时逐句可点） */}
       {transcript && (
-        <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       )}
@@ -534,7 +546,7 @@ export function LCDetail({ session }) {
       )}
       {/* Conversation turns as chat bubbles（有句级时间戳时逐句可点；气泡样式在 SentenceTranscript 里） */}
       {conversation.length > 0 ? (
-        <WordLookupLayer passage={audioText} source="listening" style={{ marginBottom: 12 }}>
+        <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} style={{ marginBottom: 12 }}>
           <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       ) : transcript ? (

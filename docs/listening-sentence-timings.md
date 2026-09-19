@@ -56,14 +56,24 @@
   （含真题练习记录、模考复盘卡）与练习模式的结果页（`ListeningMCQTask`，考试态不展示原文）。
   三个落历史的地方（listening / real-bank 页、AdaptiveExamShell）把 `sentence_timings` 随 `audio_url` 一起存进
   `details`，老记录没有这个键就按原样整段展示。
-- 手势：**点句子 = 播放这一句；划词或双击 = 查词**。句子 span 在没有选区时截住 mouseup/touchend，
-  外层 WordLookupLayer 不会把这一下当成点词；有选区时不截、不播。
+- 手势：**每句前面一个小播放键（▶）= 播放这一句；文字本身只管查词**（单击一个词、划词、双击都弹词典）。
+  播放键带 `data-no-dict`，外层 WordLookupLayer 见到就跳过，因此一次点击只会有一个响应；
+  文字上不再挂任何事件，听力原文和题干、阅读复盘的查词手势就此统一。
+  （2026-09-19 前是「点句子 = 播放、划词 = 查词」，那样单击查词在听力原文里失效、手机上只能长按。）
+- 词典弹窗：词落在某一句里（`data-sentence-index` + `data-sentence-playable="1"`）且调用方传了
+  `onPlaySentence(index)` 时，弹窗发音钮旁多一颗「▶ 听这一句」，点它放那一句、弹窗保持打开。
+  阅读等没传这个 prop 的调用方完全不受影响。
 - seek 到 `start - SENTENCE_SEEK_LEAD_SEC`（60ms）：时间戳量的是 MP3 编码前的 WAV，MP3 编解码会带最多约 46ms
   的前置延迟（LAME 编码器 576 + 解码器 529 采样 @24kHz），浏览器不一定剥掉；上一句后面至少 120ms 静音，
   提前量吃不到上一句。
 - 播到 `end` 停：主刹车是 `requestAnimationFrame` 轮询（`timeupdate` 粒度约 250ms，一句只有一两秒），
   `timeupdate` 作后台标签页的兜底。整段播放 / 续播会清掉句子刹车。
 - 高亮跟着播放头走；落进句间静音（含一句刚放完）时留在上一句。
+  点播某一句期间高亮**钉在被点的那一句**（`pinnedSentenceIndex`，范围 = start-0.5 ~ end+0.35）：ASR 对齐的时间戳常见
+  上一句 end === 下一句 start，刹车停在 end 后十几毫秒时播放头已算进下一句，不钉的话高亮会在停下那一刻跳到没放的那句。
+  出了范围（点继续 / 整段重播）自动放开。
+- 播放键与句子首词包在同一个 `white-space: nowrap` 里（按钮是原子行内元素，前后天然是断行点，不粘住键会孤零零
+  留在上一行行尾）。句子因此是两个文本节点，整句文本要按 `[data-sentence-index]` 的 textContent 取。
 - 没有该字段、有字段但没有真实音频（TTS 兜底）、或体检不过 → 原文照常整段展示，只是没有逐句功能。
 - 2026-09-18 真浏览器验证（合成 4 句 mp3 + 真实 LADetail，headless Chromium）：点第三句从 2.181s 起放、
   3.849s 停（end 3.84）；停后点「继续」续到结尾 5.016s 不再被掐；播放中点第一句跳回 0、1.213s 停。
