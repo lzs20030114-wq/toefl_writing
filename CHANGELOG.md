@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-09-19 — v1.22.1
+
+> 逐句点播手势改版 + 真题复述场景插图。无迁移、无新 flag、无新 env。
+
+- **逐句点播手势改版**（`c67c449c`）。v1.22.0 的「点句子文字 = 播放、划词 / 双击 = 查词」靠句子 span 在 mouseup/touchend 上
+  `stopPropagation` 实现，代价是听力原文里的单击查词失效（同页题干选项、阅读复盘都是单击查词），触屏只能长按选词。改为：
+  - `SentenceTranscript`：可播放句前一个小圆播放键（`button[data-sentence-play]` + `data-no-dict`，`WordLookupLayer.handlePick`
+    本来就按 `closest("[data-no-dict]")` 跳过）；文字不再挂任何事件。键与句子首词包进同一个 `white-space: nowrap`
+    （按钮是原子行内元素，前后天然是断行点），句子因此是两个文本节点，整句文本按 `[data-sentence-index]` 的 textContent 取。
+  - `WordLookupLayer`：新增可选 prop `onPlaySentence(index)`；`openFor` 时从 range 向上找
+    `[data-sentence-index][data-sentence-playable="1"]` 记下标，弹窗发音钮旁渲染「听这一句」，点击不关弹窗。未传该 prop 的调用方零变化。
+    接线：`useSentencePlayback`（LADetail / LCDetail）与 `ListeningMCQTask` 结果页，下标经 `sentenceAt` 换回同一份体检后的句子。
+  - `pinnedSentenceIndex`：点播期间高亮钉在被点的那一句（start-0.5 ~ end+0.35）。ASR 对齐的时间戳常见上一句 end === 下一句 start，
+    刹车停在 end 后十几毫秒时播放头已算进下一句，高亮会在停下那一刻滑走（v1.22.0 起就有）。
+  - 验证：dev server 临时页挂真实 LADetail / LCDetail（生成库 TTS + 真题原声各一条），桌面 + 375 视口 + 合成 touchend 路径；jest 232 套 / 2844 条。
+- **真题复述场景插图**（`34a6379e`）。真考 Listen & Repeat 一套句子共用一张场景图、每句高亮不同物件。
+  `crop_repeat_scenes.py` 裁图 + Qwen-VL fail-closed 校验，人工放行清单 `data/realBank/scene-image-overrides.json`（绑定 sha1）；
+  `repeat.json` 27 套新增可选字段 `scene_image` / `sentence_frames`（底图 12 + 帧 148，帧按 sentence_id 直连）；
+  前端 `SceneImage` + `RepeatTask` 按当前句切帧，没图的套 DOM 零变化；`scene_image_carry.js` 保证 build_bank 全量重建沿用。
+
 ## 2026-09-19 — v1.22.0
 
 > 听力「逐句点播」：复盘原文点一句 → 播放器只放音频里那一句。契约 docs/listening-sentence-timings.md。
