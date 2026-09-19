@@ -72,6 +72,14 @@ afterEach(() => {
 });
 
 /** 预加载门里的隐藏 <img> 逐个触发 load（jsdom 不会自己加载图片）。 */
+// 开始 now asks for the mic inside the gesture and holds the intro until it
+// settles — grant it and drain the microtask chain before asserting the task.
+const flush = async () => { for (let i = 0; i < 10; i++) await Promise.resolve(); };
+async function startTask() {
+  navigator.mediaDevices.getUserMedia.mockResolvedValue({ getTracks: () => [] });
+  await act(async () => { fireEvent.click(screen.getByText("开始")); await flush(); });
+}
+
 function settlePreload() {
   const imgs = screen.queryAllByTestId("asset-preload-img");
   act(() => { imgs.forEach((img) => fireEvent.load(img)); });
@@ -116,23 +124,23 @@ describe("pickSceneFrame（纯函数）", () => {
 });
 
 describe("RepeatTask：没图的套 UI 零变化", () => {
-  test("不渲染任何 <img>，也不多一层预加载门", () => {
+  test("不渲染任何 <img>，也不多一层预加载门", async () => {
     const { container } = render(
       <RepeatTask items={ITEMS} setInfo={SET_INFO_NO_IMAGE} onComplete={jest.fn()} onExit={jest.fn()} isPractice />,
     );
     expect(screen.queryByTestId("asset-preload-gate")).toBeNull();
     expect(container.querySelectorAll("img")).toHaveLength(0);
 
-    act(() => { fireEvent.click(screen.getByText("开始")); });
+    await startTask();
     expect(screen.getByText(/Sentence 1 of 2/)).toBeInTheDocument();
     expect(container.querySelectorAll("img")).toHaveLength(0);
   });
 
-  test("setInfo 整个缺席（生成库 / 模考口径）也不炸、也没有图", () => {
+  test("setInfo 整个缺席（生成库 / 模考口径）也不炸、也没有图", async () => {
     const { container } = render(
       <RepeatTask items={ITEMS} onComplete={jest.fn()} onExit={jest.fn()} isPractice />,
     );
-    act(() => { fireEvent.click(screen.getByText("开始")); });
+    await startTask();
     expect(container.querySelectorAll("img")).toHaveLength(0);
   });
 });
@@ -155,12 +163,12 @@ describe("RepeatTask：有图的套", () => {
     expect(screen.getByAltText("场景图")).toBeInTheDocument();
   });
 
-  test("逐句帧随当前句切换；题号缺口时第二句拿到的是 n=3 的帧", () => {
+  test("逐句帧随当前句切换；题号缺口时第二句拿到的是 n=3 的帧", async () => {
     render(
       <RepeatTask items={ITEMS} setInfo={SET_INFO_WITH_IMAGE} onComplete={jest.fn()} onExit={jest.fn()} isPractice />,
     );
     settlePreload();
-    act(() => { fireEvent.click(screen.getByText("开始")); });
+    await startTask();
 
     expect(sceneSrc()).toBe(SET_INFO_WITH_IMAGE.sentence_frames[0].url);
 
@@ -170,13 +178,13 @@ describe("RepeatTask：有图的套", () => {
     expect(sceneSrc()).toBe(SET_INFO_WITH_IMAGE.sentence_frames[1].url);
   });
 
-  test("某句没有帧 → 退底图；图加载失败 → 隐藏，不留破图标", () => {
+  test("某句没有帧 → 退底图；图加载失败 → 隐藏，不留破图标", async () => {
     const setInfo = { ...SET_INFO_WITH_IMAGE, sentence_frames: [SET_INFO_WITH_IMAGE.sentence_frames[0]] };
     render(
       <RepeatTask items={ITEMS} setInfo={setInfo} onComplete={jest.fn()} onExit={jest.fn()} isPractice />,
     );
     settlePreload();
-    act(() => { fireEvent.click(screen.getByText("开始")); });
+    await startTask();
     expect(sceneSrc()).toBe(setInfo.sentence_frames[0].url);
 
     act(() => { fireEvent.click(screen.getByText("Skip this sentence")); });

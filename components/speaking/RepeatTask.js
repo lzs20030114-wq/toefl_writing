@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
-import { VoiceRecorder } from "./VoiceRecorder";
+import { VoiceRecorder, warmUpMicrophone } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { AssetPreloadGate } from "../shared/AssetPreloadGate";
 import { SceneImage } from "./SceneImage";
@@ -84,12 +84,15 @@ function playOriginalSentence(sentence) {
 /**
  * Listen and Repeat — Task 1 of TOEFL 2026 Speaking.
  *
- * Flow per sentence:
- *   1. Show "Listen" phase — play TTS
- *   2. User records their repetition
- *   3. User can replay both original and their recording
- *   4. "Next Sentence" advances
- *   5. After 7 sentences: summary with replay for each
+ * Flow per sentence (真考节奏):
+ *   1. "Listen" phase — the sentence plays by itself
+ *   2. The mic opens by itself the moment the audio ends (VoiceRecorder autoStart);
+ *      the user just speaks and taps stop. The intro's 开始 gesture pre-requests
+ *      mic permission (warmUpMicrophone) so the browser prompt never lands here.
+ *   3. "Recorded" — NO per-sentence verdict (the real test never tells you how
+ *      that one went); STT/scoring runs in the background, replay + Re-record
+ *      stay available, "Next Sentence" advances
+ *   4. After 7 sentences: summary with per-sentence accuracy + word highlight
  *
  * Props:
  *   items       — array of { id, sentence, difficulty } (7 items)
@@ -98,9 +101,12 @@ function playOriginalSentence(sentence) {
  *                 (真题专区 passes the exam's own prompt, which must not be re-templated)
  *   onComplete  — called with session summary
  *   onExit      — back navigation
- *   isPractice  — if true, show elapsed instead of countdown
+ *   isPractice  — accepted for caller compatibility; currently no effect. It used to
+ *                 reveal the reference sentence right after each take, which is exactly
+ *                 the per-sentence verdict the real test never gives — the summary
+ *                 screen shows every sentence's text + word highlight in both modes.
  */
-function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
+function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
   // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so sentence clips play through
   // the shared persistent element unlocked on the first gesture. examController
@@ -114,12 +120,18 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   // the shared exam audio element (a real gesture that roots out the zero-click
   // autoplay unlock race on practice pages).
   const [started, setStarted] = useState(false);
+  // 开始 tapped and the mic permission is being requested inside that gesture
+  // (see handleStart): the intro stays up, button relabelled, until it settles.
+  const [starting, setStarting] = useState(false);
   const [current, setCurrent] = useState(0);
   const [phase, setPhase] = useState("listen"); // listen | record | review
   // True from the instant a recording attempt begins until it ends — drives the
   // replay-button lockout + the playSentence() guard so the reference audio can
   // never sound (and leak into the mic / STT) while the user is recording.
   const [isRecording, setIsRecording] = useState(false);
+  // The recorder's auto-start was refused (iOS Safari without a prior grant,
+  // permission denied…) → show the manual-tap hint under the mic button.
+  const [autoBlocked, setAutoBlocked] = useState(false);
   const [recordings, setRecordings] = useState([]); // blobUrl per index
   const [finished, setFinished] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState(false);
@@ -157,6 +169,9 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   const consentRePromptedRef = useRef(false);
 
   const elapsedRef = useRef(null);
+  const mountedRef = useRef(true);
+  // Double-tap guard for 开始 while the permission prompt is up.
+  const startingRef = useRef(false);
   const utteranceRef = useRef(null);
   // Current pre-rendered MP3 <Audio> instance (preferred over Web Speech). Held
   // so we can stop it when replaying, advancing, or unmounting.
@@ -187,6 +202,11 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   useEffect(() => {
     if (typeof window === "undefined") return;
     setTtsSupported("speechSynthesis" in window);
+  }, []);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
   }, []);
 
   // Stop any in-flight MP3 / utterance (incl. an "Original" replay) on unmount.
@@ -581,6 +601,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   const SUBMIT_WAIT_CAP_SEC = 45; // hard cap so the user can never get stuck
 
   const handleNext = useCallback(() => {
+    setAutoBlocked(false);
     if (current < total - 1) {
       // Exam-controller mode: kick the NEXT sentence's clip synchronously in
       // this click (gesture-stack playback — belt and braces on top of the
@@ -671,10 +692,29 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   );
 
   // 开始: unlock the shared exam audio element inside this real gesture (idempotent;
-  // examController may be null under the kill switch — guard it), then begin.
+  // examController may be null under the kill switch — guard it), ask for the mic
+  // in the SAME gesture, and only then begin.
+  //
+  // Recording now starts by itself after every sentence, so the mic permission
+  // must be settled up front: otherwise the browser's permission popup would pop
+  // over the first sentence (audio playing while the user hunts for「允许」, first
+  // take truncated), and iOS Safari — which only prompts from a gesture — would
+  // refuse the first auto-start outright. The intro stays up until the prompt is
+  // answered (or 10s pass, so a hung getUserMedia can never strand the user);
+  // a denial just falls through to the recorder's manual-tap hint.
   const handleStart = useCallback(() => {
+    if (startingRef.current) return;
     if (examController) examController.unlock();
-    setStarted(true);
+    const warm = warmUpMicrophone();
+    if (!warm) { setStarted(true); return; } // no getUserMedia here → old synchronous start
+    startingRef.current = true;
+    setStarting(true);
+    warm.then(() => {
+      startingRef.current = false;
+      if (!mountedRef.current) return;
+      setStarting(false);
+      setStarted(true);
+    });
   }, [examController]);
 
   // 当前句该显示哪一帧（逐句帧按题号对齐，找不到退底图，都没有则 null）。
@@ -841,6 +881,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
         // 真考的场景插图在设定屏就已经在了；没图时 image 为空，引入屏一个节点都不多。
         image={setInfo?.scene_image || null}
         lines={[intro.settingText, intro.instructionText]}
+        buttonLabel={starting ? "正在准备麦克风…" : "开始"}
         onStart={handleStart}
         onExit={onExit}
       />
@@ -896,7 +937,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                 {ttsPlaying ? "Listen carefully..." : "Get ready to listen"}
               </div>
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 20 }}>
-                The sentence will play automatically. Listen and prepare to repeat.
+                The sentence will play automatically — recording starts as soon as it ends.
               </div>
               {playBlocked && !ttsPlaying && (
                 <div style={{
@@ -944,13 +985,25 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                 Your Turn
               </div>
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 24 }}>
-                Repeat the sentence you just heard
+                {isRecording
+                  ? "Recording — repeat the sentence you just heard, then tap the button to stop."
+                  : "Repeat the sentence you just heard"}
               </div>
+              {/* 真考节奏：原句一放完麦克风就自动打开，不等用户点。autoStart 每次进入
+                  录音阶段（含 Re-record）都生效；被浏览器拒绝时退回手动点麦 + 提示。 */}
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
                 onRecordingStateChange={handleRecordingStateChange}
+                onRecordingStart={() => setAutoBlocked(false)}
+                onAutoStartBlocked={() => setAutoBlocked(true)}
+                autoStart
                 maxDuration={30}
               />
+              {autoBlocked && !isRecording && (
+                <div style={{ marginTop: 12, fontSize: 13, color: "#92400E", lineHeight: 1.5 }}>
+                  录音未自动开始，请点击上方按钮手动开始（iOS Safari 需手动授权麦克风）。
+                </div>
+              )}
               <div style={{ marginTop: 20 }}>
                 <button
                   onClick={() => playSentence()}
@@ -984,8 +1037,13 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
               }}>
                 <span style={{ fontSize: 26 }}>✓</span>
               </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 16 }}>
-                Well done!
+              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
+                Recorded
+              </div>
+              {/* 真考里每句答完直接进下一句，不会当场告诉你这句对了多少。逐句准确率 /
+                  逐词对照统一放到最后的总结页（scores 照常在后台回填，这里不渲染）。 */}
+              <div style={{ fontSize: 13, color: C.t3, marginBottom: 16 }}>
+                这句的识别结果不在这里显示，全部录完后在总结页统一查看
               </div>
 
               <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 24 }}>
@@ -995,23 +1053,6 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                 )}
               </div>
 
-              {/* Accuracy score display (when transcript came back) */}
-              {scores[current] && (
-                <AccuracyCard score={scores[current]} originalSentence={sentence.sentence} />
-              )}
-
-              {/* Server STT is still working on this recording */}
-              {!scores[current] && transcriptStatus[current] === "processing" && (
-                <div style={{
-                  marginBottom: 20, padding: "10px 14px",
-                  background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
-                  fontSize: 13, color: C.t2, textAlign: "center",
-                }}>
-                  <span style={{ display: "inline-block", marginRight: 8 }}>⏳</span>
-                  正在识别你的录音…（你可以继续下一题，识别完会自动填上分数）
-                </div>
-              )}
-
               {/* Pro upsell — server returned NOT_PRO */}
               {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
                 <div style={{
@@ -1020,7 +1061,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                   fontSize: 13, color: "#92400E", lineHeight: 1.6,
                 }}>
                   <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
-                  录音已保存，可对照原句自查。升级 Pro 后可解锁自动识别和发音评分。
+                  录音已保存，总结页可对照原句自查。升级 Pro 后可解锁自动识别和发音评分。
                 </div>
               )}
 
@@ -1035,20 +1076,10 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                 </div>
               )}
 
-              {/* Practice mode: always show the reference sentence so users can self-check */}
-              {isPractice && (
-                <div style={{
-                  background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 10,
-                  padding: "12px 16px", marginBottom: 20, fontSize: 14, color: C.t1, lineHeight: 1.6,
-                }}>
-                  {sentence.sentence}
-                </div>
-              )}
-
               <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
                 <Btn
                   variant="secondary"
-                  onClick={() => { cancelTranscribeFor(current); setPhase("record"); }}
+                  onClick={() => { cancelTranscribeFor(current); setAutoBlocked(false); setPhase("record"); }}
                   disabled={submitting}
                 >
                   Re-record
@@ -1121,58 +1152,6 @@ export function RepeatTask(props) {
     >
       <RepeatTaskInner {...props} />
     </AssetPreloadGate>
-  );
-}
-
-/** Accuracy score card shown during review phase. */
-function AccuracyCard({ score, originalSentence }) {
-  if (!score) return null;
-  const { accuracy, matchedWords, missedWords, extraWords } = score;
-  const color = accuracy >= 80 ? "#16A34A" : accuracy >= 60 ? "#D97706" : "#DC2626";
-  const bg = accuracy >= 80 ? "#DCFCE7" : accuracy >= 60 ? "#FFFBEB" : "#FEE2E2";
-
-  return (
-    <div style={{
-      background: "#F9FAFB", border: "1px solid " + C.bdr, borderRadius: 12,
-      padding: "16px 20px", marginBottom: 20, textAlign: "left",
-    }}>
-      {/* Accuracy bar */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-        <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>Accuracy</span>
-        <span style={{
-          fontSize: 18, fontWeight: 800, color,
-          padding: "2px 12px", borderRadius: 999, background: bg,
-        }}>
-          {accuracy}%
-        </span>
-      </div>
-      <div style={{ height: 6, background: "#E5E7EB", borderRadius: 3, overflow: "hidden", marginBottom: 16 }}>
-        <div style={{
-          height: "100%", borderRadius: 3, background: color,
-          width: `${accuracy}%`, transition: "width 500ms ease",
-        }} />
-      </div>
-
-      {/* Word-level display */}
-      <WordHighlight
-        originalSentence={originalSentence}
-        matchedWords={matchedWords}
-        missedWords={missedWords}
-        extraWords={extraWords}
-      />
-
-      {/* Extra words */}
-      {extraWords.length > 0 && (
-        <div style={{ marginTop: 8, fontSize: 12, color: C.t3 }}>
-          Extra words: {extraWords.map((w, i) => (
-            <span key={i} style={{
-              display: "inline-block", margin: "2px 3px", padding: "1px 6px",
-              background: "#F3F4F6", borderRadius: 4, color: C.t3,
-            }}>{w}</span>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
 

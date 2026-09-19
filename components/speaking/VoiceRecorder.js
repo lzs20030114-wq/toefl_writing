@@ -79,6 +79,48 @@ function describePermissionError(err) {
 }
 
 /**
+ * Ask for the microphone once, INSIDE a real user gesture, and release it at
+ * once. Recordings that auto-start later in the flow then find the permission
+ * already granted, so the browser's permission popup never lands in the middle
+ * of a sentence — and iOS Safari, which only prompts from a gesture, doesn't
+ * refuse the very first auto-start.
+ *
+ * Returns null when getUserMedia is unavailable (the caller proceeds
+ * synchronously, exactly as before), otherwise a promise that ALWAYS resolves:
+ * true = granted, false = denied / errored / still pending after `timeoutMs`.
+ * The stream is stopped even when the timeout wins the race, so the mic
+ * indicator never stays lit.
+ */
+export function warmUpMicrophone(timeoutMs = 10000) {
+  if (
+    typeof navigator === "undefined"
+    || !navigator.mediaDevices
+    || typeof navigator.mediaDevices.getUserMedia !== "function"
+  ) {
+    return null;
+  }
+  let req;
+  try {
+    req = navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch {
+    return null;
+  }
+  if (!req || typeof req.then !== "function") return null;
+  const settled = req.then(
+    (stream) => {
+      try { stream.getTracks().forEach((t) => t.stop()); } catch {}
+      return true;
+    },
+    () => false,
+  );
+  let timer = null;
+  const timeout = new Promise((resolve) => {
+    timer = setTimeout(() => resolve(false), timeoutMs);
+  });
+  return Promise.race([settled, timeout]).finally(() => { if (timer) clearTimeout(timer); });
+}
+
+/**
  * Reusable voice recorder component.
  *
  * States: idle -> recording -> playback
@@ -279,7 +321,10 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordi
       // If this was an auto-start attempt that failed (common on iOS Safari,
       // where getUserMedia needs a real user gesture), tell the parent so it
       // keeps its timer paused and prompts a manual tap instead of stranding.
-      if (autoStart && onAutoStartBlocked) onAutoStartBlocked();
+      if (autoStart) {
+        setAutoStartBlocked(true);
+        if (onAutoStartBlocked) onAutoStartBlocked();
+      }
     }
   }, [disabled, maxDuration, onRecordingComplete, onRecordingStart, autoStart, onAutoStartBlocked, examAudio, signalRecording]);
 
@@ -414,7 +459,13 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordi
             <span style={{ fontSize: 28 }} role="img" aria-label="microphone">🎙️</span>
           </button>
           <span style={{ fontSize: 13, color: C.t3, fontWeight: 600 }}>
-            {disabled ? "Waiting..." : (autoStartBlocked ? "点击开始录音" : "点击录音")}
+            {disabled
+              ? "Waiting..."
+              : autoStartBlocked
+                ? "点击开始录音"
+                : autoStart && !permError
+                  ? "正在开启麦克风…"
+                  : "点击录音"}
           </span>
         </div>
       )}
