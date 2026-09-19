@@ -46,10 +46,14 @@ import {
   writeJson,
 } from "./_shared.mjs";
 
-// ── 硬编码套话信号（与代码里的注入点保持逐字一致，改这两处务必同步改这里）──
-// ① 校准层兜底蓝标（lib/ai/calibration.js addBlueRefinements）
+// ── 硬编码套话信号 ──
+// 2026-09-19：这两处注入/替换已从产线删除（calibration.js 的 addBlueRefinements、
+// parse.js parseActionSection 的三句兜底文案）。这里的字面量保留下来，是因为本脚本
+// 要在**历史 sessions 记录**里数它们出现的比例——改造后新记录应当一路读到 0，
+// 旧记录仍读得出改造前的基线。请勿因为「代码里已经没有这些字符串」就删掉它们。
+// ① 校准层兜底蓝标（原 lib/ai/calibration.js addBlueRefinements，已删除）
 const INJECTED_BLUE_MESSAGE = "Can be refined for smoother flow and more precise expression.";
-// ② 解析层短板兜底（lib/ai/parse.js parseActionSection）
+// ② 解析层短板兜底（原 lib/ai/parse.js parseActionSection，已删除）
 const FALLBACK_ACTION_TITLE = "语言与任务表达可提升";
 const FALLBACK_ORIGIN_MARK = "（原建议：";
 const TEMPLATE_ACTION_KEYWORDS = ["句型", "模板", "可以使用", "可用"];

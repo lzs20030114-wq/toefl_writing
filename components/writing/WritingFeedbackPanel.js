@@ -16,6 +16,19 @@ const P = {
   shadowMd: "0 4px 14px rgba(10,40,25,0.06), 0 1px 3px rgba(10,40,25,0.03)",
 };
 
+// 三维度小卡的中文标签。rubric 里的 definition / note 是英文内部说明，不渲染。
+const DIM_LABELS = [
+  { key: "task_fulfillment", label: "任务完成" },
+  { key: "organization_coherence", label: "组织连贯" },
+  { key: "language_use", label: "语言使用" },
+];
+
+function fmtDimScore(v) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "--";
+  return String(Math.round(n * 2) / 2);
+}
+
 function levelToCategory(level, errorType) {
   if (level === "red") {
     if (String(errorType || "").toLowerCase() === "spelling") return "拼写错误";
@@ -156,6 +169,8 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   const patterns = Array.isArray(fb?.patterns) ? fb.patterns : [];
   const marks = Array.isArray(fb?.annotationSegments) ? fb.annotationSegments : [];
   const comparison = fb?.comparison || { modelEssay: "", points: [] };
+  const dims = fb?.rubric?.dimensions || null;
+  const errorTriage = fb?.errorTriage || null;
 
   const tokens = segmentsToTokens(marks);
   const errorTokens = tokens.filter((t) => t.type === "error");
@@ -186,7 +201,31 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
               </div>
             ) : null}
           </div>
-          {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: goals.length ? 18 : 0 }}>{summary}</p> : null}
+          {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: dims || goals.length ? 18 : 0 }}>{summary}</p> : null}
+          {dims ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "minmax(0, 1fr)" : "repeat(3, minmax(0, 1fr))",
+                gap: 8,
+                marginBottom: type === "email" && goals.length > 0 ? 18 : 0,
+              }}
+            >
+              {DIM_LABELS.map(({ key, label }) => {
+                const d = dims[key] || {};
+                const reason = String(d.reason || "").trim();
+                return (
+                  <div key={key} style={{ minWidth: 0, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px" }}>
+                    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.55)" }}>{label}</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: "#34d399" }}>{fmtDimScore(d.score)}</span>
+                    </div>
+                    {reason ? <div style={{ marginTop: 6, fontSize: 12, lineHeight: 1.6, color: "rgba(255,255,255,0.72)" }}>{reason}</div> : null}
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
           {type === "email" && goals.length > 0 ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {goals.map((g) => {
@@ -246,12 +285,63 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
     );
   }
 
+  // ===ERRORS=== 段：模型自己判定的「哪几条真的压分」。放在逐句批注最前面，
+  // 让用户先看到决定分数的少数几条，再看全部批注，而不是把小错与大错混成一堆。
+  function renderErrorTriage() {
+    if (!errorTriage) return null;
+    const capped = Array.isArray(errorTriage.capped) ? errorTriage.capped : [];
+    const minorSummary = String(errorTriage.minorSummary || "").trim();
+    const verdict = String(errorTriage.verdict || "").trim();
+    if (!capped.length && !minorSummary && !verdict) return null;
+    return (
+      <div style={{ marginBottom: 18, background: P.surface, borderRadius: 12, border: `1px solid ${P.border}`, padding: "14px 16px" }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>影响分数的错误</div>
+        {capped.length > 0 ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {capped.map((item, i) => (
+              <div key={i} style={{ background: P.bg, borderRadius: 10, border: `1px solid ${P.borderSubtle}`, padding: "10px 12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                  <div style={{ flex: 1, minWidth: 0, fontSize: 12.5, fontStyle: "italic", color: P.text, lineHeight: 1.65 }}>{item.quote || "（未给出原句）"}</div>
+                  <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                    {item.impedes === true ? (
+                      <span style={{ fontSize: 10, fontWeight: 800, padding: "2px 7px", borderRadius: 999, background: P.roseSoft, color: P.rose, whiteSpace: "nowrap" }}>妨碍理解</span>
+                    ) : null}
+                    {item.systemic === true ? (
+                      <span style={{ fontSize: 10, fontWeight: 800, padding: "2px 7px", borderRadius: 999, background: P.amberSoft, color: P.amber, whiteSpace: "nowrap" }}>系统性失控</span>
+                    ) : null}
+                  </div>
+                </div>
+                {item.issue ? <div style={{ marginTop: 6, fontSize: 12.5, color: P.textSec, lineHeight: 1.7 }}>{item.issue}</div> : null}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ fontSize: 12.5, color: P.textSec, lineHeight: 1.7 }}>没有真正拉低分数的语法错误</div>
+        )}
+        <details style={{ marginTop: 12 }}>
+          <summary style={{ cursor: "pointer", fontSize: 12, fontWeight: 700, color: P.textSec, lineHeight: 1.6 }}>
+            不压分的限时小错：{minorSummary || "无"}
+          </summary>
+          <div style={{ marginTop: 6, fontSize: 11.5, color: P.textDim, lineHeight: 1.7 }}>
+            ETS 官方 5 分样文同样含约十处这类小错，它们不决定分数
+          </div>
+        </details>
+        {verdict ? <div style={{ marginTop: 10, fontSize: 11, color: P.textDim, lineHeight: 1.6 }}>{verdict}</div> : null}
+      </div>
+    );
+  }
+
   function renderLineByLine() {
+    const triage = renderErrorTriage();
     if (!errorTokens.length) return (
-      <div style={{ padding: "40px", textAlign: "center", color: P.textDim, fontSize: 13, background: P.bg, borderRadius: 12, border: `1px dashed ${P.borderSubtle}` }}>暂无逐句批注数据。</div>
+      <div>
+        {triage}
+        <div style={{ padding: "40px", textAlign: "center", color: P.textDim, fontSize: 13, background: P.bg, borderRadius: 12, border: `1px dashed ${P.borderSubtle}` }}>暂无逐句批注数据。</div>
+      </div>
     );
     return (
       <div>
+        {triage}
         <p style={{ fontSize: 13, color: P.textSec, marginBottom: 16 }}>
           共发现 <b style={{ color: P.text }}>{errorTokens.length}</b> 处表达问题。
         </p>
@@ -296,7 +386,7 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {modelEssay ? (
           <div style={{ background: P.primarySoft, borderRadius: 16, padding: "20px 22px", border: `1px solid ${P.primary}25` }}>
-            <div style={{ fontSize: 10.5, fontWeight: 800, color: P.primaryDeep, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 14 }}>Official Band 5.0 Sample</div>
+            <div style={{ fontSize: 11.5, fontWeight: 800, color: P.primaryDeep, letterSpacing: 0.3, marginBottom: 14 }}>AI 参考范文 · 众多可行写法之一</div>
             {isPro ? (
               <div style={{ fontSize: 14, color: "#052e16", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{modelEssay}</div>
             ) : (

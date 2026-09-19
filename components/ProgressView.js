@@ -786,7 +786,7 @@ function FullMockReport({ entry, onClose }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {modelEssay ? (
             <div style={{ background: P.primarySoft, borderRadius: 16, padding: "20px 22px", border: `1px solid ${P.primary}25` }}>
-              <div style={{ fontSize: 10.5, fontWeight: 800, color: P.primaryDeep, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 14 }}>Official Band 5.0 Sample</div>
+              <div style={{ fontSize: 11.5, fontWeight: 800, color: P.primaryDeep, letterSpacing: 0.3, marginBottom: 14 }}>AI 参考范文 · 众多可行写法之一</div>
               <div style={{ fontSize: 14, color: "#052e16", lineHeight: 1.9, whiteSpace: "pre-wrap" }}>{modelEssay}</div>
             </div>
           ) : null}

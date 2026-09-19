@@ -248,7 +248,10 @@ describe("holistic reconciliation (lift)", () => {
 });
 
 describe("calibrateScoreReport", () => {
-  test("near-top response keeps high score and includes blue annotation", () => {
+  // 反注入回归：旧实现（addBlueRefinements）会在「无批注」或「≥4.5 分且无蓝标」
+  // 时往原文第一句塞硬编码英文（"Can be refined for smoother flow…"）。高分报告
+  // 宁可少而真——现在一条合成批注都不许出现。
+  test("near-top response keeps high score and injects NO synthetic annotation", () => {
     const result = {
       score: 5,
       band: 5.5,
@@ -264,7 +267,30 @@ describe("calibrateScoreReport", () => {
 
     const out = calibrateScoreReport("discussion", result, text);
     expect(out.score).toBeGreaterThanOrEqual(4.5);
-    expect((out.annotationParsed?.annotations || []).some((a) => a.level === "blue")).toBe(true);
+    expect(out.annotationParsed.annotations).toEqual([]);
+    expect(out.annotationSegments.some((s) => s.type === "mark")).toBe(false);
+    expect(out.annotationCounts).toEqual({ red: 0, orange: 0, blue: 0, spelling: 0 });
+    expect(JSON.stringify(out)).not.toContain("Can be refined");
+  });
+
+  test("model-written annotations survive untouched (no extra blue appended at high score)", () => {
+    const text = LONG_ENOUGH_TEXT;
+    const result = {
+      score: 5,
+      band: 5.5,
+      summary: "strong",
+      patterns: [],
+      annotationParsed: {
+        plainText: text,
+        annotations: [
+          { level: "orange", message: "表述可更具体。", fix: "换一个更精确的动词。", start: 0, end: 9 },
+        ],
+      },
+    };
+    const out = calibrateScoreReport("discussion", result, text);
+    expect(out.score).toBeGreaterThanOrEqual(4.5);
+    expect(out.annotationParsed.annotations).toHaveLength(1);
+    expect(out.annotationCounts.blue).toBe(0);
   });
 
   test("builds compact key_problems with explanation, example, and action", () => {

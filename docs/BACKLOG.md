@@ -284,3 +284,24 @@
 - 2026-07-05 五处升级按钮 `open-upgrade-modal` 死 no-op 修复（HomePageClient 全局监听 + speaking-exam 自持 modal）——已合 main。
 - 2026-07-05 CTW 填词防呆修复（灰底锁定 chip + 键盘导航）cherry-pick 2b3f96c 合入 main（分支上过时的 v1.9.4 发版提交已丢弃）。
 - 2026-07-05 产品 P0 复测：BS 干扰项已修（did 99.6%→14.6%，88 种）；模考评分失败清零 band 已修（"--"+错误文案+重试按钮）；插入题数据面已清零（UI 欠账转为上方决策项）。
+
+## 写作批改报告改造（2026-09-19，研究报告 data/claudeGen/reports/WRITING-FEEDBACK-DEPTH-2026-09-19.md / WRITING-FEEDBACK-LESSON-BLUEPRINT-2026-09-19.md）
+
+> 代码层五项已在分支 claude/compassionate-newton-iddg2e 落地：删校准层英文蓝标注入、删解析层短板万能兜底、
+> 解析并渲染三维度「一句话理由」、解析并渲染 ===ERRORS=== 压分/不压分分级、范文标签改「AI 参考范文」。
+> 分数路径逐字节不变（34.5 万合成样本差分 0 处分数差异），jest 231 套件全绿。
+
+- [高] **合并前置**：改了 lib/ai/parse.js / calibration.js，按 docs/eval-spec/writing-scoring.md 规定须本机跑
+  `node scripts/scoring-gate.mjs --quick`（云端无 DEEPSEEK_API_KEY 跑不了）留一行基准。
+- [高] **改造前基线**：本机 `node scripts/ops/audit-writing-reports.mjs`（只读）跑一次留基线 JSON；上线一周后再跑一次对比
+  注入蓝标率 / 兜底短板率 / 总评去重率 / 标签集中度。
+- [中] **prompt 层待拍板**：拆「评分」与「讲课」为两次调用（评分 prompt 与闸门不动，取中位样本的分数 + ERRORS + SIGNALS
+  再发一次「写课」调用）vs 挤进现有 prompt（讨论 prompt 距 12000 字符上限仅余 ~1100，且加长输出会顶 8000 token 预算尾部截断）。
+  倾向拆。拆之后要做：总评三句（目标 / 引原句说停在哪 / 下一步）、短板 1 强制内容层且四段结构、论证诊断方法（讨论）与
+  目标展开+语域诊断（邮件）、PATTERNS 删「未回应他人观点」、COMPARISON 固定三维度 + 引导语。
+- [中] **产品层**：批改前 15 秒自评单选；写后练习从拼写填空换成本篇原句仿改 + 三条自查；分数弱化布局做 A/B 不直接上。
+- [低] 历史 sessions 记录里已存的注入蓝标 JSON 仍会显示（只有新批改干净）；要清需一次性数据迁移（删 message 等于那句英文的
+  annotation 并重算 counts/segments），走 /sql-migrate 另议。
+- [低] `actions[].langOk` 目前只写不读；要度量「模型漏写中文」需在 writingEval 或 analytics/track 上报。
+- [低] ScoringReport（模考结果 / 历史行）三维度小卡在极窄屏固定三列（无 isMobile），320px 下每列约 98px；WritingFeedbackPanel 已单列。
+- [低] 「影响分数的错误」区块目前放在「逐句批注大纲」标签页顶部，首屏宏观评价页看不到；是否上提到宏观页待看用户行为。

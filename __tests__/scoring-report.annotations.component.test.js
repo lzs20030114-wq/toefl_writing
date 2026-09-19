@@ -92,6 +92,102 @@ describe("ScoringReport redesigned layout", () => {
     expect(screen.getByText("介词搭配")).toBeInTheDocument();
   });
 
+  test("renders the three rubric dimensions with their one-line reasons", () => {
+    const result = {
+      score: 4.5,
+      band: 4.5,
+      summary: "总评",
+      rubric: {
+        dimensions: {
+          task_fulfillment: { score: 5, reason: "三个目标均完成且有细节" },
+          organization_coherence: { score: 4.5, reason: "结构清晰衔接自然" },
+          language_use: { score: 3.5, reason: "" },
+        },
+      },
+      actions: [],
+      annotationCounts: { red: 0, orange: 0, blue: 0 },
+      annotationSegments: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      sectionStates: {},
+    };
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.getByText("任务完成")).toBeInTheDocument();
+    expect(screen.getByText("组织连贯")).toBeInTheDocument();
+    expect(screen.getByText("语言使用")).toBeInTheDocument();
+    expect(screen.getByText("三个目标均完成且有细节")).toBeInTheDocument();
+    expect(screen.getByText("结构清晰衔接自然")).toBeInTheDocument();
+    // 英文 definition / note 不渲染
+    expect(screen.queryByText(/How fully and accurately/)).toBeNull();
+  });
+
+  test("renders the ===ERRORS=== triage block with impede / systemic tags", () => {
+    const result = {
+      score: 3.5,
+      band: 3.5,
+      summary: "总评",
+      errorTriage: {
+        capped: [
+          { quote: "the radiators is still cold", issue: "主谓一致反复出错", impedes: false, systemic: true },
+          { quote: "I have trouble to concentrate", issue: "动词搭配错误", impedes: true, systemic: false },
+        ],
+        minorSummary: "约 6-8 处拼写小错",
+        verdict: "语言使用维度定为 3.5。",
+      },
+      actions: [],
+      annotationCounts: { red: 0, orange: 0, blue: 0 },
+      annotationSegments: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      sectionStates: {},
+    };
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.getByText("影响分数的错误")).toBeInTheDocument();
+    expect(screen.getByText("the radiators is still cold")).toBeInTheDocument();
+    expect(screen.getByText("妨碍理解")).toBeInTheDocument();
+    expect(screen.getByText("系统性失控")).toBeInTheDocument();
+    expect(screen.getByText(/不压分的限时小错：约 6-8 处拼写小错/)).toBeInTheDocument();
+    expect(screen.getByText(/ETS 官方 5 分样文同样含约十处这类小错/)).toBeInTheDocument();
+  });
+
+  test("empty capped list still says no score-lowering grammar errors", () => {
+    const result = {
+      score: 5,
+      band: 5,
+      summary: "总评",
+      errorTriage: { capped: [], minorSummary: "无", verdict: "" },
+      actions: [],
+      annotationCounts: { red: 0, orange: 0, blue: 0 },
+      annotationSegments: [],
+      patterns: [],
+      comparison: { modelEssay: "", points: [] },
+      sectionStates: {},
+    };
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.getByText("没有真正拉低分数的语法错误")).toBeInTheDocument();
+  });
+
+  test("legacy records without rubric / errorTriage render neither block", () => {
+    const result = {
+      score: 4,
+      band: 4,
+      summary: "总评",
+      actions: [],
+      annotationCounts: { red: 0, orange: 0, blue: 0 },
+      annotationSegments: [],
+      patterns: [],
+      comparison: { modelEssay: "sample", points: [] },
+      sectionStates: {},
+    };
+    render(<ScoringReport result={result} type="discussion" />);
+    expect(screen.queryByText("影响分数的错误")).toBeNull();
+    expect(screen.queryByText("任务完成")).toBeNull();
+    // 范文标签诚实化：不再自称官方 5 分范文
+    expect(screen.queryByText(/Official Band/)).toBeNull();
+    fireEvent.click(screen.getByText("范文对比").closest("button"));
+    expect(screen.getByText("查看 AI 参考范文")).toBeInTheDocument();
+  });
+
   test("annotation mark click shows note card", () => {
     const result = {
       score: 4,
