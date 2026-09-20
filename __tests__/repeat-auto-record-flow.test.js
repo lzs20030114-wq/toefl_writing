@@ -3,17 +3,21 @@
  *   - 开始 asks for the microphone INSIDE that gesture and holds the intro until
  *     the prompt settles (10s cap), releasing the probe stream at once.
  *   - Entering the record phase opens the mic by itself — no 🎙️ tap.
- *   - After a take there is NO per-sentence verdict (no accuracy card, no
- *     reference sentence); scores still land on the summary screen.
- *   - Re-record auto-starts again.
+ *   - Stopping a take (tap / 30s cap) moves straight to the next sentence: no
+ *     per-sentence verdict, no replay, no Re-record, no Next button.
+ *   - The last take enters a "正在完成识别" hold until STT settles (skippable),
+ *     then the summary shows every sentence's accuracy.
  */
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { RepeatTask } from "../components/speaking/RepeatTask";
 import { warmUpMicrophone } from "../components/speaking/VoiceRecorder";
 
+// Controllable STT: each call parks until the test resolves mockStt.resolve(...).
+const mockStt = {};
 jest.mock("../lib/speakingEval/serverStt", () => ({
-  transcribeWithServer: jest.fn(async () => ({ ok: true, transcript: "the quick brown fox jumps over" })),
+  transcribeWithServer: jest.fn(() => new Promise((resolve) => { mockStt.resolve = resolve; })),
 }));
+const STT_OK = { ok: true, transcript: "the quick brown fox jumps over" };
 
 class FakeMediaRecorder {
   constructor(stream, opts) {
@@ -37,6 +41,10 @@ let gum;   // { resolve, reject } for the most recent getUserMedia promise
 let track; // the probe/recording stream's single track
 
 const ITEMS = [{ id: "s1", sentence: "The quick brown fox jumps over.", difficulty: "easy" }];
+const TWO_ITEMS = [
+  ...ITEMS,
+  { id: "s2", sentence: "Please sign in at the front desk.", difficulty: "medium" },
+];
 const flush = async () => { for (let i = 0; i < 10; i++) await Promise.resolve(); };
 
 function installMediaDevices() {
@@ -70,8 +78,8 @@ afterEach(() => {
 
 // Reach the record phase: 开始 (grant the warm-up) → "Continue to Record"
 // (no audio_url + no speechSynthesis in jsdom exposes that manual path).
-async function enterRecordPhase() {
-  render(<RepeatTask items={ITEMS} onComplete={jest.fn()} onExit={jest.fn()} isPractice />);
+async function enterRecordPhase(items = ITEMS, onComplete = jest.fn()) {
+  render(<RepeatTask items={items} onComplete={onComplete} onExit={jest.fn()} isPractice />);
   await act(async () => { fireEvent.click(screen.getByText("开始")); gum.resolve(); await flush(); });
   act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
 }
@@ -148,52 +156,95 @@ describe("录音阶段自动开麦", () => {
     // 1st call = warm-up, 2nd = the auto-started recording.
     expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledTimes(2);
     expect(screen.getByText("正在开启麦克风…")).toBeInTheDocument(); // not「点击录音」
-    expect(screen.getByText(/Recording — repeat the sentence/)).toBeInTheDocument();
+    expect(screen.getByText(/the next one follows automatically/)).toBeInTheDocument();
 
     await act(async () => { gum.resolve(); await flush(); });
     expect(screen.getByText("录音中…点击停止")).toBeInTheDocument();
     expect(screen.queryByText(/录音未自动开始/)).toBeNull();
   });
 
-  test("Re-record auto-starts again", async () => {
-    await enterRecordPhase();
+  test("stop → the next sentence starts by itself: no Next tap, no review step", async () => {
+    await enterRecordPhase(TWO_ITEMS);
     await act(async () => { gum.resolve(); await flush(); });
-    await act(async () => { fireEvent.click(stopButton()); await flush(); });
-    expect(screen.getByText("Recorded")).toBeInTheDocument();
+    expect(screen.getByText(/Sentence 1 of 2/)).toBeInTheDocument();
 
-    act(() => { fireEvent.click(screen.getByText("Re-record")); });
+    await act(async () => { fireEvent.click(stopButton()); await flush(); });
+
+    // Straight into sentence 2's listen phase.
+    expect(screen.getByText(/Sentence 2 of 2/)).toBeInTheDocument();
+    expect(screen.getByText("Get ready to listen")).toBeInTheDocument();
+    expect(screen.queryByText("Re-record")).toBeNull();
+    expect(screen.queryByText("Next Sentence")).toBeNull();
+    expect(screen.queryByText("Recorded")).toBeNull();
+    expect(screen.queryByText(/Accuracy/)).toBeNull();
+    expect(screen.queryByText("The quick brown fox jumps over.")).toBeNull();
+    // Sentence 1's STT is in flight in the background, not blocking anything.
+    expect(typeof mockStt.resolve).toBe("function");
+
+    // Sentence 2 auto-starts recording too (warm-up + s1 + s2 = 3 calls).
+    act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
     expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledTimes(3);
-    expect(screen.getByText("Replay original sentence").closest("button")).toBeDisabled();
   });
 });
 
-describe("答完一句不出结果", () => {
-  test("review step: no accuracy card / no reference sentence; the summary still scores it", async () => {
+describe("最后一句录完 → 等识别 → 总结页", () => {
+  test("hold shows no per-sentence verdict; the summary scores it once STT lands", async () => {
     const onComplete = jest.fn();
-    render(<RepeatTask items={ITEMS} onComplete={onComplete} onExit={jest.fn()} isPractice />);
-    await act(async () => { fireEvent.click(screen.getByText("开始")); gum.resolve(); await flush(); });
-    act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
+    await enterRecordPhase(ITEMS, onComplete);
     await act(async () => { gum.resolve(); await flush(); });
-    await act(async () => { fireEvent.click(stopButton()); await flush(); }); // STT mock resolves here
+    await act(async () => { fireEvent.click(stopButton()); await flush(); });
 
-    // Neutral confirmation only.
-    expect(screen.getByText("Recorded")).toBeInTheDocument();
-    expect(screen.queryByText("Well done!")).toBeNull();
-    expect(screen.getByText(/全部录完后在总结页统一查看/)).toBeInTheDocument();
+    // STT hold — neutral, with the skip link; nothing about how the take went.
+    expect(screen.getByText("All sentences recorded")).toBeInTheDocument();
+    expect(screen.getByText(/正在完成识别… \(45s\)/)).toBeInTheDocument();
+    expect(screen.getByText(/跳过等待，直接完成/)).toBeInTheDocument();
     expect(screen.queryByText(/Accuracy/)).toBeNull();
-    expect(screen.queryByText("The quick brown fox jumps over.")).toBeNull();
-    expect(screen.queryByText(/识别完会自动填上分数/)).toBeNull();
-    // Replay stays available (a utility, not a verdict).
-    expect(screen.getByText(/Original/)).toBeInTheDocument();
-    expect(screen.getByText(/My Recording/)).toBeInTheDocument();
+    expect(screen.queryByText("Well done!")).toBeNull();
+    expect(screen.queryByText("Re-record")).toBeNull();
+    expect(screen.queryByText("Finish")).toBeNull();
+    expect(screen.queryByText("Skip this sentence")).toBeNull();
+    expect(screen.queryByText("Session Complete")).toBeNull();
+    expect(onComplete).not.toHaveBeenCalled();
 
-    // The score was computed in the background and shows up on the summary.
-    await act(async () => { fireEvent.click(screen.getByText("Finish")); await flush(); });
+    // Transcript arrives → the hold settles into the summary by itself.
+    await act(async () => { mockStt.resolve(STT_OK); await flush(); });
     expect(screen.getByText("Session Complete")).toBeInTheDocument();
     expect(screen.getByText(/% Accuracy/)).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledTimes(1);
     const summary = onComplete.mock.calls[0][0];
     expect(summary.items[0].transcript).toBe("the quick brown fox jumps over");
     expect(summary.items[0].score).not.toBeNull();
+    expect(summary.attempted).toBe(1);
+  });
+
+  test("跳过等待 → summary right away, the unresolved take unscored", async () => {
+    const onComplete = jest.fn();
+    await enterRecordPhase(ITEMS, onComplete);
+    await act(async () => { gum.resolve(); await flush(); });
+    await act(async () => { fireEvent.click(stopButton()); await flush(); });
+
+    await act(async () => { fireEvent.click(screen.getByText(/跳过等待，直接完成/)); await flush(); });
+    expect(screen.getByText("Session Complete")).toBeInTheDocument();
+    expect(screen.queryByText(/% Accuracy/)).toBeNull();
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete.mock.calls[0][0].items[0].score).toBeNull();
+  });
+
+  test("45s cap: the hold never strands the user", async () => {
+    const onComplete = jest.fn();
+    await enterRecordPhase(ITEMS, onComplete);
+    await act(async () => { gum.resolve(); await flush(); });
+    await act(async () => { fireEvent.click(stopButton()); await flush(); });
+
+    // One tick per act: each 1s timer re-arms from the effect after React
+    // commits the decrement, so the ticks can't be batched into one advance.
+    const tick = async () => act(async () => { jest.advanceTimersByTime(1_000); await flush(); });
+    for (let i = 0; i < 44; i++) await tick();
+    expect(screen.getByText(/正在完成识别… \(1s\)/)).toBeInTheDocument();
+    expect(screen.queryByText("Session Complete")).toBeNull();
+    await tick(); // → 0 → forceFinish
+    await tick(); // the effect that reads 0 needs one more commit
+    expect(screen.getByText("Session Complete")).toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });

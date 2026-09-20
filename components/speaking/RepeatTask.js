@@ -89,10 +89,12 @@ function playOriginalSentence(sentence) {
  *   2. The mic opens by itself the moment the audio ends (VoiceRecorder autoStart);
  *      the user just speaks and taps stop. The intro's 开始 gesture pre-requests
  *      mic permission (warmUpMicrophone) so the browser prompt never lands here.
- *   3. "Recorded" — NO per-sentence verdict (the real test never tells you how
- *      that one went); STT/scoring runs in the background, replay + Re-record
- *      stay available, "Next Sentence" advances
- *   4. After 7 sentences: summary with per-sentence accuracy + word highlight
+ *   3. Stop (tap, or the 30s cap) → the NEXT sentence starts by itself. No
+ *      per-sentence verdict, no replay, no re-take, no Next button — the real
+ *      test never tells you how that one went. STT/scoring runs in the background.
+ *   4. Last sentence recorded → short "正在完成识别" hold until the in-flight
+ *      transcribes settle (45s cap, skippable) → summary with per-sentence
+ *      accuracy + word highlight
  *
  * Props:
  *   items       — array of { id, sentence, difficulty } (7 items)
@@ -124,7 +126,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
   // (see handleStart): the intro stays up, button relabelled, until it settles.
   const [starting, setStarting] = useState(false);
   const [current, setCurrent] = useState(0);
-  const [phase, setPhase] = useState("listen"); // listen | record | review
+  const [phase, setPhase] = useState("listen"); // listen | record | submitting (last take, STT settling)
   // True from the instant a recording attempt begins until it ends — drives the
   // replay-button lockout + the playSentence() guard so the reference audio can
   // never sound (and leak into the mic / STT) while the user is recording.
@@ -179,9 +181,8 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
   // Exam-controller mode: exposes playSentence's Web Speech fallback to the
   // controller subscription (a media error must rescue via TTS there too).
   const playViaTTSRef = useRef(null);
-  // AbortController per question index — used to cancel an in-flight
-  // transcribe when the user clicks Re-record (otherwise we pay for a
-  // transcript they're about to discard).
+  // AbortController per question index — lets forceFinish cancel every
+  // still-in-flight transcribe (stop billing for results nobody will see).
   const transcribeAbortRef = useRef([]);
 
   const total = items.length;
@@ -481,39 +482,6 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
     })();
   }, []);
 
-  // Capture the recording and kick off server-side transcription. We don't
-  // block the UI on the upload — the user is free to replay/re-record/advance
-  // while the transcript backfills asynchronously into the right slot.
-  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
-    const idx = current;
-    const sentenceText = sentence?.sentence || "";
-    const questionId = sentence?.id || "";
-
-    setRecordings(prev => {
-      const next = [...prev];
-      next[idx] = blobUrl;
-      return next;
-    });
-    setPhase("review");
-
-    // Skip the upload if we've already seen NOT_PRO once this session.
-    if (notPro || !blob) {
-      setTranscriptStatus(prev => {
-        const next = [...prev];
-        next[idx] = "failed";
-        return next;
-      });
-      setTranscriptError(prev => {
-        const next = [...prev];
-        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
-        return next;
-      });
-      return;
-    }
-
-    runTranscribeJob({ idx, blob, sentenceText, questionId, durationMs });
-  }, [current, sentence, notPro, runTranscribeJob]);
-
   // Replay queued uploads after the user grants consent in the modal.
   const handleConsentGranted = useCallback(() => {
     const jobs = pendingConsentJobsRef.current;
@@ -527,42 +495,6 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
   const handleConsentClosed = useCallback(() => {
     pendingConsentJobsRef.current = [];
     setNeedsConsent(false);
-  }, []);
-
-  // Cancel an in-flight transcribe and reset the status for a question. Used
-  // when the user clicks Re-record so we don't waste API spend on a transcript
-  // they're about to discard.
-  const cancelTranscribeFor = useCallback((idx) => {
-    const ctrl = transcribeAbortRef.current[idx];
-    if (ctrl) {
-      try { ctrl.abort(); } catch {}
-      transcribeAbortRef.current[idx] = null;
-    }
-    setTranscriptStatus(prev => {
-      if (prev[idx] == null) return prev;
-      const next = [...prev];
-      next[idx] = null;
-      return next;
-    });
-    setTranscriptError(prev => {
-      if (prev[idx] == null) return prev;
-      const next = [...prev];
-      next[idx] = null;
-      return next;
-    });
-    // Also clear any stale transcript/score from a previous take.
-    setTranscripts(prev => {
-      if (prev[idx] == null) return prev;
-      const next = [...prev];
-      next[idx] = null;
-      return next;
-    });
-    setScores(prev => {
-      if (prev[idx] == null) return prev;
-      const next = [...prev];
-      next[idx] = null;
-      return next;
-    });
   }, []);
 
   // Fire onComplete with the latest scored items. Pulled out so the
@@ -600,13 +532,24 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
 
   const SUBMIT_WAIT_CAP_SEC = 45; // hard cap so the user can never get stuck
 
-  const handleNext = useCallback(() => {
+  // Move on: called from a Skip tap (a gesture) or straight from the recorder's
+  // onstop after a take (NOT a gesture — 真考节奏，录完直接进下一句).
+  //   pendingTranscribe — the caller just fired a transcribe whose "processing"
+  //                       status isn't in this closure's transcriptStatus yet
+  //   fromGesture=false — skip the synchronous gesture-stack kick of the next
+  //                       clip; the 500ms auto-play timer starts it instead, by
+  //                       which time the mic tracks are released (iOS routes
+  //                       audio exclusively — don't start playback over an
+  //                       open mic).
+  const handleNext = useCallback((opts) => {
+    const pendingTranscribe = !!(opts && opts.pendingTranscribe);
+    const fromGesture = !(opts && opts.fromGesture === false);
     setAutoBlocked(false);
     if (current < total - 1) {
       // Exam-controller mode: kick the NEXT sentence's clip synchronously in
       // this click (gesture-stack playback — belt and braces on top of the
       // unlocked element). The auto-play effect sees it and skips its timer.
-      if (examController) {
+      if (examController && fromGesture) {
         const next = items[current + 1];
         const nextSrc = next ? sameOriginAudio(next.audio_url) : null;
         if (nextSrc) examController.play(nextSrc, { section: "speaking", taskType: "repeat", itemId: next.id });
@@ -618,7 +561,8 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
     // Last sentence — if anything is still transcribing, hold the finish call
     // until those settle (otherwise the summary screen / mock-exam parent
     // would see null scores for in-flight items).
-    if (transcriptStatus.some(s => s === "processing")) {
+    if (pendingTranscribe || transcriptStatus.some(s => s === "processing")) {
+      setPhase("submitting");
       setSubmitting(true);
       setSubmitWaitSeconds(SUBMIT_WAIT_CAP_SEC);
       return;
@@ -661,6 +605,42 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
   const handleSkip = useCallback(() => {
     handleNext();
   }, [handleNext]);
+
+  // Capture the take, kick off server-side transcription, and move straight on
+  // to the next sentence (or into the STT hold on the last one). The upload is
+  // never awaited — transcripts backfill into their slots while the user keeps
+  // going, and the summary shows everything at the end.
+  const handleRecordingComplete = useCallback((blobUrl, blob, durationMs) => {
+    const idx = current;
+    const sentenceText = sentence?.sentence || "";
+    const questionId = sentence?.id || "";
+
+    setRecordings(prev => {
+      const next = [...prev];
+      next[idx] = blobUrl;
+      return next;
+    });
+
+    // Skip the upload if we've already seen NOT_PRO once this session.
+    let willTranscribe = false;
+    if (notPro || !blob) {
+      setTranscriptStatus(prev => {
+        const next = [...prev];
+        next[idx] = "failed";
+        return next;
+      });
+      setTranscriptError(prev => {
+        const next = [...prev];
+        next[idx] = notPro ? "PRO_GATE" : "EMPTY_AUDIO";
+        return next;
+      });
+    } else {
+      runTranscribeJob({ idx, blob, sentenceText, questionId, durationMs });
+      willTranscribe = true;
+    }
+
+    handleNext({ pendingTranscribe: willTranscribe, fromGesture: false });
+  }, [current, sentence, notPro, runTranscribeJob, handleNext]);
 
   // Real-exam setting narration for the intro screen (deterministic per set).
   //
@@ -808,6 +788,17 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
                 Avg level {avgLevel.toFixed(1)}/5 across {validScores.length} sentences · band estimated from Listen &amp; Repeat only, not an official ETS score
               </div>
             )}
+            {/* Server returned NOT_PRO — no transcripts this session */}
+            {notPro && (
+              <div style={{
+                margin: "14px auto 0", maxWidth: 420, padding: "12px 16px", textAlign: "left",
+                background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
+                fontSize: 13, color: "#92400E", lineHeight: 1.6,
+              }}>
+                <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
+                录音已保存，可对照下方原句自查。升级 Pro 后可解锁自动识别和发音评分。
+              </div>
+            )}
           </SurfaceCard>
 
           {/* Sentence list with replay + scores */}
@@ -849,6 +840,19 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
                             color: accuracyColor(sc.accuracy),
                           }}>
                             {sc.accuracy}% Accuracy
+                          </span>
+                        )}
+                        {/* Transient STT failure (network / server) — not the Pro gate, which has its own banner */}
+                        {!sc && recordings[i] && transcriptStatus[i] === "failed"
+                          && transcriptError[i] !== "NOT_PRO" && transcriptError[i] !== "PRO_GATE" && (
+                          <span
+                            title={`识别失败：${transcriptError[i] || "未知错误"}`}
+                            style={{
+                              fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999,
+                              background: "#FEF2F2", color: "#991B1B",
+                            }}
+                          >
+                            识别失败
                           </span>
                         )}
                         <ReplayButton label="Original" onPlay={() => playOriginalSentence(item)} />
@@ -986,11 +990,11 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
               </div>
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 24 }}>
                 {isRecording
-                  ? "Recording — repeat the sentence you just heard, then tap the button to stop."
+                  ? "Repeat the sentence, then tap the button to stop — the next one follows automatically."
                   : "Repeat the sentence you just heard"}
               </div>
-              {/* 真考节奏：原句一放完麦克风就自动打开，不等用户点。autoStart 每次进入
-                  录音阶段（含 Re-record）都生效；被浏览器拒绝时退回手动点麦 + 提示。 */}
+              {/* 真考节奏：原句一放完麦克风就自动打开，不等用户点；被浏览器拒绝时
+                  退回手动点麦 + 提示。录完（点停止或 30s 到顶）直接进下一句。 */}
               <VoiceRecorder
                 onRecordingComplete={handleRecordingComplete}
                 onRecordingStateChange={handleRecordingStateChange}
@@ -1028,8 +1032,10 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
             </div>
           )}
 
-          {/* Phase: Review */}
-          {phase === "review" && (
+          {/* Phase: Submitting — the last take is in; hold until the in-flight STT
+              jobs settle so the summary / mock-exam parent don't see null scores.
+              45s hard cap (see submitWaitSeconds) + an explicit skip link. */}
+          {phase === "submitting" && (
             <div>
               <div style={{
                 width: 56, height: 56, borderRadius: "50%", margin: "0 auto 16px",
@@ -1038,81 +1044,26 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
                 <span style={{ fontSize: 26 }}>✓</span>
               </div>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
-                Recorded
+                All sentences recorded
               </div>
-              {/* 真考里每句答完直接进下一句，不会当场告诉你这句对了多少。逐句准确率 /
-                  逐词对照统一放到最后的总结页（scores 照常在后台回填，这里不渲染）。 */}
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 16 }}>
-                这句的识别结果不在这里显示，全部录完后在总结页统一查看
+                正在完成识别… ({submitWaitSeconds}s)
               </div>
-
-              <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 24 }}>
-                <ReplayButton label="Original" onPlay={() => playOriginalSentence(sentence)} />
-                {recordings[current] && (
-                  <ReplayButton label="My Recording" blobUrl={recordings[current]} />
-                )}
-              </div>
-
-              {/* Pro upsell — server returned NOT_PRO */}
-              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] === "NOT_PRO" && (
-                <div style={{
-                  marginBottom: 20, padding: "12px 16px",
-                  background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
-                  fontSize: 13, color: "#92400E", lineHeight: 1.6,
-                }}>
-                  <div style={{ fontWeight: 700, marginBottom: 4 }}>🔒 语音识别为 Pro 专属</div>
-                  录音已保存，总结页可对照原句自查。升级 Pro 后可解锁自动识别和发音评分。
-                </div>
-              )}
-
-              {/* Other failure — let the user know it's a transient problem */}
-              {!scores[current] && transcriptStatus[current] === "failed" && transcriptError[current] !== "NOT_PRO" && (
-                <div style={{
-                  marginBottom: 20, padding: "10px 14px",
-                  background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10,
-                  fontSize: 12, color: "#991B1B", lineHeight: 1.6,
-                }}>
-                  识别失败：{transcriptError[current] || "未知错误"}。录音已保存，可重录或继续下一题。
-                </div>
-              )}
-
-              <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-                <Btn
-                  variant="secondary"
-                  onClick={() => { cancelTranscribeFor(current); setAutoBlocked(false); setPhase("record"); }}
-                  disabled={submitting}
-                >
-                  Re-record
-                </Btn>
-                <Btn
-                  onClick={handleNext}
-                  disabled={submitting}
-                  style={{ background: SPK.color, borderColor: SPK.color }}
-                >
-                  {submitting
-                    ? `正在完成识别… (${submitWaitSeconds}s)`
-                    : current < total - 1 ? "Next Sentence" : "Finish"}
-                </Btn>
-              </div>
-              {submitting && (
-                <div style={{ marginTop: 10, textAlign: "center" }}>
-                  <button
-                    onClick={forceFinish}
-                    style={{
-                      background: "none", border: "none", cursor: "pointer",
-                      fontSize: 12, color: C.t3, textDecoration: "underline", fontFamily: FONT,
-                    }}
-                  >
-                    跳过等待，直接完成（未识别的题目不计分）
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={forceFinish}
+                style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  fontSize: 12, color: C.t3, textDecoration: "underline", fontFamily: FONT,
+                }}
+              >
+                跳过等待，直接完成（未识别的题目不计分）
+              </button>
             </div>
           )}
         </SurfaceCard>
 
         {/* Skip button */}
-        {!finished && phase !== "review" && (
+        {!finished && phase !== "submitting" && (
           <div style={{ textAlign: "center", marginTop: 16 }}>
             <button
               onClick={handleSkip}
