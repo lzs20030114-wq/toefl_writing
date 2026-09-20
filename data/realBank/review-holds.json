@@ -4666,7 +4666,7 @@
       "id": "real_ap_324_1_31",
       "path": "passage",
       "op": "trim_tail",
-      "from": " Another challenge is preserving these spaces\u2014it can be difficult to secure the funding necessary to maintain",
+      "from": " Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain",
       "why": "结尾半句被截（…necessary to maintain），截掉残句；Q4 依据的 rising rents 在前一句，保留",
       "source": "truncation-sweep-2026-09-14"
     },
@@ -4696,6 +4696,60 @@
       "from": " Morning Afternoon Evening 84% 90% 0 93% 15-20 10 KM",
       "why": "指令语尾巴串入天气图表的 OCR 数字残片",
       "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_511_2_11",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " and the need for constant",
+      "why": "末句被截在「…and the need for constant」，截到 computations 收句；Q14（为什么提 optimize algorithms，答案 D 节能）依据的「optimize algorithms to reduce unnecessary computations」保留。原卷 5.11 若拿到完整截图可改 set 补全",
+      "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_511_2_11",
+      "path": "passage",
+      "op": "append",
+      "to": ".",
+      "why": "trim_tail 后补句末句号",
+      "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_415_1",
+      "path": "scenario",
+      "op": "trim_tail",
+      "from": " at your university about dining",
+      "why": "指令语断在「about dining」（同 420_1 / 424_1 一样是串进复述套的面试开场白），截到 research study 收句（同 314_1 口径）",
+      "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_415_1",
+      "path": "scenario",
+      "op": "append",
+      "to": ".",
+      "why": "trim_tail 后补句末句号",
+      "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_223_1",
+      "path": "intro",
+      "op": "trim_tail",
+      "from": " The researcher will ask you some questio",
+      "why": "开场白末句截在半个词上（questio）；这句是「The researcher will ask you some questions.」套话、不带题意，整句截掉",
+      "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "speaking/interview",
+      "id": "real_interview_311_1",
+      "path": "intro",
+      "op": "trim_tail",
+      "from": " The researcher will ask",
+      "why": "开场白末句被截（The researcher will ask…），套话不带题意，整句截掉",
+      "source": "truncation-sweep-2026-09-20"
     }
   ]
 }
