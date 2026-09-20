@@ -295,7 +295,14 @@
   `node scripts/scoring-gate.mjs --quick`（云端无 DEEPSEEK_API_KEY 跑不了）留一行基准。
 - [高] **改造前基线**：本机 `node scripts/ops/audit-writing-reports.mjs`（只读）跑一次留基线 JSON；上线一周后再跑一次对比
   注入蓝标率 / 兜底短板率 / 总评去重率 / 标签集中度。
-- [中] **prompt 层待拍板**：拆「评分」与「讲课」为两次调用（评分 prompt 与闸门不动，取中位样本的分数 + ERRORS + SIGNALS
+- [✅已落地 2026-09-20] **讲评第二次调用**：`app/api/ai/lesson/route.js`（服务端持有 prompt `lib/ai/prompts/writingLesson.js`，不计每日用量，
+  同源+限流 20/min+有效用户校验），评分先出、讲评异步补上并回写 session（`sessionStore.updateSessionDetails`）。
+  **上线后必做**：拿 3–5 篇真实作文看 `parseLesson.ok` 命中率与讲评是否真的引了原句、有没有误判「缺的是哪一层」；
+  低于预期先收紧 prompt 格式再放量。评分路由只做了抽函数重构（lib/ai/upstream.js / routeGuards.js），34 个既有用例未改全绿。
+- [中] 讲评待决事项：①模考路径（onComplete）本轮无讲评，MockExamResult 的讲评区块暂不会出现；②free 用户讲评未做 Pro 门控
+  （每篇多一次约 4K token 调用，不扣次数），是否限 tier/限次待产品拍板；③云端回写是乐观更新无回滚、找不到 id 只重试一次 sync；
+  ④自查勾选不持久（刷新即丢）。
+- [中] ~~**prompt 层待拍板**~~（已按「拆两次调用」落地，见上）：拆「评分」与「讲课」为两次调用（评分 prompt 与闸门不动，取中位样本的分数 + ERRORS + SIGNALS
   再发一次「写课」调用）vs 挤进现有 prompt（讨论 prompt 距 12000 字符上限仅余 ~1100，且加长输出会顶 8000 token 预算尾部截断）。
   倾向拆。拆之后要做：总评三句（目标 / 引原句说停在哪 / 下一步）、短板 1 强制内容层且四段结构、论证诊断方法（讨论）与
   目标展开+语域诊断（邮件）、PATTERNS 删「未回应他人观点」、COMPARISON 固定三维度 + 引导语。

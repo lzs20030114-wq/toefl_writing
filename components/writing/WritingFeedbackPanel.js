@@ -137,8 +137,10 @@ function PromptCollapse({ type, pd }) {
   );
 }
 
-export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight }) {
+export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight, lessonState, onRetryLesson }) {
   const [secondaryTab, setSecondaryTab] = useState("macro");
+  // 「现在动手」的三条自查只是给用户自己打勾用的，纯本地 state，不入库。
+  const [checkedChecks, setCheckedChecks] = useState({});
   const [activeErrorId, setActiveErrorId] = useState(null);
   const [tooltipFlip, setTooltipFlip] = useState(false);
   const leftPanelRef = useRef(null);
@@ -171,6 +173,18 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   const comparison = fb?.comparison || { modelEssay: "", points: [] };
   const dims = fb?.rubric?.dimensions || null;
   const errorTriage = fb?.errorTriage || null;
+  // 讲评(lesson)：评分之后的第二次调用产物。没有它时整页保持改造前的样子。
+  const lesson = fb?.lesson && typeof fb.lesson === "object" ? fb.lesson : null;
+  const lessonVerdict = lesson?.verdict || null;
+  const hasVerdict = Boolean(
+    lessonVerdict && (lessonVerdict.goal || lessonVerdict.now || lessonVerdict.next)
+  );
+  const lessonFocus = lesson?.focus || null;
+  const hasFocus = Boolean(lessonFocus && (lessonFocus.strategy || lessonFocus.rewrite));
+  const lessonLanguage = Array.isArray(lesson?.language) ? lesson.language : [];
+  const lessonCompare = Array.isArray(lesson?.compare) ? lesson.compare : [];
+  const lessonNext = lesson?.next || null;
+  const lessonChecks = Array.isArray(lessonNext?.checks) ? lessonNext.checks : [];
 
   const tokens = segmentsToTokens(marks);
   const errorTokens = tokens.filter((t) => t.type === "error");
@@ -183,6 +197,129 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
   ];
 
   const taskLabel = type === "email" ? "邮件写作" : "学术讨论";
+
+  function renderActionCards() {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {actions.map((a, i) => (
+          <div key={i} style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.borderSubtle}`, borderLeft: `4px solid ${i === 0 ? P.rose : P.amber}`, padding: "14px 16px" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>{a.title || `短板 ${i + 1}`}</div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7, marginBottom: 8 }}>
+              <b style={{ color: P.text, background: P.roseSoft, padding: "0 3px", borderRadius: 3 }}>为什么重要：</b> {a.importance || "未提供"}
+            </div>
+            <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7 }}>
+              <b style={{ color: P.primaryDeep, background: P.primarySoft, padding: "0 3px", borderRadius: 3 }}>现在可做的：</b> {a.action || "未提供"}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // 「本课只讲一件事」——讲评的主体。loading 放骨架卡，error 给重试按钮，
+  // 历史记录页（没有 lessonState 也没有 lesson）什么都不渲染。
+  function renderLessonFocus() {
+    if (!hasFocus) {
+      if (lessonState === "loading") {
+        return (
+          <div style={{ background: P.surface, borderRadius: 14, border: `1px dashed ${P.border}`, padding: "18px 20px" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>本课只讲一件事</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 12 }}>
+              {[72, 100, 88].map((w, i) => (
+                <div key={i} style={{ height: 10, width: `${w}%`, borderRadius: 999, background: P.bg }} />
+              ))}
+            </div>
+            <div style={{ fontSize: 12, color: P.textDim, lineHeight: 1.6 }}>讲评生成中，约 30 秒，可以先看逐句批注</div>
+          </div>
+        );
+      }
+      if (lessonState === "error") {
+        return (
+          <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.border}`, padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, color: P.textSec }}>讲评生成失败</span>
+            {onRetryLesson ? <ActionBtn onClick={onRetryLesson}>重新生成讲评</ActionBtn> : null}
+          </div>
+        );
+      }
+      return null;
+    }
+    const rows = [
+      { label: "证据", value: lessonFocus.evidence },
+      { label: "缺的是", value: lessonFocus.missing },
+    ].filter((r) => String(r.value || "").trim());
+    return (
+      <div style={{ background: P.surface, borderRadius: 14, border: `1px solid ${P.borderSubtle}`, borderLeft: `4px solid ${P.primary}`, padding: "16px 18px", boxShadow: P.shadow }}>
+        <div style={{ fontSize: 10.5, fontWeight: 700, color: P.textDim, letterSpacing: 0.5, marginBottom: 6 }}>本课只讲一件事</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: P.text, lineHeight: 1.5, marginBottom: 12 }}>{lessonFocus.strategy || "本课重点"}</div>
+        {rows.map((r) => (
+          <div key={r.label} style={{ fontSize: 13, color: P.textSec, lineHeight: 1.75, marginBottom: 8 }}>
+            <b style={{ color: P.text }}>{r.label}：</b>{r.value}
+          </div>
+        ))}
+        {String(lessonFocus.rewrite || "").trim() ? (
+          <div style={{ marginTop: 10, background: P.primarySoft, border: `1px solid ${P.primary}25`, borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: P.primaryDeep, marginBottom: 6 }}>示范改写</div>
+            <div style={{ fontSize: 13.5, color: "#052e16", lineHeight: 1.85, fontFamily: "Georgia, 'Times New Roman', serif", whiteSpace: "pre-wrap" }}>{lessonFocus.rewrite}</div>
+          </div>
+        ) : null}
+        {String(lessonFocus.transfer || "").trim() ? (
+          <div style={{ marginTop: 10, fontSize: 12.5, color: P.textSec, lineHeight: 1.7 }}>
+            <b style={{ color: P.text }}>迁移：</b>{lessonFocus.transfer}
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  function renderLessonLanguage() {
+    if (lessonLanguage.length === 0) return null;
+    return (
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 12 }}>先改这几处语言</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {lessonLanguage.map((item, i) => (
+            <div key={i} style={{ background: P.surface, borderRadius: 10, border: `1px solid ${P.border}`, padding: "11px 13px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                <div style={{ flex: 1, minWidth: 0, fontSize: 12.5, fontStyle: "italic", color: P.text, lineHeight: 1.65 }}>{item.quote || "（未给出原句）"}</div>
+                {item.kind ? (
+                  <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 800, padding: "2px 7px", borderRadius: 999, whiteSpace: "nowrap", background: item.kind === "treatable" ? P.tealSoft : P.amberSoft, color: item.kind === "treatable" ? P.teal : P.amber }}>
+                    {item.kind === "treatable" ? "可治" : "不可治"}
+                  </span>
+                ) : null}
+              </div>
+              {item.fix ? <div style={{ marginTop: 6, fontSize: 12.5, color: P.textSec, lineHeight: 1.7 }}>{item.fix}</div> : null}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function renderLessonNext() {
+    const task = String(lessonNext?.task || "").trim();
+    if (!task && lessonChecks.length === 0) return null;
+    return (
+      <div style={{ background: P.amberSoft, borderRadius: 14, border: `1px solid ${P.amber}30`, padding: "16px 18px" }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>现在动手</div>
+        {task ? <div style={{ fontSize: 13.5, color: P.text, lineHeight: 1.8, marginBottom: lessonChecks.length ? 12 : 0 }}>{task}</div> : null}
+        {lessonChecks.length > 0 ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {lessonChecks.map((check, i) => (
+              <label key={i} style={{ display: "flex", alignItems: "flex-start", gap: 9, fontSize: 12.5, color: P.textSec, lineHeight: 1.7, cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={Boolean(checkedChecks[i])}
+                  onChange={() => setCheckedChecks((prev) => ({ ...prev, [i]: !prev[i] }))}
+                  style={{ marginTop: 3, flexShrink: 0, accentColor: P.primary, cursor: "pointer" }}
+                />
+                <span style={{ minWidth: 0, textDecoration: checkedChecks[i] ? "line-through" : "none", opacity: checkedChecks[i] ? 0.6 : 1 }}>{check}</span>
+              </label>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   function renderMacro() {
     return (
@@ -201,7 +338,22 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
               </div>
             ) : null}
           </div>
-          {summary ? <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: dims || goals.length ? 18 : 0 }}>{summary}</p> : null}
+          {hasVerdict ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: dims || goals.length ? 18 : 0 }}>
+              {[
+                { label: "目标", value: lessonVerdict.goal },
+                { label: "现状", value: lessonVerdict.now },
+                { label: "下一步", value: lessonVerdict.next },
+              ].filter((r) => String(r.value || "").trim()).map((r) => (
+                <div key={r.label} style={{ fontSize: 13, color: "rgba(255,255,255,0.78)", lineHeight: 1.75 }}>
+                  <b style={{ color: "#fff", fontWeight: 800 }}>{r.label}：</b>
+                  {r.value}
+                </div>
+              ))}
+            </div>
+          ) : summary ? (
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.75, margin: 0, marginBottom: dims || goals.length ? 18 : 0 }}>{summary}</p>
+          ) : null}
           {dims ? (
             <div
               style={{
@@ -246,23 +398,26 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
           ) : null}
         </div>
 
+        {renderLessonFocus()}
+        {renderLessonLanguage()}
+        {renderLessonNext()}
+
         {actions.length > 0 ? (
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 12 }}>结构与语域优化建议</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {actions.map((a, i) => (
-                <div key={i} style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.borderSubtle}`, borderLeft: `4px solid ${i === 0 ? P.rose : P.amber}`, padding: "14px 16px" }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: P.text, marginBottom: 10 }}>{a.title || `短板 ${i + 1}`}</div>
-                  <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7, marginBottom: 8 }}>
-                    <b style={{ color: P.text, background: P.roseSoft, padding: "0 3px", borderRadius: 3 }}>为什么重要：</b> {a.importance || "未提供"}
-                  </div>
-                  <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.7 }}>
-                    <b style={{ color: P.primaryDeep, background: P.primarySoft, padding: "0 3px", borderRadius: 3 }}>现在可做的：</b> {a.action || "未提供"}
-                  </div>
-                </div>
-              ))}
+          lesson ? (
+            /* 有讲评时，评分那一路给的短板卡降级为可展开的附录：一次只教一件事，
+               这两张卡留着备查，但不再和「本课」抢注意力。 */
+            <details>
+              <summary style={{ fontSize: 12, fontWeight: 700, color: P.textDim, cursor: "pointer", userSelect: "none" }}>
+                评分时给出的短板卡
+              </summary>
+              <div style={{ marginTop: 12 }}>{renderActionCards()}</div>
+            </details>
+          ) : (
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 12 }}>结构与语域优化建议</div>
+              {renderActionCards()}
             </div>
-          </div>
+          )
         ) : null}
 
         {patterns.length > 0 ? (
@@ -378,10 +533,28 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
     );
   }
 
+  // 核心差异分析：有讲评的对比点就用讲评那一版（维度名 / 你的 / 范文 / 差在，
+  // 每条都指着具体原句），否则回落到评分报告里的 comparison.points。
+  function renderLessonCompare() {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {lessonCompare.map((pt, i) => (
+          <div key={i} style={{ background: P.surface, borderRadius: 12, border: `1px solid ${P.border}`, padding: "14px 16px" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 8 }}>{pt.index ? `${pt.index}. ` : ""}{pt.dim || "对比"}</div>
+            {pt.yours ? <div style={{ background: P.bg, borderRadius: 7, padding: "8px 10px", fontSize: 12, marginBottom: 6 }}><b>你的：</b><ProBlur isPro={isPro}>{pt.yours}</ProBlur></div> : null}
+            {pt.model ? <div style={{ background: P.primarySoft, borderRadius: 7, padding: "8px 10px", fontSize: 12, marginBottom: 6 }}><b>范文：</b><ProBlur isPro={isPro}>{pt.model}</ProBlur></div> : null}
+            {pt.gap ? <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.65 }}><b>差在：</b><ProBlur isPro={isPro}>{pt.gap}</ProBlur></div> : null}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   function renderSample() {
     const modelEssay = String(comparison.modelEssay || "").trim();
     const points = Array.isArray(comparison.points) ? comparison.points : [];
-    if (!modelEssay && !points.length) return <div style={{ padding: "40px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无范文对比数据。</div>;
+    const useLessonCompare = lessonCompare.length > 0;
+    if (!modelEssay && !points.length && !useLessonCompare) return <div style={{ padding: "40px 0", textAlign: "center", color: P.textDim, fontSize: 13 }}>暂无范文对比数据。</div>;
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {modelEssay ? (
@@ -397,7 +570,12 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
             )}
           </div>
         ) : null}
-        {points.length > 0 ? (
+        {useLessonCompare ? (
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 12 }}>核心差异分析</div>
+            {renderLessonCompare()}
+          </div>
+        ) : points.length > 0 ? (
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: P.text, marginBottom: 12 }}>核心差异分析</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

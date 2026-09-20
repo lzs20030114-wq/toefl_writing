@@ -3,9 +3,10 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import EM_DATA from "../../data/emailWriting/prompts.json";
 import AD_DATA from "../../data/academicWriting/prompts.json";
 import { wc } from "../../lib/utils";
-import { saveSess, addDoneIds } from "../../lib/sessionStore";
+import { saveSess, addDoneIds, updateSessionDetails } from "../../lib/sessionStore";
 import { mapScoringError } from "../../lib/ai/client";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
+import { generateWritingLesson } from "../../lib/ai/writingLesson";
 import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, normalizeEmailTopic, pickRandomPrompt } from "../../lib/questionSelector";
 import { peekRetrySnapshot, clearRetrySnapshot } from "../../lib/history/retry";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
@@ -189,6 +190,9 @@ export function WritingTask({
   const [run, setRun] = useState(false);
   const [phase, setPhase] = useState("ready");
   const [fb, setFb] = useState(null);
+  // 讲评(lesson)是评分之后的第二次调用：idle | loading | done | error。
+  // 失败只影响这一块，评分报告照常显示（fail-open）。
+  const [lessonState, setLessonState] = useState("idle");
   const [requestState, setRequestState] = useState("idle");
   const [scoreError, setScoreError] = useState("");
   const [toast, setToast] = useState(null);
@@ -200,6 +204,9 @@ export function WritingTask({
   const submitLockRef = useRef(false);
   const practiceRootIdRef = useRef("");
   const practiceAttemptRef = useRef(1);
+  // 迟到的讲评结果必须被丢弃：切题/再练/卸载时 attempt id 自增，回调发现对不上就静默返回。
+  const lessonAttemptRef = useRef(0);
+  const lessonCtxRef = useRef(null);
 
   useEffect(() => {
     if (!pd?.id) return;
@@ -214,7 +221,7 @@ export function WritingTask({
     practiceAttemptRef.current = 1;
   }, [type, pd?.id, initialPracticeRootId, initialPracticeAttempt]);
 
-  useEffect(() => () => { clearInterval(tr.current); clearInterval(elapsedRef.current); }, []);
+  useEffect(() => () => { clearInterval(tr.current); clearInterval(elapsedRef.current); lessonAttemptRef.current += 1; }, []);
   useEffect(() => { setPd(pi >= 0 ? data[pi] || null : null); }, [pi, data]);
   useEffect(() => { setIntro(showTaskIntro); }, [showTaskIntro, type]);
 
@@ -283,6 +290,47 @@ export function WritingTask({
     }
   }
 
+  // 讲评(lesson)：评分完成后另发一次 /api/ai/lesson。不计用量、失败静默降级。
+  async function startLesson(ctx) {
+    if (!ctx?.report) return;
+    lessonCtxRef.current = ctx;
+    const attemptId = ++lessonAttemptRef.current;
+    setLessonState("loading");
+    try {
+      const lesson = await generateWritingLesson(type, ctx.promptData, ctx.essay, ctx.report);
+      if (attemptId !== lessonAttemptRef.current) return; // 迟到结果（已切题/已卸载）
+      setFb((prev) => (prev ? { ...prev, lesson } : prev));
+      setLessonState("done");
+      try {
+        await updateSessionDetails(
+          { practiceRootId: ctx.practiceRootId, practiceAttempt: ctx.practiceAttempt },
+          (details) => ({
+            ...(details || {}),
+            feedback: { ...((details && details.feedback) || ctx.report), lesson },
+          }),
+        );
+      } catch (e) {
+        console.warn("lesson session write-back failed", e);
+      }
+    } catch (e) {
+      if (attemptId !== lessonAttemptRef.current) return;
+      console.warn("writing lesson failed", e);
+      setLessonState("error");
+    }
+  }
+
+  function retryLesson() {
+    const ctx = lessonCtxRef.current;
+    if (!ctx) return;
+    startLesson(ctx);
+  }
+
+  function resetLesson() {
+    lessonAttemptRef.current += 1;
+    lessonCtxRef.current = null;
+    setLessonState("idle");
+  }
+
   async function runScoringAttempt() {
     if (submitLockRef.current) return;
     submitLockRef.current = true;
@@ -293,6 +341,7 @@ export function WritingTask({
     setRequestState("pending");
     setScoreError("");
     setFb(null);
+    resetLesson();
     try {
       if (!pd) {
         throw new Error("题目数据缺失。");
@@ -301,6 +350,8 @@ export function WritingTask({
       setFb(r);
       setPhase("done");
       if (r) {
+        const practiceRootId = practiceRootIdRef.current || createPracticeRootId(type, pd?.id);
+        const practiceAttempt = practiceAttemptRef.current;
         const payload = {
           type, score: r.score, band: r.band, wordCount: wc(text), weaknesses: r.weaknesses, next_steps: r.next_steps, mode: practiceMode,
           details: {
@@ -309,14 +360,17 @@ export function WritingTask({
             promptData: pd,
             userText: text,
             feedback: r,
-            practiceRootId: practiceRootIdRef.current || createPracticeRootId(type, pd?.id),
-            practiceAttempt: practiceAttemptRef.current,
+            practiceRootId,
+            practiceAttempt,
           }
         };
         if (persistSession) {
           saveSess(payload);
           addDoneIds(storageKey, [pd.id]);
           sessionSavedRef.current = true;
+          // 先出分、再补课：分数与 session 已经落地，讲评单独再发一次请求，
+          // 到了就合并进 fb 并回写那条 session。失败不影响已显示的报告。
+          startLesson({ report: r, promptData: pd, essay: text, practiceRootId, practiceAttempt });
         }
         if (typeof onComplete === "function" && !completionSentRef.current) {
           completionSentRef.current = true;
@@ -457,7 +511,7 @@ export function WritingTask({
     if (elapsedRef.current) clearInterval(elapsedRef.current);
     if (tr.current) clearInterval(tr.current);
     deadlineRef.current = 0;
-    setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; sessionSavedRef.current = false; setIntro(showTaskIntro);
+    setPi(n); setPd(data[n]); setText(""); setTl(limit); setElapsed(0); setRun(false); setPhase("ready"); setFb(null); resetLesson(); setRequestState("idle"); setScoreError(""); submitLockRef.current = false; completionSentRef.current = false; sessionSavedRef.current = false; setIntro(showTaskIntro);
   }
 
   function retryCurrentPrompt() {
@@ -471,6 +525,7 @@ export function WritingTask({
     setRun(false);
     setPhase("ready");
     setFb(null);
+    resetLesson();
     setRequestState("idle");
     setScoreError("");
     submitLockRef.current = false;
@@ -538,6 +593,8 @@ export function WritingTask({
           onNext={next}
           onRetry={retryCurrentPrompt}
           onExit={onExit}
+          lessonState={lessonState}
+          onRetryLesson={retryLesson}
         />
       ) : mobileActiveWriting ? (
         /* 移动端答题：全屏 flex 布局，无 PageShell */

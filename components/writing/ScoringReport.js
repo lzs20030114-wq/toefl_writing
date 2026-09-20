@@ -101,6 +101,13 @@ export function ScoringReport({ result, type }) {
   const triageMinor = String(errorTriage?.minorSummary || "").trim();
   const triageVerdict = String(errorTriage?.verdict || "").trim();
   const showTriage = Boolean(errorTriage) && (triageCapped.length > 0 || triageMinor || triageVerdict);
+  // 讲评(lesson)：评分之后的第二次调用产物。模考结果/历史行只做只读展示，
+  // 没有 lesson 的旧记录一整块都不渲染。
+  const lesson = report.lesson && typeof report.lesson === "object" ? report.lesson : null;
+  const lessonFocus = lesson?.focus || null;
+  const lessonNext = lesson?.next || null;
+  const lessonChecks = Array.isArray(lessonNext?.checks) ? lessonNext.checks : [];
+  const showLesson = Boolean(lessonFocus && (lessonFocus.strategy || lessonFocus.rewrite));
 
   const patternRows = useMemo(
     () =>
@@ -153,6 +160,29 @@ export function ScoringReport({ result, type }) {
           </div>
         )}
       </div>
+
+      {showLesson ? (
+        <DisclosureSection title="本课只讲一件事" defaultOpen preview={lessonFocus.strategy || ""} contentStyle={{ padding: 14 }}>
+          <div style={{ display: "grid", gap: 8 }}>
+            {lessonFocus.strategy ? <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, lineHeight: 1.6 }}>{lessonFocus.strategy}</div> : null}
+            {lessonFocus.evidence ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>证据：</b>{lessonFocus.evidence}</div> : null}
+            {lessonFocus.missing ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>缺的是：</b>{lessonFocus.missing}</div> : null}
+            {lessonFocus.rewrite ? (
+              <div style={{ background: "#ecfdf5", border: "1px solid rgba(13,150,104,0.19)", borderRadius: 6, padding: "10px 12px" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#087355", marginBottom: 6 }}>示范改写</div>
+                <div style={{ fontSize: 13, color: "#052e16", lineHeight: 1.85, whiteSpace: "pre-wrap" }}>{lessonFocus.rewrite}</div>
+              </div>
+            ) : null}
+            {lessonFocus.transfer ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>迁移：</b>{lessonFocus.transfer}</div> : null}
+            {lessonNext?.task ? <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>任务：</b>{lessonNext.task}</div> : null}
+            {lessonChecks.length > 0 ? (
+              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: C.t2, lineHeight: 1.8 }}>
+                {lessonChecks.map((check, idx) => <li key={idx}>{check}</li>)}
+              </ul>
+            ) : null}
+          </div>
+        </DisclosureSection>
+      ) : null}
 
       <DisclosureSection title="薄弱点修改建议" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"} contentStyle={{ padding: 14 }}>
         {sectionStates.ACTION && !sectionStates.ACTION.ok ? (
