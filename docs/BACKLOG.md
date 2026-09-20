@@ -19,6 +19,7 @@
 - [低] 模考 6.4 残项：#13 邮件排版（等参考图）/ #2#3 全屏与顶栏（等定范围）/ #18 三科合考（用户已 defer）。
 
 - [中] 真题专区复核余项（2026-09-07 全库复核，报告 data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md，清单 data/realBank/review-holds.json）：①音频：切句 bug（a.m. 被劈开）已修，真题 23 条 + 生成库 79 条音频已作废待补配（本机 render_real_audio / Actions backfill-audio）；②`real_ap_511_1_26#2` 答案键 D vs 独立作答 C，对原截图核；③LC 说话人对调 4 条已改题干放行（rf0620_2_06 拆轮后待本机补配 1 条音频），rf0808_2_04 / rf0808_2_06 另有截断仍扣；④放行任何一条 = 删清单行 + 本机重跑 build_bank（成品已过滤，源料在 .codex-tmp）；⑤题池阅读 parse 阶段要保住段落分隔（本次 5 题因「paragraph N」无从定位被扣）。
+- [低] `data/realExam2026/` 里两篇学术阅读真题原文被截半句（`2026-03-10_ap1` "…floating turbines represent both a"、`2026-05-03_ap1` "…strategically placing these"）。这是校准锚点语料，按「真题 ground truth 不许改」的口径本次**没动**，只登记：若后续拿到完整原卷，补全后要重跑 `lib/quality/scoreBatch.mjs` 与 gate 冻结带。（成品库 data/realBank 的同类断句已于 2026-09-14 清零，闸门 `scripts/realbank/truncation_scan.js`）
 - [中] 真题录入二期两项口径待拍板：①~~BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉，只能做成「真题句子 + 本站切块」~~ **不成立，已关（2026-09-14 核实）**：那只对 realExam2026 的 `scrambled_ocr` 文本成立；`extract_bs_pages.py` 直接看截图读块边界（块间大间隔可辨）+ 机械校验（答案句须由模板给定词 + 词块按序恰好拼出），09-08 起 38 套 328/367 过校验；09-14 让它认合订卷（按 OCR 缓存找造句页）又补 14 套 113 题过校验、去重后 +75（专区造句 281→336 题 / 36→44 套），无需任何来源分档拍板；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
 
 - [高] 真题丢题全科口径（2026-09-14，报告 data/claudeGen/reports/REALBANK-LOSS-SYSTEMIC-2026-09-14.md）：

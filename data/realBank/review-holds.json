@@ -4650,6 +4650,52 @@
       "to": "Stoicism in Ancient Philosophy\n\nStoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.\n\nA phrase that is commonly used today is \"Stoic pause.\" It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. They are taught to approach their fear rationally and ignore what is outside their control.",
       "why": "正文按原卷截图逐字重录（09-08 下架原因：本地 OCR 丢了两整行 —— a handy trick employed by business leaders in high-stakes negotiations. Stoic principles / speaking can be taught to reframe their anxiety by focusing on preparing for）",
       "source": "recovery-2026-09-15"
+    },
+    {
+      "file": "reading/rdl",
+      "id": "real_rdl_121a_1_23",
+      "path": "text",
+      "op": "replace",
+      "from": " Whether you're a\n",
+      "to": "\n",
+      "why": "倒数第二段断在半句「Whether you're a」，后面直接跳到 RSVP 行；截掉残句（三道题都不依赖这半句）",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_324_1_31",
+      "path": "passage",
+      "op": "trim_tail",
+      "from": " Another challenge is preserving these spaces\u2014it can be difficult to secure the funding necessary to maintain",
+      "why": "结尾半句被截（…necessary to maintain），截掉残句；Q4 依据的 rising rents 在前一句，保留",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_314_1",
+      "path": "scenario",
+      "op": "trim_tail",
+      "from": " in the",
+      "why": "指令语断在「for faculty to use in the」，截到 use 收句",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_314_1",
+      "path": "scenario",
+      "op": "append",
+      "to": ".",
+      "why": "trim_tail 后补句末句号",
+      "source": "truncation-sweep-2026-09-14"
+    },
+    {
+      "file": "speaking/repeat",
+      "id": "real_repeat_228_1",
+      "path": "scenario",
+      "op": "trim_tail",
+      "from": " Morning Afternoon Evening 84% 90% 0 93% 15-20 10 KM",
+      "why": "指令语尾巴串入天气图表的 OCR 数字残片",
+      "source": "truncation-sweep-2026-09-14"
     }
   ]
 }
