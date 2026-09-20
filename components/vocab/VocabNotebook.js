@@ -329,6 +329,7 @@ export default function VocabNotebook({ onBack }) {
                       {card.reps > 0 && ` · 复习 ${card.reps} 次`}
                       {card.lapses > 0 && ` · 忘过 ${card.lapses} 次`}
                       {r != null && ` · 此刻记得 ${Math.round(r * 100)}%`}
+                      {card.sentences?.length > 0 && ` · ${card.sentences.length + 1} 句语境`}
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>

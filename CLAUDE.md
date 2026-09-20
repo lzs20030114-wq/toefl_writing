@@ -190,6 +190,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 ```
 阅读复盘 WordLookupLayer 划词 → 词典弹窗「☆ 收藏到单词本」
   → lib/vocab/vocabStore.saveWord(): 连词形/音标/释义/标签/**所在原句**/来源一起存
+    （弹窗里多义项拆成 chips，点一条 = 按该义项收藏、整条留 defFull；已收藏的词再遇到是
+    「＋ 加这句语境」进 sentences(≤3) 而不是删除，删除只走「移出单词本」）
   → localStorage 是真源（点一下必须立刻变色，不能等网络）；登录后 /api/vocab 双向合并
     （按 word 取 updatedAt 新的一份，软删除 deletedAt 也参与比较，删除能同步）
 → /vocab-notebook：buildQueue 排今日队列 → VocabReview 翻卡 → gradeCard 写回 SRS 状态
@@ -203,6 +205,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 - **产出卡（释义 + 挖空 → 拼英文）只在词进入 review 后启用**：写作/口语来源、或列表页标了「要会写」（`productive`）的词；
   一个词仍只有一张卡，不双向排
 - **首日隔开提取 3 次**（学习步 10/20 分钟；一场同词最多 4 次、中间隔 ≥10 张）—— 是隔开的多次提取，不是连刷
+- **语境轮换**（`book.pickContext`）：有第二句就按 reps 轮换；只有一句的词进入 review 后每第 3 次改裸词卡，
+  防止记住的是句子不是词；learning 阶段不抽语境
 - 目标留存率 0.90，考前 10 天自动进 0.95 冲刺档（读 studyPlan 的 examDate）
 - 新词毕业后的第一个间隔强制压到 1 天（跨一次睡眠）
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；

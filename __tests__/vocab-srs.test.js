@@ -23,13 +23,23 @@ import {
   mergeCards,
   bookStats,
   buildQueue,
+  activeSentence,
   cardDirection,
   clozeSentence,
+  contextPool,
   contextSentence,
   introducedToday,
   knowledgeEstimate,
+  pickContext,
   sourceLabel,
 } from "../lib/vocab/book";
+import { saveWord, addSentence, chooseSense, getCard } from "../lib/vocab/vocabStore";
+
+jest.mock("../lib/AuthContext", () => ({
+  getSavedCode: jest.fn(() => null),
+  getSavedTier: jest.fn(() => "free"),
+  AUTH_CHANGED_EVENT: "toefl-auth-changed",
+}));
 
 const NOW = new Date("2026-09-13T08:00:00Z");
 const DAY = 86400000;
@@ -372,7 +382,33 @@ describe("normalizeCard", () => {
     expect(c.state).toBe(STATE.NEW);
     expect(c.reps).toBe(0);
     expect(c.def).toBe("");
+    expect(c.defFull).toBe("");
+    expect(c.sentences).toEqual([]);
     expect(typeof c.due).toBe("string");
+  });
+
+  test("语境池去空去重、剔掉和主句重复的那句", () => {
+    const c = normalizeCard({
+      word: "pattern",
+      sentence: "A pattern emerged.",
+      sentences: ["A pattern emerged.", "  ", "The pattern repeats.", "The pattern repeats."],
+    });
+    expect(c.sentences).toEqual(["The pattern repeats."]);
+  });
+
+  test("语境池最多 3 句，超了丢最早加的那几句", () => {
+    const c = normalizeCard({
+      word: "pattern",
+      sentence: "Main.",
+      sentences: ["one pattern", "two pattern", "three pattern", "four pattern"],
+    });
+    expect(c.sentences).toEqual(["two pattern", "three pattern", "four pattern"]);
+  });
+
+  test("defFull 收下整条词典释义", () => {
+    const c = normalizeCard({ word: "pattern", def: "n. 图案", defFull: "n. 图案, 模式\nvt. 模仿" });
+    expect(c.def).toBe("n. 图案");
+    expect(c.defFull).toBe("n. 图案, 模式\nvt. 模仿");
   });
 });
 
@@ -408,6 +444,33 @@ describe("mergeCards", () => {
     // 反过来（新的那份打开了）当然也要生效
     const onNewer = normalizeCard({ word: "cell", productive: true, updatedAt: "2026-09-20T00:00:00Z" });
     expect(mergeCards([off], [onNewer])[0].productive).toBe(true);
+  });
+
+  test("语境池取并集（winner 的在前），defFull 也不会因为另一端更新而丢", () => {
+    const local = normalizeCard({
+      word: "pattern", sentence: "Main.", sentences: ["local pattern"],
+      defFull: "n. 图案, 模式", updatedAt: "2026-09-10T00:00:00Z",
+    });
+    const remote = normalizeCard({
+      word: "pattern", sentence: "Main.", sentences: ["remote pattern"],
+      updatedAt: "2026-09-01T00:00:00Z",
+    });
+    const merged = mergeCards([local], [remote]);
+    expect(merged[0].sentences).toEqual(["local pattern", "remote pattern"]);
+    expect(merged[0].defFull).toBe("n. 图案, 模式");
+  });
+
+  test("并集撞上限时保 winner 那几句，且不会把主句重复进池", () => {
+    const winner = normalizeCard({
+      word: "pattern", sentence: "Main pattern.", sentences: ["w1 pattern", "w2 pattern", "w3 pattern"],
+      updatedAt: "2026-09-10T00:00:00Z",
+    });
+    const loser = normalizeCard({
+      word: "pattern", sentence: "Main pattern.", sentences: ["l1 pattern", "Main pattern."],
+      updatedAt: "2026-09-01T00:00:00Z",
+    });
+    const merged = mergeCards([winner], [loser]);
+    expect(merged[0].sentences).toEqual(["w1 pattern", "w2 pattern", "w3 pattern"]);
   });
 
   test("软删除能传播（删除侧更新时间更新 → 删除赢）", () => {
@@ -555,10 +618,32 @@ describe("卡片方向 / 原句", () => {
     }
   });
 
-  test("一个词只有一张卡：方向是确定的，不随复习次数来回换", () => {
+  test("还没进 review 的卡：方向不随复习次数变（学习阶段不做裸词轮换）", () => {
     const card = { word: "divide", source: "reading", sentence: "A cell divides." };
-    const dirs = [0, 1, 2, 3, 7].map((reps) => cardDirection({ ...card, reps }));
-    expect(new Set(dirs).size).toBe(1);
+    for (const st of [STATE.NEW, STATE.LEARNING, STATE.RELEARNING]) {
+      const dirs = [0, 1, 2, 3, 7].map((reps) => cardDirection({ ...card, state: st, reps }));
+      expect(new Set(dirs)).toEqual(new Set(["context"]));
+    }
+  });
+
+  test("review 后、只有一句语境的词：每第 3 次复习改用裸词卡，防止记住的是句子", () => {
+    const card = { word: "divide", source: "reading", sentence: "A cell divides.", state: STATE.REVIEW };
+    const dirs = [0, 1, 2, 3, 4, 5].map((reps) => cardDirection({ ...card, reps }));
+    expect(dirs).toEqual(["context", "context", "recognize", "context", "context", "recognize"]);
+  });
+
+  test("有第二句语境时就轮换着用，永远不会掉成裸词卡", () => {
+    const card = {
+      word: "divide", source: "reading", state: STATE.REVIEW,
+      sentence: "A cell divides.", sentences: ["Rivers divide the plain."],
+    };
+    const dirs = [0, 1, 2, 3].map((reps) => cardDirection({ ...card, reps }));
+    expect(new Set(dirs)).toEqual(new Set(["context"]));
+    const used = [0, 1, 2, 3].map((reps) => contextSentence({ ...card, reps }));
+    expect(used).toEqual([
+      "A cell divides.", "Rivers divide the plain.",
+      "A cell divides.", "Rivers divide the plain.",
+    ]);
   });
 
   test("context 句把目标词原样留在原句里（屈折变体和大小写都不许被改写）", () => {
@@ -594,6 +679,46 @@ describe("卡片方向 / 原句", () => {
     expect(out.length).toBeLessThan(long.length);
   });
 
+  test("语境池 = 主句 + 额外句，去空去重", () => {
+    expect(contextPool({ word: "divide", sentence: "A.", sentences: ["B.", "A.", ""] })).toEqual(["A.", "B."]);
+    expect(contextPool({ word: "divide" })).toEqual([]);
+    expect(contextPool(null)).toEqual([]);
+  });
+
+  test("pickContext 四种情况", () => {
+    // 池空 → 没有语境可给
+    expect(pickContext({ word: "divide" })).toBeNull();
+    // 只有一句、还没进 review → 每次都是这一句
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.LEARNING, reps: 2 })).toBe("A.");
+    // 只有一句、进了 review → 每第 3 次（reps % 3 === 2）改用裸词卡
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.REVIEW, reps: 2 })).toBeNull();
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.REVIEW, reps: 3 })).toBe("A.");
+    // 有两句以上 → 按 reps 轮换
+    const many = { word: "divide", sentence: "A.", sentences: ["B.", "C."], state: STATE.REVIEW };
+    expect([0, 1, 2, 3, 4].map((reps) => pickContext({ ...many, reps })))
+      .toEqual(["A.", "B.", "C.", "A.", "B."]);
+  });
+
+  test("轮到池里第二句时，长句照样截到目标词那一段", () => {
+    const long =
+      "Although the evidence remains contested, the discovery was pivotal in reshaping our understanding of early human migration, which scholars had long assumed to be impossible during the glacial maximum.";
+    const card = { word: "pivotal", sentence: "A pivotal choice.", sentences: [long], state: STATE.REVIEW, reps: 1 };
+    const out = contextSentence(card);
+    expect(out).toContain("pivotal");
+    expect(out).not.toContain("______");
+    expect(out.split(/\s+/).length).toBeLessThanOrEqual(30);
+    expect(out.length).toBeLessThan(long.length);
+  });
+
+  test("轮到的那句里没有这个词时，顺着池里其余的句子找，不白白退回裸词卡", () => {
+    const card = {
+      word: "divide", state: STATE.REVIEW, reps: 1,
+      sentence: "A cell divides.", sentences: ["与这个词无关的一句。"],
+    };
+    expect(contextSentence(card)).toBe("A cell divides.");
+    expect(cardDirection(card)).toBe("context");
+  });
+
   test("来源显示成中文", () => {
     expect(sourceLabel({ source: "reading" })).toBe("阅读");
     expect(sourceLabel({ source: "listening" })).toBe("听力");
@@ -608,5 +733,79 @@ describe("卡片方向 / 原句", () => {
   test("句子里找不到这个词就不出挖空卡", () => {
     expect(clozeSentence({ word: "cell", sentence: "Nothing here." })).toBeNull();
     expect(clozeSentence({ word: "cell", sentence: "" })).toBeNull();
+  });
+});
+
+/**
+ * 存储层里和语境池/义项相关的那几条规则（vocabStore 是浏览器层，jsdom 下直接跑）。
+ */
+describe("vocabStore · 语境池与义项", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  test("再次收藏同一个词：主句不动，新句子进池", () => {
+    saveWord({ word: "pattern", def: "n. 图案", sentence: "A pattern emerged.", source: "reading" });
+    saveWord({ word: "pattern", def: "n. 图案", sentence: "The pattern repeats.", source: "listening" });
+    const card = getCard("pattern");
+    expect(card.sentence).toBe("A pattern emerged.");
+    expect(card.sentences).toEqual(["The pattern repeats."]);
+  });
+
+  test("同一句再收藏一次不会在池里重复", () => {
+    saveWord({ word: "pattern", sentence: "A pattern emerged.", source: "reading" });
+    saveWord({ word: "pattern", sentence: "A pattern emerged.", source: "reading" });
+    expect(getCard("pattern").sentences).toEqual([]);
+  });
+
+  test("addSentence 追加一句；满 3 句后丢最早的那句", () => {
+    saveWord({ word: "pattern", sentence: "Main pattern.", source: "reading" });
+    ["one pattern", "two pattern", "three pattern", "four pattern"].forEach((s) => addSentence("pattern", s));
+    expect(getCard("pattern").sentences).toEqual(["two pattern", "three pattern", "four pattern"]);
+  });
+
+  test("addSentence 对没收藏的词返回 null，对已在卡上的句子不重复追加", () => {
+    expect(addSentence("nosuchword", "x")).toBeNull();
+    saveWord({ word: "pattern", sentence: "Main pattern.", source: "reading" });
+    expect(addSentence("pattern", "Main pattern.").sentences).toEqual([]);
+    addSentence("pattern", "two pattern");
+    expect(addSentence("pattern", "two pattern").sentences).toEqual(["two pattern"]);
+  });
+
+  test("chooseSense 把某一条义项设成主释义，整条留作 defFull", () => {
+    const full = "n. 模范, 典型, 图案\nvt. 模仿";
+    saveWord({ word: "pattern", def: full, sentence: "A pattern emerged.", source: "reading" });
+    const next = chooseSense("pattern", "n. 图案", full);
+    expect(next.def).toBe("n. 图案");
+    expect(next.defFull).toBe(full);
+    expect(getCard("pattern").def).toBe("n. 图案");
+    expect(chooseSense("nosuchword", "n. 图案", full)).toBeNull();
+  });
+
+  test("chooseSense 没带整条释义时，把被顶掉的旧释义留作备份", () => {
+    saveWord({ word: "pattern", def: "n. 模范, 图案", sentence: "A pattern emerged.", source: "reading" });
+    expect(chooseSense("pattern", "n. 图案").defFull).toBe("n. 模范, 图案");
+  });
+});
+
+describe("activeSentence · 背面例句与正面同源", () => {
+  const two = {
+    word: "pattern",
+    state: "review",
+    sentence: "The pattern on the vase is Greek.",
+    sentences: ["Weather patterns shift every decade."],
+  };
+  test("轮到池里第二句时返回第二句（未截断原文）", () => {
+    expect(activeSentence({ ...two, reps: 1 })).toBe("Weather patterns shift every decade.");
+    expect(activeSentence({ ...two, reps: 2 })).toBe("The pattern on the vase is Greek.");
+  });
+  test("只有一句且轮到裸词卡时返回 null，调用方退回主句", () => {
+    const one = { word: "cell", state: "review", sentence: "Every cell has a nucleus.", reps: 5 };
+    expect(activeSentence(one)).toBeNull();
+    expect(activeSentence({ ...one, reps: 3 })).toBe("Every cell has a nucleus.");
+  });
+  test("轮到的句子不含目标词就兜底到含词的那句", () => {
+    const card = { ...two, reps: 1, sentences: ["A sentence about something else."] };
+    expect(activeSentence(card)).toBe("The pattern on the vase is Greek.");
   });
 });

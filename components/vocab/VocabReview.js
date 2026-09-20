@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
-import { cardDirection, clozeSentence, contextSentence, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, cardDirection, clozeSentence, contextSentence, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 
 /**
@@ -67,6 +67,26 @@ function highlight(sentence, word) {
   );
 }
 
+/**
+ * 词典整条释义（用户在弹窗里点定某一条义项后，整条留在 defFull 里）。
+ * 只在背面出现，而且是小字：主释义要对得上这句话，其余义项是「顺带认一认」，
+ * 摆在同一级会把注意力从「这句里的意思」上拽走。
+ */
+function FullDef({ card }) {
+  if (!card.defFull || card.defFull === card.def) return null;
+  return (
+    <div style={{ fontSize: 12, color: C.t3, marginTop: 6, lineHeight: 1.8 }}>
+      <span style={{
+        fontSize: 10, color: C.t3, background: C.bdrSubtle,
+        borderRadius: 5, padding: "1px 6px", marginRight: 6,
+      }}>
+        词典全部释义
+      </span>
+      <span style={{ whiteSpace: "pre-wrap" }}>{card.defFull}</span>
+    </div>
+  );
+}
+
 function WordLine({ card, size = 30 }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -100,6 +120,8 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
   const context = useMemo(() => (card ? contextSentence(card) : null), [card]);
   const cloze = useMemo(() => (card ? clozeSentence(card) : null), [card]);
+  // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
+  const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
 
   const finished = pos >= queue.length;
@@ -286,9 +308,12 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
             <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${C.bdrSubtle}` }}>
               {/* context 卡的正面已经有词、音标和整句了，背面只补那个缺的答案：释义。 */}
               {mode === "context" ? (
-                <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontWeight: 600 }}>
-                  {card.def || "（这个词收藏时没有释义）"}
-                </div>
+                <>
+                  <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontWeight: 600 }}>
+                    {card.def || "（这个词收藏时没有释义）"}
+                  </div>
+                  <FullDef card={card} />
+                </>
               ) : (
                 <>
                   {mode !== "recognize" && <WordLine card={card} size={28} />}
@@ -300,13 +325,14 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
                       {card.def}
                     </div>
                   )}
-                  {card.sentence && (
+                  <FullDef card={card} />
+                  {shownSentence && (
                     <div style={{
                       marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9,
                       background: C.bg, borderRadius: 10, padding: "10px 14px",
                       borderLeft: `3px solid ${ACCENT}`,
                     }}>
-                      {highlight(card.sentence, card.word)}
+                      {highlight(shownSentence, card.word)}
                     </div>
                   )}
                 </>
