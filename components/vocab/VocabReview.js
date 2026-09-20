@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
-import { cardDirection, clozeSentence, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, cardDirection, clozeSentence, contextSentence, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 
 /**
@@ -13,15 +13,21 @@ import { SpeakButton } from "../shared/SpeakButton";
  *  1. 先回想、后翻面，且必须点一次才翻。被动重读几乎不产生长期记忆：
  *     同样学完，之后继续被测试的词一周后能回忆 80%，只重看的只有 36%
  *     （Karpicke & Roediger 2008, Science）。这一点的量级远大于调度算法的优化空间。
- *  2. 主卡型是原句挖空。语境提升理解，**提取**才提升留存 —— 同一个句子，
- *     挖空和不挖空是两种完全不同的学习活动（den Broek 2018/2022）。
+ *  2. 主卡型是原句里高亮认词：给完整原句、目标词高亮，回忆它在这里是什么意思。
+ *     不再挖空填词 —— 考场上要的是「看到词想起词义」（和 TOEFL 词汇题同形），
+ *     而挖空卡正面挂着音标等于已经把词形给了，真实句子的空位又不唯一，
+ *     它从头到尾没要求过词义提取。语境提升理解，**提取**才提升留存
+ *     （den Broek 2018/2022），所以语境留下，提取的目标换成词义。
  *  3. 只有两个评分键：忘了 / 记得。Anki 官方 FAQ：FSRS 对「主要用 Again/Good」
  *     的用户预测更准；而「忘了却按 Hard」是官方点名唯一会毁掉排期的习惯。
  *     四档的信息增益小于它引入的自评噪声，对我们这种顺手收藏进来的普通用户尤其如此。
  *  4. 不显示下次间隔。看见间隔，用户就会用「我想多久再看到它」而不是
  *     「我记得多牢」来评分。
- *  5. 同一个词一场里最多出现两次，且中间至少隔 10 张。连刷同一个词制造的是
- *     流畅性错觉，不是记忆（Kornell 2009）。
+ *  5. 新词和忘掉的词首日隔开提取 3 次（学习步两步），一场里同一个词最多出现
+ *     4 次，且中间至少隔 10 张。连刷是集中练习，制造的是流畅性错觉而不是记忆
+ *     （Kornell 2009）；隔开的多次提取才有效，同场隔开提取 5–7 次显著优于
+ *     1–3 次（Nakata 2017），而答对 3 次是性价比最高的那个门槛
+ *     （Rawson & Dunlosky 2011）。
  */
 
 const ACCENT = "#0891B2";
@@ -31,13 +37,13 @@ const ACCENT_SOFT = "#ECFEFF";
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 /** 重新插队至少隔这么多张 —— 刚看完答案立刻再问，考的是短时记忆，不是记忆。 */
 const REINSERT_GAP = 10;
-/** 一个词在一场里最多出现几次。 */
-const MAX_APPEARANCES = 2;
+/** 一个词在一场里最多出现几次（学习步两步 = 首日 3 次提取，留一次余量给答错重来）。 */
+const MAX_APPEARANCES = 4;
 
 const DIRECTION_META = {
-  cloze: { label: "填空", tip: "把词放回句子里" },
+  context: { label: "认词", tip: "这个词在这句里是什么意思" },
   recognize: { label: "认词", tip: "这个词什么意思" },
-  recall: { label: "拼写", tip: "这个意思怎么写" },
+  recall: { label: "拼写", tip: "这个意思用英文怎么说" },
 };
 
 /** 把句子里的目标词标出来。匹配不到就原样返回。 */
@@ -58,6 +64,26 @@ function highlight(sentence, word) {
     ) : (
       <span key={i}>{part}</span>
     ),
+  );
+}
+
+/**
+ * 词典整条释义（用户在弹窗里点定某一条义项后，整条留在 defFull 里）。
+ * 只在背面出现，而且是小字：主释义要对得上这句话，其余义项是「顺带认一认」，
+ * 摆在同一级会把注意力从「这句里的意思」上拽走。
+ */
+function FullDef({ card }) {
+  if (!card.defFull || card.defFull === card.def) return null;
+  return (
+    <div style={{ fontSize: 12, color: C.t3, marginTop: 6, lineHeight: 1.8 }}>
+      <span style={{
+        fontSize: 10, color: C.t3, background: C.bdrSubtle,
+        borderRadius: 5, padding: "1px 6px", marginRight: 6,
+      }}>
+        词典全部释义
+      </span>
+      <span style={{ whiteSpace: "pre-wrap" }}>{card.defFull}</span>
+    </div>
   );
 }
 
@@ -91,7 +117,11 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   const shownAtRef = useRef(Date.now());
 
   const card = queue[pos] || null;
+  // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
+  const context = useMemo(() => (card ? contextSentence(card) : null), [card]);
   const cloze = useMemo(() => (card ? clozeSentence(card) : null), [card]);
+  // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
+  const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
 
   const finished = pos >= queue.length;
@@ -245,14 +275,16 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* ── 正面 ── */}
-          {mode === "cloze" && (
+          {/* context：原句照抄、目标词高亮，问的是「它在这里什么意思」。
+              正面刻意不给释义 —— 释义就是答案，给了这张卡就没有提取可言。 */}
+          {mode === "context" && (
             <>
-              <div style={{ fontSize: 17, color: C.t1, lineHeight: 2 }}>{cloze}</div>
-              {card.phonetic && (
-                <div style={{ marginTop: 12, fontSize: 13, color: C.t3, fontFamily: "'Courier New', monospace" }}>
-                  /{card.phonetic}/
-                </div>
-              )}
+              <div style={{ fontSize: 17, color: C.t1, lineHeight: 2 }}>
+                {highlight(context, card.word)}
+              </div>
+              <div style={{ marginTop: 14 }}>
+                <WordLine card={card} size={22} />
+              </div>
             </>
           )}
 
@@ -274,23 +306,36 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
           {/* ── 背面 ── */}
           {revealed && (
             <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${C.bdrSubtle}` }}>
-              {mode !== "recognize" && <WordLine card={card} size={28} />}
-              {card.def && (
-                <div style={{
-                  fontSize: 14, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap",
-                  marginTop: mode === "recognize" ? 0 : 10,
-                }}>
-                  {card.def}
-                </div>
-              )}
-              {card.sentence && (
-                <div style={{
-                  marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9,
-                  background: C.bg, borderRadius: 10, padding: "10px 14px",
-                  borderLeft: `3px solid ${ACCENT}`,
-                }}>
-                  {highlight(card.sentence, card.word)}
-                </div>
+              {/* context 卡的正面已经有词、音标和整句了，背面只补那个缺的答案：释义。 */}
+              {mode === "context" ? (
+                <>
+                  <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontWeight: 600 }}>
+                    {card.def || "（这个词收藏时没有释义）"}
+                  </div>
+                  <FullDef card={card} />
+                </>
+              ) : (
+                <>
+                  {mode !== "recognize" && <WordLine card={card} size={28} />}
+                  {card.def && (
+                    <div style={{
+                      fontSize: 14, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap",
+                      marginTop: mode === "recognize" ? 0 : 10,
+                    }}>
+                      {card.def}
+                    </div>
+                  )}
+                  <FullDef card={card} />
+                  {shownSentence && (
+                    <div style={{
+                      marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9,
+                      background: C.bg, borderRadius: 10, padding: "10px 14px",
+                      borderLeft: `3px solid ${ACCENT}`,
+                    }}>
+                      {highlight(shownSentence, card.word)}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -337,7 +382,9 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
         <div style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10, lineHeight: 1.7 }}>
           {revealed
             ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
-            : "先在心里把答案想出来再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
+            : mode === "recall"
+              ? "先在心里把这个词拼出来再翻面 —— 想不起来的那几秒，才是真正在记东西。"
+              : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
         </div>
       </div>
     </div>

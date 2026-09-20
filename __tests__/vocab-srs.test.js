@@ -23,12 +23,23 @@ import {
   mergeCards,
   bookStats,
   buildQueue,
+  activeSentence,
   cardDirection,
   clozeSentence,
+  contextPool,
+  contextSentence,
   introducedToday,
   knowledgeEstimate,
+  pickContext,
   sourceLabel,
 } from "../lib/vocab/book";
+import { saveWord, addSentence, chooseSense, getCard } from "../lib/vocab/vocabStore";
+
+jest.mock("../lib/AuthContext", () => ({
+  getSavedCode: jest.fn(() => null),
+  getSavedTier: jest.fn(() => "free"),
+  AUTH_CHANGED_EVENT: "toefl-auth-changed",
+}));
 
 const NOW = new Date("2026-09-13T08:00:00Z");
 const DAY = 86400000;
@@ -215,35 +226,84 @@ describe("复习阶段", () => {
 });
 
 describe("学习步骤", () => {
-  test("新词第一次 Good 落在 15 分钟后的学习步上，不跳过当天巩固", () => {
+  const waitMin = (next, from) => (new Date(next.due).getTime() - from.getTime()) / 60000;
+
+  test("新词第一次 Good 落在 10 分钟后的学习步上，不跳过当天巩固", () => {
     const next = schedule(newCardState(NOW), RATING.GOOD, NOW, P);
     expect(next.state).toBe(STATE.LEARNING);
     expect(next.step).toBe(0);
-    const waitMin = (new Date(next.due).getTime() - NOW.getTime()) / 60000;
-    expect(waitMin).toBeCloseTo(15, 3);
+    expect(waitMin(next, NOW)).toBeCloseTo(10, 3);
   });
 
-  test("只有一个学习步：第二次 Good 就毕业到 review", () => {
+  /**
+   * 首日三次提取是这套配置的核心（Nakata 2017 / Rawson & Dunlosky 2011），
+   * 两步学习步就是为了买到它 —— 所以把整条路径钉死，别被「官方建议单步」改回去。
+   */
+  test("新词首日要隔开答对 3 次才毕业：当场 → 10 分钟 → 20 分钟 → review(1 天)", () => {
     let card = { ...newCardState(NOW) };
-    card = { ...card, ...schedule(card, RATING.GOOD, NOW, P) };
-    const at = new Date(NOW.getTime() + 16 * 60000);
-    card = { ...card, ...schedule(card, RATING.GOOD, at, P) };
-    expect(card.state).toBe(STATE.REVIEW);
+
+    const s1 = schedule(card, RATING.GOOD, NOW, P);
+    expect(s1.state).toBe(STATE.LEARNING);
+    expect(s1.step).toBe(0);
+    expect(waitMin(s1, NOW)).toBeCloseTo(10, 3);
+
+    card = { ...card, ...s1 };
+    const at2 = new Date(NOW.getTime() + 11 * 60000);
+    const s2 = schedule(card, RATING.GOOD, at2, P);
+    expect(s2.state).toBe(STATE.LEARNING);
+    expect(s2.step).toBe(1);
+    expect(waitMin(s2, at2)).toBeCloseTo(20, 3);
+
+    card = { ...card, ...s2 };
+    const at3 = new Date(at2.getTime() + 21 * 60000);
+    const s3 = schedule(card, RATING.GOOD, at3, P);
+    expect(s3.state).toBe(STATE.REVIEW);
+    // 新词毕业后的第一个间隔压到 1 天，让它跨过一次睡眠（Mazza et al. 2016）
+    expect(s3.scheduledDays).toBe(1);
   });
 
-  test("新词毕业后的第一个间隔压到 1 天，让它跨过一次睡眠", () => {
-    let card = { ...newCardState(NOW) };
-    card = { ...card, ...schedule(card, RATING.GOOD, NOW, P) };
-    const at = new Date(NOW.getTime() + 16 * 60000);
-    const graduated = schedule(card, RATING.GOOD, at, P);
-    expect(graduated.scheduledDays).toBe(1);
+  test("学习步里任何一步评 Again 都退回第一步（10 分钟）", () => {
+    const atStep0 = { ...newCardState(NOW), state: STATE.LEARNING, step: 0, stability: 3, difficulty: 5, reps: 1 };
+    const back0 = schedule(atStep0, RATING.AGAIN, NOW, P);
+    expect(back0.state).toBe(STATE.LEARNING);
+    expect(back0.step).toBe(0);
+    expect(waitMin(back0, NOW)).toBeCloseTo(10, 3);
+
+    const atStep1 = { ...atStep0, step: 1 };
+    const back1 = schedule(atStep1, RATING.AGAIN, NOW, P);
+    expect(back1.state).toBe(STATE.LEARNING);
+    expect(back1.step).toBe(0);
+    expect(waitMin(back1, NOW)).toBeCloseTo(10, 3);
   });
 
-  test("学习中评 Again 退回第一步", () => {
-    const card = { ...newCardState(NOW), state: STATE.LEARNING, step: 0, stability: 3, difficulty: 5, reps: 1 };
+  test("忘掉的词同样要隔开答对 3 次才放回复习流：10 分钟 → 20 分钟 → review(1 天)", () => {
+    let card = reviewCard();
+
+    const lapse = schedule(card, RATING.AGAIN, NOW, P);
+    expect(lapse.state).toBe(STATE.RELEARNING);
+    expect(lapse.step).toBe(0);
+    expect(waitMin(lapse, NOW)).toBeCloseTo(10, 3);
+
+    card = { ...card, ...lapse };
+    const at2 = new Date(NOW.getTime() + 11 * 60000);
+    const s2 = schedule(card, RATING.GOOD, at2, P);
+    expect(s2.state).toBe(STATE.RELEARNING);
+    expect(s2.step).toBe(1);
+    expect(waitMin(s2, at2)).toBeCloseTo(20, 3);
+
+    card = { ...card, ...s2 };
+    const at3 = new Date(at2.getTime() + 21 * 60000);
+    const s3 = schedule(card, RATING.GOOD, at3, P);
+    expect(s3.state).toBe(STATE.REVIEW);
+    expect(s3.scheduledDays).toBe(1);
+  });
+
+  test("重学中评 Again 退回重学第一步", () => {
+    const card = { ...newCardState(NOW), state: STATE.RELEARNING, step: 1, stability: 3, difficulty: 5, reps: 4 };
     const next = schedule(card, RATING.AGAIN, NOW, P);
-    expect(next.state).toBe(STATE.LEARNING);
+    expect(next.state).toBe(STATE.RELEARNING);
     expect(next.step).toBe(0);
+    expect(waitMin(next, NOW)).toBeCloseTo(10, 3);
   });
 
   test("复习卡当天再看一遍走 same-day 公式，稳定度不会暴涨", () => {
@@ -322,7 +382,33 @@ describe("normalizeCard", () => {
     expect(c.state).toBe(STATE.NEW);
     expect(c.reps).toBe(0);
     expect(c.def).toBe("");
+    expect(c.defFull).toBe("");
+    expect(c.sentences).toEqual([]);
     expect(typeof c.due).toBe("string");
+  });
+
+  test("语境池去空去重、剔掉和主句重复的那句", () => {
+    const c = normalizeCard({
+      word: "pattern",
+      sentence: "A pattern emerged.",
+      sentences: ["A pattern emerged.", "  ", "The pattern repeats.", "The pattern repeats."],
+    });
+    expect(c.sentences).toEqual(["The pattern repeats."]);
+  });
+
+  test("语境池最多 3 句，超了丢最早加的那几句", () => {
+    const c = normalizeCard({
+      word: "pattern",
+      sentence: "Main.",
+      sentences: ["one pattern", "two pattern", "three pattern", "four pattern"],
+    });
+    expect(c.sentences).toEqual(["two pattern", "three pattern", "four pattern"]);
+  });
+
+  test("defFull 收下整条词典释义", () => {
+    const c = normalizeCard({ word: "pattern", def: "n. 图案", defFull: "n. 图案, 模式\nvt. 模仿" });
+    expect(c.def).toBe("n. 图案");
+    expect(c.defFull).toBe("n. 图案, 模式\nvt. 模仿");
   });
 });
 
@@ -348,6 +434,43 @@ describe("mergeCards", () => {
     const merged = mergeCards([withSentence], [newerNoSentence]);
     expect(merged[0].sentence).toBe("A cell is small.");
     expect(merged[0].def).toBe("细胞");
+  });
+
+  test("「要会写」开关跟 updatedAt 新的一方走，不做并集（关掉也要能同步出去）", () => {
+    const on = normalizeCard({ word: "cell", productive: true, updatedAt: "2026-09-01T00:00:00Z" });
+    const off = normalizeCard({ word: "cell", productive: false, updatedAt: "2026-09-10T00:00:00Z" });
+    expect(mergeCards([on], [off])[0].productive).toBe(false);
+    expect(mergeCards([off], [on])[0].productive).toBe(false);
+    // 反过来（新的那份打开了）当然也要生效
+    const onNewer = normalizeCard({ word: "cell", productive: true, updatedAt: "2026-09-20T00:00:00Z" });
+    expect(mergeCards([off], [onNewer])[0].productive).toBe(true);
+  });
+
+  test("语境池取并集（winner 的在前），defFull 也不会因为另一端更新而丢", () => {
+    const local = normalizeCard({
+      word: "pattern", sentence: "Main.", sentences: ["local pattern"],
+      defFull: "n. 图案, 模式", updatedAt: "2026-09-10T00:00:00Z",
+    });
+    const remote = normalizeCard({
+      word: "pattern", sentence: "Main.", sentences: ["remote pattern"],
+      updatedAt: "2026-09-01T00:00:00Z",
+    });
+    const merged = mergeCards([local], [remote]);
+    expect(merged[0].sentences).toEqual(["local pattern", "remote pattern"]);
+    expect(merged[0].defFull).toBe("n. 图案, 模式");
+  });
+
+  test("并集撞上限时保 winner 那几句，且不会把主句重复进池", () => {
+    const winner = normalizeCard({
+      word: "pattern", sentence: "Main pattern.", sentences: ["w1 pattern", "w2 pattern", "w3 pattern"],
+      updatedAt: "2026-09-10T00:00:00Z",
+    });
+    const loser = normalizeCard({
+      word: "pattern", sentence: "Main pattern.", sentences: ["l1 pattern", "Main pattern."],
+      updatedAt: "2026-09-01T00:00:00Z",
+    });
+    const merged = mergeCards([winner], [loser]);
+    expect(merged[0].sentences).toEqual(["w1 pattern", "w2 pattern", "w3 pattern"]);
   });
 
   test("软删除能传播（删除侧更新时间更新 → 删除赢）", () => {
@@ -471,26 +594,80 @@ describe("bookStats / buildQueue", () => {
   });
 });
 
-describe("卡片方向 / 挖空", () => {
-  test("主卡型是原句挖空 —— 有句子就走 cloze", () => {
-    expect(cardDirection({ word: "divide", source: "reading", sentence: "A cell divides." })).toBe("cloze");
+describe("卡片方向 / 原句", () => {
+  test("主卡型是原句里高亮认词 —— 有句子且句子里找得到这个词就走 context", () => {
+    expect(cardDirection({ word: "divide", source: "reading", sentence: "A cell divides." })).toBe("context");
   });
 
-  test("收藏时没抓到句子 → 退回纯词卡，绝不渲染一个没挖空的句子", () => {
+  test("收藏时没抓到句子（或句子里没这个词）→ 退回纯词卡", () => {
     expect(cardDirection({ word: "cell", source: "reading" })).toBe("recognize");
     expect(cardDirection({ word: "cell", source: "reading", sentence: "无关的句子。" })).toBe("recognize");
   });
 
-  test("写作/口语来源的词走产出方向（中→英）", () => {
-    expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides." })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "speaking" })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "reading", productive: true })).toBe("recall");
+  test("写作/口语来源、或手动标了要会写的词，进 review 后走产出方向（中→英）", () => {
+    expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("recall");
+    expect(cardDirection({ word: "divide", source: "speaking", state: STATE.REVIEW })).toBe("recall");
+    expect(cardDirection({ word: "divide", source: "reading", productive: true, state: STATE.REVIEW })).toBe("recall");
   });
 
-  test("一个词只有一张卡：方向是确定的，不随复习次数来回换", () => {
+  test("还没进 review 的产出词先认词 —— 初学阶段强制产出反而损害词形学习（Barcroft 2006）", () => {
+    for (const st of [STATE.NEW, STATE.LEARNING, STATE.RELEARNING]) {
+      expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides.", state: st })).toBe("context");
+      expect(cardDirection({ word: "divide", source: "speaking", state: st })).toBe("recognize");
+      expect(cardDirection({ word: "divide", source: "reading", productive: true, state: st })).toBe("recognize");
+    }
+  });
+
+  test("还没进 review 的卡：方向不随复习次数变（学习阶段不做裸词轮换）", () => {
     const card = { word: "divide", source: "reading", sentence: "A cell divides." };
-    const dirs = [0, 1, 2, 3, 7].map((reps) => cardDirection({ ...card, reps }));
-    expect(new Set(dirs).size).toBe(1);
+    for (const st of [STATE.NEW, STATE.LEARNING, STATE.RELEARNING]) {
+      const dirs = [0, 1, 2, 3, 7].map((reps) => cardDirection({ ...card, state: st, reps }));
+      expect(new Set(dirs)).toEqual(new Set(["context"]));
+    }
+  });
+
+  test("review 后、只有一句语境的词：每第 3 次复习改用裸词卡，防止记住的是句子", () => {
+    const card = { word: "divide", source: "reading", sentence: "A cell divides.", state: STATE.REVIEW };
+    const dirs = [0, 1, 2, 3, 4, 5].map((reps) => cardDirection({ ...card, reps }));
+    expect(dirs).toEqual(["context", "context", "recognize", "context", "context", "recognize"]);
+  });
+
+  test("有第二句语境时就轮换着用，永远不会掉成裸词卡", () => {
+    const card = {
+      word: "divide", source: "reading", state: STATE.REVIEW,
+      sentence: "A cell divides.", sentences: ["Rivers divide the plain."],
+    };
+    const dirs = [0, 1, 2, 3].map((reps) => cardDirection({ ...card, reps }));
+    expect(new Set(dirs)).toEqual(new Set(["context"]));
+    const used = [0, 1, 2, 3].map((reps) => contextSentence({ ...card, reps }));
+    expect(used).toEqual([
+      "A cell divides.", "Rivers divide the plain.",
+      "A cell divides.", "Rivers divide the plain.",
+    ]);
+  });
+
+  test("context 句把目标词原样留在原句里（屈折变体和大小写都不许被改写）", () => {
+    expect(contextSentence({ word: "divide", sentence: "A cell divides rapidly." }))
+      .toBe("A cell divides rapidly.");
+    expect(contextSentence({ word: "pivotal", sentence: "Pivotal moments are rare." }))
+      .toBe("Pivotal moments are rare.");
+  });
+
+  test("超过 28 词的长句截断后仍然含目标词，且不会漏出下划线", () => {
+    const long =
+      "Although the evidence remains contested, the discovery was pivotal in reshaping our understanding of early human migration, which scholars had long assumed to be impossible during the glacial maximum.";
+    const out = contextSentence({ word: "pivotal", sentence: long });
+    expect(out).toContain("pivotal");
+    expect(out).not.toContain("______");
+    expect(out.split(/\s+/).length).toBeLessThanOrEqual(30);
+    expect(out.length).toBeLessThan(long.length);
+  });
+
+  test("句子里找不到这个词 / 根本没句子 → 返回 null，调用方退回纯词卡", () => {
+    expect(contextSentence({ word: "cell", sentence: "Nothing here." })).toBeNull();
+    expect(contextSentence({ word: "cell", sentence: "" })).toBeNull();
+    expect(contextSentence({ word: "cell" })).toBeNull();
+    expect(contextSentence(null)).toBeNull();
   });
 
   test("长句挖空后截到目标词所在的那一段", () => {
@@ -500,6 +677,46 @@ describe("卡片方向 / 挖空", () => {
     expect(out).toContain("______");
     expect(out.split(/\s+/).length).toBeLessThanOrEqual(30);
     expect(out.length).toBeLessThan(long.length);
+  });
+
+  test("语境池 = 主句 + 额外句，去空去重", () => {
+    expect(contextPool({ word: "divide", sentence: "A.", sentences: ["B.", "A.", ""] })).toEqual(["A.", "B."]);
+    expect(contextPool({ word: "divide" })).toEqual([]);
+    expect(contextPool(null)).toEqual([]);
+  });
+
+  test("pickContext 四种情况", () => {
+    // 池空 → 没有语境可给
+    expect(pickContext({ word: "divide" })).toBeNull();
+    // 只有一句、还没进 review → 每次都是这一句
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.LEARNING, reps: 2 })).toBe("A.");
+    // 只有一句、进了 review → 每第 3 次（reps % 3 === 2）改用裸词卡
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.REVIEW, reps: 2 })).toBeNull();
+    expect(pickContext({ word: "divide", sentence: "A.", state: STATE.REVIEW, reps: 3 })).toBe("A.");
+    // 有两句以上 → 按 reps 轮换
+    const many = { word: "divide", sentence: "A.", sentences: ["B.", "C."], state: STATE.REVIEW };
+    expect([0, 1, 2, 3, 4].map((reps) => pickContext({ ...many, reps })))
+      .toEqual(["A.", "B.", "C.", "A.", "B."]);
+  });
+
+  test("轮到池里第二句时，长句照样截到目标词那一段", () => {
+    const long =
+      "Although the evidence remains contested, the discovery was pivotal in reshaping our understanding of early human migration, which scholars had long assumed to be impossible during the glacial maximum.";
+    const card = { word: "pivotal", sentence: "A pivotal choice.", sentences: [long], state: STATE.REVIEW, reps: 1 };
+    const out = contextSentence(card);
+    expect(out).toContain("pivotal");
+    expect(out).not.toContain("______");
+    expect(out.split(/\s+/).length).toBeLessThanOrEqual(30);
+    expect(out.length).toBeLessThan(long.length);
+  });
+
+  test("轮到的那句里没有这个词时，顺着池里其余的句子找，不白白退回裸词卡", () => {
+    const card = {
+      word: "divide", state: STATE.REVIEW, reps: 1,
+      sentence: "A cell divides.", sentences: ["与这个词无关的一句。"],
+    };
+    expect(contextSentence(card)).toBe("A cell divides.");
+    expect(cardDirection(card)).toBe("context");
   });
 
   test("来源显示成中文", () => {
@@ -516,5 +733,79 @@ describe("卡片方向 / 挖空", () => {
   test("句子里找不到这个词就不出挖空卡", () => {
     expect(clozeSentence({ word: "cell", sentence: "Nothing here." })).toBeNull();
     expect(clozeSentence({ word: "cell", sentence: "" })).toBeNull();
+  });
+});
+
+/**
+ * 存储层里和语境池/义项相关的那几条规则（vocabStore 是浏览器层，jsdom 下直接跑）。
+ */
+describe("vocabStore · 语境池与义项", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  test("再次收藏同一个词：主句不动，新句子进池", () => {
+    saveWord({ word: "pattern", def: "n. 图案", sentence: "A pattern emerged.", source: "reading" });
+    saveWord({ word: "pattern", def: "n. 图案", sentence: "The pattern repeats.", source: "listening" });
+    const card = getCard("pattern");
+    expect(card.sentence).toBe("A pattern emerged.");
+    expect(card.sentences).toEqual(["The pattern repeats."]);
+  });
+
+  test("同一句再收藏一次不会在池里重复", () => {
+    saveWord({ word: "pattern", sentence: "A pattern emerged.", source: "reading" });
+    saveWord({ word: "pattern", sentence: "A pattern emerged.", source: "reading" });
+    expect(getCard("pattern").sentences).toEqual([]);
+  });
+
+  test("addSentence 追加一句；满 3 句后丢最早的那句", () => {
+    saveWord({ word: "pattern", sentence: "Main pattern.", source: "reading" });
+    ["one pattern", "two pattern", "three pattern", "four pattern"].forEach((s) => addSentence("pattern", s));
+    expect(getCard("pattern").sentences).toEqual(["two pattern", "three pattern", "four pattern"]);
+  });
+
+  test("addSentence 对没收藏的词返回 null，对已在卡上的句子不重复追加", () => {
+    expect(addSentence("nosuchword", "x")).toBeNull();
+    saveWord({ word: "pattern", sentence: "Main pattern.", source: "reading" });
+    expect(addSentence("pattern", "Main pattern.").sentences).toEqual([]);
+    addSentence("pattern", "two pattern");
+    expect(addSentence("pattern", "two pattern").sentences).toEqual(["two pattern"]);
+  });
+
+  test("chooseSense 把某一条义项设成主释义，整条留作 defFull", () => {
+    const full = "n. 模范, 典型, 图案\nvt. 模仿";
+    saveWord({ word: "pattern", def: full, sentence: "A pattern emerged.", source: "reading" });
+    const next = chooseSense("pattern", "n. 图案", full);
+    expect(next.def).toBe("n. 图案");
+    expect(next.defFull).toBe(full);
+    expect(getCard("pattern").def).toBe("n. 图案");
+    expect(chooseSense("nosuchword", "n. 图案", full)).toBeNull();
+  });
+
+  test("chooseSense 没带整条释义时，把被顶掉的旧释义留作备份", () => {
+    saveWord({ word: "pattern", def: "n. 模范, 图案", sentence: "A pattern emerged.", source: "reading" });
+    expect(chooseSense("pattern", "n. 图案").defFull).toBe("n. 模范, 图案");
+  });
+});
+
+describe("activeSentence · 背面例句与正面同源", () => {
+  const two = {
+    word: "pattern",
+    state: "review",
+    sentence: "The pattern on the vase is Greek.",
+    sentences: ["Weather patterns shift every decade."],
+  };
+  test("轮到池里第二句时返回第二句（未截断原文）", () => {
+    expect(activeSentence({ ...two, reps: 1 })).toBe("Weather patterns shift every decade.");
+    expect(activeSentence({ ...two, reps: 2 })).toBe("The pattern on the vase is Greek.");
+  });
+  test("只有一句且轮到裸词卡时返回 null，调用方退回主句", () => {
+    const one = { word: "cell", state: "review", sentence: "Every cell has a nucleus.", reps: 5 };
+    expect(activeSentence(one)).toBeNull();
+    expect(activeSentence({ ...one, reps: 3 })).toBe("Every cell has a nucleus.");
+  });
+  test("轮到的句子不含目标词就兜底到含词的那句", () => {
+    const card = { ...two, reps: 1, sentences: ["A sentence about something else."] };
+    expect(activeSentence(card)).toBe("The pattern on the vase is Greek.");
   });
 });

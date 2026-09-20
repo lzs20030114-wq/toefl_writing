@@ -50,7 +50,10 @@ function Stat({ value, label, color }) {
 }
 
 export default function VocabNotebook({ onBack }) {
-  const { cards, stats, limits, setLimits, ready, isLoggedIn, makeQueue, grade, remove, reset, schedule } = useVocabBook();
+  const {
+    cards, stats, limits, setLimits, ready, isLoggedIn,
+    makeQueue, grade, remove, reset, setProductive, schedule,
+  } = useVocabBook();
   const [queue, setQueue] = useState(null); // 非 null = 正在复习
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
@@ -283,6 +286,9 @@ export default function VocabNotebook({ onBack }) {
             list.slice(0, shown).map((card) => {
               const st = stateLabel(card, now);
               const r = currentRetrievability(card, now);
+              // 写作/口语来源的词天然走产出方向，这个开关对它们是常开且不可点的。
+              const forcedProductive = card.source === "writing" || card.source === "speaking";
+              const productiveOn = forcedProductive || card.productive === true;
               return (
                 <div
                   key={card.word}
@@ -323,9 +329,28 @@ export default function VocabNotebook({ onBack }) {
                       {card.reps > 0 && ` · 复习 ${card.reps} 次`}
                       {card.lapses > 0 && ` · 忘过 ${card.lapses} 次`}
                       {r != null && ` · 此刻记得 ${Math.round(r * 100)}%`}
+                      {card.sentences?.length > 0 && ` · ${card.sentences.length + 1} 句语境`}
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
+                    <button
+                      onClick={forcedProductive ? undefined : () => setProductive(card.word, !card.productive)}
+                      disabled={forcedProductive}
+                      title={
+                        forcedProductive
+                          ? "写作/口语来源的词默认要会写"
+                          : "进入复习后改成拼写卡：给释义，拼出英文"
+                      }
+                      style={{
+                        border: `1px solid ${productiveOn ? ACCENT : C.bdr}`,
+                        background: productiveOn ? ACCENT_SOFT : "#fff",
+                        color: productiveOn ? ACCENT : C.t3,
+                        borderRadius: 7, padding: "3px 8px", fontSize: 11,
+                        cursor: forcedProductive ? "default" : "pointer", fontFamily: FONT,
+                      }}
+                    >
+                      要会写
+                    </button>
                     {card.reps > 0 && (
                       <button
                         onClick={() => reset(card.word)}

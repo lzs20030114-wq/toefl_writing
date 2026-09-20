@@ -337,6 +337,10 @@ Bjork 的**新失用理论（New Theory of Disuse）**把记忆拆成两个独�
 
 **注意一个反向证据**：也有研究发现「给的信息越少、语境越有限，词形识别的留存反而越好」。所以**句子要短、要聚焦**。如果收藏到的原句超过 ~30 词，应该截断到目标词周围的从句，而不是整段甩给用户。
 
+> **2026-09-19 修正**：本节标题说过头了。Webb 2007 单句 vs 词对十项测试无显著差异，Laufer & Shmueli 1997 词表与单句同档；
+> den Broek 实验里的「提取」是给 L1 释义让学习者填出 L2 词形，正面没有音标。原句的价值是与 TOEFL 词汇题同形、提升向新语境的迁移，
+> **不是「记得更牢」**。上面「错的做法」指的是只看句子不要求任何回忆；「显示原句并高亮目标词、要求回忆词义」是意义回忆，属于提取。详见第八节。
+
 ### 4.4 卡片方向：英→中 vs 中→英 vs 完形填空
 
 **证据**：
@@ -519,6 +523,9 @@ Anki FSRS 官方教程 FAQ（A8）原文：**"According to our research, FSRS is
 
 ### 6.3 卡片类型设计
 
+> **2026-09-19 更新**：主卡型已改为「原句高亮认词」，产出卡改为 review 后启用，学习步改为两步；见第八节 8.4。
+> 下文保留为当时的设计记录。其中「音标可给，但不给首字母」一句是错的：音标比首字母强得多，等于把答案印在正面。
+
 **主卡型：语境完形填空（默认，每个收藏词 1 张）**
 
 ```
@@ -630,3 +637,109 @@ Anki FSRS 官方教程 FAQ（A8）原文：**"According to our research, FSRS is
 | Memrise 具体阶梯 4h→12h→24h→6d→12d→48d→96d→6mo | **中** | 社区 wiki，非 Memrise 官方文档 |
 | Gais et al. (2006) 的具体结论 | **中** | 经二手综述转引，未读原文 |
 | 其余心理学论文的效应量与数字 | **中高** | 均来自论文标题/摘要或权威转引，**未逐篇通读全文 PDF** |
+
+
+---
+
+## 八、补充裁定（2026-09-19）：应用语言学与产品调研侧
+
+> 第四节以记忆心理学为主。这一节补二语词汇习得（Nation / Webb / Nakata / Laufer / Barcroft）与主流产品的对照，
+> 并据此修正了本文两处措辞、改了三处实现。三路调研的出站代理都拦了 Cambridge、ERIC、NCBI 等全文域名，
+> 数字来自论文摘要与多源交叉转述，**未逐篇核 PDF**；可信度按 高/中/低 标注。
+
+### 8.1 结论
+
+公认最有效的词汇复习方法，两条线给的是同一个答案：**自测式提取 + 分散间隔 + 即时反馈**。
+Dunlosky et al. 2013 对十种学习技巧评级，只有「练习测验」「分散练习」是高效用，谐音关键词法、重读、划线都是低效用。
+二语侧在此之上补四条边界：
+
+- 刻意背词只该占词汇学习时间约 1/4，其余靠阅读听力再遇（Nation 四股绳；Webb & Nation 2017）。
+- 中低水平学习者用母语释义优于 L2 释义（Laufer & Shmueli 1997；Joyce 2018；Prince 1996 指出弱学习者纯靠语境猜义无法迁移）。
+- 语义相近的词不要同批学；主题聚类（同一篇文章的词）无害（Tinkham 1997；Nakata & Suzuki 2019）。
+- 练习方向匹配用途：阅读听力靠 L2→L1 意义回忆，写作口语靠 L1→L2 形式回忆（Mondria & Wiersma 2004；Steinel et al. 2007；Nakata 2020）。
+
+### 8.2 裁定表
+
+| 现有做法 | 裁定 | 最强证据 | 可信度 |
+|---|---|---|---|
+| 先想后翻，必须点一次才显示答案 | 支持，效应最大的一条 | Karpicke & Roediger 2008；Barcroft 2007 直接验证「显示答案前留几秒自主回忆」 | 高 |
+| FSRS-6 间隔调度 | 支持 | Kim & Webb 2022 二语分散练习元分析，延迟测验为大效应；FSRS 公开 benchmark | 高 |
+| 二档评分「忘了/记得」 | 支持 | Anki 官方 FAQ；二语文献未专门检验档位，无反对证据 | 高 |
+| 中文释义而非英文释义 | 支持 | Laufer & Shmueli 1997；Joyce 2018 | 中 |
+| 不做图片、不做谐音 | 支持 | Carpenter & Olson 2012 图片制造过度自信；Dunlosky 2013；Wang, Thomas & Ouellette 1992 | 高 |
+| 每日新词 15–20 | 支持，但理由是时间预算 | Nation 建议 15–20 一组；Nakata & Webb 2016 实证大组不比小组差 | 高 |
+| 同一篇文章的词一起排 | 支持 | Tinkham 1997 主题聚类 vs 语义聚类 | 高 |
+| 不强制打字或抄写 | 支持 | Barcroft 2006 初学阶段强制产出损害词形学习 | 高 |
+| 挖不出来退纯词卡 | 支持 | Elgort 2011 纯词对学习同样产生自动化词汇知识 | 中 |
+| 原句挖空作主卡 | 无定论偏中性，且实现有缺陷 | Webb 2007 打平；Laufer & Shmueli 1997 同档；本节 8.3 | 中高 |
+| 一场同词最多两次 | 反对 | Nakata 2017 同场隔开提取 5–7 次显著优于 1–3 次；Rawson & Dunlosky 2011 答对 3 次为最经济门槛 | 高 |
+
+### 8.3 对本文的两处修正
+
+1. **4.3「原句是最大差异化资产」说过头了。** Webb 2007 单句 vs 词对无显著差异；Laufer & Shmueli 1997 词表与单句同档。
+   den Broek 2018 的原话是「语境提升理解，提取提升留存」，其实验里的提取是**给 L1 释义让学习者填出 L2 词形**，正面没有音标。
+   原句的价值是：与 TOEFL 词汇题「该词在本文中最接近…」同形、提升向新语境的迁移；不是「记得更牢」。
+2. **6.3「音标可给，但不给首字母」是错的。** 音标是比首字母强得多的线索，会读音标的人等于直接读出答案，
+   提取难度归零，Pyc & Rawson 2009「提取越费力记得越牢」的前提就没了。而且真实句子的空位往往不唯一
+   （The discovery was ___ in reshaping… 填 crucial 也通），「填对没填对」和「懂不懂这个词」脱钩，评分掺噪声。
+
+### 8.4 据此改的实现（第一批，2026-09-19）
+
+- **主卡型**：阅读/听力来源 → 「原句高亮认词」——正面显示原句并高亮目标词，带音标与发音，回忆词义；背面释义。
+  这是 L2→L1 意义回忆，也和考法同形。句子里找不到词退裸词卡。代码：`lib/vocab/book.js` 的 `contextSentence` / `cardDirection`。
+- **产出卡**：写作/口语来源、或用户标「要会写」（`productive`，随卡同步）的词，**进入 review 状态后**切成
+  「释义 + 挖空 → 拼出英文」（Barcroft 2006）。列表页加开关。
+- **首日提取 3 次**：学习步 [15] → [10, 20]，重学步 [10] → [10, 20]，一场同词上限 2 → 4，插回间隔 10 张不变。
+  这是**有意偏离** Anki 单步建议：Anki 的理由是多步干扰排期精度，FSRS-6 已建模当日复习；我们要的是提取次数。
+  代价约每天多 20 张短卡。
+- **不动**：二档评分、FSRS 参数与 DR 0.90、每日 20/120、首间隔 1 天、不显示间隔、乱序与同源拆开、冲刺档。
+
+### 8.5 第二批（2026-09-19 已做）与不做清单
+
+- **句子池**（已做）：卡上加 `sentences[]`（≤3 句，主句 `sentence` 不变），同词在别的文章再遇时弹窗给「＋ 加这句语境」
+  而不是删除；`book.pickContext` 按 reps 轮换，只有一句的词进入 review 后每第 3 次改裸词卡；正面轮到哪句，
+  背面高亮的就是哪句（`activeSentence`）。依据 Bolger, Balass, Landen & Perfetti 2008、Webb 2008：
+  语境多样性决定能否泛化到新语境，单句反复有「记句子不记词」风险。文献没有「隔几次换一句」的数字。
+- **释义对准语境义**（已做）：`dict/core.splitSenses` 把词典释义按「词性行 × 逗号义项」拆成 chips，
+  弹窗点一条 = 按该义项收藏（或已收藏时 `chooseSense` 换主释义），整条留 `defFull` 在复习背面小字展示。
+  依据 Bolger 2008：释义在场才能补单一语境的短板，前提是释义对得上那句话。
+- **观望**：近义/形近词同批打散（Nakata & Suzuki 2019 混淆错误更多，但总分差异不显著）。
+- **不做**：图片（Carpenter & Olson 2012）、谐音/关键词法（Dunlosky 2013；Wang et al. 1992）、
+  强制读出声（production effect 只在「一部分读一部分不读」的混合设计中出现，MacLeod et al. 2010）、
+  词根词缀卡（Bowers, Kirby & Deacon 2010 证据主要为母语儿童）。搭配卡有证据但产品形态不明
+  （Webb & Kagimoto 2011；Boers & Lindstromberg 2012），列中期。
+
+### 8.6 产品对照
+
+Anki、Magoosh、不背单词均为二档评分，墨墨三档。墨墨的算法出自 KDD 2022（Ye, Su & Cao）与 TKDE 2023 两篇论文，
+KDD 一作叶峻峣即 FSRS 作者，本产品与国内最讲算法的一家在同一条研究线上。百词斩的图背路线是文献反例
+（社区「只认图不认词」与 Carpenter & Olson 2012 一致）。Quizlet 工程博客按「填空优于选择题」调整题型；
+本产品若做「快速模式」不要退化成四选一。
+
+### 8.7 本节新增文献（未逐篇核 PDF，以摘要与多源转述为准）
+
+- Nation, I. S. P. (2013). *Learning Vocabulary in Another Language* (2nd ed.). Cambridge. / Webb, S., & Nation, P. (2017). *How Vocabulary Is Learned*. Oxford.
+- Nakata, T. (2015). Effects of expanding and equal spacing on second language vocabulary learning. *SSLA*, 37(4).
+- Nakata, T., & Webb, S. (2016). Does studying vocabulary in smaller sets increase learning? *SSLA*, 38(3).
+- Nakata, T. (2017). Does repeated practice make perfect? The effects of within-session repeated retrieval on second language vocabulary learning. *SSLA*, 39(4).
+- Nakata, T., & Suzuki, Y. (2019). Effects of massing and spacing on the learning of semantically related and unrelated words. *SSLA*, 41(2).
+- Kim, S. K., & Webb, S. (2022). The effects of spaced practice on second language learning: A meta-analysis. *Language Learning*, 72(1).
+- Webb, S. (2007). Learning word pairs and glossed sentences: The effects of a single context on vocabulary knowledge. *Language Teaching Research*, 11(1).
+- Webb, S. (2008). The effects of context on incidental vocabulary learning. *Reading in a Foreign Language*, 20(2).
+- Laufer, B., & Shmueli, K. (1997). Memorizing new words: Does teaching have anything to do with it? *RELC Journal*, 28(1).
+- Prince, P. (1996). Second language vocabulary learning: The role of context versus translations as a function of proficiency. *Modern Language Journal*, 80(4).
+- Joyce, P. (2018). L2 vocabulary learning and testing: The use of L1 translation versus L2 definition. *The Language Learning Journal*, 46(3).
+- Carpenter, S. K., & Olson, K. M. (2012). Are pictures good for learning new vocabulary in a foreign language? Only if you think they are not. *JEP: LMC*, 38(1).
+- Tinkham, T. (1997). The effects of semantic and thematic clustering on the learning of second language vocabulary. *Second Language Research*, 13(2).
+- Bolger, D. J., Balass, M., Landen, E., & Perfetti, C. A. (2008). Context variation and definitions in learning the meanings of words. *Discourse Processes*, 45(2).
+- Elgort, I. (2011). Deliberate learning and vocabulary acquisition in a second language. *Language Learning*, 61(2).
+- Barcroft, J. (2006). Can writing a new word detract from learning it? *Second Language Research*, 22(4). / Barcroft, J. (2007). Effects of opportunities for word retrieval during second language vocabulary learning. *Language Learning*, 57(1).
+- Mondria, J.-A., & Wiersma, B. (2004). Receptive, productive, and receptive + productive L2 vocabulary learning. In Bogaards & Laufer (Eds.), *Vocabulary in a Second Language*. Benjamins.
+- Steinel, M. P., Hulstijn, J. H., & Steinel, W. (2007). Second language idiom learning in a paired-associate paradigm. *SSLA*, 29(3).
+- Pyc, M. A., & Rawson, K. A. (2009). Testing the retrieval effort hypothesis. *Journal of Memory and Language*, 60(4).
+- Rawson, K. A., & Dunlosky, J. (2011). Optimizing schedules of retrieval practice for durable and efficient learning: How much is enough? *JEP: General*, 140(3).
+- Dunlosky, J., et al. (2013). Improving students' learning with effective learning techniques. *Psychological Science in the Public Interest*, 14(1).
+- Wang, A. Y., Thomas, M. H., & Ouellette, J. A. (1992). Keyword mnemonic and retention of second-language vocabulary words. *Journal of Educational Psychology*, 84(4).
+- Gu, Y., & Johnson, R. K. (1996). Vocabulary learning strategies and language learning outcomes. *Language Learning*, 46(4).
+- Uchihara, T., Webb, S., & Yanagisawa, A. (2019). The effects of repetition on incidental vocabulary learning: A meta-analysis. *Language Learning*, 69(3).
+- Ye, J., Su, J., & Cao, Y. (2022). A stochastic shortest path algorithm for optimizing spaced repetition scheduling. *KDD 2022*.
