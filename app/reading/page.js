@@ -12,6 +12,7 @@ import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { listActiveDrafts } from "../../lib/draftPersist";
 import { pickWithTopicDiversity } from "../../lib/recentTopics";
 import { getReadingTimeSeconds } from "../../lib/practiceMode";
+import { apPassageText } from "../../lib/reading/passageLayout";
 import { fetchPersonalBank, mapPersonalToPicker } from "../../lib/userBank/personalBank";
 import CTW_DATA from "../../data/reading/bank/ctw.json";
 // RDL bank is split into two pools by question count:
@@ -307,7 +308,8 @@ function ReadingPageClient() {
         topic: itemData.topic || itemData.genre || "",
         genre: itemData.genre || "",
         results: result.results,
-        passage: subtype === "ctw" ? itemData.passage : (itemData.text || itemData.passage),
+        // AP 存的是补好分段的正文：details 里不带 paragraphs，复盘页没有别的东西可以据以还原版面。
+        passage: subtype === "ctw" ? itemData.passage : apPassageText(itemData),
         blanks: subtype === "ctw" ? itemData.blanks : undefined,
         questions: (subtype === "rdl" || subtype === "ap") ? itemData.questions : undefined,
       },
@@ -322,7 +324,9 @@ function ReadingPageClient() {
 
   if (type === "ap") {
     // AP uses the same MC question interface as RDL but with passage field instead of text
-    const apAsRdl = { ...item, text: item.passage, genre: item.topic };
+    // text 走 apPassageText：题库条目漏了段落空行时（渲染是 pre-wrap，只认空行）在这里当场补回，
+    // 补法见 lib/reading/passageLayout.js —— 只插空行、段内不动，选句题的精确定位照样成立。
+    const apAsRdl = { ...item, text: apPassageText(item), genre: item.topic };
     return (
       <RDLTask
         item={apAsRdl}

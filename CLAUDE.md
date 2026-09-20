@@ -305,6 +305,11 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **JSX 文本禁写 `\uXXXX`**: JSX 文本与 JSX 属性都不是 JS 字符串字面量，`\uXXXX` 不会被解码，会原样渲染成一长串 ASCII
   （既是乱码，又因不可断行而挤爆分栏）。中文直接写中文；`__tests__/encoding-hygiene.regression.test.js` 会拦。
   同源问题还有题库 JSON 里的 U+FFFD 替换字符（`caf�`），同一条测试一起扫。
+- **AP 正文 passage 与 paragraphs 必须同步**: 学术阅读条目的 `passage` 是渲染用的权威正文（pre-wrap，只认空行分段），
+  `paragraphs[]` 是它的段落切分 —— 题干四分之三写着「paragraph N」，两者对不上文章就糊成一坨。
+  补分段一律走 `lib/reading/passageLayout.js`（只往段间插空行、段内逐字不动，所以选句题的精确定位照样成立），
+  **绝不能写成 `paragraphs.join("\n\n")`**：带 `[■]` 插入句标记的条目只有 passage 里有标记，join 会把标记吃掉。
+  合库口 merge-staging 先修后拦，`__tests__/ap-paragraph-layout.regression.test.js` 卡住整库。
 - **State**: 无 Redux/Zustand, 用 useState + localStorage + Supabase
 - **API**: 所有 API 返回 `{ ok: boolean, ...data }` 格式, 见 `lib/apiResponse.js`
 - **Prompts**: AI prompt 模板集中在 `lib/*Gen/` 与 `lib/ai/prompts/`, 纯字符串拼接, 不引入模板引擎

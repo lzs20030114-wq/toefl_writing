@@ -8,6 +8,7 @@ import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { insertStemParts } from "../../lib/reading/insertSentence";
 import { InsertSentenceStem } from "../reading/InsertSentenceStem";
+import { apPassageText } from "../../lib/reading/passageLayout";
 import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
 import {
   buildReadingModule1,
@@ -338,7 +339,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   // Get the text content to display
   function getPassageContent() {
     if (taskType === "rdl") return item.text || "";
-    if (taskType === "ap") return item.passage || "";
+    if (taskType === "ap") return apPassageText(item); // 漏了段落空行的条目在这里补回（pre-wrap 只认空行）
     return null; // listening types show audio instead
   }
 

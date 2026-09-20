@@ -7,6 +7,7 @@ import { questionLookupContext } from "../../lib/dict/core";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { insertStemParts } from "../../lib/reading/insertSentence";
 import { InsertSentenceStem } from "./InsertSentenceStem";
+import { restoreParagraphBreaks } from "../../lib/reading/passageLayout";
 import { formatLocalDateTime } from "../../lib/utils";
 import { getBandColor } from "../../lib/history/bandColor";
 
@@ -160,7 +161,9 @@ function McqTaskBody({ task, explainHook }) {
     ? [{ stem: task.speaker || "Listen and choose a response.", options: task.options, correct_answer: task.answer }]
     : [];
 
-  const passage = task.passage || task.text || "";
+  // 快照带 paragraphs（buildTaskSnapshots 存了），所以旧存档里糊成一坨的 AP 正文在复盘时也能补回分段。
+  // 取值顺序与从前一致（passage 优先），只在外面套一层补分段。
+  const passage = restoreParagraphBreaks(task.passage || task.text || "", task.paragraphs);
   const [passageOpen, setPassageOpen] = useState(true);
   // 题干、选项也能点词查，上下文拼上题目文本（原文在前，优先取原文里的那句）。
   const lookupContext = useMemo(() => questionLookupContext(passage, renderable), [passage, renderable]);

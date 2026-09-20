@@ -22,6 +22,7 @@ const require = createRequire(import.meta.url);
 const { buildAPPrompt } = require("../lib/readingGen/apPromptBuilder.js");
 const { validateAPItem, validateAPBatch } = require("../lib/readingGen/apValidator.js");
 const { auditRDLItem } = require("../lib/readingGen/answerAuditor.js"); // Reuse RDL auditor — same logic
+const { restoreParagraphBreaks } = require("../lib/reading/passageLayout.js");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STAGING_DIR = join(__dirname, "..", "data", "reading", "staging");
@@ -173,7 +174,9 @@ async function main() {
     // Normalize
     const item = {
       id,
-      passage: raw.passage || "",
+      // 按 paragraphs 的边界把段落空行补回（模型时常给出单空格拼起来的 passage，
+      // 渲染层 pre-wrap 只认空行）。补不回来的由 validateAPItem 的 paragraph_layout 拒收。
+      passage: restoreParagraphBreaks(raw.passage || "", raw.paragraphs),
       word_count: raw.passage ? countWords(raw.passage) : 0,
       paragraphs: raw.paragraphs || [],
       paragraph_count: (raw.paragraphs || []).length,
