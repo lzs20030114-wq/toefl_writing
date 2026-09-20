@@ -8,6 +8,8 @@ import { AssetPreloadGate } from "../shared/AssetPreloadGate";
 import { SceneImage } from "./SceneImage";
 import { buildRepeatIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
+import { RepeatRetake } from "./RepeatRetake";
+import { WordHighlight } from "./WordHighlight";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
 import { scoreRepeat } from "../../lib/speakingEval/repeatScorer";
 import { levelMeanToBand } from "../../lib/mockExam/speakingBand";
@@ -151,6 +153,9 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   // can replay the upload once the user grants consent in the modal. Cleared
   // when the modal is dismissed.
   const [needsConsent, setNeedsConsent] = useState(false);
+  // 总结页「重录这句」正在录音：锁掉该页的 Original / My Recording 回放，
+  // 免得原句 / 上一次录音漏进麦克风（与答题阶段 isRecording 同一个初衷）。
+  const [summaryRecording, setSummaryRecording] = useState(false);
   const pendingConsentJobsRef = useRef([]);
   // Show the v2 re-consent prompt at most once per session for legacy v1
   // consenters (their transcription still works; this only upgrades disclosure).
@@ -210,6 +215,12 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
   // the replay button) and, on start, kill any reference audio still sounding.
   const handleRecordingStateChange = useCallback((recording) => {
     setIsRecording(recording);
+    if (recording) stopLocalPlayback();
+  }, [stopLocalPlayback]);
+
+  // 同上，但来自总结页里各句的 RepeatRetake（它只上报录音态，不回写任何成绩）。
+  const handleSummaryRecordingChange = useCallback((recording) => {
+    setSummaryRecording(recording);
     if (recording) stopLocalPlayback();
   }, [stopLocalPlayback]);
 
@@ -771,6 +782,9 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
           </SurfaceCard>
 
           {/* Sentence list with replay + scores */}
+          <div style={{ fontSize: 12, color: C.t3, marginBottom: 8 }}>
+            每句都可以点「重录这句」再练一次，原始成绩和总分不会改变
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {items.map((item, i) => {
               const sc = scores[i];
@@ -811,11 +825,26 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, isPractice
                             {sc.accuracy}% Accuracy
                           </span>
                         )}
-                        <ReplayButton label="Original" onPlay={() => playOriginalSentence(item)} />
+                        <ReplayButton
+                          label="Original"
+                          onPlay={() => playOriginalSentence(item)}
+                          disabled={summaryRecording}
+                        />
                         {recordings[i] && (
-                          <ReplayButton label="My Recording" blobUrl={recordings[i]} />
+                          <ReplayButton
+                            label="My Recording"
+                            blobUrl={recordings[i]}
+                            disabled={summaryRecording}
+                          />
                         )}
                       </div>
+                      {/* 重录只在本页显示，绝不回写 scores / onComplete 的 payload */}
+                      <RepeatRetake
+                        sentenceText={item.sentence}
+                        questionId={item.id}
+                        originalAccuracy={sc ? sc.accuracy : null}
+                        onRecordingStateChange={handleSummaryRecordingChange}
+                      />
                     </div>
                   </div>
                 </SurfaceCard>
@@ -1176,63 +1205,13 @@ function AccuracyCard({ score, originalSentence }) {
   );
 }
 
-/** Renders original sentence with matched (green) and missed (red strikethrough) words. */
-function WordHighlight({ originalSentence, matchedWords, missedWords }) {
-  // Rebuild original sentence word-by-word with styling
-  const origWords = String(originalSentence || "").split(/\s+/).filter(Boolean);
-  const normalizeWord = (w) => w.toLowerCase().replace(/[^\w]/g, "");
-
-  // Track which matched/missed words we've consumed (for duplicates)
-  const matchedPool = [...matchedWords];
-  const missedPool = [...missedWords];
-
-  const styled = origWords.map((word, idx) => {
-    const norm = normalizeWord(word);
-    const matchIdx = matchedPool.indexOf(norm);
-    if (matchIdx !== -1) {
-      matchedPool.splice(matchIdx, 1);
-      return (
-        <span key={idx} style={{ color: "#16A34A", fontWeight: 600 }}>
-          {word}{" "}
-        </span>
-      );
-    }
-    const missIdx = missedPool.indexOf(norm);
-    if (missIdx !== -1) {
-      missedPool.splice(missIdx, 1);
-      return (
-        <span key={idx} style={{
-          color: "#DC2626", textDecoration: "line-through",
-          textDecorationColor: "#DC2626",
-        }}>
-          {word}{" "}
-        </span>
-      );
-    }
-    // Fallback: treat as missed if not matched
-    return (
-      <span key={idx} style={{
-        color: "#DC2626", textDecoration: "line-through",
-        textDecorationColor: "#DC2626",
-      }}>
-        {word}{" "}
-      </span>
-    );
-  });
-
-  return (
-    <div style={{ fontSize: 14, lineHeight: 1.8, marginBottom: 4 }}>
-      {styled}
-    </div>
-  );
-}
-
 /** Small replay button used in review and summary. */
-function ReplayButton({ label, blobUrl, onPlay }) {
+function ReplayButton({ label, blobUrl, onPlay, disabled = false }) {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
   const toggle = () => {
+    if (disabled) return;
     if (onPlay) { onPlay(); return; }
     if (!audioRef.current) return;
     if (playing) {
@@ -1252,13 +1231,16 @@ function ReplayButton({ label, blobUrl, onPlay }) {
       )}
       <button
         onClick={toggle}
+        disabled={disabled}
+        title={disabled ? "录音中不可回放" : undefined}
         style={{
           display: "inline-flex", alignItems: "center", gap: 5,
           padding: "5px 12px", borderRadius: 999,
           background: playing ? SPK.soft : "#F3F4F6",
           border: "1px solid " + (playing ? "#FDE68A" : C.bdr),
-          cursor: "pointer", fontSize: 12, fontWeight: 600,
+          cursor: disabled ? "not-allowed" : "pointer", fontSize: 12, fontWeight: 600,
           color: playing ? "#92400E" : C.t2, fontFamily: FONT,
+          opacity: disabled ? 0.6 : 1,
         }}
       >
         {playing ? "⏸" : "▶"} {label}
