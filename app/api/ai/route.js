@@ -7,6 +7,8 @@ import {
   callViaCurlOnce as callViaCurlOnceShared,
   describeUpstreamError,
   isNonEmptyContent,
+  isUpstreamTimeoutError,
+  resolveUpstreamBudget,
 } from "../../../lib/ai/upstream";
 import { fail, getRateLimitKey, isOriginAllowed, logApiFailure } from "../../../lib/ai/routeGuards";
 
@@ -38,6 +40,11 @@ const MAX_SAMPLES = 3;
 // 主动掐掉,让请求仍走 fail() 写 api_error_feedback;否则被 Vercel 在 180s 杀掉时
 // 什么都记不到,用户只看到一个没来由的 504。
 const DIRECT_TOTAL_BUDGET_MS = 165000;
+// 客户端外层超时的合法区间(clientTimeoutMs)。调用方各不相同:听力/阅读讲解 60s、
+// 面试评分 120s、写作评分 175s —— 服务端按其中最小者收敛自己的预算,见
+// resolveUpstreamBudget。缺省(老客户端不带这个字段)仍用上面的 165s。
+const MIN_CLIENT_TIMEOUT_MS = 5000;
+const MAX_CLIENT_TIMEOUT_MS = 600000;
 
 const limiter = createRateLimiter("ai", { max: 45 });
 
@@ -61,6 +68,13 @@ function validateBody(body) {
   if (!Number.isInteger(samplesRaw) || samplesRaw < 1 || samplesRaw > MAX_SAMPLES) {
     return `samples must be an integer between 1 and ${MAX_SAMPLES}.`;
   }
+  // 可选字段:不带就按服务端默认预算跑(老客户端/服务端到服务端调用)。
+  if (body.clientTimeoutMs != null) {
+    const t = Number(body.clientTimeoutMs);
+    if (!Number.isInteger(t) || t < MIN_CLIENT_TIMEOUT_MS || t > MAX_CLIENT_TIMEOUT_MS) {
+      return `clientTimeoutMs must be an integer between ${MIN_CLIENT_TIMEOUT_MS} and ${MAX_CLIENT_TIMEOUT_MS}.`;
+    }
+  }
   return "";
 }
 
@@ -81,16 +95,41 @@ function normalizeSamples(body) {
   return Math.max(1, Math.min(MAX_SAMPLES, raw));
 }
 
-// 单次上游调用(proxy 路径)——沿用 deepseekHttp 的 120s 网络超时,成功返回
-// content 字符串,失败抛错(交由 allSettled / 外层 catch 处理)。
-function callViaCurlOnce(apiKey, proxyUrl, params) {
-  return callViaCurlOnceShared(apiKey, proxyUrl, params);
+// 单次上游调用(proxy 路径)——成功返回 content 字符串,失败抛错(交由
+// allSettled / 外层 catch 处理)。预算与直连路径同源(见 resolveUpstreamBudget)。
+function callViaCurlOnce(apiKey, proxyUrl, params, budgetMs) {
+  return callViaCurlOnceShared(apiKey, proxyUrl, params, { timeoutMs: budgetMs });
 }
 
-// 单次上游调用(直连路径)——流式拼接 + 快速 5xx 单次重试,预算是本路由的
-// DIRECT_TOTAL_BUDGET_MS。实现见 lib/ai/upstream.js。
-function callDirectOnce(apiKey, params) {
-  return callDirectOnceShared(apiKey, params, { totalBudgetMs: DIRECT_TOTAL_BUDGET_MS });
+// 单次上游调用(直连路径)——流式拼接 + 无输出看门狗 + 快速失败单次重试。
+// 实现见 lib/ai/upstream.js。
+function callDirectOnce(apiKey, params, budgetMs) {
+  return callDirectOnceShared(apiKey, params, { totalBudgetMs: budgetMs });
+}
+
+// 上游失败的统一出口。把「我们自己掐断的超时」单列成 504 + upstream_timeout:
+// 它和 502(上游报错)、500(内部异常)的处置完全不同 —— 对用户是「排队中,可重试」,
+// 对后台是一眼可筛的一类。2026-09-20 之前这类失败记成 internal 500,查不出根因。
+function failUpstream(requestMeta, reason) {
+  const status = Number(reason?.status);
+  const hasStatus = Number.isFinite(status) && status > 0;
+  if (!hasStatus && isUpstreamTimeoutError(reason)) {
+    return fail(
+      {
+        ...requestMeta,
+        stage: "deepseek",
+        errorType: "upstream_timeout",
+        errorDetail: describeUpstreamError(reason) || String(reason?.message || "upstream timeout"),
+      },
+      504,
+      { error: "AI 正在排队，请稍后重试", code: "UPSTREAM_TIMEOUT" },
+    );
+  }
+  return fail(
+    { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: describeUpstreamError(reason) },
+    hasStatus && status < 500 ? status : 502,
+    { error: "AI service temporarily unavailable. Please retry." },
+  );
 }
 
 // 从 allSettled 结果里挑出成功且非空的 content(保持采样顺序)。
@@ -276,12 +315,15 @@ export async function POST(request) {
     const upstreamParams = { system, message, maxTokens, temperature };
     const apiKey = process.env.DEEPSEEK_API_KEY;
     const proxyUrl = resolveProxyUrl();
+    // 上游预算收敛到客户端的外层超时之内:客户端先放弃后,再等下去既白烧 token,
+    // 又让这条失败记成「internal 500」而不是超时。
+    const budgetMs = resolveUpstreamBudget(payload.clientTimeoutMs, DIRECT_TOTAL_BUDGET_MS);
 
     if (proxyUrl) {
       if (samples > 1) {
         // 服务端 fan-out：并行 N 发,收集成功的 content。用量只计 1 次。
         const results = await Promise.allSettled(
-          Array.from({ length: samples }, () => callViaCurlOnce(apiKey, proxyUrl, upstreamParams)),
+          Array.from({ length: samples }, () => callViaCurlOnce(apiKey, proxyUrl, upstreamParams, budgetMs)),
         );
         const contents = collectContents(results);
         if (contents.length === 0) {
@@ -295,7 +337,7 @@ export async function POST(request) {
         ]);
         return Response.json({ content: contents[0], contents });
       }
-      const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams);
+      const content = await callViaCurlOnce(apiKey, proxyUrl, upstreamParams, budgetMs);
       if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "proxy", maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
@@ -304,21 +346,12 @@ export async function POST(request) {
     if (samples > 1) {
       // 直连路径 fan-out。单发失败(!res.ok 或网络异常)只算该采样失败。
       const results = await Promise.allSettled(
-        Array.from({ length: samples }, () => callDirectOnce(apiKey, upstreamParams)),
+        Array.from({ length: samples }, () => callDirectOnce(apiKey, upstreamParams, budgetMs)),
       );
       const contents = collectContents(results);
       if (contents.length === 0) {
-        // 0 成功——走现有 fail() 语义,取第一个失败采样的上游错误文本做 errorDetail。
-        const reason = firstRejectionReason(results);
-        const upstreamStatus = Number(reason?.status);
-        const httpStatus = Number.isFinite(upstreamStatus) && upstreamStatus
-          ? (upstreamStatus >= 500 ? 502 : upstreamStatus)
-          : 502;
-        return fail(
-          { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: describeUpstreamError(reason) },
-          httpStatus,
-          { error: "AI service temporarily unavailable. Please retry." },
-        );
+        // 0 成功——取第一个失败采样的上游错误做分类(超时 504 / 其余 502)。
+        return failUpstream(requestMeta, firstRejectionReason(results));
       }
       // 部分失败也要留痕(见 logPartialSampleFailures),与计量一起 best-effort。
       await Promise.all([
@@ -328,24 +361,17 @@ export async function POST(request) {
       return Response.json({ content: contents[0], contents });
     }
 
-    // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
+    // 单采样直连路径:!res.ok → 502/原状态码,我们掐断的超时 → 504,纯网络异常 → 外层 500。
     try {
-      const content = await callDirectOnce(apiKey, upstreamParams);
+      const content = await callDirectOnce(apiKey, upstreamParams, budgetMs);
       if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct", maxTokens);
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {
-      const upstreamStatus = Number(err?.status);
-      const hasStatus = Number.isFinite(upstreamStatus) && upstreamStatus > 0;
-      // 带 status 的 HTTP 错误,或流里夹带的 {error} 对象(有 errText 无 status),都算
-      // 上游失败 → 与 fan-out 路径同一套映射(5xx/无状态 → 502)。纯网络异常仍走外层 500。
-      if (hasStatus || err?.errText) {
-        // Log full upstream error for debugging, but don't expose details to client
-        return fail(
-          { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: describeUpstreamError(err) },
-          hasStatus && upstreamStatus < 500 ? upstreamStatus : 502,
-          { error: "AI service temporarily unavailable. Please retry." },
-        );
+      // 带 status 的 HTTP 错误、流里夹带的 {error} 对象(有 errText 无 status)、以及
+      // 看门狗/预算掐断的超时,都由 failUpstream 分类。纯网络异常仍走外层 500。
+      if (Number(err?.status) > 0 || err?.errText || isUpstreamTimeoutError(err)) {
+        return failUpstream(requestMeta, err);
       }
       throw err;
     }

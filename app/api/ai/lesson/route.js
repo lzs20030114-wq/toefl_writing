@@ -7,6 +7,7 @@ import {
   callViaCurlOnce,
   describeUpstreamError,
   isNonEmptyContent,
+  isUpstreamTimeoutError,
 } from "../../../../lib/ai/upstream";
 import { fail, getRateLimitKey, isOriginAllowed } from "../../../../lib/ai/routeGuards";
 import { buildLessonSystemPrompt, buildLessonUserPrompt } from "../../../../lib/ai/prompts/writingLesson";
@@ -167,6 +168,20 @@ export async function POST(request) {
     } catch (err) {
       const upstreamStatus = Number(err?.status);
       const hasStatus = Number.isFinite(upstreamStatus) && upstreamStatus > 0;
+      // 我们自己掐断的超时(无输出看门狗 / 预算耗尽)单列成 504 upstream_timeout,
+      // 与 /api/ai 同口径 —— 后台按这个类型就能筛出「上游排队」这一类失败。
+      if (!hasStatus && isUpstreamTimeoutError(err)) {
+        return fail(
+          {
+            ...requestMeta,
+            stage: "deepseek",
+            errorType: "upstream_timeout",
+            errorDetail: describeUpstreamError(err) || String(err?.message || "upstream timeout"),
+          },
+          504,
+          { error: "AI 正在排队，请稍后重试", code: "UPSTREAM_TIMEOUT" },
+        );
+      }
       if (hasStatus || err?.errText) {
         return fail(
           { ...requestMeta, stage: "deepseek", errorType: "upstream", errorDetail: describeUpstreamError(err) },

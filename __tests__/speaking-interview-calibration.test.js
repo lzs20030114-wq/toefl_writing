@@ -280,9 +280,9 @@ describe("scoreInterview: 三路取中位 + 护栏集成", () => {
     expect(Array.isArray(res.guardrails)).toBe(true);
     expect(res.guardrails).toEqual([]);
     expect(res.dimensions.fluency.score).toBe(4);
-    // 调用签名：maxTokens=2500, timeout=120000, temp=0.3, samples=3
+    // 调用签名：maxTokens=2500, timeout=120000, temp=0.3, samples=3, opts(中止信号)
     expect(callAIMulti).toHaveBeenCalledWith(
-      expect.any(String), expect.any(String), 2500, 120000, 0.3, 3,
+      expect.any(String), expect.any(String), 2500, 120000, 0.3, 3, { signal: undefined },
     );
   });
 

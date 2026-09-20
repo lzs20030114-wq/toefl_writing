@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
@@ -13,6 +13,8 @@ import { formatLocalDateTime } from "../../lib/utils";
 import { buildDailyAveragePoints, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
 import { InterviewAiReviewBlock } from "./useInterviewAiReview";
+import { rescoreInterview } from "../../lib/speakingEval/interviewScorer";
+import { readCachedInterviewScore } from "../../lib/speakingEval/interviewScoreCache";
 
 const ACCENT = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -308,12 +310,50 @@ const DIM_COLORS = {
   organization: "#16A34A",
 };
 
+/**
+ * 记录页的「补分」。面试每题的评分是各自一次 DeepSeek 调用，交卷最多只等 60 秒，
+ * 所以这条记录里可能缺分：评分当时失败（存进去的是一份 error 报告），或者评分在
+ * 交卷之后才回来（那时记录已落库，分数进不去）。转写一直都在，不该让用户重录。
+ *
+ * 两步：① 先读本地补分缓存——命中说明分其实早算出来了，只是没进这条记录，直接补上，
+ * 不花钱；② 没命中才给一颗「重新评分」，点了才真调一次 AI。
+ */
+function useInterviewScoreRecovery(items) {
+  const [patched, setPatched] = useState({});
+  const [busy, setBusy] = useState({});
+
+  useEffect(() => {
+    const found = {};
+    items.forEach((item, i) => {
+      if (item?.aiScore && !item.aiScore.error) return;
+      if (!item?.transcript) return;
+      const cached = readCachedInterviewScore({ question: item.question, transcript: item.transcript });
+      if (cached) found[i] = cached;
+    });
+    if (Object.keys(found).length > 0) setPatched((prev) => ({ ...prev, ...found }));
+  }, [items]);
+
+  const rescore = useCallback(async (i, item) => {
+    if (!item?.transcript) return;
+    setBusy((prev) => ({ ...prev, [i]: true }));
+    try {
+      const result = await rescoreInterview({ question: item.question, transcript: item.transcript });
+      setPatched((prev) => ({ ...prev, [i]: result }));
+    } finally {
+      setBusy((prev) => ({ ...prev, [i]: false }));
+    }
+  }, []);
+
+  return { patched, busy, rescore };
+}
+
 export function InterviewDetail({ session }) {
   const items = session.details?.items || [];
   const elapsed = session.details?.totalElapsed || session.details?.elapsed || 0;
   const attempted = session.details?.attempted || 0;
   const total = session.details?.total || items.length;
   const [expandedQ, setExpandedQ] = useState(null);
+  const { patched, busy, rescore } = useInterviewScoreRecovery(items);
 
   if (items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细练习数据</div>;
@@ -339,8 +379,10 @@ export function InterviewDetail({ session }) {
       />
 
       {items.map((item, i) => {
-        const sc = item.aiScore;
+        const sc = patched[i] || item.aiScore;
         const hasScore = sc && !sc.error;
+        // 缺分 + 转写还在 = 可以补。retryable===false 的失败(没有有效语音)重算也没用。
+        const canRescore = !hasScore && !!item.transcript && sc?.retryable !== false;
         const scoreColor = hasScore ? (sc.score >= 4 ? "#059669" : sc.score >= 3 ? "#D97706" : "#DC2626") : P.textDim;
         const isExpanded = expandedQ === i;
 
@@ -376,6 +418,24 @@ export function InterviewDetail({ session }) {
                   {!item.recorded && (
                     <span style={{ fontSize: 10, color: P.textDim, fontStyle: "italic" }}>已跳过</span>
                   )}
+                  {canRescore && (
+                    busy[i] ? (
+                      <span style={{ fontSize: 10, color: P.textDim }}>重新评分中…</span>
+                    ) : (
+                      <button
+                        type="button"
+                        data-testid="interview-rescore-history"
+                        onClick={(e) => { e.stopPropagation(); rescore(i, item); }}
+                        style={{
+                          fontSize: 10, fontWeight: 700, color: "#fff", background: "#DC2626",
+                          border: "none", borderRadius: 5, padding: "2px 8px",
+                          cursor: "pointer", fontFamily: FONT,
+                        }}
+                      >
+                        重新评分
+                      </button>
+                    )
+                  )}
                   <span style={{ marginLeft: "auto", fontSize: 10, color: P.textDim }}>{isExpanded ? "▼" : "▶"}</span>
                 </div>
               </div>
@@ -391,6 +451,18 @@ export function InterviewDetail({ session }) {
                     <AudioPlayer compact text={item.question} isPractice />
                   </div>
                 )}
+                {/* 评分失败时把原因摆出来（以前这里只渲染成功的报告，缺分那题在
+                    记录里完全没有说法，用户不知道是失败了还是没评过） */}
+                {sc && sc.error && sc.summary && (
+                  <div style={{
+                    padding: "8px 10px", marginBottom: 10,
+                    background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8,
+                    fontSize: 11, color: "#991B1B", lineHeight: 1.6,
+                  }}>
+                    {sc.summary}
+                  </div>
+                )}
+
                 {/* Dimension bars */}
                 {hasScore && sc.dimensions && (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 10 }}>

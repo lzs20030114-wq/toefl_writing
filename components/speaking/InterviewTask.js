@@ -7,7 +7,7 @@ import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { buildInterviewIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { transcribeWithServer } from "../../lib/speakingEval/serverStt";
-import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
+import { scoreInterview, rescoreInterview } from "../../lib/speakingEval/interviewScorer";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
@@ -98,6 +98,9 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
   // AbortController per question — used by forceFinish to cancel in-flight
   // transcribe uploads when the user gives up on the deferred-finish wait.
   const transcribeAbortRef = useRef([]);
+  // 同款,但给 DeepSeek 评分用。交卷后还挂着的评分既没人接收结果,又占着一次上游
+  // 调用 —— 上游变慢时四题的评分会一起挂满各自的超时(2026-09-20 事故现场)。
+  const scoringAbortRef = useRef([]);
 
   const total = items.length;
   const question = items[current];
@@ -300,6 +303,28 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
     }
   }, [current, phase, finished, started]);
 
+  // 评分结果落库到本地 state。失败的报告(scoreInterview 内部已兜住异常,返回的是
+  // 一份 error 报告而不是抛错)也要标成 failed 并把原因摆到当前题上 —— 以前它被记成
+  // "done",用户在答题页完全看不到失败,要等到结束页才发现某题没分。
+  const applyScoreResult = useCallback((idx, result) => {
+    const failed = !!(result && result.error);
+    setAiScores(prev => {
+      const next = [...prev];
+      next[idx] = result;
+      return next;
+    });
+    setScoringStatus(prev => {
+      const next = [...prev];
+      next[idx] = failed ? "failed" : "done";
+      return next;
+    });
+    setScoringErrors(prev => {
+      const next = [...prev];
+      next[idx] = failed ? (result.summary || "评分失败") : null;
+      return next;
+    });
+  }, []);
+
   // Start STT when recording begins
   // Run AI scoring once we have a transcript. Takes transcript as a parameter
   // so we don't race against state updates from the transcribe step.
@@ -330,22 +355,18 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
       next[questionIdx] = null;
       return next;
     });
+    const controller = new AbortController();
+    try { scoringAbortRef.current[questionIdx]?.abort?.(); } catch { /* 上一次已结束 */ }
+    scoringAbortRef.current[questionIdx] = controller;
     try {
       const q = items[questionIdx];
       const result = await scoreInterview({
         question: q.question,
         transcript,
+        signal: controller.signal,
       });
-      setAiScores(prev => {
-        const next = [...prev];
-        next[questionIdx] = result;
-        return next;
-      });
-      setScoringStatus(prev => {
-        const next = [...prev];
-        next[questionIdx] = "done";
-        return next;
-      });
+      if (scoringAbortRef.current[questionIdx] === controller) scoringAbortRef.current[questionIdx] = null;
+      applyScoreResult(questionIdx, result);
     } catch (err) {
       setScoringErrors(prev => {
         const next = [...prev];
@@ -358,7 +379,34 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
         return next;
       });
     }
-  }, [items]);
+  }, [items, applyScoreResult]);
+
+  // 用已保存的转写重算一题。先查本地补分缓存(rescoreInterview 内),命中就不再计费。
+  const rescore = useCallback(async (questionIdx) => {
+    const q = items[questionIdx];
+    const transcript = transcripts[questionIdx];
+    if (!q || !transcript) return;
+    setScoringStatus(prev => {
+      const next = [...prev];
+      next[questionIdx] = "processing";
+      return next;
+    });
+    setScoringErrors(prev => {
+      const next = [...prev];
+      next[questionIdx] = null;
+      return next;
+    });
+    const controller = new AbortController();
+    try { scoringAbortRef.current[questionIdx]?.abort?.(); } catch { /* 上一次已结束 */ }
+    scoringAbortRef.current[questionIdx] = controller;
+    const result = await rescoreInterview({
+      question: q.question,
+      transcript,
+      signal: controller.signal,
+    });
+    if (scoringAbortRef.current[questionIdx] === controller) scoringAbortRef.current[questionIdx] = null;
+    applyScoreResult(questionIdx, result);
+  }, [items, transcripts, applyScoreResult]);
 
   // Upload + handle a single blob. Pulled out of handleRecordingComplete so
   // the consent-modal retry path can call it too.
@@ -540,6 +588,10 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
   const forceFinish = useCallback(() => {
     transcribeAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
     transcribeAbortRef.current = [];
+    // 评分一并掐掉:交卷后它的结果没人接收,却还占着一次上游调用(上游变慢时是
+    // 四题各挂满一个超时)。掉下来的那题在结束页有「重新评分」可以补。
+    scoringAbortRef.current.forEach((c) => { try { c?.abort?.(); } catch {} });
+    scoringAbortRef.current = [];
     setSubmitting(false);
     setSubmitWaitSeconds(0);
     finishSession();
@@ -742,6 +794,23 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
                       </div>
                     </div>
                   </div>
+
+                  {/* 评分失败/被交卷掐断的那一题:转写还在,给一条「重新评分」而不是
+                      让用户重录整道题。命中本地补分缓存时连 AI 都不用再调。 */}
+                  {sc && sc.error && (
+                    <div style={{
+                      marginTop: 12, padding: "10px 12px",
+                      background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8,
+                      fontSize: 12, color: "#991B1B", lineHeight: 1.6,
+                    }}>
+                      <div>{scoringStatus[i] === "processing" ? "正在重新评分…" : sc.summary}</div>
+                      {sc.retryable && transcripts[i] && scoringStatus[i] !== "processing" && (
+                        <div style={{ marginTop: 8 }}>
+                          <RescoreButton onClick={() => rescore(i)} />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Expanded details */}
                   {isExpanded && sc && !sc.error && (
@@ -1010,6 +1079,11 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
                   fontSize: 12, color: "#991B1B", lineHeight: 1.6,
                 }}>
                   {scoringErrors[current]}
+                  {aiScores[current]?.retryable && transcripts[current] && (
+                    <div style={{ marginTop: 8 }}>
+                      <RescoreButton onClick={() => rescore(current)} />
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1172,6 +1246,27 @@ function DimensionScoreCard({ score, compact = false }) {
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * 「重新评分」按钮。答题页与结束页共用同一颗,文案与样式只此一处。
+ * 它不重录、不重传音频,只把已保存的转写再送一次评分。
+ */
+export function RescoreButton({ onClick, label = "重新评分" }) {
+  return (
+    <button
+      type="button"
+      data-testid="interview-rescore"
+      onClick={onClick}
+      style={{
+        fontSize: 12, fontWeight: 700, color: "#fff", background: "#DC2626",
+        border: "none", borderRadius: 6, padding: "5px 14px", cursor: "pointer",
+        fontFamily: FONT,
+      }}
+    >
+      {label}
+    </button>
   );
 }
 
