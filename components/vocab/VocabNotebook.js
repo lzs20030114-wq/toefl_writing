@@ -7,6 +7,7 @@ import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
 import { MATURE_DAYS, sortByUrgency } from "../../lib/vocab/book";
+import { humanizeDef } from "../../lib/dict/core";
 
 const ACCENT = "#0891B2";
 const ACCENT_SOFT = "#ECFEFF";
@@ -321,7 +322,7 @@ export default function VocabNotebook({ onBack }) {
                         overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
                         WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
                       }}>
-                        {card.def.replace(/\n/g, " / ")}
+                        {humanizeDef(card.def)}
                       </div>
                     )}
                     <div style={{ fontSize: 10.5, color: C.t3, marginTop: 4 }}>
