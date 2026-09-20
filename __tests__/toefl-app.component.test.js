@@ -404,7 +404,10 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("writing-intro-start")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("writing-intro-start"));
     expect(screen.getByTestId("writing-textarea")).toHaveValue("");
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    // 只数评分那一路：2026-09-20 起评分成功后还会再发一次 /api/ai/lesson（讲评），
+    // 它是独立调用、不计用量，不该被算进「重练有没有重复评分」这条断言里。
+    const scoringCalls = global.fetch.mock.calls.filter(([url]) => url === "/api/ai");
+    expect(scoringCalls).toHaveLength(1);
   });
 
   test("build final submit can be canceled by confirm dialog", () => {

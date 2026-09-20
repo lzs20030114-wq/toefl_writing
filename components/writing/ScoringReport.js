@@ -19,6 +19,19 @@ function GoalBadge({ status }) {
   );
 }
 
+// 三维度小卡的中文标签。rubric 里的 definition / note 是英文内部说明，不渲染。
+const DIM_LABELS = [
+  { key: "task_fulfillment", label: "任务完成" },
+  { key: "organization_coherence", label: "组织连贯" },
+  { key: "language_use", label: "语言使用" },
+];
+
+function fmtDimScore(v) {
+  const n = Number(v);
+  if (!Number.isFinite(n)) return "--";
+  return String(Math.round(n * 2) / 2);
+}
+
 function levelStyles(level) {
   if (level === "red") return { bg: "#fee2e2", color: "#991b1b" };
   if (level === "orange") return { bg: "#ffedd5", color: "#9a3412" };
@@ -82,6 +95,19 @@ export function ScoringReport({ result, type }) {
     return report.annotationRaw || "";
   }, [report.userText, marks, report.annotationRaw]);
   const sectionStates = report.sectionStates || {};
+  const dims = report?.rubric?.dimensions || null;
+  const errorTriage = report?.errorTriage || null;
+  const triageCapped = Array.isArray(errorTriage?.capped) ? errorTriage.capped : [];
+  const triageMinor = String(errorTriage?.minorSummary || "").trim();
+  const triageVerdict = String(errorTriage?.verdict || "").trim();
+  const showTriage = Boolean(errorTriage) && (triageCapped.length > 0 || triageMinor || triageVerdict);
+  // 讲评(lesson)：评分之后的第二次调用产物。模考结果/历史行只做只读展示，
+  // 没有 lesson 的旧记录一整块都不渲染。
+  const lesson = report.lesson && typeof report.lesson === "object" ? report.lesson : null;
+  const lessonFocus = lesson?.focus || null;
+  const lessonNext = lesson?.next || null;
+  const lessonChecks = Array.isArray(lessonNext?.checks) ? lessonNext.checks : [];
+  const showLesson = Boolean(lessonFocus && (lessonFocus.strategy || lessonFocus.rewrite));
 
   const patternRows = useMemo(
     () =>
@@ -102,6 +128,23 @@ export function ScoringReport({ result, type }) {
           <span style={{ background: "rgba(255,255,255,0.18)", borderRadius: 14, padding: "3px 10px", fontSize: 12, fontWeight: 700 }}>{band ?? "-"}</span>
         </div>
         <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>{summary || "总评暂缺。"}</div>
+        {dims ? (
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 8 }}>
+            {DIM_LABELS.map(({ key, label }) => {
+              const d = dims[key] || {};
+              const reason = String(d.reason || "").trim();
+              return (
+                <div key={key} style={{ minWidth: 0, background: "rgba(255,255,255,0.1)", borderRadius: 6, padding: "8px 10px" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 6 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, opacity: 0.75 }}>{label}</span>
+                    <span style={{ fontSize: 15, fontWeight: 800 }}>{fmtDimScore(d.score)}</span>
+                  </div>
+                  {reason ? <div style={{ marginTop: 4, fontSize: 12, lineHeight: 1.55, opacity: 0.85 }}>{reason}</div> : null}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
         {type === "email" && (
           <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
             {goals.length > 0 ? (
@@ -117,6 +160,29 @@ export function ScoringReport({ result, type }) {
           </div>
         )}
       </div>
+
+      {showLesson ? (
+        <DisclosureSection title="本课只讲一件事" defaultOpen preview={lessonFocus.strategy || ""} contentStyle={{ padding: 14 }}>
+          <div style={{ display: "grid", gap: 8 }}>
+            {lessonFocus.strategy ? <div style={{ fontSize: 14, fontWeight: 700, color: C.t1, lineHeight: 1.6 }}>{lessonFocus.strategy}</div> : null}
+            {lessonFocus.evidence ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>证据：</b>{lessonFocus.evidence}</div> : null}
+            {lessonFocus.missing ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>缺的是：</b>{lessonFocus.missing}</div> : null}
+            {lessonFocus.rewrite ? (
+              <div style={{ background: "#ecfdf5", border: "1px solid rgba(13,150,104,0.19)", borderRadius: 6, padding: "10px 12px" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#087355", marginBottom: 6 }}>示范改写</div>
+                <div style={{ fontSize: 13, color: "#052e16", lineHeight: 1.85, whiteSpace: "pre-wrap" }}>{lessonFocus.rewrite}</div>
+              </div>
+            ) : null}
+            {lessonFocus.transfer ? <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}><b>迁移：</b>{lessonFocus.transfer}</div> : null}
+            {lessonNext?.task ? <div style={{ fontSize: 13, color: C.t1, lineHeight: 1.7, background: "#f8fafc", borderRadius: 6, padding: "8px 10px" }}><b>任务：</b>{lessonNext.task}</div> : null}
+            {lessonChecks.length > 0 ? (
+              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: C.t2, lineHeight: 1.8 }}>
+                {lessonChecks.map((check, idx) => <li key={idx}>{check}</li>)}
+              </ul>
+            ) : null}
+          </div>
+        </DisclosureSection>
+      ) : null}
 
       <DisclosureSection title="薄弱点修改建议" defaultOpen preview={actions.length > 0 ? `${actions.length} 个重点` : "暂无"} contentStyle={{ padding: 14 }}>
         {sectionStates.ACTION && !sectionStates.ACTION.ok ? (
@@ -135,6 +201,47 @@ export function ScoringReport({ result, type }) {
           </div>
         )}
       </DisclosureSection>
+
+      {showTriage ? (
+        <DisclosureSection
+          title="影响分数的错误"
+          defaultOpen
+          preview={triageCapped.length > 0 ? `${triageCapped.length} 条` : "无"}
+          contentStyle={{ padding: 14 }}
+        >
+          {triageCapped.length > 0 ? (
+            <div style={{ display: "grid", gap: 8 }}>
+              {triageCapped.map((item, idx) => (
+                <div key={idx} style={{ border: "1px solid #e5e7eb", borderRadius: 6, padding: 10 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, fontStyle: "italic", color: C.t1, lineHeight: 1.6 }}>{item.quote || "（未给出原句）"}</div>
+                    <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                      {item.impedes === true ? (
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: "#fef2f2", color: C.red, whiteSpace: "nowrap" }}>妨碍理解</span>
+                      ) : null}
+                      {item.systemic === true ? (
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 999, background: C.softAmber, color: C.orange, whiteSpace: "nowrap" }}>系统性失控</span>
+                      ) : null}
+                    </div>
+                  </div>
+                  {item.issue ? <div style={{ marginTop: 6, fontSize: 13, color: C.t2, lineHeight: 1.7 }}>{item.issue}</div> : null}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ fontSize: 13, color: C.t2, lineHeight: 1.7 }}>没有真正拉低分数的语法错误</div>
+          )}
+          <details style={{ marginTop: 12 }}>
+            <summary style={{ cursor: "pointer", fontSize: 12, fontWeight: 700, color: C.t2, lineHeight: 1.6 }}>
+              不压分的限时小错：{triageMinor || "无"}
+            </summary>
+            <div style={{ marginTop: 6, fontSize: 11.5, color: C.t3, lineHeight: 1.7 }}>
+              ETS 官方 5 分样文同样含约十处这类小错，它们不决定分数
+            </div>
+          </details>
+          {triageVerdict ? <div style={{ marginTop: 10, fontSize: 11, color: C.t3, lineHeight: 1.6 }}>{triageVerdict}</div> : null}
+        </DisclosureSection>
+      ) : null}
 
       <DisclosureSection title="逐句批注" preview={(() => {
         const spelling = marks.filter((m) => m.type === "mark" && m.level === "red" && String(m.errorType || "").toLowerCase() === "spelling").length;
@@ -221,7 +328,7 @@ export function ScoringReport({ result, type }) {
         ) : (
           <div style={{ display: "grid", gap: 10 }}>
             <details>
-              <summary style={{ cursor: "pointer", fontWeight: 700, color: C.nav }}>查看完整范文</summary>
+              <summary style={{ cursor: "pointer", fontWeight: 700, color: C.nav }}>查看 AI 参考范文</summary>
               <pre style={{ whiteSpace: "pre-wrap", marginTop: 8, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, padding: 10, fontFamily: "inherit", fontSize: 13, lineHeight: 1.8 }}>
                 {isPro ? (comparison.modelEssay || "暂无范文") : (() => {
                   const text = comparison.modelEssay || "暂无范文";
