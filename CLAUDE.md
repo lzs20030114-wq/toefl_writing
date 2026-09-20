@@ -51,7 +51,8 @@ app/                          # Next.js App Router
 components/                   # 分科任务 UI + 后台
 ├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask), InsertSentenceStem(插入句题干拆三段, 拆法在 lib/reading/insertSentence)
 ├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer(ref.playRange 逐句), SentenceTranscript(每句前 ▶ 键播放, 文字留给划词词典)
-├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT)
+├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT), useInterviewAiReview(面试练后「AI 整场分析」:
+│                             #   跨题诊断+改法+改写示范, prompt 在 lib/ai/prompts/interviewReview.js, 记录页与结束页共用缓存)
 ├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)

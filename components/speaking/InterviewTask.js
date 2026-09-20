@@ -11,6 +11,7 @@ import { scoreInterview } from "../../lib/speakingEval/interviewScorer";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
+import { InterviewAiReviewBlock } from "./useInterviewAiReview";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -672,6 +673,23 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
               </div>
             )}
           </SurfaceCard>
+
+          {/* 整场 AI 分析：跨题找反复出现的问题 + 改法 + 改写示范。与练习记录里的
+              InterviewDetail 共用同一份缓存 key（题 + 转写 + 分），这里生成过的分析
+              回到记录里打开直接命中，不重复计费。 */}
+          <InterviewAiReviewBlock
+            items={items.map((item, i) => ({
+              id: item.id,
+              question: item.question,
+              category: item.category,
+              recorded: !!recordings[i],
+              transcript: transcripts[i] || null,
+              aiScore: aiScores[i] || null,
+            }))}
+            averageScore={avgScore}
+            totalElapsed={totalElapsed}
+            style={{ marginBottom: 20 }}
+          />
 
           {/* Per-question breakdown */}
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
