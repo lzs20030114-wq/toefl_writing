@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-09-20 — v1.23.1
+
+> 单词本释义层的三处修补，起因是一张真实的复习卡：varying 的背面只有一句 `[计] 改变`。
+> 无迁移（`vocab_cards` 存整卡 JSONB，新字段 `lemma` 随卡同步）、无新 flag、无新 env。
+
+- **ECDICT 行话翻成中文**（`0517985`）。`lib/dict/core.js` 加 `POS_LABEL` / `DOMAIN_LABEL` 两张表
+  （`vt.` → 及物动词，`计` → 计算机；表里没有的原样回显，不猜），并把 `splitSenses` 底下抽出
+  `parseSenses(t)` 返回 `{ pos, posTags, posLabels, domains, domainLabels, senses }`。
+  **`pos` 字段刻意保持原样前缀** —— 存量卡的 `def` 就是 `${pos} ${sense}` 拼的，义项选中态靠字符串相等比，改了全对不上。
+  新建 `components/shared/DictSenses.js`（一行一个词性的只读视图 + `DefLine`），复习卡背面、划词弹窗、
+  单词本列表三处共用；`humanizeDef()` 给列表的一行文本用。
+- **薄条目不再挡住原形**（`0517985`）。ECDICT 给 816 个屈折形单收了「没音标 + 义项全带领域标」的条目
+  （`varying → [计] 改变`），`lookupWord` 直接命中就再也回落不到 `vary`。新增 `isThinEntry` / `pickLemma`：
+  命中薄条目时在同片里挑「能查到、自己不薄」的候选中**词干最长**的那个（`naiveStems("using")` 先给代词 `us` 再给 `use`，
+  取第一个会落错），两字母词干一概不认（`abs → ab` 纯属巧合）。全库实测救回 **207 个词**，
+  `building` / `pattern` 等自带好条目的词不受影响。
+- **薄释义的卡自动顶替主释义**（`70f677e`）。`needsDictFill(card)` 从组件挪到 `lib/vocab/book.js`
+  （store 写回和 UI 判断必须用同一把尺子）；新增卡片字段 `lemma` 记原形词形，`normalizeCard` / `mergeCards` 一并带上
+  （云同步取并集，一端修好的原形不该因为另一端打了一次分就丢）。`vocabStore.adoptDictEntry` 在复习查到词条后写回：
+  换 `def`、记 `lemma`、补 `tag`，**不动 `word`**（主键，换掉会把复习进度和用户可能已有的另一张卡搅在一起）、
+  **不动 `phonetic`**（卡面词形是 varying，挂 vary 的音标是错的）、**不碰已有通用词性的卡**（那是用户点定的义项）。
+  幂等（一场里同词回插多次只写一次盘）。写回后 `needsDictFill` 恒为 false —— 真机重载验证过零 `/dict/` 分片请求。
+- 测试：新增 `dict-senses.test.js`（含真实词库防退化：`varying→vary` / `using→use` / `pacing→pace`，
+  且 `building` / `pattern` / `abs` 不动）、`vocab-adopt-dict.test.js`、`vocab-review-dict.component.test.js`，
+  共 +21 条；`dict-lookup*.test.js` / `listening-word-lookup` 的断言随弹窗改中文词性同步更新。
+
+
 ## 2026-09-20 — v1.23.0
 
 > 九个会话分支一次合进 main（各自一个 merge commit，可单独回退）：写作批改改造成「一节写作课」、面试「AI 整场分析」、
