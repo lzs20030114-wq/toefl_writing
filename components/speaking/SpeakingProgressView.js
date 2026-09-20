@@ -10,6 +10,7 @@ import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
 import { buildDailyAveragePoints, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
+import { InterviewAiReviewBlock } from "./useInterviewAiReview";
 
 const ACCENT = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -340,6 +341,15 @@ export function InterviewDetail({ session }) {
         <span>回答 {attempted}/{total} 题</span>
         {elapsed > 0 && <span>用时 {formatTime(elapsed)}</span>}
       </div>
+
+      {/* 整场 AI 分析：跨题诊断 + 改法 + 改写示范（Pro，点了才计费；无有效转写时不渲染） */}
+      <InterviewAiReviewBlock
+        items={items}
+        averageScore={session.details?.averageScore ?? null}
+        totalElapsed={elapsed}
+        topic={session.details?.topic || ""}
+        style={{ marginBottom: 4 }}
+      />
 
       {items.map((item, i) => {
         const sc = item.aiScore;
