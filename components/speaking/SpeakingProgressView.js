@@ -5,6 +5,8 @@ import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NE
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "../listening/AudioPlayer";
+import { WordHighlight } from "./WordHighlight";
+import { RepeatRetake } from "./RepeatRetake";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
@@ -224,6 +226,7 @@ export function RepeatDetail({ session }) {
                     originalSentence={item.sentence}
                     matchedWords={score.matchedWords}
                     missedWords={score.missedWords}
+                    fontSize={13}
                   />
                 ) : (
                   <div style={{ fontSize: 13, color: P.text, lineHeight: 1.6 }}>
@@ -271,38 +274,22 @@ export function RepeatDetail({ session }) {
             {!item.recorded && (
               <div style={{ marginLeft: 30, fontSize: 11, color: P.textDim, fontStyle: "italic" }}>未录制</div>
             )}
+
+            {/* 复盘时再练一次：只在本页显示，不回写历史记录（设计决定，见 CLAUDE.md） */}
+            {item.sentence && (
+              <div style={{ marginLeft: 30, marginTop: 6 }}>
+                <RepeatRetake
+                  sentenceText={item.sentence}
+                  questionId={item.id || ""}
+                  originalAccuracy={accuracy != null ? accuracy : null}
+                />
+              </div>
+            )}
           </div>
         );
       })}
     </div>
   );
-}
-
-// -- Word Highlight (reused from RepeatTask pattern) --
-
-function WordHighlight({ originalSentence, matchedWords, missedWords }) {
-  const origWords = String(originalSentence || "").split(/\s+/).filter(Boolean);
-  const normalizeWord = (w) => w.toLowerCase().replace(/[^\w]/g, "");
-
-  const matchedPool = [...(matchedWords || [])];
-  const missedPool = [...(missedWords || [])];
-
-  const styled = origWords.map((word, idx) => {
-    const norm = normalizeWord(word);
-    const matchIdx = matchedPool.indexOf(norm);
-    if (matchIdx !== -1) {
-      matchedPool.splice(matchIdx, 1);
-      return <span key={idx} style={{ color: "#16A34A", fontWeight: 600 }}>{word} </span>;
-    }
-    const missIdx = missedPool.indexOf(norm);
-    if (missIdx !== -1) {
-      missedPool.splice(missIdx, 1);
-      return <span key={idx} style={{ color: "#DC2626", textDecoration: "line-through", textDecorationColor: "#DC2626" }}>{word} </span>;
-    }
-    return <span key={idx} style={{ color: "#DC2626", textDecoration: "line-through", textDecorationColor: "#DC2626" }}>{word} </span>;
-  });
-
-  return <div style={{ fontSize: 13, lineHeight: 1.8 }}>{styled}</div>;
 }
 
 // -- Interview Detail --
