@@ -1,0 +1,136 @@
+{
+  "items": [
+    {
+      "id": "tmp_r2_q1",
+      "prompt": "What did Mariana ask you at the front desk?",
+      "answer": "My poster was printed by the design lab.",
+      "chunks": ["my", "poster", "by", "the design", "lab"],
+      "prefilled": ["was printed"],
+      "prefilled_positions": { "was printed": 2 },
+      "distractor": "been",
+      "has_question_mark": false,
+      "grammar_points": ["passive voice with by-phrase"]
+    },
+    {
+      "id": "tmp_r2_q2",
+      "prompt": "What did Julian ask about the study group?",
+      "answer": "I joined the group that meets on Thursday mornings.",
+      "chunks": ["joined", "the group", "that", "meets", "on Thursday", "mornings"],
+      "prefilled": ["I"],
+      "prefilled_positions": { "i": 0 },
+      "distractor": "joining",
+      "has_question_mark": false,
+      "grammar_points": ["relative clause with that"]
+    },
+    {
+      "id": "tmp_r2_q3",
+      "prompt": "Why did Harold call you about the fee?",
+      "answer": "I found out the late fee was already waived.",
+      "chunks": ["i", "the late", "fee", "was", "already waived"],
+      "prefilled": ["found out"],
+      "prefilled_positions": { "found out": 1 },
+      "distractor": "have",
+      "has_question_mark": false,
+      "grammar_points": ["embedded clause with found out"]
+    },
+    {
+      "id": "tmp_r2_q4",
+      "prompt": "Has Emma shown you the renovated north wing?",
+      "answer": "The upstairs seminar rooms feel much quieter than the old basement lounge.",
+      "chunks": ["the upstairs", "seminar rooms", "feel", "much", "quieter", "than", "the old", "basement lounge"],
+      "prefilled": [],
+      "prefilled_positions": {},
+      "distractor": null,
+      "has_question_mark": false,
+      "grammar_points": ["comparative with -er than"]
+    },
+    {
+      "id": "tmp_r2_q5",
+      "prompt": "Margot has your name on the tutoring roster.",
+      "answer": "When do I meet my first student?",
+      "chunks": ["do", "I", "meet", "my first", "student"],
+      "prefilled": ["when"],
+      "prefilled_positions": { "when": 0 },
+      "distractor": "does",
+      "has_question_mark": true,
+      "grammar_points": ["direct wh-question"]
+    },
+    {
+      "id": "tmp_r2_q6",
+      "prompt": "Did Hector mention the archive tour?",
+      "answer": "He asked whether the microfilm room would stay open during exam week.",
+      "chunks": ["he", "the microfilm", "room", "would stay", "open", "during", "exam week"],
+      "prefilled": ["asked whether"],
+      "prefilled_positions": { "asked whether": 1 },
+      "distractor": "did",
+      "has_question_mark": false,
+      "grammar_points": ["embedded question with whether"]
+    },
+    {
+      "id": "tmp_r2_q7",
+      "prompt": "Where did Olivia leave your parking pass?",
+      "answer": "Unfortunately, I left it inside my other jacket pocket.",
+      "chunks": ["I", "left", "it", "inside", "jacket", "pocket"],
+      "prefilled": ["Unfortunately,", "my other"],
+      "prefilled_positions": { "unfortunately,": 0, "my other": 5 },
+      "distractor": "leaving",
+      "has_question_mark": false,
+      "grammar_points": ["sentence-opener adverb", "prepositional phrase"]
+    },
+    {
+      "id": "tmp_r2_q8",
+      "prompt": "Naomi was hoping to borrow your lab coat.",
+      "answer": "I no longer keep it in the supply closet.",
+      "chunks": ["i", "keep", "it", "in", "the supply", "closet"],
+      "prefilled": ["no longer"],
+      "prefilled_positions": { "no longer": 1 },
+      "distractor": "not",
+      "has_question_mark": false,
+      "grammar_points": ["negation with no longer"]
+    },
+    {
+      "id": "tmp_r2_q9",
+      "prompt": "What did Professor Cho ask after the seminar?",
+      "answer": "She needed to know my revised research topic.",
+      "chunks": ["needed to", "know", "my revised", "research", "topic"],
+      "prefilled": ["She"],
+      "prefilled_positions": { "she": 0 },
+      "distractor": "was",
+      "has_question_mark": false,
+      "grammar_points": ["reported request with needed to know"]
+    },
+    {
+      "id": "tmp_r2_q10",
+      "prompt": "Has Diane seen your headphones anywhere?",
+      "answer": "They are still inside my gym bag.",
+      "chunks": ["are", "still", "inside", "my", "gym bag"],
+      "prefilled": ["They"],
+      "prefilled_positions": { "they": 0 },
+      "distractor": "were",
+      "has_question_mark": false,
+      "grammar_points": ["simple present statement"]
+    },
+    {
+      "id": "tmp_r2_q11",
+      "prompt": "What did Angelina say about the shuttle schedule?",
+      "answer": "She told me when the last van leaves.",
+      "chunks": ["she", "when", "the last", "van", "leaves"],
+      "prefilled": ["told me"],
+      "prefilled_positions": { "told me": 1 },
+      "distractor": "said",
+      "has_question_mark": false,
+      "grammar_points": ["indirect question with when"]
+    },
+    {
+      "id": "tmp_r2_q12",
+      "prompt": "Did Alison give you the studio access code?",
+      "answer": "She emailed it to me this morning.",
+      "chunks": ["she", "emailed", "it", "this morning"],
+      "prefilled": ["to me"],
+      "prefilled_positions": { "to me": 3 },
+      "distractor": "sent",
+      "has_question_mark": false,
+      "grammar_points": ["simple past statement"]
+    }
+  ]
+}
