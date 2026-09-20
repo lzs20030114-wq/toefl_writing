@@ -2,11 +2,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
-import { activeSentence, cardDirection, clozeSentence, contextSentence, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
 import { parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
+import { adoptDictEntry } from "../../lib/vocab/vocabStore";
 
 /**
  * 一场复习。
@@ -71,41 +72,37 @@ function highlight(sentence, word) {
 }
 
 /**
- * 卡上存的释义够不够用：有任何一条挂着通用词性（n./vt./a.…）就算够。
- *
- * 不够的典型是 varying —— ECDICT 给这个屈折形单收了 `[计] 改变`（没音标、没词性），
- * 收藏时命中的就是它，于是卡上永远只有这一句看不懂的话。这种卡复习时现查一次词典，
- * 把原形 vary 的完整词性释义补上。
- */
-export function needsDictFill(card) {
-  if (!card) return false;
-  return !parseSenses(card.defFull || card.def).some((g) => g.posTags.length > 0);
-}
-
-/**
  * 背面的「词典」区：把这个词的全部释义按词性铺开。
  *
  * 主释义回答的是「它在这句里什么意思」，这一块回答另外两个问题 ——
  * 它还能当别的词性用吗、那个看不懂的 [计] 到底是什么。只在背面出现：
  * 正面给了释义这张卡就没有提取可言。
  *
- * 取数顺序：卡上存的整条释义优先；卡上那条太薄才用复习时现查的词条补
- * （extra 由调用方查好传进来，见 VocabReview 里的 useEffect）。
+ * 三种状态：
+ *  - 卡上释义太薄、这次现查到了（filling）：整条词典释义摆在这儿，
+ *    同一次里 adoptDictEntry 已经把它顶成主释义，所以下一次进来走第三种。
+ *  - 顶替过的卡：主释义已经是整条词典释义了，这里只剩「原形是谁」要交代。
+ *  - 用户点过义项的卡：主释义是那一条，这里摆整条 defFull 当参照。
  */
 function DictPanel({ card, extra }) {
   const filling = needsDictFill(card) && !!extra && !!extra.t;
-  const text = filling ? extra.t : card.defFull;
+  // 释义讲的是原形（varying → vary）时必须说清楚，否则用户会以为
+  // 这些词性和音标属于卡面上那个词形。
+  const lemma = filling
+    ? (extra.word && extra.word !== card.word ? { word: extra.word, p: extra.p } : null)
+    : (card.lemma ? { word: card.lemma, p: "" } : null);
   // 卡上那条整释义和主释义一字不差时就别重复摆一遍了
-  if (!filling && (!text || text === card.def)) return null;
-  if (parseSenses(text).length === 0) return null;
-  // 现查的条目落在原形上（varying → vary）时必须说清楚，
-  // 否则用户会以为这个音标和词性是卡片上那个词形的。
-  const lemma = filling && extra.word && extra.word !== card.word ? extra : null;
+  const body = filling ? extra.t : (card.defFull && card.defFull !== card.def ? card.defFull : "");
+  const hasBody = !!body && parseSenses(body).length > 0;
+  if (!hasBody && !lemma) return null;
   return (
     <div style={{
       marginTop: 12, paddingTop: 10, borderTop: `1px dashed ${C.bdrSubtle}`,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+        marginBottom: hasBody ? 8 : 0,
+      }}>
         <span style={{
           fontSize: 10, color: C.t3, background: C.bdrSubtle,
           borderRadius: 5, padding: "1px 6px", fontWeight: 700,
@@ -134,7 +131,7 @@ function DictPanel({ card, extra }) {
           </span>
         )}
       </div>
-      <DictSenses text={text} />
+      {hasBody && <DictSenses text={body} />}
     </div>
   );
 }
@@ -196,7 +193,13 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
     // 失败时背面照常显示卡上存的那条释义。
     lookupWord(fillWord)
       .then((e) => {
-        if (alive && e && e.t) setExtra(e);
+        if (!e || !e.t) return;
+        if (alive) setExtra(e);
+        // 顺手写回卡片：这张卡的主释义本来就是「词典整条」（用户没点过义项），
+        // 换成查得到的那一条才是它该有的样子。写回之后列表页、别的设备、
+        // 下一次复习都不用再查（needsDictFill 从此为 false）。
+        // 卸载了也照写 —— 修复本身是对的，不该因为用户正好翻页就丢掉。
+        adoptDictEntry(fillWord, e);
       })
       .catch(() => {});
     return () => {

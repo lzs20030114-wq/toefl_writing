@@ -13,6 +13,7 @@ import React from "react";
 import { act, render, screen, fireEvent } from "@testing-library/react";
 import { VocabReview } from "../components/vocab/VocabReview";
 import { normalizeCard } from "../lib/vocab/book";
+import { getCard, saveWord } from "../lib/vocab/vocabStore";
 
 const VARY = {
   word: "vary",
@@ -34,17 +35,16 @@ const SENTENCE =
   "Players control the dynamics of soft and loud sounds by varying the pressure on the keys.";
 
 function renderCard(overrides) {
-  const card = normalizeCard({
-    word: "varying",
-    sentence: SENTENCE,
-    source: "reading",
-    ...overrides,
-  });
+  const entry = { word: "varying", sentence: SENTENCE, source: "reading", ...overrides };
+  // 真的收藏一遍：顶替主释义是写回 store 的，卡不在本子里就没得顶
+  saveWord(entry);
+  const card = normalizeCard(entry);
   render(<VocabReview initialQueue={[card]} onGrade={() => null} onExit={() => {}} />);
   return card;
 }
 
 beforeEach(() => {
+  localStorage.clear();
   lookupWord.mockReset();
   lookupWord.mockResolvedValue(VARY);
 });
@@ -87,6 +87,39 @@ describe("复习卡背面 · 词典区", () => {
     });
     fireEvent.click(screen.getByText(/显示答案/));
     expect(await screen.findByText("模仿、仿造")).toBeInTheDocument();
+    expect(lookupWord).not.toHaveBeenCalled();
+  });
+
+  test("薄释义被词典条目顶掉，并记下原形 —— 列表页和别的设备也跟着对", async () => {
+    renderCard({ def: "[计] 改变" });
+    fireEvent.click(screen.getByText(/显示答案/));
+    await screen.findByText("及物动词");
+    const saved = getCard("varying");
+    expect(saved.def).toBe(VARY.t);
+    expect(saved.lemma).toBe("vary");
+    // word 是主键，不能跟着换：换掉会把复习进度和用户可能已有的 vary 卡搅在一起
+    expect(saved.word).toBe("varying");
+    // 卡面上的词形是 varying，挂 vary 的音标是错的
+    expect(saved.phonetic).toBe("");
+  });
+
+  test("用户自己点定过义项的卡不被词典覆盖", async () => {
+    renderCard({
+      word: "pattern",
+      sentence: "The pattern of migration changed over time.",
+      def: "n. 图案",
+      defFull: "n. 模范, 典型, 图案\nvt. 模仿, 仿造",
+    });
+    fireEvent.click(screen.getByText(/显示答案/));
+    await screen.findByText("模仿、仿造");
+    expect(getCard("pattern").def).toBe("n. 图案");
+  });
+
+  test("顶替过的卡下次复习不再查词典，但仍写着原形是谁", async () => {
+    renderCard({ def: VARY.t, lemma: "vary" });
+    fireEvent.click(screen.getByText(/显示答案/));
+    expect(await screen.findByText("vary")).toBeInTheDocument();
+    expect(screen.getByText("及物动词")).toBeInTheDocument();
     expect(lookupWord).not.toHaveBeenCalled();
   });
 
