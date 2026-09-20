@@ -1,5 +1,81 @@
 # Changelog
 
+## 2026-09-20 — v1.23.0
+
+> 九个会话分支一次合进 main（各自一个 merge commit，可单独回退）：写作批改改造成「一节写作课」、面试「AI 整场分析」、
+> Listen & Repeat 真考节奏 + 练后重录、单词本卡型改版 + 语境句子池、学术阅读段落分隔与插入句题干、听力标准模式准备页、
+> 真题材料断句体检。无迁移（`manual-legacy-code-xxy123.sql` 是 09-15 已跑的手动发码，只是补登记）、无新 flag、无新 env。
+> **未在云端完成的合并前置**：`lib/ai/parse.js` / `calibration.js` 改了，按 docs/eval-spec/writing-scoring.md 须本机
+> `node scripts/scoring-gate.mjs --quick` 留基准（云端无 DEEPSEEK_API_KEY）；分支自述分数路径逐字节不变（34.5 万合成样本差分 0 处）。
+> 未合入：`claude/charming-planck-7ozj9n`（AI 讲解流式回传，与本版抽出的 `lib/ai/upstream.js` 结构冲突，需按新结构重做）、
+> `claude/sharp-hawking-ywzes1`（已被 `77441ad1` 替代，PR #13 待关）。
+
+- **写作批改报告 → 一节写作课**（`92862906` / `097faf3e` / `0ca5f465`，研究报告 data/claudeGen/reports/WRITING-FEEDBACK-*-2026-09-19.md）。
+  - 代码层：`calibration.js` 删 `addBlueRefinements` / `sentenceSpans`（高分或无批注时不再合成英文「拔高建议」）；`parse.js` 短板卡不再被固定三句替换、
+    维度行同时抓「一句话理由」、新增 `parseErrorsSection` 解析 `===ERRORS===` → `report.errorTriage`（压分 / 不压分分级）；
+    `WritingFeedbackPanel` / `ScoringReport` 分数卡加三维度小卡、逐句批注前加「影响分数的错误」；范文标签改「AI 参考范文」。分数路径不变。
+  - 第二次调用：新路由 `app/api/ai/lesson`（prompt 在服务端 `lib/ai/prompts/writingLesson.js`：每条判断引原句 / 只深挖一个教学点 / 终点是一个动作，
+    输出 VERDICT/FOCUS/LANGUAGE/COMPARE/NEXT 五段；同源校验 + 独立限流 20/min + 有效用户校验，**不计每日用量、tier 不限**，4096 token / 100s）。
+    评分路由 `/api/ai` 只做抽函数：上游调用层 → `lib/ai/upstream.js`、守卫 → `lib/ai/routeGuards.js`，34 个既有用例未改。
+    `WritingTask` 评分落地后异步发讲评，迟到结果按 attempt id 丢弃，成功后 `sessionStore.updateSessionDetails` 回写已存记录
+    （`cloudSessionStore` 新增按 id + user_code 的 update）；`lib/ai/lessonParse.js` 容错解析，失败 fail-open 只少讲评。
+    面板：分数卡三行（目标 / 现状 / 下一步）+「本课只讲一件事」「先改这几处语言」「现在动手」（可勾选自查，不持久）。**模考路径本轮无讲评。**
+  - `scripts/ops/audit-writing-reports.mjs`（只读）量注入蓝标率 / 兜底短板率 / 三维度理由缺失率等，改造前后各跑一次做基线。
+    上线后必做：拿 3–5 篇真实作文看 `parseLesson.ok` 命中率与讲评是否真引了原句（BACKLOG 已记，含 free 门控 / 模考路径待决）。
+- **模拟面试「AI 整场分析」**（`c1f62675`）。`InterviewDetail`（/speaking/progress 与 /real-bank/progress 共用）与 InterviewTask 结束页各挂一块
+  Pro 专属、点了才计费的整场分析：全部转写 + 单题机器分喂 DeepSeek 做跨题诊断（哪里对 / 反复出现的问题 / 最拖分的一环 / 3 条下次动作）
+  + 最低分那题一段口语化改写示范。prompt `lib/ai/prompts/interviewReview.js`（不重新打分、每条问题必须引作答原句、STT filler 不算问题），
+  hook `components/speaking/useInterviewAiReview.js` 与其他 AI 讲解 hook 同骨架（Pro 门 + localStorage 缓存，key 只看题 + 转写 + 分，结束页生成的回记录里直接命中）。
+- **Listen & Repeat 真考节奏**（`93fb82da` / `32b8f694`）。原句放完 `VoiceRecorder` autoStart 自动开麦（被浏览器拒绝退回手动点麦 + 提示）；
+  引入屏「开始」在手势内 `warmUpMicrophone()` 预授权并立即释放（10s 上限兜底），权限弹窗不压在首句音频上、iOS Safari 首句自动开麦不被拒；
+  点停止（或 30s 到顶）`handleRecordingComplete` 存录音、起识别后直接 `handleNext`（`pendingTranscribe` 参数：最后一句据此进等待态，否则总结页拿到 null 分）；
+  最后一句进「正在完成识别」等待态（45s 上限 + 跳过链接），识别落地自动出总结页。phase 机 `listen | record | submitting`；
+  复盘步（AccuracyCard / Re-record / Next Sentence / 参考原句）整个删掉，Pro 门槛提示挪到总结页横幅，识别失败改总结页逐句小标。
+  测试 `repeat-auto-record-flow`（预授权 / 超时 / 自动开麦 / 自动跳句 / 等待态 / 45s 上限）。
+- **Listen & Repeat 练后重录**（`64a18451`，merge `220bf512` 解了与上一条在 `RepeatTask.js` 的两处冲突）。总结页与历史页 `RepeatDetail` 每句挂
+  「🎙 重录这句」：`components/speaking/RepeatRetake.js` 自包含（内嵌录音器 → 原有 STT + `scoreRepeat` → 追加「重录 #n」+ 较原始的差值 + 逐词高亮 + 回放；
+  NOT_PRO sticky / NEEDS_CONSENT 语义照搬 RepeatTask，卸载 revoke object URL）。多次重录全部保留；原始每句成绩、总分横幅、`onComplete` payload 一律不动。
+  `WordHighlight` 抽到 `components/speaking/WordHighlight.js`（RepeatTask 与 SpeakingProgressView 两份私有副本合一）；总结页重录期间锁 Original / My Recording 回放。
+- **单词本：卡型改版 + 语境句子池**（`58f75073` / `28b4e652` / `9dd9c4ea`，裁定见 docs/vocab-srs-research.md 第八节，CLAUDE.md 第 8 节同步）。
+  - `book.js`：`cardDirection` 三态 `context / recognize / recall` —— 主卡改「原句高亮认词」（正面原句高亮目标词 + 词 / 音标 / 发音，背面只给释义，不挖空）；
+    产出卡（释义 + 挖空 → 拼英文）只在词进入 review 后启用，限写作 / 口语来源或列表页标了「要会写」的词（卡片 `productive` 字段，合并跟 updatedAt 新的一方）。
+    `srs.js` 学习步 `[15]` → `[10, 20]`、重学步同（首日隔开提取 3 次才毕业，注释写明是对 Anki 单步建议的有意偏离）；一场同词上限 2 → 4。
+  - 语境池：卡片加 `sentences(≤3)` 与 `defFull`；`normalizeCard` / `mergeCards` 规范化并合并；`contextPool` / `pickContext`（有第二句按 reps 轮换，
+    只有一句的词进入 review 后每第 3 次改裸词卡，防止记住的是句子）；`activeSentence` 背面例句与正面同源；`vocabStore` 新增 `addSentence` / `chooseSense`。
+  - 词典弹窗 `WordLookupLayer`：`dict/core.splitSenses` 按「词性行 × 逗号义项」拆义项渲染成可点 chips，点一条 = 按该义项收藏或换主释义（整条留 defFull）；
+    已收藏时显示「＋ 加这句语境 / 移出单词本」，**去掉「点已收藏即删除」**。`VocabReview` 背面小字显示词典全部释义；`VocabNotebook` 加「要会写」开关、标注语境句数。
+- **学术阅读正文段落分隔**（`706b7fc9`）。AP 条目 `passage`（渲染，pre-wrap 只认空行）与 `paragraphs[]`（题干「paragraph N」下标空间）分别由模型产出，
+  偶尔给出不带空行的 passage，整篇糊成一坨（常规库 101 条中 15 条、staging 353 条中 59 条）。三层：
+  ① 数据修 `scripts/fix-ap-paragraph-breaks.mjs`（幂等，14 条补空行 + 1 条删文末重复整块，真题库 89 条零改动）；
+  ② 渲染兜底 `lib/reading/passageLayout.js`（`apPassageText` / `restoreParagraphBreaks`，常规练习 / 真题专区 / 自适应模考 / 模考复盘四入口；
+  只往段间插空白、段内逐字不动，选句题 indexOf 定位不受影响；**绝不写 `paragraphs.join`**，带 `[■]` 的条目只有 passage 里有标记）；
+  ③ 管线闸 merge-staging 先修后拦 + `apValidator` 新增 `paragraph_layout` 拒收 + generate-ap 落 staging 归一 + prompt 输出契约。
+  回归测试 18 条（含整库体检 `ap-paragraph-layout.regression`），CLAUDE.md 新增「passage 与 paragraphs 必须同步」约定。
+- **插入句题的待插入句单独成段**（`532904c9`）。`lib/reading/insertSentence.js` 纯函数 `splitInsertStem` / `insertStemParts`
+  （覆盖真题 OCR 无引号 / `[■]` `[ ]` `■` `[A]-[D]` 各种方块写法、生成库 `**'…'**` 包装、提问在前 / 只剩句子等残缺写法；缺的指令 / 提问用 ETS 套话补齐，拆不出返回 null 回落原样）；
+  `components/reading/InsertSentenceStem.js` 共享渲染（指令 / 提问降字重，句子左色条 + 浅底 + 粗体，compact 档给复盘列表）；
+  接入 RDLTask（练习 + 真题）、AdaptiveExamShell、ReadingProgressView / MockSessionDetail、McqMistakesView（`readingMistakes` 顺带把 question_type 带进 type，此前恒 null）。
+  两个 AP 库全量 76 道插入题都拆得出干净句子。
+- **听力标准模式准备页**（`a41a7330`）。从首页「今日任务」直跳 `/listening?type=lcr` 落地时第一题已在放（标准模式只播一遍 + 限时，等于白丢一题）：
+  根因是任务组件随路由挂载、AudioPlayer autoPlay 立刻开播。新增 `components/listening/ListeningIntroScreen.js`（与 SpeakingIntroScreen 同思路，不朗读说明）；
+  `app/listening/page.js` 标准模式先渲染准备页，「开始」在真实手势里 unlock 共享考试音频元素（iOS / 微信内置浏览器需要）后再挂任务；按 type 记「点过开始」。
+  练习模式（TopicPicker）与真题专区不受影响。测试 `listening-intro-gate.component`。
+- **老听力记录也能逐句点播**（`ccee5555`）。09-18 前的练习记录快照里没有 `sentence_timings`。新增 `lib/listening/timingsLookup.js` 按 `audio_url` 建索引
+  （只收过体检的，题库 JSON 动态 import，只有打开缺时间戳的老记录才拉，/progress 首屏体积不变）；`useSentencePlayback` 快照缺就异步补查，
+  音频已不在题库（下架 / 重配）才整段展示。
+- **真题材料断句体检**（`a4ea189a` + 合入后补 `04774052`）。用户在 1.21 A 卷看到 advertisement 停在 "Whether you're a"：不是渲染吃字，是成品库 text 本身断了
+  （源料抽取窗口截断），09-07 那轮复核只按字段末尾扫、段中断句整批漏网。新增 `scripts/realbank/truncation_scan.js` 两条判据
+  （A 段中断句：行尾是不可能收尾的功能词且下一行另起；B 结尾断句：末行是散文却无句末标点；网址 / 邮箱 / 时间 / 表单 / 表格 / 标题豁免，全库 0 误报）。
+  修法一律写进 `review-holds.json` 的 patches（trim_tail 到成句边界 + append 句号）由 `apply_review` 幂等重放：分支清掉 4 处
+  （`real_rdl_121a_1_23` / `real_ap_324_1_31` / `real_repeat_314_1` / `real_repeat_228_1`），合入 main 时又命中 09-14 之后重建混进的 4 条
+  （`real_ap_511_2_11` 保住 Q14 依据的 optimize algorithms 句、`real_repeat_415_1`、`real_interview_223_1` / `_311_1` 开场白套话句整句截掉），补 6 处 patch 清零。
+  `__tests__/real-bank-truncated-material.regression.test.js` 双向锁：全库体检必须为 0，同时原始坏形态回灌检测器必须全部命中。
+  `data/realExam2026` 另有 2 篇学术阅读原文被截，是校准锚点、按「ground truth 不许改」没动（BACKLOG 已记）。
+- **examword 考试日期回填**（`cc3e782e`）。学术讨论真题「同为回忆版，有的标日期有的不标」：当初日期从列表页手抄成 `parse-examword.mjs` 写死表（只有最新 20 条）。
+  `scripts/research/examwordDate.mjs` 页面日期解析纯函数 + `backfill-examword-dates.mjs` 自校验回填（必须先原样复现已有 20 条，复现不了一个字不写；默认体检，`--write` 才落盘）。
+  题库 JSON 本次未改（本机网络策略拦源站），脚本离线验证三条路径。
+- **登记手动发码**（`c260e5b8` / `edd11557`）。`scripts/sql/manual-legacy-code-xxy123.sql`（`users.tier='legacy'` 永久 Pro）在 MIGRATIONS.md 登记为 2026-09-15 已跑。
+
 ## 2026-09-19 — v1.22.1
 
 > 逐句点播手势改版 + 真题复述场景插图。无迁移、无新 flag、无新 env。
