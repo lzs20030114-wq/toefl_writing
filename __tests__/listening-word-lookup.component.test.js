@@ -93,7 +93,7 @@ describe("听力复盘 · 原文划词", () => {
     const host = screen.getByText(/The seminar will focus/);
     aimAt("photosynthesis");
     clickIn(host);
-    expect(await screen.findByText("n. 光合作用")).toBeInTheDocument();
+    expect(await screen.findByText("光合作用")).toBeInTheDocument();
   });
 
   test("收藏时来源记成听力，并带上原文里的那一句", async () => {
@@ -115,7 +115,7 @@ describe("听力复盘 · 原文划词", () => {
     const host = screen.getByText(/A notebook/);
     aimAt("notebook");
     clickIn(host);
-    expect(await screen.findByText("n. 笔记本")).toBeInTheDocument();
+    expect(await screen.findByText("笔记本")).toBeInTheDocument();
   });
 
   test("AI 讲解块在查词豁免区里，原文和选项不在", () => {
@@ -147,7 +147,7 @@ describe("听力复盘 · 对话与应答", () => {
     const host = screen.getByText(/I am reading about photosynthesis/);
     aimAt("photosynthesis");
     clickIn(host);
-    expect(await screen.findByText("n. 光合作用")).toBeInTheDocument();
+    expect(await screen.findByText("光合作用")).toBeInTheDocument();
   });
 
   test("应答题的刺激句能点词，播放器不参与查词", async () => {
@@ -168,7 +168,7 @@ describe("听力复盘 · 对话与应答", () => {
     const host = screen.getByText(/Did you finish the photosynthesis lab/);
     aimAt("photosynthesis");
     clickIn(host);
-    expect(await screen.findByText("n. 光合作用")).toBeInTheDocument();
+    expect(await screen.findByText("光合作用")).toBeInTheDocument();
 
     // 播放键必须落在豁免区里：点播放还弹出个词典是纯干扰
     expect(screen.getByText("Replay").closest("[data-no-dict]")).toBeTruthy();

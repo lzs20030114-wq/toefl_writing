@@ -8,6 +8,7 @@ import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/cli
 import { getCard, saveWord, removeWord, addSentence, chooseSense } from "../../lib/vocab/vocabStore";
 import { MAX_CONTEXTS } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
+import { DefLine } from "../shared/DictSenses";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -510,9 +511,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
               整条词典条目（七八个义项）存进单词本，复习时根本对不上原句那个意思。
               拆不出多个义项（或压根只有一条）时保持老的纯文本展示。 */}
           {!pop.loading && pop.entry && pop.entry.t && senseGroups.length === 0 && (
-            <div style={{ marginTop: 8, whiteSpace: "pre-wrap", color: "#31423a" }}>
-              {pop.entry.t}
-            </div>
+            <DefLine text={pop.entry.t} style={{ marginTop: 8, color: "#31423a" }} />
           )}
           {!pop.loading && senseGroups.length > 0 && (
             <div style={{ marginTop: 8 }}>
@@ -527,8 +526,13 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
                     marginTop: gi === 0 ? 0 : 6,
                   }}
                 >
-                  {group.pos && (
-                    <span style={{ fontSize: 11, color: "#8a9a92", flexShrink: 0 }}>{group.pos}</span>
+                  {(group.posLabels.length > 0 || group.domainLabels.length > 0) && (
+                    <span style={{ fontSize: 11, color: "#8a9a92", flexShrink: 0 }}>
+                      {[
+                        ...group.posLabels,
+                        ...group.domainLabels.map((d) => `〔${d}〕`),
+                      ].join(" ")}
+                    </span>
                   )}
                   {group.senses.map((sense) => {
                     const chosen = `${group.pos} ${sense}`.trim();

@@ -90,10 +90,11 @@ describe("划词弹窗 · 义项 chips", () => {
   test("多义项拆成 chips；点一条就按这条义项收藏，整条留作 defFull", async () => {
     openPopup("pattern");
     const chip = await screen.findByText("图案");
-    // 整条释义不再直接铺开，词性变成行首的小标题
+    // 整条释义不再直接铺开，词性变成行首的小标题（而且是中文 —— vt. 这种行话
+    // 对着弹窗的学生没有义务认得）
     expect(screen.queryByText(PATTERN_T)).not.toBeInTheDocument();
-    expect(screen.getByText("n.")).toBeInTheDocument();
-    expect(screen.getByText("vt.")).toBeInTheDocument();
+    expect(screen.getByText("名词")).toBeInTheDocument();
+    expect(screen.getByText("及物动词")).toBeInTheDocument();
     expect(screen.getByText("点一个义项收藏，复习时就按这个意思考")).toBeInTheDocument();
 
     fireEvent.click(chip);
@@ -117,9 +118,10 @@ describe("划词弹窗 · 义项 chips", () => {
     expect(card.reps).toBe(0);
   });
 
-  test("单义项的词仍旧渲染成纯文本，收藏走整条释义", async () => {
+  test("单义项的词不拆 chips，但词性照样说人话；收藏走整条释义", async () => {
     openPopup("photosynthesis", "Plants rely on photosynthesis every day.");
-    expect(await screen.findByText("n. 光合作用")).toBeInTheDocument();
+    expect(await screen.findByText("光合作用")).toBeInTheDocument();
+    expect(screen.getByText("名词")).toBeInTheDocument();
     fireEvent.click(screen.getByText("☆ 收藏到单词本"));
     const card = getCard("photosynthesis");
     expect(card.def).toBe("n. 光合作用");

@@ -2,8 +2,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
-import { activeSentence, cardDirection, clozeSentence, contextSentence, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
+import { DefLine, DictSenses } from "../shared/DictSenses";
+import { parseSenses } from "../../lib/dict/core";
+import { lookupWord } from "../../lib/dict/lookup";
+import { adoptDictEntry } from "../../lib/vocab/vocabStore";
 
 /**
  * 一场复习。
@@ -68,21 +72,66 @@ function highlight(sentence, word) {
 }
 
 /**
- * 词典整条释义（用户在弹窗里点定某一条义项后，整条留在 defFull 里）。
- * 只在背面出现，而且是小字：主释义要对得上这句话，其余义项是「顺带认一认」，
- * 摆在同一级会把注意力从「这句里的意思」上拽走。
+ * 背面的「词典」区：把这个词的全部释义按词性铺开。
+ *
+ * 主释义回答的是「它在这句里什么意思」，这一块回答另外两个问题 ——
+ * 它还能当别的词性用吗、那个看不懂的 [计] 到底是什么。只在背面出现：
+ * 正面给了释义这张卡就没有提取可言。
+ *
+ * 三种状态：
+ *  - 卡上释义太薄、这次现查到了（filling）：整条词典释义摆在这儿，
+ *    同一次里 adoptDictEntry 已经把它顶成主释义，所以下一次进来走第三种。
+ *  - 顶替过的卡：主释义已经是整条词典释义了，这里只剩「原形是谁」要交代。
+ *  - 用户点过义项的卡：主释义是那一条，这里摆整条 defFull 当参照。
  */
-function FullDef({ card }) {
-  if (!card.defFull || card.defFull === card.def) return null;
+function DictPanel({ card, extra }) {
+  const filling = needsDictFill(card) && !!extra && !!extra.t;
+  // 释义讲的是原形（varying → vary）时必须说清楚，否则用户会以为
+  // 这些词性和音标属于卡面上那个词形。
+  const lemma = filling
+    ? (extra.word && extra.word !== card.word ? { word: extra.word, p: extra.p } : null)
+    : (card.lemma ? { word: card.lemma, p: "" } : null);
+  // 卡上那条整释义和主释义一字不差时就别重复摆一遍了
+  const body = filling ? extra.t : (card.defFull && card.defFull !== card.def ? card.defFull : "");
+  const hasBody = !!body && parseSenses(body).length > 0;
+  if (!hasBody && !lemma) return null;
   return (
-    <div style={{ fontSize: 12, color: C.t3, marginTop: 6, lineHeight: 1.8 }}>
-      <span style={{
-        fontSize: 10, color: C.t3, background: C.bdrSubtle,
-        borderRadius: 5, padding: "1px 6px", marginRight: 6,
+    <div style={{
+      marginTop: 12, paddingTop: 10, borderTop: `1px dashed ${C.bdrSubtle}`,
+    }}>
+      <div style={{
+        display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+        marginBottom: hasBody ? 8 : 0,
       }}>
-        词典全部释义
-      </span>
-      <span style={{ whiteSpace: "pre-wrap" }}>{card.defFull}</span>
+        <span style={{
+          fontSize: 10, color: C.t3, background: C.bdrSubtle,
+          borderRadius: 5, padding: "1px 6px", fontWeight: 700,
+        }}>
+          词典
+        </span>
+        {lemma && (
+          <>
+            <span style={{ fontSize: 12, color: C.t2 }}>
+              原形 <strong style={{ color: C.t1 }}>{lemma.word}</strong>
+            </span>
+            {lemma.p && (
+              <span style={{ fontSize: 12, color: C.t3, fontFamily: "'Courier New', monospace" }}>
+                /{lemma.p}/
+              </span>
+            )}
+            <SpeakButton word={lemma.word} size={22} />
+          </>
+        )}
+        {filling && extra.g && (
+          <span style={{
+            fontSize: 10, color: "#3f7a5c", background: "#e8f5ee",
+            borderRadius: 5, padding: "1px 6px", fontWeight: 600,
+          }}>
+            {extra.g}
+          </span>
+        )}
+      </div>
+      {hasBody && <DictSenses text={body} />}
     </div>
   );
 }
@@ -115,6 +164,10 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   const seenRef = useRef(new Map());
   // 这张卡是什么时候显示出来的 —— 存进日志，留给以后用反应时间做隐式分档
   const shownAtRef = useRef(Date.now());
+  // 卡上释义太薄时现查到的词条（见 needsDictFill）。只查当前这一张：
+  // 一个分片一百多 KB，把整队列的首字母都预热一遍在移动网络上不划算，
+  // 而真正需要补的卡是少数（绝大多数卡是从义项 chips 点着收藏的，词性本来就全）。
+  const [extra, setExtra] = useState(null);
 
   const card = queue[pos] || null;
   // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
@@ -130,6 +183,29 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   useEffect(() => {
     shownAtRef.current = Date.now();
   }, [pos]);
+
+  const fillWord = card && needsDictFill(card) ? card.word : "";
+  useEffect(() => {
+    setExtra(null);
+    if (!fillWord) return undefined;
+    let alive = true;
+    // 查不到、断网、词库没收录都当作没有补充：这一块只是锦上添花，
+    // 失败时背面照常显示卡上存的那条释义。
+    lookupWord(fillWord)
+      .then((e) => {
+        if (!e || !e.t) return;
+        if (alive) setExtra(e);
+        // 顺手写回卡片：这张卡的主释义本来就是「词典整条」（用户没点过义项），
+        // 换成查得到的那一条才是它该有的样子。写回之后列表页、别的设备、
+        // 下一次复习都不用再查（needsDictFill 从此为 false）。
+        // 卸载了也照写 —— 修复本身是对的，不该因为用户正好翻页就丢掉。
+        adoptDictEntry(fillWord, e);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [fillWord]);
 
   const grade = useCallback(
     (rating) => {
@@ -292,9 +368,10 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
 
           {mode === "recall" && (
             <>
-              <div style={{ fontSize: 17, color: C.t1, lineHeight: 1.8, whiteSpace: "pre-wrap", fontWeight: 600 }}>
-                {card.def || "（这个词收藏时没有释义）"}
-              </div>
+              <DefLine
+                text={card.def}
+                style={{ fontSize: 17, color: C.t1, lineHeight: 1.8, fontWeight: 600 }}
+              />
               {cloze && (
                 <div style={{ marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9, background: C.bg, borderRadius: 8, padding: "9px 13px" }}>
                   {cloze}
@@ -309,23 +386,25 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
               {/* context 卡的正面已经有词、音标和整句了，背面只补那个缺的答案：释义。 */}
               {mode === "context" ? (
                 <>
-                  <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontWeight: 600 }}>
-                    {card.def || "（这个词收藏时没有释义）"}
-                  </div>
-                  <FullDef card={card} />
+                  <DefLine
+                    text={card.def}
+                    style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, fontWeight: 600 }}
+                  />
+                  <DictPanel card={card} extra={extra} />
                 </>
               ) : (
                 <>
                   {mode !== "recognize" && <WordLine card={card} size={28} />}
                   {card.def && (
-                    <div style={{
-                      fontSize: 14, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap",
-                      marginTop: mode === "recognize" ? 0 : 10,
-                    }}>
-                      {card.def}
-                    </div>
+                    <DefLine
+                      text={card.def}
+                      style={{
+                        fontSize: 14, color: C.t1, lineHeight: 1.9,
+                        marginTop: mode === "recognize" ? 0 : 10,
+                      }}
+                    />
                   )}
-                  <FullDef card={card} />
+                  <DictPanel card={card} extra={extra} />
                   {shownSentence && (
                     <div style={{
                       marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9,
