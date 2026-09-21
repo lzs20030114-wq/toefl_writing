@@ -6,6 +6,7 @@ import {
   callDirectOnce,
   callViaCurlOnce,
   describeUpstreamError,
+  describeSampleDiag,
   isNonEmptyContent,
 } from "../../../../lib/ai/upstream";
 import { fail, getRateLimitKey, isOriginAllowed } from "../../../../lib/ai/routeGuards";
@@ -147,17 +148,22 @@ export async function POST(request) {
     const apiKey = process.env.DEEPSEEK_API_KEY;
     const proxyUrl = resolveProxyUrl();
 
+    // 诊断:直连路径把 finish_reason / reasoning 长度记下来,空正文时写进详情。
+    const diag = {};
     try {
       const content = proxyUrl
         ? await callViaCurlOnce(apiKey, proxyUrl, upstreamParams, { timeoutMs: LESSON_TOTAL_BUDGET_MS })
-        : await callDirectOnce(apiKey, upstreamParams, { totalBudgetMs: LESSON_TOTAL_BUDGET_MS });
+        : await callDirectOnce(apiKey, upstreamParams, { totalBudgetMs: LESSON_TOTAL_BUDGET_MS, diag });
       if (!isNonEmptyContent(content)) {
         return fail(
           {
             ...requestMeta,
             stage: "deepseek",
             errorType: "empty_content",
-            errorDetail: `upstream returned empty content (${proxyUrl ? "proxy" : "direct"}); max_tokens=${LESSON_MAX_TOKENS} (reasoning tokens count toward it)`,
+            errorDetail:
+              `upstream returned empty content (${proxyUrl ? "proxy" : "direct"}); ` +
+              `max_tokens=${LESSON_MAX_TOKENS} (reasoning tokens count toward it)` +
+              (proxyUrl ? "" : `; ${describeSampleDiag(diag)}`),
           },
           502,
           { error: "AI service temporarily unavailable. Please retry." },

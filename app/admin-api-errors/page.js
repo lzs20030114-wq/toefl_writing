@@ -164,6 +164,7 @@ export default function AdminApiErrorsPage() {
               <thead>
                 <tr style={{ background: "#f8fafc", color: C.t2 }}>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>时间</th>
+                  <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>接口</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>阶段</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>状态码</th>
                   <th style={{ textAlign: "left", padding: "8px 6px", borderBottom: "1px solid #e2e8f0" }}>类型</th>
@@ -175,6 +176,7 @@ export default function AdminApiErrorsPage() {
                 {rows.map((r) => (
                   <tr key={r.id}>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{fmtDate(r.created_at)}</td>
+                    <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9", fontFamily: "monospace" }}>{r.endpoint || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.stage || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.http_status || "-"}</td>
                     <td style={{ padding: "8px 6px", borderBottom: "1px solid #f1f5f9" }}>{r.error_type || "-"}</td>
@@ -184,7 +186,7 @@ export default function AdminApiErrorsPage() {
                 ))}
                 {rows.length === 0 && (
                   <tr>
-                    <td colSpan={6} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
+                    <td colSpan={7} style={{ padding: 12, color: C.t2 }}>暂无记录。</td>
                   </tr>
                 )}
               </tbody>

@@ -454,4 +454,108 @@ describe("/api/ai route", () => {
       expect(mockInsertCalls.filter((c) => c.table === "api_error_feedback")).toHaveLength(0);
     });
   });
+  // ── 修:三路全空正文不再错标成 upstream(2026-09-21 线上实案)──────────
+  //
+  // 后台 /admin-api-errors 上曾出现两条「deepseek / upstream / 502 / 详情空」。
+  // 详情为空恰恰说明没有任何一路 reject:三路都回了 HTTP 200,只是正文是空的,
+  // 却掉进了 upstream 兜底分支(reason=null → describeUpstreamError 返回空串)。
+  // 单发路径早有 empty_content 这个分类,fan-out 一直漏着。
+  describe("fan-out 全部 200 但无正文 → empty_content(不是 upstream)", () => {
+    function sse(chunks) {
+      const encoder = new TextEncoder();
+      const body = new ReadableStream({
+        start(controller) {
+          chunks.forEach((c) => controller.enqueue(encoder.encode(c)));
+          controller.close();
+        },
+      });
+      return { ok: true, status: 200, headers: new Headers({ "content-type": "text/event-stream" }), body };
+    }
+    const fanout = () => new Request("http://localhost/api/ai", {
+      method: "POST",
+      body: JSON.stringify({ system: "s", message: "m", maxTokens: 8000, samples: 3, userCode: "ABC123" }),
+    });
+    const failRow = () => mockInsertCalls.find((c) => c.table === "api_error_feedback" && c.row.stage === "deepseek");
+
+    beforeEach(() => {
+      mockSupabaseConfigured = true;
+      mockUsersRow = { tier: "pro", tier_expires_at: "2999-01-01T00:00:00.000Z" };
+      mockInsertCalls.length = 0;
+    });
+    afterEach(() => {
+      mockSupabaseConfigured = false;
+      mockUsersRow = null;
+    });
+
+    test("推理吃光预算(只有 reasoning_content)→ empty_content + 详情带 finish/reasoning", async () => {
+      global.fetch = jest.fn().mockImplementation(async () => sse([
+        'data: {"choices":[{"delta":{"reasoning_content":"想了很久很久"}}]}\n\n',
+        'data: {"choices":[{"delta":{},"finish_reason":"length"}]}\n\n',
+        "data: [DONE]\n\n",
+      ]));
+
+      const res = await POST(fanout());
+
+      expect(res.status).toBe(502);
+      const row = failRow().row;
+      expect(row.error_type).toBe("empty_content");
+      // 详情不能再是 NULL——那正是线上查不出根因的原因。
+      expect(row.error_detail).toContain("samples=3");
+      expect(row.error_detail).toContain("max_tokens=8000");
+      expect(row.error_detail).toContain("finish=length");
+      expect(row.error_detail).toContain("reasoning=");
+      expect(row.error_detail).toContain("#3");
+      // 失败不扣用量。
+      expect(mockInsertCalls.some((c) => c.table === "daily_usage")).toBe(false);
+    });
+
+    test("上游回 200 就把流掐了 → 详情标出 stream-cut,与预算问题区分得开", async () => {
+      global.fetch = jest.fn().mockImplementation(async () => sse([]));
+
+      const res = await POST(fanout());
+
+      expect(res.status).toBe(502);
+      const row = failRow().row;
+      expect(row.error_type).toBe("empty_content");
+      expect(row.error_detail).toContain("chunks=0");
+      expect(row.error_detail).toContain("stream-cut");
+      expect(row.error_detail).not.toContain("finish=length");
+    });
+
+    test("有一路真的报错时仍记成 upstream,保留上游原文(不被新分支吃掉)", async () => {
+      let n = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        n += 1;
+        // 429 不在重试白名单里,这一路会直接 reject;另外两路回 200 空正文。
+        if (n === 1) return { ok: false, status: 429, text: async () => "rate limited" };
+        return sse([]);
+      });
+
+      const res = await POST(fanout());
+
+      expect(res.status).toBe(429);
+      const row = failRow().row;
+      expect(row.error_type).toBe("upstream");
+      expect(row.error_detail).toBe("upstream 429: rate limited");
+    });
+
+    test("单发路径的空正文详情也带上诊断行", async () => {
+      global.fetch = jest.fn().mockResolvedValue(sse([
+        'data: {"choices":[{"delta":{"reasoning_content":"..."},"finish_reason":"length"}]}\n\n',
+        "data: [DONE]\n\n",
+      ]));
+      const req = new Request("http://localhost/api/ai", {
+        method: "POST",
+        body: JSON.stringify({ system: "s", message: "m", maxTokens: 2000, userCode: "ABC123" }),
+      });
+
+      const res = await POST(req);
+
+      expect(res.status).toBe(502);
+      const row = failRow().row;
+      expect(row.error_type).toBe("empty_content");
+      expect(row.error_detail).toContain("samples=1");
+      expect(row.error_detail).toContain("finish=length");
+    });
+  });
 });

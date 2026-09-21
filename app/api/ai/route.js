@@ -6,6 +6,7 @@ import {
   callDirectOnce as callDirectOnceShared,
   callViaCurlOnce as callViaCurlOnceShared,
   describeUpstreamError,
+  describeSampleDiags,
   isNonEmptyContent,
 } from "../../../lib/ai/upstream";
 import { fail, getRateLimitKey, isOriginAllowed, logApiFailure } from "../../../lib/ai/routeGuards";
@@ -89,8 +90,8 @@ function callViaCurlOnce(apiKey, proxyUrl, params) {
 
 // 单次上游调用(直连路径)——流式拼接 + 快速 5xx 单次重试,预算是本路由的
 // DIRECT_TOTAL_BUDGET_MS。实现见 lib/ai/upstream.js。
-function callDirectOnce(apiKey, params) {
-  return callDirectOnceShared(apiKey, params, { totalBudgetMs: DIRECT_TOTAL_BUDGET_MS });
+function callDirectOnce(apiKey, params, diag) {
+  return callDirectOnceShared(apiKey, params, { totalBudgetMs: DIRECT_TOTAL_BUDGET_MS, diag });
 }
 
 // 从 allSettled 结果里挑出成功且非空的 content(保持采样顺序)。
@@ -130,14 +131,20 @@ function logPartialSampleFailures(requestMeta, results) {
 // 空正文一律按上游失败回 502(与其他 upstream 失败同一套文案/状态码),并且**不计用量**
 // —— 与本路由既有原则一致:失败的调用不扣次数。errorType 单列 empty_content,好让后台
 // /admin-api-errors 一眼区分「上游报错」和「上游回了 200 但正文是空的」。
-function failEmptyContent(requestMeta, path, maxTokens) {
+function failEmptyContent(requestMeta, path, maxTokens, { samples = 1, diags = [] } = {}) {
+  const perSample = describeSampleDiags(diags);
   return fail(
     {
       ...requestMeta,
       stage: "deepseek",
       errorType: "empty_content",
       // 详情里带上预算：v4-flash 的推理 token 计入 max_tokens，后台一眼能看出是不是给少了。
-      errorDetail: `upstream returned empty content (${path}, samples=1); max_tokens=${maxTokens} (reasoning tokens count toward it)`,
+      // 再跟上每一路的上游诊断(finish/reasoning/chunks),用来区分「推理吃光预算」和
+      // 「上游回了 200 就把流掐了」——两者在后台原本长得一模一样。
+      errorDetail:
+        `upstream returned empty content (${path}, samples=${samples}); ` +
+        `max_tokens=${maxTokens} (reasoning tokens count toward it)` +
+        (perSample ? `; ${perSample}` : ""),
     },
     502,
     { error: "AI service temporarily unavailable. Please retry." },
@@ -303,13 +310,24 @@ export async function POST(request) {
 
     if (samples > 1) {
       // 直连路径 fan-out。单发失败(!res.ok 或网络异常)只算该采样失败。
+      // 每一路配一个 diag,收集上游诊断(finish_reason / reasoning 长度 / 分片数),
+      // 供「全都回 200 但没正文」时定位根因。
+      const diags = Array.from({ length: samples }, () => ({}));
       const results = await Promise.allSettled(
-        Array.from({ length: samples }, () => callDirectOnce(apiKey, upstreamParams)),
+        diags.map((diag) => callDirectOnce(apiKey, upstreamParams, diag)),
       );
       const contents = collectContents(results);
       if (contents.length === 0) {
         // 0 成功——走现有 fail() 语义,取第一个失败采样的上游错误文本做 errorDetail。
         const reason = firstRejectionReason(results);
+        // 2026-09-21: 没有任何一路 reject,说明三路都回了 HTTP 200、只是正文是空的
+        // ——这不是「上游报错」。单发路径早有 empty_content 这个分类(见
+        // failEmptyContent),fan-out 却一直漏进下面的 upstream 兜底:reason=null →
+        // describeUpstreamError(null) 返回空串 → 详情整列写成 NULL,后台只看得到一条
+        // 「deepseek / upstream / 502 / 详情空」,根因无从查起(线上实案)。
+        if (!reason) {
+          return failEmptyContent(requestMeta, "direct", maxTokens, { samples, diags });
+        }
         const upstreamStatus = Number(reason?.status);
         const httpStatus = Number.isFinite(upstreamStatus) && upstreamStatus
           ? (upstreamStatus >= 500 ? 502 : upstreamStatus)
@@ -329,9 +347,12 @@ export async function POST(request) {
     }
 
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
+    const diag = {};
     try {
-      const content = await callDirectOnce(apiKey, upstreamParams);
-      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct", maxTokens);
+      const content = await callDirectOnce(apiKey, upstreamParams, diag);
+      if (!isNonEmptyContent(content)) {
+        return failEmptyContent(requestMeta, "direct", maxTokens, { samples: 1, diags: [diag] });
+      }
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {
