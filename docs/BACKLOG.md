@@ -314,3 +314,23 @@
 - [低] `actions[].langOk` 目前只写不读；要度量「模型漏写中文」需在 writingEval 或 analytics/track 上报。
 - [低] ScoringReport（模考结果 / 历史行）三维度小卡在极窄屏固定三列（无 isMobile），320px 下每列约 98px；WritingFeedbackPanel 已单列。
 - [低] 「影响分数的错误」区块目前放在「逐句批注大纲」标签页顶部，首屏宏观评价页看不到；是否上提到宏观页待看用户行为。
+- [✅已落地 2026-09-21] **段落标记解析加固**：线上一份报告里批注与范文同时消失（用户实测截图）。根因是 `extractSections`
+  的标记正则 `/^===([A-Z_]+)===$/gm` 严格到只认一种写法 —— 模型给标记行加任何装饰（markdown 加粗 / 标题号 / 行尾空格 /
+  小写 / 行首缩进）都会让那一段连同它后面的内容被并进上一段吞掉，表现是分数照常显示、批注 / 修订版（写后练习的唯一数据源）/
+  范文 / 行动建议静默消失且报告不报错。现放宽外围修饰与大小写、段名限定白名单（评分 9 段 + 讲评 5 段，`lib/ai/lessonParse.js`
+  复用同一函数一并受益）；并在关键段缺两个以上时写 `feedback.parseDiagnostics`（标记原文 + 尾部片段 + 缺失段名）随 session
+  落库，下次故障不必再让用户开 DevTools 现挖。回归用例 `__tests__/ai-parse-section-markers.regression.test.js`
+  含「prompt 里每个段名都在白名单内」的反查 —— 新增段落忘了同步白名单会红。
+- [中] **范文缺失的另外两条成因未修**（本次只修了「标记被吞」这一条，另两条待线上 `parseDiagnostics` 数据定优先级）：
+  ①**输出被截断**：`===COMPARISON===` 排在 CORRECTED（要重抄全文）与 PATTERNS 之后，v4-flash 的 reasoning 也吃 8000 预算。
+  治法是把 COMPARISON 提到 CORRECTED 之前（但 CORRECTED 是写后练习的唯一数据源 `lib/postWritingPractice.js:266`，不能牺牲）
+  或范文单发一次调用。②**COMPARISON 段内标签漂移**：`parseComparisonSection` 硬匹配字面 `[范文]` / `[对比]`，模型写成
+  `范文：` / `【范文】` / `## 范文` 就整段解析为空（本地实测）。放宽时必须先按对比标签切段再锚段首；「无标签就把整块当范文」
+  的回退不能做 —— 实测会把模型的中文过场白当成范文渲染给用户。
+- [中] **三路取中位的范文兜底是全有全无**：`recoverCompleteComparison` 要求 donor 的范文与对比点俱全，某一路只有范文时
+  不算 donor、那篇范文跟着一起丢。应改成范文与对比点各自独立找 donor（本地实测：现行逻辑在「中位路全空、一路只有范文、
+  一路只有对比点」时结果仍是全空；而单纯把合格线降成「有范文就算数」会造成回归 —— 中位路有范文无对比点时，
+  反而不再去借另一路的对比点）。
+- [低] `data/academicWriting/sample_answers.json` 有 60 条题库范文但全仓库零引用，且只有 27 条 id 还在现行 prompts.json 里
+  （215 题，覆盖 12.6%），邮件题 0 条。可作范文缺失的兜底 —— 填上 modelEssay 还能让讲评的 COMPARE 段活过来（它现在是因为
+  modelEssay 为空才按 prompt 写「无」，见 `lib/ai/prompts/writingLesson.js:99`）—— 但这个覆盖率决定了它不是主方案。
