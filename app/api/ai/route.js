@@ -6,6 +6,7 @@ import {
   callDirectOnce as callDirectOnceShared,
   callViaCurlOnce as callViaCurlOnceShared,
   describeUpstreamError,
+  describeSampleDiag,
   describeSampleDiags,
   isNonEmptyContent,
 } from "../../../lib/ai/upstream";
@@ -39,6 +40,14 @@ const MAX_SAMPLES = 3;
 // 主动掐掉,让请求仍走 fail() 写 api_error_feedback;否则被 Vercel 在 180s 杀掉时
 // 什么都记不到,用户只看到一个没来由的 504。
 const DIRECT_TOTAL_BUDGET_MS = 165000;
+// 2026-09-21: 三路全空(都回 HTTP 200 却没正文)时的一次「降级单发」自救预算门槛。
+// 为什么降到 1 路而不是原样重发 3 路:三路并发本身就是诱因之一——09-09 晚高峰
+// DeepSeek 网关把这类长挂请求整批掐成 5xx(13/18 失败,三路全灭),现在换成回 200
+// 空流,同一族问题;单发既躲开并发,又对「推理吃光预算」那种重尾随机失败有独立的
+// 重试价值(实测重灾区文在 4000 预算下 9 次中 4 次空,重试本身就值)。
+// 一次完整的 8000 token 生成约 60-90s,所以剩余预算不足 45s 就别开始了,免得
+// 把自己拖到 Vercel 的 180s 上限外、反而连失败留痕都写不成。
+const RESCUE_MIN_REMAINING_MS = 45000;
 
 const limiter = createRateLimiter("ai", { max: 45 });
 
@@ -131,7 +140,7 @@ function logPartialSampleFailures(requestMeta, results) {
 // 空正文一律按上游失败回 502(与其他 upstream 失败同一套文案/状态码),并且**不计用量**
 // —— 与本路由既有原则一致:失败的调用不扣次数。errorType 单列 empty_content,好让后台
 // /admin-api-errors 一眼区分「上游报错」和「上游回了 200 但正文是空的」。
-function failEmptyContent(requestMeta, path, maxTokens, { samples = 1, diags = [] } = {}) {
+function failEmptyContent(requestMeta, path, maxTokens, { samples = 1, diags = [], rescue = "" } = {}) {
   const perSample = describeSampleDiags(diags);
   return fail(
     {
@@ -144,7 +153,8 @@ function failEmptyContent(requestMeta, path, maxTokens, { samples = 1, diags = [
       errorDetail:
         `upstream returned empty content (${path}, samples=${samples}); ` +
         `max_tokens=${maxTokens} (reasoning tokens count toward it)` +
-        (perSample ? `; ${perSample}` : ""),
+        (perSample ? `; ${perSample}` : "") +
+        (rescue ? `; rescue: ${rescue}` : ""),
     },
     502,
     { error: "AI service temporarily unavailable. Please retry." },
@@ -313,6 +323,7 @@ export async function POST(request) {
       // 每一路配一个 diag,收集上游诊断(finish_reason / reasoning 长度 / 分片数),
       // 供「全都回 200 但没正文」时定位根因。
       const diags = Array.from({ length: samples }, () => ({}));
+      const upstreamStartedAt = Date.now();
       const results = await Promise.allSettled(
         diags.map((diag) => callDirectOnce(apiKey, upstreamParams, diag)),
       );
@@ -326,7 +337,41 @@ export async function POST(request) {
         // describeUpstreamError(null) 返回空串 → 详情整列写成 NULL,后台只看得到一条
         // 「deepseek / upstream / 502 / 详情空」,根因无从查起(线上实案)。
         if (!reason) {
-          return failEmptyContent(requestMeta, "direct", maxTokens, { samples, diags });
+          // 三路都回了 200 空正文 —— 在放弃之前降级单发再试一次(见
+          // RESCUE_MIN_REMAINING_MS 的注释:为什么是 1 路、为什么要卡剩余预算)。
+          const remaining = DIRECT_TOTAL_BUDGET_MS - (Date.now() - upstreamStartedAt);
+          let rescueNote = remaining > RESCUE_MIN_REMAINING_MS ? "" : `skipped (remaining ${Math.max(0, remaining)}ms)`;
+          if (!rescueNote) {
+            const rescueDiag = {};
+            let rescued = "";
+            try {
+              rescued = await callDirectOnceShared(apiKey, upstreamParams, {
+                totalBudgetMs: remaining,
+                diag: rescueDiag,
+              });
+            } catch (rescueErr) {
+              // 自救失败不改变结论,只把它的上游错误并进详情。
+              rescueDiag.failure = describeUpstreamError(rescueErr) || String(rescueErr?.message || rescueErr);
+            }
+            if (isNonEmptyContent(rescued)) {
+              // 用户侧这次是成功的(照常扣 1 次用量),但「三路全空」这件事必须留痕,
+              // 否则自救一上线,这个故障又变回后台看不见——正是本次要根治的毛病。
+              await Promise.all([
+                recordAiUsage(usageUserCode, usageCap, usageDay),
+                logApiFailure({
+                  ...requestMeta,
+                  stage: "deepseek_rescue",
+                  errorType: "empty_content_rescued",
+                  httpStatus: 200,
+                  errorMessage: `${samples}/${samples} samples returned empty content; single-call rescue succeeded`,
+                  errorDetail: describeSampleDiags(diags),
+                }),
+              ]);
+              return Response.json({ content: rescued, contents: [rescued] });
+            }
+            rescueNote = rescueDiag.failure || describeSampleDiag(rescueDiag);
+          }
+          return failEmptyContent(requestMeta, "direct", maxTokens, { samples, diags, rescue: rescueNote });
         }
         const upstreamStatus = Number(reason?.status);
         const httpStatus = Number.isFinite(upstreamStatus) && upstreamStatus

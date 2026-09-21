@@ -557,5 +557,89 @@ describe("/api/ai route", () => {
       expect(row.error_detail).toContain("samples=1");
       expect(row.error_detail).toContain("finish=length");
     });
+    // ── 三路全空时的降级单发自救(2026-09-21)──────────────────────
+    test("自救成功 → 200 返回自救那份报告，并留一条 empty_content_rescued 痕迹", async () => {
+      let n = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        n += 1;
+        // 前 3 路(fan-out)全空,第 4 次是降级单发的自救。
+        if (n <= 3) return sse([]);
+        return sse([
+          'data: {"choices":[{"delta":{"content":"===SCORE=== 4"}}]}\n\n',
+          "data: [DONE]\n\n",
+        ]);
+      });
+
+      const res = await POST(fanout());
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body.content).toBe("===SCORE=== 4");
+      // callAIMulti 会从 contents 里取,单元素数组 = 取中位取到这一份。
+      expect(body.contents).toEqual(["===SCORE=== 4"]);
+      expect(global.fetch).toHaveBeenCalledTimes(4); // 3 路 fan-out + 1 路自救
+
+      // 关键:用户侧成功了,但这次「三路全空」必须仍然看得见,否则自救一上线故障就隐身了。
+      const trace = mockInsertCalls.find((c) => c.table === "api_error_feedback");
+      expect(trace.row.stage).toBe("deepseek_rescue");
+      expect(trace.row.error_type).toBe("empty_content_rescued");
+      expect(trace.row.http_status).toBe(200);
+      expect(trace.row.error_detail).toContain("#3");
+    });
+
+    test("自救也是空正文 → 仍回 502，详情带上自救那一路的诊断", async () => {
+      global.fetch = jest.fn().mockImplementation(async () => sse([]));
+
+      const res = await POST(fanout());
+
+      expect(res.status).toBe(502);
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+      const row = failRow().row;
+      expect(row.error_type).toBe("empty_content");
+      expect(row.error_detail).toContain("rescue: ");
+      expect(row.error_detail).toContain("stream-cut");
+    });
+
+    test("自救撞上上游报错 → 502，详情带上自救的上游原文", async () => {
+      let n = 0;
+      global.fetch = jest.fn().mockImplementation(async () => {
+        n += 1;
+        if (n <= 3) return sse([]);
+        // 402 不在重试白名单里,自救只发一次就抛。
+        return { ok: false, status: 402, text: async () => "Insufficient Balance" };
+      });
+
+      const res = await POST(fanout());
+
+      expect(res.status).toBe(502);
+      expect(global.fetch).toHaveBeenCalledTimes(4);
+      const row = failRow().row;
+      expect(row.error_type).toBe("empty_content");
+      expect(row.error_detail).toContain("rescue: upstream 402: Insufficient Balance");
+    });
+
+    test("剩余预算不够时不开始自救，详情写明 skipped", async () => {
+      const realNow = Date.now;
+      let offset = 0;
+      jest.spyOn(Date, "now").mockImplementation(() => realNow.call(Date) + offset);
+      try {
+        let n = 0;
+        global.fetch = jest.fn().mockImplementation(async () => {
+          n += 1;
+          // 三路都发出去之后把时钟推到预算耗尽,模拟 fan-out 本身跑了两分半。
+          if (n === 3) offset = 160000;
+          return sse([]);
+        });
+
+        const res = await POST(fanout());
+
+        expect(res.status).toBe(502);
+        // 没有第 4 次调用 —— 不能为了自救把自己拖过 Vercel 的 180s 上限。
+        expect(global.fetch).toHaveBeenCalledTimes(3);
+        expect(failRow().row.error_detail).toContain("rescue: skipped");
+      } finally {
+        Date.now.mockRestore();
+      }
+    });
   });
 });
