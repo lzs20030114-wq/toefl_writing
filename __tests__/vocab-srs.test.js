@@ -384,7 +384,16 @@ describe("normalizeCard", () => {
     expect(c.def).toBe("");
     expect(c.defFull).toBe("");
     expect(c.sentences).toEqual([]);
+    expect(c.productive).toBe(true);
+    expect(c.spellingOptOut).toBe(false);
     expect(typeof c.due).toBe("string");
+  });
+
+  test("旧卡的默认 false 不算手动剔除，只有新标记才关闭会写要求", () => {
+    expect(normalizeCard({ word: "old", productive: false }).productive).toBe(true);
+    const excluded = normalizeCard({ word: "excluded", productive: false, spellingOptOut: true });
+    expect(excluded.productive).toBe(false);
+    expect(excluded.spellingOptOut).toBe(true);
   });
 
   test("语境池去空去重、剔掉和主句重复的那句", () => {
@@ -438,9 +447,10 @@ describe("mergeCards", () => {
 
   test("「要会写」开关跟 updatedAt 新的一方走，不做并集（关掉也要能同步出去）", () => {
     const on = normalizeCard({ word: "cell", productive: true, updatedAt: "2026-09-01T00:00:00Z" });
-    const off = normalizeCard({ word: "cell", productive: false, updatedAt: "2026-09-10T00:00:00Z" });
+    const off = normalizeCard({ word: "cell", spellingOptOut: true, updatedAt: "2026-09-10T00:00:00Z" });
     expect(mergeCards([on], [off])[0].productive).toBe(false);
     expect(mergeCards([off], [on])[0].productive).toBe(false);
+    expect(mergeCards([on], [off])[0].spellingOptOut).toBe(true);
     // 反过来（新的那份打开了）当然也要生效
     const onNewer = normalizeCard({ word: "cell", productive: true, updatedAt: "2026-09-20T00:00:00Z" });
     expect(mergeCards([off], [onNewer])[0].productive).toBe(true);
@@ -604,10 +614,15 @@ describe("卡片方向 / 原句", () => {
     expect(cardDirection({ word: "cell", source: "reading", sentence: "无关的句子。" })).toBe("recognize");
   });
 
-  test("写作/口语来源、或手动标了要会写的词，进 review 后走产出方向（中→英）", () => {
+  test("所有来源的词默认在 review 后走产出方向（中→英）", () => {
     expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("recall");
     expect(cardDirection({ word: "divide", source: "speaking", state: STATE.REVIEW })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "reading", productive: true, state: STATE.REVIEW })).toBe("recall");
+    expect(cardDirection({ word: "divide", source: "reading", state: STATE.REVIEW })).toBe("recall");
+  });
+
+  test("手动剔除后，写作和口语词也只考认词", () => {
+    expect(cardDirection({ word: "divide", source: "writing", productive: false, sentence: "A cell divides.", state: STATE.REVIEW })).toBe("context");
+    expect(cardDirection({ word: "divide", source: "speaking", productive: false, state: STATE.REVIEW })).toBe("recognize");
   });
 
   test("还没进 review 的产出词先认词 —— 初学阶段强制产出反而损害词形学习（Barcroft 2006）", () => {
@@ -627,14 +642,14 @@ describe("卡片方向 / 原句", () => {
   });
 
   test("review 后、只有一句语境的词：每第 3 次复习改用裸词卡，防止记住的是句子", () => {
-    const card = { word: "divide", source: "reading", sentence: "A cell divides.", state: STATE.REVIEW };
+    const card = { word: "divide", source: "reading", productive: false, sentence: "A cell divides.", state: STATE.REVIEW };
     const dirs = [0, 1, 2, 3, 4, 5].map((reps) => cardDirection({ ...card, reps }));
     expect(dirs).toEqual(["context", "context", "recognize", "context", "context", "recognize"]);
   });
 
   test("有第二句语境时就轮换着用，永远不会掉成裸词卡", () => {
     const card = {
-      word: "divide", source: "reading", state: STATE.REVIEW,
+      word: "divide", source: "reading", productive: false, state: STATE.REVIEW,
       sentence: "A cell divides.", sentences: ["Rivers divide the plain."],
     };
     const dirs = [0, 1, 2, 3].map((reps) => cardDirection({ ...card, reps }));
@@ -712,7 +727,7 @@ describe("卡片方向 / 原句", () => {
 
   test("轮到的那句里没有这个词时，顺着池里其余的句子找，不白白退回裸词卡", () => {
     const card = {
-      word: "divide", state: STATE.REVIEW, reps: 1,
+      word: "divide", productive: false, state: STATE.REVIEW, reps: 1,
       sentence: "A cell divides.", sentences: ["与这个词无关的一句。"],
     };
     expect(contextSentence(card)).toBe("A cell divides.");

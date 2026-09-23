@@ -279,6 +279,10 @@ export default function VocabNotebook({ onBack }) {
             />
           </div>
 
+          <div style={{ fontSize: 11, color: C.t3, marginBottom: 8 }}>
+            所有词默认要求会写；不需要会写的词，可逐个关闭右侧「要会写」。
+          </div>
+
           {list.length === 0 ? (
             <div style={{ padding: "26px 0", textAlign: "center", fontSize: 13, color: C.t3 }}>
               这一类里还没有词
@@ -287,9 +291,7 @@ export default function VocabNotebook({ onBack }) {
             list.slice(0, shown).map((card) => {
               const st = stateLabel(card, now);
               const r = currentRetrievability(card, now);
-              // 写作/口语来源的词天然走产出方向，这个开关对它们是常开且不可点的。
-              const forcedProductive = card.source === "writing" || card.source === "speaking";
-              const productiveOn = forcedProductive || card.productive === true;
+              const productiveOn = card.productive !== false;
               return (
                 <div
                   key={card.word}
@@ -335,22 +337,20 @@ export default function VocabNotebook({ onBack }) {
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
                     <button
-                      onClick={forcedProductive ? undefined : () => setProductive(card.word, !card.productive)}
-                      disabled={forcedProductive}
-                      title={
-                        forcedProductive
-                          ? "写作/口语来源的词默认要会写"
-                          : "进入复习后改成拼写卡：给释义，拼出英文"
-                      }
+                      onClick={() => setProductive(card.word, !productiveOn)}
+                      role="switch"
+                      aria-checked={productiveOn}
+                      aria-label={`${card.display || card.word}需要会写`}
+                      title={productiveOn ? "剔除会写要求，复习时只考认词" : "重新要求会写"}
                       style={{
                         border: `1px solid ${productiveOn ? ACCENT : C.bdr}`,
                         background: productiveOn ? ACCENT_SOFT : "#fff",
                         color: productiveOn ? ACCENT : C.t3,
                         borderRadius: 7, padding: "3px 8px", fontSize: 11,
-                        cursor: forcedProductive ? "default" : "pointer", fontFamily: FONT,
+                        cursor: "pointer", fontFamily: FONT,
                       }}
                     >
-                      要会写
+                      {productiveOn ? "要会写" : "只需认得"}
                     </button>
                     {card.reps > 0 && (
                       <button
