@@ -12,8 +12,8 @@ import { cardDirection, clozeSentence, sourceLabel } from "../../lib/vocab/book"
  *  1. 先回想、后翻面，且必须点一次才翻。被动重读几乎不产生长期记忆：
  *     同样学完，之后继续被测试的词一周后能回忆 80%，只重看的只有 36%
  *     （Karpicke & Roediger 2008, Science）。这一点的量级远大于调度算法的优化空间。
- *  2. 主卡型是原句挖空。语境提升理解，**提取**才提升留存 —— 同一个句子，
- *     挖空和不挖空是两种完全不同的学习活动（den Broek 2018/2022）。
+ *  2. 默认中译英回忆完整拼写；用户逐词剔除会写要求后，改考英译中。
+ *     有原句时，产出卡仍会附挖空句作为语境线索。
  *  3. 只有两个评分键：忘了 / 记得。Anki 官方 FAQ：FSRS 对「主要用 Again/Good」
  *     的用户预测更准；而「忘了却按 Hard」是官方点名唯一会毁掉排期的习惯。
  *     四档的信息增益小于它引入的自评噪声，对我们这种顺手收藏进来的普通用户尤其如此。
@@ -34,7 +34,6 @@ const REINSERT_GAP = 10;
 const MAX_APPEARANCES = 2;
 
 const DIRECTION_META = {
-  cloze: { label: "填空", tip: "把词放回句子里" },
   recognize: { label: "认词", tip: "这个词什么意思" },
   recall: { label: "拼写", tip: "这个意思怎么写" },
 };
@@ -272,17 +271,6 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* ── 正面 ── */}
-          {mode === "cloze" && (
-            <>
-              <div style={{ fontSize: 17, color: C.t1, lineHeight: 2 }}>{cloze}</div>
-              {card.phonetic && (
-                <div style={{ marginTop: 12, fontSize: 13, color: C.t3, fontFamily: "'Courier New', monospace" }}>
-                  /{card.phonetic}/
-                </div>
-              )}
-            </>
-          )}
-
           {mode === "recognize" && <WordLine card={card} size={34} />}
 
           {mode === "recall" && (
@@ -364,7 +352,9 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
         <div style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10, lineHeight: 1.7 }}>
           {revealed
             ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
-            : "先在心里把答案想出来再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
+            : mode === "recall"
+              ? "先在心里拼出完整单词再翻面，确认自己真的会写。"
+              : "先想出词义再翻面；想不起来的那几秒，才是真正在记东西。"}
         </div>
       </div>
     </div>

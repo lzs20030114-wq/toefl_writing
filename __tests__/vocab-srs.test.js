@@ -322,7 +322,13 @@ describe("normalizeCard", () => {
     expect(c.state).toBe(STATE.NEW);
     expect(c.reps).toBe(0);
     expect(c.def).toBe("");
+    expect(c.productive).toBe(true);
     expect(typeof c.due).toBe("string");
+  });
+
+  test("手动剔除会写要求会保留，旧卡和新卡默认都要会写", () => {
+    expect(normalizeCard({ word: "old" }, NOW).productive).toBe(true);
+    expect(normalizeCard({ word: "excluded", productive: false }, NOW).productive).toBe(false);
   });
 });
 
@@ -362,6 +368,12 @@ describe("mergeCards", () => {
       [normalizeCard({ word: "b" })],
     );
     expect(merged.map((c) => c.word).sort()).toEqual(["a", "b"]);
+  });
+
+  test("较新的手动剔除会写要求在合并后保留", () => {
+    const older = normalizeCard({ word: "cell", updatedAt: "2026-09-01T00:00:00Z" });
+    const excluded = normalizeCard({ word: "cell", productive: false, updatedAt: "2026-09-10T00:00:00Z" });
+    expect(mergeCards([older], [excluded])[0].productive).toBe(false);
   });
 });
 
@@ -472,19 +484,15 @@ describe("bookStats / buildQueue", () => {
 });
 
 describe("卡片方向 / 挖空", () => {
-  test("主卡型是原句挖空 —— 有句子就走 cloze", () => {
-    expect(cardDirection({ word: "divide", source: "reading", sentence: "A cell divides." })).toBe("cloze");
-  });
-
-  test("收藏时没抓到句子 → 退回纯词卡，绝不渲染一个没挖空的句子", () => {
-    expect(cardDirection({ word: "cell", source: "reading" })).toBe("recognize");
-    expect(cardDirection({ word: "cell", source: "reading", sentence: "无关的句子。" })).toBe("recognize");
-  });
-
-  test("写作/口语来源的词走产出方向（中→英）", () => {
-    expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides." })).toBe("recall");
+  test("所有来源的词默认都要会写，有例句也不改变方向", () => {
+    expect(cardDirection({ word: "divide", source: "reading", sentence: "A cell divides." })).toBe("recall");
+    expect(cardDirection({ word: "divide", source: "writing" })).toBe("recall");
     expect(cardDirection({ word: "divide", source: "speaking" })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "reading", productive: true })).toBe("recall");
+  });
+
+  test("手动剔除后只考认词，不再要求拼写", () => {
+    expect(cardDirection({ word: "cell", source: "reading", productive: false, sentence: "A cell is small." })).toBe("recognize");
+    expect(cardDirection({ word: "cell", source: "writing", productive: false })).toBe("recognize");
   });
 
   test("一个词只有一张卡：方向是确定的，不随复习次数来回换", () => {

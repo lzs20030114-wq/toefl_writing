@@ -49,7 +49,7 @@ function Stat({ value, label, color }) {
 }
 
 export default function VocabNotebook({ onBack }) {
-  const { cards, stats, limits, setLimits, ready, isLoggedIn, makeQueue, grade, remove, reset, schedule } = useVocabBook();
+  const { cards, stats, limits, setLimits, ready, isLoggedIn, makeQueue, grade, remove, setProductive, reset, schedule } = useVocabBook();
   const [queue, setQueue] = useState(null); // 非 null = 正在复习
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
@@ -274,6 +274,10 @@ export default function VocabNotebook({ onBack }) {
             />
           </div>
 
+          <div style={{ fontSize: 11, color: C.t3, marginBottom: 8 }}>
+            所有词默认要求会写；不需要会写的词，点右侧「要会写」即可剔除。
+          </div>
+
           {list.length === 0 ? (
             <div style={{ padding: "26px 0", textAlign: "center", fontSize: 13, color: C.t3 }}>
               这一类里还没有词
@@ -324,6 +328,21 @@ export default function VocabNotebook({ onBack }) {
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
+                    <button
+                      onClick={() => setProductive(card.word, card.productive === false)}
+                      role="switch"
+                      aria-checked={card.productive !== false}
+                      aria-label={`${card.display || card.word}需要会写`}
+                      title={card.productive === false ? "改为需要会写" : "剔除会写要求，只需认得"}
+                      style={{
+                        border: `1px solid ${card.productive === false ? C.bdr : ACCENT}`,
+                        background: card.productive === false ? "#fff" : ACCENT_SOFT,
+                        color: card.productive === false ? C.t3 : ACCENT,
+                        borderRadius: 7, padding: "3px 8px", fontSize: 11, cursor: "pointer", fontFamily: FONT,
+                      }}
+                    >
+                      {card.productive === false ? "只需认得" : "要会写"}
+                    </button>
                     {card.reps > 0 && (
                       <button
                         onClick={() => reset(card.word)}
