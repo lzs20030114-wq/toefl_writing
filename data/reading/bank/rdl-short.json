@@ -7631,6 +7631,174 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_001",
+      "variant": "short",
+      "text": "Hi Omar, a quick reminder that the biosafety refresher for all lab assistants is set for Thursday, April 10, from 3:00 to 4:30 PM in Room 118, Hawley Annex. Please bring $5 for the materials fee. Sign in at the front desk. — Dr. Whitfield",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what are attendees asked to bring?",
+          "options": {
+            "A": "A copy of the biosafety refresher schedule",
+            "B": "A signed permission form from a supervisor",
+            "C": "A five-dollar payment for materials",
+            "D": "A valid student identification card"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that attendees should bring $5 for the materials fee, which matches a five-dollar payment for materials."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the biosafety refresher?",
+          "options": {
+            "A": "It is required for laboratory assistants.",
+            "B": "It takes place in a large lecture hall.",
+            "C": "It replaces an earlier training session.",
+            "D": "It lasts for more than two hours."
+          },
+          "correct_answer": "A",
+          "explanation": "The email is sent to all lab assistants and describes the session as a refresher they must attend and sign in for, implying it is mandatory for them."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_002",
+      "variant": "short",
+      "text": "Notice: South Lot B will be closed for repaving from 6:00 AM Monday, June 2, through 6:00 PM Friday, June 6. Permit holders should park in West Lot C during this period. Overnight parking in Lot C is not permitted. Contact the Facilities Office at 555-0142.",
+      "word_count": 46,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where should permit holders park during the closure?",
+          "options": {
+            "A": "In the North Campus Garage",
+            "B": "In the South Lot B overflow area",
+            "C": "In West Lot C",
+            "D": "In the East Visitor Lot"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice directs permit holders to park in West Lot C while South Lot B is being repaved."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about overnight parking during the closure?",
+          "options": {
+            "A": "It remains available in South Lot B.",
+            "B": "It is prohibited in the replacement lot.",
+            "C": "It requires a special permit from Facilities.",
+            "D": "It moves to the North Campus Garage."
+          },
+          "correct_answer": "B",
+          "explanation": "Since overnight parking in Lot C is not permitted, drivers who normally park overnight cannot use the temporary replacement lot for that purpose."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_003",
+      "variant": "short",
+      "text": "Hi Dana, your tour guide shift is confirmed for Saturday, March 8, 9:30 AM to 12:30 PM, starting at the Kerr Admissions Desk. Arrive fifteen minutes early to collect your badge; late arrivals forfeit the slot. Reply by Wednesday to keep it. — Ms. Alvarez",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when should the volunteer arrive at the Kerr Admissions Desk?",
+          "options": {
+            "A": "At 9:15 AM",
+            "B": "At 9:30 AM",
+            "C": "At 12:15 PM",
+            "D": "At 12:30 PM"
+          },
+          "correct_answer": "A",
+          "explanation": "The shift begins at 9:30 AM and volunteers are told to come fifteen minutes early, which means arriving at 9:15 AM."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about volunteers who arrive after the shift begins?",
+          "options": {
+            "A": "They can collect badges at the front desk.",
+            "B": "They will be given a different shift time.",
+            "C": "They must reply to Ms. Alvarez by Wednesday.",
+            "D": "They will lose their assigned shift."
+          },
+          "correct_answer": "D",
+          "explanation": "The email warns that late arrivals forfeit the slot, meaning someone who shows up after the start time gives up that shift."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_004",
+      "variant": "short",
+      "text": "The campus garden is open again! Hours are Tuesdays and Thursdays, 4:00-6:00 PM, behind Beale Hall. I grabbed basil and tomato starts for $3.50 each — honestly the best deal on campus. Bring cash, since they can't take cards yet. See you there!",
+      "word_count": 43,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the post, when is the campus garden open?",
+          "options": {
+            "A": "On Monday and Wednesday afternoons",
+            "B": "On Saturday and Sunday mornings",
+            "C": "On weekday mornings before classes",
+            "D": "On Tuesday and Thursday afternoons"
+          },
+          "correct_answer": "D",
+          "explanation": "The post lists opening hours as Tuesdays and Thursdays from 4:00 to 6:00 PM, which are late-afternoon times."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_004_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the post, the word \"starts\" is closest in meaning to",
+          "options": {
+            "A": "Prices",
+            "B": "Young plants",
+            "C": "Cooking tips",
+            "D": "Garden tools"
+          },
+          "correct_answer": "B",
+          "explanation": "The writer bought basil and tomato starts for $3.50 each, so \"starts\" refers to small young plants meant for planting."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
