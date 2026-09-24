@@ -11,6 +11,8 @@ import {
   buildPracticeMap, computeStreak, daysUntil, buildMonthGrid, buildHeatmapColumns,
   toLocalDateKey, startOfDay,
 } from "../../lib/studyStreak";
+// 放在 Icon/IconBadge/PressButton 的定义之后使用（函数声明会被提升，循环引用安全）。
+import { DailyTasksCard } from "./DailyTasksCard";
 
 const WEEKDAYS = ["一", "二", "三", "四", "五", "六", "日"];
 const WD_FULL = ["日", "一", "二", "三", "四", "五", "六"];
@@ -75,12 +77,13 @@ function heatColor(count, isChallenge) {
   return { bg: T.primaryDeep, fg: "#fff" };
 }
 
-function Icon({ name, color, size = 14 }) {
+export function Icon({ name, color, size = 14 }) {
   const c = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: color, strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
   if (name === "flame") return (<svg {...c}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>);
   if (name === "flag") return (<svg {...c}><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" /></svg>);
   if (name === "edit") return (<svg {...c}><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>);
   if (name === "check") return (<svg {...c} strokeWidth="3.2"><polyline points="20 6 9 17 4 12" /></svg>);
+  if (name === "list") return (<svg {...c}><polyline points="3 7 5 9 9 5" /><polyline points="3 17 5 19 9 15" /><line x1="13" y1="7" x2="21" y2="7" /><line x1="13" y1="17" x2="21" y2="17" /></svg>);
   return null;
 }
 
@@ -100,7 +103,7 @@ function Flame({ size = 44, grad = ["#FFD27A", "#FF7A2E"], id = "sp-flame" }) {
   );
 }
 
-function IconBadge({ name, isChallenge, tint, soft, border }) {
+export function IconBadge({ name, isChallenge, tint, soft, border }) {
   return (
     <div style={{
       width: 26, height: 26, borderRadius: 8, flexShrink: 0,
@@ -114,7 +117,7 @@ function IconBadge({ name, isChallenge, tint, soft, border }) {
 }
 
 /* 多邻国式 3D 可按压按钮：底部深色边，按下陷入 */
-function PressButton({ onClick, bg, edge, color = "#fff", style, children, title }) {
+export function PressButton({ onClick, bg, edge, color = "#fff", style, children, title }) {
   const [pressed, setPressed] = useState(false);
   return (
     <button
@@ -252,57 +255,55 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
           </div>
         ) : (
           <>
-            {plan.examDate && (
-              <div style={{ position: "relative", padding: "4px 0 14px" }}>
-                <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", width: 140, height: 140, borderRadius: "50%", background: `radial-gradient(circle, ${tone}16 0%, transparent 68%)`, pointerEvents: "none" }} />
-                <ProgressRing size={134} stroke={9} progress={ringProgress} color={tone} track={`${tone}26`}>
-                  {days < 0 ? (
-                    <span style={{ fontSize: 17, fontWeight: 700, color: t3 }}>已结束</span>
-                  ) : days === 0 ? (
-                    <>
-                      <span style={{ fontSize: 22, fontWeight: 700, color: tone }}>今天</span>
-                      <span style={{ fontSize: 11, color: t3, fontWeight: 700 }}>考试日 🎉</span>
-                    </>
+            {/* 压缩版：小环横排在左，考试日一行 + 分数进度条在右，
+                省出的垂直高度留给下面的「今日任务」卡 */}
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {plan.examDate && (
+                <div style={{ flexShrink: 0 }}>
+                  <ProgressRing size={64} stroke={6} progress={ringProgress} color={tone} track={`${tone}26`}>
+                    {days < 0 ? (
+                      <span style={{ fontSize: 11, fontWeight: 700, color: t3 }}>已结束</span>
+                    ) : days === 0 ? (
+                      <span style={{ fontSize: 14, fontWeight: 700, color: tone }}>今天</span>
+                    ) : (
+                      <span style={{ fontSize: days >= 100 ? 20 : 23, fontWeight: 700, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1 }}>{days}</span>
+                    )}
+                  </ProgressRing>
+                </div>
+              )}
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {/* 考试日只在这一行出现一次；目标分平时由下方进度条展示，
+                    仅当进度条不渲染（还没有当前分）时并入这一行，避免同卡重复 */}
+                {(plan.examDate || (plan.targetScore != null && effectiveCurrent == null)) && (
+                  <div style={{ fontSize: 12, color: t2, lineHeight: 1.5, textAlign: plan.examDate ? "left" : "center" }}>
+                    {plan.examDate && (
+                      <>{days > 0 ? "距考试" : "考试日"} · <b style={{ color: t1, fontWeight: 700 }}>{exDate.md}</b> {exDate.wd}</>
+                    )}
+                    {plan.examDate && plan.targetScore != null && effectiveCurrent == null && <br />}
+                    {plan.targetScore != null && effectiveCurrent == null && (
+                      <>目标 <b style={{ color: T.primary, fontWeight: 700 }}>{fmtBand(plan.targetScore)}</b> 分</>
+                    )}
+                  </div>
+                )}
+
+                {plan.targetScore != null && (
+                  effectiveCurrent != null ? (
+                    <ScoreProgress current={effectiveCurrent} target={plan.targetScore} label={currentLabel} t2={t2} t3={t3} ringTrack={ringTrack} marginTop={plan.examDate ? 8 : 11} />
                   ) : (
-                    <>
-                      <span style={{ fontSize: 10, color: t3, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>距考试</span>
-                      <span style={{ fontSize: 36, fontWeight: 700, color: tone, lineHeight: 1, fontVariantNumeric: "tabular-nums", letterSpacing: -1.5, marginTop: 1 }}>{days}</span>
-                      <span style={{ fontSize: 12, color: t2, fontWeight: 700, marginTop: 1 }}>天</span>
-                    </>
-                  )}
-                </ProgressRing>
-              </div>
-            )}
-
-            {/* 考试日只在这一行出现一次；目标分平时由下方进度条展示，
-                仅当进度条不渲染（还没有当前分）时并入这一行，避免同卡重复 */}
-            {(plan.examDate || (plan.targetScore != null && effectiveCurrent == null)) && (
-              <div style={{ textAlign: "center", fontSize: 12, color: t2, lineHeight: 1.5 }}>
-                {plan.examDate && (
-                  <>考试日 <b style={{ color: t1, fontWeight: 700 }}>{exDate.md}</b> {exDate.wd}</>
-                )}
-                {plan.examDate && plan.targetScore != null && effectiveCurrent == null && " · "}
-                {plan.targetScore != null && effectiveCurrent == null && (
-                  <>目标 <b style={{ color: T.primary, fontWeight: 700 }}>{fmtBand(plan.targetScore)}</b> 分</>
+                    <button
+                      onClick={() => setEditorOpen(true)}
+                      style={{ width: "100%", marginTop: 9, padding: "7px 0", fontSize: 12, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
+                    >
+                      + 记录当前水平
+                    </button>
+                  )
                 )}
               </div>
-            )}
-
-            {plan.targetScore != null && (
-              effectiveCurrent != null ? (
-                <ScoreProgress current={effectiveCurrent} target={plan.targetScore} label={currentLabel} t2={t2} t3={t3} ringTrack={ringTrack} />
-              ) : (
-                <button
-                  onClick={() => setEditorOpen(true)}
-                  style={{ width: "100%", marginTop: 9, padding: "8px 0", fontSize: 12, fontWeight: 700, color: T.primary, background: "transparent", border: `1.5px dashed ${isChallenge ? "rgba(13,150,104,0.4)" : T.primaryMist}`, borderRadius: 10, cursor: "pointer", fontFamily: HOME_FONT }}
-                >
-                  + 记录当前水平，追踪进步
-                </button>
-              )
-            )}
+            </div>
 
             {pep(days) && (
-              <div style={{ marginTop: 11, fontSize: 12, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center" }}>
+              <div style={{ marginTop: 10, fontSize: 12, color: tone, fontWeight: 700, lineHeight: 1.5, textAlign: "center", textWrap: "balance" }}>
                 {pep(days)}
               </div>
             )}
@@ -310,7 +311,17 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
         )}
       </div>
 
-      {/* ══ 卡片二：学习打卡（多邻国式连胜） ══ */}
+      {/* ══ 卡片二：今日任务（用户自定义每日练习量，本地存储） ══ */}
+      <DailyTasksCard
+        userCode={userCode}
+        isChallenge={isChallenge}
+        sessions={sessions}
+        modernCard={modernCard}
+        fadeIn={fadeIn}
+        now={now}
+      />
+
+      {/* ══ 卡片三：学习打卡（多邻国式连胜） ══ */}
       <div style={{ ...modernCard("15px 16px 14px"), ...fadeIn(220) }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
           <IconBadge name="flame" isChallenge={isChallenge} tint="#F2702E" soft="rgba(242,112,46,0.14)" border="rgba(242,112,46,0.28)" />
@@ -474,11 +485,11 @@ function WeekStrip({ practiceMap, now, examKey, isChallenge, t2, t3 }) {
   );
 }
 
-function ScoreProgress({ current, target, label, t2, t3, ringTrack }) {
+function ScoreProgress({ current, target, label, t2, t3, ringTrack, marginTop = 11 }) {
   const pct = target > 0 ? Math.max(0, Math.min(1, current / target)) : 0;
   const reached = current >= target;
   return (
-    <div style={{ marginTop: 11 }}>
+    <div style={{ marginTop }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
         <span style={{ fontSize: 11, color: t3 }}>{label || "当前"} <b style={{ color: t2, fontSize: 12, fontWeight: 700 }}>{fmtBand(current)}</b></span>
         <span style={{ fontSize: 11, color: t3 }}>目标 <b style={{ color: T.primary, fontSize: 12, fontWeight: 700 }}>{fmtBand(target)}</b></span>

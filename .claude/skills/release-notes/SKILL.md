@@ -171,6 +171,11 @@ Vercel 几分钟后自动部署，首页「更新公告」面板会出现新版�
 
 8. **永远不要 `--no-verify`** — 项目有 pre-commit 钩子的话让它跑。
 
+9. **公告里写了「真题专区现共 N 题」就必须同步邮件题量快照** — `lib/mail/templates/realBankLaunch.js` 的 `REAL_BANK_LAUNCH_COUNTS`（总数 + 写作/阅读/听力/口语各分项，出处写在该文件头注）要跟公告改成同一组数，并一起进发版 commit。`__tests__/real-bank-launch-email.test.js` 锁着「最新一条带『共 N 题』的公告 = 快照 total」，漏改 = main 的 CI 直接红（v1.20.0 漏过一次，连红 5 次推送才被发现）。改完跑一下：
+   ```bash
+   npx jest __tests__/real-bank-launch-email.test.js
+   ```
+
 ---
 
 ## 触发示例

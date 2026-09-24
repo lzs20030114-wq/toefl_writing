@@ -6,6 +6,8 @@ import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { materialImageSrc } from "../../lib/reading/materialImage";
 import { questionTypeLabel } from "../../lib/reading/questionTypeLabels";
+import { insertStemParts } from "../../lib/reading/insertSentence";
+import { InsertSentenceStem } from "./InsertSentenceStem";
 import {
   isSentenceSelection,
   sentenceOptionKeys,
@@ -75,6 +77,8 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
   const questions = item.questions || [];
   const question = questions[currentQ];
+  // 插入句题：题干拆成「指令 / 待插入句 / 提问」三段（lib/reading/insertSentence.js），拆不出照旧整段。
+  const insertParts = insertStemParts(question);
   // Vocab-in-context: highlight the asked word in the passage (real-exam behavior).
   const vocabWord = getVocabTargetWord(question);
   const answeredCount = selections.filter(s => s !== null).length;
@@ -476,9 +480,13 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                   <span style={{ marginLeft: 8, color: accent.color }}>({questionTypeLabel(question.question_type)})</span>
                 )}
               </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
-                {question.stem}
-              </div>
+              {insertParts ? (
+                <InsertSentenceStem parts={insertParts} accent={accent.color} soft={accent.soft} style={{ marginBottom: 18 }} />
+              ) : (
+                <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
+                  {question.stem}
+                </div>
+              )}
 
               {/* 选句题：作答在左栏正文里，右栏只报「已选哪一句」 */}
               {selectionLayout && !submitted && (

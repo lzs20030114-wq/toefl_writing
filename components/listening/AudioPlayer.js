@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { C, FONT } from "../shared/ui";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { useExamAudio } from "../shared/ExamAudioProvider";
 import { trackAudioEvent } from "../../lib/analytics/audio";
+import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 
@@ -20,6 +21,13 @@ let activePlayerStop = null;
 const FEMALE_VOICE_RE = /Samantha|Aria|Zira|Jenny|Karen|Moira|Tessa|Victoria|Ava|Allison|Susan|Fiona|Google US English|Female/i;
 const MALE_VOICE_RE = /Alex|David|Daniel|Mark|Fred|Guy|Rishi|Tom|Oliver|George|Google UK English Male|Male/i;
 const TURN_GAP_MS = 350;
+
+// mm:ss（进度条右侧的时间读数）。元数据还没到时 duration 是 NaN/0，显示占位。
+function fmtClock(sec) {
+  if (!Number.isFinite(sec) || sec < 0) return "--:--";
+  const total = Math.floor(sec);
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
 function pickVoice(voices, gender) {
   const re = gender === "female" ? FEMALE_VOICE_RE : gender === "male" ? MALE_VOICE_RE : null;
   if (!re) return null;
@@ -41,7 +49,12 @@ function pickVoice(voices, gender) {
  *  - isPractice: if true, unlimited replays
  *  - autoPlay: if true, starts playback when mounted or when content changes
  *  - compact: if true, render a single inline replay pill (for review / results pages)
+ *           紧凑模式 + 真实 src（非考试共享元素）还会带一条可拖动的进度条：
+ *           练习记录里精听要反复听某一句/某一段，只有「从头再放一遍」不够用。
  *  - taskType/itemId: telemetry labels, only used in exam-controller mode
+ *  - onTime(sec): 播放位置回调（timeupdate + 逐句播放时的 rAF 节流），复盘页用它高亮当前句
+ *  - ref: 命令式句柄 { playRange(start, end), pause(), seekable }——逐句点播
+ *         （docs/listening-sentence-timings.md）：只在紧凑 + 真实音频 + 非考试共享元素时可用
  *
  * Exam-controller mode: when an ExamAudioProvider is mounted above (exam
  * shells only) AND autoPlay is set, playback goes through the shared
@@ -50,7 +63,7 @@ function pickVoice(voices, gender) {
  * iOS Safari / WeChat per-element autoplay rules. With no provider (all
  * practice pages) every code path below is exactly the legacy one.
  */
-export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null }) {
+export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null, onTime = null }, ref) {
   const examAudio = useExamAudio();
   const controller = examAudio ? examAudio.controller : null;
   const controllerMode = !!(controller && autoPlay);
@@ -64,8 +77,12 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   const [completed, setCompleted] = useState(false);
   const [hover, setHover] = useState(null); // "play" | "replay" | null
   const [buffering, setBuffering] = useState(false); // mp3 fetched but not yet audible
+  // 紧凑模式可拖动进度条需要总时长；dragging 时关掉进度过渡并让把手显形。
+  const [duration, setDuration] = useState(0);
+  const [dragging, setDragging] = useState(false);
 
   const audioRef = useRef(null);
+  const seekBarRef = useRef(null);
   const ttsTimerRef = useRef(null);
   const ttsStartRef = useRef(0);
   const ttsDurationRef = useRef(0);
@@ -77,6 +94,13 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   // Multi-turn TTS: bumped on every stop so a cancelled utterance's onend can't
   // schedule the next turn of a playback that was already torn down.
   const ttsSessionRef = useRef(0);
+  // 逐句播放：playRange 设下的「播到这一秒就停」；null = 整段正常播放。
+  const rangeEndRef = useRef(null);
+  const rangeRafRef = useRef(null);
+  const rangeLastTickRef = useRef(0);
+  // onTime 走 ref：timeupdate 监听器挂在 [src] effect 里，不能因回调 identity 变化重挂。
+  const onTimeRef = useRef(onTime);
+  onTimeRef.current = onTime;
 
   const replayLimit = isPractice ? Infinity : maxReplays;
   const canReplay = replays < replayLimit;
@@ -97,8 +121,14 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   // 只在共享模式的播放路径里写入，所以它非空就意味着共享模式，无需再判模式。
   const sharedPlaySrcRef = useRef(null);
 
+  const clearRange = useCallback(() => {
+    rangeEndRef.current = null;
+    if (rangeRafRef.current) { cancelAnimationFrame(rangeRafRef.current); rangeRafRef.current = null; }
+  }, []);
+
   const stopPlayback = useCallback(() => {
     ttsSessionRef.current += 1;
+    clearRange();
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (audioRef.current) {
@@ -118,7 +148,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     if (typeof speechSynthesis !== "undefined") {
       speechSynthesis.cancel();
     }
-  }, []);
+  }, [clearRange]);
 
   // Stop this instance and reset its button. Called directly, or by another
   // instance taking over the single playback slot.
@@ -141,6 +171,8 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     setProgress(0);
     setReplays(0);
     setCompleted(false);
+    setDuration(0);
+    setDragging(false);
     stopPlayback();
   }, [src, text, stopPlayback]);
 
@@ -152,6 +184,14 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     const onTimeUpdate = () => {
       if (audio.duration > 0) {
         setProgress(audio.currentTime / audio.duration);
+      }
+      if (onTimeRef.current) onTimeRef.current(audio.currentTime);
+      // 逐句播放的兜底刹车（主刹车是 rAF 循环；后台标签页 rAF 会被挂起，timeupdate 还在走）。
+      if (rangeEndRef.current != null && audio.currentTime >= rangeEndRef.current) {
+        rangeEndRef.current = null;
+        audio.pause();
+        setPlaying(false);
+        setBuffering(false);
       }
     };
     const onEnd = () => {
@@ -173,7 +213,15 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     // mp3 hasn't started/has stalled so the animated waveform never implies sound.
     const onWaiting = () => setBuffering(true);
     const onResume = () => setBuffering(false);
+    // 进度条要按秒渲染，必须拿到总时长。元数据可能在监听器挂上之前就到了
+    // （缓存命中），所以除了订阅事件还要立刻读一次。
+    const onDuration = () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) setDuration(audio.duration);
+    };
+    onDuration();
 
+    audio.addEventListener("loadedmetadata", onDuration);
+    audio.addEventListener("durationchange", onDuration);
     audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnd);
     audio.addEventListener("error", onError);
@@ -182,6 +230,8 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     audio.addEventListener("playing", onResume);
     audio.addEventListener("canplay", onResume);
     return () => {
+      audio.removeEventListener("loadedmetadata", onDuration);
+      audio.removeEventListener("durationchange", onDuration);
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("ended", onEnd);
       audio.removeEventListener("error", onError);
@@ -382,6 +432,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     // can't sound at once.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    clearRange(); // 整段播放不受上一次逐句播放的 end 约束
     // Exam-controller mode: route through the shared unlocked element. The
     // controller emits loading/playing/ended/error/blocked — the subscription
     // effect above maps those back onto this component's UI state.
@@ -414,7 +465,7 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     }
     // No audio src — speak the text directly.
     startTTS();
-  }, [src, startTTS, stopSelf, controllerMode, controller, audioSrc, taskType, itemId]);
+  }, [src, startTTS, stopSelf, controllerMode, controller, audioSrc, taskType, itemId, clearRange]);
 
   useEffect(() => {
     if (!autoPlay) return;
@@ -438,15 +489,188 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
     playAudio();
   }, [playing, completed, canReplay, playAudio]);
 
+  // ── 紧凑模式的可拖动进度条（练习记录精听）──────────────────────────────
+  // 只在「有真实音频 + 不是考试共享元素」时开放：TTS 兜底没有可定位的时间轴，
+  // 考试壳的共享元素也不该被回看逻辑改写播放位置。
+  const seekable = compact && !!src && !controllerMode;
+
+  // 从当前位置开声（不像 playAudio 那样把 currentTime 归零）。
+  const playFromCurrent = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
+    activePlayerStop = stopSelf;
+    clearRange();
+    setPlaying(true);
+    setBuffering(true);
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.catch(() => { setPlaying(false); setBuffering(false); });
+    }
+  }, [stopSelf, clearRange]);
+
+  // 暂停 ≠ 停止：stopPlayback 会把 currentTime 归零，而「反复听同一句」要求
+  // 再点一下是从原处接着放。
+  const pausePlayback = useCallback(() => {
+    clearRange();
+    if (audioRef.current) audioRef.current.pause();
+    setPlaying(false);
+    setBuffering(false);
+  }, [clearRange]);
+
+  // ── 逐句播放（docs/listening-sentence-timings.md）────────────────────────
+  // playRange(start, end)：定位到 start（提前 SENTENCE_SEEK_LEAD_SEC 盖住 MP3 编解码的
+  // 前置延迟），开声，播到 end 就停。刹车走 rAF 轮询（timeupdate 事件粒度约 250ms，
+  // 一句只有一两秒，靠它会多放半句）；onTime 也在这条循环里按 ~100ms 节流回调。
+  const tickRange = useCallback(() => {
+    rangeRafRef.current = null;
+    const audio = audioRef.current;
+    const end = rangeEndRef.current;
+    if (!audio || end == null) return;
+    const t = audio.currentTime;
+    if (t >= end || audio.ended) {
+      rangeEndRef.current = null;
+      audio.pause();
+      setPlaying(false);
+      setBuffering(false);
+      if (onTimeRef.current) onTimeRef.current(t);
+      return;
+    }
+    const now = Date.now();
+    if (onTimeRef.current && now - rangeLastTickRef.current >= 100) {
+      rangeLastTickRef.current = now;
+      onTimeRef.current(t);
+    }
+    rangeRafRef.current = requestAnimationFrame(tickRange);
+  }, []);
+
+  const playRange = useCallback((start, end) => {
+    const audio = audioRef.current;
+    if (!seekable || !audio) return false;
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return false;
+    if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
+    activePlayerStop = stopSelf;
+    clearRange();
+    rangeEndRef.current = end;
+    const target = Math.max(0, start - SENTENCE_SEEK_LEAD_SEC);
+    const go = () => {
+      audio.currentTime = target;
+      const dur = audio.duration;
+      if (Number.isFinite(dur) && dur > 0) setProgress(Math.min(target / dur, 1));
+      setCompleted(false);
+      setPlaying(true);
+      setBuffering(true);
+      const p = audio.play();
+      if (p && typeof p.then === "function") {
+        p.catch(() => { clearRange(); setPlaying(false); setBuffering(false); });
+      }
+      rangeLastTickRef.current = 0;
+      if (rangeRafRef.current) cancelAnimationFrame(rangeRafRef.current);
+      rangeRafRef.current = requestAnimationFrame(tickRange);
+    };
+    // 元数据还没到时 currentTime 设不进去（老 WebKit 直接抛错）：等一次 loadedmetadata 再定位。
+    if (audio.readyState >= 1) go();
+    else {
+      const once = () => { audio.removeEventListener("loadedmetadata", once); if (rangeEndRef.current === end) go(); };
+      audio.addEventListener("loadedmetadata", once);
+      setPlaying(true);
+      setBuffering(true);
+    }
+    return true;
+  }, [seekable, stopSelf, clearRange, tickRange]);
+
+  useImperativeHandle(ref, () => ({
+    playRange,
+    pause: pausePlayback,
+    seekable,
+  }), [playRange, pausePlayback, seekable]);
+
+  // ratio(0~1) → 定位。元数据还没到（duration 是 NaN）时定位不了，返回 false。
+  const seekToRatio = useCallback((ratio) => {
+    const audio = audioRef.current;
+    if (!audio) return false;
+    const dur = audio.duration;
+    if (!Number.isFinite(dur) || dur <= 0) return false;
+    const clamped = Math.min(Math.max(ratio, 0), 1);
+    audio.currentTime = clamped * dur;
+    setProgress(clamped);
+    // 从结尾往回拖 = 这一遍不再算「听完」，按钮要回到可播状态。
+    if (clamped < 1) setCompleted(false);
+    return true;
+  }, []);
+
+  const ratioFromPointer = useCallback((clientX) => {
+    const el = seekBarRef.current;
+    if (!el || typeof el.getBoundingClientRect !== "function") return null;
+    const rect = el.getBoundingClientRect();
+    if (!rect.width) return null;
+    return (clientX - rect.left) / rect.width;
+  }, []);
+
+  const handleSeekPointerDown = useCallback((e) => {
+    if (!seekable) return;
+    const ratio = ratioFromPointer(e.clientX);
+    if (ratio === null) return;
+    // 指针捕获让手指/鼠标划出进度条范围也继续跟手；不支持时退化成单击定位。
+    if (e.currentTarget.setPointerCapture && e.pointerId !== undefined) {
+      try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) { /* 捕获失败不影响定位 */ }
+    }
+    setDragging(true);
+    seekToRatio(ratio);
+  }, [seekable, ratioFromPointer, seekToRatio]);
+
+  const handleSeekPointerMove = useCallback((e) => {
+    if (!dragging) return;
+    // 指针捕获失败时松手可能落在进度条外，pointerup 收不到 —— 这里按「已经没在
+    // 按着了」收尾，免得之后划过进度条就误定位。
+    if (e.buttons === 0) { setDragging(false); return; }
+    const ratio = ratioFromPointer(e.clientX);
+    if (ratio !== null) seekToRatio(ratio);
+  }, [dragging, ratioFromPointer, seekToRatio]);
+
+  const handleSeekPointerUp = useCallback((e) => {
+    if (!dragging) return;
+    setDragging(false);
+    if (e.currentTarget.releasePointerCapture && e.pointerId !== undefined) {
+      try { e.currentTarget.releasePointerCapture(e.pointerId); } catch (err) { /* 已自动释放 */ }
+    }
+    const ratio = ratioFromPointer(e.clientX);
+    const moved = ratio === null ? false : seekToRatio(ratio);
+    // 拖进度条的唯一意图就是「从这里再听一遍」，松手直接开声。
+    if (moved && !playing) playFromCurrent();
+  }, [dragging, ratioFromPointer, seekToRatio, playing, playFromCurrent]);
+
+  // 键盘：左右各挪 5 秒（一句话量级），Home/End 跳首尾。
+  const handleSeekKeyDown = useCallback((e) => {
+    const audio = audioRef.current;
+    if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+    let target = null;
+    if (e.key === "ArrowLeft") target = audio.currentTime - 5;
+    else if (e.key === "ArrowRight") target = audio.currentTime + 5;
+    else if (e.key === "Home") target = 0;
+    else if (e.key === "End") target = audio.duration;
+    else return;
+    e.preventDefault();
+    if (seekToRatio(target / audio.duration) && !playing) playFromCurrent();
+  }, [seekToRatio, playing, playFromCurrent]);
+
   // Compact pill toggles play/stop in one button (no separate replay control).
   const handleCompactToggle = useCallback(() => {
     if (playing) {
+      // 能拖进度时按「暂停」语义保住位置；不能拖（TTS / 考试共享元素）仍是停止。
+      if (seekable) { pausePlayback(); return; }
       stopPlayback();
       setPlaying(false);
       return;
     }
+    const audio = audioRef.current;
+    const atEnd = Number.isFinite(audio?.duration) && audio.duration > 0 && audio.currentTime >= audio.duration - 0.05;
+    if (seekable && audio && audio.currentTime > 0 && !atEnd) {
+      playFromCurrent(); // 从暂停/拖动后的位置续播，而不是回到开头
+      return;
+    }
     handlePlay();
-  }, [playing, stopPlayback, handlePlay]);
+  }, [playing, seekable, pausePlayback, stopPlayback, playFromCurrent, handlePlay]);
 
   // Waveform bars animation
   const WaveformBars = () => {
@@ -472,10 +696,14 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
   };
 
   // ── Compact mode: a single inline replay pill (review / results pages) ──
+  // 带真实音频时再跟一条可拖动进度条：练习记录里精听靠它反复听一句/一段。
   if (compact) {
+    const clampedProgress = Math.min(Math.max(progress, 0), 1);
+    const elapsed = duration > 0 ? clampedProgress * duration : NaN;
+    const midway = seekable && clampedProgress > 0 && clampedProgress < 1;
     return (
-      <span style={{ display: "inline-flex" }}>
-        {src && !controllerMode && <audio ref={audioRef} src={audioSrc} preload="none" />}
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 10, flexWrap: "wrap", maxWidth: "100%" }}>
+        {src && !controllerMode && <audio ref={audioRef} src={audioSrc} preload={seekable ? "metadata" : "none"} />}
         <button
           onClick={handleCompactToggle}
           onMouseEnter={() => setHover("compact")}
@@ -500,8 +728,54 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
               <path d="M8 5.14v13.72a1 1 0 001.5.86l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
             )}
           </svg>
-          {buffering ? "缓冲中…" : playing ? "Playing…" : "Replay"}
+          {buffering ? "缓冲中…" : playing ? "Playing…" : midway ? "继续" : "Replay"}
         </button>
+        {/* 进度条：元数据到手（知道总时长）才渲染，避免出现一条拖不动的死控件 */}
+        {seekable && duration > 0 && (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, flex: "1 1 160px", minWidth: 0 }}>
+            <span
+              ref={seekBarRef}
+              role="slider"
+              aria-label="音频进度，可拖动反复听"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(clampedProgress * 100)}
+              aria-valuetext={`${fmtClock(elapsed)} / ${fmtClock(duration)}`}
+              tabIndex={0}
+              onPointerDown={handleSeekPointerDown}
+              onPointerMove={handleSeekPointerMove}
+              onPointerUp={handleSeekPointerUp}
+              onPointerCancel={handleSeekPointerUp}
+              onKeyDown={handleSeekKeyDown}
+              style={{
+                position: "relative", display: "block", flex: "1 1 auto", minWidth: 90,
+                height: 16, cursor: "pointer", touchAction: "none", outline: "none",
+              }}
+            >
+              {/* 轨道 */}
+              <span style={{ position: "absolute", left: 0, right: 0, top: 6, height: 4, borderRadius: 2, background: C.bdr, display: "block" }} />
+              {/* 已播部分 */}
+              <span style={{
+                position: "absolute", left: 0, top: 6, height: 4, width: `${clampedProgress * 100}%`,
+                borderRadius: 2, background: ACCENT.color, display: "block",
+                transition: (dragging || playing) ? "none" : "width 0.2s ease",
+              }} />
+              {/* 把手 */}
+              <span style={{
+                // 12px 把手：左右端各内收自身宽度的相应比例，两头才不会探出轨道
+                // （逐题卡片里 0% 时会压到卡片内边距上）。
+                position: "absolute", top: 2, left: `calc(${clampedProgress * 100}% - ${clampedProgress * 12}px)`,
+                width: 12, height: 12, borderRadius: "50%", background: "#fff",
+                border: `2px solid ${ACCENT.color}`, display: "block", pointerEvents: "none",
+                boxShadow: dragging ? `0 0 0 4px ${ACCENT.soft}` : "0 1px 2px rgba(0,0,0,0.15)",
+                transition: (dragging || playing) ? "none" : "left 0.2s ease",
+              }} />
+            </span>
+            <span style={{ fontSize: 11, color: C.t3, fontFamily: FONT, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+              {fmtClock(elapsed)} / {fmtClock(duration)}
+            </span>
+          </span>
+        )}
       </span>
     );
   }
@@ -589,4 +863,4 @@ export function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, 
       )}
     </div>
   );
-}
+});

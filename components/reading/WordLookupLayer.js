@@ -2,10 +2,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
-import { sentenceAround } from "../../lib/dict/core";
+import { sentenceAround, splitSenses } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
-import { isSaved, saveWord, removeWord } from "../../lib/vocab/vocabStore";
+import { getCard, saveWord, removeWord, addSentence, chooseSense } from "../../lib/vocab/vocabStore";
+import { MAX_CONTEXTS } from "../../lib/vocab/book";
+import { SpeakButton } from "../shared/SpeakButton";
+import { DefLine } from "../shared/DictSenses";
 
 // 复盘时的划词小词典：把原文容器包一层，点词或划词就在词边上弹出释义。
 //
@@ -65,6 +68,20 @@ function wordRangeFromPoint(x, y) {
   return r;
 }
 
+/**
+ * 被查的词落在听力原文的哪一句里（SentenceTranscript 渲染的 data-sentence-index）。
+ * 只认可定位的句子（playable="1"）；不在句子里、或调用方根本没渲染句子时返回 -1。
+ */
+function sentenceIndexOf(range) {
+  if (!range) return -1;
+  let node = range.startContainer;
+  if (node && node.nodeType === 3) node = node.parentElement;
+  const el = node && node.closest ? node.closest('[data-sentence-index][data-sentence-playable="1"]') : null;
+  if (!el) return -1;
+  const i = Number(el.getAttribute("data-sentence-index"));
+  return Number.isInteger(i) && i >= 0 ? i : -1;
+}
+
 function loadAiCache() {
   try {
     return JSON.parse(localStorage.getItem(AI_CACHE_KEY) || "{}");
@@ -89,14 +106,19 @@ function saveAiCache(key, text) {
  * 用法：<WordLookupLayer passage={passage}>…原文…</WordLookupLayer>
  * 带 data-no-dict 属性的子节点（例如 CTW 里点开解析的填空 chip）不触发查词。
  * source 会记进单词本，用来在 /vocab-notebook 里显示这个词是从哪儿收藏的。
+ * onPlaySentence(index) 可选：听力复盘传进来后，词落在某一句里时弹窗多一颗「听这一句」
+ * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
  */
-export function WordLookupLayer({ passage, children, style, source = "reading" }) {
+export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
   const [ai, setAi] = useState(null); // { loading, text, error }
-  const [saved, setSaved] = useState(false); // 当前这个词在不在单词本里
+  // 当前这个词在单词本里的那张卡（没收藏就是 null）。存整张卡而不是一个布尔，
+  // 是因为义项选中态、「这句在不在卡上」都要读卡上的字段。
+  const [card, setCard] = useState(null);
+  const saved = !!card;
 
   const tier = typeof window !== "undefined" ? getSavedTier() : null;
   const isPro = tier === "legacy" || tier === "pro";
@@ -105,7 +127,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     wordRef.current = null;
     setPop(null);
     setAi(null);
-    setSaved(false);
+    setCard(null);
   }, []);
 
   // 文章用到哪些首字母就预热哪些分片，点词时不必等网络。
@@ -124,8 +146,15 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
     rangeRef.current = range;
     wordRef.current = word;
     setAi(null);
-    setSaved(isSaved(word));
-    setPop({ word, rect: range.getBoundingClientRect(), entry: null, loading: true, notFound: false });
+    setCard(getCard(word));
+    setPop({
+      word,
+      rect: range.getBoundingClientRect(),
+      entry: null,
+      loading: true,
+      notFound: false,
+      sentenceIndex: sentenceIndexOf(range),
+    });
     const entry = await lookupWord(word);
     setPop((prev) =>
       prev && prev.word === word
@@ -255,29 +284,86 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
   // 查词结果回来后词形可能被归一，重新对一次收藏态。
   useEffect(() => {
     if (!saveWordForm) return;
-    setSaved(isSaved(saveWordForm));
+    setCard(getCard(saveWordForm));
   }, [saveWordForm]);
 
+  // 这个词在本页原文里的那一句：收藏时当主句，之后当「再加一句语境」的素材。
+  const popWord = pop ? pop.word : "";
+  const curSentence = popWord ? sentenceAround(passage, popWord) || "" : "";
+
+  /** 收藏这个词。def 传空就用整条词典释义（用户没点义项时的老行为）。 */
+  const saveCurrent = useCallback(
+    (def) => {
+      if (!pop || !saveWordForm) return null;
+      const full = (pop.entry && pop.entry.t) || "";
+      const next = saveWord({
+        word: saveWordForm,
+        display: saveWordForm,
+        phonetic: (pop.entry && pop.entry.p) || "",
+        def: def || full,
+        // 用户点了某条义项时，整条释义留作备份；没点就没必要重复存一遍
+        defFull: def ? full : "",
+        tag: (pop.entry && pop.entry.g) || "",
+        // 连词所在的整句一起存：复习时在原语境里认词比孤立词表记得牢。
+        sentence: curSentence,
+        source,
+      });
+      setCard(next || getCard(saveWordForm));
+      return next;
+    },
+    [pop, saveWordForm, curSentence, source],
+  );
+
   const toggleSave = useCallback(() => {
-    if (!pop || !saveWordForm) return;
-    if (isSaved(saveWordForm)) {
-      removeWord(saveWordForm);
-      setSaved(false);
-      return;
-    }
-    saveWord({
-      word: saveWordForm,
-      display: saveWordForm,
-      phonetic: (pop.entry && pop.entry.p) || "",
-      def: (pop.entry && pop.entry.t) || "",
-      tag: (pop.entry && pop.entry.g) || "",
-      // 连词所在的整句一起存：复习时在原语境里认词比孤立词表记得牢，
-      // 这句话也是「挖空填词」卡片的原料。
-      sentence: sentenceAround(passage, pop.word) || "",
-      source,
-    });
-    setSaved(true);
-  }, [pop, saveWordForm, passage, source]);
+    saveCurrent("");
+  }, [saveCurrent]);
+
+  /**
+   * 点一条义项：把它设成这张卡的主释义（整条词典释义留作 defFull）。
+   * 还没收藏就顺手收藏 —— 「点义项」本身就是一次明确的收藏意图。
+   */
+  const pickSense = useCallback(
+    (pos, sense) => {
+      if (!pop || !saveWordForm) return;
+      const chosen = `${pos} ${sense}`.trim();
+      if (!chosen) return;
+      if (saved) {
+        const next = chooseSense(saveWordForm, chosen, (pop.entry && pop.entry.t) || "");
+        if (next) setCard(next);
+        return;
+      }
+      saveCurrent(chosen);
+    },
+    [pop, saveWordForm, saved, saveCurrent],
+  );
+
+  const pool = (card && Array.isArray(card.sentences) ? card.sentences : []);
+  const sentenceOnCard = !!card && !!curSentence
+    && (curSentence === card.sentence || pool.includes(curSentence));
+  const poolFull = pool.length >= MAX_CONTEXTS;
+  const addSentenceLabel = sentenceOnCard
+    ? "✓ 这句已在卡上"
+    : poolFull
+      ? "语境已满 3 句"
+      : "＋ 加这句语境";
+  const canAddSentence = !!card && !!curSentence && !sentenceOnCard && !poolFull;
+
+  const addCurrentSentence = useCallback(() => {
+    if (!saveWordForm || !curSentence) return;
+    const next = addSentence(saveWordForm, curSentence);
+    if (next) setCard(next);
+  }, [saveWordForm, curSentence]);
+
+  const dropWord = useCallback(() => {
+    if (!saveWordForm) return;
+    removeWord(saveWordForm);
+    setCard(null);
+  }, [saveWordForm]);
+
+  // 多义项的词拆成 chips 让用户点定一个意思；单义项（或拆不出来）退回纯文本。
+  const senseGroups = !pop || pop.loading || !pop.entry || !pop.entry.t
+    ? []
+    : splitSenses(pop.entry.t);
 
   // 贴在词的正下方；下方装不下就翻到上方，左右不越界。
   let popStyle = null;
@@ -330,40 +416,81 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
             cursor: "auto",
           }}
         >
-          <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: "#14281e" }}>
-              {(pop.entry && pop.entry.word) || pop.word}
-            </span>
-            {pop.entry && pop.entry.p && (
-              <span
-                style={{
-                  fontSize: 12,
-                  color: "#6b8078",
-                  fontFamily: "'Courier New', monospace",
-                }}
-              >
-                /{pop.entry.p}/
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            {/* 词条本身（词/音标/发音/词性）挤不下就在这一块里换行；关闭钮是它的兄弟节点，
+                所以永远留在第一行右上角。写成一整排 + marginLeft:auto 的话，长词一挤
+                × 就会被顶到第二行去。 */}
+            <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap", flex: 1, minWidth: 0 }}>
+              <span style={{ fontSize: 16, fontWeight: 700, color: "#14281e" }}>
+                {(pop.entry && pop.entry.word) || pop.word}
               </span>
-            )}
-            {pop.entry && pop.entry.g && (
-              <span
-                style={{
-                  fontSize: 10,
-                  color: "#3f7a5c",
-                  background: "#e8f5ee",
-                  borderRadius: 5,
-                  padding: "1px 6px",
-                  fontWeight: 600,
-                }}
-              >
-                {pop.entry.g}
-              </span>
-            )}
+              {pop.entry && pop.entry.p && (
+                <span
+                  style={{
+                    fontSize: 12,
+                    color: "#6b8078",
+                    fontFamily: "'Courier New', monospace",
+                  }}
+                >
+                  /{pop.entry.p}/
+                </span>
+              )}
+              {/* 念的是标题上这个词（词典命中的原形 study，而不是学生点的 studies），
+                  和旁边显示的音标才对得上。 */}
+              <SpeakButton
+                word={saveWordForm}
+                size={24}
+                palette={{ border: "#dbe3dd" }}
+                style={{ alignSelf: "center" }}
+              />
+              {/* 听力复盘专属：这个词所在的那一句可以直接放一遍（弹窗不关，边听边看释义）。
+                  阅读等没传 onPlaySentence 的调用方，以及词不在可播放句里时，都不渲染。 */}
+              {typeof onPlaySentence === "function" && pop.sentenceIndex >= 0 && (
+                <button
+                  type="button"
+                  onClick={() => onPlaySentence(pop.sentenceIndex)}
+                  aria-label="听这一句"
+                  title="播放原文里的这一句"
+                  style={{
+                    alignSelf: "center",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 3,
+                    border: "1px solid #dbe3dd",
+                    background: "#fff",
+                    color: "#5a6b62",
+                    borderRadius: 999,
+                    padding: "2px 9px",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    lineHeight: 1.5,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ▶ 听这一句
+                </button>
+              )}
+              {pop.entry && pop.entry.g && (
+                <span
+                  style={{
+                    fontSize: 10,
+                    color: "#3f7a5c",
+                    background: "#e8f5ee",
+                    borderRadius: 5,
+                    padding: "1px 6px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {pop.entry.g}
+                </span>
+              )}
+            </div>
             <button
               onClick={close}
               aria-label="关闭"
               style={{
-                marginLeft: "auto",
+                flexShrink: 0,
                 border: "none",
                 background: "transparent",
                 color: "#9aa8a1",
@@ -380,9 +507,68 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
           {pop.loading && (
             <div style={{ marginTop: 8, color: "#8a9a92", fontSize: 12 }}>查询中…</div>
           )}
-          {!pop.loading && pop.entry && pop.entry.t && (
-            <div style={{ marginTop: 8, whiteSpace: "pre-wrap", color: "#31423a" }}>
-              {pop.entry.t}
+          {/* 释义区：多义项拆成可点的 chips，点一条就把它定成这张卡的主释义 ——
+              整条词典条目（七八个义项）存进单词本，复习时根本对不上原句那个意思。
+              拆不出多个义项（或压根只有一条）时保持老的纯文本展示。 */}
+          {!pop.loading && pop.entry && pop.entry.t && senseGroups.length === 0 && (
+            <DefLine text={pop.entry.t} style={{ marginTop: 8, color: "#31423a" }} />
+          )}
+          {!pop.loading && senseGroups.length > 0 && (
+            <div style={{ marginTop: 8 }}>
+              {senseGroups.map((group, gi) => (
+                <div
+                  key={`${group.pos}-${gi}`}
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                    gap: 6,
+                    marginTop: gi === 0 ? 0 : 6,
+                  }}
+                >
+                  {(group.posLabels.length > 0 || group.domainLabels.length > 0) && (
+                    <span style={{ fontSize: 11, color: "#8a9a92", flexShrink: 0 }}>
+                      {[
+                        ...group.posLabels,
+                        ...group.domainLabels.map((d) => `〔${d}〕`),
+                      ].join(" ")}
+                    </span>
+                  )}
+                  {group.senses.map((sense) => {
+                    const chosen = `${group.pos} ${sense}`.trim();
+                    const on = !!card && card.def === chosen;
+                    return (
+                      <button
+                        key={sense}
+                        type="button"
+                        onClick={() => pickSense(group.pos, sense)}
+                        title={on ? "复习时就按这个意思考" : "把这条义项定成这个词的释义"}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          border: `1px solid ${on ? "#0891B2" : "#dbe3dd"}`,
+                          background: on ? "#ECFEFF" : "#fff",
+                          color: on ? "#0891B2" : "#31423a",
+                          fontWeight: on ? 700 : 400,
+                          borderRadius: 999,
+                          padding: "2px 9px",
+                          fontSize: 12,
+                          lineHeight: 1.6,
+                          cursor: "pointer",
+                          fontFamily: "inherit",
+                          maxWidth: "100%",
+                          textAlign: "left",
+                        }}
+                      >
+                        {sense}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))}
+              <div style={{ marginTop: 6, fontSize: 11, color: "#8a9a92" }}>
+                {saved ? "点义项可以换成这句里的意思" : "点一个义项收藏，复习时就按这个意思考"}
+              </div>
             </div>
           )}
           {!pop.loading && pop.notFound && (
@@ -393,28 +579,87 @@ export function WordLookupLayer({ passage, children, style, source = "reading" }
 
           {!pop.loading && (
             <div style={{ marginTop: 10, borderTop: "1px solid #eef2ef", paddingTop: 8 }}>
-              <button
-                onClick={toggleSave}
-                aria-label={saved ? "从单词本移除" : "收藏到单词本"}
-                title={saved ? "已在单词本里，点一下移除" : "收藏到单词本，之后按遗忘曲线安排复习"}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 4,
-                  border: `1px solid ${saved ? "#f0c14b" : "#dbe3dd"}`,
-                  background: saved ? "#fff8e6" : "#fff",
-                  color: saved ? "#9a6b00" : "#5a6b62",
-                  borderRadius: 999,
-                  padding: "4px 12px",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  lineHeight: 1.5,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {saved ? "★ 已在单词本" : "☆ 收藏到单词本"}
-              </button>
+              {!saved ? (
+                <button
+                  onClick={toggleSave}
+                  aria-label="收藏到单词本"
+                  title="收藏到单词本，之后按遗忘曲线安排复习"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    border: "1px solid #dbe3dd",
+                    background: "#fff",
+                    color: "#5a6b62",
+                    borderRadius: 999,
+                    padding: "4px 12px",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    lineHeight: 1.5,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ☆ 收藏到单词本
+                </button>
+              ) : (
+                /* 已收藏：收藏钮让位给两件真正还能做的事 —— 给这张卡再加一句语境，
+                   或者把词移出去。点「已收藏」误删的路也就此堵掉了。 */
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <button
+                    onClick={addCurrentSentence}
+                    disabled={!canAddSentence}
+                    aria-label={addSentenceLabel}
+                    title={
+                      sentenceOnCard
+                        ? "这句已经在这张卡的语境里了"
+                        : poolFull
+                          ? "一张卡最多存 3 句额外语境"
+                          : canAddSentence
+                            ? "把这句也存进这张卡，复习时轮换着考"
+                            : "这里没抓到完整的一句话"
+                    }
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                      border: `1px solid ${canAddSentence ? "#f0c14b" : "#dbe3dd"}`,
+                      background: canAddSentence ? "#fff8e6" : "#f6f8f7",
+                      color: canAddSentence ? "#9a6b00" : "#8a9a92",
+                      borderRadius: 999,
+                      padding: "4px 12px",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: canAddSentence ? "pointer" : "default",
+                      lineHeight: 1.5,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {addSentenceLabel}
+                  </button>
+                  <button
+                    onClick={dropWord}
+                    aria-label="从单词本移除"
+                    title="把这个词移出单词本"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      border: "1px solid #dbe3dd",
+                      background: "#fff",
+                      color: "#8a9a92",
+                      borderRadius: 999,
+                      padding: "4px 12px",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      lineHeight: 1.5,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    移出单词本
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

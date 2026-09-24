@@ -30,7 +30,7 @@
  * `ocr/1.21新托福真题B卷__….txt` 会被服务端直接 400）。清单 `_manifest.json` 里记的仍是
  * **原始相对路径**，编码只发生在真正调 upload/download 的那一行。
  *
- * 退出码：0 正常；1 有文件传/收失败（清单不写）；2 用法错误；3 Supabase 不可用。
+ * 退出码：0 正常；1 有文件传/收失败（清单不写）或清单本身没写上；2 用法错误；3 Supabase 不可用。
  */
 import fs from "fs";
 import path from "path";
@@ -164,10 +164,15 @@ async function pool(items, n, fn) {
 
 /* ── push ────────────────────────────────────────────────────────────────── */
 
-export async function push(sb, { dry = false, only = null, log = console.log } = {}) {
+/**
+ * `tmpDir`：本地产物根目录，默认就是 `.codex-tmp/`。留这个口子是给单测用的 ——
+ * `.codex-tmp/` 不进 git，CI 上是空的；测试若读真目录，「有没有文件可传」就取决于跑在谁的机器上
+ * （本机几千个文件 → 走逐文件上传那一支；CI 0 个 → 直接落到写清单那一支），同一条断言两种结果。
+ */
+export async function push(sb, { dry = false, only = null, log = console.log, tmpDir = TMP } = {}) {
   await ensureBucket(sb);
   const remote = await readManifest(sb);
-  const local = scanLocal();
+  const local = scanLocal(tmpDir);
 
   const changed = [];
   const skippedBig = [];
@@ -189,7 +194,7 @@ export async function push(sb, { dry = false, only = null, log = console.log } =
   const files = { ...(remote.files || {}) };
   await pool(changed, CONCURRENCY, async (rel) => {
     try {
-      const buf = fs.readFileSync(path.join(TMP, rel));
+      const buf = fs.readFileSync(path.join(tmpDir, rel));
       const { error } = await sb.storage.from(BUCKET).upload(encodeObjectPath(rel), buf, {
         upsert: true, contentType: "application/octet-stream",
       });
@@ -220,17 +225,25 @@ export async function push(sb, { dry = false, only = null, log = console.log } =
     count: Object.keys(files).length,
     files,
   };
-  const { error } = await sb.storage.from(BUCKET).upload(
-    MANIFEST_KEY, Buffer.from(JSON.stringify(manifest, null, 1), "utf8"),
-    { upsert: true, contentType: "application/json" });
-  if (error) throw new Error(`清单写入失败: ${error.message}`);
+  // 清单本身也是一次 upload：同样可能「返回 {error}」或「直接抛」，同样收敛成 SyncFailure。
+  // 文件都传上去了、清单却没记上 = 同步没做完（退出码 1），不是环境不可用（3）；
+  // 裸抛出去的话 CLI 只打一句没头没尾的底层报错，看不出是哪一步挂的。
+  let manifestError = null;
+  try {
+    ({ error: manifestError } = await sb.storage.from(BUCKET).upload(
+      MANIFEST_KEY, Buffer.from(JSON.stringify(manifest, null, 1), "utf8"),
+      { upsert: true, contentType: "application/json" }));
+  } catch (e) { manifestError = e; }
+  if (manifestError) {
+    throw SyncFailure(`清单写入失败（本次上传 ${uploaded} 个文件，清单未更新）: ${manifestError.message || manifestError}`);
+  }
   log(`  ✓ 上传 ${uploaded} 个；清单 ${manifest.count} 个文件 / structured ${manifest.structured} 套`);
   return { changed, uploaded, skippedBig, manifest };
 }
 
 /* ── pull ────────────────────────────────────────────────────────────────── */
 
-export async function pull(sb, { dry = false, log = console.log } = {}) {
+export async function pull(sb, { dry = false, log = console.log, tmpDir = TMP } = {}) {
   await ensureBucket(sb);
   const remote = await readManifest(sb);
   const remoteFiles = remote.files || {};
@@ -238,7 +251,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     log("■ pull：远端清单为空（桶还没灌过），跳过");
     return { downloaded: 0, structured: 0, empty: true };
   }
-  const local = scanLocal();
+  const local = scanLocal(tmpDir);
 
   const todo = Object.keys(remoteFiles).filter((rel) => {
     if (!isSynced(rel)) return false;                       // 清单被人动过手脚也不越界写盘
@@ -259,7 +272,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     } catch (e) { failed.push(`${rel}: ${(e && e.message) || e}`); return; }
     if (error || !data) { failed.push(`${rel}: ${error && error.message}`); return; }
     // 清单里的 key 已经是原始相对路径了，这里 decode 是防御：万一有人把编码 key 写进了清单。
-    const abs = path.join(TMP, decodeObjectPath(rel));
+    const abs = path.join(tmpDir, decodeObjectPath(rel));
     fs.mkdirSync(path.dirname(abs), { recursive: true });
     fs.writeFileSync(abs, Buffer.from(await data.arrayBuffer()));
     // mtime 对齐远端记录：否则下一次 push 会因为「mtime 变了」把刚拉下来的文件原样再传一遍。
@@ -272,7 +285,7 @@ export async function pull(sb, { dry = false, log = console.log } = {}) {
     throw SyncFailure(`有 ${failed.length} 个文件下载失败：\n  ${failed.slice(0, 5).join("\n  ")}`);
   }
 
-  const after = countStructured(scanLocal());
+  const after = countStructured(scanLocal(tmpDir));
   log(`  ✓ 下载 ${downloaded} 个；本地 structured ${after} 套（远端清单记 ${remote.structured ?? "?"}）`);
   return { downloaded, structured: remote.structured || 0, localStructured: after };
 }

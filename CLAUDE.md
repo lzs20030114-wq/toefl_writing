@@ -49,9 +49,10 @@ app/                          # Next.js App Router
     ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
 
 components/                   # 分科任务 UI + 后台
-├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask)
-├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer
-├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT)
+├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask), InsertSentenceStem(插入句题干拆三段, 拆法在 lib/reading/insertSentence)
+├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer(ref.playRange 逐句), SentenceTranscript(每句前 ▶ 键播放, 文字留给划词词典)
+├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT), useInterviewAiReview(面试练后「AI 整场分析」:
+│                             #   跨题诊断+改法+改写示范, prompt 在 lib/ai/prompts/interviewReview.js, 记录页与结束页共用缓存)
 ├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
@@ -156,7 +157,8 @@ UpgradeModal → XorPay(扫码/webhook) 或 Afdian(跳转 ifdian.net/webhook)
   文本生成走 Claude 订阅(边际~¥0)；只有听力 TTS 配音按量掏钱。
   R3 prompt 存档: docs/routine-prompts/audit-r3-v2.md (改 routine 先改这份再手动粘贴)。
 
-【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS。
+【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS；persona 渲染一句一次 TTS，
+  拼接时顺带写 `sentence_timings`（每句起止秒，与 audio_url 同生同灭，契约见 docs/listening-sentence-timings.md）。
 
 【后备/手动】.github/workflows/nightly-bank-refresh.yml 是手动 fallback(仅当 routine 挂了);
   nightly-quality-monitor.yml 是唯一还在自动 cron 的 workflow(质量监控, 非生成)。
@@ -189,6 +191,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 ```
 阅读复盘 WordLookupLayer 划词 → 词典弹窗「☆ 收藏到单词本」
   → lib/vocab/vocabStore.saveWord(): 连词形/音标/释义/标签/**所在原句**/来源一起存
+    （弹窗里多义项拆成 chips，点一条 = 按该义项收藏、整条留 defFull；已收藏的词再遇到是
+    「＋ 加这句语境」进 sentences(≤3) 而不是删除，删除只走「移出单词本」）
   → localStorage 是真源（点一下必须立刻变色，不能等网络）；登录后 /api/vocab 双向合并
     （按 word 取 updatedAt 新的一份，软删除 deletedAt 也参与比较，删除能同步）
 → /vocab-notebook：buildQueue 排今日队列 → VocabReview 翻卡 → gradeCard 写回 SRS 状态
@@ -197,7 +201,13 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 调度是 **FSRS-6**（`lib/vocab/srs.js`，21 参数 DSR 模型），不是 SM-2。几条不要随手改的设定：
 - **评分只有二档**「忘了/记得」，且**不显示下次间隔** —— 四档的自评噪声大于信息增益；
   看见间隔用户就会按「想隔多久再见」而不是「记得多牢」来评分
-- **主卡型是原句挖空**，挖不出来才退纯词卡；一个词只有一张卡，不双向排
+- **主卡型是「原句高亮认词」**：正面显示原句并高亮目标词（带音标/发音），让用户回忆词义 —— 和 TOEFL 词汇题同形；
+  句子里找不到词才退裸词卡。**不要挖空、更不要挖空还给音标**（音标等于把词形给了，真实句子的空位又不唯一）
+- **产出卡（释义 + 挖空 → 拼英文）只在词进入 review 后启用**：写作/口语来源、或列表页标了「要会写」（`productive`）的词；
+  一个词仍只有一张卡，不双向排
+- **首日隔开提取 3 次**（学习步 10/20 分钟；一场同词最多 4 次、中间隔 ≥10 张）—— 是隔开的多次提取，不是连刷
+- **语境轮换**（`book.pickContext`）：有第二句就按 reps 轮换；只有一句的词进入 review 后每第 3 次改裸词卡，
+  防止记住的是句子不是词；learning 阶段不抽语境
 - 目标留存率 0.90，考前 10 天自动进 0.95 冲刺档（读 studyPlan 的 examDate）
 - 新词毕业后的第一个间隔强制压到 1 天（跨一次睡眠）
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
@@ -207,7 +217,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 
 ```
 my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
-  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读)
+  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读，
+  随 WordBoundary 写 sentence_timings 供复盘逐句点播)
 → user_question_banks 表 → lib/userBank/personalBank.js 运行时拉取
 → 只并入各科 practice picker(带「我的」标签)，不进 standard 随机池。
 ```
@@ -302,6 +313,11 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 - **JSX 文本禁写 `\uXXXX`**: JSX 文本与 JSX 属性都不是 JS 字符串字面量，`\uXXXX` 不会被解码，会原样渲染成一长串 ASCII
   （既是乱码，又因不可断行而挤爆分栏）。中文直接写中文；`__tests__/encoding-hygiene.regression.test.js` 会拦。
   同源问题还有题库 JSON 里的 U+FFFD 替换字符（`caf�`），同一条测试一起扫。
+- **AP 正文 passage 与 paragraphs 必须同步**: 学术阅读条目的 `passage` 是渲染用的权威正文（pre-wrap，只认空行分段），
+  `paragraphs[]` 是它的段落切分 —— 题干四分之三写着「paragraph N」，两者对不上文章就糊成一坨。
+  补分段一律走 `lib/reading/passageLayout.js`（只往段间插空行、段内逐字不动，所以选句题的精确定位照样成立），
+  **绝不能写成 `paragraphs.join("\n\n")`**：带 `[■]` 插入句标记的条目只有 passage 里有标记，join 会把标记吃掉。
+  合库口 merge-staging 先修后拦，`__tests__/ap-paragraph-layout.regression.test.js` 卡住整库。
 - **State**: 无 Redux/Zustand, 用 useState + localStorage + Supabase
 - **API**: 所有 API 返回 `{ ok: boolean, ...data }` 格式, 见 `lib/apiResponse.js`
 - **Prompts**: AI prompt 模板集中在 `lib/*Gen/` 与 `lib/ai/prompts/`, 纯字符串拼接, 不引入模板引擎

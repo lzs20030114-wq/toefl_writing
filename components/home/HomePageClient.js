@@ -105,7 +105,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [feedbackMsg, setFeedbackMsg] = useState(null);
   const [fbHistory, setFbHistory] = useState([]);
   const [copied, setCopied] = useState(false);
-  const [logoutHover, setLogoutHover] = useState(false);
   const [referralModalOpen, setReferralModalOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
 
@@ -210,6 +209,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     } catch { /* silent */ }
   }
 
+  // 登录后先拉一次反馈记录（侧栏要用它算「作者回复」未读角标），打开弹窗时再刷新
+  useEffect(() => { if (userCode) loadFbHistory(); }, [userCode]);
   useEffect(() => { if (fbOpen) loadFbHistory(); }, [fbOpen, userCode]);
 
   async function submitFeedback() {
@@ -378,7 +379,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fbOpen={fbOpen} setFbOpen={setFbOpen} fbText={fbText} setFbText={setFbText}
             fbBusy={fbBusy} fbSent={fbSent} feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
             fbHistory={fbHistory}
-            copied={copied} copyCode={copyCode} logoutHover={logoutHover} setLogoutHover={setLogoutHover}
+            copied={copied} copyCode={copyCode}
             fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
           />

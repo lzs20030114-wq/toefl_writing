@@ -9,6 +9,9 @@
  *
  * RepeatTask: while recording, the "Replay original sentence" button is
  * disabled and a hint appears — the user can't re-sound the original into STT.
+ * Recording now starts by itself on entering the record phase (真考节奏), so
+ * the lock engages without any mic tap; a refused auto-start falls back to the
+ * manual button + hint.
  */
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { VoiceRecorder } from "../components/speaking/VoiceRecorder";
@@ -113,26 +116,48 @@ test("VoiceRecorder: omitting onRecordingStateChange is a no-op (Interview backw
   }).not.toThrow();
 });
 
-test("RepeatTask: recording locks the 'Replay original sentence' button + shows the hint", () => {
+// Drain a longer microtask chain (warmUpMicrophone → race → finally → then).
+const flush = async () => { for (let i = 0; i < 10; i++) await Promise.resolve(); };
+
+test("RepeatTask: entering the record phase auto-starts recording — replay locked + hint, no mic tap", async () => {
   // No audio_url + jsdom has no speechSynthesis → the listen phase exposes the
   // manual "Continue to Record" path, letting us reach the record phase.
   const items = [{ id: "s1", sentence: "The quick brown fox jumps over.", difficulty: "easy" }];
   render(<RepeatTask items={items} onComplete={jest.fn()} onExit={jest.fn()} isPractice />);
 
-  // New: the task opens on the setting/intro screen — tap 开始 to reach the task.
-  act(() => { fireEvent.click(screen.getByText("开始")); });
+  // 开始 asks for the mic inside the gesture and holds the intro until it settles.
+  await act(async () => { fireEvent.click(screen.getByText("开始")); gum.resolve(); await flush(); });
+  expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledTimes(1);
 
   act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
 
-  const replayBtn = screen.getByText("Replay original sentence").closest("button");
-  expect(replayBtn).not.toBeDisabled();
-  expect(screen.queryByText("录音中不可重放")).toBeNull();
-
-  // Start recording — the mic button lives inside VoiceRecorder.
-  const mic = screen.getByRole("img", { name: "microphone" }).closest("button");
-  act(() => { fireEvent.click(mic); });
-
-  // Record-intent signalled synchronously → button locked + hint shown.
+  // Nobody tapped the mic: the recorder opened it by itself (2nd getUserMedia)
+  // and record-intent fired synchronously → replay locked + hint shown.
+  expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledTimes(2);
   expect(screen.getByText("Replay original sentence").closest("button")).toBeDisabled();
   expect(screen.getByText("录音中不可重放")).toBeInTheDocument();
+});
+
+test("RepeatTask: auto-start refused → manual mic + hint, replay unlocked; a tap re-locks it", async () => {
+  const items = [{ id: "s1", sentence: "The quick brown fox jumps over.", difficulty: "easy" }];
+  render(<RepeatTask items={items} onComplete={jest.fn()} onExit={jest.fn()} isPractice />);
+  await act(async () => { fireEvent.click(screen.getByText("开始")); gum.resolve(); await flush(); });
+  act(() => { fireEvent.click(screen.getByText("Continue to Record")); });
+
+  // The auto-start's getUserMedia is rejected (iOS Safari without a grant, denied…).
+  await act(async () => {
+    gum.reject(new DOMException("denied", "NotAllowedError"));
+    await flush();
+  });
+  expect(screen.getByText(/录音未自动开始/)).toBeInTheDocument();
+  expect(screen.getByText("点击开始录音")).toBeInTheDocument();
+  expect(screen.getByText("Replay original sentence").closest("button")).not.toBeDisabled();
+  expect(screen.queryByText("录音中不可重放")).toBeNull();
+
+  // Manual tap on the mic retries and re-locks the replay button.
+  const mic = screen.getByRole("img", { name: "microphone" }).closest("button");
+  act(() => { fireEvent.click(mic); });
+  expect(screen.getByText("Replay original sentence").closest("button")).toBeDisabled();
+  expect(screen.getByText("录音中不可重放")).toBeInTheDocument();
+  expect(screen.queryByText(/录音未自动开始/)).toBeNull();
 });

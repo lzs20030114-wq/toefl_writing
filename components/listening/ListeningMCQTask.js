@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
+import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { listeningSecondsForType, formatAnswerTime } from "../../lib/listeningTiming";
@@ -173,6 +175,31 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
   const listeningAi = useListeningAiExplain();
   const explainContext =
     item?.transcript || item?.announcement || item?.lecture || conversationText(item?.conversation) || "";
+  // 练习模式结果页的「原文精听」：有 sentence_timings（与 audio_url 同一次配音）时逐句可点
+  // （docs/listening-sentence-timings.md）。考试态不展示原文。
+  const reviewPlayerRef = useRef(null);
+  const [activeSentence, setActiveSentence] = useState(-1);
+  const reviewTimings = isPractice && item?.audio_url ? (item?.sentence_timings || null) : null;
+  // 点播的那一句（pinnedSentenceIndex）：停在句末那一下不让高亮滑到下一句。
+  const reviewPinRef = useRef(null);
+  const handleReviewTime = useCallback((t) => {
+    const pinned = pinnedSentenceIndex(reviewPinRef.current, t);
+    if (pinned === -1) reviewPinRef.current = null;
+    const i = pinned !== -1 ? pinned : activeSentenceIndex(reviewTimings, t);
+    // 句间静音 / 一句刚放完：高亮留在上一句（与历史页 useSentencePlayback 同一口径）。
+    setActiveSentence((prev) => (i === -1 || prev === i ? prev : i));
+  }, [reviewTimings]);
+  const handleReviewPick = useCallback((i, s) => {
+    if (reviewPlayerRef.current && reviewPlayerRef.current.playRange(s.start, s.end)) {
+      reviewPinRef.current = { index: i, start: s.start, end: s.end };
+      setActiveSentence(i);
+    }
+  }, []);
+  // 词典弹窗里的「听这一句」只给得出下标，句子从同一份列表里换回来。
+  const handlePlaySentence = useCallback((i) => {
+    const s = sentenceAt(reviewTimings, i);
+    if (s) handleReviewPick(i, s);
+  }, [reviewTimings, handleReviewPick]);
 
   if (!item || totalQ === 0) {
     return (
@@ -239,6 +266,28 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
             <div style={{ fontSize: 14, fontWeight: 700, color: ACCENT.color, textTransform: "uppercase", marginBottom: 4 }}>Result</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: C.t1 }}>{correct}/{totalQ}</div>
           </div>
+
+          {/* 练习模式：原文精听（逐句可点）。答题结果与原文并排复盘，比翻回历史页顺手。 */}
+          {isPractice && (transcript || item.conversation) && (
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: C.t2, letterSpacing: "0.02em" }}>原文精听</span>
+                <AudioPlayer ref={reviewPlayerRef} compact src={item.audio_url || null} text={ttsText} turns={ttsTurns} isPractice onTime={handleReviewTime} />
+              </div>
+              <WordLookupLayer passage={explainContext} source="listening" onPlaySentence={handlePlaySentence} style={item.conversation
+                ? { marginBottom: 4 }
+                : { fontSize: 13, color: C.t1, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${C.bdr}` }}>
+                <SentenceTranscript
+                  variant={item.conversation ? "turns" : "paragraph"}
+                  timings={reviewTimings}
+                  transcript={transcript}
+                  conversation={item.conversation}
+                  activeIndex={activeSentence}
+                  onPick={handleReviewPick}
+                />
+              </WordLookupLayer>
+            </div>
+          )}
 
           {questions.map((q, i) => {
             const r = results[i];

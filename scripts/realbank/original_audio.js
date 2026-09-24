@@ -630,6 +630,10 @@ function applyOriginalAudio(bundle, manifest, spokenTextFn) {
     unit.audio_url = e.url;
     unit.audio_source = "original";
     delete unit.audio_pending;
+    // 句级时间戳跟着音频走：TTS 配音量出来的时间对不上原声，换了 URL 就作废；
+    // 原声自己的时间戳（ASR 对齐产物）由清单条目的 sentence_timings 带进来。
+    if (Array.isArray(e.sentence_timings)) unit.sentence_timings = e.sentence_timings;
+    else delete unit.sentence_timings;
     out.mounted += 1;
   };
   for (const [kind, items] of Object.entries(bundle || {})) {

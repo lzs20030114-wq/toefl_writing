@@ -2,10 +2,12 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { C, FONT, PageShell, SurfaceCard } from "../shared/ui";
+import { SpeakButton } from "../shared/SpeakButton";
 import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
 import { MATURE_DAYS, sortByUrgency } from "../../lib/vocab/book";
+import { humanizeDef } from "../../lib/dict/core";
 
 const ACCENT = "#0891B2";
 const ACCENT_SOFT = "#ECFEFF";
@@ -49,7 +51,10 @@ function Stat({ value, label, color }) {
 }
 
 export default function VocabNotebook({ onBack }) {
-  const { cards, stats, limits, setLimits, ready, isLoggedIn, makeQueue, grade, remove, setProductive, reset, schedule } = useVocabBook();
+  const {
+    cards, stats, limits, setLimits, ready, isLoggedIn,
+    makeQueue, grade, remove, reset, setProductive, schedule,
+  } = useVocabBook();
   const [queue, setQueue] = useState(null); // 非 null = 正在复习
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
@@ -103,7 +108,7 @@ export default function VocabNotebook({ onBack }) {
         <div style={{ minWidth: 0 }}>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: C.t1, letterSpacing: -0.4 }}>单词本</h1>
           <div style={{ fontSize: 12, color: C.t2, marginTop: 2 }}>
-            阅读复盘时点原文里的词 → 词典弹窗点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。
+            阅读/听力复盘时点原文里的词 → 词典弹窗点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。
           </div>
         </div>
         <button
@@ -275,7 +280,7 @@ export default function VocabNotebook({ onBack }) {
           </div>
 
           <div style={{ fontSize: 11, color: C.t3, marginBottom: 8 }}>
-            所有词默认要求会写；不需要会写的词，点右侧「要会写」即可剔除。
+            所有词默认要求会写；不需要会写的词，可逐个关闭右侧「要会写」。
           </div>
 
           {list.length === 0 ? (
@@ -286,6 +291,7 @@ export default function VocabNotebook({ onBack }) {
             list.slice(0, shown).map((card) => {
               const st = stateLabel(card, now);
               const r = currentRetrievability(card, now);
+              const productiveOn = card.productive !== false;
               return (
                 <div
                   key={card.word}
@@ -304,6 +310,7 @@ export default function VocabNotebook({ onBack }) {
                           /{card.phonetic}/
                         </span>
                       )}
+                      <SpeakButton word={card.display || card.word} size={26} style={{ alignSelf: "center" }} />
                       <span style={{
                         fontSize: 10, fontWeight: 700, color: st.color, background: st.bg,
                         borderRadius: 5, padding: "1px 7px",
@@ -317,7 +324,7 @@ export default function VocabNotebook({ onBack }) {
                         overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
                         WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
                       }}>
-                        {card.def.replace(/\n/g, " / ")}
+                        {humanizeDef(card.def)}
                       </div>
                     )}
                     <div style={{ fontSize: 10.5, color: C.t3, marginTop: 4 }}>
@@ -325,23 +332,25 @@ export default function VocabNotebook({ onBack }) {
                       {card.reps > 0 && ` · 复习 ${card.reps} 次`}
                       {card.lapses > 0 && ` · 忘过 ${card.lapses} 次`}
                       {r != null && ` · 此刻记得 ${Math.round(r * 100)}%`}
+                      {card.sentences?.length > 0 && ` · ${card.sentences.length + 1} 句语境`}
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
                     <button
-                      onClick={() => setProductive(card.word, card.productive === false)}
+                      onClick={() => setProductive(card.word, !productiveOn)}
                       role="switch"
-                      aria-checked={card.productive !== false}
+                      aria-checked={productiveOn}
                       aria-label={`${card.display || card.word}需要会写`}
-                      title={card.productive === false ? "改为需要会写" : "剔除会写要求，只需认得"}
+                      title={productiveOn ? "剔除会写要求，复习时只考认词" : "重新要求会写"}
                       style={{
-                        border: `1px solid ${card.productive === false ? C.bdr : ACCENT}`,
-                        background: card.productive === false ? "#fff" : ACCENT_SOFT,
-                        color: card.productive === false ? C.t3 : ACCENT,
-                        borderRadius: 7, padding: "3px 8px", fontSize: 11, cursor: "pointer", fontFamily: FONT,
+                        border: `1px solid ${productiveOn ? ACCENT : C.bdr}`,
+                        background: productiveOn ? ACCENT_SOFT : "#fff",
+                        color: productiveOn ? ACCENT : C.t3,
+                        borderRadius: 7, padding: "3px 8px", fontSize: 11,
+                        cursor: "pointer", fontFamily: FONT,
                       }}
                     >
-                      {card.productive === false ? "只需认得" : "要会写"}
+                      {productiveOn ? "要会写" : "只需认得"}
                     </button>
                     {card.reps > 0 && (
                       <button

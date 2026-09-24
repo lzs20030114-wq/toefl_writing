@@ -4,6 +4,7 @@
 //
 // 升级按钮走全局 open-upgrade-modal 事件 —— 本组件在 HomePageClient 组件树下，
 // HomePageClient 上挂着唯一监听者（HomePageClient.js:142-152），所以不需要自持 UpgradeModal。
+import { useState } from "react";
 import { SECTION_ACCENTS } from "./sections";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { HomeTaskCard, HomeLinkCard } from "./HomeTaskCard";
@@ -29,13 +30,133 @@ import { countRealBankSessions } from "../../lib/realBankHistory";
 
 const REAL_ACCENT = SECTION_ACCENTS["real-bank"];
 
-// 卡片分组（写作 / 阅读 / 听力 / 口语）。12 张卡平铺会糊成一片，按科目分段用户才找得着。
+// 卡片分组（写作 / 阅读 / 听力 / 口语）。12 张卡平铺会糊成一片（整页拉到两屏多），
+// 所以按科目收成四个折叠面板：默认只展开第一个，点标题展开 / 收起，一次只开一个。
+// 面板配色沿用各科目在导航里的 accent（SECTION_ACCENTS），用户一眼就能对上侧栏。
 export const REAL_EXAM_GROUPS = [
-  { id: "writing", label: "写作" },
-  { id: "reading", label: "阅读" },
-  { id: "listening", label: "听力" },
-  { id: "speaking", label: "口语" },
+  { id: "writing", label: "写作", en: "Writing", icon: "✍️" },
+  { id: "reading", label: "阅读", en: "Reading", icon: "📖" },
+  { id: "listening", label: "听力", en: "Listening", icon: "🎧" },
+  { id: "speaking", label: "口语", en: "Speaking", icon: "🎤" },
 ];
+
+// 折叠面板动效：grid-template-rows 0fr ↔ 1fr 做高度过渡（不用 JS 量高度，内容高度变了也不会卡），
+// 内容层同步做透明度 + 位移；收起时 visibility 延后到过渡结束再切 hidden（顺带移出 Tab 序）。
+const PANEL_MS = 320;
+const PANEL_EASE = "cubic-bezier(0.25, 1, 0.5, 1)";
+
+function Chevron({ open, color }) {
+  return (
+    <svg
+      width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: `transform ${PANEL_MS}ms ${PANEL_EASE}`, flexShrink: 0 }}
+    >
+      <path d="M5 7.5 10 12.5 15 7.5" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** 单个科目面板：标题行（图标 / 科目名 / 题型概览 / 箭头）+ 可展开的任务卡网格。 */
+function RealExamGroupPanel({ group, items, open, onToggle, isPro, isChallenge, hoverKey, setHoverKey, fadeIn, delay }) {
+  const accent = SECTION_ACCENTS[group.id] || REAL_ACCENT;
+  const headKey = `real-group-${group.id}`;
+  const headHover = hoverKey === headKey;
+  const panelId = `real-group-panel-${group.id}`;
+  const summary = items.map((it) => it.t.replace(/真题$/, "")).join(" · ");
+
+  return (
+    <div
+      data-testid={`real-group-${group.id}`}
+      style={{
+        background: isChallenge ? CH.card : T.card,
+        border: `1px solid ${isChallenge ? CH.cardBorder : (open || headHover ? `${accent.color}66` : T.bdr)}`,
+        borderRadius: 14, marginBottom: 12, overflow: "hidden",
+        boxShadow: isChallenge ? "none" : (open ? T.shadowHover : T.shadow),
+        transition: `border-color ${PANEL_MS}ms ease, box-shadow ${PANEL_MS}ms ease`,
+        ...fadeIn(delay),
+      }}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={onToggle}
+        onMouseEnter={() => setHoverKey(headKey)}
+        onMouseLeave={() => setHoverKey("")}
+        style={{
+          width: "100%", display: "flex", alignItems: "center", gap: 14,
+          padding: "14px 18px 14px 16px", border: "none", cursor: "pointer", textAlign: "left",
+          background: isChallenge
+            ? (headHover || open ? "rgba(255,255,255,0.03)" : "transparent")
+            : (open ? accent.soft : headHover ? T.bgSoft : "transparent"),
+          color: "inherit", fontFamily: HOME_FONT,
+          transition: `background ${PANEL_MS}ms ease`,
+        }}
+      >
+        <div style={{
+          width: 40, height: 40, borderRadius: 11, flexShrink: 0,
+          display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19,
+          background: isChallenge ? "rgba(255,255,255,0.06)" : (open ? "#fff" : accent.soft),
+          border: `1px solid ${isChallenge ? CH.cardBorder : `${accent.color}33`}`,
+          transition: `background ${PANEL_MS}ms ease`,
+        }}>
+          <span aria-hidden="true">{group.icon}</span>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            <span style={{ fontSize: 16, fontWeight: 800, color: isChallenge ? CH.t1 : T.t1, letterSpacing: -0.2 }}>{group.label}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: isChallenge ? CH.accent : accent.color, letterSpacing: 0.3 }}>{group.en}</span>
+          </div>
+          <div style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t2, marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {summary}
+          </div>
+        </div>
+        <div style={{
+          fontSize: 11, fontWeight: 700, whiteSpace: "nowrap", flexShrink: 0,
+          color: isChallenge ? CH.t2 : (open ? accent.color : T.t2),
+          background: isChallenge ? "rgba(255,255,255,0.05)" : "#fff",
+          border: `1px solid ${isChallenge ? "rgba(255,255,255,0.08)" : (open ? `${accent.color}55` : T.bdr)}`,
+          borderRadius: 999, padding: "3px 10px",
+          transition: `color ${PANEL_MS}ms ease, border-color ${PANEL_MS}ms ease`,
+        }}>
+          {items.length} 个题型
+        </div>
+        <Chevron open={open} color={isChallenge ? CH.accent : (open ? accent.color : T.t3)} />
+      </button>
+
+      <div
+        id={panelId}
+        role="region"
+        aria-label={`${group.label}真题`}
+        style={{ display: "grid", gridTemplateRows: open ? "1fr" : "0fr", transition: `grid-template-rows ${PANEL_MS}ms ${PANEL_EASE}` }}
+      >
+        <div style={{
+          minHeight: 0, overflow: "hidden",
+          opacity: open ? 1 : 0,
+          transform: open ? "translateY(0)" : "translateY(-6px)",
+          visibility: open ? "visible" : "hidden",
+          transition: `opacity ${PANEL_MS}ms ease, transform ${PANEL_MS}ms ${PANEL_EASE}, visibility 0s linear ${open ? 0 : PANEL_MS}ms`,
+        }}>
+          <div style={{ borderTop: `1px solid ${isChallenge ? CH.cardBorder : T.bdrSubtle}`, padding: 12, background: isChallenge ? "transparent" : T.bgSoft }}>
+            {/* 非 Pro 置灰禁点。四张网格都带 .home-grid 和同一套置灰样式，
+                非 Pro 时整个专区一起禁点（测试用 querySelector 取第一张网格断言，语义一致）。 */}
+            <div className="home-grid" style={{
+              display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 10,
+              opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
+              filter: isPro ? "none" : "grayscale(0.5)",
+            }}>
+              {items.map((item) => (
+                <div key={item.k} style={{ display: "flex" }}>
+                  <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // 任务卡的文案。题量与来源分档严格按 data/REFERENCE_BANKS.md 的口径写，
 // 不许把未核验的语料吹成 ETS 官方（讨论 81 条无 tier → legacy；邮件只有 tpo1/tpo2 是官方；
@@ -43,13 +164,13 @@ export const REAL_EXAM_GROUPS = [
 export const REAL_EXAM_TASKS = [
   {
     g: "writing",
-    k: "real-discussion",
-    type: "discussion",
-    href: "/real-bank?type=discussion",
-    n: "Task 3",
-    t: "学术讨论真题",
-    d: "回忆版 51 题（2026 考生回忆）+ 参考版 81 题，AI 评分与常规练习一致。",
-    it: `${REAL_WRITING_COUNTS.discussion} 题`,
+    k: "real-bs",
+    type: "bs",
+    href: "/real-bank?type=bs",
+    n: "Task 1",
+    t: "造句真题",
+    d: "ETS 官方原题 20 题（Full-Length Practice Test 1 & 2）+ 回忆版 86 题，按套次分组。",
+    it: `${REAL_WRITING_COUNTS.bs} 题 · ${REAL_WRITING_COUNTS.bsSets} 套`,
   },
   {
     g: "writing",
@@ -63,13 +184,13 @@ export const REAL_EXAM_TASKS = [
   },
   {
     g: "writing",
-    k: "real-bs",
-    type: "bs",
-    href: "/real-bank?type=bs",
-    n: "Task 1",
-    t: "造句真题",
-    d: "ETS 官方原题 20 题（Full-Length Practice Test 1 & 2）+ 回忆版 86 题，按套次分组。",
-    it: `${REAL_WRITING_COUNTS.bs} 题 · ${REAL_WRITING_COUNTS.bsSets} 套`,
+    k: "real-discussion",
+    type: "discussion",
+    href: "/real-bank?type=discussion",
+    n: "Task 3",
+    t: "学术讨论真题",
+    d: "回忆版 51 题（2026 考生回忆）+ 参考版 81 题，AI 评分与常规练习一致。",
+    it: `${REAL_WRITING_COUNTS.discussion} 题`,
   },
   {
     g: "reading",
@@ -171,9 +292,11 @@ export function RealExamSectionContent({
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const realCount = countRealBankSessions(sessions);
+  // 一次只展开一个科目；默认写作（真题专区最早只有写作，也是用户最熟的入口）。
+  const [openGroup, setOpenGroup] = useState(REAL_EXAM_GROUPS[0].id);
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
-  const gridItems = REAL_EXAM_TASKS.map((task, index) => {
+  const gridItems = REAL_EXAM_TASKS.map((task) => {
     const { timeLabel, standardLabel } = getRealBankTimeLabels(task.type, modeStr);
     return {
       ...task,
@@ -182,7 +305,6 @@ export function RealExamSectionContent({
       standardLabel,
       acc: REAL_ACCENT,
       isMock: false,
-      delay: 190 + index * 70,
     };
   });
 
@@ -237,14 +359,24 @@ export function RealExamSectionContent({
         </p>
       </div>
 
-      {/* Feature strip — 来源分档口径，摆在最显眼处 */}
-      <div style={{ background: isChallenge ? "rgba(17,17,24,0.7)" : T.card, border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`, borderRadius: 10, padding: "10px 16px", marginBottom: 16, boxShadow: isChallenge ? "none" : T.shadow, ...fadeIn(120) }}>
-        <div style={{ display: "flex", gap: 20, flexWrap: "wrap", fontSize: 12, color: isChallenge ? CH.t2 : T.t2 }}>
-          <span>- ETS官方：官方 PDF 逐字原题</span>
-          <span>- 回忆版：2026 考生回忆整理</span>
-          <span>- 参考版：早期收集，来源未核验</span>
-          <span>- 每道题都标注来源分档，仅供练习参考</span>
-        </div>
+      {/* Feature strip — 来源分档口径，摆在最显眼处（四枚小标签，比整行文字轻） */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16, ...fadeIn(120) }}>
+        {[
+          ["ETS官方", "官方 PDF 逐字原题"],
+          ["回忆版", "2026 考生回忆整理"],
+          ["参考版", "早期收集，来源未核验"],
+        ].map(([tier, note]) => (
+          <span key={tier} style={{
+            display: "inline-flex", alignItems: "center", gap: 2, fontSize: 12,
+            padding: "5px 10px", borderRadius: 999,
+            background: isChallenge ? "rgba(17,17,24,0.7)" : T.card,
+            border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
+            color: isChallenge ? CH.t2 : T.t2,
+          }}>
+            <span style={{ fontWeight: 700, color: isChallenge ? CH.accent : REAL_ACCENT.color }}>{tier}</span>：{note}
+          </span>
+        ))}
+        <span style={{ fontSize: 12, color: isChallenge ? CH.t2 : T.t3, alignSelf: "center" }}>每道题都标注来源分档，仅供练习参考</span>
       </div>
 
       {/* Pro gate */}
@@ -291,34 +423,27 @@ export function RealExamSectionContent({
         </div>
       )}
 
-      {/* Task grid（非 Pro 置灰禁点） */}
-      {/* 按科目分组：每组一个小标题 + 一张网格。四张网格都带 .home-grid 和同一套置灰样式，
-          非 Pro 时整个专区一起禁点（测试用 querySelector 取第一张网格断言，语义一致）。 */}
-      {REAL_EXAM_GROUPS.map((group) => {
+      {/* 四个科目折叠面板（写作 / 阅读 / 听力 / 口语） */}
+      {REAL_EXAM_GROUPS.map((group, gi) => {
         const groupItems = gridItems.filter((it) => it.g === group.id);
         if (groupItems.length === 0) return null;
         return (
-          <div key={group.id}>
-            <div style={{
-              fontSize: 12, fontWeight: 700, letterSpacing: 0.5, marginBottom: 8,
-              color: isChallenge ? CH.t2 : T.t2, ...fadeIn(170),
-            }}>
-              {group.label}
-            </div>
-            <div className="home-grid" style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20,
-              opacity: isPro ? 1 : 0.45, pointerEvents: isPro ? "auto" : "none",
-              filter: isPro ? "none" : "grayscale(0.5)",
-            }}>
-              {groupItems.map((item) => (
-                <div key={item.k} style={{ display: "flex", ...fadeIn(item.delay) }}>
-                  <HomeTaskCard item={item} hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge} />
-                </div>
-              ))}
-            </div>
-          </div>
+          <RealExamGroupPanel
+            key={group.id}
+            group={group}
+            items={groupItems}
+            open={openGroup === group.id}
+            onToggle={() => setOpenGroup((cur) => (cur === group.id ? null : group.id))}
+            isPro={isPro}
+            isChallenge={isChallenge}
+            hoverKey={hoverKey}
+            setHoverKey={setHoverKey}
+            fadeIn={fadeIn}
+            delay={190 + gi * 70}
+          />
         );
       })}
+      <div style={{ marginBottom: 8 }} />
       {/* 真题练习记录入口（与阅读 / 听力 / 口语面板的「练习记录」伴生卡同款）。
           非 Pro 不显示 —— 真题专区本身就是 Pro 专属，没记录可看。 */}
       {isPro && (

@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
 import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
+import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
+import { WordLookupLayer } from "../reading/WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
+import { findSentenceTimingsByAudioUrl } from "../../lib/listening/timingsLookup";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
 import { getSavedCode } from "../../lib/AuthContext";
@@ -233,7 +237,46 @@ function taskToReviewDetails(task) {
     transcript: task.transcript || task.announcement || task.lecture || task.text || task.passage || "",
     conversation: task.conversation || null,
     audio_url: task.audio_url || null,
+    sentence_timings: task.sentence_timings || null,
   };
+}
+
+// 逐句点播（docs/listening-sentence-timings.md）：播放器 ref + 「正在放哪一句」的高亮下标。
+// 只在有真实音频时认时间戳；只在当前句变了才 setState，播放中不会每帧重渲染。
+function useSentencePlayback(timings, audioUrl) {
+  const playerRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  // 老记录（时间戳上线前做的）快照里没有 sentence_timings，但有 audio_url：按音频到题库里现查同一份。
+  const [looked, setLooked] = useState(null);
+  useEffect(() => {
+    setLooked(null);
+    if (timings || !audioUrl) return undefined;
+    let alive = true;
+    findSentenceTimingsByAudioUrl(audioUrl).then((found) => { if (alive && found) setLooked(found); });
+    return () => { alive = false; };
+  }, [timings, audioUrl]);
+  const usable = audioUrl ? (timings || looked) : null;
+  // 点播的那一句（pinnedSentenceIndex）：停在句末那一下不让高亮滑到下一句。
+  const pinRef = useRef(null);
+  const onTime = useCallback((t) => {
+    const pinned = pinnedSentenceIndex(pinRef.current, t);
+    if (pinned === -1) pinRef.current = null;
+    const i = pinned !== -1 ? pinned : activeSentenceIndex(usable, t);
+    // 落在句间静音（含一句刚放完）时高亮留在上一句：精听时「刚才放的是哪句」比空白有用。
+    setActiveIndex((prev) => (i === -1 || prev === i ? prev : i));
+  }, [usable]);
+  const onPick = useCallback((i, s) => {
+    if (playerRef.current && playerRef.current.playRange(s.start, s.end)) {
+      pinRef.current = { index: i, start: s.start, end: s.end };
+      setActiveIndex(i);
+    }
+  }, []);
+  // 词典弹窗里的「听这一句」只给得出下标，句子从同一份列表里换回来。
+  const onPlaySentence = useCallback((i) => {
+    const s = sentenceAt(usable, i);
+    if (s) onPick(i, s);
+  }, [usable, onPick]);
+  return { playerRef, activeIndex, onTime, onPick, onPlaySentence, timings: usable };
 }
 
 // One collapsible card per mock task, reusing the practice-review renderers.
@@ -282,13 +325,19 @@ export function LCRDetail({ session }) {
   // matching reader in lib/listeningMistakes.js. Fall back to details.questions
   // for any legacy/alternate shape.
   const items = session.details?.items || session.details?.questions || [];
+  // 点词查词典的上下文：刺激句在前、选项在后。收藏进单词本时存的「所在原句」
+  // 和 AI 讲解都靠它定位。
+  const lookupContext = questionLookupContext(
+    results.map((r, i) => (items[i] || {}).speaker || (items[i] || {}).stem || r.stem || "").filter(Boolean).join(" "),
+    results.map((r, i) => ({ options: (items[i] || {}).options || r.options || {} }))
+  );
 
   if (results.length === 0 && items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>;
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {results.map((r, i) => {
         const q = items[i] || {};
         const speakerText = q.speaker || q.stem || r.stem || "";
@@ -307,7 +356,7 @@ export function LCRDetail({ session }) {
             )}
             {/* Replay the recording for 精听 (TTS fallback off speaker text) */}
             {(q.audio_url || speakerText) && (
-              <div style={{ marginBottom: 8 }}>
+              <div data-no-dict style={{ marginBottom: 8 }}>
                 <AudioPlayer compact src={q.audio_url || null} text={speakerText} isPractice />
               </div>
             )}
@@ -348,6 +397,7 @@ export function LCRDetail({ session }) {
             )}
             {/* AI 讲解：只给答错的题。应答题走语用那支（没有原文定位可讲）。 */}
             {!r.isCorrect && (speakerText || Object.keys(options).length > 0) && (
+              <div data-no-dict>
               <ListeningAiExplainBlock
                 explainKey={`${session.id}-lcr${i}`}
                 detail={{
@@ -363,11 +413,12 @@ export function LCRDetail({ session }) {
                 }}
                 {...listeningAi}
               />
+              </div>
             )}
           </div>
         );
       })}
-    </div>
+    </WordLookupLayer>
   );
 }
 
@@ -380,6 +431,10 @@ export function LADetail({ session }) {
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
   const audioUrl = session.details?.audio_url || null;
+  // 题干、选项也能点词查：上下文拼上题目文本，词只出现在选项里时也有句可依。
+  const lookupContext = questionLookupContext(transcript, questions.length ? questions : results);
+  // 逐句点播：记录里存了 sentence_timings（与 audio_url 同一次配音）时原文逐句可点。
+  const sp = useSentencePlayback(session.details?.sentence_timings || null, audioUrl);
 
   return (
     <div>
@@ -387,18 +442,18 @@ export function LADetail({ session }) {
       {(audioUrl || transcript) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer compact src={audioUrl} text={transcript} isPractice />
+          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={transcript} isPractice onTime={sp.onTime} />
         </div>
       )}
-      {/* Transcript / announcement text */}
+      {/* Transcript / announcement text（有句级时间戳时逐句可点） */}
       {transcript && (
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
-          {transcript}
-        </div>
+        <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+          <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
+        </WordLookupLayer>
       )}
       {/* Per-question detail */}
       {results.length > 0 ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -440,7 +495,7 @@ export function LADetail({ session }) {
                 )}
                 {/* AI 讲解：只给答错的题。老记录没存题面（stem 与 options 都空）时讲不了，不放。 */}
                 {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
-                  <div style={{ marginLeft: 20 }}>
+                  <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
                       detail={{
@@ -466,7 +521,7 @@ export function LADetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}
@@ -485,6 +540,10 @@ export function LCDetail({ session }) {
   const transcript = session.details?.transcript || session.details?.passage || "";
   const audioUrl = session.details?.audio_url || null;
   const audioText = transcript || conversation.map(t => t.text || t.content || "").join(" ");
+  // 查词上下文：对话逐行拼平（不带 Speaker 前缀，免得收藏进单词本的原句多一截人名）。
+  const lookupContext = questionLookupContext(audioText, questions.length ? questions : results);
+  // 逐句点播：记录里存了 sentence_timings（与 audio_url 同一次配音）时气泡里每句可点。
+  const sp = useSentencePlayback(session.details?.sentence_timings || null, audioUrl);
 
   return (
     <div>
@@ -492,45 +551,24 @@ export function LCDetail({ session }) {
       {(audioUrl || audioText) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer compact src={audioUrl} text={audioText} isPractice />
+          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={audioText} isPractice onTime={sp.onTime} />
         </div>
       )}
-      {/* Conversation turns as chat bubbles */}
+      {/* Conversation turns as chat bubbles（有句级时间戳时逐句可点；气泡样式在 SentenceTranscript 里） */}
       {conversation.length > 0 ? (
-        <div style={{ marginBottom: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-          {conversation.map((turn, i) => {
-            const isLeft = i % 2 === 0;
-            const speaker = turn.speaker || turn.name || (isLeft ? "Speaker A" : "Speaker B");
-            const text = turn.text || turn.content || "";
-            return (
-              <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: isLeft ? "flex-start" : "flex-end" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: isLeft ? "#6366F1" : "#0891B2", marginBottom: 2, paddingLeft: isLeft ? 8 : 0, paddingRight: isLeft ? 0 : 8 }}>
-                  {speaker}
-                </div>
-                <div style={{
-                  maxWidth: "85%", fontSize: 12, lineHeight: 1.6, color: P.text,
-                  padding: "8px 12px", borderRadius: 12,
-                  borderTopLeftRadius: isLeft ? 4 : 12,
-                  borderTopRightRadius: isLeft ? 12 : 4,
-                  background: isLeft ? "#F3E8FF" : "#ECFEFF",
-                  border: `1px solid ${isLeft ? "#DDD6FE" : "#CFFAFE"}`,
-                }}>
-                  {text}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} style={{ marginBottom: 12 }}>
+          <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
+        </WordLookupLayer>
       ) : transcript ? (
         /* Fallback: show transcript as plain text block */
-        <div style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           {transcript}
-        </div>
+        </WordLookupLayer>
       ) : null}
 
       {/* Questions (same pattern as LA/LAT) */}
       {results.length > 0 ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -569,7 +607,7 @@ export function LCDetail({ session }) {
                 )}
                 {/* AI 讲解：只给答错的题。原文用对话逐行（没存 transcript 时按 turns 拼）。 */}
                 {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
-                  <div style={{ marginLeft: 20 }}>
+                  <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
                       detail={{
@@ -594,7 +632,7 @@ export function LCDetail({ session }) {
               </div>
             );
           })}
-        </div>
+        </WordLookupLayer>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}

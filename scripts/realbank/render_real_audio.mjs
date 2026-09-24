@@ -24,13 +24,17 @@
  *   node scripts/realbank/render_real_audio.mjs --only=lcr,lc --limit=5
  *
  * 断点续跑：已有 audio_url 的直接跳过，可以随时 Ctrl-C 再跑。
+ *
+ * 句级时间戳：听力四型走 *Timed 渲染，随 audio_url 一起写 `sentence_timings`
+ *（每句在这条音频里的起止秒，契约见 docs/listening-sentence-timings.md）。原声条目
+ * （audio_source: "original"）不经这里，它们的时间戳要靠 ASR 对齐另补。
  */
 import fs from "fs";
 import path from "path";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { renderSingleSpeaker, renderConversation } = require("../../lib/tts/renderListening.js");
+const { renderSingleSpeaker, renderSingleSpeakerTimed, renderConversationTimed } = require("../../lib/tts/renderListening.js");
 const { encodeWavToMp3 } = require("../../lib/tts/mp3Encode.js");
 const { uploadAudio, versionedAudioUrl } = require("../../lib/tts/storage.js");
 
@@ -86,8 +90,12 @@ function planListening(type) {
     if (!words) continue;
     jobs.push({
       file: p, bank, type, id: it.id, words,
-      render: () => (type === "lc" ? renderConversation(it) : renderSingleSpeaker(it, type)),
-      assign: (url) => { it.audio_url = versionedAudioUrl(url); delete it.audio_pending; },
+      render: () => (type === "lc" ? renderConversationTimed(it) : renderSingleSpeakerTimed(it, type)),
+      assign: (url, sentences) => {
+        it.audio_url = versionedAudioUrl(url);
+        it.sentence_timings = sentences; // 与这条 audio_url 同生同灭
+        delete it.audio_pending;
+      },
     });
   }
   return jobs;
@@ -115,7 +123,8 @@ function planSpeaking(kind) {
       };
       jobs.push({
         file: p, bank, type: kind, id: unit.id, words: wc(text),
-        render: () => renderSingleSpeaker(pseudo, "lcr"),
+        // 一句 / 一题一条音频，整条就是一句，不需要句级时间戳。
+        render: () => renderSingleSpeakerTimed(pseudo, "lcr"),
         assign: (url) => { unit.audio_url = versionedAudioUrl(url); delete unit.audio_pending; },
       });
     }
@@ -184,11 +193,11 @@ async function main() {
   for (const j of jobs) {
     if (budget <= 0) break;
     try {
-      const wav = await j.render();
+      const { wav, sentences } = await j.render();
       const mp3 = await encodeWavToMp3(wav);
       const { url } = await uploadAudio(`real/${j.type}/${j.id}.mp3`, mp3);
       if (String(url || "").startsWith("/")) throw new Error("上传退回本地路径");
-      j.assign(url);
+      j.assign(url, sentences);
       dirty.set(j.file, j.bank);
       done += 1; budget -= 1;
       // 每条都落盘：中途断了也不丢已经花过钱的音频（断点续跑靠 audio_url 判定）。

@@ -19,7 +19,7 @@ const require = createRequire(import.meta.url);
 const { generateSpeech, generateConversation } = require('../lib/tts/edgeTts.js');
 const { uploadAudio, versionedAudioUrl } = require('../lib/tts/storage.js');
 // Persona render path — used ONLY in --tts-provider=openai mode, listening types only.
-const { renderSingleSpeaker, renderConversation } = require('../lib/tts/renderListening.js');
+const { renderSingleSpeakerTimed, renderConversationTimed } = require('../lib/tts/renderListening.js');
 const { encodeWavToMp3 } = require('../lib/tts/mp3Encode.js');
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -68,18 +68,23 @@ async function backfillSingle(bankPath, textFn, prefix, preset, type) {
     const text = textFn(it);
     if (!text || !it.id) { fail++; continue; }
     try {
-      let buf, storagePath;
+      let buf, storagePath, timings = null;
       if (OPENAI) {
         // Persona render → MP3 at a NEW .p1.mp3 path (never overwrites the old edge file).
-        const wav = await renderSingleSpeaker(it, type);
+        // The timed render also hands back where each sentence sits in the clip.
+        const { wav, sentences } = await renderSingleSpeakerTimed(it, type);
         buf = await encodeWavToMp3(wav);
         storagePath = `${prefix}/${it.id}.p1.mp3`;
+        timings = sentences;
       } else {
         buf = await generateSpeech(String(text), { preset, format: 'mp3' });
         storagePath = `${prefix}/${it.id}.mp3`;
       }
       const { url } = await uploadChecked(storagePath, buf);
       it.audio_url = versionedAudioUrl(url); done++; budget--;
+      // sentence_timings always describes THIS audio_url: written with it, dropped with it
+      // (an edge render is one opaque clip — stale timings from an older render must not survive).
+      if (timings) it.sentence_timings = timings; else delete it.sentence_timings;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
   save(bankPath, b);
@@ -95,12 +100,13 @@ async function backfillConversation(bankPath, prefix) {
     const turns = it.conversation || it.turns || [];
     if (!turns.length || !it.id) { fail++; continue; }
     try {
-      let buf, storagePath;
+      let buf, storagePath, timings = null;
       if (OPENAI) {
-        // Persona multi-voice render → MP3 at a NEW .p1.mp3 path.
-        const wav = await renderConversation(it);
+        // Persona multi-voice render → MP3 at a NEW .p1.mp3 path (+ per-sentence timings).
+        const { wav, sentences } = await renderConversationTimed(it);
         buf = await encodeWavToMp3(wav);
         storagePath = `${prefix}/${it.id}.p1.mp3`;
+        timings = sentences;
       } else {
         const segments = turns.map(t => ({ text: t.text, preset: CONV_VOICE[t.speaker] || 'lcr_staff_female' }));
         buf = await generateConversation(segments, { format: 'mp3' });
@@ -108,6 +114,7 @@ async function backfillConversation(bankPath, prefix) {
       }
       const { url } = await uploadChecked(storagePath, buf);
       it.audio_url = versionedAudioUrl(url); done++; budget--;
+      if (timings) it.sentence_timings = timings; else delete it.sentence_timings;
     } catch (e) { if (e.fatal) throw e; fail++; console.log(`  ✗ ${it.id}: ${e.message.slice(0, 80)}`); }
   }
   save(bankPath, b);

@@ -47,6 +47,22 @@ describe("fetchPersonalBank LA/LAT shape-guard + audio whitelist", () => {
     expect(rows[0].id).toBe("usr_ABC123_2_0");
   });
 
+  test("sentence_timings：只随可用 audio_url 透传且须整份过体检；foreign audio_url / 坏时间戳 → 去掉该键", async () => {
+    const good = [{ text: "The library will be closed for maintenance on Friday.", start: 0.1, end: 3.2 }];
+    mockItems([
+      { item_id: "usr_ABC123_5_0", data: { ...goodLa, audio_url: "/api/audio/user/ABC123/a.mp3", sentence_timings: good } },
+      { item_id: "usr_ABC123_5_1", data: { ...goodLa, audio_url: "https://evil.example.com/t.mp3", sentence_timings: good } },
+      { item_id: "usr_ABC123_5_2", data: { ...goodLa, audio_url: "/api/audio/user/ABC123/b.mp3", sentence_timings: [{ text: "x", start: 2, end: 1 }] } },
+      { item_id: "usr_ABC123_5_3", data: { ...goodLa, sentence_timings: good } },
+    ]);
+    const rows = await fetchPersonalBank("la");
+    const byId = Object.fromEntries(rows.map((r) => [r.id, r]));
+    expect(byId["usr_ABC123_5_0"].sentence_timings).toEqual(good);
+    expect(byId["usr_ABC123_5_1"]).not.toHaveProperty("sentence_timings");
+    expect(byId["usr_ABC123_5_2"]).not.toHaveProperty("sentence_timings");
+    expect(byId["usr_ABC123_5_3"]).not.toHaveProperty("sentence_timings");
+  });
+
   test("audio_url whitelist: keeps bucket / proxy path, nulls foreign URLs (LA)", async () => {
     mockItems([
       { item_id: "usr_ABC123_3_0", data: { ...goodLa, audio_url: "https://x.supabase.co/storage/v1/object/public/listening_audio/user/ABC123/usr_ABC123_3_0-1.mp3" } },

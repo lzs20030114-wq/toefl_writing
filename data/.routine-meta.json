@@ -1,9 +1,46 @@
 {
-  "session_id": "routine-20260916-190458",
-  "completed_at": "2026-09-16T19:04:58Z",
-  "duration_minutes": 2,
+  "session_id": "routine-20260920-190451",
+  "completed_at": "2026-09-20T19:40:00.000Z",
+  "duration_minutes": 36,
   "model": "Claude Opus 5",
-  "highlight": "按需信号: 今晚无需出题（12 个 routine 题库共 2234 题，库存全部充足，LCR 421 / CTW 407 / Email 221 领跑，最短 runway 为 BS 142.8 天；唯一告警的 interview 库存 11/红线 30 标记 not_in_routine，不在本管线内）",
+  "highlight": "按需信号只点名 BS：补 20 题（2 套）全部过冻结门，语域与难度带同时回真题带内",
   "commit_sha": "",
-  "results": {}
+  "results": {
+    "bs": {
+      "generated": 20,
+      "accepted": 30,
+      "topics": [
+        "教材购买",
+        "招聘会",
+        "校园电台社团",
+        "校医院保险",
+        "补办学生证",
+        "琴房预约",
+        "实地考察改期",
+        "研讨课阅读",
+        "教务处成绩单",
+        "宿舍押金",
+        "自行车维修",
+        "志愿者例会",
+        "奖学金办公室",
+        "健身课调整",
+        "实习录取",
+        "室友分配",
+        "海报展",
+        "自习室体验",
+        "写作中心新点",
+        "机房打印机"
+      ],
+      "favorite": {
+        "prompt": "My roommate assignment finally came through.",
+        "answer": "I chose the student who studies in the evenings."
+      },
+      "retried_after_fail": false,
+      "failure_reason": "",
+      "r2_supplemented": true,
+      "r2_items_added": 10
+    }
+  },
+  "r2_completed_at": "2026-09-20T19:42:19Z",
+  "r2_session_id": "routine-r2-20260920-193144"
 }

@@ -78,6 +78,14 @@ function vet(prefix, item) {
       blanked.difficulty = estimateDifficulty(blanked).difficulty;
       return { ok: true, item: blanked };
     }
+    if (prefix === 'ap') {
+      // 合库咽喉 = 段落版面的最后一道闸。模型偶尔给出一个用单空格拼起来、不带空行的 passage，
+      // 渲染层只认空行 —— 这里按 paragraphs 的边界把空行补回来（只插空白、段内不动），
+      // 补不回来的交给 validator 的 paragraph_layout 拒收。2026-09-18 实测 staging 353 条里
+      // 59 条版面坏，58 条在这一步救得回来 —— 所以是「先修再拦」，不是直接拦。
+      const { restoreParagraphBreaks } = require('../lib/reading/passageLayout.js');
+      item.passage = restoreParagraphBreaks(item.passage, item.paragraphs);
+    }
     const fn = VALIDATORS[prefix];
     if (!fn) return { ok: true, item }; // no validator (e.g. interview) → pass through
     const r = fn(item) || {};

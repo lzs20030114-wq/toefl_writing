@@ -10,6 +10,7 @@ const {
   shardOf,
   resolveFromShard,
   sentenceAround,
+  splitSenses,
 } = require("../lib/dict/core");
 
 const DICT_DIR = path.join(__dirname, "..", "public", "dict");
@@ -184,5 +185,55 @@ describe("真实词库 public/dict", () => {
   it("查无此词返回 null 而不是抛错", () => {
     expect(lookup("zzzqqxnotaword")).toBeNull();
     expect(lookup("")).toBeNull();
+  });
+});
+
+/**
+ * 词典条目的 t 是整条词条堆在一起的多行文本；拆成义项 chips 之后，用户才能在收藏时
+ * 点定「这句里是哪个意思」。样例直接取自 public/dict（pattern / plausible 的真实条目）。
+ */
+describe("splitSenses", () => {
+  // 每组除了 pos/senses 还带中文词性名等字段（见 dict-senses.test.js），
+  // 这里只关心「拆得对不对」，投影成这两项比。
+  const shape = (groups) => groups.map((g) => ({ pos: g.pos, senses: g.senses }));
+
+  it("按词性分行，每行切成义项（pattern 的三行真实条目）", () => {
+    const t = shard("p").pattern.t;
+    expect(shape(splitSenses(t))).toEqual([
+      { pos: "n.", senses: ["模范", "典型", "式样", "样品", "图案", "格调", "模式"] },
+      { pos: "vt.", senses: ["模仿", "仿造", "以图案装饰"] },
+      { pos: "vi.", senses: ["形成图案"] },
+    ]);
+  });
+
+  it("领域标（[法] 这类）也当作前缀剥出来", () => {
+    const groups = splitSenses(shard("p").plausible.t);
+    expect(groups[0].pos).toBe("a.");
+    expect(shape(groups)[1]).toEqual({ pos: "[法]", senses: ["花言巧语的", "似乎有理的"] });
+  });
+
+  it("整条只有一个义项 → 返回空数组（调用方退回纯文本）", () => {
+    expect(splitSenses("n. 光合作用")).toEqual([]);
+    expect(splitSenses("光合作用")).toEqual([]);
+  });
+
+  it("空串 / null / 非字符串 → 空数组", () => {
+    expect(splitSenses("")).toEqual([]);
+    expect(splitSenses("   ")).toEqual([]);
+    expect(splitSenses(null)).toEqual([]);
+    expect(splitSenses(undefined)).toEqual([]);
+    expect(splitSenses(42)).toEqual([]);
+  });
+
+  it("一行义项过多时只留前 8 个", () => {
+    const line = `n. ${Array.from({ length: 12 }, (_, i) => `义项${i}`).join(", ")}`;
+    expect(splitSenses(line)[0].senses).toHaveLength(8);
+  });
+
+  it("中文逗号/分号也是分隔符，空行和重复义项被丢掉", () => {
+    expect(shape(splitSenses("n. 甲，乙；甲\n\n\nvt. 丙"))).toEqual([
+      { pos: "n.", senses: ["甲", "乙"] },
+      { pos: "vt.", senses: ["丙"] },
+    ]);
   });
 });

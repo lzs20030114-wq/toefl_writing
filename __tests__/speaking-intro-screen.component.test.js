@@ -56,9 +56,12 @@ afterEach(() => {
   delete global.SpeechSynthesisUtterance;
 });
 
+// Drain a longer microtask chain (RepeatTask's 开始 awaits warmUpMicrophone).
+const flush = async () => { for (let i = 0; i < 10; i++) await Promise.resolve(); };
+
 // ── RepeatTask intro screen ──
 
-test("RepeatTask opens on the setting screen and 开始 unlocks the exam audio", () => {
+test("RepeatTask opens on the setting screen and 开始 unlocks the exam audio", async () => {
   const ctrl = makeController();
   mockExamAudioHolder.value = { controller: ctrl };
 
@@ -78,9 +81,12 @@ test("RepeatTask opens on the setting screen and 开始 unlocks the exam audio",
   expect(screen.queryByText(/Sentence 1 of 1/)).toBeNull();
   expect(ctrl.unlock).not.toHaveBeenCalled();
 
-  // 开始 → unlock + enter the task.
+  // 开始 → unlock synchronously (in-gesture), then the mic warm-up settles → task.
+  navigator.mediaDevices.getUserMedia.mockResolvedValue({ getTracks: () => [] });
   act(() => { fireEvent.click(screen.getByText("开始")); });
   expect(ctrl.unlock).toHaveBeenCalledTimes(1);
+  expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledTimes(1);
+  await act(async () => { await flush(); });
   expect(screen.getByText(/Sentence 1 of 1/)).toBeInTheDocument();
 });
 
@@ -222,7 +228,8 @@ test("RepeatTask 无 Provider 路径 autoplay 被拒时给出手动播放提示"
     />,
   );
 
-  act(() => { fireEvent.click(screen.getByText("开始")); });
+  navigator.mediaDevices.getUserMedia.mockResolvedValue({ getTracks: () => [] });
+  await act(async () => { fireEvent.click(screen.getByText("开始")); await flush(); });
   // 500ms 自动播放计时器 → play() 被拒 → 提示出现，Play Again 仍可点。
   await act(async () => { jest.advanceTimersByTime(500); });
 

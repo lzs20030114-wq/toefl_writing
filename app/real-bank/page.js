@@ -26,6 +26,7 @@ import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
 import UsageGateWrapper from "../../components/shared/UsageGateWrapper";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { TopicPicker } from "../../components/shared/TopicPicker";
+import { apPassageText } from "../../lib/reading/passageLayout";
 import { AssetPreloadGate } from "../../components/shared/AssetPreloadGate";
 import { C, FONT } from "../../components/shared/ui";
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
@@ -246,6 +247,7 @@ function saveRealListeningSession(subtype, item, result, mode) {
     reviewData.questions = item.questions || [];
     reviewData.topic = item.topic || item.context || "";
     reviewData.audio_url = item.audio_url || null;
+    reviewData.sentence_timings = item.sentence_timings || null; // 与 audio_url 同一次配音，历史页逐句点播
   }
 
   saveSess({
@@ -512,6 +514,10 @@ function RealBankPageClient() {
                 // 原卷提示语自带「Listen to the manager … Repeat only once.」，
                 // 不再叠加生成的指令句（空串 = 该行不渲染）。
                 instructionText: "",
+                // 场景插图（真考里一套 N 句共用一张图常驻屏幕，逐句高亮）。
+                // 只有抠过图的套才带这两个键，其余为 undefined → RepeatTask 一个节点都不多渲染。
+                scene_image: audioItem.scene_image,
+                sentence_frames: audioItem.sentence_frames,
               }}
               onComplete={(result) => saveRealSpeakingSession("repeat", audioItem, result, mode)}
               onExit={backToAudioPicker}
@@ -576,7 +582,7 @@ function RealBankPageClient() {
     const backToPicker = () => setPickedReadingId(null);
     // AP 复用 RDLTask（同一套交互，四选一 + 选句题），只把字段名对上：passage→text、topic→genre。
     // 适配对象只喂给组件；存历史 / 打已练一律用原 item（details.passage 那一支自己会挑）。
-    const apAsRdl = { ...item, text: item.passage, genre: item.topic };
+    const apAsRdl = { ...item, text: apPassageText(item), genre: item.topic };
 
     // 材料原图先在加载页拉完再挂任务组件 —— RDLTask 一挂载就起计时，不能让用户
     // 盯着空白材料框等图。没图的题（CTW / 老库形状）数组为空，门原样透传。

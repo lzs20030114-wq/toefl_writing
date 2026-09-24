@@ -36,7 +36,12 @@ jest.mock("../components/listening/LCRTask", () => ({ LCRTask: () => <div>LCR</d
 jest.mock("../components/listening/ListeningMCQTask", () => ({ ListeningMCQTask: () => <div>MCQ</div> }));
 jest.mock("../components/shared/TopicPicker", () => ({ TopicPicker: () => <div>PICKER</div> }));
 // 听力默认导出用 ExamAudioProvider 包裹 client；mock 成透传 children。
-jest.mock("../components/shared/ExamAudioProvider", () => ({ ExamAudioProvider: ({ children }) => <>{children}</> }));
+// 页面里标准模式的准备门会调 useExamAudio()（点「开始」时 unlock 共享音频元素），
+// 这里返回 null = kill switch 路径，锁定屏测试不关心它。
+jest.mock("../components/shared/ExamAudioProvider", () => ({
+  ExamAudioProvider: ({ children }) => <>{children}</>,
+  useExamAudio: () => null,
+}));
 
 import ReadingPage from "../app/reading/page";
 import ListeningPage from "../app/listening/page";

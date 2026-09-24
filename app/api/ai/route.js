@@ -1,8 +1,15 @@
 import { createRequire } from "module";
-import { createHash } from "crypto";
 import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 import { lookupUserTier } from "../../../lib/userLookup";
+import {
+  callDirectOnce as callDirectOnceShared,
+  callViaCurlOnce as callViaCurlOnceShared,
+  describeUpstreamError,
+  describeSampleDiags,
+  isNonEmptyContent,
+} from "../../../lib/ai/upstream";
+import { fail, getRateLimitKey, isOriginAllowed, logApiFailure } from "../../../lib/ai/routeGuards";
 
 // Give the serverless function room to wait for slow DeepSeek responses.
 // Without this, Vercel's hobby default (10s) would kill the request long
@@ -11,7 +18,7 @@ import { lookupUserTier } from "../../../lib/userLookup";
 export const maxDuration = 180;
 
 const require = createRequire(import.meta.url);
-const { callDeepSeekViaCurl, resolveProxyUrl, callWithRetry } = require("../../../lib/ai/deepseekHttp");
+const { resolveProxyUrl } = require("../../../lib/ai/deepseekHttp");
 const MAX_BODY_BYTES = 120000;
 const MAX_SYSTEM_CHARS = 12000;
 const MAX_MESSAGE_CHARS = 40000;
@@ -34,50 +41,6 @@ const MAX_SAMPLES = 3;
 const DIRECT_TOTAL_BUDGET_MS = 165000;
 
 const limiter = createRateLimiter("ai", { max: 45 });
-
-function getRateLimitKey(request) {
-  const ip = getIp(request);
-  if (ip && ip !== "unknown") return `ip:${ip}`;
-  const ua = request.headers.get("user-agent") || "";
-  const lang = request.headers.get("accept-language") || "";
-  const secUa = request.headers.get("sec-ch-ua") || "";
-  const host = request.headers.get("host") || "";
-  const origin = request.headers.get("origin") || "";
-  const raw = `${ua}|${lang}|${secUa}|${host}|${origin}`;
-  const digest = createHash("sha1").update(raw).digest("hex");
-  return `fp:${digest}`;
-}
-
-function normalizeHost(raw) {
-  const input = String(raw || "").trim();
-  if (!input) return "";
-  try {
-    if (input.includes("://")) return new URL(input).host.toLowerCase();
-    return new URL(`http://${input}`).host.toLowerCase();
-  } catch {
-    return input.toLowerCase();
-  }
-}
-
-function isOriginAllowed(request) {
-  const origin = request.headers.get("origin");
-  if (!origin) {
-    // Browser requests always include Origin on POST.
-    // If sec-fetch-site is present (modern browser) but origin is missing, reject.
-    const secFetchSite = request.headers.get("sec-fetch-site");
-    if (secFetchSite && secFetchSite !== "none") return false;
-    // No origin + no sec-fetch-site = likely server-to-server (cURL, etc.) — allow.
-    return true;
-  }
-  const originHost = normalizeHost(origin);
-  if (!originHost) return false;
-  const host = normalizeHost(request.headers.get("host"));
-  const xfh = String(request.headers.get("x-forwarded-host") || "")
-    .split(",")
-    .map((v) => normalizeHost(v))
-    .filter(Boolean);
-  return [host, ...xfh].includes(originHost);
-}
 
 function validateBody(body) {
   if (!body || typeof body !== "object") return "Invalid request body.";
@@ -119,162 +82,16 @@ function normalizeSamples(body) {
   return Math.max(1, Math.min(MAX_SAMPLES, raw));
 }
 
-// 构造发往 DeepSeek 的统一 payload(单采样/多采样共用同一形状)。
-// stream 只在直连路径打开:8K token 的评分报告非流式要等 60-80s 才有第一个字节,
-// 2026-09-09 晚高峰 DeepSeek 网关把这类长挂请求整批掐成 5xx(13/18 失败,三路
-// 全灭且都卡在 ~75s)。流式让连接持续有数据,不会被中间层当成空闲连接掐断;
-// 服务端把分片拼回完整文本,对前端/解析层完全透明。proxy 路径(本地调试)沿用
-// deepseekHttp 的非流式解析,不动。
-function buildUpstreamPayload({ system, message, maxTokens, temperature }, { stream = false } = {}) {
-  return {
-    model: "deepseek-v4-flash",
-    max_tokens: maxTokens,
-    temperature,
-    stream,
-    messages: [
-      { role: "system", content: system },
-      { role: "user", content: message },
-    ],
-  };
-}
-
 // 单次上游调用(proxy 路径)——沿用 deepseekHttp 的 120s 网络超时,成功返回
 // content 字符串,失败抛错(交由 allSettled / 外层 catch 处理)。
 function callViaCurlOnce(apiKey, proxyUrl, params) {
-  return callDeepSeekViaCurl({
-    apiKey,
-    proxyUrl,
-    // The writing caller uses a 175s outer timeout and this route allows 180s,
-    // leaving the upstream transport 160s to finish an 8K-token report.
-    timeoutMs: 160000,
-    payload: buildUpstreamPayload(params),
-  });
+  return callViaCurlOnceShared(apiKey, proxyUrl, params);
 }
 
-// AbortSignal.timeout 在 Node ≥17.3 可用;万一运行时没有就退化为无超时(与旧版等价)。
-function makeTimeoutSignal(ms) {
-  if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
-    return AbortSignal.timeout(Math.max(1000, Math.trunc(ms)));
-  }
-  return undefined;
-}
-
-// 把 DeepSeek 的 SSE 流拼成完整 content。规则(与官方文档一致):
-//   - 空行 / 以 ":" 开头的 keep-alive 注释行 → 忽略
-//   - "data: [DONE]" → 结束
-//   - "data: {json}" → 取 choices[0].delta.content 追加(reasoning_content 不要)
-//   - 流中 {error:...} → 抛错(带 errText),交由采样级失败处理
-// 分片可能在任意字节处切开,所以按 "\n" 缓冲成整行再解析;半截行留到下一片。
-async function readSseContent(body) {
-  const decoder = new TextDecoder("utf-8");
-  let buffer = "";
-  let content = "";
-  let finished = false;
-  const handleLine = (rawLine) => {
-    const line = rawLine.replace(/\r$/, "");
-    if (!line || line.startsWith(":")) return;
-    if (!line.startsWith("data:")) return;
-    const payload = line.slice(5).trim();
-    if (!payload) return;
-    if (payload === "[DONE]") {
-      finished = true;
-      return;
-    }
-    let obj;
-    try {
-      obj = JSON.parse(payload);
-    } catch {
-      return; // 非 JSON 的 data 行(不应出现)直接跳过,不让单行毁掉整份报告
-    }
-    if (obj?.error) {
-      const msg = typeof obj.error === "string" ? obj.error : JSON.stringify(obj.error);
-      const err = new Error("DeepSeek stream error");
-      err.errText = msg;
-      throw err;
-    }
-    const delta = obj?.choices?.[0]?.delta;
-    if (typeof delta?.content === "string") content += delta.content;
-  };
-  for await (const chunk of body) {
-    buffer += typeof chunk === "string" ? chunk : decoder.decode(chunk, { stream: true });
-    let idx;
-    while ((idx = buffer.indexOf("\n")) >= 0) {
-      handleLine(buffer.slice(0, idx));
-      buffer = buffer.slice(idx + 1);
-    }
-    if (finished) break;
-  }
-  if (!finished) {
-    buffer += decoder.decode();
-    if (buffer) handleLine(buffer);
-  }
-  return content;
-}
-
-// 按响应类型取正文:流式 → 拼 SSE;非流式 JSON(测试 mock / 上游忽略 stream 时)→ 旧逻辑。
-async function readUpstreamContent(res) {
-  const contentType = String(res.headers?.get?.("content-type") || "").toLowerCase();
-  if (contentType.includes("text/event-stream") && res.body) return readSseContent(res.body);
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || "";
-}
-
-// 单次上游调用(直连路径)——成功返回 content 字符串;!res.ok 时抛出携带
-// { status, errText } 的错误,网络异常照原样抛出(无 status)。多采样模式下
-// 单发失败只算该采样失败,不会立刻拖垮整个请求。
-// 复用 deepseekHttp.callWithRetry:只对「快速失败的 5xx / 连接重置」重试一次,
-// 且剩余预算 >8s 才重试;超时、4xx(含 402 余额不足、429)一律不重试。
-async function callDirectOnce(apiKey, params) {
-  const body = JSON.stringify(buildUpstreamPayload(params, { stream: true }));
-  const runAttempt = async (remainingMs) => {
-    let res;
-    try {
-      res = await fetch("https://api.deepseek.com/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + apiKey,
-        },
-        body,
-        signal: makeTimeoutSignal(remainingMs),
-      });
-    } catch (e) {
-      // undici 把 ECONNRESET 之类塞在 cause 里;提到顶层让重试分类器能看见。
-      if (e && !e.code && e.cause?.code) e.code = e.cause.code;
-      throw e;
-    }
-    if (!res.ok) {
-      const errText = await res.text();
-      const err = new Error(`DeepSeek ${res.status}`);
-      err.status = res.status;
-      err.errText = errText;
-      throw err;
-    }
-    return readUpstreamContent(res);
-  };
-  return callWithRetry({ runAttempt, totalBudgetMs: DIRECT_TOTAL_BUDGET_MS });
-}
-
-// 给 fail() 的 errorDetail:把上游原始状态码带上。表里的 http_status 是我们映射后
-// 的 502,不带这个就分不清上游到底是 502/503/504 还是网络层断开。
-function describeUpstreamError(reason) {
-  if (!reason) return "";
-  const status = Number(reason.status);
-  const text = String(reason.errText || reason.message || "").trim();
-  return Number.isFinite(status) && status ? `upstream ${status}: ${text}` : text;
-}
-
-// 上游「HTTP 200 但正文是空的」——单采样路径必须把它当失败。
-//
-// 2026-09-13: v4-flash 是推理型模型,reasoning_tokens 计入 max_tokens 预算(见
-// lib/ai/writingEval.js 的实测记录)。预算被推理吃光时上游回 finish_reason=length
-// + 空 content,HTTP 却是 200。原来的单采样路径直接 Response.json({ content }) 放行,
-// 前端拿到 {content:""} 当成功:AI 解释类 hook 把空串写进 state(ex.text 是假值 →
-// 渲染回按钮)和 localStorage 缓存,用户看到的是「点了既不出内容也不报错」的死按钮,
-// 而 api_error_feedback 里一条记录都没有,后台完全查不到。
-// 多采样路径的 collectContents 早就把空串判为失败了,这里补齐单采样的同款判据。
-function isNonEmptyContent(content) {
-  return typeof content === "string" && content.trim().length > 0;
+// 单次上游调用(直连路径)——流式拼接 + 快速 5xx 单次重试,预算是本路由的
+// DIRECT_TOTAL_BUDGET_MS。实现见 lib/ai/upstream.js。
+function callDirectOnce(apiKey, params, diag) {
+  return callDirectOnceShared(apiKey, params, { totalBudgetMs: DIRECT_TOTAL_BUDGET_MS, diag });
 }
 
 // 从 allSettled 结果里挑出成功且非空的 content(保持采样顺序)。
@@ -288,26 +105,6 @@ function collectContents(results) {
 function firstRejectionReason(results) {
   const rejected = results.find((r) => r.status === "rejected");
   return rejected ? rejected.reason : null;
-}
-
-async function logApiFailure(meta) {
-  if (!isSupabaseAdminConfigured) return;
-  try {
-    await supabaseAdmin.from("api_error_feedback").insert({
-      endpoint: "/api/ai",
-      stage: meta.stage || null,
-      http_status: Number(meta.httpStatus || 0) || null,
-      error_type: String(meta.errorType || "unknown"),
-      error_message: String(meta.errorMessage || "").slice(0, 500),
-      error_detail: meta.errorDetail ? String(meta.errorDetail).slice(0, 4000) : null,
-      client_id: meta.clientId ? String(meta.clientId).slice(0, 120) : null,
-      client_ip: meta.clientIp ? String(meta.clientIp).slice(0, 64) : null,
-      origin: meta.origin ? String(meta.origin).slice(0, 300) : null,
-      user_agent: meta.userAgent ? String(meta.userAgent).slice(0, 500) : null,
-    });
-  } catch {
-    // Do not block API response when logging fails.
-  }
 }
 
 // 多采样 fan-out「部分失败」留痕:只要 ≥1 采样成功,请求就整体成功返回,但
@@ -331,29 +128,23 @@ function logPartialSampleFailures(requestMeta, results) {
   );
 }
 
-async function fail(meta, status, payload) {
-  // 2026-09-09: 原写法 `payload?.detail || ""` 会把 meta.errorDetail(上游原文)无条件
-  // 覆盖成空 —— 后台 /admin-api-errors 的「详情」列因此一直是空的,502 排查无从下手。
-  await logApiFailure({
-    ...meta,
-    httpStatus: status,
-    errorMessage: payload?.error || "Unknown error",
-    errorDetail: payload?.detail || meta?.errorDetail || "",
-  });
-  return Response.json(payload, { status });
-}
-
 // 空正文一律按上游失败回 502(与其他 upstream 失败同一套文案/状态码),并且**不计用量**
 // —— 与本路由既有原则一致:失败的调用不扣次数。errorType 单列 empty_content,好让后台
 // /admin-api-errors 一眼区分「上游报错」和「上游回了 200 但正文是空的」。
-function failEmptyContent(requestMeta, path, maxTokens) {
+function failEmptyContent(requestMeta, path, maxTokens, { samples = 1, diags = [] } = {}) {
+  const perSample = describeSampleDiags(diags);
   return fail(
     {
       ...requestMeta,
       stage: "deepseek",
       errorType: "empty_content",
       // 详情里带上预算：v4-flash 的推理 token 计入 max_tokens，后台一眼能看出是不是给少了。
-      errorDetail: `upstream returned empty content (${path}, samples=1); max_tokens=${maxTokens} (reasoning tokens count toward it)`,
+      // 再跟上每一路的上游诊断(finish/reasoning/chunks),用来区分「推理吃光预算」和
+      // 「上游回了 200 就把流掐了」——两者在后台原本长得一模一样。
+      errorDetail:
+        `upstream returned empty content (${path}, samples=${samples}); ` +
+        `max_tokens=${maxTokens} (reasoning tokens count toward it)` +
+        (perSample ? `; ${perSample}` : ""),
     },
     502,
     { error: "AI service temporarily unavailable. Please retry." },
@@ -519,13 +310,24 @@ export async function POST(request) {
 
     if (samples > 1) {
       // 直连路径 fan-out。单发失败(!res.ok 或网络异常)只算该采样失败。
+      // 每一路配一个 diag,收集上游诊断(finish_reason / reasoning 长度 / 分片数),
+      // 供「全都回 200 但没正文」时定位根因。
+      const diags = Array.from({ length: samples }, () => ({}));
       const results = await Promise.allSettled(
-        Array.from({ length: samples }, () => callDirectOnce(apiKey, upstreamParams)),
+        diags.map((diag) => callDirectOnce(apiKey, upstreamParams, diag)),
       );
       const contents = collectContents(results);
       if (contents.length === 0) {
         // 0 成功——走现有 fail() 语义,取第一个失败采样的上游错误文本做 errorDetail。
         const reason = firstRejectionReason(results);
+        // 2026-09-21: 没有任何一路 reject,说明三路都回了 HTTP 200、只是正文是空的
+        // ——这不是「上游报错」。单发路径早有 empty_content 这个分类(见
+        // failEmptyContent),fan-out 却一直漏进下面的 upstream 兜底:reason=null →
+        // describeUpstreamError(null) 返回空串 → 详情整列写成 NULL,后台只看得到一条
+        // 「deepseek / upstream / 502 / 详情空」,根因无从查起(线上实案)。
+        if (!reason) {
+          return failEmptyContent(requestMeta, "direct", maxTokens, { samples, diags });
+        }
         const upstreamStatus = Number(reason?.status);
         const httpStatus = Number.isFinite(upstreamStatus) && upstreamStatus
           ? (upstreamStatus >= 500 ? 502 : upstreamStatus)
@@ -545,9 +347,12 @@ export async function POST(request) {
     }
 
     // 单采样直连路径——与旧版逐字等价:!res.ok → fail(502/status),网络异常 → 外层 catch → 500。
+    const diag = {};
     try {
-      const content = await callDirectOnce(apiKey, upstreamParams);
-      if (!isNonEmptyContent(content)) return failEmptyContent(requestMeta, "direct", maxTokens);
+      const content = await callDirectOnce(apiKey, upstreamParams, diag);
+      if (!isNonEmptyContent(content)) {
+        return failEmptyContent(requestMeta, "direct", maxTokens, { samples: 1, diags: [diag] });
+      }
       await recordAiUsage(usageUserCode, usageCap, usageDay);
       return Response.json({ content });
     } catch (err) {

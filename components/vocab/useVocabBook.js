@@ -6,8 +6,8 @@ import {
   saveLimits,
   gradeCard,
   removeWord,
-  setWordProductive,
   resetCard,
+  setProductive,
   initVocabSync,
   VOCAB_UPDATED_EVENT,
 } from "../../lib/vocab/vocabStore";
@@ -66,8 +66,8 @@ export function useVocabBook() {
     [],
   );
   const remove = useCallback((word) => removeWord(word), []);
-  const setProductive = useCallback((word, productive) => setWordProductive(word, productive), []);
   const reset = useCallback((word) => resetCard(word), []);
+  const markProductive = useCallback((word, on) => setProductive(word, on), []);
   const setLimits = useCallback((next) => {
     saveLimits(next);
     setLimitsState(loadLimits());
@@ -85,5 +85,8 @@ export function useVocabBook() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick]);
 
-  return { cards, stats, limits, setLimits, ready, isLoggedIn, refresh, makeQueue, grade, remove, setProductive, reset, schedule };
+  return {
+    cards, stats, limits, setLimits, ready, isLoggedIn, refresh,
+    makeQueue, grade, remove, reset, setProductive: markProductive, schedule,
+  };
 }

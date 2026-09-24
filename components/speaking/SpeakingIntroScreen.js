@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
+import { SceneImage } from "./SceneImage";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -81,17 +82,21 @@ export function useNarration(text) {
  * unlock race.
  *
  * @param {string[]} lines — narration lines (e.g. [settingText, instructionText]).
+ * @param {{url: string, w?: number, h?: number}|null} image — 可选的场景插图（复述真题才有；
+ *        缺省 null = 老行为，一个节点都不多）。
  */
 export function SpeakingIntroScreen({
   title,
   section,
   qInfo,
   lines = [],
+  image = null,
   buttonLabel = "开始",
   onStart,
   onExit,
 }) {
   const shown = lines.filter(Boolean);
+  const pic = image && image.url ? image : null;
   useNarration(shown.join(" "));
 
   return (
@@ -99,21 +104,27 @@ export function SpeakingIntroScreen({
       <TopBar title={title} section={section} qInfo={qInfo} onExit={onExit} />
       <PageShell narrow>
         <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
-          <div
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: "50%",
-              margin: "0 auto 20px",
-              background: SPK.soft,
-              border: "2px solid #FDE68A",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <span style={{ fontSize: 32 }}>🔊</span>
-          </div>
+          {/* 有场景插图时用图代替喇叭图标（真考的设定屏上就是这张图 + 提示语）；
+              没图时这一支不渲染，屏幕与改动前逐字一致。 */}
+          {pic ? (
+            <SceneImage frame={pic} />
+          ) : (
+            <div
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: "50%",
+                margin: "0 auto 20px",
+                background: SPK.soft,
+                border: "2px solid #FDE68A",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontSize: 32 }}>🔊</span>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
             {shown.map((line, i) => (
               <div key={i} style={{ fontSize: 16, color: C.t1, lineHeight: 1.7 }}>

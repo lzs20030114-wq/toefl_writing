@@ -4,8 +4,9 @@ import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LCRTask } from "../../components/listening/LCRTask";
 import { ListeningMCQTask } from "../../components/listening/ListeningMCQTask";
+import { ListeningIntroScreen } from "../../components/listening/ListeningIntroScreen";
 import { TopicPicker } from "../../components/shared/TopicPicker";
-import { ExamAudioProvider } from "../../components/shared/ExamAudioProvider";
+import { ExamAudioProvider, useExamAudio } from "../../components/shared/ExamAudioProvider";
 import { getSavedTier, getSavedCode } from "../../lib/AuthContext";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
@@ -139,6 +140,13 @@ function ListeningPageClient() {
   const type = searchParams.get("type") || "lcr";
   const mode = searchParams.get("mode") || "standard";
   const isPractice = mode === "practice";
+
+  // 标准模式的「准备」门：任务组件一挂载就 autoPlay，而从首页任务卡 / 今日任务直接
+  // 跳进来时组件是随路由一起挂的——用户还没看清页面第一题就播完了。所以标准模式先停在
+  // ListeningIntroScreen，等用户点「开始」（真实手势，顺便 unlock 共享音频元素）再挂任务。
+  // 记的是「为哪个 type 点过开始」：同页切 type 要重新准备；同 type 换一题不用再点。
+  const examAudio = useExamAudio();
+  const [startedFor, setStartedFor] = useState(null);
 
   const [isPro, setIsPro] = useState(false);
   // 此页是独立路由，不在 HomePageClient 树下，全局 open-upgrade-modal 事件监听者到不了这里，
@@ -341,6 +349,8 @@ function ListeningPageClient() {
       reviewData.questions = firstItem.questions || [];
       reviewData.topic = firstItem.topic || firstItem.context || "";
       reviewData.audio_url = firstItem.audio_url || null;
+      // 句级时间戳与 audio_url 同一次配音；历史页据此逐句点播（docs/listening-sentence-timings.md）
+      reviewData.sentence_timings = firstItem.sentence_timings || null;
     }
 
     saveSess({
@@ -371,6 +381,37 @@ function ListeningPageClient() {
     lat: { title: "Listen to an Academic Talk", section: "Listening | Academic Talk" },
   };
   const labels = TYPE_LABELS[type] || TYPE_LABELS.lcr;
+
+  // ── Standard mode: ready gate before the first autoplay ──
+  // 练习模式不需要：TopicPicker 挡在前面，点题本身就是手势、用户也知道点完就放。
+  if (!isPractice && startedFor !== type) {
+    const handleStart = () => {
+      // 在这次点击里解锁（幂等；kill switch 下 examAudio 为 null 要兜住），
+      // 紧接着挂载的任务组件 autoPlay 才能接上这个手势。与 RepeatTask.handleStart 同款。
+      if (examAudio && examAudio.controller) examAudio.controller.unlock();
+      setStartedFor(type);
+    };
+    const count = Array.isArray(taskItems) ? taskItems.length : 0;
+    const INTRO_LINES = {
+      lcr: `选择回应 · 本组 ${count} 题：先听一句话，再从四个选项里选出最合适的回应。`,
+      la: "听一段校园公告，然后回答问题。",
+      lc: "听一段两人对话，然后回答问题。",
+      lat: "听一段学术讲座，然后回答问题。",
+    };
+    return (
+      <ListeningIntroScreen
+        title={labels.title}
+        section={labels.section}
+        qInfo={type === "lcr" && count > 0 ? `0 / ${count}` : undefined}
+        lines={[
+          INTRO_LINES[type] || INTRO_LINES.lcr,
+          "标准模式下每段音频只播放一遍、作答限时。戴好耳机后点「开始」，第一题会立刻自动播放。",
+        ]}
+        onStart={handleStart}
+        onExit={onExit}
+      />
+    );
+  }
 
   // ── LCR: uses specialized LCRTask component ──
   if (type === "lcr") {

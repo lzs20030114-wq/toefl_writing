@@ -6,8 +6,11 @@
  * 多收一类 = 把 650MB 的 audio/ 与 src-converted/ 往桶里灌，每次 job 多花几分钟传大件。
  * 所以这两侧都得钉死。
  */
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 const {
-  isSynced, countStructured, SyncFailure, push,
+  isSynced, countStructured, SyncFailure, push, pull, MANIFEST_KEY,
 } = require("../scripts/realbank/artifacts_sync.mjs");
 
 describe("isSynced —— 收哪些", () => {
@@ -95,15 +98,40 @@ describe("countStructured", () => {
 describe("上传失败必须是硬失败", () => {
   // 线上原样：2474 个文件全被 Supabase 以 `Invalid key: …` 拒收，脚本却还退 0，
   // 于是「同步成功」的假象一路传到 Worker 的 fail-closed 校验前。
-  const stubSb = (uploadResult) => ({
-    storage: {
-      getBucket: async () => ({ data: { name: "real_bank_artifacts" } }),
-      from: () => ({
-        download: async () => ({ data: null, error: { message: "not found" } }),
-        upload: async () => uploadResult(),
-      }),
-    },
+  //
+  // 本地产物一律用 tmpDir 注入的夹具目录，**不读真的 `.codex-tmp/`**：那个目录不进 git，
+  // 本机有几千个文件、CI 上一个都没有。这组用例最初读的就是真目录 —— 本机有文件可传，
+  // 走到逐文件上传那一支，绿；CI 上 changed 为空，整段上传循环被跳过，stub 的失败 upload
+  // 第一次被调用是在写清单那一步，抛出来的是普通 Error —— 同一条断言，在干净检出上必红。
+  let fixtureDir; // 两个白名单内的文件（其中一个带中文名，顺带过一遍 key 编码）
+  let emptyDir;   // CI 上 `.codex-tmp/` 的样子：什么都没有
+  beforeAll(() => {
+    fixtureDir = fs.mkdtempSync(path.join(os.tmpdir(), "artifacts-sync-"));
+    emptyDir = fs.mkdtempSync(path.join(os.tmpdir(), "artifacts-sync-empty-"));
+    fs.mkdirSync(path.join(fixtureDir, "realbank"), { recursive: true });
+    fs.mkdirSync(path.join(fixtureDir, "ocr"), { recursive: true });
+    fs.writeFileSync(path.join(fixtureDir, "realbank", "9.9测试卷.structured.json"), "{}");
+    fs.writeFileSync(path.join(fixtureDir, "ocr", "9.9测试卷__阅读.txt"), "ocr text");
   });
+  afterAll(() => {
+    for (const d of [fixtureDir, emptyDir]) fs.rmSync(d, { recursive: true, force: true });
+  });
+
+  /** uploadResult(key) 决定每次 upload 的结局；sb.uploads 记下每次传的 key 与内容。 */
+  const stubSb = (uploadResult, { download } = {}) => {
+    const uploads = [];
+    return {
+      uploads,
+      storage: {
+        getBucket: async () => ({ data: { name: "real_bank_artifacts" } }),
+        from: () => ({
+          download: download || (async () => ({ data: null, error: { message: "not found" } })),
+          upload: async (key, body) => { uploads.push({ key, body }); return uploadResult(key); },
+        }),
+      },
+    };
+  };
+  const quiet = (tmpDir) => ({ log: () => {}, tmpDir });
 
   test("SyncFailure 带 exitCode 1（CLI 据此退非 0）", () => {
     expect(SyncFailure("x").exitCode).toBe(1);
@@ -118,13 +146,61 @@ describe("上传失败必须是硬失败", () => {
     return e;
   };
 
+  test("对照组：upload 都成功 → 两个文件按编码后的 key 传上去，清单最后写、记 structured 1 套", async () => {
+    const sb = stubSb(() => ({ error: null }));
+    const res = await push(sb, quiet(fixtureDir));
+    expect(res.uploaded).toBe(2);
+    expect(sb.uploads.map((u) => u.key).at(-1)).toBe(MANIFEST_KEY);
+    // Supabase 的 isValidKey 不收中文：真正发出去的 key 必须已经过 objectKey 编码
+    for (const { key } of sb.uploads) expect(key).toMatch(/^[\x20-\x7e]+$/);
+    const manifest = JSON.parse(sb.uploads.at(-1).body.toString("utf8"));
+    expect(manifest.structured).toBe(1);
+    expect(Object.keys(manifest.files).sort()).toEqual(
+      ["ocr/9.9测试卷__阅读.txt", "realbank/9.9测试卷.structured.json"]);
+  });
+
   test("upload 返回 error → 抛 SyncFailure(exitCode 1)，清单不写", async () => {
-    const e = await expectSyncFailure(
-      push(stubSb(() => ({ error: { message: "Invalid key: ocr/中文.txt" } })), { log: () => {} }));
-    expect(e.message).toMatch(/上传失败，清单未更新/);
+    const sb = stubSb(() => ({ error: { message: "Invalid key: ocr/中文.txt" } }));
+    const e = await expectSyncFailure(push(sb, quiet(fixtureDir)));
+    expect(e.message).toMatch(/有 2 个文件上传失败，清单未更新/);
+    expect(sb.uploads.map((u) => u.key)).not.toContain(MANIFEST_KEY);
   });
 
   test("upload 直接抛（不是返回 {error}）也照样收敛成 SyncFailure，不会让 pool 炸穿", async () => {
-    await expectSyncFailure(push(stubSb(() => { throw new Error("boom"); }), { log: () => {} }));
+    const sb = stubSb(() => { throw new Error("boom"); });
+    const e = await expectSyncFailure(push(sb, quiet(fixtureDir)));
+    // 两个文件都进了失败清单 = pool 没有在第一个异常上炸掉
+    expect(e.message).toMatch(/有 2 个文件上传失败，清单未更新/);
+    expect(sb.uploads.map((u) => u.key)).not.toContain(MANIFEST_KEY);
+  });
+
+  // CI 的真实处境：本地没有任何文件可传，唯一一次 upload 就是写清单。
+  test.each([
+    ["返回 {error}", () => ({ error: { message: "row-level security" } }), /row-level security/],
+    ["直接抛", () => { throw new Error("boom"); }, /boom/],
+  ])("没有文件可传、清单写入%s → 同样是 SyncFailure，且报错点名是清单这一步", async (_label, result, detail) => {
+    const sb = stubSb(result);
+    const e = await expectSyncFailure(push(sb, quiet(emptyDir)));
+    expect(sb.uploads.map((u) => u.key)).toEqual([MANIFEST_KEY]);
+    expect(e.message).toMatch(/清单写入失败/);
+    expect(e.message).toMatch(detail);
+  });
+
+  test("文件都传上去了、只有清单写不上 → 也是 SyncFailure（不能当成同步成功）", async () => {
+    const sb = stubSb((key) => (key === MANIFEST_KEY ? { error: { message: "quota" } } : { error: null }));
+    const e = await expectSyncFailure(push(sb, quiet(fixtureDir)));
+    expect(e.message).toMatch(/清单写入失败（本次上传 2 个文件，清单未更新）/);
+  });
+
+  test("pull：清单里的文件下载失败 → SyncFailure，本地不落半截文件", async () => {
+    const manifest = { structured: 1, files: { "realbank/9.9测试卷.structured.json": { size: 2, mtime: 1 } } };
+    const sb = stubSb(() => ({ error: null }), {
+      download: async (key) => (key === MANIFEST_KEY
+        ? { data: { text: async () => JSON.stringify(manifest) }, error: null }
+        : { data: null, error: { message: "Object not found" } }),
+    });
+    const e = await expectSyncFailure(pull(sb, quiet(emptyDir)));
+    expect(e.message).toMatch(/有 1 个文件下载失败/);
+    expect(fs.existsSync(path.join(emptyDir, "realbank"))).toBe(false);
   });
 });

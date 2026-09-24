@@ -6,6 +6,9 @@ import { C, FONT, READING_FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { AudioPlayer } from "../listening/AudioPlayer";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
+import { insertStemParts } from "../../lib/reading/insertSentence";
+import { InsertSentenceStem } from "../reading/InsertSentenceStem";
+import { apPassageText } from "../../lib/reading/passageLayout";
 import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
 import {
   buildReadingModule1,
@@ -327,6 +330,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   const [phase, setPhase] = useState(isListeningType ? "listen" : "answer");
 
   const question = questions[currentQ];
+  const insertParts = insertStemParts(question);
 
   const handleAudioEnded = useCallback(() => {
     setPhase((p) => (p === "listen" ? "answer" : p));
@@ -335,7 +339,7 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   // Get the text content to display
   function getPassageContent() {
     if (taskType === "rdl") return item.text || "";
-    if (taskType === "ap") return item.passage || "";
+    if (taskType === "ap") return apPassageText(item); // 漏了段落空行的条目在这里补回（pre-wrap 只认空行）
     return null; // listening types show audio instead
   }
 
@@ -436,9 +440,18 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
       <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>
         Question {currentQ + 1} of {questions.length}
       </div>
-      <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 14, fontFamily: READING_FONT }}>
-        {getStem(question)}
-      </div>
+      {insertParts ? (
+        <InsertSentenceStem
+          parts={insertParts}
+          accent={SECTION_CONFIG.reading.accent}
+          soft={SECTION_CONFIG.reading.accentSoft}
+          style={{ marginBottom: 14 }}
+        />
+      ) : (
+        <div style={{ fontSize: 15, fontWeight: 600, color: C.t1, lineHeight: 1.5, marginBottom: 14, fontFamily: READING_FONT }}>
+          {getStem(question)}
+        </div>
+      )}
 
       {/* Options */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -846,6 +859,7 @@ function buildTaskSnapshots(results) {
       lecture: item.lecture || null,
       transcript: item.transcript || null,
       conversation: item.conversation || null,
+      sentence_timings: item.sentence_timings || null, // 复盘逐句点播（与 audio_url 同一次配音）
       // Performance
       correct: r.correct ?? 0,
       total: r.total ?? 0,

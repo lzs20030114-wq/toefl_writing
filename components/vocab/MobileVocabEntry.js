@@ -17,7 +17,7 @@ export function MobileVocabEntry({ isChallenge, querySuffix = "" }) {
   const sub = !ready
     ? "查词时点「☆ 收藏到单词本」就能收进来"
     : total === 0
-      ? "阅读复盘里点词收藏，按遗忘曲线复习"
+      ? "阅读/听力复盘里点词收藏，按遗忘曲线复习"
       : todo > 0
         ? `今天有 ${todo} 个词该过一遍`
         : `今天过完了，共收藏 ${total} 词`;

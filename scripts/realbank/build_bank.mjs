@@ -60,6 +60,8 @@ const { buildAuditIndex, auditKey } = require("./audit_key.js");
 const AUDIT_OVERRIDES = loadAuditOverrides();
 // 材料原图沿用判据抽成纯函数放隔壁（无 IO，可单测）：scripts/realbank/material_image_carry.js。
 const { carryMaterialImages } = require("./material_image_carry.js");
+// 复述题场景插图（scene_image / sentence_frames）的沿用判据，同样是纯函数：scripts/realbank/scene_image_carry.js。
+const { carrySceneImages } = require("./scene_image_carry.js");
 // 插入句题的 ■ 标记找回判据同样抽成纯函数：scripts/realbank/insert_markers.js。
 const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 // 听力原声回挂判据同样抽成纯函数（无 IO，可单测）：scripts/realbank/original_audio.js。
@@ -83,6 +85,8 @@ const { apQuestionType } = require("./question_type.js");
 const WR = require("./writing_recall.js");
 // 落库丢弃账本（每道闸扔掉的每一题记一行，原因码 = 下面 stats 的键名）：scripts/realbank/drop_ledger.js。
 const { makeDropRecorder, dropLedgerPayload, summarizeDrops } = require("./drop_ledger.js");
+// 造句句首词块照抄答案句的大写（"Which"）= 白送排序提示，落库前改回小写：lib/questionBank/bsChunkCase.js。
+const { normalizeSentenceInitialChunkCase, findSentenceInitialCapChunks } = require("../../lib/questionBank/bsChunkCase.js");
 
 /**
  * 记一笔落库丢弃。计数器照旧在调用处 += 1（终端日志口径不变），这里只多落一行明细。
@@ -851,8 +855,10 @@ function buildWriting(files, stats) {
   const bsAliasEdges = [];
   const seenAnswer = new Map();
   const bs = [];
-  for (const q of out.bs) {
-    const k = bsAnswerKey(q.answer);
+  for (const raw of out.bs) {
+    const k = bsAnswerKey(raw.answer);
+    const caseFixes = findSentenceInitialCapChunks(raw);
+    const q = normalizeSentenceInitialChunkCase(raw);
     const bsDrop = (code, detail) => recordDrop(stats, {
       set: q.source, slug: q.source ? setSlug(q.source) : null, section: "writing", type: "bs",
       q: Number((String(q.id).match(/_(\d+)$/) || [])[1]) || null, n: 1, id: q.id, code, detail,
@@ -875,6 +881,7 @@ function buildWriting(files, stats) {
     }
     seenAnswer.set(k, q);
     bs.push(q);
+    if (caseFixes.length) stats.wBsCaseLowered.push(`${q.id}: ${caseFixes.map((f) => `${f.from}→${f.to}`).join(", ")}`);
   }
   out.bs = bs;
   stats.wRecallAliases = recallWriting(out, eligible, dupSets, stats);
@@ -1570,6 +1577,8 @@ function buildListeningSpeaking(files, stats) {
  * 所以落盘前拿上一版的库比一次：**口播文本逐字没变**就把 audio_url 接过来，
  * 变了的（或新增的）才留 audio_pending 给 render_real_audio.mjs 去配。
  * 判据只看「会被念出来的那段文本」：选项、参考答案、难度标签改了不该重配音。
+ * `sentence_timings`（句级时间戳，docs/listening-sentence-timings.md）是那条音频的
+ * 附属物：口播文本没变就随 audio_url 一起接过来，否则一起作废。
  */
 function spokenText(kind, it) {
   // 口语传进来的是**子条目**（一句复述 / 一道面试题）：原声按子条目切、清单按子条目 id 记
@@ -1611,7 +1620,7 @@ function carryAudioUrls(prevBundle, bundle) {
           if (u.audio_url) old.set(u.id, { url: u.audio_url, text: String(text || "") });
         }
       } else if (it.audio_url) {
-        old.set(it.id, { url: it.audio_url, text: spokenText(kind, it) });
+        old.set(it.id, { url: it.audio_url, text: spokenText(kind, it), timings: it.sentence_timings });
       }
     }
     for (const it of list) {
@@ -1626,6 +1635,7 @@ function carryAudioUrls(prevBundle, bundle) {
         const hit = old.get(it.id);
         if (hit && hit.text === spokenText(kind, it)) {
           it.audio_url = hit.url; delete it.audio_pending; n += 1;
+          if (Array.isArray(hit.timings)) it.sentence_timings = hit.timings; else delete it.sentence_timings;
         }
       }
     }
@@ -1646,6 +1656,25 @@ function recarryOnDisk(dir, prevBundle) {
     let cur;
     try { cur = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
     const got = carryAudioUrls({ [kind]: prevBundle[kind] }, { [kind]: cur.items || [] });
+    if (!got) continue;
+    n += got;
+    fs.writeFileSync(p, JSON.stringify(cur, null, 2), "utf8");
+  }
+  return n;
+}
+
+/**
+ * applyReview 落盘之后再跑一遍复述题场景插图沿用（与 recarryOnDisk / recarryMaterialImagesOnDisk
+ * 同一套理由：复核清单会下架复述句、patch 句子文本，第一遍沿用比的是没打 patch 的新句子序列）。
+ */
+function recarrySceneImagesOnDisk(dir, prevBundle) {
+  let n = 0;
+  for (const kind of Object.keys(prevBundle || {})) {
+    const p = path.join(dir, `${kind}.json`);
+    if (!fs.existsSync(p)) continue;
+    let cur;
+    try { cur = JSON.parse(fs.readFileSync(p, "utf8")); } catch { continue; }
+    const got = carrySceneImages({ [kind]: prevBundle[kind] }, { [kind]: cur.items || [] });
     if (!got) continue;
     n += got;
     fs.writeFileSync(p, JSON.stringify(cur, null, 2), "utf8");
@@ -1734,7 +1763,7 @@ function main() {
   const stats = {
     sets: 0, itemsSeen: 0, keptByAudit: 0, keptBySecondVote: 0, keptByManual: 0, keptByAnswerFix: 0, droppedNoAudit: 0, droppedDisagree: 0,
     built: 0, buildFailed: 0, droppedDupSet: 0, droppedBadOptions: 0, droppedInsert: 0, restoredInsert: 0,
-    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wSkippedThin: 0,
+    mergedGroups: 0, droppedDupStem: 0, wDroppedDupSet: 0, wDroppedDupBs: 0, wDroppedBsRuntime: 0, wBsRuntimeDetail: [], wBsCaseLowered: [], wSkippedThin: 0,
     droppedHeld: 0, wDroppedHeld: 0, lDroppedHeld: 0,
     wRecallAdded: { email: 0, discussion: 0 }, wRecallDropped: [], wRecallAliases: [], wRecallReleased: [],
     wBsAliases: [], itemAliases: [], sRecallAdded: { repeat: 0, interview: 0 },
@@ -2020,6 +2049,7 @@ function main() {
   console.log(`  造句 ${writing.bs.length} 题 / 邮件 ${writing.email.length} 题 / 学术讨论 ${writing.discussion.length} 题`);
   console.log(`  跨卷重复跳过 ${stats.wDroppedDupSet} 套；源料体检 blocking 扣下 ${stats.wDroppedHeld} 套；字段不全丢弃 ${stats.wSkippedThin} 条；造句答案句跨卷重复丢弃 ${stats.wDroppedDupBs} 题；造句过不了 runtime 丢弃 ${stats.wDroppedBsRuntime} 题`);
   for (const d of stats.wBsRuntimeDetail) console.log(`    ✗ ${d}`);
+  console.log(`  造句句首词块大写改回小写 ${stats.wBsCaseLowered.length} 题`);
   const thinTop = Object.entries(stats.wThinReasons).sort((a, b) => b[1] - a[1]);
   if (thinTop.length) console.log(`  字段不全 top 原因：${thinTop.slice(0, 8).map(([k, n]) => `${k} ${n}`).join(" / ")}`);
   const recallDrops = stats.wRecallDropped.reduce((m, d) => { const k = `${d.type}:${d.code}`; m[k] = (m[k] || 0) + 1; return m; }, {});
@@ -2139,6 +2169,10 @@ function main() {
     const prevS = readBundle(SPEAKING_DIR, Object.keys(S));
     const carried = carryAudioUrls(prevL, L) + carryAudioUrls(prevS, S);
     console.log(`\n■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）`);
+    // 复述题场景插图同理：全量重建的新对象不带 scene_image / sentence_frames，不接回就等于
+    // 把抠图 + 上传的成果清零（图还在 Supabase 桶里，只能重跑上传脚本白传一次）。
+    const carriedScenes = carrySceneImages(prevS, S);
+    if (carriedScenes) console.log(`■ 场景插图沿用：${carriedScenes} 套（句子文本序列逐字未变）`);
     const keep = new Set();
     for (const [dir, bundle] of [[LISTENING_DIR, L], [SPEAKING_DIR, S]]) {
       fs.mkdirSync(dir, { recursive: true });
@@ -2185,6 +2219,8 @@ function main() {
     if (r) console.log(`  apply_review：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions}`);
     const recarried = recarryOnDisk(LISTENING_DIR, prevL) + recarryOnDisk(SPEAKING_DIR, prevS);
     if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
+    const recarriedScenes = recarrySceneImagesOnDisk(SPEAKING_DIR, prevS);
+    if (recarriedScenes) console.log(`■ 复核 patch 后二次沿用：${recarriedScenes} 套场景插图接回（patch 后句子序列与上一版逐字相同）`);
     const sp = applyInterviewSplitsOnDisk(SPEAKING_DIR);
     if (sp && sp.changed) {
       console.log(`■ 拼盘面试切分：${sp.stats.split} 条大集 → ${sp.stats.chunks} 套 4 问；尾巴 ${sp.stats.dropped_questions} 问不入库；interview 共 ${sp.count} 套`);
@@ -2332,6 +2368,9 @@ function main() {
   console.log(`
 ■ 已配音沿用：${carried} 条 audio_url 从上一版接过来（口播文本逐字未变）；`
     + `其余 audio_pending 的交给 render_real_audio.mjs`);
+  // 复述题场景插图沿用（同 id 且句子文本序列逐字未变）：见 scripts/realbank/scene_image_carry.js。
+  const carriedScenes = carrySceneImages(prevS, S);
+  if (carriedScenes) console.log(`■ 场景插图沿用：${carriedScenes} 套（句子文本序列逐字未变）`);
   // 跨卷重复的别名各落各科目：listening/ 收 lcr/lc/la/lat，speaking/ 收 repeat/interview。
   for (const [dir, types] of [[LISTENING_DIR, ["lcr", "lc", "la", "lat"]], [SPEAKING_DIR, ["repeat", "interview"]]]) {
     const rows = (stats.itemAliases || []).filter((a) => types.includes(a.from_type));
@@ -2370,6 +2409,8 @@ function main() {
   if (recarried) console.log(`■ 复核 patch 后二次沿用：${recarried} 条 audio_url 接回（patch 后文本与上一版逐字相同）`);
   const recarriedImages = recarryMaterialImagesOnDisk(BANK_DIR, prevReading);
   if (recarriedImages) console.log(`■ 复核 patch 后二次沿用：${recarriedImages} 条 material_image 接回（patch 后材料文本与上一版逐字相同）`);
+  const recarriedScenes = recarrySceneImagesOnDisk(SPEAKING_DIR, prevS);
+  if (recarriedScenes) console.log(`■ 复核 patch 后二次沿用：${recarriedScenes} 套场景插图接回（patch 后句子序列与上一版逐字相同）`);
   if (r) {
     console.log(`\n■ 复核清单已应用：patch ${r.stats.patched} 处；下架 整条 ${r.stats.units} / 单题 ${r.stats.questions} / 复述句 ${r.stats.sentences} / 面试题 ${r.stats.iqs}`
       + `（顺着归位别名搬到新 file+id ${r.stats.redirected} 条）`

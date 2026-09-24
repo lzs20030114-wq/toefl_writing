@@ -6,6 +6,8 @@ import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCur
 import { getSavedCode } from "../../lib/AuthContext";
 import { formatLocalDateTime } from "../../lib/utils";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
+import { insertStemParts } from "../../lib/reading/insertSentence";
+import { InsertSentenceStem } from "./InsertSentenceStem";
 import { buildDailyAveragePoints, getAccuracyPercent } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
 import { getBandColor } from "../../lib/history/bandColor";
@@ -353,12 +355,17 @@ export function RDLDetail({ session }) {
         <WordLookupLayer passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions && questions[i];
+            const insertParts = q ? insertStemParts(q) : null;
             return (
               <div key={i} style={{ padding: "10px 12px", borderRadius: 10, background: r.isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
-                {/* Question stem */}
+                {/* Question stem（插入句题拆成指令 / 待插入句 / 提问三段） */}
                 <div style={{ fontSize: 13, fontWeight: 600, color: P.text, marginBottom: 6, display: "flex", alignItems: "flex-start", gap: 6 }}>
                   <span style={{ fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626", flexShrink: 0 }}>{r.isCorrect ? "✓" : "✗"}</span>
-                  <span>{q ? q.stem : `第 ${i + 1} 题`}</span>
+                  {insertParts ? (
+                    <InsertSentenceStem parts={insertParts} compact accent={P.ap.color} soft={P.ap.soft} style={{ flex: 1 }} />
+                  ) : (
+                    <span>{q ? q.stem : `第 ${i + 1} 题`}</span>
+                  )}
                 </div>
                 {/* 选句题（真题 AP）：选项是第 N 段各句、答案是 S 键 —— 直接写出你选的句子与正确句子 */}
                 {q && isSentenceSelection(q) && (

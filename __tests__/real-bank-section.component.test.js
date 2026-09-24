@@ -177,14 +177,63 @@ describe("真题专区 section：Pro 门禁", () => {
   });
 
   test("题量与来源分档文案诚实（参考版不冒充官方）", () => {
-    render(<RealExamSectionContent {...baseProps} userTier="pro" isLoggedIn={true} />);
+    const { container } = render(<RealExamSectionContent {...baseProps} userTier="pro" isLoggedIn={true} />);
     // 用 getAllByText：题库长大后不同题型的徽章会撞到同一个数字（第二波之后
     // 写作造句和听力 LCR 都是 125 题），getByText 会因为「找到多个」直接报错 ——
     // 这条断言要的是「徽章在、数字对」，不是「全页面只有一个 125」。
     expect(screen.getAllByText("162 题").length).toBeGreaterThan(0);
     expect(screen.getAllByText("57 题").length).toBeGreaterThan(0);
     expect(screen.getByText("658 题 · 70 套")).toBeTruthy();
-    expect(screen.getByText(/参考版：早期收集，来源未核验/)).toBeTruthy();
+    // 分档标签把「参考版」加粗成独立节点，按整段 textContent 断言（getByText 只看直接文本节点）。
+    expect(container.textContent).toContain("参考版：早期收集，来源未核验");
+  });
+});
+
+describe("真题专区 section：四个科目折叠面板", () => {
+  const pro = { ...baseProps, userTier: "pro", isLoggedIn: true };
+  const header = (name) => screen.getByRole("button", { name: new RegExp(`^${name}`) });
+
+  test("四个科目各一个面板，默认只展开写作", () => {
+    render(<RealExamSectionContent {...pro} />);
+    ["写作", "阅读", "听力", "口语"].forEach((label) => expect(header(label)).toBeTruthy());
+    expect(header("写作").getAttribute("aria-expanded")).toBe("true");
+    expect(header("阅读").getAttribute("aria-expanded")).toBe("false");
+    expect(header("听力").getAttribute("aria-expanded")).toBe("false");
+    expect(header("口语").getAttribute("aria-expanded")).toBe("false");
+  });
+
+  test("收起的面板：卡片仍在 DOM 里（深链 / 测试可取），但 visibility hidden 不占 Tab 序", () => {
+    const { container } = render(<RealExamSectionContent {...pro} />);
+    const readingCard = container.querySelector('a[href="/real-bank?type=ctw&mode=standard"]');
+    expect(readingCard).toBeTruthy();
+    const readingPanel = container.querySelector('[data-testid="real-group-reading"] [role="region"] > div');
+    expect(readingPanel.style.visibility).toBe("hidden");
+    const writingPanel = container.querySelector('[data-testid="real-group-writing"] [role="region"] > div');
+    expect(writingPanel.style.visibility).toBe("visible");
+  });
+
+  test("点阅读 → 阅读展开、写作收起（一次只开一个）；再点阅读 → 全部收起", () => {
+    const { container } = render(<RealExamSectionContent {...pro} />);
+    fireEvent.click(header("阅读"));
+    expect(header("阅读").getAttribute("aria-expanded")).toBe("true");
+    expect(header("写作").getAttribute("aria-expanded")).toBe("false");
+    const readingPanel = container.querySelector('[data-testid="real-group-reading"] [role="region"] > div');
+    expect(readingPanel.style.visibility).toBe("visible");
+    fireEvent.click(header("阅读"));
+    expect(header("阅读").getAttribute("aria-expanded")).toBe("false");
+  });
+
+  test("面板标题行列出该科目的题型概览（收起时也能看到里面有什么）", () => {
+    render(<RealExamSectionContent {...pro} />);
+    expect(header("听力").textContent).toContain("听力应答 · 听力对话 · 听力通知 · 听力讲座");
+    expect(header("听力").textContent).toContain("4 个题型");
+  });
+
+  test("非 Pro：四张网格全部置灰禁点（不只是默认展开的那张）", () => {
+    const { container } = render(<RealExamSectionContent {...baseProps} userTier="free" isLoggedIn={true} />);
+    const grids = container.querySelectorAll(".home-grid");
+    expect(grids.length).toBe(4);
+    grids.forEach((g) => expect(g.style.pointerEvents).toBe("none"));
   });
 });
 

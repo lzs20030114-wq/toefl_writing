@@ -19,6 +19,7 @@
 - [低] 模考 6.4 残项：#13 邮件排版（等参考图）/ #2#3 全屏与顶栏（等定范围）/ #18 三科合考（用户已 defer）。
 
 - [中] 真题专区复核余项（2026-09-07 全库复核，报告 data/claudeGen/reports/REALBANK-RECHECK-2026-09-07.md，清单 data/realBank/review-holds.json）：①音频：切句 bug（a.m. 被劈开）已修，真题 23 条 + 生成库 79 条音频已作废待补配（本机 render_real_audio / Actions backfill-audio）；②`real_ap_511_1_26#2` 答案键 D vs 独立作答 C，对原截图核；③LC 说话人对调 4 条已改题干放行（rf0620_2_06 拆轮后待本机补配 1 条音频），rf0808_2_04 / rf0808_2_06 另有截断仍扣；④放行任何一条 = 删清单行 + 本机重跑 build_bank（成品已过滤，源料在 .codex-tmp）；⑤题池阅读 parse 阶段要保住段落分隔（本次 5 题因「paragraph N」无从定位被扣）。
+- [低] `data/realExam2026/` 里两篇学术阅读真题原文被截半句（`2026-03-10_ap1` "…floating turbines represent both a"、`2026-05-03_ap1` "…strategically placing these"）。这是校准锚点语料，按「真题 ground truth 不许改」的口径本次**没动**，只登记：若后续拿到完整原卷，补全后要重跑 `lib/quality/scoreBatch.mjs` 与 gate 冻结带。（成品库 data/realBank 的同类断句已于 2026-09-14 清零，闸门 `scripts/realbank/truncation_scan.js`）
 - [中] 真题录入二期两项口径待拍板：①~~BS 造句真题——写作 PDF 上的乱序词块边界已被 OCR 糊掉，只能做成「真题句子 + 本站切块」~~ **不成立，已关（2026-09-14 核实）**：那只对 realExam2026 的 `scrambled_ocr` 文本成立；`extract_bs_pages.py` 直接看截图读块边界（块间大间隔可辨）+ 机械校验（答案句须由模板给定词 + 词块按序恰好拼出），09-08 起 38 套 328/367 过校验；09-14 让它认合订卷（按 OCR 缓存找造句页）又补 14 套 113 题过校验、去重后 +75（专区造句 281→336 题 / 36→44 套），无需任何来源分档拍板；②听力/口语音频路线——用户已拍板上传原始机经音频到 Supabase（版权风险自担、1.1GB 需先清理 382.8MB 可回收音频或迁 R2），但听力题面链路未达标（见「进行中」），是否先只上口语 repeat。
 
 - [高] 真题丢题全科口径（2026-09-14，报告 data/claudeGen/reports/REALBANK-LOSS-SYSTEMIC-2026-09-14.md）：
@@ -150,7 +151,8 @@
 
 ## 进行中
 - [中] DeepSeek 余额告警（出处：2026-09-09 排查 502 时在 /admin-api-errors 看到 9/5 22:21–22:24 三条 **402 Insufficient Balance**，即账户欠费过一次，用户侧同样只看到「评分服务暂时不可用」）：建议 nightly-quality-monitor 或后台首页加余额/402 计数告警，欠费与网关故障要能分开。
-- [低] `/api/ai` 直连路径 2026-09-09 已改流式拼接 + 快速 5xx 单次重试 + `fail()` 不再丢上游原文（修前后台「详情」列一直为空）。**待验证**：下一次晚高峰观察 api_error_feedback 里 stage=deepseek 的 error_detail 是否带 `upstream 5xx:` 前缀；若仍成批出现且原文是 503 overloaded，下一步把 samples=3 在重试时降为 1 路。
+- [✅已验证] `/api/ai` 直连路径 2026-09-09 的流式拼接 + 快速 5xx 单次重试 + `fail()` 不丢上游原文。**2026-09-21 结论**：9/21 16:10、16:11 后台又出现两条「deepseek / upstream / 502 / 详情空」，但根因不是 09-09 那笔没生效，而是 **fan-out 压根没走到 `fail()` 的上游分支**——三路都回 HTTP 200、只是正文为空时没有任何一路 reject，`firstRejectionReason` 返回 null，`describeUpstreamError(null)` 得到空串，于是被错标成 `upstream` 且详情写成 NULL。已修（本次提交）：无 reject 时改记 `empty_content`，并把每一路的 `finish_reason` / reasoning 长度 / 分片数写进详情。真上游报错的详情格式（`upstream 5xx: 原文`）经测试确认未变。
+- [中] 写作评分三路全空正文时的**自救**（出处：2026-09-21 上面那条的后续）：目前三路都回空正文就直接把 502 丢给用户（用户看到「评分服务暂时不可用」，不扣次数）。`lib/ai/writingEval.js` 请求 `maxTokens=8000` 而 `/api/ai` 的 `MAX_TOKENS` 上限是 8192，**已无余量可抬**。待线上攒到几条带诊断行的真实记录后再定方案：若详情普遍是 `finish=length` + reasoning 很长 → 是推理吃光预算，考虑降级重试（关推理或压低预算）或抬 MAX_TOKENS；若普遍是 `chunks=0 / stream-cut` → 是上游回 200 就掐流，那就该按 09-09 原计划把 samples=3 在重试时降为 1 路。**先看数据再动手，不要盲目加重试烧钱。**
 
 - [✅完成] L1 存量库答案全量二审（2026-08-02）：覆盖 ~1593 题（LCR 413 + 阅读听力 7 库），5 轮 DeepSeek 盲审 + 多轮 agent 分诊 + 人工复核。**改键 26**（LCR 16 角色反转 + AP 9 insert_text 时序 + RDL 1）+ 数据毛病 2 + CTW 指示代词歧义 117 题系统性重挖 + 挖空器闭集跳过根治。lat/lc/la/rdl-short 零实锤。完整报告 data/claudeGen/reports/L1-answer-audit-20260802.md。**遗留（低优先，非阻塞）**：①CTW 10 项低危残留（2 validator + 8 长尾歧义，各 1/10 空双解，合库层 CTW auditor 对未来题兜底）；②AP 11 + CTW 18 题因 DeepSeek 反复超时未被二审覆盖（顽固 error 项，可在后续 full-audit-l1 dispatch 顺带续扫，L1-state 断点续跑只重试 error）。**衍生新条目见下「AP insert_text 生成侧缺陷」**。
 - [中] AP insert_text 生成侧缺陷：L1 二审在 AP 库查出 9 处 insert_text 答案错序（例子/回指置于概括句之前），且多题 explanation 自曝「Wait…」「retained per the plan」——说明生成期对插入题的自检形同虚设。已逐一改键，但**生成侧未修**：需在 AP 生成 prompt/校验里加插入题时序自检（回指词需前置先行词、例子在概括之后），否则新出的 AP 插入题仍会复发。出处：L1-answer-audit-20260802.md。
@@ -158,6 +160,21 @@
 - [中] 真题录入管线（二期，`scripts/realbank/`，2026-09-06 阅读一期首批落库）：四阶段 对齐(零token)→DeepSeek结构化→盲审→落库，答案来自机经卷自带答案 PDF（LLM 只转写不解题）。**已完成**：解析器修复后全库确定性配对 5577/5387 答案条目（+1011）；阅读 4 套试点盲审 92%（58/63）；`data/realBank/reading/` 首批 AP/RDL/CTW 已接进 `/real-bank?type=ctw|rdl|ap`；管线有余额预检 + 系统性失败不写文件 + 一代备份 + `--resume` + 跨卷 hash 去重。**待办**（按序）：①铺量 54 套 `run_pipeline.mjs --all --resume`，实测每套约 ¥1.26（结构化+盲审，reading+writing），全库约 ¥60–70，跑完再 `build_bank.mjs` 落库 + 发版公告；②盲审 <90% 的卷进人工复核队列（复核清单在 `.codex-tmp/realbank/<卷>.audit.json`）；③CTW 还原产率低（4 套 13 段仅 4 段过结构化，DeepSeek 对分栏 OCR 的填词还原失败率高）需改 prompt/分块；④听力**不能上线**：一屏两题 OCR 串栏导致选项错位（A/B 对照证实是数据坏不是审法），根治要改 OCR 切块；⑤口语 repeat 已零 token + 音频已切片（3.10 验证），可作二期首个音频题型；⑥`.codex-tmp/realbank/` 全部中间产物不在 git 里，无备份。出处：memory realbank-ingest-pipeline.md。
 
 ## 可派工
+
+- [中] **听力逐句点播（点原文一句 → 只放音频那一句）**，契约 docs/listening-sentence-timings.md。
+  2026-09-18 代码侧已做完：①产线随 `audio_url` 写 `sentence_timings`；②存量对齐工具
+  `scripts/align-sentence-timings.mjs`（fetch → asr_words.py 词级转写 → 对齐写回）；③前端逐句可点
+  （历史页 LADetail/LCDetail + 练习结果页，真浏览器验过）。**数据侧已完成（2026-09-18 本机跑完）**：存量 1473 条音频
+  （生成库 753 / 真题 TTS 54 / 真题原声 666）用 `node scripts/align-sentence-timings.mjs` 补齐，
+  首轮写入 1460 / 拒绝 13 / 缺转写 0（GPU medium.en 转写 109 分钟）；生成库四个库 100%，真题 lcr 100% / lc 96.6% / la 90.9% / lat 96.8%。
+  首轮拒绝的 13 条（全是真题原声 lc 4 / la 6 / lat 3）：whisper 念完开头旁白「Listen to a…」就提前收工、正文没转出来；
+  09-19 按旁白句末的词级时间戳裁掉开头 → 对裁后片段重转写 → 时间戳加回偏移量 → `--phase=apply`，13 条全部写入
+  （真题四库现均 100%；`real_lat_rp0711_2_08` 有 2 句未定位，列出但不可点）。这步预处理是 `.codex-tmp` 里的一次性本地脚本，
+  没进仓库——日后原声再出现同类拒绝，值得把「跳过旁白重转」做成 align 脚本的正式重试档。
+  遗留：`real_lcr_128a_1_04/11/12` 三条原声在 original-audio.json 里没有同 id 条目，时间戳只写在题库上，build_bank 全量重建会丢。
+  体积：`text` 是原文再抄一遍，全量 raw +820KB / gzip 仅 +84KB（同文件里的原文让 gzip 基本抵消），
+  已按「直接进题库 JSON」实施；若日后嫌大再搬 sidecar，契约不变。
+  ④个人题库也已做完（edge WordBoundary + 按 mp3 帧时长平移各段，写回 data.sentence_timings，无需迁移）。
 
 - [中] 真题阅读缺题找回残余（2026-09-13，报告 data/claudeGen/reports/REALBANK-AP-RECOVERY-2026-09-13.md）：①第二来源 rf*/rp* 22 卷的 13 个 flagged ap/rdl 块，`<卷>.json` alignment 为空、`structure_set --only-failed` 够不着且 GT 不覆盖，要走 parse_reformatted 侧另立方案；②AP 每篇上限 5 挡下 11 道跨卷并入的真题（consolidation.json 的 over_cap 清单），要「并集全留」改 consolidate_reading.js 的 MAX_QUESTIONS.ap；③（09-13 第二轮已按考卷位置归位 26 篇，此项关闭）；④5 条曾下架的题干因别卷同篇副本被救回而重现（非 hold 失配），复核清单补跨套重复条目；⑤`audit_answers --second-vote` 走 pro 模型但台账按 ¥5.24/M 估价，偏低。**第二轮残余（同一报告第二部分）**：⑥选择题 7 道找不到源截图、插入题 29 道找不到那一屏且 14 道标记表无对应正文、点选句子候选多数卡在宿主段落结构（无分段/多切一刀）或保留方是拼盘副本；⑦基线 CTW 13 簇跨卷重复未下架（需先给 CTW 做旧 id 别名兼容）、基线 116 段 CTW 正文未做看图忠实度核对（第二轮发现模型会编补丢失的句子）；⑧`/progress/reading` 通用历史页对归位的旧记录仍显示旧题型，后台 `lib/admin/realBankStats.js` 仍按旧 id/题型统计；⑨合并判据盲区：标题与首段粘连（3.29 Opal）时聚不成簇，若清单没下架另一份会双份在线；⑩工具坑：`audit_answers.mjs --only-q` 不带 `--only-missing` 会清空该卷全部阅读盲审条目。
 
@@ -269,3 +286,51 @@
 - 2026-07-05 五处升级按钮 `open-upgrade-modal` 死 no-op 修复（HomePageClient 全局监听 + speaking-exam 自持 modal）——已合 main。
 - 2026-07-05 CTW 填词防呆修复（灰底锁定 chip + 键盘导航）cherry-pick 2b3f96c 合入 main（分支上过时的 v1.9.4 发版提交已丢弃）。
 - 2026-07-05 产品 P0 复测：BS 干扰项已修（did 99.6%→14.6%，88 种）；模考评分失败清零 band 已修（"--"+错误文案+重试按钮）；插入题数据面已清零（UI 欠账转为上方决策项）。
+
+## 写作批改报告改造（2026-09-19，研究报告 data/claudeGen/reports/WRITING-FEEDBACK-DEPTH-2026-09-19.md / WRITING-FEEDBACK-LESSON-BLUEPRINT-2026-09-19.md）
+
+> 代码层五项已在分支 claude/compassionate-newton-iddg2e 落地：删校准层英文蓝标注入、删解析层短板万能兜底、
+> 解析并渲染三维度「一句话理由」、解析并渲染 ===ERRORS=== 压分/不压分分级、范文标签改「AI 参考范文」。
+> 分数路径逐字节不变（34.5 万合成样本差分 0 处分数差异），jest 231 套件全绿。
+
+- [高] **合并前置**：改了 lib/ai/parse.js / calibration.js，按 docs/eval-spec/writing-scoring.md 规定须本机跑
+  `node scripts/scoring-gate.mjs --quick`（云端无 DEEPSEEK_API_KEY 跑不了）留一行基准。
+- [高] **改造前基线**：本机 `node scripts/ops/audit-writing-reports.mjs`（只读）跑一次留基线 JSON；上线一周后再跑一次对比
+  注入蓝标率 / 兜底短板率 / 总评去重率 / 标签集中度。
+- [✅已落地 2026-09-20] **讲评第二次调用**：`app/api/ai/lesson/route.js`（服务端持有 prompt `lib/ai/prompts/writingLesson.js`，不计每日用量，
+  同源+限流 20/min+有效用户校验），评分先出、讲评异步补上并回写 session（`sessionStore.updateSessionDetails`）。
+  **上线后必做**：拿 3–5 篇真实作文看 `parseLesson.ok` 命中率与讲评是否真的引了原句、有没有误判「缺的是哪一层」；
+  低于预期先收紧 prompt 格式再放量。评分路由只做了抽函数重构（lib/ai/upstream.js / routeGuards.js），34 个既有用例未改全绿。
+- [中] 讲评待决事项：①模考路径（onComplete）本轮无讲评，MockExamResult 的讲评区块暂不会出现；②free 用户讲评未做 Pro 门控
+  （每篇多一次约 4K token 调用，不扣次数），是否限 tier/限次待产品拍板；③云端回写是乐观更新无回滚、找不到 id 只重试一次 sync；
+  ④自查勾选不持久（刷新即丢）。
+- [中] ~~**prompt 层待拍板**~~（已按「拆两次调用」落地，见上）：拆「评分」与「讲课」为两次调用（评分 prompt 与闸门不动，取中位样本的分数 + ERRORS + SIGNALS
+  再发一次「写课」调用）vs 挤进现有 prompt（讨论 prompt 距 12000 字符上限仅余 ~1100，且加长输出会顶 8000 token 预算尾部截断）。
+  倾向拆。拆之后要做：总评三句（目标 / 引原句说停在哪 / 下一步）、短板 1 强制内容层且四段结构、论证诊断方法（讨论）与
+  目标展开+语域诊断（邮件）、PATTERNS 删「未回应他人观点」、COMPARISON 固定三维度 + 引导语。
+- [中] **产品层**：批改前 15 秒自评单选；写后练习从拼写填空换成本篇原句仿改 + 三条自查；分数弱化布局做 A/B 不直接上。
+- [低] 历史 sessions 记录里已存的注入蓝标 JSON 仍会显示（只有新批改干净）；要清需一次性数据迁移（删 message 等于那句英文的
+  annotation 并重算 counts/segments），走 /sql-migrate 另议。
+- [低] `actions[].langOk` 目前只写不读；要度量「模型漏写中文」需在 writingEval 或 analytics/track 上报。
+- [低] ScoringReport（模考结果 / 历史行）三维度小卡在极窄屏固定三列（无 isMobile），320px 下每列约 98px；WritingFeedbackPanel 已单列。
+- [低] 「影响分数的错误」区块目前放在「逐句批注大纲」标签页顶部，首屏宏观评价页看不到；是否上提到宏观页待看用户行为。
+- [✅已落地 2026-09-21] **段落标记解析加固**：线上一份报告里批注与范文同时消失（用户实测截图）。根因是 `extractSections`
+  的标记正则 `/^===([A-Z_]+)===$/gm` 严格到只认一种写法 —— 模型给标记行加任何装饰（markdown 加粗 / 标题号 / 行尾空格 /
+  小写 / 行首缩进）都会让那一段连同它后面的内容被并进上一段吞掉，表现是分数照常显示、批注 / 修订版（写后练习的唯一数据源）/
+  范文 / 行动建议静默消失且报告不报错。现放宽外围修饰与大小写、段名限定白名单（评分 9 段 + 讲评 5 段，`lib/ai/lessonParse.js`
+  复用同一函数一并受益）；并在关键段缺两个以上时写 `feedback.parseDiagnostics`（标记原文 + 尾部片段 + 缺失段名）随 session
+  落库，下次故障不必再让用户开 DevTools 现挖。回归用例 `__tests__/ai-parse-section-markers.regression.test.js`
+  含「prompt 里每个段名都在白名单内」的反查 —— 新增段落忘了同步白名单会红。
+- [中] **范文缺失的另外两条成因未修**（本次只修了「标记被吞」这一条，另两条待线上 `parseDiagnostics` 数据定优先级）：
+  ①**输出被截断**：`===COMPARISON===` 排在 CORRECTED（要重抄全文）与 PATTERNS 之后，v4-flash 的 reasoning 也吃 8000 预算。
+  治法是把 COMPARISON 提到 CORRECTED 之前（但 CORRECTED 是写后练习的唯一数据源 `lib/postWritingPractice.js:266`，不能牺牲）
+  或范文单发一次调用。②**COMPARISON 段内标签漂移**：`parseComparisonSection` 硬匹配字面 `[范文]` / `[对比]`，模型写成
+  `范文：` / `【范文】` / `## 范文` 就整段解析为空（本地实测）。放宽时必须先按对比标签切段再锚段首；「无标签就把整块当范文」
+  的回退不能做 —— 实测会把模型的中文过场白当成范文渲染给用户。
+- [中] **三路取中位的范文兜底是全有全无**：`recoverCompleteComparison` 要求 donor 的范文与对比点俱全，某一路只有范文时
+  不算 donor、那篇范文跟着一起丢。应改成范文与对比点各自独立找 donor（本地实测：现行逻辑在「中位路全空、一路只有范文、
+  一路只有对比点」时结果仍是全空；而单纯把合格线降成「有范文就算数」会造成回归 —— 中位路有范文无对比点时，
+  反而不再去借另一路的对比点）。
+- [低] `data/academicWriting/sample_answers.json` 有 60 条题库范文但全仓库零引用，且只有 27 条 id 还在现行 prompts.json 里
+  （215 题，覆盖 12.6%），邮件题 0 条。可作范文缺失的兜底 —— 填上 modelEssay 还能让讲评的 COMPARE 段活过来（它现在是因为
+  modelEssay 为空才按 prompt 写「无」，见 `lib/ai/prompts/writingLesson.js:99`）—— 但这个覆盖率决定了它不是主方案。

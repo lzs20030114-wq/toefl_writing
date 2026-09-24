@@ -7463,6 +7463,342 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_35795957911-short_001",
+      "variant": "short",
+      "text": "Hi Daniel, your parcel has been sitting at the West Hall mailroom since Monday. Items left beyond 14 days are sent back, and a $5 holding charge starts after Friday. Please collect it weekdays between 2:00 and 5:00 PM. — RA Kim",
+      "word_count": 42,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35795957911-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what happens to packages kept at the mailroom longer than two weeks?",
+          "options": {
+            "A": "They are moved to the front desk.",
+            "B": "They are held for an extra month.",
+            "C": "They are sent back to the sender.",
+            "D": "They are donated to campus charities."
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that items left beyond 14 days are sent back, meaning they are returned to the sender."
+        },
+        {
+          "qid": "rdl_gen_35795957911-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about picking up the parcel?",
+          "options": {
+            "A": "He should wait until Monday to collect it.",
+            "B": "He must bring a printed delivery slip.",
+            "C": "He needs to pay before Friday.",
+            "D": "He avoids the charge by collecting Friday."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the $5 holding charge only starts after Friday, collecting the parcel on or before Friday means no charge is paid."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35795957911-short_002",
+      "variant": "short",
+      "text": "Fire Alarm Testing Notice — Balk Hall. System tests are scheduled for Tuesday, October 8, from 9:00 AM to 11:00 AM. Alarms will sound repeatedly. Residents are not required to leave their rooms. Report faulty units to Facilities at 555-0142. Room access may be needed on floor 2.",
+      "word_count": 48,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35795957911-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the alarm testing occur?",
+          "options": {
+            "A": "On Tuesday morning, from 9:00 to 11:00.",
+            "B": "On Tuesday afternoon, from 2:00 to 4:00.",
+            "C": "On Wednesday morning, from 9:00 to 11:00.",
+            "D": "On Thursday evening, from 6:00 to 8:00."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice gives the test date as Tuesday, October 8, running from 9:00 AM to 11:00 AM."
+        },
+        {
+          "qid": "rdl_gen_35795957911-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about residents living on floor 2?",
+          "options": {
+            "A": "They may be asked to leave the building.",
+            "B": "They may receive a refund on their deposit.",
+            "C": "They may need to call the Facilities line.",
+            "D": "They may need to allow staff into rooms."
+          },
+          "correct_answer": "D",
+          "explanation": "The notice mentions that room access may be needed on floor 2, implying those residents could have to let workers into their rooms."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35795957911-short_003",
+      "variant": "short",
+      "text": "Recycling Bin Relocation — North Quad bins move to the Jensen Lot entrance on Monday, November 4. Old bins are removed at 8:00 AM that day. Glass and cardboard are accepted; plastic film is not. Questions? Email the Sustainability Office at green@univ.edu.",
+      "word_count": 42,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35795957911-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where will the recycling bins be placed?",
+          "options": {
+            "A": "At the entrance to Jensen Lot.",
+            "B": "Inside the North Quad laundry room.",
+            "C": "Beside the Sustainability Office door.",
+            "D": "Near the campus dining hall."
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that the North Quad bins are moving to the Jensen Lot entrance."
+        },
+        {
+          "qid": "rdl_gen_35795957911-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the old bins?",
+          "options": {
+            "A": "They will be moved to a storage area.",
+            "B": "They will be gone after Monday morning.",
+            "C": "They will accept glass and cardboard.",
+            "D": "They will be replaced at noon on Monday."
+          },
+          "correct_answer": "B",
+          "explanation": "Because the old bins are removed at 8:00 AM on Monday, they will no longer be in place once that morning has passed."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35795957911-short_004",
+      "variant": "short",
+      "text": "Lost Property Notice — Field House. Unclaimed items held at the equipment desk will be discarded on Friday, December 6. Retrieval is available Monday to Thursday, 10:00 AM to 4:00 PM. A $2 handling fee applies. Bring your student ID. Contact the front desk with questions.",
+      "word_count": 46,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35795957911-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must a person bring to retrieve an item?",
+          "options": {
+            "A": "A printed email confirmation",
+            "B": "A signed form from the desk",
+            "C": "A student identification card",
+            "D": "A receipt from the Field House"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice instructs readers to bring their student ID when claiming an item."
+        },
+        {
+          "qid": "rdl_gen_35795957911-short_004_q2",
+          "question_type": "detail",
+          "stem": "According to the notice, what will happen to items that are never collected?",
+          "options": {
+            "A": "They will be sold at a campus auction.",
+            "B": "They will be thrown away.",
+            "C": "They will be given to charity groups.",
+            "D": "They will be kept until January."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says unclaimed items will be discarded on December 6, which means they are thrown away."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_001",
+      "variant": "short",
+      "text": "Hi Omar, a quick reminder that the biosafety refresher for all lab assistants is set for Thursday, April 10, from 3:00 to 4:30 PM in Room 118, Hawley Annex. Please bring $5 for the materials fee. Sign in at the front desk. — Dr. Whitfield",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what are attendees asked to bring?",
+          "options": {
+            "A": "A copy of the biosafety refresher schedule",
+            "B": "A signed permission form from a supervisor",
+            "C": "A five-dollar payment for materials",
+            "D": "A valid student identification card"
+          },
+          "correct_answer": "C",
+          "explanation": "The email states that attendees should bring $5 for the materials fee, which matches a five-dollar payment for materials."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the biosafety refresher?",
+          "options": {
+            "A": "It is required for laboratory assistants.",
+            "B": "It takes place in a large lecture hall.",
+            "C": "It replaces an earlier training session.",
+            "D": "It lasts for more than two hours."
+          },
+          "correct_answer": "A",
+          "explanation": "The email is sent to all lab assistants and describes the session as a refresher they must attend and sign in for, implying it is mandatory for them."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_002",
+      "variant": "short",
+      "text": "Notice: South Lot B will be closed for repaving from 6:00 AM Monday, June 2, through 6:00 PM Friday, June 6. Permit holders should park in West Lot C during this period. Overnight parking in Lot C is not permitted. Contact the Facilities Office at 555-0142.",
+      "word_count": 46,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, where should permit holders park during the closure?",
+          "options": {
+            "A": "In the North Campus Garage",
+            "B": "In the South Lot B overflow area",
+            "C": "In West Lot C",
+            "D": "In the East Visitor Lot"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice directs permit holders to park in West Lot C while South Lot B is being repaved."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about overnight parking during the closure?",
+          "options": {
+            "A": "It remains available in South Lot B.",
+            "B": "It is prohibited in the replacement lot.",
+            "C": "It requires a special permit from Facilities.",
+            "D": "It moves to the North Campus Garage."
+          },
+          "correct_answer": "B",
+          "explanation": "Since overnight parking in Lot C is not permitted, drivers who normally park overnight cannot use the temporary replacement lot for that purpose."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_003",
+      "variant": "short",
+      "text": "Hi Dana, your tour guide shift is confirmed for Saturday, March 8, 9:30 AM to 12:30 PM, starting at the Kerr Admissions Desk. Arrive fifteen minutes early to collect your badge; late arrivals forfeit the slot. Reply by Wednesday to keep it. — Ms. Alvarez",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when should the volunteer arrive at the Kerr Admissions Desk?",
+          "options": {
+            "A": "At 9:15 AM",
+            "B": "At 9:30 AM",
+            "C": "At 12:15 PM",
+            "D": "At 12:30 PM"
+          },
+          "correct_answer": "A",
+          "explanation": "The shift begins at 9:30 AM and volunteers are told to come fifteen minutes early, which means arriving at 9:15 AM."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about volunteers who arrive after the shift begins?",
+          "options": {
+            "A": "They can collect badges at the front desk.",
+            "B": "They will be given a different shift time.",
+            "C": "They must reply to Ms. Alvarez by Wednesday.",
+            "D": "They will lose their assigned shift."
+          },
+          "correct_answer": "D",
+          "explanation": "The email warns that late arrivals forfeit the slot, meaning someone who shows up after the start time gives up that shift."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_35931562066-short_004",
+      "variant": "short",
+      "text": "The campus garden is open again! Hours are Tuesdays and Thursdays, 4:00-6:00 PM, behind Beale Hall. I grabbed basil and tomato starts for $3.50 each — honestly the best deal on campus. Bring cash, since they can't take cards yet. See you there!",
+      "word_count": 43,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_35931562066-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the post, when is the campus garden open?",
+          "options": {
+            "A": "On Monday and Wednesday afternoons",
+            "B": "On Saturday and Sunday mornings",
+            "C": "On weekday mornings before classes",
+            "D": "On Tuesday and Thursday afternoons"
+          },
+          "correct_answer": "D",
+          "explanation": "The post lists opening hours as Tuesdays and Thursdays from 4:00 to 6:00 PM, which are late-afternoon times."
+        },
+        {
+          "qid": "rdl_gen_35931562066-short_004_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the post, the word \"starts\" is closest in meaning to",
+          "options": {
+            "A": "Prices",
+            "B": "Young plants",
+            "C": "Cooking tips",
+            "D": "Garden tools"
+          },
+          "correct_answer": "B",
+          "explanation": "The writer bought basil and tomato starts for $3.50 each, so \"starts\" refers to small young plants meant for planting."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
