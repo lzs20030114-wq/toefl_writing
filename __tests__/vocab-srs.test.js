@@ -689,7 +689,7 @@ describe("卡片方向 / 原句", () => {
     const long =
       "Although the evidence remains contested, the discovery was pivotal in reshaping our understanding of early human migration, which scholars had long assumed to be impossible during the glacial maximum.";
     const out = clozeSentence({ word: "pivotal", sentence: long });
-    expect(out).toContain("______");
+    expect(out).toContain("_______");
     expect(out.split(/\s+/).length).toBeLessThanOrEqual(30);
     expect(out.length).toBeLessThan(long.length);
   });
@@ -743,6 +743,10 @@ describe("卡片方向 / 原句", () => {
   test("挖空把词换成下划线，屈折形式也能挖掉", () => {
     expect(clozeSentence({ word: "divide", sentence: "A cell divides rapidly." }))
       .toBe("A cell ______ rapidly.");
+    expect(clozeSentence({ word: "approximately", sentence: "There are approximately 1,670 stones." }))
+      .toBe("There are _____________ 1,670 stones.");
+    expect(clozeSentence({ word: "cat", sentence: "The cats slept." }))
+      .toBe("The ___ slept.");
   });
 
   test("句子里找不到这个词就不出挖空卡", () => {

@@ -22,6 +22,7 @@ import { adoptDictEntry } from "../../lib/vocab/vocabStore";
  *     而挖空卡正面挂着音标等于已经把词形给了，真实句子的空位又不唯一，
  *     它从头到尾没要求过词义提取。语境提升理解，**提取**才提升留存
  *     （den Broek 2018/2022），所以语境留下，提取的目标换成词义。
+ *     进入 review 后的产出卡要求输入拼写，核对后按实际结果评分。
  *  3. 只有两个评分键：忘了 / 记得。Anki 官方 FAQ：FSRS 对「主要用 Again/Good」
  *     的用户预测更准；而「忘了却按 Hard」是官方点名唯一会毁掉排期的习惯。
  *     四档的信息增益小于它引入的自评噪声，对我们这种顺手收藏进来的普通用户尤其如此。
@@ -156,6 +157,8 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   const [queue, setQueue] = useState(() => initialQueue || []);
   const [pos, setPos] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [spelling, setSpelling] = useState("");
+  const [spellingResult, setSpellingResult] = useState(null);
   const [tally, setTally] = useState({ again: 0, good: 0 });
   // 队列在本场内是活的（答错的卡会回插），进度条分母用「初始张数」会跳；
   // 用已答次数 /（已答 + 剩余）才稳。
@@ -164,6 +167,7 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   const seenRef = useRef(new Map());
   // 这张卡是什么时候显示出来的 —— 存进日志，留给以后用反应时间做隐式分档
   const shownAtRef = useRef(Date.now());
+  const spellingRef = useRef(null);
   // 卡上释义太薄时现查到的词条（见 needsDictFill）。只查当前这一张：
   // 一个分片一百多 KB，把整队列的首字母都预热一遍在移动网络上不划算，
   // 而真正需要补的卡是少数（绝大多数卡是从义项 chips 点着收藏的，词性本来就全）。
@@ -183,6 +187,18 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   useEffect(() => {
     shownAtRef.current = Date.now();
   }, [pos]);
+
+  useEffect(() => {
+    if (mode === "recall" && !revealed) spellingRef.current?.focus();
+  }, [pos, mode, revealed]);
+
+  const checkSpelling = useCallback((e) => {
+    e.preventDefault();
+    if (!card || !spelling.trim() || revealed) return;
+    const normalize = (value) => value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
+    setSpellingResult(normalize(spelling) === normalize(card.word) ? "correct" : "incorrect");
+    setRevealed(true);
+  }, [card, spelling, revealed]);
 
   const fillWord = card && needsDictFill(card) ? card.word : "";
   useEffect(() => {
@@ -230,19 +246,32 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
         return next;
       });
       setRevealed(false);
+      setSpelling("");
+      setSpellingResult(null);
       setPos((p) => p + 1);
     },
     [card, onGrade, pos],
   );
 
-  // 键盘：空格先翻面，翻完再按空格 = 记得；1 = 忘了，2 = 记得。
+  // 认词卡沿用翻面自评；拼写卡必须先输入或明确选择「想不起来」。
   const gradeRef = useRef(grade);
   gradeRef.current = grade;
   const revealedRef = useRef(revealed);
   revealedRef.current = revealed;
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+  const spellingResultRef = useRef(spellingResult);
+  spellingResultRef.current = spellingResult;
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+      if (e.target && /^(INPUT|TEXTAREA|BUTTON)$/.test(e.target.tagName)) return;
+      if (modeRef.current === "recall") {
+        if (revealedRef.current && (e.key === " " || e.key === "Enter")) {
+          e.preventDefault();
+          gradeRef.current(spellingResultRef.current === "correct" ? RATING.GOOD : RATING.AGAIN);
+        }
+        return;
+      }
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         if (!revealedRef.current) setRevealed(true);
@@ -326,12 +355,12 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
 
       {/* 卡片 */}
       <div
-        onClick={() => !revealed && setRevealed(true)}
+        onClick={() => mode !== "recall" && !revealed && setRevealed(true)}
         style={{
           background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16,
           boxShadow: C.shadow, padding: "28px 24px", minHeight: 250,
           display: "flex", flexDirection: "column",
-          cursor: revealed ? "default" : "pointer",
+          cursor: mode !== "recall" && !revealed ? "pointer" : "default",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
@@ -374,8 +403,41 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
               />
               {cloze && (
                 <div style={{ marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9, background: C.bg, borderRadius: 8, padding: "9px 13px" }}>
-                  {cloze}
+                  {cloze.split(/(_+)/).map((part, i) => i % 2 === 1
+                    ? <span key={i} style={{ letterSpacing: 2, fontFamily: "monospace" }}>{part}</span>
+                    : part)}
                 </div>
+              )}
+              {!revealed && (
+                <form onSubmit={checkSpelling} style={{ display: "flex", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+                  <input
+                    ref={spellingRef}
+                    aria-label="拼写英文单词"
+                    value={spelling}
+                    onChange={(e) => setSpelling(e.target.value)}
+                    placeholder="在这里输入完整拼写"
+                    autoComplete="off"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                    maxLength={100}
+                    style={{
+                      flex: "1 1 220px", minWidth: 0, boxSizing: "border-box",
+                      border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 13px",
+                      fontSize: 16, color: C.t1, fontFamily: FONT,
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={!spelling.trim()}
+                    style={{
+                      border: "none", borderRadius: 10, padding: "11px 18px", fontSize: 14,
+                      fontWeight: 700, fontFamily: FONT, background: ACCENT, color: "#fff",
+                      cursor: spelling.trim() ? "pointer" : "default", opacity: spelling.trim() ? 1 : 0.5,
+                    }}
+                  >
+                    核对拼写
+                  </button>
+                </form>
               )}
             </>
           )}
@@ -394,6 +456,11 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
                 </>
               ) : (
                 <>
+                  {mode === "recall" && (
+                    <div role="status" style={{ fontSize: 13, fontWeight: 700, color: spellingResult === "correct" ? "#0d9668" : "#dc2626", marginBottom: 10 }}>
+                      {spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："}
+                    </div>
+                  )}
                   {mode !== "recognize" && <WordLine card={card} size={28} />}
                   {card.def && (
                     <DefLine
@@ -423,7 +490,29 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
 
       {/* 操作区 —— 两个键，不显示下次间隔 */}
       <div style={{ marginTop: 16 }}>
-        {!revealed ? (
+        {mode === "recall" && !revealed ? (
+          <button
+            onClick={() => { setSpellingResult("skipped"); setRevealed(true); }}
+            style={{
+              width: "100%", border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2,
+              borderRadius: 12, padding: "12px 0", fontSize: 13, fontWeight: 600,
+              cursor: "pointer", fontFamily: FONT,
+            }}
+          >
+            想不起来，显示答案
+          </button>
+        ) : mode === "recall" ? (
+          <button
+            onClick={() => grade(spellingResult === "correct" ? RATING.GOOD : RATING.AGAIN)}
+            style={{
+              width: "100%", border: "none", background: ACCENT, color: "#fff",
+              borderRadius: 12, padding: "15px 0", fontSize: 15, fontWeight: 700,
+              cursor: "pointer", fontFamily: FONT,
+            }}
+          >
+            {spellingResult === "correct" ? "记得，下一词" : "忘了，下一词"}
+          </button>
+        ) : !revealed ? (
           <button
             onClick={() => setRevealed(true)}
             style={{
@@ -459,10 +548,12 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
           </div>
         )}
         <div style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10, lineHeight: 1.7 }}>
-          {revealed
-            ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
-            : mode === "recall"
-              ? "先在心里把这个词拼出来再翻面 —— 想不起来的那几秒，才是真正在记东西。"
+          {mode === "recall"
+            ? revealed
+              ? "拼对算记得；拼错或想不起来算忘了。"
+              : "先写出完整单词再核对；不会写时也可以显示答案。"
+            : revealed
+              ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
               : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
         </div>
       </div>
