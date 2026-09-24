@@ -8,6 +8,7 @@ import { VocabReview } from "./VocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
 import { MATURE_DAYS, sortByUrgency } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
+import RootExplorer from "./RootExplorer";
 
 const ACCENT = "#0891B2";
 const ACCENT_SOFT = "#ECFEFF";
@@ -211,6 +212,8 @@ export default function VocabNotebook({ onBack }) {
           间隔也压在考试日之前。今天的词会比平时多一些，这是故意的。
         </div>
       )}
+
+      <RootExplorer />
 
       {!isLoggedIn && ready && cards.length > 0 && (
         <div style={{
