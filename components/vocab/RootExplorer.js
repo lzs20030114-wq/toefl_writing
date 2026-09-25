@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { C, FONT, SurfaceCard } from "../shared/ui";
+import { SpeakButton } from "../shared/SpeakButton";
 import { callAI } from "../../lib/ai/client";
 import { getSavedCode } from "../../lib/AuthContext";
 import { isSaved, saveWord } from "../../lib/vocab/vocabStore";
@@ -130,6 +131,7 @@ export default function RootExplorer() {
                 <div key={item.word} style={{ border: `1px solid ${C.bdrSubtle}`, borderRadius: 10, padding: "12px 13px", minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                     <strong style={{ fontSize: 15, color: C.t1, overflowWrap: "anywhere" }}>{item.word}</strong>
+                    <SpeakButton word={item.word} size={26} title={`朗读 ${item.word}`} />
                     <span style={{ color: ACCENT, fontSize: 11, fontWeight: 700 }}>{item.partOfSpeech}</span>
                     <button type="button" onClick={() => addWord(item)} disabled={saved} style={{ marginLeft: "auto", border: `1px solid ${saved ? C.bdr : ACCENT}`, background: saved ? C.bdrSubtle : "#ECFEFF", color: saved ? C.t3 : ACCENT, borderRadius: 7, padding: "3px 8px", fontSize: 11, fontFamily: FONT, cursor: saved ? "default" : "pointer" }}>
                       {saved ? "已收藏" : "收藏"}
