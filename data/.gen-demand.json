@@ -1,25 +1,27 @@
 {
-  "generated_at": "2026-09-24T20:38:44.758Z",
+  "generated_at": "2026-09-25T20:37:48.939Z",
   "window_days": 7,
   "active_users": 20,
   "banks": {
     "bs": {
       "bank_size": 110,
-      "top_user_consumed": 76,
-      "top_user_pct": 0.691,
-      "burn_7d": 24,
-      "min_user_runway_days": 57.3,
-      "triggers": [],
-      "generate": false,
-      "n": 0,
-      "reason": "库存充足，当晚无需补题。"
+      "top_user_consumed": 77,
+      "top_user_pct": 0.7,
+      "burn_7d": 29,
+      "min_user_runway_days": 51.3,
+      "triggers": [
+        "T1"
+      ],
+      "generate": true,
+      "n": 19,
+      "reason": "头号活跃用户已做 77/110 题（70%），逼近刷穿，建议补 19 题。"
     },
     "discussion": {
-      "bank_size": 222,
+      "bank_size": 226,
       "top_user_consumed": 6,
       "top_user_pct": 0.027,
-      "burn_7d": 2,
-      "min_user_runway_days": 1512,
+      "burn_7d": 1,
+      "min_user_runway_days": 1540,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -29,8 +31,8 @@
       "bank_size": 221,
       "top_user_consumed": 19,
       "top_user_pct": 0.086,
-      "burn_7d": 10,
-      "min_user_runway_days": 214,
+      "burn_7d": 8,
+      "min_user_runway_days": 249.7,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -51,19 +53,19 @@
       "bank_size": 407,
       "top_user_consumed": 35,
       "top_user_pct": 0.086,
-      "burn_7d": 37,
-      "min_user_runway_days": 151.3,
+      "burn_7d": 38,
+      "min_user_runway_days": 128.7,
       "triggers": [],
       "generate": false,
       "n": 0,
       "reason": "库存充足，当晚无需补题。"
     },
     "rdl-short": {
-      "bank_size": 216,
+      "bank_size": 220,
       "top_user_consumed": 5,
       "top_user_pct": 0.023,
       "burn_7d": 7,
-      "min_user_runway_days": 295.4,
+      "min_user_runway_days": 301,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -73,7 +75,7 @@
       "bank_size": 132,
       "top_user_consumed": 5,
       "top_user_pct": 0.038,
-      "burn_7d": 3,
+      "burn_7d": 4,
       "min_user_runway_days": 455,
       "triggers": [],
       "generate": false,
@@ -106,7 +108,7 @@
       "bank_size": 100,
       "top_user_consumed": 3,
       "top_user_pct": 0.03,
-      "burn_7d": 4,
+      "burn_7d": 5,
       "min_user_runway_days": 226.3,
       "triggers": [],
       "generate": false,
@@ -117,8 +119,8 @@
       "bank_size": 421,
       "top_user_consumed": 28,
       "top_user_pct": 0.067,
-      "burn_7d": 44,
-      "min_user_runway_days": 140.4,
+      "burn_7d": 24,
+      "min_user_runway_days": 189.5,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -150,5 +152,7 @@
       "not_in_routine": true
     }
   },
-  "routine_instructions": []
+  "routine_instructions": [
+    "Generate 19 bs sentence-building items"
+  ]
 }
