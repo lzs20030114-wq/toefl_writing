@@ -7967,6 +7967,132 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_36200875121-short_001",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nMy office hours shift this week to Wednesday, 2:00–4:00 PM in Room 312 instead of Thursday. Forms submitted after Friday at noon carry a $5 late fee. Please bring your signed advising sheet and a pen.\n\nBest,\nDr. Alvarez",
+      "word_count": 41,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36200875121-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what should Daniel bring?",
+          "options": {
+            "A": "A copy of his tuition receipt",
+            "B": "An advising form he signed",
+            "C": "A late fee payment voucher",
+            "D": "A printed class schedule"
+          },
+          "correct_answer": "B",
+          "explanation": "The email asks Daniel to bring 'your signed advising sheet and a pen.' The $5 fee is mentioned, but no receipt, voucher, or schedule is requested."
+        },
+        {
+          "qid": "rdl_gen_36200875121-short_001_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word \"shift\" is closest in meaning to",
+          "options": {
+            "A": "remain unchanged",
+            "B": "become longer",
+            "C": "be rescheduled",
+            "D": "be repeated"
+          },
+          "correct_answer": "C",
+          "explanation": "\"Shift\" indicates that the office hours have moved to a different day and time, so they are rescheduled. They do not stay the same, grow longer, or repeat."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36200875121-short_002",
+      "variant": "short",
+      "text": "NOTICE: Recycling Bins Relocated\n\nEffective March 3, the bins formerly at Lot C are moved to the north entrance of Baker Hall. Collection occurs 7:00–10:00 AM daily. Glass and cardboard must be separated; mixed containers will not be emptied. Questions: Facilities Office.",
+      "word_count": 42,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36200875121-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what is required of people using the bins?",
+          "options": {
+            "A": "Rinsing all containers before deposit",
+            "B": "Delivering bins to the Facilities Office",
+            "C": "Arriving before 7:00 AM each day",
+            "D": "Keeping glass and cardboard apart"
+          },
+          "correct_answer": "D",
+          "explanation": "The notice states that glass and cardboard must be separated, meaning these two materials have to be kept apart. No rinsing, delivery, or early arrival is mentioned."
+        },
+        {
+          "qid": "rdl_gen_36200875121-short_002_q2",
+          "question_type": "inference",
+          "stem": "What is implied by the statement that mixed containers will not be emptied?",
+          "options": {
+            "A": "Users must sort items before drop-off",
+            "B": "Staff will sort the contents later",
+            "C": "The bins will be taken away soon",
+            "D": "Collection will start earlier daily"
+          },
+          "correct_answer": "A",
+          "explanation": "Since unsorted containers are left unemptied, users themselves must separate their recyclables before depositing them. The notice says nothing about staff sorting, bin removal, or changed collection hours."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36200875121-short_003",
+      "variant": "short",
+      "text": "NOTICE: Network Maintenance\n\nWireless access in the Hartley Library will be unavailable on Saturday, April 12, from 11:00 PM to 3:00 AM Sunday while servers are upgraded. Wired connections in Room 110 remain active. Direct questions to the IT Help Desk, extension 4400.",
+      "word_count": 43,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36200875121-short_003_q1",
+          "question_type": "detail",
+          "stem": "During which period will wireless access be unavailable?",
+          "options": {
+            "A": "From Saturday night until early Sunday",
+            "B": "From Saturday morning until Sunday night",
+            "C": "From Friday night until Saturday morning",
+            "D": "From Sunday afternoon until Monday morning"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice gives the window as 11:00 PM Saturday to 3:00 AM Sunday, which is Saturday night through early Sunday morning."
+        },
+        {
+          "qid": "rdl_gen_36200875121-short_003_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the notice, the word \"active\" is closest in meaning to",
+          "options": {
+            "A": "busy",
+            "B": "open",
+            "C": "functioning",
+            "D": "guarded"
+          },
+          "correct_answer": "C",
+          "explanation": "\"Active\" means the wired connections in Room 110 continue to function while the wireless network is down. It does not refer to being crowded, open to the public, or protected."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
