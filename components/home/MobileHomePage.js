@@ -26,6 +26,7 @@ import { REAL_WRITING_COUNTS } from "./realExamCounts";
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
 import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
 import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
+import { DailyTasksCard } from "./DailyTasksCard";
 import { LISTENING_TOTAL_QUESTIONS, listeningModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
 /* ── 颜色工具 ── */
@@ -36,7 +37,7 @@ export function MobileHomePage({
   isChallenge, isPractice, mode, switchMode,
   gridItems, postWritingCounts, bsMistakeCount = 0,
   userCode, userTier, userEmail, isLoggedIn, showLoginModal, onLogout,
-  totalCount, weekCount, bestMock,
+  totalCount, weekCount, bestMock, sessions,
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
   fadeIn, sideCard, querySuffix, isChallengeProp,
   onOpenReferral,
@@ -138,6 +139,14 @@ export function MobileHomePage({
         )}
         <span style={{ color: t2, fontSize: 18 }}>›</span>
       </div>
+
+      {/* ── 今日任务（紧凑变体：默认收起，展开状态记在 localStorage） ── */}
+      <DailyTasksCard
+        variant="mobile"
+        userCode={userCode}
+        isChallenge={isChallenge}
+        sessions={sessions}
+      />
 
       {/* ── Section tabs ── */}
       <div style={{ display: "flex", gap: 0, marginBottom: 14, width: "100%", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>

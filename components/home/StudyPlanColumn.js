@@ -162,6 +162,7 @@ function ProgressRing({ size, stroke, progress, color, track, children }) {
 export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sideCard, fadeIn }) {
   const [plan, setPlan] = useState(EMPTY_PLAN);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [streakOpen, setStreakOpen] = useState(false);
   const [calView, setCalView] = useState("week"); // week | month | heat
   const now = useMemo(() => new Date(), []);
   const [view, setView] = useState(() => ({ y: now.getFullYear(), m: now.getMonth() }));
@@ -323,11 +324,20 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
 
       {/* ══ 卡片三：学习打卡（多邻国式连胜） ══ */}
       <div style={{ ...modernCard("15px 16px 14px"), ...fadeIn(220) }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-          <IconBadge name="flame" isChallenge={isChallenge} tint="#F2702E" soft="rgba(242,112,46,0.14)" border="rgba(242,112,46,0.28)" />
-          <span style={{ fontSize: 14, fontWeight: 700, color: t1, flex: 1 }}>学习打卡</span>
-        </div>
+        {streakOpen ? (
+          <button
+            type="button" onClick={() => setStreakOpen(false)} aria-expanded={true} aria-label="收起学习打卡"
+            style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, marginBottom: 12, padding: 0, border: 0, background: "transparent", cursor: "pointer", textAlign: "left", fontFamily: HOME_FONT }}
+          >
+            <IconBadge name="flame" isChallenge={isChallenge} tint="#F2702E" soft="rgba(242,112,46,0.14)" border="rgba(242,112,46,0.28)" />
+            <span style={{ fontSize: 14, fontWeight: 700, color: t1, flex: 1 }}>学习打卡</span>
+            <CollapseChevron open color={t3} />
+          </button>
+        ) : (
+          <StreakCompact streak={streak} onClick={() => setStreakOpen(true)} />
+        )}
 
+        {streakOpen && <>
         {/* 连胜火焰主视觉 */}
         <StreakHero streak={streak} isChallenge={isChallenge} t3={t3} />
 
@@ -361,6 +371,7 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
         <div style={{ marginTop: 13, paddingTop: 11, borderTop: `1px solid ${hairline}`, textAlign: "center", fontSize: 11, color: t3, fontVariantNumeric: "tabular-nums" }}>
           本月 {currentMonthCount} 天 · 累计 {totalCount} 天
         </div>
+        </>}
       </div>
 
       {editorOpen && createPortal(
@@ -377,6 +388,32 @@ export function StudyPlanColumn({ userCode, isChallenge, sessions, bestMock, sid
 }
 
 const EMPTY_PLAN = { examDate: null, targetScore: null, currentScore: null, createdAt: null, updatedAt: null };
+
+function CollapseChevron({ open, color }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
+      style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+function StreakCompact({ streak, onClick }) {
+  const tier = flameTierFor(streak);
+  return (
+    <button type="button" onClick={onClick} aria-expanded={false} aria-label={`展开学习打卡，已连续打卡 ${streak} 天`}
+      style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: 0, borderRadius: 12,
+        background: "linear-gradient(135deg, #EB8855 0%, #CF542C 100%)", boxShadow: "0 4px 11px rgba(207,84,44,0.25)",
+        cursor: "pointer", textAlign: "left", fontFamily: HOME_FONT }}>
+      <Flame size={30} grad={tier.flame} id="sp-flame-compact" />
+      <span style={{ flex: 1, minWidth: 0, color: "#fff" }}>
+        <span style={{ display: "block", fontSize: 11, fontWeight: 700, opacity: 0.9 }}>学习打卡</span>
+        <span style={{ display: "block", fontSize: 16, fontWeight: 700, lineHeight: 1.25, fontVariantNumeric: "tabular-nums" }}>{streak} 天连续打卡</span>
+      </span>
+      <CollapseChevron open={false} color="#fff" />
+    </button>
+  );
+}
 
 function shiftMonth({ y, m }, delta) {
   const d = new Date(y, m + delta, 1);
