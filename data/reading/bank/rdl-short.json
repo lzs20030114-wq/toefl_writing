@@ -8093,6 +8093,174 @@
         "status": "passed",
         "accuracy": "2/2"
       }
+    },
+    {
+      "id": "rdl_gen_36278272045-short_001",
+      "variant": "short",
+      "text": "Taco Loco truck is back on Library Plaza today! Three tacos for just $3 until 4 PM — hands down the best deal on campus, way better than the dining hall. Cash only, so hit the ATM first. Tag a friend!",
+      "word_count": 41,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36278272045-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what can be bought for $3?",
+          "options": {
+            "A": "Three tacos",
+            "B": "One taco",
+            "C": "A dining hall meal",
+            "D": "An ATM withdrawal"
+          },
+          "correct_answer": "A",
+          "explanation": "The post advertises three tacos for just $3, sold until 4 PM on Library Plaza."
+        },
+        {
+          "qid": "rdl_gen_36278272045-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about paying at the truck?",
+          "options": {
+            "A": "Customers should have cash ready.",
+            "B": "Customers may use a credit card.",
+            "C": "Customers must order online first.",
+            "D": "Customers receive a free drink."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the post says cash only and suggests visiting the ATM, buyers need physical money on hand."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36278272045-short_002",
+      "variant": "short",
+      "text": "Water fountains on the fourth floor of Keating Hall will be closed for repairs from Monday, April 7, through Wednesday, April 9. Bottled water is available at the Facilities Office, Room 112, between 9:00 AM and 3:00 PM. We apologize for any inconvenience.",
+      "word_count": 43,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36278272045-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the fountains be closed?",
+          "options": {
+            "A": "Between April 3 and April 5",
+            "B": "Between April 9 and April 11",
+            "C": "Between April 7 and April 9",
+            "D": "Between April 12 and April 14"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states the fountains will be closed for repairs from Monday, April 7, through Wednesday, April 9."
+        },
+        {
+          "qid": "rdl_gen_36278272045-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about getting drinking water during the closure period?",
+          "options": {
+            "A": "Students on other floors also lack water.",
+            "B": "The building's water supply is cut off.",
+            "C": "Repairs will end earlier than planned.",
+            "D": "Students must go elsewhere for water."
+          },
+          "correct_answer": "D",
+          "explanation": "Since the fourth-floor fountains are unavailable, the notice directs people to Room 112 of the Facilities Office for bottled water, implying they must travel to another spot."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36278272045-short_003",
+      "variant": "short",
+      "text": "Hi Dana, Quick update — the Astronomy Club meeting has moved from Wednesday to Thursday at 6:30 PM. We'll now meet in Room 310 of the Physics Building instead of the library. Please bring your observation logs. See you there, Miguel",
+      "word_count": 41,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36278272045-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when will the Astronomy Club meeting take place?",
+          "options": {
+            "A": "At 6:30 PM on Wednesday",
+            "B": "At 6:30 PM on Thursday",
+            "C": "At 3:10 PM on Wednesday",
+            "D": "At 3:10 PM on Thursday"
+          },
+          "correct_answer": "B",
+          "explanation": "The email says the meeting has moved from Wednesday to Thursday at 6:30 PM."
+        },
+        {
+          "qid": "rdl_gen_36278272045-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about where the club previously met?",
+          "options": {
+            "A": "It met in Room 310.",
+            "B": "It met in the library.",
+            "C": "It met in a lecture hall.",
+            "D": "It met in the Physics Building."
+          },
+          "correct_answer": "B",
+          "explanation": "The email says the club will now meet in Room 310 of the Physics Building instead of the library, implying the library was the old location."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36278272045-short_004",
+      "variant": "short",
+      "text": "Hi Adrian, The music department has a limited number of practice room keys available. There's a $15 deposit required at the Music Office, Room 12, before Friday, April 4, at 5:00 PM. Please bring your student ID. Best, Ms. Reyes",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36278272045-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, how much is the deposit for a practice room key?",
+          "options": {
+            "A": "$5",
+            "B": "$12",
+            "C": "$50",
+            "D": "$15"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states that a $15 deposit is required at the Music Office, Room 12."
+        },
+        {
+          "qid": "rdl_gen_36278272045-short_004_q2",
+          "question_type": "detail",
+          "stem": "According to the email, where should the deposit be paid?",
+          "options": {
+            "A": "At the Music Office, Room 21",
+            "B": "At the Student ID Office",
+            "C": "At the Music Office, Room 12",
+            "D": "At the Practice Room Desk"
+          },
+          "correct_answer": "C",
+          "explanation": "The deposit is to be paid at the Music Office, Room 12, before Friday, April 4."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
     }
   ]
 }
