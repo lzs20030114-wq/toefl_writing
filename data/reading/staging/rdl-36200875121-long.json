@@ -1,0 +1,130 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-25T23:25:36.865Z",
+  "total_generated": 2,
+  "total_accepted": 2,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36200875121-long_001",
+      "variant": "long",
+      "text": "CAMPUS RECREATION — HALSEY HALL LOCKER RENEWAL NOTICE\n\nSeptember 8, 2025\n\nAll lockers in Halsey Hall must be emptied by 5:00 PM on Friday, September 26. Locker assignments for the fall semester will be renewed only for students who submit the online renewal form through the recreation portal before that deadline.\n\nLockers that are not renewed will be cleared by facilities staff beginning Monday, September 29 at 8:00 AM. Personal items left behind will be held at the equipment desk in Room 112 for 14 days. After October 13, unclaimed items will be donated.\n\n- Renewal fee: $15.00 per locker, charged to your student account.\n- Replacement lock: $8.00 if the original lock is missing.\n- Renewal form: recreation portal, \"My Lockers\" tab.\n- Questions: contact Ms. Alicia Braun at abraun@halseyrec.edu or visit Room 112.\n\nStudents with a medical note may request a locker on the ground floor near the pool deck. Requests must be submitted in person before September 26.",
+      "word_count": 161,
+      "genre": "notice",
+      "format_metadata": {
+        "title": "Halsey Hall Locker Renewal Notice",
+        "issued_by": "Campus Recreation",
+        "date": "September 8, 2025",
+        "contact": "abraun@halseyrec.edu, Room 112"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_36200875121-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, how can students renew a locker for the fall semester?",
+          "options": {
+            "A": "By paying the fee at the equipment desk in person",
+            "B": "By submitting an online form before September 26",
+            "C": "By returning the original lock to Room 112",
+            "D": "By calling Ms. Braun before the deadline"
+          },
+          "correct_answer": "B",
+          "explanation": "The notice states that locker assignments will be renewed only for students who submit the online renewal form through the recreation portal before the September 26 deadline."
+        },
+        {
+          "qid": "rdl_gen_36200875121-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the lockers on the ground floor near the pool deck?",
+          "options": {
+            "A": "They are assigned on a first-come basis.",
+            "B": "They are renewed more often than other lockers.",
+            "C": "They are intended for students with special needs.",
+            "D": "They are available for an additional fee."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice says these lockers may be requested by students with a medical note, implying they are set aside for students who have a documented need rather than being assigned generally."
+        },
+        {
+          "qid": "rdl_gen_36200875121-long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about students who do not renew their lockers?",
+          "options": {
+            "A": "They will be charged the fifteen-dollar renewal fee.",
+            "B": "They will receive a reminder from Ms. Braun.",
+            "C": "They will need to clear their belongings by September 26.",
+            "D": "They will be able to renew after October 13."
+          },
+          "correct_answer": "C",
+          "explanation": "Because un-renewed lockers are cleared by facilities staff starting September 29, students who do not renew must remove their belongings before the September 26 deadline."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    },
+    {
+      "id": "rdl_gen_36200875121-long_002",
+      "variant": "long",
+      "text": "RIVERSIDE RECREATION CENTER — GROUP FITNESS SCHEDULE\nFall Semester (September 2 – December 12)\n\nMONDAY\n6:30 AM – 7:15 AM  Sunrise Yoga  Studio A  $5.00 drop-in\n12:10 PM – 12:50 PM  Express Cycle  Cycle Room  free with pass\n5:30 PM – 6:30 PM  Power Strength  Studio B  $5.00 drop-in\n\nWEDNESDAY\n6:30 AM – 7:15 AM  Sunrise Yoga  Studio A  $5.00 drop-in\n12:10 PM – 12:50 PM  Express Cycle  Cycle Room  free with pass\n6:00 PM – 7:00 PM  Zumba  Studio A  $7.00 drop-in\n\nFRIDAY\n7:00 AM – 7:45 AM  Deep Water Aerobics  Aquatic Center  $8.00 drop-in\n5:00 PM – 6:00 PM  Power Strength  Studio B  $5.00 drop-in\n\nSATURDAY\n9:00 AM – 10:00 AM  Zumba  Studio A  $7.00 drop-in\n10:30 AM – 11:30 AM  Deep Water Aerobics  Aquatic Center  $8.00 drop-in\n\nPOLICIES\n- Semester pass: $45.00; covers every class except Deep Water Aerobics.\n- Registration opens 48 hours before each class through the recreation portal.\n- Participants must arrive 5 minutes early; late arrivals will not be admitted.\n- No classes on November 27–28 (Thanksgiving holiday).\n- Questions? Email fitness@riversiderec.edu or call 555-0142.",
+      "word_count": 182,
+      "genre": "schedule",
+      "format_metadata": {
+        "title": "Group Fitness Schedule, Fall Semester",
+        "issued_by": "Riverside Recreation Center",
+        "term": "September 2 – December 12",
+        "contact": "fitness@riversiderec.edu, 555-0142"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_36200875121-long_002_q1",
+          "question_type": "detail",
+          "stem": "According to the schedule, what is true about the semester pass?",
+          "options": {
+            "A": "It can be used without any advance registration.",
+            "B": "It must be renewed at the start of each term.",
+            "C": "It includes all classes held in the aquatic center.",
+            "D": "It does not cover Deep Water Aerobics classes."
+          },
+          "correct_answer": "D",
+          "explanation": "The policy section states that the $45.00 semester pass covers every class except Deep Water Aerobics, so that class is excluded."
+        },
+        {
+          "qid": "rdl_gen_36200875121-long_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who arrives at 12:15 PM for the Express Cycle class?",
+          "options": {
+            "A": "The student will be charged a late fee of five dollars.",
+            "B": "The student will not be permitted to take the class.",
+            "C": "The student will need to register for a different session.",
+            "D": "The student will be asked to arrive five minutes early."
+          },
+          "correct_answer": "B",
+          "explanation": "Participants must arrive five minutes before a class begins, and late arrivals are not admitted. Since the class starts at 12:10 PM, someone arriving at 12:15 PM would be turned away."
+        },
+        {
+          "qid": "rdl_gen_36200875121-long_002_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of this schedule?",
+          "options": {
+            "A": "To list the drop-in fees charged at the recreation center",
+            "B": "To give class times, locations, and registration rules",
+            "C": "To explain why the aquatic center closes in November",
+            "D": "To encourage students to purchase a semester pass"
+          },
+          "correct_answer": "B",
+          "explanation": "The document provides the weekly class timetable with times and rooms, plus supporting policies such as fees, registration, and arrival rules."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}

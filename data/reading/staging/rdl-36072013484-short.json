@@ -1,0 +1,178 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-24T23:19:19.971Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36072013484-short_001",
+      "variant": "short",
+      "text": "Hi Daniel,\n\nThis confirms your tutoring session with Ms. Rowe on Wednesday, March 12, from 4:00 to 5:00 PM in Room 118, Baker Library. The session fee is $8, payable at the desk. Bring your draft essay.\n\nBest,\nTutoring Center",
+      "word_count": 40,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36072013484-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what should Daniel bring to the appointment?",
+          "options": {
+            "A": "A printed copy of the schedule",
+            "B": "A signed permission form",
+            "C": "A draft essay",
+            "D": "A valid student ID card"
+          },
+          "correct_answer": "C",
+          "explanation": "The email ends with the instruction to bring a draft essay, which is the only item Daniel is asked to take along."
+        },
+        {
+          "qid": "rdl_gen_36072013484-short_001_q2",
+          "question_type": "detail",
+          "stem": "When is the tutoring session scheduled to take place?",
+          "options": {
+            "A": "From 4:00 to 5:00 PM on Wednesday",
+            "B": "From 3:00 to 4:00 PM on Wednesday",
+            "C": "From 4:00 to 5:00 PM on Thursday",
+            "D": "From 5:00 to 6:00 PM on Wednesday"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the appointment runs from 4:00 to 5:00 PM on Wednesday, March 12."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36072013484-short_002",
+      "variant": "short",
+      "text": "NOTICE: The west elevator in Merrick Hall will be out of service from March 10 to March 21 for motor replacement. Occupants should use the east elevator or the stairwell near Room 110. Accessibility assistance is available at the Facilities Office, 555-0182.",
+      "word_count": 42,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36072013484-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, why is the west elevator unavailable?",
+          "options": {
+            "A": "Because of a needed motor replacement",
+            "B": "Because of a routine safety inspection",
+            "C": "Because of a planned building renovation",
+            "D": "Because of a recent power failure"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice says the elevator is out of service 'for motor replacement,' meaning its motor is being changed."
+        },
+        {
+          "qid": "rdl_gen_36072013484-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about people who are unable to use the stairs?",
+          "options": {
+            "A": "They ought to reschedule their appointments in advance.",
+            "B": "They need to submit a written request before March 10.",
+            "C": "They will be reassigned to offices on the ground floor.",
+            "D": "They can obtain assistance by contacting the Facilities Office."
+          },
+          "correct_answer": "D",
+          "explanation": "Since stair use is offered as the alternative but not everyone can manage stairs, the mention of accessibility help at the Facilities Office implies those individuals can call to arrange support."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36072013484-short_003",
+      "variant": "short",
+      "text": "Huge news—the computer lab in Tyler Hall is offering free printing until Friday! I printed my whole 30-page thesis there yesterday and paid nothing. Just bring your student ID. Doors open at 8:00 AM, and the staff are super helpful!",
+      "word_count": 40,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36072013484-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what must someone show to use the free printing?",
+          "options": {
+            "A": "A printed voucher",
+            "B": "A small fee",
+            "C": "A student ID",
+            "D": "A lab membership"
+          },
+          "correct_answer": "C",
+          "explanation": "The post instructs readers to just bring their student ID, indicating that identification is what is needed."
+        },
+        {
+          "qid": "rdl_gen_36072013484-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the author?",
+          "options": {
+            "A": "The author is employed by the computer lab.",
+            "B": "The author has already used the free service.",
+            "C": "The author needs help with a class assignment.",
+            "D": "The author pays for printing at the library."
+          },
+          "correct_answer": "B",
+          "explanation": "The author describes printing a 30-page thesis there yesterday and paying nothing, which shows the service was already used."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36072013484-short_004",
+      "variant": "short",
+      "text": "Hi Elena,\n\nYou are confirmed for the memory study on Thursday, April 3, at 2:30 PM in Room 212, Kline Psychology Building. The session lasts about an hour, and you'll receive $15 in cash. Please avoid caffeine that morning.\n\nThanks,\nDr. Alvarez",
+      "word_count": 42,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36072013484-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what will Elena receive for taking part in the study?",
+          "options": {
+            "A": "A copy of the study results",
+            "B": "A cash payment of fifteen dollars",
+            "C": "A parking pass for the session",
+            "D": "A gift card for the campus store"
+          },
+          "correct_answer": "B",
+          "explanation": "The email states that participants are given $15 in cash, which matches a fifteen-dollar cash payment."
+        },
+        {
+          "qid": "rdl_gen_36072013484-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the memory study?",
+          "options": {
+            "A": "It tests participants on their general knowledge.",
+            "B": "It will last for more than one day.",
+            "C": "It charges participants a small fee.",
+            "D": "It measures how diet may influence memory."
+          },
+          "correct_answer": "D",
+          "explanation": "The request to avoid caffeine before the session suggests that what participants consume could affect the memory results being measured."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
