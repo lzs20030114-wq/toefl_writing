@@ -274,7 +274,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
                 <span style={{ fontSize: 11, fontWeight: 700, color: C.t2, letterSpacing: "0.02em" }}>原文精听</span>
                 <AudioPlayer ref={reviewPlayerRef} compact src={item.audio_url || null} text={ttsText} turns={ttsTurns} isPractice onTime={handleReviewTime} />
               </div>
-              <WordLookupLayer passage={explainContext} source="listening" onPlaySentence={handlePlaySentence} style={item.conversation
+              <WordLookupLayer passage={explainContext} source="listening" onPlaySentence={handlePlaySentence} listeningAudio={{ audioUrl: item.audio_url, timings: reviewTimings }} style={item.conversation
                 ? { marginBottom: 4 }
                 : { fontSize: 13, color: C.t1, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${C.bdr}` }}>
                 <SentenceTranscript

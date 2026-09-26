@@ -316,6 +316,28 @@ function MockTaskCard({ task, index }) {
 
 // -- LCR Detail (Choose a Response) --
 
+function LCRSpeakerReview({ speakerText, item }) {
+  const audioUrl = item.audio_url || null;
+  const sp = useSentencePlayback(item.sentence_timings || null, audioUrl);
+  return (
+    <>
+      {speakerText && (
+        <WordLookupLayer passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence}
+          listeningAudio={{ audioUrl, timings: sp.timings }}
+          style={{ fontSize: 13, color: P.text, lineHeight: 1.6, padding: "8px 12px", background: "#f8faf9", borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${ACCENT.color}`, fontStyle: "italic" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>Speaker:</span>
+          <SentenceTranscript timings={sp.timings} transcript={speakerText} activeIndex={sp.activeIndex} onPick={sp.onPick} />
+        </WordLookupLayer>
+      )}
+      {(audioUrl || speakerText) && (
+        <div data-no-dict style={{ marginBottom: 8 }}>
+          <AudioPlayer ref={sp.playerRef} compact playbackRateControl src={audioUrl} text={speakerText} isPractice onTime={sp.onTime} />
+        </div>
+      )}
+    </>
+  );
+}
+
 export function LCRDetail({ session }) {
   const results = session.details?.results || [];
   // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
@@ -325,19 +347,13 @@ export function LCRDetail({ session }) {
   // matching reader in lib/listeningMistakes.js. Fall back to details.questions
   // for any legacy/alternate shape.
   const items = session.details?.items || session.details?.questions || [];
-  // 点词查词典的上下文：刺激句在前、选项在后。收藏进单词本时存的「所在原句」
-  // 和 AI 讲解都靠它定位。
-  const lookupContext = questionLookupContext(
-    results.map((r, i) => (items[i] || {}).speaker || (items[i] || {}).stem || r.stem || "").filter(Boolean).join(" "),
-    results.map((r, i) => ({ options: (items[i] || {}).options || r.options || {} }))
-  );
 
   if (results.length === 0 && items.length === 0) {
     return <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>;
   }
 
   return (
-    <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {results.map((r, i) => {
         const q = items[i] || {};
         const speakerText = q.speaker || q.stem || r.stem || "";
@@ -348,21 +364,10 @@ export function LCRDetail({ session }) {
         return (
           <div key={i} style={{ padding: "10px 12px", borderRadius: 10, background: r.isCorrect ? "#F0FDF4" : "#FEF2F2", border: `1px solid ${r.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
             {/* Speaker text */}
-            {speakerText && (
-              <div style={{ fontSize: 13, color: P.text, lineHeight: 1.6, padding: "8px 12px", background: "#f8faf9", borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${ACCENT.color}`, fontStyle: "italic" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>Speaker:</span>
-                {speakerText}
-              </div>
-            )}
-            {/* Replay the recording for 精听 (TTS fallback off speaker text) */}
-            {(q.audio_url || speakerText) && (
-              <div data-no-dict style={{ marginBottom: 8 }}>
-                <AudioPlayer compact src={q.audio_url || null} text={speakerText} isPractice />
-              </div>
-            )}
+            <LCRSpeakerReview speakerText={speakerText} item={q} />
             {/* Options A/B/C/D */}
             {Object.keys(options).length > 0 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: explanation ? 8 : 0 }}>
+              <WordLookupLayer passage={Object.values(options).join(" ")} source="listening" style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: explanation ? 8 : 0 }}>
                 {["A", "B", "C", "D"].map(key => {
                   if (!options[key]) return null;
                   const isUserChoice = r.selected === key;
@@ -380,7 +385,7 @@ export function LCRDetail({ session }) {
                     </div>
                   );
                 })}
-              </div>
+              </WordLookupLayer>
             )}
             {/* Fallback when no options saved */}
             {Object.keys(options).length === 0 && (
@@ -418,7 +423,7 @@ export function LCRDetail({ session }) {
           </div>
         );
       })}
-    </WordLookupLayer>
+    </div>
   );
 }
 
@@ -442,12 +447,12 @@ export function LADetail({ session }) {
       {(audioUrl || transcript) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={transcript} isPractice onTime={sp.onTime} />
+          <AudioPlayer ref={sp.playerRef} compact playbackRateControl src={audioUrl} text={transcript} isPractice onTime={sp.onTime} />
         </div>
       )}
       {/* Transcript / announcement text（有句级时间戳时逐句可点） */}
       {transcript && (
-        <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       )}
@@ -551,12 +556,12 @@ export function LCDetail({ session }) {
       {(audioUrl || audioText) && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: P.textSec, letterSpacing: "0.02em" }}>原文精听</span>
-          <AudioPlayer ref={sp.playerRef} compact src={audioUrl} text={audioText} isPractice onTime={sp.onTime} />
+          <AudioPlayer ref={sp.playerRef} compact playbackRateControl src={audioUrl} text={audioText} isPractice onTime={sp.onTime} />
         </div>
       )}
       {/* Conversation turns as chat bubbles（有句级时间戳时逐句可点；气泡样式在 SentenceTranscript 里） */}
       {conversation.length > 0 ? (
-        <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} style={{ marginBottom: 12 }}>
+        <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ marginBottom: 12 }}>
           <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </WordLookupLayer>
       ) : transcript ? (

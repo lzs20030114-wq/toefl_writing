@@ -302,6 +302,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             userCode={userCode} userTier={userTier} userEmail={userEmail}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
             totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
+            sessions={sessions}
             fbOpen={fbOpen} setFbOpen={setFbOpen}
             fbText={fbText} setFbText={setFbText}
             fbBusy={fbBusy} fbSent={fbSent}

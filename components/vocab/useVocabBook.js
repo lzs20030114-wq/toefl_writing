@@ -8,6 +8,7 @@ import {
   removeWord,
   resetCard,
   setProductive,
+  setReviewMode as setStoredReviewMode,
   initVocabSync,
   VOCAB_UPDATED_EVENT,
 } from "../../lib/vocab/vocabStore";
@@ -55,19 +56,25 @@ export function useVocabBook() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [cards, limits, tick],
   );
+  const statsByMode = useMemo(() => ({
+    reading: bookStats(cards, new Date(), limits, "reading"),
+    listening: bookStats(cards, new Date(), limits, "listening"),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [cards, limits, tick]);
 
   const makeQueue = useCallback(
-    () => buildQueue(loadBook(), new Date(), loadLimits()),
+    (mode) => buildQueue(loadBook(), new Date(), loadLimits(), Math.random, mode),
     [],
   );
 
   const grade = useCallback(
-    (word, rating, durationMs) => gradeCard(word, rating, new Date(), undefined, durationMs),
+    (word, rating, durationMs, mode) => gradeCard(word, rating, new Date(), undefined, durationMs, mode),
     [],
   );
   const remove = useCallback((word) => removeWord(word), []);
   const reset = useCallback((word) => resetCard(word), []);
   const markProductive = useCallback((word, on) => setProductive(word, on), []);
+  const setReviewMode = useCallback((word, mode) => setStoredReviewMode(word, mode), []);
   const setLimits = useCallback((next) => {
     saveLimits(next);
     setLimitsState(loadLimits());
@@ -86,7 +93,7 @@ export function useVocabBook() {
   }, [tick]);
 
   return {
-    cards, stats, limits, setLimits, ready, isLoggedIn, refresh,
-    makeQueue, grade, remove, reset, setProductive: markProductive, schedule,
+    cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn, refresh,
+    makeQueue, grade, remove, reset, setReviewMode, setProductive: markProductive, schedule,
   };
 }

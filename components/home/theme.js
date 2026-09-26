@@ -63,7 +63,33 @@ export const HOME_PAGE_CSS = `
 @keyframes ch-sweep{0%{left:-30%}100%{left:130%}}
 @keyframes ch-gradRot{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes ch-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-/* 备考日历右栏：窄屏桌面（<1100px）自动隐藏，回退到两栏，避免中间内容被挤窄 */
-@media (max-width: 1100px){ .home-study-col{ display:none !important; } }
-/* 响应式规则已移至 app/mobile.css（全局生效） */
+@media (min-width: 2000px) {
+  .home-shell { max-width: min(1760px, 76vw) !important; }
+}
+/* 中等宽度让任务卡占满右侧，备考卡片移到内容下方，功能仍可访问。 */
+@media (min-width: 769px) and (max-width: 1280px) {
+  .home-shell { display: grid !important; grid-template-columns: 220px minmax(0, 1fr); }
+  .home-nav-sidebar { grid-column: 1; grid-row: 1 / 3; }
+  .home-shell > :nth-child(2) { grid-column: 2; grid-row: 1; min-width: 0; }
+  .home-study-col {
+    grid-column: 2; grid-row: 2;
+    display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: auto !important; min-width: 0 !important;
+    position: static !important; align-self: start !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 1100px) {
+  .home-shell { padding: 24px 24px 48px !important; gap: 18px !important; grid-template-columns: 200px minmax(0, 1fr); }
+  .home-nav-sidebar { width: 200px !important; min-width: 200px !important; }
+  .tp-home-header { flex-wrap: wrap !important; }
+}
+@media (min-width: 769px) and (max-width: 980px) {
+  .home-shell { padding: 20px 20px 40px !important; gap: 16px !important; grid-template-columns: 180px minmax(0, 1fr); }
+  .home-nav-sidebar { width: 180px !important; min-width: 180px !important; }
+  .home-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .home-study-col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-collapse-panel, .home-collapse-panel > div, .home-collapse-chevron { transition-duration: 0.01ms !important; }
+}
 `;

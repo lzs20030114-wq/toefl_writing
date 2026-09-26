@@ -5,9 +5,11 @@ import { C, FONT, PageShell, SurfaceCard } from "../shared/ui";
 import { SpeakButton } from "../shared/SpeakButton";
 import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
+import { ListeningVocabReview } from "./ListeningVocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
-import { MATURE_DAYS, sortByUrgency } from "../../lib/vocab/book";
+import { MATURE_DAYS, sortByUrgency, reviewCard } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
+import RootExplorer from "./RootExplorer";
 
 const ACCENT = "#0891B2";
 const ACCENT_SOFT = "#ECFEFF";
@@ -52,10 +54,12 @@ function Stat({ value, label, color }) {
 
 export default function VocabNotebook({ onBack }) {
   const {
-    cards, stats, limits, setLimits, ready, isLoggedIn,
-    makeQueue, grade, remove, reset, setProductive, schedule,
+    cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn,
+    makeQueue, grade, remove, reset, setProductive, setReviewMode, schedule,
   } = useVocabBook();
   const [queue, setQueue] = useState(null); // 非 null = 正在复习
+  const [reviewingMode, setReviewingMode] = useState("reading");
+  const [listMode, setListMode] = useState("all");
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
   const [shown, setShown] = useState(PAGE_SIZE);
@@ -65,29 +69,30 @@ export default function VocabNotebook({ onBack }) {
 
   const list = useMemo(() => {
     const kw = q.trim().toLowerCase();
-    let out = sortByUrgency(cards, now);
+    let out = sortByUrgency(cards.filter((c) => listMode === "all" || (c.reviewMode || "reading") === listMode).map((c) => reviewCard(c)), now);
     if (filter === "due") out = out.filter((c) => c.state !== STATE.NEW && isDue(c, now));
     else if (filter === "new") out = out.filter((c) => c.state === STATE.NEW);
     else if (filter === "learning") out = out.filter((c) => c.state === STATE.LEARNING || c.state === STATE.RELEARNING);
     else if (filter === "mature") out = out.filter((c) => (c.scheduledDays || 0) >= MATURE_DAYS);
     if (kw) out = out.filter((c) => c.word.includes(kw) || (c.def || "").toLowerCase().includes(kw));
     return out;
-  }, [cards, filter, q, now]);
+  }, [cards, filter, listMode, q, now]);
 
-  const startReview = () => {
-    const next = makeQueue();
+  const startReview = (mode) => {
+    const next = makeQueue(mode);
     if (next.length === 0) return;
+    setReviewingMode(mode);
     setQueue(next);
   };
 
   if (queue) {
     return (
       <PageShell narrow>
-        <VocabReview
-          initialQueue={queue}
-          onGrade={grade}
-          onExit={() => setQueue(null)}
-        />
+        {reviewingMode === "listening" ? (
+          <ListeningVocabReview initialQueue={queue} onGrade={grade} onExit={() => setQueue(null)} />
+        ) : (
+          <VocabReview initialQueue={queue} onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "reading")} onSetProductive={setProductive} onExit={() => setQueue(null)} />
+        )}
       </PageShell>
     );
   }
@@ -126,7 +131,7 @@ export default function VocabNotebook({ onBack }) {
         <SurfaceCard style={{ padding: "14px 18px", marginBottom: 14 }}>
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
             {[
-              { key: "newPerDay", label: "每天放出新词", max: 100, note: "备考期建议 15–25：放太多，三四天后会堆出还不完的复习债" },
+              { key: "newPerDay", label: "每天放出新词", max: 100, note: "阅读词和听力词共用此额度。备考期建议 15–25；放太多会堆出复习债" },
               { key: "maxReviews", label: "每天复习上限", max: 500, note: "0 = 不限。到期的词优先，超出的顺延到明天" },
             ].map((f) => (
               <label key={f.key} style={{ flex: "1 1 220px", minWidth: 0 }}>
@@ -157,35 +162,35 @@ export default function VocabNotebook({ onBack }) {
           display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
         }}>
           <div style={{ flex: 1, minWidth: 180 }}>
-            <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 600 }}>今天该过的词</div>
+            <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 600 }}>阅读复习 · 今天该过的词</div>
             <div style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.15, letterSpacing: -1 }}>
-              {ready ? stats.todo : "—"}
+              {ready ? (statsByMode?.reading?.todo ?? stats.todo) : "—"}
             </div>
             <div style={{ fontSize: 11.5, opacity: 0.85, marginTop: 2 }}>
-              {ready && stats.todo > 0
-                ? `到期复习 ${Math.min(stats.dueReview, limits.maxReviews || stats.dueReview)} · 新词 ${stats.newToday}`
+              {ready && (statsByMode?.reading?.todo ?? stats.todo) > 0
+                ? `到期复习 ${Math.min(statsByMode?.reading?.dueReview ?? stats.dueReview, limits.maxReviews || stats.dueReview)} · 新词 ${statsByMode?.reading?.newToday ?? stats.newToday}`
                 : "今天的词都过完了，明天同一时间再来"}
             </div>
             {/* 超出每日上限的部分明确说「顺延」，而不是任它堆成一面三百张的墙 —— 
                 那面墙才是真正让人弃用单词本的东西。 */}
-            {ready && limits.maxReviews > 0 && stats.dueReview > limits.maxReviews && (
+            {ready && limits.maxReviews > 0 && (statsByMode?.reading?.dueReview ?? stats.dueReview) > limits.maxReviews && (
               <div style={{ fontSize: 11, opacity: 0.75, marginTop: 4 }}>
-                还有 {stats.dueReview - limits.maxReviews} 个到期的词已顺延到明天
+                还有 {(statsByMode?.reading?.dueReview ?? stats.dueReview) - limits.maxReviews} 个到期的阅读词已顺延到明天
               </div>
             )}
           </div>
           <button
-            onClick={startReview}
-            disabled={!ready || stats.todo === 0}
+            onClick={() => startReview("reading")}
+            disabled={!ready || (statsByMode?.reading?.todo ?? stats.todo) === 0}
             style={{
               border: "none", borderRadius: 12, padding: "13px 28px",
               fontSize: 15, fontWeight: 800, fontFamily: FONT, flexShrink: 0,
-              background: !ready || stats.todo === 0 ? "rgba(255,255,255,0.25)" : "#fff",
-              color: !ready || stats.todo === 0 ? "rgba(255,255,255,0.7)" : ACCENT,
-              cursor: !ready || stats.todo === 0 ? "default" : "pointer",
+              background: !ready || (statsByMode?.reading?.todo ?? stats.todo) === 0 ? "rgba(255,255,255,0.25)" : "#fff",
+              color: !ready || (statsByMode?.reading?.todo ?? stats.todo) === 0 ? "rgba(255,255,255,0.7)" : ACCENT,
+              cursor: !ready || (statsByMode?.reading?.todo ?? stats.todo) === 0 ? "default" : "pointer",
             }}
           >
-            {stats.todo > 0 ? "开始复习" : "已完成"}
+            {(statsByMode?.reading?.todo ?? stats.todo) > 0 ? "开始阅读复习" : "阅读已完成"}
           </button>
         </div>
         <div style={{ display: "flex", borderTop: `1px solid ${C.bdrSubtle}` }}>
@@ -202,6 +207,17 @@ export default function VocabNotebook({ onBack }) {
         </div>
       </SurfaceCard>
 
+      <SurfaceCard style={{ padding: "18px 22px", marginBottom: 14, display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <div style={{ fontWeight: 800, color: C.t1 }}>听力复习</div>
+          <div style={{ fontSize: 12, color: C.t2, marginTop: 4 }}>今天待听 {ready ? (statsByMode?.listening?.todo ?? 0) : "—"} 词 · 先听声音再看答案</div>
+        </div>
+        <button type="button" onClick={() => startReview("listening")} disabled={!ready || !statsByMode?.listening?.todo}
+          style={{ border: "none", borderRadius: 10, padding: "11px 18px", fontFamily: FONT, fontWeight: 800, background: statsByMode?.listening?.todo ? ACCENT : C.bdrSubtle, color: statsByMode?.listening?.todo ? "#fff" : C.t3, cursor: statsByMode?.listening?.todo ? "pointer" : "default" }}>
+          开始听力复习
+        </button>
+      </SurfaceCard>
+
       {ready && schedule.sprint && (
         <div style={{
           fontSize: 12, color: "#9a3412", background: "#fff7ed", border: "1px solid #fed7aa",
@@ -211,6 +227,8 @@ export default function VocabNotebook({ onBack }) {
           间隔也压在考试日之前。今天的词会比平时多一些，这是故意的。
         </div>
       )}
+
+      <RootExplorer />
 
       {!isLoggedIn && ready && cards.length > 0 && (
         <div style={{
@@ -248,6 +266,12 @@ export default function VocabNotebook({ onBack }) {
       {ready && cards.length > 0 && (
         <SurfaceCard style={{ padding: "14px 16px 6px" }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+            <div role="group" aria-label="词表类型" style={{ display: "flex", gap: 5 }}>
+              {[["all", "全部词"], ["reading", "阅读词"], ["listening", "听力词"]].map(([mode, label]) => (
+                <button key={mode} type="button" onClick={() => { setListMode(mode); setShown(PAGE_SIZE); }}
+                  aria-pressed={listMode === mode} style={{ border: `1px solid ${listMode === mode ? ACCENT : C.bdr}`, borderRadius: 7, padding: "4px 9px", color: listMode === mode ? ACCENT : C.t2, background: "#fff", cursor: "pointer" }}>{label}</button>
+              ))}
+            </div>
             <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
               {FILTERS.map((f) => {
                 const on = filter === f.id;
@@ -280,7 +304,7 @@ export default function VocabNotebook({ onBack }) {
           </div>
 
           <div style={{ fontSize: 11, color: C.t3, marginBottom: 8 }}>
-            所有词默认要求会写；不需要会写的词，可逐个关闭右侧「要会写」。
+            阅读词默认要求会写；不需要会写的阅读词，可逐个关闭右侧「要会写」。听力词只考听懂，不考拼写。
           </div>
 
           {list.length === 0 ? (
@@ -336,7 +360,12 @@ export default function VocabNotebook({ onBack }) {
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: 5, flexShrink: 0 }}>
-                    <button
+                    <select aria-label={`${card.display || card.word}复习类型`} value={card.reviewMode || "reading"}
+                      onChange={(e) => setReviewMode(card.word, e.target.value)}
+                      style={{ border: `1px solid ${C.bdr}`, borderRadius: 7, background: "#fff", color: C.t2, fontSize: 11 }}>
+                      <option value="reading">阅读词</option><option value="listening">听力词</option>
+                    </select>
+                    {(card.reviewMode || "reading") === "reading" && <button
                       onClick={() => setProductive(card.word, !productiveOn)}
                       role="switch"
                       aria-checked={productiveOn}
@@ -351,7 +380,7 @@ export default function VocabNotebook({ onBack }) {
                       }}
                     >
                       {productiveOn ? "要会写" : "只需认得"}
-                    </button>
+                    </button>}
                     {card.reps > 0 && (
                       <button
                         onClick={() => reset(card.word)}

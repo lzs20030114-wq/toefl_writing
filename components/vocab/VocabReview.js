@@ -153,12 +153,16 @@ function WordLine({ card, size = 30 }) {
   );
 }
 
-export function VocabReview({ initialQueue, onGrade, onExit }) {
+export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) {
   const [queue, setQueue] = useState(() => initialQueue || []);
   const [pos, setPos] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [spelling, setSpelling] = useState("");
   const [spellingResult, setSpellingResult] = useState(null);
+  const [retrying, setRetrying] = useState(false);
+  const [retryResult, setRetryResult] = useState(null);
+  // 当前题型/已做出的拼写结果保持不变；逐词设置在下次出现时生效。
+  const [productiveOverrides, setProductiveOverrides] = useState({});
   const [tally, setTally] = useState({ again: 0, good: 0 });
   // 队列在本场内是活的（答错的卡会回插），进度条分母用「初始张数」会跳；
   // 用已答次数 /（已答 + 剩余）才稳。
@@ -180,6 +184,10 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
   // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
   const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
+  const productiveOn = card
+    ? (productiveOverrides[card.word] ?? (card.productive !== false))
+    : true;
+  const productiveChangedForThisCard = card && productiveOn !== (card.productive !== false);
 
   const finished = pos >= queue.length;
   const remaining = Math.max(0, queue.length - pos);
@@ -196,9 +204,27 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
     e.preventDefault();
     if (!card || !spelling.trim() || revealed) return;
     const normalize = (value) => value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
-    setSpellingResult(normalize(spelling) === normalize(card.word) ? "correct" : "incorrect");
+    const result = normalize(spelling) === normalize(card.word) ? "correct" : "incorrect";
+    if (retrying) setRetryResult(result);
+    else setSpellingResult(result);
     setRevealed(true);
-  }, [card, spelling, revealed]);
+  }, [card, spelling, revealed, retrying]);
+
+  const retrySpelling = useCallback(() => {
+    setRetrying(true);
+    setRetryResult(null);
+    setSpelling("");
+    setRevealed(false);
+  }, []);
+
+  const toggleProductive = useCallback((event) => {
+    event.stopPropagation();
+    if (!card || !onSetProductive) return;
+    const updated = onSetProductive(card.word, !productiveOn);
+    if (updated) {
+      setProductiveOverrides((prev) => ({ ...prev, [card.word]: updated.productive !== false }));
+    }
+  }, [card, onSetProductive, productiveOn]);
 
   const fillWord = card && needsDictFill(card) ? card.word : "";
   useEffect(() => {
@@ -248,6 +274,8 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
       setRevealed(false);
       setSpelling("");
       setSpellingResult(null);
+      setRetrying(false);
+      setRetryResult(null);
       setPos((p) => p + 1);
     },
     [card, onGrade, pos],
@@ -372,11 +400,36 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
           </span>
           <span style={{ fontSize: 11, color: C.t3 }}>{dirMeta.tip}</span>
           {/* 来源不只是信息展示：情境线索本身就是有效的提取线索 */}
-          <span style={{ fontSize: 10, color: C.t3, marginLeft: "auto" }}>
-            {sourceLabel(card)}
-            {card.tag ? ` · ${card.tag}` : ""}
-          </span>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 10, color: C.t3 }}>
+              {sourceLabel(card)}
+              {card.tag ? ` · ${card.tag}` : ""}
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={productiveOn}
+              aria-label={`${card.display || card.word}需要会写`}
+              onClick={toggleProductive}
+              title={productiveOn ? "改为只需认得，下次出现时生效" : "改为要会写，下次出现时生效"}
+              style={{
+                border: `1px solid ${productiveOn ? ACCENT : C.bdr}`,
+                background: productiveOn ? ACCENT_SOFT : "#fff",
+                color: productiveOn ? ACCENT : C.t2,
+                borderRadius: 7, padding: "4px 9px", fontSize: 11,
+                cursor: "pointer", fontFamily: FONT, fontWeight: 700,
+              }}
+            >
+              {productiveOn ? "要会写" : "只需认得"}
+            </button>
+          </div>
         </div>
+
+        {productiveChangedForThisCard && (
+          <div role="status" style={{ fontSize: 11, color: C.t2, marginBottom: 12 }}>
+            已改为「{productiveOn ? "要会写" : "只需认得"}」，下次出现时生效；本次仍按当前题型计分。
+          </div>
+        )}
 
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* ── 正面 ── */}
@@ -404,12 +457,17 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
               {cloze && (
                 <div style={{ marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9, background: C.bg, borderRadius: 8, padding: "9px 13px" }}>
                   {cloze.split(/(_+)/).map((part, i) => i % 2 === 1
-                    ? <span key={i} style={{ letterSpacing: 2, fontFamily: "monospace" }}>{part}</span>
+                    ? <span key={i} style={{ letterSpacing: 2, fontFamily: "monospace" }}>{card.word.trim().charAt(0)}{part.slice(1)}</span>
                     : part)}
                 </div>
               )}
+              {retrying && !revealed && (
+                <div style={{ marginTop: 16, fontSize: 13, color: ACCENT, fontWeight: 700 }}>
+                  首字母提示：{card.word.trim().charAt(0)}
+                </div>
+              )}
               {!revealed && (
-                <form onSubmit={checkSpelling} style={{ display: "flex", gap: 8, marginTop: 18, flexWrap: "wrap" }}>
+                <form onSubmit={checkSpelling} style={{ display: "flex", gap: 8, marginTop: retrying ? 10 : 18, flexWrap: "wrap" }}>
                   <input
                     ref={spellingRef}
                     aria-label="拼写英文单词"
@@ -457,8 +515,10 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
               ) : (
                 <>
                   {mode === "recall" && (
-                    <div role="status" style={{ fontSize: 13, fontWeight: 700, color: spellingResult === "correct" ? "#0d9668" : "#dc2626", marginBottom: 10 }}>
-                      {spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："}
+                    <div role="status" style={{ fontSize: 13, fontWeight: 700, color: (retrying ? retryResult : spellingResult) === "correct" ? "#0d9668" : "#dc2626", marginBottom: 10 }}>
+                      {retrying
+                        ? retryResult === "correct" ? "这次拼对了，首次结果仍按忘了计" : retryResult === "incorrect" ? `这次写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："
+                        : spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："}
                     </div>
                   )}
                   {mode !== "recognize" && <WordLine card={card} size={28} />}
@@ -492,7 +552,7 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
       <div style={{ marginTop: 16 }}>
         {mode === "recall" && !revealed ? (
           <button
-            onClick={() => { setSpellingResult("skipped"); setRevealed(true); }}
+            onClick={() => { if (retrying) setRetryResult("skipped"); else setSpellingResult("skipped"); setRevealed(true); }}
             style={{
               width: "100%", border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2,
               borderRadius: 12, padding: "12px 0", fontSize: 13, fontWeight: 600,
@@ -502,16 +562,31 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
             想不起来，显示答案
           </button>
         ) : mode === "recall" ? (
-          <button
-            onClick={() => grade(spellingResult === "correct" ? RATING.GOOD : RATING.AGAIN)}
-            style={{
-              width: "100%", border: "none", background: ACCENT, color: "#fff",
-              borderRadius: 12, padding: "15px 0", fontSize: 15, fontWeight: 700,
-              cursor: "pointer", fontFamily: FONT,
-            }}
-          >
-            {spellingResult === "correct" ? "记得，下一词" : "忘了，下一词"}
-          </button>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            {spellingResult !== "correct" && (
+              <button
+                type="button"
+                onClick={retrySpelling}
+                style={{
+                  flex: "1 1 160px", border: `1px solid ${ACCENT}`, background: "#fff", color: ACCENT,
+                  borderRadius: 12, padding: "15px 10px", fontSize: 14, fontWeight: 700,
+                  cursor: "pointer", fontFamily: FONT,
+                }}
+              >
+                再拼一次（提示首字母）
+              </button>
+            )}
+            <button
+              onClick={() => grade(spellingResult === "correct" ? RATING.GOOD : RATING.AGAIN)}
+              style={{
+                flex: "1 1 220px", border: "none", background: ACCENT, color: "#fff",
+                borderRadius: 12, padding: "15px 10px", fontSize: 15, fontWeight: 700,
+                cursor: "pointer", fontFamily: FONT,
+              }}
+            >
+              {spellingResult === "correct" ? "记得，下一词" : "忘了，下一词"}
+            </button>
+          </div>
         ) : !revealed ? (
           <button
             onClick={() => setRevealed(true)}
@@ -550,8 +625,8 @@ export function VocabReview({ initialQueue, onGrade, onExit }) {
         <div style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10, lineHeight: 1.7 }}>
           {mode === "recall"
             ? revealed
-              ? "拼对算记得；拼错或想不起来算忘了。"
-              : "先写出完整单词再核对；不会写时也可以显示答案。"
+              ? retrying ? "再拼一次只作巩固，本次仍按首次拼写结果排期。" : "拼对算记得；拼错或想不起来算忘了。"
+              : retrying ? "根据首字母提示，再写一次完整单词。" : "先写出完整单词再核对；不会写时也可以显示答案。"
             : revealed
               ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
               : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}

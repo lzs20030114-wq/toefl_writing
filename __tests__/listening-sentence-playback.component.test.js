@@ -14,8 +14,10 @@ import { createRef } from "react";
 import { AudioPlayer } from "../components/listening/AudioPlayer";
 import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "../components/listening/SentenceTranscript";
 import { WordLookupLayer } from "../components/reading/WordLookupLayer";
-import { LADetail, LCDetail } from "../components/listening/ListeningProgressView";
+import { LADetail, LCDetail, LCRDetail } from "../components/listening/ListeningProgressView";
 import { SENTENCE_SEEK_LEAD_SEC } from "../lib/listening/sentenceTimings";
+import { getCard } from "../lib/vocab/vocabStore";
+import { saveWord } from "../lib/vocab/vocabStore";
 
 jest.mock("../lib/AuthContext", () => ({
   getSavedCode: jest.fn(() => null),
@@ -285,6 +287,94 @@ describe("与划词词典共存", () => {
   });
 });
 
+describe("收藏听力原句", () => {
+  const originalCaret = document.caretRangeFromPoint;
+  const originalRect = Range.prototype.getBoundingClientRect;
+  afterEach(() => {
+    document.caretRangeFromPoint = originalCaret;
+    Range.prototype.getBoundingClientRect = originalRect;
+    localStorage.clear();
+  });
+
+  test("相同词选中第二句时只绑定第二句音频；题干里的词不绑定原声", async () => {
+    localStorage.clear();
+    Range.prototype.getBoundingClientRect = () => ({ top: 100, bottom: 116, left: 40, right: 100, width: 60, height: 16 });
+    const timings = [
+      { text: "The pattern changed.", start: 0, end: 1.2 },
+      { text: "Another pattern emerged.", start: 1.5, end: 3 },
+    ];
+    const { unmount } = render(
+      <WordLookupLayer passage={timings.map((t) => t.text).join(" ")} source="listening" listeningAudio={{ audioUrl: CLIP, timings }}>
+        <SentenceTranscript timings={timings} onPick={() => {}} />
+      </WordLookupLayer>
+    );
+    const second = sentenceEl("Another pattern emerged.");
+    document.caretRangeFromPoint = () => {
+      const node = [...second.childNodes].find((n) => n.nodeType === 3 && n.textContent.includes("pattern"));
+      const r = document.createRange();
+      r.setStart(node, node.textContent.indexOf("pattern") + 2);
+      r.collapse(true);
+      return r;
+    };
+    fireEvent.mouseUp(second, { clientX: 50, clientY: 108 });
+    fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
+    expect(getCard("pattern").reviewMode).toBe("listening");
+    expect(getCard("pattern").listeningContext).toEqual({ audioUrl: CLIP, start: 1.5, end: 3, text: "Another pattern emerged." });
+
+    unmount();
+    render(<WordLookupLayer passage="Which route is correct?" source="listening" listeningAudio={{ audioUrl: CLIP, timings }}>
+      <span data-testid="stem">Which route is correct?</span>
+    </WordLookupLayer>);
+    const stem = screen.getByTestId("stem");
+    document.caretRangeFromPoint = () => {
+      const node = stem.firstChild;
+      const r = document.createRange();
+      r.setStart(node, node.textContent.indexOf("route") + 2);
+      r.collapse(true);
+      return r;
+    };
+    fireEvent.mouseUp(stem, { clientX: 50, clientY: 108 });
+    fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
+    expect(getCard("route").reviewMode).toBe("listening");
+    expect(getCard("route").listeningContext).toBeFalsy();
+  });
+
+  test("已有文字语境可以补原句音频；跨句选择不绑首句音频", async () => {
+    localStorage.clear();
+    saveWord({ word: "pattern", sentence: "The pattern changed.", source: "reading" });
+    Range.prototype.getBoundingClientRect = () => ({ top: 100, bottom: 116, left: 40, right: 100, width: 60, height: 16 });
+    const timings = [
+      { text: "The pattern changed.", start: 0, end: 1.2 },
+      { text: "Another pattern emerged.", start: 1.5, end: 3 },
+    ];
+    render(<WordLookupLayer passage={timings.map((t) => t.text).join(" ")} source="listening" listeningAudio={{ audioUrl: CLIP, timings }}>
+      <SentenceTranscript timings={timings} onPick={() => {}} />
+    </WordLookupLayer>);
+    const first = sentenceEl("The pattern changed.");
+    const second = sentenceEl("Another pattern emerged.");
+    document.caretRangeFromPoint = () => {
+      const node = first.lastChild;
+      const r = document.createRange();
+      r.setStart(node, node.textContent.indexOf("pattern") + 2);
+      r.collapse(true);
+      return r;
+    };
+    fireEvent.mouseUp(first, { clientX: 50, clientY: 108 });
+    fireEvent.click(await screen.findByRole("button", { name: "＋ 补充原句音频" }));
+    expect(getCard("pattern").listeningContext).toEqual({ audioUrl: CLIP, start: 0, end: 1.2, text: "The pattern changed." });
+    fireEvent.click(screen.getByRole("button", { name: "关闭" }));
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.setStart(first.lastChild, first.lastChild.textContent.indexOf("pattern"));
+    range.setEnd(second.lastChild, second.lastChild.textContent.indexOf("pattern") + 7);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    fireEvent.mouseUp(first, { clientX: 50, clientY: 108 });
+    await act(async () => {});
+    expect(screen.queryByRole("button", { name: "听这一句" })).toBeNull();
+  });
+});
+
 describe("历史页接线", () => {
   const laSession = (over = {}) => ({
     id: 1, type: "listening", date: "2026-09-18T10:00:00.000Z",
@@ -309,6 +399,68 @@ describe("历史页接线", () => {
     media.currentTime = 3.6;
     act(() => { fireEvent(audioEl(), new Event("timeupdate")); });
     expect(sentenceEl("Did you find the book?")).toHaveStyle({ background: "#F3E8FF" });
+  });
+
+  test("LCR 每题原文有逐句音频，选项保持纯文字查词", async () => {
+    localStorage.clear();
+    Range.prototype.getBoundingClientRect = () => ({ top: 100, bottom: 116, left: 40, right: 100, width: 60, height: 16 });
+    const originalCaret = document.caretRangeFromPoint;
+    const item = { speaker: "The pattern changed.", audio_url: CLIP, sentence_timings: [{ text: "The pattern changed.", start: 0.4, end: 1.4 }], options: { A: "A route appeared." } };
+    render(<LCRDetail session={{ id: 10, details: { items: [item], results: [{ selected: "A", correct: "A", isCorrect: true }] } }} />);
+    const speaker = sentenceEl("The pattern changed.");
+    document.caretRangeFromPoint = () => {
+      const node = speaker.lastChild;
+      const r = document.createRange();
+      r.setStart(node, node.textContent.indexOf("pattern") + 2);
+      r.collapse(true);
+      return r;
+    };
+    fireEvent.mouseUp(speaker, { clientX: 50, clientY: 108 });
+    fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
+    expect(getCard("pattern").listeningContext).toEqual({ audioUrl: CLIP, start: 0.4, end: 1.4, text: "The pattern changed." });
+    fireEvent.click(screen.getByRole("button", { name: "关闭" }));
+    const option = screen.getByText(/A route appeared/);
+    document.caretRangeFromPoint = () => {
+      const node = [...option.childNodes].find((n) => n.nodeType === 3 && n.textContent.includes("route"));
+      const r = document.createRange();
+      r.setStart(node, node.textContent.indexOf("route") + 2);
+      r.collapse(true);
+      return r;
+    };
+    fireEvent.mouseUp(option, { clientX: 50, clientY: 108 });
+    fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
+    expect(getCard("route").listeningContext).toBeFalsy();
+    document.caretRangeFromPoint = originalCaret;
+  });
+
+  test("历史页倍速：整段和单句共用速度，播放中切换立即生效", () => {
+    render(<LADetail session={laSession()} />);
+    const media = stubMedia(audioEl());
+    act(() => { fireEvent(audioEl(), new Event("loadedmetadata")); });
+    const speed = screen.getByRole("slider", { name: "播放速度" });
+    expect(speed).toHaveAttribute("min", "0");
+    expect(speed).toHaveAttribute("max", "5");
+    expect(speed).toHaveAttribute("step", "1");
+    expect(speed).toHaveValue("2");
+    expect(screen.getByText("1.0×")).toBeInTheDocument();
+
+    fireEvent.change(speed, { target: { value: "0" } });
+    expect(audioEl().playbackRate).toBe(0.6);
+    fireEvent.change(speed, { target: { value: "5" } });
+    expect(audioEl().playbackRate).toBe(2);
+    fireEvent.change(speed, { target: { value: "1" } });
+    expect(audioEl().playbackRate).toBe(0.8);
+    expect(screen.getByText("0.8×")).toBeInTheDocument();
+    fireEvent.click(playKeys()[1]);
+    expect(media.currentTime).toBeCloseTo(2.42 - SENTENCE_SEEK_LEAD_SEC, 3);
+    expect(audioEl().playbackRate).toBe(0.8);
+
+    fireEvent.change(speed, { target: { value: "4" } });
+    expect(audioEl().playbackRate).toBe(1.5);
+    expect(media.currentTime).toBeCloseTo(2.42 - SENTENCE_SEEK_LEAD_SEC, 3);
+    fireEvent.click(screen.getByRole("button", { name: /缓冲中|Playing/ })); // 暂停单句
+    fireEvent.click(screen.getByRole("button", { name: /继续|Replay/ })); // 整段续播
+    expect(audioEl().playbackRate).toBe(1.5);
   });
 
   test("LADetail：老记录没有 sentence_timings → 原文照旧整段显示，没有播放键", () => {

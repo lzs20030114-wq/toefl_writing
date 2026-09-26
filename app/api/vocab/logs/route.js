@@ -31,6 +31,7 @@ function toRow(code, raw) {
   return {
     user_code: code,
     word,
+    mode: raw.mode === "listening" ? "listening" : "reading",
     rating,
     state: VALID_STATES.has(raw.st) ? raw.st : "new",
     elapsed_days: num(raw.el) ?? 0,

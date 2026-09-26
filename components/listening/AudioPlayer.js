@@ -8,6 +8,7 @@ import { trackAudioEvent } from "../../lib/analytics/audio";
 import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
+const PLAYBACK_RATES = [0.6, 0.8, 1, 1.2, 1.5, 2];
 
 // Only one AudioPlayer should sound at a time. Each instance owns an
 // independent <audio> element, and speechSynthesis is global, so without a
@@ -53,6 +54,7 @@ function pickVoice(voices, gender) {
  *           练习记录里精听要反复听某一句/某一段，只有「从头再放一遍」不够用。
  *  - taskType/itemId: telemetry labels, only used in exam-controller mode
  *  - onTime(sec): 播放位置回调（timeupdate + 逐句播放时的 rAF 节流），复盘页用它高亮当前句
+ *  - playbackRateControl: 在练习记录的进度条旁显示倍速选择，整段与逐句点播共用速度
  *  - ref: 命令式句柄 { playRange(start, end), pause(), seekable }——逐句点播
  *         （docs/listening-sentence-timings.md）：只在紧凑 + 真实音频 + 非考试共享元素时可用
  *
@@ -63,7 +65,7 @@ function pickVoice(voices, gender) {
  * iOS Safari / WeChat per-element autoplay rules. With no provider (all
  * practice pages) every code path below is exactly the legacy one.
  */
-export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, taskType = null, itemId = null, onTime = null }, ref) {
+export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = null, onEnded, maxReplays = 2, isPractice = false, autoPlay = false, compact = false, playbackRateControl = false, taskType = null, itemId = null, onTime = null }, ref) {
   const examAudio = useExamAudio();
   const controller = examAudio ? examAudio.controller : null;
   const controllerMode = !!(controller && autoPlay);
@@ -80,6 +82,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   // 紧凑模式可拖动进度条需要总时长；dragging 时关掉进度过渡并让把手显形。
   const [duration, setDuration] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   const audioRef = useRef(null);
   const seekBarRef = useRef(null);
@@ -494,6 +497,18 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   // 考试壳的共享元素也不该被回看逻辑改写播放位置。
   const seekable = compact && !!src && !controllerMode;
 
+  // 改速时立刻作用于正在播放的音频；同一元素也供 playRange 逐句点播使用。
+  const handlePlaybackRateChange = useCallback((e) => {
+    const rate = PLAYBACK_RATES[Number(e.target.value)];
+    if (!rate) return;
+    setPlaybackRate(rate);
+    if (audioRef.current) audioRef.current.playbackRate = rate;
+  }, []);
+
+  useEffect(() => {
+    if (seekable && audioRef.current) audioRef.current.playbackRate = playbackRate;
+  }, [seekable, src, playbackRate]);
+
   // 从当前位置开声（不像 playAudio 那样把 currentTime 归零）。
   const playFromCurrent = useCallback(() => {
     const audio = audioRef.current;
@@ -773,6 +788,27 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
             </span>
             <span style={{ fontSize: 11, color: C.t3, fontFamily: FONT, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
               {fmtClock(elapsed)} / {fmtClock(duration)}
+            </span>
+          </span>
+        )}
+        {playbackRateControl && seekable && duration > 0 && (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            <span style={{ fontSize: 11, color: C.t3, fontFamily: FONT }}>倍速</span>
+            <input
+              type="range"
+              aria-label="播放速度"
+              aria-valuetext={`${playbackRate.toFixed(1)}倍`}
+              min={0}
+              max={PLAYBACK_RATES.length - 1}
+              step={1}
+              value={PLAYBACK_RATES.indexOf(playbackRate)}
+              onChange={handlePlaybackRateChange}
+              style={{
+                width: 100, margin: 0, accentColor: ACCENT.color, cursor: "pointer",
+              }}
+            />
+            <span style={{ minWidth: 28, fontSize: 12, color: ACCENT.color, fontWeight: 700, fontFamily: FONT, fontVariantNumeric: "tabular-nums" }}>
+              {playbackRate.toFixed(1)}×
             </span>
           </span>
         )}

@@ -9,7 +9,7 @@
  */
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
-import { canSpeak, pickEnglishVoice, speakWord } from "../lib/audio/speakWord";
+import { canSpeak, pickEnglishVoice, speakWord, cancelSpeakWord } from "../lib/audio/speakWord";
 import { WordLookupLayer } from "../components/reading/WordLookupLayer";
 
 const PASSAGE = "The scholar studies ancient trade routes.";
@@ -128,6 +128,32 @@ describe("speakWord", () => {
     speakWord("study", { onDone });
     act(() => jest.advanceTimersByTime(20000));
     expect(onDone).toHaveBeenCalledTimes(1);
+  });
+
+  it("等待 voice 时取消，不得在延迟回调里播出旧词", () => {
+    jest.useFakeTimers();
+    const { synth, spoken } = installSpeech({ voices: [EN], deferVoices: true });
+    speakWord("old", { onEnd: jest.fn() });
+    cancelSpeakWord();
+    act(() => synth.releaseVoices());
+    act(() => jest.advanceTimersByTime(20000));
+    expect(spoken).toHaveLength(0);
+  });
+
+  it("只有正常结束触发 onEnd，中途取消和错误均不算听完", () => {
+    const { spoken } = installSpeech({ voices: [EN] });
+    const onEnd = jest.fn();
+    speakWord("first", { onEnd });
+    cancelSpeakWord();
+    expect(onEnd).not.toHaveBeenCalled();
+    speakWord("second", { onEnd });
+    act(() => spoken[1].onstart());
+    act(() => spoken[1].onerror());
+    expect(onEnd).not.toHaveBeenCalled();
+    speakWord("third", { onEnd });
+    act(() => spoken[2].onstart());
+    act(() => spoken[2].onend());
+    expect(onEnd).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -103,8 +103,19 @@ describe("划词弹窗 · 义项 chips", () => {
     expect(card.defFull).toBe(PATTERN_T);
     // 收藏时连词所在的那一句一起存
     expect(card.sentence).toBe("The pattern of migration changed.");
+    expect(card.reviewMode).toBe("reading");
     // 选中的那颗 chip 立刻变成选中态
     expect(chip).toHaveStyle({ color: "#0891B2" });
+  });
+
+  test("点义项前可选听力词；已收藏的词可切换类型", async () => {
+    openPopup("pattern");
+    const chip = await screen.findByText("图案");
+    fireEvent.click(screen.getByRole("button", { name: "听力词" }));
+    fireEvent.click(chip);
+    expect(getCard("pattern").reviewMode).toBe("listening");
+    fireEvent.click(screen.getByRole("button", { name: "阅读词" }));
+    expect(getCard("pattern").reviewMode).toBe("reading");
   });
 
   test("已收藏的词换一条义项：主释义跟着换，整条备份不动", async () => {

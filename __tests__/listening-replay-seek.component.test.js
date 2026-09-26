@@ -161,4 +161,5 @@ test("拖不动的场景不长出进度条：TTS 兜底（无 src）/ 非紧凑�
   stubMedia(audioEl);
   await act(async () => { fireEvent(audioEl, new Event("loadedmetadata")); });
   expect(screen.queryByRole("slider")).toBeNull();
+  expect(screen.queryByRole("slider", { name: "播放速度" })).toBeNull();
 });

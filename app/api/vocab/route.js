@@ -12,7 +12,7 @@ import { jsonError } from "../../../lib/apiResponse";
 
 const TABLE = "vocab_cards";
 const MAX_CARDS_PER_REQUEST = 100;
-const CARD_MAX_BYTES = 4 * 1024;
+const CARD_MAX_BYTES = 8 * 1024;
 const WORD_MAX_LEN = 60;
 
 // 复习时每打一次分就 debounce 后同步一次，一次同步最多 N 个批次请求；

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAround, splitSenses } from "../../lib/dict/core";
@@ -73,13 +73,19 @@ function wordRangeFromPoint(x, y) {
  * 只认可定位的句子（playable="1"）；不在句子里、或调用方根本没渲染句子时返回 -1。
  */
 function sentenceIndexOf(range) {
-  if (!range) return -1;
-  let node = range.startContainer;
-  if (node && node.nodeType === 3) node = node.parentElement;
-  const el = node && node.closest ? node.closest('[data-sentence-index][data-sentence-playable="1"]') : null;
-  if (!el) return -1;
+  const el = sentenceElementOf(range);
+  if (el?.getAttribute("data-sentence-playable") !== "1") return -1;
   const i = Number(el.getAttribute("data-sentence-index"));
   return Number.isInteger(i) && i >= 0 ? i : -1;
+}
+
+function sentenceElementOf(range) {
+  if (!range) return null;
+  const startNode = range.startContainer?.nodeType === 3 ? range.startContainer.parentElement : range.startContainer;
+  const endNode = range.endContainer?.nodeType === 3 ? range.endContainer.parentElement : range.endContainer;
+  const start = startNode?.closest?.("[data-sentence-index]") || null;
+  const end = endNode?.closest?.("[data-sentence-index]") || null;
+  return start && start === end ? start : null;
 }
 
 function loadAiCache() {
@@ -109,7 +115,7 @@ function saveAiCache(key, text) {
  * onPlaySentence(index) 可选：听力复盘传进来后，词落在某一句里时弹窗多一颗「听这一句」
  * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
  */
-export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence }) {
+export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence, listeningAudio }) {
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
@@ -118,6 +124,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   // 当前这个词在单词本里的那张卡（没收藏就是 null）。存整张卡而不是一个布尔，
   // 是因为义项选中态、「这句在不在卡上」都要读卡上的字段。
   const [card, setCard] = useState(null);
+  const [reviewMode, setReviewMode] = useState(source === "listening" ? "listening" : "reading");
   const saved = !!card;
 
   const tier = typeof window !== "undefined" ? getSavedTier() : null;
@@ -146,7 +153,10 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     rangeRef.current = range;
     wordRef.current = word;
     setAi(null);
-    setCard(getCard(word));
+    const existing = getCard(word);
+    setCard(existing);
+    setReviewMode(existing?.reviewMode || (source === "listening" ? "listening" : "reading"));
+    const sentenceEl = sentenceElementOf(range);
     setPop({
       word,
       rect: range.getBoundingClientRect(),
@@ -154,6 +164,8 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       loading: true,
       notFound: false,
       sentenceIndex: sentenceIndexOf(range),
+      sentenceText: sentenceEl?.textContent?.trim() || "",
+      crossSentence: !range.collapsed && !sentenceEl && !!(range.startContainer?.parentElement?.closest?.("[data-sentence-index]")),
     });
     const entry = await lookupWord(word);
     setPop((prev) =>
@@ -161,7 +173,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         ? { ...prev, entry, loading: false, notFound: !entry }
         : prev
     );
-  }, []);
+  }, [source]);
 
   const handlePick = useCallback(
     (ev) => {
@@ -284,12 +296,28 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   // 查词结果回来后词形可能被归一，重新对一次收藏态。
   useEffect(() => {
     if (!saveWordForm) return;
-    setCard(getCard(saveWordForm));
+    const existing = getCard(saveWordForm);
+    setCard(existing);
+    if (existing) setReviewMode(existing.reviewMode || "reading");
   }, [saveWordForm]);
 
   // 这个词在本页原文里的那一句：收藏时当主句，之后当「再加一句语境」的素材。
   const popWord = pop ? pop.word : "";
-  const curSentence = popWord ? sentenceAround(passage, popWord) || "" : "";
+  const timing = pop?.sentenceIndex >= 0 && Array.isArray(listeningAudio?.timings)
+    ? listeningAudio.timings[pop.sentenceIndex] : null;
+  const listeningContext = useMemo(() => typeof listeningAudio?.audioUrl === "string" && listeningAudio.audioUrl
+    && timing && typeof timing.text === "string" && timing.text.trim()
+    && Number.isFinite(timing.start) && Number.isFinite(timing.end) && timing.end > timing.start
+    ? { audioUrl: listeningAudio.audioUrl, start: timing.start, end: timing.end, text: timing.text.trim() }
+    : null, [listeningAudio?.audioUrl, timing]);
+  const curSentence = popWord && !pop?.crossSentence ? (listeningContext?.text || pop?.sentenceText || sentenceAround(passage, popWord) || "") : "";
+
+  const changeReviewMode = useCallback((mode) => {
+    setReviewMode(mode);
+    if (!card) return;
+    const next = saveWord({ ...card, reviewMode: mode, ...(listeningContext ? { listeningContext } : {}) });
+    if (next) setCard(next);
+  }, [card, listeningContext]);
 
   /** 收藏这个词。def 传空就用整条词典释义（用户没点义项时的老行为）。 */
   const saveCurrent = useCallback(
@@ -307,11 +335,13 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         // 连词所在的整句一起存：复习时在原语境里认词比孤立词表记得牢。
         sentence: curSentence,
         source,
+        reviewMode,
+        ...(listeningContext ? { listeningContext } : {}),
       });
       setCard(next || getCard(saveWordForm));
       return next;
     },
-    [pop, saveWordForm, curSentence, source],
+    [pop, saveWordForm, curSentence, source, reviewMode, listeningContext],
   );
 
   const toggleSave = useCallback(() => {
@@ -329,19 +359,25 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       if (!chosen) return;
       if (saved) {
         const next = chooseSense(saveWordForm, chosen, (pop.entry && pop.entry.t) || "");
-        if (next) setCard(next);
+        if (next) {
+          const updated = saveWord({ ...next, reviewMode, ...(listeningContext ? { listeningContext } : {}) });
+          setCard(updated || next);
+        }
         return;
       }
       saveCurrent(chosen);
     },
-    [pop, saveWordForm, saved, saveCurrent],
+    [pop, saveWordForm, saved, saveCurrent, reviewMode, listeningContext],
   );
 
   const pool = (card && Array.isArray(card.sentences) ? card.sentences : []);
   const sentenceOnCard = !!card && !!curSentence
     && (curSentence === card.sentence || pool.includes(curSentence));
   const poolFull = pool.length >= MAX_CONTEXTS;
-  const addSentenceLabel = sentenceOnCard
+  const canSupplementAudio = sentenceOnCard && !!listeningContext && !card?.listeningContext;
+  const addSentenceLabel = canSupplementAudio
+    ? "＋ 补充原句音频"
+    : sentenceOnCard
     ? "✓ 这句已在卡上"
     : poolFull
       ? "语境已满 3 句"
@@ -351,8 +387,10 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const addCurrentSentence = useCallback(() => {
     if (!saveWordForm || !curSentence) return;
     const next = addSentence(saveWordForm, curSentence);
-    if (next) setCard(next);
-  }, [saveWordForm, curSentence]);
+    if (!next) return;
+    const updated = listeningContext ? saveWord({ ...next, reviewMode, listeningContext }) : next;
+    setCard(updated || next);
+  }, [saveWordForm, curSentence, reviewMode, listeningContext]);
 
   const dropWord = useCallback(() => {
     if (!saveWordForm) return;
@@ -507,6 +545,15 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
           {pop.loading && (
             <div style={{ marginTop: 8, color: "#8a9a92", fontSize: 12 }}>查询中…</div>
           )}
+          <div role="group" aria-label="选择复习类型" style={{ display: "flex", gap: 6, marginTop: 8 }}>
+            {[["reading", "阅读词"], ["listening", "听力词"]].map(([mode, label]) => (
+              <button key={mode} type="button" aria-pressed={reviewMode === mode} disabled={pop.loading}
+                onClick={() => changeReviewMode(mode)}
+                style={{ border: `1px solid ${reviewMode === mode ? "#0891B2" : "#dbe3dd"}`, background: reviewMode === mode ? "#ECFEFF" : "#fff", color: reviewMode === mode ? "#08758f" : "#596b61", borderRadius: 999, padding: "2px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                {label}
+              </button>
+            ))}
+          </div>
           {/* 释义区：多义项拆成可点的 chips，点一条就把它定成这张卡的主释义 ——
               整条词典条目（七八个义项）存进单词本，复习时根本对不上原句那个意思。
               拆不出多个义项（或压根只有一条）时保持老的纯文本展示。 */}
@@ -608,10 +655,12 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button
                     onClick={addCurrentSentence}
-                    disabled={!canAddSentence}
+                    disabled={!canAddSentence && !canSupplementAudio}
                     aria-label={addSentenceLabel}
                     title={
-                      sentenceOnCard
+                      canSupplementAudio
+                        ? "给这句补上对应的原声，听力复习时使用"
+                        : sentenceOnCard
                         ? "这句已经在这张卡的语境里了"
                         : poolFull
                           ? "一张卡最多存 3 句额外语境"
@@ -623,14 +672,14 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
                       display: "inline-flex",
                       alignItems: "center",
                       gap: 4,
-                      border: `1px solid ${canAddSentence ? "#f0c14b" : "#dbe3dd"}`,
-                      background: canAddSentence ? "#fff8e6" : "#f6f8f7",
-                      color: canAddSentence ? "#9a6b00" : "#8a9a92",
+                      border: `1px solid ${canAddSentence || canSupplementAudio ? "#f0c14b" : "#dbe3dd"}`,
+                      background: canAddSentence || canSupplementAudio ? "#fff8e6" : "#f6f8f7",
+                      color: canAddSentence || canSupplementAudio ? "#9a6b00" : "#8a9a92",
                       borderRadius: 999,
                       padding: "4px 12px",
                       fontSize: 12,
                       fontWeight: 700,
-                      cursor: canAddSentence ? "pointer" : "default",
+                      cursor: canAddSentence || canSupplementAudio ? "pointer" : "default",
                       lineHeight: 1.5,
                       whiteSpace: "nowrap",
                     }}
