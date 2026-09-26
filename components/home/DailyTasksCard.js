@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
+import { HomeCollapse, HOME_COLLAPSE_MS, HOME_COLLAPSE_EASE } from "./HomeCollapse";
 // Icon / IconBadge / PressButton 复用右栏现有的设计语言（同一份实现，不另抄一遍）。
 import { Icon, IconBadge, PressButton } from "./StudyPlanColumn";
 import {
@@ -124,18 +125,19 @@ export function DailyTasksCard({ userCode, isChallenge, sessions, modernCard, fa
         </button>
       </div>
 
-      {configured && !desktopOpen && (
-        <div role="progressbar" aria-label="今日任务总进度" aria-valuemin={0} aria-valuemax={Math.max(1, summary.dueCount)} aria-valuenow={summary.completeCount}
-          style={{ height: 8, borderRadius: 99, background: barTrack, overflow: "hidden" }}>
-          <div style={{ width: `${summary.dueCount ? summary.completeCount / summary.dueCount * 100 : 0}%`, height: "100%", borderRadius: 99, background: `linear-gradient(90deg, ${T.cyan}, ${T.primary})`, transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
-        </div>
-      )}
+      <HomeCollapse open={!desktopOpen} label="今日任务概览">
+        {configured ? (
+          <div role="progressbar" aria-label="今日任务总进度" aria-valuemin={0} aria-valuemax={Math.max(1, summary.dueCount)} aria-valuenow={summary.completeCount}
+            style={{ height: 8, borderRadius: 99, background: barTrack, overflow: "hidden" }}>
+            <div style={{ width: `${summary.dueCount ? summary.completeCount / summary.dueCount * 100 : 0}%`, height: "100%", borderRadius: 99, background: `linear-gradient(90deg, ${T.cyan}, ${T.primary})`, transition: "width .7s cubic-bezier(.25,1,.5,1)" }} />
+          </div>
+        ) : (
+          <button type="button" onClick={() => setEditorOpen(true)} style={{ width: "100%", border: `1px dashed ${T.primaryMist}`, borderRadius: 9, padding: "7px 0", background: "transparent", color: T.primary, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT }}>+ 设置每日任务</button>
+        )}
+      </HomeCollapse>
 
-      {!configured && !desktopOpen && (
-        <button type="button" onClick={() => setEditorOpen(true)} style={{ width: "100%", border: `1px dashed ${T.primaryMist}`, borderRadius: 9, padding: "7px 0", background: "transparent", color: T.primary, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: HOME_FONT }}>+ 设置每日任务</button>
-      )}
-
-      {desktopOpen && (!configured ? (
+      <HomeCollapse open={desktopOpen} label="今日任务详情">
+        {!configured ? (
         <div style={{ textAlign: "center", padding: "4px 2px 2px" }}>
           <div style={{ width: 46, height: 46, borderRadius: 15, margin: "0 auto 11px", display: "flex", alignItems: "center", justifyContent: "center", background: isChallenge ? "rgba(13,150,104,0.12)" : T.primarySoft, border: `1px solid ${isChallenge ? "rgba(13,150,104,0.22)" : T.primaryMist}` }}>
             <Icon name="list" color={T.primary} size={22} />
@@ -171,7 +173,8 @@ export function DailyTasksCard({ userCode, isChallenge, sessions, modernCard, fa
             </div>
           )}
         </>
-      ))}
+      )}
+      </HomeCollapse>
 
       {editorPortal}
       {sourcePortal}
@@ -186,7 +189,8 @@ function Chevron({ open, color }) {
     <svg
       width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color}
       strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
-      style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .25s ease" }}
+      className="home-collapse-chevron"
+      style={{ flexShrink: 0, transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: `transform ${HOME_COLLAPSE_MS}ms ${HOME_COLLAPSE_EASE}` }}
     >
       <polyline points="6 9 12 15 18 9" />
     </svg>
@@ -196,7 +200,7 @@ function Chevron({ open, color }) {
 /**
  * 手机端紧凑变体：外观与手机首页「用户状态条」同一语言（T.card + 1px T.bdr + 圆角 12）。
  * 头部整行可点切换展开/收起，头部下方常驻一条总进度条（已达标应练数 / 应练数）。
- * 展开状态存 localStorage，下次进来保持；展开动画用 grid-template-rows 0fr↔1fr，不量高度。
+ * 展开状态存 localStorage，下次进来保持；动画与桌面侧栏共用 HomeCollapse。
  */
 function MobileDailyTasks({ summary, configured, isChallenge, t1, t2, t3, tRest, barTrack, onEdit, onChooseSource }) {
   const [open, setOpen] = useState(false);
@@ -274,8 +278,7 @@ function MobileDailyTasks({ summary, configured, isChallenge, t1, t2, t3, tRest,
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateRows: open ? "1fr" : "0fr", transition: "grid-template-rows .28s ease" }}>
-        <div style={{ overflow: "hidden", minHeight: 0 }}>
+      <HomeCollapse open={open} label="今日任务详情">
           <div style={{ padding: "2px 14px 10px" }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {summary.items.map((item) => (
@@ -298,8 +301,7 @@ function MobileDailyTasks({ summary, configured, isChallenge, t1, t2, t3, tRest,
               编辑任务
             </button>
           </div>
-        </div>
-      </div>
+      </HomeCollapse>
     </div>
   );
 }

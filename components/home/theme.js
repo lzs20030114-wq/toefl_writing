@@ -89,4 +89,7 @@ export const HOME_PAGE_CSS = `
   .home-grid { grid-template-columns: minmax(0, 1fr) !important; }
   .home-study-col { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
+@media (prefers-reduced-motion: reduce) {
+  .home-collapse-panel, .home-collapse-panel > div, .home-collapse-chevron { transition-duration: 0.01ms !important; }
+}
 `;
