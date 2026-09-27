@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import RootExplorer from "../components/vocab/RootExplorer";
 import { callAI } from "../lib/ai/client";
 import { getSavedCode } from "../lib/AuthContext";
@@ -84,4 +84,62 @@ test("每个词的朗读按钮会念对应词，不影响收藏", async () => {
   expect(saveWord).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "朗读 lose" }));
   expect(speakWord).toHaveBeenLastCalledWith("lose", expect.objectContaining({ onDone: expect.any(Function) }));
+});
+
+test("紧凑卡内可收起和展开整组结果", async () => {
+  callAI.mockResolvedValue(JSON.stringify({ words: [
+    { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
+  ] }));
+  render(<RootExplorer compact />);
+  expect(screen.getByText("词根查询")).toBeInTheDocument();
+  fireEvent.change(screen.getByRole("textbox", { name: "输入词根" }), { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByText("organism")).toBeInTheDocument();
+  const wordRegion = screen.getByRole("region", { name: "词族词条" });
+  expect(wordRegion).toHaveAttribute("tabindex", "0");
+  expect(wordRegion.getAttribute("style")).toContain("max-height: min(52vh, 480px)");
+  expect(wordRegion).toHaveStyle({ overflowY: "auto" });
+  const toggle = screen.getByRole("button", { name: /organ · 1 个词/ });
+  expect(toggle).toHaveAttribute("aria-expanded", "true");
+  fireEvent.click(toggle);
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
+  expect(document.getElementById("root-explorer-results")).toHaveAttribute("aria-hidden", "true");
+  fireEvent.click(toggle);
+  expect(toggle).toHaveAttribute("aria-expanded", "true");
+});
+
+test("新查询失败时清掉旧结果，并忽略过时请求", async () => {
+  let resolveOld;
+  callAI.mockImplementationOnce(() => new Promise((resolve) => { resolveOld = resolve; }));
+  callAI.mockRejectedValueOnce(new Error("API timeout"));
+  render(<RootExplorer compact />);
+  const input = screen.getByRole("textbox", { name: "输入词根" });
+  fireEvent.change(input, { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(screen.getByRole("status")).toHaveTextContent("正在整理词族");
+  expect(screen.getByRole("button", { name: "整理中…" })).toBeDisabled();
+  fireEvent.change(input, { target: { value: "struct" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByRole("alert")).toHaveTextContent("查询超时");
+  await act(async () => resolveOld(JSON.stringify({ words: [
+    { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
+  ] })));
+  expect(screen.queryByText("organism")).not.toBeInTheDocument();
+  expect(screen.getByRole("alert")).toHaveTextContent("查询超时");
+});
+
+test("已有结果后查询另一个词根失败，不保留旧词条", async () => {
+  callAI.mockResolvedValueOnce(JSON.stringify({ words: [
+    { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
+  ] }));
+  callAI.mockRejectedValueOnce(new Error("API timeout"));
+  render(<RootExplorer compact />);
+  const input = screen.getByRole("textbox", { name: "输入词根" });
+  fireEvent.change(input, { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByText("organism")).toBeInTheDocument();
+  fireEvent.change(input, { target: { value: "struct" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByRole("alert")).toHaveTextContent("查询超时");
+  expect(screen.queryByText("organism")).not.toBeInTheDocument();
 });
