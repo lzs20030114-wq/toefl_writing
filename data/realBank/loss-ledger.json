@@ -1,9 +1,9 @@
 {
-  "_generated": "2026-09-17",
+  "_generated": "2026-09-27",
   "_generated_by": "scripts/realbank/loss_ledger.mjs",
   "_purpose": "全科真题缺口账本：每个没填满的槽位 + 归因。口径见 scripts/realbank/loss_attribution.js",
   "_source": {
-    "sets": "data/realBank/sets.json（2026-09-17，蓝图 2026.1）",
+    "sets": "data/realBank/sets.json（2026-09-27，蓝图 2026.1）",
     "holds": "data/realBank/review-holds.json",
     "source_flags": "data/realBank/source-flags.json",
     "consolidation": "data/realBank/reading/consolidation.json",
@@ -20,10 +20,10 @@
   },
   "summary": {
     "need": 8280,
-    "got": 7178,
-    "missing": 1161,
+    "got": 7179,
+    "missing": 1160,
     "overfilled": 59,
-    "completeness": 0.8669,
+    "completeness": 0.867,
     "causes": {
       "source_defect": 286,
       "held": 103,
@@ -31,16 +31,16 @@
       "bank_dropped": 300,
       "section_never_run": 51,
       "section_lost": 0,
-      "pipeline_loss": 396
+      "pipeline_loss": 395
     },
-    "actionable": 396
+    "actionable": 395
   },
   "byType": {
     "ctw": {
       "type": "ctw",
       "need": 2070,
-      "got": 2009,
-      "missing": 61,
+      "got": 2010,
+      "missing": 60,
       "causes": {
         "source_defect": 50,
         "held": 0,
@@ -48,9 +48,9 @@
         "bank_dropped": 0,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 11
+        "pipeline_loss": 10
       },
-      "completeness": 0.9705
+      "completeness": 0.971
     },
     "rdl": {
       "type": "rdl",
@@ -249,8 +249,8 @@
     "reading": {
       "section": "reading",
       "need": 3450,
-      "got": 3294,
-      "missing": 162,
+      "got": 3295,
+      "missing": 161,
       "causes": {
         "source_defect": 78,
         "held": 35,
@@ -258,9 +258,9 @@
         "bank_dropped": 5,
         "section_never_run": 0,
         "section_lost": 0,
-        "pipeline_loss": 19
+        "pipeline_loss": 18
       },
-      "completeness": 0.9548
+      "completeness": 0.9551
     },
     "speaking": {
       "section": "speaking",
@@ -1471,20 +1471,6 @@
       },
       "slots": [
         "M1/la_19(-1)"
-      ]
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "reading",
-      "missing": 1,
-      "cause": "pipeline_loss",
-      "types": {
-        "ctw": 1
-      },
-      "slots": [
-        "M1/ctw_1(-1)"
       ]
     },
     {
@@ -10259,29 +10245,6 @@
       "notes": [
         "duplicate_cluster"
       ]
-    },
-    {
-      "set": "4.24新托福真题",
-      "slug": "424",
-      "date": "2026-04-24",
-      "section": "reading",
-      "module": "1",
-      "form": "A",
-      "slotKey": "ctw_1",
-      "type": "ctw",
-      "band": [
-        1,
-        10
-      ],
-      "need": 10,
-      "got": 9,
-      "missing": 1,
-      "status": "near",
-      "cause": "pipeline_loss",
-      "charged": {
-        "pipeline_loss": 1
-      },
-      "notes": []
     },
     {
       "set": "4.24新托福真题",

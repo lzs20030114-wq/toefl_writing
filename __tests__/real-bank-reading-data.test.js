@@ -185,6 +185,17 @@ describe("真题阅读：CTW 形状（CTWTask 硬契约）", () => {
     });
   });
 
+  test("填词每屏保有 10 个空，正文没有从首句中途截入", () => {
+    const bad = ctw.filter((it) => it.blanks.length !== 10 || /^[a-z]/.test(it.passage))
+      .map((it) => `${it.id}: ${it.blanks.length} 空 / ${it.passage.slice(0, 35)}`);
+    expect(bad).toEqual([]);
+  });
+
+  test("3.18 中段断句保留同篇材料里的完整句子", () => {
+    const passage = ctw.find((it) => it.id === "real_ctw_318_2_1")?.passage || "";
+    expect(passage).toContain("daily life and governance. Trade routes expanded, facilitating the exchange of goods and ideas. Art and architecture flourished, exemplified by Gothic cathedrals");
+  });
+
   // 回归测试：build_bank.buildCtw 曾经直接把带标点的 token 当 original_word。
   test("original_word 不带尾标点，且以 displayed_fragment 开头（忽略大小写）", () => {
     const bad = [];

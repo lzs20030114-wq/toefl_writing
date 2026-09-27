@@ -367,6 +367,54 @@ const LEAD_PUNCT = /^[^A-Za-z0-9]+/;
 const stripPunct = (w) => String(w || "").replace(LEAD_PUNCT, "").replace(TRAIL_PUNCT, "");
 const dashSegments = (tok) => (/[—–]/.test(tok) ? String(tok).split(/[—–]/).map(stripPunct).filter(Boolean) : []);
 const coreKey = (w) => String(w || "").toLowerCase().replace(/[^a-z0-9']/g, "");
+
+// 三份来源截图从首句中途开始，结构化产物也照着截头文本入库。完整首句分别可在
+// 3.18 / 3.14 / rp0705 的同篇材料中核对；只补已逐字证实的前缀，绝不改挖空词。
+const CTW_HEAD_REPAIRS = new Map([
+  ["real_ctw_228_1_11", {
+    truncated: "representing significant biological and ecological shifts.",
+    complete: "Mass extinctions have periodically reshaped the diversity of life on Earth, representing significant biological and ecological shifts.",
+  }],
+  ["real_ctw_28_2_1", {
+    truncated: "millions of years.",
+    complete: "Climate change refers to significant and lasting changes in weather patterns over periods ranging from decades to millions of years.",
+  }],
+  ["real_ctw_318_2_1", {
+    truncated: "political, and economic changes.",
+    complete: "Medieval European history, lasting approximately from 500 C.E. to 1500 C.E., is marked by significant cultural, political, and economic changes.",
+  }],
+]);
+
+function repairCtwSource(item, id) {
+  let passage = String(item.passage || "").trim();
+  const blanks = [...(item.blanks || [])];
+  const head = CTW_HEAD_REPAIRS.get(id);
+  if (head) {
+    if (passage.startsWith(head.truncated)) passage = head.complete + passage.slice(head.truncated.length);
+    else if (!passage.startsWith(head.complete)) throw new Error(`${id}: 首句与已核对的补全文本不符`);
+  }
+
+  // 3.18 M2 同篇还在正文中间跳过了两句，且把前后残句接成了
+  // "daily life and exemplified"。rp0705 的同篇材料保留了这段完整文字。
+  if (id === "real_ctw_318_2_1") {
+    const cut = "The Church exerted substantial influence over daily life and exemplified by Gothic cathedrals and illuminated manuscripts.";
+    const full = "The Church exerted substantial influence over daily life and governance. Trade routes expanded, facilitating the exchange of goods and ideas. Art and architecture flourished, exemplified by Gothic cathedrals and illuminated manuscripts.";
+    if (passage.includes(cut)) passage = passage.replace(cut, full);
+    else if (!passage.includes(full)) throw new Error(`${id}: 正文断句与已核对的补全文本不符`);
+  }
+
+  // 4.24 M1 Q1-10：答案页漏了第 8 词，旧校验只对齐了 9 个答案就放行。
+  // 源截图 OCR 两次读到 Consci____，正文是 Consciousness；补在 retrieves 与 state 之间。
+  if (id === "real_ctw_424_1_1" && !blanks.some((b) => coreKey(b.word) === "consciousness")) {
+    if (!passage.includes("Consciousness, the state") || blanks.length !== 9
+      || coreKey(blanks[7]?.word) !== "retrieves" || coreKey(blanks[8]?.word) !== "state") {
+      throw new Error(`${id}: 漏空位置与已核对的源图不符`);
+    }
+    blanks.splice(8, 0, { word: "Consciousness", given: "Consci" });
+  }
+  return { passage, blanks };
+}
+
 function locateBlankWord(toks, want, cursor) {
   for (let i = cursor; i < toks.length; i += 1) {
     const whole = stripPunct(toks[i]);
@@ -385,11 +433,14 @@ function locateBlankWord(toks, want, cursor) {
 // 以及整篇的 blanked_text。这些全都能从 passage + blanks 确定性推出来 —— 唯一要小心的是
 // 同一个词在文中多次出现，所以定位游标只许前进，不许回头。
 function buildCtw(item, meta) {
-  const passage = String(item.passage || "").trim();
+  const id = `real_ctw_${meta.slug}_${meta.module}_${meta.qStart}`;
+  const source = repairCtwSource(item, id);
+  const passage = source.passage;
+  if (source.blanks.length !== 10) return null; // CTW 一屏固定 10 空；少一个也不能作为完整题上线
   const toks = words(passage);
   const blanks = [];
   let cursor = 0;
-  for (const b of item.blanks || []) {
+  for (const b of source.blanks) {
     const want = coreKey(b.word);
     const given = String(b.given || "");
     const { at, word: originalWord } = locateBlankWord(toks, want, cursor);
@@ -413,7 +464,7 @@ function buildCtw(item, meta) {
     blankedTokens[b.position] = `${b.displayed_fragment}${"_".repeat(Math.max(1, b.hidden_length))}`;
   }
   return {
-    id: `real_ctw_${meta.slug}_${meta.module}_${meta.qStart}`,
+    id,
     passage,
     word_count: toks.length,
     topic: String(item.topic || "other"),
@@ -422,7 +473,7 @@ function buildCtw(item, meta) {
     subtopic: "",
     blanks,
     blank_count: blanks.length,
-    first_sentence: (passage.match(/^[^.!?]+[.!?]/) || [passage])[0].trim(),
+    first_sentence: CTW_HEAD_REPAIRS.get(id)?.complete || (passage.match(/^[^.!?]+[.!?]/) || [passage])[0].trim(),
     blanked_text: blankedTokens.join(" "),
     difficulty: "medium",  // 真题不自带难度标签，统一 medium，不编造分档
     real: true, tier: TIER, source: meta.set, date: meta.date,
