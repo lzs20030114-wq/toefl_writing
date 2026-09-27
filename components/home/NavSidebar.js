@@ -323,8 +323,7 @@ export function NavSidebar({
             </button>
           );
         })}
-        {/* 单词本：独立路由，挂在 section 列表末尾（原来在右栏页底，不显眼） */}
-        <VocabNavItem isChallenge={isChallenge} />
+        <VocabNavItem isChallenge={isChallenge} isActive={activeSection === "vocab"} />
       </div>
 
       {/* ── Divider ── */}

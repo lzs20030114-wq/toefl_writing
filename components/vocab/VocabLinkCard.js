@@ -1,12 +1,14 @@
 "use client";
 import { HomeLinkCard } from "../home/HomeTaskCard";
 import { useVocabSummary } from "./useVocabSummary";
+import { useVocabHomeNavigation } from "./VocabHomeNavigation";
 
 /**
  * 首页各科目正文里的单词本入口卡。文案随状态变，免得永远显示一句没信息量的说明。
  */
 export function VocabLinkCard({ hoverKey, setHoverKey, isChallenge }) {
   const { total, todo, ready } = useVocabSummary();
+  const navigate = useVocabHomeNavigation();
 
   const description = !ready
     ? "查词时点「☆ 收藏到单词本」，之后按遗忘曲线安排复习。"
@@ -18,7 +20,8 @@ export function VocabLinkCard({ hoverKey, setHoverKey, isChallenge }) {
 
   return (
     <HomeLinkCard
-      href="/vocab-notebook"
+      href="/?section=vocab"
+      onClick={navigate}
       cardKey="vocab-notebook"
       hoverKey={hoverKey}
       setHoverKey={setHoverKey}

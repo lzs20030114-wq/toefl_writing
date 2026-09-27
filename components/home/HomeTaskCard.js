@@ -85,13 +85,19 @@ export function HomeTaskCard({ item, hoverKey, setHoverKey, isChallenge, footer 
   );
 }
 
-export function HomeLinkCard({ href, cardKey, hoverKey, setHoverKey, isChallenge, icon, eyebrow, title, description, tone = "primary", badge }) {
+export function HomeLinkCard({ href, onClick, cardKey, hoverKey, setHoverKey, isChallenge, icon, eyebrow, title, description, tone = "primary", badge }) {
   const isHover = hoverKey === cardKey;
   const color = tone === "warning" ? "#D97706" : T.primary;
 
   return (
     <Link
       href={href}
+      onClick={(event) => {
+        if (onClick && !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       onMouseEnter={() => setHoverKey(cardKey)}
       onMouseLeave={() => setHoverKey("")}
       style={{

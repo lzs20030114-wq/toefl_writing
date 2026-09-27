@@ -95,7 +95,7 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
   </div>;
 }
 
-export default function VocabNotebook({ onBack, sidebar }) {
+export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
   const { cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn,
     makeQueue, grade, remove, reset, setProductive, setReviewMode, schedule } = useVocabBook();
   const [queue, setQueue] = useState(null);
@@ -130,19 +130,22 @@ export default function VocabNotebook({ onBack, sidebar }) {
     setQueue(next);
   };
 
-  if (queue) return <PageShell narrow>{reviewingMode === "listening"
+  if (queue) {
+    const review = reviewingMode === "listening"
     ? <ListeningVocabReview initialQueue={queue} onGrade={grade} onExit={() => setQueue(null)} />
     : <VocabReview initialQueue={queue} onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "reading")}
-      onSetProductive={setProductive} onExit={() => setQueue(null)} />}</PageShell>;
+      onSetProductive={setProductive} onExit={() => setQueue(null)} />;
+    return embedded ? <div className={styles.embeddedReview}>{review}</div> : <PageShell narrow>{review}</PageShell>;
+  }
 
   const reading = statsByMode?.reading || stats;
   const listening = statsByMode?.listening || { todo: 0, dueReview: 0, newToday: 0 };
   const deferred = (stat) => limits.maxReviews > 0 ? Math.max(0, (stat?.dueReview || 0) - limits.maxReviews) : 0;
 
-  return <div className={styles.page} style={{ fontFamily: HOME_FONT }}>
-    <header className={styles.topbar}><div className={styles.brand}><span className={styles.brandMark}>T</span><strong>TreePractice</strong><span className={styles.brandSub}>TOEFL 备考</span></div></header>
-    <div className={`${styles.shell} ${!sidebar ? styles.noSidebar : ""}`}>
-      {sidebar && <nav className={styles.sidebar} aria-label="主导航">{sidebar}</nav>}
+  return <div className={`${styles.page} ${embedded ? styles.embedded : ""}`} style={{ fontFamily: HOME_FONT }}>
+    {!embedded && <header className={styles.topbar}><div className={styles.brand}><span className={styles.brandMark}>T</span><strong>TreePractice</strong><span className={styles.brandSub}>TOEFL 备考</span></div></header>}
+    <div className={`${styles.shell} ${!sidebar || embedded ? styles.noSidebar : ""}`}>
+      {!embedded && sidebar && <nav className={styles.sidebar} aria-label="主导航">{sidebar}</nav>}
       <main className={styles.main}>
         <div className={styles.heading}><div><h1>单词本</h1><p>收藏练习中的生词，按记忆情况安排复习。</p></div>
           {onBack && <button type="button" className={styles.back} onClick={onBack}>← 返回</button>}</div>

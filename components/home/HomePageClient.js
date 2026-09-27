@@ -21,6 +21,8 @@ import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 import UpgradeModal from "../shared/UpgradeModal";
+import VocabNotebook from "../vocab/VocabNotebook";
+import { VocabHomeNavigationProvider } from "../vocab/VocabHomeNavigation";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -94,7 +96,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
   const [activeSection, setActiveSection] = useState(() => {
     const s = searchParams.get("section");
-    return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank"].includes(s) ? s : "writing";
+    return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank", "vocab"].includes(s) ? s : "writing";
   });
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
@@ -119,6 +121,13 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const isChallenge = mode === PRACTICE_MODE.CHALLENGE;
   const isPractice = mode === PRACTICE_MODE.PRACTICE;
   const isMobile = useIsMobile();
+
+  function changeSection(section) {
+    setActiveSection(section);
+    const url = new URL(window.location.href);
+    url.searchParams.set("section", section);
+    window.history.replaceState(window.history.state, "", url);
+  }
 
   // 「我的题库」新功能一次性聚光灯引导（桌面端；移动端在 MobileHomePage 内自带）
   const bankSpotlight = useSpotlightGate({
@@ -276,7 +285,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   /* ── 移动端：完全不同的布局和交互 ── */
   if (isMobile) {
     return (
-      <>
+      <VocabHomeNavigationProvider navigate={() => changeSection("vocab")}>
         <style>{HOME_PAGE_CSS}</style>
         <ChallengeEffects isChallenge={isChallenge} crtFlash={crtFlash} />
         <div style={{ minHeight: "100vh", background: isChallenge ? CH.bg : T.bg, fontFamily: HOME_FONT, position: "relative", zIndex: 3 }}>
@@ -309,6 +318,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             feedbackMsg={feedbackMsg} submitFeedback={submitFeedback}
             fadeIn={fadeIn} sideCard={sideCard} querySuffix={querySuffix}
             onOpenReferral={handleOpenReferral}
+            activeSection={activeSection} onSectionChange={changeSection}
           />
         </div>
         {referralModalOpen && (
@@ -325,13 +335,13 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         <BankUpdateModal isLoggedIn={isLoggedIn} />
         <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
         <ActivatedToast />
-      </>
+      </VocabHomeNavigationProvider>
     );
   }
 
   /* ── 桌面端：原有布局不变 ── */
   return (
-    <>
+    <VocabHomeNavigationProvider navigate={() => changeSection("vocab")}>
       <style>{HOME_PAGE_CSS}</style>
       <ChallengeEffects isChallenge={isChallenge} crtFlash={crtFlash} />
 
@@ -373,7 +383,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
         <div className="home-shell" style={{ maxWidth: 1360, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
           <NavSidebar
-            activeSection={activeSection} onSectionChange={setActiveSection}
+            activeSection={activeSection} onSectionChange={changeSection}
             isChallenge={isChallenge}
             userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
@@ -384,7 +394,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
           />
-          <SectionContent
+          {activeSection === "vocab" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded /></div> : <><SectionContent
             activeSection={activeSection}
             isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
             gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}
@@ -401,7 +411,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             bestMock={bestMock}
             sideCard={sideCard}
             fadeIn={fadeIn}
-          />
+          /></>}
         </div>
       </div>
       {bankSpotlight.open && !isChallenge && (
@@ -409,7 +419,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           targetSelector='[data-section-id="my-bank"]'
           title="我的题库"
           description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
-          onCta={() => { bankSpotlight.close(); setActiveSection("my-bank"); }}
+          onCta={() => { bankSpotlight.close(); changeSection("my-bank"); }}
           onDismiss={bankSpotlight.close}
         />
       )}
@@ -427,6 +437,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       <BankUpdateModal isLoggedIn={isLoggedIn} />
       <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
       <ActivatedToast />
-    </>
+    </VocabHomeNavigationProvider>
   );
 }

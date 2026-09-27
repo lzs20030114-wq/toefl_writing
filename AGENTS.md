@@ -1,0 +1,356 @@
+# TOEFL Practice App — Architecture Guide
+
+一款 TOEFL 全科备考 App：写作(讨论/邮件/造句) + 阅读 + 听力 + 口语 + 模考 + 个人题库。
+早期只有写作，现已扩到四大科目 12+ 题型；本文件是每个 agent 会话的第一手上下文，
+请优先信任「路径 + 一句话职责」，需要细节时再打开对应文件。
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Database**: Supabase (PostgreSQL + Auth)
+- **AI 评分/出题**: DeepSeek(写作评分, curl-based HTTP) + Codex(云端 routine 出题)
+- **视觉识别**: 通义千问 Qwen3-VL (个人题库图片抽题, OpenAI 兼容接口)
+- **语音**: TTS 双 provider(edge-tts 免费 / gpt-4o-mini-tts) + STT(OpenAI Whisper, 口语评分)
+- **Payments**: XorPay (扫码) / Afdian 爱发电 (跳转)
+- **Hosting**: Vercel (serverless + edge runtime)
+
+## Directory Structure
+
+```
+app/                          # Next.js App Router
+├── page.js                   # 首页 (任务卡 + 侧栏 + 右栏备考日历/打卡；单词本复用 activeSection 原地切换)
+├── build-sentence/           # 写作 Task: 拖拽造句 (BS)
+├── academic-writing/         # 写作 Task: 学术讨论 (Discussion)
+├── email-writing/            # 写作 Task: 邮件
+├── reading/                  # 阅读 (?type=ctw|rdl|ap, ?variant=short|long, ?mode=practice) Pro 专属
+├── listening/                # 听力 (?type=lcr|lc|la|lat) Pro 专属
+├── speaking/                 # 口语 (?type=repeat|interview) Pro 专属
+├── mock-exam/                # 写作模考 (3-task + 计时)
+├── reading-exam/             # 阅读自适应模考 (M1 路由→M2 分档)
+├── listening-exam/           # 听力自适应模考
+├── speaking-exam/            # 口语模考
+├── post-writing-practice/    # 写后练习
+├── mistake-notebook/         # 错题本
+├── vocab-notebook/           # 单词本旧地址兼容入口 → /?section=vocab（首页内嵌，FSRS-6 间隔重复复习）
+├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
+├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
+│                             #   (lib/realBankHistory 辨认真题记录, 复用各科历史页的逐题回顾渲染)
+├── my-bank/                  # 个人题库 (Pro 专属)
+├── terms/                    # 条款页
+├── admin*/                   # 后台页 (codes/users/questions/staging/analytics/
+│                             #   retention/report/voice-vote/surveys/referrals/wechat-qr/…)
+└── api/                      # 见下方「API」
+    ├── ai/                   # DeepSeek 写作评分 (限流 45/min + origin 校验)
+    ├── audio/[...path]/      # 听力音频同源流式代理 (Edge, 国内可达 Supabase Storage)
+    ├── speech/               # 口语 STT (transcribe) + 录音授权 (consent)
+    ├── user-bank/            # 个人题库 (extract / extract-image / render-audio / verify)
+    ├── vocab/                # 单词本云端副本 (卡片 JSONB 镜像 + logs/ 复习日志归档)
+    ├── wechat-qr/            # 群二维码同源代理 (Edge；后台 /admin-wechat-qr 拖图上传到 Supabase Storage)
+    ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
+
+components/                   # 分科任务 UI + 后台
+├── reading/                  # CTWTask, RDLTask (+ AP 复用 RDLTask)
+├── listening/                # LCRTask, ListeningMCQTask (LA/LC/LAT), AudioPlayer
+├── speaking/                 # RepeatTask, InterviewTask (含录音 + STT)
+├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
+├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
+├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
+├── userBank/                 # 个人题库导入/管理 UI
+├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
+├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
+├── referral/                 # 推荐邀请浮层/入口
+├── home/ history/ mistakes/ login/ admin/
+└── shared/                   # ui.js(设计系统 C/FONT/Btn/PageShell), UpgradeModal,
+                              #   UsageGateWrapper, TopicPicker
+
+lib/
+├── AuthContext.js supabase.js supabaseAdmin.js sessionStore.js cloudSessionStore.js
+├── dailyUsage.js rateLimit.js apiResponse.js featureFlags.js draftPersist.js
+├── studyPlan.js studyStreak.js        # 备考日历 + 火苗打卡 streak
+├── ai/                       # 写作侧：client, deepseekHttp(curl), calibration, parse
+│   └── prompts/              #   academicWriting.js, emailWriting.js
+├── readingGen/               # 阅读出题：ctw/ap/rdl PromptBuilder + Validator + answerAuditor
+├── readingBank/              # 阅读 schema + ETS profile
+├── listeningGen/             # 听力出题：lc/lcr/la/lat PromptBuilder + Validator + Auditor
+├── speakingGen/              # 口语出题：repeat/interview PromptBuilder + Validator
+├── speakingEval/             # 口语评分逻辑
+├── bsGen/                    # BS 出题：promptBuilders(纯函数) + circuitBreaker(熔断低通过率)
+├── tts/                      # edgeTts / openaiTts / toneDirector(persona) / renderListening / storage
+├── userBank/                 # personalBank(拉取+映射picker), imageSniff, listeningAudioRender
+├── vocab/                    # 单词本：srs(FSRS-6 调度) + book(排队/卡型/统计) +
+│                             #   vocabStore(本地优先+云同步) + reviewLog(复习日志)
+├── dict/                     # 划词词典查询层 (core 纯函数 + lookup 分片 fetch)
+├── realBank.js realBankModes.js realBankHistory.js   # 真题专区数据层 / 三档限时 / 练习记录纯函数
+├── realExam/                 # blueprint.mjs: 2026 整卷结构蓝图(题号带/槽位) — scripts/realbank/assemble_sets.mjs 用
+├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
+├── gate/                     # 通用防退化门：gateHarness + gate-registry + measurers/
+├── quality/                  # scoreBatch.mjs (真题校准打分器)
+├── mockExam/                 # 模考：service, planner(reading/listening/speaking),
+│                             #   adaptiveScoring(M1/M2), adaptiveCheckpoint, bandScore, stateMachine
+├── iap/                      # 支付：service, catalog, repository, providers/(xorpay/afdian/mock)
+├── referral/                 # 推荐体系：service, state, useReferralFlow
+├── questionBank/ mistakeFavorites listeningMistakes readingMistakes
+└── mail/                     # 事务性邮件 (QQ SMTP)
+
+data/                         # 题库 + 校准语料 (JSON)
+├── buildSentence/            # BS: questions.json(主库) + easy/medium/hard + staging/
+├── academicWriting/          # Discussion: prompts.json + real_tpo_reference.json + sample_answers
+├── emailWriting/             # Email: prompts.json + tpo_reference.json
+├── reading/bank/             # ctw.json, ap.json, rdl-short.json, rdl-long.json (+ staging/, profile/)
+├── listening/bank/           # lcr.json, lc.json, la.json, lat.json (+ staging/, profile/)
+├── speaking/bank/            # repeat.json, interview.json (+ staging/, profile/)
+├── realExam2026/             # ★真题 ground truth (reading/listening/speaking/writing) — 校准基准
+├── realBank/                 # 真题专区成品库 (build_bank.mjs 产物) + sets.json(装回整卷: 原卷完整度/拼卷/整卷清单)
+│                             #   + loss-ledger.json(全科丢题账本: 每个缺口槽位+归因) / loss-baseline.json(防退化基线)
+│                             #   + drop-ledger.json(落库丢弃明细: build_bank 每道闸扔掉的每一题, 原因码=stats 键名)
+│                             #   + writing-recall.json(第一来源邮件/讨论补录账本, 逐条对过原卷)
+│                             #   + audit-overrides.json(盲审两票都不认、人工对原卷核过「答案页对」的放行清单, 每条写依据)
+├── eval-profiles/            # 各题型 eval 画像 + gate 标准 (bs/ad/email/ctw/ap/listening/...)
+├── vocabulary/               # 词表
+├── announcements.json        # 应用内更新公告 (发版时改)
+└── claudeGen/reports/        # 历次 review 报告
+```
+
+## Key Data Flows
+
+### 1. 认证 (Auth)
+
+```
+用户 → LoginGate
+  ├── 邮箱 OTP / 密码: emailAuth.js → Supabase Auth → users 表 (自动创建)
+  └── 6位码: authCode.js → users 表验证
+→ AuthContext (localStorage 持久化: code, email, tier)
+→ 新用户自动赠送 3 天 Pro 试用
+```
+
+### 2. 写作 AI 评分 (Scoring)
+
+```
+WritingTask 提交 → lib/ai/client.js → POST /api/ai →
+  rateLimit (45/min per IP) → deepseekHttp.js (curl → DeepSeek) →
+  parse.js (提取 ===SCORE=== / ===ANNOTATION=== / ===ACTION===) →
+  calibration.js (校准到 ETS band) → WritingFeedbackPanel 渲染批注
+```
+阅读/听力客观题在前端本地判分算 band(见各 page.js 的 saveSession)；口语走 STT + speakingEval。
+
+### 3. 支付 (Payment)
+
+```
+UpgradeModal → XorPay(扫码/webhook) 或 Afdian(跳转 ifdian.net/webhook)
+→ POST /api/iap/webhook → iap_webhook_events 去重 → iap_entitlements 记录
+→ users.tier='pro' 升级 → 前端轮询 user-info 检测到 tier 变化
+```
+
+### 4. 题目生成 (Generation)
+
+```
+【主链路】三段式 Codex 云端 routine (UTC；北京时间 +8):
+  R1 出题 19:00 (trig_01SmJeXr8ySEZRo2dEoohzTP): 校准 prompt (lib/*Gen/) 生成 →
+    bs/disc/email 直接合库；阅读/听力/口语只写 staging 不合库
+  R2 补产 19:30 (trig_016m6uqg…): 按 .pending-retry.json 补未达标库 → 同样只写 staging
+  R3 盲审 20:00 (trig_014NhSJe…): Codex 盲解 MCQ(第一票) → 不一致项从 staging 剔除 →
+    合并阅读/口语；听力被 merge-staging fail-closed HOLD(设计行为)
+  合听力 21:00 (merge-listening-audited.yml): DeepSeek 第二家族票
+    (LCR 3票多数+歧义一票否决; la/lc/lat 单票) → 过两票才进 live 库
+  lib/gate 冻结防退化门 (BS_GATE_ENFORCE 默认=1, FAIL 即拒合)。
+  文本生成走 Codex 订阅(边际~¥0)；只有听力 TTS 配音按量掏钱。
+  R3 prompt 存档: docs/routine-prompts/audit-r3-v2.md (改 routine 先改这份再手动粘贴)。
+
+【配音回填】backfill-audio.yml 自动给缺 audio_url 的听力题补 TTS。
+
+【后备/手动】.github/workflows/nightly-bank-refresh.yml 是手动 fallback(仅当 routine 挂了);
+  nightly-quality-monitor.yml 是唯一还在自动 cron 的 workflow(质量监控, 非生成)。
+  admin-generate* 页 + generate-*.yml 仅剩人工触发后备，不再是常规产线。
+```
+
+### 5. 质量校准 (Calibration)
+
+```
+data/realExam2026/ (真题 ground truth) = 唯一标准锚点
+  → lib/quality/scoreBatch.mjs + data/eval-profiles/ 打分 → docs/eval-spec/ 逐题型标准
+  → lib/gate/gate-registry.js 声明「维度(检测器+policy+tol+precision+why)」→ 自动从真题 derive 冻结带
+质量退化了走 /calibration-fix (诊断 → 修 → 锁死不再回退)。
+hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
+```
+
+### 6. 模考自适应 (Adaptive Mock)
+
+```
+阅读/听力/口语模考: Module 1 做完 → 按正确率路由 (≥0.6 → upper, 否则 lower)
+  → Module 2 按 upper/lower 供不同难度档题 → calculateAdaptiveScore:
+     rawScore = M1正确率*0.4 + M2正确率*0.6，band = rawScore * maxBand(四舍五入到 0.5)
+     maxBand: upper 路 6.0 / lower 路 4.0 (下行路即使满分也封顶 4.0)
+  lib/mockExam/adaptiveScoring.js + adaptiveCheckpoint.js(可中途续考)
+写作模考仍是 3-task 固定卷(lib/mockExam/service.js + stateMachine)。
+```
+
+### 8. 单词本 (Vocabulary Notebook)
+
+```
+阅读复盘 WordLookupLayer 划词 → 词典弹窗「☆ 收藏到单词本」
+  → lib/vocab/vocabStore.saveWord(): 连词形/音标/释义/标签/**所在原句**/来源一起存
+  → localStorage 是真源（点一下必须立刻变色，不能等网络）；登录后 /api/vocab 双向合并
+    （按 word 取 updatedAt 新的一份，软删除 deletedAt 也参与比较，删除能同步）
+→ 首页 section=vocab（旧 /vocab-notebook 自动转入）：buildQueue 排今日队列 → VocabReview 翻卡 → gradeCard 写回 SRS 状态
+  + appendReviewLog 记一条日志（debounce 后随卡片一起推到 vocab_review_logs）
+```
+调度是 **FSRS-6**（`lib/vocab/srs.js`，21 参数 DSR 模型），不是 SM-2。几条不要随手改的设定：
+- **评分只有二档**「忘了/记得」，且**不显示下次间隔** —— 四档的自评噪声大于信息增益；
+  看见间隔用户就会按「想隔多久再见」而不是「记得多牢」来评分
+- **主卡型是原句挖空**，挖不出来才退纯词卡；一个词只有一张卡，不双向排
+- 目标留存率 0.90，考前 10 天自动进 0.95 冲刺档（读 studyPlan 的 examDate）
+- 新词毕业后的第一个间隔强制压到 1 天（跨一次睡眠）
+每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
+`__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
+
+### 7. 个人题库 (User Bank, Pro 专属, v1.11.0 全 12 题型)
+
+```
+my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
+  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读)
+→ user_question_banks 表 → lib/userBank/personalBank.js 运行时拉取
+→ 只并入各科 practice picker(带「我的」标签)，不进 standard 随机池。
+```
+
+## API 一览 (app/api/*)
+
+- `ai/` 写作评分 · `audio/[...path]/` 听力音频 Edge 代理 · `speech/{transcribe,consent}` 口语 STT
+- `user-bank/{extract,extract-image,render-audio,verify}` 个人题库 · `vocab/` 单词本同步 + `vocab/logs` 复习日志
+- `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
+- `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
+- `analytics/track` 事件 · `feedback/` 反馈
+- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals/wechat-qr(群二维码上传)
+
+## Database (Supabase)
+
+| Table | Purpose |
+|-------|---------|
+| `users` | code(PK), email, tier, tier_expires_at, auth_uid, pro_trial |
+| `access_codes` | 登录码管理 |
+| `daily_usage` | user_code, date, usage_count (免费 3次/天) |
+| `daily_speech_usage` | 口语 STT 每日配额 |
+| `sessions` | user_code, session_data(JSON) — 练习历史云同步 |
+| `iap_entitlements` | user_code, product_id, provider, provider_ref |
+| `iap_webhook_events` | provider, event_id — 支付回调去重 |
+| `user_question_banks` | 个人题库 (widen-types 迁移后支持全 12 题型) |
+| `referrals` / `referral_events` | 推荐关系 + 事件 |
+| `mistake_favorites` | 错题收藏 |
+| `vocab_cards` | 单词本（word + 整卡 JSONB，本地 localStorage 才是真源，这是跨设备镜像） |
+| `vocab_review_logs` | 每次复习一行，供日后用真实数据重拟合 FSRS 权重 / 做留存率校准 |
+| `user_surveys` | 问卷/语音投票 |
+| `page_views` | 埋点 |
+| `api_error_feedback` | 用户上报的 API 错误 |
+
+迁移文件在 `scripts/sql/`；执行台账见 `scripts/sql/MIGRATIONS.md`(SQL 走 /sql-migrate)。
+
+## Tier System
+
+- **free**: 3 次/天, 写作基础功能；阅读/听力/口语/个人题库均为 Pro 专属
+- **pro**: 无限次, 完整 AI 批改 + 全科解锁, 有过期时间 (tier_expires_at)
+- **legacy**: 旧版 tier, 等同 pro
+
+## Environment Variables
+
+```bash
+# AI (写作评分)
+DEEPSEEK_API_KEY=             # DeepSeek API 密钥
+# DEEPSEEK_PROXY_URL=         # 可选代理 (国内服务器访问)
+# DEEPSEEK_USAGE_LOG=         # 可选: 调用台账路径(默认 .ops/deepseek-usage.jsonl; 设 0 关闭)
+# DEEPSEEK_CNY_PER_MTOK=5.24  # 可选: 估价混合单价 ¥/M tokens(默认 9/1 账单实测)
+
+# OpenAI (口语 STT Whisper-1；Vercel 美区直连，本地调试用 HTTPS_PROXY)
+OPENAI_API_KEY=
+# HTTPS_PROXY=http://127.0.0.1:10808
+
+# Qwen3-VL (个人题库图片抽题, OpenAI 兼容；默认大陆 endpoint 直连)
+DASHSCOPE_API_KEY=
+# DASHSCOPE_BASE_URL=         # 默认大陆；国际/免费额度区用 dashscope-intl
+# QWEN_VL_MODEL=qwen3-vl-plus # 批量可换 qwen3-vl-flash
+
+# Database
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# Admin / SEO / Mail
+ADMIN_DASHBOARD_TOKEN=
+NEXT_PUBLIC_SITE_URL=
+MAIL_HOST= MAIL_PORT= MAIL_SECURE= MAIL_USER= MAIL_PASS= MAIL_FROM_NAME=  # QQ SMTP 授权码
+
+# Payment 开关 + provider
+NEXT_PUBLIC_IAP_ENABLED= IAP_ENABLED=
+IAP_PROVIDER=xorpay|afdian|mock
+IAP_WEBHOOK_SECRET=
+XORPAY_AID= XORPAY_APP_SECRET= XORPAY_NOTIFY_URL=       # xorpay
+AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
+
+# 出题生成后备 (GitHub Actions, 可选；主链路是 Codex routine 不吃这些)
+# GH_OWNER= GH_REPO= GH_PAT=
+```
+注：**TTS provider 是脚本 CLI 参数(`--tts-provider edge|openai`)不是 env var**；OpenAI TTS 复用 `OPENAI_API_KEY`。
+
+## Conventions
+
+- **Styling**: 内联 style objects, 设计系统在 `components/shared/ui.js` (C=颜色常量, FONT)
+- **内容分栏防挤压**: 题面/作答、文章/题目这类内容双栏，grid track 一律写 `minmax(0, 1fr)`（裸 `1fr` = `minmax(auto, 1fr)`，
+  某一栏冒出不可断行的长串就会顶穿份额、把另一栏挤成窄缝）；flex 分栏同理，可伸缩的那一侧必须带 `minWidth: 0`。
+  stat 卡 / auto-fit 卡片网格不受此约束。
+- **真题答题页 = 常规练习答题页**: 真题专区复用各科现成任务组件，答题页不许再套任何额外外壳
+  （通栏横幅 / 额外顶条都不行）：顶栏是 `position: sticky` 贴顶的，阅读等答题区高度写死 `calc(100vh - N)`
+  且 N 按常规结构算，多一条就整页下移、答题区溢出视口。真题的来源分档一律只在选题页呈现
+  （卡片「考试日期 · 来源分档」+ 源料缺陷徽章，释义在列表说明 `REAL_TIER_NOTE`）。
+- **JSX 文本禁写 `\uXXXX`**: JSX 文本与 JSX 属性都不是 JS 字符串字面量，`\uXXXX` 不会被解码，会原样渲染成一长串 ASCII
+  （既是乱码，又因不可断行而挤爆分栏）。中文直接写中文；`__tests__/encoding-hygiene.regression.test.js` 会拦。
+  同源问题还有题库 JSON 里的 U+FFFD 替换字符（`caf�`），同一条测试一起扫。
+- **State**: 无 Redux/Zustand, 用 useState + localStorage + Supabase
+- **API**: 所有 API 返回 `{ ok: boolean, ...data }` 格式, 见 `lib/apiResponse.js`
+- **Prompts**: AI prompt 模板集中在 `lib/*Gen/` 与 `lib/ai/prompts/`, 纯字符串拼接, 不引入模板引擎
+- **题库格式**: 各题型 bank 为 `{ items: [...] }`；Discussion 题 `{ id, course, professor, students }`；
+  阅读/听力/口语 item 形状见各 `lib/*Gen/*Validator.js`
+- **出题不许自由发挥**: 一切以 `data/realExam2026/` 真题为锚，改 prompt 前先看 `docs/eval-spec/` 对应文件
+- **安全**: middleware.js 设安全头, admin API 需 token, /api/ai 有限流 + origin 校验；
+  个人题库 strip audio_url/白名单删桶；音频代理拒 `..`/反斜杠/非白名单扩展名
+- **DeepSeek 成本护栏**: 本地批量脚本的每次调用都记台账 `.ops/deepseek-usage.jsonl`（Node 走 `lib/ai/deepseekHttp` 自动记，
+  Python 走 `scripts/ops/_usage_ledger.py`），对账 `node scripts/ops/deepseek-usage-report.mjs`；真题结构化脚本先
+  `--dry-run` 看「将调用 N 次/预计 ¥X」再跑，超 `--max-calls`(默认 200) 须 `--yes`。详见 docs/deepseek-usage-ledger.md
+
+## 协作约定 (Agent Conventions)
+
+- **新功能与 UI 改造：先查规范，优先复用**：开发新功能、新页面或改造 UI 前，必须先查询并充分了解项目已有的审美、功能、交互与流程规范，检查需要的功能组件是否已有可复用实现，并查找可以直接参考的成熟功能。先明确可复用的组件、页面外壳、导航机制、状态管理和动效，再动手实施。已有规范和实现时，遵守规范、复用并扩展现有实现优先；完全重写是最后且最差的选项，只有确认现有实现无法满足需求并说明具体原因后才考虑。不得因局部视觉改造另起一套导航、页面外壳或交互流程。
+- **模型分工**: 主线程(Fable)只做规划/决策/审查。派 Agent 必须显式传 model 参数——实施类=opus、搜索/整理/机械改动=sonnet、只读探索用 Explore 类型；不传 model 会静默继承贵模型。spec 必须自包含。
+- **环境**: Windows 11 + PowerShell 5.1(Bash 工具=Git Bash)。禁止假设 Unix：没有 /tmp、install.sh 类脚本通常不适用、路径用正斜杠或转义。
+- **后台长任务**: Workflow/子代理/长脚本每完成一个阶段要向用户回报一行进度，不许黑盒静默跑。
+- **报告语言**: 一律中文。
+- **固定入口**: 开工先看 docs/BACKLOG.md（统一挂起清单）；推送走 /ship；发版走 /release-notes；SQL 迁移走 /sql-migrate；题库质量退化先走 /calibration-fix；GitHub 方案调研走 /research-reuse。
+- **真题「丢题/缺题/这篇怎么只有几道题」**: 先跑 `node scripts/realbank/loss_ledger.mjs`（零 token、只读仓库），
+  它直接给出每套卷每个槽位缺几题 + 归因（管线丢题 / 落库丢弃 / 整科缺席 / 源料缺陷 / 复核扣下 / 跨卷合并）。
+  「落库丢弃」的逐题原因在 `data/realBank/drop-ledger.json`（`build_bank --dry` 会重写它）；这一桶重扫结构化治不了，要看闸判得对不对。
+  **不要凭用户撞见的那一篇开工** —— 那正是 2026-09 连修几轮仍普遍丢题的原因（口径见 scripts/realbank/loss_attribution.js 头注）。
+  重建题库后要 `--freeze` 重冻基线，`__tests__/realbank-loss-guard.test.js` 卡住「某题型悄悄变少」。
+- **发版前置**: 未跑迁移(scripts/sql/MIGRATIONS.md)/未翻 flag/未勾 Vercel env 必须在推送前核对。
+- **复现 UI 问题必须挂真实组件**: 一律起 dev server + 临时页 import 真组件（`app/zz-probe/page.js` 之类，用完删）跑真浏览器量，
+  禁止手写一份「长得像」的 HTML/JSX 复刻页来下判断——bug 按定义就住在「你以为的实现」和「真实现」的差里，
+  复刻页只会复现你的理解，让你误判成「代码没问题」。2026-09-11 的写作分栏事故就栽在这一步，多绕了一整轮像素取证。
+  （量法：临时页里 clone 节点进 `width:min-content` 容器读 `getBoundingClientRect`，即得该列 min-content。）
+
+### 口语路由表（用户怎么说,就怎么接;不要求用户记指令）
+| 用户说 | 动作 |
+|---|---|
+| 推 / 推送 / 推上去 / 没bug就推 | /ship |
+| 更新日志 / 发版 / 更新公告 | /release-notes |
+| 建表 / 迁移 / SQL怎么跑;「建好了/跑完了」 | /sql-migrate（完成语=登记台账） |
+| 退化了 / 不像真题 / 机器味 / 全校准一下 | /calibration-fix |
+| github有没有现成的 / 找参考 / 先调研再做 | /research-reuse |
+| 换二维码 | /swap-qrcode（首选指引后台 /admin-wechat-qr 拖图，无需部署） |
+| 成本多少 / 精算 / 预算 | /cost |
+| 模拟真实用户 / 过一遍题型 / 线上看一眼 | /smoke |
+| 查bug / 复查一下改动 | /code-review |
+| 验证某个修复真的生效 | /verify |
+| review方案 / 自审 / 严肃严密地审 | 对抗式自审：列攻击面逐条自检后给结论 |
+| 有人反馈X / 用户反映X | 先复现验证问题存在→根因→方案,等拍板再修 |
+| 进度如何 / 在跑吗 | 立即汇总所有后台任务状态,一行一个 |
+| 继续 | 从中断点接着干,先一句话复述接到哪了 |
+| ui丑 / 不好看 / 好好研究一下ui | 先出3-5个静态方案对比图选定再实施,不逐轮渲染试错 |
+| 给我看看 / 预览 / 截图 | 立即出示产出物(截图/预览/文件路径) |
+| 可以 / 行 / 就这么做 / A / B / 1 / 2 | 视为拍板：立即执行选中方案,不再追问 |
+| 不是,我的意思是… | 停手,复述自己的理解偏差,确认后再继续 |

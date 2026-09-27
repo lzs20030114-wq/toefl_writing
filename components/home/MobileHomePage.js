@@ -9,6 +9,7 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { ReferralBanner } from "./ReferralBanner";
 import { MobileVocabEntry } from "../vocab/MobileVocabEntry";
+import VocabNotebook from "../vocab/VocabNotebook";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { getRealBankTimeLabels } from "../../lib/realBankModes";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
@@ -41,10 +42,10 @@ export function MobileHomePage({
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
   fadeIn, sideCard, querySuffix, isChallengeProp,
   onOpenReferral,
+  activeSection, onSectionChange,
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("writing");
   const tier = userTier || "free";
 
   // 「我的题库」新功能一次性聚光灯引导（与桌面端共用同一 featureId，不会重复弹）
@@ -148,6 +149,8 @@ export function MobileHomePage({
         sessions={sessions}
       />
 
+      <MobileVocabEntry isChallenge={isChallenge} querySuffix={querySuffix} isActive={activeSection === "vocab"} />
+
       {/* ── Section tabs ── */}
       <div style={{ display: "flex", gap: 0, marginBottom: 14, width: "100%", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>
         {SECTIONS.map((sec) => {
@@ -158,7 +161,7 @@ export function MobileHomePage({
             <button
               key={sec.id}
               data-section-id={sec.id}
-              onClick={() => setActiveSection(sec.id)}
+              onClick={() => onSectionChange(sec.id)}
               style={{
                 flex: "1 1 0", minWidth: 0,
                 display: "flex", alignItems: "center", justifyContent: "center",
@@ -193,6 +196,8 @@ export function MobileHomePage({
             </>
           ) : null; })()}
         </div>
+      ) : activeSection === "vocab" ? (
+        <div style={{ minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded /></div>
       ) : activeSection === "reading" ? (
         <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
       ) : activeSection === "real-bank" ? (
@@ -324,9 +329,6 @@ export function MobileHomePage({
 
       </>
       )}
-
-      {/* ── 单词本入口（跨科目，切到哪个 tab 都在） ── */}
-      <MobileVocabEntry isChallenge={isChallenge} querySuffix={querySuffix} />
 
       {/* ── 底部快捷入口 ── */}
       <div style={{ display: "flex", gap: 8 }}>
