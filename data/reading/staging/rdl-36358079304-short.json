@@ -1,0 +1,178 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-27T23:16:54.966Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36358079304-short_001",
+      "variant": "short",
+      "text": "Notice: During spring break week (March 10-14), the Westgate Library will close at 6:00 PM, three hours earlier than usual. Returns may be placed in the outside bin. Holds not collected by Friday will be charged a $2 handling fee. Contact the front desk with any questions.",
+      "word_count": 47,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36358079304-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, when will the Westgate Library close during spring break week?",
+          "options": {
+            "A": "At 6:00 PM from March 10 to March 14",
+            "B": "At 9:00 PM from March 10 to March 14",
+            "C": "At 6:00 PM on March 14 only",
+            "D": "At 8:00 PM from March 10 to March 14"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states the library closes at 6:00 PM during the March 10-14 spring break period."
+        },
+        {
+          "qid": "rdl_gen_36358079304-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about patrons who have items on hold?",
+          "options": {
+            "A": "They must pay the charge when they request an item.",
+            "B": "They may collect their holds at any hour.",
+            "C": "They are charged for every item they request.",
+            "D": "They avoid the charge by picking up holds before the weekend."
+          },
+          "correct_answer": "D",
+          "explanation": "Since a $2 fee applies to holds not collected by Friday, patrons who pick up their items before Saturday avoid it."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36358079304-short_002",
+      "variant": "short",
+      "text": "USED BOOK SALE! Saturday, April 5 — 9:00 AM to 3:00 PM. Hollis Hall, Room 112. Prices: $3 paperback, $8 hardcover. Bring your student ID. Cash only. Sponsored by the Student Book Exchange. No returns or exchanges. Unsold titles move to the free shelf at 3:30 PM.",
+      "word_count": 47,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36358079304-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, where is the sale being held?",
+          "options": {
+            "A": "In the Student Book Exchange office",
+            "B": "In the Hollis Hall lobby",
+            "C": "In the main campus store",
+            "D": "In Hollis Hall, Room 112"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer lists Hollis Hall, Room 112 as the sale location."
+        },
+        {
+          "qid": "rdl_gen_36358079304-short_002_q2",
+          "question_type": "detail",
+          "stem": "According to the poster, what happens to books that are not sold?",
+          "options": {
+            "A": "They are given away free after 3:30 PM.",
+            "B": "They are returned to their owners.",
+            "C": "They are sold again the next weekend.",
+            "D": "They are stored in Room 112."
+          },
+          "correct_answer": "A",
+          "explanation": "The poster states that unsold titles move to the free shelf at 3:30 PM."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36358079304-short_003",
+      "variant": "short",
+      "text": "NOTICE: The bicycle racks outside Kemper Hall will be removed on Tuesday, May 6, at 7:00 AM. Sidewalk repairs are scheduled through May 9. Cyclists should use the racks near the West Garage during this period. Bikes left after May 5 will be relocated to the Facilities Office.",
+      "word_count": 48,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36358079304-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what should cyclists do during the repair period?",
+          "options": {
+            "A": "Use the racks inside Kemper Hall",
+            "B": "Use the racks outside the Facilities Office",
+            "C": "Use the racks near the West Garage",
+            "D": "Use racks along the main campus walkway"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice directs cyclists to the racks near the West Garage while repairs continue."
+        },
+        {
+          "qid": "rdl_gen_36358079304-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the removal of the racks?",
+          "options": {
+            "A": "It will last for exactly three days.",
+            "B": "It was requested by the West Garage.",
+            "C": "It is needed for the sidewalk repairs.",
+            "D": "It will be delayed until May 9."
+          },
+          "correct_answer": "C",
+          "explanation": "Because the racks are removed as sidewalk work begins, the removal is evidently required for that construction."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36358079304-short_004",
+      "variant": "short",
+      "text": "Hi Devon,\n\nThe Astronomy Club meeting has been moved from Wednesday to Thursday, March 6, at 7:30 PM in Olin 214. Our usual room is unavailable. Please bring the $5 dues for the spring skywatch permit. Reply by Monday if you cannot attend.\n\nBest,\nRavi",
+      "word_count": 45,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36358079304-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, when will the Astronomy Club meet?",
+          "options": {
+            "A": "On Wednesday, March 5, at 7:30 PM",
+            "B": "On Thursday, March 6, at 7:30 PM",
+            "C": "On Thursday, March 6, at 5:00 PM",
+            "D": "On Tuesday, March 4, at 7:30 PM"
+          },
+          "correct_answer": "B",
+          "explanation": "The email gives the new meeting time as Thursday, March 6, at 7:30 PM."
+        },
+        {
+          "qid": "rdl_gen_36358079304-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about members who are unable to attend?",
+          "options": {
+            "A": "They should pay their dues the following week.",
+            "B": "They ought to notify the club in advance.",
+            "C": "They will miss the skywatch event.",
+            "D": "They must send another member in their place."
+          },
+          "correct_answer": "B",
+          "explanation": "Ravi asks members to reply by Monday if they cannot come, implying advance notice is expected."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
