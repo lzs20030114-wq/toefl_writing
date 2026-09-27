@@ -1,0 +1,70 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-27T23:16:52.993Z",
+  "total_generated": 1,
+  "total_accepted": 1,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36358079304-long_001",
+      "variant": "long",
+      "text": "Update to Campus Lost and Found Procedures\nOffice of Campus Services, Whitfield Hall, Room 112\n\nEffective March 3, the campus Lost and Found program will be managed by the Office of Campus Services. Items will be accepted between 9:00 AM and 4:30 PM on weekdays; nothing can be received on weekends or university holidays.\n\nUnclaimed articles are held for 30 days. After that period, they are donated to the Riverside Community Shelter or discarded. Beginning April 1, a $5.00 processing fee will be required before any electronic device — including laptops, tablets, and headphones — is returned. Cash is not accepted at the counter; the fee must be paid online through the student portal.\n\n• Bring a photo ID and your student number when claiming an item.\n• Wallets, passports, and other valuables are stored in a locked cabinet and released only by a supervisor.\n• Perishable items and personal clothing are not accepted.\n\nQuestions about a specific item should be directed to lostfound@whitfield.edu or 555-0142.",
+      "word_count": 166,
+      "genre": "notice",
+      "format_metadata": {
+        "title": "Update to Campus Lost and Found Procedures",
+        "office": "Office of Campus Services, Whitfield Hall, Room 112",
+        "effective_date": "March 3",
+        "contact": "lostfound@whitfield.edu"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_36358079304-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what must be done before a lost laptop is returned to its owner?",
+          "options": {
+            "A": "To pay a processing charge through the online portal",
+            "B": "To submit a written request at the Whitfield Hall desk",
+            "C": "To reserve a locker in the cabinet near Room 112",
+            "D": "To donate the device to a community shelter"
+          },
+          "correct_answer": "A",
+          "explanation": "The notice states that a $5.00 processing fee is required before any electronic device is returned, and that cash is not accepted — the fee must be paid online through the student portal. The other options describe actions that the notice does not require of an owner claiming an item."
+        },
+        {
+          "qid": "rdl_gen_36358079304-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about items that remain at the Lost and Found for more than a month?",
+          "options": {
+            "A": "They are returned to the office that originally received them.",
+            "B": "They are no longer kept for students to claim.",
+            "C": "They are moved to a locked cabinet in Whitfield Hall.",
+            "D": "They are sold to cover the cost of storage and handling."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says unclaimed articles are held for 30 days and are then donated or discarded, which implies they can no longer be collected. The locked cabinet applies only to valuables at the time they are stored, and there is no mention of returning items to another office or selling them."
+        },
+        {
+          "qid": "rdl_gen_36358079304-long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about items such as wallets and passports?",
+          "options": {
+            "A": "They are returned at the front counter without staff assistance.",
+            "B": "They require a supervisor's approval before they are released.",
+            "C": "They are the items most often turned in at Whitfield Hall.",
+            "D": "They are photographed and listed on the student portal."
+          },
+          "correct_answer": "B",
+          "explanation": "The notice says valuables are kept in a locked cabinet and released only by a supervisor, so a staff member's authorization is needed for their return. Nothing in the notice mentions photographs, portal listings, or how frequently such items are turned in."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}
