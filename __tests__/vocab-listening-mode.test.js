@@ -51,7 +51,7 @@ test("跨设备合并逐模式择新，语境从有效一方补足", () => {
 
 test("按模式排队，阅读积压不会饿死听力，共用每日新词额度", () => {
   const cards = Array.from({ length: 22 }, (_, i) => normalizeCard({ word: `word${i}`, reviewMode: i < 20 ? "reading" : "listening", createdAt: new Date(at.getTime() + i * 1000).toISOString() }));
-  expect(buildQueue(cards, at, { newPerDay: 20 }, () => 0.5, "reading")).toHaveLength(20);
+  expect(buildQueue(cards, at, { newPerDay: 20 }, () => 0.5, "reading")).toHaveLength(18);
   expect(buildQueue(cards, at, { newPerDay: 20 }, () => 0.5, "listening")).toHaveLength(2);
   expect(bookStats(cards, at, { newPerDay: 20 }, "listening").newToday).toBe(2);
   const introduced = { ...cards[20], listeningState: { ...cards[20].listeningState, introducedAt: at.toISOString() } };
@@ -64,6 +64,6 @@ test("复习日志写入模式，旧模式默认为阅读", () => {
   const before = normalizeCard({ word: "useful" });
   appendReviewLog(before, { ...before, scheduledDays: 1 }, 3, at, 250, "listening");
   appendReviewLog(before, before, 3, at);
-  const logs = JSON.parse(localStorage.getItem("toefl-vocab-logs")).logs;
+  const logs = JSON.parse(localStorage.getItem("toefl-vocab-logs::guest")).logs;
   expect(logs.map((log) => log.mode)).toEqual(["listening", "reading"]);
 });

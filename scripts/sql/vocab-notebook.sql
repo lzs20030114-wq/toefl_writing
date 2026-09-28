@@ -1,5 +1,7 @@
 -- 单词本（Vocabulary Notebook）——划词词典收藏的词 + 间隔重复复习进度
 -- 在 Supabase SQL Editor 里执行。
+-- 新环境接着执行 vocab-sync-hardening.sql 与 vocab-cas-version.sql，
+-- 后者提供新版 /api/vocab 条件写入所需的 version/trigger。
 --
 -- 设计说明：
 --   本地 localStorage 是真源，这张表只是跨设备镜像，所以整张卡片存 JSONB
@@ -30,20 +32,11 @@ CREATE INDEX IF NOT EXISTS idx_vocab_cards_user
 
 ALTER TABLE vocab_cards ENABLE ROW LEVEL SECURITY;
 
--- 与 mistake_favorites 同构：匿名 key 不直连这张表，读写只经
--- /api/vocab（service role）走，所以这里放行的是 service role 路径。
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE schemaname = 'public'
-      AND tablename = 'vocab_cards'
-      AND policyname = 'Allow all operations on vocab_cards'
-  ) THEN
-    CREATE POLICY "Allow all operations on vocab_cards" ON vocab_cards
-      FOR ALL USING (true) WITH CHECK (true);
-  END IF;
-END $$;
+-- 仅服务端 service_role 访问；不要给 PUBLIC true 策略。
+REVOKE ALL ON TABLE vocab_cards FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE vocab_cards TO service_role;
+REVOKE ALL ON SEQUENCE vocab_cards_id_seq FROM PUBLIC, anon, authenticated;
+GRANT USAGE, SELECT ON SEQUENCE vocab_cards_id_seq TO service_role;
 
 -- ── 复习日志 ───────────────────────────────────────────────────────────
 -- 每打一次分一行。当下没人读它；它的全部价值在以后：
@@ -79,15 +72,7 @@ CREATE INDEX IF NOT EXISTS idx_vocab_review_logs_user
 
 ALTER TABLE vocab_review_logs ENABLE ROW LEVEL SECURITY;
 
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE schemaname = 'public'
-      AND tablename = 'vocab_review_logs'
-      AND policyname = 'Allow all operations on vocab_review_logs'
-  ) THEN
-    CREATE POLICY "Allow all operations on vocab_review_logs" ON vocab_review_logs
-      FOR ALL USING (true) WITH CHECK (true);
-  END IF;
-END $$;
+REVOKE ALL ON TABLE vocab_review_logs FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE vocab_review_logs TO service_role;
+REVOKE ALL ON SEQUENCE vocab_review_logs_id_seq FROM PUBLIC, anon, authenticated;
+GRANT USAGE, SELECT ON SEQUENCE vocab_review_logs_id_seq TO service_role;

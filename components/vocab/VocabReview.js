@@ -5,9 +5,10 @@ import { RATING } from "../../lib/vocab/srs";
 import { activeSentence, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
-import { parseSenses } from "../../lib/dict/core";
+import { hasUsableSense, parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
-import { adoptDictEntry } from "../../lib/vocab/vocabStore";
+import { adoptDictEntry, getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 
 /**
  * 一场复习。
@@ -85,7 +86,7 @@ function highlight(sentence, word) {
  *  - 顶替过的卡：主释义已经是整条词典释义了，这里只剩「原形是谁」要交代。
  *  - 用户点过义项的卡：主释义是那一条，这里摆整条 defFull 当参照。
  */
-function DictPanel({ card, extra }) {
+function DictPanel({ card, extra, mainDef }) {
   const filling = needsDictFill(card) && !!extra && !!extra.t;
   // 释义讲的是原形（varying → vary）时必须说清楚，否则用户会以为
   // 这些词性和音标属于卡面上那个词形。
@@ -93,7 +94,8 @@ function DictPanel({ card, extra }) {
     ? (extra.word && extra.word !== card.word ? { word: extra.word, p: extra.p } : null)
     : (card.lemma ? { word: card.lemma, p: "" } : null);
   // 卡上那条整释义和主释义一字不差时就别重复摆一遍了
-  const body = filling ? extra.t : (card.defFull && card.defFull !== card.def ? card.defFull : "");
+  const body = filling ? (extra.t !== mainDef ? extra.t : "")
+    : (card.defFull && card.defFull !== mainDef ? card.defFull : "");
   const hasBody = !!body && parseSenses(body).length > 0;
   if (!hasBody && !lemma) return null;
   return (
@@ -153,7 +155,7 @@ function WordLine({ card, size = 30 }) {
   );
 }
 
-export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) {
+export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, accountKey = getVocabAccountKey() }) {
   const [queue, setQueue] = useState(() => initialQueue || []);
   const [pos, setPos] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -178,6 +180,9 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
   const [extra, setExtra] = useState(null);
 
   const card = queue[pos] || null;
+  const extraEntry = extra && card && extra.forWord === card.word ? extra.entry : null;
+  const mainDef = card && hasUsableSense(card.def) ? card.def
+    : (extraEntry && hasUsableSense(extraEntry.t) ? extraEntry.t : "");
   // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
   const context = useMemo(() => (card ? contextSentence(card) : null), [card]);
   const cloze = useMemo(() => (card ? clozeSentence(card) : null), [card]);
@@ -219,12 +224,12 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
 
   const toggleProductive = useCallback((event) => {
     event.stopPropagation();
-    if (!card || !onSetProductive) return;
+    if (!card || !onSetProductive || getVocabAccountKey() !== accountKey) return;
     const updated = onSetProductive(card.word, !productiveOn);
     if (updated) {
       setProductiveOverrides((prev) => ({ ...prev, [card.word]: updated.productive !== false }));
     }
-  }, [card, onSetProductive, productiveOn]);
+  }, [accountKey, card, onSetProductive, productiveOn]);
 
   const fillWord = card && needsDictFill(card) ? card.word : "";
   useEffect(() => {
@@ -236,23 +241,24 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
     lookupWord(fillWord)
       .then((e) => {
         if (!e || !e.t) return;
-        if (alive) setExtra(e);
+        if (alive) setExtra({ forWord: fillWord, entry: e });
         // 顺手写回卡片：这张卡的主释义本来就是「词典整条」（用户没点过义项），
         // 换成查得到的那一条才是它该有的样子。写回之后列表页、别的设备、
         // 下一次复习都不用再查（needsDictFill 从此为 false）。
         // 卸载了也照写 —— 修复本身是对的，不该因为用户正好翻页就丢掉。
-        adoptDictEntry(fillWord, e);
+        if (getVocabAccountKey() === accountKey) adoptDictEntry(fillWord, e, new Date(), accountKey);
       })
       .catch(() => {});
     return () => {
       alive = false;
     };
-  }, [fillWord]);
+  }, [accountKey, fillWord]);
 
   const grade = useCallback(
     (rating) => {
-      if (!card) return;
+      if (!card || getVocabAccountKey() !== accountKey) return;
       const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current);
+      if (!updated) return;
       setTally((t) => ({
         again: t.again + (rating === RATING.AGAIN ? 1 : 0),
         good: t.good + (rating === RATING.AGAIN ? 0 : 1),
@@ -264,12 +270,9 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
       seen.set(card.word, times);
 
       setQueue((q) => {
-        if (!updated || times >= MAX_APPEARANCES) return q;
-        const dueIn = new Date(updated.due).getTime() - Date.now();
-        if (dueIn > SESSION_WINDOW_MS) return q;
-        const next = [...q];
-        next.splice(Math.min(next.length, pos + 1 + REINSERT_GAP), 0, updated);
-        return next;
+        return reinsertAfterGap(q, pos, updated, times, {
+          gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
+        });
       });
       setRevealed(false);
       setSpelling("");
@@ -278,7 +281,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
       setRetryResult(null);
       setPos((p) => p + 1);
     },
-    [card, onGrade, pos],
+    [accountKey, card, onGrade, pos],
   );
 
   // 认词卡沿用翻面自评；拼写卡必须先输入或明确选择「想不起来」。
@@ -325,7 +328,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
     return (
       <div style={{ textAlign: "center", padding: "48px 20px" }}>
         <div style={{ fontSize: 40, marginBottom: 10 }}>🌿</div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: C.t1, marginBottom: 6 }}>今天的词过完了</div>
+        <div style={{ fontSize: 20, fontWeight: 800, color: C.t1, marginBottom: 6 }}>这一轮复习完成</div>
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 22 }}>
           过了 {words} 个词，共 {total} 次提问
         </div>
@@ -340,7 +343,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
           </div>
         </div>
         <div style={{ fontSize: 12, color: C.t3, lineHeight: 1.8, maxWidth: 420, margin: "0 auto 22px" }}>
-          今天学的新词，明天会再出现一次 —— 中间隔一觉，同样的练习量能记得更久。
+          尚未完成的学习步到期后会再次出现在单词本；新词完成初学后，隔天再复习。
           <br />
           别回头再刷一遍，那只会制造「我记住了」的错觉。
         </div>
@@ -451,7 +454,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
           {mode === "recall" && (
             <>
               <DefLine
-                text={card.def}
+                text={mainDef}
                 style={{ fontSize: 17, color: C.t1, lineHeight: 1.8, fontWeight: 600 }}
               />
               {cloze && (
@@ -507,10 +510,10 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
               {mode === "context" ? (
                 <>
                   <DefLine
-                    text={card.def}
+                    text={mainDef}
                     style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, fontWeight: 600 }}
                   />
-                  <DictPanel card={card} extra={extra} />
+                  <DictPanel card={card} extra={extraEntry} mainDef={mainDef} />
                 </>
               ) : (
                 <>
@@ -522,16 +525,16 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit }) 
                     </div>
                   )}
                   {mode !== "recognize" && <WordLine card={card} size={28} />}
-                  {card.def && (
+                  {mainDef && (
                     <DefLine
-                      text={card.def}
+                      text={mainDef}
                       style={{
                         fontSize: 14, color: C.t1, lineHeight: 1.9,
                         marginTop: mode === "recognize" ? 0 : 10,
                       }}
                     />
                   )}
-                  <DictPanel card={card} extra={extra} />
+                  <DictPanel card={card} extra={extraEntry} mainDef={mainDef} />
                   {shownSentence && (
                     <div style={{
                       marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9,

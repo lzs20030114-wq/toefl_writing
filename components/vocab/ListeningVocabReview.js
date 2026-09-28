@@ -6,13 +6,15 @@ import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 import { canSpeak, cancelSpeakWord, speakWord } from "../../lib/audio/speakWord";
 import { humanizeDef } from "../../lib/dict/core";
+import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 const REINSERT_GAP = 10;
 const MAX_APPEARANCES = 4;
 const buttonStyle = { border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 16px", background: "#fff", color: C.t1, fontFamily: FONT, fontWeight: 700, cursor: "pointer" };
 
-export function ListeningVocabReview({ initialQueue, onGrade, onExit }) {
+export function ListeningVocabReview({ initialQueue, onGrade, onExit, accountKey = getVocabAccountKey() }) {
   const [queue, setQueue] = useState(() => initialQueue || []);
   const [pos, setPos] = useState(0);
   const [heard, setHeard] = useState(false);
@@ -139,25 +141,23 @@ export function ListeningVocabReview({ initialQueue, onGrade, onExit }) {
   }, [stop]);
 
   const grade = (rating) => {
-    if (!card || !heard || !revealed) return;
+    if (!card || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
     const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current, "listening");
+    if (!updated) return;
     const seen = seenRef.current;
     const times = (seen.get(card.word) || 0) + 1;
     seen.set(card.word, times);
     setQueue((q) => {
-      if (!updated || times >= MAX_APPEARANCES) return q;
-      const dueIn = new Date(updated.due).getTime() - Date.now();
-      if (!Number.isFinite(dueIn) || dueIn > SESSION_WINDOW_MS) return q;
-      const copy = [...q];
-      copy.splice(Math.min(copy.length, pos + 1 + REINSERT_GAP), 0, updated);
-      return copy;
+      return reinsertAfterGap(q, pos, updated, times, {
+        gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
+      });
     });
     next();
   };
 
   if (!card) return (
     <div style={{ padding: 24, textAlign: "center" }}>
-      <h2>听力复习结束</h2>
+      <h2>这一轮听力复习完成</h2>
       <button type="button" style={buttonStyle} onClick={onExit}>返回单词本</button>
     </div>
   );

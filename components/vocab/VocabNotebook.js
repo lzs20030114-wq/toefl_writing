@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { PageShell } from "../shared/ui";
 import { SpeakButton } from "../shared/SpeakButton";
@@ -12,6 +12,7 @@ import { MATURE_DAYS, sortByUrgency, reviewCard } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import RootExplorer from "./RootExplorer";
 import DailyQuotaCard from "./DailyQuotaCard";
+import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import styles from "./VocabNotebook.module.css";
 
 const PAGE_SIZE = 60;
@@ -41,7 +42,7 @@ function TaskCard({ mode, stat, ready, deferred, onStart }) {
   const listening = mode === "listening";
   const name = listening ? "听力复习" : "阅读复习";
   const todo = stat?.todo || 0;
-  const due = stat?.dueReview || 0;
+  const due = stat?.eligibleReview || 0;
   const fresh = stat?.newToday || 0;
   return <button type="button" className={`${styles.task} ${listening ? styles.listening : ""}`}
     disabled={!ready || !todo} onClick={() => onStart(mode)}
@@ -50,7 +51,7 @@ function TaskCard({ mode, stat, ready, deferred, onStart }) {
     <span className={styles.taskBody}>
       <span className={styles.taskEyebrow}>VOCAB REVIEW</span>
       <strong>{name}</strong>
-      <span>{ready ? (todo ? `到期 ${Math.max(0, due - deferred)} · 新词 ${fresh}` : "今天暂无待复习的词") : "正在读取词库…"}</span>
+      <span>{ready ? (todo ? `到期 ${due} · 新词 ${fresh}` : "今天暂无待复习的词") : "正在读取词库…"}</span>
       {deferred > 0 && <span className={styles.deferred}>另有 {deferred} 个到期词顺延到明天</span>}
     </span>
     <span className={styles.taskAction}>{todo ? "开始复习" : "暂无任务"}<span aria-hidden="true">›</span></span>
@@ -96,9 +97,10 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
 }
 
 export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
-  const { cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn,
+  const { cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn, accountKey, storageStatus,
     makeQueue, grade, remove, reset, setProductive, setReviewMode, schedule } = useVocabBook();
   const [queue, setQueue] = useState(null);
+  useEffect(() => { setQueue(null); }, [accountKey]);
   const [reviewingMode, setReviewingMode] = useState("reading");
   const [listMode, setListMode] = useState("all");
   const [filter, setFilter] = useState("all");
@@ -124,23 +126,32 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
     if (listRef.current) listRef.current.scrollTop = 0;
   };
   const startReview = (mode) => {
-    const next = makeQueue(mode);
+    if (!ready || accountKey !== getVocabAccountKey()) return;
+    const next = makeQueue(mode, accountKey);
     if (!next.length) return;
     setReviewingMode(mode);
-    setQueue(next);
+    setQueue({ cards: next, account: accountKey });
   };
 
-  if (queue) {
+  // 账号一变，旧队列在这一轮 render 就不可见，旧评分闭包也带原账号校验。
+  if (accountKey && accountKey !== getVocabAccountKey()) {
+    return <div className={styles.page} style={{ fontFamily: HOME_FONT }}>正在切换单词本…</div>;
+  }
+  if (queue && queue.account === accountKey) {
     const review = reviewingMode === "listening"
-    ? <ListeningVocabReview initialQueue={queue} onGrade={grade} onExit={() => setQueue(null)} />
-    : <VocabReview initialQueue={queue} onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "reading")}
-      onSetProductive={setProductive} onExit={() => setQueue(null)} />;
+    ? <ListeningVocabReview key={queue.account} initialQueue={queue.cards} accountKey={queue.account}
+      onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "listening", queue.account)}
+      onExit={() => setQueue(null)} />
+    : <VocabReview key={queue.account} initialQueue={queue.cards} accountKey={queue.account}
+      onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "reading", queue.account)}
+      onSetProductive={(word, on) => getVocabAccountKey() === queue.account ? setProductive(word, on) : null}
+      onExit={() => setQueue(null)} />;
     return embedded ? <div className={styles.embeddedReview}>{review}</div> : <PageShell narrow>{review}</PageShell>;
   }
 
   const reading = statsByMode?.reading || stats;
   const listening = statsByMode?.listening || { todo: 0, dueReview: 0, newToday: 0 };
-  const deferred = (stat) => limits.maxReviews > 0 ? Math.max(0, (stat?.dueReview || 0) - limits.maxReviews) : 0;
+  const deferred = (stat) => stat?.deferredReview || 0;
 
   return <div className={`${styles.page} ${embedded ? styles.embedded : ""}`} style={{ fontFamily: HOME_FONT }}>
     {!embedded && <header className={styles.topbar}><div className={styles.brand}><span className={styles.brandMark}>T</span><strong>TreePractice</strong><span className={styles.brandSub}>TOEFL 备考</span></div></header>}
@@ -155,6 +166,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
         </div>
         {ready && schedule.sprint && <div className={styles.notice}><strong>考前冲刺档已开启：</strong>距考试不到 10 天，目标留存率从 90% 提到 95%，复习间隔也压在考试日之前。</div>}
         {!isLoggedIn && ready && cards.length > 0 && <div className={styles.notice}>当前没登录，单词只保存在这台设备的浏览器中；登录后会同步到账号。</div>}
+        {ready && !storageStatus.persisted && <div className={styles.notice} role="alert">浏览器未能保存单词本改动；当前页面仍可暂时使用，关闭或刷新后可能丢失。请检查浏览器存储空间或权限。</div>}
         <section className={styles.card} aria-labelledby="vn-library-title">
           <div className={styles.libraryHead}><h2 id="vn-library-title">我的词库 <span>{ready ? stats.total : "—"}</span></h2>
             <input value={q} onChange={(event) => { setQ(event.target.value); resetListView(); }}

@@ -28,6 +28,18 @@ test("要会写：先输入并核对，拼对才按记得排期", () => {
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
 });
 
+test("旧账号的同词评分回调在切换账号后不执行", () => {
+  localStorage.setItem("toefl-user-code", "VOCABPROBEA");
+  try {
+    const onGrade = jest.fn(() => ({ ...card, due: new Date().toISOString() }));
+    render(<VocabReview accountKey="VOCABPROBEA" initialQueue={[{ ...card, productive: false }]} onGrade={onGrade} onExit={jest.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+    localStorage.setItem("toefl-user-code", "VOCABPROBEB");
+    fireEvent.click(screen.getByRole("button", { name: /记得/ }));
+    expect(onGrade).not.toHaveBeenCalled();
+  } finally { localStorage.removeItem("toefl-user-code"); }
+});
+
 test("拼错或主动看答案都按忘了排期", () => {
   const onGrade = jest.fn(() => null);
   const { rerender } = render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
@@ -90,7 +102,7 @@ test("主动看答案后也能反复重练，仍只评分一次", () => {
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
 });
 
-test("拼写失败后可改为只需认得，本次仍按拼错计分，下次出现改考认词", () => {
+test("拼写失败后可改为只需认得；短队列不提前回插，改动留待下次到期", () => {
   let productive = true;
   const onSetProductive = jest.fn((word, on) => {
     productive = on;
@@ -112,7 +124,8 @@ test("拼写失败后可改为只需认得，本次仍按拼错计分，下次�
   fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
   expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
-  expect(screen.getByRole("switch", { name: "approximately需要会写" })).toHaveAttribute("aria-checked", "false");
+  expect(screen.getByText("这一轮复习完成")).toBeInTheDocument();
+  expect(screen.getByText(/学习步到期后会再次出现在单词本/)).toBeInTheDocument();
 });
 
 test("认词卡可改回要会写，点开关不会顺带翻面", () => {

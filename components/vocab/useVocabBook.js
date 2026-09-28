@@ -11,6 +11,8 @@ import {
   setReviewMode as setStoredReviewMode,
   initVocabSync,
   VOCAB_UPDATED_EVENT,
+  getVocabAccountKey,
+  getVocabStorageStatus,
 } from "../../lib/vocab/vocabStore";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../../lib/AuthContext";
 import { activeCards, bookStats, buildQueue, DEFAULT_LIMITS } from "../../lib/vocab/book";
@@ -28,13 +30,18 @@ export function useVocabBook() {
   const [limits, setLimitsState] = useState(DEFAULT_LIMITS);
   const [ready, setReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [accountKey, setAccountKey] = useState(null);
+  const [storageStatus, setStorageStatus] = useState({ persisted: true });
   // 每次评分都推进这个值，让 stats/queue 里的 now 重算（否则跨过整点也不刷新）
   const [tick, setTick] = useState(0);
 
   const refresh = useCallback(() => {
-    setCards(activeCards(loadBook()));
+    const account = getVocabAccountKey();
+    setCards(loadBook());
     setLimitsState(loadLimits());
     setIsLoggedIn(!!getSavedCode());
+    setAccountKey(account);
+    setStorageStatus(getVocabStorageStatus());
     setReady(true);
     setTick((t) => t + 1);
   }, []);
@@ -43,10 +50,17 @@ export function useVocabBook() {
     refresh();
     window.addEventListener(VOCAB_UPDATED_EVENT, refresh);
     window.addEventListener(AUTH_CHANGED_EVENT, refresh);
+    const refreshTime = () => setTick((t) => t + 1);
+    const timer = window.setInterval(refreshTime, 60 * 1000);
+    window.addEventListener("focus", refreshTime);
+    document.addEventListener("visibilitychange", refreshTime);
     const stopSync = initVocabSync(refresh);
     return () => {
       window.removeEventListener(VOCAB_UPDATED_EVENT, refresh);
       window.removeEventListener(AUTH_CHANGED_EVENT, refresh);
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refreshTime);
+      document.removeEventListener("visibilitychange", refreshTime);
       stopSync();
     };
   }, [refresh]);
@@ -63,13 +77,16 @@ export function useVocabBook() {
   }), [cards, limits, tick]);
 
   const makeQueue = useCallback(
-    (mode) => buildQueue(loadBook(), new Date(), loadLimits(), Math.random, mode),
-    [],
+    (mode, expectedAccount = accountKey) => expectedAccount === getVocabAccountKey()
+      ? buildQueue(loadBook(), new Date(), loadLimits(), Math.random, mode) : [],
+    [accountKey],
   );
 
   const grade = useCallback(
-    (word, rating, durationMs, mode) => gradeCard(word, rating, new Date(), undefined, durationMs, mode),
-    [],
+    (word, rating, durationMs, mode, expectedAccount = accountKey) =>
+      expectedAccount === getVocabAccountKey()
+        ? gradeCard(word, rating, new Date(), undefined, durationMs, mode, expectedAccount) : null,
+    [accountKey],
   );
   const remove = useCallback((word) => removeWord(word), []);
   const reset = useCallback((word) => resetCard(word), []);
@@ -93,7 +110,8 @@ export function useVocabBook() {
   }, [tick]);
 
   return {
-    cards, stats, statsByMode, limits, setLimits, ready, isLoggedIn, refresh,
+    cards: activeCards(cards), stats, statsByMode, limits, setLimits, ready: ready && accountKey === getVocabAccountKey(),
+    isLoggedIn, accountKey, storageStatus, refresh,
     makeQueue, grade, remove, reset, setReviewMode, setProductive: markProductive, schedule,
   };
 }

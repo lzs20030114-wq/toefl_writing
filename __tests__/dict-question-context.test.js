@@ -1,4 +1,11 @@
-import { questionLookupContext, sentenceAround } from "../lib/dict/core";
+import { questionLookupContext, sentenceAround, sentenceAtOffsets } from "../lib/dict/core";
+
+test("原句按实际点击偏移定位重复词，跨句选择拒收", () => {
+  const text = "The bank is deep. The bank is crowded.";
+  const second = text.lastIndexOf("bank");
+  expect(sentenceAtOffsets(text, second, second + 4)).toBe("The bank is crowded.");
+  expect(sentenceAtOffsets(text, text.indexOf("bank"), second + 4)).toBe("");
+});
 
 describe("questionLookupContext（复盘题目区点词的上下文）", () => {
   const passage = "SRM reflects sunlight back into space. CDR lowers greenhouse gas concentrations.";

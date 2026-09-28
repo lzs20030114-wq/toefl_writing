@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
-import { sentenceAround, splitSenses } from "../../lib/dict/core";
+import { sentenceAtOffsets, splitSenses } from "../../lib/dict/core";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { getCard, saveWord, removeWord, addSentence, chooseSense } from "../../lib/vocab/vocabStore";
@@ -88,6 +88,20 @@ function sentenceElementOf(range) {
   return start && start === end ? start : null;
 }
 
+function sentenceFromRange(root, range) {
+  if (!root || !range || !root.contains(range.startContainer) || !root.contains(range.endContainer)) return "";
+  try {
+    const full = document.createRange();
+    full.selectNodeContents(root);
+    const text = full.toString();
+    const before = full.cloneRange();
+    before.setEnd(range.startContainer, range.startOffset);
+    const through = full.cloneRange();
+    through.setEnd(range.endContainer, range.endOffset);
+    return sentenceAtOffsets(text, before.toString().length, through.toString().length);
+  } catch { return ""; }
+}
+
 function loadAiCache() {
   try {
     return JSON.parse(localStorage.getItem(AI_CACHE_KEY) || "{}");
@@ -116,6 +130,7 @@ function saveAiCache(key, text) {
  * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
  */
 export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence, listeningAudio }) {
+  const rootRef = useRef(null);
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
   const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
@@ -157,6 +172,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setCard(existing);
     setReviewMode(existing?.reviewMode || (source === "listening" ? "listening" : "reading"));
     const sentenceEl = sentenceElementOf(range);
+    const sentenceText = sentenceEl?.textContent?.trim() || sentenceFromRange(rootRef.current, range);
     setPop({
       word,
       rect: range.getBoundingClientRect(),
@@ -164,8 +180,9 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       loading: true,
       notFound: false,
       sentenceIndex: sentenceIndexOf(range),
-      sentenceText: sentenceEl?.textContent?.trim() || "",
-      crossSentence: !range.collapsed && !sentenceEl && !!(range.startContainer?.parentElement?.closest?.("[data-sentence-index]")),
+      sentenceText,
+      crossSentence: !range.collapsed && (!sentenceText
+        || (!sentenceEl && !!range.startContainer?.parentElement?.closest?.("[data-sentence-index]"))),
     });
     const entry = await lookupWord(word);
     setPop((prev) =>
@@ -259,7 +276,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const askAi = useCallback(async () => {
     if (!pop) return;
     const word = pop.word;
-    const sentence = sentenceAround(passage, pop.word) || pop.word;
+    const sentence = pop.sentenceText || pop.word;
     const key = `${pop.word}|||${sentence.slice(0, 80)}`;
     const cached = loadAiCache()[key];
     if (cached) {
@@ -288,7 +305,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       if (wordRef.current !== word) return;
       setAi({ loading: false, text: null, error: mapAiHelperError(e) });
     }
-  }, [pop, passage]);
+  }, [pop]);
 
   // 词典命中的原形才是该进单词本的那个词：学生查 studies，收藏的应该是 study。
   const saveWordForm = (pop && pop.entry && pop.entry.word) || (pop && pop.word) || "";
@@ -310,7 +327,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     && Number.isFinite(timing.start) && Number.isFinite(timing.end) && timing.end > timing.start
     ? { audioUrl: listeningAudio.audioUrl, start: timing.start, end: timing.end, text: timing.text.trim() }
     : null, [listeningAudio?.audioUrl, timing]);
-  const curSentence = popWord && !pop?.crossSentence ? (listeningContext?.text || pop?.sentenceText || sentenceAround(passage, popWord) || "") : "";
+  const curSentence = popWord && !pop?.crossSentence ? (listeningContext?.text || pop?.sentenceText || "") : "";
 
   const changeReviewMode = useCallback((mode) => {
     setReviewMode(mode);
@@ -424,7 +441,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   }
 
   return (
-    <div onMouseUp={handlePick} onTouchEnd={handleTouch} style={style}>
+    <div ref={rootRef} onMouseUp={handlePick} onTouchEnd={handleTouch} style={style}>
       {children}
       {/* Portal 到 body：页面外层 <main> 的 animation 用了 fill-mode both，结束态留下
           transform: translateY(0)；任何非 none 的 transform 都会成为 position:fixed

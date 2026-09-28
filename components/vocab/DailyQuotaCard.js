@@ -63,9 +63,9 @@ export default function DailyQuotaCard({ limits, setLimits }) {
         <form onSubmit={save}>
           <label>每天放出新词<input type="number" min="0" max="100" step="1" inputMode="numeric"
             value={newDraft} onChange={(event) => setNewDraft(event.target.value)} /></label>
-          <label>每天复习上限<input type="number" min="0" max="500" step="1" inputMode="numeric"
+          <label>每天到期词额度<input type="number" min="0" max="500" step="1" inputMode="numeric"
             value={reviewDraft} onChange={(event) => setReviewDraft(event.target.value)} /></label>
-          <p className={styles.quotaHint}>复习上限设为 0 表示不限；超出的到期词会顺延。</p>
+          <p className={styles.quotaHint}>阅读、听力共用额度；同一词当天只占一次。新词和当天的学习步另算。设为 0 表示不限，超额到期词顺延。</p>
           {error && <p className={styles.quotaError} role="alert">{error}</p>}
           <div className={styles.quotaActions}><button type="button" onClick={cancel}>取消</button><button type="submit">保存</button></div>
         </form>

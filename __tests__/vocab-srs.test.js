@@ -614,10 +614,10 @@ describe("卡片方向 / 原句", () => {
     expect(cardDirection({ word: "cell", source: "reading", sentence: "无关的句子。" })).toBe("recognize");
   });
 
-  test("所有来源的词默认在 review 后走产出方向（中→英）", () => {
-    expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "speaking", state: STATE.REVIEW })).toBe("recall");
-    expect(cardDirection({ word: "divide", source: "reading", state: STATE.REVIEW })).toBe("recall");
+  test("所有来源的词有有效释义时，默认在 review 后走产出方向（中→英）", () => {
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("recall");
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "speaking", state: STATE.REVIEW })).toBe("recall");
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "reading", state: STATE.REVIEW })).toBe("recall");
   });
 
   test("手动剔除后，写作和口语词也只考认词", () => {
