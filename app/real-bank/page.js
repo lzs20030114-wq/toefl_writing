@@ -696,7 +696,7 @@ function RealBankPageClient() {
           accent={REAL_ACCENT}
           compact
           onSelect={(id) => {
-            // real_* id 不存在于 live 静态题库，必须靠快照交接，否则 WritingTask 报「已下线」。
+            // 保存所选题快照；同时传完整真题池，保证结果页「下一题」继续抽真题。
             const raw = writingById.get(String(id));
             if (raw) stashPromptSnapshot(type, raw);
             setPickedPromptId(String(id));
@@ -712,6 +712,7 @@ function RealBankPageClient() {
       <WritingTask
         onExit={() => setPickedPromptId(null)}
         type={type}
+        prompts={writingPrompts}
         practiceMode={mode}
         timeLimitSeconds={timeLimitSeconds}
         reportLanguage={reportLanguage}

@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { clearAllSessions, deleteSession, loadHist, SESSION_STORE_EVENTS, setCurrentUser } from "../lib/sessionStore";
+import { clearAllSessions, deleteSession, loadHist } from "../lib/sessionStore";
 import { getSavedCode } from "../lib/AuthContext";
+import { subscribeHistory } from "../lib/history/subscribeHistory";
 import { buildHistoryEntries, buildHistoryStats } from "../lib/history/viewModel";
 import { startRetryFromHistory, buildRetryHref } from "../lib/history/retry";
 import { isV1Session } from "../lib/history/bankVersion";
@@ -987,23 +988,15 @@ export function ProgressView({ onBack }) {
   const [showStats, setShowStats] = useState(true);
 
   useEffect(() => {
-    // Re-initialize user context in case this page was loaded directly (e.g. refresh),
-    // bypassing the home page where setCurrentUser is normally called.
-    setCurrentUser(getSavedCode());
-    const refresh = () => setHist(loadHist());
-    refresh();
     // Avoid flashing the '还没有练习记录' empty state before the cloud sync lands for
     // logged-in users: hold the loading state until the first HISTORY_UPDATED event,
     // with a 1.5s safety net (and skip the wait entirely for logged-out users).
     if (!getSavedCode()) setSynced(true);
     const markSynced = () => setSynced(true);
-    const onUpdate = () => { refresh(); markSynced(); };
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
-    window.addEventListener("storage", refresh);
+    const unsubscribe = subscribeHistory(setHist, { onSynced: markSynced });
     const safety = setTimeout(markSynced, 1500);
     return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, onUpdate);
-      window.removeEventListener("storage", refresh);
+      unsubscribe();
       clearTimeout(safety);
     };
   }, []);

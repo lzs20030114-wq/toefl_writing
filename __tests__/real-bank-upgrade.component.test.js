@@ -32,9 +32,10 @@ jest.mock("next/navigation", () => ({
 
 // 锁定屏在这些组件之前 return；Pro 路径只需要证明 picker / 任务组件接线正确，本体不参与断言。
 jest.mock("../components/writing/WritingTask", () => ({
-  WritingTask: ({ type, initialPromptId, practiceMode, timeLimitSeconds }) => (
+  WritingTask: ({ type, initialPromptId, prompts, practiceMode, timeLimitSeconds }) => (
     <div data-testid="writing-task">
       type={type} id={initialPromptId} mode={practiceMode} limit={String(timeLimitSeconds)}
+      <span data-testid="writing-prompt-pool">{(prompts || []).map((p) => p.id).join(",")}</span>
     </div>
   ),
 }));
@@ -250,7 +251,7 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     try { sessionStorage.clear(); localStorage.clear(); } catch {}
   });
 
-  test("选讨论题 → 先 stash 整题快照再挂 WritingTask（real_ id 不在 live 库，缺快照必报「已下线」）", async () => {
+  test("选讨论题 → 整题快照及完整真题池交给 WritingTask，下一题仍在真题池", async () => {
     const prompts = getRealDiscussionPrompts();
     render(<RealBankPage />);
     fireEvent.click(await screen.findByTestId("pick-first"));
@@ -264,6 +265,7 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     const task = screen.getByTestId("writing-task");
     expect(task.textContent).toContain("type=discussion");
     expect(task.textContent).toContain(`id=${prompts[0].id}`);
+    expect(screen.getByTestId("writing-prompt-pool").textContent).toBe(prompts.map((p) => p.id).join(","));
     // 默认档 = standard（与 app/academic-writing 等常规入口一致），限时 600s。
     expect(task.textContent).toContain("mode=standard");
     expect(task.textContent).toContain("limit=600");
@@ -304,6 +306,7 @@ describe("真题专区独立页：选题 → 答题接线", () => {
     fireEvent.click(screen.getByTestId("pick-first"));
     expect(stashPromptSnapshot).toHaveBeenCalledWith("email", expect.objectContaining({ id: emails[0].id }));
     expect(screen.getByTestId("writing-task").textContent).toContain("type=email");
+    expect(screen.getByTestId("writing-prompt-pool").textContent).toBe(emails.map((p) => p.id).join(","));
     // 只有 tpo1 / tpo2 是 ETS 官方，且被排到列表最前两位（第 1 / 2 套）。
     expect(emails.filter((p) => p.tier === "official").map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);
     expect(emails.slice(0, 2).map((p) => p.id)).toEqual(["real_tpo1", "real_tpo2"]);

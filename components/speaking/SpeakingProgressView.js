@@ -7,8 +7,8 @@ import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "../listening/AudioPlayer";
 import { WordHighlight } from "./WordHighlight";
 import { RepeatRetake } from "./RepeatRetake";
-import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
-import { getSavedCode } from "../../lib/AuthContext";
+import { loadHist, deleteSession, clearAllSessions } from "../../lib/sessionStore";
+import { subscribeHistory } from "../../lib/history/subscribeHistory";
 import { formatLocalDateTime } from "../../lib/utils";
 import { buildDailyAveragePoints, getSpeakingAverageScore, getSpeakingBandScore } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
@@ -468,17 +468,7 @@ export function SpeakingProgressView({ onBack }) {
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  useEffect(() => {
-    try { setCurrentUser(getSavedCode() || ""); } catch {}
-    const refresh = () => setHist(loadHist());
-    refresh();
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-    window.addEventListener("storage", refresh);
-    return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
-    };
-  }, []);
+  useEffect(() => subscribeHistory(setHist), []);
 
   const sessions = useMemo(() => {
     if (!hist?.sessions) return [];

@@ -16,8 +16,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FONT, TopBar, SurfaceCard, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
-import { loadHist, deleteSession, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
-import { getSavedCode } from "../../lib/AuthContext";
+import { loadHist, deleteSession } from "../../lib/sessionStore";
+import { subscribeHistory } from "../../lib/history/subscribeHistory";
 import { formatLocalDateTime } from "../../lib/utils";
 import { buildDailyAveragePoints } from "../../lib/history/scoreMetrics";
 import { relativeDateLabel } from "../../lib/history/dateGroup";
@@ -409,17 +409,7 @@ export function RealBankProgressView({ onBack }) {
   const [activeIdx, setActiveIdx] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  useEffect(() => {
-    try { setCurrentUser(getSavedCode() || ""); } catch {}
-    const refresh = () => setHist(loadHist());
-    refresh();
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-    window.addEventListener("storage", refresh);
-    return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
-    };
-  }, []);
+  useEffect(() => subscribeHistory(setHist), []);
 
   const index = useMemo(() => getRealItemIndex(), []);
   const entries = useMemo(

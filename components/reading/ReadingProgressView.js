@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { C, FONT, Btn, PageShell, SurfaceCard, TopBar, ChevronIcon, ModeChip, NEUTRAL } from "../shared/ui";
-import { loadHist, deleteSession, clearAllSessions, SESSION_STORE_EVENTS, setCurrentUser } from "../../lib/sessionStore";
-import { getSavedCode } from "../../lib/AuthContext";
+import { loadHist, deleteSession, clearAllSessions } from "../../lib/sessionStore";
+import { subscribeHistory } from "../../lib/history/subscribeHistory";
 import { formatLocalDateTime } from "../../lib/utils";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { insertStemParts } from "../../lib/reading/insertSentence";
@@ -669,17 +669,7 @@ export function ReadingProgressView({ onBack }) {
   // "查看本次逐题解析" button) so re-renders don't re-open it.
   const mockDeepLinkConsumed = useRef(false);
 
-  useEffect(() => {
-    try { setCurrentUser(getSavedCode() || ""); } catch {}
-    const refresh = () => setHist(loadHist());
-    refresh();
-    window.addEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-    window.addEventListener("storage", refresh);
-    return () => {
-      window.removeEventListener(SESSION_STORE_EVENTS.HISTORY_UPDATED_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
-    };
-  }, []);
+  useEffect(() => subscribeHistory(setHist), []);
 
   // Build entries up-front so sourceIndex survives normalization (legacy
   // adaptive-reading records produce a new object ref, breaking indexOf

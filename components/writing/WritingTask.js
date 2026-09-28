@@ -89,6 +89,9 @@ function createPracticeRootId(type, promptId) {
 export function WritingTask({
   onExit,
   type,
+  // A caller-owned bank (e.g. real questions) must also supply the next prompt.
+  // Null uses the regular bank; an explicitly empty bank must stay empty.
+  prompts = null,
   embedded = false,
   persistSession = true,
   onComplete = null,
@@ -110,7 +113,7 @@ export function WritingTask({
   const isMobile = useIsMobile();
   const [promptCollapsed, setPromptCollapsed] = useState(false);
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
-  const dataRaw = type === "email" ? EM_DATA : AD_DATA;
+  const dataRaw = prompts ?? (type === "email" ? EM_DATA : AD_DATA);
   const forcedPromptId = String(initialPromptId || "").trim();
   // Retry-from-history hands the exact practiced question off via sessionStorage.
   // Peek it once (read-only → SSR/StrictMode safe); clear it in the effect below.
