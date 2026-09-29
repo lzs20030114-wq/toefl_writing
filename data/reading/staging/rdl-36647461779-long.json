@@ -1,0 +1,69 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-29T23:53:44.194Z",
+  "total_generated": 1,
+  "total_accepted": 1,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36647461779-long_001",
+      "variant": "long",
+      "text": "GREEN SPOON FOOD TRUCK — WEEKLY SPECIALS\nNorth Quad, beside Kessler Library\nMonday–Friday, 11:00 AM to 3:00 PM\n\nMONDAY — BURRITO DAY\nBlack bean burrito with lime rice: $6.50\nGrilled chicken, added: $2.00\nMango salsa cup: $1.75\n\nWEDNESDAY — NOODLE BOWL\nSesame noodle bowl with seasonal vegetables: $7.25\nExtra tofu: $1.50\nGinger iced tea: $2.25\n\nFRIDAY — BREAKFAST ALL DAY\nButtermilk pancake stack with maple syrup: $5.75\nTwo scrambled eggs: $2.50\nCold brew coffee: $3.00\n\nEvery order of $10.00 or more earns a free side salad. Students who show a valid campus ID receive 10% off the noodle bowl before 12:00 PM. Preorder through the campus dining portal to skip the line. We accept dining dollars, debit cards, and mobile pay; cash is not accepted. On rainy days, service moves to the covered walkway outside Baker Hall. Follow @greenspoontruck for daily updates.",
+      "word_count": 142,
+      "genre": "menu",
+      "format_metadata": {
+        "establishment": "Green Spoon Food Truck",
+        "location": "North Quad, beside Kessler Library",
+        "hours": "Monday–Friday, 11:00 AM to 3:00 PM"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_36647461779-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the menu, what does a customer receive at no charge?",
+          "options": {
+            "A": "A side salad with a purchase of ten dollars or more",
+            "B": "A ginger iced tea with any noodle bowl order",
+            "C": "A mango salsa cup with any burrito order",
+            "D": "A cold brew coffee with any breakfast order"
+          },
+          "correct_answer": "A",
+          "explanation": "The menu states that every order of $10.00 or more earns a free side salad, while the other items listed carry individual prices."
+        },
+        {
+          "qid": "rdl_gen_36647461779-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about customers who order at the Green Spoon truck?",
+          "options": {
+            "A": "Customers who pay with cash receive a small discount.",
+            "B": "Customers can avoid standing in line by ordering ahead online.",
+            "C": "Customers who use the dining portal pay less for a burrito.",
+            "D": "Customers can buy the pancake stack on Monday and Friday."
+          },
+          "correct_answer": "B",
+          "explanation": "The menu tells customers to preorder through the campus dining portal to skip the line, which implies that ordering in advance avoids a wait."
+        },
+        {
+          "qid": "rdl_gen_36647461779-long_001_q3",
+          "question_type": "inference",
+          "stem": "What can be inferred about the 10% noodle bowl discount?",
+          "options": {
+            "A": "It applies to drinks as well as to main dishes.",
+            "B": "It cannot be applied to an order placed after noon.",
+            "C": "It requires payment by mobile app rather than by card.",
+            "D": "It is offered on days when the truck moves to the walkway."
+          },
+          "correct_answer": "B",
+          "explanation": "The discount applies to the noodle bowl only before 12:00 PM, so an order placed after that time would not qualify."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
+    }
+  ],
+  "rejected": []
+}
