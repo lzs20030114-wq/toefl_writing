@@ -1,0 +1,178 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-09-29T00:29:52.499Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36503262436-short_001",
+      "variant": "short",
+      "text": "HELP CLEAN THE CAMPUS CREEK! Saturday, April 12, 9:00 AM–1:00 PM. Check in at South Lot B. Volunteers get lunch and a $5 bookstore card. Bring work gloves and a water bottle. Register by April 9 at the Student Center, Room 118.",
+      "word_count": 42,
+      "genre": "flyer",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36503262436-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the flyer, what will each volunteer receive?",
+          "options": {
+            "A": "A reserved parking space at South Lot B",
+            "B": "A certificate signed by the environmental club",
+            "C": "A refund of the registration fee",
+            "D": "A meal and a bookstore gift card"
+          },
+          "correct_answer": "D",
+          "explanation": "The flyer promises volunteers lunch plus a $5 bookstore card; parking, certificates, and fee refunds are never mentioned."
+        },
+        {
+          "qid": "rdl_gen_36503262436-short_001_q2",
+          "question_type": "detail",
+          "stem": "According to the flyer, where should people sign up?",
+          "options": {
+            "A": "At the campus bookstore",
+            "B": "At South Lot B",
+            "C": "At the Student Center",
+            "D": "At the creek entrance"
+          },
+          "correct_answer": "C",
+          "explanation": "Registration takes place at the Student Center, Room 118. South Lot B is only the check-in point on the day of the event."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36503262436-short_002",
+      "variant": "short",
+      "text": "Dear Ms. Alvarez, Our records show your spring meal plan has a remaining balance of $42.50, refundable by check. Please confirm your mailing address at the Dining Office, Room 12, by May 30. No action is needed if you plan to use the funds next term. Regards, Dining Services",
+      "word_count": 49,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36503262436-short_002_q1",
+          "question_type": "detail",
+          "stem": "What does the email ask recipients to do?",
+          "options": {
+            "A": "Use the remaining balance before May 30",
+            "B": "Verify their mailing address with Dining Services",
+            "C": "Return the refund check to Room 12",
+            "D": "Pay a fee to remain enrolled"
+          },
+          "correct_answer": "B",
+          "explanation": "The message requests confirmation of the mailing address at the Dining Office by May 30 so a check can be sent."
+        },
+        {
+          "qid": "rdl_gen_36503262436-short_002_q2",
+          "question_type": "detail",
+          "stem": "According to the email, how are refunds paid?",
+          "options": {
+            "A": "By check",
+            "B": "By card credit",
+            "C": "In cash",
+            "D": "By bank transfer"
+          },
+          "correct_answer": "A",
+          "explanation": "The email states the balance is refundable by check; no cash, card, or transfer option is offered."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36503262436-short_003",
+      "variant": "short",
+      "text": "NOTICE: The North Garage will be closed for repaving from June 2 to June 6. Permit holders should use West Lot C, where overflow spaces are free during this period. Shuttle Route 4 stops at the lot entrance every 15 minutes. Questions: Facilities Office, Room 8, 555-0177.",
+      "word_count": 47,
+      "genre": "notice",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36503262436-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what should permit holders do during the closure?",
+          "options": {
+            "A": "Park in West Lot C",
+            "B": "Purchase a replacement permit",
+            "C": "Board the Route 4 shuttle",
+            "D": "Remove their vehicles by June 2"
+          },
+          "correct_answer": "A",
+          "explanation": "Permit holders are directed to West Lot C while the North Garage is repaved. The shuttle merely stops near that lot."
+        },
+        {
+          "qid": "rdl_gen_36503262436-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about West Lot C?",
+          "options": {
+            "A": "It will close for repaving soon",
+            "B": "It requires a paid permit",
+            "C": "It is reserved for garage staff",
+            "D": "It may be crowded in June"
+          },
+          "correct_answer": "D",
+          "explanation": "Since all garage users are redirected there and overflow spaces are offered, the lot is likely to be unusually busy."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36503262436-short_004",
+      "variant": "short",
+      "text": "Hi Daniel, Your tutoring session with Ms. Okafor is confirmed for Tuesday, March 4, at 4:30 PM in Library Room 312. The $8 fee covers materials. Please arrive ten minutes early. If you cannot attend, notify us by Monday so another student can use the slot. Best, Peer Tutoring Center",
+      "word_count": 50,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36503262436-short_004_q1",
+          "question_type": "detail",
+          "stem": "What must Daniel do if he is unable to attend?",
+          "options": {
+            "A": "Pay the $8 fee in advance",
+            "B": "Reschedule at Library Room 312",
+            "C": "Inform the center before Tuesday",
+            "D": "Find a replacement student himself"
+          },
+          "correct_answer": "C",
+          "explanation": "He is told to notify the center by Monday, which is before the Tuesday session; the center, not Daniel, would find a replacement."
+        },
+        {
+          "qid": "rdl_gen_36503262436-short_004_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the session slot?",
+          "options": {
+            "A": "It is held in an office",
+            "B": "It may be reassigned",
+            "C": "It costs more than most sessions",
+            "D": "It lasts only ten minutes"
+          },
+          "correct_answer": "B",
+          "explanation": "Because Daniel is asked to cancel early so another student can use the time, the slot can be given to someone else."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
