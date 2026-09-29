@@ -327,7 +327,7 @@ export function BuildSentenceTask({
     }
   }
 
-  /* ── AI 错题解释 (仅 legacy 用户) ── */
+  /* ── 交卷后 AI 解释（Pro / legacy） ── */
   const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
 
   if (phase === "review") {
@@ -402,7 +402,7 @@ export function BuildSentenceTask({
                   <b>语法点：</b>{r.q.grammar_points.map(translateGrammarPoint).join("、")}
                 </div>
               )}
-              <BsAiExplainBlock explainKey={i} detail={{ ...r.q, userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect }} aiExplains={aiExplains} isLegacy={isLegacy} handleAiExplain={handleAiExplain} />
+              <BsAiExplainBlock explainKey={i} detail={{ ...r.q, userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect }} aiExplains={aiExplains} isLegacy={isLegacy} handleAiExplain={handleAiExplain} includeCorrect />
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>

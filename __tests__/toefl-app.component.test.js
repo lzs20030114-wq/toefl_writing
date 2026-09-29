@@ -58,6 +58,7 @@ describe("ToeflApp navigation", () => {
   afterEach(() => {
     jest.useRealTimers();
     jest.restoreAllMocks();
+    localStorage.removeItem("toefl-user-tier");
   });
 
   test("can open email task from menu", () => {
@@ -129,8 +130,10 @@ describe("ToeflApp navigation", () => {
   });
 
   test("prefilled token stays fixed and correct order scores correct", () => {
+    localStorage.setItem("toefl-user-tier", "pro");
     render(<BuildSentenceTask onExit={() => {}} questions={[BUILD_TEST_Q]} />);
     fireEvent.click(screen.getByTestId("build-start"));
+    expect(screen.queryByRole("button", { name: "AI 解释" })).not.toBeInTheDocument();
 
     fillByDrag(["could", "send", "the", "slides", "after", "class", "today", "please"]);
     fireEvent.click(screen.getByTestId("build-submit"));
@@ -139,6 +142,8 @@ describe("ToeflApp navigation", () => {
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
       "正确答案：Could you send the slides after class today please?"
     );
+    expect(screen.getByTestId("build-result-0")).toHaveTextContent("答对");
+    expect(screen.getByRole("button", { name: "AI 解释" })).toBeInTheDocument();
   });
 
   test("next/submit is enabled even before all slots are filled (skipping allowed)", () => {

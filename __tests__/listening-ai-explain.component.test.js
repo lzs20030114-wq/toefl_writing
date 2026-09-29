@@ -4,7 +4,7 @@
  * 锁的是五件事：
  *   ① 四个入口都有：听力练习历史 LCRDetail / LADetail / LCDetail（/listening/progress、
  *      /real-bank/progress、听力模考详情共用这一组），以及 ListeningMCQTask 与
- *      LCRTask 交卷后的结果页；只给答错的题，Pro 专属，点了才计费；
+ *      LCRTask 交卷后的结果页；答对和答错均可解释，Pro 专属，点了才计费；
  *   ② 应答题（lcr）必须走语用那支：整道题只有说话人一句话，没有「原文定位」可讲，
  *      system prompt 与 message 都不能用讲座那套话术；
  *   ③ 讲座 / 对话题走定位那支，原文要真的喂进去（对话没存 transcript 时按 turns 拼）；
@@ -46,6 +46,7 @@ jest.mock("../lib/ai/client", () => ({
 import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
 import { LCRDetail, LADetail, LCDetail } from "../components/listening/ListeningProgressView";
 import { ListeningMCQTask } from "../components/listening/ListeningMCQTask";
+import { LCRTask } from "../components/listening/LCRTask";
 import {
   buildListeningExplainMessage,
   conversationText,
@@ -245,6 +246,23 @@ describe("LCDetail（对话练习历史）", () => {
   });
 });
 
+describe("LCRTask 交卷后的结果页", () => {
+  test("答对后展开题目可按需请求语用讲解", async () => {
+    render(<LCRTask item={LCR_ITEM} onComplete={() => {}} onExit={() => {}} isPractice />);
+    expect(aiButtons()).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: /I'm ready — show options/ }));
+    fireEvent.click(screen.getByRole("button", { name: /That's too bad — maybe next week/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Submit All" }));
+    expect(aiButtons()).toHaveLength(0);
+    fireEvent.click(screen.getByRole("button", { name: /Q1/ }));
+    expect(aiButtons()).toHaveLength(1);
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生选对了回应");
+  });
+});
+
 describe("ListeningMCQTask 交卷后的结果页", () => {
   const item = {
     id: "lat-task-1",
@@ -252,7 +270,7 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
     questions: [LA_QUESTION],
   };
 
-  function answerWrong() {
+  function answerWrong(selectedOption = LA_QUESTION.options.A) {
     render(
       <ListeningMCQTask
         item={item}
@@ -266,7 +284,7 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
     // listen → answer：AudioPlayer 被 mock 掉了，不会触发 onEnded，用「听完了」按钮推进
     const advance = screen.queryByRole("button", { name: /ready to answer|开始答题|跳过|继续/i });
     if (advance) fireEvent.click(advance);
-    fireEvent.click(screen.getByText(LA_QUESTION.options.A));
+    fireEvent.click(screen.getByText(selectedOption));
     fireEvent.click(screen.getByRole("button", { name: /提交|交卷|Submit/ }));
   }
 
@@ -280,6 +298,16 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
     const message = callAI.mock.calls[0][1];
     expect(message).toContain(TRANSCRIPT);
     expect(message).toContain("学生选择：A. The age of the colony");
+  });
+
+  test("交卷后答对题也有 AI 按钮，点击时使用正确题提示词", async () => {
+    answerWrong(LA_QUESTION.options.B);
+    expect(aiButtons()).toHaveLength(1);
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生答对了");
+    expect(callAI.mock.calls[0][1]).toContain("学生选择：B. The water temperature that year");
   });
 });
 

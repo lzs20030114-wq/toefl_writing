@@ -199,10 +199,14 @@ describe("RDLTask 交卷后的逐题复盘", () => {
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
   });
 
-  test("切到答对的那题就没有 AI 按钮", () => {
+  test("交卷后切到答对题也有按钮，点击后讲正确依据", async () => {
     submitWrong();
     fireEvent.click(screen.getByRole("button", { name: /下一题|Next/ }));
-    expect(aiButtons()).toHaveLength(0);
+    expect(aiButtons()).toHaveLength(1);
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生答对了");
   });
 
   test("选句题交卷后也有 AI 按钮（块与选句题复盘同级，不只挂在四选一那支上）", async () => {

@@ -170,7 +170,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
     handleQuestionTimeout();
   }, [answerTimeLeft, handleQuestionTimeout, isTimed, phase, submitted]);
 
-  // 交卷后答错的题可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
+  // 交卷后答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
   // 必须在下面几个 early return 之前调 —— hooks 不能写在条件返回之后。
   const listeningAi = useListeningAiExplain();
   const explainContext =
@@ -319,10 +319,11 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
                     <strong>Explanation:</strong> {q.explanation}
                   </div>
                 )}
-                {/* AI 讲解：只给答错的题。题库自带的 explanation 可能缺失，
+                {/* AI 讲解：答对和答错的题均可查看。题库自带的 explanation 可能缺失，
                     这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
-                {r && !r.isCorrect && (
+                {r && (
                   <ListeningAiExplainBlock
+                    includeCorrect
                     explainKey={`${item.id || "task"}-q${i}`}
                     detail={{
                       subtype: taskType,
