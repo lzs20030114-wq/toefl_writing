@@ -109,9 +109,10 @@ describe("LCRDetail（应答题练习历史 / 真题记录）", () => {
     },
   });
 
-  test("只给答错的题放 AI 按钮", () => {
+  test("历史记录答对和答错的题都有 AI 按钮", () => {
     render(<LCRDetail session={session()} />);
-    expect(aiButtons()).toHaveLength(1);
+    expect(aiButtons()).toHaveLength(2);
+    expect(callAI).not.toHaveBeenCalled();
   });
 
   test("非 Pro：没有按钮也不计费", () => {
@@ -184,9 +185,14 @@ describe("LADetail（通知 / 讲座练习历史）", () => {
     expect(message).toContain("正确答案：B. The water temperature that year");
   });
 
-  test("答对的题不放按钮", () => {
+  test("历史答对题有按钮，点击后讲证据且不虚构错因", async () => {
     render(<LADetail session={session({ results: [{ selected: "B", correct: "B", isCorrect: true }] })} />);
-    expect(aiButtons()).toHaveLength(0);
+    expect(aiButtons()).toHaveLength(1);
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.click(aiButtons()[0]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生答对了");
+    expect(callAI.mock.calls[0][0]).toContain("不要虚构学生的错误");
   });
 
   test("未作答：写「未作答」", async () => {

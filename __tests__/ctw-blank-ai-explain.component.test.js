@@ -112,7 +112,7 @@ function legacySession() {
 }
 
 function wrongChips() {
-  return screen.getAllByRole("button").filter((b) => b.getAttribute("aria-expanded") !== null);
+  return screen.getAllByRole("button").filter((b) => b.getAttribute("aria-expanded") !== null && b.textContent.includes("✗"));
 }
 
 beforeEach(() => {
@@ -226,16 +226,20 @@ describe("CTWDetail 错项展开面板", () => {
     expect(screen.queryByTestId("ctw-blank-panel")).not.toBeInTheDocument();
   });
 
-  test("正确的 chip 不是 button、点了也不展开", () => {
+  test("正确项也能展开绿色面板，并按需请求正确题讲解", async () => {
     render(<CTWDetail session={liveSession()} />);
-    // 3 个空里只有 2 个错项 → 只有 2 个可点 chip
     expect(wrongChips()).toHaveLength(2);
-    expect(screen.getAllByRole("button")).toHaveLength(2);
-    // 正确项（wheel，missing = "el"）落在一个 div 上
+    expect(screen.getAllByRole("button")).toHaveLength(3);
     const correctMissing = screen.getByText("el");
-    expect(correctMissing.closest("button")).toBeNull();
+    expect(correctMissing.closest("button")).not.toBeNull();
     fireEvent.click(correctMissing);
-    expect(screen.queryByTestId("ctw-blank-panel")).not.toBeInTheDocument();
+    const panel = screen.getByTestId("ctw-blank-panel");
+    expect(panel).toHaveStyle({ borderLeft: "3px solid #059669" });
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.click(within(panel).getByRole("button", { name: /AI 深入解析/ }));
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生答对了");
+    expect(callAI.mock.calls[0][0]).toContain("不要虚构学生填错");
   });
 
   test("真题记录（blank 只有 position/original_word/displayed_fragment/hidden_length）也能展开", () => {

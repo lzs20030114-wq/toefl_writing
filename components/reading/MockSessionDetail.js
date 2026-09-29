@@ -341,9 +341,10 @@ function McqTaskBody({ task, explainHook }) {
                   {q.explanation}
                 </div>
               )}
-              {!isCorrect && (
+              {(q.stem || q.question || q.options) && (
                 <div data-no-dict style={{ marginLeft: 25 }}>
                   <ReadingAiExplainBlock
+                    includeCorrect
                     explainKey={`${task.itemId || "task"}-${task.module || ""}-q${i}`}
                     detail={{
                       qid: q.qid,

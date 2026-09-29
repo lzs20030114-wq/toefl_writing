@@ -19,6 +19,8 @@ const SYSTEM =
   "不要重复题干和选项原文，不要空话。" +
   // 面板是 whiteSpace: pre-wrap 的纯文本渲染，markdown 星号会原样显示成 **word**。
   "直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
+const SYSTEM_CORRECT =
+  "你是一位 TOEFL 阅读辅导老师。学生答对了这道阅读题，请用中文简短讲解（3-5 句）：指出原文中支持正确答案的句子或段落，说明题干关键词如何定位到证据、正确选项如何对应原文。不要虚构学生的错误或分析其错因，不要重复题干和选项原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 
 // 缓存桶带版本号：prompt 换过一次（旧版把原文砍在 1200 字、且没禁 markdown），
 // 旧缓存里的讲解可能基于看不全的原文、还带着字面显示的 **。换桶比留着脏数据便宜。
@@ -142,7 +144,7 @@ export function useReadingAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      const text = await callAI(SYSTEM, buildReadingExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAI(detail.isCorrect ? SYSTEM_CORRECT : SYSTEM, buildReadingExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
@@ -154,18 +156,18 @@ export function useReadingAiExplain() {
 }
 
 /** Inline UI: button + result. Pass a unique key, the detail, and the hook returns. */
-export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain }) {
+export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
   const ex = aiExplains[explainKey];
 
   // Auto-load from cache on mount (no API call — cache hit is free)
   useEffect(() => {
-    if (!isPro || detail.isCorrect) return;
+    if (!isPro || (detail.isCorrect && !includeCorrect)) return;
     if (ex) return;
     const cached = getFromCache(detail);
     if (cached) handleAiExplain(explainKey, detail);
-  }, [ex, explainKey, detail, isPro, handleAiExplain]);
+  }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
-  if (!isPro || detail.isCorrect) return null;
+  if (!isPro || (detail.isCorrect && !includeCorrect)) return null;
 
   if (ex?.text) {
     return (

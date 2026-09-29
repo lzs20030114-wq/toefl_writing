@@ -33,6 +33,10 @@ const SYSTEM_MCQ =
   "如果学生未作答，就只讲第 1 点，并说明该听哪个信号词定位到答案句（同样 3-5 句，不要只写一句）。" +
   "不要重复题干和选项原文，不要空话。" +
   "直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
+const SYSTEM_LCR_CORRECT =
+  "你是一位 TOEFL 听力应答题辅导老师。学生选对了回应，请用中文简短讲解（3-5 句）：说明说话人的语用意图、正确回应为什么接得上，以及听到哪些线索可判断。不要虚构学生的错误，不要重复选项原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
+const SYSTEM_MCQ_CORRECT =
+  "你是一位 TOEFL 听力辅导老师。学生答对了这道选择题，请用中文简短讲解（3-5 句）：指出听力原文中支持答案的具体信息、题干关键词和定位信号，并说明正确选项如何对应原文。不要虚构学生的错误，不要重复题干和选项原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 
 const CACHE_KEY = "listening-ai-explain-cache-v1";
 const MAX_CACHE = 200;
@@ -169,7 +173,9 @@ export function useListeningAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      const system = isRespondKind(detail?.subtype) ? SYSTEM_LCR : SYSTEM_MCQ;
+      const system = isRespondKind(detail?.subtype)
+        ? (detail.isCorrect ? SYSTEM_LCR_CORRECT : SYSTEM_LCR)
+        : (detail.isCorrect ? SYSTEM_MCQ_CORRECT : SYSTEM_MCQ);
       const text = await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
@@ -182,17 +188,17 @@ export function useListeningAiExplain() {
 }
 
 /** Inline UI：按钮 + 结果。有缓存则自动回填（不发请求），否则等用户点（点了才计费）。 */
-export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain }) {
+export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
   const ex = aiExplains[explainKey];
 
   useEffect(() => {
-    if (!isPro || detail?.isCorrect) return;
+    if (!isPro || (detail?.isCorrect && !includeCorrect)) return;
     if (ex) return;
     const cached = getFromCache(detail);
     if (cached) handleAiExplain(explainKey, detail);
-  }, [ex, explainKey, detail, isPro, handleAiExplain]);
+  }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
-  if (!isPro || detail?.isCorrect) return null;
+  if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
 
   if (ex?.text) {
     return (

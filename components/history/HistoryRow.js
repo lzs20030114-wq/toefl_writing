@@ -275,7 +275,7 @@ function MockExamDetails({ session }) {
                       {(Array.isArray(detail?.grammar_points) ? detail.grammar_points : []).map((g, gi) => <Chip key={`${rowKey}-g-${gi}`}>{translateGrammarPoint(g)}</Chip>)}
                       {(!Array.isArray(detail?.grammar_points) || detail.grammar_points.length === 0) ? <Chip color={C.t2} bg="#f3f4f6">暂无语法标签</Chip> : null}
                     </div>
-                    <BsAiExplainBlock explainKey={`mock-${rowKey}`} detail={detail} aiExplains={mockBsAi.aiExplains} isLegacy={mockBsAi.isLegacy} handleAiExplain={mockBsAi.handleAiExplain} />
+                    <BsAiExplainBlock explainKey={`mock-${rowKey}`} detail={detail} aiExplains={mockBsAi.aiExplains} isLegacy={mockBsAi.isLegacy} handleAiExplain={mockBsAi.handleAiExplain} includeCorrect />
                   </div>
                 ) : null}
               </div>
@@ -449,7 +449,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
                         {detail.grammar_points.map((g, gi) => <Chip key={gi}>{translateGrammarPoint(g)}</Chip>)}
                       </div>
                     ) : null}
-                    <BsAiExplainBlock explainKey={`hist-${index}`} detail={detail} aiExplains={bsAi.aiExplains} isLegacy={bsAi.isLegacy} handleAiExplain={bsAi.handleAiExplain} />
+                    <BsAiExplainBlock explainKey={`hist-${index}`} detail={detail} aiExplains={bsAi.aiExplains} isLegacy={bsAi.isLegacy} handleAiExplain={bsAi.handleAiExplain} includeCorrect />
                   </div>
                 ) : null}
               </div>

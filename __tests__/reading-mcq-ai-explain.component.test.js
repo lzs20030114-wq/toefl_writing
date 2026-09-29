@@ -96,9 +96,19 @@ beforeEach(() => {
 });
 
 describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
-  test("只给答错的题放 AI 按钮，答对的题不放", () => {
+  test("历史记录答对和答错的题都有 AI 按钮", () => {
     render(<RDLDetail session={historySession()} />);
-    expect(aiButtons()).toHaveLength(1);
+    expect(aiButtons()).toHaveLength(2);
+    expect(callAI).not.toHaveBeenCalled();
+  });
+
+  test("答对题点击后讲正确答案依据，不虚构错因", async () => {
+    render(<RDLDetail session={historySession()} />);
+    fireEvent.click(aiButtons()[1]);
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
+    expect(callAI.mock.calls[0][0]).toContain("学生答对了");
+    expect(callAI.mock.calls[0][0]).toContain("不要虚构学生的错误");
+    expect(callAI.mock.calls[0][1]).toContain("学生选择：A.");
   });
 
   test("非 Pro：逐题回顾照常渲染，但没有 AI 按钮，也不计费", () => {

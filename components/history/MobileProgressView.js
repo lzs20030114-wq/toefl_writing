@@ -119,7 +119,7 @@ function MockDetailView({ entry, onBack }) {
                 ))}
               </div>
               <div style={{ paddingLeft: 20 }}>
-                <BsAiExplainBlock explainKey={`mob-${i}`} detail={d} aiExplains={mobileBsAi.aiExplains} isLegacy={mobileBsAi.isLegacy} handleAiExplain={mobileBsAi.handleAiExplain} />
+                <BsAiExplainBlock explainKey={`mob-${i}`} detail={d} aiExplains={mobileBsAi.aiExplains} isLegacy={mobileBsAi.isLegacy} handleAiExplain={mobileBsAi.handleAiExplain} includeCorrect />
               </div>
             </div>
           ))}

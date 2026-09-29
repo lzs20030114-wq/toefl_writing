@@ -152,7 +152,7 @@ export function CTWDetail({ session }) {
   const passage = session.details?.passage;
   const blanks = session.details?.blanks || [];
   const itemId = session.details?.itemId || "";
-  // 点开一个答错的空 → 看到「自己填的 vs 正确答案 + 所在句子 + AI 解析」。
+  // 点开任一填空 → 看到「自己填的 vs 正确答案 + 所在句子 + AI 解析」。
   // 同一时刻只展开一个；再点同一个收起。
   const [openBlank, setOpenBlank] = useState(null);
   // hook 在组件顶层调一次（不能在 map 里调）。
@@ -205,8 +205,8 @@ export function CTWDetail({ session }) {
       {/* Summary: correct vs total */}
       <div style={{ fontSize: 12, color: P.textSec, marginBottom: 8 }}>
         填空结果（<span style={{ color: "#059669", fontWeight: 600 }}>绿色</span> = 正确，<span style={{ color: "#DC2626", fontWeight: 600 }}>红色</span> = 错误）
-        {results.some(r => !r.isCorrect) && (
-          <span style={{ marginLeft: 6, color: P.textDim }}>点击红色错项查看解析</span>
+        {results.length > 0 && (
+          <span style={{ marginLeft: 6, color: P.textDim }}>点击任一填空查看解析</span>
         )}
       </div>
       {/* Compact blank pills in a table-like layout */}
@@ -238,43 +238,39 @@ export function CTWDetail({ session }) {
             const loc = isOpen ? locateBlankSentence(passage, blank.position) : null;
             return (
               <React.Fragment key={i}>
-                {r.isCorrect ? (
-                  <div style={{ ...chipBase, border: "1px solid #BBF7D0" }}>{chipInner}</div>
-                ) : (
                   <button
                     type="button"
                     onClick={() => setOpenBlank(isOpen ? null : i)}
                     aria-expanded={isOpen}
                     style={{
                       ...chipBase,
-                      border: `1px solid ${isOpen ? "#DC2626" : "#FECACA"}`,
+                      border: `1px solid ${isOpen ? (r.isCorrect ? "#059669" : "#DC2626") : (r.isCorrect ? "#BBF7D0" : "#FECACA")}`,
                       borderWidth: isOpen ? 1.5 : 1,
-                      background: isOpen ? "#FEE2E2" : "#FEF2F2",
+                      background: isOpen ? (r.isCorrect ? "#D1FAE5" : "#FEE2E2") : (r.isCorrect ? "#F0FDF4" : "#FEF2F2"),
                       cursor: "pointer", textAlign: "left", transition: "all 0.15s",
                     }}
-                    onMouseEnter={e => { if (!isOpen) { e.currentTarget.style.background = "#FEE2E2"; e.currentTarget.style.borderColor = "#FCA5A5"; } }}
-                    onMouseLeave={e => { if (!isOpen) { e.currentTarget.style.background = "#FEF2F2"; e.currentTarget.style.borderColor = "#FECACA"; } }}
+                    onMouseEnter={e => { if (!isOpen) { e.currentTarget.style.background = r.isCorrect ? "#D1FAE5" : "#FEE2E2"; e.currentTarget.style.borderColor = r.isCorrect ? "#6EE7B7" : "#FCA5A5"; } }}
+                    onMouseLeave={e => { if (!isOpen) { e.currentTarget.style.background = r.isCorrect ? "#F0FDF4" : "#FEF2F2"; e.currentTarget.style.borderColor = r.isCorrect ? "#BBF7D0" : "#FECACA"; } }}
                   >
                     {chipInner}
-                    <span style={{ marginLeft: "auto", color: "#DC262699", fontSize: 10 }}>{isOpen ? "▴" : "▾"}</span>
+                    <span style={{ marginLeft: "auto", color: r.isCorrect ? "#05966999" : "#DC262699", fontSize: 10 }}>{isOpen ? "▴" : "▾"}</span>
                   </button>
-                )}
                 {isOpen && (
                   // 占满整行：不受 minmax(130px, 1fr) 约束，不会把 chip 挤窄。
                   <div data-testid="ctw-blank-panel" style={{
                     gridColumn: "1 / -1", minWidth: 0,
                     padding: "12px 14px", marginBottom: 2,
                     background: P.surface, borderRadius: 10,
-                    border: `1px solid ${P.borderSubtle}`, borderLeft: "3px solid #DC2626",
+                    border: `1px solid ${P.borderSubtle}`, borderLeft: `3px solid ${r.isCorrect ? "#059669" : "#DC2626"}`,
                     animation: "fadeUp 0.2s ease",
                   }}>
-                    {/* 必补的信息缺口：chip 上红色显示的是正确答案的补全，用户看不到自己填了什么 */}
+                    {/* chip 显示正确答案的补全，这里补上用户实际填写内容 */}
                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px 14px", fontSize: 12, color: P.textSec, marginBottom: 8 }}>
                       <span style={{ fontWeight: 700, color: P.text }}>第 {i + 1} 空</span>
                       <span style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 0 }}>
                         你填的：
                         {answered ? (
-                          <span style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, color: "#DC2626", wordBreak: "break-all" }}>{userFull}</span>
+                          <span style={{ fontFamily: "'Courier New', monospace", fontWeight: 700, color: r.isCorrect ? "#059669" : "#DC2626", wordBreak: "break-all" }}>{userFull}</span>
                         ) : (
                           <span style={{ color: P.textDim }}>未作答</span>
                         )}
@@ -321,6 +317,7 @@ export function CTWDetail({ session }) {
                       aiExplains={ctwAi.aiExplains}
                       isPro={ctwAi.isPro}
                       handleAiExplain={ctwAi.handleAiExplain}
+                      includeCorrect
                     />
                   </div>
                 )}
@@ -337,7 +334,7 @@ export function RDLDetail({ session }) {
   const results = session.details?.results;
   const passage = session.details?.passage;
   const questions = session.details?.questions;
-  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  // 答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
   const readingAi = useReadingAiExplain();
   // 题干、选项也能点词查：上下文拼上题目文本，词只出现在选项里时 AI 讲解 / 收藏原句也有句可依。
   const lookupContext = useMemo(() => questionLookupContext(passage, questions), [passage, questions]);
@@ -416,8 +413,8 @@ export function RDLDetail({ session }) {
                     选择: {r.selected}{!r.isCorrect && <span style={{ color: "#DC2626" }}> (正确: {r.correct})</span>}
                   </div>
                 )}
-                {/* AI 讲解：只给答错的题。没存题面（老记录 q 为空）时讲不了，不放按钮。 */}
-                {!r.isCorrect && q && (
+                {/* 老记录没存题面（q 为空）时讲不了，不放按钮。 */}
+                {q && (
                   <div data-no-dict style={{ marginLeft: 20 }}>
                     <ReadingAiExplainBlock
                       explainKey={`${session.id}-q${i}`}
@@ -432,6 +429,7 @@ export function RDLDetail({ session }) {
                         isCorrect: r.isCorrect,
                       }}
                       {...readingAi}
+                      includeCorrect
                     />
                   </div>
                 )}

@@ -4,6 +4,7 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 
 const SYSTEM = "你是一位专业的英语语法老师。学生在拖拽造句练习中答错了一道题，请用中文简短解释（3-5句话）：1）学生的答案哪里有问题；2）正确答案为什么是对的。重点讲语法，不要重复题目内容。";
+const SYSTEM_CORRECT = "你是一位专业的英语语法老师。学生在拖拽造句练习中答对了这道题，请用中文简短解释（3-5句话）正确句子的语法结构和词序依据，帮助学生巩固解题思路。不要虚构学生的错误，不要重复题目内容。";
 
 const CACHE_KEY = "bs-ai-explain-cache";
 const MAX_CACHE = 200;
@@ -48,7 +49,7 @@ export function useBsAiExplain() {
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
       const message = `题目：${detail.prompt}\n学生答案：${detail.userAnswer}\n正确答案：${detail.correctAnswer}${detail.grammar_points?.length ? `\n涉及语法点：${detail.grammar_points.join(", ")}` : ""}`;
-      const text = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAI(detail.isCorrect ? SYSTEM_CORRECT : SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
@@ -60,19 +61,19 @@ export function useBsAiExplain() {
 }
 
 /** Inline UI for the AI explain button + result. Pass a unique key, the detail object, and the hook returns. */
-export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain }) {
+export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain, includeCorrect = false }) {
   // Auto-load from cache on mount
   const ex = aiExplains[explainKey];
   useEffect(() => {
-    if (!isLegacy || detail.isCorrect) return;
+    if (!isLegacy || (detail.isCorrect && !includeCorrect)) return;
     if (ex) return; // already loaded or loading
     const cached = getFromCache(detail);
     if (cached) {
       handleAiExplain(explainKey, detail); // will hit cache, no API call
     }
-  }, [ex, explainKey, detail, isLegacy, handleAiExplain]);
+  }, [ex, explainKey, detail, isLegacy, handleAiExplain, includeCorrect]);
 
-  if (!isLegacy || detail.isCorrect) return null;
+  if (!isLegacy || (detail.isCorrect && !includeCorrect)) return null;
 
   if (ex?.text) {
     return (

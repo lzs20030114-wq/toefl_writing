@@ -340,7 +340,7 @@ function LCRSpeakerReview({ speakerText, item }) {
 
 export function LCRDetail({ session }) {
   const results = session.details?.results || [];
-  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  // 答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
   const listeningAi = useListeningAiExplain();
   // LCR persists its per-item snapshot under details.items (parallel to
   // results) — see saveListeningSession in app/listening/page.js and the
@@ -400,10 +400,11 @@ export function LCRDetail({ session }) {
                 {explanation}
               </div>
             )}
-            {/* AI 讲解：只给答错的题。应答题走语用那支（没有原文定位可讲）。 */}
-            {!r.isCorrect && (speakerText || Object.keys(options).length > 0) && (
+            {/* 应答题走语用讲解；老记录没有说话人和选项时不放按钮。 */}
+            {(speakerText || Object.keys(options).length > 0) && (
               <div data-no-dict>
               <ListeningAiExplainBlock
+                includeCorrect
                 explainKey={`${session.id}-lcr${i}`}
                 detail={{
                   subtype: "lcr",
@@ -431,7 +432,7 @@ export function LCRDetail({ session }) {
 
 export function LADetail({ session }) {
   const results = session.details?.results || [];
-  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  // 答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
   const listeningAi = useListeningAiExplain();
   const questions = session.details?.questions || [];
   const transcript = session.details?.transcript || session.details?.passage || "";
@@ -498,10 +499,11 @@ export function LADetail({ session }) {
                     {explanation}
                   </div>
                 )}
-                {/* AI 讲解：只给答错的题。老记录没存题面（stem 与 options 都空）时讲不了，不放。 */}
-                {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
+                {/* 老记录没存题面（stem 与 options 都空）时讲不了，不放。 */}
+                {(stem || Object.keys(options).length > 0) && (
                   <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
+                      includeCorrect
                       explainKey={`${session.id}-q${i}`}
                       detail={{
                         subtype: session.details?.subtype || "lat",
@@ -538,7 +540,7 @@ export function LADetail({ session }) {
 
 export function LCDetail({ session }) {
   const results = session.details?.results || [];
-  // 答错的题可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
+  // 答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存都在 hook 里，点了才计费）。
   const listeningAi = useListeningAiExplain();
   const questions = session.details?.questions || [];
   const conversation = session.details?.conversation || session.details?.turns || [];
@@ -610,10 +612,11 @@ export function LCDetail({ session }) {
                     {explanation}
                   </div>
                 )}
-                {/* AI 讲解：只给答错的题。原文用对话逐行（没存 transcript 时按 turns 拼）。 */}
-                {!r.isCorrect && (stem || Object.keys(options).length > 0) && (
+                {/* 原文用对话逐行（没存 transcript 时按 turns 拼）。 */}
+                {(stem || Object.keys(options).length > 0) && (
                   <div data-no-dict style={{ marginLeft: 20 }}>
                     <ListeningAiExplainBlock
+                      includeCorrect
                       explainKey={`${session.id}-q${i}`}
                       detail={{
                         subtype: "lc",

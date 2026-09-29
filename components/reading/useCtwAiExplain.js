@@ -15,6 +15,8 @@ const SYSTEM =
   "不要重复原文，不要空话。" +
   // 面板是 whiteSpace: pre-wrap 的纯文本渲染，markdown 星号会原样显示成 **word**。
   "直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
+const SYSTEM_CORRECT =
+  "你是一位 TOEFL 阅读填词（C-test）辅导老师。学生答对了这个空，请用中文简短讲解（3-5 句）：从字母前缀、所在句子的语法、固定搭配或上下文中指出决定性线索，说明如何推得正确词形。不要虚构学生填错或分析错因，不要重复原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 
 const CACHE_KEY = "ctw-ai-explain-cache";
 const MAX_CACHE = 200;
@@ -138,7 +140,7 @@ export function useCtwAiExplain() {
     try {
       // 预算见 AI_HELPER_MAX_TOKENS 的注释：这里曾单独调到 700（350 会把讲解截断在
       // 句子中间），但同一个根因在 6 个辅助调用点各有一份,现已统一到共享常量。
-      const text = await callAI(SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAI(detail.isCorrect ? SYSTEM_CORRECT : SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
@@ -150,18 +152,18 @@ export function useCtwAiExplain() {
 }
 
 /** 展开面板里的 AI 讲解块：有缓存则自动填充，否则等用户点按钮（点了才计费）。 */
-export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain }) {
+export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
   const ex = aiExplains[explainKey];
 
   // 缓存命中才自动调（走的是 getFromCache 分支，不发请求）；未命中不自动打 API。
   useEffect(() => {
-    if (!isPro || detail?.isCorrect) return;
+    if (!isPro || (detail?.isCorrect && !includeCorrect)) return;
     if (ex) return;
     const cached = getFromCache(detail);
     if (cached) handleAiExplain(explainKey, detail);
-  }, [ex, explainKey, detail, isPro, handleAiExplain]);
+  }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
-  if (!isPro || detail?.isCorrect) return null;
+  if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
 
   if (ex?.text) {
     return (

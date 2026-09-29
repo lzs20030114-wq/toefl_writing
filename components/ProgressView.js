@@ -623,7 +623,7 @@ function FullMockReport({ entry, onClose }) {
                     <Tag key={gi} color={P.teal} bg={P.tealSoft}>{translateGrammarPoint(g)}</Tag>
                   ))}
                 </div>
-                <BsAiExplainBlock explainKey={`pv-${i}`} detail={d} aiExplains={progressBsAi.aiExplains} isLegacy={progressBsAi.isLegacy} handleAiExplain={progressBsAi.handleAiExplain} />
+                <BsAiExplainBlock explainKey={`pv-${i}`} detail={d} aiExplains={progressBsAi.aiExplains} isLegacy={progressBsAi.isLegacy} handleAiExplain={progressBsAi.handleAiExplain} includeCorrect />
               </div>
             </div>
           ))}
