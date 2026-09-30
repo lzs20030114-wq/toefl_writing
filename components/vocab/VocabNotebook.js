@@ -167,6 +167,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
         {ready && schedule.sprint && <div className={styles.notice}><strong>考前冲刺档已开启：</strong>距考试不到 10 天，目标留存率从 90% 提到 95%，复习间隔也压在考试日之前。</div>}
         {!isLoggedIn && ready && cards.length > 0 && <div className={styles.notice}>当前没登录，单词只保存在这台设备的浏览器中；登录后会同步到账号。</div>}
         {ready && !storageStatus.persisted && <div className={styles.notice} role="alert">浏览器未能保存单词本改动；当前页面仍可暂时使用，关闭或刷新后可能丢失。请检查浏览器存储空间或权限。</div>}
+        <RootExplorer />
         <section className={styles.card} aria-labelledby="vn-library-title">
           <div className={styles.libraryHead}><h2 id="vn-library-title">我的词库 <span>{ready ? stats.total : "—"}</span></h2>
             <input value={q} onChange={(event) => { setQ(event.target.value); resetListView(); }}
@@ -198,7 +199,6 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
             <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>
           <p className={styles.explain}>“预计记得”是复习模型的估计，不等于完成率。</p></section>
         <DailyQuotaCard limits={limits} setLimits={setLimits} />
-        <RootExplorer compact />
         <section className={`${styles.card} ${styles.sideCard}`}><h2>如何添加词</h2>
           <p className={styles.help}>阅读练习中划选生词，点击“收藏到单词本”。收藏后会出现在这里。</p></section>
       </aside>

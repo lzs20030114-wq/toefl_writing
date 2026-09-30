@@ -1,17 +1,17 @@
 "use client";
 import { useRef, useState } from "react";
-import { C, FONT, SurfaceCard } from "../shared/ui";
-import { HOME_FONT, HOME_TOKENS } from "../home/theme";
+import { HOME_FONT } from "../home/theme";
 import { HomeCollapse } from "../home/HomeCollapse";
 import { SpeakButton } from "../shared/SpeakButton";
 import { callAI } from "../../lib/ai/client";
 import { getSavedCode } from "../../lib/AuthContext";
 import { getCard, isSaved, saveWord } from "../../lib/vocab/vocabStore";
 import { buildRootPrompts, normalizeRoot, parseRootResult } from "../../lib/vocab/rootExplorer";
+import styles from "./RootExplorer.module.css";
 
-const ACCENT = HOME_TOKENS.primary;
 const CACHE_KEY = "toefl-root-explorer-v1";
 const CACHE_AGE_MS = 30 * 86400000;
+const REVIEW_MODES = [["reading", "阅读词"], ["listening", "听力词"]];
 
 function readCached(root) {
   try {
@@ -41,8 +41,8 @@ function errorMessage(error) {
   return error?.message?.startsWith("API error") ? "AI 暂时不可用，请稍后重试。" : (error?.message || "查询失败，请重试。");
 }
 
-export default function RootExplorer({ compact = false }) {
-  const font = compact ? HOME_FONT : FONT;
+// 单词本主栏里的折叠面板：收起时只剩标题 + 输入框一条细栏，展开后词条按主栏宽度排列，不再有内层滚动。
+export default function RootExplorer() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState(null);
   const [pending, setPending] = useState(false);
@@ -52,15 +52,16 @@ export default function RootExplorer({ compact = false }) {
   const [reviewModes, setReviewModes] = useState({});
   const [expanded, setExpanded] = useState(true);
   const requestId = useRef(0);
+  const panelRef = useRef(null);
 
+  // 改输入只作废进行中的请求；已有结果留到下一次查询再换，面板不随每次按键收起。
   function changeInput(event) {
-    requestId.current += 1;
     setInput(event.target.value);
-    setPending(false);
     setError("");
-    setResult(null);
-    setFromCache(false);
-    setExpanded(true);
+    if (pending) {
+      requestId.current += 1;
+      setPending(false);
+    }
   }
 
   async function search(event) {
@@ -87,7 +88,6 @@ export default function RootExplorer({ compact = false }) {
       return;
     }
     setPending(true);
-    setResult(null);
     try {
       const { system, message } = buildRootPrompts(root);
       const content = await callAI(system, message, 5000, 150000, 0.1);
@@ -99,6 +99,20 @@ export default function RootExplorer({ compact = false }) {
     } finally {
       if (requestId.current === currentRequest) setPending(false);
     }
+  }
+
+  // 底部的收起钮：结果很长时不用滚回顶部，收起后把视口带回面板顶部。
+  function collapseFromBottom() {
+    setExpanded(false);
+    panelRef.current?.scrollIntoView?.({ block: "start", behavior: "smooth" });
+  }
+
+  const modeOf = (word) => reviewModes[word] || getCard(word)?.reviewMode || "reading";
+
+  function chooseMode(word, mode) {
+    setReviewModes((prev) => ({ ...prev, [word]: mode }));
+    const existing = getCard(word);
+    if (existing) saveWord({ ...existing, reviewMode: mode });
   }
 
   function addWord(item) {
@@ -114,80 +128,90 @@ export default function RootExplorer({ compact = false }) {
     if (saved) setSavedWords((prev) => ({ ...prev, [item.word]: true }));
   }
 
+  const subtitle = result
+    ? <><b>{result.root}</b> · {result.words.length} 个词{result.rootMeaning ? ` · ${result.rootMeaning}` : ""}</>
+    : pending ? "正在整理词族…" : "输入词根，AI 整理同族词的词性、构词和区别";
+
   return (
-    <>
-    <style jsx global>{`@media (prefers-reduced-motion: reduce) { .root-explorer-card .home-collapse-panel, .root-explorer-card .home-collapse-panel > div { transition-duration: 0.01ms !important; } }`}</style>
-    <SurfaceCard className="root-explorer-card" style={{ padding: compact ? "14px 13px" : "18px 20px", marginBottom: compact ? 0 : 14, minWidth: 0, maxWidth: "100%", boxSizing: "border-box", background: HOME_TOKENS.card, borderColor: HOME_TOKENS.bdr, borderRadius: 13, fontFamily: font }}>
-      <div style={{ fontSize: compact ? 14 : 16, fontWeight: 800, color: HOME_TOKENS.t1 }}>词根查询</div>
-      {!compact && <div style={{ fontSize: 12, color: HOME_TOKENS.t2, lineHeight: 1.7, marginTop: 4 }}>
-        输入一个词根或词族核心，AI 会整理备考相关词的词性、意思、构词和区别。
-      </div>}
-      <form onSubmit={search} style={{ display: "flex", gap: 7, marginTop: compact ? 10 : 13, flexWrap: compact ? "nowrap" : "wrap", minWidth: 0 }}>
-        <input
-          aria-label="输入词根"
-          value={input}
-          onChange={changeInput}
-          placeholder={compact ? "例如 organ" : "例如 organ、struct、spect"}
-          maxLength={20}
-          autoComplete="off"
-          style={{ flex: compact ? "1 1 0" : "1 1 210px", minWidth: 0, width: compact ? 0 : undefined, boxSizing: "border-box", padding: compact ? "8px 9px" : "9px 12px", border: `1px solid ${HOME_TOKENS.bdr}`, borderRadius: 9, fontSize: compact ? 12 : 14, fontFamily: font }}
-        />
-        <button type="submit" disabled={pending} style={{ flexShrink: 0, border: 0, borderRadius: 9, padding: compact ? "8px 9px" : "9px 18px", background: pending ? HOME_TOKENS.t3 : ACCENT, color: "#fff", fontSize: compact ? 11 : 14, fontWeight: 700, cursor: pending ? "default" : "pointer", fontFamily: font }}>
-          {pending ? "整理中…" : "查词根"}
-        </button>
-      </form>
-      {result && <button type="button" aria-expanded={expanded} aria-controls="root-explorer-results" onClick={() => setExpanded((value) => !value)} style={{ display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between", gap: 8, marginTop: 12, border: 0, background: "transparent", color: ACCENT, fontSize: 12, fontWeight: 700, textAlign: "left", cursor: "pointer", padding: 0, fontFamily: font }}>
-        <span style={{ minWidth: 0, overflowWrap: "anywhere" }}>{result.root} · {result.words.length} 个词</span><span aria-hidden="true">{expanded ? "收起⌃" : "展开⌄"}</span>
-      </button>}
-      <HomeCollapse open={Boolean(pending || error || (result && expanded))} id="root-explorer-results" label="词根查询结果">
-        {pending && <div role="status" style={{ color: HOME_TOKENS.t2, fontSize: 12, marginTop: 12 }}>正在整理词族，请稍候…</div>}
-        {error && <div role="alert" style={{ color: C.red, fontSize: 12, lineHeight: 1.6, marginTop: 12, overflowWrap: "anywhere" }}>{error}</div>}
-        {result && (
-        <div style={{ marginTop: 12, minWidth: 0, overflowWrap: "anywhere" }}>
-          <div style={{ display: "flex", gap: 8, alignItems: "baseline", flexWrap: "wrap" }}>
-            <strong style={{ fontSize: 19, color: C.t1 }}>{result.root}</strong>
-            {result.rootMeaning && <span style={{ fontSize: 13, color: C.t2 }}>{result.rootMeaning}</span>}
-            {fromCache && <span style={{ fontSize: 11, color: C.t3 }}>已保存的查询</span>}
-          </div>
-          {result.memoryTip && <div style={{ fontSize: 12, color: C.t2, marginTop: 5 }}>记忆提示：{result.memoryTip}</div>}
-          <div style={{ fontSize: 11, color: C.t3, marginTop: 7 }}>由 AI 筛选整理，非 ETS 官方高频词表；词义请结合语境核对。</div>
-          <div role={compact ? "region" : undefined} aria-label={compact ? "词族词条" : undefined} tabIndex={compact ? 0 : undefined} style={{ display: "grid", gridTemplateColumns: compact ? "minmax(0, 1fr)" : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 10, marginTop: 13, minWidth: 0, maxHeight: compact ? "min(52vh, 480px)" : undefined, overflowY: compact ? "auto" : undefined, overscrollBehaviorY: compact ? "contain" : undefined }}>
-            {result.words.map((item) => {
-              const saved = savedWords[item.word] || isSaved(item.word);
-              return (
-                <div key={item.word} style={{ border: `1px solid ${HOME_TOKENS.bdrSubtle}`, borderRadius: 10, padding: compact ? "10px 9px" : "12px 13px", minWidth: 0, overflowWrap: "anywhere" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <strong style={{ fontSize: 15, color: C.t1, overflowWrap: "anywhere" }}>{item.word}</strong>
-                    <SpeakButton word={item.word} size={26} title={`朗读 ${item.word}`} />
-                    <span style={{ color: ACCENT, fontSize: 11, fontWeight: 700 }}>{item.partOfSpeech}</span>
-                    <button type="button" onClick={() => addWord(item)} disabled={saved} style={{ marginLeft: "auto", border: `1px solid ${saved ? C.bdr : ACCENT}`, background: saved ? C.bdrSubtle : HOME_TOKENS.primarySoft, color: saved ? C.t3 : ACCENT, borderRadius: 7, padding: "3px 8px", fontSize: 11, fontFamily: font, cursor: saved ? "default" : "pointer" }}>
-                      {saved ? "已收藏" : "收藏"}
-                    </button>
-                  </div>
-                  <div role="group" aria-label={`${item.word} 复习类型`} style={{ display: "flex", gap: 5, marginTop: 5 }}>
-                      {[["reading", "阅读词"], ["listening", "听力词"]].map(([mode, label]) => (
-                        <button key={mode} type="button" aria-pressed={(reviewModes[item.word] || getCard(item.word)?.reviewMode || "reading") === mode}
-                          onClick={() => {
-                            setReviewModes((prev) => ({ ...prev, [item.word]: mode }));
-                            const existing = getCard(item.word);
-                            if (existing) saveWord({ ...existing, reviewMode: mode });
-                          }}
-                          style={{ border: `1px solid ${(reviewModes[item.word] || getCard(item.word)?.reviewMode || "reading") === mode ? ACCENT : C.bdr}`, background: (reviewModes[item.word] || getCard(item.word)?.reviewMode || "reading") === mode ? HOME_TOKENS.primarySoft : "#fff", color: C.t2, borderRadius: 999, padding: "2px 8px", fontSize: 11, fontFamily: font, cursor: "pointer" }}>
-                          {label}
-                        </button>
-                      ))}
-                  </div>
-                  <div style={{ color: C.t1, fontSize: 13, marginTop: 5 }}>{item.meaning}</div>
-                  <div style={{ color: C.t2, fontSize: 11.5, lineHeight: 1.6, marginTop: 6 }}>构词：{item.formation}</div>
-                  <div style={{ color: C.t2, fontSize: 11.5, lineHeight: 1.6, marginTop: 3 }}>区别：{item.difference}</div>
-                </div>
-              );
-            })}
-          </div>
+    <section ref={panelRef} className={styles.panel} aria-labelledby="root-explorer-title" style={{ fontFamily: HOME_FONT }}>
+      <div className={styles.bar}>
+        <span className={styles.mark} aria-hidden="true">根</span>
+        <div className={styles.title}>
+          <h2 id="root-explorer-title">词根查询</h2>
+          <div className={styles.subtitle}>{subtitle}</div>
         </div>
-      )}
+        <form className={styles.search} onSubmit={search}>
+          <div className={styles.field}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input aria-label="输入词根" value={input} onChange={changeInput}
+              placeholder="例如 organ、struct、spect" maxLength={20} autoComplete="off" spellCheck={false} />
+          </div>
+          <button type="submit" className={styles.submit} disabled={pending}>{pending ? "整理中…" : "查词根"}</button>
+        </form>
+        {result && <button type="button" className={styles.toggle} aria-expanded={expanded}
+          aria-controls="root-explorer-results" onClick={() => setExpanded((value) => !value)}>
+          {expanded ? "收起" : "展开"}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true"><path d="m6 15 6-6 6 6" /></svg>
+        </button>}
+      </div>
+      <HomeCollapse open={Boolean(pending || error || (result && expanded))} id="root-explorer-results" label="词根查询结果">
+        <div className={styles.body}>
+          {pending && <>
+            <div role="status" className={styles.status}>正在整理词族，请稍候…</div>
+            <div className={styles.grid} aria-hidden="true">{[0, 1, 2].map((i) => <div key={i} className={styles.skeleton} />)}</div>
+          </>}
+          {error && <div role="alert" className={styles.error}>{error}</div>}
+          {result && <>
+            <div className={styles.summary}>
+              <div className={styles.rootWord}>{result.root}</div>
+              <div className={styles.info}>
+                {result.rootMeaning && <div className={styles.rootMeaning}>{result.rootMeaning}</div>}
+                {result.memoryTip && <div className={styles.tip}><b>记忆提示</b>{result.memoryTip}</div>}
+                <div className={styles.note}>
+                  由 AI 筛选整理，非 ETS 官方高频词表；词义请结合语境核对。
+                  {fromCache && <span className={styles.cached}>已保存的查询</span>}
+                </div>
+              </div>
+            </div>
+            <div className={styles.grid}>
+              {result.words.map((item) => {
+                const saved = savedWords[item.word] || isSaved(item.word);
+                const mode = modeOf(item.word);
+                return (
+                  <article key={item.word} className={styles.word} aria-label={item.word}>
+                    <div className={styles.wordHead}>
+                      <strong>{item.word}</strong>
+                      <SpeakButton word={item.word} size={24} title={`朗读 ${item.word}`} />
+                      <span className={styles.pos}>{item.partOfSpeech}</span>
+                    </div>
+                    <div className={styles.wordMeaning}>{item.meaning}</div>
+                    <dl className={styles.facts}>
+                      <dt>构词</dt><dd>{item.formation}</dd>
+                      <dt>区别</dt><dd>{item.difference}</dd>
+                    </dl>
+                    <div className={styles.wordFoot}>
+                      <div role="group" aria-label={`${item.word} 复习类型`} className={styles.modes}>
+                        {REVIEW_MODES.map(([value, label]) => (
+                          <button key={value} type="button" aria-pressed={mode === value}
+                            onClick={() => chooseMode(item.word, value)}>{label}</button>
+                        ))}
+                      </div>
+                      <button type="button" className={styles.save} onClick={() => addWord(item)} disabled={saved}>
+                        <span aria-hidden="true">{saved ? "✓" : "☆"}</span>{saved ? "已收藏" : "收藏"}
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+            <button type="button" className={styles.collapseBottom} aria-controls="root-explorer-results"
+              onClick={collapseFromBottom}>
+              收起 {result.root} 词族
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true"><path d="m6 15 6-6 6 6" /></svg>
+            </button>
+          </>}
+        </div>
       </HomeCollapse>
-    </SurfaceCard>
-    </>
+    </section>
   );
 }

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import RootExplorer from "../components/vocab/RootExplorer";
 import { callAI } from "../lib/ai/client";
 import { getSavedCode } from "../lib/AuthContext";
@@ -30,8 +30,9 @@ test("输入 organ 后显示词性、释义、构词、区别，并可收藏", a
   fireEvent.click(screen.getByRole("button", { name: "查词根" }));
   expect(await screen.findByText("organism")).toBeInTheDocument();
   expect(screen.getByText("生物体")).toBeInTheDocument();
-  expect(screen.getByText("构词：organ + ism")).toBeInTheDocument();
-  expect(screen.getByText("区别：指完整的生物，而非单个器官")).toBeInTheDocument();
+  const card = screen.getByRole("article", { name: "organism" });
+  expect(within(card).getByText("构词").nextElementSibling).toHaveTextContent("organ + ism");
+  expect(within(card).getByText("区别").nextElementSibling).toHaveTextContent("指完整的生物，而非单个器官");
   fireEvent.click(screen.getByRole("button", { name: "收藏" }));
   expect(saveWord).toHaveBeenCalledWith(expect.objectContaining({ word: "organism", source: "root-explorer" }));
   await waitFor(() => expect(screen.getByRole("button", { name: "已收藏" })).toBeDisabled());
@@ -86,33 +87,70 @@ test("每个词的朗读按钮会念对应词，不影响收藏", async () => {
   expect(speakWord).toHaveBeenLastCalledWith("lose", expect.objectContaining({ onDone: expect.any(Function) }));
 });
 
-test("紧凑卡内可收起和展开整组结果", async () => {
-  callAI.mockResolvedValue(JSON.stringify({ words: [
+test("结果面板可收起和展开，收起后细栏仍留着词根与词数", async () => {
+  callAI.mockResolvedValue(JSON.stringify({ rootMeaning: "器官；组织", words: [
     { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
   ] }));
-  render(<RootExplorer compact />);
-  expect(screen.getByText("词根查询")).toBeInTheDocument();
+  render(<RootExplorer />);
+  expect(screen.getByRole("heading", { name: "词根查询" })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /收起|展开/ })).not.toBeInTheDocument();
   fireEvent.change(screen.getByRole("textbox", { name: "输入词根" }), { target: { value: "organ" } });
   fireEvent.click(screen.getByRole("button", { name: "查词根" }));
   expect(await screen.findByText("organism")).toBeInTheDocument();
-  const wordRegion = screen.getByRole("region", { name: "词族词条" });
-  expect(wordRegion).toHaveAttribute("tabindex", "0");
-  expect(wordRegion.getAttribute("style")).toContain("max-height: min(52vh, 480px)");
-  expect(wordRegion).toHaveStyle({ overflowY: "auto" });
-  const toggle = screen.getByRole("button", { name: /organ · 1 个词/ });
+  const toggle = screen.getByRole("button", { name: "收起" });
   expect(toggle).toHaveAttribute("aria-expanded", "true");
+  expect(toggle).toHaveAttribute("aria-controls", "root-explorer-results");
   fireEvent.click(toggle);
   expect(toggle).toHaveAttribute("aria-expanded", "false");
+  expect(toggle).toHaveTextContent("展开");
   expect(document.getElementById("root-explorer-results")).toHaveAttribute("aria-hidden", "true");
+  expect(screen.getByText(/1 个词 · 器官；组织/)).toBeInTheDocument();
   fireEvent.click(toggle);
   expect(toggle).toHaveAttribute("aria-expanded", "true");
+});
+
+test("结果底部也能收起，并把视口带回面板顶部", async () => {
+  callAI.mockResolvedValue(JSON.stringify({ words: [
+    { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
+  ] }));
+  const scrollIntoView = jest.fn();
+  Element.prototype.scrollIntoView = scrollIntoView;
+  render(<RootExplorer />);
+  fireEvent.change(screen.getByRole("textbox", { name: "输入词根" }), { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  fireEvent.click(await screen.findByRole("button", { name: "收起 organ 词族" }));
+  expect(screen.getByRole("button", { name: "展开" })).toHaveAttribute("aria-expanded", "false");
+  expect(document.getElementById("root-explorer-results")).toHaveAttribute("aria-hidden", "true");
+  expect(scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ block: "start" }));
+  delete Element.prototype.scrollIntoView;
+});
+
+test("改输入不收起已有结果，下一次查询才替换", async () => {
+  callAI.mockResolvedValueOnce(JSON.stringify({ words: [
+    { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
+  ] }));
+  callAI.mockResolvedValueOnce(JSON.stringify({ words: [
+    { word: "structure", partOfSpeech: "n.", meaning: "结构", formation: "struct + ure", difference: "名词" },
+  ] }));
+  render(<RootExplorer />);
+  const input = screen.getByRole("textbox", { name: "输入词根" });
+  fireEvent.change(input, { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByText("organism")).toBeInTheDocument();
+  fireEvent.change(input, { target: { value: "str" } });
+  expect(screen.getByText("organism")).toBeInTheDocument();
+  expect(document.getElementById("root-explorer-results")).toHaveAttribute("aria-hidden", "false");
+  fireEvent.change(input, { target: { value: "struct" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  expect(await screen.findByText("structure")).toBeInTheDocument();
+  expect(screen.queryByText("organism")).not.toBeInTheDocument();
 });
 
 test("新查询失败时清掉旧结果，并忽略过时请求", async () => {
   let resolveOld;
   callAI.mockImplementationOnce(() => new Promise((resolve) => { resolveOld = resolve; }));
   callAI.mockRejectedValueOnce(new Error("API timeout"));
-  render(<RootExplorer compact />);
+  render(<RootExplorer />);
   const input = screen.getByRole("textbox", { name: "输入词根" });
   fireEvent.change(input, { target: { value: "organ" } });
   fireEvent.click(screen.getByRole("button", { name: "查词根" }));
@@ -133,7 +171,7 @@ test("已有结果后查询另一个词根失败，不保留旧词条", async ()
     { word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "完整生物" },
   ] }));
   callAI.mockRejectedValueOnce(new Error("API timeout"));
-  render(<RootExplorer compact />);
+  render(<RootExplorer />);
   const input = screen.getByRole("textbox", { name: "输入词根" });
   fireEvent.change(input, { target: { value: "organ" } });
   fireEvent.click(screen.getByRole("button", { name: "查词根" }));
