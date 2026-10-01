@@ -7393,6 +7393,65 @@
         "status": "passed",
         "accuracy": "3/3"
       }
+    },
+    {
+      "id": "rdl_gen_36794209682-long_001",
+      "variant": "long",
+      "text": "Wi-Fi Security Certificate Update\n\nPosted: October 3\nEffective: Wednesday, October 12, 8:00 AM – 11:00 AM\nLocation: All residence halls and academic buildings\n\nThe university's wireless network will be upgraded to a new security certificate on October 12. During this window, campus Wi-Fi will be unavailable in most buildings. The change is required to protect student accounts and is being managed by the Office of Information Technology.\n\nAfter the update, all personal devices must be re-registered. Students who do not re-register will be unable to connect to campus Wi-Fi or the student portal.\n\n• Bring your laptop or phone to the Tech Help Desk in Kellerman Hall, Room 118.\n• Staff will install the new certificate free of charge.\n• A replacement certificate card costs $5.00 if your device is lost or reset.\n• Setup takes about 10 minutes per device.\n\nThe Help Desk is open Monday–Friday, 9:00 AM to 4:30 PM. Questions? Email nethelp@westbrook.edu or call 555-0142.",
+      "word_count": 158,
+      "genre": "notice",
+      "format_metadata": {
+        "from": null,
+        "to": null,
+        "subject": "Wi-Fi Security Certificate Update"
+      },
+      "questions": [
+        {
+          "qid": "rdl_gen_36794209682-long_001_q1",
+          "question_type": "detail",
+          "stem": "According to the notice, what happens if a student does not re-register a device?",
+          "options": {
+            "A": "The device will be repaired at the Tech Help Desk.",
+            "B": "The device will receive a new certificate card.",
+            "C": "The device will lose access to the campus network.",
+            "D": "The device will be charged a five-dollar fee."
+          },
+          "correct_answer": "C",
+          "explanation": "The notice states that students who fail to re-register their personal devices after the update will be unable to connect to campus Wi-Fi or the student portal."
+        },
+        {
+          "qid": "rdl_gen_36794209682-long_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the Wi-Fi outage on October 12?",
+          "options": {
+            "A": "It affects buildings across the campus.",
+            "B": "It will last for the entire day.",
+            "C": "It will delay the help desk opening.",
+            "D": "It is caused by a student error."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the notice lists both all residence halls and all academic buildings as locations, and says most buildings will lose Wi-Fi, the outage clearly reaches the whole campus."
+        },
+        {
+          "qid": "rdl_gen_36794209682-long_001_q3",
+          "question_type": "main_idea",
+          "stem": "What is the main purpose of the notice?",
+          "options": {
+            "A": "To announce a new fee for wireless service",
+            "B": "To describe the services of the Tech Help Desk",
+            "C": "To explain a required update to campus Wi-Fi access",
+            "D": "To advertise free certificate cards for students"
+          },
+          "correct_answer": "C",
+          "explanation": "The notice explains the certificate upgrade, the outage window, and the need for students to re-register their devices — all steps in a required change to campus Wi-Fi."
+        }
+      ],
+      "question_count": 3,
+      "difficulty": "hard",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "3/3"
+      }
     }
   ]
 }
