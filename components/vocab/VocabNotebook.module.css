@@ -148,3 +148,21 @@
   .task { transition-duration: .01ms; }
   .page :global(.home-collapse-panel), .page :global(.home-collapse-panel) > div { transition-duration: .01ms !important; }
 }
+.transferActions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 22px 14px; }
+.transferActions button,.selectionBar button { padding: 7px 10px; border: 1px solid #dde5df; border-radius: 7px; background: #fff; color: #5a6b62; font-size: 12px; cursor: pointer; }
+.transferActions button[aria-pressed="true"] { border-color: #0d9668; color: #0d9668; background: #ecfdf5; }
+.transferActions button:disabled,.selectionBar button:disabled { opacity: .5; cursor: default; }
+.selectionBar { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 12px 22px; background: #f0fdf4; border-bottom: 1px solid #dde5df; font-size: 12px; }
+.selectionBar strong { margin-right: auto; }
+.selectionBar small { width: 100%; color: #5a6b62; line-height: 1.5; }
+.selectionBar .exportSelected { background: #0d9668; color: #fff; border-color: #0d9668; }
+.selectingRow { grid-template-columns: 18px minmax(0, 1.2fr) minmax(0, .8fr) auto auto; }
+.wordSelect { width: 16px; height: 16px; margin: 0; accent-color: #0d9668; }
+@media(max-width:768px) {
+ .transferActions,.selectionBar { padding-left: 16px; padding-right: 16px; }
+ .selectingRow { grid-template-columns: 18px minmax(0, 1fr) auto auto; }
+ .selectingRow .wordSelect { grid-column: 1; grid-row: 1 / 3; }
+ .selectingRow .wordMain,.selectingRow .meaning { grid-column: 2; }
+ .selectingRow .status { grid-column: 3; }
+ .selectingRow .more { grid-column: 4; }
+}

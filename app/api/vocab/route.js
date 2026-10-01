@@ -2,6 +2,7 @@ import { isSupabaseAdminConfigured, supabaseAdmin } from "../../../lib/supabaseA
 import { createRateLimiter, getIp } from "../../../lib/rateLimit";
 import { jsonError } from "../../../lib/apiResponse";
 import { mergeCards } from "../../../lib/vocab/book";
+import { VOCAB_CARD_MAX_BYTES, VOCAB_WORD_MAX_LENGTH } from "../../../lib/vocab/syncLimits";
 
 /**
  * 单词本的云端副本。
@@ -13,8 +14,8 @@ import { mergeCards } from "../../../lib/vocab/book";
 
 const TABLE = "vocab_cards";
 const MAX_CARDS_PER_REQUEST = 100;
-const CARD_MAX_BYTES = 8 * 1024;
-const WORD_MAX_LEN = 60;
+const CARD_MAX_BYTES = VOCAB_CARD_MAX_BYTES;
+const WORD_MAX_LEN = VOCAB_WORD_MAX_LENGTH;
 const PAGE_SIZE = 500;
 const LEGACY_MAX_CARDS = 10_000;
 const LEGACY_MAX_BYTES = 8 * 1024 * 1024;

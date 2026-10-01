@@ -12,6 +12,8 @@ import { MATURE_DAYS, sortByUrgency, reviewCard } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import RootExplorer from "./RootExplorer";
 import DailyQuotaCard from "./DailyQuotaCard";
+import VocabImportDialog from "./VocabImportDialog";
+import VocabExportDialog from "./VocabExportDialog";
 import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import styles from "./VocabNotebook.module.css";
 
@@ -58,15 +60,16 @@ function TaskCard({ mode, stat, ready, deferred, onStart }) {
   </button>;
 }
 
-function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onReset, onRemove }) {
+function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onReset, onRemove, selecting, selected, onSelect }) {
   const name = card.display || card.word;
   const r = currentRetrievability(card, now);
   const productive = card.productive !== false;
   const mode = card.reviewMode || "reading";
   const actionId = `vn-actions-${encodeURIComponent(card.word)}`;
-  return <div className={styles.wordRow} onKeyDown={(event) => {
+  return <div className={`${styles.wordRow} ${selecting ? styles.selectingRow : ""}`} onKeyDown={(event) => {
     if (event.key === "Escape" && open) { onToggle(null); event.stopPropagation(); }
   }}>
+    {selecting && <input className={styles.wordSelect} type="checkbox" aria-label={`选择 ${name}`} checked={selected} onChange={() => onSelect(card.word)} />}
     <div className={styles.wordMain}>
       <div className={styles.wordLine}><strong>{name}</strong><SpeakButton word={name} size={26} /></div>
       {card.phonetic && <div className={styles.phonetic}>/{card.phonetic}/</div>}
@@ -108,6 +111,24 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
   const [shown, setShown] = useState(PAGE_SIZE);
   const [openWord, setOpenWord] = useState(null);
   const listRef = useRef(null);
+  const [selecting, setSelecting] = useState(false);
+  const [selectedWords, setSelectedWords] = useState(() => new Set());
+  const [dialog, setDialog] = useState(null);
+  const [selectionAccount, setSelectionAccount] = useState(accountKey);
+  useEffect(() => { setSelectedWords(new Set()); setSelecting(false); setDialog(null); setSelectionAccount(accountKey); }, [accountKey]);
+  useEffect(() => {
+    const active = new Set(cards.map((card) => card.word));
+    setSelectedWords((previous) => {
+      const next = new Set([...previous].filter((word) => active.has(word)));
+      return next.size === previous.size ? previous : next;
+    });
+  }, [cards]);
+  const selectedCards = useMemo(() => selectionAccount === accountKey ? cards.filter((card) => selectedWords.has(card.word)) : [], [cards, selectedWords, selectionAccount, accountKey]);
+  const toggleSelected = (word) => setSelectedWords((previous) => {
+    const next = new Set(previous);
+    if (next.has(word)) next.delete(word); else next.add(word);
+    return next;
+  });
   const now = useMemo(() => new Date(), [cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const list = useMemo(() => {
@@ -172,6 +193,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
           <div className={styles.libraryHead}><h2 id="vn-library-title">我的词库 <span>{ready ? stats.total : "—"}</span></h2>
             <input value={q} onChange={(event) => { setQ(event.target.value); resetListView(); }}
               placeholder="搜索单词或释义" aria-label="搜索单词或释义" /></div>
+          <div className={styles.transferActions}>
+            <button type="button" disabled={!ready} onClick={() => setDialog({ type: "import", account: accountKey })}>导入词表</button>
+            <button type="button" disabled={!ready || !cards.length} aria-pressed={selecting} onClick={() => { setSelecting(!selecting); setOpenWord(null); }}>导出 PDF · {selecting ? "结束选择" : "选择单词"}</button>
+          </div>
           <div className={styles.filters}><div className={styles.segments} role="group" aria-label="词表类型">
             {[["all", "全部"], ["reading", "阅读"], ["listening", "听力"]].map(([mode, label]) =>
               <button key={mode} type="button" aria-pressed={listMode === mode}
@@ -179,13 +204,21 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
             <select value={filter} aria-label="状态筛选" onChange={(event) => { setFilter(event.target.value); resetListView(); }}>
               {FILTERS.map(([id, label]) => <option value={id} key={id}>{label}</option>)}
             </select></div>
+          {selecting && <div className={styles.selectionBar} role="group" aria-label="导出单词选择">
+            <strong aria-live="polite">已选 {selectedCards.length} 个词</strong>
+            <button type="button" disabled={!list.length} onClick={() => setSelectedWords((previous) => new Set([...previous, ...list.map((card) => card.word)]))}>全选当前筛选（{list.length} 词）</button>
+            <button type="button" disabled={!selectedCards.length} onClick={() => setSelectedWords(new Set())}>清空选择</button>
+            <button type="button" className={styles.exportSelected} disabled={!selectedCards.length} onClick={() => setDialog({ type: "export", account: accountKey })}>预览并导出 {selectedCards.length} 词</button>
+            <small>全选包含尚未显示的词；切换筛选会保留已选词。</small>
+          </div>}
           <div ref={listRef} className={styles.scrollList} tabIndex={0} role="region" aria-label="词库列表">
             {!ready ? <div className={styles.empty}>正在读取词库…</div>
               : cards.length === 0 ? <div className={styles.empty}><strong>单词本还是空的</strong><p>在阅读练习记录中划选生词，打开词典后点击「收藏到单词本」。</p><Link href="/reading/progress">去阅读练习记录</Link></div>
                 : list.length === 0 ? <div className={styles.empty}>这一类里还没有词</div>
                   : list.slice(0, shown).map((card) => <WordRow key={card.word} card={card} now={now}
                     open={openWord === card.word} onToggle={setOpenWord} onReviewMode={setReviewMode}
-                    onProductive={setProductive} onReset={reset} onRemove={remove} />)}
+                    onProductive={setProductive} onReset={reset} onRemove={remove}
+                    selecting={selecting} selected={selectionAccount === accountKey && selectedWords.has(card.word)} onSelect={toggleSelected} />)}
             {list.length > shown && <button className={styles.showMore} type="button"
               onClick={() => setShown((value) => value + PAGE_SIZE)}>还有 {list.length - shown} 个，继续显示</button>}
           </div>
@@ -200,8 +233,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false }) {
           <p className={styles.explain}>“预计记得”是复习模型的估计，不等于完成率。</p></section>
         <DailyQuotaCard limits={limits} setLimits={setLimits} />
         <section className={`${styles.card} ${styles.sideCard}`}><h2>如何添加词</h2>
-          <p className={styles.help}>阅读练习中划选生词，点击“收藏到单词本”。收藏后会出现在这里。</p></section>
+          <p className={styles.help}>阅读练习中划选生词，点击“收藏到单词本”；也可以导入自己的词表，加入这里的复习计划。</p></section>
       </aside>
     </div>
+    {dialog?.type === "import" && dialog.account === accountKey && <VocabImportDialog key={accountKey} cards={cards} accountKey={accountKey} onClose={() => setDialog(null)} />}
+    {dialog?.type === "export" && dialog.account === accountKey && <VocabExportDialog key={accountKey} cards={selectedCards} accountKey={accountKey} onClose={() => setDialog(null)} />}
   </div>;
 }
