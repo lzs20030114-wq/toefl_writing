@@ -1,14 +1,17 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { C, FONT } from "../shared/ui";
-import { RATING } from "../../lib/vocab/srs";
+import { RATING, STATE } from "../../lib/vocab/srs";
 import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
-import { hasUsableSense, parseSenses } from "../../lib/dict/core";
+import { hasUsableSense, humanizeDef, parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
-import { adoptDictEntry, getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { adoptDictEntry, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
+import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
+import ReviewSummary from "./ReviewSummary";
 
 /**
  * 一场复习。
@@ -39,12 +42,12 @@ import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 const ACCENT = "#0891B2";
 const ACCENT_SOFT = "#ECFEFF";
 
-/** 同一场里多久之内到期的卡要回到队尾再考一次（学习步骤就在这个窗口内）。 */
-const SESSION_WINDOW_MS = 30 * 60 * 1000;
 /** 重新插队至少隔这么多张 —— 刚看完答案立刻再问，考的是短时记忆，不是记忆。 */
 const REINSERT_GAP = 10;
 /** 一个词在一场里最多出现几次（学习步两步 = 首日 3 次提取，留一次余量给答错重来）。 */
 const MAX_APPEARANCES = 4;
+/** 每过这么多个词停一下：落一次存档、给一份小结，也给人一个自然的休息点。 */
+const SEGMENT_SIZE = 10;
 
 const DIRECTION_META = {
   context: { label: "认词", tip: "这个词在这句里是什么意思" },
@@ -155,9 +158,134 @@ function WordLine({ card, size = 30 }) {
   );
 }
 
-export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, accountKey = getVocabAccountKey() }) {
-  const [queue, setQueue] = useState(() => initialQueue || []);
-  const [pos, setPos] = useState(0);
+
+const fmtDuration = (ms) => {
+  const total = Math.max(1, Math.round(ms / 1000));
+  return `${Math.floor(total / 60)} 分 ${String(total % 60).padStart(2, "0")} 秒`;
+};
+/** 列表/小结里给这个词配一行释义（优先「在原句里的那条」）。 */
+const senseOf = (card) => humanizeDef(definitionForContext(card, activeSentence(card) || "") || card?.def || card?.defFull || "");
+const pickStats = (stats) => (stats ? { knowledge: stats.knowledge || 0, mature: stats.mature || 0, learning: stats.learning || 0 } : null);
+
+const kbd = (color, border) => ({
+  fontSize: 11, fontWeight: 700, border: `1px solid ${border}`, borderRadius: 5,
+  padding: "0 6px", lineHeight: "18px", color, background: "transparent",
+});
+const menuBtn = {
+  width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
+  padding: "8px 10px", borderRadius: 7, border: "none", background: "transparent", cursor: "pointer",
+  fontSize: 13, fontWeight: 600, color: C.t1, fontFamily: FONT, textAlign: "left",
+};
+
+/** 每过完一段（10 个词）弹出的小结：这一段每个词记没记得、用了多久，可以休息退出，也可以继续。 */
+function SegmentCheckpoint({ segNo, rows, good, again, durationMs, saved, onContinue, onPause }) {
+  if (typeof document === "undefined") return null;
+  return createPortal(
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.35)", backdropFilter: "blur(4px)",
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: FONT,
+    }}>
+      <div role="dialog" aria-modal="true" aria-label={`第 ${segNo} 段复习完成`} style={{
+        width: 560, maxWidth: "100%", maxHeight: "calc(100vh - 48px)", display: "flex", flexDirection: "column",
+        background: "#fff", borderRadius: 16, boxShadow: "0 10px 40px rgba(0,0,0,0.12)", overflow: "hidden",
+      }}>
+        <div style={{ padding: "22px 24px 16px", borderBottom: "1px solid #ebf0ed" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+            <span style={{ fontSize: 10, letterSpacing: 0.3, color: C.t3, fontWeight: 700, whiteSpace: "nowrap" }}>第 {segNo} 段</span>
+            {saved && (
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 999, padding: "1px 8px", whiteSpace: "nowrap" }}>
+                ✓ 已存档
+              </span>
+            )}
+          </div>
+          <div style={{ fontSize: 19, fontWeight: 800, letterSpacing: -0.3, color: C.t1 }}>这 {SEGMENT_SIZE} 个词过完了</div>
+          <div style={{ display: "flex", gap: 12, marginTop: 6, fontSize: 12, color: C.t2, flexWrap: "wrap" }}>
+            <span>本段用时 {fmtDuration(durationMs)}</span>
+            <span style={{ color: "#0d9668", fontWeight: 700 }}>记得 {good}</span>
+            <span style={{ color: "#dc2626", fontWeight: 700 }}>忘了 {again}</span>
+          </div>
+        </div>
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+          {rows.map((r, i) => (
+            <div key={`${r.word}-${i}`} style={{
+              display: "grid", gridTemplateColumns: "minmax(0, .9fr) minmax(0, 1.3fr) auto", alignItems: "center",
+              gap: 12, padding: "10px 24px", borderBottom: "1px solid #ebf0ed",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0, flexWrap: "wrap" }}>
+                <strong style={{ fontSize: 14, color: C.t1, overflowWrap: "anywhere" }}>{r.display}</strong>
+                {r.n > 1 && (
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#B45309", background: "#FFFBEB", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
+                    第 {r.n} 次
+                  </span>
+                )}
+              </div>
+              <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5, minWidth: 0, overflowWrap: "anywhere" }}>{r.sense}</div>
+              <span style={{
+                fontSize: 11, fontWeight: 700, borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap",
+                color: r.good ? "#0d9668" : "#dc2626", background: r.good ? "#ecfdf5" : "#fef2f2",
+                border: `1px solid ${r.good ? "#a7f3d0" : "#fecaca"}`,
+              }}>
+                {r.good ? "记得" : "忘了"}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div style={{ padding: "14px 24px 18px", display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ fontSize: 11, color: C.t3, lineHeight: 1.6 }}>
+            忘了的词已排到后面，隔一会儿再考一次。
+            {saved ? "现在退出也没关系，下次会从这个存档点接着复习。" : "现在退出也没关系，已评分的词都已计入进度。"}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.4fr)", gap: 10 }}>
+            <button type="button" onClick={onPause} style={{
+              border: "1px solid #dde5df", background: "#fff", color: C.t2, borderRadius: 10, padding: "12px 0",
+              fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: FONT,
+            }}>先休息，退出</button>
+            <button type="button" autoFocus onClick={onContinue} style={{
+              border: "none", background: ACCENT, color: "#fff", borderRadius: 10, padding: "12px 0", fontSize: 14,
+              fontWeight: 700, cursor: "pointer", fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            }}>
+              继续下一段 <span style={kbd("#fff", "rgba(255,255,255,.5)")}>空格</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+export function VocabReview({
+  initialQueue, onGrade, onUndo, onSetProductive, onSuspend, onEditDefinition, onExit,
+  accountKey = getVocabAccountKey(),
+  // 从存档继续时带进来的上一段统计；没有就是全新一场
+  resume = null,
+  // 每过完一段 / 整场结束时通知外面落存档、清存档（外面不接就不存）
+  onCheckpoint, onFinish,
+  // 单词本当前的整体统计，结算页拿它和开场时对比出「预计记得 96 → 104」
+  statsNow = null,
+  // 结算页下半截的「接下来」：{ nextTask, tomorrow, onStartNext, onExportWords }
+  summaryExtras = null,
+}) {
+  // 一场复习的全部「会因评分而变」的状态收在一个对象里：
+  // 撤销就是把上一份整个换回来，不用逐项倒推。
+  const [sess, setSess] = useState(() => ({
+    queue: initialQueue || [],
+    pos: 0,
+    // 队列在本场内是活的（答错的卡会回插），进度条分母用「初始张数」会跳；
+    // 用已答次数 /（已答 + 剩余）才稳。
+    answered: resume?.answered || 0,
+    tally: { again: resume?.tally?.again || 0, good: resume?.tally?.good || 0 },
+    first: resume?.first || {}, // 词 -> 第一次被问时是否想起来
+    seen: resume?.seen || {}, // 词 -> 这一场里已经出现了几次
+    lost: resume?.lost || [],
+    segment: [], // 当前这一段评过的 { word, good, n }
+    segNo: resume?.segNo || 0,
+    checkpoint: false,
+    resumed: !!resume,
+    endedAt: null,
+  }));
+  // 每次评分前压一份快照；过了存档点清空（那一刻已经落盘，不再允许回头改）
+  const [history, setHistory] = useState([]);
   const [revealed, setRevealed] = useState(false);
   const [spelling, setSpelling] = useState("");
   const [spellingResult, setSpellingResult] = useState(null);
@@ -165,12 +293,17 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
   const [retryResult, setRetryResult] = useState(null);
   // 当前题型/已做出的拼写结果保持不变；逐词设置在下次出现时生效。
   const [productiveOverrides, setProductiveOverrides] = useState({});
-  const [tally, setTally] = useState({ again: 0, good: 0 });
-  // 队列在本场内是活的（答错的卡会回插），进度条分母用「初始张数」会跳；
-  // 用已答次数 /（已答 + 剩余）才稳。
-  const [answered, setAnswered] = useState(0);
-  // 每个词在这一场里已经出现了几次
-  const seenRef = useRef(new Map());
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState("");
+  const [editError, setEditError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [segDurMs, setSegDurMs] = useState(0);
+  const [startStats] = useState(() => resume?.startStats || pickStats(statsNow));
+  // 评过分的词的卡面（结算页/段小结要显示词形和释义）
+  const infoRef = useRef(new Map());
+  const startedAtRef = useRef(Date.now() - (resume?.elapsedMs || 0));
+  const segStartRef = useRef(Date.now());
   // 这张卡是什么时候显示出来的 —— 存进日志，留给以后用反应时间做隐式分档
   const shownAtRef = useRef(Date.now());
   const spellingRef = useRef(null);
@@ -179,6 +312,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
   // 而真正需要补的卡是少数（绝大多数卡是从义项 chips 点着收藏的，词性本来就全）。
   const [extra, setExtra] = useState(null);
 
+  const { queue, pos, tally } = sess;
   const card = queue[pos] || null;
   const extraEntry = extra && card && extra.forWord === card.word ? extra.entry : null;
   const definitionSentence = card?.reviewMode === "listening" ? card.listeningContext?.text || "" : activeSentence(card) || "";
@@ -200,14 +334,24 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
 
   const finished = pos >= queue.length;
   const remaining = Math.max(0, queue.length - pos);
+  const timesSeen = card ? sess.seen[card.word] || 0 : 0;
+  const canUndo = !!onUndo && history.length > 0 && !sess.checkpoint;
 
   useEffect(() => {
     shownAtRef.current = Date.now();
   }, [pos]);
 
   useEffect(() => {
-    if (mode === "recall" && !revealed) spellingRef.current?.focus();
-  }, [pos, mode, revealed]);
+    setMenuOpen(false);
+    setEditing(false);
+    setEditError("");
+  }, [pos, card?.word]);
+
+  // 存档小结开着时不能抢焦点：下一张若是拼写卡，输入框一聚焦，空格就打进了它背后的输入框，
+  // 小结的「继续」按钮永远等不到键盘。小结关掉后依赖变化，焦点再回到输入框。
+  useEffect(() => {
+    if (mode === "recall" && !revealed && !sess.checkpoint) spellingRef.current?.focus();
+  }, [pos, mode, revealed, sess.checkpoint]);
 
   const checkSpelling = useCallback((e) => {
     e.preventDefault();
@@ -235,6 +379,17 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
     }
   }, [accountKey, card, onSetProductive, productiveOn]);
 
+  const resetFace = useCallback((nextRevealed = false) => {
+    setRevealed(nextRevealed);
+    setSpelling("");
+    setSpellingResult(null);
+    setRetrying(false);
+    setRetryResult(null);
+    setMenuOpen(false);
+    setEditing(false);
+    setNotice("");
+  }, []);
+
   const fillWord = card && needsDictFill(card) ? card.word : "";
   useEffect(() => {
     setExtra(null);
@@ -260,37 +415,115 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
 
   const grade = useCallback(
     (rating) => {
-      if (!card || getVocabAccountKey() !== accountKey) return;
+      if (!card || sess.checkpoint || getVocabAccountKey() !== accountKey) return;
       const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current);
       if (!updated) return;
-      setTally((t) => ({
-        again: t.again + (rating === RATING.AGAIN ? 1 : 0),
-        good: t.good + (rating === RATING.AGAIN ? 0 : 1),
-      }));
-      setAnswered((n) => n + 1);
-
-      const seen = seenRef.current;
-      const times = (seen.get(card.word) || 0) + 1;
-      seen.set(card.word, times);
-
-      setQueue((q) => {
-        return reinsertAfterGap(q, pos, updated, times, {
-          gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
-        });
+      const good = rating !== RATING.AGAIN;
+      infoRef.current.set(card.word, card);
+      const times = (sess.seen[card.word] || 0) + 1;
+      const nextQueue = reinsertAfterGap(sess.queue, sess.pos, updated, times, {
+        gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
       });
-      setRevealed(false);
-      setSpelling("");
-      setSpellingResult(null);
-      setRetrying(false);
-      setRetryResult(null);
-      setPos((p) => p + 1);
+      const nextPos = sess.pos + 1;
+      const done = nextPos >= nextQueue.length;
+      const segment = [...sess.segment, { word: card.word, good, n: times }];
+      const hit = !done && segment.length >= SEGMENT_SIZE;
+      const next = {
+        ...sess,
+        queue: nextQueue,
+        pos: nextPos,
+        answered: sess.answered + 1,
+        tally: { again: sess.tally.again + (good ? 0 : 1), good: sess.tally.good + (good ? 1 : 0) },
+        first: card.word in sess.first ? sess.first : { ...sess.first, [card.word]: good },
+        seen: { ...sess.seen, [card.word]: times },
+        lost: !good && !sess.lost.includes(card.word) ? [...sess.lost, card.word] : sess.lost,
+        segment,
+        segNo: hit ? sess.segNo + 1 : sess.segNo,
+        checkpoint: hit,
+        endedAt: done ? Date.now() : null,
+      };
+      setHistory(hit || done ? [] : [...history, sess]);
+      setSess(next);
+      resetFace(false);
+      if (hit) {
+        setSegDurMs(Date.now() - segStartRef.current);
+        onCheckpoint?.({
+          words: nextQueue.slice(nextPos).map((c) => c.word),
+          answered: next.answered, tally: next.tally, first: next.first, seen: next.seen, lost: next.lost,
+          segNo: next.segNo, elapsedMs: Date.now() - startedAtRef.current, startStats,
+        });
+      }
+      if (done) onFinish?.();
     },
-    [accountKey, card, onGrade, pos],
+    [accountKey, card, history, onCheckpoint, onFinish, onGrade, resetFace, sess, startStats],
   );
+
+  const continueSegment = useCallback(() => {
+    segStartRef.current = Date.now();
+    shownAtRef.current = Date.now();
+    setSess((s) => ({ ...s, checkpoint: false, segment: [], resumed: false }));
+  }, []);
+
+  /** 撤销上一张：评分写回的调度状态和日志一并退回，再把那张卡原样摆回来重答。 */
+  const undo = useCallback(() => {
+    if (!canUndo || getVocabAccountKey() !== accountKey) return;
+    const prev = history[history.length - 1];
+    const prevCard = prev.queue[prev.pos];
+    if (!prevCard || !onUndo(prevCard.word)) return;
+    setHistory(history.slice(0, -1));
+    setSess(prev);
+    // 认词卡摆回「已翻面」，方便直接重新选；拼写卡得重新拼，不能带着旧结果
+    resetFace(cardDirection(prevCard) !== "recall");
+  }, [accountKey, canUndo, history, onUndo, resetFace]);
+
+  const suspendWord = useCallback(() => {
+    if (!card || !onSuspend || getVocabAccountKey() !== accountKey) return;
+    if (!onSuspend(card.word)) return;
+    // 当前这张不评分直接跳过；本场后面回插的同词也一并拿掉
+    const nextQueue = sess.queue.filter((c, i) => i < sess.pos || c.word !== card.word);
+    const done = sess.pos >= nextQueue.length;
+    setHistory([]);
+    setSess({ ...sess, queue: nextQueue, endedAt: done ? Date.now() : null });
+    resetFace(false);
+    setNotice(`已暂停「${card.display || card.word}」，可在词库里恢复。`);
+    if (done) onFinish?.();
+  }, [accountKey, card, onFinish, onSuspend, resetFace, sess]);
+
+  const openEditor = useCallback(() => {
+    setEditText(mainDef || card?.def || "");
+    setEditError("");
+    setEditing(true);
+    setMenuOpen(false);
+  }, [card, mainDef]);
+
+  const saveEdit = useCallback((e) => {
+    e.preventDefault();
+    if (!card || !onEditDefinition || getVocabAccountKey() !== accountKey) return;
+    try {
+      const updated = onEditDefinition(card.word, editText);
+      if (!updated) { setEditError("没能保存：这个词可能已被移除。"); return; }
+      const patch = {
+        def: updated.def, defFull: updated.defFull, baseDef: updated.baseDef, contextSenses: updated.contextSenses,
+        definitionLocked: updated.definitionLocked, definitionUpdatedAt: updated.definitionUpdatedAt,
+        contextSenseResetAt: updated.contextSenseResetAt,
+      };
+      setSess((s) => ({ ...s, queue: s.queue.map((c) => (c.word === card.word ? { ...c, ...patch } : c)) }));
+      setEditing(false);
+      setEditError("");
+    } catch (error) {
+      setEditError(error?.message || "没能保存，请稍后重试。");
+    }
+  }, [accountKey, card, editText, onEditDefinition]);
 
   // 认词卡沿用翻面自评；拼写卡必须先输入或明确选择「想不起来」。
   const gradeRef = useRef(grade);
   gradeRef.current = grade;
+  const undoRef = useRef(undo);
+  undoRef.current = undo;
+  const continueRef = useRef(continueSegment);
+  continueRef.current = continueSegment;
+  const checkpointRef = useRef(sess.checkpoint);
+  checkpointRef.current = sess.checkpoint;
   const revealedRef = useRef(revealed);
   revealedRef.current = revealed;
   const modeRef = useRef(mode);
@@ -299,7 +532,14 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
   spellingResultRef.current = spellingResult;
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target && /^(INPUT|TEXTAREA|BUTTON)$/.test(e.target.tagName)) return;
+      if (e.target && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(e.target.tagName)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "Escape") { setMenuOpen(false); return; }
+      if (checkpointRef.current) {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); continueRef.current(); }
+        return;
+      }
+      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); return; }
       if (modeRef.current === "recall") {
         if (revealedRef.current && (e.key === " " || e.key === "Enter")) {
           e.preventDefault();
@@ -327,72 +567,93 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
   }, []);
 
   if (finished) {
-    const total = tally.again + tally.good;
-    const words = seenRef.current.size;
+    const words = Object.keys(sess.first).length;
+    const firstGood = Object.values(sess.first).filter(Boolean).length;
+    const lost = sess.lost.map((word) => {
+      const info = infoRef.current.get(word) || getCard(word);
+      return info ? { word, display: info.display || info.word, sense: senseOf(info) } : null;
+    }).filter(Boolean);
+    const change = (label, from, to, tone) => {
+      const d = to - from;
+      return { label, from, to, delta: d === 0 ? "±0" : d > 0 ? `+${d}` : `${d}`, color: d === 0 ? C.t3 : tone };
+    };
+    const changes = startStats && statsNow ? [
+      change("预计记得", startStats.knowledge, statsNow.knowledge || 0, "#0d9668"),
+      change("已记牢", startStats.mature, statsNow.mature || 0, "#0d9668"),
+      change("学习中", startStats.learning, statsNow.learning || 0, ACCENT),
+    ] : null;
+    const summary = {
+      duration: fmtDuration((sess.endedAt || Date.now()) - startedAtRef.current),
+      words, asks: tally.good + tally.again, good: tally.good, again: tally.again,
+      firstGood, firstRate: words ? Math.round((firstGood / words) * 100) : 0, lost, changes,
+    };
     return (
-      <div style={{ textAlign: "center", padding: "48px 20px" }}>
-        <div style={{ fontSize: 40, marginBottom: 10 }}>🌿</div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: C.t1, marginBottom: 6 }}>这一轮复习完成</div>
-        <div style={{ fontSize: 13, color: C.t2, marginBottom: 22 }}>
-          过了 {words} 个词，共 {total} 次提问
-        </div>
-        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 24 }}>
-          <div style={{ padding: "10px 20px", borderRadius: 10, background: "#ecfdf5", border: "1px solid #a7f3d0" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#0d9668" }}>{tally.good}</div>
-            <div style={{ fontSize: 11, color: C.t2, marginTop: 2 }}>记得</div>
-          </div>
-          <div style={{ padding: "10px 20px", borderRadius: 10, background: "#fef2f2", border: "1px solid #fecaca" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#dc2626" }}>{tally.again}</div>
-            <div style={{ fontSize: 11, color: C.t2, marginTop: 2 }}>忘了</div>
-          </div>
-        </div>
-        <div style={{ fontSize: 12, color: C.t3, lineHeight: 1.8, maxWidth: 420, margin: "0 auto 22px" }}>
-          尚未完成的学习步到期后会再次出现在单词本；新词完成初学后，隔天再复习。
-          <br />
-          别回头再刷一遍，那只会制造「我记住了」的错觉。
-        </div>
-        <button
-          onClick={onExit}
-          style={{
-            border: "none", background: ACCENT, color: "#fff", borderRadius: 10,
-            padding: "10px 24px", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: FONT,
-          }}
-        >
-          返回单词本
-        </button>
-      </div>
+      <ReviewSummary
+        summary={summary}
+        nextTask={summaryExtras?.nextTask}
+        tomorrow={summaryExtras?.tomorrow}
+        onStartNext={summaryExtras?.onStartNext}
+        onExportWords={summaryExtras?.onExportWords}
+        onExit={onExit}
+      />
     );
   }
 
   if (!card) return null;
 
   const dirMeta = DIRECTION_META[mode] || DIRECTION_META.recognize;
-  const progress = answered + remaining > 0 ? answered / (answered + remaining) : 0;
+  const progress = sess.answered + remaining > 0 ? sess.answered / (sess.answered + remaining) : 0;
+  const segmentRows = sess.segment.map((g) => {
+    const info = infoRef.current.get(g.word);
+    return { ...g, display: info?.display || g.word, sense: info ? senseOf(info) : "" };
+  });
 
   return (
     <div>
       {/* 进度 */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
         <button
           onClick={onExit}
           style={{
             border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 8,
-            padding: "5px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0,
+            padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0,
           }}
         >
           ← 退出
         </button>
-        <div style={{ flex: 1, minWidth: 0, height: 6, background: C.bdrSubtle, borderRadius: 999, overflow: "hidden" }}>
-          <div style={{ width: `${Math.round(progress * 100)}%`, height: "100%", background: ACCENT, transition: "width .25s" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6, gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.t1, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              阅读复习
+              <span style={{ fontWeight: 500, color: C.t3 }}>已答 {sess.answered} · 剩 {remaining}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: C.t2, background: "#f7faf9", border: "1px solid #ebf0ed", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
+                本段 {sess.segment.length} / {SEGMENT_SIZE}
+              </span>
+              {sess.resumed && (
+                <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
+                  已从存档继续 · 第 {sess.segNo + 1} 段
+                </span>
+              )}
+            </span>
+            <span style={{ display: "flex", gap: 10, fontSize: 11, fontWeight: 700 }}>
+              <span style={{ color: "#0d9668" }}>记得 {tally.good}</span>
+              <span style={{ color: "#dc2626" }}>忘了 {tally.again}</span>
+            </span>
+          </div>
+          <div style={{ height: 6, background: C.bdrSubtle, borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ width: `${Math.round(progress * 100)}%`, height: "100%", background: ACCENT, transition: "width .25s" }} />
+          </div>
         </div>
-        <div style={{ fontSize: 12, color: C.t2, fontWeight: 700, flexShrink: 0 }}>剩 {remaining}</div>
       </div>
 
       {/* 卡片 */}
       <div
-        onClick={() => mode !== "recall" && !revealed && setRevealed(true)}
+        onClick={() => {
+          if (menuOpen) setMenuOpen(false);
+          else if (mode !== "recall" && !revealed && !editing) setRevealed(true);
+        }}
         style={{
-          background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16,
+          position: "relative", background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16,
           boxShadow: C.shadow, padding: "28px 24px", minHeight: 250,
           display: "flex", flexDirection: "column",
           cursor: mode !== "recall" && !revealed ? "pointer" : "default",
@@ -401,11 +662,21 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
           <span style={{
             fontSize: 11, fontWeight: 700, color: ACCENT, background: ACCENT_SOFT,
-            border: "1px solid #a5e8f0", borderRadius: 999, padding: "2px 9px",
+            border: "1px solid #a5e8f0", borderRadius: 999, padding: "2px 9px", whiteSpace: "nowrap",
           }}>
             {dirMeta.label}
           </span>
           <span style={{ fontSize: 11, color: C.t3 }}>{dirMeta.tip}</span>
+          {card.state === STATE.NEW && (
+            <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
+              新词
+            </span>
+          )}
+          {timesSeen > 0 && (
+            <span style={{ fontSize: 10, fontWeight: 700, color: "#B45309", background: "#FFFBEB", border: "1px solid #f3d4a2", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
+              再次出现 · 第 {timesSeen + 1} 次
+            </span>
+          )}
           {/* 来源不只是信息展示：情境线索本身就是有效的提取线索 */}
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 10, color: C.t3 }}>
@@ -414,28 +685,86 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
             </span>
             <button
               type="button"
+              aria-label="更多操作"
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              onClick={(event) => { event.stopPropagation(); setMenuOpen((open) => !open); }}
+              style={{
+                width: 28, height: 28, display: "grid", placeItems: "center", padding: 0,
+                border: `1px solid ${C.bdr}`, borderRadius: 7, background: "#fff", color: C.t2,
+                fontSize: 17, lineHeight: 1, cursor: "pointer", fontFamily: FONT,
+              }}
+            >
+              ⋯
+            </button>
+          </div>
+        </div>
+
+        {menuOpen && (
+          <div
+            role="menu"
+            aria-label={`${card.display || card.word} 的操作`}
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              position: "absolute", top: 62, right: 20, zIndex: 5, width: 208, background: "#fff",
+              border: `1px solid ${C.bdr}`, borderRadius: 10, boxShadow: "0 10px 30px rgba(15,23,42,0.14)", padding: 6,
+            }}
+          >
+            <button
+              type="button"
               role="switch"
               aria-checked={productiveOn}
               aria-label={`${card.display || card.word}需要会写`}
               onClick={toggleProductive}
               title={productiveOn ? "改为只需认得，下次出现时生效" : "改为要会写，下次出现时生效"}
-              style={{
-                border: `1px solid ${productiveOn ? ACCENT : C.bdr}`,
-                background: productiveOn ? ACCENT_SOFT : "#fff",
-                color: productiveOn ? ACCENT : C.t2,
-                borderRadius: 7, padding: "4px 9px", fontSize: 11,
-                cursor: "pointer", fontFamily: FONT, fontWeight: 700,
-              }}
+              style={menuBtn}
             >
-              {productiveOn ? "要会写" : "只需认得"}
+              要会写
+              <span style={{ fontSize: 11, fontWeight: 700, color: productiveOn ? ACCENT : C.t3 }}>{productiveOn ? "开" : "关"}</span>
             </button>
+            {onEditDefinition && <button type="button" role="menuitem" onClick={openEditor} style={menuBtn}>编辑释义</button>}
+            {onSuspend && <button type="button" role="menuitem" onClick={suspendWord} style={menuBtn}>暂停复习这个词</button>}
+            <div style={{ height: 1, background: C.bdrSubtle, margin: 4 }} />
+            <div style={{ padding: "4px 10px 6px", fontSize: 10, color: C.t3, lineHeight: 1.5 }}>
+              改动下次出现时生效，本次仍按当前题型计分。
+            </div>
           </div>
-        </div>
+        )}
 
         {productiveChangedForThisCard && (
           <div role="status" style={{ fontSize: 11, color: C.t2, marginBottom: 12 }}>
             已改为「{productiveOn ? "要会写" : "只需认得"}」，下次出现时生效；本次仍按当前题型计分。
           </div>
+        )}
+        {notice && <div style={{ fontSize: 11, color: C.t2, marginBottom: 12 }}>{notice}</div>}
+
+        {editing && (
+          <form
+            onSubmit={saveEdit}
+            onClick={(event) => event.stopPropagation()}
+            style={{ marginBottom: 14, padding: 12, borderRadius: 10, background: C.bg, border: `1px solid ${C.bdrSubtle}` }}
+          >
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: C.t2, marginBottom: 6 }}>
+              编辑释义
+              <textarea
+                aria-label="编辑释义"
+                value={editText}
+                onChange={(event) => setEditText(event.target.value)}
+                rows={2}
+                maxLength={300}
+                autoFocus
+                style={{
+                  display: "block", width: "100%", boxSizing: "border-box", marginTop: 6, border: `1px solid ${C.bdr}`,
+                  borderRadius: 8, padding: "8px 10px", fontSize: 14, color: C.t1, fontFamily: FONT, resize: "vertical",
+                }}
+              />
+            </label>
+            {editError && <p role="alert" style={{ margin: "0 0 8px", fontSize: 12, color: "#b91c1c" }}>{editError}</p>}
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button type="button" onClick={() => { setEditing(false); setEditError(""); }} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 7, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT }}>取消</button>
+              <button type="submit" disabled={!editText.trim()} style={{ border: "none", background: ACCENT, color: "#fff", borderRadius: 7, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: editText.trim() ? "pointer" : "default", opacity: editText.trim() ? 1 : 0.5, fontFamily: FONT }}>保存</button>
+            </div>
+          </form>
         )}
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -600,10 +929,10 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
             style={{
               width: "100%", border: "none", background: ACCENT, color: "#fff",
               borderRadius: 12, padding: "15px 0", fontSize: 15, fontWeight: 700,
-              cursor: "pointer", fontFamily: FONT,
+              cursor: "pointer", fontFamily: FONT, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             }}
           >
-            显示答案 <span style={{ opacity: 0.7, fontWeight: 500, fontSize: 12 }}>（空格）</span>
+            显示答案 <span style={kbd("#fff", "rgba(255,255,255,.5)")}>空格</span>
           </button>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 10 }}>
@@ -612,33 +941,63 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
               style={{
                 border: "1px solid #fecaca", background: "#fef2f2", color: "#dc2626",
                 borderRadius: 12, padding: "15px 4px", cursor: "pointer", fontFamily: FONT,
-                fontSize: 16, fontWeight: 800,
+                fontSize: 16, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               }}
             >
-              忘了 <span style={{ fontSize: 11, fontWeight: 600, opacity: 0.7 }}>1</span>
+              忘了 <span style={kbd("#dc2626", "#fecaca")}>1</span>
             </button>
             <button
               onClick={() => grade(RATING.GOOD)}
               style={{
                 border: "1px solid #a7f3d0", background: "#ecfdf5", color: "#0d9668",
                 borderRadius: 12, padding: "15px 4px", cursor: "pointer", fontFamily: FONT,
-                fontSize: 16, fontWeight: 800,
+                fontSize: 16, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               }}
             >
-              记得 <span style={{ fontSize: 11, fontWeight: 600, opacity: 0.7 }}>2 / 空格</span>
+              记得 <span style={kbd("#0d9668", "#a7f3d0")}>2 / 空格</span>
             </button>
           </div>
         )}
-        <div style={{ fontSize: 11, color: C.t3, textAlign: "center", marginTop: 10, lineHeight: 1.7 }}>
-          {mode === "recall"
-            ? revealed
-              ? retrying ? "再拼一次只作巩固，本次仍按首次拼写结果排期。" : "拼对算记得；拼错或想不起来算忘了。"
-              : retrying ? "根据首字母提示，再写一次完整单词。" : "先写出完整单词再核对；不会写时也可以显示答案。"
-            : revealed
-              ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
-              : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+          {onUndo ? (
+            <button
+              type="button"
+              onClick={undo}
+              disabled={!canUndo}
+              style={{
+                border: 0, background: "none", padding: "4px 0", fontSize: 12, fontWeight: 700, fontFamily: FONT,
+                color: canUndo ? C.t2 : "#c5cfc9", cursor: canUndo ? "pointer" : "default",
+                display: "flex", alignItems: "center", gap: 6,
+              }}
+            >
+              ↶ 撤销上一张
+              <span style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${C.bdr}`, borderRadius: 4, padding: "0 5px", lineHeight: "16px", color: C.t3 }}>Z</span>
+            </button>
+          ) : <span />}
+          <span style={{ fontSize: 11, color: C.t3, lineHeight: 1.7, textAlign: "right", flex: 1, minWidth: 240 }}>
+            {mode === "recall"
+              ? revealed
+                ? retrying ? "再拼一次只作巩固，本次仍按首次拼写结果排期。" : "拼对算记得；拼错或想不起来算忘了。"
+                : retrying ? "根据首字母提示，再写一次完整单词。" : "先写出完整单词再核对；不会写时也可以显示答案。"
+              : revealed
+                ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
+                : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
+          </span>
         </div>
       </div>
+
+      {sess.checkpoint && (
+        <SegmentCheckpoint
+          segNo={sess.segNo}
+          rows={segmentRows}
+          good={sess.segment.filter((g) => g.good).length}
+          again={sess.segment.filter((g) => !g.good).length}
+          durationMs={segDurMs}
+          saved={!!onCheckpoint}
+          onContinue={continueSegment}
+          onPause={onExit}
+        />
+      )}
     </div>
   );
 }

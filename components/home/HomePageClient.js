@@ -98,6 +98,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     const s = searchParams.get("section");
     return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank", "vocab"].includes(s) ? s : "writing";
   });
+  // 单词本复习中进入「专注模式」：收起首页侧栏，只留一张卡（见 VocabNotebook 的 onReviewingChange）
+  const [vocabFocus, setVocabFocus] = useState(false);
   const [crtFlash, setCrtFlash] = useState(false);
   const [shaking, setShaking] = useState(false);
   const [fbOpen, setFbOpen] = useState(false);
@@ -382,7 +384,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         ) : null}
 
         <div className="home-shell" style={{ maxWidth: 1360, margin: "0 auto", padding: "28px 36px 60px", display: "flex", gap: 24, alignItems: "flex-start" }}>
-          <NavSidebar
+          {!(activeSection === "vocab" && vocabFocus) && <NavSidebar
             activeSection={activeSection} onSectionChange={changeSection}
             isChallenge={isChallenge}
             userCode={userCode} userTier={userTier} userEmail={userEmail} authMethod={authMethod}
@@ -393,8 +395,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             copied={copied} copyCode={copyCode}
             fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
-          />
-          {activeSection === "vocab" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded /></div> : <><SectionContent
+          />}
+          {activeSection === "vocab" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded onReviewingChange={setVocabFocus} /></div> : <><SectionContent
             activeSection={activeSection}
             isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
             gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}

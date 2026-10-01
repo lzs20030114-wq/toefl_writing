@@ -211,6 +211,21 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
   防止记住的是句子不是词；learning 阶段不抽语境
 - 目标留存率 0.90，考前 10 天自动进 0.95 冲刺档（读 studyPlan 的 examDate）
 - 新词毕业后的第一个间隔强制压到 1 天（跨一次睡眠）
+
+概览页 / 复习页的「会话体验」层（设计稿「单词本 优化版」，都在 `components/vocab/` + `lib/vocab/`，调度不受影响）：
+- **今日计划**：`bookStats` 给出 `todayTotal / doneToday / spellingDue`（已过的词按 `lastReview` 落在本地今天判定，
+  同一个词不重复计）；`estimateMinutes` ≈ 16 秒/张；`forecastLoad` 数「已排定」的未来 7 天负担（老词按 `maxReviews` 封顶顺延、
+  新词按 `newPerDay` 放完为止），**不预测将来评分**，页面文案也这么写
+- **撤销上一张**（`vocabStore.undoGrade`，复习页按钮 / Z 键）：只认内存栈顶、必须同词同模式；只退回评分动过的 SRS 字段 +
+  `reviewStartedDates` + `introducedAt`（评分后用户改的释义/要会写保留），时钟字段拨到现在好让云同步里「撤销」赢过「那次评分」；
+  还没上传的那条复习日志一并删（`reviewLog.removeReviewLog`），已上传的不改写
+- **分段存档**（`lib/vocab/reviewSave.js`）：阅读复习每 10 词弹小结并落存档，只存「词 + 本场统计」，不存卡片；恢复时按词重新从单词本取卡
+  并丢掉已在别处复习掉的。**当天有效**、按账号+模式分键。小结弹出时拼写框不能抢焦点（否则空格打进背后的输入框）
+- **暂停复习**（`card.suspended`，`vocabStore.setSuspended`）：词和进度保留，`dueSelection/freshSelection` 跳过，不占额度；
+  列表里有「已暂停」筛选和「恢复复习」。**手改释义**走 `chooseSense` 同一条路（锁定主释义，原释义留作 `defFull`）
+- **易忘词** = 忘过 ≥3 次（`LEECH_LAPSES`）；`cardStage` 是列表徽章 / 记忆分布条 / 筛选 chip 共用的互斥阶段口径
+- 结算页（`ReviewSummary`）用开场与结束时的 `bookStats` 对比出「预计记得 / 已记牢 / 学习中」的变化；复习中首页侧栏收起（专注模式，
+  `VocabNotebook` 的 `onReviewingChange`）。听力复习（`ListeningVocabReview`）暂未接入撤销/分段/结算页
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
 `__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
 

@@ -14,8 +14,15 @@ function validNumber(value, max) {
   return Number.isSafeInteger(number) && number >= 0 && number <= max ? number : null;
 }
 
-export default function DailyQuotaCard({ limits, setLimits }) {
-  const [open, setOpen] = useState(false);
+/** open / onOpenChange 可选：概览页的「调整额度 ›」要能从外面把这张卡展开。 */
+export default function DailyQuotaCard({ limits, setLimits, open: controlledOpen, onOpenChange }) {
+  const [innerOpen, setInnerOpen] = useState(false);
+  const open = controlledOpen ?? innerOpen;
+  const setOpen = (value) => {
+    const next = typeof value === "function" ? value(open) : value;
+    setInnerOpen(next);
+    onOpenChange?.(next);
+  };
   const [newDraft, setNewDraft] = useState(String(limits.newPerDay));
   const [reviewDraft, setReviewDraft] = useState(String(limits.maxReviews));
   const [error, setError] = useState("");

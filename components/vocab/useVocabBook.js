@@ -8,6 +8,9 @@ import {
   removeWord,
   resetCard,
   setProductive,
+  setSuspended,
+  editDefinition,
+  undoGrade,
   setReviewMode as setStoredReviewMode,
   initVocabSync,
   VOCAB_UPDATED_EVENT,
@@ -15,7 +18,7 @@ import {
   getVocabStorageStatus,
 } from "../../lib/vocab/vocabStore";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../../lib/AuthContext";
-import { activeCards, bookStats, buildQueue, DEFAULT_LIMITS } from "../../lib/vocab/book";
+import { activeCards, bookStats, buildQueue, forecastLoad, DEFAULT_LIMITS } from "../../lib/vocab/book";
 import { currentScheduleParams } from "../../lib/vocab/vocabStore";
 import { DEFAULT_PARAMS } from "../../lib/vocab/srs";
 
@@ -76,6 +79,12 @@ export function useVocabBook() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [cards, limits, tick]);
 
+  const forecast = useMemo(
+    () => forecastLoad(cards, new Date(), limits),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cards, limits, tick],
+  );
+
   const makeQueue = useCallback(
     (mode, expectedAccount = accountKey) => expectedAccount === getVocabAccountKey()
       ? buildQueue(loadBook(), new Date(), loadLimits(), Math.random, mode) : [],
@@ -88,6 +97,12 @@ export function useVocabBook() {
         ? gradeCard(word, rating, new Date(), undefined, durationMs, mode, expectedAccount) : null,
     [accountKey],
   );
+  const undo = useCallback(
+    (word, mode, expectedAccount = accountKey) => undoGrade(word, mode, expectedAccount),
+    [accountKey],
+  );
+  const suspend = useCallback((word, on = true) => setSuspended(word, on), []);
+  const editDef = useCallback((word, text) => editDefinition(word, text), []);
   const remove = useCallback((word) => removeWord(word), []);
   const reset = useCallback((word) => resetCard(word), []);
   const markProductive = useCallback((word, on) => setProductive(word, on), []);
@@ -110,8 +125,8 @@ export function useVocabBook() {
   }, [tick]);
 
   return {
-    cards: activeCards(cards), stats, statsByMode, limits, setLimits, ready: ready && accountKey === getVocabAccountKey(),
+    cards: activeCards(cards), stats, statsByMode, forecast, limits, setLimits, ready: ready && accountKey === getVocabAccountKey(),
     isLoggedIn, accountKey, storageStatus, refresh,
-    makeQueue, grade, remove, reset, setReviewMode, setProductive: markProductive, schedule,
+    makeQueue, grade, undo, suspend, editDef, remove, reset, setReviewMode, setProductive: markProductive, schedule,
   };
 }

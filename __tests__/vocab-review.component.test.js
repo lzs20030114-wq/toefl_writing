@@ -113,6 +113,7 @@ test("拼写失败后可改为只需认得；短队列不提前回插，改动�
 
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
+  fireEvent.click(screen.getByRole("button", { name: "更多操作" }));
   const toggle = screen.getByRole("switch", { name: "approximately需要会写" });
   expect(toggle).toHaveAttribute("aria-checked", "true");
   fireEvent.click(toggle);
@@ -125,12 +126,13 @@ test("拼写失败后可改为只需认得；短队列不提前回插，改动�
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
   expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
   expect(screen.getByText("这一轮复习完成")).toBeInTheDocument();
-  expect(screen.getByText(/学习步到期后会再次出现在单词本/)).toBeInTheDocument();
+  expect(screen.getByText(/它们已排进学习步，到时间会自动回到复习里/)).toBeInTheDocument();
 });
 
 test("认词卡可改回要会写，点开关不会顺带翻面", () => {
   const onSetProductive = jest.fn((word, on) => ({ ...card, productive: on }));
   render(<VocabReview initialQueue={[{ ...card, productive: false }]} onGrade={jest.fn()} onSetProductive={onSetProductive} onExit={jest.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: "更多操作" }));
   fireEvent.click(screen.getByRole("switch", { name: "approximately需要会写" }));
   expect(onSetProductive).toHaveBeenCalledWith(card.word, true);
   expect(screen.getByRole("switch", { name: "approximately需要会写" })).toHaveAttribute("aria-checked", "true");
