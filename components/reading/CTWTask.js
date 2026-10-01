@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, READING_FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
+import { WordLookupLayer } from "./WordLookupLayer";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
@@ -102,6 +103,21 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return userFull === expected;
   }).length : 0;
 
+  function renderReviewPassage() {
+    let position = 0;
+    const byPosition = new Map(item.blanks.map((blank, i) => [blank.position, { blank, i }]));
+    return item.passage.split(/(?<=[.!?])\s+/).map((sentence, si) => (
+      <span key={si} data-sentence-index={si}>
+        {sentence.split(/\s+/).map((word, wi) => {
+          const entry = byPosition.get(position++);
+          const isCorrect = entry && (entry.blank.displayed_fragment + answers[entry.i]).toLowerCase().replace(/[^a-z]/g, "") === entry.blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
+          return <span key={wi} style={entry ? { fontWeight: 700, color: isCorrect ? "#059669" : "#DC2626" } : undefined}>{wi > 0 ? " " : ""}{word}</span>;
+        })}
+        {" "}
+      </span>
+    ));
+  }
+
   // Build display text with inline inputs
   function renderPassage() {
     const sentences = item.passage.split(/(?<=[.!?])\s+/);
@@ -153,6 +169,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 {"_".repeat(missingLen)}
               </span>
               <input
+                data-no-dict
                 ref={el => inputRefs.current[bi] = el}
                 type="text"
                 value={answers[bi]}
@@ -225,9 +242,18 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
 
         {/* Passage with blanks */}
         <SurfaceCard style={{ padding: "24px 28px", marginBottom: 20, lineHeight: 2.2 }}>
-          <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>
-            {renderPassage()}
-          </div>
+          {submitted ? (
+            <WordLookupLayer passage={item.passage} source="reading" style={{ minWidth: 0, fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>
+              {renderReviewPassage()}
+            </WordLookupLayer>
+          ) : (
+            <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>{renderPassage()}</div>
+          )}
+          {submitted && item.blanks.map((blank, i) => {
+            const fullWord = blank.displayed_fragment + answers[i];
+            if (fullWord.toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")) return null;
+            return <div key={i} data-no-dict style={{ fontSize: 12, color: "#DC2626", lineHeight: 1.6, marginTop: 6 }}>第 {i + 1} 空：你的答案 {fullWord} → 正确答案 {blank.original_word}</div>;
+          })}
         </SurfaceCard>
 
         {/* Submit / Result */}

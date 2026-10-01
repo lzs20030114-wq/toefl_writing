@@ -3,12 +3,55 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
+import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
+import { WordLookupLayer } from "../reading/WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
+import { normalizeSentenceTimings } from "../../lib/listening/sentenceTimings";
 import { useListeningAiExplain, ListeningAiExplainBlock } from "./useListeningAiExplain";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const OPTION_KEYS = ["A", "B", "C", "D"];
+
+// 原句与题目分开查词：只有实际录音原句才附带听力语境音频。
+function LCRSpeakerResult({ item }) {
+  const playerRef = useRef(null);
+  const pinRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const timings = item.audio_url ? normalizeSentenceTimings(item.sentence_timings) : null;
+  const onPick = useCallback((i, sentence) => {
+    if (playerRef.current?.playRange(sentence.start, sentence.end)) {
+      pinRef.current = { index: i, start: sentence.start, end: sentence.end };
+      setActiveIndex(i);
+    }
+  }, []);
+  const onTime = useCallback((time) => {
+    const pinned = pinnedSentenceIndex(pinRef.current, time);
+    if (pinned === -1) pinRef.current = null;
+    const i = pinned !== -1 ? pinned : activeSentenceIndex(timings, time);
+    setActiveIndex((prev) => i === -1 ? prev : i);
+  }, [timings]);
+  const onPlaySentence = useCallback((i) => {
+    const sentence = sentenceAt(timings, i);
+    if (sentence) onPick(i, sentence);
+  }, [timings, onPick]);
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <WordLookupLayer passage={item.speaker} source="listening" onPlaySentence={onPlaySentence}
+        listeningAudio={{ audioUrl: item.audio_url, timings }} style={{
+          padding: "10px 14px", borderRadius: 8,
+          background: ACCENT.soft, border: "1px solid #E9D5FF",
+          fontSize: 13, color: "#5B21B6", lineHeight: 1.6, fontStyle: "italic",
+        }}>
+        <SentenceTranscript timings={timings} transcript={item.speaker} activeIndex={activeIndex} onPick={onPick} />
+      </WordLookupLayer>
+      <div data-no-dict style={{ marginTop: 8 }}>
+        <AudioPlayer ref={playerRef} compact src={item.audio_url || null} text={item.speaker} isPractice onTime={onTime} />
+      </div>
+    </div>
+  );
+}
 
 /**
  * LCR Task — Listen and Choose a Response
@@ -270,24 +313,9 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                   {isOpen && reviewItem && (
                     <div style={{ borderTop: `1px solid ${C.bdrSubtle}`, padding: "16px 18px", background: C.bg }}>
                       {/* Speaker text + replay audio */}
-                      <div style={{ marginBottom: 14 }}>
-                        <div style={{
-                          padding: "10px 14px", borderRadius: 8,
-                          background: ACCENT.soft, border: `1px solid #E9D5FF`,
-                          fontSize: 13, color: "#5B21B6", lineHeight: 1.6, fontStyle: "italic",
-                        }}>
-                          "{reviewItem.speaker}"
-                        </div>
-                        <div style={{ marginTop: 8 }}>
-                          <AudioPlayer
-                            compact
-                            src={reviewItem.audio_url || null}
-                            text={reviewItem.speaker}
-                            isPractice
-                          />
-                        </div>
-                      </div>
+                      <LCRSpeakerResult key={reviewItem.id || reviewIndex} item={reviewItem} />
 
+                      <WordLookupLayer passage={questionLookupContext(reviewItem.speaker, [reviewItem])} source="listening">
                       {/* All 4 options with correct/wrong highlighting */}
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                         {OPTION_KEYS.map(key => {
@@ -308,7 +336,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                               border: `1.5px solid ${border}`, background: bg,
                               fontSize: 14, color, lineHeight: 1.5,
                             }}>
-                              <div style={{
+                              <div data-no-dict style={{
                                 width: 26, height: 26, borderRadius: 6, flexShrink: 0,
                                 background: isCorrectOpt ? "#059669" : isWrongPick ? "#DC2626" : "#F3F4F6",
                                 color: isCorrectOpt || isWrongPick ? "#fff" : C.t2,
@@ -317,7 +345,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                               }}>
                                 {isCorrectOpt ? "\u2713" : isWrongPick ? "\u2717" : key}
                               </div>
-                              <span style={{ fontWeight: isCorrectOpt || isWrongPick ? 600 : 400 }}>{text}</span>
+                              <span data-sentence-index={`option-${key}`} style={{ fontWeight: isCorrectOpt || isWrongPick ? 600 : 400 }}>{text}</span>
                             </div>
                           );
                         })}
@@ -332,11 +360,13 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                           fontSize: 13, color: reviewResult.isCorrect ? "#166534" : "#9A3412",
                           lineHeight: 1.6,
                         }}>
-                          <strong>{reviewResult.isCorrect ? "Correct!" : "Explanation:"}</strong> {reviewItem.explanation}
+                          <strong data-no-dict>{reviewResult.isCorrect ? "Correct!" : "Explanation:"} </strong><span data-sentence-index="explanation">{reviewItem.explanation}</span>
                         </div>
                       )}
+                      </WordLookupLayer>
                       {/* AI 讲解：答对和答错的题均可查看。应答题走语用那支（整道题只有说话人一句话，
                           没有「原文定位」可讲），块独立于题库自带的 explanation 渲染。 */}
+                      <div data-no-dict>
                       <ListeningAiExplainBlock
                         includeCorrect
                         explainKey={`${reviewItem.id || "lcr"}-${reviewIndex}`}
@@ -353,6 +383,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
                         }}
                         {...listeningAi}
                       />
+                      </div>
                     </div>
                   )}
                 </SurfaceCard>

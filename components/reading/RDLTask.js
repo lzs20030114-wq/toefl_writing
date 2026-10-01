@@ -15,7 +15,15 @@ import {
   sentenceSelectionLayout,
   sentenceSelectionSegments,
 } from "../../lib/reading/sentenceSelection";
+import { WordLookupLayer } from "./WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
+
+function ReviewLookup({ enabled, passage, children, style }) {
+  return enabled
+    ? <WordLookupLayer passage={passage} source="reading" style={style}>{children}</WordLookupLayer>
+    : <div style={style}>{children}</div>;
+}
 
 const MCQ_KEYS = ["A", "B", "C", "D"];
 
@@ -77,6 +85,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
   const questions = item.questions || [];
   const question = questions[currentQ];
+  const lookupContext = questionLookupContext(item.text || item.passage, [question]);
   // 插入句题：题干拆成「指令 / 待插入句 / 提问」三段（lib/reading/insertSentence.js），拆不出照旧整段。
   const insertParts = insertStemParts(question);
   // Vocab-in-context: highlight the asked word in the passage (real-exam behavior).
@@ -264,6 +273,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 key={key}
                 className="tp-ss-sentence"
                 data-ss-key={key}
+                data-sentence-index={submitted ? `sentence-${key}` : undefined}
                 data-ss-state={state}
                 data-no-dict={interactive ? "" : undefined}
                 role={interactive ? "button" : undefined}
@@ -400,7 +410,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 )}
                 {forceText && <style>{SENTENCE_SELECTION_CSS}</style>}
                 {/* Passage */}
-                <div style={{ fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
+                <ReviewLookup enabled={submitted} passage={item.text || item.passage} style={{ minWidth: 0, fontSize: 15, color: C.t1, lineHeight: 1.9, whiteSpace: "pre-wrap", fontFamily: READING_FONT }}>
                   {selectionLayout
                     ? renderSelectionPassage()
                     : vocabWord
@@ -410,7 +420,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                             : <span key={i}>{seg.text}</span>
                         )
                       : item.text}
-                </div>
+                </ReviewLookup>
                 {materialImage && !forceText && (
                   <button
                     onClick={() => setShowMaterialImage(true)}
@@ -473,7 +483,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             </div>
 
             {/* Current question */}
-            <div style={{ flex: 1 }}>
+            <ReviewLookup enabled={submitted} passage={lookupContext} style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 13, color: C.t3, marginBottom: 8 }}>
                 第 {currentQ + 1} 题 / 共 {questions.length} 题
                 {questionTypeLabel(question.question_type) && (
@@ -481,9 +491,9 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                 )}
               </div>
               {insertParts ? (
-                <InsertSentenceStem parts={insertParts} accent={accent.color} soft={accent.soft} style={{ marginBottom: 18 }} />
+                <div data-sentence-index="insert-stem"><InsertSentenceStem parts={insertParts} accent={accent.color} soft={accent.soft} style={{ marginBottom: 18 }} /></div>
               ) : (
-                <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
+                <div data-sentence-index="stem" style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 18, lineHeight: 1.5, fontFamily: READING_FONT }}>
                   {question.stem}
                 </div>
               )}
@@ -532,11 +542,11 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                     bg = accent.soft; border = accent.color; color = accent.color;
                   }
 
+                  const Option = submitted ? "div" : "button";
                   return (
-                    <button
+                    <Option
                       key={key}
-                      onClick={() => handleSelect(key)}
-                      disabled={submitted}
+                      onClick={submitted ? undefined : () => handleSelect(key)}
                       style={{
                         display: "flex", alignItems: "center", gap: 12,
                         padding: "11px 14px", borderRadius: 8,
@@ -557,8 +567,8 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                         {isCorrectOption && <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>✓</span>}
                         {isWrongSelected && <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>✗</span>}
                       </span>
-                      <span style={{ flex: 1 }}>{question.options[key]}</span>
-                    </button>
+                      <span style={{ flex: 1, minWidth: 0 }} data-sentence-index={`option-${key}`}>{question.options[key]}</span>
+                    </Option>
                   );
                 })}
               </div>
@@ -576,16 +586,16 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                   </div>
                   {!results[currentQ].isCorrect && (
                     <div style={{ fontSize: 13, color: "#991B1B", lineHeight: 1.6, marginBottom: 6 }}>
-                      <span style={{ fontWeight: 700 }}>你选的：</span>
-                      <span style={{ fontFamily: READING_FONT }}>{selectedSentence || "未作答"}</span>
+                      <span data-no-dict style={{ fontWeight: 700 }}>你选的：</span>
+                      <span data-sentence-index="selected" style={{ fontFamily: READING_FONT }}>{selectedSentence || "未作答"}</span>
                     </div>
                   )}
                   <div style={{ fontSize: 13, color: "#065F46", lineHeight: 1.6 }}>
-                    <span style={{ fontWeight: 700 }}>正确句：</span>
-                    <span style={{ fontFamily: READING_FONT }}>{correctSentence}</span>
+                    <span data-no-dict style={{ fontWeight: 700 }}>正确句：</span>
+                    <span data-sentence-index="correct" style={{ fontFamily: READING_FONT }}>{correctSentence}</span>
                   </div>
                   {question.explanation && (
-                    <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5, marginTop: 6 }}>{question.explanation}</div>
+                    <div data-sentence-index="explanation" style={{ fontSize: 12, color: C.t2, lineHeight: 1.5, marginTop: 6 }}>{question.explanation}</div>
                   )}
                 </div>
               )}
@@ -600,14 +610,14 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                   <div style={{ fontSize: 12, fontWeight: 700, color: results[currentQ].isCorrect ? "#065F46" : "#991B1B", marginBottom: 3 }}>
                     {results[currentQ].isCorrect ? "回答正确" : `回答错误 — 正确答案: ${question.correct_answer}`}
                   </div>
-                  <div style={{ fontSize: 12, color: C.t2, lineHeight: 1.5 }}>{question.explanation}</div>
+                  <div data-sentence-index="explanation" style={{ fontSize: 12, color: C.t2, lineHeight: 1.5 }}>{question.explanation}</div>
                 </div>
               )}
 
               {/* AI 讲解：交卷后答对和答错的题均可查看。题库自带的 explanation 可能缺失，
                   这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
               {submitted && (
-                <ReadingAiExplainBlock
+                <div data-no-dict><ReadingAiExplainBlock
                   includeCorrect
                   explainKey={`${item.id || "task"}-q${currentQ}`}
                   detail={{
@@ -621,9 +631,9 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                     isCorrect: results[currentQ].isCorrect,
                   }}
                   {...readingAi}
-                />
+                /></div>
               )}
-            </div>
+            </ReviewLookup>
 
             {/* Navigation + Submit — pinned to the bottom of the question column */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 20, paddingTop: 16, borderTop: `1px solid ${C.bdrSubtle}` }}>

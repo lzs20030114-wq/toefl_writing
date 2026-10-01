@@ -5,6 +5,7 @@ import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
 import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
 import { WordLookupLayer } from "../reading/WordLookupLayer";
+import { questionLookupContext } from "../../lib/dict/core";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { listeningSecondsForType, formatAnswerTime } from "../../lib/listeningTiming";
@@ -289,12 +290,13 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
             </div>
           )}
 
+          <WordLookupLayer passage={questionLookupContext(explainContext, questions)} source="listening">
           {questions.map((q, i) => {
             const r = results[i];
             return (
               <div key={i} style={{ marginBottom: 20, padding: "16px", background: r?.isCorrect ? "#F0FDF4" : "#FEF2F2", borderRadius: 10, border: `1px solid ${r?.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: C.t1, marginBottom: 8 }}>
-                  Q{i + 1}: {q.stem}
+                  <span data-no-dict>Q{i + 1}: </span><span data-sentence-index={`question-${i}`}>{q.stem}</span>
                 </div>
                 {KEYS.map(k => {
                   const isCorrect = k === q.answer;
@@ -307,8 +309,8 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
 
                   return (
                     <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", marginBottom: 4, background: bg, border: `1px solid ${border}`, borderRadius: 6, fontSize: 13, color }}>
-                      <span style={{ fontWeight: 700, minWidth: 20 }}>{k}.</span>
-                      <span>{q.options[k]}</span>
+                      <span data-no-dict style={{ fontWeight: 700, minWidth: 20 }}>{k}.</span>
+                      <span data-sentence-index={`option-${i}-${k}`}>{q.options[k]}</span>
                       {isCorrect && <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700 }}>✓</span>}
                       {isSelected && !isCorrect && <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700 }}>✗</span>}
                     </div>
@@ -316,12 +318,13 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
                 })}
                 {q.explanation && (
                   <div style={{ marginTop: 8, fontSize: 12, color: C.t2, lineHeight: 1.5, padding: "8px 10px", background: "#FFFBEB", borderRadius: 6, border: "1px solid #FDE68A" }}>
-                    <strong>Explanation:</strong> {q.explanation}
+                    <strong data-no-dict>Explanation: </strong><span data-sentence-index={`explanation-${i}`}>{q.explanation}</span>
                   </div>
                 )}
                 {/* AI 讲解：答对和答错的题均可查看。题库自带的 explanation 可能缺失，
                     这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
                 {r && (
+                  <div data-no-dict>
                   <ListeningAiExplainBlock
                     includeCorrect
                     explainKey={`${item.id || "task"}-q${i}`}
@@ -337,10 +340,12 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
                     }}
                     {...listeningAi}
                   />
+                  </div>
                 )}
               </div>
             );
           })}
+          </WordLookupLayer>
 
           {/* 成绩在交卷那一刻就已经回调保存了，这里两颗按钮都只管跳转。
               旧版把保存挂在「完成」上，而调用方的 onComplete 只存不跳 —— 练习模式点了没反应。 */}
