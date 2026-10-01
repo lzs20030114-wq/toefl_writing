@@ -3,10 +3,11 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAtOffsets, splitSenses } from "../../lib/dict/core";
-import { getSavedTier } from "../../lib/AuthContext";
+import { CONTEXT_SENSE_SYSTEM, parseContextSense, usableContextSense } from "../../lib/dict/aiSense";
+import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
-import { getCard, saveWord, removeWord, addSentence, chooseSense } from "../../lib/vocab/vocabStore";
-import { MAX_CONTEXTS } from "../../lib/vocab/book";
+import { getCard, saveWord, removeWord, addSentence, chooseSense, adoptContextSense, getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { MAX_CONTEXTS, definitionForContext } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine } from "../shared/DictSenses";
 
@@ -20,11 +21,6 @@ const POP_W = 300;
 const AI_CACHE_KEY = "dict-ai-explain-cache";
 const MAX_AI_CACHE = 120;
 
-const SYSTEM =
-  "你是一位 TOEFL 阅读辅导老师。学生在复盘文章时查了一个词，请用中文简短说明（2-4 句）：" +
-  "1）这个词在这一句里是哪个意思（词典可能列了多个义项，指出此处用的是哪个）；" +
-  "2）如果它在学术阅读里有常见搭配、词根线索或易混词，点一句。" +
-  "不要翻译整句，不要罗列所有义项，不要空话。";
 
 const WORD_CHAR = /[A-Za-z0-9'’‐-]/;
 
@@ -104,16 +100,17 @@ function sentenceFromRange(root, range) {
 
 function loadAiCache() {
   try {
-    return JSON.parse(localStorage.getItem(AI_CACHE_KEY) || "{}");
+    const cache = JSON.parse(localStorage.getItem(AI_CACHE_KEY) || "{}");
+    return cache && typeof cache === "object" && !Array.isArray(cache) ? cache : {};
   } catch {
     return {};
   }
 }
 
-function saveAiCache(key, text) {
+function saveAiCache(key, value) {
   try {
     const cache = loadAiCache();
-    cache[key] = text;
+    cache[key] = value;
     const keys = Object.keys(cache);
     if (keys.length > MAX_AI_CACHE) {
       keys.slice(0, keys.length - MAX_AI_CACHE).forEach((k) => delete cache[k]);
@@ -133,9 +130,13 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const rootRef = useRef(null);
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
-  const wordRef = useRef(null); // 弹窗当前查的词；AI 请求回来时据此判断结果是否已过期
+  const identityRef = useRef(null); // 原句、账户与每次打开共同限定异步响应。
+  const openSequence = useRef(0);
+  const aiSequence = useRef(0);
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
-  const [ai, setAi] = useState(null); // { loading, text, error }
+  const [ai, setAi] = useState(null); // { loading, text, sense, error }
+  const [senseEdit, setSenseEdit] = useState(null);
+  const [senseFeedback, setSenseFeedback] = useState(null);
   // 当前这个词在单词本里的那张卡（没收藏就是 null）。存整张卡而不是一个布尔，
   // 是因为义项选中态、「这句在不在卡上」都要读卡上的字段。
   const [card, setCard] = useState(null);
@@ -146,7 +147,10 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const isPro = tier === "legacy" || tier === "pro";
 
   const close = useCallback(() => {
-    wordRef.current = null;
+    identityRef.current = null;
+    aiSequence.current += 1;
+    setSenseEdit(null);
+    setSenseFeedback(null);
     setPop(null);
     setAi(null);
     setCard(null);
@@ -166,8 +170,12 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     if (!word || !/[a-z]/.test(word)) return;
     // 记住这个词的 Range：页面滚动时据此重算位置，弹窗才跟得住词。
     rangeRef.current = range;
-    wordRef.current = word;
+    const identity = { id: ++openSequence.current, account: getVocabAccountKey(), word };
+    identityRef.current = identity;
+    aiSequence.current += 1;
     setAi(null);
+    setSenseEdit(null);
+    setSenseFeedback(null);
     const existing = getCard(word);
     setCard(existing);
     setReviewMode(existing?.reviewMode || (source === "listening" ? "listening" : "reading"));
@@ -175,6 +183,8 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     const sentenceText = sentenceEl?.textContent?.trim() || sentenceFromRange(rootRef.current, range);
     setPop({
       word,
+      identityId: identity.id,
+      account: identity.account,
       rect: range.getBoundingClientRect(),
       entry: null,
       loading: true,
@@ -185,8 +195,9 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         || (!sentenceEl && !!range.startContainer?.parentElement?.closest?.("[data-sentence-index]"))),
     });
     const entry = await lookupWord(word);
+    if (identityRef.current !== identity || getVocabAccountKey() !== identity.account) return;
     setPop((prev) =>
-      prev && prev.word === word
+      prev && prev.identityId === identity.id
         ? { ...prev, entry, loading: false, notFound: !entry }
         : prev
     );
@@ -273,40 +284,6 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     };
   }, [isOpen, close]);
 
-  const askAi = useCallback(async () => {
-    if (!pop) return;
-    const word = pop.word;
-    const sentence = pop.sentenceText || pop.word;
-    const key = `${pop.word}|||${sentence.slice(0, 80)}`;
-    const cached = loadAiCache()[key];
-    if (cached) {
-      setAi({ loading: false, text: cached, error: null });
-      return;
-    }
-    setAi({ loading: true, text: null, error: null });
-    try {
-      const message =
-        `句子：${sentence}\n` +
-        `学生查的词：${pop.word}\n` +
-        (pop.entry && pop.entry.t
-          ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}`
-          : "词典未收录这个词。");
-      const raw = await callAI(SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
-      if (wordRef.current !== word) return; // 等的时候换了词或关了弹窗，别把旧词的讲解贴到新词上
-      const text = String(raw || "").trim();
-      if (!text) {
-        // 空正文不缓存、也别悄悄退回按钮——得让用户知道这次没成功
-        setAi({ loading: false, text: null, error: "AI 这次没返回内容，再点一次试试" });
-        return;
-      }
-      saveAiCache(key, text);
-      setAi({ loading: false, text, error: null });
-    } catch (e) {
-      if (wordRef.current !== word) return;
-      setAi({ loading: false, text: null, error: mapAiHelperError(e) });
-    }
-  }, [pop]);
-
   // 词典命中的原形才是该进单词本的那个词：学生查 studies，收藏的应该是 study。
   const saveWordForm = (pop && pop.entry && pop.entry.word) || (pop && pop.word) || "";
 
@@ -327,19 +304,127 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     && Number.isFinite(timing.start) && Number.isFinite(timing.end) && timing.end > timing.start
     ? { audioUrl: listeningAudio.audioUrl, start: timing.start, end: timing.end, text: timing.text.trim() }
     : null, [listeningAudio?.audioUrl, timing]);
-  const curSentence = popWord && !pop?.crossSentence ? (listeningContext?.text || pop?.sentenceText || "") : "";
+  const curSentence = popWord && !pop?.crossSentence
+    ? (listeningContext?.text || pop?.sentenceText || "").trim() : "";
+  const canBindSense = !!curSentence && curSentence !== popWord
+    && curSentence.toLowerCase().includes(popWord.toLowerCase())
+    && (curSentence.match(/[A-Za-z]+(?:['’‐-][A-Za-z]+)*/g) || []).length > 1;
+  const candidateUsed = !!ai?.sense && !!card && !!curSentence
+    && definitionForContext(card, curSentence) === ai.sense
+    && card.contextSenses?.some((item) => item.sentence === curSentence);
+
+
+  // 登录状态可在弹窗打开期间改变：关闭旧账户弹窗，也让在途响应失效。
+  useEffect(() => {
+    const onAccount = () => {
+      if (identityRef.current && identityRef.current.account !== getVocabAccountKey()) close();
+    };
+    window.addEventListener(AUTH_CHANGED_EVENT, onAccount);
+    window.addEventListener("storage", onAccount);
+    return () => {
+      window.removeEventListener(AUTH_CHANGED_EVENT, onAccount);
+      window.removeEventListener("storage", onAccount);
+    };
+  }, [close]);
+
+  const canAct = useCallback(() => {
+    const identity = identityRef.current;
+    if (!identity || identity.id !== pop?.identityId || identity.account !== getVocabAccountKey()) {
+      close();
+      return false;
+    }
+    return true;
+  }, [pop?.identityId, close]);
+
+  const askAi = useCallback(async (refresh = false) => {
+    if (!pop || !isPro || !canAct()) return;
+    const identity = identityRef.current;
+    const request = ++aiSequence.current;
+    const sentence = curSentence || pop.word;
+    const key = `v2:${JSON.stringify([identity.account, pop.word, sentence.replace(/\s+/g, " ").trim()])}`;
+    const legacyKey = `${pop.word}|||${sentence.slice(0, 80)}`;
+    const current = () => identityRef.current === identity && request === aiSequence.current
+      && getVocabAccountKey() === identity.account;
+    setSenseEdit(null);
+    setSenseFeedback(null);
+    const cache = loadAiCache();
+    const cached = !refresh && (cache[key] || cache[legacyKey]);
+    if (cached) {
+      const result = parseContextSense(cached);
+      // 旧键只记前80字；只沿用讲解，不把它的短义项绑定到可能不同的长句。
+      if (!cache[key]) result.sense = "";
+      if (result.text) {
+        setAi({ loading: false, ...result, error: null });
+        return;
+      }
+    }
+    setAi({ loading: true, text: null, sense: "", error: null });
+    try {
+      const message = `句子：${sentence}\n学生查的词：${pop.word}\n`
+        + (pop.entry?.t ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}` : "词典未收录这个词。");
+      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      if (!current()) return;
+      const result = parseContextSense(raw);
+      if (!result.text) {
+        setAi({ loading: false, text: null, sense: "", error: "AI 这次没返回内容，再点一次试试" });
+        return;
+      }
+      saveAiCache(key, result);
+      setAi({ loading: false, ...result, error: null });
+    } catch (e) {
+      if (!current()) return;
+      setAi({ loading: false, text: null, sense: "", error: mapAiHelperError(e) });
+    }
+  }, [pop, curSentence, isPro, canAct]);
+
+  const adoptSense = useCallback((definition) => {
+    if (!pop || !canAct()) return;
+    if (!canBindSense || pop.crossSentence) {
+      setSenseFeedback({ error: true, text: "请在原文语境中选词后再保存释义" });
+      return;
+    }
+    if (!usableContextSense(definition)) {
+      setSenseFeedback({ error: true, text: "请输入可用于复习的短释义，最多300字" });
+      return;
+    }
+    if (definitionForContext(card, curSentence) === definition.trim()
+      && card?.contextSenses?.some((item) => item.sentence === curSentence)) {
+      setAi((prev) => prev ? { ...prev, sense: definition.trim() } : prev);
+      setSenseEdit(null);
+      setSenseFeedback(null);
+      return;
+    }
+    try {
+      const next = adoptContextSense({
+        word: saveWordForm, display: saveWordForm, phonetic: pop.entry?.p || "",
+        defFull: pop.entry?.t || "", tag: pop.entry?.g || "", source, reviewMode,
+        ...(listeningContext ? { listeningContext } : {}),
+      }, definition.trim(), curSentence, new Date(), pop.account);
+      if (!next) {
+        setSenseFeedback({ error: true, text: "没有保存成功，请重新打开这个词后再试" });
+        return;
+      }
+      setCard(next);
+      setAi((prev) => prev ? { ...prev, sense: definition.trim() } : prev);
+      setSenseEdit(null);
+      setSenseFeedback({ error: false, text: "✓ 已用于这句的复习" });
+    } catch (error) {
+      setSenseFeedback({ error: true, text: error.message || "没有保存成功，请稍后再试" });
+    }
+  }, [pop, canAct, curSentence, canBindSense, saveWordForm, source, reviewMode, listeningContext, card]);
 
   const changeReviewMode = useCallback((mode) => {
+    if (!canAct()) return;
     setReviewMode(mode);
     if (!card) return;
     const next = saveWord({ ...card, reviewMode: mode, ...(listeningContext ? { listeningContext } : {}) });
     if (next) setCard(next);
-  }, [card, listeningContext]);
+  }, [card, listeningContext, canAct]);
 
   /** 收藏这个词。def 传空就用整条词典释义（用户没点义项时的老行为）。 */
   const saveCurrent = useCallback(
     (def) => {
-      if (!pop || !saveWordForm) return null;
+      if (!pop || !saveWordForm || !canAct()) return null;
       const full = (pop.entry && pop.entry.t) || "";
       const next = saveWord({
         word: saveWordForm,
@@ -358,7 +443,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       setCard(next || getCard(saveWordForm));
       return next;
     },
-    [pop, saveWordForm, curSentence, source, reviewMode, listeningContext],
+    [pop, saveWordForm, curSentence, source, reviewMode, listeningContext, canAct],
   );
 
   const toggleSave = useCallback(() => {
@@ -371,20 +456,26 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
    */
   const pickSense = useCallback(
     (pos, sense) => {
-      if (!pop || !saveWordForm) return;
+      if (!pop || !saveWordForm || !canAct()) return;
       const chosen = `${pos} ${sense}`.trim();
       if (!chosen) return;
-      if (saved) {
-        const next = chooseSense(saveWordForm, chosen, (pop.entry && pop.entry.t) || "");
-        if (next) {
-          const updated = saveWord({ ...next, reviewMode, ...(listeningContext ? { listeningContext } : {}) });
-          setCard(updated || next);
+      setSenseFeedback(null);
+      setSenseEdit(null);
+      try {
+        if (saved) {
+          const next = chooseSense(saveWordForm, chosen, (pop.entry && pop.entry.t) || "", new Date(), curSentence || null);
+          if (next) {
+            const updated = saveWord({ ...next, reviewMode, ...(listeningContext ? { listeningContext } : {}) });
+            setCard(updated || next);
+          }
+          return;
         }
-        return;
+        saveCurrent(chosen);
+      } catch (error) {
+        setSenseFeedback({ error: true, text: error.message || "没有保存成功，请稍后再试" });
       }
-      saveCurrent(chosen);
     },
-    [pop, saveWordForm, saved, saveCurrent, reviewMode, listeningContext],
+    [pop, saveWordForm, saved, saveCurrent, reviewMode, listeningContext, canAct, curSentence],
   );
 
   const pool = (card && Array.isArray(card.sentences) ? card.sentences : []);
@@ -600,7 +691,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
                   )}
                   {group.senses.map((sense) => {
                     const chosen = `${group.pos} ${sense}`.trim();
-                    const on = !!card && card.def === chosen;
+                    const on = !!card && definitionForContext(card, curSentence) === chosen;
                     return (
                       <button
                         key={sense}
@@ -743,12 +834,42 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
                     whiteSpace: "pre-wrap",
                   }}
                 >
-                  {ai.text}
+                  <div>{ai.text}</div>
+                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid #bae6fd" }}>
+                    <div style={{ fontWeight: 700 }}>这句里的意思：{ai.sense || "可从讲解中填写短释义"}</div>
+                    {senseEdit ? (
+                      <div style={{ marginTop: 6 }}>
+                        <textarea aria-label="这句的短释义" value={senseEdit.value}
+                          onChange={(event) => setSenseEdit((prev) => prev ? { ...prev, value: event.target.value } : prev)}
+                          rows={2} style={{ width: "100%", boxSizing: "border-box", border: "1px solid #7dd3fc", borderRadius: 6, padding: "6px 8px", font: "inherit", color: "#22322a", resize: "vertical" }} />
+                        <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                          <button type="button" onClick={() => {
+                            if (senseEdit.identityId === pop.identityId) adoptSense(senseEdit.value);
+                          }} style={{ border: "none", borderRadius: 6, background: "#0284c7", color: "#fff", padding: "4px 10px", font: "inherit", cursor: "pointer" }}>保存释义</button>
+                          <button type="button" onClick={() => { setSenseEdit(null); setSenseFeedback(null); }} style={{ border: "1px solid #bae6fd", borderRadius: 6, background: "#fff", color: "#0c4a6e", padding: "4px 10px", font: "inherit", cursor: "pointer" }}>取消</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6 }}>
+                        {ai.sense && <button type="button" onClick={() => adoptSense(ai.sense)}
+                          disabled={candidateUsed || !canBindSense || pop.crossSentence}
+                          style={{ border: "none", borderRadius: 6, background: "#0284c7", color: "#fff", padding: "4px 10px", font: "inherit", cursor: !candidateUsed && canBindSense && !pop.crossSentence ? "pointer" : "default", opacity: canBindSense && !pop.crossSentence ? 1 : 0.5 }}>{candidateUsed ? "✓ 已用于这句的复习" : "用这个意思复习"}</button>}
+                        <button type="button" onClick={() => {
+                          if (!canAct()) return;
+                          setSenseEdit({ identityId: pop.identityId, value: ai.sense || "" });
+                          setSenseFeedback(null);
+                        }} style={{ border: "1px solid #bae6fd", borderRadius: 6, background: "#fff", color: "#0c4a6e", padding: "4px 10px", font: "inherit", cursor: "pointer" }}>编辑释义</button>
+                        {!ai.sense && <button type="button" onClick={() => askAi(true)} style={{ border: "none", background: "transparent", color: "#0284c7", font: "inherit", cursor: "pointer" }}>重新分析</button>}
+                      </div>
+                    )}
+                    {card && curSentence && !sentenceOnCard && poolFull && <div style={{ marginTop: 6, fontSize: 11, color: "#64748b" }}>采用后以这句复习，其他语境保留最近3句</div>}
+                    {(!canBindSense || pop.crossSentence) && <div style={{ marginTop: 6, color: "#64748b" }}>在原文语境中选词后才能保存释义</div>}
+                  </div>
                 </div>
               ) : (
                 <>
                   <button
-                    onClick={askAi}
+                    onClick={() => askAi()}
                     disabled={ai && ai.loading}
                     style={{
                       fontSize: 12,
@@ -772,6 +893,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
               )}
             </div>
           )}
+          {senseFeedback?.error && <div role="alert" style={{ marginTop: 6, fontSize: 12, color: "#E11D48" }}>{senseFeedback.text}</div>}
         </div>,
         document.body
       )}

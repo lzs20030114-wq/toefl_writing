@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING } from "../../lib/vocab/srs";
-import { activeSentence, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
 import { hasUsableSense, parseSenses } from "../../lib/dict/core";
@@ -181,7 +181,9 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
 
   const card = queue[pos] || null;
   const extraEntry = extra && card && extra.forWord === card.word ? extra.entry : null;
-  const mainDef = card && hasUsableSense(card.def) ? card.def
+  const definitionSentence = card?.reviewMode === "listening" ? card.listeningContext?.text || "" : activeSentence(card) || "";
+  const contextDef = definitionForContext(card, definitionSentence);
+  const mainDef = hasUsableSense(contextDef) ? contextDef
     : (extraEntry && hasUsableSense(extraEntry.t) ? extraEntry.t : "");
   // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
   const context = useMemo(() => (card ? contextSentence(card) : null), [card]);
@@ -189,6 +191,8 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
   // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
   const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
+  // A user-edited meaning may include the English answer; conceal it on spelling fronts.
+  const spellingDef = card?.word ? mainDef.replace(new RegExp(`\\b${card.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b`, "gi"), "____") : mainDef;
   const productiveOn = card
     ? (productiveOverrides[card.word] ?? (card.productive !== false))
     : true;
@@ -454,7 +458,7 @@ export function VocabReview({ initialQueue, onGrade, onSetProductive, onExit, ac
           {mode === "recall" && (
             <>
               <DefLine
-                text={mainDef}
+                text={spellingDef}
                 style={{ fontSize: 17, color: C.t1, lineHeight: 1.8, fontWeight: 600 }}
               />
               {cloze && (

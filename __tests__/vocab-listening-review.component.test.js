@@ -120,3 +120,19 @@ test("暂停后停止原句，迟到的完成事件不解锁", () => {
   expect(screen.queryByRole("button", { name: "显示答案" })).not.toBeInTheDocument();
   expect(onGrade).not.toHaveBeenCalled();
 });
+
+
+test("听力语境释义绑定实际原句，正面不泄露，翻面不误用另一句首选", () => {
+  const spoken = "The bank approved the loan.";
+  const other = "The bank beside the river was quiet.";
+  const entry = { ...card, word: "bank", display: "bank", def: "河岸专用义", baseDef: "通用义", sentence: other, sentences: [spoken], contextSenses: [{ sentence: spoken, def: "银行专用义", updatedAt: "2026-10-01T10:00:00Z" }, { sentence: other, def: "河岸专用义", updatedAt: "2026-10-01T10:00:00Z" }], listeningContext: { audioUrl: "/api/audio/x.mp3", start: 0, end: 3, text: spoken } };
+  render(<ListeningVocabReview initialQueue={[entry]} onGrade={() => null} onExit={() => {}} />);
+  expect(screen.queryByText("银行专用义")).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "播放原句" }));
+  act(() => audios[0].onloadedmetadata());
+  act(() => audios[0].onplaying());
+  act(() => { audios[0].currentTime = 3; audios[0].ontimeupdate(); });
+  fireEvent.click(screen.getByRole("button", { name: "显示答案" }));
+  expect(screen.getByText("银行专用义")).toBeTruthy();
+  expect(screen.queryByText("河岸专用义")).toBeNull();
+});

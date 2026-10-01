@@ -5,6 +5,7 @@ import { RATING } from "../../lib/vocab/srs";
 import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 import { canSpeak, cancelSpeakWord, speakWord } from "../../lib/audio/speakWord";
+import { definitionForContext } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
@@ -182,7 +183,7 @@ export function ListeningVocabReview({ initialQueue, onGrade, onExit, accountKey
           <div style={{ marginTop: 24, borderTop: `1px solid ${C.bdr}`, paddingTop: 18 }}>
             <div style={{ fontSize: 25, fontWeight: 800, color: C.t1 }}>{card.display || card.word}</div>
             {card.phonetic && <div style={{ color: C.t2 }}>/{card.phonetic}/</div>}
-            <div style={{ marginTop: 8, color: C.t1 }}>{humanizeDef(card.def || "")}</div>
+            <div style={{ marginTop: 8, color: C.t1 }}>{humanizeDef(definitionForContext(card, hasSentenceAudio ? context.text : ""))}</div>
             {(context?.text || card.sentence) && <p style={{ color: C.t2, lineHeight: 1.7 }}>原句：{context?.text || card.sentence}</p>}
             <p style={{ color: C.t2, fontSize: 12 }}>翻面前已听出这个词并理解其意思，才选“听懂了”。</p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
