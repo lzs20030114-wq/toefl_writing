@@ -1,0 +1,178 @@
+{
+  "type": "readInDailyLife",
+  "generated_at": "2026-10-01T00:04:59.825Z",
+  "total_generated": 4,
+  "total_accepted": 4,
+  "acceptance_rate": 1,
+  "items": [
+    {
+      "id": "rdl_gen_36794209682-short_001",
+      "variant": "short",
+      "text": "Hi Dev,\nYour spring parking permit is ready. Stop by the Transportation Office in Baker Hall between 9:00 AM and 4:00 PM, Monday through Thursday. Bring your student ID and a $15 fee. We can't hold permits past May 9.\nThanks,\nMs. Alvarez",
+      "word_count": 43,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36794209682-short_001_q1",
+          "question_type": "detail",
+          "stem": "According to the email, what should students bring to the Transportation Office?",
+          "options": {
+            "A": "A completed application form",
+            "B": "A student identification card",
+            "C": "A printed copy of the permit confirmation",
+            "D": "A signed parking agreement form"
+          },
+          "correct_answer": "B",
+          "explanation": "The email tells students to bring their student ID, which is another way of saying a student identification card."
+        },
+        {
+          "qid": "rdl_gen_36794209682-short_001_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about permits that are not collected by May 9?",
+          "options": {
+            "A": "They will no longer be available for pickup.",
+            "B": "They will be mailed to students' homes.",
+            "C": "They will be charged an additional fee.",
+            "D": "They will be transferred to another student."
+          },
+          "correct_answer": "A",
+          "explanation": "Because the office states it cannot hold permits past May 9, students who arrive later will most likely find that their permits are no longer being kept for them."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36794209682-short_002",
+      "variant": "short",
+      "text": "Okay, the Taco Loco truck parked behind the student union is genuinely the best lunch deal on campus! Today only, from 11:30 AM to 2:00 PM, every taco is $3 — cash only, and they sell out fast. Get there before the line reaches Wells Hall!",
+      "word_count": 46,
+      "genre": "social_media",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36794209682-short_002_q1",
+          "question_type": "detail",
+          "stem": "According to the post, what is true about the taco special?",
+          "options": {
+            "A": "It runs until late in the evening.",
+            "B": "It requires payment in cash.",
+            "C": "It offers free drinks with each taco.",
+            "D": "It is available every day this week."
+          },
+          "correct_answer": "B",
+          "explanation": "The post specifies that the tacos are cash only, meaning customers must pay with cash."
+        },
+        {
+          "qid": "rdl_gen_36794209682-short_002_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about a student who arrives at 2:15 PM?",
+          "options": {
+            "A": "They will find the truck parked at Wells Hall.",
+            "B": "They will pay a higher price for their tacos.",
+            "C": "They will be able to order from a limited menu.",
+            "D": "They will likely have missed the special."
+          },
+          "correct_answer": "D",
+          "explanation": "The special ends at 2:00 PM and the post warns that the food sells out quickly, so arriving at 2:15 PM means the deal is almost certainly over."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36794209682-short_003",
+      "variant": "short",
+      "text": "Hello Tomas,\nYour Lot C parking permit has been approved. Pick it up at the Campus Safety desk in Ridley Center on Friday, March 3, after 8:30 AM. You don't need to pay there — the $25 fee is already on your student account.\nRegards,\nMr. Boyd",
+      "word_count": 47,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36794209682-short_003_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where should Tomas collect his permit?",
+          "options": {
+            "A": "At the student accounts window in Ridley Center",
+            "B": "At the Lot C entrance gate on Friday",
+            "C": "At the Campus Safety counter in Ridley Center",
+            "D": "At the parking office downtown before March 3"
+          },
+          "correct_answer": "C",
+          "explanation": "The email directs Tomas to the Campus Safety desk in Ridley Center, which is paraphrased here as the Campus Safety counter in Ridley Center."
+        },
+        {
+          "qid": "rdl_gen_36794209682-short_003_q2",
+          "question_type": "inference",
+          "stem": "What can be inferred about the $25 permit charge?",
+          "options": {
+            "A": "It has already been taken care of.",
+            "B": "It must be paid in cash at Ridley Center.",
+            "C": "It will be refunded if the permit goes unused.",
+            "D": "It covers parking in every campus lot."
+          },
+          "correct_answer": "A",
+          "explanation": "Since the fee is already posted to his student account and he is told not to pay at the desk, the payment has effectively been handled."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "medium",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    },
+    {
+      "id": "rdl_gen_36794209682-short_004",
+      "variant": "short",
+      "text": "Hi Nadia,\nJust confirming our session: Thursday at 3:00 PM in Room 112 of the Learning Commons. Please bring your essay draft, notes, and questions. Your first visit is free; later sessions cost $8 each. Try to arrive five minutes early.\nBest,\nMr. Okafor",
+      "word_count": 44,
+      "genre": "email",
+      "format_metadata": {},
+      "questions": [
+        {
+          "qid": "rdl_gen_36794209682-short_004_q1",
+          "question_type": "detail",
+          "stem": "According to the email, where will the tutoring session take place?",
+          "options": {
+            "A": "In a study room at the main library",
+            "B": "In Mr. Okafor's office downtown",
+            "C": "In the writing center on the second floor",
+            "D": "In Learning Commons Room 112"
+          },
+          "correct_answer": "D",
+          "explanation": "The email states the session is in Room 112 of the Learning Commons."
+        },
+        {
+          "qid": "rdl_gen_36794209682-short_004_q2",
+          "question_type": "vocabulary_in_context",
+          "stem": "In the email, the word \"draft\" most nearly means:",
+          "options": {
+            "A": "A final version",
+            "B": "A printed copy",
+            "C": "A preliminary version",
+            "D": "A list of sources"
+          },
+          "correct_answer": "C",
+          "explanation": "In this context, a draft is an early, preliminary version of the essay that the tutor will review."
+        }
+      ],
+      "question_count": 2,
+      "difficulty": "easy",
+      "_audit": {
+        "status": "passed",
+        "accuracy": "2/2"
+      }
+    }
+  ],
+  "rejected": []
+}
