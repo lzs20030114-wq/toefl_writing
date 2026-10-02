@@ -39,3 +39,4 @@
 | `vocab-notebook.sql` | 2026-09-13 | 已跑(用户 2026-09-13 确认) | 单词本：`vocab_cards`（划词收藏的词 + FSRS 复习进度，整卡存 JSONB）+ `vocab_review_logs`（每次复习一行）。原登记的“无公开策略”描述有误：2026-09-28 核验发现旧 SQL 含公开全放行策略，已由 `vocab-sync-hardening.sql` 修复；本文件同时修正为安全的新建表脚本。 |
 | `vocab-review-mode.sql` | 2026-09-27 | 已跑 | 用户确认执行；复习日志增加 reading/listening 模式列，旧日志默认 reading。 |
 | `vocab-sync-hardening.sql` | 2026-09-28 | 已跑(本次授权修复，经 Supabase 连接器执行并核验) | 移除两张单词本表的公开策略，撤销 PUBLIC/anon/authenticated 表与序列权限，仅保留服务端 service_role 读写。线上复查两表 RLS 开启、策略为零、客户端 CRUD 被拒、服务端 CRUD/序列权限保留；未修改用户数据。 |
+| `real-mock-exam.sql` | 2026-10-02 | 已跑 | 用户确认执行成功；真题四科模考的原子预留、永久已见和已答账本，以及路由／结束释放未见题。 |

@@ -34,6 +34,7 @@ import {
   REAL_SUBJECT_ORDER,
   REAL_SUBTYPE_META,
   REAL_SUBTYPE_ORDER,
+  REAL_ENTRY_SUBTYPE_ORDER,
   buildRealBankCoverage,
   buildRealBankEntries,
   buildRealBankSubjectStats,
@@ -157,6 +158,10 @@ function describeEntry(entry, index) {
 }
 
 function retryHref(entry) {
+  if (entry?.session?.details?.realMock) {
+    const route = { writing: "/mock-exam", reading: "/reading-exam", listening: "/listening-exam", speaking: "/speaking-exam" };
+    return `${route[entry.session.details.section] || "/?section=real-bank"}?source=real-bank`;
+  }
   const mode = String(entry?.session?.mode || "").trim();
   const qs = new URLSearchParams();
   qs.set("type", entry.subtype);
@@ -307,6 +312,7 @@ function EntryRow({ entry, index, onOpen, onDelete }) {
 function RealSessionBody({ entry, onClose }) {
   const s = entry.session;
   const sub = entry.subtype;
+  if (s.details?.realMock) return <RealMockReview session={s} onClose={onClose} />;
   // 写作（讨论 / 邮件）：与主练习记录页（ProgressView）和模考报告同一套 WritingFeedbackPanel ——
   // 左栏原文逐句批注、右栏「宏观评价与建议 / 逐句批注大纲 / 范文对比分析」三标签。
   // 评分失败（feedback 为空）的记录退回 HistoryRow，它会把作答文本和「没有评分反馈」说清楚。
@@ -341,6 +347,47 @@ function RealSessionBody({ entry, onClose }) {
   if (sub === "repeat") return <RepeatDetail session={s} />;
   if (sub === "interview") return <InterviewDetail session={s} />;
   return <div style={{ fontSize: 12, color: P.textDim }}>这条记录缺少可展示的详情。</div>;
+}
+
+function RealMockReview({ session, onClose }) {
+  const d = session.details || {};
+  const tasks = Array.isArray(d.tasks) ? d.tasks : [];
+  const seen = new Set(Array.isArray(d.seenItemIds) ? d.seenItemIds : []);
+  return <div data-testid="real-mock-review" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ fontSize: 13, color: P.textSec, lineHeight: 1.6 }}>
+      已展示 {seen.size} 个完整题组／单题；原始分 {realSessionScore(session).label}。本站 1–6 分为未经 ETS 等值的模考估分。
+    </div>
+    {tasks.map((task, index) => {
+      const type = task.taskType || task.type;
+      const itemId = task.itemId || task.id || task.itemIds?.[0] || "";
+      const sourceItem = (d.items || []).find((item) => item.id === itemId) || task.items?.[0] || {};
+      const details = { ...sourceItem, ...task, itemId, itemIds: task.itemIds || [itemId],
+        results: task.results || [], items: type === "lcr" ? [sourceItem] : task.items || [],
+        questions: task.questions || sourceItem.questions || [], blanks: task.blanks || sourceItem.blanks || [],
+        passage: task.passage || sourceItem.passage || sourceItem.text || "" };
+      const childSession = { ...session, type: type === "bs" || type === "email" || type === "discussion" ? type
+        : ["repeat", "interview"].includes(type) ? "speaking" : ["ctw", "rdl", "ap"].includes(type) ? "reading" : "listening",
+        details, correct: task.correct, total: task.total };
+      return <section key={`${type}-${itemId}-${index}`} style={{ borderTop: `1px solid ${P.border}`, paddingTop: 16 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: P.text, marginBottom: 10 }}>
+          {index + 1}. {REAL_SUBTYPE_META[type]?.short || type} {itemId && <span style={{ fontSize: 11, color: P.textDim }}>{itemId}</span>}
+          {Number.isFinite(task.score) && <span style={{ float: "right", color: P.textSec }}>{task.score}/{task.maxScore || ""}</span>}
+        </div>
+        {type === "bs" ? <HistoryRow entry={{ session: { ...childSession, details: task.meta?.details || [] }, sourceIndex: index }} isExpanded detailOnly />
+          : (type === "email" || type === "discussion") ? (
+            task.meta?.feedback ? <WritingFeedbackPanel fb={task.meta.feedback} type={type} pd={sourceItem} userText={task.meta?.response?.userText || ""} containerHeight="640px" onNext={null} onExit={onClose} />
+              : <div style={{ color: P.textSec, fontSize: 13 }}>AI 评分未完成。{task.meta?.response?.userText && <p style={{ whiteSpace: "pre-wrap" }}>{task.meta.response.userText}</p>}</div>)
+          : type === "ctw" ? <CTWDetail session={childSession} />
+          : type === "rdl" || type === "ap" ? <RDLDetail session={childSession} />
+          : type === "lcr" ? <LCRDetail session={childSession} />
+          : type === "lc" ? <LCDetail session={childSession} />
+          : type === "la" || type === "lat" ? <LADetail session={childSession} />
+          : type === "repeat" ? <RepeatDetail session={{ ...childSession, details: { items: task.items || d.repeatItems || [], total: 7, attempted: task.items?.length || 0 } }} />
+          : type === "interview" ? <InterviewDetail session={{ ...childSession, details: { items: task.items || d.interviewItems || [], total: 4, attempted: task.items?.length || 0 } }} />
+          : <div style={{ color: P.textDim }}>暂无题目快照</div>}
+      </section>;
+    })}
+  </div>;
 }
 
 function RealSessionDetail({ entry, index, onClose, onDelete }) {
@@ -423,7 +470,7 @@ export function RealBankProgressView({ onBack }) {
     () => (subjectFilter === "all" ? entries : entries.filter((e) => REAL_SUBTYPE_META[e.subtype].subject === subjectFilter)),
     [entries, subjectFilter],
   );
-  const typesPresent = useMemo(() => REAL_SUBTYPE_ORDER.filter((t) => bySubject.some((e) => e.subtype === t)), [bySubject]);
+  const typesPresent = useMemo(() => REAL_ENTRY_SUBTYPE_ORDER.filter((t) => bySubject.some((e) => e.subtype === t)), [bySubject]);
   const filtered = useMemo(
     () => (typeFilter === "all" ? bySubject : bySubject.filter((e) => e.subtype === typeFilter)),
     [bySubject, typeFilter],

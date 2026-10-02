@@ -226,7 +226,19 @@ describe("真题专区 section：四个科目折叠面板", () => {
   test("面板标题行列出该科目的题型概览（收起时也能看到里面有什么）", () => {
     render(<RealExamSectionContent {...pro} />);
     expect(header("听力").textContent).toContain("听力应答 · 听力对话 · 听力通知 · 听力讲座");
-    expect(header("听力").textContent).toContain("4 个题型");
+    expect(header("听力").textContent).toContain("5 项训练");
+  });
+
+  test("四科真题模考使用独立入口，并与普通真题卡共用 Pro 门控", () => {
+    const hrefs = ["/mock-exam", "/reading-exam", "/listening-exam", "/speaking-exam"]
+      .map((path) => `${path}?source=real-bank`);
+    const { container, rerender } = render(<RealExamSectionContent {...pro} />);
+    hrefs.forEach((href) => expect(container.querySelector(`a[href="${href}"]`)).toBeTruthy());
+    rerender(<RealExamSectionContent {...baseProps} userTier="free" isLoggedIn={true} />);
+    hrefs.forEach((href) => {
+      const link = container.querySelector(`a[href="${href}"]`);
+      expect(link.closest(".home-grid").style.pointerEvents).toBe("none");
+    });
   });
 
   test("非 Pro：四张网格全部置灰禁点（不只是默认展开的那张）", () => {

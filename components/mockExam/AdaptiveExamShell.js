@@ -9,7 +9,7 @@ import { sameOriginAudio } from "../../lib/listening/audioSrc";
 import { insertStemParts } from "../../lib/reading/insertSentence";
 import { InsertSentenceStem } from "../reading/InsertSentenceStem";
 import { apPassageText } from "../../lib/reading/passageLayout";
-import { calculateAdaptiveScore, getScoreColor, bandToCEFR } from "../../lib/mockExam/adaptiveScoring";
+import { calculateAdaptiveScore } from "../../lib/mockExam/adaptiveScoring";
 import {
   buildReadingModule1,
   routeModule2 as routeReadingM2,
@@ -28,9 +28,12 @@ import { finalizeTimedOutResults } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
+import { getSavedCode } from "../../lib/AuthContext";
+import { REAL_MOCK_TEMPLATE_VERSION, getRealMockConfig } from "../../lib/realMockExam/config";
+import { prepareRealMockExam, markRealMockSeen, routeRealMockExam, finishRealMockExam } from "../../lib/realMockExam/client";
+import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper } from "../../lib/realMockExam/adaptiveScore";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
-import { fmt } from "../../lib/utils";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 // ------ Constants ------
@@ -114,14 +117,17 @@ const LEVEL_LABELS = {
  * CTW Inline — fill-in-the-blanks within a passage.
  * Each blank shows the displayed_fragment + input for the missing letters.
  */
-function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }) {
-  const [answers, setAnswers] = useState(() => item.blanks.map(() => ""));
+function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+  const [answers, setAnswers] = useState(() => item.blanks.map((_, i) =>
+    typeof partialState?.answers?.[i] === "string" ? partialState.answers[i] : ""
+  ));
   const [submitted, setSubmitted] = useState(false);
   const inputRefs = useRef([]);
   // Mirror the live answers into a ref so the timeout collector reads the
   // latest input without a stale closure (registered once on mount).
   const answersRef = useRef(answers);
   answersRef.current = answers;
+  useEffect(() => { onProgress?.({ answers }); }, [answers, onProgress]);
 
   // Register a partial-answer collector for the module timeout. Scoring here
   // mirrors handleSubmit exactly; only userAnswer differs — an unfilled blank
@@ -291,14 +297,15 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
  * MCQ Inline — generic multiple-choice for RDL, AP, LA, LC, LAT.
  * Shows passage/text, then one question at a time with A/B/C/D buttons.
  */
-function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false }) {
+function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
   const questions = item.questions || [];
   const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
   const answerSeconds = listeningSecondsForType(taskType);
-  const [currentQ, setCurrentQ] = useState(0);
-  const [selections, setSelections] = useState(() => questions.map(() => null));
+  const [currentQ, setCurrentQ] = useState(() => Math.max(0, Math.min(questions.length - 1, Number.isInteger(partialState?.currentQ) ? partialState.currentQ : 0)));
+  const [selections, setSelections] = useState(() => questions.map((_, i) => ["A", "B", "C", "D"].includes(partialState?.selections?.[i]) ? partialState.selections[i] : null));
   const [submitted, setSubmitted] = useState(false);
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(answerSeconds);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(() => Number.isFinite(partialState?.answerTimeLeft) ? Math.max(0, Math.min(answerSeconds, partialState.answerTimeLeft)) : answerSeconds);
+  const restoredTimerRef = useRef(Number.isFinite(partialState?.answerTimeLeft));
   // Mirror live selections so the timeout collector isn't stuck on a stale closure.
   const selectionsRef = useRef(selections);
   selectionsRef.current = selections;
@@ -327,7 +334,17 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   // Listening tasks play their audio first; the answer timer must not start
   // until playback ends (real TOEFL runs the clock only while you answer, never
   // during audio). Reading tasks have no audio, so they begin answering at once.
+  // Audio restarts from this material after a refresh; answer selections and
+  // the remaining answer window survive, but playback position is not guessed.
   const [phase, setPhase] = useState(isListeningType ? "listen" : "answer");
+  const lastProgressRef = useRef(null);
+  useEffect(() => {
+    const answersKey = JSON.stringify({ currentQ, selections, phase });
+    if (answersKey !== lastProgressRef.current || answerTimeLeft % 5 === 0) {
+      lastProgressRef.current = answersKey;
+      onProgress?.({ currentQ, selections, phase, answerTimeLeft });
+    }
+  }, [currentQ, selections, phase, answerTimeLeft, onProgress]);
 
   const question = questions[currentQ];
   const insertParts = insertStemParts(question);
@@ -385,7 +402,8 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   // finished for listening tasks. Resets for each question.
   useEffect(() => {
     if (!isListeningType || submitted || phase !== "answer") return;
-    setAnswerTimeLeft(answerSeconds);
+    if (restoredTimerRef.current) restoredTimerRef.current = false;
+    else setAnswerTimeLeft(answerSeconds);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
@@ -618,11 +636,20 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
 /**
  * LCR Inline — listen and choose a response (single question per item).
  */
-function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false }) {
+function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
   const [phase, setPhase] = useState("listen");
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(() => ["A", "B", "C", "D"].includes(partialState?.selected) ? partialState.selected : null);
   const [submitted, setSubmitted] = useState(false);
-  const [answerTimeLeft, setAnswerTimeLeft] = useState(LCR_SECONDS_PER_ITEM);
+  const [answerTimeLeft, setAnswerTimeLeft] = useState(() => Number.isFinite(partialState?.answerTimeLeft) ? Math.max(0, Math.min(LCR_SECONDS_PER_ITEM, partialState.answerTimeLeft)) : LCR_SECONDS_PER_ITEM);
+  const restoredTimerRef = useRef(Number.isFinite(partialState?.answerTimeLeft));
+  const lastProgressRef = useRef(null);
+  useEffect(() => {
+    const answersKey = `${selected || ""}:${phase}`;
+    if (answersKey !== lastProgressRef.current || answerTimeLeft % 5 === 0) {
+      lastProgressRef.current = answersKey;
+      onProgress?.({ selected, phase, answerTimeLeft });
+    }
+  }, [selected, phase, answerTimeLeft, onProgress]);
   // Mirror the live selection so the timeout collector reads the latest value.
   const selectedRef = useRef(selected);
   selectedRef.current = selected;
@@ -672,7 +699,8 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
 
   useEffect(() => {
     if (phase !== "choose" || submitted) return;
-    setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
+    if (restoredTimerRef.current) restoredTimerRef.current = false;
+    else setAnswerTimeLeft(LCR_SECONDS_PER_ITEM);
     const timer = setInterval(() => {
       setAnswerTimeLeft((prev) => Math.max(0, prev - 1));
     }, 1000);
@@ -791,17 +819,17 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false }
 /**
  * Routes to the correct inline renderer based on taskType.
  */
-function AdaptiveTaskRenderer({ item, onComplete, accent, collectorRef }) {
+function AdaptiveTaskRenderer({ item, onComplete, collectorRef, partialState, onProgress }) {
   if (!item) return null;
 
   if (item.taskType === "ctw") {
-    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} />;
+    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
   }
   if (item.taskType === "lcr") {
-    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} />;
+    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
   }
   // RDL, AP, LA, LC, LAT all use MCQ
-  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} />;
+  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
 }
 
 // ------ Helper: aggregate module results ------
@@ -840,6 +868,8 @@ function buildTaskSnapshots(results) {
     return {
       taskType: item.taskType || null,
       itemId: item.id || null,
+      realMockKey: item.realMockKey || null,
+      realMockRole: item.realMockRole || null,
       topic: item.topic || item.subtopic || null,
       difficulty: item.difficulty || null,
       passage: item.passage || null,
@@ -924,9 +954,15 @@ export function AdaptiveExamShell(props) {
   );
 }
 
-function AdaptiveExamShellInner({ section = "reading", onExit }) {
+function AdaptiveExamShellInner({ section = "reading", source = "standard", onExit }) {
   const invalidSection = !SECTION_CONFIG[section];
   const config = SECTION_CONFIG[section] || SECTION_CONFIG.reading;
+  const isReal = source === "real-bank";
+  const userCode = getSavedCode();
+  const checkpointScope = useMemo(
+    () => isReal ? { source, userCode, templateVersion: REAL_MOCK_TEMPLATE_VERSION } : {},
+    [isReal, source, userCode]
+  );
 
   const [phase, setPhase] = useState("intro");
   const [m1Items, setM1Items] = useState(null);
@@ -938,6 +974,18 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
   const [finalScore, setFinalScore] = useState(null);
   const [usedIds, setUsedIds] = useState(new Set());
   const [error, setError] = useState(null);
+  const [paper, setPaper] = useState(null);
+  const [seenItemIds, setSeenItemIds] = useState([]);
+  const [currentPartial, setCurrentPartial] = useState(null);
+  const [preparing, setPreparing] = useState(false);
+  const [seenState, setSeenState] = useState({ key: null, ready: false, error: null });
+  const [seenRetry, setSeenRetry] = useState(0);
+  const [answerError, setAnswerError] = useState(null);
+  const pendingAnswerRef = useRef(null);
+  const answerBusyRef = useRef(false);
+  const finishBusyRef = useRef(false);
+  const cloudRetryRef = useRef(null);
+  const [restartAttemptId, setRestartAttemptId] = useState(null);
   // ISO date this exam was saved under — used as the session's identity so the
   // results screen deep-links into THIS exact record, not just "the latest mock"
   // (which would surface a previous exam if this save silently failed to sync).
@@ -946,7 +994,7 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
   // Resume support: load any in-progress checkpoint for this section once, so
   // the intro can offer "continue where you left off". Restored on demand via
   // handleResume (not auto-applied, so the user can also choose a fresh start).
-  const [resumed] = useState(() => loadAdaptiveCheckpoint(section));
+  const [resumed, setResumed] = useState(() => loadAdaptiveCheckpoint(section, checkpointScope));
 
   // Persistent exam audio (listening): unlocked once inside the start/resume
   // click, then reused for every clip. Null when the Provider's kill switch
@@ -988,8 +1036,27 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
       phase, m1Items, m2Items, m1Results, m2Results,
       currentItemIndex, routePath, timeLeft: timeLeftRef.current,
       usedIds: Array.from(usedIds),
-    });
-  }, [section, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds]);
+      seenItemIds: isReal ? seenItemIds : undefined,
+      currentPartial: isReal && currentPartial?.phase === phase && currentPartial?.itemId === items[currentItemIndex]?.id ? currentPartial : null,
+      paper: isReal ? paper : undefined,
+    }, checkpointScope);
+  }, [section, source, userCode, isReal, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, paper, seenItemIds, currentPartial, checkpointScope]);
+
+  // A long passage can hold the same item for many minutes. Persist the real
+  // exam clock periodically so a refresh cannot restore an old time budget.
+  useEffect(() => {
+    if (!isReal || !paper || (phase !== "module1" && phase !== "module2")) return;
+    const timer = setInterval(() => {
+      saveAdaptiveCheckpoint(section, {
+        phase, m1Items, m2Items, m1Results, m2Results,
+        currentItemIndex, routePath, timeLeft: timeLeftRef.current,
+        usedIds: Array.from(usedIds), seenItemIds,
+        currentPartial: currentPartial?.phase === phase && currentPartial?.itemId === (phase === "module1" ? m1Items : m2Items)?.[currentItemIndex]?.id ? currentPartial : null,
+        paper,
+      }, checkpointScope);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isReal, paper, phase, section, userCode, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, seenItemIds, currentPartial, checkpointScope]);
 
   // Start timer when exam begins
   useEffect(() => {
@@ -1026,18 +1093,57 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
       const existing = phase === "module1" ? m1Results : m2Results;
       const collect = partialCollectorRef.current && partialCollectorRef.current.collect;
       const finalResults = finalizeTimedOutResults(items || [], existing, collect);
-      if (phase === "module1") {
-        setM1Results(finalResults);
-        handleM1Complete(finalResults);
-      } else {
-        setM2Results(finalResults);
-        handleM2Complete(finalResults);
-      }
+      const completeTimeout = async () => {
+        // Only the item actually displayed can become answered. Later planned
+        // items stay unseen even though they count as wrong in the score.
+        if (isReal && realTaskReady && currentItem) {
+          try { await markRealMockSeen(paper, [currentItem], { answered: true }); }
+          catch (e) {
+            cloudRetryRef.current = completeTimeout;
+            setError("超时作答同步失败：" + (e?.message || "请重试"));
+            return;
+          }
+        }
+        if (phase === "module1") {
+          setM1Results(finalResults);
+          handleM1Complete(finalResults);
+        } else {
+          setM2Results(finalResults);
+          handleM2Complete(finalResults);
+        }
+      };
+      completeTimeout();
     }
   }, [timeLeft, phase]);
 
   const currentItems = phase === "module1" ? m1Items : phase === "module2" ? m2Items : null;
   const currentItem = currentItems ? currentItems[currentItemIndex] : null;
+  const partialForCurrent = isReal && currentPartial?.phase === phase && currentPartial?.itemId === currentItem?.id && currentPartial?.itemIndex === currentItemIndex
+    ? currentPartial.data : null;
+  const handlePartialProgress = useCallback((data) => {
+    if (!isReal || !currentItem || (phase !== "module1" && phase !== "module2")) return;
+    setCurrentPartial({ phase, itemId: currentItem.id, itemIndex: currentItemIndex, data });
+  }, [isReal, phase, currentItem, currentItemIndex]);
+  const seenKey = currentItem ? `${paper?.attemptId || ""}:${phase}:${currentItemIndex}:${currentItem.realMockKey || currentItem.id}` : null;
+  const realTaskReady = !isReal || (seenState.key === seenKey && seenState.ready);
+  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || (isReal && !realTaskReady) || answerBusyRef.current;
+
+  const expired = timeLeft <= 0;
+  useEffect(() => {
+    if (!isReal || !paper || !currentItem || expired || autoFinishedRef.current || (phase !== "module1" && phase !== "module2")) return;
+    let active = true;
+    setSeenState({ key: seenKey, ready: false, error: null });
+    markRealMockSeen(paper, [currentItem]).then(() => {
+      if (!active) return;
+      const doneKey = config.taskDoneKeys[currentItem.taskType];
+      if (doneKey) addDoneIds(doneKey, [currentItem.id]);
+      setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
+      setSeenState({ key: seenKey, ready: true, error: null });
+    }).catch((e) => {
+      if (active) setSeenState({ key: seenKey, ready: false, error: e?.message || "已见记录同步失败，请重试。" });
+    });
+    return () => { active = false; };
+  }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, seenRetry, expired]);
 
   // Warm the next clip (same module only) as soon as the current one ends —
   // the shared element is idle between questions, so preloading there makes
@@ -1064,11 +1170,39 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
 
   // ------ Phase transitions ------
 
-  function handleStartExam() {
+  async function handleStartExam() {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
     if (examController) examController.unlock();
+    if (preparing) return;
+    setPreparing(true);
+    setError(null);
     try {
+      if (isReal) {
+        if (!userCode) throw new Error("登录状态已失效，请重新登录。");
+        const oldAttemptId = restartAttemptId || resumed?.paper?.attemptId;
+        const fresh = await prepareRealMockExam(section, oldAttemptId ? { restartAttemptId: oldAttemptId } : undefined);
+        if (!validateRealAdaptivePaper(fresh, section, userCode)) {
+          if (fresh?.attemptId) await finishRealMockExam(fresh).catch(() => {});
+          throw new Error("真题试卷不完整，暂时无法开考，请稍后重试。");
+        }
+        clearAdaptiveCheckpoint(section, checkpointScope);
+        setResumed(null);
+        setRestartAttemptId(null);
+        setPaper(fresh);
+        setSeenItemIds([]);
+        setCurrentPartial(null);
+        setM1Items(fresh.m1Items);
+        setM2Items(null);
+        setUsedIds(new Set(fresh.m1Items.map((item) => item.id)));
+        setCurrentItemIndex(0);
+        setM1Results([]);
+        setM2Results([]);
+        setTimeLeft(fresh.timing.module1Seconds);
+        autoFinishedRef.current = false;
+        setPhase("module1");
+        return;
+      }
       clearAdaptiveCheckpoint(section); // fresh start — drop any stale checkpoint
       // Prefer items the user hasn't practised yet (shared done-set with
       // practice mode); planner falls back to done items once the bank runs out.
@@ -1086,7 +1220,15 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
       autoFinishedRef.current = false;
       setPhase("module1");
     } catch (e) {
-      setError("初始化考试失败: " + (e.message || "unknown error"));
+      if (isReal && e?.code === "ACTIVE_ATTEMPT") {
+        setRestartAttemptId(e.attemptId || e.activeAttemptId || resumed?.paper?.attemptId || null);
+      }
+      const deficitText = Array.isArray(e?.deficits) && e.deficits.length
+        ? ` 缺口：${e.deficits.map((d) => `${d.taskType || d.type || "题目"}需${d.required ?? d.need ?? "?"}、可用${d.available ?? "?"}`).join("；")}。`
+        : "";
+      setError(`${isReal ? "真题组卷失败" : "初始化考试失败"}：${e?.message || "请稍后重试。"}${deficitText}`);
+    } finally {
+      setPreparing(false);
     }
   }
 
@@ -1096,6 +1238,13 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     // Same in-gesture unlock as handleStartExam (resume is also a real click).
     if (examController) examController.unlock();
     try {
+      if (isReal && (!resumed.paper || resumed.paper.userCode !== userCode || resumed.paper.templateVersion !== REAL_MOCK_TEMPLATE_VERSION)) throw new Error("断点账户或模板不匹配");
+      setPaper(isReal ? resumed.paper : null);
+      setSeenItemIds(isReal && Array.isArray(resumed.seenItemIds) ? resumed.seenItemIds : []);
+      setCurrentPartial(isReal && resumed.currentPartial?.phase === resumed.phase &&
+        resumed.currentPartial?.itemIndex === resumed.currentItemIndex &&
+        resumed.currentPartial?.itemId === (resumed.phase === "module2" ? resumed.m2Items : resumed.m1Items)?.[resumed.currentItemIndex]?.id
+        ? resumed.currentPartial : null);
       setM1Items(resumed.m1Items || null);
       setM2Items(resumed.m2Items || null);
       setM1Results(Array.isArray(resumed.m1Results) ? resumed.m1Results : []);
@@ -1103,23 +1252,38 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
       setCurrentItemIndex(Number.isFinite(resumed.currentItemIndex) ? resumed.currentItemIndex : 0);
       setRoutePath(resumed.routePath || null);
       setUsedIds(new Set(Array.isArray(resumed.usedIds) ? resumed.usedIds : []));
-      setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : config.module1TimeSeconds);
+      setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : (isReal ? resumed.paper.timing.module1Seconds : config.module1TimeSeconds));
       autoFinishedRef.current = false;
       setPhase(resumed.phase === "module2" ? "module2" : "module1");
     } catch {
-      clearAdaptiveCheckpoint(section);
+      clearAdaptiveCheckpoint(section, checkpointScope);
       setError("无法恢复上次模考进度，请重新开始。");
     }
   }
 
-  function handleItemComplete(result) {
+  async function handleItemComplete(result) {
     // Timeout guard: a task's onComplete is fired from an 800/1200ms setTimeout
     // (submit animation). If the module already timed out, that delayed callback
     // still holds a stale closure — accepting it would double-append a result
     // and re-run handleM2Complete (a duplicate saveSess → duplicate history).
     // autoFinishedRef is reset to false on start/resume/entering M2, so the
     // normal (non-timeout) flow is unaffected.
-    if (autoFinishedRef.current) return;
+    if (autoFinishedRef.current || answerBusyRef.current) return;
+    answerBusyRef.current = true;
+    pendingAnswerRef.current = result;
+    if (isReal) {
+      try {
+        await markRealMockSeen(paper, [currentItem], { answered: true });
+      } catch (e) {
+        setAnswerError(e?.message || "作答同步失败，请重试后继续。");
+        answerBusyRef.current = false;
+        return;
+      }
+    }
+    pendingAnswerRef.current = null;
+    setAnswerError(null);
+    answerBusyRef.current = false;
+    setCurrentPartial(null);
     // Attach the item to the result so the post-exam review can render the
     // original passage/questions alongside the user's answers. Without this,
     // results are just aggregated correctness — no way to show the test back.
@@ -1147,21 +1311,22 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     }
   }
 
-  function handleM1Complete(resultsOverride) {
+  async function handleM1Complete(resultsOverride) {
     const results = resultsOverride || m1Results;
     // Mark Module 1's items done (covers normal + timeout finalize paths).
-    recordSectionDone(config, results);
+    if (!isReal) recordSectionDone(config, results);
     const m1Correct = sumCorrectFromResults(results);
     const m1Total = sumTotalFromResults(results);
     const accuracy = m1Total > 0 ? m1Correct / m1Total : 0;
-    const path = config.routeM2(accuracy);
+    const path = isReal ? routeRealModule(m1Items, results, paper.routeThreshold ?? 0.6) : config.routeM2(accuracy);
     setRoutePath(path);
     setPhase("routing");
 
     // Build M2 after animation delay
-    setTimeout(() => {
+    setTimeout(async () => {
       try {
-        const m2 = config.buildM2(path, usedIds, loadSectionDoneIds(config));
+        if (isReal) await routeRealMockExam(paper, path);
+        const m2 = isReal ? { items: paper.m2ByPath[path], usedIds } : config.buildM2(path, usedIds, loadSectionDoneIds(config));
         if (!m2.items || m2.items.length === 0) {
           setError("题库数据不足，无法构建 Module 2。");
           return;
@@ -1172,25 +1337,39 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
         // Reset the timer for Module 2 — real ETS gives a fresh countdown
         // for each module, and we need to clear autoFinishedRef so the M2
         // timeout effect re-arms after the M1 one fired.
-        setTimeLeft(config.module2TimeSeconds);
+        setTimeLeft(isReal ? paper.timing.module2Seconds[path] : config.module2TimeSeconds);
         autoFinishedRef.current = false;
         setPhase("module2");
       } catch (e) {
-        setError("构建 Module 2 失败: " + (e.message || "unknown error"));
+        cloudRetryRef.current = () => handleM1Complete(results);
+        setError("进入 Module 2 失败：" + (e.message || "请重试"));
       }
     }, 2500);
   }
 
-  function handleM2Complete(resultsOverride) {
+  async function handleM2Complete(resultsOverride) {
+    if (finishBusyRef.current) return;
+    finishBusyRef.current = true;
     const m1Res = m1Results;
     const m2Res = resultsOverride || m2Results;
     // Mark Module 2's items done (covers normal + timeout finalize paths).
-    recordSectionDone(config, m2Res);
+    if (!isReal) recordSectionDone(config, m2Res);
     const m1Correct = sumCorrectFromResults(m1Res);
     const m1Total = sumTotalFromResults(m1Res);
     const m2Correct = sumCorrectFromResults(m2Res);
     const m2Total = sumTotalFromResults(m2Res);
-    const score = calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
+    const score = isReal
+      ? calculateRealAdaptiveScore(m1Items, m1Res, m2Items, m2Res, routePath)
+      : calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
+    if (isReal) {
+      try { await finishRealMockExam(paper); }
+      catch (e) {
+        finishBusyRef.current = false;
+        cloudRetryRef.current = () => handleM2Complete(m2Res);
+        setError("结束真题模考失败：" + (e?.message || "请重试"));
+        return;
+      }
+    }
     setFinalScore(score);
 
     // Stamp this exam's save identity once, reused for both the saved record's
@@ -1208,28 +1387,49 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     // render the original test back with right/wrong + AI explanations,
     // without having to re-query the question bank by id (which could shift).
     try {
+      const realItems = isReal ? [...m1Items, ...m2Items] : [];
+      const realSnapshots = isReal ? [...buildTaskSnapshots(m1Res), ...buildTaskSnapshots(m2Res)] : [];
       saveSess({
         type: section,
         mode: "mock",
+        ...(isReal ? {
+          source: "real-bank", real: true, realMock: true,
+          section,
+          itemIds: realItems.map((item) => item.id),
+        } : {}),
         date: sessionDate,
-        correct: m1Correct + m2Correct,
-        total: m1Total + m2Total,
+        correct: isReal ? score.correct : m1Correct + m2Correct,
+        total: isReal ? score.total : m1Total + m2Total,
         band: score.band,
         details: {
           subtype: "mock",
+          ...(isReal ? {
+            source: "real-bank", real: true, realMock: true,
+            section,
+            attemptId: paper.attemptId, templateVersion: paper.templateVersion,
+            itemIds: realItems.map((item) => item.id),
+            seenItemIds,
+            items: realItems, tasks: realSnapshots,
+            paperSnapshot: { ...paper, m2ByPath: { [routePath]: m2Items } },
+            scoredCorrect: score.correct, scoredTotal: score.total,
+            extraCorrect: score.extraCorrect, extraTotal: score.extraTotal,
+            scoreVersion: score.scoreVersion,
+          } : {}),
           path: routePath,
           band: score.band,
           cefr: score.cefr,
           m1: {
-            correct: m1Correct,
-            total: m1Total,
-            accuracy: score.m1Accuracy,
+            correct: isReal ? score.m1.scoredCorrect : m1Correct,
+            total: isReal ? score.m1.scoredTotal : m1Total,
+            ...(isReal ? { extraCorrect: score.m1.extraCorrect, extraTotal: score.m1.extraTotal } : {}),
+            accuracy: isReal ? score.m1.scoredCorrect / score.m1.scoredTotal : score.m1Accuracy,
             tasks: buildTaskSnapshots(m1Res),
           },
           m2: {
-            correct: m2Correct,
-            total: m2Total,
-            accuracy: score.m2Accuracy,
+            correct: isReal ? score.m2.scoredCorrect : m2Correct,
+            total: isReal ? score.m2.scoredTotal : m2Total,
+            ...(isReal ? { extraCorrect: score.m2.extraCorrect, extraTotal: score.m2.extraTotal } : {}),
+            accuracy: isReal ? score.m2.scoredCorrect / score.m2.scoredTotal : score.m2Accuracy,
             tasks: buildTaskSnapshots(m2Res),
           },
           rawScore: score.rawScore,
@@ -1237,12 +1437,18 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
       });
     } catch {}
 
-    clearAdaptiveCheckpoint(section); // exam finished — checkpoint no longer needed
+    clearAdaptiveCheckpoint(section, checkpointScope); // exam finished
+    finishBusyRef.current = false;
     setPhase("results");
   }
 
   function handleRestart() {
-    clearAdaptiveCheckpoint(section);
+    setRestartAttemptId(isReal && phase !== "results" ? paper?.attemptId || restartAttemptId : null);
+    clearAdaptiveCheckpoint(section, checkpointScope);
+    setResumed(null);
+    setPaper(null);
+    setSeenItemIds([]);
+    setCurrentPartial(null);
     setPhase("intro");
     setM1Items(null);
     setM2Items(null);
@@ -1254,6 +1460,7 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
     setSavedSessionDate(null);
     setUsedIds(new Set());
     setError(null);
+    cloudRetryRef.current = null;
     autoFinishedRef.current = false;
   }
 
@@ -1279,9 +1486,9 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
           phase === "module2" ? `Module 2 · ${routePath === "upper" ? "Upper" : "Lower"}` :
           phase === "routing" ? "正在调整难度..." :
           phase === "results" ? "考试结果" :
-          `${config.labelZh}自适应模考`
+          `${isReal ? "真题" : ""}${config.labelZh}自适应模考`
         }
-        section={`${config.label} | 模考模式`}
+        section={`${config.label} | ${isReal ? "真题模考" : "模考模式"}`}
         timeLeft={(phase === "module1" || phase === "module2") ? timeLeft : undefined}
         qInfo={
           (phase === "module1" || phase === "module2")
@@ -1297,7 +1504,16 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
-            <Btn onClick={handleRestart} variant="secondary">返回</Btn>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+              {isReal && <Btn onClick={() => {
+                setError(null);
+                const retry = cloudRetryRef.current;
+                cloudRetryRef.current = null;
+                if (retry) retry();
+                else handleStartExam();
+              }}>重试</Btn>}
+              <Btn onClick={handleRestart} variant="secondary">返回</Btn>
+            </div>
           </SurfaceCard>
         )}
 
@@ -1310,12 +1526,14 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
             onStart={handleStartExam}
             onResume={handleResume}
             hasResume={!!resumed}
+            source={source}
+            preparing={preparing}
             onExit={onExit}
           />
         )}
 
         {/* Module 1 & 2 — task rendering */}
-        {(phase === "module1" || phase === "module2") && currentItem && !error && (
+        {(phase === "module1" || phase === "module2") && currentItem && !error && realTaskReady && (
           <SurfaceCard style={{ padding: "20px 24px" }}>
             {/* Module badge */}
             <div style={{
@@ -1331,15 +1549,27 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
               key={`${phase}-${currentItemIndex}`}
               item={currentItem}
               onComplete={handleItemComplete}
-              accent={accent}
               collectorRef={partialCollectorRef}
+              partialState={partialForCurrent}
+              onProgress={isReal ? handlePartialProgress : null}
             />
+            {answerError && <div style={{ marginTop: 14, color: "#b91c1c", fontSize: 13 }}>
+              {answerError} <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>
+            </div>}
+          </SurfaceCard>
+        )}
+        {isReal && (phase === "module1" || phase === "module2") && currentItem && !error && !realTaskReady && (
+          <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
+            <div style={{ color: C.t2, fontSize: 14, marginBottom: 12 }}>
+              {seenState.key === seenKey && seenState.error ? seenState.error : "正在确认这道题的已见记录…"}
+            </div>
+            {seenState.key === seenKey && seenState.error && <Btn onClick={() => setSeenRetry((n) => n + 1)}>重试加载</Btn>}
           </SurfaceCard>
         )}
 
         {/* Routing Phase — animated transition */}
         {phase === "routing" && !error && (
-          <RoutingTransition path={routePath} accent={accent} accentSoft={accentSoft} />
+          <RoutingTransition path={routePath} accent={accent} accentSoft={accentSoft} source={source} />
         )}
 
         {/* Results Phase */}
@@ -1351,6 +1581,7 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
             config={config}
             section={section}
             sessionDate={savedSessionDate}
+            source={source}
             onRestart={handleRestart}
             onExit={onExit}
           />
@@ -1362,28 +1593,33 @@ function AdaptiveExamShellInner({ section = "reading", onExit }) {
 
 // ------ Sub-components ------
 
-function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit }) {
+function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit, source = "standard", preparing = false }) {
   const isReading = config.label === "Reading";
+  const isReal = source === "real-bank";
   // Composition strings are derived from the planners' module plans (reading
   // 35/15, listening 32/15 — see docs/realbank-set-blueprint.md §1), never
   // hand-written here. Upper/Lower share the SAME composition on both sections
   // (只题目难度不同), so each shows a single Module 2 box.
   const describe = isReading ? describeReadingModulePlan : describeListeningModulePlan;
-  const m1Count = describe(1);
-  const m2Count = describe(2);
-  const m1Time = Math.round(config.module1TimeSeconds / 60);
-  const m2Time = Math.round(config.module2TimeSeconds / 60);
-  const totalTime = m1Time + m2Time;
+  const m1Count = isReal ? `${isReading ? 35 : 32} 题（20 题计分）` : describe(1);
+  const m2Count = isReal ? "15 题（全部计分）" : describe(2);
+  const realTiming = isReal ? getRealMockConfig(isReading ? "reading" : "listening") : null;
+  const m1Time = Math.round((realTiming?.module1Seconds || config.module1TimeSeconds) / 60);
+  const m2Upper = Math.round((realTiming?.module2Seconds?.upper || config.module2TimeSeconds) / 60);
+  const m2Lower = Math.round((realTiming?.module2Seconds?.lower || config.module2TimeSeconds) / 60);
+  const m2Time = m2Upper === m2Lower ? `${m2Upper}` : `${Math.min(m2Upper, m2Lower)}–${Math.max(m2Upper, m2Lower)}`;
+  const totalTime = m1Time + Math.max(m2Upper, m2Lower);
 
   return (
     <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
       <div style={{ fontSize: 48, marginBottom: 16 }}>{isReading ? "\u{1F4D6}" : "\u{1F3A7}"}</div>
       <h2 style={{ fontSize: 22, fontWeight: 800, color: C.t1, marginBottom: 8 }}>
-        {config.labelZh}自适应模考
+        {isReal ? "真题" : ""}{config.labelZh}自适应模考
       </h2>
       <p style={{ fontSize: 14, color: C.t2, lineHeight: 1.7, marginBottom: 20, maxWidth: 500, margin: "0 auto 20px" }}>
-        模拟 TOEFL 2026 自适应考试流程。Module 1 决定你的路径，
-        Module 2 根据表现调整难度。
+        {isReal
+          ? "使用未见过的真题组成完整训练卷。Module 1 的20道计分题决定本站模拟路线，另外的训练题也会展示和计时。"
+          : "模拟 TOEFL 2026 自适应考试流程。Module 1 决定你的路径，Module 2 根据表现调整难度。"}
       </p>
 
       {/* Info grid */}
@@ -1419,9 +1655,11 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
         borderRadius: 10, padding: "12px 16px", marginBottom: 12,
         fontSize: 12, color: C.t2, lineHeight: 1.6, textAlign: "left",
       }}>
-        <strong style={{ color: accent }}>自适应机制:</strong> Module 1 正确率 &ge; 60% 进入 Upper 路径 (更难, 最高 6.0 Band),
-        否则进入 Lower 路径 (较易, 最高 4.0 Band)。
-        {" Upper 与 Lower 路径题量完全相同，仅题目难度不同。"}
+        {isReal ? (
+          <><strong style={{ color: accent }}>本站模拟规则：</strong> Module 1 的20道计分题正确率达到60%进入进阶路线，否则进入普通路线。两路题型构成不同，题目难度尚未校准；成绩为35题原始分和未校准的1–6估分。</>
+        ) : (
+          <><strong style={{ color: accent }}>自适应机制:</strong> Module 1 正确率 &ge; 60% 进入 Upper 路径 (更难, 最高 6.0 Band), 否则进入 Lower 路径 (较易, 最高 4.0 Band)。{" Upper 与 Lower 路径题量完全相同，仅题目难度不同。"}</>
+        )}
       </div>
 
       {/* Timer rule — matches real ETS behavior */}
@@ -1446,16 +1684,17 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
 
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
         {hasResume && (
-          <Btn onClick={onResume} style={{ background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}>
+          <Btn onClick={onResume} disabled={preparing} style={{ background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}>
             继续上次模考
           </Btn>
         )}
         <Btn
           onClick={onStart}
+          disabled={preparing}
           variant={hasResume ? "secondary" : undefined}
           style={hasResume ? undefined : { background: accent, borderColor: accent, padding: "12px 32px", fontSize: 15 }}
         >
-          {hasResume ? "重新开始" : "开始考试"}
+          {preparing ? "正在组卷…" : hasResume ? "重新开始" : "开始考试"}
         </Btn>
         <Btn onClick={onExit} variant="secondary">返回</Btn>
       </div>
@@ -1475,7 +1714,7 @@ function InfoBox({ label, value, accent, accentSoft }) {
   );
 }
 
-function RoutingTransition({ path, accent, accentSoft }) {
+function RoutingTransition({ path, accent, accentSoft, source = "standard" }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -1496,10 +1735,10 @@ function RoutingTransition({ path, accent, accentSoft }) {
         {path === "upper" ? "\u{1F680}" : "\u{1F4DA}"}
       </div>
       <h3 style={{ fontSize: 18, fontWeight: 700, color: C.t1, marginBottom: 12 }}>
-        正在根据你的表现调整后续题目难度...
+        {source === "real-bank" ? "正在进入下一模块…" : "正在根据你的表现调整后续题目难度..."}
       </h3>
       <p style={{ fontSize: 14, color: C.t2, marginBottom: 20 }}>
-        你将进入 <strong style={{ color: accent }}>{path === "upper" ? "Upper" : "Lower"} 路径</strong>
+        你将进入 <strong style={{ color: accent }}>{source === "real-bank" ? (path === "upper" ? "进阶" : "普通") : (path === "upper" ? "Upper" : "Lower")} 路线</strong>
       </p>
 
       {/* Progress bar */}
@@ -1517,17 +1756,20 @@ function RoutingTransition({ path, accent, accentSoft }) {
   );
 }
 
-function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate, onRestart, onExit }) {
+function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate, onRestart, onExit, source = "standard" }) {
   const router = useRouter();
+  const isReal = source === "real-bank";
   const palette = BAND_COLORS[score.color] || BAND_COLORS.blue;
   const levelLabel = LEVEL_LABELS[score.color] || "";
-  const m1Correct = sumCorrectFromResults(m1Results);
-  const m1Total = sumTotalFromResults(m1Results);
-  const m2Correct = sumCorrectFromResults(m2Results);
-  const m2Total = sumTotalFromResults(m2Results);
+  const m1Correct = isReal ? score.m1.scoredCorrect : sumCorrectFromResults(m1Results);
+  const m1Total = isReal ? score.m1.scoredTotal : sumTotalFromResults(m1Results);
+  const m2Correct = isReal ? score.m2.scoredCorrect : sumCorrectFromResults(m2Results);
+  const m2Total = isReal ? score.m2.scoredTotal : sumTotalFromResults(m2Results);
   // Total questions auto-scored wrong because the module clock ran out before
   // the student answered them (surfaced so the band doesn't look unexplained).
-  const unanswered = [...m1Results, ...m2Results].reduce((s, r) => s + (r.unanswered || 0), 0);
+  const unanswered = [...m1Results, ...m2Results].reduce(
+    (s, r) => s + (!isReal || r.item?.realMockRole === "scored" ? (r.unanswered || 0) : 0), 0
+  );
   // Deep-link into this section's practice records, auto-opening THIS exam by
   // its save identity (session date). Falls back to `mock=latest` only if the
   // date is somehow missing, so an older link shape still works.
@@ -1544,7 +1786,7 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
         border: `2px solid ${palette.border}`,
       }}>
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 8, letterSpacing: 1, textTransform: "uppercase" }}>
-          {config.labelZh}部分结果
+          {isReal ? `真题${config.labelZh}模考结果` : `${config.labelZh}部分结果`}
         </div>
 
         {/* Band circle */}
@@ -1557,17 +1799,17 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
           <span style={{ fontSize: 42, fontWeight: 800, color: palette.text, lineHeight: 1, fontFamily: FONT }}>
             {score.band.toFixed(1)}
           </span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}>Band</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}>{isReal ? "站内估分" : "Band"}</span>
         </div>
 
-        <div style={{
+        {!isReal && <div style={{
           display: "inline-block", background: palette.bg,
           border: `1px solid ${palette.border}`, borderRadius: 14,
           padding: "3px 14px", fontSize: 13, fontWeight: 600, color: palette.text,
           marginBottom: 12,
         }}>
           CEFR: {score.cefr} {levelLabel && `\u00B7 ${levelLabel}`}
-        </div>
+        </div>}
 
         {/* Path badge */}
         <div style={{ marginBottom: 8 }}>
@@ -1578,8 +1820,8 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
             color: score.path === "upper" ? "#1d4ed8" : "#92400e",
             borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 700,
           }}>
-            {score.path === "upper" ? "Upper 路径" : "Lower 路径"}
-            {" \u00B7 "}最高 {score.maxBand.toFixed(1)} Band
+            {isReal ? (score.path === "upper" ? "进阶路线" : "普通路线") : (score.path === "upper" ? "Upper 路径" : "Lower 路径")}
+            {!isReal && <> {" \u00B7 "}最高 {score.maxBand.toFixed(1)} Band</>}
           </span>
         </div>
       </SurfaceCard>
@@ -1591,23 +1833,23 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
         </div>
 
         <ScoreBreakdownRow
-          label="Module 1 (路由阶段)"
+          label={isReal ? "Module 1（20道计分题）" : "Module 1 (路由阶段)"}
           correct={m1Correct}
           total={m1Total}
-          weight={`${Math.round((score.m1Weight ?? 0) * 100)}%`}
+          weight={isReal ? null : `${Math.round((score.m1Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
         <ScoreBreakdownRow
-          label={`Module 2 (${score.path === "upper" ? "Upper" : "Lower"})`}
+          label={`Module 2 (${isReal ? (score.path === "upper" ? "进阶" : "普通") : (score.path === "upper" ? "Upper" : "Lower")})`}
           correct={m2Correct}
           total={m2Total}
-          weight={`${Math.round((score.m2Weight ?? 0) * 100)}%`}
+          weight={isReal ? null : `${Math.round((score.m2Weight ?? 0) * 100)}%`}
           accent={config.accent}
         />
 
         {/* Visual bar */}
         <div style={{ padding: "12px 16px" }}>
-          <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>综合得分比</div>
+          <div style={{ fontSize: 12, color: C.t3, marginBottom: 6 }}>{isReal ? `计分题原始分 ${score.correct}/${score.total}` : "综合得分比"}</div>
           <div style={{ height: 8, background: "#e2e8f0", borderRadius: 4, overflow: "hidden" }}>
             <div style={{
               height: "100%", borderRadius: 4,
@@ -1621,6 +1863,9 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
           </div>
         </div>
       </SurfaceCard>
+      {isReal && <SurfaceCard style={{ padding: "12px 16px", fontSize: 13, color: C.t2, lineHeight: 1.6 }}>
+        另有 {score.extraTotal} 道本站模拟额外题，答对 {score.extraCorrect} 道；它们参与训练和计时，不参与路线或估分。
+      </SurfaceCard>}
 
       {/* Timeout transparency — questions the clock cut off are scored as wrong,
           so tell the student explicitly (mirrors the amber timer-rule box). */}
@@ -1632,7 +1877,7 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
           fontSize: 13, color: "#92400e", lineHeight: 1.6,
         }}>
           <span style={{ fontSize: 15, flexShrink: 0 }}>{"⏱"}</span>
-          <span>因超时，有 <strong>{unanswered}</strong> 道题未作答，已按错误计入成绩。</span>
+          <span>因超时，有 <strong>{unanswered}</strong> 道{isReal ? "计分题" : "题"}未作答，已按错误计入成绩。</span>
         </div>
       )}
 
@@ -1662,7 +1907,7 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
         <Btn onClick={onRestart} style={{ background: config.accent, borderColor: config.accent }}>
           重新考试
         </Btn>
-        <Btn onClick={onExit} variant="secondary">返回首页</Btn>
+        <Btn onClick={onExit} variant="secondary">{isReal ? "返回真题专区" : "返回首页"}</Btn>
       </div>
 
       {/* Disclaimer */}
@@ -1671,7 +1916,7 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
         borderRadius: 6, padding: "10px 14px",
         fontSize: 12, color: "#92400e", lineHeight: 1.6,
       }}>
-        该分数基于模拟自适应考试算法估算，不代表官方 ETS 成绩。TOEFL 为 ETS 注册商标。
+        {isReal ? "1–6估分按 1 + 5 ×（35道计分题答对数 / 35）计算，并四舍五入到0.5；未经校准，不是 ETS 官方等值成绩。路线按本站规则分流，题目难度尚未标定。" : "该分数基于模拟自适应考试算法估算，不代表官方 ETS 成绩。TOEFL 为 ETS 注册商标。"}
       </div>
     </div>
   );
@@ -1686,7 +1931,7 @@ function ScoreBreakdownRow({ label, correct, total, weight, accent }) {
     }}>
       <div>
         <div style={{ fontSize: 14, color: C.t1, fontWeight: 600 }}>{label}</div>
-        <div style={{ fontSize: 11, color: C.t3, marginTop: 2 }}>权重: {weight}</div>
+        {weight && <div style={{ fontSize: 11, color: C.t3, marginTop: 2 }}>权重: {weight}</div>}
       </div>
       <div style={{ textAlign: "right" }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: accent }}>

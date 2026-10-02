@@ -97,6 +97,10 @@ export function BuildSentenceTask({
   embedded = false,
   persistSession = true,
   onComplete = null,
+  beforeQuestion = null,
+  recordGroupDone = true,
+  onProgress = null,
+  autoStartOnMount = false,
   onTimerChange = null,
   timeLimitSeconds = 410,
   practiceMode = PRACTICE_MODE.STANDARD,
@@ -138,9 +142,42 @@ export function BuildSentenceTask({
     goBack,
     getProgress,
     elapsed,
-  } = useBuildSentenceSession(questions, { persistSession, onComplete, onTimerChange, timeLimitSeconds, practiceMode, initialResults });
+    pauseTimer,
+    resumeTimer,
+  } = useBuildSentenceSession(questions, { persistSession, onComplete, onProgress, recordGroupDone, onTimerChange, timeLimitSeconds, practiceMode, initialResults });
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
+  const [questionGate, setQuestionGate] = useState({ id: "", state: "pending", error: "" });
+  const seenQuestionIds = useRef(new Set());
+  const autoStartedRef = useRef(false);
+  const gateId = String(q?.id || q?.qid || "");
+
+  useEffect(() => {
+    if (!autoStartOnMount || autoStartedRef.current || phase !== "instruction") return;
+    autoStartedRef.current = true;
+    startTimer();
+  }, [autoStartOnMount, phase, startTimer]);
+
+  useEffect(() => {
+    if (!beforeQuestion || phase !== "active" || !q || !gateId) return;
+    if (seenQuestionIds.current.has(gateId)) {
+      setQuestionGate({ id: gateId, state: "ready", error: "" });
+      return;
+    }
+    let cancelled = false;
+    setQuestionGate({ id: gateId, state: "pending", error: "" });
+    pauseTimer();
+    Promise.resolve().then(() => beforeQuestion(q, idx)).then(() => {
+      seenQuestionIds.current.add(gateId);
+      if (!cancelled) {
+        resumeTimer();
+        setQuestionGate({ id: gateId, state: "ready", error: "" });
+      }
+    }).catch((error) => {
+      if (!cancelled) setQuestionGate({ id: gateId, state: "error", error: error?.message || "记录已见状态失败" });
+    });
+    return () => { cancelled = true; };
+  }, [beforeQuestion, phase, idx, q, gateId]);
 
   /* ── 交互动画状态 ── */
   const [animSlot, setAnimSlot] = useState(null);      // 刚填入的槽位 index
@@ -458,6 +495,13 @@ export function BuildSentenceTask({
         </PageShell>
       </div>
     );
+  }
+
+  if (beforeQuestion && phase === "active" && (questionGate.id !== gateId || questionGate.state !== "ready")) {
+    return <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}><PageShell narrow><SurfaceCard style={{ padding: 28, textAlign: "center" }}>
+      <div style={{ color: C.t1, fontSize: 15 }}>{questionGate.id === gateId && questionGate.state === "error" ? questionGate.error : "正在确认题目状态…"}</div>
+      {questionGate.id === gateId && questionGate.state === "error" && <Btn onClick={onExit} variant="secondary" style={{ marginTop: 16 }}>返回</Btn>}
+    </SurfaceCard></PageShell></div>;
   }
 
   const slotStyle = (i) => {

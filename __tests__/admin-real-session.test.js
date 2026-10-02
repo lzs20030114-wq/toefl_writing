@@ -96,9 +96,21 @@ describe("aggregateRealBank", () => {
     expect(out.accuracyPct).toBe(91); // (4+5+1)/(5+5+1) = 10/11
   });
 
-  test("分题型：12 种固定顺序，客观题给正确率、写作给均分", () => {
+  test("分题型：原12题型顺序不变，另列4科真题模考，普通模考不污染统计", () => {
     const out = aggregateRealBank(rows, { days: 7, now });
-    expect(out.subtypes).toHaveLength(12);
+    expect(out.subtypes.map((s) => `${s.subject}.${s.subtype}`)).toEqual([
+      "writing.build", "writing.email", "writing.discussion",
+      "reading.ctw", "reading.rdl", "reading.ap",
+      "listening.lcr", "listening.la", "listening.lc", "listening.lat",
+      "speaking.interview", "speaking.repeat",
+      "writing.mock", "reading.mock", "listening.mock", "speaking.mock",
+    ]);
+    expect(out.subtypes.slice(12)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ subject: "writing", subtype: "mock", sessions: 0, users: 0 }),
+      expect.objectContaining({ subject: "reading", subtype: "mock", sessions: 0, users: 0 }),
+      expect.objectContaining({ subject: "listening", subtype: "mock", sessions: 0, users: 0 }),
+      expect.objectContaining({ subject: "speaking", subtype: "mock", sessions: 0, users: 0 }),
+    ]));
     const ap = out.subtypes.find((s) => s.subtype === "ap");
     expect(ap).toMatchObject({ subject: "reading", sessions: 2, users: 1, correct: 9, total: 10, accuracyPct: 90 });
     const disc = out.subtypes.find((s) => s.subtype === "discussion");

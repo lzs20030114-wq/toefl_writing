@@ -119,7 +119,7 @@ function RealExamGroupPanel({ group, items, open, onToggle, isPro, isChallenge, 
           borderRadius: 999, padding: "3px 10px",
           transition: `color ${PANEL_MS}ms ease, border-color ${PANEL_MS}ms ease`,
         }}>
-          {items.length} 个题型
+          {items.length} 项训练
         </div>
         <Chevron open={open} color={isChallenge ? CH.accent : (open ? accent.color : T.t3)} />
       </button>
@@ -162,6 +162,26 @@ function RealExamGroupPanel({ group, items, open, onToggle, isPro, isChallenge, 
 // 不许把未核验的语料吹成 ETS 官方（讨论 81 条无 tier → legacy；邮件只有 tpo1/tpo2 是官方；
 // 阅读三题型全是 2026 考生回忆整理 → 回忆版）。
 export const REAL_EXAM_TASKS = [
+  {
+    g: "writing", k: "real-writing-mock", type: "mock", href: "/mock-exam?source=real-bank",
+    n: "Writing Mock", t: "写作真题模考", d: "10 道造句、1 封邮件、1 篇学术讨论。约 23 分钟；从未做过的完整真题中组卷。",
+    it: "12 题 · 23 分钟", isMock: true,
+  },
+  {
+    g: "reading", k: "real-reading-mock", type: "mock", href: "/reading-exam?source=real-bank",
+    n: "Reading Mock", t: "阅读真题模考", d: "按 2026 考试题型组合练习。M1 完成后按本站规则进入相应 M2 题型路线。",
+    it: "50 题 · 约 30 分钟", isMock: true,
+  },
+  {
+    g: "listening", k: "real-listening-mock", type: "mock", href: "/listening-exam?source=real-bank",
+    n: "Listening Mock", t: "听力真题模考", d: "完整音频题组与两阶段答题。M2 题型路线按本站模拟规则选择。",
+    it: "47 题 · 约 29 分钟", isMock: true,
+  },
+  {
+    g: "speaking", k: "real-speaking-mock", type: "mock", href: "/speaking-exam?source=real-bank",
+    n: "Speaking Mock", t: "口语真题模考", d: "7 句 Listen & Repeat、4 问 Interview；需要麦克风。",
+    it: "11 题 · 约 8 分钟", isMock: true,
+  },
   {
     g: "writing",
     k: "real-bs",
@@ -297,14 +317,14 @@ export function RealExamSectionContent({
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
   const gridItems = REAL_EXAM_TASKS.map((task) => {
-    const { timeLabel, standardLabel } = getRealBankTimeLabels(task.type, modeStr);
+    const { timeLabel, standardLabel } = task.isMock ? { timeLabel: task.it, standardLabel: "完整模考" } : getRealBankTimeLabels(task.type, modeStr);
     return {
       ...task,
-      href: `${task.href}&mode=${modeStr}`,
+      href: task.isMock ? task.href : `${task.href}&mode=${modeStr}`,
       timeLabel,
       standardLabel,
       acc: REAL_ACCENT,
-      isMock: false,
+      isMock: !!task.isMock,
     };
   });
 
