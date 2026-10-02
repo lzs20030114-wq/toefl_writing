@@ -183,8 +183,6 @@ export function VocabReview({
   onCheckpoint, onFinish,
   // 单词本当前的整体统计，结算页拿它和开场时对比出「预计记得 96 → 104」
   statsNow = null,
-  // 拼写下划线观感（对比稿用，选定后删掉这个参数）
-  spellingLook = "inline",
   // 结算页下半截的「接下来」：{ nextTask, tomorrow, onStartNext, onExportWords }
   summaryExtras = null,
 }) {
@@ -254,7 +252,7 @@ export function VocabReview({
   // 拼写格子按词条摆；卡面写法只差大小写时（Renaissance）用卡面写法显示答案
   const answerWord = card ? (lettersOf(card.display) === lettersOf(card.word) ? card.display : card.word) : "";
   // 「填在原句的空里」只在挖得出空的时候成立，否则退回独立一行
-  const inlineSpelling = spellingLook === "inline" && !!cloze;
+  const inlineSpelling = !!cloze;
   // A user-edited meaning may include the English answer; conceal it on spelling fronts.
   const spellingDef = card?.word ? mainDef.replace(new RegExp(`\\b${card.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b`, "gi"), "____") : mainDef;
   const productiveOn = card
@@ -731,7 +729,7 @@ export function VocabReview({
                     ? (inlineSpelling && spellStage === "input"
                       ? (
                         <SpellingInput
-                          key={i} inline look="inline" word={answerWord} value={spelling} onChange={setSpelling}
+                          key={i} inline word={answerWord} value={spelling} onChange={setSpelling}
                           onSubmit={checkSpelling} inputRef={spellingRef} ghost={lettersOf(card.word).charAt(0)}
                         />
                       )
@@ -752,7 +750,6 @@ export function VocabReview({
                       value={spelling}
                       onChange={setSpelling}
                       inputRef={spellingRef}
-                      look={spellingLook === "inline" ? "mono" : spellingLook}
                       ghost={lettersOf(card.word).charAt(0)}
                     />
                   )}
@@ -800,7 +797,7 @@ export function VocabReview({
                   )}
                   {spellStage === "result" && (
                     <>
-                      <SpellingAnswer word={answerWord} typed={spelling} result={retrying ? retryResult : spellingResult} look={spellingLook} />
+                      <SpellingAnswer word={answerWord} typed={spelling} result={retrying ? retryResult : spellingResult} />
                       <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
                         {card.phonetic && (
                           <span style={{ fontSize: 13, color: C.t3, fontFamily: "'Courier New', monospace" }}>/{card.phonetic}/</span>

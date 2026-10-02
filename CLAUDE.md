@@ -228,7 +228,7 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
   **当天有效**、按账号+模式分键，两边存档互不影响。小结弹出时拼写框不能抢焦点（否则空格打进背后的输入框）
 - **暂停复习**（`card.suspended`，`vocabStore.setSuspended`）：词和进度保留，`dueSelection/freshSelection` 跳过，不占额度；
   列表里有「已暂停」筛选和「恢复复习」。**手改释义**走 `chooseSense` 同一条路（锁定主释义，原释义留作 `defFull`）
-- **拼写是一个字母一条下划线**（`components/vocab/SpellingBoxes.js` + `lib/vocab/spelling.js`）：默认直接填进原句的空里（`spellingLook="inline"`，挖不出空时退回独立一行），不要做成方块；接键盘的是盖在上面的透明 `<input>`（手机键盘/粘贴/退格走原生），只收字母、空格连字符原样给出；拼错时正确拼写按 LCS 对齐只把漏写/写错的字母标红
+- **拼写是一个字母一条下划线**（`components/vocab/SpellingBoxes.js` + `lib/vocab/spelling.js`）：直接填进原句的空里（挖不出空时退回独立一行；2026-10-02 用户在三版对比里选定，方块版被否），不要做成方块；接键盘的是盖在上面的透明 `<input>`（手机键盘/粘贴/退格走原生），只收字母、空格连字符原样给出；拼错时正确拼写按 LCS 对齐只把漏写/写错的字母标红
 - **易忘词** = 忘过 ≥3 次（`LEECH_LAPSES`）；`cardStage` 是列表徽章 / 记忆分布条 / 筛选 chip 共用的互斥阶段口径
 - 结算页（`ReviewSummary`）用开场与结束时的 `bookStats` 对比出「预计记得 / 已记牢 / 学习中」的变化；复习中首页侧栏收起（专注模式，
   `VocabNotebook` 的 `onReviewingChange`）。听力复习（`ListeningVocabReview`）同样有撤销（按钮 / Z 键，撤销后摆回「已听过、已翻面」）和结算页（措辞换成听懂/没听懂，

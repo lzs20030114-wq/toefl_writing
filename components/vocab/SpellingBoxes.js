@@ -13,14 +13,14 @@ import { missedLetters, sanitizeSpelling, spellingSlots } from "../../lib/vocab/
 
 const ACCENT = "#0891B2";
 const MONO = "ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace";
-const SERIF = "Georgia, 'Times New Roman', 'Noto Serif SC', serif";
 
-/** 三种观感（待选定后只留一种）：slot = 每格宽，size = 字号，lift = 字到线的距离。 */
-const LOOKS = {
-  mono: { font: MONO, size: 20, slot: 15, gap: 7, lift: 5, weight: 600, line: 2 },
-  inline: { font: MONO, size: 17, slot: 12, gap: 4, lift: 2, weight: 700, line: 1.5 },
-  serif: { font: SERIF, size: 23, slot: 16, gap: 8, lift: 3, weight: 400, line: 1.5 },
-};
+/**
+ * 两种摆法：INLINE 嵌在原句的空里（默认，读句子和拼写是同一个动作）；ROW 独立一行
+ * （挖不出空时作答，以及核对后摆出正确拼写）。slot = 每格宽，size = 字号，lift = 字到线的距离。
+ * 2026-10-02 对比过「独立一行等宽 / 独立一行衬线 / 填进原句」三版，用户选了填进原句；方块版被否。
+ */
+const INLINE = { font: MONO, size: 17, slot: 12, gap: 4, lift: 2, weight: 700, line: 1.5 };
+const ROW = { font: MONO, size: 20, slot: 15, gap: 7, lift: 5, weight: 600, line: 2 };
 
 const LINE = {
   empty: "#cfd8d3",
@@ -38,7 +38,7 @@ const INK = {
 const CARET_CSS = "@keyframes vocabSpellCaret{0%,49%{opacity:1}50%,100%{opacity:0}}";
 
 /** 按容器宽度缩放：一行放得下就一行；放不下（手机上的超长词）就均匀分几行。 */
-function useFit(slots, look, inline) {
+function useFit(slots, inline) {
   const ref = useRef(null);
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -54,7 +54,7 @@ function useFit(slots, look, inline) {
     observer.observe(el);
     return () => observer.disconnect();
   }, [inline]);
-  const L = LOOKS[look];
+  const L = ROW;
   if (inline || !(width > 0)) return { ref, scale: 1, rowWidth: null };
   const n = slots.length;
   const unit = L.slot + L.gap;
@@ -92,8 +92,8 @@ function Slot({ L, scale, ch, ghost, tone, caret, sep }) {
   );
 }
 
-function Slots({ slots, look, scale, rowWidth, inline, render }) {
-  const L = LOOKS[look];
+function Slots({ slots, scale, rowWidth, inline, render }) {
+  const L = inline ? INLINE : ROW;
   let n = 0;
   return (
     <span
@@ -115,9 +115,9 @@ function Slots({ slots, look, scale, rowWidth, inline, render }) {
  * 作答用的下划线。value 只含字母（sanitizeSpelling 收拾过）。
  * ghost = 第一格浮出的提示字母；inline = 嵌在原句的空里（挖空句里那一段就是它）。
  */
-export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost = "", look = "mono", inline = false, label = "拼写英文单词" }) {
+export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost = "", inline = false, label = "拼写英文单词" }) {
   const slots = spellingSlots(word);
-  const { ref, scale, rowWidth } = useFit(slots, look, inline);
+  const { ref, scale, rowWidth } = useFit(slots, inline);
   const [focused, setFocused] = useState(false);
   const typed = [...value];
   const letterCount = slots.filter((slot) => slot.letter).length;
@@ -131,7 +131,7 @@ export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost
     <Wrap ref={ref} style={{ position: "relative", display: inline ? "inline-block" : "block" }}>
       <style>{CARET_CSS}</style>
       <Slots
-        slots={slots} look={look} scale={scale} rowWidth={rowWidth} inline={inline}
+        slots={slots} scale={scale} rowWidth={rowWidth} inline={inline}
         render={(idx) => {
           const ch = typed[idx] || "";
           // 当前位置 = 下一个要填的格；填满了就停在最后一格（光标落在字母后面）
@@ -166,15 +166,14 @@ export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost
  * 核对后的正确拼写：拼对整排绿；拼错时漏写 / 写错的那几个字母标红（按对齐算，见 missedLetters）；
  * 没写（想不起来）就中性色摆出来。
  */
-export function SpellingAnswer({ word, typed, result, look = "mono" }) {
+export function SpellingAnswer({ word, typed, result }) {
   const slots = spellingSlots(word);
-  const L = look === "inline" ? "mono" : look;
-  const { ref, scale, rowWidth } = useFit(slots, L, false);
+  const { ref, scale, rowWidth } = useFit(slots, false);
   const missed = result === "incorrect" ? missedLetters(typed, word) : [];
   return (
     <div ref={ref} role="group" aria-label={`正确拼写 ${word}`}>
       <Slots
-        slots={slots} look={L} scale={scale} rowWidth={rowWidth}
+        slots={slots} scale={scale} rowWidth={rowWidth}
         render={(idx, slot) => ({
           ch: slot.ch,
           tone: result === "correct" ? "correct" : result === "incorrect" ? (missed[idx] ? "missed" : "plain") : "answer",
