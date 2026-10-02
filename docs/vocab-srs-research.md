@@ -6,6 +6,8 @@
 
 > **产品规则更新（2026-09-24）：**所有词（包括已有卡片）默认标为「要会写」，用户可在单词本逐词关闭，写作/口语来源也可关闭。初学阶段仍先认词；进入 review 后，未关闭的词走中译英拼写卡。旧卡的 `productive=false` 是当时的默认值，不能代表用户主动剔除；新规则用 `spellingOptOut=true` 保存明确的剔除选择。本报告下文的旧卡型决策保留为研究记录。
 
+> **产品规则更新（2026-10-02）：**要会写的词不再一进 review 就换成拼写正面：正面仍是认词，选「记得」后弹拼写，拼对才算记得；过关规则改为「当天第一遍答对就过，没答对累计答对 3 次」。依据是线上日志，见 8.5.1。
+
 ---
 
 ## TL;DR（结论先行）
@@ -711,6 +713,43 @@ Dunlosky et al. 2013 对十种学习技巧评级，只有「练习测验」「�
   词根词缀卡（Bowers, Kirby & Deacon 2010 证据主要为母语儿童）。搭配卡有证据但产品形态不明
   （Webb & Kagimoto 2011；Boers & Lindstromberg 2012），列中期。
 
+### 8.5.1 第三批（2026-10-02）：用线上日志校准当天复习次数与拼写
+
+> 这一节推翻了 8.4「首日提取 3 次」和「进入 review 后正面换成拼写卡」两条，依据是本产品自己的复习日志，
+> 不是文献推演。改之前先看这里。
+
+**线上日志**（`vocab_review_logs`，近 30 天、阅读模式 751 条，样本小、人数未细分）：
+
+| 打分前状态 | 类型 | 次数 | 忘了占比 | 中位秒数 |
+|---|---|---:|---:|---:|
+| new | 当天 | 140 | 15.7% | 7.2 |
+| learning | 当天 | 264 | 0.0% | 2.1 |
+| relearning | 当天 | 133 | 0.8% | 2.1 |
+| learning | 跨天 | 26 | 3.8% | 5.0 |
+| relearning | 跨天 | 7 | 0.0% | 2.7 |
+| review | 跨天 | 181 | **37.0%** | 7.8 |
+
+读法：
+1. **当天回访是空转**：397 次只错 1 次、中位 2.1 秒；「隔 10 张」实际只隔了半分钟到一分钟，是集中重复。
+   同一结论还有两条独立依据：FSRS-6 的 same-day 公式给「首评 Good 后当天再看」的稳定度增益约为 0；
+   首日学到更高标准的优势会被之后的间隔复习抹平（relearning-override effect，Vaughn, Dunlosky & Rawson 2016，
+   「既然后面还会复习，花时间提高初始标准不划算」）。
+2. **跨天失败集中在拼写卡**：跨天的认词（学习/重学留到次日）33 次错 1 次，跨天 review 181 次错 37%——
+   09-24 起要会写默认开，review 卡基本都是拼写。稳定度是按认词练出来的，毕业后第一次复习突然冷考拼写；
+   拼错记 lapse → 间隔打回 1 天 → 重学那两遍又退回认词卡（2.1 秒、0.8% 错），拼错了却在练认词。
+
+**改法（用户拍板）**：
+- **过关规则**：当天第一遍答对 → 直接过；没答对 → 当天累计答对 3 次才过（不是连续 3 次，答错不清零）。
+  `learningSteps / relearningSteps = [10, 10, 20]`，步数 = 失手后要累计答对的次数。昨天没过完的学习中词，
+  今天第一遍答对也直接过（学习日凌晨 4 点换日）。新词毕业首间隔仍压到 1 天。一场同词上限 4 → 6。
+- **拼写**：要会写的词正面也是认词；选「记得」才弹拼写（释义 + 挖空句，词和原句收起），拼对才算记得，
+  拼错 / 想不起来按没记住走「累计答对 3 次」。只在 review / relearning 阶段弹，新词第一天只认词（Barcroft 2006）。
+  重学那几遍同样要拼对，不再退回认词空转。
+- **已知局限**：拼写紧跟在看过词之后，测的偏短时记忆，短词几乎是照抄；长难词仍能筛出拼不对的。
+  日志目前只记评分，分不出「意思忘了」和「意思记得、拼错了」——要校准拼写的真实难度，得给日志加一列。
+- **待验证**：上线 2–4 周后重跑同一条查询：review 跨天忘了占比应从 37% 明显回落；
+  当天回访次数应大幅减少（第一遍答对的词不再回访）。
+
 ### 8.6 产品对照
 
 Anki、Magoosh、不背单词均为二档评分，墨墨三档。墨墨的算法出自 KDD 2022（Ye, Su & Cao）与 TKDE 2023 两篇论文，
@@ -725,6 +764,7 @@ KDD 一作叶峻峣即 FSRS 作者，本产品与国内最讲算法的一家在�
 - Nakata, T., & Webb, S. (2016). Does studying vocabulary in smaller sets increase learning? *SSLA*, 38(3).
 - Nakata, T. (2017). Does repeated practice make perfect? The effects of within-session repeated retrieval on second language vocabulary learning. *SSLA*, 39(4).
 - Nakata, T., & Suzuki, Y. (2019). Effects of massing and spacing on the learning of semantically related and unrelated words. *SSLA*, 41(2).
+- Vaughn, K. E., Dunlosky, J., & Rawson, K. A. (2016). Effects of successive relearning on recall: Does relearning override the effects of initial learning criterion? *Memory & Cognition*, 44(6).
 - Kim, S. K., & Webb, S. (2022). The effects of spaced practice on second language learning: A meta-analysis. *Language Learning*, 72(1).
 - Webb, S. (2007). Learning word pairs and glossed sentences: The effects of a single context on vocabulary knowledge. *Language Teaching Research*, 11(1).
 - Webb, S. (2008). The effects of context on incidental vocabulary learning. *Reading in a Foreign Language*, 20(2).

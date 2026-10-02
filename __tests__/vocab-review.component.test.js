@@ -12,10 +12,24 @@ const card = {
   state: STATE.REVIEW,
 };
 
-test("要会写：先输入并核对，拼对才按记得排期", () => {
+/** 要会写的词：先认词翻面，选「记得」才弹拼写。 */
+const toSpelling = () => {
+  fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+  fireEvent.click(screen.getByRole("button", { name: /记得，去拼写/ }));
+};
+
+test("要会写：正面先认词，选「记得」才弹拼写，拼对才按记得排期", () => {
   const onGrade = jest.fn(() => null);
   render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
 
+  // 正面和别的词一样是原句高亮认词，没有输入框
+  expect(screen.getByText("认词")).toBeInTheDocument();
+  expect(screen.getAllByText("approximately").length).toBeGreaterThan(0);
+  expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
+
+  toSpelling();
+  // 拼写时词和原句收起来，只给释义 + 挖空句
+  expect(screen.getByText("拼写")).toBeInTheDocument();
   expect(screen.getByText(`a${"_".repeat(12)}`)).toBeInTheDocument();
   expect(screen.queryByText("approximately")).not.toBeInTheDocument();
   fireEvent.click(screen.getByText("大约、近似"));
@@ -24,7 +38,37 @@ test("要会写：先输入并核对，拼对才按记得排期", () => {
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "Approximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
   expect(screen.getByRole("status")).toHaveTextContent("拼写正确");
-  fireEvent.click(screen.getByRole("button", { name: "记得，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "拼对了，下一词" }));
+  expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
+});
+
+test("要会写的词认词就选「忘了」：直接按忘了排期，不弹拼写", () => {
+  const onGrade = jest.fn(() => null);
+  render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+  fireEvent.click(screen.getByRole("button", { name: /忘了/ }));
+  expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
+});
+
+test("新词第一天只认词：选「记得」直接算记得，不弹拼写", () => {
+  const onGrade = jest.fn(() => null);
+  render(<VocabReview initialQueue={[{ ...card, state: STATE.NEW }]} onGrade={onGrade} onExit={jest.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+  expect(screen.queryByRole("button", { name: /去拼写/ })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /记得/ }));
+  expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
+});
+
+test("键盘：空格翻面 → 空格选记得进拼写 → 回车核对 → 空格下一词", () => {
+  const onGrade = jest.fn(() => null);
+  render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  fireEvent.keyDown(window, { key: " " });
+  fireEvent.keyDown(window, { key: " " });
+  const input = screen.getByRole("textbox", { name: "拼写英文单词" });
+  expect(onGrade).not.toHaveBeenCalled();
+  fireEvent.change(input, { target: { value: "approximately" } });
+  fireEvent.submit(input.closest("form"));
+  fireEvent.keyDown(window, { key: " " });
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
 });
 
@@ -40,19 +84,21 @@ test("旧账号的同词评分回调在切换账号后不执行", () => {
   } finally { localStorage.removeItem("toefl-user-code"); }
 });
 
-test("拼错或主动看答案都按忘了排期", () => {
+test("认得但拼错、或拼写时主动看答案，都按没记住排期", () => {
   const onGrade = jest.fn(() => null);
   const { rerender } = render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  toSpelling();
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.submit(screen.getByRole("button", { name: "核对拼写" }).closest("form"));
   expect(screen.getByRole("status")).toHaveTextContent("aproximately");
-  fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
 
   onGrade.mockClear();
   rerender(<VocabReview key="second" initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  toSpelling();
   fireEvent.click(screen.getByRole("button", { name: "想不起来，显示答案" }));
-  fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
 });
 
@@ -68,6 +114,7 @@ test("只需认得的词仍可翻面并自评，不要求输入拼写", () => {
 test("拼错后可用首字母提示再拼一次，重练拼对仍按首次结果排期", () => {
   const onGrade = jest.fn(() => null);
   render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  toSpelling();
 
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
@@ -82,13 +129,14 @@ test("拼错后可用首字母提示再拼一次，重练拼对仍按首次结�
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "approximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
   expect(screen.getByRole("status")).toHaveTextContent("这次拼对了");
-  fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
 });
 
 test("主动看答案后也能反复重练，仍只评分一次", () => {
   const onGrade = jest.fn(() => null);
   render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
+  toSpelling();
 
   fireEvent.click(screen.getByRole("button", { name: "想不起来，显示答案" }));
   fireEvent.click(screen.getByRole("button", { name: "再拼一次（提示首字母）" }));
@@ -97,7 +145,7 @@ test("主动看答案后也能反复重练，仍只评分一次", () => {
   fireEvent.click(screen.getByRole("button", { name: "再拼一次（提示首字母）" }));
   expect(screen.getByRole("textbox", { name: "拼写英文单词" })).toHaveValue("");
   fireEvent.click(screen.getByRole("button", { name: "想不起来，显示答案" }));
-  fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
   expect(onGrade).toHaveBeenCalledTimes(1);
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
 });
@@ -110,6 +158,7 @@ test("拼写失败后可改为只需认得；短队列不提前回插，改动�
   });
   const onGrade = jest.fn(() => ({ ...card, productive, due: new Date().toISOString() }));
   render(<VocabReview initialQueue={[card]} onGrade={onGrade} onSetProductive={onSetProductive} onExit={jest.fn()} />);
+  toSpelling();
 
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
@@ -120,9 +169,9 @@ test("拼写失败后可改为只需认得；短队列不提前回插，改动�
   expect(onSetProductive).toHaveBeenCalledWith(card.word, false);
   expect(toggle).toHaveAttribute("aria-checked", "false");
   expect(screen.getByText(/下次出现时生效；本次仍按当前题型计分/)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "忘了，下一词" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "没拼对，下一词" })).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+  fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.AGAIN, expect.any(Number));
   expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
   expect(screen.getByText("这一轮复习完成")).toBeInTheDocument();

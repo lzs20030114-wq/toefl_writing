@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
 import { hasUsableSense, parseSenses } from "../../lib/dict/core";
@@ -27,17 +27,19 @@ import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSu
  *     而挖空卡正面挂着音标等于已经把词形给了，真实句子的空位又不唯一，
  *     它从头到尾没要求过词义提取。语境提升理解，**提取**才提升留存
  *     （den Broek 2018/2022），所以语境留下，提取的目标换成词义。
- *     进入 review 后的产出卡要求输入拼写，核对后按实际结果评分。
+ *     要会写的词进入 review 后，认词选「记得」还要写出拼写，拼对才算记得
+ *     （book.needsSpelling）。不再一上来就冷考拼写：先认词，词义和拼写两个信号分得开。
  *  3. 只有两个评分键：忘了 / 记得。Anki 官方 FAQ：FSRS 对「主要用 Again/Good」
  *     的用户预测更准；而「忘了却按 Hard」是官方点名唯一会毁掉排期的习惯。
  *     四档的信息增益小于它引入的自评噪声，对我们这种顺手收藏进来的普通用户尤其如此。
  *  4. 不显示下次间隔。看见间隔，用户就会用「我想多久再看到它」而不是
  *     「我记得多牢」来评分。
- *  5. 新词和忘掉的词首日隔开提取 3 次（学习步两步），一场里同一个词最多出现
- *     4 次，且中间至少隔 10 张。连刷是集中练习，制造的是流畅性错觉而不是记忆
- *     （Kornell 2009）；隔开的多次提取才有效，同场隔开提取 5–7 次显著优于
- *     1–3 次（Nakata 2017），而答对 3 次是性价比最高的那个门槛
- *     （Rawson & Dunlosky 2011）。
+ *  5. 当天第一遍就答对 → 今天过；没答对 → 隔开（至少 10 张）回来，当天累计答对
+ *     3 次才过（srs.learningSteps）。答对过的词当天再问只是在点按钮（线上日志：
+ *     当天回访 397 次只错 1 次、中位 2.1 秒），时间留给隔天复习更值
+ *     （Vaughn, Dunlosky & Rawson 2016）；答错的词才需要当天补够 3 次
+ *     （Rawson & Dunlosky 2011）。连刷是集中练习，制造的是流畅性错觉（Kornell 2009），
+ *     所以回插仍要隔开。
  */
 
 const ACCENT = "#0891B2";
@@ -45,14 +47,16 @@ const ACCENT_SOFT = "#ECFEFF";
 
 /** 重新插队至少隔这么多张 —— 刚看完答案立刻再问，考的是短时记忆，不是记忆。 */
 const REINSERT_GAP = 10;
-/** 一个词在一场里最多出现几次（学习步两步 = 首日 3 次提取，留一次余量给答错重来）。 */
-const MAX_APPEARANCES = 4;
+/** 一个词在一场里最多出现几次：失手 1 次 + 累计答对 3 次 = 4，再留两次给中途又错。
+ *  到顶还没过的词留在学习中，下次（多半是明天）第一遍答对就过。 */
+const MAX_APPEARANCES = 6;
 
 const DIRECTION_META = {
   context: { label: "认词", tip: "这个词在这句里是什么意思" },
   recognize: { label: "认词", tip: "这个词什么意思" },
-  recall: { label: "拼写", tip: "这个意思用英文怎么说" },
 };
+/** 认词选了「记得」之后弹出的拼写步骤。 */
+const SPELL_META = { label: "拼写", tip: "认得了，再写出它的英文拼写" };
 
 /** 把句子里的目标词标出来。匹配不到就原样返回。 */
 function highlight(sentence, word) {
@@ -201,6 +205,8 @@ export function VocabReview({
   // 每次评分前压一份快照；过了存档点清空（那一刻已经落盘，不再允许回头改）
   const [history, setHistory] = useState([]);
   const [revealed, setRevealed] = useState(false);
+  // 拼写步骤：null = 还在认词；input = 正在写；result = 已核对，看结果
+  const [spellStage, setSpellStage] = useState(null);
   const [spelling, setSpelling] = useState("");
   const [spellingResult, setSpellingResult] = useState(null);
   const [retrying, setRetrying] = useState(false);
@@ -233,12 +239,14 @@ export function VocabReview({
   const contextDef = definitionForContext(card, definitionSentence);
   const mainDef = hasUsableSense(contextDef) ? contextDef
     : (extraEntry && hasUsableSense(extraEntry.t) ? extraEntry.t : "");
-  // context 卡正面用「保留目标词的原句」，recall 卡正面用「挖了空的原句」。
+  // 认词正面用「保留目标词的原句」，拼写步骤用「挖了空的原句」。
   const context = useMemo(() => (card ? contextSentence(card) : null), [card]);
   const cloze = useMemo(() => (card ? clozeSentence(card) : null), [card]);
   // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
   const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
+  // 这一次选「记得」后要不要拼：按卡进队列时的状态定，本场改「要会写」开关下次才生效。
+  const spellingOn = useMemo(() => (card ? needsSpelling(card) : false), [card]);
   // A user-edited meaning may include the English answer; conceal it on spelling fronts.
   const spellingDef = card?.word ? mainDef.replace(new RegExp(`\\b${card.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b`, "gi"), "____") : mainDef;
   const productiveOn = card
@@ -261,27 +269,33 @@ export function VocabReview({
     setEditError("");
   }, [pos, card?.word]);
 
-  // 存档小结开着时不能抢焦点：下一张若是拼写卡，输入框一聚焦，空格就打进了它背后的输入框，
+  // 存档小结开着时不能抢焦点：输入框一聚焦，空格就打进了它背后的输入框，
   // 小结的「继续」按钮永远等不到键盘。小结关掉后依赖变化，焦点再回到输入框。
   useEffect(() => {
-    if (mode === "recall" && !revealed && !sess.checkpoint) spellingRef.current?.focus();
-  }, [pos, mode, revealed, sess.checkpoint]);
+    if (spellStage === "input" && !sess.checkpoint) spellingRef.current?.focus();
+  }, [pos, spellStage, sess.checkpoint]);
 
   const checkSpelling = useCallback((e) => {
     e.preventDefault();
-    if (!card || !spelling.trim() || revealed) return;
+    if (!card || !spelling.trim() || spellStage !== "input") return;
     const normalize = (value) => value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
     const result = normalize(spelling) === normalize(card.word) ? "correct" : "incorrect";
     if (retrying) setRetryResult(result);
     else setSpellingResult(result);
-    setRevealed(true);
-  }, [card, spelling, revealed, retrying]);
+    setSpellStage("result");
+  }, [card, spelling, spellStage, retrying]);
+
+  const giveUpSpelling = useCallback(() => {
+    if (retrying) setRetryResult("skipped");
+    else setSpellingResult("skipped");
+    setSpellStage("result");
+  }, [retrying]);
 
   const retrySpelling = useCallback(() => {
     setRetrying(true);
     setRetryResult(null);
     setSpelling("");
-    setRevealed(false);
+    setSpellStage("input");
   }, []);
 
   const toggleProductive = useCallback((event) => {
@@ -295,6 +309,7 @@ export function VocabReview({
 
   const resetFace = useCallback((nextRevealed = false) => {
     setRevealed(nextRevealed);
+    setSpellStage(null);
     setSpelling("");
     setSpellingResult(null);
     setRetrying(false);
@@ -386,8 +401,8 @@ export function VocabReview({
     if (!prevCard || !onUndo(prevCard.word)) return;
     setHistory(history.slice(0, -1));
     setSess(prev);
-    // 认词卡摆回「已翻面」，方便直接重新选；拼写卡得重新拼，不能带着旧结果
-    resetFace(cardDirection(prevCard) !== "recall");
+    // 摆回「已翻面、还没选」：直接重新选；要拼写的话选「记得」后从空输入框重新拼，不带旧结果
+    resetFace(true);
   }, [accountKey, canUndo, history, onUndo, resetFace]);
 
   const suspendWord = useCallback(() => {
@@ -429,9 +444,17 @@ export function VocabReview({
     }
   }, [accountKey, card, editText, onEditDefinition]);
 
-  // 认词卡沿用翻面自评；拼写卡必须先输入或明确选择「想不起来」。
+  /** 认词选「记得」：要会写的词先弹拼写，拼对才算；其余直接记得。 */
+  const remember = useCallback(() => {
+    if (spellingOn) setSpellStage("input");
+    else grade(RATING.GOOD);
+  }, [grade, spellingOn]);
+
+  // 认词翻面自评；选「记得」的要会写词，还得写出拼写或明确选择「想不起来」。
   const gradeRef = useRef(grade);
   gradeRef.current = grade;
+  const rememberRef = useRef(remember);
+  rememberRef.current = remember;
   const undoRef = useRef(undo);
   undoRef.current = undo;
   const continueRef = useRef(continueSegment);
@@ -440,8 +463,8 @@ export function VocabReview({
   checkpointRef.current = sess.checkpoint;
   const revealedRef = useRef(revealed);
   revealedRef.current = revealed;
-  const modeRef = useRef(mode);
-  modeRef.current = mode;
+  const spellStageRef = useRef(spellStage);
+  spellStageRef.current = spellStage;
   const spellingResultRef = useRef(spellingResult);
   spellingResultRef.current = spellingResult;
   useEffect(() => {
@@ -457,8 +480,9 @@ export function VocabReview({
         if (e.key === " " || e.key === "Enter") { e.preventDefault(); continueRef.current(); }
         return;
       }
-      if (modeRef.current === "recall") {
-        if (revealedRef.current && (e.key === " " || e.key === "Enter")) {
+      if (spellStageRef.current) {
+        // 拼写中：按键交给输入框（焦点不在框里时不替用户做决定）；看结果时空格/回车进下一词
+        if (spellStageRef.current === "result" && (e.key === " " || e.key === "Enter")) {
           e.preventDefault();
           gradeRef.current(spellingResultRef.current === "correct" ? RATING.GOOD : RATING.AGAIN);
         }
@@ -467,7 +491,7 @@ export function VocabReview({
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         if (!revealedRef.current) setRevealed(true);
-        else gradeRef.current(RATING.GOOD);
+        else rememberRef.current();
         return;
       }
       if (!revealedRef.current) return;
@@ -476,7 +500,7 @@ export function VocabReview({
         gradeRef.current(RATING.AGAIN);
       } else if (e.key === "2") {
         e.preventDefault();
-        gradeRef.current(RATING.GOOD);
+        rememberRef.current();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -504,7 +528,7 @@ export function VocabReview({
 
   if (!card) return null;
 
-  const dirMeta = DIRECTION_META[mode] || DIRECTION_META.recognize;
+  const dirMeta = spellStage ? SPELL_META : DIRECTION_META[mode] || DIRECTION_META.recognize;
   const progress = sess.answered + remaining > 0 ? sess.answered / (sess.answered + remaining) : 0;
   const segmentRows = sess.segment.map((g) => {
     const info = infoRef.current.get(g.word);
@@ -553,13 +577,13 @@ export function VocabReview({
       <div
         onClick={() => {
           if (menuOpen) setMenuOpen(false);
-          else if (mode !== "recall" && !revealed && !editing) setRevealed(true);
+          else if (!spellStage && !revealed && !editing) setRevealed(true);
         }}
         style={{
           position: "relative", background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16,
           boxShadow: C.shadow, padding: "28px 24px", minHeight: 250,
           display: "flex", flexDirection: "column",
-          cursor: mode !== "recall" && !revealed ? "pointer" : "default",
+          cursor: !spellStage && !revealed ? "pointer" : "default",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
@@ -674,7 +698,7 @@ export function VocabReview({
           {/* ── 正面 ── */}
           {/* context：原句照抄、目标词高亮，问的是「它在这里什么意思」。
               正面刻意不给释义 —— 释义就是答案，给了这张卡就没有提取可言。 */}
-          {mode === "context" && (
+          {!spellStage && mode === "context" && (
             <>
               <div style={{ fontSize: 17, color: C.t1, lineHeight: 2 }}>
                 {highlight(context, card.word)}
@@ -685,9 +709,10 @@ export function VocabReview({
             </>
           )}
 
-          {mode === "recognize" && <WordLine card={card} size={34} />}
+          {!spellStage && mode === "recognize" && <WordLine card={card} size={34} />}
 
-          {mode === "recall" && (
+          {/* 拼写步骤：认词选了「记得」才来。词和原句都收起来，只给释义 + 挖空句。 */}
+          {spellStage && (
             <>
               <DefLine
                 text={spellingDef}
@@ -700,12 +725,12 @@ export function VocabReview({
                     : part)}
                 </div>
               )}
-              {retrying && !revealed && (
+              {retrying && spellStage === "input" && (
                 <div style={{ marginTop: 16, fontSize: 13, color: ACCENT, fontWeight: 700 }}>
                   首字母提示：{card.word.trim().charAt(0)}
                 </div>
               )}
-              {!revealed && (
+              {spellStage === "input" && (
                 <form onSubmit={checkSpelling} style={{ display: "flex", gap: 8, marginTop: retrying ? 10 : 18, flexWrap: "wrap" }}>
                   <input
                     ref={spellingRef}
@@ -740,10 +765,10 @@ export function VocabReview({
           )}
 
           {/* ── 背面 ── */}
-          {revealed && (
+          {(spellStage === "result" || (revealed && !spellStage)) && (
             <div style={{ marginTop: 18, paddingTop: 16, borderTop: `1px solid ${C.bdrSubtle}` }}>
               {/* context 卡的正面已经有词、音标和整句了，背面只补那个缺的答案：释义。 */}
-              {mode === "context" ? (
+              {!spellStage && mode === "context" ? (
                 <>
                   <DefLine
                     text={mainDef}
@@ -753,20 +778,20 @@ export function VocabReview({
                 </>
               ) : (
                 <>
-                  {mode === "recall" && (
+                  {spellStage === "result" && (
                     <div role="status" style={{ fontSize: 13, fontWeight: 700, color: (retrying ? retryResult : spellingResult) === "correct" ? "#0d9668" : "#dc2626", marginBottom: 10 }}>
                       {retrying
-                        ? retryResult === "correct" ? "这次拼对了，首次结果仍按忘了计" : retryResult === "incorrect" ? `这次写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："
+                        ? retryResult === "correct" ? "这次拼对了，本次仍按没拼对计" : retryResult === "incorrect" ? `这次写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："
                         : spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："}
                     </div>
                   )}
-                  {mode !== "recognize" && <WordLine card={card} size={28} />}
+                  {spellStage === "result" && <WordLine card={card} size={28} />}
                   {mainDef && (
                     <DefLine
                       text={mainDef}
                       style={{
                         fontSize: 14, color: C.t1, lineHeight: 1.9,
-                        marginTop: mode === "recognize" ? 0 : 10,
+                        marginTop: spellStage === "result" ? 10 : 0,
                       }}
                     />
                   )}
@@ -789,9 +814,9 @@ export function VocabReview({
 
       {/* 操作区 —— 两个键，不显示下次间隔 */}
       <div style={{ marginTop: 16 }}>
-        {mode === "recall" && !revealed ? (
+        {spellStage === "input" ? (
           <button
-            onClick={() => { if (retrying) setRetryResult("skipped"); else setSpellingResult("skipped"); setRevealed(true); }}
+            onClick={giveUpSpelling}
             style={{
               width: "100%", border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2,
               borderRadius: 12, padding: "12px 0", fontSize: 13, fontWeight: 600,
@@ -800,7 +825,7 @@ export function VocabReview({
           >
             想不起来，显示答案
           </button>
-        ) : mode === "recall" ? (
+        ) : spellStage === "result" ? (
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {spellingResult !== "correct" && (
               <button
@@ -823,7 +848,7 @@ export function VocabReview({
                 cursor: "pointer", fontFamily: FONT,
               }}
             >
-              {spellingResult === "correct" ? "记得，下一词" : "忘了，下一词"}
+              {spellingResult === "correct" ? "拼对了，下一词" : "没拼对，下一词"}
             </button>
           </div>
         ) : !revealed ? (
@@ -850,14 +875,14 @@ export function VocabReview({
               忘了 <span style={kbd("#dc2626", "#fecaca")}>1</span>
             </button>
             <button
-              onClick={() => grade(RATING.GOOD)}
+              onClick={remember}
               style={{
                 border: "1px solid #a7f3d0", background: "#ecfdf5", color: "#0d9668",
                 borderRadius: 12, padding: "15px 4px", cursor: "pointer", fontFamily: FONT,
                 fontSize: 16, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               }}
             >
-              记得 <span style={kbd("#0d9668", "#a7f3d0")}>2 / 空格</span>
+              {spellingOn ? "记得，去拼写" : "记得"} <span style={kbd("#0d9668", "#a7f3d0")}>2 / 空格</span>
             </button>
           </div>
         )}
@@ -878,12 +903,12 @@ export function VocabReview({
             </button>
           ) : <span />}
           <span style={{ fontSize: 11, color: C.t3, lineHeight: 1.7, textAlign: "right", flex: 1, minWidth: 240 }}>
-            {mode === "recall"
-              ? revealed
-                ? retrying ? "再拼一次只作巩固，本次仍按首次拼写结果排期。" : "拼对算记得；拼错或想不起来算忘了。"
-                : retrying ? "根据首字母提示，再写一次完整单词。" : "先写出完整单词再核对；不会写时也可以显示答案。"
+            {spellStage === "result"
+              ? retrying ? "再拼一次只作巩固，本次仍按首次拼写结果排期。" : "拼对才算记得；拼错或想不起来算没记住，要再累计答对 3 次才过。"
+              : spellStage === "input"
+                ? retrying ? "根据首字母提示，再写一次完整单词。" : "这个词要会写：写出完整拼写再核对；不会写也可以显示答案。"
               : revealed
-                ? "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
+                ? spellingOn ? "按你刚才想起来的情况选；选「记得」后还要写出拼写，拼对才算。" : "按你刚才「想起来的难易」评，不是按「想隔多久再见到它」。"
                 : "先在心里说出它的意思再翻面 —— 想不起来的那几秒，才是真正在记东西。"}
           </span>
         </div>

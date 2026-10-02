@@ -27,6 +27,8 @@ test("无有效备份的旧卡：异步补全当张可见，本张仍是认词�
   fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
   expect(screen.getByText(/称呼\( address的名词复数 \)/)).toBeInTheDocument();
   expect(screen.queryByText("…")).not.toBeInTheDocument();
+  // 进队列时没有能当提示的释义：这一张选「记得」不弹拼写（补全的释义下次出现才生效）
+  expect(screen.queryByRole("button", { name: /去拼写/ })).not.toBeInTheDocument();
 });
 
 test("切到下一张卡时，未返回的新查词不能沿用上一张的释义", async () => {

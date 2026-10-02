@@ -35,7 +35,7 @@ describe("今日计划 · bookStats", () => {
     expect(stats.todayTotal).toBe(2 + 3); // 已过 c,d + 待过 a,b,fresh（d 不重复计）
   });
 
-  test("考拼写 = 进入 review 且要会写的到期词；只需认得的不算", () => {
+  test("考拼写 = 进入 review 且要会写的到期词（认得之后还要拼）；只需认得的、学习中的不算", () => {
     const cards = [review("a"), review("b", { spellingOptOut: true }), review("c", { state: STATE.LEARNING })];
     const stats = bookStats(cards, now, { newPerDay: 0, maxReviews: 100 });
     expect(stats.eligibleReview).toBe(3);
@@ -155,7 +155,8 @@ describe("vocabStore · 撤销 / 暂停 / 编辑释义", () => {
     saveWord({ word: "Cell", def: "细胞", sentence: "A cell divides.", source: "reading" }, at);
     const before = getCard("cell");
     const graded = gradeCard("cell", RATING.GOOD, at, undefined, 4000, "reading");
-    expect(graded.state).toBe(STATE.LEARNING);
+    // 新词第一遍就答对 → 直接过，明天见
+    expect(graded.state).toBe(STATE.REVIEW);
     expect(getCard("cell").introducedAt).toBe(at.toISOString());
     expect(localLogCount()).toBe(1);
 

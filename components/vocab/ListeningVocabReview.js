@@ -15,7 +15,8 @@ import { LISTENING_SEGMENT_LABELS, SEGMENT_SIZE, SegmentCheckpoint } from "./Seg
 
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 const REINSERT_GAP = 10;
-const MAX_APPEARANCES = 4;
+/** 失手 1 次 + 累计答对 3 次 = 4，再留两次给中途又错（同阅读复习，见 srs.learningSteps）。 */
+const MAX_APPEARANCES = 6;
 /** 撤销栈深度，和 vocabStore 里保留的评分前快照数一致（超出的撤销外面也撤不动）。 */
 const UNDO_DEPTH = 30;
 const buttonStyle = { border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 16px", background: "#fff", color: C.t1, fontFamily: FONT, fontWeight: 700, cursor: "pointer" };

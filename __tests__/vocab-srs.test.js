@@ -25,6 +25,7 @@ import {
   buildQueue,
   activeSentence,
   cardDirection,
+  needsSpelling,
   clozeSentence,
   contextPool,
   contextSentence,
@@ -225,85 +226,102 @@ describe("复习阶段", () => {
   });
 });
 
-describe("学习步骤", () => {
+describe("学习步骤：当天第一遍答对就过，没答对累计答对 3 次", () => {
   const waitMin = (next, from) => (new Date(next.due).getTime() - from.getTime()) / 60000;
-
-  test("新词第一次 Good 落在 10 分钟后的学习步上，不跳过当天巩固", () => {
-    const next = schedule(newCardState(NOW), RATING.GOOD, NOW, P);
-    expect(next.state).toBe(STATE.LEARNING);
-    expect(next.step).toBe(0);
-    expect(waitMin(next, NOW)).toBeCloseTo(10, 3);
-  });
+  const later = (from, minutes) => new Date(from.getTime() + minutes * 60000);
 
   /**
-   * 首日三次提取是这套配置的核心（Nakata 2017 / Rawson & Dunlosky 2011），
-   * 两步学习步就是为了买到它 —— 所以把整条路径钉死，别被「官方建议单步」改回去。
+   * 2026-10-02 的过关规则（用户拍板）：第一遍就答对 → 今天过；没答对 → 当天累计答对 3 次才过。
+   * 线上日志里答对过的词当天再问 397 次只错 1 次、中位 2.1 秒，再问只是在点按钮。
    */
-  test("新词首日要隔开答对 3 次才毕业：当场 → 10 分钟 → 20 分钟 → review(1 天)", () => {
-    let card = { ...newCardState(NOW) };
-
-    const s1 = schedule(card, RATING.GOOD, NOW, P);
-    expect(s1.state).toBe(STATE.LEARNING);
-    expect(s1.step).toBe(0);
-    expect(waitMin(s1, NOW)).toBeCloseTo(10, 3);
-
-    card = { ...card, ...s1 };
-    const at2 = new Date(NOW.getTime() + 11 * 60000);
-    const s2 = schedule(card, RATING.GOOD, at2, P);
-    expect(s2.state).toBe(STATE.LEARNING);
-    expect(s2.step).toBe(1);
-    expect(waitMin(s2, at2)).toBeCloseTo(20, 3);
-
-    card = { ...card, ...s2 };
-    const at3 = new Date(at2.getTime() + 21 * 60000);
-    const s3 = schedule(card, RATING.GOOD, at3, P);
-    expect(s3.state).toBe(STATE.REVIEW);
+  test("新词第一遍就答对：直接过，明天见（不再当天连问 3 遍）", () => {
+    const next = schedule(newCardState(NOW), RATING.GOOD, NOW, P);
+    expect(next.state).toBe(STATE.REVIEW);
     // 新词毕业后的第一个间隔压到 1 天，让它跨过一次睡眠（Mazza et al. 2016）
-    expect(s3.scheduledDays).toBe(1);
+    expect(next.scheduledDays).toBe(1);
   });
 
-  test("学习步里任何一步评 Again 都退回第一步（10 分钟）", () => {
-    const atStep0 = { ...newCardState(NOW), state: STATE.LEARNING, step: 0, stability: 3, difficulty: 5, reps: 1 };
-    const back0 = schedule(atStep0, RATING.AGAIN, NOW, P);
-    expect(back0.state).toBe(STATE.LEARNING);
-    expect(back0.step).toBe(0);
-    expect(waitMin(back0, NOW)).toBeCloseTo(10, 3);
+  test("新词第一遍没答对：当天要累计答对 3 次 —— 10 分钟 → 10 分钟 → 20 分钟 → review(1 天)", () => {
+    let card = { ...newCardState(NOW) };
+    const miss = schedule(card, RATING.AGAIN, NOW, P);
+    expect(miss).toMatchObject({ state: STATE.LEARNING, step: 0 });
+    expect(waitMin(miss, NOW)).toBeCloseTo(10, 3);
 
-    const atStep1 = { ...atStep0, step: 1 };
-    const back1 = schedule(atStep1, RATING.AGAIN, NOW, P);
-    expect(back1.state).toBe(STATE.LEARNING);
-    expect(back1.step).toBe(0);
-    expect(waitMin(back1, NOW)).toBeCloseTo(10, 3);
+    card = { ...card, ...miss };
+    const at1 = later(NOW, 11);
+    const ok1 = schedule(card, RATING.GOOD, at1, P);
+    expect(ok1).toMatchObject({ state: STATE.LEARNING, step: 1 });
+    expect(waitMin(ok1, at1)).toBeCloseTo(10, 3);
+
+    card = { ...card, ...ok1 };
+    const at2 = later(at1, 11);
+    const ok2 = schedule(card, RATING.GOOD, at2, P);
+    expect(ok2).toMatchObject({ state: STATE.LEARNING, step: 2 });
+    expect(waitMin(ok2, at2)).toBeCloseTo(20, 3);
+
+    card = { ...card, ...ok2 };
+    const at3 = later(at2, 21);
+    const ok3 = schedule(card, RATING.GOOD, at3, P);
+    expect(ok3.state).toBe(STATE.REVIEW);
+    expect(ok3.scheduledDays).toBe(1);
   });
 
-  test("忘掉的词同样要隔开答对 3 次才放回复习流：10 分钟 → 20 分钟 → review(1 天)", () => {
+  test("是累计不是连续：中途又错一次不加数，但已经答对的不清零", () => {
+    const at = later(NOW, 30);
+    const atStep2 = { ...newCardState(NOW), state: STATE.LEARNING, step: 2, stability: 0.3, difficulty: 6, reps: 3, lastReview: NOW.toISOString() };
+    const miss = schedule(atStep2, RATING.AGAIN, at, P);
+    expect(miss).toMatchObject({ state: STATE.LEARNING, step: 2 });
+    expect(waitMin(miss, at)).toBeCloseTo(20, 3);
+    // 再答对一次就凑够 3 次
+    const done = schedule({ ...atStep2, ...miss }, RATING.GOOD, later(at, 21), P);
+    expect(done.state).toBe(STATE.REVIEW);
+  });
+
+  test("复习时忘了：进重学，同样当天累计答对 3 次才放回复习流", () => {
     let card = reviewCard();
-
     const lapse = schedule(card, RATING.AGAIN, NOW, P);
-    expect(lapse.state).toBe(STATE.RELEARNING);
-    expect(lapse.step).toBe(0);
+    expect(lapse).toMatchObject({ state: STATE.RELEARNING, step: 0, lapses: card.lapses + 1 });
     expect(waitMin(lapse, NOW)).toBeCloseTo(10, 3);
 
     card = { ...card, ...lapse };
-    const at2 = new Date(NOW.getTime() + 11 * 60000);
-    const s2 = schedule(card, RATING.GOOD, at2, P);
-    expect(s2.state).toBe(STATE.RELEARNING);
-    expect(s2.step).toBe(1);
-    expect(waitMin(s2, at2)).toBeCloseTo(20, 3);
+    const at1 = later(NOW, 11);
+    const ok1 = schedule(card, RATING.GOOD, at1, P);
+    expect(ok1).toMatchObject({ state: STATE.RELEARNING, step: 1 });
+    expect(waitMin(ok1, at1)).toBeCloseTo(10, 3);
 
-    card = { ...card, ...s2 };
-    const at3 = new Date(at2.getTime() + 21 * 60000);
-    const s3 = schedule(card, RATING.GOOD, at3, P);
-    expect(s3.state).toBe(STATE.REVIEW);
-    expect(s3.scheduledDays).toBe(1);
+    card = { ...card, ...ok1 };
+    const at2 = later(at1, 11);
+    const ok2 = schedule(card, RATING.GOOD, at2, P);
+    expect(ok2).toMatchObject({ state: STATE.RELEARNING, step: 2 });
+    expect(waitMin(ok2, at2)).toBeCloseTo(20, 3);
+
+    card = { ...card, ...ok2 };
+    const back = schedule(card, RATING.GOOD, later(at2, 21), P);
+    expect(back.state).toBe(STATE.REVIEW);
+    expect(back.scheduledDays).toBe(1);
   });
 
-  test("重学中评 Again 退回重学第一步", () => {
-    const card = { ...newCardState(NOW), state: STATE.RELEARNING, step: 1, stability: 3, difficulty: 5, reps: 4 };
-    const next = schedule(card, RATING.AGAIN, NOW, P);
-    expect(next.state).toBe(STATE.RELEARNING);
-    expect(next.step).toBe(0);
-    expect(waitMin(next, NOW)).toBeCloseTo(10, 3);
+  test("重学中又错：不清零，原地再等一步", () => {
+    const card = { ...newCardState(NOW), state: STATE.RELEARNING, step: 1, stability: 3, difficulty: 5, reps: 4, lastReview: NOW.toISOString() };
+    const next = schedule(card, RATING.AGAIN, later(NOW, 12), P);
+    expect(next).toMatchObject({ state: STATE.RELEARNING, step: 1 });
+    expect(waitMin(next, later(NOW, 12))).toBeCloseTo(10, 3);
+  });
+
+  test("昨天没过完的词：今天第一遍答对就过；第一遍又错就从 0 重新数", () => {
+    const yesterday = new Date(NOW.getTime() - 20 * 3600000); // 隔了一夜，换了学习日
+    const leftover = { ...newCardState(yesterday), state: STATE.LEARNING, step: 1, stability: 0.3, difficulty: 6, reps: 2, lastReview: yesterday.toISOString() };
+    const pass = schedule(leftover, RATING.GOOD, NOW, P);
+    expect(pass.state).toBe(STATE.REVIEW);
+    const miss = schedule(leftover, RATING.AGAIN, NOW, P);
+    expect(miss).toMatchObject({ state: STATE.LEARNING, step: 0 });
+  });
+
+  test("学习日凌晨 4 点换日：23:50 错、次日 00:10 再见不算「隔天第一遍」", () => {
+    const night = new Date(2026, 8, 13, 23, 50);
+    const card = { ...newCardState(night), state: STATE.LEARNING, step: 0, stability: 0.2, difficulty: 6, reps: 1, lastReview: night.toISOString() };
+    const next = schedule(card, RATING.GOOD, new Date(2026, 8, 14, 0, 10), P);
+    expect(next).toMatchObject({ state: STATE.LEARNING, step: 1 });
   });
 
   test("复习卡当天再看一遍走 same-day 公式，稳定度不会暴涨", () => {
@@ -614,22 +632,28 @@ describe("卡片方向 / 原句", () => {
     expect(cardDirection({ word: "cell", source: "reading", sentence: "无关的句子。" })).toBe("recognize");
   });
 
-  test("所有来源的词有有效释义时，默认在 review 后走产出方向（中→英）", () => {
-    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("recall");
-    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "speaking", state: STATE.REVIEW })).toBe("recall");
-    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "reading", state: STATE.REVIEW })).toBe("recall");
+  test("要会写的词正面也是认词：进入 review 后不再换成「给释义拼英文」的正面", () => {
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "writing", sentence: "A cell divides.", state: STATE.REVIEW })).toBe("context");
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "speaking", state: STATE.REVIEW })).toBe("recognize");
+    expect(cardDirection({ word: "divide", def: "vt. 分开", source: "reading", state: STATE.REVIEW })).toBe("recognize");
   });
 
-  test("手动剔除后，写作和口语词也只考认词", () => {
-    expect(cardDirection({ word: "divide", source: "writing", productive: false, sentence: "A cell divides.", state: STATE.REVIEW })).toBe("context");
-    expect(cardDirection({ word: "divide", source: "speaking", productive: false, state: STATE.REVIEW })).toBe("recognize");
+  test("要会写的词进入 review / 重学后，认词选「记得」还要拼对才算", () => {
+    for (const st of [STATE.REVIEW, STATE.RELEARNING]) {
+      expect(needsSpelling({ word: "divide", def: "vt. 分开", source: "writing", sentence: "A cell divides.", state: st })).toBe(true);
+      expect(needsSpelling({ word: "divide", def: "vt. 分开", source: "reading", state: st })).toBe(true);
+    }
   });
 
-  test("还没进 review 的产出词先认词 —— 初学阶段强制产出反而损害词形学习（Barcroft 2006）", () => {
-    for (const st of [STATE.NEW, STATE.LEARNING, STATE.RELEARNING]) {
+  test("手动剔除拼写、或没有能当提示的释义：只认词", () => {
+    expect(needsSpelling({ word: "divide", def: "vt. 分开", productive: false, state: STATE.REVIEW })).toBe(false);
+    expect(needsSpelling({ word: "divide", def: "", state: STATE.REVIEW })).toBe(false);
+  });
+
+  test("新词第一天只认词，不拼写 —— 初学阶段强制产出反而损害词形学习（Barcroft 2006）", () => {
+    for (const st of [STATE.NEW, STATE.LEARNING]) {
+      expect(needsSpelling({ word: "divide", def: "vt. 分开", source: "writing", sentence: "A cell divides.", state: st })).toBe(false);
       expect(cardDirection({ word: "divide", source: "writing", sentence: "A cell divides.", state: st })).toBe("context");
-      expect(cardDirection({ word: "divide", source: "speaking", state: st })).toBe("recognize");
-      expect(cardDirection({ word: "divide", source: "reading", productive: true, state: st })).toBe("recognize");
     }
   });
 

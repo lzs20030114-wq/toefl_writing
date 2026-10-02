@@ -148,14 +148,13 @@ test("评分后今日进度推进，撤销后退回", () => {
   render(<VocabNotebook embedded />);
   fireEvent.click(screen.getByRole("button", { name: /^阅读复习，今天 4 个词/ }));
   const reveal = () => fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
-  // 第一张可能是拼写卡（alpha），按「想不起来」走；其余认词卡直接翻面评「记得」
+  // 都先翻面评「记得」；要会写的复习词（alpha）会再弹拼写，按「想不起来」走
   const answerOne = () => {
+    reveal();
+    fireEvent.click(screen.getByRole("button", { name: /记得/ }));
     if (screen.queryByRole("textbox", { name: "拼写英文单词" })) {
       fireEvent.click(screen.getByRole("button", { name: "想不起来，显示答案" }));
-      fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
-    } else {
-      reveal();
-      fireEvent.click(screen.getByRole("button", { name: /记得/ }));
+      fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
     }
   };
   answerOne();

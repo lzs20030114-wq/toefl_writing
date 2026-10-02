@@ -55,13 +55,17 @@ describe("撤销上一张", () => {
     expect(screen.getByText("word0")).toBeInTheDocument();
   });
 
-  test("拼写卡撤销后要重新拼，不带着旧的拼写结果", () => {
+  test("拼写过的词撤销后摆回认词背面，重选「记得」要从空输入框重新拼", () => {
     const spell = { word: "approximately", display: "approximately", def: "大约", defFull: "adv. 大约", sentence: "About approximately ten.", state: STATE.REVIEW };
     const onGrade = jest.fn(() => ({ ...spell, due: farFuture() }));
     render(<VocabReview initialQueue={[spell, mk(1)]} onGrade={onGrade} onUndo={() => ({})} onExit={jest.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+    fireEvent.click(screen.getByRole("button", { name: /记得，去拼写/ }));
     fireEvent.click(screen.getByRole("button", { name: "想不起来，显示答案" }));
-    fireEvent.click(screen.getByRole("button", { name: "忘了，下一词" }));
+    fireEvent.click(screen.getByRole("button", { name: "没拼对，下一词" }));
     fireEvent.click(screen.getByRole("button", { name: /撤销上一张/ }));
+    expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /记得，去拼写/ }));
     expect(screen.getByRole("textbox", { name: "拼写英文单词" })).toHaveValue("");
     expect(screen.getByRole("button", { name: "想不起来，显示答案" })).toBeInTheDocument();
   });
@@ -254,5 +258,35 @@ describe("徽章", () => {
     good();
     expect(screen.getByText("word0")).toBeInTheDocument();
     expect(screen.getByText("再次出现 · 第 2 次")).toBeInTheDocument();
+  });
+});
+
+describe("过关规则（真实调度 + 真实回插）", () => {
+  /**
+   * 2026-10-02 用户拍板：当天第一遍就答对 → 今天过；没答对 → 隔开回来，当天累计答对 3 次才过。
+   * 这里不用 mock 的评分回调，直接走 srs.schedule，把「一个词一场里出现几次」整条钉死。
+   */
+  test("第一遍答对的词只出现一次；第一遍忘了的词回来到累计答对 3 次为止（共 4 次）", () => {
+    const { schedule } = jest.requireActual("../lib/vocab/srs");
+    const words = Array.from({ length: 40 }, (_, i) => ({ ...mk(i), state: STATE.NEW }));
+    const book = Object.fromEntries(words.map((c) => [c.word, c]));
+    const seen = {};
+    const onGrade = jest.fn((word, rating) => {
+      book[word] = { ...book[word], ...schedule(book[word], rating, new Date()) };
+      return book[word];
+    });
+    render(<VocabReview initialQueue={words} onGrade={onGrade} onExit={jest.fn()} />);
+    for (let guard = 0; guard < 200 && !screen.queryByText("这一轮复习完成"); guard += 1) {
+      if (screen.queryByRole("dialog")) { fireEvent.keyDown(window, { key: " " }); continue; }
+      const word = words.find((c) => screen.queryByText(c.word, { selector: "span" }))?.word;
+      seen[word] = (seen[word] || 0) + 1;
+      if (word === "word0" && seen[word] === 1) again();
+      else good();
+    }
+    expect(seen.word0).toBe(4);
+    expect(book.word0.state).toBe(STATE.REVIEW);
+    const others = Object.entries(seen).filter(([w]) => w !== "word0");
+    expect(others).toHaveLength(39);
+    expect(others.every(([, n]) => n === 1)).toBe(true);
   });
 });

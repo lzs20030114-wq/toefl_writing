@@ -1,5 +1,5 @@
 import { hasUsableSense, isThinEntry, parseSenses, splitSenses } from "../lib/dict/core";
-import { cardDirection, needsDictFill, normalizeCard } from "../lib/vocab/book";
+import { cardDirection, needsDictFill, needsSpelling, normalizeCard } from "../lib/vocab/book";
 import { chooseSense, getCard, saveWord } from "../lib/vocab/vocabStore";
 import { STATE } from "../lib/vocab/srs";
 
@@ -34,7 +34,7 @@ test("旧卡用有效备份修复主释义，复习状态与听力状态原样�
     sentence: "It addresses fundamental questions.", ...readingState, listeningState });
   expect(card.def).toBe(addresses.t);
   expect(needsDictFill(card)).toBe(false);
-  expect(cardDirection(card)).toBe("recall");
+  expect(needsSpelling(card)).toBe(true);
   expect(card).toMatchObject({ ...readingState, listeningState });
 });
 
@@ -44,6 +44,7 @@ test("无备份的旧卡不能变成空提示拼写题，并会进入词典补�
   expect(card.def).toBe("");
   expect(needsDictFill(card)).toBe(true);
   expect(cardDirection(card)).toBe("context");
+  expect(needsSpelling(card)).toBe(false);
 });
 
 test("存储入口拒绝省略号，仍保留已有的有效手选义项", () => {
