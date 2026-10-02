@@ -241,6 +241,23 @@ describe("真题专区 section：四个科目折叠面板", () => {
     });
   });
 
+  // 模考卡排在各科最后一张；左侧时间栏只放分钟数（整段「50 题 · 约 30 分钟」塞进 68px 会溢出到卡外）。
+  test("每科的模考卡排在该科最后一张，时间栏只写分钟数", () => {
+    const { container } = render(<RealExamSectionContent {...pro} />);
+    [
+      ["writing", "/mock-exam", "23 min"],
+      ["reading", "/reading-exam", "30 min"],
+      ["listening", "/listening-exam", "29 min"],
+      ["speaking", "/speaking-exam", "8 min"],
+    ].forEach(([group, path, time]) => {
+      const cards = container.querySelectorAll(`[data-testid="real-group-${group}"] .home-grid a`);
+      const last = cards[cards.length - 1];
+      expect(last.getAttribute("href")).toBe(`${path}?source=real-bank`);
+      // children: [左侧色条, 时间栏, 分隔线, 正文, 徽章+箭头]
+      expect(last.children[1].textContent).toBe(time);
+    });
+  });
+
   test("非 Pro：四张网格全部置灰禁点（不只是默认展开的那张）", () => {
     const { container } = render(<RealExamSectionContent {...baseProps} userTier="free" isLoggedIn={true} />);
     const grids = container.querySelectorAll(".home-grid");
@@ -360,7 +377,9 @@ describe("真题专区 section：SectionContent 路由分支", () => {
     expect(tasks).toContain("REAL_WRITING_COUNTS.discussion");
     expect(tasks).toContain("REAL_WRITING_COUNTS.email");
     expect(tasks).toContain("REAL_WRITING_COUNTS.bs");
-    expect(/count:\s*"\d+\s*题"/.test(tasks)).toBe(false);
+    // 带 href 的模考卡是固定整卷结构（题量不随题库增长），只有它们能写死题量。
+    const bankLines = tasks.split(/\r?\n/).filter((l) => !l.includes("href:")).join("\n");
+    expect(/count:\s*"\d+\s*题"/.test(bankLines)).toBe(false);
   });
 
   // 移动端与桌面端是两条独立渲染链，最容易出的事故就是「桌面改了题量、移动端忘改」——

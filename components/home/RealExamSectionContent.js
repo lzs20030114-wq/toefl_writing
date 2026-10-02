@@ -163,26 +163,6 @@ function RealExamGroupPanel({ group, items, open, onToggle, isPro, isChallenge, 
 // 阅读三题型全是 2026 考生回忆整理 → 回忆版）。
 export const REAL_EXAM_TASKS = [
   {
-    g: "writing", k: "real-writing-mock", type: "mock", href: "/mock-exam?source=real-bank",
-    n: "Writing Mock", t: "写作真题模考", d: "10 道造句、1 封邮件、1 篇学术讨论。约 23 分钟；从未做过的完整真题中组卷。",
-    it: "12 题 · 23 分钟", isMock: true,
-  },
-  {
-    g: "reading", k: "real-reading-mock", type: "mock", href: "/reading-exam?source=real-bank",
-    n: "Reading Mock", t: "阅读真题模考", d: "按 2026 考试题型组合练习。M1 完成后按本站规则进入相应 M2 题型路线。",
-    it: "50 题 · 约 30 分钟", isMock: true,
-  },
-  {
-    g: "listening", k: "real-listening-mock", type: "mock", href: "/listening-exam?source=real-bank",
-    n: "Listening Mock", t: "听力真题模考", d: "完整音频题组与两阶段答题。M2 题型路线按本站模拟规则选择。",
-    it: "47 题 · 约 29 分钟", isMock: true,
-  },
-  {
-    g: "speaking", k: "real-speaking-mock", type: "mock", href: "/speaking-exam?source=real-bank",
-    n: "Speaking Mock", t: "口语真题模考", d: "7 句 Listen & Repeat、4 问 Interview；需要麦克风。",
-    it: "11 题 · 约 8 分钟", isMock: true,
-  },
-  {
     g: "writing",
     k: "real-bs",
     type: "bs",
@@ -213,6 +193,11 @@ export const REAL_EXAM_TASKS = [
     it: `${REAL_WRITING_COUNTS.discussion} 题`,
   },
   {
+    g: "writing", k: "real-writing-mock", type: "mock", href: "/mock-exam?source=real-bank",
+    n: "Writing Mock", t: "写作真题模考", d: "10 道造句、1 封邮件、1 篇学术讨论。约 23 分钟；从未做过的完整真题中组卷。",
+    it: "12 题", time: "23 min", isMock: true,
+  },
+  {
     g: "reading",
     k: "real-ctw",
     type: "ctw",
@@ -241,6 +226,11 @@ export const REAL_EXAM_TASKS = [
     t: "学术阅读真题",
     d: "回忆版学术长文，一篇多题，与常规练习同一判分。",
     it: `${REAL_READING_COUNTS.ap} 篇`,
+  },
+  {
+    g: "reading", k: "real-reading-mock", type: "mock", href: "/reading-exam?source=real-bank",
+    n: "Reading Mock", t: "阅读真题模考", d: "按 2026 考试题型组合练习。M1 完成后按本站规则进入相应 M2 题型路线。",
+    it: "50 题", time: "30 min", isMock: true,
   },
   {
     g: "listening",
@@ -283,6 +273,11 @@ export const REAL_EXAM_TASKS = [
     it: `${REAL_LISTENING_COUNTS.lat} 段`,
   },
   {
+    g: "listening", k: "real-listening-mock", type: "mock", href: "/listening-exam?source=real-bank",
+    n: "Listening Mock", t: "听力真题模考", d: "完整音频题组与两阶段答题。M2 题型路线按本站模拟规则选择。",
+    it: "47 题", time: "29 min", isMock: true,
+  },
+  {
     g: "speaking",
     k: "real-repeat",
     type: "repeat",
@@ -302,6 +297,11 @@ export const REAL_EXAM_TASKS = [
     d: "回忆版 Take an Interview，一套多问，含参考答案。",
     it: `${REAL_SPEAKING_COUNTS.interview} 套`,
   },
+  {
+    g: "speaking", k: "real-speaking-mock", type: "mock", href: "/speaking-exam?source=real-bank",
+    n: "Speaking Mock", t: "口语真题模考", d: "7 句 Listen & Repeat、4 问 Interview；需要麦克风。",
+    it: "11 题", time: "8 min", isMock: true,
+  },
 ];
 
 export function RealExamSectionContent({
@@ -317,7 +317,7 @@ export function RealExamSectionContent({
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
 
   const gridItems = REAL_EXAM_TASKS.map((task) => {
-    const { timeLabel, standardLabel } = task.isMock ? { timeLabel: task.it, standardLabel: "完整模考" } : getRealBankTimeLabels(task.type, modeStr);
+    const { timeLabel, standardLabel } = task.isMock ? { timeLabel: task.time, standardLabel: "完整模考" } : getRealBankTimeLabels(task.type, modeStr);
     return {
       ...task,
       href: task.isMock ? task.href : `${task.href}&mode=${modeStr}`,

@@ -791,22 +791,22 @@ function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier
   // 落库时顺手写的 counts.json，写作三题型读 realExamCounts.js —— 与桌面端同一来源，
   // 都不是 lib/realBank（那会把整个真题库打进首页 bundle，见文件头 import 处的说明）。
   const tasks = [
-    { g: "写作", type: "mock-writing", n: "Writing Mock", t: "写作真题模考", d: "10 道造句 + 邮件 + 讨论，完整未做真题", count: "12 题 · 23 分钟", href: "/mock-exam?source=real-bank" },
     { g: "写作", type: "discussion", n: "Task 3", t: "学术讨论真题", d: "回忆版 51 + 参考版 81", count: `${REAL_WRITING_COUNTS.discussion} 题` },
     { g: "写作", type: "email", n: "Task 2", t: "邮件真题", d: "官方 2 + 回忆版 14 + 参考版 11", count: `${REAL_WRITING_COUNTS.email} 题` },
     { g: "写作", type: "bs", n: "Task 1", t: "造句真题", d: "ETS 官方 20 + 回忆版 86", count: `${REAL_WRITING_COUNTS.bs} 题` },
+    { g: "写作", type: "mock-writing", n: "Writing Mock", t: "写作真题模考", d: "10 道造句 + 邮件 + 讨论，完整未做真题", count: "12 题", time: "23 min", href: "/mock-exam?source=real-bank" },
     { g: "阅读", type: "ctw", n: "Reading 1", t: "阅读填词真题", d: "回忆版原文，按真题原样挖空", count: `${REAL_READING_COUNTS.ctw} 篇` },
-    { g: "阅读", type: "mock-reading", n: "Reading Mock", t: "阅读真题模考", d: "两阶段完整模考，本站规则选择 M2 题型路线", count: "50 题 · 约 30 分钟", href: "/reading-exam?source=real-bank" },
     { g: "阅读", type: "rdl", n: "Reading 2", t: "日常阅读真题", d: "回忆版通知 / 邮件 / 海报", count: `${REAL_READING_COUNTS.rdl} 篇` },
     { g: "阅读", type: "ap", n: "Reading 3", t: "学术阅读真题", d: "回忆版学术长文，一篇多题", count: `${REAL_READING_COUNTS.ap} 篇` },
+    { g: "阅读", type: "mock-reading", n: "Reading Mock", t: "阅读真题模考", d: "两阶段完整模考，本站规则选择 M2 题型路线", count: "50 题", time: "30 min", href: "/reading-exam?source=real-bank" },
     { g: "听力", type: "lcr", n: "Listening 1", t: "听力应答真题", d: "回忆版应答题，按考试日期整套练", count: `${REAL_LISTENING_COUNTS.lcr} 题` },
-    { g: "听力", type: "mock-listening", n: "Listening Mock", t: "听力真题模考", d: "完整音频题组，两阶段答题", count: "47 题 · 约 29 分钟", href: "/listening-exam?source=real-bank" },
     { g: "听力", type: "lc", n: "Listening 2", t: "听力对话真题", d: "回忆版校园对话，一段多题", count: `${REAL_LISTENING_COUNTS.lc} 段` },
     { g: "听力", type: "la", n: "Listening 3", t: "听力通知真题", d: "回忆版校园通知播报", count: `${REAL_LISTENING_COUNTS.la} 段` },
     { g: "听力", type: "lat", n: "Listening 4", t: "听力讲座真题", d: "回忆版学术讲座，一段多题", count: `${REAL_LISTENING_COUNTS.lat} 段` },
+    { g: "听力", type: "mock-listening", n: "Listening Mock", t: "听力真题模考", d: "完整音频题组，两阶段答题", count: "47 题", time: "29 min", href: "/listening-exam?source=real-bank" },
     { g: "口语", type: "repeat", n: "Speaking 1", t: "口语跟读真题", d: "回忆版跟读，录音 + AI 评分", count: `${REAL_SPEAKING_COUNTS.repeat} 套` },
-    { g: "口语", type: "mock-speaking", n: "Speaking Mock", t: "口语真题模考", d: "7 句跟读 + 4 道访谈，需要麦克风", count: "11 题 · 约 8 分钟", href: "/speaking-exam?source=real-bank" },
     { g: "口语", type: "interview", n: "Speaking 2", t: "口语访谈真题", d: "回忆版访谈，一套多问", count: `${REAL_SPEAKING_COUNTS.interview} 套` },
+    { g: "口语", type: "mock-speaking", n: "Speaking Mock", t: "口语真题模考", d: "7 句跟读 + 4 道访谈，需要麦克风", count: "11 题", time: "8 min", href: "/speaking-exam?source=real-bank" },
   ];
   // 科目小标题：只在该科目第一张卡前插一行（12 张卡平铺在手机上根本找不着）。
   const groupSeen = new Set();
@@ -852,7 +852,7 @@ function MobileRealExamSection({ isChallenge, isPractice, mode, switchMode, tier
               <MobileSecTaskCard
                 href={task.href || `/real-bank?type=${task.type}&mode=${modeStr}`}
                 n={task.n} t={task.t} d={`${task.d} · ${task.count}`}
-                timeLabel={task.href ? "完整模考" : getRealBankTimeLabels(task.type, modeStr).timeLabel}
+                timeLabel={task.href ? task.time : getRealBankTimeLabels(task.type, modeStr).timeLabel}
                 accent={accent} isChallenge={isChallenge} t1={t1} t2={t2}
               />
             </div>
