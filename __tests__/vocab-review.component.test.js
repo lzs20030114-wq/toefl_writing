@@ -28,9 +28,10 @@ test("要会写：正面先认词，选「记得」才弹拼写，拼对才按�
   expect(screen.queryByRole("textbox", { name: "拼写英文单词" })).not.toBeInTheDocument();
 
   toSpelling();
-  // 拼写时词和原句收起来，只给释义 + 挖空句
+  // 拼写时词收起来，只给释义 + 挖空句；句子里的空就是作答处，一开始一个字母都没有
   expect(screen.getByText("拼写")).toBeInTheDocument();
-  expect(screen.getByText(`a${"_".repeat(12)}`)).toBeInTheDocument();
+  expect(screen.getByText(/There are/)).toBeInTheDocument();
+  expect(screen.getByRole("textbox", { name: "拼写英文单词" })).toHaveValue("");
   expect(screen.queryByText("approximately")).not.toBeInTheDocument();
   fireEvent.click(screen.getByText("大约、近似"));
   expect(screen.queryByText("approximately")).not.toBeInTheDocument();
@@ -59,7 +60,7 @@ test("拼错后正确拼写按格子摆出来，漏写的字母标红", () => {
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
   const answer = screen.getByRole("group", { name: "正确拼写 approximately" });
-  const red = [...answer.children].filter((el) => el.style.color === "rgb(220, 38, 38)");
+  const red = [...answer.querySelectorAll("span")].filter((el) => el.style.color === "rgb(220, 38, 38)");
   expect(red.map((el) => el.textContent)).toEqual(["p"]);
 });
 
@@ -88,7 +89,7 @@ test("键盘：空格翻面 → 空格选记得进拼写 → 回车核对 → �
   const input = screen.getByRole("textbox", { name: "拼写英文单词" });
   expect(onGrade).not.toHaveBeenCalled();
   fireEvent.change(input, { target: { value: "approximately" } });
-  fireEvent.submit(input.closest("form"));
+  fireEvent.keyDown(input, { key: "Enter" });
   fireEvent.keyDown(window, { key: " " });
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
 });
@@ -143,7 +144,6 @@ test("拼错后可用首字母提示再拼一次，重练拼对仍按首次结�
 
   fireEvent.click(screen.getByRole("button", { name: "再拼一次（提示首字母）" }));
   expect(screen.getByText("首字母提示：a")).toBeInTheDocument();
-  expect(screen.getByText(`a${"_".repeat(12)}`)).toBeInTheDocument();
   expect(screen.queryAllByText("approximately")).toHaveLength(0);
   expect(screen.getByRole("textbox", { name: "拼写英文单词" })).toHaveValue("");
 
