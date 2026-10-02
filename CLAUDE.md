@@ -219,14 +219,15 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 - **撤销上一张**（`vocabStore.undoGrade`，复习页按钮 / Z 键）：只认内存栈顶、必须同词同模式；只退回评分动过的 SRS 字段 +
   `reviewStartedDates` + `introducedAt`（评分后用户改的释义/要会写保留），时钟字段拨到现在好让云同步里「撤销」赢过「那次评分」；
   还没上传的那条复习日志一并删（`reviewLog.removeReviewLog`），已上传的不改写
-- **分段存档**（`lib/vocab/reviewSave.js`）：阅读复习每 10 词弹小结并落存档，只存「词 + 本场统计」，不存卡片；恢复时按词重新从单词本取卡
-  并丢掉已在别处复习掉的。**当天有效**、按账号+模式分键。小结弹出时拼写框不能抢焦点（否则空格打进背后的输入框）
+- **分段存档**（`lib/vocab/reviewSave.js` + `SegmentCheckpoint`）：阅读、听力复习都是每过 10 个词弹小结并落存档，只存「词 + 本场统计」，不存卡片；
+  恢复时按词重新从单词本取卡并丢掉已在别处复习掉的（按学习步排到后面的回访仍在 30 分钟窗口内，所以存档里常比「没问过的词」多）。
+  **当天有效**、按账号+模式分键，两边存档互不影响。小结弹出时拼写框不能抢焦点（否则空格打进背后的输入框）
 - **暂停复习**（`card.suspended`，`vocabStore.setSuspended`）：词和进度保留，`dueSelection/freshSelection` 跳过，不占额度；
   列表里有「已暂停」筛选和「恢复复习」。**手改释义**走 `chooseSense` 同一条路（锁定主释义，原释义留作 `defFull`）
 - **易忘词** = 忘过 ≥3 次（`LEECH_LAPSES`）；`cardStage` 是列表徽章 / 记忆分布条 / 筛选 chip 共用的互斥阶段口径
 - 结算页（`ReviewSummary`）用开场与结束时的 `bookStats` 对比出「预计记得 / 已记牢 / 学习中」的变化；复习中首页侧栏收起（专注模式，
   `VocabNotebook` 的 `onReviewingChange`）。听力复习（`ListeningVocabReview`）同样有撤销（按钮 / Z 键，撤销后摆回「已听过、已翻面」）和结算页（措辞换成听懂/没听懂，
-  下一步接阅读复习），共用 `ReviewSummary` + `lib/vocab/reviewSummary.js`；听力暂无分段存档
+  下一步接阅读复习），共用 `ReviewSummary` + `lib/vocab/reviewSummary.js`
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
 `__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
 

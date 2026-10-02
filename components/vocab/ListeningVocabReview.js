@@ -11,6 +11,7 @@ import { getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
 import ReviewSummary, { LISTENING_LABELS } from "./ReviewSummary";
+import { LISTENING_SEGMENT_LABELS, SEGMENT_SIZE, SegmentCheckpoint } from "./SegmentCheckpoint";
 
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 const REINSERT_GAP = 10;
@@ -21,6 +22,10 @@ const buttonStyle = { border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "
 
 export function ListeningVocabReview({
   initialQueue, onGrade, onUndo, onExit, accountKey = getVocabAccountKey(),
+  // 从存档继续时带进来的上一段统计；没有就是全新一场（存档的读写与恢复见 lib/vocab/reviewSave.js）
+  resume = null,
+  // 每过完一段 / 整场结束时通知外面落存档、清存档（外面不接就不存）
+  onCheckpoint, onFinish,
   // 单词本当前的整体统计，结算页拿它和开场时对比出「预计记得 96 → 104」
   statsNow = null,
   // 结算页下半截的「接下来」：{ nextTask, tomorrow, onStartNext, onExportWords }
@@ -28,21 +33,26 @@ export function ListeningVocabReview({
 }) {
   // 会因评分而变的状态收在一个对象里，撤销就是整个换回上一份（做法同 VocabReview）。
   const [sess, setSess] = useState(() => ({
-    queue: initialQueue || [], pos: 0, answered: 0, tally: { good: 0, again: 0 },
-    first: {}, seen: {}, lost: [], endedAt: null,
+    queue: initialQueue || [], pos: 0, answered: resume?.answered || 0,
+    tally: { good: resume?.tally?.good || 0, again: resume?.tally?.again || 0 },
+    first: resume?.first || {}, seen: resume?.seen || {}, lost: resume?.lost || [],
+    segment: [], // 当前这一段评过的 { word, good, n }
+    segNo: resume?.segNo || 0, checkpoint: false, resumed: !!resume, endedAt: null,
   }));
   const [history, setHistory] = useState([]);
   const [heard, setHeard] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [status, setStatus] = useState("");
   const [playing, setPlaying] = useState(false);
-  const [startStats] = useState(() => pickStats(statsNow));
+  const [startStats] = useState(() => resume?.startStats || pickStats(statsNow));
+  const [segDurMs, setSegDurMs] = useState(0);
   const audioRef = useRef(null);
   const timerRef = useRef(null);
   const rafRef = useRef(null);
   const tokenRef = useRef(0);
   const infoRef = useRef(new Map());
-  const startedAtRef = useRef(Date.now());
+  const startedAtRef = useRef(Date.now() - (resume?.elapsedMs || 0));
+  const segStartRef = useRef(Date.now());
   const shownAtRef = useRef(Date.now());
   const { queue, pos } = sess;
   const card = queue[pos];
@@ -78,7 +88,7 @@ export function ListeningVocabReview({
   }, []);
 
   const play = useCallback(() => {
-    if (!card) return;
+    if (!card || sess.checkpoint) return;
     stop();
     const token = tokenRef.current;
     setStatus("");
@@ -147,7 +157,7 @@ export function ListeningVocabReview({
       timerRef.current = setTimeout(fallback, 15000);
       audio.load();
     } catch { wordSound(true); }
-  }, [card, context, hasSentenceAudio, stop]);
+  }, [card, context, hasSentenceAudio, sess.checkpoint, stop]);
 
   const resetCardUi = useCallback((nextHeard = false) => {
     stop();
@@ -159,12 +169,15 @@ export function ListeningVocabReview({
 
   /** 跳过：不评分，只往后翻一张（队列走完也算结束）。 */
   const skip = () => {
+    if (sess.checkpoint) return;
+    const done = sess.pos + 1 >= sess.queue.length;
     resetCardUi(false);
-    setSess((s) => ({ ...s, pos: s.pos + 1, endedAt: s.pos + 1 >= s.queue.length ? Date.now() : null }));
+    setSess({ ...sess, pos: sess.pos + 1, endedAt: done ? Date.now() : null });
+    if (done) onFinish?.();
   };
 
   const grade = (rating) => {
-    if (!card || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
+    if (!card || sess.checkpoint || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
     const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current, "listening");
     if (!updated) return;
     const good = rating !== RATING.AGAIN;
@@ -174,8 +187,10 @@ export function ListeningVocabReview({
       gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
     });
     const nextPos = sess.pos + 1;
-    setHistory((h) => [...h, sess].slice(-UNDO_DEPTH));
-    setSess({
+    const done = nextPos >= nextQueue.length;
+    const segment = [...sess.segment, { word: card.word, good, n: times }];
+    const hit = !done && segment.length >= SEGMENT_SIZE;
+    const next = {
       ...sess,
       queue: nextQueue,
       pos: nextPos,
@@ -184,32 +199,62 @@ export function ListeningVocabReview({
       first: card.word in sess.first ? sess.first : { ...sess.first, [card.word]: good },
       seen: { ...sess.seen, [card.word]: times },
       lost: !good && !sess.lost.includes(card.word) ? [...sess.lost, card.word] : sess.lost,
-      endedAt: nextPos >= nextQueue.length ? Date.now() : null,
-    });
+      segment,
+      segNo: hit ? sess.segNo + 1 : sess.segNo,
+      checkpoint: hit,
+      endedAt: done ? Date.now() : null,
+    };
+    // 过了存档点就清掉撤销栈：那一刻已经落盘，不再允许回头改
+    setHistory(hit || done ? [] : (h) => [...h, sess].slice(-UNDO_DEPTH));
+    setSess(next);
     resetCardUi(false);
+    if (hit) {
+      setSegDurMs(Date.now() - segStartRef.current);
+      onCheckpoint?.({
+        words: nextQueue.slice(nextPos).map((c) => c.word),
+        answered: next.answered, tally: next.tally, first: next.first, seen: next.seen, lost: next.lost,
+        segNo: next.segNo, elapsedMs: Date.now() - startedAtRef.current, startStats,
+      });
+    }
+    if (done) onFinish?.();
   };
+
+  const continueSegment = useCallback(() => {
+    segStartRef.current = Date.now();
+    shownAtRef.current = Date.now();
+    setSess((s) => ({ ...s, checkpoint: false, segment: [], resumed: false }));
+  }, []);
 
   /**
    * 撤销上一张评分：外面把调度状态和日志退回后，界面摆回那张卡「已听过、已翻面」的样子，
    * 不用再听一遍就能直接重新选（那句刚刚才听过，再听只是白费一次提取）。
    */
   const undo = useCallback(() => {
-    if (!onUndo || !history.length || getVocabAccountKey() !== accountKey) return;
+    if (!onUndo || !history.length || sess.checkpoint || getVocabAccountKey() !== accountKey) return;
     const prev = history[history.length - 1];
     const prevCard = prev.queue[prev.pos];
     if (!prevCard || !onUndo(prevCard.word)) return;
     setHistory(history.slice(0, -1));
     setSess(prev);
     resetCardUi(true);
-  }, [accountKey, history, onUndo, resetCardUi]);
+  }, [accountKey, history, onUndo, resetCardUi, sess.checkpoint]);
 
   const undoRef = useRef(undo);
   undoRef.current = undo;
+  const continueRef = useRef(continueSegment);
+  continueRef.current = continueSegment;
+  const checkpointRef = useRef(sess.checkpoint);
+  checkpointRef.current = sess.checkpoint;
   useEffect(() => {
     const onKey = (e) => {
       if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); }
+      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); return; }
+      // 存档小结开着时空格/回车 = 继续下一段（焦点在按钮上就留给按钮自己点）
+      if (checkpointRef.current && (e.key === " " || e.key === "Enter") && !(e.target && e.target.tagName === "BUTTON")) {
+        e.preventDefault();
+        continueRef.current();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -242,7 +287,17 @@ export function ListeningVocabReview({
   return (
     <div style={{ maxWidth: 620, margin: "24px auto", fontFamily: FONT }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-        <span style={{ color: C.t2, fontSize: 13 }}>听力复习 · {pos + 1} / {queue.length}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span style={{ color: C.t2, fontSize: 13 }}>听力复习 · {pos + 1} / {queue.length}</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: C.t2, background: "#f7faf9", border: "1px solid #ebf0ed", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
+            本段 {sess.segment.length} / {SEGMENT_SIZE}
+          </span>
+          {sess.resumed && (
+            <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
+              已从存档继续 · 第 {sess.segNo + 1} 段
+            </span>
+          )}
+        </div>
         <button type="button" style={buttonStyle} onClick={() => { stop(); onExit(); }}>退出复习</button>
       </div>
       <div style={{ background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16, padding: 24, minHeight: 260 }}>
@@ -287,6 +342,22 @@ export function ListeningVocabReview({
           </button>
         )}
       </div>
+      {sess.checkpoint && (
+        <SegmentCheckpoint
+          segNo={sess.segNo}
+          rows={sess.segment.map((g) => {
+            const info = infoRef.current.get(g.word);
+            return { ...g, display: info?.display || g.word, sense: info ? senseOf(info, info.listeningContext?.text) : "" };
+          })}
+          good={sess.segment.filter((g) => g.good).length}
+          again={sess.segment.filter((g) => !g.good).length}
+          durationMs={segDurMs}
+          saved={!!onCheckpoint}
+          labels={LISTENING_SEGMENT_LABELS}
+          onContinue={continueSegment}
+          onPause={() => { stop(); onExit(); }}
+        />
+      )}
     </div>
   );
 }

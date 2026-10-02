@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, act } from "@testing-library/react";
+import { fireEvent, render, screen, act, within } from "@testing-library/react";
 import { ListeningVocabReview } from "../components/vocab/ListeningVocabReview";
 import { RATING, STATE } from "../lib/vocab/srs";
 import { canSpeak, cancelSpeakWord, speakWord } from "../lib/audio/speakWord";
@@ -239,5 +239,83 @@ describe("听力复习 · 结算页", () => {
     expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
     expect(screen.queryByText("第一次就听懂")).not.toBeInTheDocument();
     expect(onGrade).not.toHaveBeenCalled();
+  });
+});
+
+// ── 分段存档 ──
+const lcard = (i) => ({ ...card, word: `word${i}`, display: `word${i}`, def: `释义${i}`, phonetic: "" });
+const lqueue = (n) => Array.from({ length: n }, (_, i) => lcard(i));
+const lgrade = () => jest.fn((word) => ({ ...lcard(Number(word.slice(4))), due: farFuture() }));
+
+describe("听力复习 · 分段存档", () => {
+  test("每 10 个词弹小结并落存档；空格继续、下一段重新计数；存档点之后不能撤销", () => {
+    const onCheckpoint = jest.fn();
+    const onFinish = jest.fn();
+    render(<ListeningVocabReview initialQueue={lqueue(12)} onGrade={lgrade()} onUndo={() => ({})} onCheckpoint={onCheckpoint} onFinish={onFinish} onExit={jest.fn()} />);
+    expect(screen.getByText("本段 0 / 10")).toBeInTheDocument();
+    for (let i = 0; i < 9; i += 1) gradedAs(i === 3 ? "没听懂" : "听懂了");
+    expect(screen.getByText("本段 9 / 10")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    gradedAs("听懂了");
+
+    const dialog = screen.getByRole("dialog", { name: "第 1 段复习完成" });
+    expect(within(dialog).getByText("这 10 个词过完了")).toBeInTheDocument();
+    expect(within(dialog).getByText("听懂了 9")).toBeInTheDocument();
+    expect(within(dialog).getByText("没听懂 1")).toBeInTheDocument();
+    expect(within(dialog).getByText("✓ 已存档")).toBeInTheDocument();
+    expect(within(dialog).getByText(/没听懂的词已排到后面/)).toBeInTheDocument();
+    expect(within(dialog).getAllByText(/^word\d$/)).toHaveLength(10);
+    expect(onCheckpoint).toHaveBeenCalledTimes(1);
+    expect(onCheckpoint.mock.calls[0][0]).toMatchObject({
+      words: ["word10", "word11"], answered: 10, tally: { good: 9, again: 1 }, lost: ["word3"], segNo: 1,
+      first: expect.objectContaining({ word3: false, word0: true }),
+    });
+    expect(screen.getByRole("button", { name: /撤销上一张/ })).toBeDisabled();
+    expect(onFinish).not.toHaveBeenCalled();
+
+    act(() => { fireEvent.keyDown(window, { key: " " }); });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByText("本段 0 / 10")).toBeInTheDocument();
+    expect(screen.getByText("听力复习 · 11 / 12")).toBeInTheDocument();
+
+    gradedAs("听懂了");
+    gradedAs("听懂了");
+    expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
+    expect(onFinish).toHaveBeenCalledTimes(1);
+  });
+
+  test("小结开着时不能评分也不能播放；先休息，退出 = 外面的退出并停止声音", () => {
+    const onExit = jest.fn();
+    const onGrade = lgrade();
+    render(<ListeningVocabReview initialQueue={lqueue(11)} onGrade={onGrade} onExit={onExit} />);
+    for (let i = 0; i < 10; i += 1) gradedAs("听懂了");
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).queryByText("✓ 已存档")).not.toBeInTheDocument(); // 没接存档回调，不谎称已存档
+    const calls = speakWord.mock.calls.length;
+    fireEvent.click(screen.getByRole("button", { name: "播放单词发音" }));
+    expect(speakWord.mock.calls.length).toBe(calls);
+    fireEvent.click(within(dialog).getByRole("button", { name: "先休息，退出" }));
+    expect(onExit).toHaveBeenCalledTimes(1);
+    expect(cancelSpeakWord).toHaveBeenCalled();
+    expect(onGrade).toHaveBeenCalledTimes(10);
+  });
+
+  test("从存档继续：带上已答张数、听懂/没听懂和段号，下一次存档的段号接着数", () => {
+    const onCheckpoint = jest.fn();
+    const resume = { answered: 10, tally: { good: 8, again: 2 }, first: { x: true }, seen: { x: 1 }, lost: ["y"], segNo: 1, elapsedMs: 60000, startStats: null };
+    render(<ListeningVocabReview initialQueue={lqueue(11)} resume={resume} onGrade={lgrade()} onCheckpoint={onCheckpoint} onExit={jest.fn()} />);
+    expect(screen.getByText("已从存档继续 · 第 2 段")).toBeInTheDocument();
+    for (let i = 0; i < 10; i += 1) gradedAs("听懂了");
+    expect(onCheckpoint.mock.calls[0][0]).toMatchObject({ answered: 20, tally: { good: 18, again: 2 }, segNo: 2, lost: ["y"] });
+    expect(screen.getByRole("dialog", { name: "第 2 段复习完成" })).toBeInTheDocument();
+  });
+
+  test("一路跳过走到队尾也算结束，通知外面清存档", () => {
+    const onFinish = jest.fn();
+    render(<ListeningVocabReview initialQueue={lqueue(2)} onGrade={lgrade()} onFinish={onFinish} onExit={jest.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: "跳过这张卡" }));
+    expect(onFinish).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "跳过这张卡" }));
+    expect(onFinish).toHaveBeenCalledTimes(1);
   });
 });

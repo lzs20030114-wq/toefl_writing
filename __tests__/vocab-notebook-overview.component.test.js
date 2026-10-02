@@ -198,3 +198,58 @@ test("听力复习接上撤销与结算页：评分/撤销写进真实存储，�
   fireEvent.click(screen.getByRole("button", { name: "开始阅读复习" }));
   expect(screen.getByText("本段 0 / 10")).toBeInTheDocument();
 });
+
+describe("听力复习的分段存档（真实存储）", () => {
+  const SAVE_KEY = (mode) => `toefl-vocab-review-save::guest::${mode}`;
+  const addListening = (n) => {
+    const book = JSON.parse(localStorage.getItem("toefl-vocab-book::guest"));
+    for (let i = 0; i < n; i += 1) book.cards.push({ word: `ear${i}`, def: `n. 听${i}`, source: "listening", reviewMode: "listening", createdAt: iso(base() - DAY) });
+    localStorage.setItem("toefl-vocab-book::guest", JSON.stringify(book));
+  };
+  const answer = (label) => {
+    fireEvent.click(screen.getByRole("button", { name: "播放单词发音" }));
+    fireEvent.click(screen.getByRole("button", { name: "显示答案" }));
+    fireEvent.click(screen.getByRole("button", { name: label }));
+  };
+
+  test("练满 10 个词落存档 → 先休息退出 → 概览显示「从存档继续」→ 继续练完清存档", () => {
+    addListening(10); // 加上种子里的 heard，一共 11 个听力词
+    render(<VocabNotebook embedded />);
+    fireEvent.click(screen.getByRole("button", { name: /^听力复习，今天 11 个词/ }));
+    for (let i = 0; i < 10; i += 1) answer("听懂了");
+    const dialog = screen.getByRole("dialog", { name: "第 1 段复习完成" });
+    expect(within(dialog).getByText("✓ 已存档")).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY("listening")))).toMatchObject({ mode: "listening", answered: 10, segNo: 1 });
+    expect(localStorage.getItem(SAVE_KEY("reading"))).toBeNull(); // 阅读的存档互不影响
+
+    fireEvent.click(within(dialog).getByRole("button", { name: "先休息，退出" }));
+    const cta = screen.getByRole("button", { name: /^听力复习，今天/ });
+    expect(cta).toHaveTextContent("从存档继续 · 第 11 张起");
+    expect(screen.getByText(/存档于第 1 段结束（已答 10 张）/)).toBeInTheDocument();
+
+    fireEvent.click(cta);
+    expect(screen.getByText("已从存档继续 · 第 2 段")).toBeInTheDocument();
+    // 存档里除了没问过的那个词，还有按学习步排到后面的回访；一路答「听懂了」直到本场结束
+    for (let guard = 0; guard < 40 && !screen.queryByText("这一轮听力复习完成"); guard += 1) {
+      if (screen.queryByRole("dialog")) fireEvent.click(screen.getByRole("button", { name: /继续下一段/ }));
+      else answer("听懂了");
+    }
+    expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
+    expect(localStorage.getItem(SAVE_KEY("listening"))).toBeNull();
+  });
+
+  test("阅读、听力存档各管各的：重新开始只清自己这一边", () => {
+    writeReviewSave("guest", "reading", { words: ["alpha"], answered: 10, tally: { good: 10, again: 0 }, first: {}, seen: {}, lost: [], segNo: 1, elapsedMs: 0, startStats: null });
+    writeReviewSave("guest", "listening", { words: ["heard"], answered: 20, tally: { good: 20, again: 0 }, first: {}, seen: {}, lost: [], segNo: 2, elapsedMs: 0, startStats: null });
+    render(<VocabNotebook embedded />);
+    expect(screen.getByRole("button", { name: /^阅读复习，今天/ })).toHaveTextContent("从存档继续 · 第 11 张起");
+    expect(screen.getByRole("button", { name: /^听力复习，今天/ })).toHaveTextContent("从存档继续 · 第 21 张起");
+
+    const listeningCol = screen.getByRole("button", { name: /^听力复习，今天/ }).parentElement;
+    fireEvent.click(within(listeningCol).getByRole("button", { name: "重新开始" }));
+    expect(localStorage.getItem(SAVE_KEY("listening"))).toBeNull();
+    expect(localStorage.getItem(SAVE_KEY("reading"))).not.toBeNull();
+    expect(screen.getByRole("button", { name: /^阅读复习，今天/ })).toHaveTextContent("从存档继续 · 第 11 张起");
+    expect(screen.getByRole("button", { name: /^听力复习，今天/ })).toHaveTextContent("开始听力复习");
+  });
+});

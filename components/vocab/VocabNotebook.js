@@ -219,14 +219,19 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     return out;
   }, [cards]);
 
-  // 阅读复习的存档：只当天有效，且只留还值得问的词（见 resumableQueue）。
-  const readingSave = useMemo(() => {
-    if (!ready || !accountKey) return null;
-    const save = readReviewSave(accountKey, "reading", now);
-    if (!save) return null;
-    const resumable = resumableQueue(save, cards, "reading", now);
-    return resumable.length ? { save, queue: resumable } : null;
+  // 阅读 / 听力复习各自的存档：只当天有效，且只留还值得问的词（见 resumableQueue）。
+  const saves = useMemo(() => {
+    const out = { reading: null, listening: null };
+    if (!ready || !accountKey) return out;
+    for (const mode of ["reading", "listening"]) {
+      const save = readReviewSave(accountKey, mode, now);
+      const resumable = save ? resumableQueue(save, cards, mode, now) : [];
+      if (resumable.length) out[mode] = { save, queue: resumable };
+    }
+    return out;
   }, [ready, accountKey, cards, now, saveTick]); // eslint-disable-line react-hooks/exhaustive-deps
+  const readingSave = saves.reading;
+  const listeningSave = saves.listening;
 
   const resetListView = () => {
     setShown(PAGE_SIZE);
@@ -235,10 +240,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   };
   const startReview = (mode, { resume = false } = {}) => {
     if (!ready || accountKey !== getVocabAccountKey()) return;
-    const resumed = mode === "reading" && resume && readingSave ? readingSave : null;
+    const resumed = resume ? saves[mode] : null;
     const next = resumed ? resumed.queue : makeQueue(mode, accountKey);
     if (!next || !next.length) return;
-    if (mode === "reading" && !resumed) clearReviewSave(accountKey, "reading");
+    if (!resumed) clearReviewSave(accountKey, mode);
     setQueue({ cards: next, account: accountKey, mode, resume: resumed?.save || null, run: Date.now() });
   };
   const exitReview = () => { setQueue(null); setSaveTick((tick) => tick + 1); };
@@ -266,9 +271,11 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     const account = queue.account;
     const review = queue.mode === "listening"
       ? <ListeningVocabReview key={`${account}:${queue.run}`} initialQueue={queue.cards} accountKey={account}
-        statsNow={stats}
+        resume={queue.resume} statsNow={stats}
         onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "listening", account)}
         onUndo={undo ? (word) => undo(word, "listening", account) : undefined}
+        onCheckpoint={(state) => writeReviewSave(account, "listening", state)}
+        onFinish={() => clearReviewSave(account, "listening")}
         summaryExtras={{
           // 听力练完，下一步是还没做完的阅读复习；有存档就接着存档做
           nextTask: { label: "阅读复习", todo: num(reading.todo), minutes: estimateMinutes(num(reading.todo)) },
@@ -289,7 +296,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         summaryExtras={{
           nextTask: { label: "听力复习", todo: num(listening.todo), minutes: estimateMinutes(num(listening.todo)) },
           tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried } : null,
-          onStartNext: () => startReview("listening"),
+          onStartNext: () => startReview("listening", { resume: !!listeningSave }),
           onExportWords: (words) => setLostExport({ words, account }),
         }}
         onExit={exitReview} />;
@@ -310,6 +317,14 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     : readingSave ? `从存档继续 · 第 ${readingSave.save.answered + 1} 张起`
       : readingTodo && num(reading.doneToday) > 0 ? `继续阅读复习 · 剩 ${readingTodo}`
         : readingTodo ? "开始阅读复习" : "暂无任务";
+  const listeningCta = !ready ? "正在读取…"
+    : listeningSave ? `从存档继续 · 第 ${listeningSave.save.answered + 1} 张起`
+      : listeningTodo && num(listening.doneToday) > 0 ? `继续听力复习 · 剩 ${listeningTodo}`
+        : listeningTodo ? "开始听力复习" : "暂无任务";
+  const saveRow = (mode, entry) => entry && <div className={styles.saveRow}>
+    <span><em>存档</em><span>存档于第 {entry.save.segNo} 段结束（已答 {entry.save.answered} 张）· {new Date(entry.save.at).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}</span></span>
+    <button type="button" onClick={() => { clearReviewSave(accountKey, mode); setSaveTick((tick) => tick + 1); }}>重新开始</button>
+  </div>;
   const today = ready ? new Date() : null;
   const forecastDays = forecast?.days || [];
   const forecastMax = Math.max(1, ...forecastDays.map((d) => d.n));
@@ -357,18 +372,16 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
               <button type="button" className={styles.cta} disabled={!ready || (!readingTodo && !readingSave)}
                 onClick={() => startReview("reading", { resume: !!readingSave })}
                 aria-label={`阅读复习，今天 ${ready ? readingTodo : "加载中"} 个词。${readingCta}`}>{readingCta}</button>
-              {readingSave && <div className={styles.saveRow}>
-                <span><em>存档</em><span>存档于第 {readingSave.save.segNo} 段结束（已答 {readingSave.save.answered} 张）· {new Date(readingSave.save.at).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}</span></span>
-                <button type="button" onClick={() => { clearReviewSave(accountKey, "reading"); setSaveTick((tick) => tick + 1); }}>重新开始</button>
-              </div>}
+              {saveRow("reading", readingSave)}
             </div>
             <div className={`${styles.taskCol} ${styles.listening}`}>
               <div className={styles.taskColHead}><strong>听力复习</strong>{ready && listeningTodo > 0 && <span>约 {estimateMinutes(listeningTodo)} 分钟</span>}</div>
               <div className={styles.bigNum}><strong>{ready ? listeningTodo : "—"}</strong><span>词待完成</span></div>
               <div className={styles.chips}><span>到期 {num(listening.eligibleReview)}</span><span>新词 {num(listening.newToday)}</span></div>
-              <button type="button" className={styles.cta} disabled={!ready || !listeningTodo}
-                onClick={() => startReview("listening")}
-                aria-label={`听力复习，今天 ${ready ? listeningTodo : "加载中"} 个词`}>{listeningTodo ? "开始听力复习" : "暂无任务"}</button>
+              <button type="button" className={styles.cta} disabled={!ready || (!listeningTodo && !listeningSave)}
+                onClick={() => startReview("listening", { resume: !!listeningSave })}
+                aria-label={`听力复习，今天 ${ready ? listeningTodo : "加载中"} 个词。${listeningCta}`}>{listeningCta}</button>
+              {saveRow("listening", listeningSave)}
             </div>
           </div>
           {ready && num(stats?.deferredReview) > 0 && <div className={styles.overflow}>
