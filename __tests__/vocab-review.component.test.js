@@ -54,6 +54,17 @@ test("拼写是一个字母一个格：敲的字母落在格子上，多敲的�
   expect(input).toHaveValue("approximately");
 });
 
+test("输入法组字中不改写输入框，组字结束再只留字母", () => {
+  render(<VocabReview initialQueue={[card]} onGrade={jest.fn(() => null)} onExit={jest.fn()} />);
+  toSpelling();
+  const input = screen.getByRole("textbox", { name: "拼写英文单词" });
+  fireEvent.compositionStart(input);
+  fireEvent.change(input, { target: { value: "a'pr" } });
+  expect(input).toHaveValue("a'pr");
+  fireEvent.compositionEnd(input, { target: { value: "a'pr" } });
+  expect(input).toHaveValue("apr");
+});
+
 test("拼错后正确拼写按格子摆出来，漏写的字母标红", () => {
   render(<VocabReview initialQueue={[card]} onGrade={jest.fn(() => null)} onExit={jest.fn()} />);
   toSpelling();

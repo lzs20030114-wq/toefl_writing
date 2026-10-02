@@ -119,7 +119,10 @@ export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost
   const slots = spellingSlots(word);
   const { ref, scale, rowWidth } = useFit(slots, inline);
   const [focused, setFocused] = useState(false);
-  const typed = [...value];
+  // 输入法组字中（中文输入法没切英文就敲字母）先原样留着，不能每敲一下就剔字符改写输入框 ——
+  // 那会把组字打断。组字结束再统一收拾；格子上照样实时显示收拾后的字母。
+  const [draft, setDraft] = useState(null);
+  const typed = [...(draft === null ? value : sanitizeSpelling(draft, word))];
   const letterCount = slots.filter((slot) => slot.letter).length;
   // 透明输入框里点到中间会把光标放到中间去，而格子总是从左往右填 —— 光标钉在末尾，两边才对得上。
   const keepCaretAtEnd = (e) => {
@@ -142,12 +145,14 @@ export function SpellingInput({ word, value, onChange, onSubmit, inputRef, ghost
       <input
         ref={inputRef}
         aria-label={label}
-        value={value}
-        onChange={(e) => onChange(sanitizeSpelling(e.target.value, word))}
+        value={draft === null ? value : draft}
+        onChange={(e) => (draft === null ? onChange(sanitizeSpelling(e.target.value, word)) : setDraft(e.target.value))}
+        onCompositionStart={(e) => setDraft(e.target.value)}
+        onCompositionEnd={(e) => { setDraft(null); onChange(sanitizeSpelling(e.target.value, word)); }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         onSelect={keepCaretAtEnd}
-        onKeyDown={(e) => { if (e.key === "Enter" && onSubmit) { e.preventDefault(); onSubmit(e); } }}
+        onKeyDown={(e) => { if (e.key === "Enter" && onSubmit && !e.nativeEvent.isComposing) { e.preventDefault(); onSubmit(e); } }}
         autoComplete="off"
         autoCapitalize="none"
         autoCorrect="off"
