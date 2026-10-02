@@ -55,6 +55,8 @@ function readBsResumeDraft(currentQs) {
 export function useBuildSentenceSession(questions, options = {}) {
   const persistSession = options.persistSession !== false;
   const onComplete = typeof options.onComplete === "function" ? options.onComplete : null;
+  const onProgress = typeof options.onProgress === "function" ? options.onProgress : null;
+  const recordGroupDone = options.recordGroupDone !== false;
   const onTimerChange = typeof options.onTimerChange === "function" ? options.onTimerChange : null;
   const isPracticeMode = options.practiceMode === "practice";
   const timeLimitSeconds = isPracticeMode ? 0 : (Number.isFinite(options.timeLimitSeconds) && options.timeLimitSeconds > 0 ? options.timeLimitSeconds : 410);
@@ -117,6 +119,7 @@ export function useBuildSentenceSession(questions, options = {}) {
   const elapsedRef = useRef(null);
   const autoSubmitRef = useRef(false);
   const deadlineRef = useRef(0);
+  const pausedRemainingRef = useRef(null);
   const resultsRef = useRef(results);
   const idxRef = useRef(0);
   const slotsRef = useRef([]);
@@ -187,6 +190,31 @@ export function useBuildSentenceSession(questions, options = {}) {
     }
   }
 
+  function pauseTimer() {
+    if (!run || isPracticeMode || pausedRemainingRef.current !== null) return;
+    const remaining = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+    pausedRemainingRef.current = remaining;
+    clearInterval(tr.current);
+    setTl(remaining);
+  }
+
+  function resumeTimer() {
+    if (!run || isPracticeMode || pausedRemainingRef.current === null) return;
+    const remaining = pausedRemainingRef.current;
+    pausedRemainingRef.current = null;
+    deadlineRef.current = Date.now() + remaining * 1000;
+    clearInterval(tr.current);
+    tr.current = setInterval(() => {
+      const rem = Math.max(0, Math.round((deadlineRef.current - Date.now()) / 1000));
+      setTl(rem);
+      if (rem <= 0) {
+        clearInterval(tr.current);
+        setRun(false);
+        autoSubmitRef.current = true;
+      }
+    }, 1000);
+  }
+
   useEffect(() => { resultsRef.current = results; }, [results]);
   useEffect(() => { idxRef.current = idx; }, [idx]);
   useEffect(() => { slotsRef.current = slots; }, [slots]);
@@ -244,7 +272,7 @@ export function useBuildSentenceSession(questions, options = {}) {
         .map((r) => Number(r?.q?.__sourceSetId))
         .filter((id) => Number.isInteger(id) && id > 0)
     );
-    if (doneSetIds.size > 0) {
+    if (recordGroupDone && doneSetIds.size > 0) {
       addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [...doneSetIds]);
     }
     const doneGroupIds = new Set(
@@ -252,7 +280,7 @@ export function useBuildSentenceSession(questions, options = {}) {
         .map((r) => r?.q?.__sourceGroupId)
         .filter((id) => typeof id === "string" && id)
     );
-    if (doneGroupIds.size > 0) {
+    if (recordGroupDone && doneGroupIds.size > 0) {
       addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE_GP, [...doneGroupIds]);
     }
 
@@ -487,6 +515,7 @@ export function useBuildSentenceSession(questions, options = {}) {
 
     if (idx < qs.length - 1) {
       setResults(nr);
+      onProgress?.(nr.map((r) => r ? { userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect } : null));
       setIdx(idx + 1);
       restoreOrInitQ(idx + 1, qs);
       submitLockRef.current = false;
@@ -560,6 +589,8 @@ export function useBuildSentenceSession(questions, options = {}) {
     onDropBank,
     getProgress,
     elapsed,
+    pauseTimer,
+    resumeTimer,
   };
 }
 

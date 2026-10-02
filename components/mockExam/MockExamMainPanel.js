@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { C, Btn } from "../shared/ui";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { BuildSentenceTask } from "../buildSentence/BuildSentenceTask";
@@ -8,6 +8,7 @@ import { addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
+import { markRealMockSeen } from "../../lib/realMockExam/client";
 import { TaskTransitionCard } from "./TaskTransitionCard";
 
 const TRANSITION_SECONDS = 25;
@@ -27,9 +28,28 @@ export function MockExamMainPanel({
   canRetryScoring,
   onRetryScoring,
   reportLanguage,
+  realMockPaper,
+  realMockBsProgress,
+  onRealMockBsProgress,
+  realMockSeenItemIds,
+  onRealMockSeen,
+  realMockTaskDeadline,
 }) {
   const [transitionTaskId, setTransitionTaskId] = useState("");
   const [transitionLeft, setTransitionLeft] = useState(0);
+  const seenBsIdsRef = useRef(new Set());
+  const taskTimeSeconds = realMockPaper && Number.isFinite(realMockTaskDeadline)
+    ? Math.max(1, Math.min(currentTask?.seconds || 1, Math.ceil((realMockTaskDeadline - Date.now()) / 1000)))
+    : currentTask?.seconds;
+  const beforeBsQuestion = useCallback(async (question) => {
+    if (!realMockPaper) return;
+    const item = realMockPaper.bsQuestions.find((candidate) => candidate.id === question?.id);
+    if (!item) throw new Error("当前真题不在预选试卷中");
+    await markRealMockSeen(realMockPaper, [item]);
+    seenBsIdsRef.current.add(item.id);
+    addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [item.id]);
+    onRealMockSeen?.(item.id);
+  }, [realMockPaper, onRealMockSeen]);
 
   useEffect(() => {
     if (session.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
@@ -70,10 +90,16 @@ export function MockExamMainPanel({
       {session.status === MOCK_EXAM_STATUS.RUNNING && !showTransition && currentTask?.taskId === TASK_IDS.BUILD_SENTENCE && (
         <BuildSentenceTask
           embedded
+          questions={realMockPaper?.bsQuestions}
+          initialResults={realMockPaper ? realMockBsProgress : null}
+          autoStartOnMount={!!realMockPaper && !!realMockTaskDeadline}
+          beforeQuestion={realMockPaper ? beforeBsQuestion : null}
+          recordGroupDone={!realMockPaper}
+          onProgress={realMockPaper ? onRealMockBsProgress : null}
           persistSession={false}
           onExit={onAbort}
           onTimerChange={onTimerChange}
-          timeLimitSeconds={currentTask?.seconds}
+          timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           onComplete={(payload) => {
             onSubmitTaskResult({
@@ -83,6 +109,7 @@ export function MockExamMainPanel({
                 type: "bs",
                 detailCount: Array.isArray(payload.details) ? payload.details.length : 0,
                 details: Array.isArray(payload.details) ? payload.details : [],
+                ...(realMockPaper ? { seenItemIds: [...new Set([...(realMockSeenItemIds || []), ...seenBsIdsRef.current])] } : {}),
               },
             });
           }}
@@ -92,12 +119,14 @@ export function MockExamMainPanel({
       {session.status === MOCK_EXAM_STATUS.RUNNING && !showTransition && currentTask?.taskId === TASK_IDS.EMAIL_WRITING && (
         <WritingTask
           type="email"
+          prompts={realMockPaper ? [realMockPaper.emailPrompt] : null}
+          initialPromptId={realMockPaper?.emailPrompt?.id || ""}
           embedded
           persistSession={false}
           deferScoring
           onExit={onAbort}
           onTimerChange={onTimerChange}
-          timeLimitSeconds={currentTask?.seconds}
+          timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
           autoStartOnMount
@@ -126,12 +155,14 @@ export function MockExamMainPanel({
       {session.status === MOCK_EXAM_STATUS.RUNNING && !showTransition && currentTask?.taskId === TASK_IDS.ACADEMIC_WRITING && (
         <WritingTask
           type="discussion"
+          prompts={realMockPaper ? [realMockPaper.discussionPrompt] : null}
+          initialPromptId={realMockPaper?.discussionPrompt?.id || ""}
           embedded
           persistSession={false}
           deferScoring
           onExit={onAbort}
           onTimerChange={onTimerChange}
-          timeLimitSeconds={currentTask?.seconds}
+          timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
           autoStartOnMount
@@ -168,6 +199,7 @@ export function MockExamMainPanel({
           canRetryScoring={canRetryScoring}
           onRetryScoring={onRetryScoring}
           reportLanguage={reportLanguage}
+          realMock={!!realMockPaper}
         />
       )}
 

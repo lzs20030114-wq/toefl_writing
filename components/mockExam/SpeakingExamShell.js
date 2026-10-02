@@ -11,6 +11,11 @@ import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
+import { prepareRealMockExam, markRealMockSeen, finishRealMockExam } from "../../lib/realMockExam/client";
+import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
+import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
+import { loadMockCheckpoint, saveMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
+import { getSavedCode } from "../../lib/AuthContext";
 
 // ------ Constants ------
 
@@ -82,19 +87,27 @@ export function SpeakingExamShell(props) {
   );
 }
 
-function SpeakingExamShellInner({ onExit }) {
+function SpeakingExamShellInner({ onExit, realMock = false }) {
+  const checkpointScope = realMock ? { source: "real-bank", section: "speaking", userCode: getSavedCode(), templateVersion: REAL_MOCK_TEMPLATE_VERSION } : null;
+  const restored = useRef((() => {
+    const saved = realMock ? loadMockCheckpoint(checkpointScope)?.session : null;
+    return saved?.exam?.section === "speaking" && saved.exam.userCode === getSavedCode() && saved.exam.templateVersion === REAL_MOCK_TEMPLATE_VERSION ? saved : null;
+  })());
   // Shared exam audio controller (null when the kill switch disables it).
   const examAudio = useExamAudio();
   const examController = examAudio ? examAudio.controller : null;
-  const [phase, setPhase] = useState("intro");
-  const [exam, setExam] = useState(null);
-  const [repeatResults, setRepeatResults] = useState(null);
-  const [interviewResults, setInterviewResults] = useState(null);
-  const [finalScore, setFinalScore] = useState(null);
+  const [phase, setPhase] = useState(["repeat", "interview"].includes(restored.current?.phase) ? "resumeBlocked" : restored.current?.phase || "intro");
+  const [exam, setExam] = useState(restored.current?.exam || null);
+  const [repeatResults, setRepeatResults] = useState(restored.current?.repeatResults || null);
+  const [interviewResults, setInterviewResults] = useState(restored.current?.interviewResults || null);
+  const [finalScore, setFinalScore] = useState(restored.current?.finalScore || null);
   const [error, setError] = useState(null);
+  const [pendingTransition, setPendingTransition] = useState(null);
+  const [preparing, setPreparing] = useState(false);
+  const [blockedAttemptId, setBlockedAttemptId] = useState("");
 
   // Timer
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsed, setElapsed] = useState(restored.current?.elapsed || 0);
   const timerRef = useRef(null);
 
   // Elapsed timer (runs during repeat and interview phases)
@@ -111,12 +124,18 @@ function SpeakingExamShellInner({ onExit }) {
     };
   }, [phase]);
 
+  useEffect(() => {
+    if (!realMock || !exam || phase === "results") return;
+    saveMockCheckpoint({ phase, exam, repeatResults, interviewResults, finalScore, elapsed }, phase, checkpointScope);
+  }, [realMock, phase, exam, repeatResults, interviewResults, finalScore, elapsed]);
+
   // ------ Phase transitions ------
 
-  function handleStartExam() {
+  async function handleStartExam(restartAttemptId = "") {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
     if (examController) examController.unlock();
+    setPreparing(true);
     try {
       // Prefer sets the user hasn't practised yet (shared done-set with practice
       // mode). repeat ids (rpt_*) and interview ids (intv_*) never collide, so a
@@ -126,7 +145,8 @@ function SpeakingExamShellInner({ onExit }) {
         ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT),
         ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW),
       ]);
-      const built = buildSpeakingExam(doneIds);
+      if (realMock && exam) await finishRealMockExam(exam);
+      const built = realMock ? await prepareRealMockExam("speaking", restartAttemptId ? { restartAttemptId } : {}) : buildSpeakingExam(doneIds);
       if (!built.repeatSet || !built.interviewSet) {
         setError("\u9898\u5E93\u6570\u636E\u4E0D\u8DB3\uFF0C\u65E0\u6CD5\u5F00\u59CB\u8003\u8BD5\u3002\u8BF7\u7A0D\u540E\u518D\u8BD5\u3002");
         return;
@@ -137,13 +157,24 @@ function SpeakingExamShellInner({ onExit }) {
       setFinalScore(null);
       setElapsed(0);
       setError(null);
+      setBlockedAttemptId("");
+      if (realMock) clearMockCheckpoint(checkpointScope);
       setPhase("repeatNarration");
     } catch (e) {
-      setError("\u521D\u59CB\u5316\u8003\u8BD5\u5931\u8D25: " + (e.message || "unknown error"));
+      setBlockedAttemptId(e?.activeAttemptId || "");
+      const gaps = (e?.deficits || []).filter((d) => d.gap > 0).map((d) => `${d.taskType} 需要 ${d.need}／可用 ${d.available}／缺 ${d.gap}`);
+      setError([e?.message || "初始化考试失败", ...gaps].join("；"));
+    } finally {
+      setPreparing(false);
     }
   }
 
-  function handleRepeatComplete(result) {
+  async function handleRepeatComplete(result) {
+    if (realMock) {
+      try { await markRealMockSeen(exam, [exam.repeatSet], { answered: true }); }
+      catch (e) { setPendingTransition({ kind: "repeat", result }); setError(e?.message || "跟读提交同步失败"); return; }
+    }
+    setPendingTransition(null);
     setRepeatResults(result);
     setPhase("interviewNarration");
   }
@@ -151,15 +182,30 @@ function SpeakingExamShellInner({ onExit }) {
   // Task-level narration screens → the corresponding task. The exam audio is
   // already unlocked (start-exam click), and the narration itself is read via
   // the browser's Web Speech API, so no controller gesture is needed here.
-  function handleRepeatNarrationContinue() {
+  async function handleRepeatNarrationContinue() {
+    if (realMock) {
+      try { await markRealMockSeen(exam, [exam.repeatSet]); }
+      catch (e) { setError(e?.message || "记录跟读题已见失败"); return; }
+    }
     setPhase("repeat");
   }
 
-  function handleInterviewNarrationContinue() {
+  async function handleInterviewNarrationContinue() {
+    if (realMock) {
+      try { await markRealMockSeen(exam, [exam.interviewSet]); }
+      catch (e) { setError(e?.message || "记录访谈题已见失败"); return; }
+    }
     setPhase("interview");
   }
 
-  function handleInterviewComplete(result) {
+  async function handleInterviewComplete(result) {
+    if (realMock) {
+      try {
+        await markRealMockSeen(exam, [exam.interviewSet], { answered: true });
+        await finishRealMockExam(exam);
+      } catch (e) { setPendingTransition({ kind: "interview", result }); setError(e?.message || "访谈提交同步失败"); return; }
+    }
+    setPendingTransition(null);
     setInterviewResults(result);
     computeScore(repeatResults, result);
   }
@@ -191,12 +237,16 @@ function SpeakingExamShellInner({ onExit }) {
       : 0;
 
     // Band on the ETS raw structure (repeat 0-35 + interview 0-20 = 0-55 → 1-6).
-    const { band, rawTotal, repeatRaw, interviewRaw } = calculateSpeakingBand(
+    const normalScore = calculateSpeakingBand(
       repeatLevels,
       interviewScores,
     );
-    const cefr = bandToCEFR(band);
-    const color = getScoreColor(band);
+    const realScore = realMock ? scoreRealSpeaking(rptItems, intvItems) : null;
+    const { band, rawTotal, repeatRaw, interviewRaw } = realMock
+      ? { band: realScore.band, rawTotal: realScore.raw, repeatRaw: realScore.repeatRaw, interviewRaw: realScore.interviewRaw }
+      : normalScore;
+    const cefr = Number.isFinite(band) ? bandToCEFR(band) : "";
+    const color = Number.isFinite(band) ? getScoreColor(band) : "yellow";
 
     const score = {
       band,
@@ -205,9 +255,9 @@ function SpeakingExamShellInner({ onExit }) {
       repeatScore,
       interviewScore,
       avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
-      rawTotal: Math.round(rawTotal * 10) / 10,
-      repeatRaw: Math.round(repeatRaw * 10) / 10,
-      interviewRaw: Math.round(interviewRaw * 10) / 10,
+      rawTotal: Number.isFinite(rawTotal) ? Math.round(rawTotal * 10) / 10 : null,
+      repeatRaw: Number.isFinite(repeatRaw) ? Math.round(repeatRaw * 10) / 10 : null,
+      interviewRaw: Number.isFinite(interviewRaw) ? Math.round(interviewRaw * 10) / 10 : null,
       repeatItems: rptItems,
       interviewItems: intvItems,
     };
@@ -226,18 +276,28 @@ function SpeakingExamShellInner({ onExit }) {
         band,
         details: {
           subtype: "mock",
+          ...(realMock ? { real: true, source: "real-bank", realMock: true, section: "speaking",
+            attemptId: exam?.attemptId, templateVersion: exam?.templateVersion,
+            itemIds: [exam?.repeatSet?.id, exam?.interviewSet?.id].filter(Boolean),
+            seenItemIds: [exam?.repeatSet?.id, exam?.interviewSet?.id].filter(Boolean),
+            items: [exam?.repeatSet, exam?.interviewSet].filter(Boolean),
+            paperSnapshot: exam, tasks: [
+              { taskType: "repeat", setId: exam?.repeatSet?.id, itemIds: [exam?.repeatSet?.id], items: rptItems, score: repeatRaw },
+              { taskType: "interview", setId: exam?.interviewSet?.id, itemIds: [exam?.interviewSet?.id], items: intvItems, score: interviewRaw },
+            ], repeatItems: rptItems, interviewItems: intvItems } : {}),
           band,
           cefr,
           repeatScore,
           interviewScore,
           avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
-          rawTotal: Math.round(rawTotal * 10) / 10,
+          rawTotal: Number.isFinite(rawTotal) ? Math.round(rawTotal * 10) / 10 : null,
           repeatSetId: exam?.repeatSet?.id,
           interviewSetId: exam?.interviewSet?.id,
           elapsed,
         },
       });
     } catch {}
+    if (realMock) clearMockCheckpoint(checkpointScope);
 
     // Mark this exam's sets done so future mocks (and practice) prefer unseen
     // ones. Speaking mock always runs straight through to here, so this is the
@@ -251,6 +311,7 @@ function SpeakingExamShellInner({ onExit }) {
   }
 
   function handleRestart() {
+    if (realMock) clearMockCheckpoint(checkpointScope);
     setPhase("intro");
     setExam(null);
     setRepeatResults(null);
@@ -278,10 +339,10 @@ function SpeakingExamShellInner({ onExit }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {/* Top bar — only show on intro, transition, and results */}
-      {(phase === "intro" || phase === "repeatNarration" || phase === "interviewNarration" || phase === "results") && (
+      {(phase === "intro" || phase === "resumeBlocked" || phase === "repeatNarration" || phase === "interviewNarration" || phase === "results") && (
         <TopBar
-          title={topBarTitle}
-          section="Speaking | 模考模式"
+          title={realMock ? "口语真题模考" : topBarTitle}
+          section={realMock ? "真题专区｜口语模考" : "Speaking | 模考模式"}
           elapsedTime={phase !== "intro" ? elapsed : undefined}
           onExit={onExit}
         />
@@ -290,9 +351,16 @@ function SpeakingExamShellInner({ onExit }) {
       {/* Intro Phase */}
       {phase === "intro" && !error && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
-          <IntroCard onStart={handleStartExam} onExit={onExit} />
+          <IntroCard onStart={() => handleStartExam()} onExit={onExit} realMock={realMock} preparing={preparing} />
         </div>
       )}
+
+      {phase === "resumeBlocked" && !error && <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}><SurfaceCard style={{ padding: 28, textAlign: "center" }}>
+        <h2 style={{ color: C.t1, fontSize: 19 }}>这项口语任务无法从录音中途恢复</h2>
+        <p style={{ color: C.t2, lineHeight: 1.6 }}>刷新前的录音和逐题评分没有完整保存。已经展示的整套真题仍记为已见；可释放本卷，重新抽取未见真题。</p>
+        <Btn onClick={() => handleStartExam()} disabled={preparing}>{preparing ? "正在重新组卷…" : "重新组卷"}</Btn>
+        <Btn onClick={onExit} variant="secondary">返回真题专区</Btn>
+      </SurfaceCard></div>}
 
       {/* Error state */}
       {error && (
@@ -300,9 +368,11 @@ function SpeakingExamShellInner({ onExit }) {
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
-            <Btn onClick={handleRestart} variant="secondary">
-              返回
-            </Btn>
+            <Btn onClick={blockedAttemptId ? () => { setError(null); handleStartExam(blockedAttemptId); } : pendingTransition ? () => {
+              setError(null);
+              if (pendingTransition.kind === "repeat") handleRepeatComplete(pendingTransition.result);
+              else handleInterviewComplete(pendingTransition.result);
+            } : handleRestart} variant="secondary">{blockedAttemptId ? "释放上次试卷并重新组卷" : pendingTransition ? "重试同步" : "返回"}</Btn>
           </SurfaceCard>
         </div>
       )}
@@ -359,6 +429,7 @@ function SpeakingExamShellInner({ onExit }) {
             elapsed={elapsed}
             onRestart={handleRestart}
             onExit={onExit}
+            realMock={realMock}
           />
         </div>
       )}
@@ -368,7 +439,7 @@ function SpeakingExamShellInner({ onExit }) {
 
 // ------ Sub-components ------
 
-function IntroCard({ onStart, onExit }) {
+function IntroCard({ onStart, onExit, realMock = false, preparing = false }) {
   return (
     <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
       <div style={{ fontSize: 48, marginBottom: 16 }}>{"\uD83C\uDFA4"}</div>
@@ -380,7 +451,7 @@ function IntroCard({ onStart, onExit }) {
           marginBottom: 8,
         }}
       >
-        {"\u53E3\u8BED\u6A21\u8003"} {"\u00B7"} TOEFL 2026 Speaking Section
+        {realMock ? "口语真题模考" : "口语模考"} · TOEFL 2026 Speaking Section
       </h2>
       <p
         style={{
@@ -392,7 +463,7 @@ function IntroCard({ onStart, onExit }) {
           margin: "0 auto 20px",
         }}
       >
-        {"\u6A21\u62DF TOEFL 2026 \u53E3\u8BED\u90E8\u5206\u3002\u5148\u5B8C\u6210 7 \u53E5\u590D\u8FF0\uFF0C\u518D\u56DE\u7B54 4 \u9053\u9762\u8BD5\u9898\u3002"}
+          {realMock ? "从未做过的完整真题套中预选 7 句复述与 4 道访谈问题，约 8 分钟。" : "模拟 TOEFL 2026 口语部分。先完成 7 句复述，再回答 4 道面试题。"}
       </p>
 
       {/* Info grid */}
@@ -449,6 +520,7 @@ function IntroCard({ onStart, onExit }) {
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
         <Btn
           onClick={onStart}
+          disabled={preparing}
           style={{
             background: ACCENT,
             borderColor: ACCENT,
@@ -456,7 +528,7 @@ function IntroCard({ onStart, onExit }) {
             fontSize: 15,
           }}
         >
-          {"\u5F00\u59CB\u8003\u8BD5"}
+          {preparing ? "正在检查真题…" : "开始考试"}
         </Btn>
         <Btn onClick={onExit} variant="secondary">
           {"\u8FD4\u56DE"}
@@ -527,7 +599,7 @@ function NarrationCard({ title, body, onContinue }) {
   );
 }
 
-function ResultsCard({ score, elapsed, onRestart, onExit }) {
+function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
   const palette = BAND_COLORS[score.color] || BAND_COLORS.yellow;
   const levelLabel = LEVEL_LABELS[score.color] || "";
 
@@ -609,7 +681,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
               fontFamily: FONT,
             }}
           >
-            {score.band.toFixed(1)}
+            {Number.isFinite(score.band) ? score.band.toFixed(1) : "--"}
           </span>
           <span
             style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}
@@ -631,7 +703,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
             marginBottom: 8,
           }}
         >
-          CEFR: {score.cefr} {levelLabel && `\u00B7 ${levelLabel}`}
+          {realMock ? "本站模考估分" : `CEFR: ${score.cefr}`} {levelLabel && `· ${levelLabel}`}
         </div>
 
         <div style={{ fontSize: 13, color: C.t3, marginTop: 4 }}>
@@ -678,7 +750,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
             </div>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: ACCENT }}>
-                {score.repeatScore.toFixed(1)}/5
+                {realMock && score.repeatRaw == null ? "--" : `${score.repeatScore.toFixed(1)}/5`}
               </div>
               <div style={{ fontSize: 11, color: C.t2 }}>
                 {score.avgRepeatAccuracy}% {"\u51C6\u786E\u7387"}
@@ -728,7 +800,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
             </div>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: ACCENT }}>
-                {score.interviewScore.toFixed(1)}/5
+                {realMock && score.interviewRaw == null ? "--" : `${score.interviewScore.toFixed(1)}/5`}
               </div>
               {validIntvItems.length === 0 && (
                 <div style={{ fontSize: 11, color: "#DC2626" }}>
@@ -818,7 +890,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
                 height: "100%",
                 borderRadius: 4,
                 background: `linear-gradient(90deg, ${palette.border}, ${palette.ring})`,
-                width: `${(score.band / 6) * 100}%`,
+                width: `${(Number.isFinite(score.band) ? score.band / 6 : 0) * 100}%`,
                 transition: "width 600ms ease",
               }}
             />
@@ -831,7 +903,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
               textAlign: "right",
             }}
           >
-            {score.band.toFixed(1)} / 6.0
+            {Number.isFinite(score.band) ? score.band.toFixed(1) : "--"} / 6.0
           </div>
         </div>
       </SurfaceCard>
@@ -870,7 +942,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit }) {
           lineHeight: 1.6,
         }}
       >
-        {"\u8BE5\u5206\u6570\u57FA\u4E8E\u6A21\u62DF\u8003\u8BD5\u7B97\u6CD5\u4F30\u7B97\uFF0C\u4E0D\u4EE3\u8868\u5B98\u65B9 ETS \u6210\u7EE9\u3002TOEFL \u4E3A ETS \u6CE8\u518C\u5546\u6807\u3002"}
+        {realMock ? "原始分按公开题型评分口径汇总；1–6 为本站未校准估分，未经 ETS 等值，不代表官方成绩。" : "该分数基于模拟考试算法估算，不代表官方 ETS 成绩。TOEFL 为 ETS 注册商标。"}
       </div>
     </div>
   );

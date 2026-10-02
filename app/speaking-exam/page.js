@@ -5,13 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { getSavedTier, getSavedCode } from "../../lib/AuthContext";
 import { isSpeakingOpenBetaEnabled } from "../../lib/featureFlags";
 import { SpeakingExamShell } from "../../components/mockExam/SpeakingExamShell";
+import { RealMockProGate } from "../../components/mockExam/RealMockProGate";
 import UpgradeModal from "../../components/shared/UpgradeModal";
 import { C, FONT } from "../../components/shared/ui";
 
 function SpeakingExamClient() {
   const router = useRouter();
   const searchParams = useSearchParams(); // force dynamic rendering
-  const onExit = () => router.push("/?section=speaking");
+  const realMock = searchParams.get("source") === "real-bank";
+  const onExit = () => router.push(realMock ? "/?section=real-bank" : "/?section=speaking");
 
   const [isPro, setIsPro] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -33,6 +35,8 @@ function SpeakingExamClient() {
   if (!checked) return null;
 
   // Pro gate — bypassed while Speaking open-beta opens the exam to free users.
+  if (realMock) return <RealMockProGate onExit={onExit}><SpeakingExamShell onExit={onExit} realMock /></RealMockProGate>;
+
   if (!isPro && !isSpeakingOpenBetaEnabled()) {
     return (
       <div

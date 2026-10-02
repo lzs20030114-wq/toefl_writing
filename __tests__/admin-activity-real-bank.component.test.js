@@ -20,6 +20,7 @@ const REAL_BANK_BODY = {
     { subject: "writing", subtype: "build", sessions: 3, users: 2, correct: 25, total: 30, accuracyPct: 83, avgScore: null },
     { subject: "writing", subtype: "discussion", sessions: 2, users: 2, correct: 0, total: 0, accuracyPct: null, avgScore: 3.5 },
     { subject: "reading", subtype: "ap", sessions: 7, users: 3, correct: 60, total: 70, accuracyPct: 86, avgScore: null },
+    { subject: "reading", subtype: "mock", sessions: 2, users: 2, correct: 15, total: 20, accuracyPct: 75, avgScore: null },
     { subject: "listening", subtype: "lcr", sessions: 0, users: 0, correct: 0, total: 0, accuracyPct: null, avgScore: null },
   ],
   topItems: [{ id: "real_ap_511_1_26", subject: "reading", subtype: "ap", sessions: 5, users: 3 }],
@@ -77,6 +78,10 @@ test("真题板块：面板 + 真题列 + 真题标签", async () => {
   // 分题型：客观题给正确率、写作给均分
   expect(screen.getByText("86%")).toBeInTheDocument();
   expect(screen.getByText("3.5")).toBeInTheDocument();
+  const mockRow = screen.getByText("阅读真题模考").closest("tr");
+  expect(mockRow).not.toBeNull();
+  expect(within(mockRow).getByText("75%", { exact: false })).toBeInTheDocument();
+  expect(screen.getByText("有人练过的题型与模考项")).toBeInTheDocument();
   expect(global.fetch.mock.calls.some(([u]) => String(u).includes("/api/admin/real-bank?days=30"))).toBe(true);
 
   // 切换到「全部」重新拉

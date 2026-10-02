@@ -37,11 +37,12 @@ export function MockExamResult({
   canRetryScoring = false,
   onRetryScoring = null,
   reportLanguage = "zh",
+  realMock = false,
 }) {
   const [expandedTask, setExpandedTask] = useState(null);
   const agg = session?.aggregate || {};
   const scoringDone = scoringPhase === "done" || scoringPhase === "error";
-  const bandReady = scoringDone && Number.isFinite(agg.band);
+  const bandReady = scoringDone && Number.isFinite(agg.band) && (!realMock || scoringPhase === "done");
   const band = bandReady ? agg.band.toFixed(1) : "--";
   const scaledScore = bandReady ? agg.scaledScore : "--";
   const cefr = bandReady ? agg.cefr : "--";
@@ -75,7 +76,7 @@ export function MockExamResult({
         textAlign: "center",
       }}>
         <div style={{ fontSize: 13, color: C.t2, marginBottom: 8, letterSpacing: 1, textTransform: "uppercase" }}>
-          写作部分结果
+          {realMock ? "写作真题模考结果 · 本站估分" : "写作部分结果"}
         </div>
 
         {scoringPhase === "pending" ? (
@@ -112,10 +113,12 @@ export function MockExamResult({
           <span style={{ fontSize: 13, fontWeight: 600, color: palette.text, marginTop: 2 }}>段位</span>
         </div>
 
-        <div style={{ fontSize: 14, color: C.t1, marginBottom: 4 }}>
+        {realMock ? <div style={{ fontSize: 14, color: C.t1, marginBottom: 4 }}>
+          原始分：<b>{Number.isFinite(agg.raw) ? agg.raw : "--"}</b> / 20（造句 10 + 邮件 5 + 讨论 5）
+        </div> : <div style={{ fontSize: 14, color: C.t1, marginBottom: 4 }}>
           换算分：<b>{scaledScore}</b> / 30
-        </div>
-        <div style={{
+        </div>}
+        {!realMock && <div style={{
           display: "inline-block",
           background: palette.bg,
           border: `1px solid ${palette.border}`,
@@ -126,7 +129,7 @@ export function MockExamResult({
           color: palette.text,
         }}>
           欧框：{cefr} {levelLabel && `\u00B7 ${levelLabel}`}
-        </div>
+        </div>}
           </>
         )}
         {scoringPhase === "error" && (
@@ -134,6 +137,7 @@ export function MockExamResult({
             AI 评分部分失败：{scoringError}
           </div>
         )}
+        {realMock && <div style={{ marginTop: 10, color: C.t2, fontSize: 12 }}>1–6 分为本站线性模考估分，未经 ETS 试卷等值；评分失败时不计入成绩。</div>}
       </div>
 
       {/* Task breakdown */}
@@ -222,7 +226,7 @@ export function MockExamResult({
         color: "#92400e",
         lineHeight: 1.6,
       }}>
-        该分数基于公开可用的 ETS 换算表与 AI 评分标准进行估算，不代表官方 ETS 成绩。
+        {realMock ? "原始分按公开题型评分口径汇总；1–6 为本站未校准估分，未经 ETS 等值，不代表官方成绩。" : "该分数基于公开可用的 ETS 换算表与 AI 评分标准进行估算，不代表官方 ETS 成绩。"}
       </div>
     </div>
   );

@@ -388,6 +388,10 @@ function RealBankPageClient() {
   // picker 头部：练习记录入口 + 三档切换（记录页在 /real-bank/progress，与分科历史页同一挂法）。
   const modeSwitch = (
     <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+      <Link href={`${{ bs: "/mock-exam", email: "/mock-exam", discussion: "/mock-exam", ctw: "/reading-exam", rdl: "/reading-exam", ap: "/reading-exam", lcr: "/listening-exam", lc: "/listening-exam", la: "/listening-exam", lat: "/listening-exam", repeat: "/speaking-exam", interview: "/speaking-exam" }[type]}?source=real-bank`}
+        data-testid="real-mock-link" style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "6px 12px", borderRadius: 999, border: `1px solid ${C.bdr}`, background: "#fff", color: REAL_ACCENT.color, fontSize: 12, fontWeight: 700, textDecoration: "none", fontFamily: FONT, whiteSpace: "nowrap" }}>
+        本科真题模考
+      </Link>
       <Link
         href="/real-bank/progress"
         data-testid="real-progress-link"

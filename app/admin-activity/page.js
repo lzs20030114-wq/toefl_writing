@@ -25,21 +25,25 @@ const SUBTYPE_LABEL = {
     build: { short: "BS", long: "Build Sentence" },
     email: { short: "Email", long: "Email Writing" },
     discussion: { short: "Discussion", long: "Academic Discussion" },
+    mock: { short: "Mock", long: "写作真题模考" },
   },
   reading: {
     ctw: { short: "CTW", long: "Complete the Words" },
     rdl: { short: "RDL", long: "Read in Daily Life" },
     ap: { short: "AP", long: "Academic Passage" },
+    mock: { short: "Mock", long: "阅读真题模考" },
   },
   listening: {
     lcr: { short: "LCR", long: "Choose a Response" },
     la: { short: "LA", long: "Announcement" },
     lc: { short: "LC", long: "Conversation" },
     lat: { short: "LAT", long: "Academic Talk" },
+    mock: { short: "Mock", long: "听力真题模考" },
   },
   speaking: {
     interview: { short: "Interview", long: "Interview" },
     repeat: { short: "Repeat", long: "Repeat" },
+    mock: { short: "Mock", long: "口语真题模考" },
   },
 };
 
@@ -396,7 +400,7 @@ function RealBankPanel({ callAdminApi, hasToken }) {
             <RealStatCard value={data?.realSessions} label="真题练习场次" sub={data?.realSharePct != null ? `占全部练习 ${data.realSharePct}%` : rangeLabel} color={REAL_CHIP.fg} />
             <RealStatCard value={data?.realUsers} label="练过真题的用户" sub={data?.userSharePct != null ? `占活跃用户 ${data.userSharePct}%（活跃 ${safeNum(data?.allUsers)} 人）` : ""} color="#16a34a" />
             <RealStatCard value={data?.accuracyPct != null ? `${data.accuracyPct}%` : "—"} label="客观题正确率" sub="造句 / 阅读 / 听力真题合计（按题数）" color={C.blue} />
-            <RealStatCard value={activeSubtypes.length} label="有人练过的真题题型" sub={`共 ${subtypes.length} 种题型上线`} color={C.nav} />
+            <RealStatCard value={activeSubtypes.length} label="有人练过的题型与模考项" sub={`共 ${subtypes.length} 个题型与模考项`} color={C.nav} />
           </div>
 
           <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, padding: "10px 12px" }}>
@@ -406,12 +410,12 @@ function RealBankPanel({ callAdminApi, hasToken }) {
 
           <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 12 }}>
             <div style={{ border: "1px solid #e2e8f0", borderRadius: 6, overflow: "hidden" }}>
-              <div style={{ padding: "8px 12px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", fontSize: 12, fontWeight: 700, color: C.nav }}>分题型</div>
+              <div style={{ padding: "8px 12px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", fontSize: 12, fontWeight: 700, color: C.nav }}>分题型与模考</div>
               <div className="adm-table-wrap" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontVariantNumeric: "tabular-nums" }}>
                   <thead>
                     <tr style={{ color: C.t2 }}>
-                      <th style={{ textAlign: "left", padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>题型</th>
+                      <th style={{ textAlign: "left", padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>题型 / 模考</th>
                       <th style={{ textAlign: "right", padding: "6px 8px", borderBottom: "1px solid #f1f5f9" }}>场次</th>
                       <th style={{ textAlign: "right", padding: "6px 8px", borderBottom: "1px solid #f1f5f9" }}>人数</th>
                       <th style={{ textAlign: "right", padding: "6px 12px", borderBottom: "1px solid #f1f5f9" }}>正确率 / 均分</th>
