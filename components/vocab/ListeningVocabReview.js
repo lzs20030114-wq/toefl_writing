@@ -7,27 +7,44 @@ import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
 import { canSpeak, cancelSpeakWord, speakWord } from "../../lib/audio/speakWord";
 import { definitionForContext } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
-import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
+import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
+import ReviewSummary, { LISTENING_LABELS } from "./ReviewSummary";
 
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 const REINSERT_GAP = 10;
 const MAX_APPEARANCES = 4;
+/** 撤销栈深度，和 vocabStore 里保留的评分前快照数一致（超出的撤销外面也撤不动）。 */
+const UNDO_DEPTH = 30;
 const buttonStyle = { border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 16px", background: "#fff", color: C.t1, fontFamily: FONT, fontWeight: 700, cursor: "pointer" };
 
-export function ListeningVocabReview({ initialQueue, onGrade, onExit, accountKey = getVocabAccountKey() }) {
-  const [queue, setQueue] = useState(() => initialQueue || []);
-  const [pos, setPos] = useState(0);
+export function ListeningVocabReview({
+  initialQueue, onGrade, onUndo, onExit, accountKey = getVocabAccountKey(),
+  // 单词本当前的整体统计，结算页拿它和开场时对比出「预计记得 96 → 104」
+  statsNow = null,
+  // 结算页下半截的「接下来」：{ nextTask, tomorrow, onStartNext, onExportWords }
+  summaryExtras = null,
+}) {
+  // 会因评分而变的状态收在一个对象里，撤销就是整个换回上一份（做法同 VocabReview）。
+  const [sess, setSess] = useState(() => ({
+    queue: initialQueue || [], pos: 0, answered: 0, tally: { good: 0, again: 0 },
+    first: {}, seen: {}, lost: [], endedAt: null,
+  }));
+  const [history, setHistory] = useState([]);
   const [heard, setHeard] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [status, setStatus] = useState("");
   const [playing, setPlaying] = useState(false);
+  const [startStats] = useState(() => pickStats(statsNow));
   const audioRef = useRef(null);
   const timerRef = useRef(null);
   const rafRef = useRef(null);
   const tokenRef = useRef(0);
-  const seenRef = useRef(new Map());
+  const infoRef = useRef(new Map());
+  const startedAtRef = useRef(Date.now());
   const shownAtRef = useRef(Date.now());
+  const { queue, pos } = sess;
   const card = queue[pos];
   const context = card?.listeningContext;
   const hasSentenceAudio = !!context?.audioUrl && Number.isFinite(context.start) && Number.isFinite(context.end) && context.end > context.start;
@@ -132,36 +149,95 @@ export function ListeningVocabReview({ initialQueue, onGrade, onExit, accountKey
     } catch { wordSound(true); }
   }, [card, context, hasSentenceAudio, stop]);
 
-  const next = useCallback(() => {
+  const resetCardUi = useCallback((nextHeard = false) => {
     stop();
-    setHeard(false);
-    setRevealed(false);
+    setHeard(nextHeard);
+    setRevealed(nextHeard);
     setStatus("");
     shownAtRef.current = Date.now();
-    setPos((p) => p + 1);
   }, [stop]);
+
+  /** 跳过：不评分，只往后翻一张（队列走完也算结束）。 */
+  const skip = () => {
+    resetCardUi(false);
+    setSess((s) => ({ ...s, pos: s.pos + 1, endedAt: s.pos + 1 >= s.queue.length ? Date.now() : null }));
+  };
 
   const grade = (rating) => {
     if (!card || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
     const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current, "listening");
     if (!updated) return;
-    const seen = seenRef.current;
-    const times = (seen.get(card.word) || 0) + 1;
-    seen.set(card.word, times);
-    setQueue((q) => {
-      return reinsertAfterGap(q, pos, updated, times, {
-        gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
-      });
+    const good = rating !== RATING.AGAIN;
+    infoRef.current.set(card.word, card);
+    const times = (sess.seen[card.word] || 0) + 1;
+    const nextQueue = reinsertAfterGap(sess.queue, sess.pos, updated, times, {
+      gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
     });
-    next();
+    const nextPos = sess.pos + 1;
+    setHistory((h) => [...h, sess].slice(-UNDO_DEPTH));
+    setSess({
+      ...sess,
+      queue: nextQueue,
+      pos: nextPos,
+      answered: sess.answered + 1,
+      tally: { good: sess.tally.good + (good ? 1 : 0), again: sess.tally.again + (good ? 0 : 1) },
+      first: card.word in sess.first ? sess.first : { ...sess.first, [card.word]: good },
+      seen: { ...sess.seen, [card.word]: times },
+      lost: !good && !sess.lost.includes(card.word) ? [...sess.lost, card.word] : sess.lost,
+      endedAt: nextPos >= nextQueue.length ? Date.now() : null,
+    });
+    resetCardUi(false);
   };
 
-  if (!card) return (
-    <div style={{ padding: 24, textAlign: "center" }}>
-      <h2>这一轮听力复习完成</h2>
-      <button type="button" style={buttonStyle} onClick={onExit}>返回单词本</button>
-    </div>
-  );
+  /**
+   * 撤销上一张评分：外面把调度状态和日志退回后，界面摆回那张卡「已听过、已翻面」的样子，
+   * 不用再听一遍就能直接重新选（那句刚刚才听过，再听只是白费一次提取）。
+   */
+  const undo = useCallback(() => {
+    if (!onUndo || !history.length || getVocabAccountKey() !== accountKey) return;
+    const prev = history[history.length - 1];
+    const prevCard = prev.queue[prev.pos];
+    if (!prevCard || !onUndo(prevCard.word)) return;
+    setHistory(history.slice(0, -1));
+    setSess(prev);
+    resetCardUi(true);
+  }, [accountKey, history, onUndo, resetCardUi]);
+
+  const undoRef = useRef(undo);
+  undoRef.current = undo;
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  if (!card) {
+    // 整轮都是跳过、一张没评：没有可复盘的内容，给个简短收尾
+    if (!Object.keys(sess.first).length) return (
+      <div style={{ padding: 24, textAlign: "center" }}>
+        <h2>这一轮听力复习完成</h2>
+        <button type="button" style={buttonStyle} onClick={onExit}>返回单词本</button>
+      </div>
+    );
+    const summary = buildReviewSummary({
+      first: sess.first, tally: sess.tally, lost: sess.lost,
+      infoFor: (word) => infoRef.current.get(word) || getCard(word),
+      senseFor: (info) => senseOf(info, info.listeningContext?.text),
+      startedAt: startedAtRef.current, endedAt: sess.endedAt, startStats, statsNow,
+    });
+    return (
+      <ReviewSummary
+        summary={summary} labels={LISTENING_LABELS}
+        nextTask={summaryExtras?.nextTask} tomorrow={summaryExtras?.tomorrow}
+        onStartNext={summaryExtras?.onStartNext} onExportWords={summaryExtras?.onExportWords}
+        onExit={onExit}
+      />
+    );
+  }
 
   return (
     <div style={{ maxWidth: 620, margin: "24px auto", fontFamily: FONT }}>
@@ -193,7 +269,24 @@ export function ListeningVocabReview({ initialQueue, onGrade, onExit, accountKey
           </div>
         )}
       </div>
-      <button type="button" style={{ ...buttonStyle, marginTop: 12 }} onClick={next}>跳过这张卡</button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+        <button type="button" style={buttonStyle} onClick={skip}>跳过这张卡</button>
+        {onUndo && (
+          <button
+            type="button"
+            onClick={undo}
+            disabled={!history.length}
+            style={{
+              border: 0, background: "none", padding: "4px 0", fontSize: 12, fontWeight: 700, fontFamily: FONT,
+              color: history.length ? C.t2 : "#c5cfc9", cursor: history.length ? "pointer" : "default",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            ↶ 撤销上一张
+            <span style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${C.bdr}`, borderRadius: 4, padding: "0 5px", lineHeight: "16px", color: C.t3 }}>Z</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -6,12 +6,13 @@ import { RATING, STATE } from "../../lib/vocab/srs";
 import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, sourceLabel } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
-import { hasUsableSense, humanizeDef, parseSenses } from "../../lib/dict/core";
+import { hasUsableSense, parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
 import { adoptDictEntry, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
 import ReviewSummary from "./ReviewSummary";
+import { buildReviewSummary, fmtDuration, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
 
 /**
  * 一场复习。
@@ -158,14 +159,6 @@ function WordLine({ card, size = 30 }) {
   );
 }
 
-
-const fmtDuration = (ms) => {
-  const total = Math.max(1, Math.round(ms / 1000));
-  return `${Math.floor(total / 60)} 分 ${String(total % 60).padStart(2, "0")} 秒`;
-};
-/** 列表/小结里给这个词配一行释义（优先「在原句里的那条」）。 */
-const senseOf = (card) => humanizeDef(definitionForContext(card, activeSentence(card) || "") || card?.def || card?.defFull || "");
-const pickStats = (stats) => (stats ? { knowledge: stats.knowledge || 0, mature: stats.mature || 0, learning: stats.learning || 0 } : null);
 
 const kbd = (color, border) => ({
   fontSize: 11, fontWeight: 700, border: `1px solid ${border}`, borderRadius: 5,
@@ -532,14 +525,17 @@ export function VocabReview({
   spellingResultRef.current = spellingResult;
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target && /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(e.target.tagName)) return;
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Esc / Z 对按钮没有原生含义，焦点停在按钮上（比如刚点开 ⋯ 菜单）也要生效；
+      // 空格/回车则留给聚焦的按钮自己去点，免得一次按键触发两件事。
       if (e.key === "Escape") { setMenuOpen(false); return; }
+      if (!checkpointRef.current && (e.key === "z" || e.key === "Z")) { e.preventDefault(); undoRef.current(); return; }
+      if (e.target && e.target.tagName === "BUTTON") return;
       if (checkpointRef.current) {
         if (e.key === " " || e.key === "Enter") { e.preventDefault(); continueRef.current(); }
         return;
       }
-      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); return; }
       if (modeRef.current === "recall") {
         if (revealedRef.current && (e.key === " " || e.key === "Enter")) {
           e.preventDefault();
@@ -567,26 +563,12 @@ export function VocabReview({
   }, []);
 
   if (finished) {
-    const words = Object.keys(sess.first).length;
-    const firstGood = Object.values(sess.first).filter(Boolean).length;
-    const lost = sess.lost.map((word) => {
-      const info = infoRef.current.get(word) || getCard(word);
-      return info ? { word, display: info.display || info.word, sense: senseOf(info) } : null;
-    }).filter(Boolean);
-    const change = (label, from, to, tone) => {
-      const d = to - from;
-      return { label, from, to, delta: d === 0 ? "±0" : d > 0 ? `+${d}` : `${d}`, color: d === 0 ? C.t3 : tone };
-    };
-    const changes = startStats && statsNow ? [
-      change("预计记得", startStats.knowledge, statsNow.knowledge || 0, "#0d9668"),
-      change("已记牢", startStats.mature, statsNow.mature || 0, "#0d9668"),
-      change("学习中", startStats.learning, statsNow.learning || 0, ACCENT),
-    ] : null;
-    const summary = {
-      duration: fmtDuration((sess.endedAt || Date.now()) - startedAtRef.current),
-      words, asks: tally.good + tally.again, good: tally.good, again: tally.again,
-      firstGood, firstRate: words ? Math.round((firstGood / words) * 100) : 0, lost, changes,
-    };
+    const summary = buildReviewSummary({
+      first: sess.first, tally, lost: sess.lost,
+      infoFor: (word) => infoRef.current.get(word) || getCard(word),
+      senseFor: (info) => senseOf(info, activeSentence(info)),
+      startedAt: startedAtRef.current, endedAt: sess.endedAt, startStats, statsNow,
+    });
     return (
       <ReviewSummary
         summary={summary}
@@ -605,7 +587,7 @@ export function VocabReview({
   const progress = sess.answered + remaining > 0 ? sess.answered / (sess.answered + remaining) : 0;
   const segmentRows = sess.segment.map((g) => {
     const info = infoRef.current.get(g.word);
-    return { ...g, display: info?.display || g.word, sense: info ? senseOf(info) : "" };
+    return { ...g, display: info?.display || g.word, sense: info ? senseOf(info, activeSentence(info)) : "" };
   });
 
   return (

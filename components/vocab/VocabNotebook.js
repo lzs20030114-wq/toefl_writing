@@ -266,7 +266,16 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     const account = queue.account;
     const review = queue.mode === "listening"
       ? <ListeningVocabReview key={`${account}:${queue.run}`} initialQueue={queue.cards} accountKey={account}
+        statsNow={stats}
         onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "listening", account)}
+        onUndo={undo ? (word) => undo(word, "listening", account) : undefined}
+        summaryExtras={{
+          // 听力练完，下一步是还没做完的阅读复习；有存档就接着存档做
+          nextTask: { label: "阅读复习", todo: num(reading.todo), minutes: estimateMinutes(num(reading.todo)) },
+          tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried } : null,
+          onStartNext: () => startReview("reading", { resume: !!readingSave }),
+          onExportWords: (words) => setLostExport({ words, account }),
+        }}
         onExit={exitReview} />
       : <VocabReview key={`${account}:${queue.run}`} initialQueue={queue.cards} accountKey={account}
         resume={queue.resume} statsNow={stats}

@@ -225,7 +225,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
   列表里有「已暂停」筛选和「恢复复习」。**手改释义**走 `chooseSense` 同一条路（锁定主释义，原释义留作 `defFull`）
 - **易忘词** = 忘过 ≥3 次（`LEECH_LAPSES`）；`cardStage` 是列表徽章 / 记忆分布条 / 筛选 chip 共用的互斥阶段口径
 - 结算页（`ReviewSummary`）用开场与结束时的 `bookStats` 对比出「预计记得 / 已记牢 / 学习中」的变化；复习中首页侧栏收起（专注模式，
-  `VocabNotebook` 的 `onReviewingChange`）。听力复习（`ListeningVocabReview`）暂未接入撤销/分段/结算页
+  `VocabNotebook` 的 `onReviewingChange`）。听力复习（`ListeningVocabReview`）同样有撤销（按钮 / Z 键，撤销后摆回「已听过、已翻面」）和结算页（措辞换成听懂/没听懂，
+  下一步接阅读复习），共用 `ReviewSummary` + `lib/vocab/reviewSummary.js`；听力暂无分段存档
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
 `__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
 

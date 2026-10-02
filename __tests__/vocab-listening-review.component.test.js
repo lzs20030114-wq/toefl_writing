@@ -136,3 +136,108 @@ test("听力语境释义绑定实际原句，正面不泄露，翻面不误用�
   expect(screen.getByText("银行专用义")).toBeTruthy();
   expect(screen.queryByText("河岸专用义")).toBeNull();
 });
+
+// ── 撤销 / 结算页 ──
+const farFuture = () => new Date(Date.now() + 3 * 86400000).toISOString();
+const forest = { ...card, word: "forest", display: "forest", def: "森林", phonetic: "ˈfɒrɪst" };
+const hearAndReveal = () => {
+  fireEvent.click(screen.getByRole("button", { name: "播放单词发音" }));
+  const callbacks = speakWord.mock.calls[speakWord.mock.calls.length - 1][1];
+  act(() => callbacks.onStart());
+  act(() => callbacks.onEnd());
+  fireEvent.click(screen.getByRole("button", { name: "显示答案" }));
+};
+const gradedAs = (label) => { hearAndReveal(); fireEvent.click(screen.getByRole("button", { name: label })); };
+const gradeMock = () => jest.fn((word) => ({ ...(word === "forest" ? forest : card), due: farFuture() }));
+
+describe("听力复习 · 撤销上一张", () => {
+  test("评分后可撤销：外面收到词名，回到那张卡且已翻面，不用重新听；撤销后按钮再次禁用", () => {
+    const onUndo = jest.fn(() => ({}));
+    const onGrade = gradeMock();
+    render(<ListeningVocabReview initialQueue={[card, forest]} onGrade={onGrade} onUndo={onUndo} onExit={jest.fn()} />);
+    expect(screen.getByRole("button", { name: /撤销上一张/ })).toBeDisabled();
+
+    gradedAs("没听懂");
+    expect(onGrade).toHaveBeenCalledWith("habitat", RATING.AGAIN, expect.any(Number), "listening");
+    expect(screen.getByText("听力复习 · 2 / 2")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "显示答案" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /撤销上一张/ }));
+    expect(onUndo).toHaveBeenCalledWith("habitat");
+    expect(screen.getByText("听力复习 · 1 / 2")).toBeInTheDocument();
+    // 已听过、已翻面：答案和评分键直接可用
+    expect(screen.getByText("栖息地")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "听懂了" }));
+    expect(onGrade).toHaveBeenLastCalledWith("habitat", RATING.GOOD, expect.any(Number), "listening");
+    expect(screen.getByRole("button", { name: /撤销上一张/ })).toBeEnabled();
+  });
+
+  test("Z 键撤销；外面没撤成（返回 null）时界面不动；跳过不进撤销栈", () => {
+    const onUndo = jest.fn(() => null);
+    render(<ListeningVocabReview initialQueue={[card, forest]} onGrade={gradeMock()} onUndo={onUndo} onExit={jest.fn()} />);
+    gradedAs("听懂了");
+    act(() => { fireEvent.keyDown(window, { key: "z" }); });
+    expect(onUndo).toHaveBeenCalledWith("habitat");
+    expect(screen.getByText("听力复习 · 2 / 2")).toBeInTheDocument();
+
+    onUndo.mockReturnValue({});
+    act(() => { fireEvent.keyDown(window, { key: "Z" }); });
+    expect(screen.getByText("听力复习 · 1 / 2")).toBeInTheDocument();
+    // 刚撤销完栈空了；跳过也不会让它重新可撤销
+    fireEvent.click(screen.getByRole("button", { name: "跳过这张卡" }));
+    expect(screen.getByRole("button", { name: /撤销上一张/ })).toBeDisabled();
+  });
+
+  test("没有 onUndo 时不显示撤销按钮", () => {
+    render(<ListeningVocabReview initialQueue={[card]} onGrade={gradeMock()} onExit={jest.fn()} />);
+    expect(screen.queryByRole("button", { name: /撤销上一张/ })).not.toBeInTheDocument();
+  });
+});
+
+describe("听力复习 · 结算页", () => {
+  test("复盘：听懂比例、没听懂的词、前后变化、下一步（阅读复习）", () => {
+    const onExportWords = jest.fn();
+    const onStartNext = jest.fn();
+    const onExit = jest.fn();
+    const extras = { nextTask: { label: "阅读复习", todo: 9, minutes: 2 }, tomorrow: { n: 12, carried: 4 }, onStartNext, onExportWords };
+    const props = { initialQueue: [card, forest], onGrade: gradeMock(), onExit, summaryExtras: extras };
+    const { rerender } = render(<ListeningVocabReview {...props} statsNow={{ knowledge: 50, mature: 5, learning: 8 }} />);
+    gradedAs("没听懂");
+    rerender(<ListeningVocabReview {...props} statsNow={{ knowledge: 51, mature: 5, learning: 10 }} />);
+    gradedAs("听懂了");
+
+    expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
+    expect(screen.getByText(/听力复习 · 用时 .* · 过了 2 个词，共 2 次提问/)).toBeInTheDocument();
+    expect(screen.getByText("第一次就听懂")).toBeInTheDocument();
+    expect(screen.getByText("50%")).toBeInTheDocument();
+    expect(screen.getByText("1 / 2 词")).toBeInTheDocument();
+    expect(screen.getByText("50 →")).toBeInTheDocument();
+    expect(screen.getByText("+1")).toBeInTheDocument();
+    expect(screen.getByText("+2")).toBeInTheDocument();
+    expect(screen.getByText("这一轮没听懂的词")).toBeInTheDocument();
+    expect(screen.getByText("栖息地")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "导出这些词 PDF" }));
+    expect(onExportWords).toHaveBeenCalledWith(["habitat"]);
+    expect(screen.getByText("阅读复习还有 9 词")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "开始阅读复习" }));
+    expect(onStartNext).toHaveBeenCalled();
+    expect(screen.getByText("明天预计 12 词")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "返回单词本" }));
+    expect(onExit).toHaveBeenCalled();
+  });
+
+  test("全部听懂时的文案；整轮都跳过则只给简短收尾", () => {
+    const { unmount } = render(<ListeningVocabReview initialQueue={[card]} onGrade={gradeMock()} onExit={jest.fn()} />);
+    gradedAs("听懂了");
+    expect(screen.getByText("这一轮每个词都听懂了。")).toBeInTheDocument();
+    unmount();
+
+    const onGrade = jest.fn();
+    render(<ListeningVocabReview initialQueue={[card, forest]} onGrade={onGrade} onExit={jest.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: "跳过这张卡" }));
+    fireEvent.click(screen.getByRole("button", { name: "跳过这张卡" }));
+    expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
+    expect(screen.queryByText("第一次就听懂")).not.toBeInTheDocument();
+    expect(onGrade).not.toHaveBeenCalled();
+  });
+});

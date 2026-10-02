@@ -23,11 +23,21 @@ function Stat({ label, children, tone }) {
   );
 }
 
+/** 复盘页上的措辞：阅读说「记得/忘了」，听力说「听懂了/没听懂」。 */
+export const READING_LABELS = {
+  title: "这一轮复习完成", kind: "阅读复习", first: "第一次就想起来", good: "记得", again: "忘了", lostTitle: "这一轮忘了的词",
+  noneLost: "这一轮一个都没忘。",
+};
+export const LISTENING_LABELS = {
+  title: "这一轮听力复习完成", kind: "听力复习", first: "第一次就听懂", good: "听懂了", again: "没听懂", lostTitle: "这一轮没听懂的词",
+  noneLost: "这一轮每个词都听懂了。",
+};
+
 /**
- * 一轮阅读复习结束后的复盘页：这一轮学得怎么样、哪些词忘了、接下来该做什么。
- * 全是展示，数据由 VocabReview 算好传进来（见 VocabReview 的 buildSummary）。
+ * 一轮复习结束后的复盘页：这一轮学得怎么样、哪些词没记住、接下来该做什么。
+ * 全是展示，数据由 VocabReview / ListeningVocabReview 用 lib/vocab/reviewSummary.js 算好传进来。
  */
-export default function ReviewSummary({ summary, nextTask, tomorrow, onExit, onStartNext, onExportWords }) {
+export default function ReviewSummary({ summary, labels = READING_LABELS, nextTask, tomorrow, onExit, onStartNext, onExportWords }) {
   const { duration, words, asks, good, again, firstRate, firstGood, lost, changes } = summary;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14, fontFamily: FONT }}>
@@ -38,15 +48,15 @@ export default function ReviewSummary({ summary, nextTask, tomorrow, onExit, onS
             display: "grid", placeItems: "center", fontSize: 28, flexShrink: 0,
           }}>🌿</div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: C.t1, letterSpacing: -0.4 }}>这一轮复习完成</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: C.t1, letterSpacing: -0.4 }}>{labels.title}</div>
             <div style={{ fontSize: 13, color: C.t2, marginTop: 4 }}>
-              阅读复习 · 用时 {duration} · 过了 {words} 个词，共 {asks} 次提问
+              {labels.kind} · 用时 {duration} · 过了 {words} 个词，共 {asks} 次提问
             </div>
           </div>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 10, marginTop: 22 }}>
-          <Stat label="第一次就想起来" tone="plain">
+          <Stat label={labels.first} tone="plain">
             <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
               <span style={{ fontSize: 26, fontWeight: 800, color: C.t1, letterSpacing: -0.5 }}>{firstRate}%</span>
               <span style={{ fontSize: 12, color: C.t3 }}>{firstGood} / {words} 词</span>
@@ -55,10 +65,10 @@ export default function ReviewSummary({ summary, nextTask, tomorrow, onExit, onS
               <div style={{ height: "100%", width: `${firstRate}%`, background: "#0D9668" }} />
             </div>
           </Stat>
-          <Stat label="记得" tone="good">
+          <Stat label={labels.good} tone="good">
             <div style={{ fontSize: 26, fontWeight: 800, color: "#0d9668", marginTop: 4 }}>{good}</div>
           </Stat>
-          <Stat label="忘了" tone="bad">
+          <Stat label={labels.again} tone="bad">
             <div style={{ fontSize: 26, fontWeight: 800, color: "#dc2626", marginTop: 4 }}>{again}</div>
           </Stat>
         </div>
@@ -82,7 +92,7 @@ export default function ReviewSummary({ summary, nextTask, tomorrow, onExit, onS
       <section style={{ ...card, overflow: "hidden" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, padding: "16px 22px", borderBottom: "1px solid #ebf0ed", flexWrap: "wrap" }}>
           <h2 style={{ margin: 0, fontSize: 15, color: C.t1 }}>
-            这一轮忘了的词 <span style={{ color: C.t3, fontSize: 13, fontWeight: 500, marginLeft: 6 }}>{lost.length}</span>
+            {labels.lostTitle} <span style={{ color: C.t3, fontSize: 13, fontWeight: 500, marginLeft: 6 }}>{lost.length}</span>
           </h2>
           {lost.length > 0 && onExportWords && (
             <button type="button" style={ghostBtn} onClick={() => onExportWords(lost.map((l) => l.word))}>导出这些词 PDF</button>
@@ -101,7 +111,7 @@ export default function ReviewSummary({ summary, nextTask, tomorrow, onExit, onS
             <span style={{ fontSize: 11, color: C.t3, whiteSpace: "nowrap" }}>已安排重学</span>
           </div>
         ))}
-        {lost.length === 0 && <div style={{ padding: 22, textAlign: "center", fontSize: 13, color: C.t2 }}>这一轮一个都没忘。</div>}
+        {lost.length === 0 && <div style={{ padding: 22, textAlign: "center", fontSize: 13, color: C.t2 }}>{labels.noneLost}</div>}
         <div style={{ padding: "11px 22px", color: C.t3, fontSize: 11, lineHeight: 1.6 }}>
           它们已排进学习步，到时间会自动回到复习里。别现在回头再刷一遍——那只会制造「我记住了」的错觉。
         </div>

@@ -13,6 +13,12 @@ jest.mock("../lib/AuthContext", () => ({
 }));
 jest.mock("../components/vocab/RootExplorer", () => () => null);
 jest.mock("../components/shared/SpeakButton", () => ({ SpeakButton: () => null }));
+// 听力复习的「播放单词发音」：同步走完 开始→结束，等于立刻听完
+jest.mock("../lib/audio/speakWord", () => ({
+  canSpeak: () => true,
+  cancelSpeakWord: () => {},
+  speakWord: (word, cb) => { cb.onStart?.(); cb.onEnd?.(); cb.onDone?.(); return true; },
+}));
 
 const DAY = 86400000;
 const iso = (ms) => new Date(ms).toISOString();
@@ -158,4 +164,37 @@ test("评分后今日进度推进，撤销后退回", () => {
   expect(screen.getByText(/已答 0 · 剩 4/)).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "← 退出" }));
   expect(screen.getByText("0 / 5")).toBeInTheDocument();
+});
+
+test("听力复习接上撤销与结算页：评分/撤销写进真实存储，练完可接着做阅读复习", () => {
+  const book = JSON.parse(localStorage.getItem("toefl-vocab-book::guest"));
+  book.cards.push({ word: "heard2", def: "n. 又听到", source: "listening", reviewMode: "listening", createdAt: iso(base() - DAY) });
+  localStorage.setItem("toefl-vocab-book::guest", JSON.stringify(book));
+  const touched = () => JSON.parse(localStorage.getItem("toefl-vocab-book::guest")).cards
+    .filter((c) => c.reviewMode === "listening" && c.listeningState && c.listeningState.state !== STATE.NEW).length;
+
+  render(<VocabNotebook embedded />);
+  fireEvent.click(screen.getByRole("button", { name: /^听力复习，今天 2 个词/ }));
+  const answer = (label) => {
+    fireEvent.click(screen.getByRole("button", { name: "播放单词发音" }));
+    fireEvent.click(screen.getByRole("button", { name: "显示答案" }));
+    fireEvent.click(screen.getByRole("button", { name: label }));
+  };
+  expect(screen.getByRole("button", { name: /撤销上一张/ })).toBeDisabled();
+
+  answer("没听懂");
+  expect(touched()).toBe(1);
+  fireEvent.click(screen.getByRole("button", { name: /撤销上一张/ }));
+  expect(touched()).toBe(0); // 评分写进存储的状态被退回
+  expect(screen.getByRole("button", { name: "听懂了" })).toBeInTheDocument(); // 同一张卡，已翻面
+
+  fireEvent.click(screen.getByRole("button", { name: "听懂了" }));
+  answer("没听懂");
+  expect(touched()).toBe(2);
+  expect(screen.getByText("这一轮听力复习完成")).toBeInTheDocument();
+  expect(screen.getByText("这一轮没听懂的词")).toBeInTheDocument();
+  expect(screen.getByText("阅读复习还有 4 词")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "开始阅读复习" }));
+  expect(screen.getByText("本段 0 / 10")).toBeInTheDocument();
 });
