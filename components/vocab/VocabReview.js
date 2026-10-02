@@ -11,6 +11,8 @@ import { adoptDictEntry, getCard, getVocabAccountKey } from "../../lib/vocab/voc
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
 import ReviewSummary from "./ReviewSummary";
+import { SpellingAnswer, SpellingInput } from "./SpellingBoxes";
+import { formatTyped, lettersOf, spellingCorrect } from "../../lib/vocab/spelling";
 import { SEGMENT_SIZE, SegmentCheckpoint } from "./SegmentCheckpoint";
 import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
 
@@ -247,6 +249,8 @@ export function VocabReview({
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
   // 这一次选「记得」后要不要拼：按卡进队列时的状态定，本场改「要会写」开关下次才生效。
   const spellingOn = useMemo(() => (card ? needsSpelling(card) : false), [card]);
+  // 拼写格子按词条摆；卡面写法只差大小写时（Renaissance）用卡面写法显示答案
+  const answerWord = card ? (lettersOf(card.display) === lettersOf(card.word) ? card.display : card.word) : "";
   // A user-edited meaning may include the English answer; conceal it on spelling fronts.
   const spellingDef = card?.word ? mainDef.replace(new RegExp(`\\b${card.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b`, "gi"), "____") : mainDef;
   const productiveOn = card
@@ -278,8 +282,7 @@ export function VocabReview({
   const checkSpelling = useCallback((e) => {
     e.preventDefault();
     if (!card || !spelling.trim() || spellStage !== "input") return;
-    const normalize = (value) => value.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-US");
-    const result = normalize(spelling) === normalize(card.word) ? "correct" : "incorrect";
+    const result = spellingCorrect(spelling, card.word) ? "correct" : "incorrect";
     if (retrying) setRetryResult(result);
     else setSpellingResult(result);
     setSpellStage("result");
@@ -721,7 +724,7 @@ export function VocabReview({
               {cloze && (
                 <div style={{ marginTop: 12, fontSize: 13, color: C.t2, lineHeight: 1.9, background: C.bg, borderRadius: 8, padding: "9px 13px" }}>
                   {cloze.split(/(_+)/).map((part, i) => i % 2 === 1
-                    ? <span key={i} style={{ letterSpacing: 2, fontFamily: "monospace" }}>{card.word.trim().charAt(0)}{part.slice(1)}</span>
+                    ? <span key={i} style={{ letterSpacing: 2, fontFamily: "monospace", color: ACCENT, fontWeight: 700 }}>{card.word.trim().charAt(0)}{part.slice(1)}</span>
                     : part)}
                 </div>
               )}
@@ -731,34 +734,30 @@ export function VocabReview({
                 </div>
               )}
               {spellStage === "input" && (
-                <form onSubmit={checkSpelling} style={{ display: "flex", gap: 8, marginTop: retrying ? 10 : 18, flexWrap: "wrap" }}>
-                  <input
-                    ref={spellingRef}
-                    aria-label="拼写英文单词"
+                <form onSubmit={checkSpelling} style={{ marginTop: retrying ? 12 : 20 }}>
+                  <SpellingInput
+                    word={answerWord}
                     value={spelling}
-                    onChange={(e) => setSpelling(e.target.value)}
-                    placeholder="在这里输入完整拼写"
-                    autoComplete="off"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    maxLength={100}
-                    style={{
-                      flex: "1 1 220px", minWidth: 0, boxSizing: "border-box",
-                      border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 13px",
-                      fontSize: 16, color: C.t1, fontFamily: FONT,
-                    }}
+                    onChange={setSpelling}
+                    inputRef={spellingRef}
+                    ghost={retrying ? lettersOf(card.word).charAt(0) : ""}
                   />
-                  <button
-                    type="submit"
-                    disabled={!spelling.trim()}
-                    style={{
-                      border: "none", borderRadius: 10, padding: "11px 18px", fontSize: 14,
-                      fontWeight: 700, fontFamily: FONT, background: ACCENT, color: "#fff",
-                      cursor: spelling.trim() ? "pointer" : "default", opacity: spelling.trim() ? 1 : 0.5,
-                    }}
-                  >
-                    核对拼写
-                  </button>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 14, flexWrap: "wrap" }}>
+                    <span style={{ fontSize: 12, color: C.t3 }}>
+                      已填 <strong style={{ color: C.t2 }}>{[...spelling].length}</strong> / {[...lettersOf(card.word)].length} 个字母 · 回车核对
+                    </span>
+                    <button
+                      type="submit"
+                      disabled={!spelling}
+                      style={{
+                        border: "none", borderRadius: 10, padding: "10px 20px", fontSize: 14,
+                        fontWeight: 700, fontFamily: FONT, background: ACCENT, color: "#fff",
+                        cursor: spelling ? "pointer" : "default", opacity: spelling ? 1 : 0.45,
+                      }}
+                    >
+                      核对拼写
+                    </button>
+                  </div>
                 </form>
               )}
             </>
@@ -781,11 +780,21 @@ export function VocabReview({
                   {spellStage === "result" && (
                     <div role="status" style={{ fontSize: 13, fontWeight: 700, color: (retrying ? retryResult : spellingResult) === "correct" ? "#0d9668" : "#dc2626", marginBottom: 10 }}>
                       {retrying
-                        ? retryResult === "correct" ? "这次拼对了，本次仍按没拼对计" : retryResult === "incorrect" ? `这次写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："
-                        : spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${spelling}，正确拼写是：` : "这次没写出来，正确拼写是："}
+                        ? retryResult === "correct" ? "这次拼对了，本次仍按没拼对计" : retryResult === "incorrect" ? `这次写的是 ${formatTyped(spelling, answerWord)}，正确拼写是：` : "这次没写出来，正确拼写是："
+                        : spellingResult === "correct" ? "拼写正确" : spellingResult === "incorrect" ? `你写的是 ${formatTyped(spelling, answerWord)}，正确拼写是：` : "这次没写出来，正确拼写是："}
                     </div>
                   )}
-                  {spellStage === "result" && <WordLine card={card} size={28} />}
+                  {spellStage === "result" && (
+                    <>
+                      <SpellingAnswer word={answerWord} typed={spelling} result={retrying ? retryResult : spellingResult} />
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 10, flexWrap: "wrap" }}>
+                        {card.phonetic && (
+                          <span style={{ fontSize: 13, color: C.t3, fontFamily: "'Courier New', monospace" }}>/{card.phonetic}/</span>
+                        )}
+                        <SpeakButton word={card.display || card.word} size={28} />
+                      </div>
+                    </>
+                  )}
                   {mainDef && (
                     <DefLine
                       text={mainDef}

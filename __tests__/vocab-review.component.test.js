@@ -42,6 +42,27 @@ test("要会写：正面先认词，选「记得」才弹拼写，拼对才按�
   expect(onGrade).toHaveBeenCalledWith(card.word, RATING.GOOD, expect.any(Number));
 });
 
+test("拼写是一个字母一个格：敲的字母落在格子上，多敲的、空格标点都不进", () => {
+  render(<VocabReview initialQueue={[card]} onGrade={jest.fn(() => null)} onExit={jest.fn()} />);
+  toSpelling();
+  const input = screen.getByRole("textbox", { name: "拼写英文单词" });
+  fireEvent.change(input, { target: { value: "Appr ox!" } });
+  expect(input).toHaveValue("approx");
+  expect(screen.getByText(/已填/)).toHaveTextContent("已填 6 / 13 个字母");
+  fireEvent.change(input, { target: { value: "approximatelyyy" } });
+  expect(input).toHaveValue("approximately");
+});
+
+test("拼错后正确拼写按格子摆出来，漏写的字母标红", () => {
+  render(<VocabReview initialQueue={[card]} onGrade={jest.fn(() => null)} onExit={jest.fn()} />);
+  toSpelling();
+  fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
+  fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
+  const answer = screen.getByRole("group", { name: "正确拼写 approximately" });
+  const red = [...answer.children].filter((el) => el.style.color === "rgb(220, 38, 38)");
+  expect(red.map((el) => el.textContent)).toEqual(["p"]);
+});
+
 test("要会写的词认词就选「忘了」：直接按忘了排期，不弹拼写", () => {
   const onGrade = jest.fn(() => null);
   render(<VocabReview initialQueue={[card]} onGrade={onGrade} onExit={jest.fn()} />);
@@ -118,7 +139,7 @@ test("拼错后可用首字母提示再拼一次，重练拼对仍按首次结�
 
   fireEvent.change(screen.getByRole("textbox", { name: "拼写英文单词" }), { target: { value: "aproximately" } });
   fireEvent.click(screen.getByRole("button", { name: "核对拼写" }));
-  expect(screen.getAllByText("approximately").length).toBeGreaterThan(0);
+  expect(screen.getByRole("group", { name: "正确拼写 approximately" })).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "再拼一次（提示首字母）" }));
   expect(screen.getByText("首字母提示：a")).toBeInTheDocument();
