@@ -7,6 +7,7 @@
  *  ④评分失败的写作记录：「没有评分反馈」+ 重试评分，成功后直接出完整批改报告；
  *  ⑤删除 / 清空 / 空态 / 返回。
  */
+import React from "react";
 import { render, screen, fireEvent, within, waitFor, act } from "@testing-library/react";
 
 jest.mock("../lib/AuthContext", () => ({
@@ -315,6 +316,25 @@ describe("写作", () => {
     expect(patchSession.mock.calls[0][0]).toBe(104);
     expect(within(main).getByTestId("score-panel")).toBeInTheDocument();
     expect(within(screen.getByTestId("real-session-detail")).getByText("4/5")).toBeInTheDocument();
+  });
+
+  test("开发态 StrictMode（挂载→卸载→再挂载）下重试评分也能走完，不会卡在「评分中…」", async () => {
+    evaluate.mockResolvedValue({ ...FB, score: 4 });
+    render(<React.StrictMode><RealBankProgressView onBack={() => {}} /></React.StrictMode>);
+    const row = expandRow("学术讨论真题");
+    fireEvent.click(within(row).getByRole("button", { name: /重试评分/ }));
+    await waitFor(() => expect(within(row).queryByRole("button", { name: /评分中/ })).not.toBeInTheDocument());
+    expect(within(row).getByText("4/5")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("重新评分完成：4/5");
+  });
+
+  test("概览里重试评分失败：行内给出中文原因，按钮变「再试一次」", async () => {
+    evaluate.mockRejectedValue(new Error("API timeout"));
+    render(<RealBankProgressView onBack={() => {}} />);
+    const row = expandRow("学术讨论真题");
+    fireEvent.click(within(row).getByRole("button", { name: /重试评分/ }));
+    await waitFor(() => expect(within(row).getByRole("alert")).toHaveTextContent("重新评分失败：AI 响应超时，请重试"));
+    expect(within(row).getByRole("button", { name: "再试一次" })).toBeInTheDocument();
   });
 
   test("重试评分失败：中文原因 + 再试一次，作答原文仍在", async () => {

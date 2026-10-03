@@ -7,7 +7,7 @@ const evaluate = jest.fn();
 jest.mock("../lib/ai/writingEval", () => ({ evaluateWritingResponse: (...a) => evaluate(...a) }));
 jest.mock("../lib/supabase", () => ({ isSupabaseConfigured: false, supabase: null }));
 
-import { applyRescore, canRescoreSession, rescoreWritingEntry } from "../lib/realBankRescore";
+import { applyRescore, canRescoreSession, isSameSession, rescoreWritingEntry } from "../lib/realBankRescore";
 import { loadHist, patchSession } from "../lib/sessionStore";
 
 const failed = {
@@ -35,6 +35,16 @@ describe("canRescoreSession", () => {
     expect(canRescoreSession({ ...failed, details: { ...failed.details, promptData: null } })).toBe(false);
     expect(canRescoreSession({ type: "reading", details: {} })).toBe(false);
     expect(canRescoreSession(null)).toBe(false);
+  });
+});
+
+describe("isSameSession", () => {
+  test("类型 / 时间 / 作答原文都一致才算同一条", () => {
+    expect(isSameSession(failed, { ...failed })).toBe(true);
+    expect(isSameSession(failed, { ...failed, date: "2026-09-29T00:00:00.000Z" })).toBe(false);
+    expect(isSameSession(failed, { ...failed, type: "discussion" })).toBe(false);
+    expect(isSameSession(failed, { ...failed, details: { ...failed.details, userText: "other" } })).toBe(false);
+    expect(isSameSession(failed, null)).toBe(false);
   });
 });
 
@@ -78,6 +88,18 @@ describe("rescoreWritingEntry（本地存储路径）", () => {
     seed();
     evaluate.mockResolvedValue({ summary: "x" });
     await expect(rescoreWritingEntry({ session: failed, sourceIndex: 1 })).rejects.toThrow("评分结果无效");
+  });
+
+  test("下标已过期（该位置现在是另一条记录）：不写，别的记录原样，saved=false", async () => {
+    const other = { type: "reading", date: "2026-09-01T00:00:00.000Z", details: { subtype: "ctw" } };
+    localStorage.setItem("toefl-hist", JSON.stringify({ sessions: [other, failed] }));
+    evaluate.mockResolvedValue(fb);
+    // 页面渲染时 failed 在下标 0（后来另一个标签页在它前面插/删了记录，现在下标 0 是 other）
+    const out = await rescoreWritingEntry({ session: failed, sourceIndex: 0 });
+    expect(out).toEqual({ feedback: fb, saved: false });
+    const saved = loadHist().sessions;
+    expect(saved[0]).toEqual(other);
+    expect(saved[1].score).toBeNull();
   });
 
   test("记录已不在了：评分照出，saved=false", async () => {

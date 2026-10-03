@@ -180,7 +180,7 @@ function SummaryCard({ all, bySubject, list, subject, onSubject, coverage, covOp
   );
 }
 
-function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, onRescore, rescoring, canRescore }) {
+function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, onRescore, rescoring, rescoreError, canRescore }) {
   const [confirming, setConfirming] = useState(false);
   const s = entry.session;
   const info = describeEntry(entry, index);
@@ -236,9 +236,10 @@ function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, o
               <button onClick={onRescore} disabled={rescoring}
                 style={{ alignSelf: "flex-start", marginLeft: 8, display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 8, border: `1px solid ${A}55`, background: ACCENT.soft, color: A, fontSize: 12, fontWeight: 700, cursor: rescoring ? "default" : "pointer", fontFamily: "inherit" }}>
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke={A} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9" /><path d="M13.5 2.5v3h-3" /></svg>
-                {rescoring ? "评分中…" : "重试评分"}
+                {rescoring ? "评分中…" : rescoreError ? "再试一次" : "重试评分"}
               </button>
             ) : null}
+            {canRescore && rescoreError && !rescoring ? <span role="alert" style={{ fontSize: 11.5, color: LV.bad.c, padding: "0 8px" }}>重新评分失败：{rescoreError}</span> : null}
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, flex: "0 0 150px" }}>
             <button onClick={() => onOpen(entry)}
@@ -265,7 +266,7 @@ function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, o
 
 export function RealOverview({
   entries, index, models, coverage, subject, type, onSubject, onType, groupsClosed, onToggleGroup, covOpen, onToggleCov,
-  onOpen, onDelete, onClearAll, onRescore, rescoring, canRescoreEntry, subtypeOrder,
+  onOpen, onDelete, onClearAll, onRescore, rescoring, rescoreError, canRescoreEntry, subtypeOrder,
 }) {
   const [expanded, setExpanded] = useState(null);
   const [clearConfirm, setClearConfirm] = useState(false);
@@ -332,7 +333,7 @@ export function RealOverview({
                         expanded={expanded === entry.sourceIndex}
                         onToggle={() => setExpanded(expanded === entry.sourceIndex ? null : entry.sourceIndex)}
                         onOpen={onOpen} onDelete={() => { setExpanded(null); onDelete(entry); }}
-                        canRescore={canRescoreEntry(entry)} rescoring={rescoring[entry.sourceIndex] === "loading"} onRescore={() => onRescore(entry)} />
+                        canRescore={canRescoreEntry(entry)} rescoring={rescoring[entry.sourceIndex] === "loading"} rescoreError={rescoreError[entry.sourceIndex] || ""} onRescore={() => onRescore(entry)} />
                     ))}
                   </div>
                 ) : null}

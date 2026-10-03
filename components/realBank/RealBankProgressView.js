@@ -59,7 +59,12 @@ export function RealBankProgressView({ onBack }) {
   const toastTimer = useRef(null);
 
   useEffect(() => subscribeHistory(setHist), []);
-  useEffect(() => () => { alive.current = false; clearTimeout(toastTimer.current); }, []);
+  // StrictMode（开发态）会 挂载 → 卸载 → 再挂载：挂载时必须把 alive 置回 true，
+  // 否则重试评分回来后所有 setState 都被当成「页面已卸载」跳过，界面永远卡在「评分中…」。
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; clearTimeout(toastTimer.current); };
+  }, []);
 
   const showToast = useCallback((msg) => {
     clearTimeout(toastTimer.current);
@@ -174,7 +179,7 @@ export function RealBankProgressView({ onBack }) {
             groupsClosed={groupsClosed} onToggleGroup={(label) => setGroupsClosed((g) => ({ ...g, [label]: !g[label] }))}
             covOpen={covOpen} onToggleCov={() => setCovOpen((v) => !v)}
             onOpen={openEntry} onDelete={handleDelete} onClearAll={clearAll}
-            onRescore={rescore} rescoring={rescoring} canRescoreEntry={(e) => canRescoreSession(e.session)}
+            onRescore={rescore} rescoring={rescoring} rescoreError={rescoreError} canRescoreEntry={(e) => canRescoreSession(e.session)}
             subtypeOrder={REAL_ENTRY_SUBTYPE_ORDER}
           />
         )}
