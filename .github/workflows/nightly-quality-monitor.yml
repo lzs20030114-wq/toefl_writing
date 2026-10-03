@@ -82,7 +82,7 @@ jobs:
           convert_markdown: true
 
       - name: Auto-heal — dispatch fallback pipeline if R1 was stale
-        if: steps.mon.outputs.stale == 'yes'
+        if: ${{ false }}
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
