@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { AiExplainView } from "../shared/AiExplainView";
 
 const SYSTEM = "你是一位专业的英语语法老师。学生在拖拽造句练习中答错了一道题，请用中文简短解释（3-5句话）：1）学生的答案哪里有问题；2）正确答案为什么是对的。重点讲语法，不要重复题目内容。";
 const SYSTEM_CORRECT = "你是一位专业的英语语法老师。学生在拖拽造句练习中答对了这道题，请用中文简短解释（3-5句话）正确句子的语法结构和词序依据，帮助学生巩固解题思路。不要虚构学生的错误，不要重复题目内容。";
@@ -61,7 +62,7 @@ export function useBsAiExplain() {
 }
 
 /** Inline UI for the AI explain button + result. Pass a unique key, the detail object, and the hook returns. */
-export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain, includeCorrect = false }) {
+export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain, includeCorrect = false, variant }) {
   // Auto-load from cache on mount
   const ex = aiExplains[explainKey];
   useEffect(() => {
@@ -74,6 +75,11 @@ export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, han
   }, [ex, explainKey, detail, isLegacy, handleAiExplain, includeCorrect]);
 
   if (!isLegacy || (detail.isCorrect && !includeCorrect)) return null;
+
+  // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在 hook 里）。
+  if (variant === "review") {
+    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} loadingText="AI 正在分析语序…" testId="bs-ai-explain" />;
+  }
 
   if (ex?.text) {
     return (

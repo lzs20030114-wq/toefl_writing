@@ -35,7 +35,7 @@ app/                          # Next.js App Router
 ├── vocab-notebook/           # 单词本 (划词收藏的词 + FSRS-6 间隔重复复习)
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
 ├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
-│                             #   (lib/realBankHistory 辨认真题记录, 复用各科历史页的逐题回顾渲染)
+│                             #   (lib/realBankHistory 辨认真题记录; 概览=摘要卡+科目条+日分组速览, 详情=主从布局, 逐题回顾见 components/realBank/review/)
 ├── my-bank/                  # 个人题库 (Pro 专属)
 ├── terms/                    # 条款页
 ├── admin*/                   # 后台页 (codes/users/questions/staging/analytics/
@@ -58,7 +58,10 @@ components/                   # 分科任务 UI + 后台
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
 ├── userBank/                 # 个人题库导入/管理 UI
-├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
+├── realBank/                 # 真题练习记录页(设计稿「真题练习记录 优化版」): RealBankProgressView(状态/数据) → RealOverview(摘要卡/科目条/题库覆盖/日分组速览)
+│                             #   | RealDetail(左 rail + 头部 + 编号导航 + 吸顶筛选条 + 上/下一条) → review/{Ctw,Mcq,Bs,Speaking,Writing}Review
+│                             #   (查词典/AI 讲解/逐句点播/口语再练/WritingFeedbackPanel 仍复用各科历史页的 hook 与组件, AI 讲解外观见 shared/AiExplainView)
+│                             #   realBankMeta=来源分档/考试日期/题库总量(会 import 整个真题库, 只给本路由用)
 ├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
 ├── home/ history/ mistakes/ login/ admin/
@@ -83,6 +86,7 @@ lib/
 │                             #   vocabStore(本地优先+云同步) + reviewLog(复习日志)
 ├── dict/                     # 划词词典查询层 (core 纯函数 + lookup 分片 fetch)
 ├── realBank.js realBankModes.js realBankHistory.js   # 真题专区数据层 / 三档限时 / 练习记录纯函数
+├── realBankReview.js realBankRescore.js              # 记录页逐题模型(units/速览/日分组/词级 diff) / 评分失败的写作记录「重试评分」(patchSession 回写 score+details)
 ├── realExam/                 # blueprint.mjs: 2026 整卷结构蓝图(题号带/槽位) — scripts/realbank/assemble_sets.mjs 用
 ├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
 ├── gate/                     # 通用防退化门：gateHarness + gate-registry + measurers/

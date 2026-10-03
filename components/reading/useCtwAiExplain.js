@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { AiExplainView } from "../shared/AiExplainView";
 
 // CTW（阅读填词 / C-test）专用的 AI 讲解。与 useReadingAiExplain / useMcqAiExplain
 // 同一骨架（Pro 门 + localStorage 缓存 + 点了才计费），差别只在 prompt：
@@ -152,7 +153,7 @@ export function useCtwAiExplain() {
 }
 
 /** 展开面板里的 AI 讲解块：有缓存则自动填充，否则等用户点按钮（点了才计费）。 */
-export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
+export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
 
   // 缓存命中才自动调（走的是 getFromCache 分支，不发请求）；未命中不自动打 API。
@@ -164,6 +165,11 @@ export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handl
   }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
   if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
+
+  // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
+  if (variant === "review") {
+    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="ctw-ai-explain" />;
+  }
 
   if (ex?.text) {
     return (

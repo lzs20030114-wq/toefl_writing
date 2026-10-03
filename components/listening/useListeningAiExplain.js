@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { AiExplainView } from "../shared/AiExplainView";
 
 // 听力题的 AI 讲解。与 useReadingAiExplain / useCtwAiExplain / useBsAiExplain 同一骨架：
 // Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——而听力内部还要再分两支：
@@ -188,7 +189,7 @@ export function useListeningAiExplain() {
 }
 
 /** Inline UI：按钮 + 结果。有缓存则自动回填（不发请求），否则等用户点（点了才计费）。 */
-export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
+export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
 
   useEffect(() => {
@@ -199,6 +200,11 @@ export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro,
   }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
   if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
+
+  // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
+  if (variant === "review") {
+    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="listening-ai-explain" />;
+  }
 
   if (ex?.text) {
     return (

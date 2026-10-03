@@ -137,7 +137,9 @@ function PromptCollapse({ type, pd }) {
   );
 }
 
-export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight, lessonState, onRetryLesson }) {
+// externalFocus（可选）：{ id: "err12", nonce } —— 外部（真题练习记录页的「编号导航」）要求「定位到第 N 处批注」。
+// nonce 每次点击自增，所以重复点同一处也会重新定位。不传则与从前完全一致。
+export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, onExit, topBarHeight = 56, containerHeight, lessonState, onRetryLesson, externalFocus = null }) {
   const [secondaryTab, setSecondaryTab] = useState("macro");
   // 「现在动手」的三条自查只是给用户自己打勾用的，纯本地 state，不入库。
   const [checkedChecks, setCheckedChecks] = useState({});
@@ -160,6 +162,26 @@ export function WritingFeedbackPanel({ fb, type, pd, userText, onNext, onRetry, 
     document.addEventListener("click", handleOutside);
     return () => document.removeEventListener("click", handleOutside);
   }, []);
+
+  const focusNonce = externalFocus?.nonce;
+  const focusId = externalFocus?.id;
+  useEffect(() => {
+    if (!focusId) return undefined;
+    setSecondaryTab("linebyline");
+    setMobileTab("linebyline");
+    setActiveErrorId(focusId);
+    // 只滚左栏（不带着整页动，用户的编号导航还在页面上方）；等标签页切换后的那一帧再量位置。
+    const t = setTimeout(() => {
+      const panel = leftPanelRef.current;
+      const el = document.getElementById(`mark-${focusId}`);
+      if (!panel || !el) return;
+      const pr = panel.getBoundingClientRect();
+      const er = el.getBoundingClientRect();
+      panel.scrollTo({ top: panel.scrollTop + (er.top - pr.top) - panel.clientHeight / 2, behavior: "smooth" });
+      setTooltipFlip(er.left + 292 > pr.right - 8);
+    }, 80);
+    return () => clearTimeout(t);
+  }, [focusNonce, focusId]);
 
   const score = Number.isFinite(Number(fb?.score)) ? Number(fb.score) : null;
   const band = fb?.band != null ? String(fb.band) : null;

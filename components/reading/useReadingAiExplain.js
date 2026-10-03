@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { isSentenceSelection, sentenceOptionKeys, sentenceOptionText } from "../../lib/reading/sentenceSelection";
+import { AiExplainView } from "../shared/AiExplainView";
 
 // 阅读选择题（RDL / AP，含真题选句题）的 AI 讲解。与 useCtwAiExplain / useBsAiExplain
 // 同一骨架：Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——阅读考的是
@@ -156,7 +157,7 @@ export function useReadingAiExplain() {
 }
 
 /** Inline UI: button + result. Pass a unique key, the detail, and the hook returns. */
-export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false }) {
+export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
 
   // Auto-load from cache on mount (no API call — cache hit is free)
@@ -168,6 +169,11 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
   }, [ex, explainKey, detail, isPro, handleAiExplain, includeCorrect]);
 
   if (!isPro || (detail.isCorrect && !includeCorrect)) return null;
+
+  // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
+  if (variant === "review") {
+    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="reading-ai-explain" />;
+  }
 
   if (ex?.text) {
     return (

@@ -2,7 +2,7 @@
  * 真题练习记录页（components/realBank/RealBankProgressView.js）× 旧 id 别名 × 选句题记录。
  *   ① 覆盖率 / 最新一次 / 列表题型按「解析后的当前 id + 题型」算：记录里 subtype=ap、已归位到日常阅读的
  *      算进 rdl；同一篇旧 id 与新 id 只算一篇；
- *   ② 逐题回顾复用 RDLDetail，选句题写出你选的句子与正确句子；「再练一套」指向归位后的题型。
+ *   ② 逐题回顾（review/McqReview），选句题写出你选的句子与正确句子；「再练一套」指向归位后的题型。
  * 别名账本 virtual mock；记录形状照 app/real-bank/page.js 的 saveRealReadingSession。
  */
 import { render, screen, fireEvent, within } from "@testing-library/react";
@@ -89,9 +89,13 @@ describe("RealBankProgressView × 旧 id 别名", () => {
 
   test("点开归位的那条：逐题回顾里选句题写出你选的句子与正确句子；「再练一套」指向日常阅读", () => {
     render(<RealBankProgressView onBack={() => {}} />);
-    fireEvent.click(screen.getAllByTestId("real-entry-row")[0]);
+    window.scrollTo = jest.fn();
+    // 点一行 = 就地展开速览；再点「逐题回顾」进详情（默认展开第一道错题 = 这道选句题）。
+    const row = screen.getAllByTestId("real-entry-row")[0];
+    fireEvent.click(within(row).getAllByRole("button", { expanded: false })[0]);
+    fireEvent.click(within(row).getByRole("button", { name: /逐题回顾 →/ }));
     const detail = screen.getByTestId("real-session-detail");
-    const ss = within(detail).getByTestId("ss-history-detail");
+    const ss = within(detail.closest("main")).getByTestId("ss-history-detail");
     expect(within(ss).getByText(`你选的句子：${SS.options.S3}`)).toBeInTheDocument();
     expect(within(ss).getByText(`正确句子：${SS.options.S2}`)).toBeInTheDocument();
     expect(within(detail).getByRole("link", { name: "再练一套" }).getAttribute("href")).toBe("/real-bank?type=rdl");
