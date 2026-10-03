@@ -14,6 +14,7 @@ import ReviewSummary from "./ReviewSummary";
 import { SpellingAnswer, SpellingInput } from "./SpellingBoxes";
 import { formatTyped, lettersOf, spellingCorrect } from "../../lib/vocab/spelling";
 import { SEGMENT_SIZE, SegmentCheckpoint } from "./SegmentCheckpoint";
+import { reviewCardStyle, reviewKbd as kbd, reviewMenuButton as menuBtn } from "./reviewPresentation";
 import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
 
 /**
@@ -164,15 +165,6 @@ function WordLine({ card, size = 30 }) {
 }
 
 
-const kbd = (color, border) => ({
-  fontSize: 11, fontWeight: 700, border: `1px solid ${border}`, borderRadius: 5,
-  padding: "0 6px", lineHeight: "18px", color, background: "transparent",
-});
-const menuBtn = {
-  width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
-  padding: "8px 10px", borderRadius: 7, border: "none", background: "transparent", cursor: "pointer",
-  fontSize: 13, fontWeight: 600, color: C.t1, fontFamily: FONT, textAlign: "left",
-};
 
 export function VocabReview({
   initialQueue, onGrade, onUndo, onSetProductive, onSuspend, onEditDefinition, onExit,
@@ -585,9 +577,7 @@ export function VocabReview({
           else if (!spellStage && !revealed && !editing) setRevealed(true);
         }}
         style={{
-          position: "relative", background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16,
-          boxShadow: C.shadow, padding: "28px 24px", minHeight: 250,
-          display: "flex", flexDirection: "column",
+          ...reviewCardStyle,
           cursor: !spellStage && !revealed ? "pointer" : "default",
         }}
       >

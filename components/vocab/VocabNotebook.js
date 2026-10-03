@@ -274,6 +274,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         resume={queue.resume} statsNow={stats}
         onGrade={(word, rating, durationMs) => grade(word, rating, durationMs, "listening", account)}
         onUndo={undo ? (word) => undo(word, "listening", account) : undefined}
+        onSuspend={suspend ? (word) => (getVocabAccountKey() === account ? suspend(word, true) : null) : undefined}
+        onEditDefinition={editDef ? (word, text) => (getVocabAccountKey() === account ? editDef(word, text) : null) : undefined}
         onCheckpoint={(state) => writeReviewSave(account, "listening", state)}
         onFinish={() => clearReviewSave(account, "listening")}
         summaryExtras={{

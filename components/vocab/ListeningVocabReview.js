@@ -1,17 +1,17 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
-import { RATING } from "../../lib/vocab/srs";
-import { sameOriginAudio } from "../../lib/listening/audioSrc";
-import { SENTENCE_SEEK_LEAD_SEC } from "../../lib/listening/sentenceTimings";
+import { RATING, STATE } from "../../lib/vocab/srs";
 import { canSpeak, cancelSpeakWord, speakWord } from "../../lib/audio/speakWord";
-import { definitionForContext } from "../../lib/vocab/book";
-import { humanizeDef } from "../../lib/dict/core";
+import { definitionForContext, sourceLabel } from "../../lib/vocab/book";
+import { DefLine } from "../shared/DictSenses";
 import { getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
 import ReviewSummary, { LISTENING_LABELS } from "./ReviewSummary";
 import { LISTENING_SEGMENT_LABELS, SEGMENT_SIZE, SegmentCheckpoint } from "./SegmentCheckpoint";
+
+import { reviewCardStyle, reviewKbd as kbd, reviewMenuButton as menuBtn } from "./reviewPresentation";
 
 const SESSION_WINDOW_MS = 30 * 60 * 1000;
 const REINSERT_GAP = 10;
@@ -22,7 +22,7 @@ const UNDO_DEPTH = 30;
 const buttonStyle = { border: `1px solid ${C.bdr}`, borderRadius: 10, padding: "11px 16px", background: "#fff", color: C.t1, fontFamily: FONT, fontWeight: 700, cursor: "pointer" };
 
 export function ListeningVocabReview({
-  initialQueue, onGrade, onUndo, onExit, accountKey = getVocabAccountKey(),
+  initialQueue, onGrade, onUndo, onSuspend, onEditDefinition, onExit, accountKey = getVocabAccountKey(),
   // 从存档继续时带进来的上一段统计；没有就是全新一场（存档的读写与恢复见 lib/vocab/reviewSave.js）
   resume = null,
   // 每过完一段 / 整场结束时通知外面落存档、清存档（外面不接就不存）
@@ -41,15 +41,16 @@ export function ListeningVocabReview({
     segNo: resume?.segNo || 0, checkpoint: false, resumed: !!resume, endedAt: null,
   }));
   const [history, setHistory] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState("");
+  const [editError, setEditError] = useState("");
   const [heard, setHeard] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [status, setStatus] = useState("");
   const [playing, setPlaying] = useState(false);
   const [startStats] = useState(() => resume?.startStats || pickStats(statsNow));
   const [segDurMs, setSegDurMs] = useState(0);
-  const audioRef = useRef(null);
-  const timerRef = useRef(null);
-  const rafRef = useRef(null);
   const tokenRef = useRef(0);
   const infoRef = useRef(new Map());
   const startedAtRef = useRef(Date.now() - (resume?.elapsedMs || 0));
@@ -58,33 +59,15 @@ export function ListeningVocabReview({
   const { queue, pos } = sess;
   const card = queue[pos];
   const context = card?.listeningContext;
-  const hasSentenceAudio = !!context?.audioUrl && Number.isFinite(context.start) && Number.isFinite(context.end) && context.end > context.start;
 
   const stop = useCallback(() => {
     tokenRef.current += 1;
-    clearTimeout(timerRef.current);
-    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-    rafRef.current = null;
-    if (audioRef.current) {
-      audioRef.current.onloadedmetadata = null;
-      audioRef.current.onplaying = null;
-      audioRef.current.onerror = null;
-      audioRef.current.ontimeupdate = null;
-      audioRef.current.onended = null;
-      audioRef.current.pause();
-      audioRef.current.removeAttribute?.("src");
-      audioRef.current.load?.();
-      audioRef.current = null;
-    }
     cancelSpeakWord();
     setPlaying(false);
   }, []);
 
   useEffect(() => () => {
     tokenRef.current += 1;
-    clearTimeout(timerRef.current);
-    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; audioRef.current = null; }
     cancelSpeakWord();
   }, []);
 
@@ -92,76 +75,36 @@ export function ListeningVocabReview({
     if (!card || sess.checkpoint) return;
     stop();
     const token = tokenRef.current;
-    setStatus("");
-    setPlaying(true);
     const live = () => tokenRef.current === token;
-    const wordSound = (fallback = false) => {
-      if (!live()) return;
-      if (!canSpeak()) { setPlaying(false); setStatus("此设备无法播放音频，请重试或跳过这张卡。"); return; }
-      if (fallback) setStatus("原句音频不可用，改播单词发音。");
-      const started = speakWord(card.display || card.word, {
-        onStart: () => { if (live()) setStatus(fallback ? "正在播放单词发音。" : "正在播放单词发音。"); },
-        onEnd: () => { if (live()) { setHeard(true); setPlaying(false); setStatus(""); } },
-        onError: () => { if (live()) { setPlaying(false); setStatus("单词发音失败，请重试或跳过这张卡。"); } },
-        onDone: () => { if (live()) setPlaying(false); },
-      });
-      if (!started) { setPlaying(false); setStatus("此设备无法播放单词发音，请重试或跳过这张卡。"); }
-    };
-    if (!hasSentenceAudio) { wordSound(); return; }
-    try {
-      const audio = new Audio(sameOriginAudio(context.audioUrl));
-      audioRef.current = audio;
-      let fallbackStarted = false;
-      let audioStarted = false;
-      let done = false;
-      const clearAudio = () => {
-        clearTimeout(timerRef.current);
-        if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-        audio.onloadedmetadata = null;
-        audio.onplaying = null;
-        audio.onerror = null;
-        audio.ontimeupdate = null;
-        audio.onended = null;
-        audio.pause();
-        if (audioRef.current === audio) audioRef.current = null;
-      };
-      const fallback = () => {
-        if (!live() || fallbackStarted || done) return;
-        fallbackStarted = true;
-        clearAudio();
-        wordSound(true);
-      };
-      const finish = () => {
-        if (!live() || fallbackStarted || done) return;
-        done = true;
-        clearAudio();
-        setPlaying(false);
-        if (audioStarted) { setHeard(true); setStatus(""); }
-        else wordSound(true);
-      };
-      const checkEnd = () => {
-        if (!live() || fallbackStarted || done) return;
-        if (audio.currentTime >= context.end) { finish(); return; }
-        if (audio.ended) { fallback(); return; }
-        rafRef.current = requestAnimationFrame(checkEnd);
-      };
-      audio.onloadedmetadata = () => {
-        if (!live() || fallbackStarted || done) return;
-        try { audio.currentTime = Math.max(0, context.start - SENTENCE_SEEK_LEAD_SEC); } catch { fallback(); return; }
-        Promise.resolve(audio.play()).catch(fallback);
-      };
-      audio.onplaying = () => { if (live() && !fallbackStarted && !done) { audioStarted = true; clearTimeout(timerRef.current); setStatus("正在播放原句。"); if (rafRef.current == null) rafRef.current = requestAnimationFrame(checkEnd); } };
-      audio.onerror = fallback;
-      audio.ontimeupdate = () => { if (audio.currentTime >= context.end) finish(); };
-      audio.onended = () => { if (audioStarted && audio.currentTime >= context.end) finish(); else fallback(); };
-      timerRef.current = setTimeout(fallback, 15000);
-      audio.load();
-    } catch { wordSound(true); }
-  }, [card, context, hasSentenceAudio, sess.checkpoint, stop]);
+    // A failed or cancelled attempt must never unlock an answer via a late onEnd.
+    let failed = false;
+    setStatus("");
+    if (!canSpeak()) { setStatus("此设备无法播放单词发音，请重试或跳过这张卡。"); return; }
+    setPlaying(true);
+    const started = speakWord(card.display || card.word, {
+      onStart: () => { if (live() && !failed) setStatus("正在播放单词发音。"); },
+      onEnd: () => { if (live() && !failed) { setHeard(true); setPlaying(false); setStatus(""); } },
+      onError: () => { if (live()) { failed = true; setPlaying(false); setStatus("单词发音失败，请点击播放或按空格重试，或跳过这张卡。"); } },
+      onDone: () => { if (live()) setPlaying(false); },
+    });
+    if (!started) { failed = true; setPlaying(false); setStatus("此设备无法播放单词发音，请重试或跳过这张卡。"); }
+  }, [card, sess.checkpoint, stop]);
+
+  // Only a new question (position or checkpoint continuation) starts playback.
+  // Answer reveal, rerenders and undo restoration must not replay.
+  const [autoRevision, setAutoRevision] = useState(0);
+  const playbackRef = useRef(null);
+  playbackRef.current = { play, canAutoPlay: !!card && !revealed };
+  useEffect(() => {
+    const playback = playbackRef.current;
+    if (!sess.checkpoint && playback.canAutoPlay) playback.play();
+  }, [pos, sess.checkpoint, autoRevision]);
 
   const resetCardUi = useCallback((nextHeard = false) => {
     stop();
+    setMenuOpen(false);
+    setEditing(false);
+    setEditError("");
     setHeard(nextHeard);
     setRevealed(nextHeard);
     setStatus("");
@@ -178,7 +121,7 @@ export function ListeningVocabReview({
   };
 
   const grade = (rating) => {
-    if (!card || sess.checkpoint || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
+    if (!card || sess.checkpoint || editing || menuOpen || !heard || !revealed || getVocabAccountKey() !== accountKey) return;
     const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current, "listening");
     if (!updated) return;
     const good = rating !== RATING.AGAIN;
@@ -240,21 +183,56 @@ export function ListeningVocabReview({
     resetCardUi(true);
   }, [accountKey, history, onUndo, resetCardUi, sess.checkpoint]);
 
-  const undoRef = useRef(undo);
-  undoRef.current = undo;
-  const continueRef = useRef(continueSegment);
-  continueRef.current = continueSegment;
-  const checkpointRef = useRef(sess.checkpoint);
-  checkpointRef.current = sess.checkpoint;
+  const suspendWord = () => {
+    if (!card || sess.checkpoint || !onSuspend || getVocabAccountKey() !== accountKey || !onSuspend(card.word)) return;
+    const nextQueue = sess.queue.filter((entry, i) => i < pos || entry.word !== card.word);
+    const done = pos >= nextQueue.length;
+    setHistory([]);
+    setSess({ ...sess, queue: nextQueue, endedAt: done ? Date.now() : null });
+    resetCardUi(false);
+    if (done) onFinish?.();
+    // The next question can occupy the same position after removal.
+    if (!done) setAutoRevision((n) => n + 1);
+  };
+  const saveEdit = (event) => {
+    event.preventDefault();
+    if (!card || !onEditDefinition || getVocabAccountKey() !== accountKey) return;
+    try {
+      const updated = onEditDefinition(card.word, editText);
+      if (!updated) { setEditError("没能保存：这个词可能已被移除。"); return; }
+      const fields = ["def", "defFull", "baseDef", "contextSenses", "definitionLocked", "definitionUpdatedAt", "contextSenseResetAt"];
+      const patch = Object.fromEntries(fields.map((key) => [key, updated[key]]));
+      setSess((prev) => ({ ...prev, queue: prev.queue.map((entry) => entry.word === card.word ? { ...entry, ...patch } : entry) }));
+      setEditing(false);
+    } catch (error) { setEditError(error?.message || "没能保存，请稍后重试。"); }
+  };
+
+  const actionRef = useRef(null);
+  actionRef.current = { undo, continueSegment, play, grade, card, heard, revealed, checkpoint: sess.checkpoint, editing, menuOpen };
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === "z" || e.key === "Z") { e.preventDefault(); undoRef.current(); return; }
-      // 存档小结开着时空格/回车 = 继续下一段（焦点在按钮上就留给按钮自己点）
-      if (checkpointRef.current && (e.key === " " || e.key === "Enter") && !(e.target && e.target.tagName === "BUTTON")) {
+      const target = e.target;
+      if (e.defaultPrevented || e.repeat || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      if (target?.closest?.("input, textarea, select, [contenteditable]:not([contenteditable='false'])")) return;
+      const action = actionRef.current;
+      if (!action.card) return;
+      const button = target?.closest?.("button");
+      if (action.editing) return;
+      if (e.key === "Escape") { setMenuOpen(false); return; }
+      if (action.checkpoint) {
+        if (!button && (e.key === " " || e.key === "Enter")) { e.preventDefault(); action.continueSegment(); }
+        return;
+      }
+      if (e.key === " " || e.code === "Space") { e.preventDefault(); action.play(); return; }
+      if (action.menuOpen) return;
+      if (e.key.toLowerCase() === "z") { e.preventDefault(); action.undo(); return; }
+      if (button && e.key === "Enter") return;
+      if (e.key === "Enter") {
         e.preventDefault();
-        continueRef.current();
+        if (!action.revealed) { if (action.heard) setRevealed(true); }
+        else action.grade(RATING.GOOD);
+      } else if (action.revealed && (e.key === "1" || e.key === "2")) {
+        e.preventDefault(); action.grade(e.key === "1" ? RATING.AGAIN : RATING.GOOD);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -285,63 +263,79 @@ export function ListeningVocabReview({
     );
   }
 
+  const remaining = Math.max(0, queue.length - pos);
+  const progress = sess.answered / (sess.answered + remaining || 1);
+  const timesSeen = sess.seen[card.word] || 0;
+  const reveal = () => {
+    if (menuOpen) setMenuOpen(false);
+    else if (heard && !sess.checkpoint && !editing) setRevealed(true);
+  };
   return (
-    <div style={{ maxWidth: 620, margin: "24px auto", fontFamily: FONT }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ color: C.t2, fontSize: 13 }}>听力复习 · {pos + 1} / {queue.length}</span>
-          <span style={{ fontSize: 10, fontWeight: 700, color: C.t2, background: "#f7faf9", border: "1px solid #ebf0ed", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
-            本段 {sess.segment.length} / {SEGMENT_SIZE}
-          </span>
-          {sess.resumed && (
-            <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 5, padding: "1px 6px", whiteSpace: "nowrap" }}>
-              已从存档继续 · 第 {sess.segNo + 1} 段
+    <div style={{ fontFamily: FONT }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+        <button type="button" aria-label="退出复习" onClick={() => { stop(); onExit(); }} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0 }}>← 退出</button>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6, gap: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: C.t1, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              {LISTENING_LABELS.kind}
+              <span style={{ fontWeight: 500, color: C.t3 }}>已答 {sess.answered} · 剩 {remaining}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: C.t2, background: "#f7faf9", border: "1px solid #ebf0ed", borderRadius: 5, padding: "1px 6px" }}>本段 {sess.segment.length} / {SEGMENT_SIZE}</span>
+              {sess.resumed && <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 5, padding: "1px 6px" }}>已从存档继续 · 第 {sess.segNo + 1} 段</span>}
             </span>
-          )}
-        </div>
-        <button type="button" style={buttonStyle} onClick={() => { stop(); onExit(); }}>退出复习</button>
-      </div>
-      <div style={{ background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 16, padding: 24, minHeight: 260 }}>
-        <div style={{ color: C.t2, fontSize: 13, marginBottom: 18 }}>
-          {hasSentenceAudio ? "先听懂这句话，再翻面核对收藏的词。" : "听单词发音，想一想它的意思。"}
-        </div>
-        <button type="button" style={{ ...buttonStyle, background: "#0891B2", color: "#fff", border: "none" }} onClick={play}>
-          {playing ? "重新播放" : hasSentenceAudio ? "播放原句" : "播放单词发音"}
-        </button>
-        {playing && <button type="button" style={{ ...buttonStyle, marginLeft: 8 }} onClick={() => { stop(); setStatus("已暂停；请重新播放完整音频后再看答案。"); }}>暂停播放</button>}
-        {status && <p role="status" style={{ color: "#b45309", fontSize: 13 }}>{status}</p>}
-        {heard && !revealed && <div style={{ marginTop: 22 }}><button type="button" style={buttonStyle} onClick={() => setRevealed(true)}>显示答案</button></div>}
-        {revealed && heard && (
-          <div style={{ marginTop: 24, borderTop: `1px solid ${C.bdr}`, paddingTop: 18 }}>
-            <div style={{ fontSize: 25, fontWeight: 800, color: C.t1 }}>{card.display || card.word}</div>
-            {card.phonetic && <div style={{ color: C.t2 }}>/{card.phonetic}/</div>}
-            <div style={{ marginTop: 8, color: C.t1 }}>{humanizeDef(definitionForContext(card, hasSentenceAudio ? context.text : ""))}</div>
-            {(context?.text || card.sentence) && <p style={{ color: C.t2, lineHeight: 1.7 }}>原句：{context?.text || card.sentence}</p>}
-            <p style={{ color: C.t2, fontSize: 12 }}>翻面前已听出这个词并理解其意思，才选“听懂了”。</p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <button type="button" style={buttonStyle} onClick={() => grade(RATING.AGAIN)}>没听懂</button>
-              <button type="button" style={{ ...buttonStyle, background: "#0891B2", color: "#fff", border: "none" }} onClick={() => grade(RATING.GOOD)}>听懂了</button>
-            </div>
+            <span style={{ display: "flex", gap: 10, fontSize: 11, fontWeight: 700 }}>
+              <span style={{ color: "#0d9668" }}>{LISTENING_LABELS.good} {sess.tally.good}</span>
+              <span style={{ color: "#dc2626" }}>{LISTENING_LABELS.again} {sess.tally.again}</span>
+            </span>
           </div>
-        )}
+          <div role="progressbar" aria-label="听力复习进度" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100} style={{ height: 6, background: C.bdrSubtle, borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ width: `${Math.round(progress * 100)}%`, height: "100%", background: "#0891B2", transition: "width .25s" }} />
+          </div>
+        </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
-        <button type="button" style={buttonStyle} onClick={skip}>跳过这张卡</button>
-        {onUndo && (
-          <button
-            type="button"
-            onClick={undo}
-            disabled={!history.length}
-            style={{
-              border: 0, background: "none", padding: "4px 0", fontSize: 12, fontWeight: 700, fontFamily: FONT,
-              color: history.length ? C.t2 : "#c5cfc9", cursor: history.length ? "pointer" : "default",
-              display: "flex", alignItems: "center", gap: 6,
-            }}
-          >
-            ↶ 撤销上一张
-            <span style={{ fontSize: 10, fontWeight: 700, border: `1px solid ${C.bdr}`, borderRadius: 4, padding: "0 5px", lineHeight: "16px", color: C.t3 }}>Z</span>
-          </button>
-        )}
+      <div onClick={reveal} style={{ ...reviewCardStyle, cursor: heard && !revealed ? "pointer" : "default" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#0891B2", background: "#ECFEFF", border: "1px solid #a5e8f0", borderRadius: 999, padding: "2px 9px" }}>听词</span>
+          <span style={{ fontSize: 11, color: C.t3 }}>听发音，回想词义</span>
+          {card.state === STATE.NEW && <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 999, padding: "1px 7px" }}>新词</span>}
+          {timesSeen > 0 && <span style={{ fontSize: 10, fontWeight: 700, color: "#B45309", background: "#FFFBEB", border: "1px solid #f3d4a2", borderRadius: 999, padding: "1px 7px" }}>再次出现 · 第 {timesSeen + 1} 次</span>}
+          <span style={{ marginLeft: "auto", fontSize: 10, color: C.t3 }}>{sourceLabel(card)}{card.tag ? ` · ${card.tag}` : ""}</span>
+          {(onSuspend || (revealed && onEditDefinition)) && <button type="button" aria-label="更多操作" aria-haspopup="menu" aria-expanded={menuOpen} onClick={(e) => { e.stopPropagation(); setMenuOpen((open) => !open); }} style={{ width: 28, height: 28, border: `1px solid ${C.bdr}`, borderRadius: 7, background: "#fff", color: C.t2, cursor: "pointer" }}>⋯</button>}
+
+        </div>
+        {menuOpen && <div role="menu" aria-label="单词操作" onClick={(e) => e.stopPropagation()} style={{ position: "absolute", top: 62, right: 20, zIndex: 5, width: 208, maxWidth: "calc(100% - 40px)", background: "#fff", border: `1px solid ${C.bdr}`, borderRadius: 10, boxShadow: C.shadow, padding: 6 }}>
+          {revealed && onEditDefinition && <button type="button" role="menuitem" style={menuBtn} onClick={() => { setMenuOpen(false); setEditText(definitionForContext(card, context?.text || "")); setEditError(""); setEditing(true); }}>编辑释义</button>}
+          {onSuspend && <button type="button" role="menuitem" style={menuBtn} onClick={suspendWord}>暂停复习这个词</button>}
+        </div>}
+        {editing && <form onSubmit={saveEdit} onClick={(e) => e.stopPropagation()} style={{ marginBottom: 14, padding: 12, borderRadius: 10, background: C.bg, border: `1px solid ${C.bdrSubtle}` }}>
+          <label style={{ fontSize: 11, fontWeight: 700, color: C.t2 }}>编辑释义<textarea aria-label="编辑释义" value={editText} onChange={(e) => setEditText(e.target.value)} rows={2} maxLength={300} autoFocus style={{ display: "block", width: "100%", boxSizing: "border-box", marginTop: 6, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: "8px 10px", fontFamily: FONT }} /></label>
+          {editError && <p role="alert">{editError}</p>}
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 8 }}><button type="button" style={buttonStyle} onClick={() => setEditing(false)}>取消</button><button type="submit" style={buttonStyle} disabled={!editText.trim()}>保存</button></div>
+        </form>}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button type="button" aria-label="播放单词发音" style={{ ...buttonStyle, background: "#0891B2", color: "#fff", border: "none" }} onClick={play}>{playing ? "重新播放" : "播放单词发音"} <span style={kbd("#fff", "rgba(255,255,255,.5)")}>空格</span></button>
+            {playing && <button type="button" style={buttonStyle} onClick={() => { stop(); setStatus("已暂停；请重新播放完整单词发音后再看答案。"); }}>暂停播放</button>}
+          </div>
+          {status && <p role="status" style={{ color: "#b45309", fontSize: 13 }}>{status}</p>}
+          {revealed && heard && <div style={{ marginTop: 18, borderTop: `1px solid ${C.bdrSubtle}`, paddingTop: 16 }}>
+            <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+              <span style={{ fontSize: 34, fontWeight: 800, color: C.t1, letterSpacing: -0.5, wordBreak: "break-word" }}>{card.display || card.word}</span>
+              {card.phonetic && <span style={{ fontSize: 13, color: C.t3, fontFamily: "'Courier New', monospace" }}>/{card.phonetic}/</span>}
+            </div>
+            <DefLine text={definitionForContext(card, context?.text || "")} style={{ marginTop: 10, color: C.t1, fontSize: 14, lineHeight: 1.9 }} />
+          </div>}
+        </div>
+      </div>
+      <div style={{ marginTop: 16 }}>
+        {!revealed ? (heard ? <button type="button" aria-label="显示答案" onClick={reveal} style={{ width: "100%", border: "none", background: "#0891B2", color: "#fff", borderRadius: 12, padding: "15px 0", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: FONT }}>显示答案 <span style={kbd("#fff", "rgba(255,255,255,.5)")}>Enter</span></button> : <div style={{ padding: "15px 0", textAlign: "center", color: C.t3, fontSize: 13 }}>完整听完后，点击卡片或按 Enter 翻面</div>) : <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 10 }}>
+          <button type="button" aria-label="没听懂" onClick={() => grade(RATING.AGAIN)} style={{ border: "1px solid #fecaca", background: "#fef2f2", color: "#dc2626", borderRadius: 12, padding: "15px 4px", cursor: "pointer", fontFamily: FONT, fontSize: 16, fontWeight: 800 }}>{LISTENING_LABELS.again} <span style={kbd("#dc2626", "#fecaca")}>1</span></button>
+          <button type="button" aria-label="听懂了" onClick={() => grade(RATING.GOOD)} style={{ border: "1px solid #a7f3d0", background: "#ecfdf5", color: "#0d9668", borderRadius: 12, padding: "15px 4px", cursor: "pointer", fontFamily: FONT, fontSize: 16, fontWeight: 800 }}>{LISTENING_LABELS.good} <span style={kbd("#0d9668", "#a7f3d0")}>2 / Enter</span></button>
+        </div>}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+          {onUndo && <button type="button" onClick={undo} disabled={!history.length || sess.checkpoint} style={{ border: 0, background: "none", padding: "4px 0", fontSize: 12, fontWeight: 700, fontFamily: FONT, color: history.length ? C.t2 : "#c5cfc9", cursor: history.length ? "pointer" : "default" }}>↶ 撤销上一张 <span style={kbd(C.t3, C.bdr)}>Z</span></button>}
+          <button type="button" onClick={skip} style={{ border: 0, background: "none", padding: "4px 0", fontSize: 12, color: C.t2, cursor: "pointer", fontFamily: FONT }}>跳过这张卡</button>
+          <span style={{ fontSize: 11, color: C.t3, lineHeight: 1.7, flex: "1 1 240px", textAlign: "right" }}>{revealed ? "翻面前已听出这个词并理解其意思，才选“听懂了”。" : "先在心里回想词义，再翻面；空格可随时重播。"}</span>
+        </div>
       </div>
       {sess.checkpoint && (
         <SegmentCheckpoint
