@@ -107,11 +107,22 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     let position = 0;
     const byPosition = new Map(item.blanks.map((blank, i) => [blank.position, { blank, i }]));
     return item.passage.split(/(?<=[.!?])\s+/).map((sentence, si) => (
-      <span key={si} data-sentence-index={si}>
+      <span key={si} data-sentence-index={si} data-sentence-text={sentence}>
         {sentence.split(/\s+/).map((word, wi) => {
           const entry = byPosition.get(position++);
           const isCorrect = entry && (entry.blank.displayed_fragment + answers[entry.i]).toLowerCase().replace(/[^a-z]/g, "") === entry.blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
-          return <span key={wi} style={entry ? { fontWeight: 700, color: isCorrect ? "#059669" : "#DC2626" } : undefined}>{wi > 0 ? " " : ""}{word}</span>;
+          if (!entry) return <span key={wi}>{wi > 0 ? " " : ""}{word}</span>;
+          const { lead, tail } = splitBlankToken(word, entry.blank.original_word);
+          const userAnswer = answers[entry.i].trim()
+            ? entry.blank.displayed_fragment + answers[entry.i]
+            : "未作答";
+          return (
+            <span key={wi} style={{ fontWeight: 700, color: isCorrect ? "#059669" : "#DC2626" }}>
+              {wi > 0 ? " " : ""}{lead}{entry.blank.original_word}
+              {!isCorrect && <span data-no-dict>（{userAnswer}）</span>}
+              {tail}
+            </span>
+          );
         })}
         {" "}
       </span>
@@ -249,11 +260,6 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
           ) : (
             <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>{renderPassage()}</div>
           )}
-          {submitted && item.blanks.map((blank, i) => {
-            const fullWord = blank.displayed_fragment + answers[i];
-            if (fullWord.toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")) return null;
-            return <div key={i} data-no-dict style={{ fontSize: 12, color: "#DC2626", lineHeight: 1.6, marginTop: 6 }}>第 {i + 1} 空：你的答案 {fullWord} → 正确答案 {blank.original_word}</div>;
-          })}
         </SurfaceCard>
 
         {/* Submit / Result */}
@@ -278,7 +284,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {correct} / {item.blanks.length}
             </div>
             <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>
-              {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！请回顾上方的错误答案。" : "继续加油！请回顾上方标红的正确答案。"}
+              {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！括号内为你的错误答案，请对照原文回顾。" : "继续加油！括号内为你的错误答案，请对照原文回顾。"}
             </div>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
               <Btn onClick={onExit} variant="secondary">返回</Btn>

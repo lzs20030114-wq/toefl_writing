@@ -37,7 +37,8 @@ test("CTW 作答时不查词，交卷后完整填空词收藏到正确原句", a
   pick(screen.getAllByText("bank")[1], 3);
   fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
   expect(loadBook().find(card => card.word === "bank")).toMatchObject({ source: "reading", sentence: "The bank was quiet." });
-  expect(screen.getByText(/你的答案 baxx/)).toBeTruthy();
+  expect(screen.getByText("（baxx）").hasAttribute("data-no-dict")).toBe(true);
+  expect(screen.queryByText(/第\s*1\s*空/)).toBeNull();
 });
 
 test("RDL 提交后选项只读且可收藏，语境不混入题干和相邻选项", async () => {

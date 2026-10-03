@@ -180,7 +180,8 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setCard(existing);
     setReviewMode(existing?.reviewMode || (source === "listening" ? "listening" : "reading"));
     const sentenceEl = sentenceElementOf(range);
-    const sentenceText = sentenceEl?.textContent?.trim() || sentenceFromRange(rootRef.current, range);
+    const sentenceText = sentenceEl?.getAttribute("data-sentence-text")?.trim()
+      || sentenceEl?.textContent?.trim() || sentenceFromRange(rootRef.current, range);
     setPop({
       word,
       identityId: identity.id,
