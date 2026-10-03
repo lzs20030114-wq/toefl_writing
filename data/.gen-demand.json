@@ -1,23 +1,25 @@
 {
-  "generated_at": "2026-10-02T21:24:39.664Z",
+  "generated_at": "2026-10-03T20:03:53.777Z",
   "window_days": 7,
-  "active_users": 13,
+  "active_users": 14,
   "banks": {
     "bs": {
       "bank_size": 110,
-      "top_user_consumed": 29,
-      "top_user_pct": 0.264,
-      "burn_7d": 60,
+      "top_user_consumed": 77,
+      "top_user_pct": 0.7,
+      "burn_7d": 56,
       "min_user_runway_days": 19.6,
-      "triggers": [],
-      "generate": false,
-      "n": 0,
-      "reason": "库存充足，当晚无需补题。"
+      "triggers": [
+        "T1"
+      ],
+      "generate": true,
+      "n": 19,
+      "reason": "头号活跃用户已做 77/110 题（70%），逼近刷穿，建议补 19 题。"
     },
     "discussion": {
-      "bank_size": 254,
+      "bank_size": 258,
       "top_user_consumed": 6,
-      "top_user_pct": 0.024,
+      "top_user_pct": 0.023,
       "burn_7d": 0,
       "min_user_runway_days": null,
       "triggers": [],
@@ -51,7 +53,7 @@
       "bank_size": 407,
       "top_user_consumed": 39,
       "top_user_pct": 0.096,
-      "burn_7d": 43,
+      "burn_7d": 40,
       "min_user_runway_days": 182.9,
       "triggers": [],
       "generate": false,
@@ -59,11 +61,11 @@
       "reason": "库存充足，当晚无需补题。"
     },
     "rdl-short": {
-      "bank_size": 243,
+      "bank_size": 247,
       "top_user_consumed": 5,
-      "top_user_pct": 0.021,
+      "top_user_pct": 0.02,
       "burn_7d": 4,
-      "min_user_runway_days": 418.3,
+      "min_user_runway_days": 425.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -73,8 +75,8 @@
       "bank_size": 143,
       "top_user_consumed": 6,
       "top_user_pct": 0.042,
-      "burn_7d": 7,
-      "min_user_runway_days": 239.8,
+      "burn_7d": 5,
+      "min_user_runway_days": 243.3,
       "triggers": [],
       "generate": false,
       "n": 0,
@@ -150,5 +152,7 @@
       "not_in_routine": true
     }
   },
-  "routine_instructions": []
+  "routine_instructions": [
+    "Generate 19 bs sentence-building items"
+  ]
 }
