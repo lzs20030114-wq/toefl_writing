@@ -243,7 +243,7 @@ function taskToReviewDetails(task) {
 
 // 逐句点播（docs/listening-sentence-timings.md）：播放器 ref + 「正在放哪一句」的高亮下标。
 // 只在有真实音频时认时间戳；只在当前句变了才 setState，播放中不会每帧重渲染。
-function useSentencePlayback(timings, audioUrl) {
+export function useSentencePlayback(timings, audioUrl) {
   const playerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   // 老记录（时间戳上线前做的）快照里没有 sentence_timings，但有 audio_url：按音频到题库里现查同一份。
