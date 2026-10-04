@@ -266,7 +266,8 @@ export function ReadingSectionContent({
 
 function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
   // Include legacy "adaptive-reading" records — 842cd85 regression dropped this.
-  const readingCount = sessions.filter((s) => s?.type === "reading" || s?.type === "adaptive-reading").length;
+  // 真题模考住在「真题练习记录」，阅读练习记录页不收它，条数也不算。
+  const readingCount = sessions.filter((s) => (s?.type === "reading" || s?.type === "adaptive-reading") && s?.details?.realMock !== true).length;
 
   return (
     <>

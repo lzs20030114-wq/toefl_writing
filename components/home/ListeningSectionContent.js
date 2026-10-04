@@ -228,7 +228,8 @@ export function ListeningSectionContent({
 
 function ListeningCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
   // Include legacy adaptive-listening records so mock-exam history surfaces.
-  const listeningCount = sessions.filter((s) => s?.type === "listening" || s?.type === "adaptive-listening").length;
+  // 真题模考住在「真题练习记录」，听力练习记录页不收它，条数也不算。
+  const listeningCount = sessions.filter((s) => (s?.type === "listening" || s?.type === "adaptive-listening") && s?.details?.realMock !== true).length;
 
   return (
     <>

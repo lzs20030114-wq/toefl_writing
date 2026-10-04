@@ -163,7 +163,8 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
 
   const { totalCount, weekCount, bestMock } = useMemo(() => {
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const mockBands = sessions.filter((session) => session?.type === "mock" && Number.isFinite(session?.band)).map((session) => session.band);
+    // 写作真题模考的 1–6 是另一套站内估分口径，不和常规写作模考比「最佳」。
+    const mockBands = sessions.filter((session) => session?.type === "mock" && session?.details?.realMock !== true && Number.isFinite(session?.band)).map((session) => session.band);
     return {
       totalCount: sessions.length,
       weekCount: sessions.filter((session) => new Date(session?.date || 0).getTime() >= weekAgo).length,

@@ -217,7 +217,8 @@ export function SpeakingSectionContent({
 
 function SpeakingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [] }) {
   // Include legacy speaking-exam records so mock-exam history surfaces.
-  const speakingCount = sessions.filter((s) => s?.type === "speaking" || s?.type === "speaking-exam").length;
+  // 真题模考住在「真题练习记录」，口语练习记录页不收它，条数也不算。
+  const speakingCount = sessions.filter((s) => (s?.type === "speaking" || s?.type === "speaking-exam") && s?.details?.realMock !== true).length;
 
   return (
     <div style={{ marginBottom: 20, ...fadeIn(380) }}>
