@@ -665,10 +665,13 @@ export function ListeningProgressView({ onBack }) {
 
   useEffect(() => subscribeHistory(setHist), []);
 
+  // Real mocks (真题模考) are left out everywhere here — list, stats, trend,
+  // ?mock= deep link, 清空 — they live on 真题练习记录, whose raw-35 score
+  // doesn't fit this page's band / CEFR / path view.
   const sessions = useMemo(() => {
     if (!hist?.sessions) return [];
     return hist.sessions
-      .filter(s => s.type === "listening" || s.type === "adaptive-listening")
+      .filter(s => (s.type === "listening" || s.type === "adaptive-listening") && s.details?.realMock !== true)
       .map(normalizeListeningSession)
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [hist]);
@@ -698,8 +701,11 @@ export function ListeningProgressView({ onBack }) {
       setExpandedKey(sessionKey(sessions[latestMockIdx]));
     } else {
       // params.get() already returns the decoded value — no extra decodeURIComponent.
+      // Compare instants, not strings: the link carries the local toISOString() ("…Z"),
+      // while a record re-synced from Supabase comes back as timestamptz ("…+00:00").
+      const wanted = Date.parse(val);
       const target = sessions.find(
-        (s) => s.date === val && s.details?.subtype === "mock",
+        (s) => Number.isFinite(wanted) && Date.parse(s.date) === wanted && s.details?.subtype === "mock",
       );
       if (target) setExpandedKey(sessionKey(target));
       else setMockNotFound(true);

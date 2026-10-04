@@ -24,13 +24,16 @@ import {
   describeModulePlan as describeListeningModulePlan,
   listeningModuleSeconds,
 } from "../../lib/mockExam/listeningPlanner";
-import { finalizeTimedOutResults } from "../../lib/mockExam/timeoutFinalize";
+import { finalizeTimedOutResults, itemScorableCount } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getSavedCode } from "../../lib/AuthContext";
 import { REAL_MOCK_TEMPLATE_VERSION, getRealMockConfig } from "../../lib/realMockExam/config";
-import { prepareRealMockExam, markRealMockSeen, routeRealMockExam, finishRealMockExam } from "../../lib/realMockExam/client";
+import {
+  prepareRealMockExam, markRealMockSeen, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
+} from "../../lib/realMockExam/client";
+import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper } from "../../lib/realMockExam/adaptiveScore";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
@@ -110,6 +113,11 @@ const LEVEL_LABELS = {
   orange: "初中级",
   red: "初级",
 };
+
+// Real mode checkpoints the answer in progress on every keystroke / pick, but
+// the payload carries the whole paper (~60 KB reading, ~155 KB listening), so
+// those saves are trailing and at most one per this many ms.
+const PARTIAL_SAVE_MS = 800;
 
 // ------ Inline Task Renderers ------
 
@@ -902,6 +910,57 @@ function buildTaskSnapshots(results) {
   });
 }
 
+/**
+ * The per-item part of a real mock's saved record. Items the clock cut off
+ * before they were ever shown go back to the pool as unseen (only seenItemIds
+ * blocks re-use), so the record must not carry their passage / questions /
+ * answers: they keep a stub that the record page shows as 「超时未到达」.
+ * Shown items keep their full snapshot for the per-question review. Scores are
+ * not derived from this — the stub's planned `total` only keeps the counts readable.
+ */
+export function buildRealMockRecord({ m1Items, m2Items, m1Results, m2Results, seenItemIds }) {
+  const seen = new Set(Array.isArray(seenItemIds) ? seenItemIds : []);
+  const items = [...(m1Items || []), ...(m2Items || [])];
+  const results = [...(m1Results || []), ...(m2Results || [])];
+  return {
+    items: items.map((item) => (seen.has(item?.id) ? item : {
+      id: item?.id || null, taskType: item?.taskType || null, realMockRole: item?.realMockRole || null, unreached: true,
+    })),
+    tasks: buildTaskSnapshots(results).map((task, i) => {
+      if (seen.has(task.itemId)) return task;
+      const item = results[i]?.item || {};
+      const total = itemScorableCount(item);
+      return {
+        taskType: item.taskType || null, itemId: item.id || null, realMockRole: item.realMockRole || null,
+        unreached: true, timedOut: true, correct: 0, total, unanswered: total, results: [],
+      };
+    }),
+  };
+}
+
+/**
+ * The resumable state of the module in progress, or null when there is nothing
+ * to checkpoint: outside a module, and in the transient "module fully answered"
+ * state just before the phase advances to routing/results — skipping that keeps
+ * every saved checkpoint at currentItemIndex === results.length, so resume lands
+ * on the next unanswered item and never re-scores the last one. timeLeft is
+ * stamped at write time.
+ */
+function checkpointPayload({ isReal, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, seenItemIds, currentPartial, paper }) {
+  if (phase !== "module1" && phase !== "module2") return null;
+  const items = phase === "module1" ? m1Items : m2Items;
+  const moduleResults = phase === "module1" ? m1Results : m2Results;
+  if (!Array.isArray(items) || (Array.isArray(moduleResults) && moduleResults.length >= items.length)) return null;
+  return {
+    phase, m1Items, m2Items, m1Results, m2Results,
+    currentItemIndex, routePath,
+    usedIds: Array.from(usedIds),
+    seenItemIds: isReal ? seenItemIds : undefined,
+    currentPartial: isReal && currentPartial?.phase === phase && currentPartial?.itemId === items[currentItemIndex]?.id ? currentPartial : null,
+    paper: isReal ? paper : undefined,
+  };
+}
+
 // ------ Done-set helpers (shared with practice-mode picker) ------
 
 /**
@@ -974,18 +1033,27 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const [finalScore, setFinalScore] = useState(null);
   const [usedIds, setUsedIds] = useState(new Set());
   const [error, setError] = useState(null);
+  // Real mode: the classified error behind `error` (describeRealMockError's
+  // kind / canRetry / activeAttemptId, plus a card title). RealErrorCard picks
+  // its buttons from it — no real-mode button may throw progress away.
+  const [errorInfo, setErrorInfo] = useState(null);
   const [paper, setPaper] = useState(null);
   const [seenItemIds, setSeenItemIds] = useState([]);
   const [currentPartial, setCurrentPartial] = useState(null);
   const [preparing, setPreparing] = useState(false);
+  // error: null, or the classified failure ({ kind, message, … }) of this item's seen call.
   const [seenState, setSeenState] = useState({ key: null, ready: false, error: null });
   const [seenRetry, setSeenRetry] = useState(0);
+  // Classified failure of the current item's answered sync (real mode), or null.
   const [answerError, setAnswerError] = useState(null);
   const pendingAnswerRef = useRef(null);
   const answerBusyRef = useRef(false);
-  const finishBusyRef = useRef(false);
+  // Completion guard: true once this exam has been saved, so a second completion
+  // path (timeout racing the last submit, a stale delayed onComplete) can never
+  // save it again and no deferred checkpoint save can bring it back. Reset on
+  // start / resume / restart.
+  const examClosedRef = useRef(false);
   const cloudRetryRef = useRef(null);
-  const [restartAttemptId, setRestartAttemptId] = useState(null);
   // ISO date this exam was saved under — used as the session's identity so the
   // results screen deep-links into THIS exact record, not just "the latest mock"
   // (which would surface a previous exam if this save silently failed to sync).
@@ -1020,43 +1088,67 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const timeLeftRef = useRef(timeLeft);
   useEffect(() => { timeLeftRef.current = timeLeft; }, [timeLeft]);
 
+  // The checkpoint as of this render (null when nothing is resumable). Every
+  // save — immediate, throttled, periodic or on page hide — reads it at write
+  // time, so a timer that fires after the exam ended finds null and can never
+  // re-create the checkpoint.
+  const checkpointRef = useRef(null);
+  checkpointRef.current = checkpointPayload({
+    isReal, phase, m1Items, m2Items, m1Results, m2Results,
+    currentItemIndex, routePath, usedIds, seenItemIds, currentPartial, paper,
+  });
+  const saveCheckpointNow = useCallback(() => {
+    const payload = checkpointRef.current;
+    if (!payload || examClosedRef.current) return;
+    saveAdaptiveCheckpoint(section, { ...payload, timeLeft: timeLeftRef.current }, checkpointScope);
+  }, [section, checkpointScope]);
+
   // Checkpoint in-progress exam state on every progress change (item answered,
   // module switch, route decided) so an exit mid-exam can be resumed. timeLeft
   // is snapshotted from the ref so this doesn't fire each second.
   useEffect(() => {
-    if (phase !== "module1" && phase !== "module2") return;
-    const items = phase === "module1" ? m1Items : m2Items;
-    const moduleResults = phase === "module1" ? m1Results : m2Results;
-    // Skip the transient "module fully answered" state (just before the phase
-    // advances to routing/results) so every saved checkpoint keeps
-    // currentItemIndex === results.length — i.e. resume lands on the next
-    // unanswered item and never re-scores the last one.
-    if (!Array.isArray(items) || (Array.isArray(moduleResults) && moduleResults.length >= items.length)) return;
-    saveAdaptiveCheckpoint(section, {
-      phase, m1Items, m2Items, m1Results, m2Results,
-      currentItemIndex, routePath, timeLeft: timeLeftRef.current,
-      usedIds: Array.from(usedIds),
-      seenItemIds: isReal ? seenItemIds : undefined,
-      currentPartial: isReal && currentPartial?.phase === phase && currentPartial?.itemId === items[currentItemIndex]?.id ? currentPartial : null,
-      paper: isReal ? paper : undefined,
-    }, checkpointScope);
-  }, [section, source, userCode, isReal, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, paper, seenItemIds, currentPartial, checkpointScope]);
+    saveCheckpointNow();
+  }, [saveCheckpointNow, phase, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, paper, seenItemIds]);
+
+  // Real mode also checkpoints the answer in progress (CTW letters, MCQ picks,
+  // answer-window time), which changes on every keystroke: a trailing save at
+  // most once per PARTIAL_SAVE_MS. A pending save is never rescheduled — it
+  // picks up the newest answer from the ref when it fires.
+  const partialSaveTimerRef = useRef(null);
+  useEffect(() => {
+    if (!isReal || !currentPartial || partialSaveTimerRef.current) return;
+    partialSaveTimerRef.current = setTimeout(() => {
+      partialSaveTimerRef.current = null;
+      saveCheckpointNow();
+    }, PARTIAL_SAVE_MS);
+  }, [isReal, currentPartial, saveCheckpointNow]);
+  // Unmount (top bar 返回, 保存进度并退出): flush a pending answer save rather than drop it.
+  useEffect(() => () => {
+    if (!partialSaveTimerRef.current) return;
+    clearTimeout(partialSaveTimerRef.current);
+    partialSaveTimerRef.current = null;
+    saveCheckpointNow();
+  }, [saveCheckpointNow]);
 
   // A long passage can hold the same item for many minutes. Persist the real
-  // exam clock periodically so a refresh cannot restore an old time budget.
+  // exam clock periodically so a refresh cannot restore an old time budget, and
+  // save at once when the page is hidden or unloaded (refresh / tab close).
+  const paperAttemptId = paper?.attemptId || null;
   useEffect(() => {
-    if (!isReal || !paper || (phase !== "module1" && phase !== "module2")) return;
-    const timer = setInterval(() => {
-      saveAdaptiveCheckpoint(section, {
-        phase, m1Items, m2Items, m1Results, m2Results,
-        currentItemIndex, routePath, timeLeft: timeLeftRef.current,
-        usedIds: Array.from(usedIds), seenItemIds,
-        currentPartial: currentPartial?.phase === phase && currentPartial?.itemId === (phase === "module1" ? m1Items : m2Items)?.[currentItemIndex]?.id ? currentPartial : null,
-        paper,
-      }, checkpointScope);
-    }, 5000);
+    if (!isReal || !paperAttemptId || (phase !== "module1" && phase !== "module2")) return undefined;
+    const timer = setInterval(saveCheckpointNow, 5000);
     return () => clearInterval(timer);
-  }, [isReal, paper, phase, section, userCode, m1Items, m2Items, m1Results, m2Results, currentItemIndex, routePath, usedIds, seenItemIds, currentPartial, checkpointScope]);
+  }, [isReal, paperAttemptId, phase, saveCheckpointNow]);
+  useEffect(() => {
+    if (!isReal) return undefined;
+    const onVisibility = () => { if (document.visibilityState === "hidden") saveCheckpointNow(); };
+    window.addEventListener("pagehide", saveCheckpointNow);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", saveCheckpointNow);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [isReal, saveCheckpointNow]);
 
   // Start timer when exam begins
   useEffect(() => {
@@ -1099,8 +1191,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         if (isReal && realTaskReady && currentItem) {
           try { await markRealMockSeen(paper, [currentItem], { answered: true }); }
           catch (e) {
-            cloudRetryRef.current = completeTimeout;
-            setError("超时作答同步失败：" + (e?.message || "请重试"));
+            showRealError(e, { title: "超时作答同步失败", retry: completeTimeout });
             return;
           }
         }
@@ -1126,7 +1217,10 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   }, [isReal, phase, currentItem, currentItemIndex]);
   const seenKey = currentItem ? `${paper?.attemptId || ""}:${phase}:${currentItemIndex}:${currentItem.realMockKey || currentItem.id}` : null;
   const realTaskReady = !isReal || (seenState.key === seenKey && seenState.ready);
-  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || (isReal && !realTaskReady) || answerBusyRef.current;
+  const seenGateError = seenState.key === seenKey ? seenState.error : null;
+  // The clock also waits while an answer could not be synced (the item is
+  // already submitted; the student can only retry or leave).
+  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || (isReal && (!realTaskReady || !!answerError)) || answerBusyRef.current;
 
   const expired = timeLeft <= 0;
   useEffect(() => {
@@ -1140,7 +1234,13 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
       setSeenState({ key: seenKey, ready: true, error: null });
     }).catch((e) => {
-      if (active) setSeenState({ key: seenKey, ready: false, error: e?.message || "已见记录同步失败，请重试。" });
+      if (!active) return;
+      // A finished / expired paper can never load this item (「重试加载」 would
+      // loop forever) and an account problem needs the user to leave; only a
+      // transient failure is worth retrying.
+      const info = describeRealMockError(e, "已见记录同步失败，请重试。");
+      if (info.kind === "dead-attempt") abandonDeadAttempt(info);
+      else setSeenState({ key: seenKey, ready: false, error: info });
     });
     return () => { active = false; };
   }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, seenRetry, expired]);
@@ -1170,25 +1270,86 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 
   // ------ Phase transitions ------
 
-  async function handleStartExam() {
+  // Back to a clean intro: no paper, no answers, no pending retries. The error
+  // card and the local checkpoint are left to the caller.
+  function resetExamState() {
+    // A deferred save firing before the re-render must not resurrect the paper.
+    checkpointRef.current = null;
+    setPaper(null);
+    setSeenItemIds([]);
+    setCurrentPartial(null);
+    setPhase("intro");
+    setM1Items(null);
+    setM2Items(null);
+    setM1Results([]);
+    setM2Results([]);
+    setCurrentItemIndex(0);
+    setRoutePath(null);
+    setFinalScore(null);
+    setSavedSessionDate(null);
+    setUsedIds(new Set());
+    setAnswerError(null);
+    pendingAnswerRef.current = null;
+    answerBusyRef.current = false;
+    cloudRetryRef.current = null;
+    autoFinishedRef.current = false;
+    examClosedRef.current = false;
+  }
+
+  function clearError() {
+    setError(null);
+    setErrorInfo(null);
+    cloudRetryRef.current = null;
+  }
+
+  // The server says this paper is finished / expired / gone (restarted on
+  // another device, or the local checkpoint outlived the 2-hour lease): it can
+  // never be continued. Drop the checkpoint and go back to a clean intro at
+  // once, so no retry, deferred save or 「继续上次模考」 can bring it back; the
+  // card offers 重新组卷 / 返回真题专区.
+  function abandonDeadAttempt(info) {
+    clearAdaptiveCheckpoint(section, checkpointScope);
+    setResumed(null);
+    resetExamState();
+    setErrorInfo({ ...info, title: "无法继续这份试卷" });
+    setError(info.message);
+  }
+
+  // Real-mode failure → classified error card (RealErrorCard). `retry` re-runs
+  // the failed step mid-exam and is kept only for transient failures.
+  function showRealError(e, { title = null, retry = null } = {}) {
+    const info = describeRealMockError(e);
+    if (info.kind === "dead-attempt") {
+      abandonDeadAttempt(info);
+      return;
+    }
+    cloudRetryRef.current = info.canRetry ? retry : null;
+    setErrorInfo({ ...info, title, stepRetry: !!cloudRetryRef.current });
+    setError(info.message);
+  }
+
+  async function handleStartExam(options = {}) {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
     if (examController) examController.unlock();
     if (preparing) return;
     setPreparing(true);
     setError(null);
+    setErrorInfo(null);
     try {
       if (isReal) {
-        if (!userCode) throw new Error("登录状态已失效，请重新登录。");
-        const oldAttemptId = restartAttemptId || resumed?.paper?.attemptId;
-        const fresh = await prepareRealMockExam(section, oldAttemptId ? { restartAttemptId: oldAttemptId } : undefined);
+        if (!userCode) throw new RealMockError("登录状态已失效，请重新登录。", { code: "LOGIN_REQUIRED" });
+        // Releasing a paper ends it — possibly mid-exam on another device — so
+        // its id is sent only on an explicit request (handleIntroStart /
+        // handleReleaseActiveAttempt), never by a plain retry.
+        const restartAttemptId = typeof options?.restartAttemptId === "string" ? options.restartAttemptId : null;
+        const fresh = await prepareRealMockExam(section, restartAttemptId ? { restartAttemptId } : undefined);
         if (!validateRealAdaptivePaper(fresh, section, userCode)) {
           if (fresh?.attemptId) await finishRealMockExam(fresh).catch(() => {});
           throw new Error("真题试卷不完整，暂时无法开考，请稍后重试。");
         }
         clearAdaptiveCheckpoint(section, checkpointScope);
         setResumed(null);
-        setRestartAttemptId(null);
         setPaper(fresh);
         setSeenItemIds([]);
         setCurrentPartial(null);
@@ -1199,7 +1360,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         setM1Results([]);
         setM2Results([]);
         setTimeLeft(fresh.timing.module1Seconds);
+        setAnswerError(null);
+        pendingAnswerRef.current = null;
+        answerBusyRef.current = false;
         autoFinishedRef.current = false;
+        examClosedRef.current = false;
         setPhase("module1");
         return;
       }
@@ -1218,18 +1383,44 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       setM2Results([]);
       setTimeLeft(config.module1TimeSeconds);
       autoFinishedRef.current = false;
+      examClosedRef.current = false;
       setPhase("module1");
     } catch (e) {
-      if (isReal && e?.code === "ACTIVE_ATTEMPT") {
-        setRestartAttemptId(e.attemptId || e.activeAttemptId || resumed?.paper?.attemptId || null);
-      }
-      const deficitText = Array.isArray(e?.deficits) && e.deficits.length
-        ? ` 缺口：${e.deficits.map((d) => `${d.taskType || d.type || "题目"}需${d.required ?? d.need ?? "?"}、可用${d.available ?? "?"}`).join("；")}。`
-        : "";
-      setError(`${isReal ? "真题组卷失败" : "初始化考试失败"}：${e?.message || "请稍后重试。"}${deficitText}`);
+      if (isReal) showRealError(e, { title: "真题组卷失败" });
+      else setError(`初始化考试失败：${e?.message || "请稍后重试。"}`);
     } finally {
       setPreparing(false);
     }
+  }
+
+  // IntroCard's 「开始考试 / 重新开始」 (it hands over the click event — never
+  // forward that as options). 「重新开始」 over this device's own checkpoint
+  // releases that paper; the intro already warns it clears the previous progress.
+  function handleIntroStart() {
+    const ownAttemptId = isReal ? resumed?.paper?.attemptId : null;
+    handleStartExam(ownAttemptId ? { restartAttemptId: ownAttemptId } : undefined);
+  }
+
+  // ACTIVE_ATTEMPT: another unfinished paper of this section (another device or
+  // tab). Ending it is destructive, so it takes this explicit, confirmed click.
+  function handleReleaseActiveAttempt() {
+    const activeAttemptId = errorInfo?.activeAttemptId;
+    if (!activeAttemptId) return;
+    if (examController) examController.unlock(); // still inside the click, before the modal
+    if (!window.confirm(RELEASE_ACTIVE_ATTEMPT_CONFIRM)) return;
+    handleStartExam({ restartAttemptId: activeAttemptId });
+  }
+
+  // 重新组卷 after a dead attempt: a clean intro, then a new paper with no restart id.
+  function handleStartFresh() {
+    resetExamState();
+    handleStartExam();
+  }
+
+  // 保存进度并退出: the checkpoint stays, so the intro offers 「继续上次模考」.
+  function handleSaveAndExit() {
+    saveCheckpointNow();
+    if (onExit) onExit();
   }
 
   // Resume an in-progress exam from the saved checkpoint (offered on the intro).
@@ -1253,10 +1444,19 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       setRoutePath(resumed.routePath || null);
       setUsedIds(new Set(Array.isArray(resumed.usedIds) ? resumed.usedIds : []));
       setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : (isReal ? resumed.paper.timing.module1Seconds : config.module1TimeSeconds));
+      setAnswerError(null);
+      pendingAnswerRef.current = null;
+      answerBusyRef.current = false;
       autoFinishedRef.current = false;
+      examClosedRef.current = false;
       setPhase(resumed.phase === "module2" ? "module2" : "module1");
     } catch {
       clearAdaptiveCheckpoint(section, checkpointScope);
+      if (isReal) {
+        // The checkpoint is gone — stop offering it. 关闭 returns to the intro.
+        setResumed(null);
+        setErrorInfo({ kind: "resume-failed", code: "", canRetry: false, activeAttemptId: null, title: null });
+      }
       setError("无法恢复上次模考进度，请重新开始。");
     }
   }
@@ -1268,15 +1468,33 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // and re-run handleM2Complete (a duplicate saveSess → duplicate history).
     // autoFinishedRef is reset to false on start/resume/entering M2, so the
     // normal (non-timeout) flow is unaffected.
-    if (autoFinishedRef.current || answerBusyRef.current) return;
+    if (autoFinishedRef.current || answerBusyRef.current || examClosedRef.current) return;
     answerBusyRef.current = true;
     pendingAnswerRef.current = result;
     if (isReal) {
+      // Freeze the clock for the network call right now: holdTimersRef is
+      // otherwise only recomputed on the next render, so the countdown could
+      // still tick (even to zero) while this answer is in flight.
+      holdTimersRef.current = true;
+      let syncError = null;
       try {
         await markRealMockSeen(paper, [currentItem], { answered: true });
       } catch (e) {
-        setAnswerError(e?.message || "作答同步失败，请重试后继续。");
+        syncError = e;
+      }
+      // The clock ran out while the call was in flight: the timeout path has
+      // already scored this item through the partial collector, so appending
+      // it here as well would count it twice.
+      if (autoFinishedRef.current) {
         answerBusyRef.current = false;
+        pendingAnswerRef.current = null;
+        return;
+      }
+      if (syncError) {
+        answerBusyRef.current = false;
+        const info = describeRealMockError(syncError, "作答同步失败，请重试后继续。");
+        if (info.kind === "dead-attempt") abandonDeadAttempt(info);
+        else setAnswerError(info);
         return;
       }
     }
@@ -1328,7 +1546,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         if (isReal) await routeRealMockExam(paper, path);
         const m2 = isReal ? { items: paper.m2ByPath[path], usedIds } : config.buildM2(path, usedIds, loadSectionDoneIds(config));
         if (!m2.items || m2.items.length === 0) {
-          setError("题库数据不足，无法构建 Module 2。");
+          if (isReal) showRealError(new Error("题库数据不足，无法构建 Module 2。"), { title: "进入 Module 2 失败" });
+          else setError("题库数据不足，无法构建 Module 2。");
           return;
         }
         setM2Items(m2.items);
@@ -1341,15 +1560,20 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         autoFinishedRef.current = false;
         setPhase("module2");
       } catch (e) {
+        if (isReal) {
+          showRealError(e, { title: "进入 Module 2 失败", retry: () => handleM1Complete(results) });
+          return;
+        }
         cloudRetryRef.current = () => handleM1Complete(results);
         setError("进入 Module 2 失败：" + (e.message || "请重试"));
       }
     }, 2500);
   }
 
-  async function handleM2Complete(resultsOverride) {
-    if (finishBusyRef.current) return;
-    finishBusyRef.current = true;
+  function handleM2Complete(resultsOverride) {
+    // Completion guard: the same exam is saved exactly once (see examClosedRef).
+    if (examClosedRef.current) return;
+    examClosedRef.current = true;
     const m1Res = m1Results;
     const m2Res = resultsOverride || m2Results;
     // Mark Module 2's items done (covers normal + timeout finalize paths).
@@ -1361,15 +1585,6 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     const score = isReal
       ? calculateRealAdaptiveScore(m1Items, m1Res, m2Items, m2Res, routePath)
       : calculateAdaptiveScore(m1Correct, m1Total, m2Correct, m2Total, routePath);
-    if (isReal) {
-      try { await finishRealMockExam(paper); }
-      catch (e) {
-        finishBusyRef.current = false;
-        cloudRetryRef.current = () => handleM2Complete(m2Res);
-        setError("结束真题模考失败：" + (e?.message || "请重试"));
-        return;
-      }
-    }
     setFinalScore(score);
 
     // Stamp this exam's save identity once, reused for both the saved record's
@@ -1386,16 +1601,18 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // passage/questions/blanks, user results) so the post-exam review can
     // render the original test back with right/wrong + AI explanations,
     // without having to re-query the question bank by id (which could shift).
+    // A real mock keeps them in details.tasks instead (shown on 真题练习记录,
+    // never on the ordinary progress pages), stubbed for items never shown.
     try {
-      const realItems = isReal ? [...m1Items, ...m2Items] : [];
-      const realSnapshots = isReal ? [...buildTaskSnapshots(m1Res), ...buildTaskSnapshots(m2Res)] : [];
+      const realItemIds = isReal ? [...m1Items, ...m2Items].map((item) => item.id) : [];
+      const realRecord = isReal ? buildRealMockRecord({ m1Items, m2Items, m1Results: m1Res, m2Results: m2Res, seenItemIds }) : null;
       saveSess({
         type: section,
         mode: "mock",
         ...(isReal ? {
           source: "real-bank", real: true, realMock: true,
           section,
-          itemIds: realItems.map((item) => item.id),
+          itemIds: realItemIds,
         } : {}),
         date: sessionDate,
         correct: isReal ? score.correct : m1Correct + m2Correct,
@@ -1407,10 +1624,9 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
             source: "real-bank", real: true, realMock: true,
             section,
             attemptId: paper.attemptId, templateVersion: paper.templateVersion,
-            itemIds: realItems.map((item) => item.id),
+            itemIds: realItemIds,
             seenItemIds,
-            items: realItems, tasks: realSnapshots,
-            paperSnapshot: { ...paper, m2ByPath: { [routePath]: m2Items } },
+            items: realRecord.items, tasks: realRecord.tasks,
             scoredCorrect: score.correct, scoredTotal: score.total,
             extraCorrect: score.extraCorrect, extraTotal: score.extraTotal,
             scoreVersion: score.scoreVersion,
@@ -1423,14 +1639,14 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
             total: isReal ? score.m1.scoredTotal : m1Total,
             ...(isReal ? { extraCorrect: score.m1.extraCorrect, extraTotal: score.m1.extraTotal } : {}),
             accuracy: isReal ? score.m1.scoredCorrect / score.m1.scoredTotal : score.m1Accuracy,
-            tasks: buildTaskSnapshots(m1Res),
+            ...(isReal ? {} : { tasks: buildTaskSnapshots(m1Res) }),
           },
           m2: {
             correct: isReal ? score.m2.scoredCorrect : m2Correct,
             total: isReal ? score.m2.scoredTotal : m2Total,
             ...(isReal ? { extraCorrect: score.m2.extraCorrect, extraTotal: score.m2.extraTotal } : {}),
             accuracy: isReal ? score.m2.scoredCorrect / score.m2.scoredTotal : score.m2Accuracy,
-            tasks: buildTaskSnapshots(m2Res),
+            ...(isReal ? {} : { tasks: buildTaskSnapshots(m2Res) }),
           },
           rawScore: score.rawScore,
         },
@@ -1438,30 +1654,18 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     } catch {}
 
     clearAdaptiveCheckpoint(section, checkpointScope); // exam finished
-    finishBusyRef.current = false;
     setPhase("results");
+    // Record first, finish later: `finish` only releases this paper's still-
+    // unseen reservations (the 2-hour lease would too), so the saved exam never
+    // waits on it. A finish that keeps failing is retried before the next prepare.
+    if (isReal) finishRealMockExamReliably(paper);
   }
 
   function handleRestart() {
-    setRestartAttemptId(isReal && phase !== "results" ? paper?.attemptId || restartAttemptId : null);
     clearAdaptiveCheckpoint(section, checkpointScope);
     setResumed(null);
-    setPaper(null);
-    setSeenItemIds([]);
-    setCurrentPartial(null);
-    setPhase("intro");
-    setM1Items(null);
-    setM2Items(null);
-    setM1Results([]);
-    setM2Results([]);
-    setCurrentItemIndex(0);
-    setRoutePath(null);
-    setFinalScore(null);
-    setSavedSessionDate(null);
-    setUsedIds(new Set());
-    setError(null);
-    cloudRetryRef.current = null;
-    autoFinishedRef.current = false;
+    resetExamState();
+    clearError();
   }
 
   // ------ Render ------
@@ -1476,6 +1680,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 
   const accent = config.accent;
   const accentSoft = config.accentSoft;
+  // Real mode names the Module 2 routes in Chinese everywhere (intro, routing, results).
+  const routeLabel = (path) => (isReal ? (path === "upper" ? "进阶" : "普通") : (path === "upper" ? "Upper" : "Lower"));
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -1483,7 +1689,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       <TopBar
         title={
           phase === "module1" ? `Module 1 · 路由阶段` :
-          phase === "module2" ? `Module 2 · ${routePath === "upper" ? "Upper" : "Lower"}` :
+          phase === "module2" ? `Module 2 · ${routeLabel(routePath)}` :
           phase === "routing" ? "正在调整难度..." :
           phase === "results" ? "考试结果" :
           `${isReal ? "真题" : ""}${config.labelZh}自适应模考`
@@ -1500,18 +1706,29 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 
       <div className="tp-reading-exam-wrap" style={{ maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
         {/* Error state */}
-        {error && (
+        {error && isReal && (
+          <RealErrorCard
+            info={errorInfo}
+            message={error}
+            examUnderway={phase === "module1" || phase === "module2" || phase === "routing"}
+            onRetryStep={() => {
+              const retry = cloudRetryRef.current;
+              clearError();
+              if (retry) retry();
+            }}
+            onRetryStart={handleIntroStart}
+            onRelease={handleReleaseActiveAttempt}
+            onStartFresh={handleStartFresh}
+            onSaveAndExit={handleSaveAndExit}
+            onExit={onExit}
+            onClose={clearError}
+          />
+        )}
+        {error && !isReal && (
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
             <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
-              {isReal && <Btn onClick={() => {
-                setError(null);
-                const retry = cloudRetryRef.current;
-                cloudRetryRef.current = null;
-                if (retry) retry();
-                else handleStartExam();
-              }}>重试</Btn>}
               <Btn onClick={handleRestart} variant="secondary">返回</Btn>
             </div>
           </SurfaceCard>
@@ -1523,7 +1740,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
             config={config}
             accent={accent}
             accentSoft={accentSoft}
-            onStart={handleStartExam}
+            onStart={handleIntroStart}
             onResume={handleResume}
             hasResume={!!resumed}
             source={source}
@@ -1542,7 +1759,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
               borderRadius: 999, padding: "4px 12px", marginBottom: 16,
               fontSize: 11, fontWeight: 700, color: accent,
             }}>
-              {phase === "module1" ? "Module 1 · Routing" : `Module 2 · ${routePath === "upper" ? "Upper" : "Lower"}`}
+              {phase === "module1" ? "Module 1 · Routing" : `Module 2 · ${routeLabel(routePath)}`}
             </div>
 
             <AdaptiveTaskRenderer
@@ -1553,17 +1770,24 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
               partialState={partialForCurrent}
               onProgress={isReal ? handlePartialProgress : null}
             />
-            {answerError && <div style={{ marginTop: 14, color: "#b91c1c", fontSize: 13 }}>
-              {answerError} <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>
+            {answerError && <div style={{ marginTop: 14, color: "#b91c1c", fontSize: 13, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <span>{answerError.message}</span>
+              {answerError.kind === "transient" && <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>}
+              <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
             </div>}
           </SurfaceCard>
         )}
         {isReal && (phase === "module1" || phase === "module2") && currentItem && !error && !realTaskReady && (
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
             <div style={{ color: C.t2, fontSize: 14, marginBottom: 12 }}>
-              {seenState.key === seenKey && seenState.error ? seenState.error : "正在确认这道题的已见记录…"}
+              {seenGateError ? seenGateError.message : "正在确认这道题的已见记录…"}
             </div>
-            {seenState.key === seenKey && seenState.error && <Btn onClick={() => setSeenRetry((n) => n + 1)}>重试加载</Btn>}
+            {seenGateError && (
+              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+                {seenGateError.kind === "transient" && <Btn onClick={() => setSeenRetry((n) => n + 1)}>重试加载</Btn>}
+                <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
+              </div>
+            )}
           </SurfaceCard>
         )}
 
@@ -1592,6 +1816,58 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 }
 
 // ------ Sub-components ------
+
+/**
+ * Real-mode error card. No button on it may throw progress away:
+ *   dead-attempt (the paper is finished / expired / gone; its checkpoint is
+ *     already dropped) → 重新组卷 + 返回真题专区;
+ *   mid-exam → 重试 for a transient failure + 保存进度并退出 (the checkpoint
+ *     stays, so the intro offers 「继续上次模考」);
+ *   intro (组卷 failed) → 重试 only when retrying can help, the confirmed
+ *     放弃那份试卷并重新组卷 for another unfinished paper, 返回真题专区 when the
+ *     unseen bank ran out — and always 关闭, which only closes this card.
+ */
+function RealErrorCard({ info, message, examUnderway, onRetryStep, onRetryStart, onRelease, onStartFresh, onSaveAndExit, onExit, onClose }) {
+  const kind = info?.kind;
+  let actions;
+  if (kind === "dead-attempt") {
+    actions = (
+      <>
+        <Btn onClick={onStartFresh}>重新组卷</Btn>
+        <Btn onClick={onExit} variant="secondary">返回真题专区</Btn>
+      </>
+    );
+  } else if (examUnderway) {
+    actions = (
+      <>
+        {info?.stepRetry && <Btn onClick={onRetryStep}>重试</Btn>}
+        <Btn onClick={onSaveAndExit} variant={info?.stepRetry ? "secondary" : undefined}>保存进度并退出</Btn>
+      </>
+    );
+  } else {
+    actions = (
+      <>
+        {info?.canRetry && <Btn onClick={onRetryStart}>重试</Btn>}
+        {kind === "active-attempt" && info.activeAttemptId && <Btn onClick={onRelease}>放弃那份试卷并重新组卷</Btn>}
+        {kind === "exhausted" && <Btn onClick={onExit}>返回真题专区</Btn>}
+        <Btn onClick={onClose} variant="secondary">关闭</Btn>
+      </>
+    );
+  }
+  return (
+    <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
+      <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
+      {info?.title && <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{info.title}</div>}
+      <div style={{
+        fontSize: info?.title ? 14 : 16, fontWeight: info?.title ? 400 : 700, color: info?.title ? C.t2 : C.t1,
+        lineHeight: 1.7, maxWidth: 520, margin: "0 auto 16px",
+      }}>
+        {message}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>{actions}</div>
+    </SurfaceCard>
+  );
+}
 
 function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, onExit, source = "standard", preparing = false }) {
   const isReading = config.label === "Reading";
@@ -1670,6 +1946,11 @@ function IntroCard({ config, accent, accentSoft, onStart, onResume, hasResume, o
       }}>
         <strong>计时规则:</strong> 两个 Module 各自独立计时，进入 Module 2 时倒计时会重置。
         Module 1 时间用尽会自动进入 Module 2，无法回到上一个 Module 的题目。
+        {isReal && (
+          <div style={{ marginTop: 6 }}>
+            开考后展示过的题会永久计为已做，不会再出现在之后的真题模考里；中途离开 2 小时内可在本设备点「继续上次模考」（离开期间不计时）。
+          </div>
+        )}
       </div>
 
       {hasResume && (
@@ -1772,11 +2053,15 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
   );
   // Deep-link into this section's practice records, auto-opening THIS exam by
   // its save identity (session date). Falls back to `mock=latest` only if the
-  // date is somehow missing, so an older link shape still works.
+  // date is somehow missing, so an older link shape still works. A real mock
+  // lives on 真题练习记录 only (the ordinary pages exclude it: their 换算分 /
+  // CEFR / Upper-Lower view doesn't fit its raw-35 score and practice extras).
   const reviewBase = `/${section === "listening" ? "listening" : "reading"}/progress`;
-  const reviewHref = sessionDate
-    ? `${reviewBase}?mock=${encodeURIComponent(sessionDate)}`
-    : `${reviewBase}?mock=latest`;
+  const reviewHref = isReal
+    ? (sessionDate ? `/real-bank/progress?mock=${encodeURIComponent(sessionDate)}` : "/real-bank/progress")
+    : sessionDate
+      ? `${reviewBase}?mock=${encodeURIComponent(sessionDate)}`
+      : `${reviewBase}?mock=latest`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1892,7 +2177,7 @@ function ResultsCard({ score, m1Results, m2Results, config, section, sessionDate
       }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
           <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
-          <span>想回看每道题的作答与解析？点击下方按钮进入 <strong style={{ color: config.accent }}>{config.labelZh}练习记录</strong>，将自动展开本次模考详情。</span>
+          <span>想回看每道题的作答与解析？点击下方按钮进入 <strong style={{ color: config.accent }}>{isReal ? "真题练习记录" : `${config.labelZh}练习记录`}</strong>，将自动展开本次模考详情。</span>
         </div>
         <Btn
           onClick={() => router.push(reviewHref)}

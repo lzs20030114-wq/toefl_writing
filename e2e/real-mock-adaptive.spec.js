@@ -97,7 +97,8 @@ test("real reading task stays hidden until seen succeeds, then a timeout routes 
   await expect(page.getByText("Complete the Words")).toBeVisible();
   await page.screenshot({ path: path.join(reportDir, "reading-first-seen.png"), fullPage: true });
   await expect(page.getByText("正在进入下一模块…")).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByText("Module 2 · Lower").first()).toBeVisible({ timeout: 15_000 });
+  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Lower" before the copy fix).
+  await expect(page.getByText("Module 2 · 普通").first()).toBeVisible({ timeout: 15_000 });
   expect(calls.filter((c) => c.action === "seen").every((c) => c.items.every((it) => it.id === "r-sc-ctw" || it.id.startsWith("r-lo")))).toBe(true);
   expect(calls.filter((c) => c.action === "route")[0].path).toBe("lower");
   await expect(page.getByText("真题阅读模考结果")).toBeVisible({ timeout: 15_000 });
@@ -146,7 +147,8 @@ test("listening resumes the actual shell on upper route and a wrong account cann
   await expect(page.getByRole("button", { name: "继续上次模考" })).toBeVisible();
   await page.getByRole("button", { name: "继续上次模考" }).click();
   await expect(page.getByText("正在进入下一模块…")).toBeVisible({ timeout: 10_000 });
-  await expect(page.getByText("Module 2 · Upper").first()).toBeVisible({ timeout: 10_000 });
+  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Upper" before the copy fix).
+  await expect(page.getByText("Module 2 · 进阶").first()).toBeVisible({ timeout: 10_000 });
   await page.screenshot({ path: path.join(reportDir, "listening-upper-module.png"), fullPage: true });
   await expect(page.getByText("真题听力模考结果")).toBeVisible({ timeout: 15_000 });
   await page.screenshot({ path: path.join(reportDir, "listening-upper-result.png"), fullPage: true });
@@ -165,7 +167,8 @@ test("listening starts a fresh full paper and times out through lower to results
   await page.goto("/listening-exam?source=real-bank");
   await page.getByRole("button", { name: "开始考试" }).click();
   await expect(page.getByText("Choose a Response")).toBeVisible();
-  await expect(page.getByText("Module 2 · Lower").first()).toBeVisible({ timeout: 15_000 });
+  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Lower" before the copy fix).
+  await expect(page.getByText("Module 2 · 普通").first()).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText("真题听力模考结果")).toBeVisible({ timeout: 15_000 });
   expect(calls.find((c) => c.action === "route")?.path).toBe("lower");
   expect(calls.filter((c) => c.action === "seen" && !c.answered).map((c) => c.items[0].id)).toEqual(["l-sc-0", "l-lo-0"]);
@@ -241,4 +244,122 @@ test("listening LCR choice survives refresh while its material starts again", as
   await page.getByRole("button", { name: "开始答题" }).click();
   await expect(page.getByRole("button", { name: "B No" })).toHaveCSS("border-color", "rgb(139, 92, 246)");
   await page.screenshot({ path: path.join(reportDir, "listening-lcr-resumed-choice.png"), fullPage: true });
+});
+
+const READING_CHECKPOINT_KEY = "toefl-adaptive-checkpoint:real-bank:ABC123:2026-full-v1:reading";
+const savedRealReadingMocks = (page) => page.evaluate(() => (JSON.parse(localStorage.getItem("toefl-hist") || "{}").sessions || [])
+  .filter((s) => s.details?.realMock === true && s.details?.section === "reading"));
+
+test("a failed finish still shows the results and keeps the saved record", async ({ page }) => {
+  await auth(page);
+  const exam = paper("reading", 3);
+  const calls = [];
+  await page.route("**/api/real-mock-exam", (route) => {
+    const body = route.request().postDataJSON();
+    calls.push(body);
+    if (body.action === "prepare") return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper: exam }) });
+    if (body.action === "finish") return route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ ok: false, code: "REAL_MOCK_ERROR", error: "真题模考服务暂不可用，请稍后重试。" }) });
+    return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
+  });
+  await page.goto("/reading-exam?source=real-bank");
+  await page.getByRole("button", { name: "开始考试" }).click();
+  await expect(page.getByText("真题阅读模考结果")).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByText(/结束真题模考失败/)).toHaveCount(0);
+  const records = await savedRealReadingMocks(page);
+  expect(records).toHaveLength(1);
+  expect(records[0].details.attemptId).toBe(exam.attemptId);
+  // The finish is retried in the background and remembered for the next prepare.
+  await expect.poll(() => calls.filter((c) => c.action === "finish").length).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("toefl-real-mock-pending-finish") || "[]").map((x) => x.attemptId))).toContain(exam.attemptId);
+  await page.screenshot({ path: path.join(reportDir, "reading-finish-failure-result.png"), fullPage: true });
+});
+
+test("another unfinished paper is released only by the confirmed release button, never by a retry", async ({ page }) => {
+  await auth(page);
+  const exam = paper("reading", 120);
+  const prepares = [];
+  await page.route("**/api/real-mock-exam", (route) => {
+    const body = route.request().postDataJSON();
+    if (body.action === "prepare") {
+      prepares.push(body);
+      if (!body.restartAttemptId) return route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ ok: false, code: "ACTIVE_ATTEMPT", activeAttemptId: "other-device-attempt", error: "已有正在进行的真题模考，请续考或选择重新开始。" }) });
+      return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper: exam }) });
+    }
+    return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
+  });
+  await page.goto("/reading-exam?source=real-bank");
+  await page.getByRole("button", { name: "开始考试" }).click();
+  await expect(page.getByText(/没做完的同科真题模考/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "重试", exact: true })).toHaveCount(0);
+  await page.screenshot({ path: path.join(reportDir, "reading-active-attempt.png"), fullPage: true });
+  const release = page.getByRole("button", { name: "放弃那份试卷并重新组卷" });
+  // Dismissing the confirm keeps the other paper alive: nothing is sent.
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await release.click();
+  await expect(page.getByText(/没做完的同科真题模考/)).toBeVisible();
+  // Accepting it releases exactly that paper.
+  let confirmText = "";
+  page.once("dialog", (dialog) => { confirmText = dialog.message(); return dialog.accept(); });
+  await release.click();
+  await expect(page.getByText("Complete the Words")).toBeVisible();
+  expect(confirmText).toContain("确定放弃那份没做完的试卷吗");
+  expect(prepares.map((p) => p.restartAttemptId || null)).toEqual([null, "other-device-attempt"]);
+});
+
+test("a paper finished elsewhere offers a fresh paper instead of an endless reload", async ({ page }) => {
+  await auth(page);
+  const exam = paper("reading", 120);
+  const fresh = { ...paper("reading", 120), attemptId: "browser-reading-fresh" };
+  const prepares = [];
+  await page.route("**/api/real-mock-exam", (route) => {
+    const body = route.request().postDataJSON();
+    if (body.action === "prepare") {
+      prepares.push(body);
+      return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper: prepares.length === 1 ? exam : fresh }) });
+    }
+    if (body.action === "seen" && body.attemptId === exam.attemptId) return route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ ok: false, code: "ATTEMPT_FINISHED", error: "这份试卷已结束。" }) });
+    return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
+  });
+  await page.goto("/reading-exam?source=real-bank");
+  await page.getByRole("button", { name: "开始考试" }).click();
+  await expect(page.getByText(/这份试卷已结束/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "重试加载" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "返回真题专区" })).toBeVisible();
+  // The dead paper's checkpoint is dropped, so the intro can't offer to continue it.
+  expect(await page.evaluate((key) => localStorage.getItem(key), READING_CHECKPOINT_KEY)).toBeNull();
+  await page.screenshot({ path: path.join(reportDir, "reading-dead-attempt.png"), fullPage: true });
+  await page.getByRole("button", { name: "重新组卷" }).click();
+  await expect(page.getByText("Complete the Words")).toBeVisible();
+  expect(prepares.map((p) => p.restartAttemptId || null)).toEqual([null, null]);
+});
+
+test("a timed-out real reading record stores no content for items never shown", async ({ page }) => {
+  await auth(page);
+  const exam = paper("reading", 3);
+  await page.route("**/api/real-mock-exam", (route) => {
+    const body = route.request().postDataJSON();
+    if (body.action === "prepare") return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper: exam }) });
+    return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
+  });
+  await page.goto("/reading-exam?source=real-bank");
+  await page.getByRole("button", { name: "开始考试" }).click();
+  await expect(page.getByText("真题阅读模考结果")).toBeVisible({ timeout: 30_000 });
+  const [record] = await savedRealReadingMocks(page);
+  const d = record.details;
+  expect(d.seenItemIds).toEqual(["r-sc-ctw", "r-lo-ctw"]);
+  expect(d.paperSnapshot).toBeUndefined();
+  expect(d.m1.tasks).toBeUndefined();
+  expect(d.m2.tasks).toBeUndefined();
+  const unseen = d.tasks.filter((t) => !d.seenItemIds.includes(t.itemId));
+  expect(unseen.map((t) => t.itemId)).toEqual(["r-sc-rdl2", "r-sc-rdl3", "r-sc-ap", "r-extra-ctw", "r-extra-rdl2", "r-extra-rdl3", "r-lo-rdl2", "r-lo-rdl3"]);
+  for (const task of unseen) {
+    expect(task).toMatchObject({ unreached: true, results: [] });
+    for (const field of ["passage", "text", "questions", "blanks", "options", "answer"]) expect(task[field]).toBeUndefined();
+  }
+  const json = JSON.stringify(record);
+  for (const id of ["r-sc-rdl2", "r-sc-rdl3", "r-sc-ap", "r-extra-rdl2", "r-extra-rdl3", "r-lo-rdl2", "r-lo-rdl3"]) {
+    expect(json).not.toContain(`Passage ${id}`);
+    expect(json).not.toContain(`Question 1 ${id}`);
+  }
+  expect(json).not.toContain("r-up-"); // the route not taken is never stored
 });

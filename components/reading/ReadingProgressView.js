@@ -672,6 +672,9 @@ export function ReadingProgressView({ onBack }) {
   // Build entries up-front so sourceIndex survives normalization (legacy
   // adaptive-reading records produce a new object ref, breaking indexOf
   // lookups later). Prefer cloud row id when present.
+  // Real mocks (真题模考) are left out everywhere here — mock list, latest-mock
+  // card, ?mock= deep link, practice stats, 清空 — they live on 真题练习记录,
+  // whose raw-35 score doesn't fit this page's band / CEFR / Upper-Lower view.
   const entries = useMemo(() => {
     if (!hist?.sessions) return [];
     return hist.sessions
@@ -679,7 +682,7 @@ export function ReadingProgressView({ onBack }) {
         original: s,
         sourceIndex: Number.isFinite(Number(s?.id)) ? Number(s.id) : i,
       }))
-      .filter((e) => e.original.type === "reading" || e.original.type === "adaptive-reading")
+      .filter((e) => (e.original.type === "reading" || e.original.type === "adaptive-reading") && e.original.details?.realMock !== true)
       .map((e) => ({ session: normalizeReadingSession(e.original), sourceIndex: e.sourceIndex }))
       .sort((a, b) => new Date(b.session.date) - new Date(a.session.date));
   }, [hist]);
@@ -708,7 +711,10 @@ export function ReadingProgressView({ onBack }) {
       setActiveMockSrcIdx(mockEntries[0].sourceIndex);
     } else if (val != null) {
       // params.get() already returns the decoded value — no extra decodeURIComponent.
-      const target = mockEntries.find((e) => e.session.date === val);
+      // Compare instants, not strings: the link carries the local toISOString() ("…Z"),
+      // while a record re-synced from Supabase comes back as timestamptz ("…+00:00").
+      const wanted = Date.parse(val);
+      const target = Number.isFinite(wanted) ? mockEntries.find((e) => Date.parse(e.session.date) === wanted) : null;
       if (target) setActiveMockSrcIdx(target.sourceIndex);
       else setMockNotFound(true);
     }
