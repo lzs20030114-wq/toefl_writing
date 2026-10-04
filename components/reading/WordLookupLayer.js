@@ -122,6 +122,8 @@ function saveAiCache(key, value) {
 /**
  * 用法：<WordLookupLayer passage={passage}>…原文…</WordLookupLayer>
  * 带 data-no-dict 属性的子节点（例如 CTW 里点开解析的填空 chip）不触发查词。
+ * 带 data-dict-word="词" 的子节点整块算一个词：点它里面任何位置都查这个词——
+ * 给拆成几段上色的词用（真题记录的填词空：已给片段 + 补全部分是两个节点）。
  * source 会记进单词本，用来在 /vocab-notebook 里显示这个词是从哪儿收藏的。
  * onPlaySentence(index) 可选：听力复盘传进来后，词落在某一句里时弹窗多一颗「听这一句」
  * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
@@ -216,6 +218,13 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         if (picked.length > 60 || picked.split(/\s+/).length > 6) return;
         // selection 的 Range 是 live 的（用户再选别处就会变），克隆一份快照留着定位
         openFor(picked, sel.getRangeAt(0).cloneRange());
+        return;
+      }
+      const whole = ev.target && ev.target.closest && ev.target.closest("[data-dict-word]");
+      if (whole && rootRef.current && rootRef.current.contains(whole)) {
+        const wr = document.createRange();
+        wr.selectNodeContents(whole);
+        openFor(whole.getAttribute("data-dict-word") || wr.toString(), wr);
         return;
       }
       const r = wordRangeFromPoint(ev.clientX, ev.clientY);

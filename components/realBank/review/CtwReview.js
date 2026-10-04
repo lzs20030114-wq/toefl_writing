@@ -1,12 +1,13 @@
 "use client";
-// 阅读填词（CTW）逐题回顾：原文里的空可直接点开解析，下方是每空一张小卡（设计稿 · 填词）。
-// 原文点词查词典（WordLookupLayer）；挖空词自己带 data-no-dict —— 点它是开解析，不是查词。
+// 阅读填词（CTW）逐题回顾：原文里的空按对错上色，下方是每空一张小卡（设计稿 · 填词），点卡片开解析。
+// 原文点词查词典（WordLookupLayer），挖空词也一样查词典（data-dict-word 让拆成两段上色的词整块当一个词查）；
+// 别再给原文里的空挂「跳到下方解析」—— 那会把词典顶掉（2026-10 用户反馈）。
 import React from "react";
 import { WordLookupLayer } from "../../reading/WordLookupLayer";
 import { splitBlankToken } from "../../../lib/reading/ctwToken";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "../../reading/useCtwAiExplain";
 import { LV, MONO, READ_FONT } from "../realBankUi";
-import { EmptyNote, scrollToKey } from "./shared";
+import { EmptyNote } from "./shared";
 
 export function CtwReview({ session, model, vid, ctx }) {
   const d = session.details || {};
@@ -18,13 +19,6 @@ export function CtwReview({ session, model, vid, ctx }) {
 
   const posToIdx = {};
   blankList.forEach((b, i) => { if (Number.isInteger(b.position)) posToIdx[b.position] = i; });
-
-  function openBlank(i) {
-    const key = `${vid}:${i}`;
-    const was = ctx.isOpen(i);
-    ctx.setOpen(i, true);
-    if (!was) scrollToKey(key);
-  }
 
   const words = passage.split(/\s+/).filter(Boolean);
   const visible = model.units.filter((u) => ctx.pass(u));
@@ -45,8 +39,7 @@ export function CtwReview({ session, model, vid, ctx }) {
             return (
               <span key={wi}>
                 {lead}
-                <span data-no-dict role="button" tabIndex={0} onClick={() => openBlank(bi)}
-                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openBlank(bi); } }}
+                <span data-dict-word={full}
                   style={{ cursor: "pointer", fontFamily: MONO, fontSize: 13.5, fontWeight: 700, padding: "1px 4px", borderRadius: 4, background: o ? L.bg : L.soft, borderBottom: `2px solid ${L.c}`, boxShadow: o ? `0 0 0 2px ${L.c}40` : "none" }}>
                   <span style={{ color: "#5a6b62" }}>{frag}</span><span style={{ color: L.c }}>{full.slice(frag.length)}</span>
                 </span>
@@ -60,7 +53,7 @@ export function CtwReview({ session, model, vid, ctx }) {
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", fontSize: 12, color: "#5a6b62" }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: LV.ok.bg, borderBottom: `2px solid ${LV.ok.c}` }} />正确</span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}><span style={{ width: 10, height: 10, borderRadius: 3, background: LV.bad.bg, borderBottom: `2px solid ${LV.bad.c}` }} />错误</span>
-        <span style={{ color: "#94a39a" }}>点原文里的空或下方卡片查看解析 · 点普通词查释义</span>
+        <span style={{ color: "#94a39a" }}>点下方卡片查看解析 · 点原文里的词（含空）查释义</span>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(136px,1fr))", gap: 6 }}>

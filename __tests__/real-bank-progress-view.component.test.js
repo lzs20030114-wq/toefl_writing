@@ -242,7 +242,7 @@ describe("详情：逐题回顾", () => {
     expect(panel).toHaveTextContent("正确答案 early");
     // 原文挖空词以独立节点出现；legend 与筛选条
     expect(within(detail.closest("main")).getAllByText(/^do$/).length).toBeGreaterThan(0);
-    expect(within(detail.closest("main")).getByText(/点原文里的空或下方卡片查看解析/)).toBeInTheDocument();
+    expect(within(detail.closest("main")).getByText(/点下方卡片查看解析 · 点原文里的词（含空）查释义/)).toBeInTheDocument();
     // 头部：再练入口指回真题专区同题型
     expect(within(detail).getByRole("link", { name: "再练一套" }).getAttribute("href")).toBe("/real-bank?type=ctw");
     // 导航：答对 1 · 答错 1，两个编号
@@ -253,6 +253,18 @@ describe("详情：逐题回顾", () => {
     fireEvent.click(within(detail).getByRole("button", { name: /返回列表/ }));
     expect(screen.queryByTestId("real-session-detail")).not.toBeInTheDocument();
     expect(rows()).toHaveLength(4);
+  });
+
+  test("原文里的空点了是查词典，不再跳到下方解析（不能把词典顶掉）", () => {
+    render(<RealBankProgressView onBack={() => {}} />);
+    const detail = openDetail("阅读填词真题", /逐题回顾 →/);
+    const main = detail.closest("main");
+    fireEvent.click(within(main).getByRole("button", { name: "全部收起" }));
+    const blank = within(main).getAllByText(/^do$/).map((el) => el.closest("[data-dict-word]")).find(Boolean);
+    expect(blank).toHaveAttribute("data-dict-word", "dorm");
+    expect(blank).not.toHaveAttribute("data-no-dict");
+    fireEvent.click(blank);
+    expect(within(main).queryByTestId("ctw-blank-panel")).not.toBeInTheDocument();
   });
 
   test("速览里点某一项：直接进详情并展开那一题", () => {
