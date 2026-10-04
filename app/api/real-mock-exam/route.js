@@ -8,6 +8,19 @@ const limiter = createRateLimiter("real-mock-exam", { window: 60_000, max: 90 })
 const fail = (status, code, error, extras = {}) => Response.json({ ok: false, code, error, ...extras }, { status });
 const codeOf = (raw) => String(raw || "").trim().toUpperCase();
 
+// real_mock_transition 拒绝时的 status（scripts/sql/real-mock-exam.sql）→ [HTTP, code, 中文文案]。
+// 客户端按 code 选错误卡（lib/realMockExam/messages.js），error 原样给用户看，所以不能透出英文状态字。
+const ATTEMPT_FINISHED = [409, "ATTEMPT_FINISHED", "这份试卷已结束（可能已在其他设备或页面重新开始）。"];
+const ATTEMPT_EXPIRED = [409, "ATTEMPT_EXPIRED", "这份试卷超过 2 小时没有作答，保留已过期。"];
+const TRANSITION_FAILURES = new Map([
+  ["finished", ATTEMPT_FINISHED],
+  ["expired", ATTEMPT_EXPIRED],
+  ["missing", [404, "ATTEMPT_NOT_FOUND", "找不到这份试卷。"]],
+  ["invalid-route", [409, "INVALID_ROUTE", "路线与服务器记录不一致，请刷新页面后重试。"]],
+  ["invalid-key", [400, "INVALID_ITEMS", "题目不属于这份试卷。"]],
+]);
+const TRANSITION_REJECTED = [409, "TRANSITION_REJECTED", "试卷状态更新失败，请重试。"];
+
 function authorizedItems(attempt, refs) {
   const allowed = [...(attempt.snapshot?.m1Items || [])];
   if (attempt.route) allowed.push(...(attempt.snapshot?.m2ByPath?.[attempt.route] || []));
@@ -51,8 +64,8 @@ export async function POST(request) {
     if (!/^[0-9a-f-]{36}$/i.test(attemptId)) return fail(400, "INVALID_ATTEMPT", "试卷编号无效。");
     const attempt = await getAttempt(userCode, attemptId);
     if (!attempt) return fail(404, "ATTEMPT_NOT_FOUND", "找不到这份试卷。");
-    if (attempt.status !== "active") return action === "finish" ? Response.json({ ok: true, status: "ok" }) : fail(409, "ATTEMPT_FINISHED", "这份试卷已结束。");
-    if (Date.parse(attempt.lease_expires_at) <= Date.now() && action !== "finish") return fail(409, "ATTEMPT_EXPIRED", "试卷预留已过期，请重新开始。");
+    if (attempt.status !== "active") return action === "finish" ? Response.json({ ok: true, status: "ok" }) : fail(...ATTEMPT_FINISHED);
+    if (Date.parse(attempt.lease_expires_at) <= Date.now() && action !== "finish") return fail(...ATTEMPT_EXPIRED);
     let keys = [];
     let path = null;
     if (action === "seen") {
@@ -67,7 +80,7 @@ export async function POST(request) {
       keys = [...new Set([...(attempt.snapshot?.m1Items || []), ...(attempt.snapshot?.m2ByPath?.[path] || [])].flatMap((item) => item.realMockKeys || []))];
     }
     const result = await transitionAttempt(userCode, attemptId, action, keys, path, body.answered === true);
-    if (result?.status !== "ok") return fail(409, "TRANSITION_REJECTED", result?.status || "试卷状态更新失败。");
+    if (result?.status !== "ok") return fail(...(TRANSITION_FAILURES.get(result?.status) || TRANSITION_REJECTED));
     return Response.json({ ok: true, status: result.status });
   } catch (error) {
     console.error("[real-mock-exam]", error);

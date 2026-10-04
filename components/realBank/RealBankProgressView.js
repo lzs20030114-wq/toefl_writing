@@ -57,6 +57,7 @@ export function RealBankProgressView({ onBack }) {
   const wide = useWide();
   const alive = useRef(true);
   const toastTimer = useRef(null);
+  const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => subscribeHistory(setHist), []);
   // StrictMode（开发态）会 挂载 → 卸载 → 再挂载：挂载时必须把 alive 置回 true，
@@ -97,6 +98,32 @@ export function RealBankProgressView({ onBack }) {
     setFocus(focusIdx);
     if (typeof window !== "undefined") window.scrollTo(0, 0);
   }, []);
+
+  // 模考结果页「查看记录」带 `?mock=<记录的 date>`（那次保存的身份）：等历史到了（云端同步是异步的），
+  // 找到同一 date 的真题模考记录，像点了一下那样打开；找不到给个提示，不去开一条别的。只消费一次，
+  // 处理完把参数从地址栏去掉，免得返回 / 重渲染又被拉回去。只读一次 window（不用 useSearchParams：
+  // 这页没有 Suspense 边界）。照搬 components/reading/ReadingProgressView.js 的同名做法。
+  useEffect(() => {
+    if (mockDeepLinkConsumed.current || typeof window === "undefined") return;
+    if (entries.length === 0) return; // 等记录（云端同步）
+    mockDeepLinkConsumed.current = true;
+    const params = new URLSearchParams(window.location.search);
+    const val = params.get("mock");
+    if (val == null) return;
+    // params.get 已经解码过，不要再 decodeURIComponent。
+    // 按时间值比，不比字符串：结果页带的是本地存的 "…Z"，云端同步回来的 timestamptz 是 "…+00:00"。
+    const wanted = Date.parse(val);
+    const target = Number.isFinite(wanted)
+      ? entries.find((e) => e.session?.details?.realMock === true && Date.parse(e.session.date) === wanted)
+      : null;
+    if (target) openEntry(target);
+    else showToast("没找到这次模考的记录，可能还在同步，稍后刷新再看");
+    try {
+      params.delete("mock");
+      const qs = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    } catch { /* 地址栏改不了也不影响已打开的记录 */ }
+  }, [entries, openEntry, showToast]);
 
   function pickSubject(next) {
     setSubject(next);

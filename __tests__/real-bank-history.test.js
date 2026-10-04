@@ -151,3 +151,35 @@ describe("realBankHistory：聚合", () => {
     expect(buildRealBankCoverage([], {}).every((c) => c.done === 0)).toBe(true);
   });
 });
+
+describe("realBankHistory：真题模考", () => {
+  const mockBase = { real: true, source: "real-bank", realMock: true, subtype: "mock", seenItemIds: ["real_em_1"] };
+  // 写作模考「重试 AI 评分」以前每重存一次就在云端多插一行（同一 mockSessionId）。
+  const writingV1 = { id: 30, type: "mock", date: "2026-10-01T10:00:00.000Z", details: { ...mockBase, section: "writing", mockSessionId: "ms-1", attemptId: "att-w", aggregate: { raw: 7, maxRaw: 20 } } };
+  const writingV2 = { id: 31, type: "mock", date: "2026-10-01T10:05:00.000Z", details: { ...mockBase, section: "writing", mockSessionId: "ms-1", attemptId: "att-w", aggregate: { raw: 15, maxRaw: 20 } } };
+  // 新版写作记录 date 固定为 completedAt：两行同一时刻 → 取行 id 大的。
+  const sameTimeA = { id: 40, type: "mock", date: "2026-10-02T09:00:00.000Z", details: { ...mockBase, section: "writing", mockSessionId: "ms-2", aggregate: { raw: 5, maxRaw: 20 } } };
+  const sameTimeB = { id: 41, type: "mock", date: "2026-10-02T09:00:00.000Z", details: { ...mockBase, section: "writing", mockSessionId: "ms-2", aggregate: { raw: 9, maxRaw: 20 } } };
+  // 阅读模考没有 mockSessionId，按 attemptId 认同一场。
+  const readingA = { id: 50, type: "reading", date: "2026-10-03T08:00:00.000Z", details: { ...mockBase, section: "reading", attemptId: "att-r", scoredCorrect: 10, scoredTotal: 35 } };
+  const readingB = { id: 51, type: "reading", date: "2026-10-03T08:01:00.000Z", details: { ...mockBase, section: "reading", attemptId: "att-r", scoredCorrect: 12, scoredTotal: 35 } };
+  const otherAttempt = { id: 52, type: "reading", date: "2026-10-03T07:00:00.000Z", details: { ...mockBase, section: "reading", attemptId: "att-other", scoredCorrect: 1, scoredTotal: 35 } };
+
+  test("同一场模考的重复行只留最新一条（date 新者胜，同时刻取行 id 大的）；常规记录不受影响", () => {
+    const list = [writingV2, realReading, writingV1, sameTimeB, sameTimeA, readingA, readingB, otherAttempt, realBs];
+    const entries = buildRealBankEntries(list);
+    expect(entries.map((e) => e.sourceIndex)).toEqual([51, 52, 41, 31, 17, 11]);
+    expect(realSessionScore(entries.find((e) => e.sourceIndex === 31).session).label).toBe("15/20");
+    expect(countRealBankSessions(list)).toBe(6);
+    // 本地记录没有行 id：下标仍是原数组下标（本地删除按它删）
+    const local = buildRealBankEntries([{ ...writingV1, id: undefined }, realReading, { ...writingV2, id: undefined }]);
+    expect(local.map((e) => e.sourceIndex)).toEqual([2, 11]);
+  });
+
+  test("中止的模考：得分「已中止」，不进平均", () => {
+    const aborted = { ...writingV2, id: 60, details: { ...writingV2.details, mockSessionId: "ms-aborted", aborted: true } };
+    expect(realSessionScore(aborted)).toEqual({ label: "已中止", pct: null, kind: "mock" });
+    const stats = buildRealBankSubjectStats(buildRealBankEntries([aborted, realBs]));
+    expect(stats.find((s) => s.subject === "writing")).toEqual({ subject: "writing", count: 2, avgPct: 90 });
+  });
+});

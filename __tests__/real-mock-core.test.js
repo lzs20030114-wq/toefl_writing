@@ -1,5 +1,5 @@
 import { planRealMockExam, loadRealMockPool } from "../lib/realMockExam/planner";
-import { canonicalId } from "../lib/realMockExam/identity";
+import { canonicalId, expandDoneIds } from "../lib/realMockExam/identity";
 
 const deterministic = () => 0.5;
 
@@ -57,6 +57,52 @@ test("exhaustion reports type and gap instead of shrinking the exam", () => {
   expect(result.ok).toBe(false);
   expect(result.code).toBe("REAL_MOCK_EXHAUSTED");
   expect(result.deficits).toEqual(expect.arrayContaining([expect.objectContaining({ taskType: "repeat", need: 1, available: 0, gap: 1 })]));
+  // Speaking has no routing: both routes need the same set, so it is one entry for the whole paper.
+  expect(result.deficits.filter((d) => d.taskType === "repeat")).toEqual([{ path: "both", taskType: "repeat", need: 1, available: 0, gap: 1 }]);
+});
+
+function disjoint(items, n) {
+  const used = new Set();
+  const out = [];
+  for (const item of items) {
+    if (item.realMockKeys.some((key) => used.has(key))) continue;
+    out.push(item);
+    item.realMockKeys.forEach((key) => used.add(key));
+    if (out.length === n) break;
+  }
+  return out;
+}
+
+test("exhaustion deficits are merged per task type across the two routes", () => {
+  const pool = loadRealMockPool("reading");
+  const rdl2 = pool.rdl.filter((x) => x.questions.length === 2);
+  const rdl3 = pool.rdl.filter((x) => x.questions.length === 3);
+  // ctw: both routes need 3 (short on both) · two-question RDL: only the lower route needs a 3rd · AP: only upper needs a 2nd.
+  const result = planRealMockExam("reading", {
+    pool: { ...pool, ctw: disjoint(pool.ctw, 2), rdl: [...disjoint(rdl2, 2), ...rdl3], ap: disjoint(pool.ap, 1) },
+    rng: deterministic,
+  });
+  expect(result.ok).toBe(false);
+  expect(result.deficits).toEqual([
+    { path: "both", taskType: "ctw", need: 3, available: 2, gap: 1 },
+    { path: "upper", taskType: "ap", need: 2, available: 1, gap: 1 },
+    { path: "lower", taskType: "rdl2", need: 3, available: 2, gap: 1 },
+  ]);
+});
+
+test("a real BS batch practiced only in the local done key (batch id) is never refilled", () => {
+  const pool = loadRealMockPool("writing");
+  const first = planRealMockExam("writing", { pool, rng: deterministic });
+  const groupId = first.paper.bsQuestions[0].__sourceGroupId;
+  expect(groupId).toMatch(/^real-bs-set-\d+$/);
+  // useBuildSentenceSession records the batch id ("real-bs-set-N") in BUILD_SENTENCE_GP, not item ids.
+  const keys = expandDoneIds([groupId], pool.bs);
+  const batch = pool.bs.filter((q) => q.__sourceGroupId === groupId);
+  expect(batch.length).toBeGreaterThan(0);
+  expect(batch.every((q) => q.realMockKeys.every((key) => keys.has(key)))).toBe(true);
+  const second = planRealMockExam("writing", { pool, doneIds: [` ${groupId} `], rng: deterministic });
+  expect(second.ok).toBe(true);
+  expect(second.paper.bsQuestions.some((q) => q.__sourceGroupId === groupId)).toBe(false);
 });
 
 test("incomplete audio materials are filtered before planning", () => {

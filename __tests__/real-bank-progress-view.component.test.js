@@ -31,6 +31,7 @@ const evaluate = jest.fn();
 jest.mock("../lib/ai/writingEval", () => ({ evaluateWritingResponse: (...a) => evaluate(...a) }));
 
 import { RealBankProgressView } from "../components/realBank/RealBankProgressView";
+import { getRealCTWItems, realTierLabel } from "../lib/realBank";
 
 // 与 app/real-bank/page.js 的 saveRealReadingSession 同形（band 档位、details 字段名一个不改）。
 const realCtw = {
@@ -101,6 +102,47 @@ const realReadingMock = {
   },
 };
 
+// 超时交卷的真题阅读模考：第 2 组是新版占位（没有题面），第 3 组是修复前的旧记录形状 ——
+// 没展示过，却连原文 / 题目 / 答案一起存了下来，只能按 seenItemIds 认出来。
+const UNSEEN_SECRET = "SECRET UNSEEN PASSAGE";
+const timedOutReadingMock = {
+  id: 110, type: "reading", mode: "mock", date: "2026-09-09T10:00:00.000Z",
+  details: {
+    real: true, source: "real-bank", realMock: true, subtype: "mock", section: "reading", attemptId: "att-timeout",
+    seenItemIds: ["real_ctw_test_1"],
+    items: [
+      { id: "real_ctw_test_1", taskType: "ctw" },
+      { id: "real_rdl_test_9", taskType: "rdl", realMockRole: "scored", unreached: true },
+      { id: "real_ap_test_9", taskType: "ap", passage: UNSEEN_SECRET, questions: [{ stem: "Why?", correct_answer: "C" }] },
+    ],
+    scoredCorrect: 1, scoredTotal: 35,
+    tasks: [
+      { taskType: "ctw", itemId: "real_ctw_test_1", correct: 1, total: 2, results: realCtw.details.results, blanks: realCtw.details.blanks, passage: realCtw.details.passage },
+      { taskType: "rdl", itemId: "real_rdl_test_9", realMockRole: "scored", unreached: true, timedOut: true, correct: 0, total: 3, unanswered: 3, results: [] },
+      { taskType: "ap", itemId: "real_ap_test_9", timedOut: true, correct: 0, total: 5, passage: UNSEEN_SECRET, topic: "SECRET TOPIC", questions: [{ stem: "Why?", correct_answer: "C" }], results: [] },
+    ],
+  },
+};
+// 中途放弃的写作真题模考：造句做到第 2 题（第 3 题新版占位、第 4 题旧形状连答案都存了），邮件 / 讨论没到达。
+const abortedWritingMock = {
+  id: 111, type: "mock", mode: "mock", date: "2026-09-10T10:00:00.000Z", score: null,
+  details: {
+    real: true, source: "real-bank", realMock: true, subtype: "mock", section: "writing", mockSessionId: "ms-aborted", aborted: true,
+    seenItemIds: ["real_bs_test_1", "real_bs_test_2"],
+    items: [{ id: "real_bs_test_1", taskType: "bs" }, { id: "real_em_test_9", taskType: "email", unreached: true }, { id: "real_ad_test_9", taskType: "discussion", unreached: true }],
+    tasks: [
+      { taskId: "bs", taskType: "bs", title: "Build a Sentence", score: 1, maxScore: 10, itemIds: ["real_bs_test_1", "real_bs_test_2", "real_bs_test_3", "real_bs_test_4"], meta: { details: [
+        { qid: "real_bs_test_1", prompt: "Where is it?", userAnswer: "it is here", correctAnswer: "it is here", isCorrect: true },
+        { qid: "real_bs_test_2", prompt: "When?", userAnswer: "now it is", correctAnswer: "it is now", isCorrect: false },
+        { qid: "real_bs_test_3", unreached: true, isCorrect: false },
+        { qid: "real_bs_test_4", prompt: "SECRET BS PROMPT", userAnswer: "(no answer)", correctAnswer: "SECRET BS ANSWER", isCorrect: false },
+      ] } },
+      { taskId: "email", taskType: "email", score: null, maxScore: 5, itemIds: ["real_em_test_9"], items: [{ id: "real_em_test_9", taskType: "email", unreached: true }], meta: null },
+      { taskId: "discussion", taskType: "discussion", score: null, maxScore: 5, itemIds: ["real_ad_test_9"], items: [{ id: "real_ad_test_9", taskType: "discussion", unreached: true }], meta: null },
+    ],
+  },
+};
+
 const rows = () => screen.getAllByTestId("real-entry-row");
 const rowOf = (label) => rows().find((r) => r.textContent.includes(label));
 function expandRow(label) {
@@ -116,6 +158,7 @@ function openDetail(label, cta) {
 
 beforeEach(() => {
   window.scrollTo = jest.fn(); // jsdom 未实现；页面切换会回到顶部
+  window.history.replaceState(null, "", "/real-bank/progress");
   deleteSession.mockClear();
   patchSession.mockClear();
   evaluate.mockReset();
@@ -372,6 +415,144 @@ describe("真题模考", () => {
     expect(within(main).getByTestId("ctw-blank-panel")).toBeInTheDocument();
     fireEvent.click(within(detail).getByRole("button", { name: /‹ 阅读真题模考/ }));
     expect(within(main).getByTestId("real-mock-review")).toBeInTheDocument();
+  });
+
+  test("超时没到达的题组：只列题型、不露题面 / 话题 / 答案，点不进去；编号导航也锁住", () => {
+    SESSIONS = [timedOutReadingMock];
+    render(<RealBankProgressView onBack={() => {}} />);
+    const row = expandRow("阅读真题模考");
+    expect(within(row).getByText(/题组得分 · 共 3 组/)).toBeInTheDocument();
+    expect(row.textContent).not.toContain("SECRET");
+    fireEvent.click(within(row).getByRole("button", { name: /查看模考报告 →/ }));
+    const detail = screen.getByTestId("real-session-detail");
+    const main = detail.closest("main");
+    const list = within(main).getByTestId("real-mock-review");
+    expect(within(list).getAllByText(/逐题回顾 →/)).toHaveLength(1);
+    const unreached = within(list).getAllByTestId("real-mock-unreached");
+    expect(unreached).toHaveLength(2);
+    unreached.forEach((el) => {
+      expect(el).toHaveTextContent("超时未到达 · 未展示题目");
+      expect(el).not.toHaveTextContent(/逐题回顾|real_/);
+      expect(el.tagName).not.toBe("BUTTON");
+    });
+    expect(within(unreached[0]).getByText("0/3")).toBeInTheDocument();
+    expect(main.textContent).not.toContain("SECRET");
+    expect(within(detail).getByText(/原始分 1\/35 · 3 个题组 · 2 组未到达/)).toBeInTheDocument();
+    // 编号导航：第 2、3 组锁住，点了也不进去
+    const nav = within(detail).getByTestId("real-unit-nav");
+    expect(within(nav).getByRole("button", { name: "2" })).toBeDisabled();
+    expect(within(nav).getByRole("button", { name: "3" })).toBeDisabled();
+    fireEvent.click(unreached[1]);
+    fireEvent.click(within(nav).getByRole("button", { name: "3" }));
+    expect(within(detail).queryByText(/第 3 题组/)).not.toBeInTheDocument();
+    expect(within(main).getByTestId("real-mock-review")).toBeInTheDocument();
+    // 到达的那组照常进
+    fireEvent.click(within(list).getByRole("button", { name: /逐题回顾 →/ }));
+    expect(within(main).getByTestId("ctw-blank-panel")).toBeInTheDocument();
+  });
+
+  test("速览里点没到达的题组：进详情但停在题组列表", () => {
+    SESSIONS = [timedOutReadingMock];
+    render(<RealBankProgressView onBack={() => {}} />);
+    const row = expandRow("阅读真题模考");
+    fireEvent.click(within(row).getByText("第 2 题组").closest("button"));
+    const detail = screen.getByTestId("real-session-detail");
+    expect(within(detail.closest("main")).getByTestId("real-mock-review")).toBeInTheDocument();
+    expect(within(detail).queryByText(/第 2 题组 ·/)).not.toBeInTheDocument();
+  });
+
+  test("中止的写作模考：得分「已中止」；造句里没展示的题只显示「第 N 题 · 未到达」，不露题面与答案", () => {
+    SESSIONS = [abortedWritingMock];
+    render(<RealBankProgressView onBack={() => {}} />);
+    expect(within(rowOf("写作真题模考")).getByText("已中止")).toBeInTheDocument();
+    const row = expandRow("写作真题模考");
+    fireEvent.click(within(row).getByRole("button", { name: /查看模考报告 →/ }));
+    const detail = screen.getByTestId("real-session-detail");
+    const main = detail.closest("main");
+    const list = within(main).getByTestId("real-mock-review");
+    const unreached = within(list).getAllByTestId("real-mock-unreached");
+    expect(unreached).toHaveLength(2);
+    unreached.forEach((el) => expect(el).toHaveTextContent("中止前未到达 · 未展示题目"));
+    expect(within(detail).getByText(/^已中止 · 3 个题组 · 2 组未到达$/)).toBeInTheDocument();
+    expect(within(main).getByText(/本卷中途已中止，不计分/)).toBeInTheDocument();
+
+    fireEvent.click(within(list).getByRole("button", { name: /逐题回顾 →/ }));
+    expect(within(detail).getByText(/第 1 题组 · 造句/)).toBeInTheDocument();
+    expect(within(detail).getByText("答对 1 · 答错 1 · 未到达 2")).toBeInTheDocument();
+    const stubs = within(main).getAllByTestId("bs-unreached");
+    expect(stubs.map((el) => el.textContent)).toEqual([expect.stringContaining("第 3 题 · 未到达"), expect.stringContaining("第 4 题 · 未到达")]);
+    stubs.forEach((el) => expect(within(el).queryByRole("button")).not.toBeInTheDocument());
+    expect(main.textContent).not.toContain("SECRET");
+    // 到达的题照常：题面 + 可展开对比
+    expect(within(main).getByText("When?")).toBeInTheDocument();
+  });
+
+  test("整卷模考不挂单题的来源分档 / 考试日期（那只是看到的第一道题的）", () => {
+    const item = getRealCTWItems().find((it) => it.date && it.tier === "official") || getRealCTWItems().find((it) => it.date && it.tier);
+    expect(item).toBeTruthy();
+    SESSIONS = [{ ...realReadingMock, details: { ...realReadingMock.details, seenItemIds: [item.id, "real_rdl_test_1"] } }];
+    render(<RealBankProgressView onBack={() => {}} />);
+    const row = rowOf("阅读真题模考");
+    expect(within(row).queryByText(realTierLabel(item.tier))).not.toBeInTheDocument();
+    expect(row.textContent).not.toContain("考试 ");
+    expect(within(screen.getByTestId("real-latest-card")).queryByText(realTierLabel(item.tier))).not.toBeInTheDocument();
+    const detail = openDetail("阅读真题模考", /查看模考报告 →/);
+    expect(detail.textContent).not.toContain("考试日期");
+    expect(within(detail).queryByText(realTierLabel(item.tier))).not.toBeInTheDocument();
+  });
+});
+
+describe("从模考结果页跳来（?mock=<记录 date>）", () => {
+  test("直接打开那条真题模考，并把参数从地址栏去掉（其余参数保留）", () => {
+    SESSIONS = [realReadingMock, timedOutReadingMock, realCtw];
+    window.history.replaceState(null, "", `/real-bank/progress?from=result&mock=${encodeURIComponent(timedOutReadingMock.date)}`);
+    render(<RealBankProgressView onBack={() => {}} />);
+    const detail = screen.getByTestId("real-session-detail");
+    expect(within(detail.closest("main")).getAllByTestId("real-mock-unreached")).toHaveLength(2);
+    expect(window.location.search).toBe("?from=result");
+    expect(screen.getByTestId("real-rail")).toBeInTheDocument();
+  });
+
+  test("记录还在云端同步：等历史到了再打开（只消费一次）", () => {
+    SESSIONS = [];
+    window.history.replaceState(null, "", `/real-bank/progress?mock=${encodeURIComponent(realReadingMock.date)}`);
+    render(<RealBankProgressView onBack={() => {}} />);
+    expect(screen.getByText("还没有真题练习记录")).toBeInTheDocument();
+    expect(window.location.search).toContain("mock=");
+    SESSIONS = [realReadingMock, realCtw];
+    act(() => { window.dispatchEvent(new CustomEvent("toefl-history-updated")); });
+    const detail = screen.getByTestId("real-session-detail");
+    expect(within(detail.closest("main")).getByTestId("real-mock-review")).toBeInTheDocument();
+    expect(window.location.search).toBe("");
+    // 回到列表后，历史再刷新也不会被拉回去
+    fireEvent.click(within(detail).getByRole("button", { name: /返回列表/ }));
+    act(() => { window.dispatchEvent(new CustomEvent("toefl-history-updated")); });
+    expect(screen.queryByTestId("real-session-detail")).not.toBeInTheDocument();
+  });
+
+  test("云端同步回来的日期写法不同（+00:00 而不是 Z）也能对上", () => {
+    // 结果页带的是本地保存时的 toISOString()；记录被云端同步替换后，timestamptz 回来是 "+00:00" 写法。
+    SESSIONS = [{ ...timedOutReadingMock, date: "2026-09-09T10:00:00+00:00" }, realCtw];
+    window.history.replaceState(null, "", `/real-bank/progress?mock=${encodeURIComponent("2026-09-09T10:00:00.000Z")}`);
+    render(<RealBankProgressView onBack={() => {}} />);
+    expect(screen.getByTestId("real-session-detail")).toBeInTheDocument();
+    expect(window.location.search).toBe("");
+  });
+
+  test("找不到那条记录：留在概览并提示，不去开别的模考", () => {
+    SESSIONS = [realReadingMock, realCtw];
+    window.history.replaceState(null, "", `/real-bank/progress?mock=${encodeURIComponent("2026-01-01T00:00:00.000Z")}`);
+    render(<RealBankProgressView onBack={() => {}} />);
+    expect(screen.queryByTestId("real-session-detail")).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("没找到这次模考的记录");
+    expect(window.location.search).toBe("");
+  });
+
+  test("只认真题模考记录：同一时刻的单题记录不会被当成模考打开", () => {
+    SESSIONS = [realCtw];
+    window.history.replaceState(null, "", `/real-bank/progress?mock=${encodeURIComponent(realCtw.date)}`);
+    render(<RealBankProgressView onBack={() => {}} />);
+    expect(screen.queryByTestId("real-session-detail")).not.toBeInTheDocument();
   });
 });
 

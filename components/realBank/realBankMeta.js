@@ -119,9 +119,10 @@ export function describeEntry(entry, index) {
   const lookupId = (Array.isArray(entry.itemIds) && entry.itemIds[0]) || ids[0];
   const info = lookupId ? index.get(lookupId) : null;
   // 写作历史里整道题（promptData）都存了，分档 / 日期优先读历史本身（老记录也能显示）。
+  // 整卷模考由多场考试的题拼成：没有单一的来源分档 / 考试日期（ids[0] 只是看到的第一道题）。
   const isWriting = sub === "bs" || sub === "email" || sub === "discussion";
-  const tier = obj.promptData?.tier || info?.tier || (ids.length > 0 && !isWriting ? "recalled" : "");
-  const examDate = formatExamDate(obj.promptData?.date || info?.date || "");
+  const tier = obj.realMock ? "" : obj.promptData?.tier || info?.tier || (ids.length > 0 && !isWriting ? "recalled" : "");
+  const examDate = obj.realMock ? "" : formatExamDate(obj.promptData?.date || info?.date || "");
 
   let subtitle = "";
   if (sub === "email" || sub === "discussion") subtitle = obj.promptSummary || info?.label || "";

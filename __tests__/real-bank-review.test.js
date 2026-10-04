@@ -250,6 +250,103 @@ describe("真题模考", () => {
   });
 });
 
+describe("真题模考：超时 / 中止前没到达的题", () => {
+  const SECRET = "UNSEEN PASSAGE TEXT";
+  const reached = { taskType: "ctw", itemId: "real_ctw_1", correct: 1, total: 2, results: ctw.details.results, blanks: ctw.details.blanks, passage: "x" };
+  const base = { realMock: true, source: "real-bank", section: "reading", real: true, subtype: "mock", seenItemIds: ["real_ctw_1"], aggregate: { raw: 1, maxRaw: 35 } };
+  // 新记录：没到达的组只存占位（无题面），items 里同样是占位。
+  const timedOut = {
+    type: "reading", mode: "mock", date: "2026-10-03T10:00:00",
+    details: {
+      ...base,
+      items: [{ id: "real_ctw_1", taskType: "ctw" }, { id: "real_rdl_9", taskType: "rdl", realMockRole: "scored", unreached: true }],
+      tasks: [reached, { taskType: "rdl", itemId: "real_rdl_9", realMockRole: "scored", unreached: true, timedOut: true, correct: 0, total: 2, unanswered: 2, results: [] }],
+    },
+  };
+  // 修复前的旧记录：没到达的组照样存了整篇原文、题目与正确答案 —— 只能靠 seenItemIds 认出来。
+  const legacy = {
+    type: "reading", mode: "mock", date: "2026-10-02T10:00:00",
+    details: {
+      ...base,
+      items: [{ id: "real_ctw_1", taskType: "ctw" }, { id: "real_rdl_9", taskType: "rdl", text: SECRET, questions: [{ stem: "Q?", correct_answer: "B" }] }],
+      tasks: [reached, { taskType: "rdl", itemId: "real_rdl_9", correct: 0, total: 2, timedOut: true, text: SECRET, questions: [{ stem: "Q?", correct_answer: "B" }], results: [{ selected: null, correct: "B", isCorrect: false }] }],
+    },
+  };
+
+  test.each([["新记录（unreached 占位）", timedOut], ["旧记录（按 seenItemIds 认）", legacy]])("%s：题组标成未到达，不带任何题面 / 答案，不可点进", (_, rec) => {
+    const tasks = buildMockTasks(rec);
+    expect(tasks[0].unreached).toBeUndefined();
+    expect(tasks[0].model.kind).toBe("ctw");
+    expect(tasks[1]).toMatchObject({ unreached: true, session: null, sourceItem: null, type: "rdl", itemId: "real_rdl_9" });
+    expect(tasks[1].model).toEqual({ kind: "unreached", units: [], score: { label: "0/2", pct: 0, kind: "mock" } });
+    expect(JSON.stringify(tasks[1])).not.toContain(SECRET);
+    expect(JSON.stringify(tasks[1])).not.toContain("correct_answer");
+
+    const m = buildReviewModel(rec, "mock-reading", { shortOf: (t) => ({ ctw: "填词", rdl: "日常" }[t]) });
+    expect(m.units[1]).toMatchObject({ lv: "none", label: "第 2 题组", text: "日常 · 未到达", hint: "0/2", unreached: true });
+    expect(JSON.stringify(m.units)).not.toContain(SECRET);
+    // 进度点只摊平到达的组；速览照列全部题组（含未到达）
+    expect(stripUnits(rec, m)).toHaveLength(2);
+    const p = buildPreview(m);
+    expect(p.items.map((u) => u.unreached === true)).toEqual([false, true]);
+    expect(buildPreview(tasks[1].model)).toMatchObject({ none: true, noneKind: "unreached", items: [] });
+  });
+
+  test("没有 seenItemIds 的旧记录不据此猜测（一律当已展示）", () => {
+    const rec = { ...legacy, details: { ...legacy.details, seenItemIds: [] } };
+    expect(buildMockTasks(rec).some((t) => t.unreached)).toBe(false);
+  });
+
+  const writingBase = {
+    realMock: true, source: "real-bank", section: "writing", real: true, subtype: "mock", mockSessionId: "ms-1",
+    seenItemIds: ["real_bs_1", "real_bs_2", "real_em_1", "real_ad_1"],
+  };
+  const bsMeta = (details) => ({ taskId: "bs", taskType: "bs", title: "Build a Sentence", score: 1, maxScore: 10, itemIds: ["real_bs_1", "real_bs_2", "real_bs_3", "real_bs_4"], meta: { details } });
+
+  test("写作造句：没展示的题只剩「第 N 题 · 未到达」，题面 / 答案都不带（新占位与旧记录都一样）", () => {
+    const rec = {
+      type: "mock", date: "2026-10-03T10:00:00",
+      details: {
+        ...writingBase,
+        tasks: [bsMeta([
+          { qid: "real_bs_1", prompt: "p1", userAnswer: "a b", correctAnswer: "a b", isCorrect: true },
+          { qid: "real_bs_2", prompt: "p2", userAnswer: "b a", correctAnswer: "a b", isCorrect: false },
+          { qid: "real_bs_3", unreached: true, isCorrect: false },
+          // 旧记录：超时自动交卷把没展示的题也连题面带答案存了下来
+          { qid: "real_bs_4", prompt: "p4", userAnswer: "(no answer)", correctAnswer: "SECRET ANSWER", isCorrect: false },
+        ])],
+      },
+    };
+    const [bsTask] = buildMockTasks(rec);
+    expect(bsTask.unreached).toBeUndefined();
+    expect(bsTask.model.units.map((u) => [u.lv, u.label, u.text])).toEqual([
+      ["ok", "第 1 题", "a b"], ["bad", "第 2 题", "a b"], ["none", "第 3 题 · 未到达", ""], ["none", "第 4 题 · 未到达", ""],
+    ]);
+    expect(bsTask.session.details[3]).toEqual({ qid: "real_bs_4", unreached: true, isCorrect: false });
+    // 回顾组件只读子记录与逐题模型
+    expect(JSON.stringify([bsTask.session, bsTask.model])).not.toContain("SECRET ANSWER");
+  });
+
+  test("中止的写作模考：题源是未到达占位的邮件 / 讨论组算未到达；整卷得分「已中止」", () => {
+    const rec = {
+      type: "mock", date: "2026-10-03T10:00:00",
+      details: {
+        ...writingBase, aborted: true, seenItemIds: ["real_bs_1"],
+        items: [{ id: "real_bs_1", taskType: "bs" }, { id: "real_em_1", taskType: "email", unreached: true }, { id: "real_ad_1", taskType: "discussion", unreached: true }],
+        tasks: [
+          bsMeta([{ qid: "real_bs_1", prompt: "p1", userAnswer: "a b", correctAnswer: "a b", isCorrect: true }, { qid: "real_bs_2", unreached: true, isCorrect: false }]),
+          { taskId: "email", taskType: "email", score: null, maxScore: 5, itemIds: ["real_em_1"], items: [{ id: "real_em_1", taskType: "email", unreached: true }], meta: null },
+          { taskId: "discussion", taskType: "discussion", score: null, maxScore: 5, itemIds: ["real_ad_1"], items: [{ id: "real_ad_1", taskType: "discussion", unreached: true }], meta: null },
+        ],
+      },
+    };
+    const tasks = buildMockTasks(rec);
+    expect(tasks.map((t) => !!t.unreached)).toEqual([false, true, true]);
+    expect(tasks[1].model.score).toEqual({ label: "0/5", pct: 0, kind: "mock" });
+    expect(buildReviewModel(rec, "mock-writing").score).toEqual({ label: "已中止", pct: null, kind: "mock" });
+  });
+});
+
 describe("日期", () => {
   // 2026-10-03 是周六 → 本周一是 9/28：9/28–10/1 属「本周早些时候」，9/27 及以前「更早」
   const now = new Date("2026-10-03T23:30:00");

@@ -36,9 +36,20 @@ export function BsReview({ session, model, vid, ctx }) {
         {visible.map((u) => {
           const i = u.idx;
           const it = details[i] || {};
+          const key = `${vid}:${i}`;
+          if (u.unreached || it.unreached) {
+            // 模考里没展示过的题：不能展开、不出题面与答案（这些题已退回题库）。
+            return (
+              <div key={i} data-q={key} data-testid="bs-unreached" style={{ borderBottom: "1px solid #f0f3f1", display: "flex", gap: 10, alignItems: "center", padding: "11px 14px", background: "#fafbfa" }}>
+                <Mark lv="none" />
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#94a39a", flexShrink: 0, minWidth: 22 }}>#{u.n}</span>
+                <span style={{ fontSize: 12.5, color: "#5a6b62", fontWeight: 600 }}>{u.label || `第 ${u.n} 题 · 未到达`}</span>
+                <span style={{ fontSize: 11.5, color: "#94a39a" }}>题目未展示</span>
+              </div>
+            );
+          }
           const ok = u.lv === "ok";
           const o = ctx.isOpen(i);
-          const key = `${vid}:${i}`;
           const df = wordDiff(it.userAnswer, it.correctAnswer);
           const grammar = (Array.isArray(it.grammar_points) ? it.grammar_points : []).map(translateGrammarPoint);
           const userSpans = df.user.map((w, x) => (

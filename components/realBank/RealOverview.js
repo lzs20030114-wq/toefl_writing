@@ -52,7 +52,8 @@ function TrendChart({ points }) {
 function SummaryCard({ all, bySubject, list, subject, onSubject, coverage, covOpen, onToggleCov, index, onOpen }) {
   const avgAll = averagePct(bySubject);
   const subjSuffix = subject === "all" ? "" : ` · ${REAL_SUBJECT_META[subject].label}`;
-  const unscored = bySubject.filter((e) => !Number.isFinite(realSessionScore(e.session).pct)).length;
+  // 中止的模考本来就不计分（行上标「已中止」），不算进「未评分」。
+  const unscored = bySubject.filter((e) => !Number.isFinite(realSessionScore(e.session).pct) && e.session?.details?.aborted !== true).length;
   const points = buildDailyAveragePoints(list.map((e) => e.session), (s) => realSessionScore(s).pct);
 
   const latest = all[0];
