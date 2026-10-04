@@ -109,8 +109,10 @@ function playOriginalSentence(sentence) {
  *                 reveal the reference sentence right after each take, which is exactly
  *                 the per-sentence verdict the real test never gives — the summary
  *                 screen shows every sentence's text + word highlight in both modes.
+ *   realMock    — 真题模考（SpeakingExamShell realMock）：「跳过等待」的后果不同 ——
+ *                 录了音没识别完的题无法评分，整场不出估分，提示文案照实说。
  */
-function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
+function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock = false }) {
   // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so sentence clips play through
   // the shared persistent element unlocked on the first gesture. examController
@@ -1085,7 +1087,9 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit }) {
                   fontSize: 12, color: C.t3, textDecoration: "underline", fontFamily: FONT,
                 }}
               >
-                跳过等待，直接完成（未识别的题目不计分）
+                {realMock
+                  ? "跳过等待，直接完成（未识别的题目无法评分，本次模考将不出估分）"
+                  : "跳过等待，直接完成（未识别的题目不计分）"}
               </button>
             </div>
           )}

@@ -34,8 +34,10 @@ const ANSWER_DURATION = 45; // seconds per question
  *   onComplete  — called with session summary
  *   onExit      — back navigation
  *   isPractice  — if true, no auto-advance
+ *   realMock    — 真题模考（SpeakingExamShell realMock）：「跳过等待」时没评完的题无法评分，
+ *                 整场不出估分，提示文案照实说。
  */
-export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPractice = false }) {
+export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPractice = false, realMock = false }) {
   // Exam-controller mode: the mock-exam shell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so question prompts play
   // through the shared persistent element. examController is non-null in practice
@@ -1036,7 +1038,9 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
                       fontSize: 11, color: C.t3, textDecoration: "underline", fontFamily: FONT,
                     }}
                   >
-                    跳过等待，直接完成（未识别的题目不计分）
+                    {realMock
+                      ? "跳过等待，直接完成（未识别的题目无法评分，本次模考将不出估分）"
+                      : "跳过等待，直接完成（未识别的题目不计分）"}
                   </button>
                 </div>
               )}

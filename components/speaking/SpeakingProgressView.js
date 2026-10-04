@@ -470,10 +470,13 @@ export function SpeakingProgressView({ onBack }) {
 
   useEffect(() => subscribeHistory(setHist), []);
 
+  // 口语真题模考也存成 type "speaking" + subtype "mock"，但它住在「真题练习记录」
+  // （/real-bank/progress），且原始分口径（55 分制、未作答按 0 计）和这里的模考不同，
+  // 混进来会污染「模考」统计卡与趋势图 —— 这里一律不收。
   const sessions = useMemo(() => {
     if (!hist?.sessions) return [];
     return hist.sessions
-      .filter(s => s.type === "speaking" || s.type === "speaking-exam")
+      .filter(s => (s.type === "speaking" || s.type === "speaking-exam") && s.details?.realMock !== true)
       .map(normalizeSpeakingSession)
       .sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [hist]);

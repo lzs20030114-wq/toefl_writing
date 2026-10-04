@@ -34,12 +34,74 @@ test("writing uses 10+5+5 raw points and retries only the failed AI task", async
   expect(scoreRealWriting({ ...writingSession().attempts, [TASK_IDS.EMAIL_WRITING]: { score: null } }).band).toBeNull();
 });
 
-test("speaking 7+4 scoring requires all 11 valid item scores", () => {
-  const repeat = Array.from({ length: 7 }, () => ({ score: { officialLevel: 4 } }));
-  const interview = Array.from({ length: 4 }, () => ({ aiScore: { score: 3 } }));
-  expect(scoreRealSpeaking(repeat, interview)).toMatchObject({ raw: 40, maxRaw: 55, repeatRaw: 28, interviewRaw: 12 });
-  interview[2].aiScore = { error: "STT failed" };
-  expect(scoreRealSpeaking(repeat, interview).band).toBeNull();
+// This test used to be "requires all 11 valid item scores": ANY item without a score —
+// including one the student simply skipped — nulled the band AND both sub-scores, so a
+// single 「Skip this sentence」 wiped the whole estimate. Now a skipped item (recorded:
+// false) is 0, and only a recorded-but-unscored item (STT / AI failure) withholds the band.
+describe("speaking 7+4 scoring", () => {
+  const repeatItems = (level = 4) => Array.from({ length: 7 }, (_, i) => ({ id: `r${i}`, recorded: true, score: { officialLevel: level } }));
+  const interviewItems = (score = 3) => Array.from({ length: 4 }, (_, i) => ({ id: `q${i}`, recorded: true, aiScore: { score } }));
+
+  test("all 11 scored → raw, percent and band", () => {
+    expect(scoreRealSpeaking(repeatItems(), interviewItems())).toEqual({
+      raw: 40, maxRaw: 55, percent: 73, band: 4.5, repeatRaw: 28, interviewRaw: 12, unanswered: 0, unscored: 0,
+    });
+  });
+
+  test("an unrecorded item counts 0 and the band is still computed", () => {
+    const repeat = repeatItems();
+    repeat[3] = { id: "r3", recorded: false, transcript: null, score: null };
+    expect(scoreRealSpeaking(repeat, interviewItems())).toMatchObject({
+      raw: 36, repeatRaw: 24, interviewRaw: 12, band: 4.5, unanswered: 1, unscored: 0,
+    });
+  });
+
+  test("skipping all 11 is an estimate of 0, not a missing one", () => {
+    const skip = (item) => ({ ...item, recorded: false, score: null, aiScore: null });
+    expect(scoreRealSpeaking(repeatItems().map(skip), interviewItems().map(skip))).toMatchObject({
+      raw: 0, percent: 0, band: 1, repeatRaw: 0, interviewRaw: 0, unanswered: 11, unscored: 0,
+    });
+  });
+
+  test("a recorded-but-unscored item withholds the band but keeps the other part's raw", () => {
+    const repeat = repeatItems();
+    repeat[0] = { id: "r0", recorded: true, transcript: null, score: null };
+    expect(scoreRealSpeaking(repeat, interviewItems())).toMatchObject({
+      raw: null, percent: null, band: null, repeatRaw: null, interviewRaw: 12, unanswered: 0, unscored: 1,
+    });
+  });
+
+  test("an AI scoring error is unscored, not zero", () => {
+    const interview = interviewItems();
+    interview[2] = { id: "q2", recorded: true, transcript: "I like it.", aiScore: { error: "STT failed" } };
+    expect(scoreRealSpeaking(repeatItems(), interview)).toMatchObject({
+      raw: null, band: null, repeatRaw: 28, interviewRaw: null, unanswered: 0, unscored: 1,
+    });
+  });
+
+  test("a legacy item without `recorded` and without a score is unscored", () => {
+    const repeat = repeatItems();
+    repeat[6] = { id: "r6", score: null };
+    expect(scoreRealSpeaking(repeat, interviewItems())).toMatchObject({ band: null, repeatRaw: null, interviewRaw: 12, unscored: 1, unanswered: 0 });
+    // ...and the old shape with scores but no flag keeps scoring as before.
+    const legacy = repeatItems().map(({ recorded, ...item }) => item);
+    expect(scoreRealSpeaking(legacy, interviewItems()).band).toBe(4.5);
+  });
+
+  test("unanswered and unscored together: no band, counts reported", () => {
+    const repeat = repeatItems();
+    repeat[1] = { id: "r1", recorded: false, score: null };
+    const interview = interviewItems();
+    interview[0] = { id: "q0", recorded: true, aiScore: null };
+    expect(scoreRealSpeaking(repeat, interview)).toMatchObject({ band: null, repeatRaw: 24, interviewRaw: null, unanswered: 1, unscored: 1 });
+  });
+
+  test("anything but exactly 7 + 4 items stays unavailable", () => {
+    const none = { raw: null, band: null, repeatRaw: null, interviewRaw: null };
+    expect(scoreRealSpeaking(repeatItems().slice(0, 6), interviewItems())).toMatchObject(none);
+    expect(scoreRealSpeaking(repeatItems(), [...interviewItems(), { recorded: true, aiScore: { score: 3 } }])).toMatchObject(none);
+    expect(scoreRealSpeaking(null, undefined)).toMatchObject(none);
+  });
 });
 
 test("timed-out blank essays are explicit zero without AI calls", async () => {

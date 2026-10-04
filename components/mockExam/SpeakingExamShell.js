@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { C, FONT, Btn, TopBar, SurfaceCard } from "../shared/ui";
 import { RepeatTask } from "../speaking/RepeatTask";
 import { InterviewTask } from "../speaking/InterviewTask";
@@ -11,7 +12,8 @@ import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
-import { prepareRealMockExam, markRealMockSeen, finishRealMockExam } from "../../lib/realMockExam/client";
+import { prepareRealMockExam, markRealMockSeen, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
 import { loadMockCheckpoint, saveMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
@@ -29,6 +31,9 @@ const BAND_COLORS = {
   orange: { bg: "#ffedd5", border: "#f97316", text: "#c2410c", ring: "#f97316" },
   red: { bg: "#fee2e2", border: "#ef4444", text: "#b91c1c", ring: "#ef4444" },
 };
+
+// 真题模考不出估分时的中性配色（不借用任何等级的颜色，免得暗示一个等级）。
+const NO_BAND_COLORS = { bg: "#f1f5f9", border: "#cbd5e1", text: "#475569", ring: "#94a3b8" };
 
 const LEVEL_LABELS = {
   green: "\u9AD8\u7EA7",
@@ -102,9 +107,17 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   const [interviewResults, setInterviewResults] = useState(restored.current?.interviewResults || null);
   const [finalScore, setFinalScore] = useState(restored.current?.finalScore || null);
   const [error, setError] = useState(null);
+  // 真题模式：describeRealMockError 的 kind，决定错误卡给哪些按钮（常规模考恒为 ""）。
+  const [errorKind, setErrorKind] = useState("");
+  // 错误卡「重试」要重放的那一步：{ kind: prepare | repeatNarration | repeat |
+  // interviewNarration | interview, result?, restartAttemptId? }。只有 transient 错误才有。
   const [pendingTransition, setPendingTransition] = useState(null);
   const [preparing, setPreparing] = useState(false);
+  // 重试进行中：错误卡留着、按钮禁用，成功后由那一步自己收起错误。
+  const [syncing, setSyncing] = useState(false);
   const [blockedAttemptId, setBlockedAttemptId] = useState("");
+  // 这次成绩存进历史时用的 date —— 结果页「查看本次记录」按它深链到真题练习记录里的这一条。
+  const [recordDate, setRecordDate] = useState("");
 
   // Timer
   const [elapsed, setElapsed] = useState(restored.current?.elapsed || 0);
@@ -131,11 +144,44 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   // ------ Phase transitions ------
 
+  function clearError() {
+    setError(null);
+    setErrorKind("");
+    setPendingTransition(null);
+    setBlockedAttemptId("");
+  }
+
+  // 这份卷在服务端已经结束 / 过期 / 不存在：本卷不可能再续答。丢掉内存里的卷和本地存档
+  // （留着只会让刷新后的人回到一份死卷），错误卡只给「重新组卷」和「返回真题专区」。
+  function abandonDeadPaper() {
+    clearMockCheckpoint(checkpointScope);
+    setExam(null);
+    setRepeatResults(null);
+    setInterviewResults(null);
+    setFinalScore(null);
+    setElapsed(0);
+    setPhase("intro");
+  }
+
+  // 真题模式的请求失败 → 错误卡。pending 是「重试」要重放的那一步，只有 transient 才给重试；
+  // 考试中途的错误卡绝不给 handleRestart（那会把已经做完的部分整个丢掉）。
+  function showRealMockError(e, fallback, pending) {
+    const info = describeRealMockError(e, fallback);
+    if (info.kind === "dead-attempt") abandonDeadPaper();
+    setErrorKind(info.kind);
+    setBlockedAttemptId(info.kind === "active-attempt" ? info.activeAttemptId || "" : "");
+    setPendingTransition(info.canRetry ? pending : null);
+    setError(info.message);
+  }
+
   async function handleStartExam(restartAttemptId = "") {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
     if (examController) examController.unlock();
     setPreparing(true);
+    // 真题模式：显式给的旧卷（放弃另一份进行中的卷）优先，否则带上内存里这份卷 ——
+    // 服务端若它仍是进行中的那份，会先结束它再组新卷（以前是客户端先 finish、失败就卡住开考）。
+    const restartId = realMock ? restartAttemptId || exam?.attemptId || "" : "";
     try {
       // Prefer sets the user hasn't practised yet (shared done-set with practice
       // mode). repeat ids (rpt_*) and interview ids (intv_*) never collide, so a
@@ -145,8 +191,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
         ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT),
         ...loadDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW),
       ]);
-      if (realMock && exam) await finishRealMockExam(exam);
-      const built = realMock ? await prepareRealMockExam("speaking", restartAttemptId ? { restartAttemptId } : {}) : buildSpeakingExam(doneIds);
+      const built = realMock ? await prepareRealMockExam("speaking", restartId ? { restartAttemptId: restartId } : {}) : buildSpeakingExam(doneIds);
       if (!built.repeatSet || !built.interviewSet) {
         setError("\u9898\u5E93\u6570\u636E\u4E0D\u8DB3\uFF0C\u65E0\u6CD5\u5F00\u59CB\u8003\u8BD5\u3002\u8BF7\u7A0D\u540E\u518D\u8BD5\u3002");
         return;
@@ -156,12 +201,14 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       setInterviewResults(null);
       setFinalScore(null);
       setElapsed(0);
-      setError(null);
-      setBlockedAttemptId("");
+      clearError();
       if (realMock) clearMockCheckpoint(checkpointScope);
       setPhase("repeatNarration");
     } catch (e) {
-      setBlockedAttemptId(e?.activeAttemptId || "");
+      if (realMock) {
+        showRealMockError(e, "初始化考试失败", { kind: "prepare", restartAttemptId: restartId });
+        return;
+      }
       const gaps = (e?.deficits || []).filter((d) => d.gap > 0).map((d) => `${d.taskType} 需要 ${d.need}／可用 ${d.available}／缺 ${d.gap}`);
       setError([e?.message || "初始化考试失败", ...gaps].join("；"));
     } finally {
@@ -172,9 +219,9 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   async function handleRepeatComplete(result) {
     if (realMock) {
       try { await markRealMockSeen(exam, [exam.repeatSet], { answered: true }); }
-      catch (e) { setPendingTransition({ kind: "repeat", result }); setError(e?.message || "跟读提交同步失败"); return; }
+      catch (e) { showRealMockError(e, "跟读提交同步失败", { kind: "repeat", result }); return; }
     }
-    setPendingTransition(null);
+    clearError();
     setRepeatResults(result);
     setPhase("interviewNarration");
   }
@@ -185,29 +232,54 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   async function handleRepeatNarrationContinue() {
     if (realMock) {
       try { await markRealMockSeen(exam, [exam.repeatSet]); }
-      catch (e) { setError(e?.message || "记录跟读题已见失败"); return; }
+      catch (e) { showRealMockError(e, "记录跟读题已见失败", { kind: "repeatNarration" }); return; }
     }
+    clearError();
     setPhase("repeat");
   }
 
   async function handleInterviewNarrationContinue() {
     if (realMock) {
       try { await markRealMockSeen(exam, [exam.interviewSet]); }
-      catch (e) { setError(e?.message || "记录访谈题已见失败"); return; }
+      catch (e) { showRealMockError(e, "记录访谈题已见失败", { kind: "interviewNarration" }); return; }
     }
+    clearError();
     setPhase("interview");
   }
 
   async function handleInterviewComplete(result) {
     if (realMock) {
-      try {
-        await markRealMockSeen(exam, [exam.interviewSet], { answered: true });
-        await finishRealMockExam(exam);
-      } catch (e) { setPendingTransition({ kind: "interview", result }); setError(e?.message || "访谈提交同步失败"); return; }
+      try { await markRealMockSeen(exam, [exam.interviewSet], { answered: true }); }
+      catch (e) { showRealMockError(e, "访谈提交同步失败", { kind: "interview", result }); return; }
     }
-    setPendingTransition(null);
+    clearError();
     setInterviewResults(result);
     computeScore(repeatResults, result);
+    // 记录已存、结果页已出。finish 只是释放这份卷剩下的预留（2 小时租约本来也会放），
+    // 所以不等它、它失败也不挡成绩 —— 没落地的会被记下，下次组卷前先补上。
+    if (realMock) finishRealMockExamReliably(exam);
+  }
+
+  // 错误卡「重试」：重放失败的那一步。进行中错误卡保持显示（按钮禁用），成功由那一步自己收起。
+  async function retryPendingTransition() {
+    const pending = pendingTransition;
+    if (!pending || syncing) return;
+    setSyncing(true);
+    try {
+      if (pending.kind === "prepare") await handleStartExam(pending.restartAttemptId);
+      else if (pending.kind === "repeatNarration") await handleRepeatNarrationContinue();
+      else if (pending.kind === "repeat") await handleRepeatComplete(pending.result);
+      else if (pending.kind === "interviewNarration") await handleInterviewNarrationContinue();
+      else await handleInterviewComplete(pending.result);
+    } finally {
+      setSyncing(false);
+    }
+  }
+
+  // 放弃另一份进行中的同科试卷：服务端结束它（已展示的题仍记为已做）再组新卷 —— 必须用户确认。
+  function handleReleaseActiveAttempt() {
+    if (!blockedAttemptId || !window.confirm(RELEASE_ACTIVE_ATTEMPT_CONFIRM)) return;
+    handleStartExam(blockedAttemptId);
   }
 
   function computeScore(rptResults, intvResults) {
@@ -246,18 +318,24 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       ? { band: realScore.band, rawTotal: realScore.raw, repeatRaw: realScore.repeatRaw, interviewRaw: realScore.interviewRaw }
       : normalScore;
     const cefr = Number.isFinite(band) ? bandToCEFR(band) : "";
-    const color = Number.isFinite(band) ? getScoreColor(band) : "yellow";
+    // 真题模式不出估分时不给等级（以前回退成 "yellow"，结果页挂着「中级」）；常规模考照旧。
+    const color = Number.isFinite(band) ? getScoreColor(band) : realMock ? null : "yellow";
+    // 真题模式：未作答按 0 分计入原始分，分项的 0-5 均分也走同一口径（原始分 ÷ 题数），
+    // 否则「6 句跳过 + 1 句 5 分」会显示 5.0/5，旁边的原始分却只有 5/35。
+    const repeatPartScore = realMock && Number.isFinite(repeatRaw) ? Math.round((repeatRaw / 7) * 2) / 2 : repeatScore;
+    const interviewPartScore = realMock && Number.isFinite(interviewRaw) ? Math.round((interviewRaw / 4) * 2) / 2 : interviewScore;
 
     const score = {
       band,
       cefr,
       color,
-      repeatScore,
-      interviewScore,
+      repeatScore: repeatPartScore,
+      interviewScore: interviewPartScore,
       avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
       rawTotal: Number.isFinite(rawTotal) ? Math.round(rawTotal * 10) / 10 : null,
       repeatRaw: Number.isFinite(repeatRaw) ? Math.round(repeatRaw * 10) / 10 : null,
       interviewRaw: Number.isFinite(interviewRaw) ? Math.round(interviewRaw * 10) / 10 : null,
+      ...(realMock ? { unanswered: realScore.unanswered, unscored: realScore.unscored } : {}),
       repeatItems: rptItems,
       interviewItems: intvItems,
     };
@@ -268,11 +346,15 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     // + the section-page link card surface it like a practice record. The
     // previous "speaking-exam" type was a write-only orphan (mirrors the
     // listening/reading adaptive bug fixed in f531a90).
+    // (Real-bank mocks are the exception: SpeakingProgressView skips them —
+    // they live in 真题练习记录, which the results page deep-links by this date.)
+    const recordDate = new Date().toISOString();
+    setRecordDate(recordDate);
     try {
       saveSess({
         type: "speaking",
         mode: "mock",
-        date: new Date().toISOString(),
+        date: recordDate,
         band,
         details: {
           subtype: "mock",
@@ -284,11 +366,12 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
             paperSnapshot: exam, tasks: [
               { taskType: "repeat", setId: exam?.repeatSet?.id, itemIds: [exam?.repeatSet?.id], items: rptItems, score: repeatRaw },
               { taskType: "interview", setId: exam?.interviewSet?.id, itemIds: [exam?.interviewSet?.id], items: intvItems, score: interviewRaw },
-            ], repeatItems: rptItems, interviewItems: intvItems } : {}),
+            ], repeatItems: rptItems, interviewItems: intvItems,
+            unanswered: realScore.unanswered, unscored: realScore.unscored } : {}),
           band,
           cefr,
-          repeatScore,
-          interviewScore,
+          repeatScore: repeatPartScore,
+          interviewScore: interviewPartScore,
           avgRepeatAccuracy: Math.round(avgRepeatAccuracy),
           rawTotal: Number.isFinite(rawTotal) ? Math.round(rawTotal * 10) / 10 : null,
           repeatSetId: exam?.repeatSet?.id,
@@ -317,7 +400,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     setRepeatResults(null);
     setInterviewResults(null);
     setFinalScore(null);
-    setError(null);
+    clearError();
     setElapsed(0);
   }
 
@@ -364,21 +447,42 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
       {/* Error state */}
       {error && (
-        <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
+        <div data-testid="speaking-exam-error" style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>&#9888;&#65039;</div>
             <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 8 }}>{error}</div>
-            <Btn onClick={blockedAttemptId ? () => { setError(null); handleStartExam(blockedAttemptId); } : pendingTransition ? () => {
-              setError(null);
-              if (pendingTransition.kind === "repeat") handleRepeatComplete(pendingTransition.result);
-              else handleInterviewComplete(pendingTransition.result);
-            } : handleRestart} variant="secondary">{blockedAttemptId ? "释放上次试卷并重新组卷" : pendingTransition ? "重试同步" : "返回"}</Btn>
+            {realMock ? (
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                {errorKind === "active-attempt" && blockedAttemptId && (
+                  <Btn onClick={handleReleaseActiveAttempt} disabled={preparing}>
+                    {preparing ? "正在重新组卷…" : "放弃那份试卷并重新组卷"}
+                  </Btn>
+                )}
+                {errorKind === "dead-attempt" && (
+                  <Btn onClick={() => handleStartExam()} disabled={preparing}>
+                    {preparing ? "正在重新组卷…" : "重新组卷"}
+                  </Btn>
+                )}
+                {pendingTransition && (
+                  <Btn onClick={retryPendingTransition} disabled={syncing || preparing}>
+                    {syncing || preparing ? "正在重试…" : pendingTransition.kind === "prepare" ? "重试" : "重试同步"}
+                  </Btn>
+                )}
+                {/* 考试中途只给重试：做完的部分只在这页内存里，重来或离开都会丢掉它。 */}
+                {(!pendingTransition || pendingTransition.kind === "prepare") && (
+                  <Btn onClick={onExit} variant="secondary">返回真题专区</Btn>
+                )}
+              </div>
+            ) : (
+              <Btn onClick={handleRestart} variant="secondary">返回</Btn>
+            )}
           </SurfaceCard>
         </div>
       )}
 
-      {/* Task-level narration before Task 1 (verbatim real-exam "Speaking section…") */}
-      {phase === "repeatNarration" && (
+      {/* Task-level narration before Task 1 (verbatim real-exam "Speaking section…").
+          Hidden while an error is shown — retry goes through the error card. */}
+      {phase === "repeatNarration" && !error && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Speaking Section"
@@ -396,11 +500,12 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
           onComplete={handleRepeatComplete}
           onExit={onExit}
           isPractice={false}
+          realMock={realMock}
         />
       )}
 
       {/* Task-level narration before Task 2 (verbatim real-exam "Take an interview…") */}
-      {phase === "interviewNarration" && (
+      {phase === "interviewNarration" && !error && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Take an Interview"
@@ -418,6 +523,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
           onComplete={handleInterviewComplete}
           onExit={onExit}
           isPractice={false}
+          realMock={realMock}
         />
       )}
 
@@ -430,6 +536,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
             onRestart={handleRestart}
             onExit={onExit}
             realMock={realMock}
+            recordDate={recordDate}
           />
         </div>
       )}
@@ -515,6 +622,11 @@ function IntroCard({ onStart, onExit, realMock = false, preparing = false }) {
         }}
       >
         {"\uD83C\uDFA4 \u53E3\u8BED\u6A21\u8003\u9700\u8981\u9EA6\u514B\u98CE\u6743\u9650\u3002\u8BF7\u786E\u4FDD\u6D4F\u89C8\u5668\u5DF2\u6388\u6743\u5F55\u97F3\u3002"}
+        {realMock && (
+          <div style={{ marginTop: 6, fontWeight: 600, lineHeight: 1.6 }}>
+            开考后展示过的题会永久计为已做；口语录音中途刷新或离开，本卷作废、需要重新组卷。
+          </div>
+        )}
       </div>
 
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
@@ -599,8 +711,10 @@ function NarrationCard({ title, body, onContinue }) {
   );
 }
 
-function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
-  const palette = BAND_COLORS[score.color] || BAND_COLORS.yellow;
+function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false, recordDate = "" }) {
+  const hasBand = Number.isFinite(score.band);
+  // 真题模式不出估分时 color 为 null：中性配色、不挂等级（常规模考 color 恒有值，照旧）。
+  const palette = BAND_COLORS[score.color] || (realMock ? NO_BAND_COLORS : BAND_COLORS.yellow);
   const levelLabel = LEVEL_LABELS[score.color] || "";
 
   const formatTime = (s) =>
@@ -703,8 +817,16 @@ function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
             marginBottom: 8,
           }}
         >
-          {realMock ? "本站模考估分" : `CEFR: ${score.cefr}`} {levelLabel && `· ${levelLabel}`}
+          {realMock ? (hasBand ? "本站模考估分" : "本次不出估分") : `CEFR: ${score.cefr}`} {levelLabel && `· ${levelLabel}`}
         </div>
+
+        {/* 真题模式：说清楚为什么没有估分 / 分数里含了哪些 0 分。 */}
+        {realMock && (score.unscored > 0 || score.unanswered > 0) && (
+          <div data-testid="real-speaking-score-note" style={{ fontSize: 12.5, color: C.t2, lineHeight: 1.7, maxWidth: 480, margin: "4px auto 0" }}>
+            {score.unscored > 0 && <div>有 {score.unscored} 题录了音但评分没完成（语音识别或 AI 评分失败），本次不出估分。</div>}
+            {score.unanswered > 0 && <div>{score.unanswered} 题没有作答，按 0 分计入。</div>}
+          </div>
+        )}
 
         <div style={{ fontSize: 13, color: C.t3, marginTop: 4 }}>
           {"\u7528\u65F6: "}{formatTime(elapsed)}
@@ -802,7 +924,8 @@ function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
               <div style={{ fontSize: 15, fontWeight: 700, color: ACCENT }}>
                 {realMock && score.interviewRaw == null ? "--" : `${score.interviewScore.toFixed(1)}/5`}
               </div>
-              {validIntvItems.length === 0 && (
+              {/* 真题模式四题全跳过时原始分是 0、不是识别失败（未作答已在上面说明）。 */}
+              {validIntvItems.length === 0 && !(realMock && score.interviewRaw != null) && (
                 <div style={{ fontSize: 11, color: "#DC2626" }}>
                   {"\u8BED\u97F3\u8BC6\u522B\u5931\u8D25"}
                 </div>
@@ -917,7 +1040,22 @@ function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
         fontSize: 13, color: C.t2, lineHeight: 1.6,
       }}>
         <span style={{ fontSize: 15, flexShrink: 0 }}>{"💡"}</span>
-        <span>{"本次模考成绩已保存，可在首页 "}<strong style={{ color: ACCENT }}>{"口语练习记录"}</strong>{" 中回看。"}</span>
+        {realMock ? (
+          // 真题模考记录住在「真题练习记录」（口语练习记录不收它），按保存时的 date 深链到这一条。
+          <span>
+            本次模考记录已保存到「真题练习记录」。{" "}
+            {/* 站内跳转（不是整页刷新）：刚存的记录还在内存里的历史缓存中，云端写入未完成也能深链到。 */}
+            <Link
+              data-testid="real-speaking-record-link"
+              href={`/real-bank/progress${recordDate ? `?mock=${encodeURIComponent(recordDate)}` : ""}`}
+              style={{ color: ACCENT, fontWeight: 700 }}
+            >
+              查看本次记录 →
+            </Link>
+          </span>
+        ) : (
+          <span>{"本次模考成绩已保存，可在首页 "}<strong style={{ color: ACCENT }}>{"口语练习记录"}</strong>{" 中回看。"}</span>
+        )}
       </div>
 
       {/* Actions */}
@@ -926,7 +1064,7 @@ function ResultsCard({ score, elapsed, onRestart, onExit, realMock = false }) {
           {"\u91CD\u65B0\u8003\u8BD5"}
         </Btn>
         <Btn onClick={onExit} variant="secondary">
-          {"\u8FD4\u56DE\u9996\u9875"}
+          {realMock ? "返回真题专区" : "\u8FD4\u56DE\u9996\u9875"}
         </Btn>
       </div>
 
