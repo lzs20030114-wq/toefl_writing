@@ -173,6 +173,12 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   const [blockedAttemptId, setBlockedAttemptId] = useState("");
   const [preparing, setPreparing] = useState(false);
   const preparingRef = useRef(false);
+  // 结果页 / 中止页的「开始新模考」在页面底部，组卷失败的提示却在顶部：出现时把它滚进视野，不然用户看不到。
+  const prepareStatusRef = useRef(null);
+  useEffect(() => {
+    if (!session || !(prepareError || blockedAttemptId)) return;
+    prepareStatusRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+  }, [prepareError, blockedAttemptId]); // eslint-disable-line react-hooks/exhaustive-deps
   const [taskGate, setTaskGate] = useState({ id: "", state: "pending", error: "" });
   const [gateRetryTick, setGateRetryTick] = useState(0);
   const [pendingSubmission, setPendingSubmission] = useState(null);
@@ -514,7 +520,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
           <>
             {/* 结果页 / 中止页上点「开始新模考」也会组卷失败（题量不足、另一份卷未完成），
                 提示必须在这里也看得到，不能只挂在开始卡下面。 */}
-            {(preparing || prepareError || blockedAttemptId) && <div style={{ marginBottom: 16 }}>{prepareStatus}</div>}
+            {(preparing || prepareError || blockedAttemptId) && <div ref={prepareStatusRef} style={{ marginBottom: 16 }}>{prepareStatus}</div>}
             {/* Mobile-only sticky countdown: the desktop SectionTimerPanel gets pushed
                 far below the answer area on phones, so reuse the already-lifted
                 sectionTimer as a fixed top bar. Hidden on desktop (display:none →
