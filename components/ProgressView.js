@@ -1006,7 +1006,9 @@ export function ProgressView({ onBack }) {
     setShowStats(activePracticeSrcIdx === null);
   }, [activePracticeSrcIdx]);
 
-  const entries = useMemo(() => buildHistoryEntries(hist), [hist]);
+  // 真题模考（details.realMock）住在「真题练习记录」；这里的模考列表按普通模考的换算分 /30
+  // 渲染，真题写作模考只会显示成「换算 --/30」，而评分失败的那条还会让 hasPendingMock 一直轮询。
+  const entries = useMemo(() => buildHistoryEntries(hist).filter((e) => e.session?.details?.realMock !== true), [hist]);
   const stats = useMemo(() => buildHistoryStats(entries), [entries]);
 
   const mockEntries = useMemo(() =>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { C, Btn, FONT } from "../shared/ui";
 import { ScoringReport } from "../writing/ScoringReport";
 import { TASK_IDS } from "../../lib/mockExam/contracts";
@@ -49,6 +50,8 @@ export function MockExamResult({
   const colorKey = bandReady ? (agg.color || "blue") : "blue";
   const palette = BAND_COLORS[colorKey] || BAND_COLORS.blue;
   const levelLabel = bandReady ? (LEVEL_LABELS[colorKey] || "") : "";
+  // The saved real record is dated session.completedAt (buildRealWritingHistory); the record page opens it by that date.
+  const recordHref = realMock && session?.completedAt ? `/real-bank/progress?mock=${encodeURIComponent(session.completedAt)}` : "";
 
   const hasFeedback = (taskId) => {
     const a = session?.attempts?.[taskId];
@@ -196,7 +199,8 @@ export function MockExamResult({
       </div>
 
       {/* Review hint — the per-task feedback is also kept in the practice
-          records, so users can revisit the full report later. */}
+          records, so users can revisit the full report later. A real mock lives in
+          真题练习记录 (not the ordinary 练习记录), and is saved only once scoring ends. */}
       <div style={{
         display: "flex", alignItems: "flex-start", gap: 8,
         background: "#eff6ff", border: "1px solid #bfdbfe",
@@ -204,15 +208,35 @@ export function MockExamResult({
         fontSize: 13, color: C.t2, lineHeight: 1.6,
       }}>
         <span style={{ fontSize: 15, flexShrink: 0 }}>{"\u{1F4A1}"}</span>
-        <span>本次模考已保存，之后可在首页 <strong style={{ color: C.blue }}>练习记录</strong> 中再次查看答题详情与 AI 批改。</span>
+        {realMock ? (
+          <>
+            <span style={{ flex: 1 }}>
+              {scoringDone
+                ? <>本次真题模考已保存到 <strong style={{ color: C.blue }}>真题练习记录</strong>，可以逐题回看作答与 AI 批改。</>
+                : <>AI 评分结束后，本次真题模考会保存到 <strong style={{ color: C.blue }}>真题练习记录</strong>。</>}
+            </span>
+            {scoringDone && recordHref && (
+              <Link href={recordHref} data-testid="real-mock-record-link" style={{
+                flexShrink: 0, alignSelf: "center", padding: "5px 12px", borderRadius: 8,
+                border: "1px solid #bfdbfe", background: "#fff", color: C.blue,
+                fontSize: 13, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", fontFamily: FONT,
+              }}>
+                查看本次记录
+              </Link>
+            )}
+          </>
+        ) : (
+          <span>本次模考已保存，之后可在首页 <strong style={{ color: C.blue }}>练习记录</strong> 中再次查看答题详情与 AI 批改。</span>
+        )}
       </div>
 
-      {/* Actions */}
+      {/* Actions — no 「开始新模考」 while AI scoring runs: a new exam would take over
+          the page (and the shared checkpoint) before this exam's result is saved. */}
       <div style={{ display: "flex", gap: 10 }}>
         {scoringPhase !== "pending" && canRetryScoring && typeof onRetryScoring === "function" && (
           <Btn onClick={onRetryScoring} variant="secondary">重试 AI 评分</Btn>
         )}
-        <Btn onClick={onStartNew}>开始新模考</Btn>
+        {scoringPhase !== "pending" && <Btn onClick={onStartNew}>开始新模考</Btn>}
         <Btn onClick={onExit} variant="secondary">返回</Btn>
       </div>
 

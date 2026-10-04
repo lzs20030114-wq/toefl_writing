@@ -148,6 +148,7 @@ export function BuildSentenceTask({
   const isMobile = useIsMobile();
   const exhausted = String(selectionError || "").includes(BANK_EXHAUSTED_ERRORS.BUILD_SENTENCE);
   const [questionGate, setQuestionGate] = useState({ id: "", state: "pending", error: "" });
+  const [gateRetry, setGateRetry] = useState(0);
   const seenQuestionIds = useRef(new Set());
   const autoStartedRef = useRef(false);
   const gateId = String(q?.id || q?.qid || "");
@@ -166,6 +167,8 @@ export function BuildSentenceTask({
     }
     let cancelled = false;
     setQuestionGate({ id: gateId, state: "pending", error: "" });
+    // The clock stays paused while the gate is pending or failed; only a confirmed
+    // question resumes it (a retry re-enters here while still paused).
     pauseTimer();
     Promise.resolve().then(() => beforeQuestion(q, idx)).then(() => {
       seenQuestionIds.current.add(gateId);
@@ -177,7 +180,7 @@ export function BuildSentenceTask({
       if (!cancelled) setQuestionGate({ id: gateId, state: "error", error: error?.message || "记录已见状态失败" });
     });
     return () => { cancelled = true; };
-  }, [beforeQuestion, phase, idx, q, gateId]);
+  }, [beforeQuestion, phase, idx, q, gateId, gateRetry]);
 
   /* ── 交互动画状态 ── */
   const [animSlot, setAnimSlot] = useState(null);      // 刚填入的槽位 index
@@ -498,9 +501,11 @@ export function BuildSentenceTask({
   }
 
   if (beforeQuestion && phase === "active" && (questionGate.id !== gateId || questionGate.state !== "ready")) {
+    // A failed check only retries this question — it must never exit: in the mock exam
+    // onExit is 「中止」, and one network blip would void the whole paper.
     return <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}><PageShell narrow><SurfaceCard style={{ padding: 28, textAlign: "center" }}>
       <div style={{ color: C.t1, fontSize: 15 }}>{questionGate.id === gateId && questionGate.state === "error" ? questionGate.error : "正在确认题目状态…"}</div>
-      {questionGate.id === gateId && questionGate.state === "error" && <Btn onClick={onExit} variant="secondary" style={{ marginTop: 16 }}>返回</Btn>}
+      {questionGate.id === gateId && questionGate.state === "error" && <Btn data-testid="build-gate-retry" onClick={() => setGateRetry((n) => n + 1)} style={{ marginTop: 16 }}>重试</Btn>}
     </SurfaceCard></PageShell></div>;
   }
 

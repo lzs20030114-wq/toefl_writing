@@ -18,11 +18,24 @@ import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLan
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { checkCanPractice } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
-import { prepareRealMockExam, markRealMockSeen, finishRealMockExam } from "../../lib/realMockExam/client";
-import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
-import { buildRealWritingHistory, finalizeRealWriting } from "../../lib/realMockExam/linearWritingService";
+import { prepareRealMockExam, markRealMockSeen, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { getRealMockConfig, REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
+import { buildRealWritingHistory, finalizeRealWriting, shouldKeepRealWritingCheckpoint } from "../../lib/realMockExam/linearWritingService";
+import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 
 const MOCK_EXAM_COST = 3;
+const REAL_ABORT_CONFIRM = "中止后本卷作废：已经展示过的题仍计为已做，不会给出成绩。确定中止吗？";
+
+/** Checkpoint to resume on mount, or null. Real mode only resumes this account's unfinished writing paper. */
+function loadResumableCheckpoint(realMock, scope) {
+  const cp = loadMockCheckpoint(scope);
+  const saved = cp?.session;
+  if (!saved) return null;
+  if (!realMock) return cp;
+  return saved.realMockPaper?.section === "writing" && saved.realMockPaper.userCode === getSavedCode()
+    && saved.realMockPaper.templateVersion === REAL_MOCK_TEMPLATE_VERSION
+    && shouldKeepRealWritingCheckpoint(saved, cp.scoringPhase) ? cp : null;
+}
 
 /**
  * Modal confirming mock exam will consume 3 free credits.
@@ -133,18 +146,13 @@ function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) 
 export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage, realMock = false }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const checkpointScope = realMock ? { source: "real-bank", section: "writing", userCode: getSavedCode(), templateVersion: REAL_MOCK_TEMPLATE_VERSION } : null;
-  const [session, setSession] = useState(() => {
-    const cp = loadMockCheckpoint(checkpointScope);
-    const saved = cp?.session;
-    return saved?.realMockPaper?.section === "writing" && saved.realMockPaper.userCode === getSavedCode() && saved.realMockPaper.templateVersion === REAL_MOCK_TEMPLATE_VERSION
-      ? saved : realMock ? null : saved || null;
-  });
+  const [session, setSession] = useState(() => loadResumableCheckpoint(realMock, checkpointScope)?.session || null);
   const [hist] = useState(() => loadMockExamHistory());
   const [sectionTimer, setSectionTimer] = useState(null);
   const currentTaskIdRef = useRef("");
   const lastSavedTimerRef = useRef(new Map());
   const [scoringPhase, setScoringPhase] = useState(() => {
-    const cp = loadMockCheckpoint(checkpointScope);
+    const cp = loadResumableCheckpoint(realMock, checkpointScope);
     // A persisted "pending" means scoring was interrupted (reload / crash / lost
     // connection mid-scoring). Restore as "idle" so the idempotent finalize effect
     // re-fires and re-scores the unscored tasks, instead of stranding a completed
@@ -154,21 +162,33 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   });
   const [scoringError, setScoringError] = useState("");
   const finalizedSessionIdsRef = useRef(new Set());
+  // Async scoring may resolve after this exam left the page (「开始新模考」 or unmount).
+  // These refs tell the result handlers which exam is on screen right now.
+  const sessionIdRef = useRef(null);
+  sessionIdRef.current = session?.id || null;
+  const mountedRef = useRef(false);
   const [showCostModal, setShowCostModal] = useState(false);
   const [usageRemaining, setUsageRemaining] = useState(null);
   const [prepareError, setPrepareError] = useState("");
   const [blockedAttemptId, setBlockedAttemptId] = useState("");
   const [preparing, setPreparing] = useState(false);
+  const preparingRef = useRef(false);
   const [taskGate, setTaskGate] = useState({ id: "", state: "pending", error: "" });
   const [gateRetryTick, setGateRetryTick] = useState(0);
   const [pendingSubmission, setPendingSubmission] = useState(null);
   const markedTaskIdsRef = useRef(new Set());
 
-  // Auto-checkpoint session to localStorage on every state change
   useEffect(() => {
-    if (session) {
-      saveMockCheckpoint(session, scoringPhase, checkpointScope);
-    }
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
+  // Auto-checkpoint session to localStorage on every state change. Real mode does
+  // not keep a finished (scored) or aborted paper — it would reopen for 2 hours.
+  useEffect(() => {
+    if (!session) return;
+    if (realMock && !shouldKeepRealWritingCheckpoint(session, scoringPhase)) return;
+    saveMockCheckpoint(session, scoringPhase, checkpointScope);
   }, [session, scoringPhase]);
 
   const userCode = getSavedCode();
@@ -216,50 +236,100 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     return () => { cancelled = true; };
   }, [realMock, paper, session?.status, currentTask?.taskId, onRealMockSeen, gateRetryTick]);
 
-  function persistFinalSession(finalSession, phase = "done", err = "") {
+  // Record part: this exam's own history row + local mock history (a real paper is
+  // also finished, releasing its never-shown items). Safe for an exam no longer on screen.
+  function persistFinalRecord(finalSession, phase = "done", err = "") {
     if (realMock) {
       saveMockExamSession(finalSession);
       upsertMockSess(buildRealWritingHistory(finalSession, phase, err), finalSession.id);
-      clearMockCheckpoint(checkpointScope);
       clearMockDrafts(finalSession.id);
-      if (finalSession.status === MOCK_EXAM_STATUS.COMPLETED) finishRealMockExam(finalSession.realMockPaper).catch((error) => setScoringError(error?.message || "释放预留失败"));
+      if (finalSession.status === MOCK_EXAM_STATUS.COMPLETED || finalSession.status === MOCK_EXAM_STATUS.ABORTED) {
+        finishRealMockExamReliably(finalSession.realMockPaper);
+      }
       return;
     }
     const payload = buildPersistPayload(finalSession, { phase, error: err });
     saveMockExamSession(payload.sessionSnapshot);
     upsertMockSess(payload.historyPayload, payload.mockSessionId);
-    clearMockCheckpoint(); // session persisted, checkpoint no longer needed
+  }
+
+  // Checkpoint part. The checkpoint key is shared by every exam of this scope.
+  function syncFinalCheckpoint(finalSession, phase) {
+    if (!realMock) {
+      clearMockCheckpoint(); // session persisted, checkpoint no longer needed
+      return;
+    }
+    if (shouldKeepRealWritingCheckpoint(finalSession, phase)) saveMockCheckpoint(finalSession, phase, checkpointScope);
+    else clearMockCheckpoint(checkpointScope);
+  }
+
+  function persistFinalSession(finalSession, phase = "done", err = "") {
+    persistFinalRecord(finalSession, phase, err);
+    syncFinalCheckpoint(finalSession, phase);
+  }
+
+  /**
+   * Apply a scoring result that resolved asynchronously. If that exam is no longer on
+   * screen (a new exam started, or the page unmounted), only its own record is saved:
+   * page state stays with the new exam, and the shared checkpoint is touched only
+   * while it still holds this very exam.
+   */
+  function applyScoringResult(finalSession, phase, err) {
+    finalizedSessionIdsRef.current.add(finalSession.id);
+    if (!mountedRef.current || sessionIdRef.current !== finalSession.id) {
+      persistFinalRecord(finalSession, phase, err);
+      if (loadMockCheckpoint(checkpointScope)?.session?.id === finalSession.id) syncFinalCheckpoint(finalSession, phase);
+      return;
+    }
+    setSession(finalSession);
+    setScoringPhase(phase);
+    setScoringError(err);
+    persistFinalSession(finalSession, phase, err);
   }
 
   async function doStartExam(restartAttemptId = "") {
+    if (preparingRef.current) return; // a second click while a paper is being prepared is ignored
+    preparingRef.current = true;
     setPreparing(true);
     setPrepareError("");
-    let selectedPaper = null;
-    if (realMock) {
-      try {
-        if (session?.realMockPaper) await finishRealMockExam(session.realMockPaper);
-        selectedPaper = await prepareRealMockExam("writing", restartAttemptId ? { restartAttemptId } : {});
-      } catch (error) {
-        setBlockedAttemptId(error?.activeAttemptId || "");
-        const gaps = (error?.deficits || []).filter((d) => d.gap > 0).map((d) => `${d.taskType} 需要 ${d.need}／可用 ${d.available}／缺 ${d.gap}`);
-        setPrepareError([error?.message || "真题组卷失败", ...gaps].join("；"));
-        setPreparing(false);
-        return;
+    try {
+      let selectedPaper = null;
+      if (realMock) {
+        try {
+          // Restarting from a result / aborted page hands the old paper to the server,
+          // which finishes it (if still active) before planning the new one.
+          const oldAttemptId = restartAttemptId || session?.realMockPaper?.attemptId || "";
+          selectedPaper = await prepareRealMockExam("writing", oldAttemptId ? { restartAttemptId: oldAttemptId } : {});
+        } catch (error) {
+          const info = describeRealMockError(error, "真题组卷失败，请稍后重试。");
+          setBlockedAttemptId(info.kind === "active-attempt" ? info.activeAttemptId || "" : "");
+          setPrepareError(info.message);
+          return;
+        }
       }
+      clearMockCheckpoint(checkpointScope); // clear any stale checkpoint before starting fresh
+      setBlockedAttemptId("");
+      const blueprint = getDefaultMockExamBlueprint(realMock ? PRACTICE_MODE.STANDARD : mode).map((task) => realMock ? {
+        ...task, seconds: task.taskId === TASK_IDS.BUILD_SENTENCE ? selectedPaper.timing.taskSeconds.bs
+          : task.taskId === TASK_IDS.EMAIL_WRITING ? selectedPaper.timing.taskSeconds.email
+          : selectedPaper.timing.taskSeconds.discussion,
+      } : task);
+      const next = { ...mockExamRunner.startNewExam(blueprint), mode: realMock ? PRACTICE_MODE.STANDARD : mode, ...(selectedPaper ? { realMockPaper: selectedPaper, realMockSeenItemIds: [], source: "real-bank", userCode: selectedPaper.userCode, templateVersion: selectedPaper.templateVersion } : {}) };
+      sessionIdRef.current = next.id; // before the re-render: a result resolving in between is already stale
+      setSession(next);
+      setSectionTimer(null);
+      setScoringPhase("idle");
+      setScoringError("");
+    } finally {
+      preparingRef.current = false;
+      setPreparing(false);
     }
-    clearMockCheckpoint(checkpointScope); // clear any stale checkpoint before starting fresh
-    setBlockedAttemptId("");
-    const blueprint = getDefaultMockExamBlueprint(realMock ? PRACTICE_MODE.STANDARD : mode).map((task) => realMock ? {
-      ...task, seconds: task.taskId === TASK_IDS.BUILD_SENTENCE ? selectedPaper.timing.taskSeconds.bs
-        : task.taskId === TASK_IDS.EMAIL_WRITING ? selectedPaper.timing.taskSeconds.email
-        : selectedPaper.timing.taskSeconds.discussion,
-    } : task);
-    const next = mockExamRunner.startNewExam(blueprint);
-    setSession({ ...next, mode: realMock ? PRACTICE_MODE.STANDARD : mode, ...(selectedPaper ? { realMockPaper: selectedPaper, realMockSeenItemIds: [], source: "real-bank", userCode: selectedPaper.userCode, templateVersion: selectedPaper.templateVersion } : {}) });
-    setSectionTimer(null);
-    setScoringPhase("idle");
-    setScoringError("");
-    setPreparing(false);
+  }
+
+  function releaseBlockedAttempt() {
+    if (preparingRef.current || !blockedAttemptId) return;
+    if (!window.confirm(RELEASE_ACTIVE_ATTEMPT_CONFIRM)) return;
+    doStartExam(blockedAttemptId);
   }
 
   async function startExam() {
@@ -305,9 +375,14 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
 
   function abortExam() {
     if (!session) return;
+    if (realMock) {
+      if (session.status !== MOCK_EXAM_STATUS.RUNNING) return;
+      if (!window.confirm(REAL_ABORT_CONFIRM)) return;
+    }
     const next = mockExamRunner.abort(session);
     setSession(next);
-    if (!realMock) persistFinalSession(next, "aborted", "");
+    // Real: an aborted record (no score) + finish, so the never-shown items go back to the pool.
+    persistFinalSession(next, "aborted", "");
   }
 
   useEffect(() => {
@@ -317,14 +392,13 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       if (finalizedSessionIdsRef.current.has(session.id)) return;
       const hasDeferred = [TASK_IDS.EMAIL_WRITING, TASK_IDS.ACADEMIC_WRITING].some((taskId) => {
         const a = session.attempts?.[taskId];
-        return a && a.score == null && a.meta?.deferredPayload;
+        // finalizeRealWriting also re-scores a failed task's retryPayload (reload mid-retry).
+        return a && a.score == null && (a.meta?.deferredPayload || (realMock && a.meta?.retryPayload));
       });
       if (!hasDeferred) {
         if (realMock) {
           const result = await finalizeRealWriting(session, evaluateWritingResponse, mockExamRunner.updateTaskScore);
-          setSession(result.session); setScoringPhase(result.phase); setScoringError(result.error);
-          persistFinalSession(result.session, result.phase, result.error);
-          finalizedSessionIdsRef.current.add(session.id);
+          applyScoringResult(result.session, result.phase, result.error);
           return;
         }
         persistFinalSession(session, "done", "");
@@ -338,9 +412,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       try {
         if (realMock) {
           const result = await finalizeRealWriting(session, evaluateWritingResponse, mockExamRunner.updateTaskScore);
-          setSession(result.session); setScoringPhase(result.phase); setScoringError(result.error);
-          persistFinalSession(result.session, result.phase, result.error);
-          finalizedSessionIdsRef.current.add(session.id);
+          applyScoringResult(result.session, result.phase, result.error);
           return;
         }
         const result = await finalizeDeferredScoringSession(session, {
@@ -348,19 +420,9 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
           updateTaskScore: mockExamRunner.updateTaskScore,
           recomputeAggregate: mockExamRunner.recomputeAggregate,
         });
-
-        setSession(result.session);
-        setScoringError(result.error || "");
-        persistFinalSession(result.session, result.phase, result.error || "");
-        setScoringPhase(result.phase);
-        finalizedSessionIdsRef.current.add(result.session.id);
+        applyScoringResult(result.session, result.phase, result.error || "");
       } catch (e) {
-        const msg = e?.message || "AI scoring failed";
-        setScoringError(msg);
-        setSession(session);
-        persistFinalSession(session, "error", msg);
-        finalizedSessionIdsRef.current.add(session.id);
-        setScoringPhase("error");
+        applyScoringResult(session, "error", e?.message || "AI scoring failed");
       }
     }
 
@@ -396,8 +458,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     try {
       if (realMock) {
         const result = await finalizeRealWriting(session, evaluateWritingResponse, mockExamRunner.updateTaskScore);
-        setSession(result.session); setScoringPhase(result.phase); setScoringError(result.error);
-        persistFinalSession(result.session, result.phase, result.error);
+        applyScoringResult(result.session, result.phase, result.error);
         return;
       }
       const result = await retryTimeoutScoringSession(session, {
@@ -405,17 +466,20 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
         updateTaskScore: mockExamRunner.updateTaskScore,
         recomputeAggregate: mockExamRunner.recomputeAggregate,
       });
-      setSession(result.session);
-      setScoringError(result.error || "");
-      persistFinalSession(result.session, result.phase, result.error || "");
-      setScoringPhase(result.phase);
+      applyScoringResult(result.session, result.phase, result.error || "");
     } catch (e) {
-      const msg = e?.message || "Retry scoring failed";
-      setScoringError(msg);
-      persistFinalSession(session, "error", msg);
-      setScoringPhase("error");
+      applyScoringResult(session, "error", e?.message || "Retry scoring failed");
     }
   }
+
+  const realTaskSeconds = realMock ? getRealMockConfig("writing")?.taskSeconds || null : null;
+  const prepareStatus = (
+    <>
+      {preparing && <p style={{ color: C.t2 }}>正在检查完整真题题量与未做记录…</p>}
+      {prepareError && <div role="alert" style={{ color: C.red, marginTop: 12, lineHeight: 1.6 }}>{prepareError}</div>}
+      {blockedAttemptId && <button onClick={releaseBlockedAttempt} disabled={preparing} style={{ marginTop: 10, padding: "9px 14px", border: `1px solid ${C.bdr}`, background: "#fff", borderRadius: 8, cursor: preparing ? "not-allowed" : "pointer" }}>释放上次未完成试卷，重新组卷</button>}
+    </>
+  );
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
@@ -436,16 +500,21 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
             savedCount={(hist.sessions || []).length}
             onStart={startExam}
             mode={mode}
-            totalTimeLabel={formatMinutesLabel(getDefaultMockExamBlueprint(mode).reduce((sum, t) => sum + (t.seconds || 0), 0))}
+            realMock={realMock}
+            taskSeconds={realTaskSeconds}
+            totalTimeLabel={formatMinutesLabel(realTaskSeconds
+              ? realTaskSeconds.bs + realTaskSeconds.email + realTaskSeconds.discussion
+              : getDefaultMockExamBlueprint(mode).reduce((sum, t) => sum + (t.seconds || 0), 0))}
           />
-          {preparing && <p style={{ color: C.t2 }}>正在检查完整真题题量与未做记录…</p>}
-          {prepareError && <div role="alert" style={{ color: C.red, marginTop: 12, lineHeight: 1.6 }}>{prepareError}</div>}
-          {blockedAttemptId && <button onClick={() => doStartExam(blockedAttemptId)} style={{ marginTop: 10, padding: "9px 14px", border: `1px solid ${C.bdr}`, background: "#fff", borderRadius: 8, cursor: "pointer" }}>释放上次未完成试卷，重新组卷</button>}
+          {prepareStatus}
           </>
         )}
 
         {!!session && (
           <>
+            {/* 结果页 / 中止页上点「开始新模考」也会组卷失败（题量不足、另一份卷未完成），
+                提示必须在这里也看得到，不能只挂在开始卡下面。 */}
+            {(preparing || prepareError || blockedAttemptId) && <div style={{ marginBottom: 16 }}>{prepareStatus}</div>}
             {/* Mobile-only sticky countdown: the desktop SectionTimerPanel gets pushed
                 far below the answer area on phones, so reuse the already-lifted
                 sectionTimer as a fixed top bar. Hidden on desktop (display:none →

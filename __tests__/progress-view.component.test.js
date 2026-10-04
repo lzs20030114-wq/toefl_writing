@@ -55,6 +55,20 @@ jest.mock("../lib/sessionStore", () => ({
         date: "2026-02-11T10:00:00.000Z",
         details: { subtype: "interview", items: [] },
       },
+      // A real-bank writing mock is also type "mock", but it lives in 真题练习记录
+      // and has no /30 conversion (it rendered here as 「换算 --/30」).
+      {
+        id: 15,
+        type: "mock",
+        date: "2026-02-16T10:00:00.000Z",
+        score: 14,
+        band: 4.5,
+        details: {
+          real: true, source: "real-bank", realMock: true, subtype: "mock", section: "writing", mockSessionId: "mock-real",
+          aggregate: { raw: 14, maxRaw: 20, band: 4.5 },
+          tasks: [{ taskId: "email-writing", taskType: "email", score: null, maxScore: 5 }],
+        },
+      },
     ],
   })),
   deleteSession: jest.fn(() => ({ sessions: [] })),
@@ -82,5 +96,13 @@ describe("ProgressView", () => {
     // and would render an unlabeled "未知类型" row with no question detail.
     render(<ProgressView onBack={() => {}} />);
     expect(screen.queryByText("未知类型")).not.toBeInTheDocument();
+  });
+
+  test("leaves real-bank mocks to 真题练习记录 (no 「换算 --/30」 row)", () => {
+    render(<ProgressView onBack={() => {}} />);
+    expect(screen.getByText(/模考记录 \(1\)/)).toBeInTheDocument();
+    expect(screen.queryByText(/--\/30/)).not.toBeInTheDocument();
+    // The latest-mock card shows the ordinary mock, not the newer real one.
+    expect(screen.getAllByText(/24\/30/).length).toBeGreaterThan(0);
   });
 });

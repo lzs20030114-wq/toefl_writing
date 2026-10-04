@@ -55,8 +55,11 @@ export function MockExamMainPanel({
     if (session.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
     if (transitionTaskId === currentTask.taskId) return;
     setTransitionTaskId(currentTask.taskId);
-    setTransitionLeft(TRANSITION_SECONDS);
-  }, [session.status, currentTask?.taskId, transitionTaskId]);
+    // A real-mock task that already has a deadline was started before this mount
+    // (page reload): its clock is running, so go straight back to it — the 25 s
+    // card would otherwise show the full time limit while the deadline ticks on.
+    setTransitionLeft(realMockPaper && Number.isFinite(realMockTaskDeadline) ? 0 : TRANSITION_SECONDS);
+  }, [session.status, currentTask?.taskId, transitionTaskId, realMockPaper, realMockTaskDeadline]);
 
   useEffect(() => {
     if (transitionLeft <= 0) return;
