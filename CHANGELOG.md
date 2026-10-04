@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-04 — v1.27.0
+
+> 覆盖 v1.26.0 公告（`50cf0da`）之后的提交：真题练习记录页重做（`a3c9de5`）、真题模考审查后的一批修复（`c384322`…`2826c7a`，审查时在真实浏览器复现了 10 个场景）、填词结果与单词本三处修正、暂停自动后备出题（`0ec4ea0`）。无新 SQL 迁移、生产 env 或 feature flag；未做线上部署验证。
+
+- **真题练习记录页重做**（`a3c9de5`）：概览改为摘要卡（整体得分率 / 趋势 / 最近一次）+ 科目条 + 可折叠题库覆盖 + 按日分组明细，点一行就地展开错题速览；详情为主从布局（可收起左栏、得分环、编号导航、吸顶筛选、上一条 / 下一条），逐题回顾拆到 `components/realBank/review/*`。评分失败的邮件 / 讨论记录可「重试评分」，成功后经 `sessionStore.patchSession` 把 score + details 回写同一条记录（云端两列一起写，回写前校验记录身份）。
+- **真题模考交卷先存记录、后结束试卷**（`c384322` / `7c3bcd0` / `b8aa868`）：`finish` 只释放没用到的预留题，此前阅读 / 听力 `handleM2Complete` 要等它成功才 `saveSess`，失败卡上的「返回」= `handleRestart` 会清空断点与作答，整卷连记录一起丢。现在三科都先存记录，再调 `finishRealMockExamReliably`（后台重试，仍失败记入 localStorage，`prepareRealMockExam` 组卷前 `flushPendingFinishes`）。
+- **错误卡不再毁进度、跨设备需确认**（`7c3bcd0` / `61bc585` / `b8aa868`）：新增 `lib/realMockExam/messages.js` 按错误码分类（transient / exhausted / active-attempt / dead-attempt / account）。考试中只给「重试」「保存进度并退出」；`ATTEMPT_FINISHED / EXPIRED / NOT_FOUND` 清本机断点并给「重新组卷」，不再无限「重试加载」；去掉阅读 / 听力的隐式 `restartAttemptId`（此前「重试」会静默结束另一台设备上的卷），改为显式按钮 + `window.confirm`。`route.js` 把 RPC 状态映射为中文错误码，`planner` 按题型合并缺口，客户端译成「学术阅读还差 1 篇」这类说明。
+- **写作真题模考**（`61bc585` / `2826c7a`）：评分中隐藏「开始新模考」，`applyScoringResult` 用 session id ref 判断过期，旧卷结果只落记录、不覆盖新卷与共用断点（常规写作模考同样受益）；组卷提示在结果 / 中止页也渲染并滚进视野；`shouldKeepRealWritingCheckpoint` 不再保存 / 恢复已评完与已中止的卷；造句已见门禁失败改为「重试」（此前唯一按钮接到 `onAbort`）；已有截止时间的任务刷新后跳过 25 秒过渡卡；「中止」先确认，并写 `details.aborted` 记录 + finish。
+- **口语真题模考**（`b8aa868`）：`scoreRealSpeaking` 改为未录音记 0（`unanswered`），录了音没评上计 `unscored`（有则不出 band，但不含未评分题的分项照算）；无 band 时不再回退 yellow →「中级」；两个说明页的已见失败也走「重试同步」，成功时清错误；交卷先出结果再后台 finish。
+- **未到达题与记录口径**（`078020a` / `7c3bcd0` / `61bc585` / `966ea35`）：超时 / 中止前没展示的题只存占位，不含题面和答案（阅读听力同时不再写 `paperSnapshot` 与 `m1/m2.tasks`）；记录页按 `unreached` 或不在 `seenItemIds` 判为「超时未到达」且不可展开，旧记录同样遮住；结果页深链 `/real-bank/progress?mock=<date>`（按时间值比对，兼容云端 `+00:00` 写法，阅读 / 听力记录页的原有深链一并修正）；普通阅读 / 听力 / 口语 / 写作练习记录、首页条数与「最佳模考」不再混入真题模考。
+- **服务端与云端**（`078020a`）：`loadHistoricalIds` 拆为模考行只投影 `seenItemIds` + 其余行整段 details（任一出错回退原单查询）；`expandDoneIds` 修复造句批次已练标记永远匹配不上；`upsertMockSessionCloud` 按 `details->>mockSessionId` 原地更新（重试评分不再多插一行），删除时同场的行一起删；`buildRealBankEntries` / `countRealBankSessions` 去重。
+- **其他修正**：填词交卷后恢复原文内「正确答案 + 括号错答」、未作答明确标注，移除文末逐空列表（`bd56439`）；听力单词复习只播单词发音、不再播原句，交互与阅读复习对齐（自动播放、快捷键、暂停与编辑释义）（`6698fcf`）；拼写下划线在中文输入法组字时不再改写输入框，组字中的回车不触发核对（`1c6ecb7`）；夜间质量监控 workflow 暂停自动后备出题，保留库存告警（`0ec4ea0`）。
+- **验证**：全量 jest 314 套件 / 3752 条通过；真题模考 e2e 24 条通过（含修正记录页重做后已失效的「四科模考回顾」用例）；审查时复现的 10 个场景在真实 Chromium 按修复后预期重跑通过；`next build` 通过。云端两处改动（历史查询拆分、按 mockSessionId 更新）本地没有 Supabase，未做线上验证，出错时均回退原写法。
+
 ## 2026-10-02 — v1.26.0
 
 > 覆盖 v1.25.0 公告（`91e2f05`）之后的功能提交：真题四科模考、单词本优化版（含听力复习的撤销 / 结算 / 分段存档）、复习次数与拼写流程按线上日志重做、首页模考卡修正。唯一新增迁移 `scripts/sql/real-mock-exam.sql` 已在 `scripts/sql/MIGRATIONS.md` 登记为 2026-10-02 已跑；无新生产 env 或 feature flag。未做线上部署验证。
