@@ -1,8 +1,12 @@
 import { readFileSync, readdirSync, statSync } from "fs";
-import { join } from "path";
+import { join, resolve } from "path";
 import { isAdminAuthorized } from "../../../../../lib/adminAuth";
 import { CONTENT_GROUPS, getContentMeta } from "../../../../../lib/admin/contentRegistry";
 
+// 注意：这里故意用 resolve(relPath) 而不是 join(process.cwd(), relPath)。两者运行时等价（resolve 对相对路径
+// 就是接在 process.cwd() 后面），但 Next 的文件追踪器能静态折叠 process.cwd()，再碰上动态的第二段就会把整个
+// 项目根目录拖进这个 Serverless 函数包（字体、截图、测试夹具……90 MB）；函数真正需要的文件由
+// next.config.js 的 outputFileTracingIncludes 显式列出。
 function readJsonSafe(abs) {
   try {
     const text = readFileSync(abs, "utf8").replace(/^\uFEFF/, "");
@@ -21,7 +25,7 @@ function statSafe(abs) {
 }
 
 function listStagingFilesForMeta(meta) {
-  const absDir = join(process.cwd(), meta.stagingDir);
+  const absDir = resolve(meta.stagingDir);
   let entries = [];
   try {
     entries = readdirSync(absDir);
@@ -75,7 +79,7 @@ export async function GET(request) {
     if (!safeName.endsWith(".json")) {
       return Response.json({ error: "Forbidden file" }, { status: 400 });
     }
-    const abs = join(process.cwd(), meta.stagingDir, safeName);
+    const abs = resolve(meta.stagingDir, safeName);
     const content = readJsonSafe(abs);
     if (!content) return Response.json({ error: "File not found or invalid JSON" }, { status: 404 });
     const st = statSafe(abs);

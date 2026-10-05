@@ -1,11 +1,11 @@
 import { readFileSync, readdirSync, statSync } from "fs";
-import { join } from "path";
+import { resolve } from "path";
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { CONTENT_GROUPS, getContentMeta } from "../../../../lib/admin/contentRegistry";
 
 function readJson(relPath) {
   try {
-    const abs = join(process.cwd(), relPath);
+    const abs = resolve(relPath);
     const text = readFileSync(abs, "utf8").replace(/^\uFEFF/, "");
     return JSON.parse(text);
   } catch {
@@ -31,7 +31,7 @@ function extractItems(raw, shape) {
 
 function countStagingFiles(stagingDir, prefix) {
   try {
-    const abs = join(process.cwd(), stagingDir);
+    const abs = resolve(stagingDir);
     const entries = readdirSync(abs);
     let count = 0;
     for (const name of entries) {
@@ -47,7 +47,7 @@ function countStagingFiles(stagingDir, prefix) {
 
 function bankFileInfo(relPath) {
   try {
-    const abs = join(process.cwd(), relPath);
+    const abs = resolve(relPath);
     const st = statSync(abs);
     return { size: st.size, modifiedAt: st.mtime.toISOString() };
   } catch {
