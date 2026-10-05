@@ -13,11 +13,13 @@ scripts/feature-guides/
     seed.mjs        用网站自己的单词本代码模拟 18 天使用，产出 seed-book.json（已提交一份）
     seed-book.json  演示账号的单词本数据快照
     capture.mjs     在真实页面上拍每个画面，记下要标注的元素坐标（.work/vocab/meta.json）
-    build.mjs       12 张图的版式与文案
+    build.mjs       5 张图的版式与文案
   .work/            中间产物（截图、meta、posters.html、out/），不入库
 ```
 
-成图在 `docs/feature-guides/vocab/`（12 张，1080×1440）。
+成图在 `docs/feature-guides/vocab/`（5 张，1080×1440）：查词和收藏 → 打开单词本 → 阅读复习 → 拼写 → 听力复习。
+只讲主流程，小结、结算、拼写核对这类页面自己看得懂，不单独出图（用户要求别拆太细）。
+capture 里 ai / list / rhythm 几组和 dv-front、dv-spell-wrong 是早先 12 张版用的，留着方便以后加回来。
 
 ## 跑法
 
@@ -40,6 +42,6 @@ node scripts/feature-guides/render.mjs vocab --publish # 确认无误后拷进 d
 - 3:4 竖图，给手机看；**截图必须是电脑版网页**。
 - 左上标题 + 一句说明；右上是整页缩略图，橙框标出下面放大的是哪一块。
 - 说明标签直接贴在真实截图里对应元素旁边、用线连上；不要编号图例，不要用文字描述位置（「右上角 ⋯ 里」这种），
-  要指的东西不在画面上就补拍一张真实画面（第 8 张的 ⋯ 菜单就是这么来的）。
+  要指的东西不在画面上就补拍一张真实画面（「拼写」那张的 ⋯ 菜单就是这么来的）。
 - 文案只说「这是什么、怎么用」，不写口号。标签位置由 `poster.mjs` 在浏览器里按实际文字宽度摆，`render.mjs` 等摆完才截。
-- 数据是 seed 出来的演示账号；第 3 张的 AI 讲解是示例文字（图上有注明）。
+- 数据是 seed 出来的演示账号。
