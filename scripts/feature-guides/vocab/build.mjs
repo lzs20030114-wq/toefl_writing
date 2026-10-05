@@ -1,294 +1,287 @@
-// 第 3 步：用 capture 拍下的真实截图拼出 9 张 3:4 引导图（.work/vocab/posters.html），
-// 再跑 render.mjs 出 PNG。改文案/版式只需改这里，不用重拍。
-import fs from "node:fs";
+// 第 3 步：拼版。读 capture 写出的 meta.json（元素在截图里的坐标），
+// 拼成 12 张 3:4 竖图（1080×1440）的 posters.html，再由 render.mjs 截成 PNG。
+//
+// 版式（样张 A）：左上标题 + 一句说明；右上是电脑网页整页缩略图，橙框标出放大的位置；
+// 下面是放大的真实截图，说明标签贴在对应元素旁边、用线连到元素上。
+// 文案只讲「这是什么、怎么用」，不写口号。坐标一律取自截图元数据，不手估。
+//
+//   node scripts/feature-guides/vocab/build.mjs && node scripts/feature-guides/render.mjs vocab
 import { workDir } from "../lib/browser.mjs";
-import { C, kit, page, cover, ring, badge, cursor, flipArrow, cap, side, union, writeSet } from "../lib/poster.mjs";
+import { kit, page, union, rect, writeSet } from "../lib/poster.mjs";
 
 const wd = workDir("vocab");
-const meta = wd.readMeta();
-const { box, boxByText, fig } = kit(meta);
-const TOTAL = 9;
+const K = kit(wd.readMeta());
+const TOTAL = 12;
+
+/** 截图坐标里把框往外扩（给压暗层留的亮区用）。 */
+const grow = (r, p, radius = 0) => ({ x: r.x - p, y: r.y - p, w: r.w + p * 2, h: r.h + p * 2, r: radius });
+const shift = (r, dx, dy) => ({ ...r, x: r.x + dx, y: r.y + dy });
+/** 圈的四条边中点：连线从这里出发。 */
+const L = (r) => ({ x: r.x, y: r.cy });
+const R = (r) => ({ x: r.x + r.w, y: r.cy });
+const T = (r) => ({ x: r.cx, y: r.y });
+const B = (r) => ({ x: r.cx, y: r.y + r.h });
+const bottom = (r) => r.y + r.h;
+
+/** 划词弹窗三张共用的放大区：左边从原文栏起，右边到弹窗为止。 */
+const POP_CROP = { x: 150, y: 397, w: 556, h: 428 };
+
+const pages = [];
+const def = (name, fn) => pages.push({ name, fn });
+
+def("01-划词查词", (n) => {
+  const shot = "dl-unsaved";
+  const m = K.need(shot);
+  const bt = (t, o) => K.boxByText(shot, t, o);
+  const p = page(K, { n, total: TOTAL, shot, title: "划词查词", desc: "阅读、听力交卷后，在解析页里点一下原文中的英文单词，就会弹出词典。" });
+  const z = p.zoom({ crop: POP_CROP, y: 400, dim: [{ ...m.pop, r: 12 }, grow(m.word, 3, 4)] });
+  const RX = z.map(m.pop).x - 22; // 左侧标签的右边缘：弹窗左边那片压暗的原文
+  const word = p.ring(z.map(m.word), { p: 6, radius: 9 });
+  p.label({ t: "点一下英文单词", side: "above", at: { x: word.cx, y: word.y - 10 } });
+  const head = p.ring(z.map(union(bt("attribute", { tag: "SPAN", exact: true }), bt("🔊", { tag: "BUTTON" }), bt("TOEFL", { tag: "SPAN" }))), { p: 6, radius: 10 });
+  p.label({ t: "单词、音标、发音", s: "TOEFL：托福常考词", side: "left", at: { x: RX, y: head.cy - 34 }, from: L(head) });
+  const mode = p.ring(z.map(union(bt("阅读词", { tag: "BUTTON" }), bt("听力词", { tag: "BUTTON" }))), { p: 6, radius: 999 });
+  p.label({ t: "复习方式", s: "阅读词看着认；听力词听着认", side: "left", at: { x: RX, y: mode.cy + 30 }, from: L(mode) });
+  const senses = p.ring(z.map(union(bt("名词", { tag: "SPAN", exact: true }), bt("认为...属于", { tag: "BUTTON" }), bt("〔计算机〕", { tag: "SPAN" }))), { p: 8, radius: 14 });
+  p.label({ t: "这个词的几个意思", s: "点一个，就按这个意思收藏", side: "left", at: { x: RX, y: senses.cy + 34 }, from: L(senses) });
+  const save = p.ring(z.map(bt("☆ 收藏到单词本", { tag: "BUTTON" })), { p: 6, radius: 999 });
+  p.label({ t: "不挑意思，直接收藏", side: "left", at: { x: RX, y: save.cy - 8 }, from: L(save) });
+  const ai = p.ring(z.map(bt("讲讲这句里的用法", { tag: "BUTTON" })), { p: 6, radius: 10 });
+  p.label({ t: "Pro：AI 讲它在这句里的意思", side: "left", at: { x: RX, y: ai.cy + 14 }, from: L(ai) });
+  p.footer("能查词的地方：<b>阅读、听力交卷后的解析页</b>，以及<b>练习记录</b>里的原文、题目和选项。");
+  return p;
+});
+
+def("02-收藏单词", (n) => {
+  const shot = "dl-saved";
+  const m = K.need(shot);
+  const bt = (t, o) => K.boxByText(shot, t, o);
+  const p = page(K, { n, total: TOTAL, shot, title: "收藏单词", desc: "在词典里点一个意思，这个词就收进单词本，这句原文也一起存下来。" });
+  const z = p.zoom({ crop: POP_CROP, y: 400, dim: [{ ...m.pop, r: 12 }, grow(m.word, 3, 4)] });
+  const pop = z.map(m.pop);
+  const RX = pop.x - 22;
+  const senses = p.ring(z.map(union(bt("名词", { tag: "SPAN", exact: true }), bt("认为...属于", { tag: "BUTTON" }), bt("〔计算机〕", { tag: "SPAN" }))), { p: 8, radius: 14 });
+  p.label({ t: "青色的是你选的意思", s: "复习时考这个意思；点别的可以换", side: "left", at: { x: RX, y: senses.cy }, from: L(senses) });
+  const on = p.ring(z.map(bt("✓ 这句已在卡上", { tag: "BUTTON" })), { p: 6, radius: 999 });
+  p.label({ t: "这句原文也存进去了", s: "复习时就用这句考你", side: "left", at: { x: RX, y: on.cy }, from: L(on) });
+  const rm = p.ring(z.map(bt("移出单词本", { tag: "BUTTON" })), { p: 6, radius: 999 });
+  p.label({ t: "从单词本删掉这个词", side: "below", at: { x: rm.cx, y: bottom(pop) + 18 }, from: B(rm) });
+  p.footer("同一个词在别的文章里再查到，按钮会变成<b>「＋ 加这句语境」</b>，最多存 3 句原文。");
+  return p;
+});
+
+def("03-AI讲解", (n) => {
+  const shot = "dl-ai";
+  const m = K.need(shot);
+  const bt = (t, o) => K.boxByText(shot, t, o);
+  const p = page(K, { n, total: TOTAL, shot, title: "AI 讲解（Pro）", desc: "词典的意思和这句对不上时，点「讲讲这句里的用法」，AI 会按这句话讲这个词。" });
+  const z = p.zoom({ crop: { x: 160, y: 445, w: 556, h: 428 }, y: 400, dim: [{ ...m.pop, r: 12 }, grow(m.word, 3, 4)] });
+  const RX = z.map(m.pop).x - 22;
+  const add = p.ring(z.map(bt("＋ 加这句语境", { tag: "BUTTON" })), { p: 6, radius: 999 });
+  p.label({ t: "这个词以前收藏过", s: "点这里把这句也存上", side: "left", at: { x: RX, y: add.cy }, from: L(add) });
+  // 讲解正文没有单独的元素框：取讲解框（蓝底）里分隔线以上那一段
+  const expl = p.ring(z.map(rect(432, 558, 260, 102)), { p: 4, radius: 10 });
+  p.label({ t: "AI 讲解", s: "这个词在这句里的意思和用法", side: "left", at: { x: RX, y: expl.cy }, from: L(expl) });
+  const use = p.ring(z.map(union(bt("这句里的意思：", { tag: "DIV" }), bt("用这个意思复习", { tag: "BUTTON" }), bt("编辑释义", { tag: "BUTTON" }))), { p: 6, radius: 10 });
+  p.label({ t: "用这个意思复习", s: "复习时就考这句里的意思", side: "left", at: { x: RX, y: use.cy }, from: L(use) });
+  const word = p.ring(z.map(m.word), { p: 6, radius: 9 });
+  p.label({ t: "查的是这个词", side: "right", at: { x: word.x + word.w + 24, y: word.cy }, from: R(word) });
+  p.footer("图中 AI 讲解是示例，实际以 AI 当次的回答为准。");
+  return p;
+});
+
+def("04-打开单词本", (n) => {
+  const shot = "dv-home";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "打开单词本", desc: "首页左栏点「单词本」。最上面是今天要复习的词，分「阅读复习」和「听力复习」两组，点按钮开始。" });
+  const zn = p.zoom({ crop: { x: 40, y: 330, w: 222, h: 100 }, y: 400, x: 20, s: 2, dim: [grow(b("nav"), 3, 10)] });
+  const nav = p.ring(zn.map(b("nav")), { p: 4, radius: 12 });
+  p.label({ t: "首页左栏的「单词本」", s: "数字＝今天还要复习几个词", side: "right", at: { x: zn.screen.x + zn.screen.w + 36, y: nav.cy }, from: R(nav) });
+  const z = p.zoom({ crop: { x: 270, y: 150, w: 850, h: 390 }, y: 640, dim: [{ ...b("hero"), r: 16 }] });
+  const heroBottom = bottom(z.map(b("hero")));
+  const title = p.ring(z.map(union(b("heroTitle"), b("minutes"))), { p: 6, radius: 10 });
+  p.label({ t: "今天要复习的词数", s: "后面是预计用时", side: "right", at: { x: title.x + title.w + 26, y: title.cy }, from: R(title) });
+  const rd = p.ring(z.map(union(b("readingCol"), b("readingCta"))), { p: 8, radius: 14 });
+  p.label({ t: "阅读复习：看原句认词", s: "要会写的词，认出来后再拼写", side: "below", at: { x: rd.cx, y: heroBottom + 18 }, from: B(rd) });
+  const ls = p.ring(z.map(union(b("listeningCol"), b("listeningCta"))), { p: 8, radius: 14 });
+  p.label({ t: "听力复习：听发音认词", s: "收藏时选了「听力词」的词", side: "below", at: { x: ls.cx, y: heroBottom + 18 }, from: B(ls) });
+  p.footer("「到期」＝该复习了，「新词」＝今天第一次学，「考拼写」＝其中要拼写的词。");
+  return p;
+});
+
+def("05-我的词库", (n) => {
+  const shot = "dv-list";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "我的词库", desc: "收藏过的词都在「我的词库」：能搜索、筛选，每个词都能看到复习状态、还记得多少、下次什么时候复习。" });
+  // 第一行（sophistication）展开了详情；第二行（propagate）整行亮着，用来讲每一列
+  const z = p.zoom({ crop: { x: 290, y: 180, w: 810, h: 540 }, y: 400, dim: [rect(290, 180, 810, 406)] });
+  const ROW = 190; // 第二行比第一行低多少（截图 CSS px）
+  const sr = p.ring(z.map(union(b("search"), b("sort"))), { p: 5, radius: 10 });
+  p.label({ t: "搜索单词；右边可以换排序", side: "left", at: { x: sr.x - 18, y: sr.cy }, from: L(sr) });
+  const fl = p.ring(z.map(union(b("segments"), b("filters"))), { p: 5, radius: 12 });
+  p.label({ t: "按阅读／听力、按复习状态筛选", side: "below", at: { x: z.map(b("filters")).x + 200, y: bottom(fl) + 4 } });
+  const more = p.ring(z.map(b("more")), { p: 4, radius: 10 });
+  const acts = p.ring(z.map(union(b("mode"), b("remove"))), { p: 6, radius: 12 });
+  const panel = z.map(b("actions"));
+  p.label({ t: "点 ⋯ 展开：这个词的设置", s: "复习类型、拼写、改释义、暂停、移除", side: "right", at: { x: acts.x + acts.w + 34, y: bottom(panel) - 46 }, from: [R(acts), B(more)] });
+  const lc = p.ring(z.map(b("leech")), { p: 5, radius: 8 });
+  const labelY = bottom(lc) + 66;
+  p.label({ t: "易忘：忘过 3 次以上的词", side: "below", at: { x: lc.cx, y: labelY }, from: B(lc) });
+  const mem = p.ring(z.map(shift(b("memory"), 0, ROW)), { p: 7, radius: 8 });
+  const due = p.ring(z.map({ ...shift(b("due"), 0, ROW), w: 28 }), { p: 7, radius: 8 });
+  p.label({ t: "此刻记得：现在还能想起来的概率", s: "下次：下一次复习的时间", side: "below", at: { x: 850, y: labelY }, from: [B(mem), B(due)] });
+  p.footer("阅读词默认要会写（复习时要拼写），听力词只考听懂；「此刻记得」是估计值。");
+  return p;
+});
+
+def("06-认词复习", (n) => {
+  const shot = "dv-front";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "阅读复习：认词", desc: "先看原句里高亮的词，在心里说出它的意思，再点「显示答案」。" });
+  const z = p.zoom({ crop: { x: 330, y: 60, w: 780, h: 490 }, y: 400 });
+  const hl = p.ring(z.map(b("hl")), { p: 5, radius: 8 });
+  const chip = z.map(b("chip"));
+  p.label({ t: "高亮的就是要认的词", side: "right", at: { x: 330, y: chip.y + chip.h / 2 }, from: T(hl) });
+  const speak = p.ring(z.map(b("speak")), { p: 4, radius: 999 });
+  p.label({ t: "点喇叭听发音", side: "right", at: { x: speak.x + speak.w + 24, y: speak.cy }, from: R(speak) });
+  const more = p.ring(z.map(b("more")), { p: 4, radius: 10 });
+  p.label({ t: "更多：改释义、暂停这个词", side: "below", at: { x: 850, y: 770 }, from: B(more) });
+  const show = p.ring(z.map(b("show")), { p: 5, radius: 16 });
+  p.label({ t: "想好意思后，点这里翻面看答案", side: "above", at: { x: 380, y: show.y - 18 }, from: { x: 380, y: show.y } });
+  const undo = p.ring(z.map(b("undo")), { p: 4, radius: 8 });
+  p.label({ t: "按错了：撤销上一张（Z 键）", side: "below", at: { x: undo.cx + 110, y: bottom(undo) + 18 }, from: B(undo) });
+  p.footer("电脑上可以全用键盘：<b>空格</b>翻面；翻面后 <b>1</b>＝忘了，<b>2</b>＝记得；<b>Z</b>＝撤销上一张。");
+  return p;
+});
+
+def("07-看答案", (n) => {
+  const shot = "dv-back";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "阅读复习：看答案", desc: "对照答案，照实选「忘了」或「记得」。只有这两个选项。" });
+  const z = p.zoom({ crop: { x: 330, y: 140, w: 780, h: 505 }, y: 400 });
+  const d = b("def");
+  const def = p.ring(z.map(rect(d.x, d.y, 128, d.h)), { p: 5, radius: 8 }); // 释义那一行只圈文字部分
+  p.label({ t: "答案：它在这句里的意思", side: "right", at: { x: def.x + def.w + 26, y: def.cy }, from: R(def) });
+  const dict = p.ring(z.map(rect(362, 398, 204, 110)), { p: 6, radius: 12 }); // 「词典」三行
+  p.label({ t: "完整的词典释义", s: "名词、动词各是什么意思", side: "right", at: { x: dict.x + dict.w + 30, y: dict.cy }, from: R(dict) });
+  const forgot = p.ring(z.map(b("forgot")), { p: 5, radius: 14 });
+  const rem = p.ring(z.map(b("remember")), { p: 5, radius: 14 });
+  const ly = Math.max(bottom(forgot), bottom(rem)) + 26;
+  p.label({ t: "想不起来：点「忘了」", s: "键盘按 1", side: "below", at: { x: forgot.cx, y: ly }, from: B(forgot) });
+  p.label({ t: "想起来了：点「记得」", s: "键盘按 2；要会写的词接着拼写", side: "below", at: { x: rem.cx, y: ly }, from: B(rem) });
+  p.footer("忘了的词这一轮还会再考，当天累计答对 3 次才过；第一遍就记得的，今天就过了。");
+  return p;
+});
+
+def("08-拼写", (n) => {
+  const shot = "dv-spell";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "阅读复习：拼写", desc: "要会写的词，选「记得」之后还要拼一遍：看中文意思，把英文直接填进原句的空里。" });
+  const z = p.zoom({ crop: { x: 330, y: 140, w: 780, h: 370 }, y: 400 });
+  const pr = b("prompt");
+  const prompt = p.ring(z.map(rect(pr.x, pr.y, 134, pr.h)), { p: 5, radius: 8 });
+  const slots = p.ring(z.map(b("slots")), { p: 4, radius: 8 });
+  p.label({ t: "看中文意思，把英文填进空里", side: "right", at: { x: prompt.x + prompt.w + 50, y: prompt.cy }, from: [R(prompt), T(slots)] });
+  const check = p.ring(z.map(b("check")), { p: 5, radius: 12 });
+  p.label({ t: "拼完按回车，或点这里核对", side: "left", at: { x: check.x - 22, y: check.cy }, from: L(check) });
+  const giveup = p.ring(z.map(b("giveup")), { p: 5, radius: 14 });
+  p.label({ t: "拼不出来：点这里看答案（算没记住）", side: "below", at: { x: giveup.cx, y: bottom(giveup) + 22 }, from: B(giveup) });
+  // 同一张卡点开右上角 ⋯ 的样子（dv-menu）
+  const mb = (k) => K.box("dv-menu", k);
+  const zm = p.zoom({
+    shot: "dv-menu", crop: { x: 820, y: 145, w: 290, h: 215 }, y: 1000, s: 1.42, x: 1060 - Math.round(290 * 1.42), tag: false,
+    dim: [{ ...mb("menu"), r: 10 }, grow(mb("more"), 3, 8)],
+  });
+  const RX = zm.screen.x - 20;
+  const more = p.ring(zm.map(mb("more")), { p: 4, radius: 10 });
+  p.label({ t: "点 ⋯ 打开菜单", side: "above", at: { x: more.cx - 70, y: more.y - 14 }, from: T(more) });
+  const prod = p.ring(zm.map(mb("productive")), { p: 3, radius: 10 });
+  p.label({ t: "不想练拼写：关掉「要会写」", s: "改动下次出现时生效", side: "left", at: { x: RX, y: prod.cy + 14 }, from: L(prod) });
+  const rest = p.ring(zm.map(union(mb("editDef"), mb("suspend"))), { p: 3, radius: 10 });
+  p.label({ t: "也能改释义、暂停复习这个词", side: "left", at: { x: RX, y: rest.cy + 30 }, from: L(rest) });
+  p.footer("一个字母一条下划线，拼对才算记得。");
+  return p;
+});
+
+def("09-拼写核对", (n) => {
+  const shot = "dv-spell-wrong";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "拼写核对", desc: "回车核对后，拼错或漏掉的字母会标成红色。拼对才算记得。" });
+  const z = p.zoom({ crop: { x: 330, y: 345, w: 780, h: 535 }, y: 400, dim: [rect(330, 345, 780, 130), rect(330, 778, 780, 102)] });
+  const v = b("verdict");
+  const letters = p.ring(z.map(rect(v.x, v.y, 192, 61)), { p: 6, radius: 10 }); // 「你写的是…」+ 逐字母对照
+  p.label({ t: "红色＝写错或漏掉的字母", s: "这次漏写了一个 t", side: "right", at: { x: letters.x + letters.w + 30, y: letters.cy }, from: R(letters) });
+  const retry = p.ring(z.map(b("retry")), { p: 5, radius: 14 });
+  const next = p.ring(z.map(b("next")), { p: 5, radius: 14 });
+  const ly = Math.min(retry.y, next.y) - 22;
+  p.label({ t: "再拼一次", s: "有首字母提示，只练习、不改结果", side: "above", at: { x: retry.cx, y: ly }, from: T(retry) });
+  p.label({ t: "下一个词", s: "这次算没记住，之后会再考", side: "above", at: { x: next.cx, y: ly }, from: T(next) });
+  p.footer("看完结果按<b>空格</b>或<b>回车</b>，进入下一个词。");
+  return p;
+});
+
+def("10-听力复习", (n) => {
+  const shot = "dv-listen";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "听力复习", desc: "收藏时选了「听力词」的词，复习时只听不看：先听发音想意思，听完再翻面看答案。" });
+  const z = p.zoom({ crop: { x: 330, y: 60, w: 780, h: 455 }, y: 400 });
+  const play = p.ring(z.map(b("play")), { p: 5, radius: 12 });
+  p.label({ t: "听发音：可以多听几遍", side: "right", at: { x: play.x + play.w + 28, y: play.cy }, from: R(play) });
+  const ans = p.ring(z.map(union(b("word"), rect(532, 292, 88, 18), rect(365, 333, 96, 27))), { p: 6, radius: 12 });
+  p.label({ t: "翻面后才显示单词和意思", side: "right", at: { x: ans.x + ans.w + 30, y: ans.cy }, from: R(ans) });
+  const no = p.ring(z.map(b("no")), { p: 5, radius: 14 });
+  const yes = p.ring(z.map(b("yes")), { p: 5, radius: 14 });
+  const ly = Math.max(bottom(no), bottom(yes)) + 26;
+  p.label({ t: "没听出来，或不懂意思", s: "键盘按 1", side: "below", at: { x: no.cx, y: ly }, from: B(no) });
+  p.label({ t: "听出来了，也懂意思", s: "键盘按 2 或回车", side: "below", at: { x: yes.cx, y: ly }, from: B(yes) });
+  p.footer("电脑上：<b>空格</b>重播，<b>回车</b>翻面；翻面后 <b>1</b>＝没听懂，<b>2</b> 或<b>回车</b>＝听懂了。");
+  return p;
+});
+
+def("11-每10词小结", (n) => {
+  const shot = "dv-checkpoint";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "每 10 个词小结", desc: "每复习 10 个词会停一下，给出这一段的小结并自动存档。可以先退出，当天回来从这里接着复习。" });
+  const za = p.zoom({ crop: { x: 440, y: 102, w: 560, h: 260 }, y: 400, s: 1.5 }); // 正好切在弹窗边上，不带背后的遮罩
+  const saved = p.ring(za.map(b("saved")), { p: 4, radius: 999 });
+  p.label({ t: "进度已自动存档", side: "right", at: { x: saved.x + saved.w + 30, y: saved.cy - 6 }, from: R(saved) });
+  const tags = p.ring(za.map(rect(934, 225, 46, 130)), { p: 4, radius: 10 }); // 前三行右边的「忘了 / 记得」
+  p.label({ t: "每个词这次记得还是忘了", side: "below", at: { x: tags.cx - 150, y: bottom(za.screen) + 14 }, from: B(tags) });
+  const zb = p.zoom({ crop: { x: 440, y: 690, w: 560, h: 108 }, y: bottom(za.screen) + 86, s: 1.5, tag: false });
+  const pause = p.ring(zb.map(b("pause")), { p: 5, radius: 14 });
+  const cont = p.ring(zb.map(b("cont")), { p: 5, radius: 14 });
+  const ly = bottom(zb.screen) + 22;
+  p.label({ t: "先休息：退出", s: "今天回来从这里接着复习", side: "below", at: { x: pause.cx, y: ly }, from: B(pause) });
+  p.label({ t: "继续下一段", s: "键盘按空格", side: "below", at: { x: cont.cx, y: ly }, from: B(cont) });
+  p.footer("存档只在当天有效；阅读复习和听力复习各存各的。");
+  return p;
+});
+
+def("12-复习结算", (n) => {
+  const shot = "dv-summary";
+  const b = (k) => K.box(shot, k);
+  const p = page(K, { n, total: TOTAL, shot, title: "复习结算", desc: "一轮复习结束后会出结算：这一轮的成绩、忘了的词，和接下来的安排。" });
+  const z = p.zoom({ crop: { x: 340, y: 78, w: 760, h: 788 }, y: 400, s: 1.2 });
+  const stats = p.ring(z.map(rect(366, 190, 706, 95)), { p: 6, radius: 14 }); // 三张成绩卡
+  p.label({ t: "这一轮的成绩", s: "第一遍就想起来的比例、答题次数", side: "left", at: { x: z.map(rect(1075, 0, 0, 0)).x - 10, y: stats.y - 58 }, from: { x: 780, y: stats.y } });
+  const deltas = p.ring(z.map(rect(375, 315, 700, 52)), { p: 6, radius: 12 });
+  p.label({ t: "复习前 → 复习后的变化", side: "below", at: { x: 520, y: bottom(deltas) + 40 }, from: { x: 520, y: bottom(deltas) } });
+  const relearn = p.ring(z.map(rect(1015, 470, 70, 190)), { p: 4, radius: 10 }); // 「已安排重学」那一列
+  p.label({ t: "会自动安排重学", side: "left", at: { x: relearn.x - 20, y: z.map(rect(0, 491, 0, 0)).y }, from: { x: relearn.x, y: z.map(rect(0, 491, 0, 0)).y } });
+  const nxt = p.ring(z.map(rect(342, 719, 371, 141)), { p: 4, radius: 16 });
+  const tmr = p.ring(z.map(rect(727, 719, 373, 141)), { p: 4, radius: 16 });
+  const ly = bottom(nxt) + 16;
+  p.label({ t: "下一步：还没做的复习", side: "below", at: { x: nxt.cx, y: ly }, from: B(nxt) });
+  p.label({ t: "明天大概要复习几个词", side: "below", at: { x: tmr.cx, y: ly }, from: B(tmr) });
+  return p;
+});
+
 const posters = [];
 const manifest = [];
-const add = (id, name, html) => { posters.push(html); manifest.push({ id, name }); };
-const word = (shot) => meta[shot].word; // 弹窗截图里被点的那个词
-const pop = (shot) => meta[shot].pop; //   弹窗本身
-
-// ───────── 01 · 封面 ─────────
-{
-  const a = fig({ shot: "lk-unsaved", crop: { x: 128, y: 449, w: 389, h: 354 }, x: 64, y: 588, s: 1.54, frame: "browser", z: 2, shadow: "0 30px 70px rgba(0,0,0,.35)" });
-  const w = a.map(word("lk-unsaved"));
-  const b = fig({ shot: "rv-front", crop: { x: 0, y: 112, w: 390, h: 500 }, x: 1016 - 376, y: 548, s: 0.892, frame: "phone", radius: 30, z: 3, shadow: "0 30px 70px rgba(0,0,0,.4)" });
-  const hl = b.map(box("rv-front", "hl"));
-  const lt = box("rv-spell-wrong2", "letters"); // 拼写核对：漏掉的 t 标红
-  const c = fig({ shot: "rv-spell-wrong2", crop: { x: 28, y: lt.y - 36, w: 222, h: 73 }, x: 1016 - 376, y: 1052, s: 1.42, frame: "card", radius: 18, z: 4, shadow: "0 24px 50px rgba(0,0,0,.35)" });
-  add("p1", "01-封面", cover({
-    total: TOTAL,
-    kicker: "TOEFL 备考 · 使用指南",
-    title: "读到生词，<mark>点一下</mark>就查<br>收进单词本，按<mark>遗忘曲线</mark>背",
-    sub: "阅读、听力交卷后，原文里的生词随手查、随手收；单词本每天替你排好该复习的词。",
-    steps: ["点词就查", "点义项收藏", "每天 10 分钟复习"],
-    body: [
-      a.html, b.html, c.html,
-      // 浏览器左侧是裁出来的半截原文，渐隐一下
-      `<div style="position:absolute;left:${a.rect.x}px;top:${a.rect.y + 54}px;width:70px;height:${a.rect.h - 54}px;background:linear-gradient(90deg,#fff 10%,rgba(255,255,255,0));z-index:2;border-bottom-left-radius:22px"></div>`,
-      ring(w, { pad: 5, radius: 9, width: 4 }),
-      cursor(w.x + w.w * 0.78, w.y + w.h * 0.8, { z: 9 }),
-      ring(hl, { pad: 4, radius: 8, width: 4, z: 6 }),
-    ].join("\n"),
-  }));
-}
-
-// ───────── 02 · 点词查词 ─────────
-{
-  const shot = "lk-unsaved";
-  const crop = { x: 33, y: 449, w: 484, h: 355 };
-  const f = fig({ shot, crop, x: 64, y: 462, s: 952 / crop.w, frame: "browser", url: "treepractice.com/reading" });
-  const w = f.map(word(shot));
-  const head = f.map(union(boxByText(shot, "/ә'tribju:t/", { tag: "SPAN" }), boxByText(shot, "🔊", { tag: "BUTTON" }), boxByText(shot, "TOEFL", { tag: "SPAN" })));
-  const senses = f.map(union(boxByText(shot, "名词", { tag: "SPAN", exact: true }), boxByText(shot, "认为...属于", { tag: "BUTTON" }), boxByText(shot, "〔计算机〕", { tag: "SPAN" })));
-  add("p2", "02-点词查词", page({
-    n: 2, total: TOTAL, step: ["STEP 1", "查词"],
-    title: "交卷后，<mark>点一下生词</mark><br>释义马上弹出来",
-    sub: "阅读、听力交卷后的解析页和练习记录里，原文、题干、选项都能直接点词查；词典装在本地，点了马上出。",
-    body: [
-      f.html,
-      ring(w, { pad: 7, radius: 10 }), badge(1, w.x - 7, w.y - 7),
-      cursor(w.x + w.w * 0.78, w.y + w.h * 0.8),
-      ring(head, { pad: 8 }), badge(2, head.x + head.w + 8, head.y - 8),
-      ring(senses, { pad: 10 }), badge(3, senses.x + senses.w + 10, senses.y - 10),
-    ].join("\n"),
-    legend: [
-      { t: "点一下生词", s: "拖选几个词，还能查短语" },
-      { t: "音标 · 发音 · 标签", s: "点 🔊 就念给你听" },
-      { t: "按词性分好的义项", s: "名词、动词各是什么意思" },
-    ],
-    legendTop: 1256,
-  }));
-}
-
-// ───────── 03 · 点义项收藏 ─────────
-{
-  const shot = "lk-saved";
-  const s = 2.06;
-  const f = fig({ shot, crop: pop(shot), x: 64, y: 476, s, frame: "card", radius: 12 * s });
-  const chip = f.map(boxByText(shot, "把...归于", { tag: "BUTTON" }));
-  const mode = f.map(union(boxByText(shot, "阅读词", { tag: "BUTTON" }), boxByText(shot, "听力词", { tag: "BUTTON" })));
-  const done = f.map(union(boxByText(shot, "✓ 这句已在卡上", { tag: "BUTTON" }), boxByText(shot, "移出单词本", { tag: "BUTTON" })));
-  const sx = 64 + f.rect.w + 44, sw = 1016 - sx;
-  // 小图：以后在别的文章又遇到已收藏的词
-  const addBtn = boxByText("lk-addctx", "＋ 加这句语境", { tag: "BUTTON" });
-  const row = union(addBtn, boxByText("lk-addctx", "移出单词本", { tag: "BUTTON" }));
-  const g = fig({ shot: "lk-addctx", crop: { x: row.x - 8, y: row.y - 4, w: row.w + 16, h: row.h + 8 }, x: 98, y: 1226, s, frame: "bare", z: 5 });
-  add("p3", "03-点义项收藏", page({
-    n: 3, total: TOTAL, step: ["STEP 2", "收藏"],
-    title: "点中这句里的意思<br><mark>就收进单词本</mark>",
-    sub: "多义词拆成一个个义项：点你在这句里读到的那个，复习时就按它考。不想挑？直接点<q>☆ 收藏到单词本</q>。",
-    body: [
-      f.html,
-      ring(mode, { pad: 8, radius: 999 }), badge(1, mode.x + mode.w + 14, mode.y + mode.h / 2),
-      ring(chip, { pad: 8, radius: 999 }), badge(2, chip.x + chip.w + 8, chip.y - 6),
-      ring(done, { pad: 8, radius: 999 }), badge(3, done.x + done.w + 14, done.y + done.h / 2),
-      side(1, "阅读词 / 听力词", "阅读里默认阅读词；想练听音辨义就选听力词", sx, mode.y + mode.h / 2 - 8, sw),
-      side(2, "点义项＝收藏", "复习时就按这个意思考，点错了再点别的就换", sx, chip.y + chip.h / 2 - 8, sw),
-      side(3, "收好了", "这句原文也一起存进卡片", sx, done.y + done.h / 2 - 8, sw),
-      `<div class="inset" style="top:1150px;height:206px"></div>`,
-      `<div style="position:absolute;left:98px;top:1174px;z-index:5"><span style="display:inline-block;font-size:21px;font-weight:700;color:${C.brandDark};background:#E5F5EE;border-radius:8px;padding:4px 12px">以后在别的文章又遇到这个词</span></div>`,
-      g.html,
-      ring(g.map(addBtn), { pad: 7, radius: 999, z: 6 }),
-      `<div style="position:absolute;left:600px;top:1186px;width:390px;z-index:5"><div style="font-size:28px;font-weight:800;line-height:1.35;color:${C.ink}">点「＋ 加这句语境」</div><div style="font-size:23px;font-weight:500;line-height:1.5;color:#5A6E64;margin-top:8px">最多再加 3 句，复习时轮换着考，记住的是词，不是那一句</div></div>`,
-    ].join("\n"),
-  }));
-}
-
-// ───────── 04 · AI 按这句讲（Pro） ─────────
-{
-  const shot = "lk-ai";
-  const s = 1.88;
-  const f = fig({ shot, crop: pop(shot), x: 64, y: 474, s, frame: "card", radius: 12 * s });
-  const chips = f.map(union(boxByText(shot, "消耗", { tag: "BUTTON" }), boxByText(shot, "消灭", { tag: "BUTTON" }), boxByText(shot, "毁灭", { tag: "BUTTON" }), boxByText(shot, "不及物动词", { tag: "SPAN" })));
-  const ai = f.map({ x: 165, y: 1295, w: 268, h: 112 }); // AI 讲解那块蓝底
-  const adopt = f.map(union(boxByText(shot, "用这个意思复习", { tag: "BUTTON" }), boxByText(shot, "编辑释义", { tag: "BUTTON" })));
-  const sx = 64 + f.rect.w + 44, sw = 1016 - sx;
-  add("p4", "04-AI讲这句", page({
-    n: 4, total: TOTAL, step: ["STEP 2", "AI 讲解"],
-    title: "词典对不上？<br>让 <mark>AI 按这句讲</mark>",
-    sub: "Pro 用户点<q>讲讲这句里的用法</q>，AI 讲清这个词在这句里的意思；同一个词在不同句子里的意思，分开记、分开考。",
-    body: [
-      f.html,
-      ring(chips, { pad: 8, radius: 18 }), badge(1, chips.x + chips.w + 8, chips.y - 6),
-      ring(ai, { pad: 8, radius: 18 }), badge(2, ai.x + ai.w + 8, ai.y - 6),
-      ring(adopt, { pad: 8, radius: 16 }), badge(3, adopt.x + adopt.w + 8, adopt.y - 6),
-      side(1, "词典义项对不上", "消耗、消费、消灭……可这句说的是鹮只吃掉蟾蜍没毒的部分", sx, chips.y + 10, sw),
-      side(2, "AI 按这句讲", "这里是「吃、食用」，还带上常见搭配和同根词", sx, ai.y + 30, sw),
-      side(3, "用这个意思复习", "这句就按「吃；食用」考，也能先改再存", sx, adopt.y - 16, sw),
-      `<div style="position:absolute;left:64px;top:${474 + f.rect.h + 14}px;font-size:19px;color:#8A9C93;z-index:3">* 图中 AI 讲解为示例，实际以 AI 当次回答为准</div>`,
-      `<div style="position:absolute;left:${64 + f.rect.w - 120}px;top:448px;z-index:6;background:linear-gradient(135deg,#F59E0B,#F97316);color:#fff;font:800 22px/1 'Plus Jakarta Sans',sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 8px 18px rgba(249,115,22,.35)">PRO</div>`,
-    ].join("\n"),
-    tip: "点<b>编辑释义</b>，可以先改成你自己的话再保存，复习时就考你写的版本。",
-  }));
-}
-
-// ───────── 05 · 单词本首页 ─────────
-{
-  const shot = "m-vocab-screen";
-  const f = fig({ shot, crop: { x: 0, y: 0, w: 390, h: 786 }, x: 64, y: 470, s: 1.06, frame: "phone", radius: 40 });
-  const hero = f.map(union(box(shot, "hero"), box(shot, "minutes"), box(shot, "progress")));
-  const reading = f.map(union(box(shot, "readingCol"), box(shot, "cta"), { x: 31, y: 396, w: 328, h: 100 }));
-  const listening = f.map(union(box(shot, "listeningCol"), box(shot, "listeningCta")));
-  const rx = 64 + f.rect.w + 46, rw = 1016 - rx;
-  // 入口：电脑首页左栏 / 手机首页卡片（都是真实截图）
-  const navB = box("d-vocab", "nav");
-  const nav = fig({ shot: "d-vocab", crop: { x: navB.x - 10, y: navB.y - 8, w: navB.w + 20, h: navB.h + 16 }, x: rx, y: 540, s: 1.72, frame: "card", radius: 16 });
-  const cardB = box("m-home-top", "card");
-  const card = fig({ shot: "m-home-top", crop: { x: cardB.x - 6, y: cardB.y - 6, w: cardB.w + 12, h: cardB.h + 12 }, x: rx, y: 668, s: rw / (cardB.w + 12), frame: "bare" });
-  add("p5", "05-单词本首页", page({
-    n: 5, total: TOTAL, step: ["STEP 3", "复习"],
-    title: "打开单词本<br>今天背什么<mark>一目了然</mark>",
-    sub: "收藏的词会按遗忘曲线自动排进每天的复习；每天跟着做完当天的量，就不会越攒越多。",
-    body: [
-      f.html,
-      `<div style="position:absolute;left:${rx}px;top:478px;font-size:24px;font-weight:800;color:${C.brandDark};z-index:3;letter-spacing:1px">入口</div>`,
-      nav.html,
-      `<div style="position:absolute;left:${rx + nav.rect.w + 18}px;top:${540 + nav.rect.h / 2 - 17}px;font-size:23px;font-weight:600;color:#5A6E64;z-index:3">电脑：<br>首页左栏</div>`,
-      card.html,
-      `<div style="position:absolute;left:${rx}px;top:${668 + card.rect.h + 8}px;font-size:23px;font-weight:600;color:#5A6E64;z-index:3">手机：首页上的单词本卡片，数字＝今天待复习</div>`,
-      ring(hero, { pad: 8, radius: 16 }), badge(1, hero.x + hero.w + 8, hero.y - 4),
-      ring(reading, { pad: 8, radius: 16 }), badge(2, reading.x + reading.w + 8, reading.y - 4),
-      ring(listening, { pad: 8, radius: 16 }), badge(3, listening.x + listening.w + 8, listening.y - 4),
-      side(1, "今天要过多少词", "已经排好，还告诉你大约几分钟", rx, 878, rw),
-      side(2, "阅读复习", "认词 + 拼写；到期词、新词都在这儿", rx, 1032, rw),
-      side(3, "听力复习", "听发音回想意思，和阅读分开练", rx, 1186, rw),
-    ].join("\n"),
-  }));
-}
-
-/** 两部手机左右并排 + 中间箭头，内页 06/07/08 共用。 */
-function pair(leftShot, leftCrop, rightShot, rightCrop, labels, { s = 1.07, fy = 486, inset = 0 } = {}) {
-  const left = fig({ shot: leftShot, crop: leftCrop, x: 64 + inset, y: fy, s, frame: "phone", radius: 34 });
-  const right = fig({ shot: rightShot, crop: rightCrop, x: 1016 - inset - left.rect.w, y: fy, s, frame: "phone", radius: 34 });
-  const html = [
-    left.html, right.html,
-    cap(labels[0], left.rect.x + 22, fy - 18),
-    cap(labels[1], right.rect.x + 22, fy - 18),
-  ];
-  if (!inset) html.push(flipArrow((left.rect.x + left.rect.w + right.rect.x) / 2, fy + 250));
-  return { left, right, html: html.join("\n") };
-}
-
-// ───────── 06 · 原句认词 ─────────
-{
-  const { left, right, html } = pair("rv-front", { x: 0, y: 112, w: 390, h: 568 }, "rv-back", { x: 0, y: 276, w: 390, h: 568 }, ["正面", "翻面后"]);
-  const hl = left.map(box("rv-front", "hl"));
-  const show = left.map(box("rv-front", "show"));
-  const def = right.map({ x: 39, y: 532, w: 136, h: 30 }); // 背面主释义「把…归于」
-  const btns = right.map(union(box("rv-back", "forgot"), box("rv-back", "remember")));
-  add("p6", "06-原句认词", page({
-    n: 6, total: TOTAL, step: ["STEP 3", "认词"],
-    title: "先在原句里认词<br><mark>想起来</mark>再翻面",
-    sub: "正面是你收藏时读到的那句原文，生词高亮；心里先说出它的意思，再翻面对答案。",
-    body: [
-      html,
-      ring(hl, { pad: 6, radius: 10 }), badge(1, hl.x + hl.w / 2, hl.y - 34),
-      ring(show, { pad: 6, radius: 18 }), badge(2, show.x + show.w + 4, show.y - 4),
-      ring(def, { pad: 8, radius: 12 }), badge(3, def.x + def.w + 8, def.y - 6),
-      ring(btns, { pad: 6, radius: 18 }), badge(4, btns.x + btns.w + 4, btns.y - 4),
-    ].join("\n"),
-    legend: [
-      { t: "原句里认词", s: "心里先说出意思" },
-      { t: "想好再翻面", s: "点按钮或按空格" },
-      { t: "对答案", s: "看这句里的意思" },
-      { t: "忘了 / 记得", s: "只有两档，照实选" },
-    ],
-    legendTop: 1146,
-  }));
-}
-
-// ───────── 07 · 拼写 ─────────
-{
-  const { left, right, html } = pair("rv-spell", { x: 0, y: 198, w: 390, h: 568 }, "rv-spell-wrong2", { x: 0, y: 124, w: 390, h: 566 }, ["拼写", "核对后"]);
-  const def = left.map({ x: 37, y: 280, w: 202, h: 34 }); //   拼写提示：释义
-  const input = left.map({ x: 152, y: 336, w: 150, h: 36 }); // 填进原句的空
-  const letters = right.map({ x: 37, y: 174, w: 198, h: 40 });
-  const retry = right.map(box("rv-spell-wrong2", "retry"));
-  add("p7", "07-拼写", page({
-    n: 7, total: TOTAL, step: ["STEP 3", "拼写"],
-    title: "要会写的词<br><mark>记得之后再拼一遍</mark>",
-    sub: "选<q>记得</q>后要把它拼出来才算数；不想练拼写的词，在卡片右上角 ⋯ 里关掉「要会写」。",
-    body: [
-      html,
-      ring(def, { pad: 6, radius: 12 }), badge(1, def.x + def.w + 6, def.y - 4),
-      ring(input, { pad: 6, radius: 12 }), badge(2, input.x + input.w + 6, input.y - 4),
-      ring(letters, { pad: 6, radius: 12 }), badge(3, letters.x + letters.w + 34, letters.y + letters.h / 2),
-      ring(retry, { pad: 6, radius: 18 }), badge(4, retry.x + retry.w + 4, retry.y - 4),
-    ].join("\n"),
-    legend: [
-      { t: "看释义回想", s: "英文被挖掉了" },
-      { t: "填进原句的空", s: "一个字母一条线" },
-      { t: "错哪儿标哪儿", s: "漏掉的 t 标红" },
-      { t: "再拼一次", s: "提示首字母" },
-    ],
-    legendTop: 1146,
-  }));
-}
-
-// ───────── 08 · 听力词 ─────────
-{
-  const { left, right, html } = pair("ls-front", { x: 0, y: 112, w: 390, h: 568 }, "ls-back", { x: 0, y: 112, w: 390, h: 568 }, ["先听", "翻面后"]);
-  const play = left.map(box("ls-front", "play"));
-  const show = left.map(box("ls-front", "show"));
-  const ans = right.map(union(box("ls-back", "word"), box("ls-back", "def")));
-  const btns = right.map(union(box("ls-back", "no"), box("ls-back", "yes")));
-  add("p8", "08-听力词", page({
-    n: 8, total: TOTAL, step: ["STEP 3", "听力词"],
-    title: "听力词这样练<br><mark>先听发音</mark>再想意思",
-    sub: "收藏时选<q>听力词</q>，复习时单词自动念给你听；听完翻面对答案，练的是「听得出来」。",
-    body: [
-      html,
-      ring(play, { pad: 6, radius: 14 }), badge(1, play.x + play.w + 6, play.y - 4),
-      ring(show, { pad: 6, radius: 18 }), badge(2, show.x + show.w + 4, show.y - 4),
-      ring(ans, { pad: 8, radius: 14 }), badge(3, ans.x + ans.w + 8, ans.y + ans.h + 6),
-      ring(btns, { pad: 6, radius: 18 }), badge(4, btns.x + btns.w + 4, btns.y - 4),
-    ].join("\n"),
-    legend: [
-      { t: "先听发音", s: "进来就自动播放" },
-      { t: "听完再翻面", s: "点按钮或按 Enter" },
-      { t: "对答案", s: "看单词和意思" },
-      { t: "听懂了没", s: "只有两档，照实选" },
-    ],
-    legendTop: 1146,
-  }));
-}
-
-// ───────── 09 · 段小结 / 撤销 / 结算 ─────────
-{
-  const full = { x: 0, y: 0, w: 390, h: 700 };
-  const { left, right, html } = pair("rv-checkpoint-sm", full, "rv-summary-sm", full, ["每 10 个词", "一轮练完"], { s: 1.0, inset: 20 });
-  const saved = left.map(box("rv-checkpoint-sm", "saved"));
-  const go = left.map(union(box("rv-checkpoint-sm", "pause"), box("rv-checkpoint-sm", "cont")));
-  const first = right.map({ x: 41, y: 201, w: 148, h: 116 }); // 「第一次就想起来」卡
-  const delta = right.map({ x: 41, y: 438, w: 310, h: 92 }); //  预计记得 / 已记牢 / 学习中 的变化
-  add("p9", "09-小结与结算", page({
-    n: 9, total: TOTAL, step: ["STEP 3", "节奏"],
-    title: "每 10 个词一小结<br><mark>随时停，随时接</mark>",
-    sub: "每段自动存档，当天回来从断点接着背；按错了点<q>↶ 撤销上一张</q>（电脑按 Z）。一轮练完，有结算页。",
-    body: [
-      html,
-      ring(saved, { pad: 6, radius: 999 }), badge(1, saved.x + saved.w + 44, saved.y + saved.h / 2),
-      ring(go, { pad: 6, radius: 16 }), badge(2, go.x + go.w + 4, go.y - 4),
-      ring(first, { pad: 6, radius: 16 }), badge(3, first.x + first.w + 6, first.y - 4),
-      ring(delta, { pad: 6, radius: 16 }), badge(4, delta.x + delta.w + 6, delta.y - 4),
-    ].join("\n"),
-    legend: [
-      { t: "自动存档", s: "退出也不丢进度" },
-      { t: "歇会儿或继续", s: "空格继续下一段" },
-      { t: "第一次就想起", s: "看真实掌握" },
-      { t: "记住的变多了", s: meta["rv-summary-sm"].facts?.knowDelta ? `预计记得 ${meta["rv-summary-sm"].facts.knowDelta}` : "预计记得涨了多少" },
-    ],
-    legendTop: 1250,
-  }));
-}
-
+pages.forEach(({ name, fn }, i) => {
+  const p = fn(i + 1);
+  posters.push(p.html());
+  manifest.push({ id: `p${i + 1}`, name });
+});
 writeSet(wd.dir, posters, manifest);
-console.log(`posters: ${posters.length} → ${wd.dir}/posters.html`);
-if (!fs.existsSync(wd.metaFile)) console.warn("meta.json 不存在：先跑 capture");
+console.log(`posters.html：${posters.length} 张 →`, wd.dir);

@@ -1,5 +1,8 @@
-// 功能引导图 · 拼版层：把真实截图裁切、放进手机/浏览器外框，再叠圈注、编号和说明。
-// 画布 1080×1440（3:4，小红书/朋友圈竖图）；所有坐标都是画布像素，绝对定位。
+// 功能引导图 · 拼版层（3:4，1080×1440，给手机看）
+//
+// 每一页：左上标题 + 说明；右上是电脑网页的整页缩略图，橙框标出放大的位置；
+// 下面是放大的局部（真实截图），说明标签直接贴在对应元素旁边、用线连到元素上。
+// 标签的位置在浏览器里按实际文字宽度摆（见 LAYOUT_JS），超出画布会自动收回。
 import fs from "node:fs";
 import path from "node:path";
 
@@ -8,8 +11,7 @@ export const H = 1440;
 
 export const C = {
   ink: "#0E2A1F", ink2: "#3D5249", muted: "#6F837A",
-  brand: "#0D9668", brandDark: "#087355", cyan: "#0891B2",
-  accent: "#FF6A3D", mark: "#FFE27A",
+  brand: "#0D9668", accent: "#FF6A3D",
 };
 
 export const union = (...bs) => {
@@ -17,34 +19,10 @@ export const union = (...bs) => {
   const r = Math.max(...bs.map((b) => b.x + b.w)), btm = Math.max(...bs.map((b) => b.y + b.h));
   return { x, y, w: r - x, h: btm - y };
 };
+export const rect = (x, y, w, h) => ({ x, y, w, h });
+const pad = (r, p) => ({ x: r.x - p, y: r.y - p, w: r.w + p * 2, h: r.h + p * 2 });
 
-/** 圈注：r 为画布坐标框。 */
-export const ring = (r, { pad = 8, radius = 16, z = 5, color = C.accent, width = 5 } = {}) =>
-  `<div class="ring" style="left:${r.x - pad}px;top:${r.y - pad}px;width:${r.w + pad * 2}px;height:${r.h + pad * 2}px;border-radius:${radius}px;border-width:${width}px;border-color:${color};z-index:${z}"></div>`;
-
-/** 编号圆点：(cx, cy) 为圆心。 */
-export const badge = (n, cx, cy, { z = 7, color = C.accent, size = 52 } = {}) =>
-  `<div class="badge" style="left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px;line-height:${size - 8}px;font-size:${Math.round(size * 0.54)}px;background:${color};z-index:${z}">${n}</div>`;
-
-/** 鼠标指针（点击示意），(x, y) 为指针尖。 */
-export const cursor = (x, y, { z = 8, size = 46 } = {}) =>
-  `<svg class="cursor" style="left:${x - 4}px;top:${y - 2}px;z-index:${z}" width="${size}" height="${size * 1.3}" viewBox="0 0 24 31"><path d="M2 2 L2 24 L8 18.5 L12.2 28 L16 26.3 L11.9 17 L19.5 17 Z" fill="#fff" stroke="#0E2A1F" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
-
-/** 两部手机之间的「→」。 */
-export const flipArrow = (cx, top) =>
-  `<div class="flip" style="left:${cx - 34}px;top:${top}px"><svg width="68" height="68" viewBox="0 0 68 68"><circle cx="34" cy="34" r="32" fill="#fff" stroke="${C.accent}" stroke-width="4"/><path d="M22 34h22M36 25l9 9-9 9" fill="none" stroke="${C.accent}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
-
-/** 截图上方的黑色小标签（「正面」「翻面后」）。 */
-export const cap = (text, x, y) => `<div class="cap" style="left:${x}px;top:${y}px">${text}</div>`;
-
-/** 右侧对齐的编号说明：(x, cy) 为第一行中线。 */
-export const side = (n, title, sub, x, cy, w) =>
-  `<div class="side" style="left:${x}px;top:${cy - 24}px;width:${w}px"><span class="cn">${n}</span><b>${title}</b>${sub ? `<small>${sub}</small>` : ""}</div>`;
-
-/**
- * 绑定一套图的截图元数据（capture 写出的 meta.json），返回取框与放图的工具。
- * shotsRel：posters.html 引用截图的相对路径。
- */
+/** 绑定一套图的截图元数据（capture 写出的 meta.json）。 */
 export function kit(meta, { shotsRel = "shots" } = {}) {
   const need = (shot) => {
     if (!meta[shot]) throw new Error(`meta.json 里没有截图 ${shot}，先跑 capture`);
@@ -63,135 +41,167 @@ export function kit(meta, { shotsRel = "shots" } = {}) {
     if (!list[0]) throw new Error(`box not found: ${shot} / ${text}`);
     return list[0];
   };
-  /**
-   * 放一张截图。crop 用截图视口的 CSS px（和 boxes 同一坐标系），s 为缩放。
-   * frame: card（圆角卡片）| browser（浏览器窗）| phone（手机外框）| bare
-   * 返回 { html, map(box)→画布坐标, rect }。
-   */
-  const fig = ({ shot, crop, x, y, s, frame = "card", radius = 22, url = "treepractice.com", z = 1, shadow = "0 24px 60px rgba(14,42,31,.16), 0 4px 14px rgba(14,42,31,.06)" }) => {
-    const m = need(shot);
-    const clip = m.clip;
-    const c = crop || clip;
-    const w = Math.round(c.w * s), h = Math.round(c.h * s);
-    const img = `<div style="position:relative;width:${w}px;height:${h}px;overflow:hidden;${frame === "phone" ? `border-radius:${radius}px;` : ""}">
-    <img src="${shotsRel}/${m.file}" style="position:absolute;left:${-(c.x - clip.x) * s}px;top:${-(c.y - clip.y) * s}px;width:${clip.w * s}px;height:${clip.h * s}px;max-width:none"></div>`;
-    let html, ox = 0, oy = 0, Wd = w, Ht = h;
-    if (frame === "browser") {
-      const bar = 54;
-      oy = bar; Ht = h + bar;
-      html = `<div class="fig" style="left:${x}px;top:${y}px;width:${w}px;border-radius:${radius}px;box-shadow:${shadow};background:#fff;overflow:hidden;z-index:${z};outline:1px solid rgba(14,42,31,.08)">
-      <div class="bbar"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i><span>${url}</span></div>${img}</div>`;
-    } else if (frame === "phone") {
-      const bez = 14;
-      ox = bez; oy = bez; Wd = w + bez * 2; Ht = h + bez * 2;
-      html = `<div class="fig phone" style="left:${x}px;top:${y}px;width:${Wd}px;height:${Ht}px;border-radius:${radius + bez}px;z-index:${z};box-shadow:${shadow}">
-      <div style="position:absolute;left:${bez}px;top:${bez}px">${img}</div></div>`;
-    } else if (frame === "bare") {
-      html = `<div class="fig" style="left:${x}px;top:${y}px;z-index:${z}">${img}</div>`;
-    } else {
-      html = `<div class="fig" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${radius}px;overflow:hidden;box-shadow:${shadow};z-index:${z};outline:1px solid rgba(14,42,31,.08)">${img}</div>`;
-    }
-    const map = (b) => ({ x: x + ox + (b.x - c.x) * s, y: y + oy + (b.y - c.y) * s, w: b.w * s, h: b.h * s });
-    return { html, map, rect: { x, y, w: Wd, h: Ht } };
-  };
-  return { box, boxByText, fig, meta };
+  return { meta, need, box, boxByText, shotsRel };
 }
 
 /**
- * 一张内页的外壳：顶部步骤胶囊 + 品牌 + 页码、大标题（<mark> 高亮）、副标题，
- * 底部可选编号说明条（legend）或小贴士（tip）。
+ * 一页引导图。用法：
+ *   const p = page(K, { n, total, shot, title, desc });
+ *   const z = p.zoom({ crop, y });                 // 放大区（可以有多条；shot 可换成同一页的另一张截图）
+ *   p.ring(z.map(box)); p.label({ ... });
+ *   p.footer("…"); p.html();
  */
-export function page({ n, total, step, title, sub, body, tip, legend, legendTop = 1236, brand = "TreePractice" }) {
-  const lg = legend ? `<div class="legend" style="top:${legendTop}px">${legend.map((l, i) => `<div class="li"><span class="cn">${l.n ?? i + 1}</span><b>${l.t}</b>${l.s ? `<small>${l.s}</small>` : ""}</div>`).join("")}</div>` : "";
-  return `<section class="poster" id="p${n}"><div class="dots"></div>
-  <div class="hd">
-    <div class="toprow"><div class="pill"><b>${step[0]}</b>${step[1]}</div>
-      <div class="brand"><span class="logo">T</span>${brand}<span class="pg"><b>${String(n).padStart(2, "0")}</b> / ${String(total).padStart(2, "0")}</span></div></div>
-    <h1>${title}</h1>
-    ${sub ? `<div class="sub">${sub}</div>` : ""}
-  </div>
-  ${body}
-  ${lg}
-  ${tip ? `<div class="ft"><div class="tip"><span class="ti">💡</span><div>${tip}</div></div></div>` : ""}
+export function page(K, { n, total, shot, title, desc }) {
+  const m = K.need(shot);
+  const parts = [];
+  const marks = [];
+  let foot = "";
+  const img = (crop, x, y, s, radius = 22, src = m) => {
+    const clip = src.clip;
+    const w = Math.round(crop.w * s), h = Math.round(crop.h * s);
+    return { w, h, html: `<div class="fig" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${radius}px">
+      <img src="${K.shotsRel}/${src.file}" style="position:absolute;left:${-(crop.x - clip.x) * s}px;top:${-(crop.y - clip.y) * s}px;width:${clip.w * s}px;height:${clip.h * s}px;max-width:none"></div>` };
+  };
+  const api = {
+    /**
+     * 放大一块。crop 用截图的 CSS px；默认横向占满（宽 1040）。
+     * dim：只亮这些框（截图坐标），其余压暗——焦点落在要讲的东西上。
+     */
+    zoom({ crop, y, s = null, x = null, dim = null, radius = 22, tag = true, shot: other = null }) {
+      const scale = s || 1040 / crop.w;
+      const w = Math.round(crop.w * scale);
+      const left = x == null ? Math.round((W - w) / 2) : x;
+      const f = img(crop, left, y, scale, radius, other ? K.need(other) : m);
+      const map = (b) => ({ x: left + (b.x - crop.x) * scale, y: y + (b.y - crop.y) * scale, w: b.w * scale, h: b.h * scale });
+      const screen = { x: left, y, w: f.w, h: f.h };
+      parts.push(f.html);
+      if (dim) parts.push(dimLayer(screen, dim.map((d) => ({ ...map(d), r: (d.r || 0) * scale })), radius));
+      if (tag) parts.push(`<div class="zoomtag" style="left:${left + 22}px;top:${y - 17}px">放大</div>`);
+      marks.push(crop);
+      return { map, screen, s: scale, crop, pt: (x0, y0) => ({ x: left + (x0 - crop.x) * scale, y: y + (y0 - crop.y) * scale }) };
+    },
+    /** 圈注（画布坐标）。返回加了内边距的圈，连线从圈边上出发。 */
+    ring(r, { p = 6, radius = 12, z = 6 } = {}) {
+      const q = pad(r, p);
+      parts.push(`<div class="ring" style="left:${q.x}px;top:${q.y}px;width:${q.w}px;height:${q.h}px;border-radius:${radius}px;z-index:${z}"></div>`);
+      return { ...q, cx: q.x + q.w / 2, cy: q.y + q.h / 2 };
+    },
+    /**
+     * 说明标签。side 决定 at 是标签的哪个点：left=右边缘中点（标签在左边），right=左边缘中点，
+     * above=下边缘中点，below=上边缘中点。from：连线起点（画布坐标点，可多个）；
+     * via：连线拐点（可选，用来绕开文字）。
+     */
+    label({ t, s, side = "right", at, from = [], via = [], align = null }) {
+      const froms = (Array.isArray(from) ? from : [from]).filter(Boolean);
+      const a = align || (side === "left" ? "right" : null); // 标签在元素左边时文字靠右，贴着连线那一侧
+      parts.push(`<div class="lab" data-side="${side}" data-ax="${at.x}" data-ay="${at.y}" data-from='${JSON.stringify(froms)}' data-via='${JSON.stringify(via)}'${a ? ` style="text-align:${a}"` : ""}>${t}${s ? `<small>${s}</small>` : ""}</div>`);
+    },
+    /** 额外标记缩略图上的位置（截图坐标）。 */
+    mark(crop) { marks.push(crop); },
+    raw(html) { parts.push(html); },
+    footer(html) { foot = html; },
+    html() {
+      const ts = 374 / m.clip.w;
+      const th = Math.round(m.clip.h * ts);
+      const thumb = img({ x: m.clip.x, y: m.clip.y, w: m.clip.w, h: m.clip.h }, 650, 104, ts, 10);
+      const markHtml = marks.map((c) => `<div class="mark" style="left:${650 + c.x * ts}px;top:${104 + c.y * ts}px;width:${c.w * ts}px;height:${c.h * ts}px"></div>`).join("");
+      return `<section class="pg" id="p${n}" style="height:${H}px">
+  <div class="brand"><span class="logo">T</span>TreePractice<span class="k">功能说明</span></div>
+  <div class="num"><b>${String(n).padStart(2, "0")}</b> / ${String(total).padStart(2, "0")}</div>
+  <h1>${title}</h1>
+  <div class="desc">${desc}</div>
+  ${thumb.html.replace('class="fig"', 'class="fig thumb"')}
+  ${markHtml}
+  <div class="cap" style="left:650px;top:${104 + th + 12}px">电脑网页全貌，橙框处放大在下面</div>
+  ${parts.join("\n  ")}
+  ${foot ? `<div class="foot">${foot}</div>` : ""}
+  <svg class="ln" width="${W}" height="${H}"></svg>
 </section>`;
+    },
+  };
+  return api;
 }
 
-/** 封面：深色底、大标题、底部三步。 */
-export function cover({ total, kicker, title, sub, body, steps, brand = "TreePractice" }) {
-  return `<section class="poster cover" id="p1"><div class="dots"></div>
-  <div class="hd">
-    <div class="toprow"><div class="brand"><span class="logo">T</span>${brand}<span class="pg"><b>01</b> / ${String(total).padStart(2, "0")}</span></div><div class="kicker">${kicker}</div></div>
-    <h1>${title}</h1>
-    <div class="sub">${sub}</div>
-  </div>
-  ${body}
-  <div class="steps">${steps.map((t, i) => `<div class="st"><span>${i + 1}</span>${t}</div>${i < steps.length - 1 ? "<i>→</i>" : ""}`).join("")}</div>
-</section>`;
+/** 截图上除 holes 以外压暗一点。 */
+function dimLayer(screen, holes, radius) {
+  const id = `m${Math.random().toString(36).slice(2, 8)}`;
+  return `<svg class="dim" style="left:${screen.x}px;top:${screen.y}px" width="${screen.w}" height="${screen.h}">
+  <defs><mask id="${id}"><rect width="${screen.w}" height="${screen.h}" fill="#fff"/>
+  ${holes.map((h) => `<rect x="${h.x - screen.x}" y="${h.y - screen.y}" width="${h.w}" height="${h.h}" rx="${h.r || 0}" fill="#000"/>`).join("")}
+  </mask></defs><rect width="${screen.w}" height="${screen.h}" rx="${radius}" fill="rgba(10,30,22,.32)" mask="url(#${id})"/></svg>`;
 }
+
+/** 浏览器里：按实际尺寸摆标签、收进画布、画连线。 */
+const LAYOUT_JS = `
+(async () => {
+  await document.fonts.ready;
+  const M = 22;
+  for (const pg of document.querySelectorAll(".pg")) {
+    const W = pg.clientWidth, H = pg.clientHeight;
+    const svg = pg.querySelector("svg.ln");
+    let paths = "";
+    for (const el of pg.querySelectorAll(".lab")) {
+      const w = el.offsetWidth, h = el.offsetHeight;
+      const ax = +el.dataset.ax, ay = +el.dataset.ay, side = el.dataset.side;
+      let x = side === "left" ? ax - w : side === "right" ? ax : ax - w / 2;
+      let y = side === "above" ? ay - h : side === "below" ? ay : ay - h / 2;
+      x = Math.max(M, Math.min(W - M - w, x));
+      y = Math.max(M, Math.min(H - M - h, y));
+      el.style.left = x + "px"; el.style.top = y + "px";
+      const via = JSON.parse(el.dataset.via || "[]");
+      for (const f of JSON.parse(el.dataset.from || "[]")) {
+        const last = via.length ? via[via.length - 1] : f;
+        const ex = Math.max(x, Math.min(x + w, last.x)), ey = Math.max(y, Math.min(y + h, last.y));
+        const pts = [f, ...via, { x: ex, y: ey }];
+        paths += '<path d="' + pts.map((p, i) => (i ? "L" : "M") + p.x + "," + p.y).join(" ") + '" fill="none" stroke="#FF6A3D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
+          + '<circle cx="' + f.x + '" cy="' + f.y + '" r="6.5" fill="#FF6A3D" stroke="#fff" stroke-width="2.5"/>';
+      }
+    }
+    svg.innerHTML = paths;
+    const foot = pg.querySelector(".foot");
+    if (foot) {
+      let low = 0;
+      for (const el of pg.querySelectorAll(".fig:not(.thumb), .lab, .ring")) low = Math.max(low, el.offsetTop + el.offsetHeight);
+      foot.style.top = Math.min(low + 34, H - 40 - foot.offsetHeight) + "px";
+    }
+  }
+  document.body.dataset.laidOut = "1";
+})();
+`;
 
 export const CSS = `
 *{box-sizing:border-box}
-body{margin:0;background:#cfd8d3;font-family:'Noto Sans SC',sans-serif;-webkit-font-smoothing:antialiased}
-.poster{position:relative;width:${W}px;height:${H}px;overflow:hidden;margin:0 0 40px;color:${C.ink};
-  background:radial-gradient(1200px 700px at 100% 0%, #DDF3EA 0%, rgba(221,243,234,0) 60%), linear-gradient(180deg,#F6FBF8 0%,#EAF6F0 100%)}
-.poster .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(13,150,104,.10) 1.6px, transparent 1.6px);background-size:28px 28px;mask-image:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 100%);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 100%)}
-.hd{position:absolute;left:64px;right:64px;top:54px;z-index:2}
-.toprow{display:flex;align-items:center;justify-content:space-between;height:50px}
-.pill{display:inline-flex;align-items:center;gap:12px;height:50px;padding:0 22px 0 8px;border-radius:999px;background:#fff;box-shadow:0 4px 14px rgba(14,42,31,.08);font-weight:700;font-size:24px;color:${C.ink2}}
-.pill b{display:inline-grid;place-items:center;height:36px;padding:0 14px;border-radius:999px;background:${C.brand};color:#fff;font:800 20px/1 'Plus Jakarta Sans',sans-serif;letter-spacing:.5px}
-.brand{display:flex;align-items:center;gap:12px;font:800 27px/1 'Plus Jakarta Sans',sans-serif;color:${C.ink}}
-.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(140deg,#0D9668,#0B7E8F);color:#fff;display:grid;place-items:center;font:800 23px/1 'Plus Jakarta Sans',sans-serif}
-.pg{font:700 22px/1 'Plus Jakarta Sans',sans-serif;color:#8aa096;letter-spacing:1px;margin-left:16px;padding-left:16px;border-left:2px solid #d5e2db}
-.pg b{color:${C.ink}}
-h1{margin:34px 0 0;font-size:68px;line-height:1.24;font-weight:900;letter-spacing:-1px}
-h1 mark{background:linear-gradient(transparent 60%, ${C.mark} 60%, ${C.mark} 92%, transparent 92%);color:inherit;padding:0 2px}
-.sub{margin-top:18px;font-size:30px;line-height:1.62;color:${C.ink2};font-weight:500}
-.sub q{quotes:"「" "」";color:${C.ink};font-weight:700}
-.fig{position:absolute}
-.fig img{display:block}
-.bbar{height:54px;display:flex;align-items:center;gap:10px;padding:0 20px;background:#F3F6F4;border-bottom:1px solid #E4EAE6}
-.bbar i{width:14px;height:14px;border-radius:50%;display:block}
-.bbar span{margin-left:14px;flex:1;height:32px;border-radius:9px;background:#fff;color:#7d8f86;font:600 18px/32px 'Plus Jakarta Sans',sans-serif;padding:0 16px;max-width:420px}
-.phone{background:#101a16}
-.ring{position:absolute;border-style:solid;box-shadow:0 0 0 6px rgba(255,106,61,.16)}
-.badge{position:absolute;border-radius:50%;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;text-align:center;border:4px solid #fff;box-shadow:0 6px 16px rgba(255,106,61,.35)}
-.cursor{position:absolute;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
-.side{position:absolute;z-index:6}
-.side .cn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:${C.accent};color:#fff;font:800 24px/1 'Plus Jakarta Sans',sans-serif;border:4px solid #fff;box-shadow:0 6px 14px rgba(255,106,61,.3);vertical-align:middle;margin-right:10px}
-.side b{font-size:29px;line-height:1.3;font-weight:800;color:${C.ink};vertical-align:middle}
-.side small{display:block;margin-top:8px;font-size:23px;line-height:1.5;font-weight:500;color:#5A6E64}
-.inset{position:absolute;left:64px;right:64px;background:#fff;border-radius:24px;box-shadow:0 12px 32px rgba(14,42,31,.09);border:1px solid rgba(14,42,31,.05);z-index:3}
-.flip{position:absolute;z-index:6}
-.flip svg{display:block}
-.cap{position:absolute;z-index:6;font-size:22px;font-weight:800;color:#fff;background:${C.ink};border-radius:999px;padding:6px 16px;letter-spacing:1px}
-.legend{position:absolute;left:64px;right:64px;display:flex;gap:16px;z-index:3}
-.li{flex:1;min-width:0;position:relative;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 28px rgba(14,42,31,.08);border:1px solid rgba(14,42,31,.05)}
-.li .cn{position:absolute;left:18px;top:-20px;width:44px;height:44px;border-radius:50%;background:${C.accent};color:#fff;font:800 24px/36px 'Plus Jakarta Sans',sans-serif;text-align:center;border:4px solid #fff;box-shadow:0 6px 14px rgba(255,106,61,.3)}
-.li b{display:block;margin-top:10px;font-size:28px;line-height:1.3;font-weight:800;color:${C.ink}}
-.li small{display:block;margin-top:6px;font-size:23px;line-height:1.45;font-weight:500;color:#5A6E64}
-.ft{position:absolute;left:64px;right:64px;bottom:46px;display:flex;align-items:center;gap:18px;z-index:3}
-.tip{flex:1;display:flex;align-items:flex-start;gap:16px;background:rgba(255,255,255,.86);border:1px solid rgba(14,42,31,.06);border-radius:22px;padding:18px 24px;font-size:26px;line-height:1.5;font-weight:500;color:${C.ink2};box-shadow:0 8px 24px rgba(14,42,31,.06)}
-.tip .ti{flex:none;width:40px;height:40px;border-radius:12px;background:#FFF3D6;display:grid;place-items:center;font-size:24px;margin-top:-1px}
-.tip b{color:${C.ink};font-weight:700}
-.cover{background:radial-gradient(900px 600px at 85% 8%, rgba(45,212,191,.22), rgba(45,212,191,0) 60%),linear-gradient(165deg,#0A3226 0%,#0D4535 52%,#0F5E4C 100%);color:#fff}
-.cover .dots{background-image:radial-gradient(rgba(255,255,255,.10) 1.6px, transparent 1.6px);mask-image:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.6) 100%);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.6) 100%)}
-.cover .brand{color:#fff}.cover .pg{color:#9fc7b6;border-left-color:rgba(255,255,255,.25)}.cover .pg b{color:#fff}
-.cover .logo{background:#fff;color:#0D7A5A}
-.cover .kicker{font-size:24px;font-weight:700;color:#CFEDE1;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:10px 20px}
-.cover h1{margin-top:58px;font-size:76px;line-height:1.26;letter-spacing:-1.5px;color:#fff}
-.cover h1 mark{background:linear-gradient(transparent 62%, rgba(255,214,90,.92) 62%, rgba(255,214,90,.92) 92%, transparent 92%);color:#fff}
-.cover .sub{color:#CDE6DB;font-size:31px;margin-top:26px}
-.steps{position:absolute;left:64px;right:64px;bottom:58px;display:flex;align-items:center;gap:14px;z-index:6}
-.steps .st{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;height:76px;border-radius:20px;background:#fff;color:${C.ink};font-size:27px;font-weight:800;box-shadow:0 14px 34px rgba(0,0,0,.25)}
-.steps .st span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:${C.accent};color:#fff;font:800 22px/1 'Plus Jakarta Sans',sans-serif}
-.steps i{font-style:normal;color:#9fd8c2;font-size:30px;font-weight:800}
+body{margin:0;background:#c9d3ce;font-family:'Noto Sans SC',sans-serif;-webkit-font-smoothing:antialiased}
+.pg{position:relative;width:${W}px;overflow:hidden;margin:0 0 40px;background:linear-gradient(180deg,#F4FAF7 0%,#E9F5EF 100%);color:${C.ink}}
+.brand{position:absolute;left:56px;top:46px;display:flex;align-items:center;gap:12px;font:800 26px/1 'Plus Jakarta Sans',sans-serif;color:${C.ink}}
+.logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(140deg,#0D9668,#0B7E8F);color:#fff;display:grid;place-items:center;font:800 22px/1 'Plus Jakarta Sans',sans-serif}
+.brand .k{margin-left:10px;padding-left:14px;border-left:2px solid #cfe0d7;font:600 22px/1 'Noto Sans SC',sans-serif;color:${C.muted}}
+.num{position:absolute;left:470px;top:56px;font:700 22px/1 'Plus Jakarta Sans',sans-serif;color:#8aa096;letter-spacing:1px}
+.num b{color:${C.ink}}
+h1{position:absolute;left:56px;top:110px;margin:0;font-size:62px;line-height:1.2;font-weight:900;letter-spacing:-.5px;white-space:nowrap}
+.desc{position:absolute;left:56px;top:196px;width:560px;font-size:29px;line-height:1.55;font-weight:500;color:${C.ink2}}
+.desc b,.desc q{color:${C.ink};font-weight:700}
+.desc q,.foot q,.lab q{quotes:"「" "」"}
+.fig{position:absolute;overflow:hidden;box-shadow:0 24px 60px rgba(14,42,31,.16),0 4px 14px rgba(14,42,31,.06);outline:1px solid rgba(14,42,31,.08)}
+.fig img{display:block;position:absolute}
+.thumb{box-shadow:0 10px 26px rgba(14,42,31,.14)}
+.mark{position:absolute;border:3px solid ${C.accent};border-radius:5px;box-shadow:0 0 0 3px rgba(255,106,61,.2);z-index:4}
+.cap{position:absolute;font-size:21px;font-weight:700;color:${C.muted};z-index:4}
+.dim{position:absolute;z-index:5;pointer-events:none}
+.ring{position:absolute;border:4px solid ${C.accent};box-shadow:0 0 0 5px rgba(255,106,61,.18)}
+.lab{position:absolute;z-index:8;background:${C.accent};color:#fff;border-radius:14px;padding:9px 16px 10px;font-size:27px;line-height:1.32;font-weight:800;box-shadow:0 8px 18px rgba(200,70,30,.28);white-space:nowrap}
+.lab small{display:block;font-size:22px;line-height:1.35;font-weight:600;color:#FFE9DF;margin-top:2px}
+svg.ln{position:absolute;left:0;top:0;z-index:7;pointer-events:none;overflow:visible}
+.foot{position:absolute;left:56px;right:56px;font-size:25px;line-height:1.55;color:#52665C;font-weight:500}
+.zoomtag{position:absolute;z-index:9;background:${C.ink};color:#fff;font-size:21px;font-weight:800;border-radius:999px;padding:6px 14px;letter-spacing:1px}
+.foot b{color:${C.ink};font-weight:700}
 `;
 
 /** 写出 posters.html + manifest.json（render.mjs 按 manifest 命名成图）。 */
 export function writeSet(dir, posters, manifest) {
   const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>${CSS}</style></head><body>${posters.join("\n")}</body></html>`;
+<style>${CSS}</style></head><body>${posters.join("\n")}<script>${LAYOUT_JS}</script></body></html>`;
   fs.writeFileSync(path.join(dir, "posters.html"), html);
   fs.writeFileSync(path.join(dir, "manifest.json"), JSON.stringify(manifest, null, 1));
 }

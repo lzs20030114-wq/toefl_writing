@@ -1,5 +1,5 @@
 // 把 .work/<set>/posters.html 里的每一张截成 PNG。
-//   node scripts/feature-guides/render.mjs vocab              → .work/vocab/out/01-封面.png …
+//   node scripts/feature-guides/render.mjs vocab              → .work/vocab/out/01-划词查词.png …
 //   node scripts/feature-guides/render.mjs vocab --dpr 2      → 2160×2880 高清版（文件名带 @2x）
 //   node scripts/feature-guides/render.mjs vocab --publish    → 同时拷进 docs/feature-guides/vocab/
 //   node scripts/feature-guides/render.mjs vocab p3 p4        → 只出这几张
@@ -28,8 +28,9 @@ const browser = await launch();
 const ctx = await newCtx(browser, { mobile: false, auth: false, now: null, width: 1200, height: 1600, dpr });
 const page = await ctx.newPage();
 await page.goto(pathToFileURL(path.join(wd.dir, "posters.html")).href, { waitUntil: "networkidle" });
-await page.evaluate(async () => { await document.fonts.ready; });
-await page.waitForTimeout(500);
+// 标签位置是页面脚本按实际文字宽度摆的（poster.mjs 的 LAYOUT_JS），摆完才截
+await page.waitForFunction(() => document.body.dataset.laidOut === "1", null, { timeout: 60000 });
+await page.waitForTimeout(300);
 for (const { id, name } of manifest) {
   if (only.length && !only.includes(id)) continue;
   const file = `${name}${dpr > 1 ? `@${dpr}x` : ""}.png`;
