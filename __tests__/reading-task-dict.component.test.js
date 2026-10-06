@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { CTWTask } from "../components/reading/CTWTask";
 import { RDLTask } from "../components/reading/RDLTask";
 import { loadBook } from "../lib/vocab/vocabStore";
@@ -28,17 +28,26 @@ function pick(target, offset = 2) {
 }
 
 test("CTW 作答时不查词，交卷后完整填空词收藏到正确原句", async () => {
-  render(<CTWTask item={{ id: "dict-ctw", passage: "The bank was crowded. The bank was quiet.", blanks: [{ position: 5, original_word: "bank", displayed_fragment: "ba" }] }} />);
+  localStorage.setItem("toefl-user-tier", "pro");
+  const onComplete = jest.fn();
+  const { container } = render(<CTWTask onComplete={onComplete} item={{ id: "dict-ctw", passage: "The bank was crowded. The bank was quiet.", blanks: [{ position: 5, original_word: "bank", displayed_fragment: "ba" }] }} />);
   pick(screen.getByText("bank"));
   expect(screen.queryByRole("button", { name: "收藏到单词本" })).toBeNull();
   fireEvent.change(screen.getByRole("textbox"), { target: { value: "xx" } });
   fireEvent.click(screen.getByRole("button", { name: "提交答案" }));
   expect(screen.queryByRole("textbox")).toBeNull();
-  pick(screen.getAllByText("bank")[1], 3);
+  fireEvent.mouseUp(container.querySelector('[data-dict-word="bank"]'), { clientX: 40, clientY: 25 });
   fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
   expect(loadBook().find(card => card.word === "bank")).toMatchObject({ source: "reading", sentence: "The bank was quiet." });
-  expect(screen.getByText("（baxx）").hasAttribute("data-no-dict")).toBe(true);
-  expect(screen.queryByText(/第\s*1\s*空/)).toBeNull();
+  expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ correct: 0, total: 1, results: [expect.objectContaining({ fullWord: "baxx", isCorrect: false })] }));
+  const card = container.querySelector("button[data-q]");
+  fireEvent.click(card);
+  expect(card.getAttribute("aria-expanded")).toBe("true");
+  expect(screen.getByText(/第\s*1\s*空/)).toBeTruthy();
+  expect(screen.getByText("baxx")).toBeTruthy();
+  expect(screen.getByRole("button", { name: /AI 讲解/ })).toBeTruthy();
+  fireEvent.click(card);
+  expect(card.getAttribute("aria-expanded")).toBe("false");
 });
 
 test("RDL 提交后选项只读且可收藏，语境不混入题干和相邻选项", async () => {
@@ -53,4 +62,24 @@ test("RDL 提交后选项只读且可收藏，语境不混入题干和相邻选�
   pick(screen.getByText("The bank was crowded"), 6);
   fireEvent.click(await screen.findByRole("button", { name: "收藏到单词本" }));
   expect(loadBook().find(card => card.word === "bank")).toMatchObject({ source: "reading", sentence: "The bank was crowded" });
+});
+
+
+test("CTW 超时报告与重做都复用完整回顾，重做重新计时", () => {
+  jest.useFakeTimers();
+  try {
+    const onComplete = jest.fn();
+    render(<CTWTask onComplete={onComplete} timeLimit={1} item={{ id: "timed-ctw", passage: "The bank was quiet.", blanks: [{ position: 1, original_word: "bank", displayed_fragment: "ba" }] }} />);
+    act(() => { jest.advanceTimersByTime(1000); });
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("逐题回顾")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "重新作答" }));
+    expect(screen.getByRole("textbox").value).toBe("");
+    expect(screen.queryByText("逐题回顾")).toBeNull();
+    act(() => { jest.advanceTimersByTime(1000); });
+    expect(onComplete).toHaveBeenCalledTimes(2);
+    expect(screen.getByText("逐题回顾")).toBeTruthy();
+  } finally {
+    jest.useRealTimers();
+  }
 });

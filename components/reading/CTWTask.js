@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { C, FONT, READING_FONT, Btn, PageShell, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
-import { WordLookupLayer } from "./WordLookupLayer";
+import { CtwReview } from "../realBank/review/CtwReview";
+import { buildReviewModel } from "../../lib/realBankReview";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 
 export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
@@ -16,6 +17,8 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return (item?.blanks || []).map(() => "");
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submission, setSubmission] = useState(null);
+  const [openBlank, setOpenBlank] = useState(null);
   const inputRefs = useRef([]);
 
   useDraftPersist(draftKey, answers, { enabled: !submitted });
@@ -93,6 +96,8 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
       return { blank, userAnswer: answers[i], fullWord: fragment + answers[i], isCorrect: userFull === expected };
     });
     const correct = results.filter(r => r.isCorrect).length;
+    setSubmission({ results, correct, total: item.blanks.length });
+    setOpenBlank(null);
     if (onComplete) onComplete({ results, correct, total: item.blanks.length });
   }
 
@@ -103,31 +108,12 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return userFull === expected;
   }).length : 0;
 
-  function renderReviewPassage() {
-    let position = 0;
-    const byPosition = new Map(item.blanks.map((blank, i) => [blank.position, { blank, i }]));
-    return item.passage.split(/(?<=[.!?])\s+/).map((sentence, si) => (
-      <span key={si} data-sentence-index={si} data-sentence-text={sentence}>
-        {sentence.split(/\s+/).map((word, wi) => {
-          const entry = byPosition.get(position++);
-          const isCorrect = entry && (entry.blank.displayed_fragment + answers[entry.i]).toLowerCase().replace(/[^a-z]/g, "") === entry.blank.original_word.toLowerCase().replace(/[^a-z]/g, "");
-          if (!entry) return <span key={wi}>{wi > 0 ? " " : ""}{word}</span>;
-          const { lead, tail } = splitBlankToken(word, entry.blank.original_word);
-          const userAnswer = answers[entry.i].trim()
-            ? entry.blank.displayed_fragment + answers[entry.i]
-            : "未作答";
-          return (
-            <span key={wi} style={{ fontWeight: 700, color: isCorrect ? "#059669" : "#DC2626" }}>
-              {wi > 0 ? " " : ""}{lead}{entry.blank.original_word}
-              {!isCorrect && <span data-no-dict>（{userAnswer}）</span>}
-              {tail}
-            </span>
-          );
-        })}
-        {" "}
-      </span>
-    ));
-  }
+  // Use the same review model and UI as the practice history immediately after submission.
+  const reviewSession = submission ? {
+    type: "reading",
+    details: { subtype: "ctw", itemId: item.id, passage: item.passage, blanks: item.blanks, ...submission },
+  } : null;
+  const reviewModel = reviewSession ? buildReviewModel(reviewSession, "ctw") : null;
 
   // Build display text with inline inputs
   function renderPassage() {
@@ -239,28 +225,36 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
         onExit={onExit}
       />
       <PageShell narrow>
-        {/* Instructions */}
-        <div style={{ fontSize: 13, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
-          阅读文章，根据上下文补全每个空缺单词。
-          <span style={{ fontWeight: 700, fontFamily: "'Courier New', monospace", color: "#475569", background: "#E2E8F0", borderRadius: 3, padding: "0 3px", margin: "0 2px" }}>灰底字母</span>
-          是已给出的开头，你只需填写后面下划线处缺失的字母（填满会自动跳到下一个空，也可用 Tab / Shift+Tab 或鼠标在空格间移动）。
-        </div>
-
-        {/* Topic badge */}
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: accent.soft, border: `1px solid ${accent.color}25`, fontSize: 12, color: accent.color, fontWeight: 600, marginBottom: 16 }}>
-          {item.topic} / {item.subtopic}
-        </div>
-
-        {/* Passage with blanks */}
-        <SurfaceCard style={{ padding: "24px 28px", marginBottom: 20, lineHeight: 2.2 }}>
-          {submitted ? (
-            <WordLookupLayer passage={item.passage} source="reading" style={{ minWidth: 0, fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>
-              {renderReviewPassage()}
-            </WordLookupLayer>
-          ) : (
-            <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>{renderPassage()}</div>
-          )}
-        </SurfaceCard>
+        {!submitted ? (
+          <>
+            <div style={{ fontSize: 13, color: C.t2, marginBottom: 16, lineHeight: 1.6 }}>
+              阅读文章，根据上下文补全每个空缺单词。
+              <span style={{ fontWeight: 700, fontFamily: "'Courier New', monospace", color: "#475569", background: "#E2E8F0", borderRadius: 3, padding: "0 3px", margin: "0 2px" }}>灰底字母</span>
+              是已给出的开头，你只需填写后面下划线处缺失的字母（填满会自动跳到下一个空，也可用 Tab / Shift+Tab 或鼠标在空格间移动）。
+            </div>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 999, background: accent.soft, border: `1px solid ${accent.color}25`, fontSize: 12, color: accent.color, fontWeight: 600, marginBottom: 16 }}>
+              {item.topic} / {item.subtopic}
+            </div>
+            <SurfaceCard style={{ padding: "24px 28px", marginBottom: 20, lineHeight: 2.2 }}>
+              <div style={{ fontFamily: READING_FONT, fontSize: 15, color: C.t1, lineHeight: 2.2 }}>{renderPassage()}</div>
+            </SurfaceCard>
+          </>
+        ) : (
+          <SurfaceCard style={{ padding: "20px 24px", marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.t2, marginBottom: 14 }}>逐题回顾</div>
+            <CtwReview
+              session={reviewSession}
+              model={reviewModel}
+              vid={`ctw-result-${item.id}`}
+              ctx={{
+                pass: () => true,
+                isOpen: (i) => openBlank === i,
+                toggle: (i) => setOpenBlank((prev) => prev === i ? null : i),
+                emptyText: "暂无填空记录",
+              }}
+            />
+          </SurfaceCard>
+        )}
 
         {/* Submit / Result */}
         {!submitted ? (
@@ -284,12 +278,20 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {correct} / {item.blanks.length}
             </div>
             <div style={{ fontSize: 14, color: C.t2, marginBottom: 16 }}>
-              {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！括号内为你的错误答案，请对照原文回顾。" : "继续加油！括号内为你的错误答案，请对照原文回顾。"}
+              {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！点填空卡片查看逐空解析，点原文单词查释义。" : "继续加油！点填空卡片查看逐空解析，点原文单词查释义。"}
             </div>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
               <Btn onClick={onExit} variant="secondary">返回</Btn>
               <Btn
-                onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}
+                onClick={() => {
+                  autoSubmittedRef.current = false;
+                  setTimeLeft(timeLimit > 0 ? timeLimit : 0);
+                  setElapsed(0);
+                  setAnswers(item.blanks.map(() => ""));
+                  setSubmission(null);
+                  setOpenBlank(null);
+                  setSubmitted(false);
+                }}
                 style={{ background: accent.color, borderColor: accent.color }}
               >
                 重新作答
