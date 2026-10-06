@@ -21,6 +21,14 @@ export const union = (...bs) => {
 };
 export const rect = (x, y, w, h) => ({ x, y, w, h });
 const pad = (r, p) => ({ x: r.x - p, y: r.y - p, w: r.w + p * 2, h: r.h + p * 2 });
+/** 截图坐标里把框往外扩，可带圆角（给 zoom 的 dim 亮区用）。 */
+export const grow = (r, p, radius = 0) => ({ ...pad(r, p), r: radius });
+/** ring() 返回的圈四条边的中点：标签连线从这里出发。 */
+export const L = (r) => ({ x: r.x, y: r.cy });
+export const R = (r) => ({ x: r.x + r.w, y: r.cy });
+export const T = (r) => ({ x: r.cx, y: r.y });
+export const B = (r) => ({ x: r.cx, y: r.y + r.h });
+export const bottom = (r) => r.y + r.h;
 
 /** 绑定一套图的截图元数据（capture 写出的 meta.json）。 */
 export function kit(meta, { shotsRel = "shots" } = {}) {
@@ -196,6 +204,21 @@ svg.ln{position:absolute;left:0;top:0;z-index:7;pointer-events:none;overflow:vis
 .zoomtag{position:absolute;z-index:9;background:${C.ink};color:#fff;font-size:21px;font-weight:800;border-radius:999px;padding:6px 14px;letter-spacing:1px}
 .foot b{color:${C.ink};font-weight:700}
 `;
+
+/**
+ * 一套图按顺序编号写出：pages = [[文件名, (n, total) => page(...)], ...]。
+ * 文件名就是成图名（render 出 <文件名>.png），习惯写成「01-查词和收藏」。
+ */
+export function writePages(dir, pages) {
+  const posters = [];
+  const manifest = [];
+  pages.forEach(([name, fn], i) => {
+    posters.push(fn(i + 1, pages.length).html());
+    manifest.push({ id: `p${i + 1}`, name });
+  });
+  writeSet(dir, posters, manifest);
+  return manifest;
+}
 
 /** 写出 posters.html + manifest.json（render.mjs 按 manifest 命名成图）。 */
 export function writeSet(dir, posters, manifest) {

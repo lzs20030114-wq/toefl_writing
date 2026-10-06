@@ -9,29 +9,19 @@
 //
 //   node scripts/feature-guides/vocab/build.mjs && node scripts/feature-guides/render.mjs vocab
 import { workDir } from "../lib/browser.mjs";
-import { kit, page, union, rect, writeSet } from "../lib/poster.mjs";
+import { kit, page, union, rect, grow, L, R, T, B, bottom, writePages } from "../lib/poster.mjs";
 
 const wd = workDir("vocab");
 const K = kit(wd.readMeta());
-const TOTAL = 5;
-
-/** 截图坐标里把框往外扩（给压暗层留的亮区用）。 */
-const grow = (r, p, radius = 0) => ({ x: r.x - p, y: r.y - p, w: r.w + p * 2, h: r.h + p * 2, r: radius });
-/** 圈的四条边中点：连线从这里出发。 */
-const L = (r) => ({ x: r.x, y: r.cy });
-const R = (r) => ({ x: r.x + r.w, y: r.cy });
-const T = (r) => ({ x: r.cx, y: r.y });
-const B = (r) => ({ x: r.cx, y: r.y + r.h });
-const bottom = (r) => r.y + r.h;
 
 const pages = [];
-const def = (name, fn) => pages.push({ name, fn });
+const def = (name, fn) => pages.push([name, fn]);
 
-def("01-查词和收藏", (n) => {
+def("01-查词和收藏", (n, total) => {
   const shot = "dl-unsaved";
   const m = K.need(shot);
   const bt = (t, o) => K.boxByText(shot, t, o);
-  const p = page(K, { n, total: TOTAL, shot, title: "查词和收藏", desc: "阅读、听力交卷后，在解析页里点一下原文中的英文单词，就会弹出词典；点一个意思，就收进单词本。" });
+  const p = page(K, { n, total, shot, title: "查词和收藏", desc: "阅读、听力交卷后，在解析页里点一下原文中的英文单词，就会弹出词典；点一个意思，就收进单词本。" });
   // 左边从原文栏起，右边到弹窗为止
   const z = p.zoom({ crop: { x: 150, y: 397, w: 556, h: 428 }, y: 400, dim: [{ ...m.pop, r: 12 }, grow(m.word, 3, 4)] });
   const RX = z.map(m.pop).x - 22; // 左侧标签的右边缘：弹窗左边那片压暗的原文
@@ -51,10 +41,10 @@ def("01-查词和收藏", (n) => {
   return p;
 });
 
-def("02-打开单词本", (n) => {
+def("02-打开单词本", (n, total) => {
   const shot = "dv-home";
   const b = (k) => K.box(shot, k);
-  const p = page(K, { n, total: TOTAL, shot, title: "打开单词本", desc: "首页左栏点「单词本」。最上面是今天要复习的词，分「阅读复习」和「听力复习」两组，点按钮开始。" });
+  const p = page(K, { n, total, shot, title: "打开单词本", desc: "首页左栏点「单词本」。最上面是今天要复习的词，分「阅读复习」和「听力复习」两组，点按钮开始。" });
   const zn = p.zoom({ crop: { x: 40, y: 330, w: 222, h: 100 }, y: 400, x: 20, s: 2, dim: [grow(b("nav"), 3, 10)] });
   const nav = p.ring(zn.map(b("nav")), { p: 4, radius: 12 });
   p.label({ t: "首页左栏的「单词本」", s: "数字＝今天还要复习几个词", side: "right", at: { x: zn.screen.x + zn.screen.w + 36, y: nav.cy }, from: R(nav) });
@@ -70,10 +60,10 @@ def("02-打开单词本", (n) => {
   return p;
 });
 
-def("03-阅读复习", (n) => {
+def("03-阅读复习", (n, total) => {
   const shot = "dv-back"; // 翻面后的卡：原句、答案、忘了/记得都在一屏
   const b = (k) => K.box(shot, k);
-  const p = page(K, { n, total: TOTAL, shot, title: "阅读复习", desc: "先看原句里高亮的词，在心里说出它的意思，再按空格翻面对答案，照实选「忘了」或「记得」。" });
+  const p = page(K, { n, total, shot, title: "阅读复习", desc: "先看原句里高亮的词，在心里说出它的意思，再按空格翻面对答案，照实选「忘了」或「记得」。" });
   const z = p.zoom({ crop: { x: 330, y: 60, w: 780, h: 585 }, y: 400 });
   const hl = p.ring(z.map(b("hl")), { p: 5, radius: 8 });
   const chip = z.map(b("chip"));
@@ -90,10 +80,10 @@ def("03-阅读复习", (n) => {
   return p;
 });
 
-def("04-拼写", (n) => {
+def("04-拼写", (n, total) => {
   const shot = "dv-spell";
   const b = (k) => K.box(shot, k);
-  const p = page(K, { n, total: TOTAL, shot, title: "拼写", desc: "要会写的词，选「记得」之后还要拼一遍：看中文意思，把英文直接填进原句的空里。" });
+  const p = page(K, { n, total, shot, title: "拼写", desc: "要会写的词，选「记得」之后还要拼一遍：看中文意思，把英文直接填进原句的空里。" });
   const z = p.zoom({ crop: { x: 330, y: 140, w: 780, h: 370 }, y: 400 });
   const pr = b("prompt");
   const prompt = p.ring(z.map(rect(pr.x, pr.y, 134, pr.h)), { p: 5, radius: 8 });
@@ -120,10 +110,10 @@ def("04-拼写", (n) => {
   return p;
 });
 
-def("05-听力复习", (n) => {
+def("05-听力复习", (n, total) => {
   const shot = "dv-listen";
   const b = (k) => K.box(shot, k);
-  const p = page(K, { n, total: TOTAL, shot, title: "听力复习", desc: "收藏时选了「听力词」的词，复习时只听不看：先听发音想意思，听完再翻面看答案。" });
+  const p = page(K, { n, total, shot, title: "听力复习", desc: "收藏时选了「听力词」的词，复习时只听不看：先听发音想意思，听完再翻面看答案。" });
   const z = p.zoom({ crop: { x: 330, y: 60, w: 780, h: 455 }, y: 400 });
   const play = p.ring(z.map(b("play")), { p: 5, radius: 12 });
   p.label({ t: "听发音：可以多听几遍", side: "right", at: { x: play.x + play.w + 28, y: play.cy }, from: R(play) });
@@ -138,12 +128,5 @@ def("05-听力复习", (n) => {
   return p;
 });
 
-const posters = [];
-const manifest = [];
-pages.forEach(({ name, fn }, i) => {
-  const p = fn(i + 1);
-  posters.push(p.html());
-  manifest.push({ id: `p${i + 1}`, name });
-});
-writeSet(wd.dir, posters, manifest);
-console.log(`posters.html：${posters.length} 张 →`, wd.dir);
+writePages(wd.dir, pages);
+console.log(`posters.html：${pages.length} 张 →`, wd.dir);

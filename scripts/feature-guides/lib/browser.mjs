@@ -89,11 +89,12 @@ async function serveFont(route) {
 }
 
 /**
- * 一个浏览器上下文 = 一台设备。
+ * 一个浏览器上下文 = 一台设备。默认电脑版 1440×900（引导图一律用电脑页面截图），mobile: true 才是手机。
  * auth：写入登录态（Pro）；seed：首次加载前写进 localStorage 的键值（单词本数据等）。
- * ctx.onApi(route, req, url)：返回 true 表示这个接口已自行处理（例如 /api/ai）。
+ * ctx.onApi(route, req, url)：返回 true 表示这个接口已自行处理（例如 /api/ai）；没处理的 /api/* 一律回 { ok: true }。
+ * ctx.apiLog：页面调过的接口清单——页面空白/报错时先看它，缺哪个接口就在 onApi 里补数据。
  */
-export async function newCtx(browser, { mobile = true, auth = true, now = NOW, seed = null, width, height, dpr } = {}) {
+export async function newCtx(browser, { mobile = false, auth = true, now = NOW, seed = null, width, height, dpr } = {}) {
   const ctx = await browser.newContext({
     viewport: mobile ? { width: width || 390, height: height || 844 } : { width: width || 1440, height: height || 900 },
     deviceScaleFactor: dpr || 3,

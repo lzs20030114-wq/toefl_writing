@@ -3,6 +3,7 @@
 //   node scripts/feature-guides/render.mjs vocab --dpr 2      → 2160×2880 高清版（文件名带 @2x）
 //   node scripts/feature-guides/render.mjs vocab --publish    → 同时拷进 docs/feature-guides/vocab/
 //   node scripts/feature-guides/render.mjs vocab p3 p4        → 只出这几张
+// 整套出完会另拼一张总览 .work/<set>/sheet.png（4 列小图，自查用，不发布）。
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -37,5 +38,17 @@ for (const { id, name } of manifest) {
   await page.locator(`#${id}`).screenshot({ path: path.join(outDir, file) });
   if (flag("publish")) fs.copyFileSync(path.join(outDir, file), path.join(pubDir, file));
   console.log("rendered", id, "→", file);
+}
+// 整套出完顺手拼一张总览（.work/<set>/sheet.png，不发布）：一眼看整套是否统一、哪张标签挤了
+if (!only.length) {
+  const files = manifest.map(({ name }) => `${name}${dpr > 1 ? `@${dpr}x` : ""}.png`);
+  const cols = Math.min(4, files.length);
+  const html = path.join(wd.dir, "_sheet.html");
+  fs.writeFileSync(html, `<!doctype html><meta charset="utf-8"><body style="margin:0;background:#8a948f;display:grid;grid-template-columns:repeat(${cols},360px);gap:8px;padding:8px;width:max-content">${files.map((f) => `<img src="out/${encodeURI(f)}" style="width:360px;display:block">`).join("")}</body>`);
+  const sheet = await ctx.newPage();
+  await sheet.setViewportSize({ width: cols * 368 + 8, height: 600 });
+  await sheet.goto(pathToFileURL(html).href, { waitUntil: "load" });
+  await sheet.screenshot({ path: path.join(wd.dir, "sheet.png"), fullPage: true });
+  console.log("总览 →", path.relative(ROOT, path.join(wd.dir, "sheet.png")));
 }
 await browser.close();

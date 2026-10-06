@@ -386,6 +386,7 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
 | 换二维码 | /swap-qrcode（首选指引后台 /admin-wechat-qr 拖图，无需部署） |
 | 成本多少 / 精算 / 预算 | /cost |
 | 模拟真实用户 / 过一遍题型 / 线上看一眼 | /smoke |
+| 出介绍图 / 功能介绍图 / 引导图 / 做几张图讲X怎么用 | /feature-guide（真实电脑页面截图 + 原位标注的 3:4 竖图，一套 4–6 张） |
 | 查bug / 复查一下改动 | /code-review |
 | 验证某个修复真的生效 | /verify |
 | review方案 / 自审 / 严肃严密地审 | 对抗式自审：列攻击面逐条自检后给结论 |
