@@ -107,9 +107,9 @@ function BsBody({ brief, explainKey, ai }) {
 /**
  * 一题一张的错题卡。actions 全部可选：
  *   onToggleStar / onRemove / onRestore / drillHref —— 错题本列表用
- *   resultTag —— 练错题报告用（「这次答对 / 仍然错」）
+ *   resultTag / extra —— 练错题结算页用（「和上次错得一样」标签 / 上一次的答案）
  */
-export function MistakeItemCard({ card, items, ai, onToggleStar, onRemove, onRestore, drillHref, resultTag, showMeta = true }) {
+export function MistakeItemCard({ card, items, ai, onToggleStar, onRemove, onRestore, drillHref, resultTag, extra, showMeta = true }) {
   const subject = SUBJECT_META[card.subject] || SUBJECT_META.bs;
   const sub = SUBTYPE_META[card.subtype];
   const explainKey = `mn-${card.key}`;
@@ -156,6 +156,7 @@ export function MistakeItemCard({ card, items, ai, onToggleStar, onRemove, onRes
           {onRestore && <IconBtn onClick={() => onRestore(card)} title="放回错题本">放回</IconBtn>}
         </div>
       </div>
+      {extra}
       {card.subject === "bs" ? (
         <BsBody brief={card.brief || {}} explainKey={explainKey} ai={ai} />
       ) : (

@@ -257,7 +257,8 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 - **练错题不写练习历史、不写已练集合**（BS `persistSession/recordGroupDone=false`，不调 saveSess/addDoneIds），否则每日任务/进度图/错题本自己会重复计数
 - 填词按篇整篇重做（CTWTask 没有预填已对空的能力，空按 position 定位不能筛）；阅读/听力选择按篇只问错过的题，item 换 `${id}__drill` 防草稿串
 - 拼句只存了 qid 没存词块，重做时在 /mistake-drill 里按 qid 动态回查题库并**校验题面**（qid 曾被复用）；首页与错题本组件不许 import 题库
-- 任务组件串组靠可选 `nextLabel`（结果页退出键文案），不传时行为不变；答题页不加任何额外外壳
+- **拼句先核对原题再抽题**：进选题页时就按 qid（题面校验）→「题面+答案」回查全部拼句错题，找不到的不进抽题范围，所以「抽 10 题」就是 10 道能做的（2026-10-06 曾先抽后查、开做时悄悄少题）
+- 各组交卷时 `onComplete` 一到就切走，**不出各科自己的练习结算页**（Band/答对题数对一组自选错题没意义）；组间是衔接卡，最后是练错题结算页：主数字「纠正了 x/n」，没拿下的按「和上次错得一样 / 换了个错法 / 没作答」分（`classifyDrill`，拼句只剩预填词算没作答），可「再练没拿下的」、纠正的勾选移出。答题页不加任何额外外壳，任务组件零改动
 - 「AI 问题分析」的 `await callAI(` 必须留在 components/MistakeNotebook.js（`ai-empty-response.regression.test.js` 扫这个路径）
 
 ### 7. 个人题库 (User Bank, Pro 专属, v1.11.0 全 12 题型)

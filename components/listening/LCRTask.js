@@ -59,8 +59,7 @@ function LCRSpeakerResult({ item }) {
  * Flow: listen → choose → (next question) → ... → results page
  * All answers submitted at once after the last question.
  */
-// nextLabel：同 CTWTask —— 被「练错题」串起来时结果页的退出键文案；不传时行为不变。
-export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit, isPractice = false, nextLabel = null }) {
+export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit, isPractice = false }) {
   const items = batchItems || (item ? [item] : []);
   const isBatch = items.length > 1;
 
@@ -394,7 +393,7 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
 
           {/* Action buttons */}
           <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24, marginBottom: 40 }}>
-            <Btn onClick={onExit} variant={nextLabel ? "primary" : "secondary"}>{nextLabel || "Exit"}</Btn>
+            <Btn onClick={onExit} variant="secondary">Exit</Btn>
             <Btn onClick={() => {
               setQIndex(0);
               setPhase("listen");

@@ -5,7 +5,7 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { mergeEntries, emptyPool, loadPool, syncPoolFromSessions } from "../lib/mistakes/pool";
 import { extractMistakeEntries } from "../lib/mistakes/extract";
-import { buildStages, buildUnits, filterUnits, pickUnits, scoreStage, summarizeDrill } from "../lib/mistakes/drill";
+import { buildStages, buildUnits, classifyDrill, filterUnits, isSameMistake, pickUnits, restrictUnits, scoreStage, summarizeDrill } from "../lib/mistakes/drill";
 
 const SESSIONS = [
   {
@@ -86,10 +86,13 @@ describe("drill 纯函数", () => {
     expect(pickUnits(units, { count: 3, seed: 7 }).map((u) => u.id)).toEqual(a);
   });
 
-  test("拆组：拼句一组、应答一组、每篇一组；篇章组只带错过的题并换新 id", () => {
+  test("拆组：拼句一组（用回查好的原题）、应答一组、每篇一组；篇章组只带错过的题并换新 id", () => {
     const pool = makePool();
-    const stages = buildStages(buildUnits(pool), pool);
+    const bsQuestions = { "bs:q1": { id: "q1", prompt: "P1" }, "bs:q3": { id: "new_q3", prompt: "P3" } };
+    const stages = buildStages(buildUnits(pool, { blockedKeys: ["bs:q2"] }), pool, { bsQuestions });
     expect(stages.map((s) => s.kind)).toEqual(["bs", "lcr", "rdl", "ctw"]);
+    expect(stages[0].questions.map((q) => q.id)).toEqual(["q1", "new_q3"]);
+    expect(stages[0].keyByQid).toEqual({ q1: "bs:q1", new_q3: "bs:q3" });
     const lcr = stages[1];
     expect(lcr.items.map((i) => i.id)).toEqual(["l1__drill", "l2__drill"]);
     const ap = stages[2];
@@ -101,20 +104,55 @@ describe("drill 纯函数", () => {
     expect(ctw.keyByIndex).toEqual({ 0: "ctw:c1#b0" });
   });
 
-  test("判分只回报错过的那几题 / 空", () => {
+  test("回查不到原题的拼句（blockedKeys）不进抽题范围 —— 抽 N 题就给 N 道能做的", () => {
+    const units = buildUnits(makePool(), { blockedKeys: new Set(["bs:q2"]) });
+    const bs = filterUnits(units, { types: ["bs"] });
+    expect(bs.map((u) => u.id)).toEqual(["bs:q1", "bs:q3"]);
+    expect(pickUnits(units.filter((u) => u.type === "bs" || u.type === "lcr"), { count: 4 }).reduce((n, u) => n + u.size, 0)).toBe(4);
+  });
+
+  test("判分只回报错过的那几题 / 空，并带上这一次的作答", () => {
     const pool = makePool();
-    const stages = buildStages(buildUnits(pool), pool);
+    const stages = buildStages(buildUnits(pool), pool, { bsQuestions: { "bs:q1": { id: "q1" }, "bs:q2": { id: "q2", prefilled: ["dorms"] } } });
     const [bs, lcr, ap, ctw] = stages;
-    expect(scoreStage({ ...bs, keyByQid: { q1: "bs:q1", q2: "bs:q2" } }, { details: [{ qid: "q1", isCorrect: true }, { qid: "q2", isCorrect: false }, { qid: "zz", isCorrect: true }] }))
-      .toEqual([{ key: "bs:q1", correct: true }, { key: "bs:q2", correct: false }]);
-    expect(scoreStage(lcr, { results: [{ itemId: "l1__drill", isCorrect: true }, { itemId: "l2__drill", isCorrect: false }] }))
-      .toEqual([{ key: "lcr:l1", correct: true }, { key: "lcr:l2", correct: false }]);
-    expect(scoreStage(ap, { results: [{ isCorrect: false }, { isCorrect: true }] }))
-      .toEqual([{ key: "ap:ap1#q0", correct: false }, { key: "ap:ap1#q2", correct: true }]);
-    expect(scoreStage(ctw, { results: [{ isCorrect: true }, { isCorrect: false }] }))
-      .toEqual([{ key: "ctw:c1#b0", correct: true }]);
+    expect(scoreStage(bs, { details: [{ qid: "q1", isCorrect: true, userAnswer: "A one." }, { qid: "q2", isCorrect: false, userAnswer: "(no answer)" }, { qid: "zz", isCorrect: true }] }))
+      .toEqual([{ key: "bs:q1", correct: true, answer: "A one.", selected: null }, { key: "bs:q2", correct: false, answer: "", selected: null }]);
+    // 只剩预填词 = 一块没放 = 没作答
+    expect(scoreStage(bs, { details: [{ qid: "q2", isCorrect: false, userAnswer: "Dorms." }] })[0].answer).toBe("");
+    expect(scoreStage(lcr, { results: [{ itemId: "l1__drill", selected: "A", isCorrect: true }, { itemId: "l2__drill", selected: "A", isCorrect: false }] }))
+      .toEqual([{ key: "lcr:l1", correct: true, answer: "A. a", selected: "A" }, { key: "lcr:l2", correct: false, answer: "A. a", selected: "A" }]);
+    expect(scoreStage(ap, { results: [{ selected: "C", isCorrect: false }, { selected: "D", isCorrect: true }] }).map(({ key, correct, selected }) => ({ key, correct, selected })))
+      .toEqual([{ key: "ap:ap1#q0", correct: false, selected: "C" }, { key: "ap:ap1#q2", correct: true, selected: "D" }]);
+    expect(scoreStage(ctw, { results: [{ userAnswer: "me", fullWord: "Some", isCorrect: true }, { isCorrect: false }] }))
+      .toEqual([{ key: "ctw:c1#b0", correct: true, answer: "Some", selected: null }]);
     const s = summarizeDrill([{ key: "bs:q1", correct: true }, { key: "lcr:l2", correct: false }], pool.cards);
     expect(s).toEqual({ total: 2, correct: 1, byType: { bs: { total: 1, correct: 1 }, lcr: { total: 1, correct: 0 } } });
+  });
+
+  test("结算口径：纠正 / 没拿下 / 和上次错得一样", () => {
+    const pool = makePool();
+    // lcr:l1 上次选 B；这次又选 B → 同样的错。lcr:l2 上次选 A，这次选 B → 换了个错法。bs:q1 拼得和上次一样
+    expect(isSameMistake(pool.cards["lcr:l1"], { correct: false, selected: "B" })).toBe(true);
+    expect(isSameMistake(pool.cards["lcr:l2"], { correct: false, selected: "B" })).toBe(false);
+    expect(isSameMistake(pool.cards["bs:q1"], { correct: false, answer: " X " })).toBe(true);
+    expect(isSameMistake(pool.cards["bs:q1"], { correct: false, answer: "" })).toBe(false);
+    const c = classifyDrill([
+      { key: "lcr:l2", correct: false, selected: "B" },
+      { key: "lcr:l1", correct: false, selected: "B" },
+      { key: "bs:q2", correct: true },
+    ], pool.cards);
+    expect(c.fixed.map((x) => x.card.key)).toEqual(["bs:q2"]);
+    expect(c.still.map((x) => x.card.key)).toEqual(["lcr:l1", "lcr:l2"]); // 同样的错排前面
+    expect(c.sameMistake).toBe(1);
+    // 没作答单独算，不算「换了个错法」
+    const u = classifyDrill([{ key: "bs:q1", correct: false, answer: "" }, { key: "lcr:l2", correct: false, selected: null }], pool.cards);
+    expect(u).toMatchObject({ unanswered: 2, sameMistake: 0, changed: 0 });
+  });
+
+  test("「再练没拿下的」只留那几题：篇章单位收窄", () => {
+    const units = restrictUnits(buildUnits(makePool()), ["ap:ap1#q2", "lcr:l1"]);
+    expect(units.map((u) => [u.id, u.size])).toEqual([["lcr:l1", 1], ["ap:ap1", 1]]);
+    expect(units[1].cardKeys).toEqual(["ap:ap1#q2"]);
   });
 
   test("原文被配额精简的篇不能重做", () => {
@@ -148,6 +186,7 @@ jest.mock("../data/buildSentence/questions.json", () => ({
   question_sets: [{ set_id: 1, questions: [
     { id: "q1", prompt: "P1", answer: "A one." },
     { id: "q2", prompt: "CHANGED PROMPT", answer: "A two." },
+    { id: "q9", prompt: "P3", answer: "A three." },
   ] }],
 }), { virtual: false });
 
@@ -165,13 +204,13 @@ function mockMakeStub(label, makeResult) {
 jest.mock("../components/buildSentence/BuildSentenceTask", () => ({
   BuildSentenceTask: (props) => {
     global.__bsProps = props;
-    const Stub = mockMakeStub("拼句", (p) => ({ details: p.questions.map((q) => ({ qid: q.id, isCorrect: q.id === "q1" })) }));
+    const Stub = mockMakeStub("拼句", (p) => ({ details: p.questions.map((q) => ({ qid: q.id, isCorrect: q.id === "q1", userAnswer: "my try" })) }));
     return <Stub {...props} />;
   },
 }));
 jest.mock("../components/listening/LCRTask", () => ({
   LCRTask: (props) => {
-    const Stub = mockMakeStub("应答", (p) => ({ results: p.batchItems.map((i) => ({ itemId: i.id, isCorrect: false })) }));
+    const Stub = mockMakeStub("应答", (p) => ({ results: p.batchItems.map((i) => ({ itemId: i.id, selected: "B", isCorrect: false })) }));
     return <Stub {...props} />;
   },
 }));
@@ -198,43 +237,44 @@ describe("MistakeDrill 组件流程", () => {
     window.scrollTo = jest.fn();
   });
 
-  test("选全部 → 依次做完四组 → 报告页数字对、回写 lastDrill、不写练习历史", async () => {
+  test("拼句先核对原题再抽 → 依次做完四组（组间是衔接卡，不出各科练习结算页）→ 练错题结算页", async () => {
     const MistakeDrill = require("../components/mistakes/MistakeDrill").default;
     const { saveSess } = require("../lib/sessionStore");
     render(<MistakeDrill />);
     await screen.findByText("练哪些题型");
+    // q2 题面对不上、按「题面+答案」也找不到 → 下线，不进抽题；q3 的 id 变了但按内容找回（q9）
+    expect(screen.getByText(/另有 1 道拼句的原题已从题库下线/)).toBeTruthy();
     fireEvent.click(screen.getByText("全部"));
-    // 最近错的优先 → 篇章组按 填词(10-04)、阅读(10-03) 排
     fireEvent.change(screen.getByLabelText("抽题顺序"), { target: { value: "recent" } });
+    expect(screen.getByText(/^7 题 · 约/)).toBeTruthy();
     await act(async () => { fireEvent.click(screen.getByTestId("drill-start")); });
 
-    // 第 1 组：拼句（q2 题面对不上 → 当已下线；q3 不在题库 → 下线；只剩 q1）
     await screen.findByTestId("stub-拼句");
-    expect(global.__bsProps.questions.map((q) => q.id)).toEqual(["q1"]);
+    expect(global.__bsProps.questions.map((q) => q.id)).toEqual(["q1", "q9"]);
     expect(global.__bsProps.persistSession).toBe(false);
     expect(global.__bsProps.recordGroupDone).toBe(false);
     fireEvent.click(screen.getByText("提交拼句"));
-    fireEvent.click(screen.getByText("下一组（2/4）→"));
+    // 交卷即离开任务组件（不出它自己的 Band 结算页），进衔接卡
+    expect(screen.queryByTestId("stub-拼句")).toBeNull();
+    expect(screen.getByText(/纠正了 1 \/ 2/)).toBeTruthy();
+    fireEvent.click(screen.getByTestId("drill-continue"));
 
     await screen.findByTestId("stub-应答");
     fireEvent.click(screen.getByText("提交应答"));
-    fireEvent.click(screen.getByText("下一组（3/4）→"));
-
+    fireEvent.click(screen.getByTestId("drill-continue"));
     await screen.findByTestId("stub-填词");
     fireEvent.click(screen.getByText("提交填词"));
-    fireEvent.click(screen.getByText("下一组（4/4）→"));
-
+    fireEvent.click(screen.getByTestId("drill-continue"));
     await screen.findByTestId("stub-阅读");
     fireEvent.click(screen.getByText("提交阅读"));
-    fireEvent.click(screen.getByText("查看统计 →"));
 
     await screen.findByTestId("drill-report");
-    // 拼句 1 题对、应答 2 题错、阅读 2 题对、填词 1 空对 = 6 题对 4
-    expect(screen.getByText("题数").previousSibling.textContent).toBe("6");
-    expect(screen.getByText("答对").previousSibling.textContent).toBe("4");
-    expect(screen.getByText("67%")).toBeTruthy();
-    expect(screen.getByText(/有 2 道拼句原题已经下线/)).toBeTruthy();
-    expect(screen.getByText("仍然错的 2 题")).toBeTruthy();
+    // 纠正：bs:q1、ctw b0、ap q0/q2 = 4；没拿下：bs:q3、lcr l1/l2 = 3；其中 lcr:l1 两次都选 B
+    expect(screen.getByTestId("drill-fixed").textContent).toBe("4 / 7");
+    expect(screen.getByText("没拿下的 3 题")).toBeTruthy();
+    expect(screen.getAllByText("和上次错得一样")).toHaveLength(1);
+    expect(screen.getAllByText("换了个错法")).toHaveLength(2);
+    expect(screen.queryByText("Band")).toBeNull();
     expect(saveSess).not.toHaveBeenCalled();
 
     const pool = loadPool();
@@ -242,10 +282,14 @@ describe("MistakeDrill 组件流程", () => {
     expect(pool.cards["lcr:l1"].lastDrill.correct).toBe(false);
     expect(pool.drills).toHaveLength(1);
 
-    // 报告页：把做对的移出错题本
     fireEvent.click(screen.getByText(/把勾选的 4 题移出错题本/));
     expect(loadPool().cards["ap:ap1#q0"].deletedAt).toBeTruthy();
     expect(loadPool().cards["lcr:l1"].deletedAt).toBeNull();
+
+    // 再练没拿下的：只出这 3 题
+    fireEvent.click(screen.getByTestId("drill-retry-still"));
+    await screen.findByTestId("stub-拼句");
+    expect(global.__bsProps.questions.map((q) => q.id)).toEqual(["q9"]);
   });
 
   test("「只练这题」直达：只抽那一题；免费用户不能练阅读 / 听力", async () => {

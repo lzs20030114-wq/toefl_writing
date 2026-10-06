@@ -104,8 +104,6 @@ export function BuildSentenceTask({
   onTimerChange = null,
   timeLimitSeconds = 410,
   practiceMode = PRACTICE_MODE.STANDARD,
-  // 被「练错题」串起来时结果页退出键的文案（不传时沿用「返回 / 返回练习」）
-  nextLabel = null,
 }) {
   const {
     qs,
@@ -448,7 +446,7 @@ export function BuildSentenceTask({
             </div>
           ))}
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-            <Btn onClick={() => onExit({ completed: true, results })} variant={nextLabel ? "primary" : "secondary"}>{nextLabel || (embedded ? "返回" : "返回练习")}</Btn>
+            <Btn onClick={() => onExit({ completed: true, results })} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </div>
         </PageShell>
       </div>

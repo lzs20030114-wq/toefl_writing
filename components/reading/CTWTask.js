@@ -6,8 +6,7 @@ import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib
 import { WordLookupLayer } from "./WordLookupLayer";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 
-// nextLabel：被别的流程串起来用（如错题本「练错题」）时，结果页的退出键改成「下一组 / 查看统计」并突出显示；不传时行为不变。
-export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, nextLabel = null }) {
+export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false }) {
   const draftKey = buildDraftKey("ctw", item?.id || "");
   const [answers, setAnswers] = useState(() => {
     const restored = loadDraft(draftKey);
@@ -288,7 +287,7 @@ export function CTWTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {correct === item.blanks.length ? "全部正确！" : correct >= 7 ? "不错！括号内为你的错误答案，请对照原文回顾。" : "继续加油！括号内为你的错误答案，请对照原文回顾。"}
             </div>
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-              <Btn onClick={onExit} variant={nextLabel ? "primary" : "secondary"}>{nextLabel || "返回"}</Btn>
+              <Btn onClick={onExit} variant="secondary">返回</Btn>
               <Btn
                 onClick={() => { setAnswers(item.blanks.map(() => "")); setSubmitted(false); }}
                 style={{ background: accent.color, borderColor: accent.color }}
