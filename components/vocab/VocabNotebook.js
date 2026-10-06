@@ -12,10 +12,11 @@ import { SORT_OPTIONS, cardStage, estimateMinutes, isLeech, reviewCard, sortCard
 import { humanizeDef } from "../../lib/dict/core";
 import { clearReviewSave, readReviewSave, resumableQueue, writeReviewSave } from "../../lib/vocab/reviewSave";
 import RootExplorer from "./RootExplorer";
+import MeaningExplorer from "./MeaningExplorer";
 import DailyQuotaCard from "./DailyQuotaCard";
 import VocabImportDialog from "./VocabImportDialog";
 import VocabExportDialog from "./VocabExportDialog";
-import { getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { getVocabAccountKey, loadBook } from "../../lib/vocab/vocabStore";
 import styles from "./VocabNotebook.module.css";
 
 const PAGE_SIZE = 60;
@@ -247,6 +248,16 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     setQueue({ cards: next, account: accountKey, mode, resume: resumed?.save || null, run: Date.now() });
   };
   const exitReview = () => { setQueue(null); setSaveTick((tick) => tick + 1); };
+  const studyGroup = ({ words, mode = "reading", account, query } = {}) => {
+    const requested = [...new Set((Array.isArray(words) ? words : []).map((word) => String(word || "").trim().toLowerCase()).filter(Boolean))];
+    if (!ready || account !== accountKey || accountKey !== getVocabAccountKey() || !["reading", "listening"].includes(mode)) {
+      return { started: false, count: 0, skipped: requested.length };
+    }
+    const current = new Map(loadBook().filter((card) => !card.deletedAt && !card.suspended).map((card) => [card.word, card]));
+    const next = requested.filter((word) => current.has(word)).map((word) => reviewCard(current.get(word), mode));
+    if (next.length) setQueue({ cards: next, account: accountKey, mode, group: String(query || "中文找词"), run: Date.now(), resume: null });
+    return { started: next.length > 0, count: next.length, skipped: requested.length - next.length };
+  };
   const pickDist = (target) => {
     setListMode("all");
     setFilter(target);
@@ -276,8 +287,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         onUndo={undo ? (word) => undo(word, "listening", account) : undefined}
         onSuspend={suspend ? (word) => (getVocabAccountKey() === account ? suspend(word, true) : null) : undefined}
         onEditDefinition={editDef ? (word, text) => (getVocabAccountKey() === account ? editDef(word, text) : null) : undefined}
-        onCheckpoint={(state) => writeReviewSave(account, "listening", state)}
-        onFinish={() => clearReviewSave(account, "listening")}
+        onCheckpoint={queue.group ? undefined : (state) => writeReviewSave(account, "listening", state)}
+        onFinish={queue.group ? undefined : () => clearReviewSave(account, "listening")}
         summaryExtras={{
           // 听力练完，下一步是还没做完的阅读复习；有存档就接着存档做
           nextTask: { label: "阅读复习", todo: num(reading.todo), minutes: estimateMinutes(num(reading.todo)) },
@@ -293,8 +304,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         onSuspend={suspend ? (word) => (getVocabAccountKey() === account ? suspend(word, true) : null) : undefined}
         onEditDefinition={editDef ? (word, text) => (getVocabAccountKey() === account ? editDef(word, text) : null) : undefined}
         onSetProductive={(word, on) => getVocabAccountKey() === account ? setProductive(word, on) : null}
-        onCheckpoint={(state) => writeReviewSave(account, "reading", state)}
-        onFinish={() => clearReviewSave(account, "reading")}
+        onCheckpoint={queue.group ? undefined : (state) => writeReviewSave(account, "reading", state)}
+        onFinish={queue.group ? undefined : () => clearReviewSave(account, "reading")}
         summaryExtras={{
           nextTask: { label: "听力复习", todo: num(listening.todo), minutes: estimateMinutes(num(listening.todo)) },
           tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried } : null,
@@ -393,6 +404,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         </section>
 
         <RootExplorer />
+        <MeaningExplorer accountKey={accountKey} ready={ready} onStudyGroup={studyGroup} />
 
         <section ref={libraryRef} className={`${styles.card} ${selecting ? styles.selecting : ""}`} aria-labelledby="vn-library-title">
           <div className={styles.libraryHead}><h2 id="vn-library-title">我的词库 <span>{ready ? num(stats?.total) : "—"}</span></h2>
