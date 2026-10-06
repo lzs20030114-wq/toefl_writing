@@ -5,7 +5,6 @@
 
 ## 需用户决策
 
-- [中] 错题本改版待拍板（2026-10-06 只读调研，方案 docs/mistake-notebook-redesign-2026-10-06.md）：建议顺序 = 建「错题账本」(lib/mistakes，一题一条、去重、已掌握/收藏、可云同步) → 入口照单词本搬进左侧栏并首页内嵌 → 新路由 /mistake-review 直喂现成任务组件做抽错题组题（不改练习页、不写练习历史）→ 第二期云同步。§6 七个拍板问题都附了建议值；实施前先出 3 张概览页静态对比图。现状要点：错题只从最近 200 条 session 现算、模考错题漏收、无去重无状态、侧栏无入口、手机看不到阅读/听力错题。
 - [高] 真题自动录入上线前置（2026-09-09 实施完成未推送，契约 docs/realbank-ingest-contract.md）：①跑迁移 `scripts/sql/real-bank-ingest-jobs.sql` 并登记；②GitHub secrets 五个（DEEPSEEK_API_KEY / DASHSCOPE_API_KEY / OPENAI_API_KEY / NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY），其中 OPENAI_API_KEY 的 GitHub secret 从未验证过；③Vercel 核对 GH_PAT(actions:write+contents:write)/GH_OWNER/GH_REPO；④中间产物桶 `real_bank_artifacts` 已由本机 `artifacts_sync.mjs --push` 灌满（清单 structured 数必须 ≥ 81，否则云端全量重建会清库——worker 另有 >20% 缩水拒推闸）；⑤云端首航用后台「手动 rebuild」（不碰源文件）验证 pip/ffmpeg/push 权限，再拖第一套真卷；⑥Supabase Storage 逼近 1GB 免费档，源文件桶 done 后自动删，仍建议先清 382MB 孤儿音频。
 - [中] `/api/ai` 线上成本护栏两处（出处：2026-09-05 DeepSeek 9/1 账单 ¥11.97 溯源，见 docs/deepseek-usage-ledger.md）：
   ① 生产库缺 `increment_daily_usage` RPC——Supabase edge 日志 8/31 实证 `POST /rest/v1/rpc/increment_daily_usage → 404`，`scripts/sql/daily-usage-quota.sql` 台账状态「历史迁移,状态未知」即从未跑过；计量退化到 `fallbackIncrementUsage` 读-改-写，并发可击穿免费 3 次/天。走 /sql-migrate 补跑并登记。
@@ -162,6 +161,7 @@
 
 ## 可派工
 
+- [中] 错题本改版（2026-10-06 已拍板，方案 docs/mistake-notebook-redesign-2026-10-06.md v2，含对抗式自审）：口径 = 不做掌握判定/今日队列，只要「选类型·选数量 → 集中做题 → 统计报告」。分期：M0 静态对比图（概览/选题/报告）→ M1 入口搬进左侧栏并首页内嵌（删中栏三张卡与 sections.js 死代码 TOOLS，修 MobileHomePage.js:390）→ M2 瘦错题池 lib/mistakes（一题一条去重、含模考、每次打开从 sessions 派生合并、收藏改走池）→ M3 /mistake-drill 直喂现成任务组件 + 报告页（CTW/RDL/LCR 加可选 onNext；不写练习历史）→ M4 云同步可选。M1 与 M2 可并行派工。
 - [中] **听力逐句点播（点原文一句 → 只放音频那一句）**，契约 docs/listening-sentence-timings.md。
   2026-09-18 代码侧已做完：①产线随 `audio_url` 写 `sentence_timings`；②存量对齐工具
   `scripts/align-sentence-timings.mjs`（fetch → asr_words.py 词级转写 → 对齐写回）；③前端逐句可点
