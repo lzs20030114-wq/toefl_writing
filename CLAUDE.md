@@ -39,7 +39,7 @@ app/                          # Next.js App Router
 │                             #   (lib/realBankHistory 辨认真题记录; 概览=摘要卡+科目条+日分组速览, 详情=主从布局, 逐题回顾见 components/realBank/review/)
 ├── my-bank/                  # 个人题库 (Pro 专属)
 ├── terms/                    # 条款页
-├── admin*/                   # 后台页 (codes/users/questions/staging/analytics/
+├── admin*/                   # 后台页 (codes/users/content/analytics/
 │                             #   retention/report/voice-vote/surveys/referrals/wechat-qr/…)
 └── api/                      # 见下方「API」
     ├── ai/                   # DeepSeek 写作评分 (限流 45/min + origin 校验)
@@ -170,7 +170,7 @@ UpgradeModal → XorPay(扫码/webhook) 或 Afdian(跳转 ifdian.net/webhook)
 
 【后备/手动】.github/workflows/nightly-bank-refresh.yml 是手动 fallback(仅当 routine 挂了);
   nightly-quality-monitor.yml 是唯一还在自动 cron 的 workflow(质量监控, 非生成)。
-  admin-generate* 页 + generate-*.yml 仅剩人工触发后备，不再是常规产线。
+  generate-*.yml 保留为 GitHub Actions 人工触发后备；旧网页出题与暂存审核入口已移除。
 ```
 
 ### 5. 质量校准 (Calibration)
@@ -278,7 +278,7 @@ my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
 - `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
 - `analytics/track` 事件 · `feedback/` 反馈
-- `admin/` 后台：questions/staging/generate-*/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals/wechat-qr(群二维码上传)
+- `admin/` 后台：content/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals/wechat-qr(群二维码上传)
 
 ## Database (Supabase)
 

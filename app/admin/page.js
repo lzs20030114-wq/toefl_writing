@@ -24,9 +24,6 @@ const QUICK_LINKS = [
     label: "内容",
     items: [
       { href: "/admin-content", label: "题库总览", hint: "所有题型的浏览" },
-      { href: "/admin-questions", label: "写作题库编辑", hint: "学术 / 邮件 / BS CRUD" },
-      { href: "/admin-generate", label: "AI 自动生成", hint: "发起生成任务" },
-      { href: "/admin-staging", label: "暂存库审核", hint: "审核/部署生成结果" },
       { href: "/admin-real-bank-ingest", label: "真题录入", hint: "拖一套源进来自动上线" },
     ],
   },
@@ -47,7 +44,6 @@ const QUICK_LINKS = [
       { href: "/admin-surveys", label: "新手问卷", hint: "首套题完成后体验调研" },
       { href: "/admin-voice-vote", label: "语音升级投票", hint: "听力语音 A/B 投票结果" },
       { href: "/admin-api-errors", label: "API 错误" },
-      { href: "/admin-bs-errors", label: "BS 错题" },
     ],
   },
 ];
@@ -91,15 +87,14 @@ export default function AdminHomePage() {
     setLoading(true);
     setError("");
     try {
-      const [users, codes, content, staging, apiErrors, feedback] = await Promise.all([
+      const [users, codes, content, apiErrors, feedback] = await Promise.all([
         callAdminApi("/api/admin/users").catch(() => null),
         callAdminApi("/api/admin/codes").catch(() => null),
         callAdminApi("/api/admin/content").catch(() => null),
-        callAdminApi("/api/admin/content/staging").catch(() => null),
         callAdminApi("/api/admin/api-errors?limit=5").catch(() => null),
         callAdminApi("/api/admin/feedback?limit=200").catch(() => null),
       ]);
-      setData({ users, codes, content, staging, apiErrors, feedback });
+      setData({ users, codes, content, apiErrors, feedback });
       setUpdatedAt(new Date());
     } catch (e) {
       setError(e.message);
@@ -116,7 +111,6 @@ export default function AdminHomePage() {
   const u = data?.users;
   const codeStats = data?.codes?.stats;
   const content = data?.content;
-  const staging = data?.staging;
   const apiErrors = data?.apiErrors;
   const feedback = data?.feedback;
 
@@ -142,8 +136,6 @@ export default function AdminHomePage() {
     return { banks, questions, groups: content.groups.length };
   }, [content]);
 
-  const stagingCount = staging?.items?.length ?? 0;
-  const recentStaging = (staging?.items || []).slice(0, 4);
   const recentApiErrors = Array.isArray(apiErrors?.rows) ? apiErrors.rows.slice(0, 4) : [];
 
   return (
@@ -171,7 +163,7 @@ export default function AdminHomePage() {
         {/* Top row: key business metrics */}
         <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 16 }}>
           {loading ? (
-            Array.from({ length: 7 }, (_, i) => (
+            Array.from({ length: 6 }, (_, i) => (
               <div key={i} style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 10, padding: 18 }}>
                 <Skeleton height={32} width={60} />
                 <div style={{ marginTop: 8 }}><Skeleton height={14} width={80} /></div>
@@ -184,7 +176,6 @@ export default function AdminHomePage() {
               <StatCard value={u?.tiers?.pro} label="Pro 用户" color="#16a34a" sub={u?.tiers ? `${u.tiers.free} 免费` : undefined} />
               <StatCard value={codeStats?.available} label="可用登录码" color={codeStats?.available > 5 ? C.blue : "#d97706"} sub={codeStats ? `已发放 ${codeStats.issued}` : undefined} />
               <StatCard value={contentTotals?.questions ?? "--"} label="题库总题数" color={C.nav} sub={contentTotals ? `${contentTotals.banks} 个题库` : undefined} />
-              <StatCard value={stagingCount} label="暂存待审核" color={stagingCount > 0 ? "#d97706" : C.t2} />
               <StatCard
                 value={unreadFeedbackOverflow ? "200+" : unreadFeedbackCount}
                 label="未处理反馈"
@@ -257,7 +248,6 @@ export default function AdminHomePage() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
                 {content.groups.map((g) => {
                   const gTotal = g.items.reduce((s, it) => s + (it.count || 0), 0);
-                  const gStaging = g.items.reduce((s, it) => s + (it.stagingCount || 0), 0);
                   return (
                     <div key={g.key} style={{ padding: "10px 12px", border: "1px solid " + C.bdr, borderRadius: 8, background: "#fafbfc" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
@@ -268,18 +258,10 @@ export default function AdminHomePage() {
                         <div key={item.key} style={{ display: "flex", justifyContent: "space-between", fontSize: 12, padding: "2px 0", color: C.t2 }}>
                           <span>{item.label}</span>
                           <span>
-                            {item.count}{item.stagingCount > 0 ? <span style={{ color: "#d97706" }}> + {item.stagingCount}</span> : ""}
-                            {!item.hasGeneration && <span style={{ color: "#94a3b8", marginLeft: 4 }}>· 只读</span>}
+                            {item.count}
                           </span>
                         </div>
                       ))}
-                      {gStaging > 0 && (
-                        <div style={{ marginTop: 6, fontSize: 11 }}>
-                          <Link href={`/admin-staging`} style={{ color: "#d97706", textDecoration: "none", fontWeight: 600 }}>
-                            {gStaging} 项暂存待审核 &rarr;
-                          </Link>
-                        </div>
-                      )}
                     </div>
                   );
                 })}
@@ -316,24 +298,8 @@ export default function AdminHomePage() {
           </SectionCard>
         </div>
 
-        {/* Staging + errors */}
-        <div className="adm-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-          <SectionCard title="最近暂存" href="/admin-staging">
-            {loading ? <Skeleton height={100} /> : recentStaging.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {recentStaging.map((s) => (
-                  <div key={s.file} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, padding: "4px 0" }}>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center", minWidth: 0 }}>
-                      <Badge color="#d97706">{s.typeKey}</Badge>
-                      <span style={{ fontFamily: "monospace", fontSize: 11, color: C.t1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.file}</span>
-                    </div>
-                    <span style={{ color: C.t3, fontSize: 11 }}>{relativeTime(s.modifiedAt)}</span>
-                  </div>
-                ))}
-              </div>
-            ) : <div style={{ color: C.t3, fontSize: 13 }}>暂无待审核</div>}
-          </SectionCard>
-
+        {/* Recent errors */}
+        <div style={{ marginBottom: 14 }}>
           <SectionCard title="最近 API 错误" href="/admin-api-errors">
             {loading ? <Skeleton height={100} /> : recentApiErrors.length > 0 ? (
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>

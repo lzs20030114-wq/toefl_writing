@@ -5,7 +5,7 @@
  * /api/admin/generate-bs 写了 `./data/**\/*` + `./scripts/**\/*`，5 个函数各背 55 MB 同一份题库，
  * 一次部署函数包合计 464 MB（收紧后 191 MB）。这里卡住两件事：
  *   1. include 里不能出现整目录通配（只允许具体文件或某个 bank/staging 子目录的 *.json）；
- *   2. 用 readdirSync 列目录的两条后台内容路由，不能再用 join(process.cwd(), …) 拼路径——
+ *   2. 用 readdirSync 读取题库的后台内容路由，不能再用 join(process.cwd(), …) 拼路径——
  *      追踪器会把整个项目根目录拖进函数包（字体、截图、测试夹具…90 MB）。
  */
 const fs = require("fs");
@@ -45,7 +45,7 @@ describe("next.config.js outputFileTracingIncludes", () => {
 });
 
 describe("后台内容路由不再用 join(process.cwd(), …) 触发整目录追踪", () => {
-  const routes = ["app/api/admin/content/route.js", "app/api/admin/content/staging/route.js"];
+  const routes = ["app/api/admin/content/route.js"];
   test.each(routes)("%s", (rel) => {
     const src = fs.readFileSync(path.join(ROOT, rel), "utf8");
     const offending = src

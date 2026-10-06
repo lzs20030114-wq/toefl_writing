@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from "fs";
+import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import { isAdminAuthorized } from "../../../../lib/adminAuth";
 import { CONTENT_GROUPS, getContentMeta } from "../../../../lib/admin/contentRegistry";
@@ -27,22 +27,6 @@ function extractItems(raw, shape) {
     return flat;
   }
   return [];
-}
-
-function countStagingFiles(stagingDir, prefix) {
-  try {
-    const abs = resolve(stagingDir);
-    const entries = readdirSync(abs);
-    let count = 0;
-    for (const name of entries) {
-      if (!name.endsWith(".json")) continue;
-      if (prefix && !name.startsWith(prefix)) continue;
-      count++;
-    }
-    return count;
-  } catch {
-    return 0;
-  }
 }
 
 function bankFileInfo(relPath) {
@@ -81,8 +65,6 @@ export async function GET(request) {
           label: meta.label,
           bankPath: meta.bankPath,
           count: items.length,
-          stagingCount: countStagingFiles(meta.stagingDir, meta.stagingPrefix),
-          hasGeneration: Boolean(meta.hasGeneration),
           bankExists: Boolean(raw),
           bankSize: info?.size ?? null,
           modifiedAt: info?.modifiedAt ?? null,

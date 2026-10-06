@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
   Card,
@@ -10,7 +9,6 @@ import {
   Skeleton,
   ShimmerCSS,
   EmptyState,
-  Tabs,
   Badge,
   Button,
   InlineAlert,
@@ -165,17 +163,13 @@ export default function AdminContentPage() {
     if (!summary?.groups) return null;
     let banks = 0;
     let questions = 0;
-    let staged = 0;
-    let readyGen = 0;
     for (const g of summary.groups) {
       for (const item of g.items) {
         banks++;
         questions += item.count || 0;
-        staged += item.stagingCount || 0;
-        if (item.hasGeneration) readyGen++;
       }
     }
-    return { banks, questions, staged, readyGen };
+    return { banks, questions };
   }, [summary]);
 
   const activeMeta = useMemo(() => {
@@ -192,7 +186,7 @@ export default function AdminContentPage() {
         <ShimmerCSS />
         <PageHeader
           title="题库内容管理"
-          subtitle="浏览所有题型的正式题库与生成中暂存，数据存储于仓库 /data 目录"
+          subtitle="浏览所有题型的正式题库，数据存储于仓库 /data 目录"
           right={<Button variant="secondary" onClick={loadSummary} disabled={summaryLoading}>
             {summaryLoading ? "加载中…" : "刷新"}
           </Button>}
@@ -202,8 +196,6 @@ export default function AdminContentPage() {
         <div className="adm-stats" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 20 }}>
           <StatCard value={totals?.banks ?? "--"} label="题库数量" />
           <StatCard value={totals?.questions ?? "--"} label="题目总数" color={C.blue} />
-          <StatCard value={totals?.staged ?? "--"} label="待审核暂存" color={totals?.staged > 0 ? "#d97706" : C.t2} />
-          <StatCard value={totals?.readyGen ?? "--"} label="已接通 AI 生成" color="#16a34a" />
         </div>
 
         {summaryError && <div style={{ marginBottom: 16 }}><InlineAlert tone="error">{summaryError}</InlineAlert></div>}
@@ -238,10 +230,10 @@ export default function AdminContentPage() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: C.t1 }}>{item.label}</div>
                       <div style={{ fontSize: 11, color: C.t3, marginTop: 2 }}>
-                        {item.count} 题{item.stagingCount > 0 ? ` · 暂存 ${item.stagingCount}` : ""}
+                        {item.count} 题
                       </div>
                     </div>
-                    {item.hasGeneration ? <Badge color="#16a34a">AI</Badge> : <Badge color="#94a3b8">只读</Badge>}
+                    <Badge color="#94a3b8">只读</Badge>
                   </button>
                 );
               })}
@@ -260,16 +252,6 @@ export default function AdminContentPage() {
             }
             right={
               <div style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 11, color: C.t3 }}>
-                {activeMeta.hasGeneration && (
-                  <Link href={`/admin-generate`} style={{ color: C.blue, fontSize: 12, textDecoration: "none", fontWeight: 600 }}>
-                    生成 &rarr;
-                  </Link>
-                )}
-                {activeMeta.stagingCount > 0 && (
-                  <Link href={`/admin-staging?type=${activeMeta.key}`} style={{ color: "#d97706", fontSize: 12, textDecoration: "none", fontWeight: 600 }}>
-                    暂存 {activeMeta.stagingCount} 项 &rarr;
-                  </Link>
-                )}
                 <span>{formatBytes(activeMeta.bankSize)} · 更新 {fmtDate(activeMeta.modifiedAt)}</span>
               </div>
             }
@@ -292,7 +274,7 @@ export default function AdminContentPage() {
                   {selectedItem ? (
                     <ItemDetail item={selectedItem} meta={bankData?.meta || activeMeta} />
                   ) : (
-                    <EmptyState title="点击左侧查看题目详情" hint="题库为只读视图，编辑请修改对应 JSON 文件或使用 /admin-questions" />
+                    <EmptyState title="点击左侧查看题目详情" hint="题库为只读视图，编辑请修改对应 JSON 文件" />
                   )}
                 </Card>
               </div>
@@ -300,14 +282,6 @@ export default function AdminContentPage() {
           </SectionCard>
         )}
 
-        {/* Footer links */}
-        <div style={{ marginTop: 20, display: "flex", gap: 12, flexWrap: "wrap", fontSize: 12, color: C.t3 }}>
-          <Link href="/admin-questions" style={{ color: C.blue, textDecoration: "none" }}>编辑写作题库 (学术 / 邮件 / BS)</Link>
-          <span>·</span>
-          <Link href="/admin-generate" style={{ color: C.blue, textDecoration: "none" }}>AI 自动生成</Link>
-          <span>·</span>
-          <Link href="/admin-staging" style={{ color: C.blue, textDecoration: "none" }}>暂存库审核</Link>
-        </div>
       </div>
     </AdminLayout>
   );

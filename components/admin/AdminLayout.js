@@ -48,9 +48,6 @@ const NAV_GROUPS = [
     label: "内容",
     items: [
       { label: "题库总览", href: "/admin-content", icon: "library" },
-      { label: "写作题库编辑", href: "/admin-questions", icon: "book" },
-      { label: "AI 自动生成", href: "/admin-generate", icon: "zap" },
-      { label: "暂存审核", href: "/admin-staging", icon: "inbox" },
       { label: "真题录入", href: "/admin-real-bank-ingest", icon: "inbox" },
     ],
   },
@@ -75,7 +72,6 @@ const NAV_GROUPS = [
       { label: "新手问卷", href: "/admin-surveys", icon: "msg" },
       { label: "语音投票", href: "/admin-voice-vote", icon: "chart" },
       { label: "API 日志", href: "/admin-api-errors", icon: "alert" },
-      { label: "BS 错题统计", href: "/admin-bs-errors", icon: "target" },
     ],
   },
 ];
@@ -90,9 +86,6 @@ const ICONS = {
   chart: "M18 20V10M12 20V4M6 20v-6",
   trend: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6",
   calendar: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z",
-  book: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z",
-  zap: "M13 2L3 14h9l-1 10 10-12h-9l1-10z",
-  target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z",
   library: "M3 3h6v18H3zm8 0h6v18h-6zm8 3l3 1-5 15-3-1z",
   inbox: "M22 12h-6l-2 3h-4l-2-3H2M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z",
   image: "M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21",

@@ -2925,7 +2925,7 @@ function flushPoolCheckpoint(pool) {
 }
 
 // ── Post-generation rule checks and auto-fixes ───────────────────────────────
-// Mirrors the checks in /api/admin/staging/[runId]/review/route.js
+// Checks staged candidates before the generation pipeline proceeds
 // Applied to final sets before writing, so deployed questions are clean.
 
 const _PREP_FRAGMENT = /^(of|in|at|for|on|to|by|with|from|into|after|before|during|about|all|per)\s+(the|a|an|our|your|their|his|her|my|its)\b/i;
