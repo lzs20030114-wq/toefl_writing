@@ -48,7 +48,7 @@ export function ListeningSectionContent({
   isChallenge, isPractice, mode, switchMode,
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
-  sessions = [], mistakeCount = 0,
+  sessions = [],
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const modeStr = isPractice ? "practice" : mode === PRACTICE_MODE.CHALLENGE ? "challenge" : "standard";
@@ -203,7 +203,7 @@ export function ListeningSectionContent({
         </div>
       </div>
 
-      {/* Companion link cards (mistake notebook + progress) */}
+      {/* Companion link card (progress)；错题本入口已统一挪到左侧栏 / 移动端顶部 */}
       {isPro && (
         <ListeningCompanionLinks
           isChallenge={isChallenge}
@@ -211,7 +211,6 @@ export function ListeningSectionContent({
           setHoverKey={setHoverKey}
           fadeIn={fadeIn}
           sessions={sessions}
-          mistakeCount={mistakeCount}
         />
       )}
 
@@ -226,28 +225,13 @@ export function ListeningSectionContent({
   );
 }
 
-function ListeningCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
+function ListeningCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [] }) {
   // Include legacy adaptive-listening records so mock-exam history surfaces.
   // 真题模考住在「真题练习记录」，听力练习记录页不收它，条数也不算。
   const listeningCount = sessions.filter((s) => (s?.type === "listening" || s?.type === "adaptive-listening") && s?.details?.realMock !== true).length;
 
   return (
     <>
-      {/* Mistake notebook entry */}
-      <div style={{ marginBottom: 12, ...fadeIn(360) }}>
-        <HomeLinkCard
-          href="/mistake-notebook?section=listening"
-          cardKey="listening-mistakes"
-          hoverKey={hoverKey}
-          setHoverKey={setHoverKey}
-          isChallenge={isChallenge}
-          icon="✗"
-          eyebrow="复习"
-          title="听力错题本"
-          description={mistakeCount > 0 ? `已收录 ${mistakeCount} 道听力错题，含 AI 解释。` : "做完听力练习后，答错的题会自动收录在这里。"}
-          badge={mistakeCount > 0 ? `${mistakeCount} 题` : "暂无错题"}
-        />
-      </div>
 
       {/* Progress link */}
       <div style={{ marginBottom: 20, ...fadeIn(400) }}>

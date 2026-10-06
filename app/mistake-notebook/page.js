@@ -1,32 +1,13 @@
-"use client";
-import { Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import MistakeNotebook from "../../components/MistakeNotebook";
+import { redirect } from "next/navigation";
 
-const ALLOWED_SECTIONS = new Set(["bs", "reading", "listening"]);
-const BACK_BY_SECTION = {
-  bs: "/?section=writing",
-  reading: "/?section=reading",
-  listening: "/?section=listening",
-};
+// 旧地址：错题本已并进首页（左侧栏「错题本」→ /?section=mistakes）。
+// 旧深链 ?section=bs|reading|listening 换成首页的 sub 参数，挑战/练习模式 mode 原样带过去。
+const SUBJECTS = new Set(["bs", "reading", "listening"]);
 
-function MistakeNotebookClient() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const requested = searchParams.get("section");
-  const section = ALLOWED_SECTIONS.has(requested) ? requested : "bs";
-  return (
-    <MistakeNotebook
-      initialSection={section}
-      onBack={() => router.push(BACK_BY_SECTION[section] || "/")}
-    />
-  );
-}
-
-export default function MistakeNotebookPage() {
-  return (
-    <Suspense fallback={null}>
-      <MistakeNotebookClient />
-    </Suspense>
-  );
+export default function MistakeNotebookPage({ searchParams }) {
+  const params = new URLSearchParams({ section: "mistakes" });
+  const sub = typeof searchParams?.section === "string" ? searchParams.section : "";
+  if (SUBJECTS.has(sub)) params.set("sub", sub);
+  if (typeof searchParams?.mode === "string") params.set("mode", searchParams.mode);
+  redirect(`/?${params.toString()}`);
 }

@@ -9,6 +9,8 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_TOKENS as T } from "./theme";
 import { PromoBanner } from "./HomePageClient";
 import { ReferralBanner } from "./ReferralBanner";
 import { MobileVocabEntry } from "../vocab/MobileVocabEntry";
+import { MobileMistakeEntry } from "../mistakes/MobileMistakeEntry";
+import MistakeNotebook from "../MistakeNotebook";
 import VocabNotebook from "../vocab/VocabNotebook";
 import { PRACTICE_MODE } from "../../lib/practiceMode";
 import { getRealBankTimeLabels } from "../../lib/realBankModes";
@@ -36,7 +38,7 @@ const mC = (isChallenge, light, dark) => (isChallenge ? dark : light);
 /* ── 移动端首页（替代桌面的 sidebar+grid 布局） ── */
 export function MobileHomePage({
   isChallenge, isPractice, mode, switchMode,
-  gridItems, postWritingCounts, bsMistakeCount = 0,
+  gridItems, postWritingCounts, initialMistakeSubject = null,
   userCode, userTier, userEmail, isLoggedIn, showLoginModal, onLogout,
   totalCount, weekCount, bestMock, sessions,
   fbOpen, setFbOpen, fbText, setFbText, fbBusy, fbSent, feedbackMsg, submitFeedback,
@@ -150,6 +152,7 @@ export function MobileHomePage({
       />
 
       <MobileVocabEntry isChallenge={isChallenge} querySuffix={querySuffix} isActive={activeSection === "vocab"} />
+      <MobileMistakeEntry isChallenge={isChallenge} querySuffix={querySuffix} isActive={activeSection === "mistakes"} />
 
       {/* ── Section tabs ── */}
       <div style={{ display: "flex", gap: 0, marginBottom: 14, width: "100%", borderBottom: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}` }}>
@@ -198,6 +201,8 @@ export function MobileHomePage({
         </div>
       ) : activeSection === "vocab" ? (
         <div style={{ minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded /></div>
+      ) : activeSection === "mistakes" ? (
+        <div style={{ minWidth: 0, ...fadeIn(80) }}><MistakeNotebook embedded initialSubject={initialMistakeSubject} /></div>
       ) : activeSection === "reading" ? (
         <MobileReadingSection isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode} querySuffix={querySuffix} t1={t1} t2={t2} />
       ) : activeSection === "real-bank" ? (
@@ -301,31 +306,6 @@ export function MobileHomePage({
         </Link>
       )}
 
-      {/* ── 错题本入口 ── */}
-      <Link
-        href={`/mistake-notebook${querySuffix}`}
-        style={{
-          display: "flex", alignItems: "center", gap: 12,
-          padding: "14px 16px", marginBottom: 14,
-          background: isChallenge ? CH.card : T.card,
-          border: `1px solid ${isChallenge ? CH.cardBorder : T.bdr}`,
-          borderRadius: 12, textDecoration: "none", color: "inherit",
-        }}
-      >
-        <span style={{ fontSize: 20 }}>✗</span>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: t1 }}>拼句错题本</div>
-          <div style={{ fontSize: 12, color: t2 }}>
-            {bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题` : "做完练习后错题自动收录"}
-          </div>
-        </div>
-        {bsMistakeCount > 0 && (
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#dc2626", background: "#fef2f2", borderRadius: 999, padding: "2px 8px" }}>
-            {bsMistakeCount}
-          </span>
-        )}
-        <span style={{ color: t2 }}>›</span>
-      </Link>
 
       </>
       )}
@@ -387,7 +367,7 @@ export function MobileHomePage({
           targetSelector='[data-section-id="my-bank"]'
           title="我的题库"
           description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
-          onCta={() => { bankSpotlight.close(); setActiveSection("my-bank"); }}
+          onCta={() => { bankSpotlight.close(); onSectionChange("my-bank"); }}
           onDismiss={bankSpotlight.close}
         />
       )}

@@ -106,7 +106,7 @@ function OptionRow({ optionKey, text, isSelected, isCorrect }) {
   );
 }
 
-function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handleAiExplain, section }) {
+export function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handleAiExplain, section, bare = false }) {
   const hasOptions = mistake.options && mistake.optionsKey && mistake.optionsKey.length > 0;
   // 真题 AP 选句题：答案是原文里的一句（lib/readingMistakes 已把 S 键换成句子原文）。
   const isSentenceSelection = mistake.kind === "sentence_selection";
@@ -117,8 +117,9 @@ function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handl
     ? { ...context, passage: mistake.paragraphText }
     : context;
 
+  // bare：嵌进错题本的一题一卡（外框由 MistakeItemCard 画）时不再画自己的红边框。
   return (
-    <div style={{
+    <div style={bare ? undefined : {
       padding: "14px 16px",
       borderLeft: `4px solid ${C.red}`,
       background: "#fff",

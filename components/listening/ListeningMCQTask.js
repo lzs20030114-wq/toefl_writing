@@ -35,7 +35,8 @@ function conversationTurns(item) {
   });
 }
 
-export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, isPractice = false, title = "Listening", section = "Listening" }) {
+// nextLabel：被「练错题」串起来时「完成并返回」改成「下一组 / 查看统计」；不传时行为不变。
+export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, isPractice = false, title = "Listening", section = "Listening", nextLabel = null }) {
   const questions = item?.questions || [];
   const totalQ = questions.length;
   const answerSeconds = listeningSecondsForType(taskType);
@@ -353,7 +354,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
             {typeof onNext === "function" && (
               <Btn onClick={onNext} variant="secondary">换一题</Btn>
             )}
-            <Btn onClick={onExit}>完成并返回</Btn>
+            <Btn onClick={onExit}>{nextLabel || "完成并返回"}</Btn>
           </div>
         </SurfaceCard>
       </PageShell>

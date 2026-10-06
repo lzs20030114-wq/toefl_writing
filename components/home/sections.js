@@ -80,9 +80,3 @@ export const SECTION_ACCENTS = {
   "real-bank": { color: "#B45309", soft: "#FFF7ED" },
   "my-bank": { color: "#E11D48", soft: "#FFF1F2" },
 };
-
-export const TOOLS = [
-  { id: "mistake-notebook", label: "拼句错题本", icon: "✗", href: "/mistake-notebook" },
-  { id: "post-writing-practice", label: "拼写填空", icon: "Aa", href: "/post-writing-practice" },
-  { id: "progress", label: "练习记录", icon: "📈", href: "/progress" },
-];

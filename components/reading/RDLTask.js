@@ -50,7 +50,8 @@ const SENTENCE_SELECTION_CSS = [
  * 原图模式下这道题强制显示文字（图上点不了句子）。
  * 版面定位不到时（mapper 已拦，这里兜底）右栏退回逐句列表作答，绝不出点不了的死题。
  */
-export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2" }) {
+// nextLabel：同 CTWTask —— 被「练错题」串起来时结果卡的退出键文案；不传时行为不变。
+export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2", nextLabel = null }) {
   // Scope drafts by item id; reading tasks use the same RDLTask shell for AP too,
   // so prefix the id with the perceived subtype to avoid collisions.
   const draftKey = buildDraftKey("rdl", item?.id || "");
@@ -339,7 +340,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {correctCount === questions.length ? "全部正确！" : "使用下方导航回顾每道题的详解。"}
             </div>
             <div style={{ marginTop: 10 }}>
-              <Btn onClick={onExit} variant="secondary" style={{ fontSize: 13 }}>返回</Btn>
+              <Btn onClick={onExit} variant={nextLabel ? "primary" : "secondary"} style={{ fontSize: 13 }}>{nextLabel || "返回"}</Btn>
             </div>
           </SurfaceCard>
         )}

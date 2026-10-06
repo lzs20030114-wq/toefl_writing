@@ -10,6 +10,7 @@ import { TierBadge, BindEmailModal } from "./sidebarWidgets";
 import { SupportModal } from "./SupportModal";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
 import { VocabNavItem } from "../vocab/VocabNavItem";
+import { MistakeNavItem } from "../mistakes/MistakeNavItem";
 import { countUnseenReplies, loadSeenReplyIds, repliedIds, saveSeenReplyIds } from "../../lib/feedback/replySeen";
 
 /* ── NavSidebar ──
@@ -324,6 +325,7 @@ export function NavSidebar({
           );
         })}
         <VocabNavItem isChallenge={isChallenge} isActive={activeSection === "vocab"} />
+        <MistakeNavItem isChallenge={isChallenge} isActive={activeSection === "mistakes"} />
       </div>
 
       {/* ── Divider ── */}

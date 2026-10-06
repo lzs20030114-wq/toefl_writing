@@ -161,7 +161,7 @@
 
 ## 可派工
 
-- [中] 错题本改版（2026-10-06 已拍板，方案 docs/mistake-notebook-redesign-2026-10-06.md v2，含对抗式自审）：口径 = 不做掌握判定/今日队列，只要「选类型·选数量 → 集中做题 → 统计报告」。分期：M0 静态对比图（概览/选题/报告）→ M1 入口搬进左侧栏并首页内嵌（删中栏三张卡与 sections.js 死代码 TOOLS，修 MobileHomePage.js:390）→ M2 瘦错题池 lib/mistakes（一题一条去重、含模考、每次打开从 sessions 派生合并、收藏改走池）→ M3 /mistake-drill 直喂现成任务组件 + 报告页（CTW/RDL/LCR 加可选 onNext；不写练习历史）→ M4 云同步可选。M1 与 M2 可并行派工。
+- [低] 错题本改版余项（M1–M3 已于 2026-10-06 实现，方案 docs/mistake-notebook-redesign-2026-10-06.md）：①M4 云同步——收藏 / 移出 / 上次重做目前只存本机 localStorage（错题内容本身每次从练习记录派生，换设备不丢），要跨设备需建 `mistake_pool` 表（JSONB 镜像 + RLS 收紧，走 /sql-migrate）+ `/api/mistakes/pool`；旧 `mistake_favorites` 已改为只读一次并入、不再写。②M5 择项：各科结果页「本次 N 题进了错题本」提示、拼句「同语法点换新题」、填词「只做错的空」、错题本埋点。
 - [中] **听力逐句点播（点原文一句 → 只放音频那一句）**，契约 docs/listening-sentence-timings.md。
   2026-09-18 代码侧已做完：①产线随 `audio_url` 写 `sentence_timings`；②存量对齐工具
   `scripts/align-sentence-timings.mjs`（fetch → asr_words.py 词级转写 → 对齐写回）；③前端逐句可点

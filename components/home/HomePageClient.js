@@ -11,9 +11,6 @@ import { CHALLENGE_TOKENS as CH, HOME_FONT, HOME_PAGE_CSS, HOME_TOKENS as T, TAS
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { AnnouncementButton } from "./AnnouncementModal";
 import { BankUpdateModal } from "./BankUpdateModal";
-import { countBsMistakes } from "../MistakeNotebook";
-import { countReadingMistakes } from "../../lib/readingMistakes";
-import { countListeningMistakes } from "../../lib/listeningMistakes";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { StudyPlanColumn } from "./StudyPlanColumn";
@@ -23,6 +20,8 @@ import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToa
 import UpgradeModal from "../shared/UpgradeModal";
 import VocabNotebook from "../vocab/VocabNotebook";
 import { VocabHomeNavigationProvider } from "../vocab/VocabHomeNavigation";
+import MistakeNotebook from "../MistakeNotebook";
+import { MistakeHomeNavigationProvider } from "../mistakes/MistakeHomeNavigation";
 
 export function PromoBanner({ isChallenge, fadeIn }) {
   const [open, setOpen] = useState(false);
@@ -96,7 +95,12 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
   const [activeSection, setActiveSection] = useState(() => {
     const s = searchParams.get("section");
-    return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank", "vocab"].includes(s) ? s : "writing";
+    return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank", "vocab", "mistakes"].includes(s) ? s : "writing";
+  });
+  // 错题本内嵌时的初始科目（旧地址 /mistake-notebook?section=reading 重定向过来带 sub=reading）
+  const [initialMistakeSubject] = useState(() => {
+    const sub = searchParams.get("sub");
+    return sub && ["bs", "reading", "listening"].includes(sub) ? sub : null;
   });
   // 单词本复习中进入「专注模式」：收起首页侧栏，只留一张卡（见 VocabNotebook 的 onReviewingChange）
   const [vocabFocus, setVocabFocus] = useState(false);
@@ -171,10 +175,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       bestMock: mockBands.length > 0 ? Math.max(...mockBands) : null,
     };
   }, [sessions]);
-
-  const bsMistakeCount = useMemo(() => countBsMistakes(sessions), [sessions]);
-  const readingMistakeCount = useMemo(() => countReadingMistakes(sessions), [sessions]);
-  const listeningMistakeCount = useMemo(() => countListeningMistakes(sessions), [sessions]);
 
   const postWritingCounts = useMemo(() => {
     const grouped = groupPostWritingPracticeItems(extractPostWritingPracticeItems(sessions));
@@ -289,6 +289,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   if (isMobile) {
     return (
       <VocabHomeNavigationProvider navigate={() => changeSection("vocab")}>
+      <MistakeHomeNavigationProvider navigate={() => changeSection("mistakes")}>
         <style>{HOME_PAGE_CSS}</style>
         <ChallengeEffects isChallenge={isChallenge} crtFlash={crtFlash} />
         <div style={{ minHeight: "100vh", background: isChallenge ? CH.bg : T.bg, fontFamily: HOME_FONT, position: "relative", zIndex: 3 }}>
@@ -310,7 +311,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           <MobileHomePage
             isChallenge={isChallenge} isPractice={isPractice}
             mode={mode} switchMode={switchMode}
-            gridItems={gridItems} postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount}
+            gridItems={gridItems} postWritingCounts={postWritingCounts}
             userCode={userCode} userTier={userTier} userEmail={userEmail}
             isLoggedIn={isLoggedIn} showLoginModal={showLoginModal} onLogout={onLogout}
             totalCount={totalCount} weekCount={weekCount} bestMock={bestMock}
@@ -322,6 +323,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fadeIn={fadeIn} sideCard={sideCard} querySuffix={querySuffix}
             onOpenReferral={handleOpenReferral}
             activeSection={activeSection} onSectionChange={changeSection}
+            initialMistakeSubject={initialMistakeSubject}
           />
         </div>
         {referralModalOpen && (
@@ -338,6 +340,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
         <BankUpdateModal isLoggedIn={isLoggedIn} />
         <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
         <ActivatedToast />
+      </MistakeHomeNavigationProvider>
       </VocabHomeNavigationProvider>
     );
   }
@@ -345,6 +348,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   /* ── 桌面端：原有布局不变 ── */
   return (
     <VocabHomeNavigationProvider navigate={() => changeSection("vocab")}>
+    <MistakeHomeNavigationProvider navigate={() => changeSection("mistakes")}>
       <style>{HOME_PAGE_CSS}</style>
       <ChallengeEffects isChallenge={isChallenge} crtFlash={crtFlash} />
 
@@ -397,12 +401,11 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
             fadeIn={fadeIn}
             onOpenReferral={handleOpenReferral}
           />}
-          {activeSection === "vocab" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded onReviewingChange={setVocabFocus} /></div> : <><SectionContent
+          {activeSection === "vocab" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><VocabNotebook embedded onReviewingChange={setVocabFocus} /></div> : activeSection === "mistakes" ? <div style={{ flex: 1, minWidth: 0, ...fadeIn(80) }}><MistakeNotebook embedded initialSubject={initialMistakeSubject} /></div> : <><SectionContent
             activeSection={activeSection}
             isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
             gridItems={gridItems} hoverKey={hoverKey} setHoverKey={setHoverKey}
-            postWritingCounts={postWritingCounts} bsMistakeCount={bsMistakeCount}
-            readingMistakeCount={readingMistakeCount} listeningMistakeCount={listeningMistakeCount}
+            postWritingCounts={postWritingCounts}
             sessions={sessions}
             fadeIn={fadeIn}
             userCode={userCode} userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
@@ -440,6 +443,7 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
       <BankUpdateModal isLoggedIn={isLoggedIn} />
       <InvitationCapturedToast isLoggedIn={isLoggedIn} onSignupClick={showLoginModal} />
       <ActivatedToast />
+    </MistakeHomeNavigationProvider>
     </VocabHomeNavigationProvider>
   );
 }

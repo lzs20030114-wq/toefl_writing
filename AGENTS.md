@@ -30,7 +30,8 @@ app/                          # Next.js App Router
 ├── listening-exam/           # 听力自适应模考
 ├── speaking-exam/            # 口语模考
 ├── post-writing-practice/    # 写后练习
-├── mistake-notebook/         # 错题本
+├── mistake-notebook/         # 旧地址 → 重定向到首页内嵌错题本 /?section=mistakes&sub=bs|reading|listening
+├── mistake-drill/            # 练错题：选题型/来源/数量 → 现成任务组件依次做 → 统计报告（?key= 单题直达）
 ├── vocab-notebook/           # 单词本旧地址兼容入口 → /?section=vocab（首页内嵌，FSRS-6 间隔重复复习）
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
 ├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
@@ -59,7 +60,8 @@ components/                   # 分科任务 UI + 后台
 ├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
 ├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
-├── home/ history/ mistakes/ login/ admin/
+├── mistakes/                 # 错题本：MistakeNavItem(侧栏)/MobileMistakeEntry/useMistakePool/MistakeCardView(一题一卡)/MistakeDrill
+├── home/ history/ login/ admin/
 └── shared/                   # ui.js(设计系统 C/FONT/Btn/PageShell), UpgradeModal,
                               #   UsageGateWrapper, TopicPicker
 
@@ -89,6 +91,7 @@ lib/
 │                             #   adaptiveScoring(M1/M2), adaptiveCheckpoint, bandScore, stateMachine
 ├── iap/                      # 支付：service, catalog, repository, providers/(xorpay/afdian/mock)
 ├── referral/                 # 推荐体系：service, state, useReferralFlow
+├── mistakes/                 # 错题池：extract(从练习记录派生, 含模考) + pool(本地按账号, 去重/收藏/移出) + drill(抽题/拆组/判分)；设定见 CLAUDE.md「9. 错题本」
 ├── questionBank/ mistakeFavorites listeningMistakes readingMistakes
 └── mail/                     # 事务性邮件 (QQ SMTP)
 

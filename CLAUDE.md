@@ -31,7 +31,8 @@ app/                          # Next.js App Router
 ├── listening-exam/           # 听力自适应模考
 ├── speaking-exam/            # 口语模考
 ├── post-writing-practice/    # 写后练习
-├── mistake-notebook/         # 错题本
+├── mistake-notebook/         # 旧地址 → 重定向到首页内嵌错题本 /?section=mistakes&sub=bs|reading|listening
+├── mistake-drill/            # 练错题：选题型/来源/数量 → 现成任务组件依次做 → 统计报告（?key= 单题直达）
 ├── vocab-notebook/           # 单词本 (划词收藏的词 + FSRS-6 间隔重复复习)
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
 ├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
@@ -64,7 +65,8 @@ components/                   # 分科任务 UI + 后台
 │                             #   realBankMeta=来源分档/考试日期/题库总量(会 import 整个真题库, 只给本路由用)
 ├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
-├── home/ history/ mistakes/ login/ admin/
+├── mistakes/                 # 错题本：MistakeNavItem(侧栏)/MobileMistakeEntry/useMistakePool/MistakeCardView(一题一卡)/MistakeDrill
+├── home/ history/ login/ admin/
 └── shared/                   # ui.js(设计系统 C/FONT/Btn/PageShell), UpgradeModal,
                               #   UsageGateWrapper, TopicPicker
 
@@ -95,6 +97,7 @@ lib/
 │                             #   adaptiveScoring(M1/M2), adaptiveCheckpoint, bandScore, stateMachine
 ├── iap/                      # 支付：service, catalog, repository, providers/(xorpay/afdian/mock)
 ├── referral/                 # 推荐体系：service, state, useReferralFlow
+├── mistakes/                 # 错题池：extract(从练习记录派生, 含模考) + pool(本地按账号, 去重/收藏/移出) + drill(抽题/拆组/判分)
 ├── questionBank/ mistakeFavorites listeningMistakes readingMistakes
 └── mail/                     # 事务性邮件 (QQ SMTP)
 
@@ -239,6 +242,23 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
   下一步接阅读复习），共用 `ReviewSummary` + `lib/vocab/reviewSummary.js`
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
 `__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
+
+### 9. 错题本 (Mistake Notebook, 2026-10 改版)
+
+```
+各科练习记录(loadHist) → lib/mistakes/extract 派生错题（拼句/阅读三型/听力四型 + 阅读听力模考 + 写作模考里的拼句）
+  → lib/mistakes/pool 合并进本地错题池（localStorage 按账号分 key；一题一条，同一次练习只算一次，篇级快照按 itemKey 存一份）
+→ 首页左侧栏「错题本」/ 移动端顶部入口 → 内嵌 MistakeNotebook（筛选、收藏、移出、AI 讲解）
+→ /mistake-drill：选题型/来源/数量 → 拼句一组、应答一组、每篇一组，直接喂现成任务组件 → 统计报告
+```
+几条不要随手改的设定（方案与自审见 docs/mistake-notebook-redesign-2026-10-06.md）：
+- **不做掌握判定 / 今日队列 / 间隔重复**（2026-10-06 用户拍板）。练错题只回写 `lastDrill` 供展示；移出错题本是用户手动的，之后在新练习里再错会自动回来
+- **池不是唯一真源**：每次打开都从练习记录重新派生合并、只加不减，换设备时与「从记录现算」持平，本机还能保住被 200 条上限挤掉的老错题
+- **练错题不写练习历史、不写已练集合**（BS `persistSession/recordGroupDone=false`，不调 saveSess/addDoneIds），否则每日任务/进度图/错题本自己会重复计数
+- 填词按篇整篇重做（CTWTask 没有预填已对空的能力，空按 position 定位不能筛）；阅读/听力选择按篇只问错过的题，item 换 `${id}__drill` 防草稿串
+- 拼句只存了 qid 没存词块，重做时在 /mistake-drill 里按 qid 动态回查题库并**校验题面**（qid 曾被复用）；首页与错题本组件不许 import 题库
+- 任务组件串组靠可选 `nextLabel`（结果页退出键文案），不传时行为不变；答题页不加任何额外外壳
+- 「AI 问题分析」的 `await callAI(` 必须留在 components/MistakeNotebook.js（`ai-empty-response.regression.test.js` 扫这个路径）
 
 ### 7. 个人题库 (User Bank, Pro 专属, v1.11.0 全 12 题型)
 

@@ -16,7 +16,7 @@ export function SectionContent({
   activeSection,
   isChallenge, isPractice, mode, switchMode,
   gridItems, hoverKey, setHoverKey,
-  postWritingCounts, bsMistakeCount, readingMistakeCount, listeningMistakeCount, sessions,
+  postWritingCounts, sessions,
   fadeIn,
   userTier, isLoggedIn, showLoginModal, userCode,
 }) {
@@ -33,7 +33,7 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
-        sessions={sessions} mistakeCount={readingMistakeCount}
+        sessions={sessions}
       />
     );
   }
@@ -44,7 +44,7 @@ export function SectionContent({
         isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
         hoverKey={hoverKey} setHoverKey={setHoverKey} fadeIn={fadeIn}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
-        sessions={sessions} mistakeCount={listeningMistakeCount}
+        sessions={sessions}
       />
     );
   }
@@ -149,15 +149,6 @@ export function SectionContent({
           icon="Aa" eyebrow="写后练习" title="拼写填空练习"
           description={postWritingCounts.total > 0 ? `今日 ${postWritingCounts.today} 题，错题本 ${postWritingCounts.notebook} 题。` : "从 Task 2/3 历史反馈中提取拼写错误，做填空复习。"}
           badge={postWritingCounts.total > 0 ? `${postWritingCounts.total} 题` : "暂无题目"}
-        />
-      </div>
-      <div style={{ marginBottom: 12, ...fadeIn(460) }}>
-        <HomeLinkCard
-          href="/mistake-notebook" cardKey="mistake-notebook"
-          hoverKey={hoverKey} setHoverKey={setHoverKey} isChallenge={isChallenge}
-          icon="✗" eyebrow="复习" title="拼句错题本"
-          description={bsMistakeCount > 0 ? `已收录 ${bsMistakeCount} 道错题，点击查看详情和 AI 解析。` : "做完拼句练习后，错题会自动收录在这里。"}
-          badge={bsMistakeCount > 0 ? `${bsMistakeCount} 题` : "暂无错题"}
         />
       </div>
       <div style={{ marginBottom: 28, ...fadeIn(500) }}>

@@ -44,7 +44,7 @@ export function ReadingSectionContent({
   isChallenge, isPractice, mode, switchMode,
   hoverKey, setHoverKey, fadeIn,
   userTier, isLoggedIn, showLoginModal,
-  sessions = [], mistakeCount = 0,
+  sessions = [],
 }) {
   const isPro = userTier === "pro" || userTier === "legacy";
   const [rdlVariant, setRdlVariant] = useState("long"); // "short" | "long"
@@ -241,7 +241,7 @@ export function ReadingSectionContent({
         </div>
       </div>
 
-      {/* Companion link cards (mistake notebook + progress) */}
+      {/* Companion link card (progress)；错题本入口已统一挪到左侧栏 / 移动端顶部 */}
       {isPro && (
         <ReadingCompanionLinks
           isChallenge={isChallenge}
@@ -249,7 +249,6 @@ export function ReadingSectionContent({
           setHoverKey={setHoverKey}
           fadeIn={fadeIn}
           sessions={sessions}
-          mistakeCount={mistakeCount}
         />
       )}
 
@@ -264,28 +263,13 @@ export function ReadingSectionContent({
   );
 }
 
-function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [], mistakeCount = 0 }) {
+function ReadingCompanionLinks({ isChallenge, hoverKey, setHoverKey, fadeIn, sessions = [] }) {
   // Include legacy "adaptive-reading" records — 842cd85 regression dropped this.
   // 真题模考住在「真题练习记录」，阅读练习记录页不收它，条数也不算。
   const readingCount = sessions.filter((s) => (s?.type === "reading" || s?.type === "adaptive-reading") && s?.details?.realMock !== true).length;
 
   return (
     <>
-      {/* Mistake notebook entry — only show when there are mistakes */}
-      <div style={{ marginBottom: 12, ...fadeIn(360) }}>
-        <HomeLinkCard
-          href="/mistake-notebook?section=reading"
-          cardKey="reading-mistakes"
-          hoverKey={hoverKey}
-          setHoverKey={setHoverKey}
-          isChallenge={isChallenge}
-          icon="✗"
-          eyebrow="复习"
-          title="阅读错题本"
-          description={mistakeCount > 0 ? `已收录 ${mistakeCount} 道阅读错题，含 AI 解释。` : "做完阅读练习后，答错的题会自动收录在这里。"}
-          badge={mistakeCount > 0 ? `${mistakeCount} 题` : "暂无错题"}
-        />
-      </div>
 
       {/* Progress link */}
       <div style={{ marginBottom: 20, ...fadeIn(400) }}>

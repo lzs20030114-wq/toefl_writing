@@ -12,6 +12,7 @@ jest.mock("../components/shared/UpgradeModal", () => ({
 }));
 jest.mock("../components/shared/WechatQrImage", () => ({ WechatQrImage: () => <img alt="微信群二维码" /> }));
 jest.mock("../components/vocab/VocabNavItem", () => ({ VocabNavItem: () => null }));
+jest.mock("../components/mistakes/MistakeNavItem", () => ({ MistakeNavItem: () => null }));
 jest.mock("../lib/dailyUsage", () => ({ checkCanPractice: () => Promise.resolve({ remaining: 3 }), FREE_DAILY_LIMIT: 3 }));
 
 import { NavSidebar } from "../components/home/NavSidebar";

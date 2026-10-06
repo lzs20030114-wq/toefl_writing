@@ -1,272 +1,83 @@
 "use client";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { loadHist, SESSION_STORE_EVENTS } from "../lib/sessionStore";
-import { AUTH_CHANGED_EVENT, getSavedCode } from "../lib/AuthContext";
-import { formatLocalDateTime, translateGrammarPoint } from "../lib/utils";
-import { C, PageShell, SurfaceCard, DisclosureSection } from "./shared/ui";
-import { useBsAiExplain, BsAiExplainBlock } from "./buildSentence/useBsAiExplain";
-import { useMistakeFavorites } from "./buildSentence/useMistakeFavorites";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import Link from "next/link";
+import { translateGrammarPoint } from "../lib/utils";
+import { C, PageShell, SurfaceCard } from "./shared/ui";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
-import { extractReadingMistakes, countReadingMistakes } from "../lib/readingMistakes";
-import { extractListeningMistakes, countListeningMistakes } from "../lib/listeningMistakes";
-import { McqMistakesView } from "./mistakes/McqMistakesView";
+import { getSavedTier } from "../lib/AuthContext";
+import { useMistakePool } from "./mistakes/useMistakePool";
+import { MistakeItemCard, useMistakeAi } from "./mistakes/MistakeCardView";
+import { activeCards, removeCards, restoreCards, setStarred, summarizePool } from "../lib/mistakes/pool";
+import { SUBJECT_META, SUBTYPE_META } from "../lib/mistakes/extract";
+import { relativeDay, pct } from "../lib/mistakes/format";
 
-const SECTION_META = {
-  bs: { key: "bs", label: "拼句", subtitle: "Build a Sentence 练习中的错题", color: "#087355", soft: "#ecfdf5" },
-  reading: { key: "reading", label: "阅读", subtitle: "Reading 练习中的错题", color: "#3B82F6", soft: "#EFF6FF" },
-  listening: { key: "listening", label: "听力", subtitle: "Listening 练习中的错题", color: "#8B5CF6", soft: "#F3E8FF" },
+// 错题本（2026-10 改版，方案 docs/mistake-notebook-redesign-2026-10-06.md）：
+//   - 入口在首页左侧栏 / 移动端顶部，内嵌在首页中栏（embedded）；旧地址 /mistake-notebook 重定向过来
+//   - 数据来自本地错题池（lib/mistakes/pool）：一题一条、跨练习去重、含模考错题
+//   - 列表只负责「看 + 整理（收藏 / 移出）」；集中重做走 /mistake-drill（选题型 + 数量 → 做题 → 统计报告）
+//   - 不做掌握判定 / 今日队列（2026-10-06 用户拍板）
+
+const PAGE_SIZE = 30;
+const SUBJECT_ORDER = ["bs", "reading", "listening"];
+const SUBTYPES_BY_SUBJECT = {
+  bs: ["bs"],
+  reading: ["ctw", "rdl", "ap"],
+  listening: ["lcr", "la", "lc", "lat"],
 };
 
-/* ── helpers ── */
+/* ── 拼句：语法薄弱点 + AI 问题分析（Pro） ── */
 
-function extractMistakes(sessions) {
-  // Filter BS sessions that have details with wrong answers.
-  // We preserve the original detail index (_index) so each mistake has a
-  // stable (session_id, detail_index) pointer for the favorites feature.
-  return sessions
-    .filter((s) => s.type === "bs" && Array.isArray(s.details))
-    .map((s, idx) => {
-      const wrongs = s.details
-        .map((d, i) => ({ ...d, _index: i }))
-        .filter((d) => !d.isCorrect);
-      if (wrongs.length === 0) return null;
-      return {
-        key: s.date || `session-${idx}`,
-        sessionId: s.id ?? null,
-        date: s.date,
-        correct: s.correct ?? 0,
-        total: s.total ?? s.details.length,
-        wrongCount: wrongs.length,
-        details: wrongs,
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => new Date(b.date) - new Date(a.date)); // newest first
-}
-
-/** Build the snapshot we persist when a mistake is starred. Self-contained so
- *  the card still renders if the source session is later deleted. */
-function buildSnapshot(detail, sessionDate) {
-  return {
-    prompt: detail?.prompt || "",
-    userAnswer: detail?.userAnswer || "",
-    correctAnswer: detail?.correctAnswer || "",
-    grammar_points: Array.isArray(detail?.grammar_points) ? detail.grammar_points : [],
-    sessionDate: sessionDate || null,
-  };
-}
-
-/** Render a favorite row as a synthetic "detail" the existing MistakeCard
- *  understands. This lets the favorites tab reuse the same card. */
-function favoriteToDetail(fav) {
-  const s = fav?.snapshot || {};
-  return {
-    prompt: s.prompt || "",
-    userAnswer: s.userAnswer || "",
-    correctAnswer: s.correctAnswer || "",
-    grammar_points: Array.isArray(s.grammar_points) ? s.grammar_points : [],
-    isCorrect: false,
-    _index: fav?.detail_index ?? null,
-    _favoriteSessionDate: s.sessionDate || null,
-  };
-}
-
-function allGrammarFreq(groups) {
+function grammarFreq(cards) {
   const freq = {};
-  for (const g of groups) {
-    for (const d of g.details) {
-      for (const gp of d.grammar_points || []) {
-        freq[gp] = (freq[gp] || 0) + 1;
-      }
-    }
+  for (const c of cards) {
+    for (const gp of c.brief?.grammar_points || []) freq[gp] = (freq[gp] || 0) + (c.wrongCount || 1);
   }
   return Object.entries(freq)
     .sort((a, b) => b[1] - a[1])
     .map(([tag, count]) => ({ tag, label: translateGrammarPoint(tag), count }));
 }
 
-function topGrammarPoints(groups, limit = 3) {
-  return allGrammarFreq(groups).slice(0, limit);
-}
-
-function buildAnalysisPrompt(groups, totalWrong, gpFreq) {
-  const totalSessions = groups.length;
-  const totalQuestions = groups.reduce((n, g) => n + g.total, 0);
-  const errorRate = totalQuestions > 0 ? ((totalWrong / totalQuestions) * 100).toFixed(1) : 0;
-
-  // Top 8 grammar weaknesses
+function buildAnalysisPrompt(cards, gpFreq, drills) {
+  const totalWrongTimes = cards.reduce((n, c) => n + (c.wrongCount || 1), 0);
+  const repeated = cards.filter((c) => (c.wrongCount || 1) >= 2).length;
   const top8 = gpFreq.slice(0, 8).map((gp) => `${gp.label}(${gp.tag}): ${gp.count}次`).join("、");
-
-  // Recent trend: compare first half vs second half of sessions
-  const mid = Math.ceil(totalSessions / 2);
-  const olderHalf = groups.slice(mid); // older (groups are newest-first)
-  const newerHalf = groups.slice(0, mid);
-  const olderRate = olderHalf.reduce((n, g) => n + g.wrongCount, 0) / Math.max(olderHalf.reduce((n, g) => n + g.total, 0), 1);
-  const newerRate = newerHalf.reduce((n, g) => n + g.wrongCount, 0) / Math.max(newerHalf.reduce((n, g) => n + g.total, 0), 1);
-  const trend = newerRate < olderRate - 0.05 ? "进步明显" : newerRate > olderRate + 0.05 ? "有退步趋势" : "基本持平";
-
-  // Sample 3 representative wrong answers for context
-  const samples = [];
-  for (const g of groups) {
-    for (const d of g.details) {
-      if (samples.length < 3) {
-        samples.push(`错答:"${d.userAnswer}" → 正确:"${d.correctAnswer}" [${(d.grammar_points || []).join(",")}]`);
-      }
-    }
-  }
+  const samples = cards
+    .slice()
+    .sort((a, b) => (b.wrongCount || 1) - (a.wrongCount || 1))
+    .slice(0, 3)
+    .map((c) => `错答:"${c.brief?.userAnswer || ""}" → 正确:"${c.brief?.correctAnswer || ""}" [${(c.brief?.grammar_points || []).join(",")}]`);
+  const bsDrills = (drills || []).filter((d) => d?.byType?.bs?.total > 0).slice(-5);
+  const drillLine = bsDrills.length > 0
+    ? bsDrills.map((d) => `${d.byType.bs.correct}/${d.byType.bs.total}`).join("、")
+    : "暂无";
 
   return `学生在 TOEFL Build a Sentence 拖拽造句练习中的错题数据如下：
 
-总练习次数：${totalSessions} 套（共 ${totalQuestions} 题）
-总错题数：${totalWrong} 题（错误率 ${errorRate}%）
-近期趋势：${trend}（前半段错误率 ${(olderRate * 100).toFixed(1)}% → 后半段 ${(newerRate * 100).toFixed(1)}%）
+错题本里共 ${cards.length} 道不同的错题（累计答错 ${totalWrongTimes} 次，其中 ${repeated} 道错过两次以上）
+最近几次集中重做错题的拼句成绩：${drillLine}
 
-语法薄弱点分布（按出错频率排序）：
-${top8}
+语法薄弱点分布（按出错次数排序）：
+${top8 || "（题目没有语法点标注）"}
 
 典型错误示例：
 ${samples.join("\n")}
 
 请用中文给出简洁的分析报告（200字以内），包含：
 1. 最需要优先攻克的 2-3 个语法薄弱点及具体建议
-2. 近期学习趋势评价
+2. 反复出错的题说明了什么
 3. 一句鼓励的话`;
 }
 
 const ANALYSIS_SYSTEM = "你是一位专业的 TOEFL 写作辅导老师。根据学生的错题数据，给出简洁精准的薄弱点分析和学习建议。语气友善专业，不要废话。";
 
-/* ── sub-components ── */
-
-function StarButton({ starred, onClick, isLoggedIn = true }) {
-  const [hover, setHover] = useState(false);
-  const label = !isLoggedIn ? "登录后可收藏此错题" : starred ? "取消收藏" : "收藏此错题";
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      aria-label={label}
-      title={label}
-      style={{
-        flexShrink: 0,
-        background: hover ? "#fef3c7" : "transparent",
-        border: "none",
-        borderRadius: 999,
-        width: 32,
-        height: 32,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        opacity: !isLoggedIn ? 0.45 : 1,
-        fontSize: 20,
-        lineHeight: 1,
-        color: starred ? "#f59e0b" : "#94a3b8",
-        transition: "color 0.15s, background 0.15s, opacity 0.15s",
-        padding: 0,
-      }}
-    >
-      {starred ? "★" : "☆"}
-    </button>
-  );
-}
-
-function MistakeCard({ detail, explainKey, aiExplains, isLegacy, handleAiExplain, sessionId, detailIndex, sessionDate, isStarred, onToggleStar, isLoggedIn, onRequireLogin }) {
-  // Star always shows when we have a detail index. For guests we still render
-  // it (disabled-looking) so the feature is discoverable; click flows to a
-  // login hint via onRequireLogin instead of the API call.
-  const showStar = detailIndex != null && typeof onToggleStar === "function";
-  const canFavorite = isLoggedIn && sessionId != null;
-  const starred = canFavorite ? !!isStarred : false;
-
-  const handleStarClick = useCallback(() => {
-    if (!isLoggedIn) {
-      onRequireLogin?.();
-      return;
-    }
-    if (sessionId == null) {
-      // Logged in but session not yet synced to cloud — surface a soft hint
-      onRequireLogin?.({ syncing: true });
-      return;
-    }
-    onToggleStar(sessionId, detailIndex, buildSnapshot(detail, sessionDate));
-  }, [isLoggedIn, sessionId, detailIndex, detail, sessionDate, onToggleStar, onRequireLogin]);
-
-  return (
-    <div
-      style={{
-        padding: "14px 16px",
-        borderLeft: `4px solid ${C.red}`,
-        background: "#fff",
-        borderRadius: 6,
-        marginBottom: 10,
-      }}
-    >
-      {/* prompt + star */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-        <div style={{ flex: 1, fontSize: 13, color: C.t2, lineHeight: 1.5 }}>
-          {detail.prompt}
-        </div>
-        {showStar ? (
-          <StarButton starred={starred} onClick={handleStarClick} isLoggedIn={isLoggedIn} />
-        ) : null}
-      </div>
-
-      {/* user answer */}
-      <div style={{ fontSize: 13.5, marginBottom: 4, lineHeight: 1.6 }}>
-        <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>你的答案</span>
-        <span style={{ color: C.red }}>{detail.userAnswer}</span>
-      </div>
-
-      {/* correct answer */}
-      <div style={{ fontSize: 13.5, marginBottom: 8, lineHeight: 1.6 }}>
-        <span style={{ fontWeight: 700, color: C.t2, marginRight: 6, fontSize: 12 }}>正确答案</span>
-        <span style={{ color: C.green }}>{detail.correctAnswer}</span>
-      </div>
-
-      {/* grammar tags */}
-      {(detail.grammar_points || []).length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 4 }}>
-          {detail.grammar_points.map((gp, i) => (
-            <span
-              key={i}
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                color: C.blue,
-                background: C.ltB,
-                borderRadius: 999,
-                padding: "2px 9px",
-              }}
-            >
-              {translateGrammarPoint(gp)}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* AI explanation */}
-      <BsAiExplainBlock
-        explainKey={explainKey}
-        detail={detail}
-        aiExplains={aiExplains}
-        isLegacy={isLegacy}
-        handleAiExplain={handleAiExplain}
-      />
-    </div>
-  );
-}
-
-function StatsBar({ groups, totalWrong, isLegacy }) {
-  const topGP = topGrammarPoints(groups);
-  const gpFreq = useMemo(() => allGrammarFreq(groups), [groups]);
+function BsAnalysis({ cards, drills, isLegacy }) {
+  const gpFreq = useMemo(() => grammarFreq(cards), [cards]);
+  const [showAll, setShowAll] = useState(false);
   const [analysis, setAnalysis] = useState({ loading: false, text: null, error: null });
-  const [showDetail, setShowDetail] = useState(false);
   const [proHint, setProHint] = useState(false);
 
   const handleAnalyze = useCallback(async () => {
-    // AI 问题分析 calls DeepSeek and incurs token cost — Pro-only.
+    // AI 问题分析走 DeepSeek，Pro 专属
     if (!isLegacy) {
       setProHint(true);
       setTimeout(() => setProHint(false), 3500);
@@ -275,500 +86,335 @@ function StatsBar({ groups, totalWrong, isLegacy }) {
     if (analysis.loading) return;
     setAnalysis({ loading: true, text: null, error: null });
     try {
-      const prompt = buildAnalysisPrompt(groups, totalWrong, gpFreq);
+      const prompt = buildAnalysisPrompt(cards, gpFreq, drills);
       const text = await callAI(ANALYSIS_SYSTEM, prompt, AI_HELPER_MAX_TOKENS, 60000, 0.4);
       setAnalysis({ loading: false, text, error: null });
     } catch (e) {
       setAnalysis({ loading: false, text: null, error: mapAiHelperError(e) });
     }
-  }, [groups, totalWrong, gpFreq, analysis.loading, isLegacy]);
+  }, [cards, gpFreq, drills, analysis.loading, isLegacy]);
+
+  if (cards.length === 0) return null;
+  const maxCount = gpFreq[0]?.count || 1;
 
   return (
-    <SurfaceCard style={{ padding: "16px 18px", marginBottom: 16 }}>
-      {/* top row: numbers + analyze button */}
-      <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
-        <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: C.red }}>{totalWrong}</div>
-          <div style={{ fontSize: 12, color: C.t3 }}>道错题</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: C.t1 }}>{groups.length}</div>
-          <div style={{ fontSize: 12, color: C.t3 }}>套练习</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: C.blue }}>{gpFreq.length}</div>
-          <div style={{ fontSize: 12, color: C.t3 }}>个语法点</div>
-        </div>
-        <div style={{ marginLeft: "auto" }}>
-          <button
-            onClick={handleAnalyze}
-            disabled={analysis.loading}
-            title={!isLegacy ? "AI 问题分析是 Pro 功能" : undefined}
-            style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: "#fff",
-              background: analysis.loading
-                ? "#9ca3af"
-                : !isLegacy
-                  ? "linear-gradient(135deg, #94a3b8, #64748b)"
-                  : "linear-gradient(135deg, #7c3aed, #6d28d9)",
-              border: "none",
-              borderRadius: 8,
-              padding: "9px 18px",
-              cursor: analysis.loading ? "default" : "pointer",
-              boxShadow: analysis.loading ? "none" : "0 2px 8px rgba(124,58,237,0.25)",
-              transition: "all 0.2s",
-            }}
-          >
-            {analysis.loading
-              ? "⏳ 分析中..."
-              : !isLegacy
-                ? "🔒 AI 问题分析 · Pro"
-                : analysis.text
-                  ? "🔄 重新分析"
-                  : "🔍 AI 问题分析"}
-          </button>
-        </div>
+    <SurfaceCard style={{ padding: "14px 16px", marginBottom: 14 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: C.t1 }}>拼句语法薄弱点</div>
+        <div style={{ fontSize: 12, color: C.t3 }}>按出错次数统计</div>
+        <button
+          type="button"
+          onClick={handleAnalyze}
+          disabled={analysis.loading}
+          title={!isLegacy ? "AI 问题分析是 Pro 功能" : undefined}
+          style={{
+            marginLeft: "auto",
+            fontSize: 12.5, fontWeight: 700, color: "#fff",
+            background: analysis.loading ? "#9ca3af" : !isLegacy ? "#64748b" : "#6d28d9",
+            border: "none", borderRadius: 8, padding: "7px 14px",
+            cursor: analysis.loading ? "default" : "pointer", fontFamily: "inherit",
+          }}
+        >
+          {analysis.loading ? "分析中..." : !isLegacy ? "🔒 AI 问题分析 · Pro" : analysis.text ? "重新分析" : "AI 问题分析"}
+        </button>
       </div>
       {proHint && (
         <div style={{ marginTop: 10, fontSize: 12, color: "#92400e", background: "#fffbeb", border: "1px solid #fde68a", padding: "8px 12px", borderRadius: 6 }}>
-          🔒 AI 问题分析是 Pro 功能，升级后即可使用。
+          AI 问题分析是 Pro 功能，升级后即可使用。
         </div>
       )}
-
-      {/* grammar point frequency bar */}
-      {gpFreq.length > 0 && (
-        <div style={{ marginTop: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.t2 }}>语法薄弱点分布</span>
-            {gpFreq.length > 5 && (
-              <button
-                onClick={() => setShowDetail(!showDetail)}
-                style={{ fontSize: 11, color: C.blue, background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
-              >
-                {showDetail ? "收起" : `查看全部 ${gpFreq.length} 个`}
-              </button>
-            )}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {(showDetail ? gpFreq : gpFreq.slice(0, 5)).map((gp) => {
-              const maxCount = gpFreq[0].count;
-              const pct = (gp.count / maxCount) * 100;
-              return (
-                <div key={gp.tag} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ width: 100, fontSize: 12, fontWeight: 600, color: C.t2, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {gp.label}
-                  </div>
-                  <div style={{ flex: 1, height: 18, background: C.bg, borderRadius: 4, overflow: "hidden", position: "relative" }}>
-                    <div
-                      style={{
-                        width: `${pct}%`,
-                        height: "100%",
-                        background: pct > 60 ? "linear-gradient(90deg, #fbbf24, #f59e0b)" : pct > 30 ? "linear-gradient(90deg, #86efac, #22c55e)" : `linear-gradient(90deg, ${C.ltB}, ${C.blue})`,
-                        borderRadius: 4,
-                        transition: "width 0.4s ease",
-                      }}
-                    />
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: C.t1, width: 28, textAlign: "right", flexShrink: 0 }}>
-                    {gp.count}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+      {gpFreq.length > 0 ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 12 }}>
+          {(showAll ? gpFreq : gpFreq.slice(0, 5)).map((gp) => (
+            <div key={gp.tag} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ width: 110, fontSize: 12, fontWeight: 600, color: C.t2, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{gp.label}</div>
+              <div style={{ flex: 1, minWidth: 0, height: 14, background: C.bg, borderRadius: 4, overflow: "hidden" }}>
+                <div style={{ width: `${(gp.count / maxCount) * 100}%`, height: "100%", background: SUBJECT_META.bs.color, opacity: 0.75, borderRadius: 4 }} />
+              </div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: C.t1, width: 28, textAlign: "right", flexShrink: 0 }}>{gp.count}</span>
+            </div>
+          ))}
+          {gpFreq.length > 5 && (
+            <button type="button" onClick={() => setShowAll(!showAll)} style={{ alignSelf: "flex-start", fontSize: 12, color: C.blue, background: "none", border: "none", cursor: "pointer", fontWeight: 600, padding: 0, fontFamily: "inherit" }}>
+              {showAll ? "收起" : `查看全部 ${gpFreq.length} 个`}
+            </button>
+          )}
         </div>
+      ) : (
+        <div style={{ marginTop: 10, fontSize: 12, color: C.t3 }}>这些题没有语法点标注（真题拼句不带语法点）。</div>
       )}
-
-      {/* AI analysis result */}
       {analysis.text && (
-        <div
-          style={{
-            marginTop: 14,
-            padding: "14px 16px",
-            background: "linear-gradient(135deg, #faf5ff, #f3e8ff)",
-            border: "1px solid #e9d5ff",
-            borderRadius: 10,
-            fontSize: 13.5,
-            color: "#1e1b4b",
-            lineHeight: 1.7,
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          <div style={{ fontSize: 12, fontWeight: 700, color: "#7c3aed", marginBottom: 8 }}>🔍 AI 分析报告</div>
+        <div style={{ marginTop: 12, padding: "12px 14px", background: "#faf5ff", border: "1px solid #e9d5ff", borderRadius: 10, fontSize: 13.5, color: "#1e1b4b", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#7c3aed", marginBottom: 6 }}>AI 分析报告</div>
           {analysis.text}
         </div>
       )}
-      {analysis.error && (
-        <div style={{ marginTop: 10, fontSize: 12, color: C.red }}>
-          分析失败：{analysis.error}
-        </div>
-      )}
+      {analysis.error && <div style={{ marginTop: 10, fontSize: 12, color: C.red }}>分析失败：{analysis.error}</div>}
     </SurfaceCard>
   );
 }
 
-/* ── main component ── */
+/* ── 顶部摘要卡 ── */
 
-function TabBar({ tab, setTab, totalWrong, favoritesCount }) {
-  const tabs = [
-    { key: "all", label: "全部错题", count: totalWrong },
-    { key: "favorites", label: "★ 收藏", count: favoritesCount },
-  ];
+function SummaryCard({ summary }) {
+  const chips = Object.keys(SUBTYPE_META)
+    .filter((st) => summary.bySubtype[st] > 0)
+    .map((st) => `${SUBTYPE_META[st].label} ${summary.bySubtype[st]}`);
+  const last = summary.lastDrill;
   return (
-    <div
-      style={{
-        display: "inline-flex",
-        gap: 4,
-        padding: 4,
-        background: "#f1f5f9",
-        borderRadius: 10,
-        marginBottom: 14,
-      }}
-    >
-      {tabs.map((t) => {
-        const active = t.key === tab;
-        return (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            style={{
-              border: "none",
-              background: active ? "#fff" : "transparent",
-              color: active ? C.t1 : C.t2,
-              borderRadius: 7,
-              padding: "7px 14px",
-              fontSize: 13,
-              fontWeight: active ? 700 : 500,
-              cursor: "pointer",
-              boxShadow: active ? "0 1px 2px rgba(15,23,42,0.08)" : "none",
-              transition: "all 0.15s",
-            }}
-          >
-            {t.label}
-            <span style={{ marginLeft: 6, color: active ? C.t2 : C.t3, fontSize: 12, fontWeight: 600 }}>
-              {t.count}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function SectionPill({ section, setSection, counts }) {
-  const tabs = ["bs", "reading", "listening"].map((k) => ({
-    key: k,
-    label: SECTION_META[k].label,
-    count: counts[k] || 0,
-    color: SECTION_META[k].color,
-    soft: SECTION_META[k].soft,
-  }));
-  return (
-    <div style={{ display: "inline-flex", gap: 4, padding: 4, background: "#f1f5f9", borderRadius: 10, marginBottom: 16 }}>
-      {tabs.map((t) => {
-        const active = t.key === section;
-        return (
-          <button
-            key={t.key}
-            onClick={() => setSection(t.key)}
-            style={{
-              border: "none",
-              background: active ? "#fff" : "transparent",
-              color: active ? t.color : C.t2,
-              borderRadius: 7,
-              padding: "7px 14px",
-              fontSize: 13,
-              fontWeight: active ? 700 : 500,
-              cursor: "pointer",
-              boxShadow: active ? "0 1px 2px rgba(15,23,42,0.08)" : "none",
-              transition: "all 0.15s",
-            }}
-          >
-            {t.label}
-            <span style={{
-              marginLeft: 6,
-              padding: "1px 7px",
-              borderRadius: 999,
-              fontSize: 11,
-              fontWeight: 700,
-              background: active ? t.soft : "transparent",
-              color: active ? t.color : C.t3,
-            }}>
-              {t.count}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-export default function MistakeNotebook({ onBack, initialSection = "bs" }) {
-  // SSR-safe initial state: all browser-derived values start empty/false so the
-  // server-rendered HTML matches the first client paint. We populate from
-  // localStorage / cloudHistCache inside useEffect (runs only on the client,
-  // after hydration). Without this, /mistake-notebook is statically generated
-  // with no data, then the client hydrates with localStorage data, and React
-  // throws "Expected server HTML to contain a matching <button>" warnings.
-  const [hist, setHist] = useState({ sessions: [] });
-  const [initialized, setInitialized] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginHint, setLoginHint] = useState(null);
-  const [tab, setTab] = useState("all");
-  const [section, setSection] = useState(SECTION_META[initialSection] ? initialSection : "bs");
-  const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
-  const { favorites, isStarred, toggleStar, error: favError } = useMistakeFavorites();
-
-  // Subscribe to real history-updated events (the prior code used the wrong
-  // constant name and was dead). Also listen to auth changes so the page
-  // reloads when the user logs in mid-session in this tab. No polling.
-  useEffect(() => {
-    const refresh = () => {
-      setHist(loadHist());
-      setIsLoggedIn(!!getSavedCode());
-      setInitialized(true);
-    };
-    refresh(); // populate from localStorage after hydration
-
-    const histEvent = SESSION_STORE_EVENTS?.HISTORY_UPDATED_EVENT;
-    if (typeof window !== "undefined" && histEvent) {
-      window.addEventListener(histEvent, refresh);
-    }
-    if (typeof window !== "undefined") {
-      window.addEventListener(AUTH_CHANGED_EVENT, refresh);
-    }
-
-    // Safety net: in case the cloud sync hasn't fired its event by the time
-    // we render, flip "initialized" after 1.5s so we don't show empty-state
-    // forever on a slow network.
-    const safety = setTimeout(() => setInitialized(true), 1500);
-
-    return () => {
-      clearTimeout(safety);
-      if (typeof window !== "undefined" && histEvent) {
-        window.removeEventListener(histEvent, refresh);
-      }
-      if (typeof window !== "undefined") {
-        window.removeEventListener(AUTH_CHANGED_EVENT, refresh);
-      }
-    };
-  }, []);
-
-  const bsGroups = useMemo(
-    () => extractMistakes(hist?.sessions || []),
-    [hist],
-  );
-  const readingGroups = useMemo(
-    () => extractReadingMistakes(hist?.sessions || []),
-    [hist],
-  );
-  const listeningGroups = useMemo(
-    () => extractListeningMistakes(hist?.sessions || []),
-    [hist],
-  );
-
-  // Alias used by the BS branch below — keep the variable name `groups` and
-  // `totalWrong` so the existing BS render code stays untouched.
-  const groups = bsGroups;
-  const totalWrong = useMemo(
-    () => groups.reduce((n, g) => n + g.wrongCount, 0),
-    [groups],
-  );
-
-  const sectionCounts = useMemo(() => ({
-    bs: bsGroups.reduce((n, g) => n + g.wrongCount, 0),
-    reading: readingGroups.reduce((n, g) => n + g.wrongCount, 0),
-    listening: listeningGroups.reduce((n, g) => n + g.wrongCount, 0),
-  }), [bsGroups, readingGroups, listeningGroups]);
-
-  const favoritesCount = favorites?.length || 0;
-
-  const handleRequireLogin = useCallback((opts) => {
-    if (opts?.syncing) {
-      setLoginHint("正在同步会话，请稍后再试");
-    } else {
-      setLoginHint("登录后可以收藏错题");
-    }
-    setTimeout(() => setLoginHint((cur) => (cur ? null : cur)), 2500);
-  }, []);
-
-  const sectionMeta = SECTION_META[section] || SECTION_META.bs;
-  const bsHasContent = bsGroups.length > 0 || favoritesCount > 0;
-
-  return (
-    <PageShell>
-      {/* header — back button on the top-right to match the rest of the app */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 18 }}>
-        <div>
-          <h1 style={{ fontSize: 20, fontWeight: 800, color: C.t1, margin: 0 }}>
-            错题本
-          </h1>
-          <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>
-            {sectionMeta.subtitle}
+    <SurfaceCard style={{ padding: "18px 20px", marginBottom: 14 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+        <div style={{ minWidth: 0, flex: "1 1 260px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+            <span style={{ fontSize: 30, fontWeight: 800, color: C.t1, fontVariantNumeric: "tabular-nums" }}>{summary.total}</span>
+            <span style={{ fontSize: 13, color: C.t2 }}>道错题</span>
+          </div>
+          <div style={{ fontSize: 12.5, color: C.t2, marginTop: 4, lineHeight: 1.6 }}>
+            {chips.length > 0 ? chips.join(" · ") : "做拼句、阅读、听力练习时答错的题会自动收进来"}
+          </div>
+          <div style={{ fontSize: 12, color: C.t3, marginTop: 4 }}>
+            收藏 {summary.starred} · 本周新增 {summary.weekNew} · 还没重做过 {summary.neverDrilled}
+            {last ? ` · 上次练错题：${relativeDay(last.at)} ${last.total} 题对 ${last.correct}（${pct(last.correct, last.total)}%）` : ""}
           </div>
         </div>
-        <button
-          onClick={onBack}
+        <Link
+          href="/mistake-drill"
+          data-testid="mistake-drill-entry"
           style={{
-            background: "none",
-            border: `1px solid ${C.bdr}`,
-            borderRadius: 8,
-            padding: "6px 14px",
-            fontSize: 13,
-            fontWeight: 600,
-            color: C.t2,
-            cursor: "pointer",
+            display: "inline-flex", alignItems: "center", justifyContent: "center",
+            background: summary.total > 0 ? "#E11D48" : "#cbd5e1",
+            color: "#fff", fontWeight: 700, fontSize: 14,
+            borderRadius: 10, padding: "11px 22px", textDecoration: "none",
+            pointerEvents: summary.total > 0 ? "auto" : "none",
             flexShrink: 0,
           }}
+          aria-disabled={summary.total === 0}
         >
-          返回
-        </button>
+          练错题 →
+        </Link>
       </div>
+    </SurfaceCard>
+  );
+}
 
-      {/* loading state — wait for first sync before showing "no mistakes" */}
-      {!initialized ? (
+/* ── 筛选条 ── */
+
+function Chip({ active, onClick, children, color = C.t1, soft = "#fff" }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      style={{
+        border: `1px solid ${active ? color : C.bdr}`,
+        background: active ? soft : "#fff",
+        color: active ? color : C.t2,
+        borderRadius: 999,
+        padding: "5px 12px",
+        fontSize: 12.5,
+        fontWeight: active ? 700 : 500,
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        fontFamily: "inherit",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+const TIME_OPTIONS = [
+  { key: "all", label: "全部时间", days: null },
+  { key: "7", label: "最近 7 天", days: 7 },
+  { key: "30", label: "最近 30 天", days: 30 },
+];
+
+/* ── 主组件 ── */
+
+export default function MistakeNotebook({ onBack, embedded = false, initialSection, initialSubject }) {
+  const { pool, ready } = useMistakePool({ derive: true, migrateFavorites: true });
+  const ai = useMistakeAi();
+  const [subject, setSubject] = useState(() => {
+    const s = initialSubject || initialSection;
+    return SUBJECT_META[s] ? s : "all";
+  });
+  const [subtype, setSubtype] = useState(null);
+  const [onlyStarred, setOnlyStarred] = useState(false);
+  const [onlyUndrilled, setOnlyUndrilled] = useState(false);
+  const [showRemoved, setShowRemoved] = useState(false);
+  const [timeKey, setTimeKey] = useState("all");
+  const [sort, setSort] = useState("recent");
+  const [limit, setLimit] = useState(PAGE_SIZE);
+  const [isLegacy, setIsLegacy] = useState(false);
+
+  useEffect(() => {
+    const tier = getSavedTier();
+    setIsLegacy(tier === "pro" || tier === "legacy");
+  }, []);
+
+  useEffect(() => { setLimit(PAGE_SIZE); }, [subject, subtype, onlyStarred, onlyUndrilled, showRemoved, timeKey, sort]);
+
+  const summary = useMemo(() => summarizePool(pool), [pool]);
+  const all = useMemo(() => activeCards(pool), [pool]);
+  const removed = useMemo(() => Object.values(pool.cards || {}).filter((c) => c && c.deletedAt), [pool]);
+
+  const filtered = useMemo(() => {
+    const base = showRemoved ? removed : all;
+    const days = TIME_OPTIONS.find((t) => t.key === timeKey)?.days;
+    const since = days ? Date.now() - days * 86400000 : null;
+    const list = base.filter((c) => {
+      if (subject !== "all" && c.subject !== subject) return false;
+      if (subtype && c.subtype !== subtype) return false;
+      if (onlyStarred && !c.starred) return false;
+      if (onlyUndrilled && c.lastDrill) return false;
+      if (since && new Date(c.lastWrongAt || 0).getTime() < since) return false;
+      return true;
+    });
+    return list.sort((a, b) => {
+      if (sort === "most") {
+        const d = (b.wrongCount || 1) - (a.wrongCount || 1);
+        if (d !== 0) return d;
+      }
+      return new Date(b.lastWrongAt || 0) - new Date(a.lastWrongAt || 0);
+    });
+  }, [all, removed, showRemoved, subject, subtype, onlyStarred, onlyUndrilled, timeKey, sort]);
+
+  const bsCards = useMemo(() => all.filter((c) => c.subject === "bs"), [all]);
+
+  const toggleStar = useCallback((card) => setStarred(card.key, !card.starred), []);
+  const remove = useCallback((card) => removeCards([card.key]), []);
+  const restore = useCallback((card) => restoreCards([card.key]), []);
+
+  const body = (
+    <>
+      {!ready ? (
         <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
-          <div style={{ fontSize: 13, color: C.t3 }}>正在加载错题记录...</div>
+          <div style={{ fontSize: 13, color: C.t3 }}>正在整理错题...</div>
         </SurfaceCard>
       ) : (
         <>
-          <SectionPill section={section} setSection={setSection} counts={sectionCounts} />
+          <SummaryCard summary={summary} />
 
-          {section === "reading" ? (
-            <McqMistakesView
-              groups={readingGroups}
-              section="reading"
-              emptyHint="完成几次 Reading 练习后，答错的题会自动收录在这里。"
-            />
-          ) : section === "listening" ? (
-            <McqMistakesView
-              groups={listeningGroups}
-              section="listening"
-              emptyHint="完成几次 Listening 练习后，答错的题会自动收录在这里。"
-            />
-          ) : !bsHasContent ? (
-            <SurfaceCard style={{ padding: "48px 24px", textAlign: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
-                暂无错题
+          {/* 科目 */}
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+            <Chip active={subject === "all"} onClick={() => { setSubject("all"); setSubtype(null); }}>全部 {summary.total}</Chip>
+            {SUBJECT_ORDER.map((s) => (
+              <Chip key={s} active={subject === s} color={SUBJECT_META[s].color} soft={SUBJECT_META[s].soft} onClick={() => { setSubject(s); setSubtype(null); }}>
+                {SUBJECT_META[s].label} {summary.bySubject[s] || 0}
+              </Chip>
+            ))}
+          </div>
+          {/* 题型 */}
+          {subject !== "all" && SUBTYPES_BY_SUBJECT[subject].length > 1 && (
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+              {SUBTYPES_BY_SUBJECT[subject].filter((st) => summary.bySubtype[st] > 0).map((st) => (
+                <Chip key={st} active={subtype === st} color={SUBJECT_META[subject].color} soft={SUBJECT_META[subject].soft} onClick={() => setSubtype(subtype === st ? null : st)}>
+                  {SUBTYPE_META[st].label} {summary.bySubtype[st]}
+                </Chip>
+              ))}
+            </div>
+          )}
+          {/* 状态 / 时间 / 排序 */}
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
+            <Chip active={onlyStarred} color="#d97706" soft="#fffbeb" onClick={() => setOnlyStarred(!onlyStarred)}>★ 收藏</Chip>
+            <Chip active={onlyUndrilled} onClick={() => setOnlyUndrilled(!onlyUndrilled)}>还没重做过</Chip>
+            {TIME_OPTIONS.map((t) => (
+              <Chip key={t.key} active={timeKey === t.key} onClick={() => setTimeKey(t.key)}>{t.label}</Chip>
+            ))}
+            <span style={{ flex: 1 }} />
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              aria-label="排序"
+              style={{ fontSize: 12.5, border: `1px solid ${C.bdr}`, borderRadius: 8, padding: "5px 8px", background: "#fff", color: C.t2, fontFamily: "inherit" }}
+            >
+              <option value="recent">最近错的在前</option>
+              <option value="most">错得最多在前</option>
+            </select>
+            {removed.length > 0 && (
+              <Chip active={showRemoved} onClick={() => setShowRemoved(!showRemoved)}>已移出 {removed.length}</Chip>
+            )}
+          </div>
+
+          {!showRemoved && (subject === "all" || subject === "bs") && !subtype && bsCards.length > 0 && (
+            <BsAnalysis cards={bsCards} drills={pool.drills} isLegacy={isLegacy} />
+          )}
+
+          {filtered.length === 0 ? (
+            <SurfaceCard style={{ padding: "40px 24px", textAlign: "center" }}>
+              <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
+                {summary.total === 0 && !showRemoved ? "暂无错题" : "没有符合条件的错题"}
               </div>
               <div style={{ fontSize: 13, color: C.t3, lineHeight: 1.6 }}>
-                完成几套 Build a Sentence 练习后，答错的题会自动收录在这里。
+                {summary.total === 0 && !showRemoved
+                  ? "拼句、阅读（填词 / 日常 / 学术）、听力（应答 / 公告 / 对话 / 讲座）以及阅读听力模考里答错的题，会自动收在这里。口语和写作没有标准答案，不收。"
+                  : "换个筛选条件看看。"}
               </div>
             </SurfaceCard>
           ) : (
             <>
-              <TabBar tab={tab} setTab={setTab} totalWrong={totalWrong} favoritesCount={favoritesCount} />
-              {favError ? (
-                <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fef2f2", color: "#b91c1c", fontSize: 12 }}>
-                  收藏夹同步出错：{favError}
+              <div style={{ fontSize: 12, color: C.t3, marginBottom: 8 }}>共 {filtered.length} 道</div>
+              {filtered.slice(0, limit).map((card) => (
+                <MistakeItemCard
+                  key={card.key}
+                  card={card}
+                  items={pool.items}
+                  ai={ai}
+                  onToggleStar={showRemoved ? undefined : toggleStar}
+                  onRemove={showRemoved ? undefined : remove}
+                  onRestore={showRemoved ? restore : undefined}
+                  drillHref={showRemoved ? undefined : `/mistake-drill?key=${encodeURIComponent(card.key)}`}
+                />
+              ))}
+              {filtered.length > limit && (
+                <div style={{ textAlign: "center", margin: "6px 0 18px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setLimit(limit + PAGE_SIZE)}
+                    style={{ border: `1px solid ${C.bdr}`, background: "#fff", borderRadius: 8, padding: "8px 18px", fontSize: 13, color: C.t2, cursor: "pointer", fontFamily: "inherit" }}
+                  >
+                    再显示 {Math.min(PAGE_SIZE, filtered.length - limit)} 道
+                  </button>
                 </div>
-              ) : null}
-              {loginHint ? (
-                <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 6, background: "#fffbeb", color: "#92400e", fontSize: 12, border: "1px solid #fde68a" }}>
-                  {loginHint}
-                </div>
-              ) : null}
-
-              {tab === "all" ? (
-            <>
-              {groups.length > 0 ? (
-                <>
-                  <StatsBar groups={groups} totalWrong={totalWrong} isLegacy={isLegacy} />
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                    {groups.map((g, gi) => (
-                      <DisclosureSection
-                        key={g.key}
-                        title={`第 ${groups.length - gi} 套 · ${g.wrongCount}/${g.total} 错题`}
-                        preview={formatLocalDateTime(g.date)}
-                        badge={`${g.wrongCount} 题`}
-                        icon="✗"
-                        defaultOpen={gi === 0}
-                        contentStyle={{ padding: "12px 14px", background: C.bg }}
-                      >
-                        {g.details.map((d, di) => (
-                          <MistakeCard
-                            key={`${g.key}-${di}`}
-                            detail={d}
-                            explainKey={`mn-${gi}-${di}`}
-                            aiExplains={aiExplains}
-                            isLegacy={isLegacy}
-                            handleAiExplain={handleAiExplain}
-                            sessionId={g.sessionId}
-                            detailIndex={d._index}
-                            sessionDate={g.date}
-                            isStarred={isStarred(g.sessionId, d._index)}
-                            onToggleStar={toggleStar}
-                            isLoggedIn={isLoggedIn}
-                            onRequireLogin={handleRequireLogin}
-                          />
-                        ))}
-                      </DisclosureSection>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <SurfaceCard style={{ padding: "32px 24px", textAlign: "center" }}>
-                  <div style={{ fontSize: 14, color: C.t2 }}>暂无错题记录。</div>
-                </SurfaceCard>
               )}
-            </>
-          ) : (
-            // Favorites tab
-            <>
-              {favoritesCount === 0 ? (
-                <SurfaceCard style={{ padding: "40px 24px", textAlign: "center" }}>
-                  <div style={{ fontSize: 32, marginBottom: 10, color: "#f59e0b" }}>★</div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginBottom: 6 }}>
-                    暂无收藏的错题
-                  </div>
-                  <div style={{ fontSize: 13, color: C.t3, lineHeight: 1.6 }}>
-                    在错题卡片右上角点击 ☆ 来收藏。
-                  </div>
-                </SurfaceCard>
-              ) : (
-                <SurfaceCard style={{ padding: "12px 14px", background: C.bg }}>
-                  {favorites.map((f, fi) => {
-                    const synthDetail = favoriteToDetail(f);
-                    return (
-                      <MistakeCard
-                        key={f.id}
-                        detail={synthDetail}
-                        explainKey={`fav-${f.id}`}
-                        aiExplains={aiExplains}
-                        isLegacy={isLegacy}
-                        handleAiExplain={handleAiExplain}
-                        sessionId={f.session_id}
-                        detailIndex={f.detail_index}
-                        sessionDate={f.snapshot?.sessionDate || f.created_at}
-                        isStarred={true}
-                        onToggleStar={toggleStar}
-                        isLoggedIn={isLoggedIn}
-                        onRequireLogin={handleRequireLogin}
-                      />
-                    );
-                  })}
-                </SurfaceCard>
-              )}
-            </>
-          )}
             </>
           )}
         </>
       )}
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div data-testid="mistake-notebook">
+        <div style={{ marginBottom: 14 }}>
+          <h1 style={{ fontSize: 20, fontWeight: 800, color: C.t1, margin: 0 }}>错题本</h1>
+          <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>做错的题自动收集 · 一题一条 · 可按题型抽题集中重做</div>
+        </div>
+        {body}
+      </div>
+    );
+  }
+
+  return (
+    <PageShell>
+      <div data-testid="mistake-notebook">
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 18 }}>
+          <div>
+            <h1 style={{ fontSize: 20, fontWeight: 800, color: C.t1, margin: 0 }}>错题本</h1>
+            <div style={{ fontSize: 12, color: C.t3, marginTop: 2 }}>做错的题自动收集 · 一题一条 · 可按题型抽题集中重做</div>
+          </div>
+          {onBack && (
+            <button
+              onClick={onBack}
+              style={{ background: "none", border: `1px solid ${C.bdr}`, borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 600, color: C.t2, cursor: "pointer", flexShrink: 0 }}
+            >
+              返回
+            </button>
+          )}
+        </div>
+        {body}
+      </div>
     </PageShell>
   );
-}
-
-/**
- * Helper for homepage: count total BS mistakes from sessions.
- * Lightweight — call from HomePageClient to show badge count.
- */
-export function countBsMistakes(sessions) {
-  if (!Array.isArray(sessions)) return 0;
-  return sessions
-    .filter((s) => s.type === "bs" && Array.isArray(s.details))
-    .reduce((n, s) => n + s.details.filter((d) => !d.isCorrect).length, 0);
 }
