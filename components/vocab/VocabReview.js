@@ -7,6 +7,9 @@ import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
 import { hasUsableSense, parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
+import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense } from "../../lib/dict/aiSense";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { adoptDictEntry, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
@@ -211,6 +214,8 @@ export function VocabReview({
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState("");
   const [editError, setEditError] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const aiRequestRef = useRef(0);
   const [notice, setNotice] = useState("");
   const [segDurMs, setSegDurMs] = useState(0);
   const [startStats] = useState(() => resume?.startStats || pickStats(statsNow));
@@ -238,6 +243,8 @@ export function VocabReview({
   const cloze = useMemo(() => (card ? clozeSentence(card) : null), [card]);
   // 背面高亮的例句要和正面用的是同一句（池里轮到第二句时不能翻面又跳回主句）。
   const shownSentence = useMemo(() => (card ? activeSentence(card) || card.sentence : ""), [card]);
+  const tier = typeof window !== "undefined" ? getSavedTier() : null;
+  const canGenerateDefinition = (tier === "pro" || tier === "legacy") && !!shownSentence?.trim();
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
   // 这一次选「记得」后要不要拼：按卡进队列时的状态定，本场改「要会写」开关下次才生效。
   const spellingOn = useMemo(() => (card ? needsSpelling(card) : false), [card]);
@@ -262,10 +269,26 @@ export function VocabReview({
   }, [pos]);
 
   useEffect(() => {
+    aiRequestRef.current += 1;
     setMenuOpen(false);
     setEditing(false);
     setEditError("");
-  }, [pos, card?.word]);
+    setAiGenerating(false);
+  }, [pos, card?.word, accountKey, shownSentence]);
+
+  useEffect(() => {
+    const invalidate = () => {
+      if (getVocabAccountKey() === accountKey) return;
+      aiRequestRef.current += 1;
+      setAiGenerating(false);
+      setEditing(false);
+    };
+    window.addEventListener(AUTH_CHANGED_EVENT, invalidate);
+    return () => {
+      aiRequestRef.current += 1;
+      window.removeEventListener(AUTH_CHANGED_EVENT, invalidate);
+    };
+  }, [accountKey]);
 
   // 存档小结开着时不能抢焦点：输入框一聚焦，空格就打进了它背后的输入框，
   // 小结的「继续」按钮永远等不到键盘。小结关掉后依赖变化，焦点再回到输入框。
@@ -416,15 +439,48 @@ export function VocabReview({
   }, [accountKey, card, onFinish, onSuspend, resetFace, sess]);
 
   const openEditor = useCallback(() => {
+    aiRequestRef.current += 1;
+    setAiGenerating(false);
     setEditText(mainDef || card?.def || "");
     setEditError("");
     setEditing(true);
     setMenuOpen(false);
   }, [card, mainDef]);
 
+  const closeEditor = useCallback(() => {
+    aiRequestRef.current += 1;
+    setAiGenerating(false);
+    setEditing(false);
+    setEditError("");
+  }, []);
+
+  const generateDefinition = useCallback(async () => {
+    if (!card || !canGenerateDefinition || aiGenerating || getVocabAccountKey() !== accountKey) return;
+    const request = ++aiRequestRef.current;
+    const current = () => request === aiRequestRef.current && getVocabAccountKey() === accountKey;
+    setAiGenerating(true);
+    setEditError("");
+    try {
+      const message = contextSenseMessage(card.display || card.word, shownSentence,
+        card.defFull || card.baseDef || extraEntry?.t || card.def);
+      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      if (!current()) return;
+      const { sense } = parseContextSense(raw);
+      if (!sense) {
+        setEditError("AI 这次没返回可用的短释义，请重试。");
+        return;
+      }
+      setEditText(sense);
+    } catch (error) {
+      if (current()) setEditError(mapAiHelperError(error));
+    } finally {
+      if (current()) setAiGenerating(false);
+    }
+  }, [accountKey, aiGenerating, canGenerateDefinition, card, extraEntry, shownSentence]);
+
   const saveEdit = useCallback((e) => {
     e.preventDefault();
-    if (!card || !onEditDefinition || getVocabAccountKey() !== accountKey) return;
+    if (!card || !onEditDefinition || aiGenerating || getVocabAccountKey() !== accountKey) return;
     try {
       const updated = onEditDefinition(card.word, editText);
       if (!updated) { setEditError("没能保存：这个词可能已被移除。"); return; }
@@ -434,12 +490,11 @@ export function VocabReview({
         contextSenseResetAt: updated.contextSenseResetAt,
       };
       setSess((s) => ({ ...s, queue: s.queue.map((c) => (c.word === card.word ? { ...c, ...patch } : c)) }));
-      setEditing(false);
-      setEditError("");
+      closeEditor();
     } catch (error) {
       setEditError(error?.message || "没能保存，请稍后重试。");
     }
-  }, [accountKey, card, editText, onEditDefinition]);
+  }, [accountKey, aiGenerating, card, closeEditor, editText, onEditDefinition]);
 
   /** 认词选「记得」：要会写的词先弹拼写，拼对才算；其余直接记得。 */
   const remember = useCallback(() => {
@@ -671,6 +726,7 @@ export function VocabReview({
               <textarea
                 aria-label="编辑释义"
                 value={editText}
+                disabled={aiGenerating}
                 onChange={(event) => setEditText(event.target.value)}
                 rows={2}
                 maxLength={300}
@@ -682,9 +738,14 @@ export function VocabReview({
               />
             </label>
             {editError && <p role="alert" style={{ margin: "0 0 8px", fontSize: 12, color: "#b91c1c" }}>{editError}</p>}
-            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-              <button type="button" onClick={() => { setEditing(false); setEditError(""); }} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 7, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT }}>取消</button>
-              <button type="submit" disabled={!editText.trim()} style={{ border: "none", background: ACCENT, color: "#fff", borderRadius: 7, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: editText.trim() ? "pointer" : "default", opacity: editText.trim() ? 1 : 0.5, fontFamily: FONT }}>保存</button>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", flexWrap: "wrap" }}>
+              <button type="button" onClick={generateDefinition} disabled={!canGenerateDefinition || aiGenerating}
+                title={!shownSentence?.trim() ? "这个词没有原句语境" : tier !== "pro" && tier !== "legacy" ? "AI 释义需 Pro" : "根据当前原句生成短释义"}
+                style={{ border: `1px solid ${ACCENT}`, background: "#fff", color: ACCENT, borderRadius: 7, padding: "6px 12px", fontSize: 12, cursor: canGenerateDefinition && !aiGenerating ? "pointer" : "default", opacity: canGenerateDefinition && !aiGenerating ? 1 : 0.5, fontFamily: FONT }}>
+                {aiGenerating ? "AI 生成中…" : "AI 生成释义"}
+              </button>
+              <button type="button" onClick={closeEditor} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 7, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT }}>取消</button>
+              <button type="submit" disabled={!editText.trim() || aiGenerating} style={{ border: "none", background: ACCENT, color: "#fff", borderRadius: 7, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: editText.trim() && !aiGenerating ? "pointer" : "default", opacity: editText.trim() && !aiGenerating ? 1 : 0.5, fontFamily: FONT }}>保存</button>
             </div>
           </form>
         )}

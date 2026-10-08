@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup";
 import { sentenceAtOffsets, splitSenses } from "../../lib/dict/core";
-import { CONTEXT_SENSE_SYSTEM, parseContextSense, usableContextSense } from "../../lib/dict/aiSense";
+import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense, usableContextSense } from "../../lib/dict/aiSense";
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { getCard, saveWord, removeWord, addSentence, chooseSense, adoptContextSense, getVocabAccountKey } from "../../lib/vocab/vocabStore";
@@ -370,8 +370,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     }
     setAi({ loading: true, text: null, sense: "", error: null });
     try {
-      const message = `句子：${sentence}\n学生查的词：${pop.word}\n`
-        + (pop.entry?.t ? `词典释义：${pop.entry.t.replace(/\n/g, "；")}` : "词典未收录这个词。");
+      const message = contextSenseMessage(pop.word, sentence, pop.entry?.t);
       const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
       if (!current()) return;
       const result = parseContextSense(raw);

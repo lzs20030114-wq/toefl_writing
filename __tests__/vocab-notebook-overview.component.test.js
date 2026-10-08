@@ -8,6 +8,7 @@ import { writeReviewSave } from "../lib/vocab/reviewSave";
 import { STATE } from "../lib/vocab/srs";
 
 jest.mock("../lib/AuthContext", () => ({
+  getSavedTier: () => "pro",
   getSavedCode: jest.fn(() => null),
   AUTH_CHANGED_EVENT: "auth-changed",
 }));
