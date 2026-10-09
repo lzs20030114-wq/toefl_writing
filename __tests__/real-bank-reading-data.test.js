@@ -175,6 +175,18 @@ describe("真题阅读：源料缺陷标记（source_flags）", () => {
 });
 
 describe("真题阅读：CTW 形状（CTWTask 硬契约）", () => {
+  test("3.2 A 第 7 空 research 保留 rese 并允许填写 arch", () => {
+    const source = RB_CTW.items.find((it) => it.id === "real_ctw_32a_1_1");
+    const item = ctw.find((it) => it.id === source.id);
+    expect(source.blanks[6]).toEqual({
+      position: 25, original_word: "research", displayed_fragment: "rese", hidden_length: 4,
+    });
+    expect(item.blanks[6].original_word.slice(item.blanks[6].displayed_fragment.length)).toBe("arch");
+    expect(source.passage).toContain("This research informs strategies");
+    expect(source.blanked_text).toContain("This rese____ informs strat_____");
+    expect(source.passage).not.toContain("reseach");
+  });
+
   test("passage / first_sentence / blanks 齐全", () => {
     ctw.forEach((it) => {
       expect(typeof it.passage).toBe("string");

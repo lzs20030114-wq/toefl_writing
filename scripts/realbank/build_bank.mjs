@@ -389,6 +389,17 @@ function repairCtwSource(item, id) {
   let passage = String(item.passage || "").trim();
   const blanks = [...(item.blanks || [])];
   const head = CTW_HEAD_REPAIRS.get(id);
+  // 3.2 A M1 第 7 空：来源答案 reseach 漏写 r；保留 rese 前缀，补齐正文和答案。
+  if (id === "real_ctw_32a_1_1") {
+    const typo = "This reseach informs strategies";
+    const corrected = "This research informs strategies";
+    if (passage.includes(typo) && blanks[6]?.word === "reseach" && blanks[6]?.given === "rese") {
+      passage = passage.replace(typo, corrected);
+      blanks[6] = { ...blanks[6], word: "research" };
+    } else if (!passage.includes(corrected) || blanks[6]?.word !== "research" || blanks[6]?.given !== "rese") {
+      throw new Error(`${id}: research 拼写修正与指定题目不符`);
+    }
+  }
   if (head) {
     if (passage.startsWith(head.truncated)) passage = head.complete + passage.slice(head.truncated.length);
     else if (!passage.startsWith(head.complete)) throw new Error(`${id}: 首句与已核对的补全文本不符`);
