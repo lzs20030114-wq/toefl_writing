@@ -108,13 +108,15 @@ describe("划词弹窗 · 义项 chips", () => {
     expect(chip).toHaveStyle({ color: "#0891B2" });
   });
 
-  test("点义项前可选听力词；已收藏的词可切换类型", async () => {
+  test("点义项前可同时选阅读听力，保存及更新义项保留两项；已收藏可关闭一路", async () => {
     openPopup("pattern");
     const chip = await screen.findByText("图案");
     fireEvent.click(screen.getByRole("button", { name: "听力词" }));
     fireEvent.click(chip);
-    expect(getCard("pattern").reviewMode).toBe("listening");
-    fireEvent.click(screen.getByRole("button", { name: "阅读词" }));
+    expect(getCard("pattern").reviewMode).toBe("both");
+    fireEvent.click(screen.getByText("模仿"));
+    expect(getCard("pattern").reviewMode).toBe("both");
+    fireEvent.click(screen.getByRole("button", { name: "听力词" }));
     expect(getCard("pattern").reviewMode).toBe("reading");
   });
 
@@ -144,11 +146,12 @@ describe("划词弹窗 · 语境池", () => {
   test("已收藏时出现「＋ 加这句语境」，点了把当前这句加进池", async () => {
     saveWord({
       word: "pattern", def: "n. 图案",
-      sentence: "The pattern of migration changed.", source: "reading",
+      sentence: "The pattern of migration changed.", source: "reading", reviewMode: "both",
     });
     openPopup("pattern", OTHER_PASSAGE);
     fireEvent.click(await screen.findByText("＋ 加这句语境"));
     expect(getCard("pattern").sentences).toEqual([OTHER_PASSAGE]);
+    expect(getCard("pattern").reviewMode).toBe("both");
     // 加完当场变成「已在卡上」且点不动了
     expect(await screen.findByText("✓ 这句已在卡上")).toBeDisabled();
   });

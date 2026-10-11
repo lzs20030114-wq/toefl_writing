@@ -46,7 +46,8 @@
 .facts dt { font-size: 11px; font-weight: 700; line-height: 19px; color: #94a39a; }
 .facts dd { min-width: 0; margin: 0; }
 .wordFoot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px dashed #ebf0ed; }
-.modes { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid #ebf0ed; border-radius: 7px; background: #f7faf9; }
+.modes { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px; padding: 2px; border: 1px solid #ebf0ed; border-radius: 7px; background: #f7faf9; }
+.modeHint { padding: 0 4px; color: #94a39a; font-size: 10px; white-space: nowrap; }
 .modes button { padding: 3px 9px; border: 0; border-radius: 5px; background: transparent; color: #5a6b62; font-size: 11px; font-weight: 600; cursor: pointer; }
 .modes button[aria-pressed="true"] { background: #fff; color: #1a2420; box-shadow: 0 1px 2px #152b1d1f; }
 .save { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1px solid #0d966866; border-radius: 7px; background: #ecfdf5; color: #0d9668; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; }

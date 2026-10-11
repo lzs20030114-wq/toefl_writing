@@ -104,7 +104,7 @@ export function useVocabBook() {
   const suspend = useCallback((word, on = true) => setSuspended(word, on), []);
   const editDef = useCallback((word, text) => editDefinition(word, text), []);
   const remove = useCallback((word) => removeWord(word), []);
-  const reset = useCallback((word) => resetCard(word), []);
+  const reset = useCallback((word, mode) => resetCard(word, new Date(), mode), []);
   const markProductive = useCallback((word, on) => setProductive(word, on), []);
   const setReviewMode = useCallback((word, mode) => setStoredReviewMode(word, mode), []);
   const setLimits = useCallback((next) => {

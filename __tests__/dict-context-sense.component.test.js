@@ -58,6 +58,7 @@ async function analyze(sentence = FIRST) {
 test("请求与收藏只由用户动作触发；采用同时保存原句、音标、完整词典备份", async () => {
   mount();
   await open();
+  fireEvent.click(screen.getByRole("button", { name: "听力词" }));
   expect(callAI).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "讲讲这句里的用法" }));
   const adopt = await screen.findByRole("button", { name: "用这个意思复习" });
@@ -68,15 +69,17 @@ test("请求与收藏只由用户动作触发；采用同时保存原句、音�
   expect(card.defFull).toBe(DICT);
   expect(card.phonetic).toBe("in'vɔləntəri");
   expect(card.sentence).toBe(FIRST);
+  expect(card.reviewMode).toBe("both");
   expect(screen.getByRole("button", { name: "✓ 已用于这句的复习" })).toBeDisabled();
   expect(callAI).toHaveBeenCalledTimes(1);
 });
 
 test("既有词卡采用或编辑保留复习进度；取消与空释义不写卡，不重复调用AI", async () => {
-  const existing = saveWord({ word: "involuntary", def: DICT, sentence: SECOND, reps: 8, state: 2, due: "2030-01-01T00:00:00.000Z" });
+  const existing = saveWord({ word: "involuntary", def: DICT, sentence: SECOND, reviewMode: "both", reps: 8, state: 2, due: "2030-01-01T00:00:00.000Z" });
   mount();
   fireEvent.click(await analyze());
   expect(getCard("involuntary").reps).toBe(existing.reps);
+  expect(getCard("involuntary").reviewMode).toBe("both");
   fireEvent.click(screen.getByRole("button", { name: "编辑释义" }));
   expect(screen.getByLabelText("这句的短释义")).toHaveValue(RESPONSE.sense);
   fireEvent.change(screen.getByLabelText("这句的短释义"), { target: { value: "" } });
@@ -88,6 +91,7 @@ test("既有词卡采用或编辑保留复习进度；取消与空释义不写�
   fireEvent.change(screen.getByLabelText("这句的短释义"), { target: { value: "a. 不受意识控制的" } });
   fireEvent.click(screen.getByRole("button", { name: "保存释义" }));
   const edited = getCard("involuntary");
+  expect(edited.reviewMode).toBe("both");
   expect(definitionForContext(edited, FIRST)).toBe("a. 不受意识控制的");
   expect(edited.reps).toBe(existing.reps);
   expect(edited.due).toBe(existing.due);

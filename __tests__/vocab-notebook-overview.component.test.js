@@ -128,6 +128,48 @@ describe("今日新增按首次收藏的设备本地日期查看", () => {
   });
 });
 
+test("双轨词只收藏一份，分科筛选显示对应进度，听力重学不清阅读", () => {
+  const now = Date.now();
+  const readingState = { state: STATE.REVIEW, reps: 4, stability: 8, difficulty: 5, lastReview: iso(now - DAY), due: iso(now + 5 * DAY) };
+  localStorage.setItem("toefl-vocab-book::guest", JSON.stringify({ v: 1, cards: [{
+    word: "dual", def: "adj. 双重的", reviewMode: "both", createdAt: iso(now), ...readingState,
+    listeningState: { state: STATE.LEARNING, reps: 2, stability: 2, lastReview: iso(now - DAY), due: iso(now - DAY) },
+  }] }));
+  render(<VocabNotebook embedded />);
+  expect(screen.getByRole("region", { name: /^今日新增/ })).toHaveTextContent("今日新增 1 词");
+  expect(screen.getByRole("region", { name: /^今日新增/ })).toHaveTextContent("阅读 1 · 听力 1");
+  expect(screen.getByText("其中 1 词同时练阅读和听力")).toBeInTheDocument();
+  expect(wordsShown()).toEqual(["dual"]);
+  expect(within(library()).getByText("复习中", { exact: true })).toBeInTheDocument();
+  const modes = screen.getByRole("group", { name: "词表类型" });
+  fireEvent.click(within(modes).getByRole("button", { name: "听力", exact: true }));
+  expect(wordsShown()).toEqual(["dual"]);
+  expect(within(library()).getByText("学习中", { exact: true })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "dual 更多操作" }));
+  expect(screen.getByRole("combobox", { name: "dual复习类型" })).toHaveValue("both");
+  fireEvent.click(screen.getByRole("button", { name: "重学" }));
+  const stored = JSON.parse(localStorage.getItem("toefl-vocab-book::guest")).cards[0];
+  expect(stored.listeningState.state).toBe(STATE.NEW);
+  expect(stored.listeningState.reps).toBe(0);
+  expect(stored.reps).toBe(readingState.reps); expect(stored.due).toBe(readingState.due);
+  expect(stored.reviewMode).toBe("both");
+  fireEvent.click(within(modes).getByRole("button", { name: "阅读", exact: true }));
+  expect(wordsShown()).toEqual(["dual"]);
+  expect(within(library()).getByText("复习中", { exact: true })).toBeInTheDocument();
+});
+
+test("双轨今日计划以任务计，完成阅读后听力任务仍待完成", () => {
+  localStorage.setItem("toefl-vocab-book::guest", JSON.stringify({ v: 1, cards: [{ word: "dual", def: "双重的", reviewMode: "both", createdAt: iso(Date.now()), productive: false }] }));
+  render(<VocabNotebook embedded />);
+  expect(screen.getByText("今日复习 2 项")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /^阅读复习，今天 1 个词/ }));
+  fireEvent.click(screen.getByRole("button", { name: /显示答案/ }));
+  fireEvent.click(screen.getByRole("button", { name: /^记得/ }));
+  fireEvent.click(screen.getByRole("button", { name: /退出|返回单词本/ }));
+  expect(screen.queryByText("今天的任务完成了")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /^听力复习，今天 1 个词/ })).toBeEnabled();
+});
+
 test("今日计划：总量、预计时间、进度，以及阅读/听力两列的到期·新词·考拼写", () => {
   render(<VocabNotebook embedded />);
   expect(screen.getByText("今日复习 5 词")).toBeInTheDocument(); // alpha bravo charlie + fresh + heard

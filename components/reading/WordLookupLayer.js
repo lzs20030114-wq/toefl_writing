@@ -7,7 +7,7 @@ import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense, usableCon
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { getCard, saveWord, removeWord, addSentence, chooseSense, adoptContextSense, getVocabAccountKey } from "../../lib/vocab/vocabStore";
-import { MAX_CONTEXTS, definitionForContext } from "../../lib/vocab/book";
+import { MAX_CONTEXTS, definitionForContext, hasReviewMode, toggleReviewMode } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine } from "../shared/DictSenses";
 
@@ -479,11 +479,12 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
 
   const changeReviewMode = useCallback((mode) => {
     if (!canAct()) return;
-    setReviewMode(mode);
+    const enrollment = toggleReviewMode(reviewMode, mode);
+    setReviewMode(enrollment);
     if (!card) return;
-    const next = saveWord({ ...card, reviewMode: mode, ...(listeningContext ? { listeningContext } : {}) });
+    const next = saveWord({ ...card, reviewMode: enrollment, ...(listeningContext ? { listeningContext } : {}) });
     if (next) setCard(next);
-  }, [card, listeningContext, canAct]);
+  }, [card, listeningContext, canAct, reviewMode]);
 
   /** 收藏这个词。def 传空就用整条词典释义（用户没点义项时的老行为）。 */
   const saveCurrent = useCallback(
@@ -717,14 +718,15 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
           {pop.loading && (
             <div style={{ marginTop: 8, color: "#8a9a92", fontSize: 12 }}>查询中…</div>
           )}
-          <div role="group" aria-label="选择复习类型" style={{ display: "flex", gap: 6, marginTop: 8 }}>
+          <div role="group" aria-label="选择复习类型" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, marginTop: 8 }}>
             {[["reading", "阅读词"], ["listening", "听力词"]].map(([mode, label]) => (
-              <button key={mode} type="button" aria-pressed={reviewMode === mode} disabled={pop.loading}
+              <button key={mode} type="button" aria-pressed={hasReviewMode(reviewMode, mode)} disabled={pop.loading}
                 onClick={() => changeReviewMode(mode)}
-                style={{ border: `1px solid ${reviewMode === mode ? "#0891B2" : "#dbe3dd"}`, background: reviewMode === mode ? "#ECFEFF" : "#fff", color: reviewMode === mode ? "#08758f" : "#596b61", borderRadius: 999, padding: "2px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                style={{ border: `1px solid ${hasReviewMode(reviewMode, mode) ? "#0891B2" : "#dbe3dd"}`, background: hasReviewMode(reviewMode, mode) ? "#ECFEFF" : "#fff", color: hasReviewMode(reviewMode, mode) ? "#08758f" : "#596b61", borderRadius: 999, padding: "2px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
                 {label}
               </button>
             ))}
+            <span style={{ fontSize: 11, color: "#8a9a92" }}>可多选</span>
           </div>
           {/* 释义区：多义项拆成可点的 chips，点一条就把它定成这张卡的主释义 ——
               整条词典条目（七八个义项）存进单词本，复习时根本对不上原句那个意思。

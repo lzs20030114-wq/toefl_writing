@@ -7,6 +7,7 @@ import { callAI } from "../../lib/ai/client";
 import { getSavedCode } from "../../lib/AuthContext";
 import { getCard, isSaved, saveWord } from "../../lib/vocab/vocabStore";
 import { buildRootPrompts, normalizeRoot, parseRootResult } from "../../lib/vocab/rootExplorer";
+import { hasReviewMode, toggleReviewMode } from "../../lib/vocab/book";
 import styles from "./RootExplorer.module.css";
 
 const CACHE_KEY = "toefl-root-explorer-v1";
@@ -110,9 +111,10 @@ export default function RootExplorer() {
   const modeOf = (word) => reviewModes[word] || getCard(word)?.reviewMode || "reading";
 
   function chooseMode(word, mode) {
-    setReviewModes((prev) => ({ ...prev, [word]: mode }));
+    const enrollment = toggleReviewMode(modeOf(word), mode);
+    setReviewModes((prev) => ({ ...prev, [word]: enrollment }));
     const existing = getCard(word);
-    if (existing) saveWord({ ...existing, reviewMode: mode });
+    if (existing) saveWord({ ...existing, reviewMode: enrollment });
   }
 
   function addWord(item) {
@@ -123,7 +125,7 @@ export default function RootExplorer() {
       defFull: `${item.partOfSpeech} ${item.meaning}`,
       tag: `词根 ${result.root}`,
       source: "root-explorer",
-      reviewMode: reviewModes[item.word] || "reading",
+      reviewMode: modeOf(item.word),
     });
     if (saved) setSavedWords((prev) => ({ ...prev, [item.word]: true }));
   }
@@ -192,9 +194,10 @@ export default function RootExplorer() {
                     <div className={styles.wordFoot}>
                       <div role="group" aria-label={`${item.word} 复习类型`} className={styles.modes}>
                         {REVIEW_MODES.map(([value, label]) => (
-                          <button key={value} type="button" aria-pressed={mode === value}
+                          <button key={value} type="button" aria-pressed={hasReviewMode(mode, value)}
                             onClick={() => chooseMode(item.word, value)}>{label}</button>
                         ))}
+                        <span className={styles.modeHint}>可多选</span>
                       </div>
                       <button type="button" className={styles.save} onClick={() => addWord(item)} disabled={saved}>
                         <span aria-hidden="true">{saved ? "✓" : "☆"}</span>{saved ? "已收藏" : "收藏"}

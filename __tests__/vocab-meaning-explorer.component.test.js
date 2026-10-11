@@ -49,11 +49,27 @@ test("整组收藏跳过已有词，一起背传本组模式和账户", async ()
   const onStudyGroup = jest.fn(() => ({ started: true, count: 1, skipped: 1 }));
   render(<MeaningExplorer onStudyGroup={onStudyGroup} />); await search();
   fireEvent.click(screen.getByRole("button", { name: "听力词" }));
+  fireEvent.click(screen.getByRole("button", { name: "阅读词" }));
   fireEvent.click(screen.getByRole("button", { name: "整组收藏" }));
   expect(saveWord).toHaveBeenCalledTimes(1); expect(cards.hinder.def).toBe("原释义"); expect(cards.hinder.reps).toBe(8);
   fireEvent.click(screen.getByRole("button", { name: "一起背" }));
   expect(onStudyGroup).toHaveBeenCalledWith({ words: ["hinder", "prevent"], mode: "listening", account: "ABC123", query: "妨碍" });
 });
+test("整组可选两种收藏类型，开始复习分别传真实阅读或听力轨", async () => {
+  const onStudyGroup = jest.fn(() => ({ started: true }));
+  render(<MeaningExplorer onStudyGroup={onStudyGroup} />); await search();
+  fireEvent.click(screen.getByRole("button", { name: "听力词" }));
+  expect(screen.getByRole("button", { name: "阅读词" })).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByRole("button", { name: "听力词" })).toHaveAttribute("aria-pressed", "true");
+  fireEvent.click(screen.getByRole("button", { name: "整组收藏" }));
+  expect(cards.hinder.reviewMode).toBe("both"); expect(cards.prevent.reviewMode).toBe("both");
+  fireEvent.click(screen.getByRole("button", { name: "一起背阅读词" }));
+  expect(onStudyGroup).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "reading" }));
+  fireEvent.click(screen.getByRole("button", { name: "一起背听力词" }));
+  expect(onStudyGroup).toHaveBeenLastCalledWith(expect.objectContaining({ mode: "listening" }));
+  expect(saveWord).toHaveBeenCalledTimes(2);
+});
+
 test("输入变化使旧响应失效，切账号不缓存旧响应", async () => {
   let resolve; callAI.mockReturnValue(new Promise((r) => { resolve = r; }));
   const view = render(<MeaningExplorer accountKey="ABC123" />);

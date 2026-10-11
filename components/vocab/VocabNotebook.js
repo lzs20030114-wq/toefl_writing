@@ -8,7 +8,7 @@ import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { ListeningVocabReview } from "./ListeningVocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
-import { SORT_OPTIONS, cardStage, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards } from "../../lib/vocab/book";
+import { SORT_OPTIONS, cardStage, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards, hasReviewMode } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import { clearReviewSave, readReviewSave, resumableQueue, writeReviewSave } from "../../lib/vocab/reviewSave";
 import RootExplorer from "./RootExplorer";
@@ -80,7 +80,7 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
   const name = card.display || card.word;
   const r = currentRetrievability(card, now);
   const productive = card.productive !== false;
-  const mode = card.reviewMode || "reading";
+  const mode = card.enrollmentMode || card.reviewMode || "reading";
   const key = stageKey(card, now);
   const badge = STAGE_STYLE[key];
   const actionId = `vn-actions-${encodeURIComponent(card.word)}`;
@@ -108,7 +108,8 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
         <div className={styles.wordLine}>
           <strong>{name}</strong><SpeakButton word={name} size={24} />
           <span className={styles.tag} style={{ color: badge.fg, background: badge.bg, borderColor: badge.bd }}>{badge.label}</span>
-          {mode === "listening" && <span className={`${styles.tag} ${styles.tagListening}`}>听力</span>}
+          {mode === "both" && <span className={styles.tag} style={{ color: "#087355", background: "#ECFDF5" }}>阅读</span>}
+          {hasReviewMode(mode, "listening") && <span className={`${styles.tag} ${styles.tagListening}`}>听力</span>}
           {isLeech(card) && <span className={`${styles.tag} ${styles.tagLeech}`}>易忘 · 忘过 {card.lapses} 次</span>}
         </div>
         {card.phonetic && <div className={styles.phonetic}>/{card.phonetic}/</div>}
@@ -137,13 +138,13 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
       </form> : <div className={styles.actions}>
         <label>复习类型 <select aria-label={`${name}复习类型`} value={mode}
           onChange={(event) => onReviewMode(card.word, event.target.value)}>
-          <option value="reading">阅读词</option><option value="listening">听力词</option>
+          <option value="reading">阅读词</option><option value="listening">听力词</option><option value="both">阅读和听力</option>
         </select></label>
-        {mode === "reading" && <button type="button" role="switch" aria-checked={productive}
+        {hasReviewMode(mode, "reading") && <button type="button" role="switch" aria-checked={productive}
           aria-label={`${name}需要会写`} onClick={() => onProductive(card.word, !productive)}>
           {productive ? "✓ 要会写" : "只需认得"}</button>}
         {onEditDef && <button type="button" onClick={() => { setDraft(card.def || ""); setEditing(true); }}>编辑释义</button>}
-        {card.reps > 0 && <button type="button" onClick={() => { onReset(card.word); onToggle(null); }}>重学</button>}
+        {card.reps > 0 && <button type="button" onClick={() => { onReset(card.word, card.reviewMode); onToggle(null); }}>重学</button>}
         {onSuspend && <button type="button" onClick={() => onSuspend(card.word, !card.suspended)}>{card.suspended ? "恢复复习" : "暂停复习"}</button>}
         <button type="button" onClick={() => { onRemove(card.word); onToggle(null); }}>移除</button>
         <small>
@@ -201,12 +202,14 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   const now = useMemo(() => new Date(), [cards, stats]); // eslint-disable-line react-hooks/exhaustive-deps
   const addedToday = useMemo(() => {
     const todayCards = cards.filter((card) => isAddedToday(card, now));
-    const listening = todayCards.filter((card) => card.reviewMode === "listening").length;
-    return { total: todayCards.length, reading: todayCards.length - listening, listening };
+    const listening = todayCards.filter((card) => hasReviewMode(card, "listening")).length;
+    const reading = todayCards.filter((card) => hasReviewMode(card, "reading")).length;
+    const both = todayCards.filter((card) => hasReviewMode(card, "reading") && hasReviewMode(card, "listening")).length;
+    return { total: todayCards.length, reading, listening, both };
   }, [cards, now]);
 
   const modeCards = useMemo(
-    () => cards.filter((c) => listMode === "all" || (c.reviewMode || "reading") === listMode).map((card) => reviewCard(card)),
+    () => cards.filter((c) => listMode === "all" || hasReviewMode(c, listMode)).map((card) => reviewCard(card, listMode === "all" ? undefined : listMode)),
     [cards, listMode],
   );
   const counts = useMemo(() => {
@@ -289,6 +292,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   const reading = statsByMode?.reading || stats || {};
   const listening = statsByMode?.listening || {};
   const tomorrow = forecast?.days?.[1];
+  const hasDualMode = cards.some((card) => hasReviewMode(card, "reading") && hasReviewMode(card, "listening"));
+  const taskUnit = hasDualMode ? "项" : "词";
 
   if (queue && queue.account === accountKey) {
     const account = queue.account;
@@ -304,7 +309,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         summaryExtras={{
           // 听力练完，下一步是还没做完的阅读复习；有存档就接着存档做
           nextTask: { label: "阅读复习", todo: num(reading.todo), minutes: estimateMinutes(num(reading.todo)) },
-          tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried } : null,
+          tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried, unit: taskUnit } : null,
           onStartNext: () => startReview("reading", { resume: !!readingSave }),
           onExportWords: (words) => setLostExport({ words, account }),
         }}
@@ -320,7 +325,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
         onFinish={queue.group ? undefined : () => clearReviewSave(account, "reading")}
         summaryExtras={{
           nextTask: { label: "听力复习", todo: num(listening.todo), minutes: estimateMinutes(num(listening.todo)) },
-          tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried } : null,
+          tomorrow: tomorrow ? { n: tomorrow.n, carried: tomorrow.carried, unit: taskUnit } : null,
           onStartNext: () => startReview("listening", { resume: !!listeningSave }),
           onExportWords: (words) => setLostExport({ words, account }),
         }}
@@ -377,7 +382,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
             <div style={{ minWidth: 0 }}>
               <div className={styles.heroEyebrow}>TODAY{today && ` · ${today.getMonth() + 1} 月 ${today.getDate()} 日 周${WEEKDAYS[today.getDay()]}`}</div>
               <div className={styles.heroTitle}>
-                <strong id="vn-today-title">{!ready ? "今日复习" : todayTotal ? `今日复习 ${todayTotal} 词` : "今天没有待复习的词"}</strong>
+                <strong id="vn-today-title">{!ready ? "今日复习" : todayTotal ? `今日复习 ${todayTotal} ${taskUnit}` : "今天没有待复习的词"}</strong>
                 {ready && todo > 0 && <span>预计约 {estimateMinutes(todo)} 分钟</span>}
                 {ready && todayTotal > 0 && todo === 0 && <span>今天的任务完成了</span>}
               </div>
@@ -410,7 +415,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
             </div>
           </div>
           {ready && num(stats?.deferredReview) > 0 && <div className={styles.overflow}>
-            <span>另有 {stats.deferredReview} 个到期词超出每日额度，顺延到明天。</span>
+            <span>另有 {stats.deferredReview} {hasDualMode ? "项到期复习" : "个到期词"}超出每日额度，顺延到明天。</span>
             <button type="button" onClick={openQuota}>调整额度 ›</button>
           </div>}
         </section>
@@ -419,6 +424,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
           <div className={styles.todayAddedSummary}>
             <h2 id="vn-added-title">今日新增 <span>{ready ? addedToday.total : "—"} 词</span></h2>
             <p>{!ready ? "正在读取…" : addedToday.total ? `阅读 ${addedToday.reading} · 听力 ${addedToday.listening}` : "今天还没有新增单词"}</p>
+            {ready && addedToday.both > 0 && <p>其中 {addedToday.both} 词同时练阅读和听力</p>}
           </div>
           <button type="button" className={styles.todayAddedCta} disabled={!ready} onClick={viewAddedToday}>查看今日新增 <span aria-hidden="true">›</span></button>
         </section>
@@ -491,7 +497,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
           </>}
           <p className={styles.explain}>“预计记得”是复习模型的估计，不等于完成率。</p></section>
         {forecastDays.length > 0 && <section className={`${styles.card} ${styles.sideCard}`} aria-label="未来 7 天">
-          <div className={styles.sideHead}><h2>未来 7 天</h2><span>共 {forecast.total} 词</span></div>
+          <div className={styles.sideHead}><h2>未来 7 天</h2><span>共 {forecast.total} {taskUnit}</span></div>
           <div className={styles.forecastBars}>
             {forecastDays.map((d, i) => <div key={d.date} className={i === 0 ? styles.today : ""}>
               <span>{d.n}</span><i style={{ height: `${Math.max(2, Math.round((d.n / forecastMax) * 64))}px` }} />
@@ -500,7 +506,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
           <div className={styles.forecastDays}>
             {forecastDays.map((d, i) => <span key={d.date} className={i === 0 ? styles.today : ""}>{dayLabel(d.date, i)}</span>)}
           </div>
-          <p className={styles.explain}>按当前额度估算，含每日新词；每天完成当天的量就不会积压。</p>
+          <p className={styles.explain}>按当前额度估算，含每日新词；{hasDualMode ? "同一词的阅读和听力各算一项，进度分别记录。" : "每天完成当天的量就不会积压。"}</p>
         </section>}
         <div ref={quotaRef}><DailyQuotaCard limits={limits} setLimits={setLimits} open={quotaOpen} onOpenChange={setQuotaOpen} /></div>
       </aside>

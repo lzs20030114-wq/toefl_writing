@@ -81,6 +81,19 @@ beforeEach(() => {
   mockBeforeInsert = null;
 });
 
+test('both enrollment survives API normalization and a newer closed mode stays closed', async () => {
+  const both = { ...card('shared', { updatedAt: '2026-02-01T00:00:00Z', reps: 3,
+    listeningUpdatedAt: '2026-02-01T00:00:00Z', listeningReps: 5 }), reviewMode: 'both' };
+  expect((await post([both])).status).toBe(200);
+  let returned = (await (await get()).json()).cards[0];
+  expect(returned).toMatchObject({ reviewMode: 'both', reps: 3, listeningState: { reps: 5 } });
+  const closed = { ...both, reviewMode: 'reading', updatedAt: '2026-02-02T00:00:00Z' };
+  expect((await post([closed])).status).toBe(200);
+  expect((await post([both])).status).toBe(200);
+  returned = (await (await get()).json()).cards[0];
+  expect(returned).toMatchObject({ reviewMode: 'reading', reps: 3, listeningState: { reps: 5 } });
+});
+
 test('word cursor pages cover more than 3000 cards including tombstones', async () => {
   for (let i = 0; i < 3501; i += 1) {
     put(card(`word${String(i).padStart(4, '0')}`, i === 3000 ? { deletedAt: '2026-01-02T00:00:00Z' } : {}));

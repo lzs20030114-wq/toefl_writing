@@ -6,7 +6,7 @@ import { SpeakButton } from "../shared/SpeakButton";
 import { callAI } from "../../lib/ai/client";
 import { AUTH_CHANGED_EVENT, getSavedCode } from "../../lib/AuthContext";
 import { getCard, getVocabAccountKey, getVocabStorageStatus, loadBook, saveWord, writeBook, VOCAB_UPDATED_EVENT } from "../../lib/vocab/vocabStore";
-import { normalizeCard } from "../../lib/vocab/book";
+import { normalizeCard, hasReviewMode, toggleReviewMode } from "../../lib/vocab/book";
 import { validateVocabularyEntry } from "../../lib/vocab/importVocabulary";
 import { VOCAB_CARD_MAX_BYTES, vocabularyCardBytes } from "../../lib/vocab/syncLimits";
 import { normalizeMeaningQuery, buildMeaningPrompts, parseMeaningResult, meaningWordEntry, readMeaningHistory, readMeaningCached, cacheMeaningResult } from "../../lib/vocab/meaningExplorer";
@@ -130,9 +130,10 @@ export default function MeaningExplorer({ onStudyGroup, accountKey, ready = true
     setNotice(entries.length ? `已收藏 ${entries.length} 个新词，已有词保留原设置。` : "这些词已在单词本中，保留原设置。");
     return true;
   }
-  function study() {
+  function study(mode = groupMode) {
     if (!saveCandidates(result.words) || !current()) return;
-    const outcome = onStudyGroup?.({ words: result.words.map((item) => item.word), mode: groupMode, account, query: result.query });
+    if (!["reading", "listening"].includes(mode)) return;
+    const outcome = onStudyGroup?.({ words: result.words.map((item) => item.word), mode, account, query: result.query });
     if (!outcome?.started) setNotice(outcome?.reason || "本组暂无可复习的词，词条可能已暂停或账号已变化。");
   }
   function showRecent(entry) {
@@ -175,12 +176,16 @@ export default function MeaningExplorer({ onStudyGroup, accountKey, ready = true
         <div className={extra.actions}>
           <div className={styles.modes} role="group" aria-label="本组复习类型">
             {[["reading", "阅读词"], ["listening", "听力词"]].map(([mode, label]) => (
-              <button type="button" key={mode} aria-pressed={groupMode === mode}
-                onClick={() => setGroupMode(mode)}>{label}</button>
+              <button type="button" key={mode} aria-pressed={hasReviewMode(groupMode, mode)}
+                onClick={() => setGroupMode((currentMode) => toggleReviewMode(currentMode, mode))}>{label}</button>
             ))}
+            <span className={styles.modeHint}>可多选</span>
           </div>
           <button type="button" className={styles.save} onClick={() => saveCandidates(result.words)}>整组收藏</button>
-          <button type="button" className={styles.submit} onClick={study}>一起背</button>
+          {groupMode === "both" ? <>
+            <button type="button" className={styles.submit} onClick={() => study("reading")}>一起背阅读词</button>
+            <button type="button" className={styles.submit} onClick={() => study("listening")}>一起背听力词</button>
+          </> : <button type="button" className={styles.submit} onClick={() => study()}>一起背</button>}
         </div>
         <div className={styles.grid}>
           {result.words.map((item) => (

@@ -48,10 +48,27 @@ test("词根结果可选择听力词，默认是阅读词", async () => {
   fireEvent.click(screen.getByRole("button", { name: "查词根" }));
   await screen.findByText("organism");
   fireEvent.click(screen.getByRole("group", { name: "organism 复习类型" }).querySelector('[aria-pressed="false"]'));
+  fireEvent.click(within(screen.getByRole("group", { name: "organism 复习类型" })).getByRole("button", { name: "阅读词" }));
   fireEvent.click(screen.getAllByRole("button", { name: "收藏" })[0]);
   expect(saveWord).toHaveBeenCalledWith(expect.objectContaining({ word: "organism", reviewMode: "listening" }));
   fireEvent.click(screen.getAllByRole("button", { name: "收藏" })[0]);
   expect(saveWord).toHaveBeenCalledWith(expect.objectContaining({ word: "organic", reviewMode: "reading" }));
+});
+
+test("词根收藏可同时选两项，已收藏词修改类型保留原进度", async () => {
+  const existing = { word: "organism", reviewMode: "reading", reps: 7, listeningState: { reps: 3 } };
+  getCard.mockReturnValue(existing); isSaved.mockReturnValue(true);
+  callAI.mockResolvedValue(JSON.stringify({ words: [{ word: "organism", partOfSpeech: "n.", meaning: "生物体", formation: "organ + ism", difference: "生物" }] }));
+  render(<RootExplorer />);
+  fireEvent.change(screen.getByRole("textbox", { name: "输入词根" }), { target: { value: "organ" } });
+  fireEvent.click(screen.getByRole("button", { name: "查词根" }));
+  const modes = await screen.findByRole("group", { name: "organism 复习类型" });
+  fireEvent.click(within(modes).getByRole("button", { name: "听力词" }));
+  expect(within(modes).getByRole("button", { name: "阅读词" })).toHaveAttribute("aria-pressed", "true");
+  expect(within(modes).getByRole("button", { name: "听力词" })).toHaveAttribute("aria-pressed", "true");
+  expect(saveWord).toHaveBeenLastCalledWith({ ...existing, reviewMode: "both" });
+  fireEvent.click(within(modes).getByRole("button", { name: "阅读词" }));
+  expect(saveWord).toHaveBeenLastCalledWith({ ...existing, reviewMode: "listening" });
 });
 
 test("同一词根再次查询从本地缓存读取，不重复调用 AI", async () => {

@@ -92,6 +92,18 @@ test("导入预览不写入，已有词禁选，确认后按所选类型保存",
   expect(screen.getByText("已保存 1 个新词")).toBeInTheDocument();
 });
 
+test("词表可同时加入阅读听力，摘要仍按新词数计", async () => {
+  render(<VocabImportDialog cards={[]} accountKey="guest" onClose={() => {}} />);
+  fireEvent.change(screen.getByRole("textbox", { name: "或粘贴词表" }), { target: { value: "resilient\t有韧性的" } });
+  fireEvent.click(screen.getByRole("button", { name: "预览粘贴的词表" }));
+  fireEvent.change(screen.getByRole("combobox", { name: "加入哪类复习" }), { target: { value: "both" } });
+  fireEvent.click(screen.getByRole("button", { name: "确认导入 1 个词" }));
+  await waitFor(() => expect(importWords).toHaveBeenCalledTimes(1));
+  expect(importWords.mock.calls[0][1].reviewMode).toBe("both");
+  expect(screen.getByRole("status")).toHaveTextContent("已保存 1 个新词");
+  expect(screen.getByRole("status")).toHaveTextContent("阅读和听力复习（进度分别记录）");
+});
+
 test.each([0, 1])("编辑成重复词后可取消并保留第%s条候选的释义", async (retained) => {
   render(<VocabImportDialog cards={[]} accountKey="guest" onClose={() => {}} />);
   fireEvent.change(screen.getByRole("textbox", { name: "或粘贴词表" }), { target: { value: "apple\t错误释义\nbanana\t香蕉" } });

@@ -88,6 +88,29 @@ const LA_SESSION = {
 };
 
 describe("听力复盘 · 原文划词", () => {
+  test("可同时收藏阅读和听力，重新打开保留两项且至少保留一种", async () => {
+    render(<LADetail session={LA_SESSION} />);
+    const host = screen.getByText(/The seminar will focus/);
+    aimAt("photosynthesis"); clickIn(host);
+    await screen.findByText("光合作用");
+    fireEvent.click(screen.getByRole("button", { name: "阅读词", exact: true }));
+    expect(screen.getByRole("button", { name: "阅读词", exact: true })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "听力词", exact: true })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByText("☆ 收藏到单词本"));
+    expect(getCard("photosynthesis").reviewMode).toBe("both");
+    fireEvent.keyDown(document, { key: "Escape" });
+    clickIn(host); await screen.findByText("光合作用");
+    expect(screen.getByRole("button", { name: "阅读词", exact: true })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "听力词", exact: true })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "听力词", exact: true }));
+    expect(getCard("photosynthesis").reviewMode).toBe("reading");
+    fireEvent.click(screen.getByRole("button", { name: "阅读词", exact: true }));
+    expect(getCard("photosynthesis").reviewMode).toBe("reading");
+    fireEvent.click(screen.getByRole("button", { name: "听力词", exact: true }));
+    expect(getCard("photosynthesis").reviewMode).toBe("both");
+    expect(JSON.parse(localStorage.getItem("toefl-vocab-book::guest")).cards).toHaveLength(1);
+  });
+
   test("讲座原文里点词能弹出词典", async () => {
     render(<LADetail session={LA_SESSION} />);
     const host = screen.getByText(/The seminar will focus/);

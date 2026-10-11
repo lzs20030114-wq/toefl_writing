@@ -143,7 +143,7 @@ export default function VocabImportDialog({ cards, accountKey, onClose }) {
   </>}>
     {result ? <div className={styles.success} role="status"><strong>{result.persisted ? `已保存 ${result.added} 个新词` : `已添加 ${result.added} 个新词，但浏览器未能保存`}</strong>
       <div>跳过已有或重复词 {result.duplicates + (result.previewDuplicates || 0)} 个 · 无效内容 {result.invalid + (result.previewSkipped || 0)} 条</div>
-      <div>来源：{source} · {reviewMode === "reading" ? "阅读复习" : "听力复习"}</div>
+      <div>来源：{source} · {reviewMode === "both" ? "阅读和听力复习（进度分别记录）" : reviewMode === "reading" ? "阅读复习" : "听力复习"}</div>
       <p>{result.persisted ? "这些词已加入复习队列，可按今天的计划开始复习。" : "刷新或关闭页面后可能丢失，请检查浏览器存储空间或权限。"}</p></div>
       : <>
         <p className={styles.hint}>文字、表格和有文字层的 PDF 在本机读取。每次最多 1000 个词；已有词会跳过，并保留原来的复习进度。</p>
@@ -158,7 +158,7 @@ export default function VocabImportDialog({ cards, accountKey, onClose }) {
           <div className={styles.previewTools}><strong>核对词表 · {source} · {rows.length} 个词</strong>
             <button type="button" className={styles.secondary} disabled={busy} onClick={selectAll}>全选可导入词</button>
             <button type="button" className={styles.secondary} disabled={busy} onClick={() => setRows((current) => current.map((row) => ({ ...row, selected: false })))}>清空选择</button></div>
-          <label className={styles.field}>加入哪类复习<select value={reviewMode} disabled={busy} onChange={(event) => setReviewMode(event.target.value)}><option value="reading">阅读词 · 认得并会写</option><option value="listening">听力词 · 听懂</option></select></label>
+          <label className={styles.field}>加入哪类复习<select value={reviewMode} disabled={busy} onChange={(event) => setReviewMode(event.target.value)}><option value="reading">阅读词 · 认得并会写</option><option value="listening">听力词 · 听懂</option><option value="both">阅读和听力 · 进度分别记录</option></select></label>
           <p className={styles.hint}>不确定的词组或句子需逐条核对并勾选，全选不会自动选中。同词只能选一条，取消已选条目后可改选另一条；全选保留已有选择，其余同词选第一条。可编辑词、释义、音标和原句；留空的释义与音标会优先用本机词典补齐。</p>
           <div className={styles.candidates}>{candidates.map((row) => <div className={styles.candidate} key={row.id}>
             <input type="checkbox" aria-label={`导入 ${row.word || `第 ${row.id + 1} 行`}`} checked={row.selected && !row.duplicate && !row.validationError} disabled={busy || row.duplicate || !!row.validationError} onChange={(event) => updateRow(row.id, { selected: event.target.checked })} />

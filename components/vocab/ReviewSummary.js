@@ -145,9 +145,9 @@ export default function ReviewSummary({ summary, labels = READING_LABELS, nextTa
             <div style={{ fontSize: 10, letterSpacing: 0.3, color: C.t3, fontWeight: 700 }}>TOMORROW</div>
             {tomorrow ? (
               <>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginTop: 4 }}>明天预计 {tomorrow.n} 词</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.t1, marginTop: 4 }}>明天预计 {tomorrow.n} {tomorrow.unit || "词"}</div>
                 <div style={{ fontSize: 12, color: C.t2, marginTop: 3 }}>
-                  {tomorrow.carried > 0 ? `含今天顺延的 ${tomorrow.carried} 个到期词` : "按当前每日额度估算"}
+                  {tomorrow.carried > 0 ? `含今天顺延的 ${tomorrow.carried} ${tomorrow.unit === "项" ? "项到期复习" : "个到期词"}` : "按当前每日额度估算"}
                 </div>
               </>
             ) : (
