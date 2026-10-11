@@ -41,7 +41,9 @@ async function collect(host, word) {
     }
     return null;
   };
+  fireEvent.mouseDown(host, { clientX: 60, clientY: 108 });
   fireEvent.mouseUp(host, { clientX: 60, clientY: 108 });
+  fireEvent.click(host, { clientX: 60, clientY: 108 });
   fireEvent.click(await screen.findByText("☆ 收藏到单词本"));
   return getCard(word);
 }

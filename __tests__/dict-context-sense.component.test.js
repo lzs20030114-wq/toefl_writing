@@ -38,6 +38,8 @@ function mount() {
   </WordLookupLayer>);
 }
 async function open(sentence = FIRST, word = "involuntary") {
+  const previous = screen.queryByRole("button", { name: "关闭" });
+  if (previous) fireEvent.click(previous);
   const host = screen.getByText(sentence, { normalizer: (text) => text });
   document.caretRangeFromPoint = () => {
     const range = document.createRange();

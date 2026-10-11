@@ -21,6 +21,35 @@ const POP_W = 300;
 const AI_CACHE_KEY = "dict-ai-explain-cache";
 const MAX_AI_CACHE = 120;
 
+// 一次关闭手势由页面上的所有词典共享，避免正文关闭后选项词典又打开。
+const lookupLayers = new Set();
+let lookupGesture = null;
+let lookupGestureSequence = 0;
+let touchMousePending = false;
+function beginLookupGesture(event) {
+  if (event.type === "mousedown" && touchMousePending) return;
+  if (lookupGesture) lookupGesture.superseded = true;
+  touchMousePending = event.type === "touchstart";
+  lookupGesture = { blocked: false, sequence: ++lookupGestureSequence };
+  dismissLookupLayers(event.target, lookupGesture);
+}
+function dismissLookupLayers(target, gesture) {
+  for (const layer of lookupLayers) {
+    if (layer.identity.current && !layer.popup.current?.contains(target)) {
+      gesture.blocked = true;
+      layer.close();
+    }
+  }
+}
+function beginPointerGesture(event) {
+  // 真正的新鼠标手势有 pointerdown；触摸派生的兼容鼠标事件没有。
+  if (event.pointerType === "mouse") touchMousePending = false;
+}
+function finishLookupClick() {
+  touchMousePending = false;
+  lookupGesture = null;
+}
+
 
 const WORD_CHAR = /[A-Za-z0-9'’‐-]/;
 
@@ -158,6 +187,28 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setCard(null);
   }, []);
 
+  useEffect(() => {
+    const layer = { identity: identityRef, popup: popRef, close };
+    if (lookupLayers.size === 0) {
+      document.addEventListener("pointerdown", beginPointerGesture, true);
+      document.addEventListener("mousedown", beginLookupGesture, true);
+      document.addEventListener("touchstart", beginLookupGesture, true);
+      document.addEventListener("click", finishLookupClick);
+    }
+    lookupLayers.add(layer);
+    return () => {
+      lookupLayers.delete(layer);
+      if (lookupLayers.size === 0) {
+        document.removeEventListener("pointerdown", beginPointerGesture, true);
+        document.removeEventListener("mousedown", beginLookupGesture, true);
+        document.removeEventListener("touchstart", beginLookupGesture, true);
+        document.removeEventListener("click", finishLookupClick);
+        lookupGesture = null;
+        touchMousePending = false;
+      }
+    };
+  }, [close]);
+
   // 文章用到哪些首字母就预热哪些分片，点词时不必等网络。
   useEffect(() => {
     if (!passage) return;
@@ -208,8 +259,14 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
 
   const handlePick = useCallback(
     (ev) => {
+      if (ev.type === "mouseup" && touchMousePending) return;
       if (ev.target && ev.target.closest && ev.target.closest("[data-no-dict]")) return;
       if (popRef.current && popRef.current.contains(ev.target)) return;
+      const gesture = ev.lookupGesture || lookupGesture || { blocked: false };
+      if (gesture.blocked || gesture.superseded
+        || (ev.lookupGesture && gesture.sequence != null && gesture.sequence !== lookupGestureSequence)) return;
+      dismissLookupLayers(ev.target, gesture);
+      if (gesture.blocked) return;
 
       const sel = window.getSelection();
       const picked = sel && !sel.isCollapsed ? sel.toString().trim() : "";
@@ -240,9 +297,12 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   // 手指长按选词后 selection 要一拍才稳定
   const handleTouch = useCallback(
     (ev) => {
+      // Portal 的事件仍沿 React 树冒泡；关闭钮卸载弹窗前就要排除内部触摸。
+      if (popRef.current?.contains(ev.target) || ev.target?.closest?.("[data-no-dict]")) return;
       const t = ev.changedTouches && ev.changedTouches[0];
       if (!t) return;
-      const point = { target: ev.target, clientX: t.clientX, clientY: t.clientY };
+      const point = { target: ev.target, clientX: t.clientX, clientY: t.clientY,
+        lookupGesture: lookupGesture || { blocked: false } };
       setTimeout(() => handlePick(point), 10);
     },
     [handlePick]
@@ -253,9 +313,6 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const isOpen = !!pop;
   useEffect(() => {
     if (!isOpen) return undefined;
-    const onDown = (e) => {
-      if (!popRef.current || !popRef.current.contains(e.target)) close();
-    };
     const onKey = (e) => {
       if (e.key === "Escape") close();
     };
@@ -282,12 +339,10 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         return { ...prev, rect: r };
       });
     };
-    document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
     window.addEventListener("scroll", reposition, true);
     window.addEventListener("resize", reposition);
     return () => {
-      document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("scroll", reposition, true);
       window.removeEventListener("resize", reposition);

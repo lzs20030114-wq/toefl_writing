@@ -48,7 +48,7 @@ export function RealBankProgressView({ onBack }) {
   const [covOpen, setCovOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(null);
   const [focus, setFocus] = useState(null);
-  const [railMin, setRailMin] = useState(false);
+  const [railMin, setRailMin] = useState(true);
   const [rescoring, setRescoring] = useState({});
   const [rescoreError, setRescoreError] = useState({});
   // 重试评分拿到了反馈、但回写记录没成功（或还没刷回来）时，本页内先按它展示，不让用户白等一场。

@@ -58,6 +58,8 @@ beforeEach(() => {
 });
 
 async function openWord(x) {
+  const previous = screen.queryByRole("button", { name: "关闭" });
+  if (previous) fireEvent.click(previous);
   fireEvent.mouseUp(screen.getByText(PASSAGE), { clientX: x, clientY: 108 });
   return screen.findByText("讲讲这句里的用法");
 }

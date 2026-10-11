@@ -307,6 +307,8 @@ describe("详情：逐题回顾", () => {
     render(<RealBankProgressView onBack={() => {}} />);
     const detail = openDetail("阅读填词真题", /逐题回顾 →/);
     const rail = screen.getByTestId("real-rail");
+    expect(within(rail).getByRole("button", { name: "展开列表" })).toBeInTheDocument();
+    fireEvent.click(within(rail).getByRole("button", { name: "展开列表" }));
     expect(within(rail).getAllByRole("button").length).toBeGreaterThanOrEqual(5); // 收起键 + 4 条
     fireEvent.click(within(rail).getByTitle("听力应答真题"));
     expect(within(screen.getByTestId("real-session-detail")).getByText("听力应答真题", { selector: "span" })).toBeInTheDocument();
