@@ -5,6 +5,7 @@
 
 ## 需用户决策
 
+- [低] 学术阅读源料待补全（2026-10-11）：`real_ap_323_2_12`（管乐指挥）与 `real_ap_56_1_32`（量子计算）的源截图尾句不全；已对全部可用重复题屏，后续仍分别只能读到 “Conductors may need to adjust their” / “Quantum computing holds promise for advancements in fields like medicine, finance,”，不能猜补或宣称全文完整。拿到更完整原卷后再恢复，证据与覆盖明细见 [AP 完整性审计](realbank-ap-completeness-audit-2026-10-11.md)。
 - [高] 真题自动录入上线前置（2026-09-09 实施完成未推送，契约 docs/realbank-ingest-contract.md）：①跑迁移 `scripts/sql/real-bank-ingest-jobs.sql` 并登记；②GitHub secrets 五个（DEEPSEEK_API_KEY / DASHSCOPE_API_KEY / OPENAI_API_KEY / NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY），其中 OPENAI_API_KEY 的 GitHub secret 从未验证过；③Vercel 核对 GH_PAT(actions:write+contents:write)/GH_OWNER/GH_REPO；④中间产物桶 `real_bank_artifacts` 已由本机 `artifacts_sync.mjs --push` 灌满（清单 structured 数必须 ≥ 81，否则云端全量重建会清库——worker 另有 >20% 缩水拒推闸）；⑤云端首航用后台「手动 rebuild」（不碰源文件）验证 pip/ffmpeg/push 权限，再拖第一套真卷；⑥Supabase Storage 逼近 1GB 免费档，源文件桶 done 后自动删，仍建议先清 382MB 孤儿音频。
 - [中] `/api/ai` 线上成本护栏两处（出处：2026-09-05 DeepSeek 9/1 账单 ¥11.97 溯源，见 docs/deepseek-usage-ledger.md）：
   ① 生产库缺 `increment_daily_usage` RPC——Supabase edge 日志 8/31 实证 `POST /rest/v1/rpc/increment_daily_usage → 404`，`scripts/sql/daily-usage-quota.sql` 台账状态「历史迁移,状态未知」即从未跑过；计量退化到 `fallbackIncrementUsage` 读-改-写，并发可击穿免费 3 次/天。走 /sql-migrate 补跑并登记。

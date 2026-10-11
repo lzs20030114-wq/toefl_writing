@@ -9,7 +9,7 @@
  * 为什么 2026-09-07 那轮全库复核没兜住：那轮只按**字段末尾**扫断句（13 条 trim_tail 都是结尾那类），
  * 断在中间段落、后面还跟着一行正常收尾文字的那一类整批漏网。本测试把两类一起锁死。
  *
- * 修法一律走 data/realBank/review-holds.json 的 patches（trim_tail / replace），不直接改成品 JSON：
+ * 修法一律走 data/realBank/review-holds.json 的 patches（trim_tail / replace / set），不直接改成品 JSON：
  * 源料在 .codex-tmp 不进 git，build_bank 重跑会把截断原样再产一遍，只有 apply_review.mjs 的幂等重放能长期兜住。
  *
  * 本测试双向锁：
@@ -55,7 +55,7 @@ describe("四条已修缺陷（2026-09-14）", () => {
   it("real_ap_324_1_31：passage 结尾收在完整句上", () => {
     const passage = byId("reading/ap", "real_ap_324_1_31").passage;
     expect(passage).not.toMatch(/necessary to maintain$/);
-    expect(passage.trimEnd()).toMatch(/rising rents or property taxes\.$/);
+    expect(passage.trimEnd()).toMatch(/Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain them\.$/);
   });
 
   it("real_repeat_314_1：指令语不再断在 for faculty to use in the", () => {
@@ -89,7 +89,7 @@ describe("检测器本身不许被调松", () => {
 
   it.each([
     ["段中断句（下一行另起）", rdl.replace("having fun.\n", "having fun. Whether you're a\n"), "dangling"],
-    ["结尾断句", `${ap} Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain`, "unterminated_tail"],
+    ["结尾断句", ap.replace(/ them\.$/, ""), "unterminated_tail"],
     ["单行指令语截断", rp314.replace(/use\.$/, "use in the"), "unterminated_tail"],
     ["结尾串入 OCR 残片", `${rp228} Morning Afternoon Evening 84% 90% 0 93% 15-20 10 KM`, "unterminated_tail"],
   ])("抓得到：%s", (_label, broken, kind) => {

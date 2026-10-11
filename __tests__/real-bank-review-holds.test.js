@@ -16,12 +16,193 @@
  */
 import fs from "fs";
 import path from "path";
+import os from "os";
 
 const ROOT = path.join(__dirname, "..");
 const review = JSON.parse(fs.readFileSync(path.join(ROOT, "data/realBank/review-holds.json"), "utf8"));
 const bank = (file) => JSON.parse(fs.readFileSync(path.join(ROOT, `data/realBank/${file}.json`), "utf8")).items;
 const cache = {};
 const items = (file) => (cache[file] = cache[file] || bank(file));
+
+describe("3.14 AP 第 15 题：待插入句原卷补全", () => {
+  const id = "real_ap_314_2_11";
+  const sentence = "They also disagree about why responses vary among individual patients and what the long-term effects of EMF therapies may be.";
+  const expectedStem = `There are four locations in the passage that indicate where the following sentence could be added. ${sentence} Where would the sentence best fit? Select a location to add the sentence in the passage.`;
+  const oldStem = "There are four locations in the passage that indicate where the following sentence could be added. what the long-term effects of EMF therapies may be. Where would the sentence best fit? Select a location to add the sentence in the passage.";
+  const live = () => items("reading/ap").find((it) => it.id === id);
+
+  test("成品第 15 题包含完整原句，答案 D 与四个插入位齐全", () => {
+    const it = live();
+    const q = it.questions.find((q) => q.q_number === 15);
+    expect(q).toMatchObject({ question_type: "insert_text", stem: expectedStem, correct_answer: "D", options: { A: "[A]", B: "[B]", C: "[C]", D: "[D]" } });
+    for (const marker of ["[A]", "[B]", "[C]", "[D]"]) expect(it.passage).toContain(marker);
+  });
+
+  test("原始坏题干经正式清单重放只改该字段，二次应用幂等", () => {
+    const { applyReview } = require("../scripts/realbank/apply_review.mjs");
+    const patch = review.patches.find((p) => p.file === "reading/ap" && p.id === id && p.path === "questions.4.stem");
+    expect(patch).toMatchObject({ op: "replace", from: oldStem, to: expectedStem });
+    const original = JSON.parse(JSON.stringify(live()));
+    expect(original.questions[4].q_number).toBe(15);
+    original.questions[4].stem = oldStem;
+    const expected = JSON.parse(JSON.stringify(original));
+    expected.questions[4].stem = expectedStem;
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-ap-insert-"));
+    const bankDir = path.join(root, "data", "realBank");
+    try {
+      for (const dir of ["reading", "listening", "speaking"]) fs.mkdirSync(path.join(bankDir, dir), { recursive: true });
+      const apPath = path.join(bankDir, "reading", "ap.json");
+      fs.writeFileSync(apPath, JSON.stringify({ items: [original], count: 1 }));
+      fs.writeFileSync(path.join(bankDir, "review-holds.json"), JSON.stringify({ patches: [patch], holds: [] }));
+      expect(applyReview({ root }).stats.patched).toBe(1);
+      const afterFirst = fs.readFileSync(apPath, "utf8");
+      expect(JSON.parse(afterFirst).items).toEqual([expected]);
+      expect(applyReview({ root }).stats.patched).toBe(0);
+      expect(fs.readFileSync(apPath, "utf8")).toBe(afterFirst);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("3.16 AP：Landscape connectivity 首行原卷补全", () => {
+  test("首行已补全，正文与 paragraphs 同步；原始截断库重放幂等且题目不变", () => {
+    const { applyReview } = require("../scripts/realbank/apply_review.mjs");
+    const id = "real_ap_316_2_11";
+    const prefix = "Landscape connectivity refers to how easily organisms can move ";
+    const live = items("reading/ap").find((it) => it.id === id);
+    expect(live.passage.startsWith(`${prefix}across a landscape to access resources, find mates, disperse  \n`)).toBe(true);
+    expect(live.paragraphs).toEqual(live.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean));
+    const patch = review.patches.find((p) => p.file === "reading/ap" && p.id === id && p.path === "passage" && p.op === "set");
+    expect(patch).toMatchObject({ op: "set", to: live.passage });
+    const original = JSON.parse(JSON.stringify(live));
+    original.passage = original.passage.slice(prefix.length);
+    original.paragraphs[0] = original.paragraphs[0].slice(prefix.length);
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-ap-head-"));
+    const bankDir = path.join(root, "data", "realBank");
+    try {
+      for (const dir of ["reading", "listening", "speaking"]) fs.mkdirSync(path.join(bankDir, dir), { recursive: true });
+      const apPath = path.join(bankDir, "reading", "ap.json");
+      fs.writeFileSync(apPath, JSON.stringify({ items: [original], count: 1 }));
+      fs.writeFileSync(path.join(bankDir, "review-holds.json"), JSON.stringify({ patches: [patch], holds: [] }));
+      expect(applyReview({ root }).stats.patched).toBe(1);
+      const afterFirst = fs.readFileSync(apPath, "utf8");
+      expect(JSON.parse(afterFirst).items).toEqual([live]);
+      expect(applyReview({ root }).stats.patched).toBe(0);
+      expect(fs.readFileSync(apPath, "utf8")).toBe(afterFirst);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("3.24 AP：绿地维护末句原卷补全", () => {
+  test.each(["trimmed", "truncated"])("%s 输入重放补回完整句，正文段落同步且题目不变", (kind) => {
+    const { applyReview } = require("../scripts/realbank/apply_review.mjs");
+    const id = "real_ap_324_1_31";
+    const sentence = " Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain them.";
+    const live = items("reading/ap").find((it) => it.id === id);
+    expect(live.passage.endsWith(sentence)).toBe(true);
+    expect(live.paragraphs).toEqual(live.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean));
+    const patch = review.patches.find((p) => p.file === "reading/ap" && p.id === id && p.path === "passage");
+    expect(patch).toMatchObject({ op: "set", to: live.passage, source: "truncation-sweep-2026-09-14" });
+    expect(patch.verified_source).toContain("source-recheck-2026-10-11");
+    const original = JSON.parse(JSON.stringify(live));
+    original.passage = kind === "trimmed" ? original.passage.slice(0, -sentence.length) : original.passage.replace(/ them\.$/, "");
+    original.paragraphs = original.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-ap-tail-"));
+    const bankDir = path.join(root, "data", "realBank");
+    try {
+      for (const dir of ["reading", "listening", "speaking"]) fs.mkdirSync(path.join(bankDir, dir), { recursive: true });
+      const apPath = path.join(bankDir, "reading", "ap.json");
+      fs.writeFileSync(apPath, JSON.stringify({ items: [original], count: 1 }));
+      fs.writeFileSync(path.join(bankDir, "review-holds.json"), JSON.stringify({ patches: [patch], holds: [] }));
+      expect(applyReview({ root }).stats.patched).toBe(1);
+      const afterFirst = fs.readFileSync(apPath, "utf8");
+      expect(JSON.parse(afterFirst).items).toEqual([live]);
+      expect(applyReview({ root }).stats.patched).toBe(0);
+      expect(fs.readFileSync(apPath, "utf8")).toBe(afterFirst);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("5 月 AP：旧裁切规则替换为原卷完整正文", () => {
+  test.each([
+    ["real_ap_511_2_11", "trimmed"],
+    ["real_ap_511_2_11", "truncated"],
+    ["real_ap_510v2_1_31", "Using"],
+    ["real_ap_510v2_1_31", "Using transparent"],
+  ])("%s %s 输入恢复原文，二次幂等且题目不变", (id, kind) => {
+    const { applyReview } = require("../scripts/realbank/apply_review.mjs");
+    const live = items("reading/ap").find((it) => it.id === id);
+    const patches = review.patches.filter((p) => p.file === "reading/ap" && p.id === id && p.path === "passage");
+    expect(patches).toHaveLength(1);
+    expect(patches[0]).toMatchObject({ op: "set", to: live.passage });
+    expect(patches[0].source).toContain("source-recheck-2026-10-11");
+    expect(live.paragraphs).toEqual(live.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean));
+    const original = JSON.parse(JSON.stringify(live));
+    if (id === "real_ap_511_2_11") {
+      expect(live.passage).toContain("potentially hospitable to life.");
+      expect(live.passage).toMatch(/Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections\.$/);
+      original.passage = original.passage.replace("potentially hospitable to life", "potentially habitable to life").replace(/ and the need for constant high-speed corrections\.$/, kind === "trimmed" ? "." : " and the need for constant");
+    } else {
+      const suffix = " Using sociocybernetic principles, urban planners design more resilient cities by modeling traffic patterns, resource distribution, and emergency response strategies. This approach helps create sustainable urban environments that better respond to changes.";
+      expect(live.passage.endsWith(suffix)).toBe(true);
+      original.passage = original.passage.slice(0, -suffix.length) + ` ${kind}`;
+    }
+    original.paragraphs = original.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-ap-may-tail-"));
+    const bankDir = path.join(root, "data", "realBank");
+    try {
+      for (const dir of ["reading", "listening", "speaking"]) fs.mkdirSync(path.join(bankDir, dir), { recursive: true });
+      const apPath = path.join(bankDir, "reading", "ap.json");
+      fs.writeFileSync(apPath, JSON.stringify({ items: [original], count: 1 }));
+      fs.writeFileSync(path.join(bankDir, "review-holds.json"), JSON.stringify({ patches, holds: [] }));
+      expect(applyReview({ root }).stats.patched).toBe(1);
+      const afterFirst = fs.readFileSync(apPath, "utf8");
+      expect(JSON.parse(afterFirst).items).toEqual([live]);
+      expect(applyReview({ root }).stats.patched).toBe(0);
+      expect(fs.readFileSync(apPath, "utf8")).toBe(afterFirst);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("2.8 AP：智能织物 charge 原卷词形核实", () => {
+  test("charge 修正与 paragraphs 同步，原始 change 输入重放仅改此词且幂等", () => {
+    const { applyReview } = require("../scripts/realbank/apply_review.mjs");
+    const id = "real_ap_28_1_26";
+    const correct = "Envision clothing that can charge your smartphone simply through your daily activities.";
+    const wrong = "Envision clothing that can change your smartphone simply through your daily activities.";
+    const live = items("reading/ap").find((it) => it.id === id);
+    expect(live.passage).toContain(correct);
+    expect(live.passage).not.toContain(wrong);
+    expect(live.paragraphs).toEqual(live.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean));
+    const patch = review.patches.find((p) => p.file === "reading/ap" && p.id === id && p.path === "passage");
+    expect(patch).toMatchObject({ op: "replace", from: wrong, to: correct });
+    const original = JSON.parse(JSON.stringify(live));
+    original.passage = original.passage.replace(correct, wrong);
+    original.paragraphs = original.passage.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "realbank-ap-charge-"));
+    const bankDir = path.join(root, "data", "realBank");
+    try {
+      for (const dir of ["reading", "listening", "speaking"]) fs.mkdirSync(path.join(bankDir, dir), { recursive: true });
+      const apPath = path.join(bankDir, "reading", "ap.json");
+      fs.writeFileSync(apPath, JSON.stringify({ items: [original], count: 1 }));
+      fs.writeFileSync(path.join(bankDir, "review-holds.json"), JSON.stringify({ patches: [patch], holds: [] }));
+      expect(applyReview({ root }).stats.patched).toBe(1);
+      const afterFirst = fs.readFileSync(apPath, "utf8");
+      expect(JSON.parse(afterFirst).items).toEqual([live]);
+      expect(applyReview({ root }).stats.patched).toBe(0);
+      expect(fs.readFileSync(apPath, "utf8")).toBe(afterFirst);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
 
 // ── id 别名账本（没有 = 老产物，行为与接线前一致）──
 const aliasPath = path.join(ROOT, "data/realBank/reading/id-aliases.json");

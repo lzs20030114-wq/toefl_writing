@@ -3724,24 +3724,6 @@
     },
     {
       "file": "reading/ap",
-      "id": "real_ap_510v2_1_31",
-      "path": "passage",
-      "op": "trim_tail",
-      "from": " Using transparent",
-      "why": "结尾半句被截"
-    },
-    {
-      "file": "reading/ap",
-      "id": "real_ap_510v2_1_31",
-      "path": "passage",
-      "op": "replace",
-      "from": "interacting components. Using",
-      "to": "interacting components.",
-      "why": "结尾半句被截（插入句题那一屏截到 Using 为止；上一条 trim_tail 管的是截到 Using transparent 的那份）",
-      "source": "recovery-2026-09-15"
-    },
-    {
-      "file": "reading/ap",
       "id": "real_ap_rp0819_2006_200601",
       "path": "questions.0.options.D",
       "op": "replace",
@@ -4665,10 +4647,11 @@
       "file": "reading/ap",
       "id": "real_ap_324_1_31",
       "path": "passage",
-      "op": "trim_tail",
-      "from": " Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain",
-      "why": "结尾半句被截（…necessary to maintain），截掉残句；Q4 依据的 rising rents 在前一句，保留",
-      "source": "truncation-sweep-2026-09-14"
+      "op": "set",
+      "why": "2026-09-14 曾因 OCR 尾句截断而截去残句；2026-10-11 对原卷第 8 页第 32/33 题文章原图核实完整末句，现改为恢复整句，保留此前正文、插入标记和答案。",
+      "source": "truncation-sweep-2026-09-14",
+      "to": "Urban green spaces, such as parks and community gardens, enhance city life for residents. The contrast between green spaces and the surrounding concrete and glass structures can be a visual respite; such spaces also provide residents with a place to relax and connect with nature, which can significantly improve mental health, reduce stress, and encourage physical activity. [A]\n\nUrban green spaces also contribute to environmental sustainability. [B] They provide a cooler spot within the concrete heat traps surrounding them, absorb rainwater and reduce flooding, and increase biodiversity by providing habitats for various species. [C]\n\nRecent initiatives have focused on creating more green spaces in underserved areas. [D] Some cities are converting abandoned lots into community gardens or small parks. These projects not only provide green spaces but also involve community members in the planning and maintenance of them, fostering a sense of ownership and responsibility.\n\nWhile urban green spaces offer a host of benefits, they are not without drawbacks. When parks and gardens are added in city neighborhoods, they often increase the value of nearby properties. This can unintentionally lead to the displacement of longtime residents who can no longer afford rising rents or property taxes. Another challenge is preserving these spaces—it can be difficult to secure the funding necessary to maintain them.",
+      "verified_source": "3.24新托福真题/3.24 套一 阅读.pdf p8 Q32/Q33 / source-recheck-2026-10-11"
     },
     {
       "file": "speaking/repeat",
@@ -4696,24 +4679,6 @@
       "from": " Morning Afternoon Evening 84% 90% 0 93% 15-20 10 KM",
       "why": "指令语尾巴串入天气图表的 OCR 数字残片",
       "source": "truncation-sweep-2026-09-14"
-    },
-    {
-      "file": "reading/ap",
-      "id": "real_ap_511_2_11",
-      "path": "passage",
-      "op": "trim_tail",
-      "from": " and the need for constant",
-      "why": "末句被截在「…and the need for constant」，截到 computations 收句；Q14（为什么提 optimize algorithms，答案 D 节能）依据的「optimize algorithms to reduce unnecessary computations」保留。原卷 5.11 若拿到完整截图可改 set 补全",
-      "source": "truncation-sweep-2026-09-20"
-    },
-    {
-      "file": "reading/ap",
-      "id": "real_ap_511_2_11",
-      "path": "passage",
-      "op": "append",
-      "to": ".",
-      "why": "trim_tail 后补句末句号",
-      "source": "truncation-sweep-2026-09-20"
     },
     {
       "file": "speaking/repeat",
@@ -4750,6 +4715,53 @@
       "from": " The researcher will ask",
       "why": "开场白末句被截（The researcher will ask…），套话不带题意，整句截掉",
       "source": "truncation-sweep-2026-09-20"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_314_2_11",
+      "path": "questions.4.stem",
+      "op": "replace",
+      "from": "There are four locations in the passage that indicate where the following sentence could be added. what the long-term effects of EMF therapies may be. Where would the sentence best fit? Select a location to add the sentence in the passage.",
+      "to": "There are four locations in the passage that indicate where the following sentence could be added. They also disagree about why responses vary among individual patients and what the long-term effects of EMF therapies may be. Where would the sentence best fit? Select a location to add the sentence in the passage.",
+      "why": "原 OCR 漏掉第 15 题待插入句前半句；已对原卷第 14 页下半屏逐字核对，补全句子，正文、插入位置与答案 D 保持原样。",
+      "source": "3.14新托福真题/2026新托福真题.pdf p14 / source-recheck-2026-10-11"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_316_2_11",
+      "path": "passage",
+      "op": "set",
+      "to": "Landscape connectivity refers to how easily organisms can move across a landscape to access resources, find mates, disperse  \nseeds, or migrate. This concept is crucial in landscape ecology, as  \nit significantly impacts the survival and movement of wildlife.  \nFragmentation of habitats due to human activities, such as  \nurbanization and agriculture, can reduce connectivity, leading to  \nisolated populations and, in turn, decreased biodiversity.  \n\nOne approach to enhancing landscape connectivity is through  \nthe creation of wildlife corridors. These corridors are strips of  \nnatural habitat that connect isolated patches, allowing animals to  \nmove more freely. For example, bridges and underpasses  \ndesigned specifically for wildlife can mitigate the effects of roads  \nand highways.  \n\nRecent studies have shown that landscape connectivity benefits  \nwildlife and has positive effects on ecosystem services. [A]  \nImproved connectivity can enhance pollination, seed dispersal,  \nand pest control, which are vital for healthy ecosystems. [B]  \nAdditionally, connecting habitats can help species adapt to  \nclimate change by providing migration pathways.  \n\nHowever, creating wildlife corridors is not without challenges. It  \nrequires careful planning and consideration of various factors,  \nsuch as the specific needs of target species, the existing  \nlandscape features, and potential human-wildlife conflicts.[C]  \nDespite these challenges, efforts to improve landscape  \nconnectivity are crucial for the conservation of biodiversity and  \nthe sustainability of ecosystems. [D]",
+      "why": "原 OCR 漏掉文章首行；已对原卷第 11 页第 12 题文章原图核实 Landscape connectivity 定义句。仅补首行，其余正文硬换行、插入标记和题目答案不变；使用 set 避免前缀 replace 二次应用重复补句。",
+      "source": "3.16新托福真题/3.16  阅读.pdf p11 Q12 / source-recheck-2026-10-11"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_511_2_11",
+      "path": "passage",
+      "op": "set",
+      "to": "Optical astronomy, the study of celestial objects through visible light, has been revolutionized by adaptive optics, first developed in the late 1980s. [A] This technology, which allows ground-based telescopes at observatories to counteract atmospheric distortion, has enabled astronomers to observe the cosmos with exceptional clarity. Light waves from distant stars travel through Earth’s atmosphere, creating a shimmering effect that distorts them. [B] Adaptive optics corrects these distortions in real time using a system of deformable mirrors controlled by computer algorithms. [C] The mirrors can change shape rapidly to counteract the distortion, with the algorithms calculating the needed adjustments thousands of times per second. [D]\n\nHowever, the technology is not without controversy. Some argue that the energy consumption of adaptive optics contributes significantly to observatories’ carbon footprints. Yet, proponents counter that the potential discoveries outweigh environmental concerns, citing recent breakthroughs in identifying exoplanets potentially hospitable to life.\n\nThe debate highlights the complexities of balancing scientific advancement with environmental stewardship. Some researchers are actively exploring the use of solar panels and wind turbines to power these observatories, especially for daytime operations. Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections.",
+      "why": "原 OCR 末句被截后旧复核清单 trim_tail/append 删除尾部；现对原卷第 22 页第 13 题文章原图核实并恢复完整末句，同时将误抄 habitable 改回原图 hospitable。其余正文、分段、插入标记和题目答案不变。",
+      "source": "5.11新托福真题/5.11 阅读.pdf p22 Q13（5.11 套一 阅读.docx 转 PDF） / source-recheck-2026-10-11"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_510v2_1_31",
+      "path": "passage",
+      "op": "set",
+      "to": "Sociocybernetics: Understanding Complex Social Systems\n\nSociocybernetics is a field that provides tools to analyze complex social systems, merging sociology and cybernetics. [A] By applying principles of feedback, control, and communication from cybernetics, sociologists can understand how societies function. [B] A key concept in sociocybernetics is self-organization. [C] This is the process in which social systems develop ordered patterns without centralized control. [D]\n\nFeedback loops are crucial in sociocybernetics. Positive feedback amplifies changes, leading to rapid social transformations. Negative feedback stabilizes systems, maintaining equilibrium. In economic systems, positive feedback can result in booming markets, while negative feedback can prevent financial crises. Recognizing these mechanisms helps sociologists predict and influence social dynamics.\n\nCommunication is another critical aspect. Effective communication channels within social systems impact their stability and adaptability. Misinformation or communication breakdowns can disrupt social cohesion and lead to chaos. Sociocybernetic models highlight the importance of transparent information flow in maintaining healthy social systems. These models also explore how digital technologies influence communication patterns.\n\nSociocybernetics is important to urban planning. Cities are complex systems with numerous interacting components. Using sociocybernetic principles, urban planners design more resilient cities by modeling traffic patterns, resource distribution, and emergency response strategies. This approach helps create sustainable urban environments that better respond to changes.",
+      "why": "原 OCR 末段被截后旧 trim_tail/replace 删除截断尾部；现对原卷第 16 页第 34 题文章原图核实，恢复末段最后两句，替换旧裁切规则避免重建再删。其余正文、分段、插入标记和题目答案不变。",
+      "source": "5.10新托福真题_v2/5.10 阅读.pdf p16 Q34 / source-recheck-2026-10-11"
+    },
+    {
+      "file": "reading/ap",
+      "id": "real_ap_28_1_26",
+      "path": "passage",
+      "op": "replace",
+      "from": "Envision clothing that can change your smartphone simply through your daily activities.",
+      "to": "Envision clothing that can charge your smartphone simply through your daily activities.",
+      "why": "已对原卷第 8 页第 27/28 题文章原图核实 charge，被 OCR 误抄成 change；只修此整句中的一个词，保留其余正文、插入标记和答案。",
+      "source": "2.8新托福真题/2.8 套一 阅读.pdf p8 Q27/Q28 / source-recheck-2026-10-11"
     }
   ]
 }
