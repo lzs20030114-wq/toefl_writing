@@ -2,9 +2,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { canSpeak, cancelSpeakWord, speakWord } from "../../lib/audio/speakWord";
+import { canSpeak, cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { definitionForContext, sourceLabel } from "../../lib/vocab/book";
 import { DefLine } from "../shared/DictSenses";
+import { AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { buildReviewSummary, pickStats, senseOf } from "../../lib/vocab/reviewSummary";
@@ -56,6 +57,43 @@ export function ListeningVocabReview({
   const startedAtRef = useRef(Date.now() - (resume?.elapsedMs || 0));
   const segStartRef = useRef(Date.now());
   const shownAtRef = useRef(Date.now());
+  const initialWordsRef = useRef((initialQueue || []).map((entry) => entry.display || entry.word));
+  const preloadReleaseRef = useRef(null);
+  const audioActiveRef = useRef(true);
+  const sessionAccountRef = useRef(accountKey);
+  const releasePreload = useCallback(() => {
+    preloadReleaseRef.current?.();
+    preloadReleaseRef.current = null;
+  }, []);
+  const exitReview = useCallback(() => {
+    audioActiveRef.current = false;
+    releasePreload();
+    cancelSpeakWord();
+    onExit();
+  }, [onExit, releasePreload]);
+  useEffect(() => {
+    if (getVocabAccountKey() !== sessionAccountRef.current || accountKey !== sessionAccountRef.current) {
+      audioActiveRef.current = false;
+      cancelSpeakWord();
+      return undefined;
+    }
+    audioActiveRef.current = true;
+    preloadReleaseRef.current = preloadSpeakWords(initialWordsRef.current);
+    const invalidateAudio = () => {
+      if (getVocabAccountKey() === sessionAccountRef.current) return;
+      audioActiveRef.current = false;
+      releasePreload();
+      cancelSpeakWord();
+    };
+    window.addEventListener(AUTH_CHANGED_EVENT, invalidateAudio);
+    return () => {
+      audioActiveRef.current = false;
+      releasePreload();
+      cancelSpeakWord();
+      window.removeEventListener(AUTH_CHANGED_EVENT, invalidateAudio);
+    };
+  }, [accountKey, releasePreload]);
+
   const { queue, pos } = sess;
   const card = queue[pos];
   const context = card?.listeningContext;
@@ -72,10 +110,10 @@ export function ListeningVocabReview({
   }, []);
 
   const play = useCallback(() => {
-    if (!card || sess.checkpoint) return;
+    if (!card || sess.checkpoint || !audioActiveRef.current || getVocabAccountKey() !== sessionAccountRef.current) return;
     stop();
     const token = tokenRef.current;
-    const live = () => tokenRef.current === token;
+    const live = () => tokenRef.current === token && audioActiveRef.current && getVocabAccountKey() === sessionAccountRef.current;
     // A failed or cancelled attempt must never unlock an answer via a late onEnd.
     let failed = false;
     setStatus("");
@@ -99,6 +137,8 @@ export function ListeningVocabReview({
     const playback = playbackRef.current;
     if (!sess.checkpoint && playback.canAutoPlay) playback.play();
   }, [pos, sess.checkpoint, autoRevision]);
+
+  useEffect(() => { if (!card) releasePreload(); }, [card, releasePreload]);
 
   const resetCardUi = useCallback((nextHeard = false) => {
     stop();
@@ -244,7 +284,7 @@ export function ListeningVocabReview({
     if (!Object.keys(sess.first).length) return (
       <div style={{ padding: 24, textAlign: "center" }}>
         <h2>这一轮听力复习完成</h2>
-        <button type="button" style={buttonStyle} onClick={onExit}>返回单词本</button>
+        <button type="button" style={buttonStyle} onClick={exitReview}>返回单词本</button>
       </div>
     );
     const summary = buildReviewSummary({
@@ -258,7 +298,7 @@ export function ListeningVocabReview({
         summary={summary} labels={LISTENING_LABELS}
         nextTask={summaryExtras?.nextTask} tomorrow={summaryExtras?.tomorrow}
         onStartNext={summaryExtras?.onStartNext} onExportWords={summaryExtras?.onExportWords}
-        onExit={onExit}
+        onExit={exitReview}
       />
     );
   }
@@ -273,7 +313,7 @@ export function ListeningVocabReview({
   return (
     <div style={{ fontFamily: FONT }}>
       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-        <button type="button" aria-label="退出复习" onClick={() => { stop(); onExit(); }} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0 }}>← 退出</button>
+        <button type="button" aria-label="退出复习" onClick={() => { stop(); exitReview(); }} style={{ border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 8, padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0 }}>← 退出</button>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6, gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: C.t1, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -350,7 +390,7 @@ export function ListeningVocabReview({
           saved={!!onCheckpoint}
           labels={LISTENING_SEGMENT_LABELS}
           onContinue={continueSegment}
-          onPause={() => { stop(); onExit(); }}
+          onPause={() => { stop(); exitReview(); }}
         />
       )}
     </div>

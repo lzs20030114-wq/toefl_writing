@@ -1,9 +1,11 @@
 import { fireEvent, render, screen, act, within } from "@testing-library/react";
 import { ListeningVocabReview } from "../components/vocab/ListeningVocabReview";
 import { RATING, STATE } from "../lib/vocab/srs";
-import { canSpeak, cancelSpeakWord, speakWord } from "../lib/audio/speakWord";
+import { canSpeak, cancelSpeakWord, preloadSpeakWords, speakWord } from "../lib/audio/speakWord";
 
-jest.mock("../lib/audio/speakWord", () => ({ canSpeak: jest.fn(() => true), cancelSpeakWord: jest.fn(), speakWord: jest.fn() }));
+jest.mock("../lib/audio/speakWord", () => ({
+  preloadSpeakWords: jest.fn(() => jest.fn()),
+   canSpeak: jest.fn(() => true), cancelSpeakWord: jest.fn(), speakWord: jest.fn() }));
 
 const card = {
   word: "habitat", display: "habitat", phonetic: "ˈhæbɪtæt", def: "栖息地",
@@ -26,7 +28,7 @@ beforeEach(() => {
 });
 afterEach(() => { global.Audio = originalAudio; });
 
-test("即使有完整原句音频也只自动播放单词，不创建 Audio 或显示原句", () => {
+test("即使有完整原句音频也只自动播放单词，不创建原句播放器或显示原句", () => {
   const onGrade = jest.fn(() => null);
   render(<ListeningVocabReview initialQueue={[{ ...card, listeningContext: { audioUrl: "/api/audio/x.mp3", start: 1, end: 3, text: card.sentence } }]} onGrade={onGrade} onExit={jest.fn()} />);
   expect(audios).toHaveLength(0);

@@ -16,6 +16,8 @@ const nextConfig = {
     ];
   },
   experimental: {
+    // Edge TTS 的 ws 依赖需由 Node 原生加载，避免 webpack 打包破坏可选 bufferutil 分支。
+    serverComponentsExternalPackages: ["@andresaya/edge-tts"],
     // ── Serverless 函数打包范围（Vercel Function Storage 直接按这里的产物计费）──
     // `/api/admin` 覆盖后台路由；只为只读题库接口列出实际读取的正式库。
     outputFileTracingIncludes: {

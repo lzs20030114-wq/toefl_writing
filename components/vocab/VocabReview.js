@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
 import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
+import { cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
 import { hasUsableSense, parseSenses } from "../../lib/dict/core";
@@ -231,6 +232,43 @@ export function VocabReview({
   // 而真正需要补的卡是少数（绝大多数卡是从义项 chips 点着收藏的，词性本来就全）。
   const [extra, setExtra] = useState(null);
 
+  const initialWordsRef = useRef((initialQueue || []).map((entry) => entry.display || entry.word));
+  const preloadReleaseRef = useRef(null);
+  const audioActiveRef = useRef(true);
+  const sessionAccountRef = useRef(accountKey);
+  const releasePreload = useCallback(() => {
+    preloadReleaseRef.current?.();
+    preloadReleaseRef.current = null;
+  }, []);
+  const exitReview = useCallback(() => {
+    audioActiveRef.current = false;
+    releasePreload();
+    cancelSpeakWord();
+    onExit();
+  }, [onExit, releasePreload]);
+  useEffect(() => {
+    if (getVocabAccountKey() !== sessionAccountRef.current || accountKey !== sessionAccountRef.current) {
+      audioActiveRef.current = false;
+      cancelSpeakWord();
+      return undefined;
+    }
+    audioActiveRef.current = true;
+    preloadReleaseRef.current = preloadSpeakWords(initialWordsRef.current);
+    const invalidateAudio = () => {
+      if (getVocabAccountKey() === sessionAccountRef.current) return;
+      audioActiveRef.current = false;
+      releasePreload();
+      cancelSpeakWord();
+    };
+    window.addEventListener(AUTH_CHANGED_EVENT, invalidateAudio);
+    return () => {
+      audioActiveRef.current = false;
+      releasePreload();
+      cancelSpeakWord();
+      window.removeEventListener(AUTH_CHANGED_EVENT, invalidateAudio);
+    };
+  }, [accountKey, releasePreload]);
+
   const { queue, pos, tally } = sess;
   const card = queue[pos] || null;
   const extraEntry = extra && card && extra.forWord === card.word ? extra.entry : null;
@@ -263,6 +301,20 @@ export function VocabReview({
   const remaining = Math.max(0, queue.length - pos);
   const timesSeen = card ? sess.seen[card.word] || 0 : 0;
   const canUndo = !!onUndo && history.length > 0 && !sess.checkpoint;
+
+  const [autoRevision, setAutoRevision] = useState(0);
+  const audioCardRef = useRef(null);
+  audioCardRef.current = { card, revealed };
+  // A queue occurrence is the boundary: edits and reveal never replay the word.
+  useEffect(() => {
+    cancelSpeakWord();
+    const current = audioCardRef.current;
+    if (audioActiveRef.current && getVocabAccountKey() === sessionAccountRef.current && !sess.checkpoint && current.card && !current.revealed) {
+      speakWord(current.card.display || current.card.word, {});
+    }
+    if (finished) releasePreload();
+    return () => cancelSpeakWord();
+  }, [pos, sess.checkpoint, autoRevision, accountKey, finished, releasePreload]);
 
   useEffect(() => {
     shownAtRef.current = Date.now();
@@ -328,6 +380,7 @@ export function VocabReview({
   }, [accountKey, card, onSetProductive, productiveOn]);
 
   const resetFace = useCallback((nextRevealed = false) => {
+    cancelSpeakWord();
     setRevealed(nextRevealed);
     setSpellStage(null);
     setSpelling("");
@@ -434,6 +487,7 @@ export function VocabReview({
     setHistory([]);
     setSess({ ...sess, queue: nextQueue, endedAt: done ? Date.now() : null });
     resetFace(false);
+    if (!done) setAutoRevision((n) => n + 1);
     setNotice(`已暂停「${card.display || card.word}」，可在词库里恢复。`);
     if (done) onFinish?.();
   }, [accountKey, card, onFinish, onSuspend, resetFace, sess]);
@@ -573,7 +627,7 @@ export function VocabReview({
         tomorrow={summaryExtras?.tomorrow}
         onStartNext={summaryExtras?.onStartNext}
         onExportWords={summaryExtras?.onExportWords}
-        onExit={onExit}
+        onExit={exitReview}
       />
     );
   }
@@ -592,7 +646,7 @@ export function VocabReview({
       {/* 进度 */}
       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
         <button
-          onClick={onExit}
+          onClick={exitReview}
           style={{
             border: `1px solid ${C.bdr}`, background: "#fff", color: C.t2, borderRadius: 8,
             padding: "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: FONT, flexShrink: 0,
@@ -994,7 +1048,7 @@ export function VocabReview({
           durationMs={segDurMs}
           saved={!!onCheckpoint}
           onContinue={continueSegment}
-          onPause={onExit}
+          onPause={exitReview}
         />
       )}
     </div>

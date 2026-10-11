@@ -16,6 +16,7 @@ jest.mock("../components/vocab/RootExplorer", () => () => null);
 jest.mock("../components/shared/SpeakButton", () => ({ SpeakButton: () => null }));
 // 听力复习的「播放单词发音」：同步走完 开始→结束，等于立刻听完
 jest.mock("../lib/audio/speakWord", () => ({
+  preloadSpeakWords: jest.fn(() => jest.fn()),
   canSpeak: () => true,
   cancelSpeakWord: () => {},
   speakWord: (word, cb) => { cb.onStart?.(); cb.onEnd?.(); cb.onDone?.(); return true; },
