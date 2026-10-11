@@ -60,15 +60,15 @@ test("MCQ答题中不接词典，交卷后题干收藏保留纯题干原句", as
   expect(screen.getByText(/What should students/).closest("[data-sentence-index]")).toBeNull();
   fireEvent.click(screen.getByText("A notebook"));
   fireEvent.click(screen.getByRole("button", { name: "提交" }));
-  const card = await collect(screen.getByText(question.stem), "seminar");
+  const card = await collect(document.querySelector('[data-sentence-index="question-0"]'), "seminar");
   expect(card.source).toBe("listening");
   expect(card.sentence).toBe(question.stem);
   expect(card.listeningContext).toBeFalsy();
 });
 
-test("MCQ考试态结果仍不展示原文；选项和静态解析能收藏且不夹带标签/录音", async () => {
+test("MCQ计时交卷后直接展示原文复盘；选项和静态解析能收藏且不夹带标签/录音", async () => {
   finishMCQ(false);
-  expect(screen.queryByText("Bring your notebook to the seminar.")).not.toBeInTheDocument();
+  expect(screen.getByText("Bring your notebook to the seminar.")).toBeInTheDocument();
   const option = await collect(screen.getByText("A notebook"), "notebook");
   expect(option.sentence).toBe("A notebook");
   expect(option.listeningContext).toBeFalsy();
@@ -84,7 +84,6 @@ test("LCR交卷展开原句和选项可收藏；题面音频与选项语境分�
   fireEvent.click(screen.getByRole("button", { name: /show options/i }));
   fireEvent.click(screen.getByText("A notebook"));
   fireEvent.click(screen.getByRole("button", { name: /submit/i }));
-  fireEvent.click(screen.getByRole("button", { name: /Q1/ }));
   const card = await collect(document.querySelector('[data-sentence-index="0"]'), "notebook");
   expect(card.source).toBe("listening");
   expect(card.sentence).toBe(item.speaker);

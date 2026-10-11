@@ -85,7 +85,7 @@ const LCR_ITEM = {
 };
 
 function aiButtons() {
-  return screen.queryAllByRole("button", { name: /AI 深入解析/ });
+  return screen.queryAllByRole("button", { name: /AI 深入解析|AI 讲解/ });
 }
 
 beforeEach(() => {
@@ -253,8 +253,7 @@ describe("LCRTask 交卷后的结果页", () => {
     fireEvent.click(screen.getByRole("button", { name: /I'm ready — show options/ }));
     fireEvent.click(screen.getByRole("button", { name: /That's too bad — maybe next week/ }));
     fireEvent.click(screen.getByRole("button", { name: "Submit All" }));
-    expect(aiButtons()).toHaveLength(0);
-    fireEvent.click(screen.getByRole("button", { name: /Q1/ }));
+    // 全对时首题直接展开，立即可复盘；请求仍只在点击讲解后发生。
     expect(aiButtons()).toHaveLength(1);
     expect(callAI).not.toHaveBeenCalled();
     fireEvent.click(aiButtons()[0]);

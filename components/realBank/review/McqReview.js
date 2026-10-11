@@ -45,9 +45,9 @@ function Options({ options }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       {options.map((o) => (
         <div key={o.k} style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "7px 10px", borderRadius: 8, border: `1px solid ${o.bd}`, background: o.bg }}>
-          <span style={{ fontWeight: 800, color: o.kc, fontSize: 12, minWidth: 18, lineHeight: 1.55 }}>{o.k}</span>
-          <span style={{ flex: 1, minWidth: 0, fontSize: 12.5, lineHeight: 1.55, color: o.c, fontWeight: o.fw }}>{o.text}</span>
-          {o.tag ? <span style={{ flexShrink: 0, display: "inline-flex", padding: "1px 7px", borderRadius: 999, fontSize: 10, fontWeight: 700, lineHeight: 1.6, color: o.tagC, background: o.tagBg }}>{o.tag}</span> : null}
+          <span data-no-dict style={{ fontWeight: 800, color: o.kc, fontSize: 12, minWidth: 18, lineHeight: 1.55 }}>{o.k}</span>
+          <span data-sentence-index={`option-${o.k}`} style={{ flex: 1, minWidth: 0, fontSize: 12.5, lineHeight: 1.55, color: o.c, fontWeight: o.fw }}>{o.text}</span>
+          {o.tag ? <span data-no-dict style={{ flexShrink: 0, display: "inline-flex", padding: "1px 7px", borderRadius: 999, fontSize: 10, fontWeight: 700, lineHeight: 1.6, color: o.tagC, background: o.tagBg }}>{o.tag}</span> : null}
         </div>
       ))}
     </div>
@@ -195,7 +195,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                     <Chev open={o} />
                   </button>
                 )}>
-                {isLcr ? <LcrSpeaker item={q} speakerText={speakerText} /> : null}
+                {isLcr ? <div onMouseUp={(event) => event.stopPropagation()}><LcrSpeaker item={q} speakerText={speakerText} /></div> : null}
                 {!isLcr && insert ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                     <div style={{ fontSize: 12, color: "#5a6b62", lineHeight: 1.55 }}>{insert.lead}</div>
@@ -214,11 +214,11 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                     </div>
                   </div>
                 ) : null}
-                {!isLcr && !insert && !selectMode && stem ? <div style={{ fontSize: 13.5, fontWeight: 600, lineHeight: 1.6 }}>{stem}</div> : null}
+                {!isLcr && !insert && !selectMode && stem ? <div data-sentence-index={`question-${i}`} style={{ fontSize: 13.5, fontWeight: 600, lineHeight: 1.6 }}>{stem}</div> : null}
                 {options.length ? <Options options={options} /> : <div style={{ fontSize: 12, color: "#5a6b62" }}>选择: {r.selected || "—"}{!ok ? <span style={{ color: LV.bad.c }}> (正确: {correctKey || "—"})</span> : null}</div>}
                 {explanation ? (
                   <div style={{ fontSize: 12, lineHeight: 1.7, color: "#78350F", padding: "8px 12px", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 8 }}>
-                    <strong style={{ marginRight: 6, color: "#B45309" }}>解析</strong>{explanation}
+                    <strong data-no-dict style={{ marginRight: 6, color: "#B45309" }}>解析</strong><span data-sentence-index={`explanation-${i}`}>{explanation}</span>
                   </div>
                 ) : null}
                 {hasFace ? (

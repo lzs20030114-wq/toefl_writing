@@ -3,55 +3,12 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
-import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
-import { WordLookupLayer } from "../reading/WordLookupLayer";
-import { questionLookupContext } from "../../lib/dict/core";
-import { normalizeSentenceTimings } from "../../lib/listening/sentenceTimings";
-import { useListeningAiExplain, ListeningAiExplainBlock } from "./useListeningAiExplain";
+import { ListeningResultReview } from "./ListeningResultReview";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
 
 const ACCENT = { color: "#8B5CF6", soft: "#F3E8FF" };
 const OPTION_KEYS = ["A", "B", "C", "D"];
-
-// 原句与题目分开查词：只有实际录音原句才附带听力语境音频。
-function LCRSpeakerResult({ item }) {
-  const playerRef = useRef(null);
-  const pinRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const timings = item.audio_url ? normalizeSentenceTimings(item.sentence_timings) : null;
-  const onPick = useCallback((i, sentence) => {
-    if (playerRef.current?.playRange(sentence.start, sentence.end)) {
-      pinRef.current = { index: i, start: sentence.start, end: sentence.end };
-      setActiveIndex(i);
-    }
-  }, []);
-  const onTime = useCallback((time) => {
-    const pinned = pinnedSentenceIndex(pinRef.current, time);
-    if (pinned === -1) pinRef.current = null;
-    const i = pinned !== -1 ? pinned : activeSentenceIndex(timings, time);
-    setActiveIndex((prev) => i === -1 ? prev : i);
-  }, [timings]);
-  const onPlaySentence = useCallback((i) => {
-    const sentence = sentenceAt(timings, i);
-    if (sentence) onPick(i, sentence);
-  }, [timings, onPick]);
-  return (
-    <div style={{ marginBottom: 14 }}>
-      <WordLookupLayer passage={item.speaker} source="listening" onPlaySentence={onPlaySentence}
-        listeningAudio={{ audioUrl: item.audio_url, timings }} style={{
-          padding: "10px 14px", borderRadius: 8,
-          background: ACCENT.soft, border: "1px solid #E9D5FF",
-          fontSize: 13, color: "#5B21B6", lineHeight: 1.6, fontStyle: "italic",
-        }}>
-        <SentenceTranscript timings={timings} transcript={item.speaker} activeIndex={activeIndex} onPick={onPick} />
-      </WordLookupLayer>
-      <div data-no-dict style={{ marginTop: 8 }}>
-        <AudioPlayer ref={playerRef} compact src={item.audio_url || null} text={item.speaker} isPractice onTime={onTime} />
-      </div>
-    </div>
-  );
-}
 
 /**
  * LCR Task — Listen and Choose a Response
@@ -82,7 +39,6 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
   const [finished, setFinished] = useState(false);
   const [hoverOption, setHoverOption] = useState(null);
   const [hoverBtn, setHoverBtn] = useState(null);
-  const [reviewIndex, setReviewIndex] = useState(null); // for reviewing individual questions in results
   const [answerTimeLeft, setAnswerTimeLeft] = useState(LCR_SECONDS_PER_ITEM);
 
   const audioPlayedRef = useRef(false);
@@ -190,9 +146,6 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     completeCurrentAnswer(selected);
   }, [answerTimeLeft, completeCurrentAnswer, finished, isTimed, phase, selected]);
 
-  // 交卷后答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
-  // 必须在下面的 early return 之前调 —— hooks 不能写在条件返回之后。
-  const listeningAi = useListeningAiExplain();
 
   if (!currentItem) {
     return (
@@ -216,13 +169,11 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
     }));
     const correctCount = results.filter((r) => r.isCorrect).length;
     const pct = results.length > 0 ? Math.round((correctCount / results.length) * 100) : 0;
-    const reviewItem = reviewIndex !== null ? items[reviewIndex] : null;
-    const reviewResult = reviewIndex !== null ? results[reviewIndex] : null;
 
     return (
       <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
         <TopBar title="Results" section="Listening | Choose a Response" onExit={onExit} />
-        <PageShell narrow>
+        <PageShell>
           {/* Score card */}
           <SurfaceCard style={{ padding: "32px 28px", textAlign: "center", marginTop: 24 }}>
             <div style={{ fontSize: 56, marginBottom: 8 }}>
@@ -243,153 +194,9 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
             </div>
           </SurfaceCard>
 
-          {/* Question list */}
-          <div style={{ marginTop: 20 }}>
-            {results.map((r, i) => {
-              const itm = items[i];
-              const isOpen = reviewIndex === i;
-              return (
-                <SurfaceCard
-                  key={r.itemId}
-                  style={{ marginBottom: 10, overflow: "hidden", cursor: "pointer", border: isOpen ? `2px solid ${ACCENT.color}` : undefined }}
-                >
-                  {/* Summary row — always visible */}
-                  <button
-                    onClick={() => setReviewIndex(isOpen ? null : i)}
-                    style={{
-                      width: "100%", display: "flex", alignItems: "center", gap: 12,
-                      padding: "14px 18px", background: "transparent", border: "none",
-                      cursor: "pointer", fontFamily: FONT, textAlign: "left",
-                    }}
-                  >
-                    {/* Status icon */}
-                    <div style={{
-                      width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-                      background: r.isCorrect ? "#D1FAE5" : "#FEE2E2",
-                      color: r.isCorrect ? "#059669" : "#DC2626",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 15, fontWeight: 700,
-                    }}>
-                      {r.isCorrect ? "\u2713" : "\u2717"}
-                    </div>
-
-                    {/* Question preview */}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: C.t1, marginBottom: 2 }}>
-                        Q{i + 1}
-                      </div>
-                      <div style={{ fontSize: 12, color: C.t2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {itm?.speaker?.length > 60 ? itm.speaker.slice(0, 57) + "..." : itm?.speaker}
-                      </div>
-                    </div>
-
-                    {/* Answer badges */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                      <span style={{
-                        fontSize: 12, fontWeight: 700, padding: "3px 10px", borderRadius: 6,
-                        background: r.isCorrect ? "#D1FAE5" : "#FEE2E2",
-                        color: r.isCorrect ? "#059669" : "#DC2626",
-                      }}>
-                        {r.selected}
-                      </span>
-                      {!r.isCorrect && (
-                        <span style={{
-                          fontSize: 12, fontWeight: 700, padding: "3px 10px", borderRadius: 6,
-                          background: "#D1FAE5", color: "#059669",
-                        }}>
-                          {r.correct}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Chevron */}
-                    <span style={{
-                      fontSize: 12, color: C.t3, transition: "transform 0.2s",
-                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                    }}>v</span>
-                  </button>
-
-                  {/* Expanded detail — options + explanation */}
-                  {isOpen && reviewItem && (
-                    <div style={{ borderTop: `1px solid ${C.bdrSubtle}`, padding: "16px 18px", background: C.bg }}>
-                      {/* Speaker text + replay audio */}
-                      <LCRSpeakerResult key={reviewItem.id || reviewIndex} item={reviewItem} />
-
-                      <WordLookupLayer passage={questionLookupContext(reviewItem.speaker, [reviewItem])} source="listening">
-                      {/* All 4 options with correct/wrong highlighting */}
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        {OPTION_KEYS.map(key => {
-                          const text = reviewItem.options?.[key];
-                          if (!text) return null;
-                          const isCorrectOpt = key === reviewItem.answer;
-                          const isUserPick = key === reviewResult.selected;
-                          const isWrongPick = isUserPick && !isCorrectOpt;
-
-                          let bg = "#fff", border = C.bdr, color = C.t1;
-                          if (isCorrectOpt) { bg = "#D1FAE5"; border = "#059669"; color = "#065F46"; }
-                          else if (isWrongPick) { bg = "#FEE2E2"; border = "#DC2626"; color = "#991B1B"; }
-
-                          return (
-                            <div key={key} style={{
-                              display: "flex", alignItems: "center", gap: 12,
-                              padding: "10px 14px", borderRadius: 10,
-                              border: `1.5px solid ${border}`, background: bg,
-                              fontSize: 14, color, lineHeight: 1.5,
-                            }}>
-                              <div data-no-dict style={{
-                                width: 26, height: 26, borderRadius: 6, flexShrink: 0,
-                                background: isCorrectOpt ? "#059669" : isWrongPick ? "#DC2626" : "#F3F4F6",
-                                color: isCorrectOpt || isWrongPick ? "#fff" : C.t2,
-                                display: "flex", alignItems: "center", justifyContent: "center",
-                                fontSize: 12, fontWeight: 800,
-                              }}>
-                                {isCorrectOpt ? "\u2713" : isWrongPick ? "\u2717" : key}
-                              </div>
-                              <span data-sentence-index={`option-${key}`} style={{ fontWeight: isCorrectOpt || isWrongPick ? 600 : 400 }}>{text}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Explanation */}
-                      {reviewItem.explanation && (
-                        <div style={{
-                          marginTop: 12, padding: "12px 14px", borderRadius: 10,
-                          background: reviewResult.isCorrect ? "#F0FDF4" : "#FFF7ED",
-                          border: `1px solid ${reviewResult.isCorrect ? "#BBF7D0" : "#FED7AA"}`,
-                          fontSize: 13, color: reviewResult.isCorrect ? "#166534" : "#9A3412",
-                          lineHeight: 1.6,
-                        }}>
-                          <strong data-no-dict>{reviewResult.isCorrect ? "Correct!" : "Explanation:"} </strong><span data-sentence-index="explanation">{reviewItem.explanation}</span>
-                        </div>
-                      )}
-                      </WordLookupLayer>
-                      {/* AI 讲解：答对和答错的题均可查看。应答题走语用那支（整道题只有说话人一句话，
-                          没有「原文定位」可讲），块独立于题库自带的 explanation 渲染。 */}
-                      <div data-no-dict>
-                      <ListeningAiExplainBlock
-                        includeCorrect
-                        explainKey={`${reviewItem.id || "lcr"}-${reviewIndex}`}
-                        detail={{
-                          subtype: "lcr",
-                          qid: reviewItem.id || `lcr-${reviewIndex}`,
-                          speaker: reviewItem.speaker,
-                          situation: reviewItem.situation || "",
-                          pragmaticFunction: reviewItem.pragmatic_function || "",
-                          options: reviewItem.options,
-                          selected: reviewResult.selected,
-                          correct: reviewItem.answer,
-                          isCorrect: reviewResult.isCorrect,
-                        }}
-                        {...listeningAi}
-                      />
-                      </div>
-                    </div>
-                  )}
-                </SurfaceCard>
-              );
-            })}
-          </div>
+          <SurfaceCard style={{ padding: 20, marginTop: 20 }}>
+            <ListeningResultReview subtype="lcr" results={results} items={items} />
+          </SurfaceCard>
 
           {/* Action buttons */}
           <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24, marginBottom: 40 }}>
@@ -400,7 +207,6 @@ export function LCRTask({ item, batchItems, currentIndex = 0, onComplete, onExit
               setSelected(null);
               setAnswers([]);
               setFinished(false);
-              setReviewIndex(null);
               setHoverOption(null);
               audioPlayedRef.current = false;
             }} style={{ background: ACCENT.color, borderColor: ACCENT.color }}>

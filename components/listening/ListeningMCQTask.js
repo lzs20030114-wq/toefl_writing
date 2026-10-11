@@ -3,10 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { C, FONT, Btn, TopBar, SurfaceCard, PageShell } from "../shared/ui";
 import { AudioPlayer } from "./AudioPlayer";
-import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
-import { WordLookupLayer } from "../reading/WordLookupLayer";
-import { questionLookupContext } from "../../lib/dict/core";
-import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
+import { ListeningResultReview } from "./ListeningResultReview";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { listeningSecondsForType, formatAnswerTime } from "../../lib/listeningTiming";
 
@@ -171,37 +168,6 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
     handleQuestionTimeout();
   }, [answerTimeLeft, handleQuestionTimeout, isTimed, phase, submitted]);
 
-  // 交卷后答对和答错的题均可点开看 AI 讲解（Pro 门 + 缓存在 hook 里，点了才计费）。
-  // 必须在下面几个 early return 之前调 —— hooks 不能写在条件返回之后。
-  const listeningAi = useListeningAiExplain();
-  const explainContext =
-    item?.transcript || item?.announcement || item?.lecture || conversationText(item?.conversation) || "";
-  // 练习模式结果页的「原文精听」：有 sentence_timings（与 audio_url 同一次配音）时逐句可点
-  // （docs/listening-sentence-timings.md）。考试态不展示原文。
-  const reviewPlayerRef = useRef(null);
-  const [activeSentence, setActiveSentence] = useState(-1);
-  const reviewTimings = isPractice && item?.audio_url ? (item?.sentence_timings || null) : null;
-  // 点播的那一句（pinnedSentenceIndex）：停在句末那一下不让高亮滑到下一句。
-  const reviewPinRef = useRef(null);
-  const handleReviewTime = useCallback((t) => {
-    const pinned = pinnedSentenceIndex(reviewPinRef.current, t);
-    if (pinned === -1) reviewPinRef.current = null;
-    const i = pinned !== -1 ? pinned : activeSentenceIndex(reviewTimings, t);
-    // 句间静音 / 一句刚放完：高亮留在上一句（与历史页 useSentencePlayback 同一口径）。
-    setActiveSentence((prev) => (i === -1 || prev === i ? prev : i));
-  }, [reviewTimings]);
-  const handleReviewPick = useCallback((i, s) => {
-    if (reviewPlayerRef.current && reviewPlayerRef.current.playRange(s.start, s.end)) {
-      reviewPinRef.current = { index: i, start: s.start, end: s.end };
-      setActiveSentence(i);
-    }
-  }, []);
-  // 词典弹窗里的「听这一句」只给得出下标，句子从同一份列表里换回来。
-  const handlePlaySentence = useCallback((i) => {
-    const s = sentenceAt(reviewTimings, i);
-    if (s) handleReviewPick(i, s);
-  }, [reviewTimings, handleReviewPick]);
-
   if (!item || totalQ === 0) {
     return (
       <PageShell>
@@ -260,7 +226,7 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
     const correct = results.filter(r => r.isCorrect).length;
 
     return (
-      <PageShell narrow>
+      <PageShell>
         <TopBar title={title} section={section} onExit={onExit} />
         <SurfaceCard style={{ padding: "24px", marginTop: 20 }}>
           <div style={{ textAlign: "center", marginBottom: 24 }}>
@@ -268,87 +234,8 @@ export function ListeningMCQTask({ item, taskType, onComplete, onExit, onNext, i
             <div style={{ fontSize: 32, fontWeight: 800, color: C.t1 }}>{correct}/{totalQ}</div>
           </div>
 
-          {/* 练习模式：原文精听（逐句可点）。答题结果与原文并排复盘，比翻回历史页顺手。 */}
-          {isPractice && (transcript || item.conversation) && (
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: C.t2, letterSpacing: "0.02em" }}>原文精听</span>
-                <AudioPlayer ref={reviewPlayerRef} compact src={item.audio_url || null} text={ttsText} turns={ttsTurns} isPractice onTime={handleReviewTime} />
-              </div>
-              <WordLookupLayer passage={explainContext} source="listening" onPlaySentence={handlePlaySentence} listeningAudio={{ audioUrl: item.audio_url, timings: reviewTimings }} style={item.conversation
-                ? { marginBottom: 4 }
-                : { fontSize: 13, color: C.t1, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, whiteSpace: "pre-wrap", maxHeight: 220, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${C.bdr}` }}>
-                <SentenceTranscript
-                  variant={item.conversation ? "turns" : "paragraph"}
-                  timings={reviewTimings}
-                  transcript={transcript}
-                  conversation={item.conversation}
-                  activeIndex={activeSentence}
-                  onPick={handleReviewPick}
-                />
-              </WordLookupLayer>
-            </div>
-          )}
+          <ListeningResultReview subtype={taskType} results={results} item={item} />
 
-          <WordLookupLayer passage={questionLookupContext(explainContext, questions)} source="listening">
-          {questions.map((q, i) => {
-            const r = results[i];
-            return (
-              <div key={i} style={{ marginBottom: 20, padding: "16px", background: r?.isCorrect ? "#F0FDF4" : "#FEF2F2", borderRadius: 10, border: `1px solid ${r?.isCorrect ? "#BBF7D0" : "#FECACA"}` }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: C.t1, marginBottom: 8 }}>
-                  <span data-no-dict>Q{i + 1}: </span><span data-sentence-index={`question-${i}`}>{q.stem}</span>
-                </div>
-                {KEYS.map(k => {
-                  const isCorrect = k === q.answer;
-                  const isSelected = k === r?.selected;
-                  let bg = "#fff";
-                  let border = "#E5E7EB";
-                  let color = C.t1;
-                  if (isCorrect) { bg = "#D1FAE5"; border = "#059669"; color = "#065F46"; }
-                  else if (isSelected && !isCorrect) { bg = "#FEE2E2"; border = "#DC2626"; color = "#991B1B"; }
-
-                  return (
-                    <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 10px", marginBottom: 4, background: bg, border: `1px solid ${border}`, borderRadius: 6, fontSize: 13, color }}>
-                      <span data-no-dict style={{ fontWeight: 700, minWidth: 20 }}>{k}.</span>
-                      <span data-sentence-index={`option-${i}-${k}`}>{q.options[k]}</span>
-                      {isCorrect && <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700 }}>✓</span>}
-                      {isSelected && !isCorrect && <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700 }}>✗</span>}
-                    </div>
-                  );
-                })}
-                {q.explanation && (
-                  <div style={{ marginTop: 8, fontSize: 12, color: C.t2, lineHeight: 1.5, padding: "8px 10px", background: "#FFFBEB", borderRadius: 6, border: "1px solid #FDE68A" }}>
-                    <strong data-no-dict>Explanation: </strong><span data-sentence-index={`explanation-${i}`}>{q.explanation}</span>
-                  </div>
-                )}
-                {/* AI 讲解：答对和答错的题均可查看。题库自带的 explanation 可能缺失，
-                    这一块独立于它渲染 —— 没有静态解析的题恰恰最需要讲解。 */}
-                {r && (
-                  <div data-no-dict>
-                  <ListeningAiExplainBlock
-                    includeCorrect
-                    explainKey={`${item.id || "task"}-q${i}`}
-                    detail={{
-                      subtype: taskType,
-                      qid: q.qid || `${item.id || "task"}-q${i}`,
-                      stem: q.stem,
-                      contextText: explainContext,
-                      options: q.options,
-                      selected: r.selected,
-                      correct: q.answer,
-                      isCorrect: r.isCorrect,
-                    }}
-                    {...listeningAi}
-                  />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-          </WordLookupLayer>
-
-          {/* 成绩在交卷那一刻就已经回调保存了，这里两颗按钮都只管跳转。
-              旧版把保存挂在「完成」上，而调用方的 onComplete 只存不跳 —— 练习模式点了没反应。 */}
           <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 16 }}>
             {typeof onNext === "function" && (
               <Btn onClick={onNext} variant="secondary">换一题</Btn>
