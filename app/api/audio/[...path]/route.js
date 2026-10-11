@@ -73,7 +73,7 @@ export async function GET(request, { params }) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!base) return new Response("Audio storage not configured", { status: 500 });
 
-  // ?v=<版本> 透传到上游：本路由的响应是一年 immutable 缓存，重配只能靠换 URL 失效；
+  // ?v=<版本> 透传到上游：完整音频允许浏览器一年 immutable 缓存，重配靠换 URL 失效；
   // 上游 Supabase 对未知 query 不敏感，带上它顺便绕过存储侧 CDN 的旧副本。
   let search = "";
   try { search = new URL(request.url).search || ""; } catch { search = ""; }
@@ -97,9 +97,15 @@ export async function GET(request, { params }) {
   }
   if (!headers.has("content-type")) headers.set("content-type", "audio/mpeg");
   if (!headers.has("accept-ranges")) headers.set("accept-ranges", "bytes");
-  // Audio is immutable (named by item id) — cache hard at the CDN/PoP so a clip
-  // is pulled from Supabase at most once per edge location.
-  headers.set("cache-control", "public, max-age=31536000, immutable");
+  // CDN 的缓存键不保证包含 Range：缓存任意 206 会把那一小段当整份文件
+  // 回给后续 seek，甚至无 Range 的请求。所有响应绕过 CDN，完整 200 仅允许
+  // 浏览器缓存；Range 响应不进入任何缓存，必须每次取得所请求的字节。
+  headers.set("cache-control", range || upstream.status !== 200
+    ? "no-store"
+    : "public, max-age=31536000, immutable");
+  headers.set("cdn-cache-control", "no-store");
+  headers.set("vercel-cdn-cache-control", "no-store");
+  headers.set("vary", "Range");
 
   if (range) {
     const declared = Number(upstream.headers.get("content-length"));
@@ -131,7 +137,13 @@ export async function GET(request, { params }) {
       if (r.unsatisfiable) {
         return new Response(null, {
           status: 416,
-          headers: new Headers({ "content-range": `bytes */${total}` }),
+          headers: new Headers({
+            "content-range": `bytes */${total}`,
+            "cache-control": "no-store",
+            "cdn-cache-control": "no-store",
+            "vercel-cdn-cache-control": "no-store",
+            "vary": "Range",
+          }),
         });
       }
       const slice = buf.slice(r.start, r.end + 1);

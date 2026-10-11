@@ -79,6 +79,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   const [completed, setCompleted] = useState(false);
   const [hover, setHover] = useState(null); // "play" | "replay" | null
   const [buffering, setBuffering] = useState(false); // mp3 fetched but not yet audible
+  const [sentenceError, setSentenceError] = useState(false);
   // 紧凑模式可拖动进度条需要总时长；dragging 时关掉进度过渡并让把手显形。
   const [duration, setDuration] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -97,10 +98,16 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   // Multi-turn TTS: bumped on every stop so a cancelled utterance's onend can't
   // schedule the next turn of a playback that was already torn down.
   const ttsSessionRef = useRef(0);
+  const ttsVoiceCleanupRef = useRef(null);
   // 逐句播放：playRange 设下的「播到这一秒就停」；null = 整段正常播放。
   const rangeEndRef = useRef(null);
   const rangeRafRef = useRef(null);
   const rangeLastTickRef = useRef(0);
+  const rangeRequestRef = useRef(0);
+  const pendingRangeCleanupRef = useRef(null);
+  // Keep failed sentence requests isolated from the whole-passage TTS rescue.
+  const sentenceModeRef = useRef(false);
+  const playbackRequestedRef = useRef(false);
   // onTime 走 ref：timeupdate 监听器挂在 [src] effect 里，不能因回调 identity 变化重挂。
   const onTimeRef = useRef(onTime);
   onTimeRef.current = onTime;
@@ -125,15 +132,40 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   const sharedPlaySrcRef = useRef(null);
 
   const clearRange = useCallback(() => {
+    rangeRequestRef.current += 1;
+    if (pendingRangeCleanupRef.current) {
+      pendingRangeCleanupRef.current();
+      pendingRangeCleanupRef.current = null;
+    }
+    sentenceModeRef.current = false;
     rangeEndRef.current = null;
     if (rangeRafRef.current) { cancelAnimationFrame(rangeRafRef.current); rangeRafRef.current = null; }
   }, []);
 
-  const stopPlayback = useCallback(() => {
-    ttsSessionRef.current += 1;
+  const failSentence = useCallback(() => {
     clearRange();
+    sentenceModeRef.current = true;
+    if (audioRef.current) audioRef.current.pause();
+    setPlaying(false);
+    setBuffering(false);
+    setSentenceError(true);
+  }, [clearRange]);
+
+  const stopTTS = useCallback(() => {
+    ttsSessionRef.current += 1;
+    if (ttsVoiceCleanupRef.current) {
+      ttsVoiceCleanupRef.current();
+      ttsVoiceCleanupRef.current = null;
+    }
     if (ttsTimerRef.current) clearTimeout(ttsTimerRef.current);
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    playbackRequestedRef.current = false;
+    stopTTS();
+    clearRange();
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -148,10 +180,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
       sharedPlaySrcRef.current = null;
       sharedController.stop();
     }
-    if (typeof speechSynthesis !== "undefined") {
-      speechSynthesis.cancel();
-    }
-  }, [clearRange]);
+  }, [clearRange, stopTTS]);
 
   // Stop this instance and reset its button. Called directly, or by another
   // instance taking over the single playback slot.
@@ -176,6 +205,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     setCompleted(false);
     setDuration(0);
     setDragging(false);
+    setSentenceError(false);
     stopPlayback();
   }, [src, text, stopPlayback]);
 
@@ -208,6 +238,9 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     // dead-end the listen phase. Clear the spinner and rescue with TTS off the
     // `text` prop so the consumer's onEnded still fires and the exam advances.
     const onError = () => {
+      if (sentenceModeRef.current) { failSentence(); return; }
+      // Review metadata preloads must never start speaking without a gesture.
+      if (compact && !autoPlay && !playbackRequestedRef.current) return;
       setPlaying(false);
       setBuffering(false);
       if (startTTSRef.current) startTTSRef.current();
@@ -243,7 +276,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
       audio.removeEventListener("playing", onResume);
       audio.removeEventListener("canplay", onResume);
     };
-  }, [src, onEnded]);
+  }, [src, onEnded, failSentence, compact, autoPlay]);
 
   // Exam-controller mode: drive the same UI state machine off the shared
   // element's events instead of a local <audio>. `blocked` is deliberately
@@ -320,10 +353,12 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     // Claim the single playback slot, stopping whoever held it.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    const session = ++ttsSessionRef.current;
 
     // Build the utterance once; we may delay speaking until Safari finishes
     // populating its voice list (getVoices() returns [] on first call).
     function speak(voices) {
+      if (ttsSessionRef.current !== session) return;
       speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "en-US";
@@ -337,7 +372,6 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
 
       if (multi) {
         // Conversation: one utterance per turn, gendered voice, gap between turns.
-        const session = ++ttsSessionRef.current;
         const totalWords = turns.reduce((n, t) => n + String(t.text || "").split(/\s+/).filter(Boolean).length, 0);
         ttsDurationRef.current = (totalWords / (130 * 0.9)) * 60 * 1000 + TURN_GAP_MS * (turns.length - 1);
         ttsStartRef.current = Date.now();
@@ -355,6 +389,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
           if (!distinct) u.pitch = t.gender === "female" ? 1.15 : t.gender === "male" ? 0.85 : 1;
           if (i === 0) {
             u.onstart = () => {
+              if (ttsSessionRef.current !== session) return;
               setPlaying(true);
               setBuffering(false);
               animFrameRef.current = requestAnimationFrame(animateTTSProgress);
@@ -373,6 +408,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
             if (onEnded) onEnded();
           };
           u.onerror = () => {
+            if (ttsSessionRef.current !== session) return;
             setPlaying(false);
             if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
           };
@@ -389,11 +425,13 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
       ttsStartRef.current = Date.now();
 
       utterance.onstart = () => {
+        if (ttsSessionRef.current !== session) return;
         setPlaying(true);
         setBuffering(false);
         animFrameRef.current = requestAnimationFrame(animateTTSProgress);
       };
       utterance.onend = () => {
+        if (ttsSessionRef.current !== session) return;
         setPlaying(false);
         setProgress(1);
         setCompleted(true);
@@ -401,6 +439,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
         if (onEnded) onEnded();
       };
       utterance.onerror = () => {
+        if (ttsSessionRef.current !== session) return;
         setPlaying(false);
         if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       };
@@ -412,30 +451,39 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     if (initial && initial.length > 0) { speak(initial); return true; }
     // Safari: wait for voiceschanged (with 600ms hard timeout) before speaking.
     let fired = false;
-    const onVoicesChanged = () => {
-      if (fired) return;
+    let voiceTimer;
+    const cleanupVoices = () => {
       fired = true;
       speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      clearTimeout(voiceTimer);
+    };
+    const onVoicesChanged = () => {
+      if (fired) return;
+      cleanupVoices();
+      if (ttsVoiceCleanupRef.current === cleanupVoices) ttsVoiceCleanupRef.current = null;
       speak(speechSynthesis.getVoices());
     };
     speechSynthesis.addEventListener("voiceschanged", onVoicesChanged);
-    setTimeout(() => {
+    voiceTimer = setTimeout(() => {
       if (fired) return;
-      fired = true;
-      speechSynthesis.removeEventListener("voiceschanged", onVoicesChanged);
+      cleanupVoices();
+      if (ttsVoiceCleanupRef.current === cleanupVoices) ttsVoiceCleanupRef.current = null;
       speak(speechSynthesis.getVoices());
     }, 600);
+    ttsVoiceCleanupRef.current = cleanupVoices;
     return true;
   }, [text, turns, onEnded, animateTTSProgress, stopSelf]);
   // Expose the latest startTTS to the <audio> 'error' listener (see above).
   startTTSRef.current = startTTS;
 
   const playAudio = useCallback(() => {
+    playbackRequestedRef.current = true;
     // Claim the single playback slot, stopping whoever held it so two players
     // can't sound at once.
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
     clearRange(); // 整段播放不受上一次逐句播放的 end 约束
+    setSentenceError(false);
     // Exam-controller mode: route through the shared unlocked element. The
     // controller emits loading/playing/ended/error/blocked — the subscription
     // effect above maps those back onto this component's UI state.
@@ -511,11 +559,13 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
 
   // 从当前位置开声（不像 playAudio 那样把 currentTime 归零）。
   const playFromCurrent = useCallback(() => {
+    playbackRequestedRef.current = true;
     const audio = audioRef.current;
     if (!audio) return;
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
     clearRange();
+    setSentenceError(false);
     setPlaying(true);
     setBuffering(true);
     const playPromise = audio.play();
@@ -527,6 +577,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
   // 暂停 ≠ 停止：stopPlayback 会把 currentTime 归零，而「反复听同一句」要求
   // 再点一下是从原处接着放。
   const pausePlayback = useCallback(() => {
+    playbackRequestedRef.current = false;
     clearRange();
     if (audioRef.current) audioRef.current.pause();
     setPlaying(false);
@@ -565,34 +616,55 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return false;
     if (activePlayerStop && activePlayerStop !== stopSelf) activePlayerStop();
     activePlayerStop = stopSelf;
+    // Cancel this player's own fallback too, including pending voice callbacks.
+    stopTTS();
+    playbackRequestedRef.current = true;
     clearRange();
+    setSentenceError(false);
+    sentenceModeRef.current = true;
     rangeEndRef.current = end;
+    const request = rangeRequestRef.current;
     const target = Math.max(0, start - SENTENCE_SEEK_LEAD_SEC);
     const go = () => {
-      audio.currentTime = target;
+      if (rangeRequestRef.current !== request || audioRef.current !== audio) return;
+      try { audio.currentTime = target; }
+      catch { failSentence(); return; }
       const dur = audio.duration;
       if (Number.isFinite(dur) && dur > 0) setProgress(Math.min(target / dur, 1));
       setCompleted(false);
       setPlaying(true);
       setBuffering(true);
-      const p = audio.play();
+      let p;
+      try { p = audio.play(); }
+      catch { failSentence(); return; }
       if (p && typeof p.then === "function") {
-        p.catch(() => { clearRange(); setPlaying(false); setBuffering(false); });
+        p.catch(() => { if (rangeRequestRef.current === request) failSentence(); });
       }
       rangeLastTickRef.current = 0;
       if (rangeRafRef.current) cancelAnimationFrame(rangeRafRef.current);
       rangeRafRef.current = requestAnimationFrame(tickRange);
     };
     // 元数据还没到时 currentTime 设不进去（老 WebKit 直接抛错）：等一次 loadedmetadata 再定位。
-    if (audio.readyState >= 1) go();
+    if (audio.error && !sentenceError) { failSentence(); return true; }
+    if (audio.readyState >= 1 && !audio.error) go();
     else {
-      const once = () => { audio.removeEventListener("loadedmetadata", once); if (rangeEndRef.current === end) go(); };
+      const once = () => {
+        audio.removeEventListener("loadedmetadata", once);
+        if (rangeRequestRef.current !== request) return;
+        pendingRangeCleanupRef.current = null;
+        go();
+      };
       audio.addEventListener("loadedmetadata", once);
+      pendingRangeCleanupRef.current = () => audio.removeEventListener("loadedmetadata", once);
       setPlaying(true);
       setBuffering(true);
+      if (audio.error) {
+        try { audio.load(); }
+        catch { failSentence(); }
+      }
     }
     return true;
-  }, [seekable, stopSelf, clearRange, tickRange]);
+  }, [seekable, stopSelf, stopTTS, clearRange, tickRange, failSentence, sentenceError]);
 
   useImperativeHandle(ref, () => ({
     playRange,
@@ -718,6 +790,7 @@ export const AudioPlayer = forwardRef(function AudioPlayer({ src, text, turns = 
     const midway = seekable && clampedProgress > 0 && clampedProgress < 1;
     return (
       <span style={{ display: "inline-flex", alignItems: "center", gap: 10, flexWrap: "wrap", maxWidth: "100%" }}>
+        {sentenceError && <span role="status" style={{ fontSize: 12, color: C.t2, fontFamily: FONT }}>这句播放失败，请再点一次句前播放键重试。</span>}
         {src && !controllerMode && <audio ref={audioRef} src={audioSrc} preload={seekable ? "metadata" : "none"} />}
         <button
           onClick={handleCompactToggle}

@@ -17,19 +17,29 @@ describe("sameOriginAudio", () => {
   afterEach(() => { process.env.NEXT_PUBLIC_AUDIO_PROXY_DISABLED = prev; });
 
   test("rewrites a Supabase listening_audio URL to the same-origin proxy path", () => {
-    expect(sameOriginAudio(SUPA)).toBe("/api/audio/choose-response/lcr_001.mp3");
+    expect(sameOriginAudio(SUPA)).toBe("/api/audio/choose-response/lcr_001.mp3?proxy_version=range-v2");
   });
 
-  test("leaves non-Supabase / already-relative / empty values untouched", () => {
-    expect(sameOriginAudio("/api/audio/x.mp3")).toBe("/api/audio/x.mp3");
+  test("leaves non-Supabase / local static / empty values untouched", () => {
     expect(sameOriginAudio("/listening-audio/x.mp3")).toBe("/listening-audio/x.mp3");
     expect(sameOriginAudio("https://other.cdn/x.mp3")).toBe("https://other.cdn/x.mp3");
+    const foreign = "https://other.cdn/storage/v1/object/public/listening_audio/x.mp3";
+    expect(sameOriginAudio(foreign)).toBe(foreign);
+    expect(sameOriginAudio("https://other.cdn/api/audio/x.mp3")).toBe("https://other.cdn/api/audio/x.mp3");
     expect(sameOriginAudio(null)).toBe(null);
     expect(sameOriginAudio("")).toBe("");
   });
 
   test("keeps a ?v= cache-busting version on the proxy path (re-rendered clips)", () => {
-    expect(sameOriginAudio(`${SUPA}?v=mf3k2a`)).toBe("/api/audio/choose-response/lcr_001.mp3?v=mf3k2a");
+    expect(sameOriginAudio(`${SUPA}?v=mf3k2a`)).toBe("/api/audio/choose-response/lcr_001.mp3?v=mf3k2a&proxy_version=range-v2");
+  });
+
+  test("versions existing proxy URLs idempotently and preserves clip versions and fragments", () => {
+    expect(sameOriginAudio("/api/audio/x.mp3")).toBe("/api/audio/x.mp3?proxy_version=range-v2");
+    const versioned = sameOriginAudio("/api/audio/x.mp3?v=clip1&proxy_version=old&proxy_version=older#t=10");
+    expect(versioned).toBe("/api/audio/x.mp3?v=clip1&proxy_version=range-v2#t=10");
+    expect(sameOriginAudio(versioned)).toBe(versioned);
+    expect(sameOriginAudio(`${SUPA}#t=10`)).toBe("/api/audio/choose-response/lcr_001.mp3?proxy_version=range-v2#t=10");
   });
 
   test("kill switch returns the raw Supabase URL", () => {
@@ -42,7 +52,7 @@ describe("sameOriginAudio", () => {
   // 免得有人日后给代理加白名单时把原声漏掉，线上表现是真题听力集体没声音。
   test("原声前缀 real_orig/ 与 TTS 前缀 real/ 一样能走同源代理", () => {
     const orig = "https://abc123.supabase.co/storage/v1/object/public/listening_audio/real_orig/lcr/real_lcr_121b_1_01.mp3?v=mf3k2a";
-    expect(sameOriginAudio(orig)).toBe("/api/audio/real_orig/lcr/real_lcr_121b_1_01.mp3?v=mf3k2a");
+    expect(sameOriginAudio(orig)).toBe("/api/audio/real_orig/lcr/real_lcr_121b_1_01.mp3?v=mf3k2a&proxy_version=range-v2");
   });
 });
 
@@ -79,7 +89,10 @@ describe("/api/audio edge route", () => {
     expect(res.headers.get("content-type")).toBe("audio/mpeg");
     expect(res.headers.get("content-range")).toBe("bytes 0-9/4096");
     expect(res.headers.get("accept-ranges")).toBe("bytes");
-    expect(res.headers.get("cache-control")).toMatch(/immutable/);
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    expect(res.headers.get("cdn-cache-control")).toBe("no-store");
+    expect(res.headers.get("vercel-cdn-cache-control")).toBe("no-store");
+    expect(res.headers.get("vary")).toBe("Range");
     // content-length 锁成实际 body 字节数（定长响应，不允许被 chunked 化丢掉）。
     expect(res.headers.get("content-length")).toBe("10");
     expect(await res.text()).toBe("AUDIOBYTES");
@@ -99,6 +112,9 @@ describe("/api/audio edge route", () => {
     expect(res.status).toBe(206);
     expect(res.headers.get("content-range")).toBe("bytes 2-5/10");
     expect(res.headers.get("content-length")).toBe("4");
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    expect(res.headers.get("cdn-cache-control")).toBe("no-store");
+    expect(res.headers.get("vercel-cdn-cache-control")).toBe("no-store");
     expect(await res.text()).toBe("2345");
   });
 
@@ -116,6 +132,23 @@ describe("/api/audio edge route", () => {
     expect(await suffix.text()).toBe("6789");
   });
 
+  test("different ranges on the same URL remain distinct and never opt into CDN caching", async () => {
+    global.fetch = fullBody();
+    const url = "https://treepractice.com/api/audio/x.mp3?proxy_version=range-v2";
+    for (const [range, expected, contentRange] of [
+      ["bytes=0-1", "01", "bytes 0-1/10"],
+      ["bytes=6-8", "678", "bytes 6-8/10"],
+    ]) {
+      const res = await GET({ ...req(range), url }, { params: { path: ["x.mp3"] } });
+      expect(res.status).toBe(206);
+      expect(res.headers.get("content-range")).toBe(contentRange);
+      expect(await res.text()).toBe(expected);
+      for (const header of ["cache-control", "cdn-cache-control", "vercel-cdn-cache-control"]) {
+        expect(res.headers.get(header)).toBe("no-store");
+      }
+    }
+  });
+
   test("forwards ?v= to the upstream URL so a re-rendered clip bypasses stale caches", async () => {
     global.fetch = jest.fn(async (url) => {
       expect(url).toBe("https://abc123.supabase.co/storage/v1/object/public/listening_audio/real/lc/x.mp3?v=abc");
@@ -123,6 +156,10 @@ describe("/api/audio edge route", () => {
     });
     const res = await GET({ headers: new Headers(), url: "https://treepractice.com/api/audio/real/lc/x.mp3?v=abc" }, { params: { path: ["real", "lc", "x.mp3"] } });
     expect(res.status).toBe(200);
+    expect(res.headers.get("cache-control")).toMatch(/immutable/);
+    expect(res.headers.get("cdn-cache-control")).toBe("no-store");
+    expect(res.headers.get("vercel-cdn-cache-control")).toBe("no-store");
+    expect(res.headers.get("vary")).toBe("Range");
   });
 
   test("unsatisfiable range → 416 with the total size", async () => {
@@ -130,6 +167,7 @@ describe("/api/audio edge route", () => {
     const res = await GET(req("bytes=99-"), { params: { path: ["x.mp3"] } });
     expect(res.status).toBe(416);
     expect(res.headers.get("content-range")).toBe("bytes */10");
+    expect(res.headers.get("cache-control")).toBe("no-store");
   });
 
   test("oversized clip (beyond buffer cap) falls back to streaming passthrough", async () => {
@@ -144,6 +182,8 @@ describe("/api/audio edge route", () => {
     const res = await GET(req("bytes=0-3"), { params: { path: ["x.mp3"] } });
     expect(res.status).toBe(206);
     expect(res.headers.get("content-length")).toBe("30000000");
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    expect(res.headers.get("vercel-cdn-cache-control")).toBe("no-store");
     expect(await res.text()).toBe("HUGE");
   });
 

@@ -84,6 +84,149 @@ describe("activeSentenceIndex", () => {
 });
 
 describe("AudioPlayer.playRange —— 只放一句", () => {
+  test("单句等待 metadata 时暂停，迟来 error 不会启动全文 TTS", () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice />);
+    stubMedia(audioEl());
+    Object.defineProperty(audioEl(), "readyState", { configurable: true, get: () => 0 });
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    act(() => { ref.current.pause(); });
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+    expect(playMock).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: /Playing|缓冲中/ })).not.toBeInTheDocument();
+  });
+
+  test("整段暂停后迟来 error 不会擅自朗读，重新点击整段仍能兜底", () => {
+    render(<AudioPlayer compact src={CLIP} text="The whole passage." isPractice />);
+    const media = stubMedia(audioEl());
+    fireEvent.click(screen.getByRole("button", { name: /Replay/ }));
+    media.currentTime = 1;
+    act(() => { fireEvent(audioEl(), new Event("timeupdate")); });
+    fireEvent.click(screen.getByRole("button", { name: /Playing|缓冲中/ }));
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /继续/ }));
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).toHaveBeenCalledTimes(1);
+  });
+
+  test("复盘的 metadata 预加载失败不会擅自全文朗读", () => {
+    render(<AudioPlayer compact src={CLIP} text="The whole passage." isPractice />);
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+  });
+
+  test("点句取消同播放器既有全文 TTS，旧 TTS 完成不能改写单句状态", () => {
+    const ref = createRef();
+    const onEnded = jest.fn();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice onEnded={onEnded} />);
+    stubMedia(audioEl());
+    fireEvent.click(screen.getByRole("button", { name: /Replay/ }));
+    act(() => { fireEvent.error(audioEl()); });
+    const utterance = global.speechSynthesis.speak.mock.calls[0][0];
+    global.speechSynthesis.cancel.mockClear();
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    expect(global.speechSynthesis.cancel).toHaveBeenCalled();
+    act(() => { utterance.onend(); });
+    expect(onEnded).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /Playing|缓冲中/ })).toBeInTheDocument();
+  });
+
+  test("点句后，迟来的语音列表与超时回调不会再朗读全文", () => {
+    jest.useFakeTimers();
+    try {
+      const ref = createRef();
+      global.speechSynthesis.getVoices = () => [];
+      render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice />);
+      stubMedia(audioEl());
+      fireEvent.click(screen.getByRole("button", { name: /Replay/ }));
+      act(() => { fireEvent.error(audioEl()); });
+      const voiceCallback = global.speechSynthesis.addEventListener.mock.calls[0][1];
+      act(() => { ref.current.playRange(2.42, 3.5); });
+      act(() => { voiceCallback(); jest.advanceTimersByTime(600); });
+      expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+    } finally { jest.useRealTimers(); }
+  });
+
+  test("已损坏音频点句提示失败，再点会重载并保留选中句", () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice />);
+    const media = stubMedia(audioEl());
+    let error = { code: 2 };
+    Object.defineProperty(audioEl(), "error", { configurable: true, get: () => error });
+    Object.defineProperty(audioEl(), "readyState", { configurable: true, get: () => 0 });
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    expect(screen.getByRole("status")).toHaveTextContent("这句播放失败");
+    expect(playMock).not.toHaveBeenCalled();
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    expect(window.HTMLMediaElement.prototype.load).toHaveBeenCalledTimes(1);
+    error = null;
+    act(() => { fireEvent(audioEl(), new Event("loadedmetadata")); });
+    expect(playMock).toHaveBeenCalledTimes(1);
+    expect(media.currentTime).toBeCloseTo(2.42 - SENTENCE_SEEK_LEAD_SEC, 3);
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+  });
+
+  test("单句媒体错误停播并提示重试，不朗读整段；重试后恢复", () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice />);
+    const media = stubMedia(audioEl());
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+    expect(screen.getByRole("status")).toHaveTextContent("这句播放失败");
+    expect(screen.queryByRole("button", { name: /Playing|缓冲中/ })).not.toBeInTheDocument();
+    // 重复 error 也不能让失败的单句请求变成全文朗读。
+    act(() => { fireEvent.error(audioEl()); });
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(media.currentTime).toBeCloseTo(2.42 - SENTENCE_SEEK_LEAD_SEC, 3);
+  });
+
+  test("单句 play 拒绝给出重试反馈；旧请求迟来拒绝不能打断新请求", async () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="The whole passage." isPractice />);
+    const media = stubMedia(audioEl());
+    let rejectOld;
+    playMock.mockImplementationOnce(() => new Promise((_, reject) => { rejectOld = reject; }));
+    act(() => { ref.current.playRange(0, 2.3); });
+    act(() => { ref.current.playRange(3.9, 6.1); });
+    await act(async () => { rejectOld(new Error("superseded")); });
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(media.currentTime).toBeCloseTo(3.9 - SENTENCE_SEEK_LEAD_SEC, 3);
+    playMock.mockRejectedValueOnce(new Error("failed"));
+    await act(async () => { ref.current.playRange(2.42, 3.5); });
+    expect(screen.getByRole("status")).toHaveTextContent("这句播放失败");
+    expect(global.speechSynthesis.speak).not.toHaveBeenCalled();
+  });
+
+  test("冷加载连续选句只播放最后请求，同一个 end 也不会重播旧请求", () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="x" isPractice />);
+    const media = stubMedia(audioEl());
+    Object.defineProperty(audioEl(), "readyState", { configurable: true, get: () => 0 });
+    act(() => { ref.current.playRange(1, 4); });
+    act(() => { ref.current.playRange(3, 4); });
+    expect(playMock).not.toHaveBeenCalled();
+    act(() => { fireEvent(audioEl(), new Event("loadedmetadata")); });
+    expect(playMock).toHaveBeenCalledTimes(1);
+    expect(media.currentTime).toBeCloseTo(3 - SENTENCE_SEEK_LEAD_SEC, 3);
+  });
+
+  test("冷加载点句后暂停，迟来的 metadata 不会重新开声", () => {
+    const ref = createRef();
+    render(<AudioPlayer ref={ref} compact src={CLIP} text="x" isPractice />);
+    const media = stubMedia(audioEl());
+    Object.defineProperty(audioEl(), "readyState", { configurable: true, get: () => 0 });
+    act(() => { ref.current.playRange(2.42, 3.5); });
+    act(() => { ref.current.pause(); });
+    act(() => { fireEvent(audioEl(), new Event("loadedmetadata")); });
+    expect(playMock).not.toHaveBeenCalled();
+    expect(media.currentTime).toBe(0);
+  });
+
   test("定位到 start-提前量、开声、播到 end 就 pause；onTime 回报位置", () => {
     const ref = createRef();
     const onTime = jest.fn();
