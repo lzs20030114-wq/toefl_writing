@@ -8,7 +8,7 @@ import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { ListeningVocabReview } from "./ListeningVocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
-import { SORT_OPTIONS, cardStage, estimateMinutes, isLeech, reviewCard, sortCards } from "../../lib/vocab/book";
+import { SORT_OPTIONS, cardStage, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import { clearReviewSave, readReviewSave, resumableQueue, writeReviewSave } from "../../lib/vocab/reviewSave";
 import RootExplorer from "./RootExplorer";
@@ -33,7 +33,7 @@ const STAGE_STYLE = {
   paused: { label: "已暂停", fg: "#94a39a", bg: "#F7FAF9", bd: "#dde5df" },
 };
 const FILTERS = [
-  ["all", "全部"], ["due", "今天要复习"], ["learning", "学习中"], ["leech", "易忘"], ["mature", "已记牢"], ["new", "未开始"],
+  ["all", "全部"], ["today-added", "今日新增"], ["due", "今天要复习"], ["learning", "学习中"], ["leech", "易忘"], ["mature", "已记牢"], ["new", "未开始"],
 ];
 const DIST = [
   ["new", "未开始", "#DDE5DF", "new"], ["learning", "学习中", "#0891B2", "learning"],
@@ -46,6 +46,7 @@ function stageKey(card, now) {
 }
 function matches(id, card, now) {
   if (id === "all") return true;
+  if (id === "today-added") return isAddedToday(card, now);
   if (id === "paused") return !!card.suspended;
   if (id === "leech") return isLeech(card);
   if (id === "due") return !card.suspended && card.state !== STATE.NEW && isDue(card, now);
@@ -196,7 +197,13 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     if (next.has(word)) next.delete(word); else next.add(word);
     return next;
   });
-  const now = useMemo(() => new Date(), [cards]); // eslint-disable-line react-hooks/exhaustive-deps
+  // stats 随每分钟 / 窗口聚焦刷新，跨日也更新列表。
+  const now = useMemo(() => new Date(), [cards, stats]); // eslint-disable-line react-hooks/exhaustive-deps
+  const addedToday = useMemo(() => {
+    const todayCards = cards.filter((card) => isAddedToday(card, now));
+    const listening = todayCards.filter((card) => card.reviewMode === "listening").length;
+    return { total: todayCards.length, reading: todayCards.length - listening, listening };
+  }, [cards, now]);
 
   const modeCards = useMemo(
     () => cards.filter((c) => listMode === "all" || (c.reviewMode || "reading") === listMode).map((card) => reviewCard(card)),
@@ -263,6 +270,11 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     setFilter(target);
     resetListView();
     libraryRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+  };
+  const viewAddedToday = () => {
+    setQ("");
+    setSortKey("recent");
+    pickDist("today-added");
   };
   const openQuota = () => {
     setQuotaOpen(true);
@@ -403,6 +415,14 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
           </div>}
         </section>
 
+        <section className={`${styles.card} ${styles.todayAdded}`} aria-labelledby="vn-added-title">
+          <div className={styles.todayAddedSummary}>
+            <h2 id="vn-added-title">今日新增 <span>{ready ? addedToday.total : "—"} 词</span></h2>
+            <p>{!ready ? "正在读取…" : addedToday.total ? `阅读 ${addedToday.reading} · 听力 ${addedToday.listening}` : "今天还没有新增单词"}</p>
+          </div>
+          <button type="button" className={styles.todayAddedCta} disabled={!ready} onClick={viewAddedToday}>查看今日新增 <span aria-hidden="true">›</span></button>
+        </section>
+
         <RootExplorer />
         <MeaningExplorer accountKey={accountKey} ready={ready} onStudyGroup={studyGroup} />
 
@@ -439,7 +459,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
           </div>
           <div ref={listRef} className={styles.scrollList} tabIndex={0} role="region" aria-label="词库列表">
             {!ready ? <div className={styles.empty}>正在读取词库…</div>
-              : cards.length === 0 ? <div className={styles.empty}><strong>单词本还是空的</strong><p>在阅读练习记录中划选生词，打开词典后点击「收藏到单词本」；也可以导入自己的词表。</p><Link href="/reading/progress">去阅读练习记录</Link></div>
+              : filter === "today-added" && list.length === 0 ? <div className={styles.empty}>{addedToday.total === 0 ? "今天还没有新增单词" : "今日新增中没有符合当前类型或搜索条件的单词"}</div>
+                : cards.length === 0 ? <div className={styles.empty}><strong>单词本还是空的</strong><p>在阅读练习记录中划选生词，打开词典后点击「收藏到单词本」；也可以导入自己的词表。</p><Link href="/reading/progress">去阅读练习记录</Link></div>
                 : list.length === 0 ? <div className={styles.empty}>这一类里还没有词</div>
                   : list.slice(0, shown).map((card) => <WordRow key={card.word} card={card} now={now}
                     open={openWord === card.word} onToggle={setOpenWord} onReviewMode={setReviewMode}

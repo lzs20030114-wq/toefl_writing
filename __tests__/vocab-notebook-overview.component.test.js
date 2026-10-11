@@ -2,10 +2,11 @@
  * 单词本概览页（真实 hook + 真实 localStorage）：今日计划、筛选/排序、记忆分布、7 天预测、
  * 暂停/编辑释义、存档续做、复习专注模式回调。
  */
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import VocabNotebook from "../components/vocab/VocabNotebook";
 import { writeReviewSave } from "../lib/vocab/reviewSave";
 import { STATE } from "../lib/vocab/srs";
+import { isAddedToday } from "../lib/vocab/book";
 
 jest.mock("../lib/AuthContext", () => ({
   getSavedTier: () => "pro",
@@ -47,6 +48,85 @@ const library = () => screen.getByRole("region", { name: "词库列表" });
 const wordsShown = () => within(library()).getAllByRole("button", { name: /更多操作$/ }).map((b) => b.getAttribute("aria-label").replace(" 更多操作", ""));
 
 beforeEach(() => { localStorage.clear(); seed(); });
+
+describe("今日新增按首次收藏的设备本地日期查看", () => {
+  const now = new Date(2026, 9, 11, 10);
+  const at = (day, hour = 0, minute = 0) => new Date(2026, 9, day, hour, minute).toISOString();
+  const todayPanel = () => screen.getByRole("region", { name: /^今日新增/ });
+  const todayChip = () => within(screen.getByRole("group", { name: "状态筛选" })).getByRole("button", { name: /^今日新增/ });
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.setSystemTime(now);
+    localStorage.setItem("toefl-vocab-book::guest", JSON.stringify({ v: 1, cards: [
+      { word: "learned", def: "adj. 已学", createdAt: at(11), state: STATE.REVIEW, reps: 2, stability: 8, lastReview: at(11, 8), due: at(15) },
+      { word: "paused", def: "adj. 暂停", createdAt: at(11, 0, 1), suspended: true },
+      { word: "heard", def: "adj. 听过", createdAt: at(11, 0, 2), reviewMode: "listening" },
+      { word: "yesterday", def: "n. 昨天", createdAt: at(10, 23, 59), updatedAt: now.toISOString(), introducedAt: now.toISOString() },
+      { word: "deleted", def: "adj. 删除", createdAt: at(11, 9), deletedAt: now.toISOString() },
+      { word: "invalid", def: "adj. 未知", createdAt: "invalid", updatedAt: now.toISOString() },
+    ] }));
+  });
+  afterEach(() => { jest.useRealTimers(); });
+
+  test("本地午夜边界；缺失/非法收藏日期和删除词不推断为新增", () => {
+    expect(isAddedToday({ createdAt: at(11) }, now)).toBe(true);
+    expect(isAddedToday({ createdAt: at(10, 23, 59), updatedAt: now.toISOString() }, now)).toBe(false);
+    expect(isAddedToday({ updatedAt: now.toISOString() }, now)).toBe(false);
+    expect(isAddedToday({ createdAt: "invalid", updatedAt: now.toISOString() }, now)).toBe(false);
+    expect(isAddedToday({ createdAt: at(11), deletedAt: now.toISOString() }, now)).toBe(false);
+  });
+
+  test("独立入口清理搜索/类型并按最近收藏显示，今日已学/暂停仍在列表", () => {
+    render(<VocabNotebook embedded />);
+    expect(todayPanel()).toHaveTextContent("今日新增 3 词");
+    expect(todayPanel()).toHaveTextContent("阅读 2 · 听力 1");
+    fireEvent.change(screen.getByRole("textbox", { name: "搜索单词或释义" }), { target: { value: "yesterday" } });
+    fireEvent.click(within(screen.getByRole("group", { name: "词表类型" })).getByRole("button", { name: "听力", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "查看今日新增" }));
+    expect(screen.getByRole("textbox", { name: "搜索单词或释义" })).toHaveValue("");
+    expect(screen.getByRole("combobox", { name: "排序方式" })).toHaveValue("recent");
+    expect(todayChip()).toHaveAttribute("aria-pressed", "true");
+    expect(wordsShown()).toEqual(["heard", "paused", "learned"]);
+  });
+
+  test("新增筛选可组合阅读/听力、搜索和排序，区分无匹配与今天无新增", () => {
+    render(<VocabNotebook embedded />);
+    fireEvent.click(todayChip());
+    const modes = screen.getByRole("group", { name: "词表类型" });
+    fireEvent.click(within(modes).getByRole("button", { name: "阅读", exact: true }));
+    expect(todayChip()).toHaveTextContent("今日新增2");
+    fireEvent.change(screen.getByRole("combobox", { name: "排序方式" }), { target: { value: "alpha" } });
+    expect(wordsShown()).toEqual(["learned", "paused"]);
+    fireEvent.change(screen.getByRole("textbox", { name: "搜索单词或释义" }), { target: { value: "暂停" } });
+    expect(wordsShown()).toEqual(["paused"]);
+    fireEvent.click(within(modes).getByRole("button", { name: "听力", exact: true }));
+    expect(library()).toHaveTextContent("今日新增中没有符合当前类型或搜索条件的单词");
+    expect(library()).not.toHaveTextContent("今天还没有新增单词");
+    fireEvent.change(screen.getByRole("textbox", { name: "搜索单词或释义" }), { target: { value: "听过" } });
+    expect(wordsShown()).toEqual(["heard"]);
+  });
+
+  test("页面跨午夜后定时刷新今日新增数量和当前筛选，不改词库", () => {
+    render(<VocabNotebook embedded />);
+    fireEvent.click(screen.getByRole("button", { name: "查看今日新增" }));
+    const stored = localStorage.getItem("toefl-vocab-book::guest");
+    act(() => {
+      jest.setSystemTime(new Date(2026, 9, 12, 0, 1));
+      jest.advanceTimersByTime(60000);
+    });
+    expect(todayPanel()).toHaveTextContent("今日新增 0 词");
+    expect(library()).toHaveTextContent("今天还没有新增单词");
+    expect(localStorage.getItem("toefl-vocab-book::guest")).toBe(stored);
+    expect(within(library()).queryByRole("button", { name: /更多操作$/ })).not.toBeInTheDocument();
+  });
+
+  test("空单词本也可打开今日新增并显示准确空态", () => {
+    localStorage.removeItem("toefl-vocab-book::guest");
+    render(<VocabNotebook embedded />);
+    fireEvent.click(screen.getByRole("button", { name: "查看今日新增" }));
+    expect(library()).toHaveTextContent("今天还没有新增单词");
+  });
+});
 
 test("今日计划：总量、预计时间、进度，以及阅读/听力两列的到期·新词·考拼写", () => {
   render(<VocabNotebook embedded />);
