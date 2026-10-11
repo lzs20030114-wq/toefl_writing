@@ -1,6 +1,6 @@
 {
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "generated": "2026-09-17",
+  "generated": "2026-10-11",
   "clusters": [
     {
       "kept": "real_ap_121a_1_26",
@@ -143,12 +143,6 @@
       "skipped": [
         {
           "from": "real_ap_53_1_32",
-          "q_number": 34,
-          "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
-          "reason": "sentence_select_sentence_not_in_rep"
-        },
-        {
-          "from": "real_ap_53_1_32",
           "q_number": 31,
           "stem": "The word \"grappling\" in the passage is closest in meaning to",
           "reason": "duplicate_options"
@@ -164,6 +158,12 @@
           "q_number": 33,
           "stem": "What can be inferred about noise pollution in the European cities mentioned in the passage?",
           "reason": "duplicate_options"
+        },
+        {
+          "from": "real_ap_53_1_32",
+          "q_number": 34,
+          "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
+          "reason": "duplicate_stem"
         }
       ]
     },

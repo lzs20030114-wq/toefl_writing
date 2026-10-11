@@ -3,6 +3,46 @@
   "_purpose": "真题学术阅读「点选句子」题：题干为截图逐字转写，正确句由答案页开头词在该段唯一匹配句首得出；audits 按「题干 + 用户看到的段落文字」哈希记盲审结论，build_bank 核哈希放行。",
   "entries": [
     {
+      "key": "1.28新托福真题A卷#1#29",
+      "set": "1.28新托福真题A卷",
+      "slug": "128a",
+      "module": 1,
+      "q_number": 29,
+      "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
+      "stem_raw": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials. Select the sentence to make your choice.",
+      "stem_source": "manual-source-transcription",
+      "paragraph": 4,
+      "answer_raw": null,
+      "answer_prefix": "such materials",
+      "correct_sentence": "Such materials are often used on buildings or road surfaces.",
+      "source_page": "2026新托福真题05.pdf p7 Q29",
+      "audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "hash": "8d638090998173fb3f40c51fd87bafd11d467a7f",
+          "expected_sentence": "Such materials are often used on buildings or road surfaces.",
+          "pick_sentence": "Such materials are often used on buildings or road surfaces.",
+          "agree": true,
+          "at": "2026-10-11",
+          "reason": "Independent direct screenshot answer: buildings and road surfaces name the specific architectural elements."
+        }
+      ],
+      "source_reviews": [
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": "2026新托福真题05.pdf p7 Q29",
+          "hash": "8d638090998173fb3f40c51fd87bafd11d467a7f",
+          "expected_sentence": "Such materials are often used on buildings or road surfaces.",
+          "at": "2026-10-11",
+          "note": "Original screenshot confirms exact question stem, four body paragraphs and sentence containing buildings or road surfaces; answer-source verification, not a second blind vote."
+        }
+      ],
+      "answer_prefix_source": "independent-agent-answer plus original screenshot verification; answer page prefix not consulted"
+    },
+    {
       "key": "2.25新托福真题#1#33",
       "set": "2.25新托福真题",
       "slug": "225",
@@ -50,7 +90,30 @@
       "correct_sentence": "Some insist that despite linguistic and cultural variation, certain philosophical concerns-like suffering, justice, or mortality-are shared across societies, suggesting a basis for universality.",
       "correct_sentence_note": null,
       "source_page": "3.18 阅读.pdf p13 #1",
-      "audits": []
+      "audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "hash": "b8e632b927b2f34bbc6bd2deb6c28f48ebd7433f",
+          "expected_sentence": "Some insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality.",
+          "pick_sentence": "Some insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality.",
+          "agree": true,
+          "at": "2026-10-11",
+          "reason": "Independent answer without consulting ledger or answer source: shared philosophical concerns support universality; next sentence responds to this objection."
+        }
+      ],
+      "source_reviews": [
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": "3.18 阅读.pdf p14 #1",
+          "hash": "b8e632b927b2f34bbc6bd2deb6c28f48ebd7433f",
+          "expected_sentence": "Some insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality.",
+          "at": "2026-10-11",
+          "note": "Screenshot verifies paragraph 2 begins Some insist; original first paragraph includes This raises concerns. Reviewer had seen answer prefix; this is source verification, not a blind answer."
+        }
+      ]
     },
     {
       "key": "3.30新托福真题#1#28",

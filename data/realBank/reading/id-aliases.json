@@ -1,6 +1,6 @@
 {
   "generated_by": "scripts/realbank/build_bank.mjs",
-  "generated": "2026-09-17",
+  "generated": "2026-10-11",
   "aliases": [
     {
       "from": "real_ap_121a_1_33",
@@ -950,6 +950,13 @@
     {
       "from": "real_rdl_210_1_23",
       "to": "real_rdl_420_1_23",
+      "from_type": "rdl",
+      "to_type": "rdl",
+      "reason": "consolidated"
+    },
+    {
+      "from": "real_rdl_210_1_26",
+      "to": "real_rdl_210_1_25",
       "from_type": "rdl",
       "to_type": "rdl",
       "reason": "consolidated"

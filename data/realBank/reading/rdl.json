@@ -218,6 +218,18 @@
       "questions": [
         {
           "question_type": "detail",
+          "stem": "What is the main purpose of the notice?",
+          "options": {
+            "A": "To announce a safety procedure",
+            "B": "To request feedback",
+            "C": "To advertise a new service",
+            "D": "To explain renovations"
+          },
+          "correct_answer": "A",
+          "q_number": 21
+        },
+        {
+          "question_type": "detail",
           "stem": "How can dorm staff be recognized?",
           "options": {
             "A": "They will be wearing vests.",
@@ -677,6 +689,18 @@
         },
         {
           "question_type": "detail",
+          "stem": "Identify the sentence that highlights Japan's image.",
+          "options": {
+            "A": "Take your education beyond borders with our Japan study tour.",
+            "B": "Earn college credit while exploring land that blends ancient traditions with cutting-edge innovation.",
+            "C": "This program is designed for college students seeking cultural immersion and intellectual growth.",
+            "D": "Earn up to 6 academic credits that satisfy study-abroad policies and is fully accredited for transfer credits."
+          },
+          "correct_answer": "B",
+          "q_number": 26
+        },
+        {
+          "question_type": "detail",
           "stem": "What is true of the courses offered by the Japan SAP?",
           "options": {
             "A": "Their focus is Japanese language and culture.",
@@ -703,39 +727,6 @@
       ],
       "genre": "website",
       "text": "https://www.japanesep.jp\nYOUR GLOBAL CLASSROOM AWAITS!\nTake your education beyond borders with our Japan study tour.\nEarn college credit while exploring land that blends ancient traditions with cutting-edge innovation.\nThis program is designed for college students seeking cultural immersion and intellectual growth.\nEarn up to 6 academic credits that satisfy study-abroad policies and is fully accredited for transfer credits.\nProgram Highlights:\nTokyo: Engage in lectures on global business and technology while studying Japanese daily life.\nKyoto: Study Japanese history and art surrounded by temples and gardens.\nHokkaido: Examine environmental science through hands-on activities in stunning natural landscapes.\nWhy Choose This Program?\nFaculty-led courses and expert local guides.\nAffordable student pricing with scholarships available.\nFlexible itineraries aligned with your academic goals.\nLanguage support include winter break and spring break sessions\nSeasonal options ensures a smooth experience.\nApply now! Visit www.japanesep.jp or call 940-555-1234 for details.",
-      "format_metadata": {}
-    },
-    {
-      "id": "real_rdl_210_1_26",
-      "questions": [
-        {
-          "question_type": "detail",
-          "stem": "Identify the sentence that highlights Japan's image.",
-          "options": {
-            "A": "Take your education beyond borders with our Japan study tour.",
-            "B": "Earn college credit while exploring land that blends ancient traditions with cutting-edge innovation.",
-            "C": "This program is designed for college students seeking cultural immersion and intellectual growth.",
-            "D": "Earn up to 6 academic credits that satisfy study-abroad policies and is fully accredited for transfer credits."
-          },
-          "correct_answer": "B",
-          "q_number": 26
-        }
-      ],
-      "difficulty": "medium",
-      "real": true,
-      "tier": "recalled",
-      "source": "2.10新托福真题",
-      "date": "2026-02-10",
-      "source_hash": "22cd4d0b2984",
-      "source_flags": [
-        {
-          "code": "ctw_answer_truncated",
-          "severity": "blocking",
-          "detail": "答案 PDF 把阅读填词答案词首砍掉：18/30 题为碎片（比例 0.60）。源 PDF 本身如此，已现场 OCR 复核。"
-        }
-      ],
-      "genre": "website",
-      "text": "https://www.japanesep.jp\nYOUR GLOBAL CLASSROOM AWAITS!\n\nProgram Highlights:\nTokyo: Engage in lectures on global business and technology while studying Japanese daily life.\nKyoto: Study Japanese history and art surrounded by temples and gardens.\nHokkaido: Examine environmental science through hands-on activities in stunning natural landscapes.\n\nWhy Choose This Program?\n• Faculty-led courses and expert local guides.\n• Affordable student pricing with scholarships available.\n• Flexible itineraries aligned with your academic goals.\n• Language support includes winter break and spring break sessions\n• Seasonal options ensure a smooth experience.\n\nApply now! Visit www.japanesep.jp or call 940-555-1234 for details.",
       "format_metadata": {}
     },
     {
@@ -1310,6 +1301,18 @@
       "questions": [
         {
           "question_type": "detail",
+          "stem": "Where is the notice most likely to appear?",
+          "options": {
+            "A": "At an office building",
+            "B": "At a restaurant",
+            "C": "At an apartment complex",
+            "D": "At a self-service laundry facility"
+          },
+          "correct_answer": "C",
+          "q_number": 21
+        },
+        {
+          "question_type": "detail",
           "stem": "What are the recipients of the notice advised to do?",
           "options": {
             "A": "Apologize for any inconvenience",
@@ -1335,14 +1338,8 @@
         }
       ],
       "genre": "notice",
-      "text": "NOTICE TO RESIDENTS\nWater will be shut off for plumbing upgrades on Thursday, 14 November\nfrom 9:00 A.M. to 3:00 p.m.\nPlease store water in advance and avoid using taps during this time. We apologize for the inconvenience and appreciate your cooperation.\nThank you,\nManagement",
-      "format_metadata": {},
-      "material_image": {
-        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/reading/real_rdl_22_1_22.webp",
-        "w": 534,
-        "h": 297,
-        "source_page": 2
-      }
+      "text": "NOTICE TO RESIDENTS\n\nWater will be shut off for plumbing upgrades on Thursday, 14 November, from 9:00 A.M. to 3:00 P.M.\n\nPlease store water in advance and avoid using taps during this time. We apologize for the inconvenience and appreciate your cooperation.\n\nThank you,\nManagement",
+      "format_metadata": {}
     },
     {
       "id": "real_rdl_22_1_23",
@@ -1619,6 +1616,18 @@
           },
           "correct_answer": "B",
           "q_number": 29
+        },
+        {
+          "question_type": "detail",
+          "stem": "What will Serena probably do if Ms. Thomas offers to call her on a Tuesday morning?",
+          "options": {
+            "A": "Remind her that she is free on Monday and Wednesday afternoons",
+            "B": "Suggest that they have the call on the weekend instead",
+            "C": "Change her own schedule and agree to a call on Tuesday",
+            "D": "Suggest that they compromise and speak on a Monday or Wednesday morning"
+          },
+          "correct_answer": "C",
+          "q_number": 30
         }
       ],
       "difficulty": "medium",
@@ -2395,6 +2404,18 @@
           },
           "correct_answer": "B",
           "q_number": 29
+        },
+        {
+          "question_type": "detail",
+          "stem": "Who is most likely to obtain a locker?",
+          "options": {
+            "A": "People with membership cards",
+            "B": "People using cardio machines",
+            "C": "People with the most personal belongings",
+            "D": "People who arrive the earliest"
+          },
+          "correct_answer": "D",
+          "q_number": 30
         }
       ],
       "difficulty": "medium",
@@ -2422,6 +2443,18 @@
           },
           "correct_answer": "C",
           "q_number": 21
+        },
+        {
+          "question_type": "detail",
+          "stem": "What is the goal of the new schedule?",
+          "options": {
+            "A": "To encourage more people to use the library",
+            "B": "To better serve members of the community",
+            "C": "To host additional programs at the library",
+            "D": "To provide new services to the members of the community"
+          },
+          "correct_answer": "B",
+          "q_number": 22
         }
       ],
       "difficulty": "medium",
@@ -2444,6 +2477,18 @@
     {
       "id": "real_rdl_324_1_23",
       "questions": [
+        {
+          "question_type": "detail",
+          "stem": "The post recommends that students change their habits in all of the following ways EXCEPT",
+          "options": {
+            "A": "by bringing their own environmentally-friendly bags to stores",
+            "B": "by purchasing and utilizing reusable water bottles",
+            "C": "by shopping at locally owned stores and restaurants",
+            "D": "by looking for products that are packed in eco-friendly materials"
+          },
+          "correct_answer": "C",
+          "q_number": 23
+        },
         {
           "question_type": "detail",
           "stem": "According to the post, what is one benefit to reducing plastic use on campus?",
@@ -2794,6 +2839,18 @@
           },
           "correct_answer": "B",
           "q_number": 21
+        },
+        {
+          "question_type": "detail",
+          "stem": "What can be inferred about Sarah o'Neill's living situation?",
+          "options": {
+            "A": "She intends to relocate for school.",
+            "B": "She prefers a city center apartment.",
+            "C": "She is not currently a pet owner.",
+            "D": "She needs immediate housing."
+          },
+          "correct_answer": "C",
+          "q_number": 22
         }
       ],
       "difficulty": "medium",
@@ -3273,6 +3330,18 @@
         },
         {
           "question_type": "detail",
+          "stem": "The word \"complimentary\" in the first paragraph is closest in meaning to",
+          "options": {
+            "A": "pleasing",
+            "B": "discounted",
+            "C": "free",
+            "D": "limited"
+          },
+          "correct_answer": "C",
+          "q_number": 26
+        },
+        {
+          "question_type": "detail",
           "stem": "What is necessary for an extra 20 percent off one's first service?",
           "options": {
             "A": "Cash for payment",
@@ -3681,6 +3750,18 @@
           },
           "correct_answer": "D",
           "q_number": 21
+        },
+        {
+          "question_type": "detail",
+          "stem": "What will Janet Simmons do?",
+          "options": {
+            "A": "Give out gift certificates",
+            "B": "Collect names",
+            "C": "Determine the winners",
+            "D": "Host a reception"
+          },
+          "correct_answer": "B",
+          "q_number": 22
         }
       ],
       "difficulty": "medium",
@@ -4023,6 +4104,18 @@
       "questions": [
         {
           "question_type": "detail",
+          "stem": "Who would benefit most from enrolling in ENGL 102?",
+          "options": {
+            "A": "Students majoring in English",
+            "B": "Students with proven analytical and interpretive skills",
+            "C": "Undergraduate students who have recently completed ENGL 101",
+            "D": "Literature majors in their final year of study"
+          },
+          "correct_answer": "C",
+          "q_number": 21
+        },
+        {
+          "question_type": "detail",
           "stem": "What is the central aim of the course as described?",
           "options": {
             "A": "To increase students' appreciation for literature",
@@ -4047,15 +4140,9 @@
           "detail": "与 4.20新托福真题 属同题簇（部分科目共题，机经正常形态）。"
         }
       ],
-      "genre": "passage",
-      "text": "ENGL102: Introduction to Literature I\nExplores poetry, drama, and fiction through historical lenses.\nStudents develop analytical and interpretative skills through writing assignments.\nDesigned to deepen student awareness and love of literature\nOpen to undergraduates who have completed ENGL101.\nSpring semester, MWF 9-10 A.M.\nInstructor: Dr. Nadeem Ai-Farsi.",
-      "format_metadata": {},
-      "material_image": {
-        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/reading/real_rdl_510_1_22.webp",
-        "w": 548,
-        "h": 321,
-        "source_page": 1
-      }
+      "genre": "notice",
+      "text": "ENGL 102: Introduction to Literature II\nExplores poetry, drama, and fiction through historical lenses.\nStudents develop analytical and interpretative skills through writing assignments.\nDesigned to deepen student awareness and love of literature.\nOpen to undergraduates who have completed ENGL 101.\nSpring semester, MWF 9-10 A.M.\nInstructor: Dr. Nadeem Al-Farsi.",
+      "format_metadata": {}
     },
     {
       "id": "real_rdl_510_1_23",
@@ -6537,6 +6624,63 @@
         "h": 904,
         "source_page": 5
       }
+    },
+    {
+      "id": "real_rdl_rp0822_1001_100101",
+      "questions": [
+        {
+          "question_type": "detail",
+          "stem": "What is the main purpose of the announcement?",
+          "options": {
+            "A": "To introduce a course that has not been taught before",
+            "B": "To encourage students to attend an English Department event",
+            "C": "To demonstrate the high quality of the Creative Writing program",
+            "D": "To ask for contributions to the Creating Writing Quarterly Journal"
+          },
+          "correct_answer": "A",
+          "q_number": 100101
+        },
+        {
+          "question_type": "detail",
+          "stem": "Which of the following would most likely NOT be a major focus of the seminar?",
+          "options": {
+            "A": "Making a list of plot elements for use in fiction writing",
+            "B": "writing drafts of conversations between characters",
+            "C": "Developing arguments to respond to prompts",
+            "D": "Reading a section of one's own work to class members"
+          },
+          "correct_answer": "C",
+          "q_number": 100102
+        },
+        {
+          "question_type": "detail",
+          "stem": "To register for the Creative Writing seminar, a student must",
+          "options": {
+            "A": "submit a writing sample for evaluation",
+            "B": "have completed one introductory Creative Writing or English course",
+            "C": "be a first-year student",
+            "D": "be pursuing a degree in Creative Writing"
+          },
+          "correct_answer": "B",
+          "q_number": 100103
+        }
+      ],
+      "difficulty": "medium",
+      "real": true,
+      "tier": "recalled",
+      "source": "rp0822",
+      "date": "2026-08-22",
+      "source_hash": "257350880161",
+      "source_flags": [
+        {
+          "code": "vendor_pool",
+          "severity": "warn",
+          "detail": "第二来源「国内线下」拼盘：不是完整一卷（阅读题数 20~45 不等、写作 1500~2800 词、听力只摘了部分讲座），答案页多为截图且部分由商家 AI 补写。第二波按题池收，能收多少收多少。"
+        }
+      ],
+      "genre": "course description",
+      "text": "New Winter Term Writing Seminar\n\nPlease consider registering for the newly developed Creative Writing Seminar, designed to help you enhance your writing skills and unleash your creativity.\nLed by professors from our Creative Writing Department, this seminar-style class will help you hone your writing by giving tips on narrative structure, character development, and dialogue crafting.\nStudents will engage in interactive exercises and group readings to refine their writing abilities. Please bring your laptop for writing activities.\nThe seminar will take place on Tuesdays and Thursdays from 10:00 A.M. to 12:00 p.m. in the conference room on the fifth floor of the library.\nTo be eligible, students must have completed one first-year-level course in either the Creative Writing or English department.\nFor more information, please contact the Creative Writing Department administrator at admin@creativewriting.edu/winterterm.",
+      "format_metadata": {}
     }
   ]
 }

@@ -11,6 +11,8 @@
  * 1. **只收盲审一致的题。** 盲审不一致 = 独立模型不看答案自己做，做出来和答案页不符。
  *    那可能是模型错，也可能是我们错——分不清就不上线。宁可少题，不许上错题。
  *    没被盲审覆盖到的题同样不收（不是"默认通过"）。
+ *    原图确证补回走 source-repairs.json：精确源哈希 + 实际 agent_review/source_review，
+ *    只放行指定记录，审查类型与既有 API 盲票分别留账；插入题最终正文再核完整哈希。
  *
  * 2. **一材多题要合回去。** 真题是一屏一题，但 AP/RDL 的库结构是一段材料带多道题
  *    （实测 3.10 的 Q23/Q24 共用同一张海报）。按材料归并，否则同一张海报会被
@@ -68,6 +70,10 @@ const { decideInsertMaterial, labelSquares } = require("./insert_markers.js");
 const { applyOriginalAudio, sha1: originalAudioSha1 } = require("./original_audio.js");
 // 跨卷同篇合并（AP/RDL）同样抽成纯函数：scripts/realbank/consolidate_reading.js。
 const { consolidateReading } = require("./consolidate_reading.js");
+const { repairReadingItem, repairReadingRecord, gateRestoredInsertQuestions, sourceRepairAliasEdges } = require("./reading_source_repairs.js");
+const READING_SOURCE_REPAIR_PATH = path.join(process.cwd(), "data", "realBank", "reading", "source-repairs.json");
+const READING_SOURCE_REPAIRS = fs.existsSync(READING_SOURCE_REPAIR_PATH)
+  ? JSON.parse(fs.readFileSync(READING_SOURCE_REPAIR_PATH, "utf8")) : { entries: [] };
 // 条目 id 沿用（题号会随补题变，id 不能跟着变）同样抽成纯函数：scripts/realbank/id_carry.js。
 const { carryItemIds, findPrevId, claimReferencedIds } = require("./id_carry.js");
 // id 别名账本（合并 / 归位之后旧 id 指到哪）：scripts/realbank/id_aliases.js。
@@ -1902,11 +1908,15 @@ function main() {
     };
     // 按 module + 题号排序，保证「相邻合并」和真题屏序一致
     const recs = [];
-    for (const r of st.results) {
+    for (const sourceRecord of st.results) {
+      const repairedRecord = repairReadingRecord(sourceRecord, { set: setname }, READING_SOURCE_REPAIRS);
+      const r = repairedRecord.record;
       if (r.section !== "reading" || r.status !== "ok") continue;
       for (const it of r.items || []) {
         if (!it || typeof it !== "object") continue;
-        recs.push({ module: r.module, type: r.type, q: it.q_number ?? r.q_start, item: it });
+        const q = it.q_number ?? r.q_start;
+        const item = repairReadingItem(it, { set: setname, module: r.module, q }, READING_SOURCE_REPAIRS);
+        recs.push({ module: r.module, type: r.type, q, item, manuallyAudited: repairedRecord.manuallyAudited.has(q) });
       }
     }
     recs.sort((a, b) => a.module - b.module || a.q - b.q);
@@ -1937,11 +1947,12 @@ function main() {
       const qDrop = (code, detail) => recordDrop(stats, {
         set: setname, slug: meta0.slug, section: "reading", type: r.type, module: r.module, q: r.item.q_number, n: 1, code, detail,
       });
+      if (r.manuallyAudited) { stats.keptByManual += 1; passed.push(r); continue; }
       if (!auditedKeys.has(key)) { stats.droppedNoAudit += 1; qDrop("droppedNoAudit", "盲审没覆盖到这题"); continue; }
       // 答案页印错、人工核定改正（两票盲审都与核定字母一致才生效，见 hold_policy.manualAnswerFix）：按核定字母重盖答案
       const audit = auditByKey.get(key) || {};
       const fixed = !passedKeys.has(key) && manualAnswerFix(AUDIT_OVERRIDES, {
-        set: setname, section: "reading", q: r.item.q_number, stamped: audit.stamped, stem: r.item.stem,
+        set: setname, section: "reading", module: r.module, q: r.item.q_number, stamped: audit.stamped, stem: r.item.stem,
         votes: [audit.model, audit.second_vote && audit.second_vote.pick],
       });
       if (fixed) {
@@ -1952,7 +1963,7 @@ function main() {
         continue;
       }
       if (!passedKeys.has(key) && manualAuditPass(AUDIT_OVERRIDES, {
-        set: setname, section: "reading", q: r.item.q_number, stamped: (auditByKey.get(key) || {}).stamped, stem: r.item.stem,
+        set: setname, section: "reading", module: r.module, q: r.item.q_number, stamped: (auditByKey.get(key) || {}).stamped, stem: r.item.stem,
       })) {
         stats.keptByManual += 1;
         passed.push(r);
@@ -2503,6 +2514,8 @@ function finishReadingOnDisk(edges, mergeCandidates = [], dupSets = []) {
   const apPath = path.join(BANK_DIR, "ap.json");
   const apDoc = JSON.parse(fs.readFileSync(apPath, "utf8"));
   const before = JSON.stringify(apDoc.items);
+  const restoredInsertGate = gateRestoredInsertQuestions(apDoc.items, READING_SOURCE_REPAIRS);
+  if (restoredInsertGate.dropped.length) console.warn(`源图补回插入题：最终正文已变化，扣下 ${restoredInsertGate.dropped.length} 道：${restoredInsertGate.dropped.map((d) => `${d.host}#${d.q}`).join(", ")}`);
   const gate = SS.gateSentenceSelect(apDoc.items, SENTENCE_PASSES);
   apDoc.items = apDoc.items.filter((it) => (it.questions || []).length > 0);
   apDoc.count = apDoc.items.length;
@@ -2544,6 +2557,7 @@ function finishReadingOnDisk(edges, mergeCandidates = [], dupSets = []) {
   // 填词也进 liveIds：整份题目文件重复的卷（下面 dupSetReadingEdges）连填词段一起按别名还槽位，
   // 只收 ap+rdl 的话那几条边会收敛成 to:null，assemble_sets 直接丢掉、填词槽位照样空着。
   const live = new Set([...apDoc.items, ...(rdlDoc.items || []), ...(ctwDoc.items || [])].map((it) => String(it.id)));
+  edges = [...edges, ...sourceRepairAliasEdges([...apDoc.items, ...(rdlDoc.items || [])], READING_SOURCE_REPAIRS)];
   // 复核清单里「跨套重复、有保留方」的整条下架也是边：内容在保留方上，不能收敛成 null 让前端当成题下线
   let ledger = buildIdAliases({ prev: PREV_ALIASES, edges, holds: REVIEW.holds, liveIds: live });
   // 「整份阅读题目文件与更早一套相同」的卷：拿上面这份**收敛完的**账本 + 活着的条目，把保留方的每个

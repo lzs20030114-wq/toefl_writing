@@ -1,0 +1,665 @@
+{
+  "purpose": "Screenshot-verified repairs bound to exact source hashes. Material grouping repairs preserve existing audit gates; explicit question/image restorations require distinct actual agent/source reviews of the complete repaired item. API audit history stays unchanged; restored insertion questions also require the exact final passage hash.",
+  "entries": [
+    {
+      "set": "2.1新托福真题B卷",
+      "section": "reading",
+      "module": 2,
+      "q": 11,
+      "original_material_sha256": "e5e80e84b1312611f72a8ad4f2cbb87707da914da8b62809f433fffb84b220f2",
+      "material": "The Role of AI in Diagnosing Diseases\n\nArtificial Intelligence (AI) is transforming health informatics, particularly in diagnosing diseases. AI algorithms can analyze medical images, detecting abnormalities in X-rays, MRIs, and CT scans with accuracy comparable to trained radiologists. By processing vast amounts of data quickly, AI helps radiologists identify conditions that might be missed during routine examinations.\n\n[A] AI predicts disease outbreaks by analyzing data from social media, search engines, and health records. [B] AI systems track the spread of infectious diseases by identifying patterns and trends human analysts might overlook. [C] This predictive capability allows for faster responses and better allocation of medical resources. [D]\n\nMoreover, AI personalizes treatment plans. By considering an individual’s genetic makeup, lifestyle, and medical history, AI can recommend tailored treatments that improve patient outcomes. This approach is beneficial in managing chronic diseases like diabetes and hypertension.\n\nDespite these advancements, integrating AI into healthcare presents challenges. Concerns about data privacy, the need for large datasets to train algorithms, and the potential for algorithmic bias need to be addressed. Algorithmic bias happens when AI systems learn from data that doesn’t fully represent all groups of people, which can lead to unfair or inaccurate results for some patients. Ensuring the ethical use of AI, particularly in maintaining patient confidentiality and mitigating bias, is crucial.",
+      "evidence": {
+        "verified": true,
+        "source_page": "2026新托福真题10.pdf p9 #2",
+        "method": "Original PDF screenshot visually checked: same passage; source record omitted lines shown in screenshot. Reuse existing complete host passage.",
+        "verified_at": "2026-10-11",
+        "host_id": "real_ap_21b_2_12"
+      },
+      "reason": "OCR material truncation split one passage into separate question groups; preserve existing answer and audit gates."
+    },
+    {
+      "set": "2.10新托福真题",
+      "section": "reading",
+      "module": 1,
+      "q": 26,
+      "original_material_sha256": "c532debbc6281ecc89325a8392bd6c433b311822eb4e8981c3d80932bf2342ba",
+      "material": "https://www.japanesep.jp\nYOUR GLOBAL CLASSROOM AWAITS!\nTake your education beyond borders with our Japan study tour.\nEarn college credit while exploring land that blends ancient traditions with cutting-edge innovation.\nThis program is designed for college students seeking cultural immersion and intellectual growth.\nEarn up to 6 academic credits that satisfy study-abroad policies and is fully accredited for transfer credits.\nProgram Highlights:\nTokyo: Engage in lectures on global business and technology while studying Japanese daily life.\nKyoto: Study Japanese history and art surrounded by temples and gardens.\nHokkaido: Examine environmental science through hands-on activities in stunning natural landscapes.\nWhy Choose This Program?\nFaculty-led courses and expert local guides.\nAffordable student pricing with scholarships available.\nFlexible itineraries aligned with your academic goals.\nLanguage support include winter break and spring break sessions\nSeasonal options ensures a smooth experience.\nApply now! Visit www.japanesep.jp or call 940-555-1234 for details.",
+      "evidence": {
+        "verified": true,
+        "source_page": "2026新托福真题12.pdf p7 #1",
+        "method": "Original PDF screenshot visually checked: same passage; source record omitted lines shown in screenshot. Reuse existing complete host passage.",
+        "verified_at": "2026-10-11",
+        "host_id": "real_rdl_210_1_25"
+      },
+      "reason": "OCR material truncation split one passage into separate question groups; preserve existing answer and audit gates.",
+      "alias_from": "real_rdl_210_1_26"
+    },
+    {
+      "set": "3.18新托福真题",
+      "section": "reading",
+      "module": 2,
+      "q": 11,
+      "original_material_sha256": "8c3d42c123c208efa8ce8513e0c63496b589c5348251cb4240b695cb91cc4bf8",
+      "material": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
+      "evidence": {
+        "verified": true,
+        "source_page": "3.18 阅读.pdf p14 #1",
+        "checked_by": "/root/reading_gap_audit",
+        "verified_at": "2026-10-11",
+        "method": "Original screenshot: This raises concerns belongs to first body paragraph; Some insist begins paragraph 2. Preserve all existing words; repair only paragraph boundary."
+      },
+      "reason": "Restore screenshot paragraph boundary so paragraph-2 sentence-selection question can address the actual paragraph."
+    },
+    {
+      "set": "3.18新托福真题",
+      "section": "reading",
+      "module": 2,
+      "q": 12,
+      "original_material_sha256": "48e2e671bcfedd3bfcc5dcf2f1b2c7d12cb8050d06ff579dc4232055816f887e",
+      "material": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
+      "evidence": {
+        "verified": true,
+        "source_page": "3.18 阅读.pdf p14 #1",
+        "checked_by": "/root/reading_gap_audit",
+        "verified_at": "2026-10-11",
+        "method": "Original screenshot: This raises concerns belongs to first body paragraph; Some insist begins paragraph 2. Preserve all existing words; repair only paragraph boundary."
+      },
+      "reason": "Restore screenshot paragraph boundary so paragraph-2 sentence-selection question can address the actual paragraph."
+    },
+    {
+      "set": "3.18新托福真题",
+      "section": "reading",
+      "module": 2,
+      "q": 13,
+      "original_material_sha256": "ced67eed2e9f6648017c61940836fdc9f9afb936837bad6545c09d690dc33172",
+      "material": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
+      "evidence": {
+        "verified": true,
+        "source_page": "3.18 阅读.pdf p14 #1",
+        "checked_by": "/root/reading_gap_audit",
+        "verified_at": "2026-10-11",
+        "method": "Original screenshot: This raises concerns belongs to first body paragraph; Some insist begins paragraph 2. Preserve all existing words; repair only paragraph boundary."
+      },
+      "reason": "Restore screenshot paragraph boundary so paragraph-2 sentence-selection question can address the actual paragraph."
+    },
+    {
+      "set": "3.18新托福真题",
+      "section": "reading",
+      "module": 2,
+      "q": 15,
+      "original_material_sha256": "ced67eed2e9f6648017c61940836fdc9f9afb936837bad6545c09d690dc33172",
+      "material": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
+      "evidence": {
+        "verified": true,
+        "source_page": "3.18 阅读.pdf p14 #1",
+        "checked_by": "/root/reading_gap_audit",
+        "verified_at": "2026-10-11",
+        "method": "Original screenshot: This raises concerns belongs to first body paragraph; Some insist begins paragraph 2. Preserve all existing words; repair only paragraph boundary."
+      },
+      "reason": "Restore screenshot paragraph boundary so paragraph-2 sentence-selection question can address the actual paragraph."
+    },
+    {
+      "set": "1.28新托福真题A卷",
+      "module": 1,
+      "q": 30,
+      "original_item_sha256": "94cb2bc410750428f23babd29eb5441d59d2345346766cdefda86259673a270e",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. One common source is traffic, which includes cars, buses, motorcycles, and trucks. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Noise Control in Urban Areas\n\n[A] Urban areas across the globe are grappling with the challenge of noise pollution. [B] This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. [C] It has many causes. [D]\n\nInnovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and temperature regulation—thus not only reducing noise but also improving the environment. They work by enhancing indoor air quality and helping regulate interior temperatures by acting as natural insulation.\n\nAnother approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.\n\nAdvancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem.",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 3,
+        "answer_text": "[D]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/128a-p8.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "It has many causes 引出具体噪音来源，D位于该句后；A/B/C均把例证置于总述或cause先行词之前。",
+        "source_limit": null
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "61d905ebfca065fe75a24ee26a5f345285429a0c2197399a7ddd6e9e20f862fe",
+          "pick": "D",
+          "reason": "It has many causes 引出具体噪音来源，D位于该句后；A/B/C均把例证置于总述或cause先行词之前。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/128a-p8.png",
+          "item_sha256": "61d905ebfca065fe75a24ee26a5f345285429a0c2197399a7ddd6e9e20f862fe",
+          "pick": "D",
+          "at": "2026-10-11",
+          "reason": "Traffic exemplifies many causes immediately before solutions.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true,
+      "section": "reading"
+    },
+    {
+      "set": "3.23新托福真题",
+      "module": 2,
+      "q": 15,
+      "original_item_sha256": "d9a70e57324c7ddb3054b51a47e5d2678be3265d238873522cea9ecda9d19d57",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. In light of their area of expertise, wind ensemble conductors face a unique set of difficulties. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Wind Ensemble Conducting\n\nIn the world of classical music, wind ensemble conducting requires a blend of artistry and precision, demanding a conductor who can shape diverse musicians into a cohesive unit. [A] Unlike orchestral conductors, who often lead ensembles centered around strings, wind ensemble conductors primarily work with woodwinds, brass, and percussion, requiring a different set of interpretive and technical skills. [B]\n\nOne challenge of wind ensemble conducting is balancing the ensemble. [C] Wind instruments produce a wide range of dynamics and timbres, making it essential for conductors to ensure that no single section overpowers the others. [D] For example, the brassy sound of trumpets can dominate if not carefully managed. Conductors must use gestures and cues to achieve balance, considering the acoustics of the performance space.\n\nInterpreting the score is another crucial aspect. Wind ensemble pieces often include compositions from modern and contemporary composers, which can be complex and unconventional. Conductors need to interpret these scores carefully and convey their vision to the musicians. This involves precise beat patterns and expressive gestures to communicate dynamic contrasts and phrasing.\n\nWind ensemble conductors collaborate closely with composers, which can lead to unique performances that reflect the composer's original intent.",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 1,
+        "answer_text": "[B]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/323-p19.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "首段尾B承接不同技能/专业领域，概述独特困难，下一段One challenge展开；A过早、C/D插进具体平衡论证。",
+        "source_limit": "源尾句Conductors may need to adjust their仍不全；保留原已核实完整句结尾，不猜补尾。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "c8b933875968cd41d38d53989aac759bd8e5f69fd801871d96c502134ff16bab",
+          "pick": "B",
+          "reason": "首段尾B承接不同技能/专业领域，概述独特困难，下一段One challenge展开；A过早、C/D插进具体平衡论证。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/323-p19.png",
+          "item_sha256": "c8b933875968cd41d38d53989aac759bd8e5f69fd801871d96c502134ff16bab",
+          "pick": "B",
+          "at": "2026-10-11",
+          "reason": "Expertise and special skills introduce the unique difficulties before One challenge.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true,
+      "section": "reading"
+    },
+    {
+      "set": "5.6新托福真题_v2",
+      "module": 2,
+      "q": 15,
+      "original_item_sha256": "f7aa585849ab185c701c5103bf311021b857a562037912352677a4337c5f3fe7",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. By contrast, silkworms, traditionally used for obtaining silk, are domesticated and easy to manage. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Spider Silk in Medicine\n\nSpider silk is one of nature's most remarkable materials, known for its strength and elasticity. Stronger than steel and highly stretchable, spider silk has inspired researchers to explore its medical potential.\n\nResearchers have experimented with spider silk as a surgical suture material for use in stitching wounds, praising its strength and biocompatibility — a material's ability to interact with the human body without causing adverse reactions, such as inflammation or rejection. Spider silk meets this criterion exceptionally well. It integrates smoothly with human tissues, minimizing immune response and promoting faster healing. Additionally, its natural elasticity helps the sutures adapt to bodily movements, reducing the risk of sutures rupturing under tension.\n\nSpider silk has been woven into advanced dressings for wounds that accelerate recovery. Spider silk's biocompatibility and ability to retain moisture make it ideal for treating chronic wounds and joint injuries. Spider silk-based bandages can also be infused with medications for localized drug delivery, reducing infection risk and improving treatment outcomes.\n\nHowever, large-scale production is challenging. [A] Spiders are territorial and cannibalistic, making farming them for silk impractical. [B] Scientists have turned to synthetic methods of producing spider silk using genetically modified bacteria and yeast, but scaling up these techniques remains difficult. [C] Researchers continue refining techniques to make spider silk more accessible. [D]",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 1,
+        "answer_text": "[B]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/56v2-p24.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "B紧接蜘蛛territorial/cannibalistic、不宜饲养，以By contrast对比易管理蚕；后接转向合成办法。A先行对比依据未出现，C/D打断技术发展收束。",
+        "source_limit": null
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "7dde8f70ed517c07ec3915df2c8873e90fd04339df377cf6d00c8ce4d0b4bf20",
+          "pick": "B",
+          "reason": "B紧接蜘蛛territorial/cannibalistic、不宜饲养，以By contrast对比易管理蚕；后接转向合成办法。A先行对比依据未出现，C/D打断技术发展收束。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/56v2-p24.png",
+          "item_sha256": "7dde8f70ed517c07ec3915df2c8873e90fd04339df377cf6d00c8ce4d0b4bf20",
+          "pick": "B",
+          "at": "2026-10-11",
+          "reason": "Domesticated silkworms contrast with territorial cannibalistic spiders.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true,
+      "section": "reading"
+    },
+    {
+      "set": "1.21新托福真题C卷",
+      "section": "reading",
+      "module": 2,
+      "q": 15,
+      "original_item_sha256": "c0ada415dc81ca9f7c47f21bea1af9049857b5874e26d8a8f75cc165fcb2d3a6",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. Additionally, green roofs require ongoing maintenance to ensure proper drainage, plant health, and structural integrity. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Green Roof Benefits\n\nGreen roofs, or living roofs, are gaining prominence in urban areas due to their environmental benefits. These are roofs covered with vegetation to help manage stormwater by absorbing rainfall, decreasing runoff, and minimizing flooding risks.\n\nAnother advantage of green roofs is their ability to improve air quality. Plants on the roof filter pollutants and capture dust. Additionally, green roofs reduce the urban heat island effect. Conventional roofs absorb and radiate heat, increasing urban temperatures. In contrast, green roofs keep buildings cooler by providing insulation and emitting moisture through their plants and soil.\n\nGreen roofs offer energy-efficiency benefits. The insulation provided by soil and plants reduces the need for heating in winter and cooling in summer, leading to energy savings. Green roofs can also extend the lifespan of the roof by shielding materials from UV radiation and extreme temperatures, keeping the underlying structure sound for longer.\n\nFinally, green roofs support urban biodiversity. Their vegetative layers create habitats for insects and birds in cities where green spaces are limited. These microhabitats help sustain pollinator populations and promote ecological balance. [A] Green roofs can also grow food, contributing to food security in urban environments.\n\n[B] Despite these advantages, green roofs can be costly to install. [C] However, many cities offer incentives to encourage their adoption. [D]",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 2,
+        "answer_text": "[C]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/121c-p14.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "C接costly to install增加维护负担，后However补贴转折；其余位置处优势段或打断转折。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "a3086bbd640f4b45b18d5bd7b42fcff2ae0156bdbc8c24a458e40f73047bf9e5",
+          "pick": "C",
+          "reason": "C接costly to install增加维护负担，后However补贴转折；其余位置处优势段或打断转折。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/121c-p14.png",
+          "item_sha256": "a3086bbd640f4b45b18d5bd7b42fcff2ae0156bdbc8c24a458e40f73047bf9e5",
+          "pick": "C",
+          "at": "2026-10-11",
+          "reason": "Maintenance is another disadvantage after costly installation and before incentives.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true
+    },
+    {
+      "set": "2.23新托福真题",
+      "section": "reading",
+      "module": 1,
+      "q": 35,
+      "original_item_sha256": "b125372252f4ff05709749335b0a78cf517defbd38760f930480d64a68413e17",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. And because of the controlled conditions in which they are produced, synthetic diamonds are actually preferred for industrial uses, such as in cutting tools and electronic devices. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Synthetic Diamonds\n\nTraditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative.\n\nCreating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color.\n\nAnother method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost.\n\n[A] Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. [B] They share the same hardness, brilliance, and clarity, making them suitable for jewelry. [C] Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. [D] Nevertheless, the market for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal.",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 2,
+        "answer_text": "[C]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/223-p9.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "C接珠宝用途，以And补工业用途，下一句转消费者怀疑；B拆They解释性质，A过早，D已在消费者主题。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "1c5499ca53ab76a25999f3e98488f55f84d9a08ae7ed183d7ea79ac45d63947d",
+          "pick": "C",
+          "reason": "C接珠宝用途，以And补工业用途，下一句转消费者怀疑；B拆They解释性质，A过早，D已在消费者主题。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/223-p9.png",
+          "item_sha256": "1c5499ca53ab76a25999f3e98488f55f84d9a08ae7ed183d7ea79ac45d63947d",
+          "pick": "C",
+          "at": "2026-10-11",
+          "reason": "Industrial uses extend jewelry uses before consumers skepticism.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true
+    },
+    {
+      "set": "3.18新托福真题",
+      "section": "reading",
+      "module": 1,
+      "q": 35,
+      "original_item_sha256": "c93217908be17db2e6b044ea9d4ebdd2a8b106c0f404174e1c9d572e3a5bc1c4",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. They enable the reduction of file sizes without significant loss of quality. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Harmonic Analysis: Unveiling the Hidden Structures\n\nHarmonic analysis studies how functions or signals can be represented as combinations of basic waves, typically sine and cosine functions. This field has applications in signal processing, quantum mechanics, and data compression. One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data.\n\nThe Fourier transform is a key tool in harmonic analysis, breaking down functions into their constituent frequencies. For example, in signal processing, it isolates different frequency components, making it easier to filter out noise and enhance signal clarity. This decomposition is also crucial in quantum mechanics, where wave functions are expressed as combinations of base states, allowing for the analysis and prediction of quantum systems.\n\nWavelet transforms offer precise localization of signals in both time and frequency domains, making them highly effective for analyzing transient or non-stationary signals. [A] Their ability to adapt to various signal characteristics makes them versatile tools in numerous applications. [B] These methods are particularly useful in data compression. [C] In image processing, wavelet transforms facilitate efficient encoding of information, allowing for enhanced image reconstruction and feature extraction. [D]",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 2,
+        "answer_text": "[C]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/318-p9.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "C接data compression解释压缩作用，再In image processing展开；A/B压缩主题未出现，D在图像处理细节之后。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "d678081087d2592ccda88bb26e6d6d7d44037af1ef3ee6e405982010ab2e8cc3",
+          "pick": "C",
+          "reason": "C接data compression解释压缩作用，再In image processing展开；A/B压缩主题未出现，D在图像处理细节之后。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/318-p9.png",
+          "item_sha256": "d678081087d2592ccda88bb26e6d6d7d44037af1ef3ee6e405982010ab2e8cc3",
+          "pick": "C",
+          "at": "2026-10-11",
+          "reason": "Reduction in file sizes explains data compression before image-processing example.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true
+    },
+    {
+      "set": "4.6新托福真题",
+      "section": "reading",
+      "module": 1,
+      "q": 35,
+      "original_item_sha256": "24665e79a167cee34c8267261c8b71c1715573f4290ed54b706c33ab1964d5de",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. However, spreading information is not the only way to exert influence. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Social Networks and Influence\n\nIn today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.\n\n[A] The structure of a network can determine the flow of information. [B] An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. [C] This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors. [D] Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior.",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 3,
+        "answer_text": "[D]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/46-p7.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "D在传播信息论证后、Another factor homophily前，以However引出另种影响机制。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "d9f5f3bc44eb7d1a11d4c31ca5701460f05722445364b08b37113acb95e813f4",
+          "pick": "D",
+          "reason": "D在传播信息论证后、Another factor homophily前，以However引出另种影响机制。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/46-p7.png",
+          "item_sha256": "d9f5f3bc44eb7d1a11d4c31ca5701460f05722445364b08b37113acb95e813f4",
+          "pick": "D",
+          "at": "2026-10-11",
+          "reason": "However introduces mechanisms other than information transmission before homophily.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true
+    },
+    {
+      "set": "1.28新托福真题A卷",
+      "section": "reading",
+      "module": 1,
+      "q": 35,
+      "original_item_sha256": "86bb128849a93fbb2a321cd156b9175f7d5549cc137f3e87b31d9cb0cc432305",
+      "patch": {
+        "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. Taking a step back to analyze the situation helps you react in a more measured and mindful way. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+        "material": "Stoicism in Ancient Philosophy\n\nStoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.\n\nA phrase that is commonly used today is \"Stoic pause.\" [A] It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. [B] Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. [C] For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. [D] They are taught to approach their fear rationally and ignore what is outside their control.",
+        "options": [
+          "[A]",
+          "[B]",
+          "[C]",
+          "[D]"
+        ],
+        "answer_index": 1,
+        "answer_text": "[B]"
+      },
+      "evidence": {
+        "verified": true,
+        "source_page": ".codex-tmp/reading-question-recovery/inserts/128a-p10.png",
+        "checked_by": "history_audit-source-image-review",
+        "reason": "B在Stoic pause定义/商务用例后总结暂停分析的益处，后续转CBT另种现代实践。A打断It指代，C/D将总结摆在CBT具体例证中。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "history_audit",
+          "item_sha256": "37cae40c4761b62e24660302a0e251436818de03510984c2412f60c2452a755f",
+          "pick": "B",
+          "reason": "B在Stoic pause定义/商务用例后总结暂停分析的益处，后续转CBT另种现代实践。A打断It指代，C/D将总结摆在CBT具体例证中。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": ".codex-tmp/reading-question-recovery/inserts/128a-p10.png",
+          "item_sha256": "37cae40c4761b62e24660302a0e251436818de03510984c2412f60c2452a755f",
+          "pick": "B",
+          "at": "2026-10-11",
+          "reason": "Taking a step back explains the benefits of the Stoic pause after its definition.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "promote": true
+    },
+    {
+      "set": "2.1新托福真题C卷",
+      "key": "reading|1|35-35|35",
+      "q": 35,
+      "original_record_sha256": "61d5eb875c40b914792f37f79879be000fefed97b53149c27e5a7dd53fd58e8f",
+      "patch": {
+        "module": 1,
+        "type": "ap",
+        "q_start": 35,
+        "q_end": 35,
+        "items": [
+          {
+            "q_number": 35,
+            "material": "Libertarianism and Personal Freedom\n\nLibertarianism is a political philosophy emphasizing individual liberty, minimal government intervention, and free markets. It advocates personal freedom, arguing that individuals should make choices without undue state interference. This ideology has gained traction in recent years among those who value economic freedom.\n\nA central tenet of libertarianism is self-ownership, which asserts that individuals own their bodies and labor. Libertarians argue that people should control their lives and property and be free from coercive forces. For instance, libertarians often oppose taxation, viewing it as involuntary servitude that infringes on autonomy.\n\nLibertarianism champions free markets as the most efficient means of allocating resources. [A] By allowing supply and demand to dictate prices, free markets encourage innovation and competition, leading to better products and services. [B] Government regulations are seen as impediments that stifle economic growth and limit freedom. [C] Libertarians believe that a laissez-faire approach creates an environment where businesses can thrive and individuals can pursue their economic interests without constraints. [D]\n\nCritics of libertarianism argue that a lack of regulation can lead to social inequality and exploitation. Some contend that public goods, like education and healthcare, require government involvement to ensure equitable access. Balancing personal freedoms with the need of social welfare and infrastructure has been an issue of heated debate even among Libertarians themselves. Some support wide-scale privatization of all social services, while others acknowledge the necessity of a certain degree of government involvement. Still, as the foundation for last century's economic globalization, libertarianism will remain a popular school of thought in the foreseeable future.",
+            "material_kind": "passage",
+            "stem": "There are four locations in the passage that indicate where the following sentence could be added. Such intervention constrains innovation and can lead to unintended outcomes. Where would the sentence best fit? Select a location to add the sentence in the passage.",
+            "options": [
+              "[A]",
+              "[B]",
+              "[C]",
+              "[D]"
+            ],
+            "answer_index": 2,
+            "answer_text": "[C]",
+            "answer_key": "c"
+          }
+        ],
+        "status": "ok"
+      },
+      "evidence": {
+        "source_page": 10,
+        "verified": true,
+        "source": "D:/桌面/【2026改后全科真题】（持续更新中）/2.1新托福真题C卷/2.1新托福真题C卷.pdf",
+        "render": ".codex-tmp/reading-question-recovery/rdl/2.1新托福真题C卷-p10.png",
+        "note": "原图第三块紧接政府监管造成限制句，Such intervention回指监管；四标记位置按原图。"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "item_sha256": "6b6523d1c85c6ea033adf6d4ef790d998c7331a33b225af112116df2b7c2b769",
+          "pick": "C",
+          "reason": "Such intervention回指紧前句Government regulations...，后接Libertarians believe...延续不干预主张；原屏独立核解。",
+          "review_status": "Actual agent review after coordination; not an API vote or two blinded votes."
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root/reading_gap_audit",
+          "verified": true,
+          "source_page": 10,
+          "item_sha256": "6b6523d1c85c6ea033adf6d4ef790d998c7331a33b225af112116df2b7c2b769",
+          "pick": "C",
+          "at": "2026-10-11",
+          "reason": "Such intervention refers to government regulations before laissez-faire alternatives.",
+          "review_status": "Original screenshots visually inspected and final payload compared; reviewer had seen proposed answers."
+        }
+      ],
+      "section": "reading",
+      "module": 1,
+      "promote": true
+    },
+    {
+      "set": "rp0822",
+      "section": "reading",
+      "module": 1001,
+      "q": 100101,
+      "promote": true,
+      "repair_kind": "image_material_omission",
+      "original_item_sha256": "44eab79106652090324416395ef4f54466cbbac279be3b5599bf4c7f12aecde2",
+      "patch": {
+        "material": "New Winter Term Writing Seminar\n\nPlease consider registering for the newly developed Creative Writing Seminar, designed to help you enhance your writing skills and unleash your creativity.\nLed by professors from our Creative Writing Department, this seminar-style class will help you hone your writing by giving tips on narrative structure, character development, and dialogue crafting.\nStudents will engage in interactive exercises and group readings to refine their writing abilities. Please bring your laptop for writing activities.\nThe seminar will take place on Tuesdays and Thursdays from 10:00 A.M. to 12:00 p.m. in the conference room on the fifth floor of the library.\nTo be eligible, students must have completed one first-year-level course in either the Creative Writing or English department.\nFor more information, please contact the Creative Writing Department administrator at admin@creativewriting.edu/winterterm."
+      },
+      "evidence": {
+        "verified": true,
+        "source": "D:/桌面/【2026改后全科真题】（持续更新中）/8 月/8.22-国内线下/Reading.docx",
+        "xml_paragraph_0_based": 46,
+        "render": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "source_extraction": "original docx embedded image; manual transcript after visual reading",
+        "reason": "Q1 newly developed→A；Q2 narrative/dialogue/group readings均覆盖，唯论证提示不属于创意写作课程→C；Q3完成CW或English first-year-level course→B。原audit对Questions/Refer空材料解答无效，保留原票但用修复item哈希绑定新独立票。",
+        "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+        "source_image": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "transcript": "docs/realbank-reading-recovery-evidence/rp0822-course-transcript.txt"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "item_sha256": "0576aa452d1fd36d336280c2ef555c3ac7a5261fe463f3b83c20234b4366559b",
+          "pick": "A"
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root",
+          "verified": true,
+          "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+          "item_sha256": "0576aa452d1fd36d336280c2ef555c3ac7a5261fe463f3b83c20234b4366559b",
+          "pick": "A",
+          "reason": "Root personally read the original course image and the questions without answers: newly developed, narrative/dialogue/group readings, completed one first-year-level CW/English course.",
+          "at": "2026-10-11"
+        }
+      ]
+    },
+    {
+      "set": "rp0822",
+      "section": "reading",
+      "module": 1001,
+      "q": 100102,
+      "promote": true,
+      "repair_kind": "image_material_omission",
+      "original_item_sha256": "a00dfbe05446b28636b22ef8c7bcdc6ed81a6e0b3b8e7ee2364aebaf02085a51",
+      "patch": {
+        "material": "New Winter Term Writing Seminar\n\nPlease consider registering for the newly developed Creative Writing Seminar, designed to help you enhance your writing skills and unleash your creativity.\nLed by professors from our Creative Writing Department, this seminar-style class will help you hone your writing by giving tips on narrative structure, character development, and dialogue crafting.\nStudents will engage in interactive exercises and group readings to refine their writing abilities. Please bring your laptop for writing activities.\nThe seminar will take place on Tuesdays and Thursdays from 10:00 A.M. to 12:00 p.m. in the conference room on the fifth floor of the library.\nTo be eligible, students must have completed one first-year-level course in either the Creative Writing or English department.\nFor more information, please contact the Creative Writing Department administrator at admin@creativewriting.edu/winterterm."
+      },
+      "evidence": {
+        "verified": true,
+        "source": "D:/桌面/【2026改后全科真题】（持续更新中）/8 月/8.22-国内线下/Reading.docx",
+        "xml_paragraph_0_based": 46,
+        "render": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "source_extraction": "original docx embedded image; manual transcript after visual reading",
+        "reason": "Q1 newly developed→A；Q2 narrative/dialogue/group readings均覆盖，唯论证提示不属于创意写作课程→C；Q3完成CW或English first-year-level course→B。原audit对Questions/Refer空材料解答无效，保留原票但用修复item哈希绑定新独立票。",
+        "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+        "source_image": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "transcript": "docs/realbank-reading-recovery-evidence/rp0822-course-transcript.txt"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "item_sha256": "ec68e724ffa8bef3d6cd152bfd5859fc074d6d0b68047bdb71b55a28deab0809",
+          "pick": "C"
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root",
+          "verified": true,
+          "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+          "item_sha256": "ec68e724ffa8bef3d6cd152bfd5859fc074d6d0b68047bdb71b55a28deab0809",
+          "pick": "C",
+          "reason": "Root personally read the original course image and the questions without answers: newly developed, narrative/dialogue/group readings, completed one first-year-level CW/English course.",
+          "at": "2026-10-11"
+        }
+      ]
+    },
+    {
+      "set": "rp0822",
+      "section": "reading",
+      "module": 1001,
+      "q": 100103,
+      "promote": true,
+      "repair_kind": "image_material_omission",
+      "original_item_sha256": "c8efb77b69afa8c6343ccc1a8fa974c28a034591807343905c19c2d8589e45b7",
+      "patch": {
+        "material": "New Winter Term Writing Seminar\n\nPlease consider registering for the newly developed Creative Writing Seminar, designed to help you enhance your writing skills and unleash your creativity.\nLed by professors from our Creative Writing Department, this seminar-style class will help you hone your writing by giving tips on narrative structure, character development, and dialogue crafting.\nStudents will engage in interactive exercises and group readings to refine their writing abilities. Please bring your laptop for writing activities.\nThe seminar will take place on Tuesdays and Thursdays from 10:00 A.M. to 12:00 p.m. in the conference room on the fifth floor of the library.\nTo be eligible, students must have completed one first-year-level course in either the Creative Writing or English department.\nFor more information, please contact the Creative Writing Department administrator at admin@creativewriting.edu/winterterm."
+      },
+      "evidence": {
+        "verified": true,
+        "source": "D:/桌面/【2026改后全科真题】（持续更新中）/8 月/8.22-国内线下/Reading.docx",
+        "xml_paragraph_0_based": 46,
+        "render": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "source_extraction": "original docx embedded image; manual transcript after visual reading",
+        "reason": "Q1 newly developed→A；Q2 narrative/dialogue/group readings均覆盖，唯论证提示不属于创意写作课程→C；Q3完成CW或English first-year-level course→B。原audit对Questions/Refer空材料解答无效，保留原票但用修复item哈希绑定新独立票。",
+        "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+        "source_image": "docs/realbank-reading-recovery-evidence/rp0822-course-source.png",
+        "transcript": "docs/realbank-reading-recovery-evidence/rp0822-course-transcript.txt"
+      },
+      "manual_audits": [
+        {
+          "type": "agent_review",
+          "checked_by": "/root/rdl_source_recovery",
+          "item_sha256": "80b3409cce69030648915bd13a66b19ff1eceb25c06552d1dbbbabd8cdb57407",
+          "pick": "B"
+        },
+        {
+          "type": "source_review",
+          "checked_by": "/root",
+          "verified": true,
+          "source_page": "Reading.docx embedded course description image, XML paragraph 46",
+          "item_sha256": "80b3409cce69030648915bd13a66b19ff1eceb25c06552d1dbbbabd8cdb57407",
+          "pick": "B",
+          "reason": "Root personally read the original course image and the questions without answers: newly developed, narrative/dialogue/group readings, completed one first-year-level CW/English course.",
+          "at": "2026-10-11"
+        }
+      ]
+    }
+  ]
+}

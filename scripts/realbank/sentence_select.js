@@ -372,6 +372,11 @@ function passingHashes(ledger) {
   for (const e of (ledger && ledger.entries) || []) {
     for (const a of e.audits || []) {
       if (!a || !a.hash || !(a.agree === true || (a.second_vote && a.second_vote.agree === true))) continue;
+      // Explicit source restoration: an actual independent agent answer plus a separate
+      // screenshot review, both bound to the exact displayed paragraph and answer sentence.
+      if (a.type === "agent_review" && (!a.checked_by || !(e.source_reviews || []).some((s) =>
+        s.type === "source_review" && s.verified === true && s.checked_by && s.checked_by !== a.checked_by &&
+        s.source_page && s.hash === a.hash && s.expected_sentence === a.expected_sentence))) continue;
       if (!out.has(a.hash)) out.set(a.hash, new Set());
       out.get(a.hash).add(String(a.expected_sentence || ""));
     }

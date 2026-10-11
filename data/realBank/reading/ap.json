@@ -136,6 +136,18 @@
           },
           "correct_answer": "B",
           "q_number": 14
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. Additionally, green roofs require ongoing maintenance to ensure proper drainage, plant health, and structural integrity. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -153,14 +165,14 @@
       ],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Green Roof Benefits\n\nGreen roofs, or living roofs, are gaining prominence in urban areas due to their environmental benefits. These are roofs covered with vegetation to help manage stormwater by absorbing rainfall, decreasing runoff, and minimizing flooding risks.\n\nAnother advantage of green roofs is their ability to improve air quality. Plants on the roof filter pollutants and capture dust. Additionally, green roofs reduce the urban heat island effect. Conventional roofs absorb and radiate heat, increasing urban temperatures. In contrast, green roofs keep buildings cooler by providing insulation and emitting moisture through their plants and soil.\n\nGreen roofs offer energy-efficiency benefits. The insulation provided by soil and plants reduces the need for heating in winter and cooling in summer, leading to energy savings. Green roofs can also extend the lifespan of the roof by shielding materials from UV radiation and extreme temperatures, keeping the underlying structure sound for longer.\n\nFinally, green roofs support urban biodiversity. Their vegetative layers create habitats for insects and birds in cities where green spaces are limited. These microhabitats help sustain pollinator populations and promote ecological balance. Green roofs can also grow food, contributing to food security in urban environments.\n\nDespite these advantages, green roofs can be costly to install. However, many cities offer incentives to encourage their adoption.",
+      "passage": "Green Roof Benefits\n\nGreen roofs, or living roofs, are gaining prominence in urban areas due to their environmental benefits. These are roofs covered with vegetation to help manage stormwater by absorbing rainfall, decreasing runoff, and minimizing flooding risks.\n\nAnother advantage of green roofs is their ability to improve air quality. Plants on the roof filter pollutants and capture dust. Additionally, green roofs reduce the urban heat island effect. Conventional roofs absorb and radiate heat, increasing urban temperatures. In contrast, green roofs keep buildings cooler by providing insulation and emitting moisture through their plants and soil.\n\nGreen roofs offer energy-efficiency benefits. The insulation provided by soil and plants reduces the need for heating in winter and cooling in summer, leading to energy savings. Green roofs can also extend the lifespan of the roof by shielding materials from UV radiation and extreme temperatures, keeping the underlying structure sound for longer.\n\nFinally, green roofs support urban biodiversity. Their vegetative layers create habitats for insects and birds in cities where green spaces are limited. These microhabitats help sustain pollinator populations and promote ecological balance. [A] Green roofs can also grow food, contributing to food security in urban environments.\n\n[B] Despite these advantages, green roofs can be costly to install. [C] However, many cities offer incentives to encourage their adoption. [D]",
       "paragraphs": [
         "Green Roof Benefits",
         "Green roofs, or living roofs, are gaining prominence in urban areas due to their environmental benefits. These are roofs covered with vegetation to help manage stormwater by absorbing rainfall, decreasing runoff, and minimizing flooding risks.",
         "Another advantage of green roofs is their ability to improve air quality. Plants on the roof filter pollutants and capture dust. Additionally, green roofs reduce the urban heat island effect. Conventional roofs absorb and radiate heat, increasing urban temperatures. In contrast, green roofs keep buildings cooler by providing insulation and emitting moisture through their plants and soil.",
         "Green roofs offer energy-efficiency benefits. The insulation provided by soil and plants reduces the need for heating in winter and cooling in summer, leading to energy savings. Green roofs can also extend the lifespan of the roof by shielding materials from UV radiation and extreme temperatures, keeping the underlying structure sound for longer.",
-        "Finally, green roofs support urban biodiversity. Their vegetative layers create habitats for insects and birds in cities where green spaces are limited. These microhabitats help sustain pollinator populations and promote ecological balance. Green roofs can also grow food, contributing to food security in urban environments.",
-        "Despite these advantages, green roofs can be costly to install. However, many cities offer incentives to encourage their adoption."
+        "Finally, green roofs support urban biodiversity. Their vegetative layers create habitats for insects and birds in cities where green spaces are limited. These microhabitats help sustain pollinator populations and promote ecological balance. [A] Green roofs can also grow food, contributing to food security in urban environments.",
+        "[B] Despite these advantages, green roofs can be costly to install. [C] However, many cities offer incentives to encourage their adoption. [D]"
       ]
     },
     {
@@ -288,6 +300,32 @@
           },
           "correct_answer": "A",
           "q_number": 28
+        },
+        {
+          "question_type": "sentence_selection",
+          "stem": "Identify the sentence in paragraph 4 that names specific architectural elements built with noise-canceling materials.",
+          "paragraph": 4,
+          "paragraph_index": 4,
+          "options": {
+            "S1": "Advancements in technology have also led to the creation of noise cancelling materials.",
+            "S2": "Such materials are often used on buildings or road surfaces.",
+            "S3": "They work by actively reducing sound vibrations.",
+            "S4": "Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
+          },
+          "correct_answer": "S2",
+          "q_number": 29
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. One common source is traffic, which includes cars, buses, motorcycles, and trucks. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "D",
+          "q_number": 30
         }
       ],
       "difficulty": "medium",
@@ -305,11 +343,11 @@
       ],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Noise Control in Urban Areas\n\nUrban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.\n\nInnovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.\n\nAnother approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.\n\nAdvancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem.",
+      "passage": "Noise Control in Urban Areas\n\n[A] Urban areas across the globe are grappling with the challenge of noise pollution. [B] This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. [C] It has many causes. [D]\n\nInnovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and temperature regulation—thus not only reducing noise but also improving the environment. They work by enhancing indoor air quality and helping regulate interior temperatures by acting as natural insulation.\n\nAnother approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.\n\nAdvancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem.",
       "paragraphs": [
         "Noise Control in Urban Areas",
-        "Urban areas across the globe are grappling with the challenge of noise pollution. This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. It has many causes.",
-        "Innovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and help regulate interior temperatures by acting as natural insulation.",
+        "[A] Urban areas across the globe are grappling with the challenge of noise pollution. [B] This type of pollution can severely impact health, leading to sleep disturbances and cardiovascular problems. [C] It has many causes. [D]",
+        "Innovative solutions to control noise pollution, from traffic to concerts, are emerging. One such solution is green walls, vertical gardens installed on building facades. Green walls can absorb, reflect, or deflect sound waves, reducing the noise that enters a building. Additionally, they offer benefits like air purification and temperature regulation—thus not only reducing noise but also improving the environment. They work by enhancing indoor air quality and helping regulate interior temperatures by acting as natural insulation.",
         "Another approach involves quiet zones. These zones are designated areas where noisy activities are restricted, often including parks, residential neighborhoods, and hospital areas. The goal is to provide residents with periods of peace and tranquility. Some European cities have seen a decrease in stress-related health issues among residents in quiet zones.",
         "Advancements in technology have also led to the creation of noise cancelling materials. Such materials are often used on buildings or road surfaces. They work by actively reducing sound vibrations. Urban planners can use these materials to design cities more effectively, by strategically placing these structures to combat the noise problem."
       ]
@@ -480,6 +518,18 @@
       "id": "real_ap_21b_2_12",
       "questions": [
         {
+          "question_type": "factual_detail",
+          "stem": "What is one advantage of using Al in medical diagnostics?",
+          "options": {
+            "A": "Al eliminates the need for radiologists.",
+            "B": "Al reduces the number of medical images needed for diagnosis.",
+            "C": "Al is capable of analyzing large datasets efficiently.",
+            "D": "Al can predict patient outcomes based solely on diagnoses."
+          },
+          "correct_answer": "C",
+          "q_number": 11
+        },
+        {
           "question_type": "rhetorical_purpose",
           "stem": "Why does the author mention social media and search engines?",
           "options": {
@@ -602,6 +652,18 @@
           },
           "correct_answer": "D",
           "q_number": 34
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations in the passage that indicate where the following sentence could be added. Such intervention constrains innovation and can lead to unintended outcomes. Where would the sentence best fit? Select a location to add the sentence in the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 35
         }
       ],
       "difficulty": "medium",
@@ -619,12 +681,12 @@
       ],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Libertarianism and Personal Freedom\n\nLibertarianism is a political philosophy emphasizing individual liberty, minimal government intervention, and free markets. It advocates personal freedom, arguing that individuals should make choices without undue state interference. This ideology has gained traction in recent years among those who value economic freedom.\n\nA central tenet of libertarianism is self-ownership, which asserts that individuals own their bodies and labor. Libertarians argue that people should control their lives and property and be free from coercive forces. For instance, libertarians often oppose taxation, viewing it as involuntary servitude that infringes on autonomy.\n\nLibertarianism champions free markets as the most efficient means of allocating resources. By allowing supply and demand to dictate prices, free markets encourage innovation and competition, leading to better products and services. Government regulations are seen as impediments that stifle economic growth and limit freedom. Libertarians believe that a laissez-faire approach creates an environment where businesses can thrive and individuals can pursue their economic interests without constraints.\n\nCritics of libertarianism argue that a lack of regulation can lead to social inequality and exploitation. Some contend that public goods, like education and healthcare, require government involvement to ensure equitable access. Balancing personal freedoms with the need of social welfare and infrastructure has been an issue of heated debate even among Libertarians themselves. Some support wide-scale privatization of all social services, while others acknowledge the necessity of a certain degree of government involvement. Still, as the foundation for last century's economic globalization, libertarianism will remain a popular school of thought in the foreseeable future.",
+      "passage": "Libertarianism and Personal Freedom\n\nLibertarianism is a political philosophy emphasizing individual liberty, minimal government intervention, and free markets. It advocates personal freedom, arguing that individuals should make choices without undue state interference. This ideology has gained traction in recent years among those who value economic freedom.\n\nA central tenet of libertarianism is self-ownership, which asserts that individuals own their bodies and labor. Libertarians argue that people should control their lives and property and be free from coercive forces. For instance, libertarians often oppose taxation, viewing it as involuntary servitude that infringes on autonomy.\n\nLibertarianism champions free markets as the most efficient means of allocating resources. [A] By allowing supply and demand to dictate prices, free markets encourage innovation and competition, leading to better products and services. [B] Government regulations are seen as impediments that stifle economic growth and limit freedom. [C] Libertarians believe that a laissez-faire approach creates an environment where businesses can thrive and individuals can pursue their economic interests without constraints. [D]\n\nCritics of libertarianism argue that a lack of regulation can lead to social inequality and exploitation. Some contend that public goods, like education and healthcare, require government involvement to ensure equitable access. Balancing personal freedoms with the need of social welfare and infrastructure has been an issue of heated debate even among Libertarians themselves. Some support wide-scale privatization of all social services, while others acknowledge the necessity of a certain degree of government involvement. Still, as the foundation for last century's economic globalization, libertarianism will remain a popular school of thought in the foreseeable future.",
       "paragraphs": [
         "Libertarianism and Personal Freedom",
         "Libertarianism is a political philosophy emphasizing individual liberty, minimal government intervention, and free markets. It advocates personal freedom, arguing that individuals should make choices without undue state interference. This ideology has gained traction in recent years among those who value economic freedom.",
         "A central tenet of libertarianism is self-ownership, which asserts that individuals own their bodies and labor. Libertarians argue that people should control their lives and property and be free from coercive forces. For instance, libertarians often oppose taxation, viewing it as involuntary servitude that infringes on autonomy.",
-        "Libertarianism champions free markets as the most efficient means of allocating resources. By allowing supply and demand to dictate prices, free markets encourage innovation and competition, leading to better products and services. Government regulations are seen as impediments that stifle economic growth and limit freedom. Libertarians believe that a laissez-faire approach creates an environment where businesses can thrive and individuals can pursue their economic interests without constraints.",
+        "Libertarianism champions free markets as the most efficient means of allocating resources. [A] By allowing supply and demand to dictate prices, free markets encourage innovation and competition, leading to better products and services. [B] Government regulations are seen as impediments that stifle economic growth and limit freedom. [C] Libertarians believe that a laissez-faire approach creates an environment where businesses can thrive and individuals can pursue their economic interests without constraints. [D]",
         "Critics of libertarianism argue that a lack of regulation can lead to social inequality and exploitation. Some contend that public goods, like education and healthcare, require government involvement to ensure equitable access. Balancing personal freedoms with the need of social welfare and infrastructure has been an issue of heated debate even among Libertarians themselves. Some support wide-scale privatization of all social services, while others acknowledge the necessity of a certain degree of government involvement. Still, as the foundation for last century's economic globalization, libertarianism will remain a popular school of thought in the foreseeable future."
       ]
     },
@@ -678,6 +740,18 @@
           },
           "correct_answer": "C",
           "q_number": 34
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. And because of the controlled conditions in which they are produced, synthetic diamonds are actually preferred for industrial uses, such as in cutting tools and electronic devices. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 35
         }
       ],
       "difficulty": "medium",
@@ -689,13 +763,13 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Synthetic Diamonds\n\nTraditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative.\n\nCreating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color.\n\nAnother method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost.\n\nBoth HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal.",
+      "passage": "Synthetic Diamonds\n\nTraditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative.\n\nCreating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color.\n\nAnother method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost.\n\n[A] Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. [B] They share the same hardness, brilliance, and clarity, making them suitable for jewelry. [C] Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. [D] Nevertheless, the market for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal.",
       "paragraphs": [
         "Synthetic Diamonds",
         "Traditionally, diamonds were extracted from mines, a process fraught with environmental concerns. Synthetic diamonds offer a promising alternative.",
         "Creating synthetic diamonds involves replicating the conditions under which natural diamonds form. One popular method is High Pressure High Temperature (HPHT), where carbon is subjected to extreme heat and pressure. HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production. However, they may contain metallic inclusions from the catalysts used, which can affect clarity and color.",
         "Another method is Chemical Vapor Deposition (CVD), which grows diamonds layer by layer from carbon-rich gases in a vacuum chamber. CVD diamonds typically have fewer impurities and offer greater control over clarity and size. Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost.",
-        "Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. They share the same hardness, brilliance, and clarity, making them suitable for jewelry. Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. Nevertheless, the market for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal."
+        "[A] Both HPHT and CVD methods produce diamonds that are chemically and physically identical to natural diamonds. [B] They share the same hardness, brilliance, and clarity, making them suitable for jewelry. [C] Consumers are often skeptical of synthetic diamonds, as they associate rarity and historical significance only with natural diamonds. [D] Nevertheless, the market for synthetic diamonds continues to grow, driven by their affordability, sustainability, and ethical appeal."
       ]
     },
     {
@@ -783,6 +857,18 @@
     {
       "id": "real_ap_225_2_11",
       "questions": [
+        {
+          "question_type": "factual_detail",
+          "stem": "In the first paragraph, what is the relation between sentence 2 and sentence 3?",
+          "options": {
+            "A": "Sentence 2 raises a question, and sentence 3 presents a plausible answer.",
+            "B": "Sentence 2 identifies a problem, and sentence 3 proposes a solution.",
+            "C": "Sentence 2 states a fact, and sentence 3 points to a possible consequence.",
+            "D": "Sentence 2 describes an empirical discovery, and sentence 3 clarifies its context."
+          },
+          "correct_answer": "C",
+          "q_number": 11
+        },
         {
           "question_type": "vocabulary_in_context",
           "stem": "The word \"precarity\" in the passage is closest in meaning to",
@@ -1102,6 +1188,18 @@
       "questions": [
         {
           "question_type": "factual_detail",
+          "stem": "According to the passage, simpler functions help scientists",
+          "options": {
+            "A": "achieve exact calculations",
+            "B": "avoid relying on algorithms",
+            "C": "tackle difficult functions more effectively over time",
+            "D": "develop steps for solving problems relatively quickly"
+          },
+          "correct_answer": "D",
+          "q_number": 31
+        },
+        {
+          "question_type": "factual_detail",
           "stem": "What is indicated about polynomial approximation in the passage?",
           "options": {
             "A": "It varies in behavior from one point to another.",
@@ -1378,6 +1476,18 @@
           "q_number": 12
         },
         {
+          "question_type": "paragraph_relationship",
+          "stem": "How does paragraph 3 relate to paragraph 2?",
+          "options": {
+            "A": "Paragraph 3 provides examples of the benefits mentioned in paragraph 2.",
+            "B": "Paragraph 3 contradicts the ideas presented in paragraph 2.",
+            "C": "Paragraph 3 contrasts recent solutions with the older solutions mentioned in paragraph 2.",
+            "D": "Paragraph 3 introduces a new topic unrelated to paragraph 2."
+          },
+          "correct_answer": "A",
+          "q_number": 13
+        },
+        {
           "question_type": "factual_detail",
           "stem": "Which of the following is NOT an effect of improved landscape connectivity mentioned in the passage?",
           "options": {
@@ -1475,6 +1585,18 @@
           },
           "correct_answer": "B",
           "q_number": 34
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. They enable the reduction of file sizes without significant loss of quality. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 35
         }
       ],
       "difficulty": "medium",
@@ -1486,12 +1608,12 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Harmonic Analysis: Unveiling the Hidden Structures\n\nHarmonic analysis studies how functions or signals can be represented as combinations of basic waves, typically sine and cosine functions. This field has applications in signal processing, quantum mechanics, and data compression. One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data.\n\nThe Fourier transform is a key tool in harmonic analysis, breaking down functions into their constituent frequencies. For example, in signal processing, it isolates different frequency components, making it easier to filter out noise and enhance signal clarity. This decomposition is also crucial in quantum mechanics, where wave functions are expressed as combinations of base states, allowing for the analysis and prediction of quantum systems.\n\nWavelet transforms offer precise localization of signals in both time and frequency domains, making them highly effective for analyzing transient or non-stationary signals. Their ability to adapt to various signal characteristics makes them versatile tools in numerous applications. These methods are particularly useful in data compression. In image processing, wavelet transforms facilitate efficient encoding of information, allowing for enhanced image reconstruction and feature extraction.",
+      "passage": "Harmonic Analysis: Unveiling the Hidden Structures\n\nHarmonic analysis studies how functions or signals can be represented as combinations of basic waves, typically sine and cosine functions. This field has applications in signal processing, quantum mechanics, and data compression. One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data.\n\nThe Fourier transform is a key tool in harmonic analysis, breaking down functions into their constituent frequencies. For example, in signal processing, it isolates different frequency components, making it easier to filter out noise and enhance signal clarity. This decomposition is also crucial in quantum mechanics, where wave functions are expressed as combinations of base states, allowing for the analysis and prediction of quantum systems.\n\nWavelet transforms offer precise localization of signals in both time and frequency domains, making them highly effective for analyzing transient or non-stationary signals. [A] Their ability to adapt to various signal characteristics makes them versatile tools in numerous applications. [B] These methods are particularly useful in data compression. [C] In image processing, wavelet transforms facilitate efficient encoding of information, allowing for enhanced image reconstruction and feature extraction. [D]",
       "paragraphs": [
         "Harmonic Analysis: Unveiling the Hidden Structures",
         "Harmonic analysis studies how functions or signals can be represented as combinations of basic waves, typically sine and cosine functions. This field has applications in signal processing, quantum mechanics, and data compression. One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data.",
         "The Fourier transform is a key tool in harmonic analysis, breaking down functions into their constituent frequencies. For example, in signal processing, it isolates different frequency components, making it easier to filter out noise and enhance signal clarity. This decomposition is also crucial in quantum mechanics, where wave functions are expressed as combinations of base states, allowing for the analysis and prediction of quantum systems.",
-        "Wavelet transforms offer precise localization of signals in both time and frequency domains, making them highly effective for analyzing transient or non-stationary signals. Their ability to adapt to various signal characteristics makes them versatile tools in numerous applications. These methods are particularly useful in data compression. In image processing, wavelet transforms facilitate efficient encoding of information, allowing for enhanced image reconstruction and feature extraction."
+        "Wavelet transforms offer precise localization of signals in both time and frequency domains, making them highly effective for analyzing transient or non-stationary signals. [A] Their ability to adapt to various signal characteristics makes them versatile tools in numerous applications. [B] These methods are particularly useful in data compression. [C] In image processing, wavelet transforms facilitate efficient encoding of information, allowing for enhanced image reconstruction and feature extraction. [D]"
       ]
     },
     {
@@ -1534,6 +1656,20 @@
           "q_number": 13
         },
         {
+          "question_type": "sentence_selection",
+          "stem": "Identify the sentence in paragraph 2 that describes an argument against the claims of metaphilosophy.",
+          "paragraph": 2,
+          "paragraph_index": 2,
+          "options": {
+            "S1": "Some insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality.",
+            "S2": "Yet even these themes may be interpreted through culturally specific lenses.",
+            "S3": "Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless.",
+            "S4": "It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts."
+          },
+          "correct_answer": "S1",
+          "q_number": 14
+        },
+        {
           "question_type": "factual_detail",
           "stem": "Which of the following is one criticism of metaphilosophy mentioned in the passage?",
           "options": {
@@ -1555,11 +1691,10 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another.\n\nThis raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
+      "passage": "Beyond Philosophy's Borders\n\nMetaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?\n\nSome insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.\n\nCritics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor.",
       "paragraphs": [
         "Beyond Philosophy's Borders",
-        "Metaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another.",
-        "This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?",
+        "Metaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries. While traditional philosophy often aims to uncover universal truths, metaphilosophy questions whether such truths are even accessible across diverse contexts. Language, far from being a neutral vessel, shapes and limits how ideas are expressed and understood. A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another. This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus. Are we uncovering truths, or merely reinforcing culturally contingent assumptions?",
         "Some insist that despite linguistic and cultural variation, certain philosophical concerns—like suffering, justice, or mortality—are shared across societies, suggesting a basis for universality. Yet even these themes may be interpreted through culturally specific lenses. Metaphilosophy doesn't deny the possibility of cross-cultural dialogue but cautions against assuming it is seamless. It encourages philosophers to examine how their methods and assumptions travel—or fail to—across contexts.",
         "Critics worry this reflexivity may stall progress, but others see it as essential for avoiding intellectual overreach. By foregrounding these tensions, metaphilosophy aims not to dilute philosophy's aims, but to sharpen them through greater self-awareness and methodological rigor."
       ]
@@ -1602,6 +1737,18 @@
           },
           "correct_answer": "B",
           "q_number": 33
+        },
+        {
+          "question_type": "rhetorical_purpose",
+          "stem": "Why does the author cite studies showing that AR improves retention rates?",
+          "options": {
+            "A": "To demonstrate its usefulness when practicing emergency protocols",
+            "B": "To provide an example of its adaptability",
+            "C": "To explain why fields outside medicine and aviation are slower to adopt it",
+            "D": "To support the claim that it is useful to industries"
+          },
+          "correct_answer": "D",
+          "q_number": 34
         },
         {
           "question_type": "factual_detail",
@@ -1689,6 +1836,18 @@
           },
           "correct_answer": "D",
           "q_number": 14
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. In light of their area of expertise, wind ensemble conductors face a unique set of difficulties. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "B",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -1700,11 +1859,11 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Wind Ensemble Conducting\n\nIn the world of classical music, wind ensemble conducting requires a blend of artistry and precision, demanding a conductor who can shape diverse musicians into a cohesive unit. Unlike orchestral conductors, who often lead ensembles centered around strings, wind ensemble conductors primarily work with woodwinds, brass, and percussion, requiring a different set of interpretive and technical skills.\n\nOne challenge of wind ensemble conducting is balancing the ensemble. Wind instruments produce a wide range of dynamics and timbres, making it essential for conductors to ensure that no single section overpowers the others. For example, the brassy sound of trumpets can dominate if not carefully managed. Conductors must use gestures and cues to achieve balance, considering the acoustics of the performance space.\n\nInterpreting the score is another crucial aspect. Wind ensemble pieces often include compositions from modern and contemporary composers, which can be complex and unconventional. Conductors need to interpret these scores carefully and convey their vision to the musicians. This involves precise beat patterns and expressive gestures to communicate dynamic contrasts and phrasing.\n\nWind ensemble conductors collaborate closely with composers, which can lead to unique performances that reflect the composer's original intent.",
+      "passage": "Wind Ensemble Conducting\n\nIn the world of classical music, wind ensemble conducting requires a blend of artistry and precision, demanding a conductor who can shape diverse musicians into a cohesive unit. [A] Unlike orchestral conductors, who often lead ensembles centered around strings, wind ensemble conductors primarily work with woodwinds, brass, and percussion, requiring a different set of interpretive and technical skills. [B]\n\nOne challenge of wind ensemble conducting is balancing the ensemble. [C] Wind instruments produce a wide range of dynamics and timbres, making it essential for conductors to ensure that no single section overpowers the others. [D] For example, the brassy sound of trumpets can dominate if not carefully managed. Conductors must use gestures and cues to achieve balance, considering the acoustics of the performance space.\n\nInterpreting the score is another crucial aspect. Wind ensemble pieces often include compositions from modern and contemporary composers, which can be complex and unconventional. Conductors need to interpret these scores carefully and convey their vision to the musicians. This involves precise beat patterns and expressive gestures to communicate dynamic contrasts and phrasing.\n\nWind ensemble conductors collaborate closely with composers, which can lead to unique performances that reflect the composer's original intent.",
       "paragraphs": [
         "Wind Ensemble Conducting",
-        "In the world of classical music, wind ensemble conducting requires a blend of artistry and precision, demanding a conductor who can shape diverse musicians into a cohesive unit. Unlike orchestral conductors, who often lead ensembles centered around strings, wind ensemble conductors primarily work with woodwinds, brass, and percussion, requiring a different set of interpretive and technical skills.",
-        "One challenge of wind ensemble conducting is balancing the ensemble. Wind instruments produce a wide range of dynamics and timbres, making it essential for conductors to ensure that no single section overpowers the others. For example, the brassy sound of trumpets can dominate if not carefully managed. Conductors must use gestures and cues to achieve balance, considering the acoustics of the performance space.",
+        "In the world of classical music, wind ensemble conducting requires a blend of artistry and precision, demanding a conductor who can shape diverse musicians into a cohesive unit. [A] Unlike orchestral conductors, who often lead ensembles centered around strings, wind ensemble conductors primarily work with woodwinds, brass, and percussion, requiring a different set of interpretive and technical skills. [B]",
+        "One challenge of wind ensemble conducting is balancing the ensemble. [C] Wind instruments produce a wide range of dynamics and timbres, making it essential for conductors to ensure that no single section overpowers the others. [D] For example, the brassy sound of trumpets can dominate if not carefully managed. Conductors must use gestures and cues to achieve balance, considering the acoustics of the performance space.",
         "Interpreting the score is another crucial aspect. Wind ensemble pieces often include compositions from modern and contemporary composers, which can be complex and unconventional. Conductors need to interpret these scores carefully and convey their vision to the musicians. This involves precise beat patterns and expressive gestures to communicate dynamic contrasts and phrasing.",
         "Wind ensemble conductors collaborate closely with composers, which can lead to unique performances that reflect the composer's original intent."
       ]
@@ -3265,6 +3424,18 @@
           },
           "correct_answer": "B",
           "q_number": 34
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. However, spreading information is not the only way to exert influence. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "D",
+          "q_number": 35
         }
       ],
       "difficulty": "medium",
@@ -3276,12 +3447,11 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Social Networks and Influence\n\nIn today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.\n\nThe structure of a network can determine the flow of information. An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors.\n\nAnother factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior.",
+      "passage": "Social Networks and Influence\n\nIn today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.\n\n[A] The structure of a network can determine the flow of information. [B] An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. [C] This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors. [D] Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior.",
       "paragraphs": [
         "Social Networks and Influence",
         "In today's digital age, social networks play a significant role in shaping opinions and behaviors. The influence of these networks is not merely about the number of connections one might have, but about the quality and nature of those interactions. Sociologists have long been interested in how individuals within a network can influence the group's overall dynamics. This concept is sometimes referred to as social capital.",
-        "The structure of a network can determine the flow of information. An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors.",
-        "Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior."
+        "[A] The structure of a network can determine the flow of information. [B] An individual positioned at the intersection of various groups, known as a bridge, often plays a crucial role in disseminating information. [C] This person can introduce new ideas and perspectives to different parts of the network, thereby influencing opinions and possibly altering behaviors. [D] Another factor is homophily, where individuals are more likely to form connections with others who are similar to themselves in terms of opinions, values, or social status. While homophily can reinforce existing beliefs, it can also create echo chambers, limiting exposure to diverse perspectives. The presence of influential individuals, often termed opinion leaders, can amplify or mitigate the effects of network structures by means of their social skills or charisma. Sociologists aim to uncover the nuanced ways social networks shape collective behavior."
       ]
     },
     {
@@ -3589,6 +3759,18 @@
           },
           "correct_answer": "C",
           "q_number": 14
+        },
+        {
+          "question_type": "inference",
+          "stem": "According to the passage, the existence of an innate human aptitude for musical expression suggests that",
+          "options": {
+            "A": "music should only be seen as a form of art",
+            "B": "music may have played an important role in human development",
+            "C": "music that expresses joy is more universally appreciated than music that expresses sorrow",
+            "D": "music is not understood in the same way across different cultures"
+          },
+          "correct_answer": "B",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -4149,6 +4331,18 @@
           },
           "correct_answer": "B",
           "q_number": 14
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. By contrast, silkworms, traditionally used for obtaining silk, are domesticated and easy to manage. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "B",
+          "q_number": 15
         }
       ],
       "difficulty": "medium",
@@ -4160,13 +4354,13 @@
       "source_flags": [],
       "topic": "passage",
       "subtopic": null,
-      "passage": "Spider Silk in Medicine\n\nSpider silk is one of nature's most remarkable materials, known for its strength and elasticity. Stronger than steel and highly stretchable, spider silk has inspired researchers to explore its medical potential.\n\nResearchers have experimented with spider silk as a surgical suture material for use in stitching wounds, praising its strength and biocompatibility — a material's ability to interact with the human body without causing adverse reactions, such as inflammation or rejection. Spider silk meets this criterion exceptionally well. It integrates smoothly with human tissues, minimizing immune response and promoting faster healing. Additionally, its natural elasticity helps the sutures adapt to bodily movements, reducing the risk of sutures rupturing under tension.\n\nSpider silk has been woven into advanced dressings for wounds that accelerate recovery. Spider silk's biocompatibility and ability to retain moisture make it ideal for treating chronic wounds and joint injuries. Spider silk-based bandages can also be infused with medications for localized drug delivery, reducing infection risk and improving treatment outcomes.\n\nHowever, large-scale production is challenging. Spiders are territorial and cannibalistic, making farming them for silk impractical. Scientists have turned to synthetic methods of producing spider silk using genetically modified bacteria and yeast, but scaling up these techniques remains difficult.",
+      "passage": "Spider Silk in Medicine\n\nSpider silk is one of nature's most remarkable materials, known for its strength and elasticity. Stronger than steel and highly stretchable, spider silk has inspired researchers to explore its medical potential.\n\nResearchers have experimented with spider silk as a surgical suture material for use in stitching wounds, praising its strength and biocompatibility — a material's ability to interact with the human body without causing adverse reactions, such as inflammation or rejection. Spider silk meets this criterion exceptionally well. It integrates smoothly with human tissues, minimizing immune response and promoting faster healing. Additionally, its natural elasticity helps the sutures adapt to bodily movements, reducing the risk of sutures rupturing under tension.\n\nSpider silk has been woven into advanced dressings for wounds that accelerate recovery. Spider silk's biocompatibility and ability to retain moisture make it ideal for treating chronic wounds and joint injuries. Spider silk-based bandages can also be infused with medications for localized drug delivery, reducing infection risk and improving treatment outcomes.\n\nHowever, large-scale production is challenging. [A] Spiders are territorial and cannibalistic, making farming them for silk impractical. [B] Scientists have turned to synthetic methods of producing spider silk using genetically modified bacteria and yeast, but scaling up these techniques remains difficult. [C] Researchers continue refining techniques to make spider silk more accessible. [D]",
       "paragraphs": [
         "Spider Silk in Medicine",
         "Spider silk is one of nature's most remarkable materials, known for its strength and elasticity. Stronger than steel and highly stretchable, spider silk has inspired researchers to explore its medical potential.",
         "Researchers have experimented with spider silk as a surgical suture material for use in stitching wounds, praising its strength and biocompatibility — a material's ability to interact with the human body without causing adverse reactions, such as inflammation or rejection. Spider silk meets this criterion exceptionally well. It integrates smoothly with human tissues, minimizing immune response and promoting faster healing. Additionally, its natural elasticity helps the sutures adapt to bodily movements, reducing the risk of sutures rupturing under tension.",
         "Spider silk has been woven into advanced dressings for wounds that accelerate recovery. Spider silk's biocompatibility and ability to retain moisture make it ideal for treating chronic wounds and joint injuries. Spider silk-based bandages can also be infused with medications for localized drug delivery, reducing infection risk and improving treatment outcomes.",
-        "However, large-scale production is challenging. Spiders are territorial and cannibalistic, making farming them for silk impractical. Scientists have turned to synthetic methods of producing spider silk using genetically modified bacteria and yeast, but scaling up these techniques remains difficult."
+        "However, large-scale production is challenging. [A] Spiders are territorial and cannibalistic, making farming them for silk impractical. [B] Scientists have turned to synthetic methods of producing spider silk using genetically modified bacteria and yeast, but scaling up these techniques remains difficult. [C] Researchers continue refining techniques to make spider silk more accessible. [D]"
       ]
     },
     {
@@ -4820,6 +5014,18 @@
           },
           "correct_answer": "D",
           "q_number": 134
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage. Where would the following sentence best fit?Such intervention constrains innovation and can lead to unintended outcomes.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "C",
+          "q_number": 135
         }
       ],
       "difficulty": "medium",
@@ -4837,11 +5043,12 @@
       ],
       "topic": "sociology",
       "subtopic": null,
-      "passage": "Libertarianism is a political philosophy that emphasizes individual liberty, minimal government intervention, and free markets. Libertarians argue that people should be free to make their own choices as long as they do not harm others. They regard personal freedom as the foundation of a just society.\n\nA central principle is self-ownership: individuals own their bodies and the fruits of their labor. From this perspective, compulsory taxation may be viewed as a form of involuntary servitude because it takes a portion of a person's earnings without individual consent.\n\nLibertarians also defend free markets as the most efficient means of allocating resources. Competition encourages innovation, leading to better products and services. Government regulations are seen as impediments that stifle economic growth and limit freedom. People, they argue, should be able to exchange goods and services voluntarily and pursue opportunities without constraints. Critics respond that insufficient regulation can produce inequality and exploitation. They also argue that public goods such as education, health care, and infrastructure require government involvement. The tension between personal freedom and social welfare remains a central point of debate.",
+      "passage": "Libertarianism is a political philosophy that emphasizes individual liberty, minimal government intervention, and free markets. Libertarians argue that people should be free to make their own choices as long as they do not harm others. They regard personal freedom as the foundation of a just society.\n\nA central principle is self-ownership: individuals own their bodies and the fruits of their labor. From this perspective, compulsory taxation may be viewed as a form of involuntary servitude because it takes a portion of a person's earnings without individual consent.\n\nLibertarians also defend free markets as the most efficient means of allocating resources. [A] Competition encourages innovation, leading to better products and services. [B] Government regulations are seen as impediments that stifle economic growth and limit freedom. [C] People, they argue, should be able to exchange goods and services voluntarily and pursue opportunities without constraints. [D]\n\nCritics respond that insufficient regulation can produce inequality and exploitation. They also argue that public goods such as education, health care, and infrastructure require government involvement. The tension between personal freedom and social welfare remains a central point of debate.",
       "paragraphs": [
         "Libertarianism is a political philosophy that emphasizes individual liberty, minimal government intervention, and free markets. Libertarians argue that people should be free to make their own choices as long as they do not harm others. They regard personal freedom as the foundation of a just society.",
         "A central principle is self-ownership: individuals own their bodies and the fruits of their labor. From this perspective, compulsory taxation may be viewed as a form of involuntary servitude because it takes a portion of a person's earnings without individual consent.",
-        "Libertarians also defend free markets as the most efficient means of allocating resources. Competition encourages innovation, leading to better products and services. Government regulations are seen as impediments that stifle economic growth and limit freedom. People, they argue, should be able to exchange goods and services voluntarily and pursue opportunities without constraints. Critics respond that insufficient regulation can produce inequality and exploitation. They also argue that public goods such as education, health care, and infrastructure require government involvement. The tension between personal freedom and social welfare remains a central point of debate."
+        "Libertarians also defend free markets as the most efficient means of allocating resources. [A] Competition encourages innovation, leading to better products and services. [B] Government regulations are seen as impediments that stifle economic growth and limit freedom. [C] People, they argue, should be able to exchange goods and services voluntarily and pursue opportunities without constraints. [D]",
+        "Critics respond that insufficient regulation can produce inequality and exploitation. They also argue that public goods such as education, health care, and infrastructure require government involvement. The tension between personal freedom and social welfare remains a central point of debate."
       ]
     },
     {
@@ -7044,6 +7251,18 @@
           },
           "correct_answer": "D",
           "q_number": 34
+        },
+        {
+          "question_type": "insert_text",
+          "stem": "There are four locations [A]-[D] in the passage that indicate where the following sentence could be added. Taking a step back to analyze the situation helps you react in a more measured and mindful way. Where would the sentence best fit? Select a location [A]-[D] to add the sentence to the passage.",
+          "options": {
+            "A": "[A]",
+            "B": "[B]",
+            "C": "[C]",
+            "D": "[D]"
+          },
+          "correct_answer": "B",
+          "q_number": 35
         }
       ],
       "difficulty": "medium",
@@ -7059,13 +7278,13 @@
           "detail": "答案 PDF 把阅读填词答案词首砍掉：12/29 题为碎片（比例 0.41）。源 PDF 本身如此，已现场 OCR 复核。"
         }
       ],
-      "topic": "passage",
+      "topic": "other",
       "subtopic": null,
-      "passage": "Stoicism in Ancient Philosophy\n\nStoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.\n\nA phrase that is commonly used today is \"Stoic pause.\" It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. They are taught to approach their fear rationally and ignore what is outside their control.",
+      "passage": "Stoicism in Ancient Philosophy\n\nStoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.\n\nA phrase that is commonly used today is \"Stoic pause.\" [A] It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. [B] Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. [C] For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. [D] They are taught to approach their fear rationally and ignore what is outside their control.",
       "paragraphs": [
         "Stoicism in Ancient Philosophy",
         "Stoicism, an ancient philosophical school founded in Athens by Zeno of Citium in the early third century B.C.E., emphasizes rationality and self-control as the path to a virtuous life. Stoics believe that the universe is governed by reason, and understanding this helps individuals align with nature, achieving inner tranquility. Central to Stoic philosophy is the dichotomy of control. Some things are within our control while others are not. Stoics argue that focusing on what can be controlled, such as actions and thoughts, leads to a peaceful and contented life. Events outside one's control should be accepted with equanimity.",
-        "A phrase that is commonly used today is \"Stoic pause.\" It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. They are taught to approach their fear rationally and ignore what is outside their control."
+        "A phrase that is commonly used today is \"Stoic pause.\" [A] It refers to the internal deliberation to insert a moment of reflection before reacting emotionally, a handy trick employed by business leaders in high-stakes negotiations. [B] Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses. [C] For example, people who fear public speaking can be taught to reframe their anxiety by focusing on preparing for their speech and to expect realistic outcomes. [D] They are taught to approach their fear rationally and ignore what is outside their control."
       ]
     },
     {
