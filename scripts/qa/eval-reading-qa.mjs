@@ -260,9 +260,10 @@ const quotes = sum((r) => r.quotes);
 const badQuotes = sum((r) => r.badQuotes);
 const oos = rows.filter((r) => r.kind === "out-of-scope");
 const gram = rows.filter((r) => r.kind === "grammar");
+// 分母为 0（模型一条出处 / 引文都没给）算不过线：完全不守引用规则正是要拦的退化。
 const metrics = [
-  { name: "出处有效率", value: pct(cites - badCites, cites), pass: (v) => v == null || v >= 95, line: "≥ 95%", detail: `${cites - badCites}/${cites}` },
-  { name: "引文核实率", value: pct(quotes - badQuotes, quotes), pass: (v) => v == null || v >= 95, line: "≥ 95%", detail: `${quotes - badQuotes}/${quotes}` },
+  { name: "出处有效率", value: pct(cites - badCites, cites), pass: (v) => v != null && v >= 95, line: "≥ 95%", detail: `${cites - badCites}/${cites}` },
+  { name: "引文核实率", value: pct(quotes - badQuotes, quotes), pass: (v) => v != null && v >= 95, line: "≥ 95%", detail: `${quotes - badQuotes}/${quotes}` },
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
   { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },

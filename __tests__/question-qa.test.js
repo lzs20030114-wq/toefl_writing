@@ -152,13 +152,18 @@ describe("parseAnswer", () => {
   const cites = (segs) => segs.filter((s) => s.type === "cite").map((c) => [c.id, c.valid]);
 
   test("合法出处、越界出处、紧跟出处的引文对不上", () => {
-    const segs = parseAnswer("原文说 \"anchor the soil\" [S2]，但 [S9] 不存在；\"yields rise\" [S4]。依据 [答案] 和 [词典]，你上次 [错题1] 也是。", sentences);
+    const segs = parseAnswer("原文说 \"anchor the soil\" [S2]，但 [S9] 不存在；\"yields rise\" [S4]。依据 [答案] 和 [词典]，你上次 [错题1] 也是。", sentences, [], { mistakes: 1 });
     expect(cites(segs)).toEqual([["S2", true], ["S9", false], ["S4", false], ["答案", true], ["词典", true], ["错题1", true]]);
     expect(segs.find((s) => s.id === "S2").sentence).toContain("anchor the soil");
     // 原文完整拼回（不丢字）
     expect(segs.map((s) => (s.type === "cite" ? `{${s.id}}` : s.text)).join("")).toBe(
       "原文说 \"anchor the soil\" {S2}，但 {S9} 不存在；\"yields rise\" {S4}。依据 {答案} 和 {词典}，你上次 {错题1} 也是。"
     );
+  });
+
+  test("[错题N] 超出本会话给的错题数就核不上", () => {
+    expect(cites(parseAnswer("见 [错题1]", sentences))).toEqual([["错题1", false]]);
+    expect(cites(parseAnswer("见 [错题1] 和 [错题2]", sentences, [], { mistakes: 1 }))).toEqual([["错题1", true], ["错题2", false]]);
   });
 
   test("引文只绑紧挨着的出处：出处在前、引文在后，不连累下一条出处", () => {

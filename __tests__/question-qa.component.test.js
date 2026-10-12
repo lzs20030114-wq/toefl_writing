@@ -284,6 +284,20 @@ describe("存档", () => {
 });
 
 describe("上报", () => {
+  test("还没追问时，页脚上报带第一轮讲解", async () => {
+    const fetchMock = jest.fn(async () => ({ ok: true, json: async () => ({ ok: true }) }));
+    const prev = global.fetch;
+    global.fetch = fetchMock;
+    try {
+      await openPanel();
+      fireEvent.click(screen.getByTestId("qa-report-link"));
+      await act(async () => { fireEvent.click(screen.getByRole("button", { name: "提交上报" })); });
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body).content).toContain(`AI 原话：${FIRST}`);
+    } finally {
+      global.fetch = prev;
+    }
+  });
+
   test("点哪条回答下的「上报这题」就上报哪条的原话", async () => {
     const fetchMock = jest.fn(async () => ({ ok: true, json: async () => ({ ok: true }) }));
     const prev = global.fetch;

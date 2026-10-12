@@ -59,7 +59,8 @@ function Tag({ children, tone, onClick, title, testId }) {
 
 function Answer({ text, sentences, materials, related, theme }) {
   const [open, setOpen] = useState(null);
-  const segments = useMemo(() => parseAnswer(text, sentences, materials), [text, sentences, materials]);
+  const mistakes = related?.items?.length || 0;
+  const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes }), [text, sentences, materials, mistakes]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
@@ -89,7 +90,11 @@ function Answer({ text, sentences, materials, related, theme }) {
               ? <Tag key={i} tone="ok" testId="qa-cite" onClick={() => toggle(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
               : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
           }
-          if (s.kind === "mistake") return <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>;
+          if (s.kind === "mistake") {
+            return s.valid
+              ? <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>
+              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
+          }
           return <Tag key={i} tone="other">{s.kind === "answer" ? "答案" : "词典"}</Tag>;
         })}
       </div>
@@ -248,7 +253,8 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
     );
   }
 
-  const lastAnswer = qa.turns.length ? qa.turns[qa.turns.length - 1].a : "";
+  // 还没追问时，页脚上报带的是第一轮讲解（用户质疑的就是它）。
+  const lastAnswer = qa.turns.length ? qa.turns[qa.turns.length - 1].a : (firstExplain || "");
   const onPreset = (p) => {
     activate();
     if (p.id === "my-thinking") {
