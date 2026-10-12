@@ -8,8 +8,16 @@ import {
   locateSentence,
   askedEnglishTerm,
   conversationKey,
+  answerSignature,
+  wantsMistakeContext,
+  plainText,
+  sentenceLabel,
+  presetText,
+  QA_PRESETS,
+  QA_SYSTEM,
   QA_MAX_MESSAGE_CHARS,
 } from "../lib/qa/questionQa";
+import { shortHash } from "../lib/mistakes/extract";
 
 const PASSAGE = "Farmers use cover crops. These plants anchor the soil at 7 a.m. daily.\n\nDr. Lee disagrees. She says yields fall.";
 
@@ -28,7 +36,8 @@ describe("numberSentences", () => {
     const s = numberSentences(PASSAGE);
     expect(s.map((x) => x.id)).toEqual(["S1", "S2", "S3", "S4"]);
     expect(s[1].text).toBe("These plants anchor the soil at 7 a.m. daily.");
-    expect(s[2]).toMatchObject({ para: 2, text: "Dr. Lee disagrees." });
+    expect(s[2]).toMatchObject({ para: 2, k: 1, text: "Dr. Lee disagrees." });
+    expect(s.map((x) => x.k)).toEqual([1, 2, 1, 2]);
   });
   test("空原文返回空数组", () => {
     expect(numberSentences("")).toEqual([]);
@@ -183,6 +192,78 @@ test("askedEnglishTerm 只在问一个原文里出现过的英文词 / 短语时
   expect(askedEnglishTerm("这句话什么意思", s)).toBeNull();
 });
 
-test("conversationKey 与阅读讲解缓存同口径", () => {
-  expect(conversationKey(DETAIL)).toBe(`ap_1-q0|${DETAIL.stem}|||A|||B`);
+describe("conversationKey", () => {
+  test("讲解缓存的口径再加原文签名", () => {
+    expect(conversationKey(DETAIL)).toBe(`ap_1-q0|${DETAIL.stem}|||A|||B|||${shortHash(PASSAGE.slice(0, 400))}`);
+  });
+  test("同题干、同作答、没有 qid 的两篇文章，存档键不同", () => {
+    const a = { stem: "What is the main topic of the article?", selected: "B", correct: "C", passage: "Article one is about bikes." };
+    const b = { ...a, passage: "Article two is about the library." };
+    expect(conversationKey(a)).not.toBe(conversationKey(b));
+  });
+});
+
+describe("answerSignature 与「本题」认定", () => {
+  test("选择题是「键. 选项原文」，选句题是句子原文（与错题卡 brief.correctAnswer 同口径）", () => {
+    expect(answerSignature(DETAIL)).toBe("B. stabilize");
+    const ss = { question: { question_type: "sentence_selection", options: { S1: "Dr. Lee disagrees.", S2: "x" } }, correct: "S1" };
+    expect(answerSignature(ss)).toBe("Dr. Lee disagrees.");
+  });
+  test("同题干、不同答案的两道题互不认作本题", () => {
+    const stem = "What is the main topic of the article?";
+    const mk = (correctAnswer, at, wrongCount = 1) => ({
+      subject: "reading", subtype: "rdl", brief: { stem, type: "main_idea", userAnswer: "A. x", correctAnswer }, lastWrongAt: at, wrongCount,
+    });
+    const cards = [mk("C. A new bike lane", "2026-10-01", 4), mk("B. Library hours", "2026-10-02", 2)];
+    const r = pickRelatedMistakes(cards, { questionType: "main_idea", subtype: "rdl", stem, correctAnswer: "B. Library hours" });
+    expect(r.sameQuestionWrongCount).toBe(2);
+    expect(r.total).toBe(1);
+    expect(r.items[0].correctAnswer).toBe("C. A new bike lane");
+  });
+});
+
+describe("§1.1 小工具", () => {
+  test("wantsMistakeContext：只在问错因或说思路时附错题", () => {
+    expect(wantsMistakeContext("", "my-thinking")).toBe(true);
+    expect(wantsMistakeContext("", "parse-key")).toBe(false);
+    expect(wantsMistakeContext("", "simpler")).toBe(false);
+    expect(wantsMistakeContext("为什么不选 C", null)).toBe(true);
+    expect(wantsMistakeContext("我为什么会选错", null)).toBe(true);
+    expect(wantsMistakeContext("这句的主干是什么", null)).toBe(false);
+  });
+  test("plainText 去掉 ** 与行首 #", () => {
+    expect(plainText("## 结论\n答案是 **B**，见 [S2]。")).toBe("结论\n答案是 B，见 [S2]。");
+  });
+  test("sentenceLabel：多段写段号，单段只写句号", () => {
+    const multi = numberSentences(PASSAGE);
+    expect(sentenceLabel(multi[3], multi)).toBe("第 2 段第 2 句");
+    const one = numberSentences("A cat sat. A dog ran.");
+    expect(sentenceLabel(one[1], one)).toBe("第 2 句");
+  });
+  test("预设问题换成往深处走的三个；拆解答案句没选区时先让 AI 写出依据句", () => {
+    expect(QA_PRESETS.map((p) => p.id)).toEqual(["parse-key", "my-thinking", "simpler"]);
+    expect(presetText("parse-key")).toContain("[S编号]");
+    expect(presetText("parse-key", { selection: { text: "x y" } })).toContain("选中的这句");
+    expect(presetText("my-thinking", { selectedLabel: "A" })).toBe("我当时选 A，是因为");
+  });
+  test("QA_SYSTEM：语法分析不算超纲；说思路时先指出哪一步对不上", () => {
+    expect(QA_SYSTEM).toContain("语法、词汇、句意分析，属于本题范围");
+    expect(QA_SYSTEM).toContain("哪一步和原文对不上");
+  });
+});
+
+describe("插入句题位置标号", () => {
+  test("生成库的 [■] 依次标成 [■1]…[■4]；引文带不带标记都能核上", () => {
+    const passage = "Bees matter. [■] Farms rely on them. [■] Yields drop without them. [■] Some crops self-pollinate. [■]";
+    const { text, sentences } = buildEvidence({ stem: "Where would the sentence best fit?", passage, options: { A: "Slot 1 [■]" }, correct: "A" });
+    expect(text).toContain("[■1] Farms rely on them.");
+    expect(text).toContain("[■4]");
+    expect(text).not.toMatch(/\[■\](?!\d)/);
+    const segs = parseAnswer("原文 \"Farms rely on them.\" [S2]", sentences);
+    expect(segs.find((x) => x.type === "cite").valid).toBe(true);
+  });
+  test("真题的 [A]–[D] 不受影响", () => {
+    const { text } = buildEvidence({ stem: "x", passage: "One. [A] Two. [B] Three.", correct: "A" });
+    expect(text).toContain("[A] Two.");
+  });
 });
