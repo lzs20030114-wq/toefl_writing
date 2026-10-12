@@ -39,6 +39,13 @@ describe("numberSentences", () => {
     expect(s[2]).toMatchObject({ para: 2, k: 1, text: "Dr. Lee disagrees." });
     expect(s.map((x) => x.k)).toEqual([1, 2, 1, 2]);
   });
+  test("第一段是标题时记作第 0 段，正文从第 1 段数起", () => {
+    const s = numberSentences("Noise Control in Urban Areas\n\nCities are loud. Noise hurts sleep.\n\nWalls help.");
+    expect(s.map((x) => x.para)).toEqual([0, 1, 1, 2]);
+    expect(sentenceLabel(s[0], s)).toBe("标题");
+    expect(sentenceLabel(s[3], s)).toBe("第 2 段第 1 句");
+    expect(buildEvidence({ stem: "x", passage: "Noise Control\n\nCities are loud." }).text).toContain("（标题）\n[S1] Noise Control\n（第 1 段）");
+  });
   test("空原文返回空数组", () => {
     expect(numberSentences("")).toEqual([]);
   });
