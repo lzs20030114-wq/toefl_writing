@@ -225,7 +225,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                   <div data-no-dict>
                     {isReading ? (
                       <ReadingAiExplainBlock variant="review" includeCorrect explainKey={`${session.id}-q${i}`}
-                        detail={{ qid: q.qid || `${d.itemId || ""}-q${i}`, stem, question: q, options: q.options, selected: r.selected, correct: correctKey, passage, isCorrect: ok }}
+                        detail={{ qid: q.qid || `${d.itemId || ""}-q${i}`, stem, question: q, options: q.options, selected: r.selected, correct: correctKey, passage, subtype: d.subtype || subtype, paragraphs: d.paragraphs, isCorrect: ok }}
                         {...readingAi} />
                     ) : isLcr ? (
                       <ListeningAiExplainBlock variant="review" includeCorrect explainKey={`${session.id}-lcr${i}`}

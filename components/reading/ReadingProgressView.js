@@ -426,6 +426,8 @@ export function RDLDetail({ session }) {
                         selected: r.selected,
                         correct: r.correct || q.correct_answer,
                         passage,
+                        subtype: session.details?.subtype || "rdl",
+                        paragraphs: session.details?.paragraphs,
                         isCorrect: r.isCorrect,
                       }}
                       {...readingAi}

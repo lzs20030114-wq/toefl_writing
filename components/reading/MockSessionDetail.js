@@ -347,7 +347,9 @@ function McqTaskBody({ task, explainHook }) {
                     includeCorrect
                     explainKey={`${task.itemId || "task"}-${task.module || ""}-q${i}`}
                     detail={{
-                      qid: q.qid,
+                      // 真题没有 qid、生成库也只有约四成有：缺了就拼合成 id（与另外三个入口同写法），
+                      // 否则讲解缓存与追问存档只剩题干签名，同题干的题会串。
+                      qid: q.qid || `${task.itemId || "task"}-q${i}`,
                       stem: q.stem || q.question,
                       // 选句题（真题 AP）要把 S 键换成句子原文才讲得动，判据在 hook 里。
                       question: q,
@@ -355,6 +357,8 @@ function McqTaskBody({ task, explainHook }) {
                       selected,
                       correct: correctKey,
                       passage,
+                      subtype: task.taskType === "ap" ? "ap" : "rdl",
+                      paragraphs: task.paragraphs,
                       isCorrect,
                     }}
                     {...explainHook}

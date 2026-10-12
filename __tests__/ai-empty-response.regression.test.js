@@ -134,6 +134,7 @@ describe("所有 AI 辅助调用点都用共享预算", () => {
   const CALL_SITES = [
     "components/buildSentence/useBsAiExplain.js",
     "components/reading/useReadingAiExplain.js",
+    "components/reading/useQuestionQa.js",
     "components/reading/useCtwAiExplain.js",
     "components/reading/WordLookupLayer.js",
     "components/mistakes/useMcqAiExplain.js",
