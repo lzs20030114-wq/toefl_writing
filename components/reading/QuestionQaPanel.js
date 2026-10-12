@@ -1,0 +1,394 @@
+"use client";
+import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
+import { createPortal } from "react-dom";
+import { getSavedCode } from "../../lib/AuthContext";
+import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence } from "../../lib/qa/questionQa";
+import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
+import { useQuestionQa } from "./useQuestionQa";
+
+// 练习记录逐题「继续追问」窗口：挂在阅读选择题「AI 讲解」下面，默认收起。
+// 计划见 docs/rag-qa-implementation-plan.md §4。回答只按纯文本渲染（不许 innerHTML）；
+// 出处 [S#] 显示成「第 x 段第 y 句」并可点开原句，核不上的出处 / 引文降级显示。
+
+const THEMES = {
+  review: { text: "#4338CA", bd: "#C7D2FE", bg: "#EEF2FF", solid: "#6366F1", cardBg: "#F7F7FE", cardBd: "#E0E7FF", body: "#1a2420" },
+  default: { text: "#0c4a6e", bd: "#bae6fd", bg: "#f0f9ff", solid: "#0284c7", cardBg: "#f8fcff", cardBd: "#bae6fd", body: "#0c4a6e" },
+};
+const MUTED = "#6b7280";
+
+// 多个面板同时展开时，只让最近一次点过 / 展开的那个接收原文选区。
+let activePanelId = null;
+const activeListeners = new Set();
+function setActivePanel(id) {
+  activePanelId = id;
+  activeListeners.forEach((fn) => fn(id));
+}
+
+const ENGLISH_WORD_RE = /[A-Za-z][A-Za-z'’-]*/g;
+const normText = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+/** 选区能不能当「问这句」用：≥2 个英文词、≤600 字，且出自本题原文。 */
+function usableSelection(text, sentences) {
+  const t = String(text || "").replace(/\s+/g, " ").trim();
+  if (!t || t.length > 600) return null;
+  if ((t.match(ENGLISH_WORD_RE) || []).length < 2) return null;
+  const sentenceId = locateSentence(sentences, t);
+  if (sentenceId) return { kind: "sentence", text: t, sentenceId };
+  const whole = normText(sentences.map((s) => s.text).join(" "));
+  return whole.includes(normText(t)) ? { kind: "sentence", text: t, sentenceId: null } : null;
+}
+
+function Tag({ children, tone, onClick, title, testId }) {
+  const tones = {
+    ok: { color: "#4338CA", background: "#EEF2FF", border: "1px solid #C7D2FE" },
+    bad: { color: "#9CA3AF", background: "#F3F4F6", border: "1px solid #E5E7EB" },
+    other: { color: "#065F46", background: "#ECFDF5", border: "1px solid #A7F3D0" },
+  };
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      onClick={onClick}
+      title={title}
+      style={{ ...tones[tone], display: "inline", fontSize: 11, fontWeight: 700, lineHeight: 1.4, borderRadius: 4, padding: "0 4px", margin: "0 2px", cursor: onClick ? "pointer" : "default", verticalAlign: "baseline" }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme }) {
+  const [open, setOpen] = useState(null);
+  const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes, dict }), [text, sentences, materials, mistakes, dict]);
+  const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
+  const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
+  const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
+
+  let detailBox = null;
+  if (open?.startsWith("S")) {
+    const s = byId.get(open);
+    if (s) detailBox = <div data-testid="qa-cite-sentence" style={{ fontSize: 12.5, lineHeight: 1.6, color: "#374151", fontFamily: "Georgia, serif" }}><span style={{ fontWeight: 700, color: theme.text, marginRight: 6, fontFamily: "inherit" }}>{sentenceLabel(s, sentences)}</span>{s.text}</div>;
+  } else if (open?.startsWith("错题")) {
+    const m = related?.items?.[Number(open.slice(2)) - 1];
+    if (m) detailBox = <div data-testid="qa-cite-mistake" style={{ fontSize: 12, lineHeight: 1.6, color: "#374151" }}><div>{`${m.date} ${m.stem}`}</div><div style={{ color: "#B91C1C" }}>{`当时选：${m.userAnswer || "未作答"}`}</div><div style={{ color: "#047857" }}>{`正确：${m.correctAnswer}`}</div></div>;
+  }
+
+  return (
+    <div style={{ minWidth: 0 }}>
+      <div data-testid="qa-answer" style={{ fontSize: 12.5, lineHeight: 1.75, color: theme.body, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+        {segments.map((s, i) => {
+          if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
+          if (s.type === "quote") {
+            return s.valid
+              ? <React.Fragment key={i}>{s.text}</React.Fragment>
+              : <span key={i} data-testid="qa-bad-quote" title="这段引文在本题原文里找不到" style={{ textDecoration: "underline dashed #D97706", textUnderlineOffset: 3 }}>{s.text}</span>;
+          }
+          if (s.kind === "sentence") {
+            const sent = byId.get(s.id);
+            return s.valid
+              ? <Tag key={i} tone="ok" testId="qa-cite" onClick={() => toggle(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
+              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
+          }
+          if (s.kind === "mistake") {
+            return s.valid
+              ? <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>
+              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
+          }
+          const name = s.kind === "answer" ? "答案" : "词典";
+          return s.valid
+            ? <Tag key={i} tone="other">{name}</Tag>
+            : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${name}?`}</Tag>;
+        })}
+      </div>
+      {detailBox ? <div style={{ marginTop: 6, padding: "6px 10px", borderLeft: `3px solid ${theme.bd}`, background: "#fff", borderRadius: 4 }}>{detailBox}</div> : null}
+      {bad > 0 ? <div data-testid="qa-bad-note" style={{ marginTop: 4, fontSize: 11, color: MUTED }}>{`有 ${bad} 处出处或引文核对不上，已标灰，请以原文为准`}</div> : null}
+    </div>
+  );
+}
+
+function ReportBox({ detail, answer, onDone }) {
+  const [note, setNote] = useState("");
+  const [state, setState] = useState("idle"); // idle | sending | done | error | nologin
+  const send = async () => {
+    const userCode = String(getSavedCode() || "").trim();
+    if (!userCode) { setState("nologin"); return; }
+    setState("sending");
+    const parts = [
+      "[答疑上报]",
+      `qid=${detail?.qid || ""}`,
+      `题干：${String(detail?.stem || "").slice(0, 200)}`,
+      `标准答案：${detail?.correct || ""}`,
+      `作答：${detail?.selected || "未作答"}`,
+      `AI 原话：${String(answer || "").slice(0, 300)}`,
+      `补充：${note.trim()}`,
+    ];
+    const content = parts.join(" | ").slice(0, 2000);
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userCode, content, page: typeof location !== "undefined" ? location.pathname : "/" }),
+      });
+      setState(res.ok ? "done" : "error");
+    } catch {
+      setState("error");
+    }
+  };
+  if (state === "done") return <div style={{ fontSize: 12, color: "#047857" }}>已上报，谢谢！我们核对后会修正。</div>;
+  return (
+    <div data-testid="qa-report" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <input
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+        maxLength={300}
+        placeholder="可以补充一句哪里有问题（选填）"
+        style={{ fontSize: 16, padding: "6px 8px", border: "1px solid #D1D5DB", borderRadius: 6, minWidth: 0 }}
+      />
+      <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <button type="button" onClick={send} disabled={state === "sending"} style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#DC2626", border: "none", borderRadius: 6, padding: "4px 12px", cursor: "pointer" }}>{state === "sending" ? "提交中…" : "提交上报"}</button>
+        <button type="button" onClick={onDone} style={{ fontSize: 12, color: MUTED, background: "none", border: "none", cursor: "pointer" }}>取消</button>
+        {state === "error" ? <span style={{ fontSize: 12, color: "#E11D48" }}>提交失败，请稍后再试</span> : null}
+        {state === "nologin" ? <span style={{ fontSize: 12, color: "#E11D48" }}>登录后才能上报</span> : null}
+      </div>
+    </div>
+  );
+}
+
+export function QuestionQaPanel({ detail, firstExplain, variant }) {
+  const theme = THEMES[variant === "review" ? "review" : "default"];
+  const qa = useQuestionQa(detail, firstExplain);
+  const panelId = useId();
+  const [expanded, setExpanded] = useState(false);
+  const [input, setInput] = useState("");
+  const [selection, setSelection] = useState(null);
+  const [lastAsk, setLastAsk] = useState(null);
+  // 正在上报哪一条回答的原话（null = 没在上报）。点哪条回答下的「上报这题」就带哪条，页脚链接带最后一轮。
+  const [reporting, setReporting] = useState(null);
+  const [inputVisible, setInputVisible] = useState(true);
+  const [isActive, setIsActive] = useState(false);
+  const rootRef = useRef(null);
+  const inputRef = useRef(null);
+  const inputAreaRef = useRef(null);
+
+  useEffect(() => {
+    const fn = (id) => setIsActive(id === panelId);
+    activeListeners.add(fn);
+    return () => {
+      activeListeners.delete(fn);
+      if (activePanelId === panelId) activePanelId = null;
+    };
+  }, [panelId]);
+
+  // 展开时监听原文选区（100ms 防抖）。选区先记进 state：点 chip 时浏览器清掉选区也不影响。
+  useEffect(() => {
+    if (!expanded || !isActive || typeof document === "undefined") return undefined;
+    let timer = null;
+    const onChange = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const sel = typeof window !== "undefined" && window.getSelection ? window.getSelection() : null;
+        if (!sel || sel.isCollapsed) return;
+        const node = sel.anchorNode;
+        if (node && rootRef.current && rootRef.current.contains(node)) return;
+        const got = usableSelection(sel.toString(), qa.sentences);
+        if (got) setSelection(got);
+      }, 100);
+    };
+    document.addEventListener("selectionchange", onChange);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("selectionchange", onChange);
+    };
+  }, [expanded, isActive, qa.sentences]);
+
+  // 输入区不在视口里时，底部浮出「问 AI：拆解这句」（手机上下布局，面板常在很下面）。
+  useEffect(() => {
+    if (!expanded || typeof IntersectionObserver === "undefined" || !inputAreaRef.current) return undefined;
+    const io = new IntersectionObserver((entries) => setInputVisible(entries.some((e) => e.isIntersecting)));
+    io.observe(inputAreaRef.current);
+    return () => io.disconnect();
+  }, [expanded]);
+
+  const answered = !!detail?.selected;
+  const ss = isSentenceSelection(detail?.question) || isSentenceSelection({ question_type: detail?.questionType, options: detail?.options });
+  const selectedLabel = ss ? "那一句" : String(detail?.selected || "");
+  const atTurnCap = qa.turns.length >= QA_MAX_TURNS;
+  const atDailyCap = !atTurnCap && qa.dailyLeft <= 0;
+  const disabled = qa.loading || atTurnCap || atDailyCap;
+
+  const send = useCallback(async (question, opts = {}) => {
+    const args = { question, opts: { ...opts, selection: opts.selection === undefined ? selection : opts.selection } };
+    setLastAsk(args);
+    const ok = await qa.ask(args.question, args.opts);
+    if (ok) {
+      // 等回答的时候用户可能已经开始打下一问：只有框里还是刚发出的那句才清空。
+      if (opts.fromInput) setInput((cur) => (cur.trim() === question ? "" : cur));
+      setSelection(null);
+      setLastAsk(null);
+    }
+    return ok;
+  }, [qa, selection]);
+
+  const activate = () => setActivePanel(panelId);
+  // 「我是这么想的…」只预填输入框；用户补完发出去时仍按这个预设走（要附同类错题）。
+  const thinkingPrefix = presetText("my-thinking", { selectedLabel });
+  const sendInput = () => {
+    const q = input.trim();
+    if (!q || disabled) return;
+    send(q, { fromInput: true, presetId: q.startsWith(thinkingPrefix) ? "my-thinking" : null });
+  };
+
+  if (!qa.sentences.length) return null;
+
+  if (!expanded) {
+    const n = qa.turns.length;
+    return (
+      <div style={{ marginTop: 8 }}>
+        <button
+          type="button"
+          data-testid="qa-open"
+          onClick={() => { setExpanded(true); activate(); }}
+          style={{ fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer" }}
+        >
+          {n ? `继续追问（已问 ${n} 轮）` : "继续追问"}
+        </button>
+      </div>
+    );
+  }
+
+  // 还没追问时，页脚上报带的是第一轮讲解（用户质疑的就是它）。
+  const lastAnswer = qa.turns.length ? qa.turns[qa.turns.length - 1].a : (firstExplain || "");
+  const onPreset = (p) => {
+    activate();
+    if (p.id === "my-thinking") {
+      setInput(thinkingPrefix);
+      setTimeout(() => {
+        const el = inputRef.current;
+        if (el) { el.focus(); el.setSelectionRange?.(el.value.length, el.value.length); }
+      }, 0);
+      return;
+    }
+    send(presetText(p.id, { selection }), { presetId: p.id, label: p.id === "parse-key" && selection ? "拆解这句" : p.label });
+  };
+
+  let statusLine;
+  if (qa.loading) statusLine = <span style={{ color: theme.solid }}>AI 正在对照原文作答…</span>;
+  else if (qa.error) {
+    statusLine = (
+      <span style={{ color: "#E11D48" }}>
+        {qa.error}
+        {lastAsk ? <button type="button" data-testid="qa-retry" onClick={() => send(lastAsk.question, lastAsk.opts)} style={{ marginLeft: 8, fontSize: 12, color: theme.text, background: "none", border: "none", textDecoration: "underline", cursor: "pointer" }}>重试</button> : null}
+      </span>
+    );
+  } else if (atTurnCap) statusLine = <span>这题聊得够多了，可以去错题本练一练</span>;
+  else if (atDailyCap) statusLine = <span>今天的追问已经很多了，明天再继续吧；写作批改不受影响</span>;
+  else statusLine = <span>{`还可以追问 ${qa.remaining} 次`}</span>;
+
+  const floating = selection && !inputVisible && isActive && typeof document !== "undefined"
+    ? createPortal(
+      <button
+        type="button"
+        data-testid="qa-float"
+        onClick={() => {
+          inputAreaRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+          if (!disabled) send(presetText("parse-key", { selection }), { presetId: "parse-key", label: "拆解这句" });
+        }}
+        style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: "calc(16px + env(safe-area-inset-bottom))", zIndex: 60, fontSize: 14, fontWeight: 700, color: "#fff", background: theme.solid, border: "none", borderRadius: 999, padding: "10px 18px", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", cursor: "pointer" }}
+      >
+        问 AI：拆解这句
+      </button>,
+      document.body,
+    )
+    : null;
+
+  return (
+    <div
+      ref={rootRef}
+      data-testid="qa-panel"
+      onMouseDown={activate}
+      onFocus={activate}
+      style={{ marginTop: 8, padding: "10px 12px", borderRadius: 10, background: theme.cardBg, border: `1px solid ${theme.cardBd}`, display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span style={{ fontSize: 11, fontWeight: 800, color: theme.text, letterSpacing: "0.04em" }}>继续追问</span>
+        <button type="button" onClick={() => setExpanded(false)} style={{ border: "none", background: "none", color: "#94a39a", fontSize: 11, cursor: "pointer" }}>收起</button>
+      </div>
+
+      {qa.turns.map((t, i) => (
+        <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={{ alignSelf: "flex-end", maxWidth: "85%", minWidth: 0, background: "#F3F4F6", color: "#111827", borderRadius: 10, padding: "6px 10px", fontSize: 12.5, lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+            {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
+            {t.label || t.q}
+          </div>
+          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} theme={theme} />
+          {/可能有出入/.test(t.a) && reporting == null ? (
+            <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
+          ) : null}
+        </div>
+      ))}
+
+      {selection ? (
+        <div data-testid="qa-selection" style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#374151", background: "#fff", border: `1px dashed ${theme.bd}`, borderRadius: 8, padding: "5px 8px", minWidth: 0 }}>
+          <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{`已选中："${selection.text}"`}</span>
+          <button type="button" disabled={disabled} onClick={() => onPreset(QA_PRESETS[0])} style={{ flexShrink: 0, fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 6, padding: "2px 8px", cursor: disabled ? "default" : "pointer" }}>拆解这句</button>
+          <button type="button" aria-label="取消选中" onClick={() => setSelection(null)} style={{ flexShrink: 0, border: "none", background: "none", color: MUTED, cursor: "pointer", fontSize: 14 }}>×</button>
+        </div>
+      ) : null}
+
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {QA_PRESETS.filter((p) => !p.needsAnswer || answered).map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            data-testid={`qa-preset-${p.id}`}
+            disabled={disabled}
+            onClick={() => onPreset(p)}
+            style={{ fontSize: 12, color: theme.text, background: "#fff", border: `1px solid ${theme.bd}`, borderRadius: 999, padding: "3px 10px", cursor: disabled ? "default" : "pointer", opacity: disabled ? 0.5 : 1 }}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div ref={inputAreaRef} style={{ display: "flex", gap: 6, alignItems: "flex-end", minWidth: 0 }}>
+        <textarea
+          ref={inputRef}
+          data-testid="qa-input"
+          rows={2}
+          maxLength={1000}
+          value={input}
+          disabled={atTurnCap || atDailyCap}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key !== "Enter" || e.shiftKey) return;
+            // 输入法组字时按 Enter 是确认候选词，不是发送
+            if (e.nativeEvent?.isComposing || e.keyCode === 229) return;
+            e.preventDefault();
+            sendInput();
+          }}
+          placeholder="问这道题的任何问题，比如某句为什么这么说"
+          style={{ flex: 1, minWidth: 0, resize: "vertical", fontSize: 16, lineHeight: 1.5, padding: "6px 8px", border: `1px solid ${theme.bd}`, borderRadius: 8, fontFamily: "inherit", maxHeight: 120 }}
+        />
+        <button
+          type="button"
+          data-testid="qa-send"
+          disabled={disabled || !input.trim()}
+          onClick={sendInput}
+          style={{ flexShrink: 0, fontSize: 13, fontWeight: 700, color: "#fff", background: disabled || !input.trim() ? "#9CA3AF" : theme.solid, border: "none", borderRadius: 8, padding: "8px 14px", cursor: disabled || !input.trim() ? "default" : "pointer" }}
+        >
+          发送
+        </button>
+      </div>
+
+      <div data-testid="qa-status" style={{ fontSize: 11.5, color: MUTED }}>{statusLine}</div>
+
+      {reporting != null ? <ReportBox detail={detail} answer={reporting} onDone={() => setReporting(null)} /> : null}
+
+      <div style={{ fontSize: 11, color: "#9CA3AF", lineHeight: 1.5 }}>
+        回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。
+        {reporting == null ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(lastAnswer)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
+      </div>
+      {floating}
+    </div>
+  );
+}

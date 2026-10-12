@@ -628,6 +628,9 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
                     selected: selections[currentQ],
                     correct: question.correct_answer,
                     passage: item.text || item.passage,
+                    // 答疑窗口按 rdl / ap 取同类错题；AP 条目都带 paragraphs（生成库与真题库皆然），RDL 都不带。
+                    subtype: Array.isArray(item.paragraphs) ? "ap" : "rdl",
+                    paragraphs: item.paragraphs,
                     isCorrect: results[currentQ].isCorrect,
                   }}
                   {...readingAi}

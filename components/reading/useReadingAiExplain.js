@@ -4,6 +4,7 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { isSentenceSelection, sentenceOptionKeys, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 import { AiExplainView } from "../shared/AiExplainView";
+import { QuestionQaPanel } from "./QuestionQaPanel";
 
 // 阅读选择题（RDL / AP，含真题选句题）的 AI 讲解。与 useCtwAiExplain / useBsAiExplain
 // 同一骨架：Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——阅读考的是
@@ -171,12 +172,22 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
   if (!isPro || (detail.isCorrect && !includeCorrect)) return null;
 
   // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
+  // 讲解出来之后，下面接「继续追问」（components/reading/QuestionQaPanel；没有原文的老记录它自己不渲染）。
+  // key 带上 explainKey：交卷后复盘翻页时同一个位置换了题，面板状态（展开、选区、输入）要跟着重置。
+  const qaPanel = ex?.text ? <QuestionQaPanel key={explainKey} detail={detail} firstExplain={ex.text} variant={variant} /> : null;
+
   if (variant === "review") {
-    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="reading-ai-explain" />;
+    return (
+      <>
+        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="reading-ai-explain" />
+        {qaPanel}
+      </>
+    );
   }
 
   if (ex?.text) {
     return (
+      <>
       <div
         data-testid="reading-ai-explain"
         style={{
@@ -195,6 +206,8 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
         <span style={{ fontWeight: 700, marginRight: 4 }}>🤖 AI:</span>
         {ex.text}
       </div>
+      {qaPanel}
+      </>
     );
   }
   return (
