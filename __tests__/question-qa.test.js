@@ -179,6 +179,17 @@ describe("parseAnswer", () => {
     expect(c.every((x) => x.valid)).toBe(true);
   });
 
+  test("评估里的误报：省略号节选、带汉字的引号、连写出处都不算核不上", () => {
+    const segs = parseAnswer(
+      "原文 \"These plants anchor... daily\" [S2]；你把它理解成“anchor 等于 fertilize”；又见 \"Dr. Lee disagrees.\" [S2][S3][答案]。",
+      sentences,
+    );
+    expect(cites(segs)).toEqual([["S2", true], ["S2", true], ["S3", true], ["答案", true]]);
+    expect(citationStats(segs)).toEqual({ cites: 4, badCites: 0, badQuotes: 0 });
+    // 省略号两边有一段编造的，照样核不上
+    expect(cites(parseAnswer("\"These plants anchor... the river\" [S2]", sentences))).toEqual([["S2", false]]);
+  });
+
   test("引文忽略大小写与标点", () => {
     expect(cites(parseAnswer("“Dr Lee DISAGREES” [S3]", sentences))).toEqual([["S3", true]]);
   });
