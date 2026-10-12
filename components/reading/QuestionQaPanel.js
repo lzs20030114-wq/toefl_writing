@@ -57,10 +57,10 @@ function Tag({ children, tone, onClick, title, testId }) {
   );
 }
 
-function Answer({ text, sentences, materials, related, theme }) {
+function Answer({ text, sentences, materials, related, dict, theme }) {
   const [open, setOpen] = useState(null);
   const mistakes = related?.items?.length || 0;
-  const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes }), [text, sentences, materials, mistakes]);
+  const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes, dict }), [text, sentences, materials, mistakes, dict]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
@@ -317,7 +317,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
             {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
             {t.label || t.q}
           </div>
-          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} theme={theme} />
+          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} theme={theme} />
           {/可能有出入/.test(t.a) && reporting == null ? (
             <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
           ) : null}

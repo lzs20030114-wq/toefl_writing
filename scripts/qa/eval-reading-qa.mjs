@@ -230,6 +230,8 @@ async function runOne(c, i) {
     ms: Date.now() - t0,
     ...stats,
     quotes,
+    validCites: segs.filter((s) => s.type === "cite" && s.valid).length,
+    validQuotes: segs.filter((s) => s.type === "quote" && s.valid).length,
     empty: !text,
     // 没有句末标点多半是被 max_tokens 截断
     truncated: !!text && !/[。！？.!?」）)\]】"”]\s*$/.test(text),
@@ -260,10 +262,17 @@ const quotes = sum((r) => r.quotes);
 const badQuotes = sum((r) => r.badQuotes);
 const oos = rows.filter((r) => r.kind === "out-of-scope");
 const gram = rows.filter((r) => r.kind === "grammar");
+// 覆盖率：聚合比例只看「给了的出处对不对」，一两条合格出处就能撑起 100%；
+// 这里再按回答数，要求该讲题的回答（超纲题除外、非空）大多各自给出出处和引文。
+const inScope = rows.filter((r) => r.kind !== "out-of-scope" && !r.empty && !r.error);
+const citedRows = inScope.filter((r) => r.validCites > 0).length;
+const quotedRows = inScope.filter((r) => r.validQuotes > 0).length;
 // 分母为 0（模型一条出处 / 引文都没给）算不过线：完全不守引用规则正是要拦的退化。
 const metrics = [
   { name: "出处有效率", value: pct(cites - badCites, cites), pass: (v) => v != null && v >= 95, line: "≥ 95%", detail: `${cites - badCites}/${cites}` },
   { name: "引文核实率", value: pct(quotes - badQuotes, quotes), pass: (v) => v != null && v >= 95, line: "≥ 95%", detail: `${quotes - badQuotes}/${quotes}` },
+  { name: "出处覆盖率", value: pct(citedRows, inScope.length), pass: (v) => v != null && v >= 80, line: "≥ 80% 的回答带有效出处", detail: `${citedRows}/${inScope.length}` },
+  { name: "引文覆盖率", value: pct(quotedRows, inScope.length), pass: (v) => v != null && v >= 50, line: "≥ 50% 的回答带核实过的引文", detail: `${quotedRows}/${inScope.length}` },
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
   { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },
