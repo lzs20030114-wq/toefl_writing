@@ -35,7 +35,7 @@
 | `citationStats(segments)` | 出处数 / 核不上的出处 / 核不上的引文，给测试和评估用 |
 | `locateSentence` / `conversationKey` | 选中文字落在哪句 / 本题会话存档键（与讲解缓存同口径） |
 
-实现中可以改这一层，但测试要一直保持绿。
+这一层是用户说「先写计划」之前起的草稿，只在本分支上，没开 PR。实施窗口可以直接用、改，也可以连同测试整层删掉重写；保留的话，测试要一直保持绿。
 
 ## 2. 第 2 步：hook `components/reading/useQuestionQa.js`
 
