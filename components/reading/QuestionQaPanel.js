@@ -218,7 +218,8 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
     setLastAsk(args);
     const ok = await qa.ask(args.question, args.opts);
     if (ok) {
-      if (opts.fromInput) setInput("");
+      // 等回答的时候用户可能已经开始打下一问：只有框里还是刚发出的那句才清空。
+      if (opts.fromInput) setInput((cur) => (cur.trim() === question ? "" : cur));
       setSelection(null);
       setLastAsk(null);
     }

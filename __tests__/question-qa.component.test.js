@@ -243,6 +243,20 @@ describe("轮数、出错与上限", () => {
     expect(daily()).toBe(0);
   });
 
+  test("等回答时已经开始打下一问，回答回来不清掉草稿", async () => {
+    let done;
+    callAI.mockImplementationOnce(async () => FIRST).mockImplementationOnce(() => new Promise((res) => { done = res; }));
+    await openPanel();
+    const input = screen.getByTestId("qa-input");
+    fireEvent.change(input, { target: { value: "这句什么意思" } });
+    fireEvent.click(screen.getByTestId("qa-send"));
+    await waitFor(() => expect(done).toBeDefined());
+    fireEvent.change(input, { target: { value: "那第三句呢" } });
+    await act(async () => done("答案依据是 [S3]。"));
+    expect(await screen.findByTestId("qa-answer")).toBeInTheDocument();
+    expect(input.value).toBe("那第三句呢");
+  });
+
   test("满 6 轮后输入框禁用", async () => {
     const turns = Array.from({ length: 6 }, (_, i) => ({ q: `问${i}`, a: `答${i} [S1]`, at: "2026-10-12T00:00:00Z" }));
     saveConversation("ABC123", conversationKey(DETAIL), { turns, related: null });
