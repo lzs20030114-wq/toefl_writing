@@ -94,7 +94,10 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme
               ? <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>
               : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
           }
-          return <Tag key={i} tone="other">{s.kind === "answer" ? "答案" : "词典"}</Tag>;
+          const name = s.kind === "answer" ? "答案" : "词典";
+          return s.valid
+            ? <Tag key={i} tone="other">{name}</Tag>
+            : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${name}?`}</Tag>;
         })}
       </div>
       {detailBox ? <div style={{ marginTop: 6, padding: "6px 10px", borderLeft: `3px solid ${theme.bd}`, background: "#fff", borderRadius: 4 }}>{detailBox}</div> : null}

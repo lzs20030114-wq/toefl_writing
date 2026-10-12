@@ -284,7 +284,9 @@ const metrics = [
 const date = new Date().toISOString().slice(0, 10);
 const outDir = join(ROOT, ".ops", "qa-eval");
 mkdirSync(outDir, { recursive: true });
-const base = join(outDir, `${date}-seed${SEED}`);
+// 文件名带上影响结果的参数和时刻：同一天换 --limit / --tokens-mult 再跑不会覆盖上一次的结果。
+const stamp = new Date().toISOString().slice(11, 19).replace(/:/g, "");
+const base = join(outDir, `${date}-seed${SEED}-n${LIMIT}-x${TOKENS_MULT}-${String(MODEL).replace(/[^\w.-]+/g, "_")}-${stamp}`);
 writeFileSync(`${base}.json`, JSON.stringify({ date, seed: SEED, model: MODEL, maxTokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT, metrics: metrics.map(({ pass, ...m }) => ({ ...m, ok: pass(m.value) })), rows }, null, 2));
 
 const md = [

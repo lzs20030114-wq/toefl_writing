@@ -204,6 +204,13 @@ describe("出处渲染", () => {
     expect(second.querySelector('[data-testid="qa-cite-bad"]')).toBeNull();
   });
 
+  test("这一轮没附词典却写了 [词典]，标灰", async () => {
+    QA_REPLY = "按 [词典] 的意思。";
+    await openPanel();
+    fireEvent.click(screen.getByTestId("qa-preset-simpler"));
+    expect(await screen.findByTestId("qa-cite-bad")).toHaveTextContent("词典?");
+  });
+
   test("回答里的 markdown 星号被去掉", async () => {
     QA_REPLY = "**结论**：看 [S3]。";
     await openPanel();
