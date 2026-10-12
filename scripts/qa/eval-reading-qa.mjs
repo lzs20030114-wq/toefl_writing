@@ -26,8 +26,20 @@ const qa = await import(pathToFileURL(join(ROOT, "lib", "qa", "questionQa.js")).
 const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "reading", "sentenceSelection.js")).href);
 const { QA_SYSTEM, buildEvidence, buildQaMessage, parseAnswer, citationStats, presetText, plainText } = qa;
 
+// 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
+const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
 const AI_HELPER_MAX_TOKENS = 2000; // 与 lib/ai/client.js 同值
-const MODEL = "deepseek-v4-flash"; // 与 lib/ai/upstream.js 的 DEFAULT_MODEL 同值
+
+function loadEnv() {
+  const envPath = join(ROOT, ".env.local");
+  if (!existsSync(envPath)) return;
+  for (const line of readFileSync(envPath, "utf-8").split(/\r?\n/)) {
+    const m = line.match(/^([^#=]+)=(.*)$/);
+    if (m && !process.env[m[1].trim()]) process.env[m[1].trim()] = m[2].trim().replace(/^["']|["']$/g, "");
+  }
+}
+// 先读 .env.local 再算单价：DEEPSEEK_CNY_PER_MTOK 只写在 .env.local 时，dry-run 的报价也要用它。
+loadEnv();
 const CNY_PER_MTOK = Number(process.env.DEEPSEEK_CNY_PER_MTOK) || 5.24;
 
 /* ── 参数 ─────────────────────────────────────────────── */
@@ -168,15 +180,6 @@ if (!YES) {
 }
 
 /* ── 真跑 ─────────────────────────────────────────────── */
-function loadEnv() {
-  const envPath = join(ROOT, ".env.local");
-  if (!existsSync(envPath)) return;
-  for (const line of readFileSync(envPath, "utf-8").split(/\r?\n/)) {
-    const m = line.match(/^([^#=]+)=(.*)$/);
-    if (m && !process.env[m[1].trim()]) process.env[m[1].trim()] = m[2].trim().replace(/^["']|["']$/g, "");
-  }
-}
-loadEnv();
 const apiKey = process.env.DEEPSEEK_API_KEY;
 if (!apiKey) {
   console.error("缺 DEEPSEEK_API_KEY（.env.local 或环境变量）。");
