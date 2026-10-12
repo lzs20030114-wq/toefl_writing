@@ -9,7 +9,7 @@ import React, { useState } from "react";
 
 const INDIGO = { text: "#4338CA", bd: "#C7D2FE", bg: "#EEF2FF", hover: "#E0E7FF", solid: "#6366F1", cardBg: "#F7F7FE", cardBd: "#E0E7FF" };
 
-export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文分析…", testId }) {
+export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文分析…", testId, extra = null }) {
   // 收起只是本地视图状态；再点「AI 讲解」会回到已有结果（hook 里有缓存 / 已有文本，不会重复计费）。
   const [hidden, setHidden] = useState(false);
 
@@ -41,6 +41,7 @@ export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文�
         AI 讲解
         <span style={{ fontSize: 9, fontWeight: 800, color: "#fff", background: INDIGO.solid, borderRadius: 4, padding: "1px 5px" }}>PRO</span>
       </button>
+      {extra}
       {ex?.error ? <span style={{ fontSize: 12, color: "#E11D48" }}>{ex.error}</span> : null}
     </div>
   );

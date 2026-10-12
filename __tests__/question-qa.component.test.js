@@ -94,12 +94,53 @@ beforeEach(() => {
 });
 
 describe("显示门槛", () => {
-  test("讲解出来后才有「继续追问」，默认收起", async () => {
+  test("讲解出来后预设问题直接露在下面，点一下就问，不用先展开", async () => {
     render(<Harness />);
-    expect(screen.queryByTestId("qa-open")).toBeNull();
+    expect(screen.queryByTestId("qa-entry")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
-    expect(await screen.findByTestId("qa-open")).toHaveTextContent("继续追问");
+    const entry = await screen.findByTestId("qa-entry");
+    expect(entry).toHaveTextContent("还没懂？接着问：");
+    expect(screen.getByTestId("qa-entry-parse-key")).toBeInTheDocument();
+    expect(screen.getByTestId("qa-entry-simpler")).toBeInTheDocument();
+    expect(screen.getByTestId("qa-open")).toHaveTextContent("自己提问");
     expect(screen.queryByTestId("qa-panel")).toBeNull();
+    fireEvent.click(screen.getByTestId("qa-entry-parse-key"));
+    await waitFor(() => expect(qaCalls()).toHaveLength(1));
+    expect(await screen.findByTestId("qa-answer")).toBeInTheDocument();
+  });
+
+  test("「我是这么想的…」在入口处点：展开并预填输入框，不发请求", async () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
+    fireEvent.click(await screen.findByTestId("qa-entry-my-thinking"));
+    expect(screen.getByTestId("qa-input").value).toBe("我当时选 B，是因为");
+    expect(qaCalls()).toHaveLength(0);
+  });
+
+  test("问过的题收起后显示「继续追问（已问 N 轮）」", async () => {
+    saveConversation("ABC123", conversationKey(DETAIL), { turns: [{ q: "问", a: "答 [S1]", at: "2026-10-12T00:00:00Z" }], related: null });
+    render(<Harness />);
+    fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
+    expect(await screen.findByTestId("qa-open")).toHaveTextContent("继续追问（已问 1 轮）");
+    expect(screen.queryByTestId("qa-entry")).toBeNull();
+  });
+
+  test("讲解前就有「问这道题」：直接打开对话框，不调讲解，没有「讲简单点」", async () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByTestId("qa-ask"));
+    expect(screen.getByTestId("qa-input")).toBeInTheDocument();
+    expect(screen.queryByTestId("qa-preset-simpler")).toBeNull();
+    expect(callAI).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByTestId("qa-input"), { target: { value: "这句什么意思" } });
+    fireEvent.click(screen.getByTestId("qa-send"));
+    await waitFor(() => expect(qaCalls()).toHaveLength(1));
+    expect(qaCalls()[0][1]).not.toContain("本题已给出的讲解");
+    expect(screen.queryByTestId("qa-ask")).toBeNull();
+  });
+
+  test("review 外观讲解前也有「问这道题」", () => {
+    render(<Harness variant="review" />);
+    expect(screen.getByTestId("qa-ask")).toHaveTextContent("问这道题");
   });
 
   test("真题记录页的 review 外观同样挂在讲解卡片下面", async () => {
@@ -112,14 +153,17 @@ describe("显示门槛", () => {
     TIER = "free";
     render(<Harness />);
     expect(screen.queryByTestId("qa-open")).toBeNull();
+    expect(screen.queryByTestId("qa-ask")).toBeNull();
     expect(screen.queryByRole("button", { name: /AI 深入解析/ })).toBeNull();
   });
 
   test("没有原文的老记录：有讲解，但没有「继续追问」", async () => {
     render(<Harness detail={{ ...DETAIL, passage: "" }} />);
+    expect(screen.queryByTestId("qa-ask")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
     await screen.findByText(/答案句在第二段/);
     expect(screen.queryByTestId("qa-open")).toBeNull();
+    expect(screen.queryByTestId("qa-entry")).toBeNull();
   });
 });
 
@@ -307,12 +351,12 @@ describe("存档", () => {
 
     const other = render(<Harness detail={{ ...DETAIL, qid: "", passage: "A different flyer about a bake sale. It starts at noon." }} />);
     fireEvent.click(screen.getByRole("button", { name: /AI 深入解析/ }));
-    expect(await screen.findByTestId("qa-open")).toHaveTextContent(/^继续追问$/);
+    expect(await screen.findByTestId("qa-open")).toHaveTextContent(/^自己提问$/);
     other.unmount();
 
     CODE = "OTHER9";
     render(<Harness />);
-    expect(await screen.findByTestId("qa-open")).toHaveTextContent(/^继续追问$/);
+    expect(await screen.findByTestId("qa-open")).toHaveTextContent(/^自己提问$/);
   });
 
   test("只剩一个会话也超线时，从它最早的轮次开始丢", () => {

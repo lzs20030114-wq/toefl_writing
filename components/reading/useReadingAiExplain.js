@@ -160,6 +160,8 @@ export function useReadingAiExplain() {
 /** Inline UI: button + result. Pass a unique key, the detail, and the hook returns. */
 export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
+  // 「问这道题」：不看讲解也能直接追问（打开就是展开的对话框，第一轮讲解为空）。
+  const [askOpen, setAskOpen] = useState(false);
 
   // Auto-load from cache on mount (no API call — cache hit is free)
   useEffect(() => {
@@ -174,12 +176,18 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
   // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
   // 讲解出来之后，下面接「继续追问」（components/reading/QuestionQaPanel；没有原文的老记录它自己不渲染）。
   // key 带上 explainKey：交卷后复盘翻页时同一个位置换了题，面板状态（展开、选区、输入）要跟着重置。
-  const qaPanel = ex?.text ? <QuestionQaPanel key={explainKey} detail={detail} firstExplain={ex.text} variant={variant} /> : null;
+  const qaPanel = ex?.text || askOpen
+    ? <QuestionQaPanel key={explainKey} detail={detail} firstExplain={ex?.text || ""} variant={variant} defaultExpanded={askOpen} />
+    : null;
+  // 没有原文的老记录追问不了（面板自己也不渲染），不放按钮。
+  const askBtn = !ex?.text && !askOpen && String(detail?.passage || "").trim()
+    ? <AskQuestionButton review={variant === "review"} onClick={() => setAskOpen(true)} />
+    : null;
 
   if (variant === "review") {
     return (
       <>
-        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="reading-ai-explain" />
+        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="reading-ai-explain" extra={askBtn} />
         {qaPanel}
       </>
     );
@@ -229,9 +237,18 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
       >
         {ex?.loading ? "分析中..." : "🤖 AI 深入解析"}
       </button>
+      {askBtn}
       {ex?.error && (
         <span style={{ fontSize: 12, color: "#E11D48", marginLeft: 8 }}>{ex.error}</span>
       )}
+      {qaPanel}
     </div>
   );
+}
+
+function AskQuestionButton({ review, onClick }) {
+  const style = review
+    ? { padding: "5px 10px", borderRadius: 8, border: "1px solid #6366F1", background: "#fff", color: "#4338CA", fontSize: 12, fontWeight: 700, cursor: "pointer" }
+    : { marginLeft: 8, fontSize: 12, fontWeight: 600, color: "#0284c7", background: "#fff", border: "1px solid #0284c7", borderRadius: 6, padding: "4px 12px", cursor: "pointer" };
+  return <button type="button" data-testid="qa-ask" onClick={onClick} style={style}>问这道题</button>;
 }

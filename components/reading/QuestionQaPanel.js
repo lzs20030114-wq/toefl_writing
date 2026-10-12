@@ -154,11 +154,11 @@ function ReportBox({ detail, answer, onDone }) {
   );
 }
 
-export function QuestionQaPanel({ detail, firstExplain, variant }) {
+export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded = false }) {
   const theme = THEMES[variant === "review" ? "review" : "default"];
   const qa = useQuestionQa(detail, firstExplain);
   const panelId = useId();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const [input, setInput] = useState("");
   const [selection, setSelection] = useState(null);
   const [lastAsk, setLastAsk] = useState(null);
@@ -238,24 +238,6 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
     send(q, { fromInput: true, presetId: q.startsWith(thinkingPrefix) ? "my-thinking" : null });
   };
 
-  if (!qa.sentences.length) return null;
-
-  if (!expanded) {
-    const n = qa.turns.length;
-    return (
-      <div style={{ marginTop: 8 }}>
-        <button
-          type="button"
-          data-testid="qa-open"
-          onClick={() => { setExpanded(true); activate(); }}
-          style={{ fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer" }}
-        >
-          {n ? `继续追问（已问 ${n} 轮）` : "继续追问"}
-        </button>
-      </div>
-    );
-  }
-
   // 还没追问时，页脚上报带的是第一轮讲解（用户质疑的就是它）。
   const lastAnswer = qa.turns.length ? qa.turns[qa.turns.length - 1].a : (firstExplain || "");
   const onPreset = (p) => {
@@ -270,6 +252,60 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
     }
     send(presetText(p.id, { selection }), { presetId: p.id, label: p.id === "parse-key" && selection ? "拆解这句" : p.label });
   };
+
+  // 「讲简单点」是把上一轮再讲一遍：还没有讲解、也没追问过时没有可简化的东西。
+  const presets = QA_PRESETS.filter((p) => (!p.needsAnswer || answered) && (p.id !== "simpler" || firstExplain || qa.turns.length));
+
+  if (!qa.sentences.length) return null;
+
+  if (!expanded) {
+    const n = qa.turns.length;
+    const chip = { fontSize: 12, color: theme.text, background: "#fff", border: `1px solid ${theme.bd}`, borderRadius: 999, padding: "3px 10px", cursor: disabled ? "default" : "pointer", opacity: disabled ? 0.5 : 1 };
+    // 问过的题：一个按钮回到对话。没问过：预设问题直接露在讲解下面，点一下就问（不用先展开）。
+    if (n) {
+      return (
+        <div style={{ marginTop: 8 }}>
+          <button
+            type="button"
+            data-testid="qa-open"
+            onClick={() => { setExpanded(true); activate(); }}
+            style={{ fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer" }}
+          >
+            {`继续追问（已问 ${n} 轮）`}
+          </button>
+        </div>
+      );
+    }
+    return (
+      <div data-testid="qa-entry" style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: theme.text }}>还没懂？接着问：</span>
+        {presets.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            data-testid={`qa-entry-${p.id}`}
+            disabled={disabled}
+            onClick={() => { setExpanded(true); onPreset(p); }}
+            style={chip}
+          >
+            {p.label}
+          </button>
+        ))}
+        <button
+          type="button"
+          data-testid="qa-open"
+          onClick={() => {
+            setExpanded(true);
+            activate();
+            setTimeout(() => inputRef.current?.focus(), 0);
+          }}
+          style={{ ...chip, cursor: "pointer", opacity: 1, fontWeight: 700 }}
+        >
+          自己提问
+        </button>
+      </div>
+    );
+  }
 
   let statusLine;
   if (qa.loading) statusLine = <span style={{ color: theme.solid }}>AI 正在对照原文作答…</span>;
@@ -310,7 +346,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
       style={{ marginTop: 8, padding: "10px 12px", borderRadius: 10, background: theme.cardBg, border: `1px solid ${theme.cardBd}`, display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: theme.text, letterSpacing: "0.04em" }}>继续追问</span>
+        <span style={{ fontSize: 11, fontWeight: 800, color: theme.text, letterSpacing: "0.04em" }}>{firstExplain || qa.turns.length ? "继续追问" : "问这道题"}</span>
         <button type="button" onClick={() => setExpanded(false)} style={{ border: "none", background: "none", color: "#94a39a", fontSize: 11, cursor: "pointer" }}>收起</button>
       </div>
 
@@ -336,7 +372,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
       ) : null}
 
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-        {QA_PRESETS.filter((p) => !p.needsAnswer || answered).map((p) => (
+        {presets.map((p) => (
           <button
             key={p.id}
             type="button"
