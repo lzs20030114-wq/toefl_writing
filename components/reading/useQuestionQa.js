@@ -110,7 +110,7 @@ export function useQuestionQa(detail, firstExplain) {
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {
-        turns: [...cur.turns, { q, label, a, presetId, selection: selection || null, dict: dict ? dict.word || true : null, at: new Date().toISOString() }],
+        turns: [...cur.turns, { q, label, a, presetId, selection: selection || null, dict: dict ? dict.word || true : null, mistakes: wantMistakes ? related?.items?.length || 0 : 0, at: new Date().toISOString() }],
         related: related || cur.related || null,
       };
       saveConversation(account, key, next);

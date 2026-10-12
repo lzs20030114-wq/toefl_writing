@@ -263,8 +263,10 @@ const badQuotes = sum((r) => r.badQuotes);
 const oos = rows.filter((r) => r.kind === "out-of-scope");
 const gram = rows.filter((r) => r.kind === "grammar");
 // 覆盖率：聚合比例只看「给了的出处对不对」，一两条合格出处就能撑起 100%；
-// 这里再按回答数，要求该讲题的回答（超纲题除外、非空）大多各自给出出处和引文。
-const inScope = rows.filter((r) => r.kind !== "out-of-scope" && !r.empty && !r.error);
+// 这里再按回答数，要求该讲题的回答大多各自给出出处和引文。只算 prompt 要求标出处的两类：
+// 语法分析按规则 3 不用标注，超纲题应拒答，两类都不计。
+const CITE_KINDS = new Set(["parse-key", "my-thinking"]);
+const inScope = rows.filter((r) => CITE_KINDS.has(r.kind) && !r.empty && !r.error);
 const citedRows = inScope.filter((r) => r.validCites > 0).length;
 const quotedRows = inScope.filter((r) => r.validQuotes > 0).length;
 // 分母为 0（模型一条出处 / 引文都没给）算不过线：完全不守引用规则正是要拦的退化。

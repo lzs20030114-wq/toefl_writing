@@ -190,6 +190,20 @@ describe("出处渲染", () => {
     expect(screen.getByTestId("qa-bad-note")).toHaveTextContent("有 2 处出处或引文核对不上");
   });
 
+  test("[错题N] 按那一轮实际附的错题核对：后来加载了错题，旧回答里编的仍是灰标", async () => {
+    QA_REPLY = "你上次 [错题1] 也是这样。";
+    await openPanel();
+    fireEvent.click(screen.getByTestId("qa-preset-simpler"));
+    expect(await screen.findByTestId("qa-cite-bad")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("qa-preset-my-thinking"));
+    fireEvent.change(screen.getByTestId("qa-input"), { target: { value: "我当时选 B，是因为我以为是统一价" } });
+    fireEvent.click(screen.getByTestId("qa-send"));
+    await waitFor(() => expect(screen.getAllByTestId("qa-answer")).toHaveLength(2));
+    const [first, second] = screen.getAllByTestId("qa-answer");
+    expect(first.querySelector('[data-testid="qa-cite-bad"]')).not.toBeNull();
+    expect(second.querySelector('[data-testid="qa-cite-bad"]')).toBeNull();
+  });
+
   test("回答里的 markdown 星号被去掉", async () => {
     QA_REPLY = "**结论**：看 [S3]。";
     await openPanel();
