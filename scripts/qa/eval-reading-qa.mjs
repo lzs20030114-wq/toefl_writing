@@ -28,7 +28,8 @@ const { QA_SYSTEM, buildEvidence, buildQaMessage, parseAnswer, citationStats, pr
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
-const AI_HELPER_MAX_TOKENS = 2000; // 与 lib/ai/client.js 同值
+// token 预算同理，取线上追问用的共享常量（追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×2）。
+const { AI_HELPER_MAX_TOKENS } = await import(pathToFileURL(join(ROOT, "lib", "ai", "client.js")).href);
 
 function loadEnv() {
   const envPath = join(ROOT, ".env.local");

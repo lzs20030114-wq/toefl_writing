@@ -266,6 +266,13 @@ describe("存档", () => {
     expect(await screen.findByTestId("qa-open")).toHaveTextContent(/^继续追问$/);
   });
 
+  test("只剩一个会话也超线时，从它最早的轮次开始丢", () => {
+    const turns = Array.from({ length: 6 }, (_, i) => ({ q: `q${i}`, a: "答".repeat(30000) }));
+    const pruned = pruneStore({ only: { turns, updatedAt: "2026-10-12" } });
+    expect(JSON.stringify(pruned).length).toBeLessThanOrEqual(100000);
+    expect(pruned.only.turns.map((t) => t.q)).toEqual(["q3", "q4", "q5"]);
+  });
+
   test("超过 100,000 字符时从最旧的开始淘汰", () => {
     const store = {};
     for (let i = 0; i < 30; i++) store[`k${i}`] = { turns: [{ q: "q", a: "答".repeat(5000) }], updatedAt: `2026-10-${String(i + 1).padStart(2, "0")}` };
@@ -277,6 +284,28 @@ describe("存档", () => {
 });
 
 describe("上报", () => {
+  test("点哪条回答下的「上报这题」就上报哪条的原话", async () => {
+    const fetchMock = jest.fn(async () => ({ ok: true, json: async () => ({ ok: true }) }));
+    const prev = global.fetch;
+    global.fetch = fetchMock;
+    try {
+      QA_REPLY = "第一轮：这题答案与原文可能有出入，建议上报核对。";
+      await openPanel();
+      fireEvent.click(screen.getByTestId("qa-preset-simpler"));
+      await screen.findByRole("button", { name: "上报这题" });
+      QA_REPLY = "第二轮：普通回答 [S1]。";
+      fireEvent.click(screen.getByTestId("qa-preset-parse-key"));
+      await waitFor(() => expect(screen.getAllByTestId("qa-answer")).toHaveLength(2));
+      fireEvent.click(screen.getByRole("button", { name: "上报这题" }));
+      await act(async () => { fireEvent.click(screen.getByRole("button", { name: "提交上报" })); });
+      const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+      expect(body.content).toContain("第一轮");
+      expect(body.content).not.toContain("第二轮");
+    } finally {
+      global.fetch = prev;
+    }
+  });
+
   test("提交到 /api/feedback，content 带 qid 且不超过 2000 字", async () => {
     const fetchMock = jest.fn(async () => ({ ok: true, json: async () => ({ ok: true }) }));
     const prev = global.fetch;

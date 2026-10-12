@@ -99,7 +99,7 @@ function Answer({ text, sentences, materials, related, theme }) {
   );
 }
 
-function ReportBox({ detail, lastAnswer, onDone }) {
+function ReportBox({ detail, answer, onDone }) {
   const [note, setNote] = useState("");
   const [state, setState] = useState("idle"); // idle | sending | done | error | nologin
   const send = async () => {
@@ -112,7 +112,7 @@ function ReportBox({ detail, lastAnswer, onDone }) {
       `题干：${String(detail?.stem || "").slice(0, 200)}`,
       `标准答案：${detail?.correct || ""}`,
       `作答：${detail?.selected || "未作答"}`,
-      `AI 原话：${String(lastAnswer || "").slice(0, 300)}`,
+      `AI 原话：${String(answer || "").slice(0, 300)}`,
       `补充：${note.trim()}`,
     ];
     const content = parts.join(" | ").slice(0, 2000);
@@ -155,7 +155,8 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
   const [input, setInput] = useState("");
   const [selection, setSelection] = useState(null);
   const [lastAsk, setLastAsk] = useState(null);
-  const [reporting, setReporting] = useState(false);
+  // 正在上报哪一条回答的原话（null = 没在上报）。点哪条回答下的「上报这题」就带哪条，页脚链接带最后一轮。
+  const [reporting, setReporting] = useState(null);
   const [inputVisible, setInputVisible] = useState(true);
   const [isActive, setIsActive] = useState(false);
   const rootRef = useRef(null);
@@ -311,8 +312,8 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
             {t.label || t.q}
           </div>
           <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} theme={theme} />
-          {/可能有出入/.test(t.a) && !reporting ? (
-            <button type="button" onClick={() => setReporting(true)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
+          {/可能有出入/.test(t.a) && reporting == null ? (
+            <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
           ) : null}
         </div>
       ))}
@@ -345,6 +346,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
           ref={inputRef}
           data-testid="qa-input"
           rows={2}
+          maxLength={1000}
           value={input}
           disabled={atTurnCap || atDailyCap}
           onChange={(e) => setInput(e.target.value)}
@@ -371,11 +373,11 @@ export function QuestionQaPanel({ detail, firstExplain, variant }) {
 
       <div data-testid="qa-status" style={{ fontSize: 11.5, color: MUTED }}>{statusLine}</div>
 
-      {reporting ? <ReportBox detail={detail} lastAnswer={lastAnswer} onDone={() => setReporting(false)} /> : null}
+      {reporting != null ? <ReportBox detail={detail} answer={reporting} onDone={() => setReporting(null)} /> : null}
 
       <div style={{ fontSize: 11, color: "#9CA3AF", lineHeight: 1.5 }}>
         回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。
-        {!reporting ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(true)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
+        {reporting == null ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(lastAnswer)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
       </div>
       {floating}
     </div>
