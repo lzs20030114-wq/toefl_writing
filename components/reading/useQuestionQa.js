@@ -18,7 +18,7 @@ import {
   askedEnglishTerm,
   plainText,
 } from "../../lib/qa/questionQa";
-import { loadConversation, saveConversation, dailyCount, bumpDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
+import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
 
 // 练习记录逐题「继续追问」的状态层。第一轮仍是 useReadingAiExplain 的讲解（prompt 与缓存桶都不动），
 // 这里只管之后的多轮：证据包 + 历史拼进同一条 message 走 /api/ai（接口不改）。
@@ -80,6 +80,9 @@ export function useQuestionQa(detail, firstExplain) {
       setDaily(dailyCount(account));
       return false;
     }
+    // 先占名额再发请求（同步读写，同页多个面板同时问也越不过上限），失败再退回。
+    setDaily(bumpDaily(account));
+    let reserved = true;
     inflight.current = true;
     setLoading(true);
     setError(null);
@@ -112,12 +115,13 @@ export function useQuestionQa(detail, firstExplain) {
       };
       saveConversation(account, key, next);
       setConv(next);
-      setDaily(bumpDaily(account));
+      reserved = false;
       return true;
     } catch (e) {
       setError(mapAiHelperError(e));
       return false;
     } finally {
+      if (reserved) setDaily(releaseDaily(account));
       inflight.current = false;
       setLoading(false);
     }

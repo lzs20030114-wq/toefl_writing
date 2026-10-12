@@ -215,6 +215,20 @@ describe("轮数、出错与上限", () => {
     expect(screen.getByTestId("qa-status")).toHaveTextContent("还可以追问 5 次");
   });
 
+  test("每日名额发请求前就占上，失败退回", async () => {
+    const daily = () => JSON.parse(localStorage.getItem(`${QA_DAILY_PREFIX}:ABC123`) || "{}").n || 0;
+    let fail;
+    callAI.mockImplementationOnce(async () => FIRST).mockImplementationOnce(() => new Promise((_, rej) => { fail = rej; }));
+    await openPanel();
+    fireEvent.change(screen.getByTestId("qa-input"), { target: { value: "这句什么意思" } });
+    fireEvent.click(screen.getByTestId("qa-send"));
+    await waitFor(() => expect(fail).toBeDefined());
+    expect(daily()).toBe(1);
+    await act(async () => fail(new Error("API timeout")));
+    expect(await screen.findByText("AI 响应超时，请重试")).toBeInTheDocument();
+    expect(daily()).toBe(0);
+  });
+
   test("满 6 轮后输入框禁用", async () => {
     const turns = Array.from({ length: 6 }, (_, i) => ({ q: `问${i}`, a: `答${i} [S1]`, at: "2026-10-12T00:00:00Z" }));
     saveConversation("ABC123", conversationKey(DETAIL), { turns, related: null });
