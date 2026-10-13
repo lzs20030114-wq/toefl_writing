@@ -147,7 +147,7 @@ describe("原文批注提问", () => {
     expect(loadAllNotes("guest")).toHaveLength(1);
   });
 
-  it("选中短语走词典弹窗，底部多一块「问 AI」，问词形会查词典", async () => {
+  it("选中单个词走词典弹窗，底部多一块「问 AI」，问词形会查词典", async () => {
     render(<NotedPassage passage={PASSAGE} />);
     select(paragraph(P1), "nectar");
     fireEvent.click(await screen.findByTestId("note-preset-forms"));
@@ -189,6 +189,23 @@ describe("原文批注提问", () => {
       delete global.CSS;
       delete global.Highlight;
     }
+  });
+
+  it("选中两个词就直接弹提问气泡，不再显示最后一个词的词典释义；快捷问题按短语给", async () => {
+    render(<NotedPassage passage={PASSAGE} />);
+    select(paragraph(P1), "carry pollen");
+    expect(await screen.findByTestId("note-ask-bubble")).toBeInTheDocument();
+    expect(screen.queryByText("讲讲这句里的用法")).toBeNull();
+    expect(screen.getByTestId("note-preset-collocations")).toBeInTheDocument();
+    expect(lookupWord).not.toHaveBeenCalled();
+  });
+
+  it("非 Pro：选中几个词仍走词典（看不到提问）", async () => {
+    TIER = "free";
+    render(<NotedPassage passage={PASSAGE} />);
+    select(paragraph(P1), "carry pollen");
+    expect(screen.queryByTestId("note-ask-bubble")).toBeNull();
+    await waitFor(() => expect(lookupWord).toHaveBeenCalled());
   });
 
   it("非 Pro：长选区不弹提问气泡", () => {

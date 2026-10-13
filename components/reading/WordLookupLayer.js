@@ -369,8 +369,11 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       if (!picked && onMark) return; // 点批注高亮：展开 / 收起它自己的笔记
       if (picked) {
         // 划词：限制在一句以内，别把整段当词查
-        const long = picked.length > 60 || picked.split(/\s+/).length > 6;
-        if (long && !(notes?.isPro && picked.length <= NOTE_MAX_QUOTE)) return;
+        const canAsk = !!notes?.isPro && picked.length <= NOTE_MAX_QUOTE;
+        // 能批注的原文：选了不止一个词就直接问 AI（词典只认得到一个词，弹出来的是最后那个词的释义，答非所问）
+        const multiWord = (picked.match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g) || []).length > 1;
+        const long = (canAsk && multiWord) || picked.length > 60 || picked.split(/\s+/).length > 6;
+        if (long && !canAsk) return;
         // selection 的 Range 是 live 的（用户再选别处就会变），克隆一份快照留着定位
         const snap = sel.getRangeAt(0).cloneRange();
         // 能批注的原文：鼠标划完把浏览器选区换成自己画的高亮。选区一没，Edge 的划词迷你菜单
@@ -380,7 +383,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
           ev.preventDefault?.();
           if (paintPending(snap, picked)) sel.removeAllRanges();
         }
-        // 选了一句、几句：能批注提问的页面改弹提问气泡
+        // 选了几个词、一句、几句：能批注提问的页面改弹提问气泡
         if (long) openAsk(picked, snap);
         else openFor(picked, snap);
         return;
