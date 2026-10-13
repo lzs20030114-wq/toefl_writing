@@ -2,7 +2,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { getSavedCode } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
-import { loadHist } from "../../lib/sessionStore";
+import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { loadPool, mergeEntries, activeCards } from "../../lib/mistakes/pool";
 import { extractMistakeEntries } from "../../lib/mistakes/extract";
 import { lookupWord } from "../../lib/dict/lookup";
@@ -92,7 +92,17 @@ export function useQuestionQa(detail, firstExplain) {
   }, [account, key]);
 
   // 「举一反三」按钮只在真有以前做过的同题型题时露出（不然点了也只能白花一轮额度）。
-  const pastCount = useMemo(() => readPastQuestions(detail).length, [detail]);
+  // 直接打开练习页时本地历史可能还空着，云端同步回来会发 history-updated 事件，收到就重算。
+  const [histVer, setHistVer] = useState(0);
+  useEffect(() => {
+    const ev = SESSION_STORE_EVENTS?.HISTORY_UPDATED_EVENT;
+    if (!ev || typeof window === "undefined") return undefined;
+    const bump = () => setHistVer((v) => v + 1);
+    window.addEventListener(ev, bump);
+    return () => window.removeEventListener(ev, bump);
+  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const pastCount = useMemo(() => readPastQuestions(detail).length, [detail, histVer]);
 
   const turnsLeft = QA_MAX_TURNS - conv.turns.length;
   const dailyLeft = QA_DAILY_LIMIT - daily;

@@ -14,6 +14,7 @@ jest.mock("../lib/AuthContext", () => ({
 let SESSIONS = [];
 jest.mock("../lib/sessionStore", () => ({
   loadHist: jest.fn(() => ({ sessions: SESSIONS })),
+  SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
 const lookupWord = jest.fn(async (w) => ({ word: w, p: "kæʃ", t: "n. 现金" }));
@@ -473,6 +474,15 @@ describe("举一反三（练习记录里同题型的题，对错各至多 2 道�
     SESSIONS = [];
     await openPanel();
     expect(screen.queryByTestId("qa-preset-analogy")).toBeNull();
+  });
+
+  test("打开时历史还空着，云端同步回来（history-updated）后按钮出现", async () => {
+    SESSIONS = [];
+    await openPanel();
+    expect(screen.queryByTestId("qa-preset-analogy")).toBeNull();
+    SESSIONS = [MISTAKE_SESSION, right(1, "2026-10-02")];
+    act(() => { window.dispatchEvent(new CustomEvent("toefl-history-updated")); });
+    expect(await screen.findByTestId("qa-preset-analogy")).toBeInTheDocument();
   });
 
   test("自由提问说「这类题」也会触发", async () => {
