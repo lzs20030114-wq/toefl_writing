@@ -210,7 +210,11 @@ const JUDGE_SYSTEM =
   "引错了句号、把原文意思说反、说过头、或加了材料推不出的事实，算不支撑。" +
   '只输出 JSON 数组，例如 [{"i":1,"support":true},{"i":2,"support":false,"why":"S4 说的是 X，没说 Y"}]，每条都要有，不要别的文字。';
 
+// 实际发出的评审请求数（含失败的），摘要里和追问次数分开记，方便与 DeepSeek 台账对账。
+let judgeRequests = 0;
+
 async function judgeBatch(material, claims) {
+  judgeRequests++;
   const body = `【材料】\n${material}\n\n【待判的讲解句】\n` +
     claims.map((c, k) => `${k + 1}. ${c.claim}\n   （标的出处：${c.ids.join("、")}）`).join("\n");
   const raw = await callDeepSeekViaCurl({
@@ -361,12 +365,12 @@ mkdirSync(outDir, { recursive: true });
 // 文件名带上影响结果的参数和时刻：同一天换 --limit / --tokens-mult 再跑不会覆盖上一次的结果。
 const stamp = new Date().toISOString().slice(11, 19).replace(/:/g, "");
 const base = join(outDir, `${date}-seed${SEED}-n${LIMIT}-x${TOKENS_MULT}${REJUDGE ? "-rejudge" : ""}-${String(MODEL).replace(/[^\w.-]+/g, "_")}-${stamp}`);
-writeFileSync(`${base}.json`, JSON.stringify({ date, seed: SEED, model: MODEL, maxTokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT, metrics: metrics.map(({ pass, ...m }) => ({ ...m, ok: pass(m.value) })), rows }, null, 2));
+writeFileSync(`${base}.json`, JSON.stringify({ date, seed: SEED, model: MODEL, qaCalls: previous ? 0 : rows.length, judgeCalls: judgeRequests, maxTokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT, metrics: metrics.map(({ pass, ...m }) => ({ ...m, ok: pass(m.value) })), rows }, null, 2));
 
 const md = [
   `# 答疑窗口离线评估 ${date}${REJUDGE ? `（只重跑评审，回答取自 ${REJUDGE.replace(/\\/g, "/").split("/").pop()}）` : ""}`,
   "",
-  `种子 ${SEED} · ${rows.length} 次调用 · ${MODEL} · max_tokens ${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`,
+  `种子 ${SEED} · ${previous ? 0 : rows.length} 次追问调用${JUDGE ? ` + ${judgeRequests} 次评审调用` : ""} · ${MODEL} · max_tokens ${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`,
   "",
   "| 指标 | 结果 | 及格线 | 过线 |",
   "|---|---|---|---|",
