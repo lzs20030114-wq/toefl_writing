@@ -150,6 +150,34 @@ function saveAiCache(key, value) {
   } catch {}
 }
 
+// 划词后代替浏览器选区的高亮（CSS Custom Highlight API；样式见 components/notes/NotedPassage 的 ::highlight(note-pending)）。
+// 不支持的浏览器返回 false，调用方就保留原生选区。
+const PENDING = "note-pending";
+let pendingText = "";
+function paintPending(range, text) {
+  try {
+    if (typeof CSS === "undefined" || !CSS.highlights || typeof Highlight === "undefined") return false;
+    CSS.highlights.set(PENDING, new Highlight(range));
+    pendingText = text;
+    return true;
+  } catch {
+    return false;
+  }
+}
+function clearPending() {
+  pendingText = "";
+  try { if (typeof CSS !== "undefined" && CSS.highlights) CSS.highlights.delete(PENDING); } catch {}
+}
+// 选区换成高亮后 Ctrl+C 照样能复制选中的那段。
+if (typeof document !== "undefined") {
+  document.addEventListener("copy", (e) => {
+    const sel = window.getSelection();
+    if (!pendingText || (sel && !sel.isCollapsed)) return;
+    e.clipboardData?.setData("text/plain", pendingText);
+    e.preventDefault();
+  });
+}
+
 // 弹窗贴在选区的正下方；下方装不下就翻到上方，左右不越界。
 function placeNear(rect) {
   const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
@@ -224,6 +252,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setAsk(null);
     setAi(null);
     setCard(null);
+    clearPending();
   }, []);
 
   useEffect(() => {
@@ -340,13 +369,20 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       if (!picked && onMark) return; // 点批注高亮：展开 / 收起它自己的笔记
       if (picked) {
         // 划词：限制在一句以内，别把整段当词查
-        if (picked.length > 60 || picked.split(/\s+/).length > 6) {
-          // 选了一句、几句：能批注提问的页面改弹提问气泡
-          if (notes?.isPro && picked.length <= NOTE_MAX_QUOTE) openAsk(picked, sel.getRangeAt(0).cloneRange());
-          return;
-        }
+        const long = picked.length > 60 || picked.split(/\s+/).length > 6;
+        if (long && !(notes?.isPro && picked.length <= NOTE_MAX_QUOTE)) return;
         // selection 的 Range 是 live 的（用户再选别处就会变），克隆一份快照留着定位
-        openFor(picked, sel.getRangeAt(0).cloneRange());
+        const snap = sel.getRangeAt(0).cloneRange();
+        // 能批注的原文：鼠标划完把浏览器选区换成自己画的高亮。选区一没，Edge 的划词迷你菜单
+        // （复制 / 搜索 / Copilot）就不出；mouseup 阻止默认行为也是 Edge 认的关闭方式。
+        // 手指长按不换：手机上要靠系统选区的拖柄微调范围。
+        if (notes && ev.type === "mouseup") {
+          ev.preventDefault?.();
+          if (paintPending(snap, picked)) sel.removeAllRanges();
+        }
+        // 选了一句、几句：能批注提问的页面改弹提问气泡
+        if (long) openAsk(picked, snap);
+        else openFor(picked, snap);
         return;
       }
       const whole = ev.target && ev.target.closest && ev.target.closest("[data-dict-word]");
@@ -363,7 +399,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       }
       openFor(r.toString(), r);
     },
-    [openFor, close, notes?.isPro, openAsk]
+    [openFor, close, notes, openAsk]
   );
 
   // 手指长按选词后 selection 要一拍才稳定

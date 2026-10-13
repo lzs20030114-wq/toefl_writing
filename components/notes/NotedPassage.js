@@ -11,6 +11,14 @@ import { parseAnswer, sentenceLabel } from "../../lib/qa/questionQa";
 
 const AMBER = "#B45309";
 
+// 选中效果和批注高亮同一套琥珀色：拖选时（::selection）和松手后弹窗开着时（::highlight，
+// WordLookupLayer 把浏览器选区换成的那段高亮）看着是一回事。笔记卡里不改，保持系统默认。
+const SELECTION_CSS = `
+[data-noted-passage] ::selection { background: rgba(251, 191, 36, 0.38); color: inherit; }
+[data-noted-passage] [data-note-card] ::selection { background: Highlight; color: HighlightText; }
+::highlight(note-pending) { background-color: rgba(251, 191, 36, 0.45); text-decoration: underline 2px #F59E0B; text-underline-offset: 3px; }
+`;
+
 function hasSelection() {
   // 在高亮里拖选文字也会触发 click：有选区时不当成「点开笔记」。
   const sel = typeof window !== "undefined" ? window.getSelection() : null;
@@ -105,6 +113,7 @@ function NoteCard({ placed, notes, collapsedOnly = false }) {
   return (
     <div
       data-no-dict
+      data-note-card
       data-testid="note-card"
       style={{
         margin: "4px 0 12px", padding: open ? "8px 12px 10px" : "4px 10px", borderLeft: "3px solid #F59E0B", background: "#FFFBEB",
@@ -183,6 +192,8 @@ export function NotedPassage({ passage, style, source = "reading", paragraphWrap
 
   return (
     <WordLookupLayer passage={passage} style={style} source={source} notes={notes}>
+      <style dangerouslySetInnerHTML={{ __html: SELECTION_CSS }} />
+      <div data-noted-passage>
       {paras.length === 0 ? passage : null}
       {paras.map((para, i) => {
         const segs = highlightSegments(para.text, para.start, notes.placed);
@@ -227,6 +238,7 @@ export function NotedPassage({ passage, style, source = "reading", paragraphWrap
           </React.Fragment>
         );
       })}
+      </div>
     </WordLookupLayer>
   );
 }
