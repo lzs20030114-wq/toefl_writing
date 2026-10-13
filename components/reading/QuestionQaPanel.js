@@ -6,12 +6,14 @@ import { analogyMaterials, pastItemMaterials } from "../../lib/qa/pastQuestions"
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
 import { flashPassageSentence } from "../../lib/notes/passageFlash";
+import { answerBlocks } from "../../lib/qa/answerLayout";
+import { AnswerBlocks } from "../shared/AnswerBlocks";
 
 // 练习记录逐题「继续追问」窗口：挂在阅读选择题「AI 讲解」下面，默认收起。
 // 计划见 docs/rag-qa-implementation-plan.md §4。回答只按纯文本渲染（不许 innerHTML）；
 // 出处 [S#] 显示成「第 x 段第 y 句」并可点开原句，核不上的出处 / 引文降级显示。
 
-const THEMES = {
+export const QA_THEMES = {
   review: { text: "#4338CA", bd: "#C7D2FE", bg: "#EEF2FF", solid: "#6366F1", cardBg: "#F7F7FE", cardBd: "#E0E7FF", body: "#1a2420" },
   default: { text: "#0c4a6e", bd: "#bae6fd", bg: "#f0f9ff", solid: "#0284c7", cardBg: "#f8fcff", cardBd: "#bae6fd", body: "#0c4a6e" },
 };
@@ -57,7 +59,19 @@ function TextWithTrap({ text }) {
   return <>{parts}</>;
 }
 
-function Answer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer" }) {
+// 按格式写的讲解里「陷阱：」是单独一块：类型名认得出就画成标签，认不出照原文。
+function TrapLine({ segs, renderSeg }) {
+  const text = segs.length === 1 && segs[0].type === "text" ? segs[0].text.trim().replace(/[。.]$/, "") : "";
+  const hit = [...TRAP_TYPES, "未作答"].find((t) => t === text);
+  if (!hit) return <div style={{ minWidth: 0 }}>{segs.map(renderSeg)}</div>;
+  return (
+    <div style={{ minWidth: 0 }}>
+      <span data-testid="qa-trap" style={{ display: "inline-block", fontSize: 11.5, fontWeight: 700, lineHeight: 1.5, color: "#9A3412", background: "#FFEDD5", border: "1px solid #FDBA74", borderRadius: 4, padding: "0 6px", verticalAlign: "baseline" }}>{hit}</span>
+    </div>
+  );
+}
+
+export function QaAnswer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer" }) {
   const [open, setOpen] = useState(null);
   // 举一反三那一轮：对比题的题干、选项、依据句也算可引的材料
   const allMaterials = useMemo(() => (past?.length ? [...materials, ...analogyMaterials({ items: past })] : materials), [materials, past]);
@@ -70,6 +84,36 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
     const sent = byId.get(id);
     if (sent && flashPassageSentence(sent.text)) { setOpen(null); return; }
     toggle(id);
+  };
+
+  const layout = useMemo(() => answerBlocks(segments), [segments]);
+  const renderSeg = (s, i) => {
+    if (s.type === "text") return <React.Fragment key={i}><TextWithTrap text={s.text} /></React.Fragment>;
+    if (s.type === "quote") {
+      return s.valid
+        ? <React.Fragment key={i}>{s.text}</React.Fragment>
+        : <span key={i} data-testid="qa-bad-quote" title="这段引文在本题原文里找不到" style={{ textDecoration: "underline dashed #D97706", textUnderlineOffset: 3 }}>{s.text}</span>;
+    }
+    if (s.kind === "sentence") {
+      const sent = byId.get(s.id);
+      return s.valid
+        ? <Tag key={i} tone="ok" testId="qa-cite" title="点一下在原文里高亮这句" onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
+        : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
+    }
+    if (s.kind === "past") {
+      return s.valid
+        ? <Tag key={i} tone="other" testId="qa-cite-past-tag" onClick={() => toggle(s.id)}>{s.id}</Tag>
+        : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
+    }
+    if (s.kind === "mistake") {
+      return s.valid
+        ? <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>
+        : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
+    }
+    const name = s.kind === "answer" ? "答案" : "词典";
+    return s.valid
+      ? <Tag key={i} tone="other">{name}</Tag>
+      : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${name}?`}</Tag>;
   };
 
   let detailBox = null;
@@ -87,34 +131,16 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
   return (
     <div style={{ minWidth: 0 }}>
       <div data-testid={testId} style={{ fontSize: 12.5, lineHeight: 1.75, color: theme.body, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-        {segments.map((s, i) => {
-          if (s.type === "text") return <React.Fragment key={i}><TextWithTrap text={s.text} /></React.Fragment>;
-          if (s.type === "quote") {
-            return s.valid
-              ? <React.Fragment key={i}>{s.text}</React.Fragment>
-              : <span key={i} data-testid="qa-bad-quote" title="这段引文在本题原文里找不到" style={{ textDecoration: "underline dashed #D97706", textUnderlineOffset: 3 }}>{s.text}</span>;
-          }
-          if (s.kind === "sentence") {
-            const sent = byId.get(s.id);
-            return s.valid
-              ? <Tag key={i} tone="ok" testId="qa-cite" title="点一下在原文里高亮这句" onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
-              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
-          }
-          if (s.kind === "past") {
-            return s.valid
-              ? <Tag key={i} tone="other" testId="qa-cite-past-tag" onClick={() => toggle(s.id)}>{s.id}</Tag>
-              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
-          }
-          if (s.kind === "mistake") {
-            return s.valid
-              ? <Tag key={i} tone="other" onClick={() => toggle(s.id)}>{s.id}</Tag>
-              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
-          }
-          const name = s.kind === "answer" ? "答案" : "词典";
-          return s.valid
-            ? <Tag key={i} tone="other">{name}</Tag>
-            : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${name}?`}</Tag>;
-        })}
+        {layout.structured ? (
+          <AnswerBlocks
+            blocks={layout.blocks}
+            tone={{ label: theme.text, labelBg: theme.bg, dot: theme.solid }}
+            renderSegs={(segs) => segs.map(renderSeg)}
+            renderLabel={(seg) => renderSeg(seg, "label")}
+            renderBlock={(b) => (b.label === "陷阱" ? <TrapLine segs={b.lines.flat()} renderSeg={renderSeg} /> : null)}
+            testId={`${testId}-blocks`}
+          />
+        ) : segments.map(renderSeg)}
       </div>
       {detailBox ? <div style={{ marginTop: 6, padding: "6px 10px", borderLeft: `3px solid ${theme.bd}`, background: "#fff", borderRadius: 4 }}>{detailBox}</div> : null}
       {bad > 0 ? <div data-testid="qa-bad-note" style={{ marginTop: 4, fontSize: 11, color: MUTED }}>{`有 ${bad} 处出处或引文核对不上，已标灰，请以原文为准`}</div> : null}
@@ -127,9 +153,9 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
  * 证据包和追问同源（buildEvidence），所以讲解里的 [S编号] 与追问、原文页上的句号一致。
  */
 export function CitedText({ text, detail, variant }) {
-  const theme = THEMES[variant === "review" ? "review" : "default"];
+  const theme = QA_THEMES[variant === "review" ? "review" : "default"];
   const ev = useMemo(() => buildEvidence(detail), [detail]);
-  return <Answer text={text} sentences={ev.sentences} materials={ev.materials} theme={theme} testId="explain-answer" />;
+  return <QaAnswer text={text} sentences={ev.sentences} materials={ev.materials} theme={theme} testId="explain-answer" />;
 }
 
 function ReportBox({ detail, answer, onDone }) {
@@ -181,7 +207,7 @@ function ReportBox({ detail, answer, onDone }) {
 }
 
 export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded = false }) {
-  const theme = THEMES[variant === "review" ? "review" : "default"];
+  const theme = QA_THEMES[variant === "review" ? "review" : "default"];
   const qa = useQuestionQa(detail, firstExplain);
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [input, setInput] = useState("");
@@ -314,7 +340,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
             {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
             {t.label || t.q}
           </div>
-          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} past={t.past || null} theme={theme} />
+          <QaAnswer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} past={t.past || null} theme={theme} />
           {/可能有出入/.test(t.a) && reporting == null ? (
             <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
           ) : null}

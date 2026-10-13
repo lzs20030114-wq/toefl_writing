@@ -6,6 +6,9 @@ import { paragraphSpans, highlightSegments, notesByParagraph, NOTE_MAX_TURNS, NO
 import { parseAnswer, sentenceLabel } from "../../lib/qa/questionQa";
 import { tidyNoteSegments } from "../../lib/notes/noteQa";
 import { splitWordForms } from "../../lib/notes/wordForms";
+import { splitCollocations } from "../../lib/notes/collocations";
+import { answerBlocks } from "../../lib/qa/answerLayout";
+import { AnswerBlocks } from "../shared/AnswerBlocks";
 import { WordFormList } from "./WordFormList";
 import { PASSAGE_FLASH_EVENT, FLASH_HIGHLIGHT, FLASH_MS, findSentenceRange } from "../../lib/notes/passageFlash";
 
@@ -44,9 +47,9 @@ function CiteTag({ ok, children, title }) {
   );
 }
 
-function NoteAnswer({ text, sentences, dict }) {
-  // 「列出所有词形」的回答带一段词形表：拆出来单独渲染成可收藏的列表，表前表后的文字照常显示。
-  const split = useMemo(() => splitWordForms(text), [text]);
+export function NoteAnswer({ text, sentences, dict }) {
+  // 「列出所有词形」「常见搭配」的回答带一段表：拆出来单独渲染成可收藏的列表，表前表后的文字照常显示。
+  const split = useMemo(() => splitWordForms(text) || splitCollocations(text), [text]);
   if (!split) return <AnswerText text={text} sentences={sentences} dict={dict} />;
   return (
     <div data-testid="note-answer-forms">
@@ -57,33 +60,40 @@ function NoteAnswer({ text, sentences, dict }) {
   );
 }
 
+const NOTE_TONE = { label: "#92400E", labelBg: "#FEF3C7", dot: "#D97706" };
+
 function AnswerText({ text, sentences, dict }) {
   const segments = useMemo(
     () => tidyNoteSegments(parseAnswer(text, sentences, [], { dict: !!dict }), sentences, (s) => sentenceLabel(s, sentences)),
     [text, sentences, dict],
   );
+  // 一键提问按格式写的回答（带「意思：」「主干：」这类小标题）排成「小标题 + 内容」；没有小标题照原来整段显示。
+  const layout = useMemo(() => answerBlocks(segments), [segments]);
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
+  const renderSeg = (s, i) => {
+    if (s.type === "break") return <div key={i} style={{ height: 6 }} />;
+    if (s.type === "heading") return <span key={i} style={{ fontWeight: 700, color: "#78350F", marginRight: 4 }}>{`${s.text}：`}</span>;
+    if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
+    if (s.type === "quote") {
+      return s.valid
+        ? <React.Fragment key={i}>{s.text}</React.Fragment>
+        : <span key={i} title="这段引文在原文里找不到" style={{ textDecoration: "underline dashed #D97706", textUnderlineOffset: 3 }}>{s.text}</span>;
+    }
+    if (s.kind === "sentence") {
+      const sent = byId.get(s.id);
+      const label = sent ? sentenceLabel(sent, sentences) : "出处";
+      return <CiteTag key={i} ok={s.valid} title={s.valid ? sent?.text : "这条出处核对不上，请以原文为准"}>{s.valid ? label : `${label}?`}</CiteTag>;
+    }
+    const name = s.kind === "dict" ? "词典" : s.kind === "answer" ? "答案" : s.id;
+    return <CiteTag key={i} ok={s.valid} title={s.valid ? undefined : "这条出处核对不上，请以原文为准"}>{s.valid ? name : `${name}?`}</CiteTag>;
+  };
   return (
     <div>
       <div data-testid="note-answer" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", color: "#3f3a33", lineHeight: 1.8 }}>
-        {segments.map((s, i) => {
-          if (s.type === "break") return <div key={i} style={{ height: 6 }} />;
-          if (s.type === "heading") return <span key={i} style={{ fontWeight: 700, color: "#78350F", marginRight: 4 }}>{`${s.text}：`}</span>;
-          if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
-          if (s.type === "quote") {
-            return s.valid
-              ? <React.Fragment key={i}>{s.text}</React.Fragment>
-              : <span key={i} title="这段引文在原文里找不到" style={{ textDecoration: "underline dashed #D97706", textUnderlineOffset: 3 }}>{s.text}</span>;
-          }
-          if (s.kind === "sentence") {
-            const sent = byId.get(s.id);
-            const label = sent ? sentenceLabel(sent, sentences) : "出处";
-            return <CiteTag key={i} ok={s.valid} title={s.valid ? sent?.text : "这条出处核对不上，请以原文为准"}>{s.valid ? label : `${label}?`}</CiteTag>;
-          }
-          const name = s.kind === "dict" ? "词典" : s.kind === "answer" ? "答案" : s.id;
-          return <CiteTag key={i} ok={s.valid} title={s.valid ? undefined : "这条出处核对不上，请以原文为准"}>{s.valid ? name : `${name}?`}</CiteTag>;
-        })}
+        {layout.structured
+          ? <AnswerBlocks blocks={layout.blocks} tone={NOTE_TONE} renderSegs={(segs) => segs.map(renderSeg)} testId="note-answer-blocks" />
+          : segments.map(renderSeg)}
       </div>
       {bad > 0 ? <div style={{ marginTop: 3, fontSize: 11, color: "#9CA3AF" }}>{`有 ${bad} 处出处或引文核对不上，已标灰，请以原文为准`}</div> : null}
     </div>

@@ -6,6 +6,7 @@ import { lookupWord } from "../../lib/dict/lookup";
 import { numberSentences, plainText } from "../../lib/qa/questionQa";
 import { dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
 import { NOTE_SYSTEM, buildNoteMessage, dictTermOfQuote } from "../../lib/notes/noteQa";
+import { NOTE_FORMATS, formatFor } from "../../lib/qa/answerFormats";
 import { NOTE_MAX_TURNS, NOTE_MAX_QUESTION, NOTE_MAX_QUOTE, makeNote, placeNotes } from "../../lib/notes/passageNotes";
 import { noteAccount, notesForPassage, saveNote, deleteNote, subscribeNotes, ensureNotesPulled } from "../../lib/notes/noteStore";
 
@@ -83,7 +84,7 @@ export function usePassageNotes(passage, { source = "reading" } = {}) {
         }
       }
       const history = (note.turns || []).map((t) => ({ q: t.q, a: t.a }));
-      const { message } = buildNoteMessage({ passage: text, quote: note.quote, history, question: q, dict });
+      const { message } = buildNoteMessage({ passage: text, quote: note.quote, history, question: q, dict, format: formatFor(NOTE_FORMATS, presetId) });
       const raw = await callAI(NOTE_SYSTEM, message, AI_HELPER_MAX_TOKENS * 2, 60000, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
