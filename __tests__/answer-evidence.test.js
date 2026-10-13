@@ -1,4 +1,4 @@
-import { verifyEvidence, answerEvidenceFor, evidenceKey, normalizeIds, parseVote, quoteInSentences } from "../lib/qa/answerEvidence";
+import { verifyEvidence, answerEvidenceFor, evidenceKey, normalizeIds, parseVote, quoteInSentences, vocabTargetEvidence } from "../lib/qa/answerEvidence";
 import { numberSentences, buildEvidence } from "../lib/qa/questionQa";
 
 const PASSAGE = "Farmers use cover crops. These plants anchor the soil at 7 a.m. daily.\n\nDr. Lee disagrees. She says yields fall.";
@@ -72,5 +72,22 @@ describe("引文核对：分号拼接、跨句", () => {
   });
   test("有一段是编的就不认", () => {
     expect(quoteInSentences("use cover crops; holds the dirt", texts)).toBe(false);
+  });
+});
+
+describe("词汇题按原词定位依据句", () => {
+  const s = numberSentences("Rome fell. This decentralization fostered chronic instability. Monasteries kept fostering education.");
+  const q = { question_type: "vocabulary_in_context", stem: 'The word "fostered" in the passage is closest in meaning to' };
+  test("整词命中那一句，同根词不算", () => {
+    expect(vocabTargetEvidence({ stem: q.stem, question: q }, s)).toEqual({ ids: ["S2"], sentences: [s[1].text] });
+  });
+  test("标注没收时 answerEvidenceFor 退回原词定位；非词汇题仍返回 null", () => {
+    const data = { items: { "x-q0": { stem: q.stem.slice(0, 80), status: "disputed", reason: "两票句号无交集" } } };
+    expect(answerEvidenceFor(data, { qid: "x-q0", stem: q.stem, question: q }, s)?.ids).toEqual(["S2"]);
+    expect(answerEvidenceFor(data, { qid: "x-q0", stem: "Why does the author mention X?", question: { question_type: "rhetorical_purpose" } }, s)).toBeNull();
+  });
+  test("原词出现在两句里 → 不定位", () => {
+    const s2 = numberSentences("It fostered trade. It also fostered war.");
+    expect(vocabTargetEvidence({ stem: q.stem, question: q }, s2)).toBeNull();
   });
 });
