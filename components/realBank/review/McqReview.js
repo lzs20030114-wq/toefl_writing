@@ -8,6 +8,8 @@
 // 查词典（WordLookupLayer）、逐句点播、AI 讲解的 Pro 门与缓存都复用各科历史页同一套，这里只管版面。
 import React, { useMemo, useState } from "react";
 import { WordLookupLayer } from "../../reading/WordLookupLayer";
+import { NotedPassage } from "../../notes/NotedPassage";
+import { paragraphSpans } from "../../../lib/notes/passageNotes";
 import { AudioPlayer } from "../../listening/AudioPlayer";
 import { SentenceTranscript } from "../../listening/SentenceTranscript";
 import { useSentencePlayback } from "../../listening/ListeningProgressView";
@@ -113,7 +115,8 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
   const paras = useMemo(() => {
     if (!isPassage) return [];
     let num = 0;
-    return passage.split(/\n{2,}/).map((t) => t.trim()).filter(Boolean).map((t) => {
+    // 和原文批注（NotedPassage）同一套分段，段号才对得上它渲染的那一段。
+    return paragraphSpans(passage).map(({ text: t }) => {
       const head = !/[.!?]$/.test(t);
       if (!head) num += 1;
       return { text: t, head, num: head ? "" : `¶${num}` };
@@ -137,15 +140,21 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
           {ctxOpen ? (
             <div style={{ maxHeight: ctxMax, overflow: "auto", padding: "12px 16px 16px", fontFamily: READ_FONT, fontSize: 14, lineHeight: 1.85 }}>
               {isPassage ? (
-                <WordLookupLayer passage={passage}>
-                  {paras.map((p, i) => (
-                    <div key={i} style={{ display: "flex", gap: 10, marginBottom: 12 }}>
-                      <span data-no-dict style={{ width: 22, flexShrink: 0, fontSize: 10, fontWeight: 700, color: "#94a39a", paddingTop: 5, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{p.num}</span>
-                      <p style={{ margin: 0, flex: 1, minWidth: 0, fontWeight: p.head ? 700 : 400, whiteSpace: "pre-wrap" }}>{p.text}</p>
-                    </div>
-                  ))}
+                <>
+                  <NotedPassage
+                    passage={passage}
+                    paragraphWrap={(i, _para, content) => {
+                      const p = paras[i] || { num: "", head: false };
+                      return (
+                        <div style={{ display: "flex", gap: 10, marginBottom: 12 }}>
+                          <span data-no-dict style={{ width: 22, flexShrink: 0, fontSize: 10, fontWeight: 700, color: "#94a39a", paddingTop: 5, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{p.num}</span>
+                          <p style={{ margin: 0, flex: 1, minWidth: 0, fontWeight: p.head ? 700 : 400, whiteSpace: "pre-wrap" }}>{content}</p>
+                        </div>
+                      );
+                    }}
+                  />
                   {paras.length === 0 ? <Ghost>这条记录没有保存原文。</Ghost> : null}
-                </WordLookupLayer>
+                </>
               ) : null}
               {isTranscript ? (
                 <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ whiteSpace: "pre-wrap" }}>

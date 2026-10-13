@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { NotedPassage } from "../notes/NotedPassage";
 import { questionLookupContext } from "../../lib/dict/core";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { insertStemParts } from "../../lib/reading/insertSentence";
@@ -194,7 +195,7 @@ function McqTaskBody({ task, explainHook }) {
             原文 {!passageOpen && `(${passage.length} 字)`}
           </button>
           {passageOpen && (
-            <WordLookupLayer
+            <NotedPassage
               passage={passage}
               style={{
                 fontSize: 13.5,
@@ -203,14 +204,11 @@ function McqTaskBody({ task, explainHook }) {
                 background: C.surface,
                 borderRadius: 12,
                 border: `1px solid ${C.borderSubtle}`,
-                whiteSpace: "pre-wrap",
                 maxHeight: 280,
                 overflowY: "auto",
                 color: C.text,
               }}
-            >
-              {passage}
-            </WordLookupLayer>
+            />
           )}
         </div>
       )}
