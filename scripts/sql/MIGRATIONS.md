@@ -40,3 +40,4 @@
 | `vocab-review-mode.sql` | 2026-09-27 | 已跑 | 用户确认执行；复习日志增加 reading/listening 模式列，旧日志默认 reading。 |
 | `vocab-sync-hardening.sql` | 2026-09-28 | 已跑(本次授权修复，经 Supabase 连接器执行并核验) | 移除两张单词本表的公开策略，撤销 PUBLIC/anon/authenticated 表与序列权限，仅保留服务端 service_role 读写。线上复查两表 RLS 开启、策略为零、客户端 CRUD 被拒、服务端 CRUD/序列权限保留；未修改用户数据。 |
 | `real-mock-exam.sql` | 2026-10-02 | 已跑 | 用户确认执行成功；真题四科模考的原子预留、永久已见和已答账本，以及路由／结束释放未见题。 |
+| `passage-notes.sql` | 2026-10-13 | 已跑 | 用户确认执行；原文批注笔记跨设备镜像 `passage_notes`（整条笔记存 JSONB，按 user_code+note_id 去重，软删除），RLS 开启、仅 service_role 读写。 |

@@ -17,6 +17,7 @@ import { MockSessionDetail } from "./MockSessionDetail";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 import { WordLookupLayer } from "./WordLookupLayer";
+import { NotedPassage } from "../notes/NotedPassage";
 import { questionLookupContext } from "../../lib/dict/core";
 import { isSentenceSelection, sentenceOptionText } from "../../lib/reading/sentenceSelection";
 
@@ -341,11 +342,9 @@ export function RDLDetail({ session }) {
 
   return (
     <div>
-      {/* Original passage（点词/划词查词典） */}
+      {/* Original passage（点词/划词查词典；选中一处可以问 AI，问过的地方留批注） */}
       {passage && (
-        <WordLookupLayer passage={passage} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 150, overflow: "auto" }}>
-          {passage}
-        </WordLookupLayer>
+        <NotedPassage passage={passage} paraGap="0.6em" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, maxHeight: 220, overflow: "auto" }} />
       )}
       {/* Per-question detail with full stem + options */}
       {Array.isArray(results) && (
