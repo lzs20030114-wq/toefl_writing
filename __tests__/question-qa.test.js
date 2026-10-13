@@ -4,6 +4,8 @@ import {
   buildQaMessage,
   parseAnswer,
   citationStats,
+  citationClaims,
+  dictTermFor,
   pickRelatedMistakes,
   locateSentence,
   askedEnglishTerm,
@@ -180,7 +182,7 @@ describe("parseAnswer", () => {
     const segs = parseAnswer("选项 \"fertilize\" 不对，原文没说 \"plants grow faster\"。", sentences, buildEvidence(DETAIL).materials);
     const quotes = segs.filter((s) => s.type === "quote").map((q) => [q.text, q.valid]);
     expect(quotes).toEqual([["\"fertilize\"", true], ["\"plants grow faster\"", false]]);
-    expect(citationStats(segs)).toEqual({ cites: 0, badCites: 0, badQuotes: 1 });
+    expect(citationStats(segs)).toEqual({ cites: 0, badCites: 0, badQuotes: 1, unbound: 0 });
   });
 
   test("区间、并列、全角括号都认", () => {
@@ -195,7 +197,7 @@ describe("parseAnswer", () => {
       sentences,
     );
     expect(cites(segs)).toEqual([["S2", true], ["S2", true], ["S3", true], ["答案", true]]);
-    expect(citationStats(segs)).toEqual({ cites: 4, badCites: 0, badQuotes: 0 });
+    expect(citationStats(segs)).toEqual({ cites: 4, badCites: 0, badQuotes: 0, unbound: 0 });
     // 省略号两边有一段编造的，照样核不上
     expect(cites(parseAnswer("\"These plants anchor... the river\" [S2]", sentences))).toEqual([["S2", false]]);
   });
@@ -251,13 +253,25 @@ describe("answerSignature 与「本题」认定", () => {
 });
 
 describe("§1.1 小工具", () => {
-  test("wantsMistakeContext：只在问错因或说思路时附错题", () => {
+  test("wantsMistakeContext：只在说思路、或明确问以前的错题 / 规律时附错题", () => {
     expect(wantsMistakeContext("", "my-thinking")).toBe(true);
     expect(wantsMistakeContext("", "parse-key")).toBe(false);
     expect(wantsMistakeContext("", "simpler")).toBe(false);
-    expect(wantsMistakeContext("为什么不选 C", null)).toBe(true);
-    expect(wantsMistakeContext("我为什么会选错", null)).toBe(true);
+    // 只问本题的错因不附：错题只有题干和选项，模型判断不了错因是否相同
+    expect(wantsMistakeContext("为什么不选 C", null)).toBe(false);
+    expect(wantsMistakeContext("我为什么会选错", null)).toBe(false);
     expect(wantsMistakeContext("这句的主干是什么", null)).toBe(false);
+    expect(wantsMistakeContext("我是不是老是犯这种错", null)).toBe(true);
+    expect(wantsMistakeContext("和我上次错的那道一样吗", null)).toBe(true);
+    expect(wantsMistakeContext("我做这类题有什么规律", null)).toBe(true);
+  });
+  test("dictTermFor：提问点名的词优先；选中 1–3 个词的短语查选区；整句不查", () => {
+    const sentences = numberSentences(PASSAGE);
+    expect(dictTermFor("anchor 是什么意思", null, sentences)).toBe("anchor");
+    expect(dictTermFor("anchor 是什么意思", { kind: "sentence", text: "These plants anchor the soil" }, sentences)).toBe("anchor");
+    expect(dictTermFor("这个短语什么意思", { kind: "sentence", text: "anchor the soil" }, sentences)).toBe("anchor the soil");
+    expect(dictTermFor("这句什么意思", { kind: "sentence", text: "These plants anchor the soil at 7 a.m. daily." }, sentences)).toBe(null);
+    expect(dictTermFor("这句什么意思", null, sentences)).toBe(null);
   });
   test("plainText 去掉 ** 与行首 #", () => {
     expect(plainText("## 结论\n答案是 **B**，见 [S2]。")).toBe("结论\n答案是 B，见 [S2]。");
@@ -274,9 +288,35 @@ describe("§1.1 小工具", () => {
     expect(presetText("parse-key", { selection: { text: "x y" } })).toContain("选中的这句");
     expect(presetText("my-thinking", { selectedLabel: "A" })).toBe("我当时选 A，是因为");
   });
+  test("QA_SYSTEM：原文出处要先引原话；第一轮讲解以原文为准；错题看不出同类陷阱就不提", () => {
+    expect(QA_SYSTEM).toContain("先用英文双引号引出原文里支撑这个结论的原话");
+    expect(QA_SYSTEM).toContain("没有逐句核对过");
+    expect(QA_SYSTEM).toContain("看不出来就不要提");
+  });
+  test("buildQaMessage：第一轮讲解标明未核对、仅供参考", () => {
+    const msg = buildQaMessage({ evidence: "材料", firstExplain: "答案在 S2。", question: "为什么" });
+    expect(msg).toContain("【本题已给出的讲解】（上一轮自动生成，未逐句核对，仅供参考；与原文冲突时以原文为准）\n答案在 S2。");
+  });
   test("QA_SYSTEM：语法分析不算超纲；说思路时先指出哪一步对不上", () => {
     expect(QA_SYSTEM).toContain("语法、词汇、句意分析，属于本题范围");
     expect(QA_SYSTEM).toContain("哪一步和原文对不上");
+  });
+});
+
+describe("出处带原话 / 结论配对", () => {
+  const sentences = numberSentences(PASSAGE);
+  test("紧跟英文原话的原文出处 bound=true；光秃秃的 [Sx] 记为 unbound", () => {
+    const segs = parseAnswer("作者说植物固土 \"anchor the soil\" [S2]。Lee 不同意 [S3]，见 [答案]。", sentences);
+    const c = segs.filter((s) => s.type === "cite" && s.kind === "sentence").map((s) => [s.id, s.bound]);
+    expect(c).toEqual([["S2", true], ["S3", false]]);
+    expect(citationStats(segs)).toEqual({ cites: 3, badCites: 0, badQuotes: 0, unbound: 1 });
+  });
+  test("citationClaims：每组出处配上它前面那句话；连写出处算一组；坏句号不收", () => {
+    const segs = parseAnswer("开头一句。作者说植物固土 \"anchor the soil\" [S2][S1]。后来 Lee 不同意 [S3]，还有 [S99]。", sentences);
+    expect(citationClaims(segs)).toEqual([
+      { claim: "作者说植物固土 \"anchor the soil\"", ids: ["S2", "S1"], sentences: [sentences[1].text, sentences[0].text] },
+      { claim: "后来 Lee 不同意", ids: ["S3"], sentences: [sentences[2].text] },
+    ]);
   });
 });
 

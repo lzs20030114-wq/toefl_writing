@@ -15,7 +15,7 @@ import {
   answerSignature,
   pickRelatedMistakes,
   wantsMistakeContext,
-  askedEnglishTerm,
+  dictTermFor,
   plainText,
 } from "../../lib/qa/questionQa";
 import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
@@ -92,15 +92,14 @@ export function useQuestionQa(detail, firstExplain) {
       if (wantMistakes && !related) related = readRelatedMistakes(detail);
       const ev = wantMistakes ? buildEvidence(detail, related) : evidence;
 
+      // 选中了短语、或提问里点名了一个原文里的词，就查 ECDICT；整句选区不查。
       let dict = null;
-      if (!selection) {
-        const term = askedEnglishTerm(q, ev.sentences);
-        if (term) {
-          try {
-            dict = await lookupWord(term);
-          } catch {
-            dict = null;
-          }
+      const term = dictTermFor(q, selection, ev.sentences);
+      if (term) {
+        try {
+          dict = await lookupWord(term);
+        } catch {
+          dict = null;
         }
       }
 
