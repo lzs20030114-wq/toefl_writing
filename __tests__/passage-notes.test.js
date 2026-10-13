@@ -149,7 +149,8 @@ describe("noteQa 提示词", () => {
     expect(message).toContain("【词典】（ECDICT）collect /kə'lekt/：v. 收集；n. 募捐");
     expect(message).toContain("学生1：什么意思");
     expect(message.trim().endsWith("【学生现在的问题】列出所有词形")).toBe(true);
-    expect(NOTE_SYSTEM).toContain("[S编号]");
+    expect(NOTE_SYSTEM).toContain("格式 [S3]");
+    expect(NOTE_SYSTEM).not.toContain("非本题材料");
   });
   it("跨句选区落在两句", () => {
     const sentences = numberSentences(PASSAGE);
@@ -159,5 +160,34 @@ describe("noteQa 提示词", () => {
   it("只有单个英文词才查词典", () => {
     expect(dictTermOfQuote(" Nectar ")).toBe("nectar");
     expect(dictTermOfQuote("depends on")).toBeNull();
+  });
+});
+
+describe("tidyNoteSegments（笔记回答的显示整理）", () => {
+  const { tidyNoteSegments } = require("../lib/notes/noteQa");
+  const { parseAnswer, sentenceLabel } = require("../lib/qa/questionQa");
+  const sentences = numberSentences(PASSAGE);
+  const tidy = (text) => tidyNoteSegments(parseAnswer(text, sentences, []), sentences, (s) => sentenceLabel(s, sentences));
+
+  it("同一句的出处只留第一次，核不上的照留", () => {
+    const segs = tidy("意思是采蜜 [S2]。中心词是 nectar [S2]。另见 [S2]，还有 [S99]。");
+    const cites = segs.filter((s) => s.type === "cite");
+    expect(cites.filter((c) => c.id === "S2")).toHaveLength(1);
+    expect(cites.some((c) => c.id === "S99" && !c.valid)).toBe(true);
+  });
+
+  it("正文里漏出的 S 编号换成段句写法，「（非本题材料）」换成「补充：」", () => {
+    const text = tidy("S2 讲的是采蜜。（非本题材料）collect 还可以作名词。").filter((s) => s.type === "text").map((s) => s.text).join("");
+    expect(text).toContain("第 1 段第 1 句 讲的是采蜜");
+    expect(text).not.toMatch(/\bS2\b/);
+    expect(text).toContain("补充：collect");
+    expect(text).not.toContain("非本题材料");
+  });
+
+  it("换行拆段，行首小标题单独拿出来", () => {
+    const segs = tidy("意思：蜜蜂去采花蜜 [S2]。\n\n语法：to collect 是目的状语。");
+    expect(segs.map((s) => s.type)).toEqual(["heading", "text", "cite", "text", "break", "heading", "text"]);
+    expect(segs[0].text).toBe("意思");
+    expect(segs[5].text).toBe("语法");
   });
 });

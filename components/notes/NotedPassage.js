@@ -4,6 +4,7 @@ import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { usePassageNotes } from "./usePassageNotes";
 import { paragraphSpans, highlightSegments, notesByParagraph, NOTE_MAX_TURNS, NOTE_MAX_QUESTION } from "../../lib/notes/passageNotes";
 import { parseAnswer, sentenceLabel } from "../../lib/qa/questionQa";
+import { tidyNoteSegments } from "../../lib/notes/noteQa";
 
 // 带原文批注的文章：划词词典 + 选中提问，问过的地方留高亮和序号，点一下展开笔记卡（默认收起）。
 // 用法：<NotedPassage passage={passage} style={…} />，原样替换「<WordLookupLayer passage>{passage}</WordLookupLayer>」。
@@ -40,13 +41,18 @@ function CiteTag({ ok, children, title }) {
 }
 
 function NoteAnswer({ text, sentences, dict }) {
-  const segments = useMemo(() => parseAnswer(text, sentences, [], { dict: !!dict }), [text, sentences, dict]);
+  const segments = useMemo(
+    () => tidyNoteSegments(parseAnswer(text, sentences, [], { dict: !!dict }), sentences, (s) => sentenceLabel(s, sentences)),
+    [text, sentences, dict],
+  );
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   return (
     <div>
-      <div data-testid="note-answer" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", color: "#3f3a33" }}>
+      <div data-testid="note-answer" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", color: "#3f3a33", lineHeight: 1.8 }}>
         {segments.map((s, i) => {
+          if (s.type === "break") return <div key={i} style={{ height: 6 }} />;
+          if (s.type === "heading") return <span key={i} style={{ fontWeight: 700, color: "#78350F", marginRight: 4 }}>{`${s.text}：`}</span>;
           if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
           if (s.type === "quote") {
             return s.valid
