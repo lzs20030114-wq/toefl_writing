@@ -179,7 +179,7 @@ describe("请求内容", () => {
     expect(message).toContain("【本题已给出的讲解】");
     expect(message).toContain(FIRST);
     expect(message).not.toContain("同类错题");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 2, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, 60000, 0.3]);
   });
 
   test("「我是这么想的…」只预填输入框，不发请求；补完发出后附上同类错题", async () => {

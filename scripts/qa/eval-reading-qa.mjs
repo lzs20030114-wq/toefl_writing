@@ -37,7 +37,7 @@ const { answerEvidenceFor } = await import(pathToFileURL(join(ROOT, "lib", "qa",
 const EVIDENCE_FILE = join(ROOT, "data", "realBank", "reading", "answer-evidence.json");
 const ANSWER_EVIDENCE = existsSync(EVIDENCE_FILE) ? JSON.parse(readFileSync(EVIDENCE_FILE, "utf-8")) : null;
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
-// token 预算同理，取线上追问用的共享常量（追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×2）。
+// token 预算同理，取线上追问用的共享常量（第一轮讲解与追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×3，与线上一致）。
 const { AI_HELPER_MAX_TOKENS } = await import(pathToFileURL(join(ROOT, "lib", "ai", "client.js")).href);
 
 function loadEnv() {
@@ -63,7 +63,7 @@ const RUN = flag("run");
 const YES = flag("yes");
 const SEED = Number(opt("seed", 20261012));
 const LIMIT = Number(opt("limit", 24));
-const TOKENS_MULT = Number(opt("tokens-mult", 2));
+const TOKENS_MULT = Number(opt("tokens-mult", 3));
 const MAX_CALLS = Number(opt("max-calls", 200));
 const CONCURRENCY = Number(opt("concurrency", 4));
 const REJUDGE = opt("rejudge", null);
@@ -254,7 +254,7 @@ async function judgeBatch(material, claims) {
     claims.map((c, k) => `${k + 1}. ${c.claim}\n   （标的出处：${c.ids.join("、")}）`).join("\n");
   const raw = await callDeepSeekViaCurl({
     apiKey,
-    payload: { model: MODEL, max_tokens: 4000, temperature: 0, messages: [{ role: "system", content: JUDGE_SYSTEM }, { role: "user", content: body }] },
+    payload: { model: MODEL, max_tokens: 8000, temperature: 0, messages: [{ role: "system", content: JUDGE_SYSTEM }, { role: "user", content: body }] },
     timeoutMs: 120000,
     meta: { script: "qa/eval-reading-qa", label: "judge" },
   });
@@ -271,11 +271,20 @@ async function judgeClaims(material, claims) {
   const out = [];
   for (let k = 0; k < claims.length; k += JUDGE_BATCH) {
     const part = claims.slice(k, k + JUDGE_BATCH);
+    let got;
     try {
-      out.push(...await judgeBatch(material, part));
+      got = await judgeBatch(material, part);
     } catch (e) {
-      out.push(...part.map((x) => ({ ...x, support: null, why: `评审失败：${String(e?.message || e).slice(0, 80)}` })));
+      got = part.map((x) => ({ ...x, support: null, why: `评审失败：${String(e?.message || e).slice(0, 80)}` }));
     }
+    // 评审没给结果的（空输出、JSON 坏了、漏条）单独再评一次；仍没有就记 null，计入评审覆盖率。
+    const miss = got.filter((x) => x.support === null);
+    if (miss.length) {
+      let again = [];
+      try { again = await judgeBatch(material, miss.map(({ support, why, ...c }) => c)); } catch {}
+      got = got.map((x) => (x.support === null ? again.find((y) => y.claim === x.claim && y.support !== null) || x : x));
+    }
+    out.push(...got);
   }
   return out;
 }
@@ -302,7 +311,7 @@ async function runOne(c, i) {
       payload: {
         model: MODEL,
         // 第一轮讲解线上用 1 倍预算（useReadingAiExplain），追问用 --tokens-mult 倍
-        max_tokens: c.kind === "first-explain" ? AI_HELPER_MAX_TOKENS : AI_HELPER_MAX_TOKENS * TOKENS_MULT,
+        max_tokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT,
         temperature: 0.3,
         messages: [
           { role: "system", content: c.system },
@@ -405,7 +414,15 @@ const metrics = [
   })(),
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
-  { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },
+  { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}${(() => {
+    const by = {};
+    for (const r of rows.filter((x) => x.empty || x.truncated || x.error)) {
+      const why = r.error ? "错误" : r.empty ? "空" : "截断";
+      by[`${r.kind}${why}`] = (by[`${r.kind}${why}`] || 0) + 1;
+    }
+    const parts = Object.entries(by).map(([k, n]) => `${k} ${n}`);
+    return parts.length ? `（${parts.join("、")}）` : "";
+  })()}` },
   { name: "疑似翻案", value: rows.filter((r) => r.overturn).length, pass: () => true, line: "逐条人工复核，应为 0", detail: "" },
 ];
 

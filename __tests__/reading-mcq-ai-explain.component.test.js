@@ -138,7 +138,7 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     // 出处规则与追问同一套；错题要在末尾写陷阱类型
     expect(system).toContain("[S编号]");
     expect(system).toContain("陷阱：");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, 60000, 0.3]);
 
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
   });

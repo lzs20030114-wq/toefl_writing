@@ -141,7 +141,7 @@ export function useQuestionQa(detail, firstExplain) {
 
       const history = cur.turns.map((t) => ({ q: t.selection?.text ? `（选中："${t.selection.text}"）${t.q}` : t.q, a: t.a }));
       const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, selection, dict });
-      const raw = await callAI(QA_SYSTEM, message, AI_HELPER_MAX_TOKENS * 2, 60000, 0.3);
+      const raw = await callAI(QA_SYSTEM, message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {

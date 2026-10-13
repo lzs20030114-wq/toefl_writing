@@ -83,8 +83,10 @@ export function useReadingAiExplain() {
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
       // 真题有离线标注的答案依据句就一并给（lib/qa/answerEvidence）；加载失败照常讲。
+      // 预算 ×3（与追问同）：讲解要先引英文原话再标句号、末尾写陷阱行，v4-flash 的推理 token 又计入
+      // max_tokens；2026-10-13 离线评估在 ×1 下空回复/截断 5.6%。只是上限，用不到不计费。
       const keyEvidence = answerEvidenceFor(await loadAnswerEvidence(), detail, buildEvidence(detail).sentences);
-      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail, keyEvidence), AI_HELPER_MAX_TOKENS, 60000, 0.3));
+      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail, keyEvidence), AI_HELPER_MAX_TOKENS * 3, 60000, 0.3));
       if (!text) throw new Error("Empty AI response");
       saveToCache(detail, text);
       if (!detail.isCorrect) saveTrap(detail, parseTrap(text));
