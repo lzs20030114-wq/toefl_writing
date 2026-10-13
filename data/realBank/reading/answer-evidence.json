@@ -104,8 +104,16 @@
   },
   "real_ap_121c_2_11-q2": {
    "stem": "How do green roofs contribute to energy efficiency?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S8",
+    "S10"
+   ],
+   "sentences": [
+    "In contrast, green roofs keep buildings cooler by providing insulation and emitting moisture through their plants and soil.",
+    "The insulation provided by soil and plants reduces the need for heating in winter and cooling in summer, leading to energy savings."
+   ],
+   "quote": "providing insulation and emitting moisture through their plants and soil"
   },
   "real_ap_128a_1_27-q0": {
    "stem": "The word \"grappling\" in the passage is closest in meaning to",
@@ -189,7 +197,11 @@
   "real_ap_128b_1_32-q0": {
    "stem": "All of the following are mentioned in the passage as possible contributors to th",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S5\",\"S6\",\"S7\"],\"quote\":\"improvements in nutrition and healthcare; the complexity of modern life, with its increased cognitive demands; The widespread use of technology\"}",
+    "{\"ids\":[\"S5\",\"S6\",\"S7\"],\"quote\":\"improvements in nutrition and healthcare; the complexity of modern life, with its increased cognitive demands; The widespread use of technology\"}"
+   ]
   },
   "real_ap_21b_1_26-q0": {
    "stem": "Why does the author mention traditional solar panels?",
@@ -238,7 +250,11 @@
   "real_ap_127a_1_26-q1": {
    "stem": "What is the basic difference between the two categories of geoengineering techni",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S6\",\"S8\"],\"quote\":\"SRM aims to reflect sunlight into space to cool the planet. CDR focuses on reducing greenhouse gas concentrations\"}",
+    "{\"ids\":[\"S5\",\"S6\",\"S8\"],\"quote\":\"solar radiation management (SRM) and carbon dioxide removal (CDR); reflect sunlight into space to cool the planet; reducing greenhouse gas concentrations\"}"
+   ]
   },
   "real_ap_21b_1_26-q4": {
    "stem": "Why does the author mention catalysts in the passage?",
@@ -439,8 +455,16 @@
   },
   "real_ap_223_1_31-q2": {
    "stem": "According to the passage, what is one advantage of HPHT diamonds over CVD diamon",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S6",
+    "S10"
+   ],
+   "sentences": [
+    "HPHT diamonds can be produced quickly and in large quantities, making them suitable for mass production.",
+    "Although CVD diamonds can be produced on a large scale, CVD production is often more technically demanding and slower, which may influence cost."
+   ],
+   "quote": "HPHT diamonds can be produced quickly and in large quantities"
   },
   "real_ap_225_2_11-q3": {
    "stem": "What does the passage suggest about the potential impact of \"technological immer",
@@ -499,8 +523,16 @@
   },
   "real_ap_225_2_11-q0": {
    "stem": "In the first paragraph, what is the relation between sentence 2 and sentence 3?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "While millennials came of age during the rise of the Internet and social media, Gen Z has never known a world without smartphones, automated content filtering, and pervasive digital surveillance.",
+    "This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do."
+   ],
+   "quote": "This has led to claims that Gen Z exhibits higher digital literacy but lower trust in institutions and media than millennials do."
   },
   "real_ap_28_1_26-q0": {
    "stem": "What are phase-change materials designed to do?",
@@ -652,7 +684,11 @@
   "real_ap_311_1_31-q4": {
    "stem": "Why does the author mention “the error”?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S12\",\"S13\"],\"quote\":\"Accuracy remains a challenge. The difference between the original and the simplified version—called the error—needs to be as small as possible.\"}",
+    "{\"ids\":[\"S12\",\"S13\"],\"quote\":\"Accuracy remains a challenge. The difference between the original and the simplified version—called the error—needs to be as small as possible.\"}"
+   ]
   },
   "real_ap_314_2_11-q1": {
    "stem": "What does the passage suggest about traditional treatments for bone injury?",
@@ -678,13 +714,33 @@
   },
   "real_ap_310_2_11-q3": {
    "stem": "According to the passage, some argue that the Kessler Syndrome will not occur fo",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S6",
+    "S8"
+   ],
+   "sentences": [
+    "For instance, it presumes a uniform distribution of debris and constant collision probability, yet orbital mechanics suggest that debris clusters in specific altitudes and orbital paths, potentially limiting the scope of cascading events.",
+    "Moreover, technological advancements in debris tracking and active removal may mitigate the risk more effectively than Kessler originally envisioned.",
+    "Alternative explanations for observed debris growth include a greater number of satellite launches and fragmentation from aging spacecraft, rather than a self-sustaining cascade."
+   ],
+   "quote": "Alternative explanations for observed debris growth include a greater number of satellite launches and fragmentation from aging spacecraft, rather than a self-sustaining cascade."
   },
   "real_ap_310_2_11-q4": {
    "stem": "What does \"its cautionary implications\" refer to in the passage?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S9",
+    "S10"
+   ],
+   "sentences": [
+    "The Kessler Syndrome, proposed by NASA scientist Donald J. Kessler in 1978, hypothesizes a cascading effect in low Earth orbit (LEO) in which collisions between satellites and debris—defunct satellites, spent rocket stages, and fragments from earlier collisions—generate more fragments, exponentially increasing the likelihood of further collisions.",
+    "Nonetheless, the Kessler Syndrome remains a valuable heuristic for space policy, emphasizing the need for international cooperation and sustainable orbital practices.",
+    "Its cautionary implications are profound—especially as commercial constellations dramatically increase the number of active satellites in LEO."
+   ],
+   "quote": "a cascading effect in low Earth orbit (LEO) in which collisions between satellites and debris—defunct satellites, spent rocket stages, and fragments from earlier collisions—generate more fragments, exponentially increasing the likelihood of further collisions"
   },
   "real_ap_315_2_11-q0": {
    "stem": "The word \"mimic\" in the passage is closest in meaning to",
@@ -767,8 +823,18 @@
   },
   "real_ap_315_2_11-q3": {
    "stem": "What can be inferred about the future of expert systems?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S10",
+    "S11",
+    "S12"
+   ],
+   "sentences": [
+    "[B] Advancements in machine learning and natural language processing could address these issues.",
+    "[C] By integrating these technologies, expert systems could learn from new data and adapt, improving accuracy and relevance.",
+    "Researchers are optimistic that these advancements will transform expert systems, enabling them to tackle a wider range of challenges and operate more independently."
+   ],
+   "quote": "expert systems could learn from new data and adapt"
   },
   "real_ap_318_1_31-q2": {
    "stem": "In which of the following ways does the Fourier transform benefit signal process",
@@ -783,18 +849,46 @@
   },
   "real_ap_316_2_11-q2": {
    "stem": "How does paragraph 3 relate to paragraph 2?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S7",
+    "S8",
+    "S9"
+   ],
+   "sentences": [
+    "Recent studies have shown that landscape connectivity benefits wildlife and has positive effects on ecosystem services.",
+    "[A] Improved connectivity can enhance pollination, seed dispersal, and pest control, which are vital for healthy ecosystems.",
+    "[B] Additionally, connecting habitats can help species adapt to climate change by providing migration pathways."
+   ],
+   "quote": "Improved connectivity can enhance pollination, seed dispersal, and pest control"
   },
   "real_ap_316_2_11-q3": {
    "stem": "Which of the following is NOT an effect of improved landscape connectivity menti",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S8"
+   ],
+   "sentences": [
+    "Fragmentation of habitats due to human activities, such as urbanization and agriculture, can reduce connectivity, leading to isolated populations and, in turn, decreased biodiversity.",
+    "[A] Improved connectivity can enhance pollination, seed dispersal, and pest control, which are vital for healthy ecosystems."
+   ],
+   "quote": "reduce connectivity, leading to isolated populations"
   },
   "real_ap_318_1_31-q1": {
    "stem": "All of the following are mentioned about harmonic analysis EXCEPT:",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "Harmonic analysis studies how functions or signals can be represented as combinations of basic waves, typically sine and cosine functions.",
+    "This field has applications in signal processing, quantum mechanics, and data compression.",
+    "One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data."
+   ],
+   "quote": "One intriguing aspect is its ability to reveal hidden structures within complex signals, such as identifying the fundamental frequencies in a musical piece or detecting anomalies in financial data."
   },
   "real_ap_318_1_31-q3": {
    "stem": "Why does the author discuss \"quantum mechanics\" in paragraph 2?",
@@ -875,8 +969,18 @@
   },
   "real_ap_318_2_11-q1": {
    "stem": "Why does the author note that concepts may carry different connotations across d",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "Metaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries.",
+    "A concept that resonates deeply in one culture may carry entirely different connotations—or none at all—in another.",
+    "This raises concerns about the global applicability of philosophical frameworks developed in specific cultural milieus."
+   ],
+   "quote": "Metaphilosophy is a field that looks critically at whether philosophical inquiry can truly transcend cultural and linguistic boundaries"
   },
   "real_ap_323_2_12-q0": {
    "stem": "The word \"cohesive\" in the passage is closest in meaning to",
@@ -915,8 +1019,14 @@
   },
   "real_ap_320_1_31-q1": {
    "stem": "What is the function of AR as described in the passage?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3"
+   ],
+   "sentences": [
+    "AR overlays digital information on the real world, providing immersive experiences that enhance learning and skill acquisition."
+   ],
+   "quote": "providing immersive experiences that enhance learning and skill acquisition"
   },
   "real_ap_324_1_26-q0": {
    "stem": "How did music therapy in its modern form begin?",
@@ -953,8 +1063,18 @@
   },
   "real_ap_323_2_12-q2": {
    "stem": "What is the main purpose of paragraph 3?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S9",
+    "S10",
+    "S11"
+   ],
+   "sentences": [
+    "Interpreting the score is another crucial aspect.",
+    "Wind ensemble pieces often include compositions from modern and contemporary composers, which can be complex and unconventional.",
+    "Conductors need to interpret these scores carefully and convey their vision to the musicians."
+   ],
+   "quote": "compositions from modern and contemporary composers, which can be complex and unconventional"
   },
   "real_ap_323_2_12-q3": {
    "stem": "What can be inferred about wind ensemble conductors' collaboration with composer",
@@ -980,8 +1100,16 @@
   },
   "real_ap_324_1_26-q2": {
    "stem": "Why does the author mention listening to music daily for 30 minutes?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S8"
+   ],
+   "sentences": [
+    "Research shows that music therapy can reduce anxiety and stress.",
+    "A study found that patients who listened to 30 minutes of music daily experienced significant reductions in anxiety."
+   ],
+   "quote": "A study found that patients who listened to 30 minutes of music daily experienced significant reductions in anxiety"
   },
   "real_ap_324_1_31-q2": {
    "stem": "How can cities improve neighborhood residents' sense of responsibility to local ",
@@ -1062,8 +1190,16 @@
   },
   "real_ap_325_1_26-q1": {
    "stem": "What can be inferred about myoelectric sensors?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "This integration allows for more natural movement and even sensation.",
+    "A key development in this field has been the use of myoelectric sensors, which detect electrical signals generated by muscle movements."
+   ],
+   "quote": "This integration allows for more natural movement"
   },
   "real_ap_325_1_31-q2": {
    "stem": "What does the passage suggest is essential for resilience strategies to be fully",
@@ -1092,12 +1228,26 @@
   "real_ap_325_1_26-q3": {
    "stem": "According to the passage, using haptic feedback in artificial limbs involves eac",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "有效票不足",
+   "raw": [
+    "",
+    "{\"ids\":[\"S4\",\"S8\"],\"quote\":\"It involves integrating sensors and actuators that mimic the sensation of touch by stimulating the user's nerve endings or skin with electrical signals.\"}"
+   ]
   },
   "real_ap_325_1_31-q3": {
    "stem": "Which of the following is NOT mentioned as a challenge for urban resilience?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S6",
+    "S12",
+    "S13"
+   ],
+   "sentences": [
+    "Community engagement is another critical component of urban resilience.",
+    "[B] Budget constraints and political disagreements can hinder the implementation of necessary measures.",
+    "[C] Additionally, the integration of new technologies requires substantial investment and training."
+   ],
+   "quote": "Community engagement is another critical component of urban resilience."
   },
   "real_ap_329_1_26-q4": {
    "stem": "The word \"prophecy\" in the passage is closest in meaning to",
@@ -1149,13 +1299,29 @@
   },
   "real_ap_329_1_26-q0": {
    "stem": "All of the following are mentioned as part of the formation process of opals EXC",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "Unlike most gemstones, which form rigid, repeating crystalline structures, opals are amorphous, meaning they lack a fixed internal shape.",
+    "This is due to the formation process, where silica-rich water seeps into cracks in rocks deep underground, leaving silica deposits when it evaporates.",
+    "Tiny silica spheres create the internal structure of opals, and these spheres diffract light, separating it into colors, much like a prism does."
+   ],
+   "quote": "opals are amorphous, meaning they lack a fixed internal shape"
   },
   "real_ap_32a_1_31-q0": {
    "stem": "One of the main themes of the passage is",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3"
+   ],
+   "sentences": [
+    "Echolocation techniques vary among species, depending on their environments and needs."
+   ],
+   "quote": "Echolocation techniques vary among species, depending on their environments and needs"
   },
   "real_ap_330_1_31-q0": {
    "stem": "According to the passage, there used to be a mistaken view that plants",
@@ -1171,7 +1337,11 @@
   "real_ap_32a_1_31-q1": {
    "stem": "The passage suggests that compared to dolphins, sperm whales hunt",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid\"}",
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"This enables dolphins to find and track small, agile fish that make up their diet. Sperm whales, on the other hand, dive deep to hunt prey such as giant squid\"}"
+   ]
   },
   "real_ap_330_1_31-q2": {
    "stem": "What can be inferred to be the purpose of electrical signals that plants release",
@@ -1226,12 +1396,26 @@
   "real_ap_330_2_11-q0": {
    "stem": "The word \"fostered\" in the passage is closest in meaning to",
    "status": "disputed",
-   "reason": "两票句号无交集（S8 / S4）"
+   "reason": "两票句号无交集（S8 / S4）",
+   "raw": [
+    "{\"ids\":[\"S8\"],\"quote\":\"preserving classical knowledge and fostering educational continuity\"}",
+    "{\"ids\":[\"S4\"],\"quote\":\"This decentralization fostered chronic instability\"}"
+   ]
   },
   "real_ap_330_1_31-q1": {
    "stem": "According to the passage, corn plants may release MBOA into their tissues in res",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S6",
+    "S7"
+   ],
+   "sentences": [
+    "These signals, often carried by root exudates (substances released by the plants' roots into the soil), can inform neighboring plants about threats like plant-eating animals or disease-causing agents.",
+    "For instance, when a corn plant is attacked by caterpillars, it can release specific chemicals that warn nearby corn plants.",
+    "In response, the neighboring corn plants may release a chemical known as MBOA into their tissues, which makes them less palatable to the caterpillars."
+   ],
+   "quote": "In response, the neighboring corn plants may release a chemical known as MBOA into their tissues"
   },
   "real_ap_330_2_11-q2": {
    "stem": "Why does the author mention the Carolingian Renaissance?",
@@ -1349,8 +1533,16 @@
   },
   "real_ap_330_2_11-q3": {
    "stem": "The passage mentions each of the following as a consequence of the Roman Empire'",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S8"
+   ],
+   "sentences": [
+    "Without Rome’s unifying legal framework, power devolved to local warlords and tribal leaders, paving the way for feudalism and a mosaic of competing kingdoms.",
+    "The emergence of monastic communities during this period also played a crucial role in preserving classical knowledge and fostering educational continuity across fragmented territories."
+   ],
+   "quote": "power devolved to local warlords and tribal leaders, paving the way for feudalism and a mosaic of competing kingdoms"
   },
   "real_ap_38_2_11-q0": {
    "stem": "The word \"hinges\" in the passage is closest in meaning to",
@@ -1448,13 +1640,27 @@
   },
   "real_ap_38_2_11-q1": {
    "stem": "Which statement best summarizes the relationship between paragraphs 1 and 2?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4"
+   ],
+   "sentences": [
+    "While the theory enables simulations of complex cellular behavior, it is reliant on precise data inputs."
+   ],
+   "quote": "it is reliant on precise data inputs"
   },
   "real_ap_411_1_31-q2": {
    "stem": "Why does the author mention Biorock technology in the second paragraph?",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S10",
+    "S11"
+   ],
+   "sentences": [
+    "Another innovative approach involves using electricity to stimulate coral growth.",
+    "This method, known as Biorock technology, creates an electric field that encourages the deposition of minerals found in seawater, accelerating coral growth."
+   ],
+   "quote": "Another innovative approach involves using electricity to stimulate coral growth."
   },
   "real_ap_411_1_31-q4": {
    "stem": "What can be inferred about the long-term success of coral restoration techniques",
@@ -1604,12 +1810,24 @@
   "real_ap_418_2_11-q0": {
    "stem": "All of the following contributed to the status of Carthage as a wealthy and powe",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S4\",\"S6\"],\"quote\":\"This position allowed Carthage to establish a vast trade network that extended across the Mediterranean and into Africa, Europe, and Asia. The Carthaginians excelled in maritime technology, constructing advanced ships for long-distance journeys and bulky cargo transport.\"",
+    "{\"ids\":[\"S3\",\"S4\",\"S6\"],\"quote\":\"strategic location on the Mediterranean; vast trade network that extended across the Mediterranean and into Africa, Europe, and Asia; advanced ships for long-distance journeys\"}"
+   ]
   },
   "real_ap_418_2_11-q1": {
    "stem": "The passage indicates which of the following about Carthage's maritime technolog",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S6",
+    "S8"
+   ],
+   "sentences": [
+    "The Carthaginians excelled in maritime technology, constructing advanced ships for long-distance journeys and bulky cargo transport.",
+    "Their prowess in navigation and trade transformed Carthage into one of the wealthiest cities in the ancient world."
+   ],
+   "quote": "excelled in maritime technology, constructing advanced ships for long-distance journeys"
   },
   "real_ap_420_2_11-q2": {
    "stem": "The word \"fundamentally\" in the passage is closest in meaning to",
@@ -1648,13 +1866,25 @@
   },
   "real_ap_420_2_11-q1": {
    "stem": "According to the passage, gas lighting was an improvement over candles and oil l",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S7"
+   ],
+   "sentences": [
+    "The introduction of gas lighting in the nineteenth century provided safer lighting that was brighter and more consistent.",
+    "Lights that illuminated actors from below and the sides helped direct audience attention."
+   ],
+   "quote": "safer lighting that was brighter and more consistent"
   },
   "real_ap_420_2_11-q0": {
    "stem": "Which of the following is the most accurate description of the passage's organiz",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "有效票不足",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S5\",\"S8\"],\"quote\":\"Theater lighting has evolved significantly over the centuries; The introduction of gas lighting in the nineteenth century; The emergence of electric lighting in the late nineteenth century\"}",
+    ""
+   ]
   },
   "real_ap_424_2_11-q0": {
    "stem": "The phrase \"This field\" in the passage refers to",
@@ -1703,7 +1933,11 @@
   "real_ap_424_2_11-q4": {
    "stem": "The passage indicates that using water as a solvent is beneficial for all of the",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S13\",\"S14\"],\"quote\":\"using water as a solvent instead of organic solvents, which are often toxic, creates safer and more sustainable processes. Additionally, reactions in water can sometimes proceed faster than in organic solvents.\"}",
+    "{\"ids\":[\"S13\",\"S14\"],\"quote\":\"using water as a solvent instead of organic solvents, which are often toxic, creates safer and more sustainable processes; reactions in water can sometimes proceed faster than in organic solvents\"}"
+   ]
   },
   "real_ap_45_1_31-q0": {
    "stem": "Which of the following best summarizes the main point of the passage?",
@@ -1718,8 +1952,16 @@
   },
   "real_ap_424_2_11-q2": {
    "stem": "According to the passage, what is an important difference between plastics deriv",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "Traditional plastics are derived from petroleum, a non-renewable resource, and can take centuries to decompose.",
+    "Biodegradable plastics, made from renewable materials like cornstarch, can break down in months under composting conditions, reducing pollution and landfill burden."
+   ],
+   "quote": "can take centuries to decompose"
   },
   "real_ap_45_1_31-q3": {
    "stem": "What do the “estimates” discussed in the passage refer to?",
@@ -1773,8 +2015,16 @@
   },
   "real_ap_45_1_31-q2": {
    "stem": "Which of the following was most likely one of the \"previously accepted conclusio",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S9"
+   ],
+   "sentences": [
+    "Recent observations of the Perseus molecular cloud may have surprising implications for previously accepted conclusions about the Sun.",
+    "This rule would also apply to the Sun, whose twin likely separated following approximately one million years of coexistence."
+   ],
+   "quote": "whose twin likely separated"
   },
   "real_ap_46_1_31-q1": {
    "stem": "What does the passage imply about homophily?",
@@ -1884,7 +2134,11 @@
   "real_ap_510_1_31-q0": {
    "stem": "According to the passage, value theory is concerned with all of the following EX",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S4\",\"S5\"],\"quote\":\"What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers to the value of something ",
+    "{\"ids\":[\"S3\",\"S4\",\"S5\"],\"quote\":\"Central questions include: What makes something good? Are values objective features of the world or subjective preferences? A key distinction in value theory is between intrinsic value, which denotes value something has in itself, and instrumental value, which refers"
+   ]
   },
   "real_ap_510_1_31-q3": {
    "stem": "According to the passage, what is one main criticism of utilitarianism?",
@@ -1924,7 +2178,11 @@
   "real_ap_510_1_26-q3": {
    "stem": "All of the following are mentioned about spices EXCEPT:",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S8\",\"S4\"],\"quote\":\"spice plants were native to the area; spice consumption is related to cultural preferences; certain spices are more prevalent in some cuisines\"}",
+    "{\"ids\":[\"S3\",\"S8\",\"S4\"],\"quote\":\"spice plants were native to the area; spice consumption is related to cultural preferences; certain spices are more prevalent in some cuisines\"}"
+   ]
   },
   "real_ap_510v2_2_11-q0": {
    "stem": "The word \"interplay\" in the passage is closest in meaning to",
@@ -1961,8 +2219,14 @@
   },
   "real_ap_510v2_1_31-q1": {
    "stem": "Which of the following can be inferred about positive and negative feedback?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S10"
+   ],
+   "sentences": [
+    "In economic systems, positive feedback can result in booming markets, while negative feedback can prevent financial crises."
+   ],
+   "quote": "In economic systems, positive feedback can result in booming markets, while negative feedback can prevent financial crises."
   },
   "real_ap_510v2_2_11-q3": {
    "stem": "Why does the author mention \"patients before surgery\"?",
@@ -1990,8 +2254,16 @@
   },
   "real_ap_510v2_2_11-q1": {
    "stem": "It can be inferred that music is similar to language in that music",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S5"
+   ],
+   "sentences": [
+    "While lacking the precision of spoken language, music uniquely evokes complex emotions, a phenomenon attributed to its simultaneous engagement of various brain regions.",
+    "This interplay not only stirs emotions but also triggers memories and bodily responses, making music a profound medium of expression."
+   ],
+   "quote": "music uniquely evokes complex emotions"
   },
   "real_ap_510v2_2_11-q4": {
    "stem": "According to the passage, the existence of an innate human aptitude for musical ",
@@ -2137,8 +2409,16 @@
   },
   "real_ap_511_2_11-q3": {
    "stem": "Why does the author mention attempts to optimize algorithms?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S8",
+    "S12"
+   ],
+   "sentences": [
+    "Some argue that the energy consumption of adaptive optics contributes significantly to observatories’ carbon footprints.",
+    "Others are trying to optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections."
+   ],
+   "quote": "optimize algorithms to reduce unnecessary computations and the need for constant high-speed corrections"
   },
   "real_ap_523_2_12-q3": {
    "stem": "Why does the author mention \"tree rings\"?",
@@ -2153,8 +2433,16 @@
   },
   "real_ap_518_1_31-q1": {
    "stem": "The passage indicates all of the following about building data science EXCEPT:",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S3"
+   ],
+   "sentences": [
+    "Building data science uses sensors and Internet of Things (IoT) devices, such as smart thermostats, to collect and interpret data from buildings.",
+    "This approach enables architects and planners to make informed decisions throughout a building's design, operation, and renovation phases."
+   ],
+   "quote": "enables architects and planners to make informed decisions throughout a building's design, operation, and renovation phases"
   },
   "real_ap_56_1_32-q0": {
    "stem": "The word \"revolutionize\" in the passage is closest in meaning to",
@@ -2202,8 +2490,16 @@
   },
   "real_ap_523_2_12-q2": {
    "stem": "According to the passage, all of the following are true about ice cores EXCEPT:",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S7",
+    "S9"
+   ],
+   "sentences": [
+    "Scientists drill deep into the ice to extract cylindrical cores, whose layers, much like tree rings, correspond to distinct time periods.",
+    "Ice cores can reveal data about volcanic eruptions via ash and sulfate layers, solar activity via isotopic changes, and forest fires via trapped particulates and black carbon."
+   ],
+   "quote": "Scientists drill deep into the ice to extract cylindrical cores, whose layers, much like tree rings, correspond to distinct time periods"
   },
   "real_ap_56_1_32-q3": {
    "stem": "Why does the author mention \"external disturbances\"?",
@@ -2253,8 +2549,16 @@
   },
   "real_ap_523_2_12-q4": {
    "stem": "The passage implies that scientists should",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S12",
+    "S13"
+   ],
+   "sentences": [
+    "The urgency to study and preserve these records grows.",
+    "While scientists race against time, the question remains: what secrets do these frozen giants still hold?"
+   ],
+   "quote": "scientists race against time"
   },
   "real_ap_56v2_2_11-q0": {
    "stem": "The word \"remarkable\" in the passage is closest in meaning to",
@@ -2292,12 +2596,24 @@
   "real_ap_56v2_2_11-q3": {
    "stem": "All of the following are benefits of wound dressings made from spider silk EXCEP",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S8\",\"S9\",\"S10\"],\"quote\":\"accelerate recovery / retain moisture / localized drug delivery\"}",
+    "{\"ids\":[\"S8\",\"S9\",\"S10\"],\"quote\":\"Spider silk has been woven into advanced dressings for wounds that accelerate recovery. Spider silk's biocompatibility and ability to retain moisture make it ideal for treating chronic wounds and joint injuries. Spider silk-based bandages can also be infused with me"
+   ]
   },
   "real_ap_56v2_1_26-q2": {
    "stem": "According to the passage, radio astronomy helps scientists study all of the foll",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S7"
+   ],
+   "sentences": [
+    "This branch of astronomy has led to transformative discoveries, including the detection of cosmic microwave background radiation—a faint glow left over from the Big Bang—which has enabled scientists to reconstruct the universe's early conditions.",
+    "Observing pulsars helps scientists understand the end stages of stellar life and the behavior of matter under extreme conditions."
+   ],
+   "quote": "the end stages of stellar life and the behavior of matter under extreme conditions"
   },
   "real_ap_rf0610_1_131-q3": {
    "stem": "The word \"unravel\" in the passage is closest in meaning to",
@@ -2347,8 +2663,16 @@
   },
   "real_ap_56v2_2_11-q2": {
    "stem": "The passage indicates all of the following about spider silk-based sutures EXCEP",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S6",
+    "S7"
+   ],
+   "sentences": [
+    "It integrates smoothly with human tissues, minimizing immune response and promoting faster healing.",
+    "Additionally, its natural elasticity helps the sutures adapt to bodily movements, reducing the risk of sutures rupturing under tension."
+   ],
+   "quote": "It integrates smoothly with human tissues, minimizing immune response and promoting faster healing"
   },
   "real_ap_rf0610_2_211-q1": {
    "stem": "What might prevent the formation of stars in dark galaxies?",
@@ -2446,8 +2770,18 @@
   },
   "real_ap_rf0615_2_211-q0": {
    "stem": "Which of the following is NOT mentioned in the passage as an aspect of the study",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "Linguistic typology investigates structural features across languages, revealing both universal patterns and language-specific variation.",
+    "Placing the subject first helps listeners quickly identify the sentence's main actor, aiding comprehension.",
+    "Beyond syntax, languages differ in morphological complexity, the degree to which inflection (such as noun or verb endings) marks grammatical relationships."
+   ],
+   "quote": "revealing both universal patterns and language-specific variation"
   },
   "real_ap_rf0620_1_126-q0": {
    "stem": "What is the passage mainly about?",
@@ -2474,7 +2808,11 @@
   "real_ap_rf0620_1_126-q4": {
    "stem": "The passage introduces all of the following innovative approaches to playwriting",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S4\",\"S6\"],\"quote\":\"disrupt chronological order; directly address the audience; physically move through the performance space\"}",
+    "{\"ids\":[\"S2\",\"S4\",\"S6\"],\"quote\":\"Nonlinear narratives; disrupt chronological order; characters directly address the audience; viewers to physically move through the performance space\"}"
+   ]
   },
   "real_ap_rf0620_1_131-q2": {
    "stem": "Why does the author mention \"variations in rock density and the presence of faul",
@@ -2561,8 +2899,16 @@
   },
   "real_ap_rf0620_1_131-q1": {
    "stem": "It can be inferred that microseisms are strongest during ocean storms because",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S5"
+   ],
+   "sentences": [
+    "When waves collide, they create pressure variations that travel through the water and into the sea floor.",
+    "Interestingly, microseisms are strongest during storms when ocean waves are more powerful."
+   ],
+   "quote": "microseisms are strongest during storms when ocean waves are more powerful"
   },
   "real_ap_rf0622_2_211-q1": {
    "stem": "Why does the author mention \"gravitational lensing\" in the passage?",
@@ -2632,8 +2978,18 @@
   },
   "real_ap_rf0620_2_211-q1": {
    "stem": "All of the following are mentioned as applications of polarized light EXCEPT:",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S3",
+    "S5"
+   ],
+   "sentences": [
+    "Polarized light, characterized by waves vibrating in a single plane, offers applications beyond its familiar use in sunglasses, where it reduces glare from reflective surfaces like water and roads.",
+    "For instance, when researchers study the internal structure of crystals, polarized light provides insights that normal light cannot, by interacting differently with the distinct optical paths within the crystal lattice.",
+    "This is true for birefringent materials, which alter the polarization of light in ways that reveal microstructural patterns such as fiber alignment and intracellular organization, helping scientists assess variations in cell density and composition."
+   ],
+   "quote": "alter the polarization of light in ways that reveal microstructural patterns such as fiber alignment and intracellular organization, helping scientists assess variations in cell density and composition"
   },
   "real_ap_rf0629_1_131-q3": {
    "stem": "What central tension is described in the passage?",
@@ -2692,8 +3048,18 @@
   },
   "real_ap_rf0622_2_211-q0": {
    "stem": "The passage mentions all of the following about Newton's law of universal gravit",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "In the seventeenth century, Isaac Newton described gravity as a universal force acting between masses, formalized in his law of universal gravitation.",
+    "This theory provided a universal, mathematical framework for understanding both terrestrial and planetary motion.",
+    "However, in 1915, Albert Einstein introduced general relativity, redefining gravity as the curvature of spacetime caused by mass and energy."
+   ],
+   "quote": "gravity as a universal force acting between masses"
   },
   "real_ap_rf0708_1_126-q2": {
    "stem": "What limitation of traditional expert systems is mentioned?",
@@ -2917,12 +3283,20 @@
   "real_ap_rf0713_1_131-q3": {
    "stem": "The phrase 'these dynamics' in the passage refers to",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S8\",\"S9\",\"S10\"],\"quote\":\"how roles change over time; As society evolves, the expectations attached to roles can shift; the role of women in the workforce has changed dramatically\"}",
+    "{\"ids\":[\"S8\",\"S9\",\"S10\"],\"quote\":\"roles change over time; the expectations attached to roles can shift; the role of women in the workforce has changed dramatically\"}"
+   ]
   },
   "real_ap_rf0713_2_211-q3": {
    "stem": "The passage mentions each of the following strategies for addressing antimicrobi",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S9\",\"S10\",\"S12\"],\"quote\":\"Implementing stringent regulations on antibiotic prescriptions; Financial incentives for pharmaceutical companies; educating communities about judicious antibiotic use\"}",
+    "{\"ids\":[\"S9\",\"S10\",\"S12\"],\"quote\":\"Implementing stringent regulations on antibiotic prescriptions; Financial incentives for pharmaceutical companies could stimulate the development of novel antibiotics; Public health campaigns aimed at educating communities about judicious antibiotic use\"}"
+   ]
   },
   "real_ap_rf0716_1_131-q1": {
    "stem": "The word \"overt\" in the passage is closest in meaning to",
@@ -3022,8 +3396,16 @@
   },
   "real_ap_rf0716_1_131-q3": {
    "stem": "What does the passage suggest about contemporary actors?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S6",
+    "S9"
+   ],
+   "sentences": [
+    "This transformation reflects a broader shift toward naturalism in acting, where authenticity is paramount, and even the smallest gesture is deliberate.",
+    "Actors must adapt and modify their gestures to resonate with diverse audiences, a skill that distinguishes adept performers."
+   ],
+   "quote": "even the smallest gesture is deliberate"
   },
   "real_ap_rf0826_1_131-q2": {
    "stem": "The word \"aspirations\" in the passage is closest in meaning to",
@@ -3063,7 +3445,11 @@
   "real_ap_rf0716_2_211-q0": {
    "stem": "According to paragraph 2, dynamic stretching does all of the following EXCEPT:",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "有效票不足",
+   "raw": [
+    "",
+    "{\"ids\":[\"S3\"],\"quote\":\"Dynamic stretching, involving controlled, fluid movements through a range of motion, apparently improves athletic performance by priming muscles for activity.\"}"
+   ]
   },
   "real_ap_rp0704_2001_200131-q1": {
    "stem": "According to the passage, which of the following is true about students with a g",
@@ -3150,8 +3536,16 @@
   },
   "real_ap_rp0704_2001_200131-q2": {
    "stem": "All of the following are mentioned in the passage as ways educators can foster a",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S8",
+    "S9"
+   ],
+   "sentences": [
+    "Techniques such as praising effort rather than innate ability and providing constructive feedback can help students develop this mindset.",
+    "Creating a classroom environment that celebrates mistakes as learning opportunities can reinforce the growth mindset philosophy."
+   ],
+   "quote": "praising effort rather than innate ability"
   },
   "real_ap_rp0704_2004_200411-q0": {
    "stem": "The passage implies that bird migration began when",
@@ -3273,8 +3667,14 @@
   },
   "real_ap_rp0704_2004_200411-q3": {
    "stem": "Why does the passage provide information about rock ptarmigans?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S9"
+   ],
+   "sentences": [
+    "Instead of flying to warmer climes in winter, they shelter in snow burrows and reduce activity to conserve energy."
+   ],
+   "quote": "Instead of flying to warmer climes in winter, they shelter in snow burrows and reduce activity to conserve energy."
   },
   "real_ap_rp0812_2002_200201-q0": {
    "stem": "The word \"stark\" in the passage is closest in meaning to",
@@ -3289,13 +3689,29 @@
   },
   "real_ap_rp0704_2005_200511-q3": {
    "stem": "Which of the following best describes the influence of Ecological Systems Theory",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S12"
+   ],
+   "sentences": [
+    "Ecological Systems Theory, introduced by Urie Bronfenbrenner, revolutionized our perception of human psychological development.",
+    "Despite these critiques, the theory remains influential in fields ranging from education to public policy, prompting continuous exploration of its applications and adaptations."
+   ],
+   "quote": "the theory remains influential in fields ranging from education to public policy"
   },
   "real_ap_rp0705_2001_200121-q1": {
    "stem": "According to the passage, how did MYCIN diagnose infections?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S5"
+   ],
+   "sentences": [
+    "These systems are built to solve complex problems by applying a set of rules to specific problems.",
+    "MYCIN worked by asking a series of questions about a patient's data, inferring diagnoses and suggesting treatments."
+   ],
+   "quote": "applying a set of rules to specific problems ... asking a series of questions about a patient's data"
   },
   "real_ap_rp0812_2002_200201-q1": {
    "stem": "The passage suggests which of the following about Sontag?",
@@ -3378,8 +3794,16 @@
   },
   "real_ap_rp0812_2002_200201-q2": {
    "stem": "The author mentions \"complexity and dignity\" primarily in order to",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "Others, however, see Arbus as a profoundly empathetic artist.",
+    "Writers like Arthur Lubow emphasize her ability to reveal her subjects' complexity and dignity, noting that many of them collaborated willingly and even joyfully in the creation of their portraits."
+   ],
+   "quote": "reveal her subjects' complexity and dignity"
   },
   "real_ap_rp0819_2002_200201-q4": {
    "stem": "How can biologists use quantum dots?",
@@ -3419,7 +3843,11 @@
   "real_ap_rp0819_2004_200401-q1": {
    "stem": "Why might some nocturnal animal adaptations be important for human therapies?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S4\",\"S5\"],\"quote\":\"for thriving in conditions that disrupt human circadian rhythms. Such adaptations could inform potential human therapies.\"}",
+    "{\"ids\":[\"S4\",\"S5\"],\"quote\":\"for thriving in conditions that disrupt human circadian rhythms. Such adaptations could inform potential human therapies.\"}"
+   ]
   },
   "real_ap_rp0819_2004_200401-q0": {
    "stem": "Why does the author mention the \"higher prevalence of metabolic disorders\"?",
@@ -3539,18 +3967,38 @@
   },
   "real_ap_rp0819_2006_200601-q1": {
    "stem": "Based on the discussion in the passage, what type of musical activity would be l",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4"
+   ],
+   "sentences": [
+    "Participation in an ensemble-a group of musicians performing together-requires active collaboration, listening, and nonverbal communication, fostering empathy and cooperative behavior."
+   ],
+   "quote": "Participation in an ensemble-a group of musicians performing together-requires active collaboration, listening, and nonverbal communication, fostering empathy and cooperative behavior"
   },
   "real_ap_rp0822_2002_200201-q2": {
    "stem": "Why does the author mention \"buoyancy principles\"?",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S6"
+   ],
+   "sentences": [
+    "They rely on buoyancy principles rather than on solid ground, making their design and maintenance complex."
+   ],
+   "quote": "They rely on buoyancy principles rather than on solid ground, making their design and maintenance complex."
   },
   "real_ap_rp0822_2001_200101-q1": {
    "stem": "What does the passage suggest about traditional data charts?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S3"
+   ],
+   "sentences": [
+    "Data visualization is transforming how we interpret complex datasets, moving beyond traditional charts, such as static charts and graphs, to dynamic graphical representations, such as heat maps, time-lapse animations, and network graphs.",
+    "For example, when studying climate change impacts, a time-lapse heat map might reveal unexpected temperature shifts over decades that spreadsheets alone could not capture."
+   ],
+   "quote": "moving beyond traditional charts, such as static charts and graphs, to dynamic graphical representations"
   },
   "real_ap_rp0822_2003_200301-q1": {
    "stem": "The word \"persistent\" in the passage is closest in meaning to",
@@ -3635,8 +4083,18 @@
   },
   "real_ap_rp0822_2003_200301-q2": {
    "stem": "According to the author, GM technology can do all of the following EXCEPT",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "For instance, by engineering crops to resist pests, tolerate drought, or grow in nutrient-poor soil, farmers can produce more food with fewer resources.",
+    "Rice, for example, can be enriched with vitamin A to combat malnutrition.",
+    "Furthermore, reduced reliance on chemical pesticides benefits both the environment and farm workers."
+   ],
+   "quote": "tolerate drought, or grow in nutrient-poor soil"
   },
   "real_ap_rp0822_2006_200601-q1": {
    "stem": "The author notes all of the following as factors driving the popularity of vegan",
@@ -3663,12 +4121,22 @@
   "real_ap_rp0822_2004_200401-q1": {
    "stem": "According to the passage, all of the following were characteristics of Rogers' p",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S4\",\"S5\",\"S6\"],\"quote\":\"nonjudgmental environment fosters self-discovery; listening actively; grow personally\"}",
+    "{\"ids\":[\"S4\",\"S5\",\"S6\"],\"quote\":\"nonjudgmental environment fosters self-discovery; listening actively; grow personally\"}"
+   ]
   },
   "real_ap_rp0822_2006_200601-q0": {
    "stem": "The main purpose of this passage is to",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1"
+   ],
+   "sentences": [
+    "Veganism, a dietary approach that excludes all animal-based foods, has experienced notable shifts in popularity in the United States."
+   ],
+   "quote": "notable shifts in popularity in the United States"
   },
   "real_ap_rp0822_2006_200601-q4": {
    "stem": "The passage suggests which of the following about commercial meat-alternative pr",
@@ -3683,8 +4151,18 @@
   },
   "real_ap_rp0822_2004_200401-q3": {
    "stem": "The passage suggests which of the following about therapeutic approaches in the ",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S5",
+    "S8"
+   ],
+   "sentences": [
+    "When American psychologist Carl Rogers first introduced person-centered therapy in the mid-twentieth century, the prevailing view was that therapists should be experts in diagnosis and treatment.",
+    "The therapist acts as an empathetic facilitator, listening actively and using reflection-paraphrasing, summarizing, and clarifying the client's words-to elicit the client's feelings.",
+    "Unlike Rogers' model, earlier clinical approaches foregrounded issues and behaviors of concern, with the therapist diagnosing them and specifying treatment courses."
+   ],
+   "quote": "the prevailing view was that therapists should be experts in diagnosis and treatment"
   },
   "real_ap_rp0822_2007_200701-q0": {
    "stem": "According to the passage, how is CRISPR-Cas9 technology superior to traditional ",
@@ -3840,7 +4318,11 @@
   "real_ap_rp0822_2007_200701-q2": {
    "stem": "The passage mentions all of the following potential negative effects of gene edi",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"reduce resilience to environmental stress; making crops more vulnerable to future pests or diseases\"}",
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"reduce resilience to environmental stress. Additionally, widespread adoption of uniform edited traits may diminish genetic diversity, making crops more vulnerable to future pests or diseases.\"}"
+   ]
   },
   "real_ap_46_2_13-q2": {
    "stem": "The word \"cautiously\" in the passage is closest in meaning to",
@@ -3910,13 +4392,25 @@
   },
   "real_ap_128a_1_31-q2": {
    "stem": "What is the relationship between paragraph 2 and 1?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S9",
+    "S11"
+   ],
+   "sentences": [
+    "A phrase that is commonly used today is \"Stoic pause.\"",
+    "[B] Stoic principles are also incorporated into cognitive-behavioral therapy, where patients are encouraged to learn to identify and challenge irrational thoughts so that they can change their emotional responses."
+   ],
+   "quote": "Stoic principles are also incorporated into cognitive-behavioral therapy"
   },
   "real_ap_46_2_13-q0": {
    "stem": "What is the relationship between the first sentence and the second sentence of t",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S4\"],\"quote\":\"video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas\"}",
+    "{\"ids\":[\"S3\",\"S4\"],\"quote\":\"In the United States, as in some other countries, video evidence has become integral to the criminal justice system as technological advances have made cameras nearly ubiquitous. Police officers often wear body cameras, security cameras monitor public areas, and nearly ev"
+   ]
   },
   "real_rdl_121a_1_21-q0": {
    "stem": "Who can register for the course?",
@@ -3964,8 +4458,16 @@
   },
   "real_rdl_121a_1_21-q1": {
    "stem": "It can be inferred that students should wear closed-toed shoes because",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S5"
+   ],
+   "sentences": [
+    "No experience needed—just curiosity and closed-toe shoes!",
+    "Other safety-related equipment will be provided by the instructor."
+   ],
+   "quote": "closed-toe shoes"
   },
   "real_rdl_121b_1_23-q0": {
    "stem": "What did Ryan do yesterday?",
@@ -4107,18 +4609,38 @@
   },
   "real_rdl_127b_1_25-q2": {
    "stem": "David does not know whether",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "We can either meet on Friday afternoon or move to the smaller Conference Room A. However, Conference Room A does not have a projector.",
+    "I am not sure how you plan to present your ideas, so please let me know if this would be a problem."
+   ],
+   "quote": "I am not sure how you plan to present your ideas, so please let me know if this would be a problem."
   },
   "real_rdl_127b_1_25-q0": {
    "stem": "What can be inferred about Conference Room B?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S4\",\"S5\"],\"quote\":\"Conference Room B is double-booked on Friday morning. We can either meet on Friday afternoon\"}",
+    "{\"ids\":[\"S4\",\"S5\"],\"quote\":\"Conference Room B is double-booked on Friday morning. We can either meet on Friday afternoon\"}"
+   ]
   },
   "real_rdl_121b_1_25-q2": {
    "stem": "What can be inferred about the impact of the exhibit's interactive portion?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S8"
+   ],
+   "sentences": [
+    "The exhibit, which was funded by an arts innovation grant, allows visitors to interact with a program that generates custom artwork in real time, allowing them to choose themes and color palettes.",
+    "\"I made a painting with code; it felt empowering,\" said senior art major Sofia Ramirez."
+   ],
+   "quote": "I made a painting with code; it felt empowering"
   },
   "real_rdl_127b_1_28-q2": {
    "stem": "The word \"strive\" in the notice is closest in meaning to",
@@ -4223,8 +4745,18 @@
   },
   "real_rdl_128a_1_23-q0": {
    "stem": "Where would this sign most likely appear?",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S7",
+    "S8",
+    "S9"
+   ],
+   "sentences": [
+    "Equipment Usage: Please wipe down equipment after use with the provided disinfectant wipes.",
+    "Return machines to their starting positions after use.",
+    "Return free weights to their designated racks after use."
+   ],
+   "quote": "Return free weights to their designated racks after use."
   },
   "real_rdl_210_1_21-q1": {
    "stem": "Why should Ms. Hassan arrive early?",
@@ -4262,12 +4794,22 @@
   "real_rdl_210_1_25-q2": {
    "stem": "What is true of the courses offered by the Japan SAP?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S6\",\"S7\",\"S8\"],\"quote\":\"Tokyo: Engage in lectures on global business and technology while studying Japanese daily life. Kyoto: Study Japanese history and art surrounded by temples and gardens. Hokkaido: Examine environmental science through hands-on activities in stunning natural landscapes",
+    "{\"ids\":[\"S6\",\"S7\",\"S8\"],\"quote\":\"Tokyo: Engage in lectures on global business and technology while studying Japanese daily life. Kyoto: Study Japanese history and art surrounded by temples and gardens. Hokkaido: Examine environmental science through hands-on activities in stunning natural landscapes"
+   ]
   },
   "real_rdl_128a_1_23-q1": {
    "stem": "All of the following can be done at the front desk EXCEPT",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S12"
+   ],
+   "sentences": [
+    "Group Classes: Sign up for classes at the front desk or online."
+   ],
+   "quote": "Sign up for classes at the front desk or online."
   },
   "real_rdl_21a_1_25-q2": {
    "stem": "Where will the races take place?",
@@ -4478,7 +5020,11 @@
   "real_rdl_21c_1_21-q1": {
    "stem": "What are readers of the notice NOT asked to do?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S5\"],\"quote\":\"avoid freshly painted areas, heed posted signs about wet paint; contact the maintenance office\"}",
+    "{\"ids\":[\"S3\",\"S5\"],\"quote\":\"Please avoid freshly painted areas, heed posted signs about wet paint, and exercise caution when entering or leaving your unit. For questions, contact the maintenance office at 555-0134.\"}"
+   ]
   },
   "real_rdl_225_1_23-q1": {
    "stem": "What is suggested about the event?",
@@ -4526,8 +5072,16 @@
   },
   "real_rdl_225_1_23-q0": {
    "stem": "What event is being promoted in the post?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S2"
+   ],
+   "sentences": [
+    "Campus Innovation Hub Tech Bootcamp Alert!",
+    "Join us on February 20 at the Campus Innovation Hub for an intense, hands-on dive into AI, secure digital systems, and online safety."
+   ],
+   "quote": "Tech Bootcamp"
   },
   "real_rdl_228_1_28-q2": {
    "stem": "Which is NOT mentioned as an activity for children?",
@@ -4587,12 +5141,26 @@
   "real_rdl_228_1_28-q0": {
    "stem": "What is NOT listed as a feature of the event?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S7\",\"S8\",\"S9\"],\"quote\":\"Live Music and Dance Performances; Food Stalls; Art Exhibits\"}",
+    "{\"ids\":[\"S7\",\"S8\",\"S9\"],\"quote\":\"traditional and contemporary music and dance from various cultures | Taste delicious dishes from around the world | View artworks from local and international artists\"}"
+   ]
   },
   "real_rdl_228_1_21-q1": {
    "stem": "What information does the webpage NOT provide?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "Your health and wellness are our priority.",
+    "Facilities: - State-of-the-art gym equipment - Indoor swimming pool - Fitness classes (Yoga, Pilates, Zumba) - Personal training session",
+    "Membership Plans: - Monthly: $40 - Quarterly: $100 - Annual: $350"
+   ],
+   "quote": "Facilities: - State-of-the-art gym equipment - Indoor swimming pool - Fitness classes (Yoga, Pilates, Zumba) - Personal training session"
   },
   "real_rdl_22_1_23-q2": {
    "stem": "What is NOT yet known about the conference?",
@@ -4685,7 +5253,11 @@
   "real_rdl_28_1_21-q0": {
    "stem": "What is the main purpose of the sign?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S3\",\"S4\"],\"quote\":\"Food or drinks allowed only in the entrance-area cafe. Keep noise to a minimum. Return books that are not being checked out to the front desk when finished; do not reshelve.\"}",
+    "{\"ids\":[\"S2\",\"S3\",\"S4\"],\"quote\":\"Food or drinks allowed only in the entrance-area cafe. Keep noise to a minimum. Return books that are not being checked out to the front desk when finished; do not reshelve.\"}"
+   ]
   },
   "real_rdl_310_1_28-q0": {
    "stem": "What is the main purpose of the email?",
@@ -4968,13 +5540,31 @@
   },
   "real_rdl_316_1_21-q0": {
    "stem": "What is the primary purpose of the newspaper article?",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S2"
+   ],
+   "sentences": [
+    "Springvale College Daily A new exhibition opens Friday, October 15, at 4:00 p.m. in the college art museum.",
+    "Featuring the senior projects of art majors, the show offers free admission for students and alumni and runs through November 30."
+   ],
+   "quote": "Featuring the senior projects of art majors, the show"
   },
   "real_rdl_315_1_28-q0": {
    "stem": "All of the following are true of the new nuclear reactor EXCEPT:",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S2",
+    "S4"
+   ],
+   "sentences": [
+    "Yesterday, the university flipped the switch on its new nuclear research reactor in the basement of the Franklin Applied Energy Lab, turning the engineering quad into the hottest spot on campus—literally and figuratively.",
+    "The reactor, about the size of a classroom, won't charge cell phones or brew coffee; it's built for neutron experiments, advanced materials research, and isotope production.",
+    "While some students have expressed safety concerns, a university spokesperson assured the community that the reactor is safer than the chemistry labs most first-year students wander into."
+   ],
+   "quote": "won't charge cell phones or brew coffee; it's built for neutron experiments, advanced materials research, and isotope production"
   },
   "real_rdl_315_1_28-q2": {
    "stem": "Which of the following best describes the attitude represented by the event plan",
@@ -5077,8 +5667,14 @@
   },
   "real_rdl_318_1_23-q0": {
    "stem": "What is most likely included in the Wednesday and Friday course meetings?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2"
+   ],
+   "sentences": [
+    "Participation: one weekly lecture and two discussion meetings each week."
+   ],
+   "quote": "one weekly lecture and two discussion meetings each week"
   },
   "real_rdl_324_1_21-q0": {
    "stem": "What can be inferred about the library's previous weekday hours?",
@@ -5118,7 +5714,11 @@
   "real_rdl_323_1_28-q1": {
    "stem": "All of the following can be done at the front desk EXCEPT",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S7\",\"S13\",\"S17\"],\"quote\":\"Present your membership card at the front desk. Sign up for classes at the front desk or online. Report any damaged exercise equipment to the front desk immediately.\"}",
+    "{\"ids\":[\"S7\",\"S13\",\"S17\"],\"quote\":\"Present your membership card at the front desk. Sign up for classes at the front desk or online. Report any damaged exercise equipment to the front desk immediately.\"}"
+   ]
   },
   "real_rdl_324_1_23-q1": {
    "stem": "According to the post, what is one benefit to reducing plastic use on campus?",
@@ -5180,7 +5780,11 @@
   "real_rdl_324_1_23-q0": {
    "stem": "The post recommends that students change their habits in all of the following wa",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S5\",\"S8\",\"S14\"],\"quote\":\"Bring Your Own Bags; Use Refillable Water Bottles; Choose Products with Less Packaging\"}",
+    "{\"ids\":[\"S5\",\"S8\",\"S14\"],\"quote\":\"Always carry reusable bags when you go shopping; invest in a durable, refillable water bottle; Look for brands that use minimal or eco-friendly packaging\"}"
+   ]
   },
   "real_rdl_325_1_23-q2": {
    "stem": "What is the meaning of Daniel Rivero's advice to students?",
@@ -5321,7 +5925,11 @@
   "real_rdl_329_1_23-q1": {
    "stem": "The announcement mentions each of the following EXCEPT",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S6\",\"S7\"],\"quote\":\"creating a more comfortable swimming experience\"}",
+    "{\"ids\":[\"S4\",\"S6\",\"S7\"],\"quote\":\"less irritating to their skin, eyes, and hair\"}"
+   ]
   },
   "real_rdl_330_1_23-q1": {
    "stem": "Students should probably avoid participating in the seven-day Winter Student Tre",
@@ -5369,8 +5977,16 @@
   },
   "real_rdl_32b_1_21-q0": {
    "stem": "What is the likely purpose of this form?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S2"
+   ],
+   "sentences": [
+    "Applicant: Sarah O'Neill Telephone: 555-3210 Email: s.oneill@email.com Intended Residence: 22 Maple Lane, Apt.",
+    "3B, Dublin Preferred Move-In: June 15 Employment: University student Pets: None Applicant must include government-issued identification and employment status verification to ensure reservation of the residence."
+   ],
+   "quote": "Intended Residence: 22 Maple Lane, Apt."
   },
   "real_rdl_411_1_21-q0": {
    "stem": "What is the main purpose of the poster?",
@@ -5429,8 +6045,16 @@
   },
   "real_rdl_411_1_21-q1": {
    "stem": "When will visitors be treated to live music?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S1",
+    "S4"
+   ],
+   "sentences": [
+    "Art Exhibition: Journey Through Colors Experience the vibrant artworks of local artists at the City Gallery from July 1 to July 15.",
+    "Enjoy live acoustic music and complimentary refreshments on opening day from 12:00 p.m. to 3:00 p.m."
+   ],
+   "quote": "live acoustic music and complimentary refreshments on opening day"
   },
   "real_rdl_415_1_23-q1": {
    "stem": "What is the next step after turning on the printer?",
@@ -5457,7 +6081,11 @@
   "real_rdl_411_1_23-q1": {
    "stem": "What is NOT indicated about participating artists?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S5\",\"S6\"],\"quote\":\"local artists showcasing their work, from paintings and sculptures to handmade crafts. · Live Art Demos: Watch artists bring their creations to life.\"}",
+    "{\"ids\":[\"S5\",\"S6\"],\"quote\":\"local artists showcasing their work, from paintings and sculptures to handmade crafts. Watch artists bring their creations to life.\"}"
+   ]
   },
   "real_rdl_415_1_25-q2": {
    "stem": "What does Eli suggest about Elena's refrigerator?",
@@ -5499,7 +6127,11 @@
   "real_rdl_415_1_25-q0": {
    "stem": "What can be concluded about Eli?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S16\",\"S17\"],\"quote\":\"Chances are it's a broken condenser coil. I've got an extra one so I'll bring it with me.\"}",
+    "{\"ids\":[\"S16\",\"S17\"],\"quote\":\"Chances are it's a broken condenser coil. I've got an extra one so I'll bring it with me.\"}"
+   ]
   },
   "real_rdl_415_1_25-q1": {
    "stem": "At 4:48 P.M., what does Elena imply when she writes, \"My economics class starts ",
@@ -5667,18 +6299,36 @@
   },
   "real_rdl_420_1_25-q2": {
    "stem": "Which type of business would benefit most from services offered by Innovation Pl",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3"
+   ],
+   "sentences": [
+    "Strategically located in Paxville's historic \"tri-campus\" district, Innovation Plaza proudly holds a platinum certification for eco-friendly design, underscoring our commitment to minimizing environmental impact through innovative green technologies (e.g, solar panels, rainwater harvesting, and efficient heating and cooling)."
+   ],
+   "quote": "platinum certification for eco-friendly design, underscoring our commitment to minimizing environmental impact through innovative green technologies"
   },
   "real_rdl_420_1_25-q0": {
    "stem": "What is the primary purpose of the advertisement?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2"
+   ],
+   "sentences": [
+    "We offer co-working spaces and collaboration hubs equipped with ultra-fast Internet and amenities tailored to the unique needs of student-led start-ups."
+   ],
+   "quote": "We offer co-working spaces and collaboration hubs equipped with ultra-fast Internet and amenities tailored to the unique needs of student-led start-ups."
   },
   "real_rdl_420_1_21-q0": {
    "stem": "Who will likely join the book club?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5"
+   ],
+   "sentences": [
+    "Open to all students."
+   ],
+   "quote": "Open to all students."
   },
   "real_rdl_427_1_21-q0": {
    "stem": "What is suggested about the film's cinematography?",
@@ -5715,8 +6365,16 @@
   },
   "real_rdl_424_1_28-q0": {
    "stem": "What is the main purpose of the schedule?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S7",
+    "S8"
+   ],
+   "sentences": [
+    "Schedule Highlights: 9:00 AM - 10:00 AM Registration and Coffee: Meet speakers and fellow students.",
+    "10:00 AM - 11:30 AM Keynote: Dr. Aisha Patel on \"The Future of Student Healthcare\" 11:30 AM - 12:30 PM Panel: \"Mental Health in the Classroom\" with David Chen, Sofia Martinez, and Dr. Priya Nair 12:30 PM - 1:00 PM Lunch 1:00 PM - 2:00 PM Panel: \"Balancing Academics and Wellness\" with Jamal Robinson, Mei Lin, and Elena Petrova 2:00 PM - 3:30 PM Workshop: Nutrition and Fitness Tips for Busy Student Life"
+   ],
+   "quote": "Schedule Highlights: 9:00 AM - 10:00 AM Registration and Coffee: Meet speakers and fellow students."
   },
   "real_rdl_428_1_21-q1": {
    "stem": "What will Janet Simmons do?",
@@ -5731,8 +6389,18 @@
   },
   "real_rdl_424_1_28-q1": {
    "stem": "All of the following are reasons why someone might choose to attend the event EX",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S5",
+    "S6"
+   ],
+   "sentences": [
+    "· Learn practical tips for boosting your energy and increasing your mental focus for more effective studying.",
+    "· Chat with wellness professionals who specialize in student health.",
+    "· Access free resources to support your mental and physical well-being."
+   ],
+   "quote": "Learn practical tips for boosting your energy and increasing your mental focus for more effective studying."
   },
   "real_rdl_428_1_21-q0": {
    "stem": "What is the main purpose of the sign?",
@@ -5870,8 +6538,18 @@
   },
   "real_rdl_428_1_23-q1": {
    "stem": "The advertisement suggests that students will support the Campus International F",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S8",
+    "S10"
+   ],
+   "sentences": [
+    "Over the course of two days this spring, students, faculty, staff, and local community members will gather on the university quad to present traditions from over 20 countries through music, food, and art.",
+    "· Student groups will also host panels on diversity and inclusion, encouraging cross-campus dialogue.",
+    "Ticket proceeds will support student-led community-building initiatives, reinforcing the festival's mission to celebrate diversity and unity while strengthening ties between the campus and its host community."
+   ],
+   "quote": "present traditions from over 20 countries ... Student groups will also host panels on diversity and inclusion, encouraging cross-campus dialogue ... Ticket proceeds will support"
   },
   "real_rdl_46_1_28-q0": {
    "stem": "Why does Angela recommend bringing a lot of water for the hike?",
@@ -5909,7 +6587,11 @@
   "real_rdl_46_1_28-q2": {
    "stem": "What does Milton offer to do?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S13\",\"S14\"],\"quote\":\"I can drive! I've got room for three.\"}",
+    "{\"ids\":[\"S13\",\"S14\"],\"quote\":\"I can drive! I've got room for three.\"}"
+   ]
   },
   "real_rdl_510_1_23-q1": {
    "stem": "According to the review, the film might not appeal to audiences for which of the",
@@ -6008,7 +6690,11 @@
   "real_rdl_510_1_23-q0": {
    "stem": "Which of the following is the most accurate summary of the film review?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S5\",\"S6\",\"S8\"],\"quote\":\"character-driven storytelling and visual artistry\"}",
+    "{\"ids\":[\"S5\",\"S6\",\"S7\"],\"quote\":\"striking cinematography; excels in character depth; nuanced portrayal\"}"
+   ]
   },
   "real_rdl_511_1_21-q0": {
    "stem": "What does the excerpt imply about the Organic Chemistry I course?",
@@ -6034,8 +6720,16 @@
   },
   "real_rdl_510v2_1_28-q0": {
    "stem": "What is most likely true about Nia's level of interest in BrightPath Analytics?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5",
+    "S9"
+   ],
+   "sentences": [
+    "Storytelling particularly attracts me, since my communications minor would help me present findings to nontechnical audiences.",
+    "Please let me know what the next steps are, and when you need transcripts and a reference letter from my advisor."
+   ],
+   "quote": "Please let me know what the next steps are"
   },
   "real_rdl_511_1_23-q0": {
    "stem": "What is the most recent debating event that Noam attended?",
@@ -6051,7 +6745,11 @@
   "real_rdl_511_1_21-q1": {
    "stem": "What is NOT mentioned as part of the coursework?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S4\"],\"quote\":\"Students complete weekly labs and problem sets. There will be two major examinations.\"}",
+    "{\"ids\":[\"S3\",\"S4\"],\"quote\":\"weekly labs and problem sets; two major examinations\"}"
+   ]
   },
   "real_rdl_511_1_23-q1": {
    "stem": "Why does Noam mention \"both parliamentary and policy debate formats\"?",
@@ -6089,12 +6787,24 @@
   "real_rdl_510v2_1_28-q1": {
    "stem": "According to her email, Nia gained skills that will help her succeed as an inter",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S5\",\"S8\"],\"quote\":\"my communications minor would help me present findings to nontechnical audiences; skills that I would bring to BrightPath from my computer science major\"}",
+    "{\"ids\":[\"S5\",\"S8\"],\"quote\":\"my communications minor would help me present findings to nontechnical audiences. I would also be glad to complete coding assessments to demonstrate the skills that I would bring to BrightPath from my computer science major.\"}"
+   ]
   },
   "real_rdl_518_1_21-q0": {
    "stem": "Students enrolled in this course must do all of the following EXCEPT",
-   "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "Coursework consists of lectures, weekly laboratory sessions, and discussions.",
+    "Lectures Tues/Thurs 9:30-11:00 A.M.; labs Wed 3:00-5:00 P.M."
+   ],
+   "quote": "lectures, weekly laboratory sessions, and discussions"
   },
   "real_rdl_523_1_21-q0": {
    "stem": "Which of the following can be inferred about Mishti's menu?",
@@ -6110,7 +6820,11 @@
   "real_rdl_518_1_28-q1": {
    "stem": "The course description suggests that students will",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S7\",\"S8\"],\"quote\":\"Students will experiment with writing their own sonnets and will read them aloud in class. A final ten-page term paper will be due on May 15.\"}",
+    "{\"ids\":[\"S7\",\"S8\"],\"quote\":\"Students will experiment with writing their own sonnets and will read them aloud in class. A final ten-page term paper will be due on May 15.\"}"
+   ]
   },
   "real_rdl_518_1_21-q1": {
    "stem": "Which of the following would be a typical BIOL 101 student?",
@@ -6137,7 +6851,11 @@
   "real_rdl_523_1_21-q1": {
    "stem": "Read a review. The review praises all of the following aspects of the restaurant",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S3\"],\"quote\":\"Vegans, vegetarians, and omnivores alike will enjoy brilliantly prepared dishes at surprisingly low prices. The attentive servers happily explain unfamiliar dishes\"}",
+    "{\"ids\":[\"S2\",\"S3\"],\"quote\":\"Vegans, vegetarians, and omnivores alike will enjoy brilliantly prepared dishes at surprisingly low prices. The attentive servers happily explain unfamiliar dishes, making every meal at Mishti a delightful education in India's rich culinary traditions.\"}"
+   ]
   },
   "real_rdl_523_1_25-q0": {
    "stem": "What is the notice primarily about?",
@@ -6166,7 +6884,11 @@
   "real_rdl_518_1_28-q2": {
    "stem": "The course description mentions each of the following EXCEPT",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S3\",\"S4\"],\"quote\":\"The sonnet entered English literature in the early sixteenth century, adapted from the Italian form pioneered by Petrarch, and has inspired experimentation ever since. Poets writing in English have created endless variations on the basic formula of fourteen lines of ",
+    "{\"ids\":[\"S2\",\"S3\",\"S4\"],\"quote\":\"adapted from the Italian form pioneered by Petrarch; fourteen lines of rhymed verse in iambic pentameter; romantic, existential, and political themes\"}"
+   ]
   },
   "real_rdl_523_1_28-q1": {
    "stem": "All of the following people are invited to attend the expo EXCEPT",
@@ -6193,7 +6915,11 @@
   "real_rdl_523_1_25-q1": {
    "stem": "What should residents do beforehand?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"Fill containers with water for drinking and cooking before the interruption. Store enough water for personal hygiene needs.\"}",
+    "{\"ids\":[\"S6\",\"S7\"],\"quote\":\"Fill containers with water for drinking and cooking before the interruption. Store enough water for personal hygiene needs.\"}"
+   ]
   },
   "real_rdl_53_1_21-q1": {
    "stem": "What is one way participants can sign up for the workshop?",
@@ -6230,23 +6956,47 @@
   },
   "real_rdl_523_1_28-q0": {
    "stem": "What is the main purpose of the expo?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2"
+   ],
+   "sentences": [
+    "Discover dozens of local nonprofit organizations, campus service clubs, and community partners who need your skills and passion."
+   ],
+   "quote": "Discover dozens of local nonprofit organizations, campus service clubs, and community partners who need your skills and passion."
   },
   "real_rdl_53_1_21-q0": {
    "stem": "What information does the flyer NOT provide?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S1\",\"S2\",\"S3\"],\"quote\":\"April 10 from 10:00 A.M. to 2:00 P.M. Learn basic programming and build simple robots. Undergraduate and graduate students\"}",
+    "{\"ids\":[\"S1\",\"S2\",\"S3\"],\"quote\":\"April 10 from 10:00 A.M. to 2:00 P.M. Learn basic programming and build simple robots. Undergraduate and graduate students\"}"
+   ]
   },
   "real_rdl_523_1_25-q2": {
    "stem": "What can be inferred about the event described in the announcement?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S2",
+    "S15"
+   ],
+   "sentences": [
+    "Due to necessary maintenance on the main water line, there will be a temporary interruption in water service for all residents in the Maplewood dormitory.",
+    "We apologize for the inconvenience and appreciate your understanding as we work to improve our community's water infrastructure."
+   ],
+   "quote": "improve our community's water infrastructure"
   },
   "real_rdl_53_1_28-q2": {
    "stem": "What is suggested about the In Tune With Well-Being event?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S5"
+   ],
+   "sentences": [
+    "Connect with health-conscious peers at our afternoon social, featuring live acoustic music by local students."
+   ],
+   "quote": "Connect with health-conscious peers at our afternoon social"
   },
   "real_rdl_56v2_1_23-q1": {
    "stem": "What can be inferred from the notice?",
@@ -6284,7 +7034,11 @@
   "real_rdl_56v2_1_21-q1": {
    "stem": "Which situation would result in a violation under this policy?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S4\",\"S5\"],\"quote\":\"On Fridays and Saturdays, they begin at midnight. Please limit noise in hallways, lounges, and rooms. Keep music and conversations at a low volume.\"}",
+    "{\"ids\":[\"S3\",\"S4\",\"S5\"],\"quote\":\"On Fridays and Saturdays, they begin at midnight. Please limit noise in hallways, lounges, and rooms. Keep music and conversations at a low volume.\"}"
+   ]
   },
   "real_rdl_rf0610_1_123-q1": {
    "stem": "What is NOT mentioned as an assessment method?",
@@ -6300,7 +7054,11 @@
   "real_rdl_56v2_1_21-q0": {
    "stem": "Which statement best captures what the notice expects residents to do?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "有效票不足",
+   "raw": [
+    "{\"ids\":[\"S2\",\"S4\",\"S5\"],\"quote\":\"On Sundays through Thursdays, quiet hours begin at 10:00 p.M. Please limit noise in hallways, lounges, and rooms. Keep music and conversations at a low volume.\"}",
+    ""
+   ]
   },
   "real_rdl_rf0610_1_125-q1": {
    "stem": "What does Michelle need before enrolling in Section D?",
@@ -6337,8 +7095,18 @@
   },
   "real_rdl_56v2_1_23-q2": {
    "stem": "Read a notice. The notice mentions all of the following EXCEPT",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S4",
+    "S7"
+   ],
+   "sentences": [
+    "Campus Health Services offers free flu vaccinations and recommends that everyone except those with vaccine allergies come to get the quick and effective shot.",
+    "In addition, measures like handwashing can make a big difference in reducing your exposure to the flu virus.",
+    "While these symptoms are also typical of the common cold, the flu tends to come on quite rapidly and symptoms can be severe."
+   ],
+   "quote": "Campus Health Services offers free flu vaccinations"
   },
   "real_rdl_rf0615_1_121-q0": {
    "stem": "What can be inferred about the university?",
@@ -6353,8 +7121,16 @@
   },
   "real_rdl_rf0610_1_125-q2": {
    "stem": "Beth has worked with formulas for years and is ready to learn advanced data skil",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S9",
+    "S10"
+   ],
+   "sentences": [
+    "Data Seminar Taught by industry professionals, this course is for researchers who want to learn how to work with complex data.",
+    "Section F (virtual) | Mondays"
+   ],
+   "quote": "Section F (virtual) | Mondays"
   },
   "real_rdl_rf0615_1_121-q1": {
    "stem": "What is indicated about the university's drop-box system?",
@@ -6369,13 +7145,25 @@
   },
   "real_rdl_rf0610_1_125-q0": {
    "stem": "Peter has no experience with spreadsheets and cannot attend class on Wednesdays.",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S5"
+   ],
+   "sentences": [
+    "This course is good for beginners and those who need to relearn basics.",
+    "Section A | Mondays and Wednesdays Section B | Tuesdays and Thursdays Section C (virtual) | Wednesdays and Fridays"
+   ],
+   "quote": "Section B | Tuesdays and Thursdays"
   },
   "real_rdl_rf0615_1_125-q0": {
    "stem": "What can be concluded about Eli?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S3\",\"S13\",\"S14\"],\"quote\":\"you're good at fixing these things\"}",
+    "{\"ids\":[\"S13\",\"S14\"],\"quote\":\"Chances are it is a broken condenser coil. I have an extra one, so I'll bring it.\"}"
+   ]
   },
   "real_rdl_rf0615_1_128-q0": {
    "stem": "The post mentions that the gardening workshop will",
@@ -6391,7 +7179,11 @@
   "real_rdl_rf0615_1_125-q1": {
    "stem": "At 4:48 p.m., what does Elena imply when she writes, 'My economics class starts ",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S9\",\"S10\",\"S11\"],\"quote\":\"How about tomorrow at 12:00? My economics class starts at noon. Does 1:30 work?\"}",
+    "{\"ids\":[\"S9\",\"S10\",\"S11\"],\"quote\":\"How about tomorrow at 12:00? My economics class starts at noon. Does 1:30 work?\"}"
+   ]
   },
   "real_rdl_rf0615_1_128-q1": {
    "stem": "What is implied about Dr. Elena Tan's role in the workshop?",
@@ -6730,12 +7522,24 @@
   "real_rdl_rf0629_1_123-q2": {
    "stem": "Which of the following is NOT true?",
    "status": "disputed",
-   "reason": "有效票不足"
+   "reason": "有效票不足",
+   "raw": [
+    "{\"ids\":[\"S5\"],\"quote\":\"Lunch is provided both days.\"}",
+    ""
+   ]
   },
   "real_rdl_rf0708_1_121-q0": {
    "stem": "The review mentions all of the following about Cafe Bonjour EXCEPT",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S4",
+    "S6"
+   ],
+   "sentences": [
+    "The atmosphere is inviting, with vibrant colors and plush seating.",
+    "The food was served promptly by friendly staff and tasted great."
+   ],
+   "quote": "friendly staff and tasted great"
   },
   "real_rdl_rf0716_1_123-q0": {
    "stem": "According to the description, the course's weekly schedule includes meetings",
@@ -6986,7 +7790,11 @@
   "real_rdl_rf0826_1_128-q2": {
    "stem": "What should residents do after service resumes?",
    "status": "disputed",
-   "reason": "引文在所标句子里找不到"
+   "reason": "引文在所标句子里找不到",
+   "raw": [
+    "{\"ids\":[\"S7\",\"S8\"],\"quote\":\"Run cold water through all faucets for a few minutes. Check for leaks\"}",
+    "{\"ids\":[\"S7\",\"S8\"],\"quote\":\"Run cold water through all faucets for a few minutes. Check for leaks\"}"
+   ]
   },
   "real_rdl_rf0902_1_121-q1": {
    "stem": "What should a resident do last?",
@@ -7058,16 +7866,30 @@
   },
   "real_rdl_rf0902_1_125-q2": {
    "stem": "Which statement is NOT true about the event?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S7"
+   ],
+   "sentences": [
+    "12:00-1:30 Lunch break (lunch provided)"
+   ],
+   "quote": "Lunch break (lunch provided)"
   },
   "real_rdl_rp0822_1001_100101-q1": {
    "stem": "Which of the following would most likely NOT be a major focus of the seminar?",
-   "status": "disputed",
-   "reason": "有效票不足"
+   "status": "ok",
+   "ids": [
+    "S3",
+    "S4"
+   ],
+   "sentences": [
+    "Led by professors from our Creative Writing Department, this seminar-style class will help you hone your writing by giving tips on narrative structure, character development, and dialogue crafting.",
+    "Students will engage in interactive exercises and group readings to refine their writing abilities."
+   ],
+   "quote": "tips on narrative structure, character development, and dialogue crafting"
   }
  },
  "model": "deepseek-v4-flash",
  "votes": 2,
- "updatedAt": "2026-10-13T03:34:25.259Z"
+ "updatedAt": "2026-10-13T07:01:49.600Z"
 }
