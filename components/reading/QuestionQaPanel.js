@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from 
 import { createPortal } from "react-dom";
 import { getSavedCode } from "../../lib/AuthContext";
 import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence, buildEvidence } from "../../lib/qa/questionQa";
+import { analogyMaterials } from "../../lib/qa/pastQuestions";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
 
@@ -57,9 +58,11 @@ function Tag({ children, tone, onClick, title, testId }) {
   );
 }
 
-function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme, testId = "qa-answer" }) {
+function Answer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer" }) {
   const [open, setOpen] = useState(null);
-  const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes, dict }), [text, sentences, materials, mistakes, dict]);
+  // 举一反三那一轮：对比题的题干、选项、依据句也算可引的材料
+  const allMaterials = useMemo(() => (past?.length ? [...materials, ...analogyMaterials({ items: past })] : materials), [materials, past]);
+  const segments = useMemo(() => parseAnswer(text, sentences, allMaterials, { mistakes, dict, past: past?.length || 0 }), [text, sentences, allMaterials, mistakes, dict, past]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
@@ -68,6 +71,9 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme
   if (open?.startsWith("S")) {
     const s = byId.get(open);
     if (s) detailBox = <div data-testid="qa-cite-sentence" style={{ fontSize: 12.5, lineHeight: 1.6, color: "#374151", fontFamily: "Georgia, serif" }}><span style={{ fontWeight: 700, color: theme.text, marginRight: 6, fontFamily: "inherit" }}>{sentenceLabel(s, sentences)}</span>{s.text}</div>;
+  } else if (open && /^题\d+$/.test(open)) {
+    const m = past?.[Number(open.slice(1)) - 1];
+    if (m) detailBox = <div data-testid="qa-cite-past" style={{ fontSize: 12, lineHeight: 1.6, color: "#374151" }}><div>{`${m.date} ${m.isCorrect ? "做对" : "做错"}　${m.stem}`}</div><div style={{ color: m.isCorrect ? "#047857" : "#B91C1C" }}>{`你选：${m.userAnswer || "未作答"}`}</div>{m.isCorrect ? null : <div style={{ color: "#047857" }}>{`正确：${m.correctAnswer}`}</div>}{m.evidence?.length ? <div style={{ fontFamily: "Georgia, serif" }}>{`依据句：${m.evidence.join(" ")}`}</div> : null}</div>;
   } else if (open?.startsWith("错题")) {
     const m = related?.items?.[Number(open.slice(2)) - 1];
     if (m) detailBox = <div data-testid="qa-cite-mistake" style={{ fontSize: 12, lineHeight: 1.6, color: "#374151" }}><div>{`${m.date} ${m.stem}`}</div><div style={{ color: "#B91C1C" }}>{`当时选：${m.userAnswer || "未作答"}`}</div><div style={{ color: "#047857" }}>{`正确：${m.correctAnswer}`}</div></div>;
@@ -88,6 +94,11 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme
             return s.valid
               ? <Tag key={i} tone="ok" testId="qa-cite" onClick={() => toggle(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
               : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
+          }
+          if (s.kind === "past") {
+            return s.valid
+              ? <Tag key={i} tone="other" testId="qa-cite-past-tag" onClick={() => toggle(s.id)}>{s.id}</Tag>
+              : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${s.id}?`}</Tag>;
           }
           if (s.kind === "mistake") {
             return s.valid
@@ -264,7 +275,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   };
 
   // 「讲简单点」是把上一轮再讲一遍：还没有讲解、也没追问过时没有可简化的东西。
-  const presets = QA_PRESETS.filter((p) => (!p.needsAnswer || answered) && (p.id !== "simpler" || firstExplain || qa.turns.length));
+  const presets = QA_PRESETS.filter((p) => (!p.needsAnswer || answered) && (!p.needsPast || qa.pastCount > 0) && (p.id !== "simpler" || firstExplain || qa.turns.length));
 
   if (!qa.sentences.length) return null;
 
@@ -366,7 +377,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
             {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
             {t.label || t.q}
           </div>
-          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} theme={theme} />
+          <Answer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} past={t.past || null} theme={theme} />
           {/可能有出入/.test(t.a) && reporting == null ? (
             <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
           ) : null}

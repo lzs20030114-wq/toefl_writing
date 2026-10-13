@@ -15,11 +15,13 @@ import {
   answerSignature,
   pickRelatedMistakes,
   wantsMistakeContext,
+  wantsAnalogy,
   dictTermFor,
   plainText,
 } from "../../lib/qa/questionQa";
 import { trapOfBrief, trapOfDetail } from "../../lib/qa/trapStore";
 import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
+import { collectPastQuestions, pickAnalogies, analogyLines } from "../../lib/qa/pastQuestions";
 import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
 
 // 练习记录逐题「继续追问」的状态层。第一轮仍是 useReadingAiExplain 的讲解（prompt 与缓存桶都不动），
@@ -56,6 +58,21 @@ function readRelatedMistakes(detail) {
   }
 }
 
+/** 本题同题型、以前做过的题（练习记录里现算，只读）。 */
+function readPastQuestions(detail) {
+  try {
+    const question = detail?.question || null;
+    return collectPastQuestions(loadHist()?.sessions || [], {
+      questionType: question?.question_type || detail?.questionType || "",
+      subtype: detail?.subtype || "",
+      stem: detail?.stem || "",
+      correctAnswer: answerSignature(detail),
+    });
+  } catch {
+    return [];
+  }
+}
+
 export function useQuestionQa(detail, firstExplain) {
   const account = accountKey();
   const key = useMemo(() => conversationKey(detail), [detail]);
@@ -73,6 +90,9 @@ export function useQuestionQa(detail, firstExplain) {
     setConv(loadConversation(account, key) || { turns: [], related: null });
     setError(null);
   }, [account, key]);
+
+  // 「举一反三」按钮只在真有以前做过的同题型题时露出（不然点了也只能白花一轮额度）。
+  const pastCount = useMemo(() => readPastQuestions(detail).length, [detail]);
 
   const turnsLeft = QA_MAX_TURNS - conv.turns.length;
   const dailyLeft = QA_DAILY_LIMIT - daily;
@@ -95,10 +115,18 @@ export function useQuestionQa(detail, firstExplain) {
     setError(null);
     try {
       let related = cur.related;
-      const wantMistakes = wantsMistakeContext(q, presetId);
+      // 举一反三优先：对比题里已经含做错的题（同陷阱优先），就不再另附错题。
+      const analogy = wantsAnalogy(q, presetId);
+      const wantMistakes = !analogy && wantsMistakeContext(q, presetId);
       if (wantMistakes && !related) related = readRelatedMistakes(detail);
-      const keyEvidence = answerEvidenceFor(await loadAnswerEvidence(), detail, evidence.sentences);
-      const ev = wantMistakes || keyEvidence ? buildEvidence(detail, wantMistakes ? related : null, keyEvidence) : evidence;
+      const evidenceData = await loadAnswerEvidence();
+      const keyEvidence = answerEvidenceFor(evidenceData, detail, evidence.sentences);
+      const analogies = analogy
+        ? pickAnalogies(readPastQuestions(detail), { trap: trapOfDetail(detail), trapOf: trapOfBrief, evidenceData })
+        : null;
+      const ev = wantMistakes || keyEvidence || analogies?.items.length
+        ? buildEvidence(detail, wantMistakes ? related : null, keyEvidence, analogyLines(analogies))
+        : evidence;
 
       // 选中了短语、或提问里点名了一个原文里的词，就查 ECDICT；整句选区不查。
       let dict = null;
@@ -117,7 +145,7 @@ export function useQuestionQa(detail, firstExplain) {
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {
-        turns: [...cur.turns, { q, label, a, presetId, selection: selection || null, dict: dict ? dict.word || true : null, mistakes: wantMistakes ? related?.items?.length || 0 : 0, at: new Date().toISOString() }],
+        turns: [...cur.turns, { q, label, a, presetId, selection: selection || null, dict: dict ? dict.word || true : null, mistakes: wantMistakes ? related?.items?.length || 0 : 0, past: analogies?.items?.length ? analogies.items : null, at: new Date().toISOString() }],
         related: related || cur.related || null,
       };
       saveConversation(account, key, next);
@@ -138,6 +166,7 @@ export function useQuestionQa(detail, firstExplain) {
     turns: conv.turns,
     related: conv.related,
     sentences: evidence.sentences,
+    pastCount,
     materials: evidence.materials,
     loading,
     error,

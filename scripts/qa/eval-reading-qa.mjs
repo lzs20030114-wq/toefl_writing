@@ -3,7 +3,7 @@
 //
 // 测的是「追问 prompt 在 DeepSeek 上守不守规矩」：出处有效率、引文核实率、超纲拒答率、
 // 语法误拒率、空回复率、疑似翻案。题目来自真题库，固定随机种子抽 24 道（AP 16 + RDL 8），
-// 每道模拟一次错答、先出第一轮讲解、再问 4 个问题 → 120 次调用。
+// 每道模拟一次错答、先出第一轮讲解、再问 4 个问题，有同题型对比题的再加一问举一反三 → 约 140 次调用。
 //
 // 用法：
 //   node scripts/qa/eval-reading-qa.mjs                 # 默认 dry-run：只打印「将调用 N 次 / 预计 ¥X」
@@ -31,6 +31,7 @@ const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "re
 const { QA_SYSTEM, EXPLAIN_SYSTEM, parseTrap, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
+const { pickAnalogies, analogyLines, analogyMaterials } = await import(pathToFileURL(join(ROOT, "lib", "qa", "pastQuestions.js")).href);
 const { answerEvidenceFor } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
 // 线上同款：有离线标注的答案依据句就放进证据包（文件不存在或空 = 不放）。
 const EVIDENCE_FILE = join(ROOT, "data", "realBank", "reading", "answer-evidence.json");
@@ -132,6 +133,17 @@ function wrongKey(q) {
   return keys[Math.floor(rand() * keys.length)];
 }
 
+// 举一反三：拿同一批抽样里其他同题型的题当「以前做过的题」，按抽样顺序交替记成做错 / 做对。
+function pastFor(x) {
+  return sample
+    .filter((y) => y !== x && y.q.question_type === x.q.question_type && y.subtype === x.subtype)
+    .map((y, k) => {
+      const wrong = k % 2 === 0;
+      const sel = wrong ? Object.keys(y.q.options).find((key) => key !== y.q.correct_answer) : y.q.correct_answer;
+      return { qid: `${y.itemId}-q${y.qIndex}`, stem: y.q.stem, question: y.q, options: y.q.options, selected: sel, correct: y.q.correct_answer, passage: y.passage, isCorrect: !wrong, date: `2026-10-${String(10 + k).padStart(2, "0")}` };
+    });
+}
+
 function buildCases(x) {
   const selected = wrongKey(x.q);
   const detail = {
@@ -161,6 +173,17 @@ function buildCases(x) {
   return [
     // 第一轮讲解（keyEvidence 挂在用例上，算「依据句一致率」用）：和追问同一份证据包、同一套出处规则（components/reading/useReadingAiExplain）
     { kind: "first-explain", question: "（第一轮讲解）", detail, evidence, keyEvidence, system: EXPLAIN_SYSTEM, message: evidence.text },
+    ...(() => {
+      const an = pickAnalogies(pastFor(x), { evidenceData: ANSWER_EVIDENCE });
+      if (!an.items.length) return [];
+      const ev = buildEvidence(detail, null, keyEvidence, analogyLines(an));
+      return [{
+        kind: "analogy", question: presetText("analogy"), detail, keyEvidence, past: an.items.length,
+        evidence: { ...ev, materials: [...ev.materials, ...analogyMaterials(an)] },
+        system: QA_SYSTEM,
+        message: buildQaMessage({ evidence: ev.text, firstExplain: FIRST_EXPLAIN, question: presetText("analogy") }),
+      }];
+    })(),
     ...cases.map((c) => ({
       ...c,
       keyEvidence,
@@ -293,7 +316,7 @@ async function runOne(c, i) {
     error = String(e?.message || e).slice(0, 300);
   }
   const text = plainText(answer);
-  const segs = parseAnswer(text, c.evidence.sentences, c.evidence.materials);
+  const segs = parseAnswer(text, c.evidence.sentences, c.evidence.materials, { past: c.past || 0 });
   const stats = citationStats(segs);
   const quotes = segs.filter((s) => s.type === "quote").length;
   let judged = [];
@@ -354,7 +377,7 @@ const gram = rows.filter((r) => r.kind === "grammar");
 // 覆盖率：聚合比例只看「给了的出处对不对」，一两条合格出处就能撑起 100%；
 // 这里再按回答数，要求该讲题的回答大多各自给出出处和引文。只算 prompt 要求标出处的两类：
 // 语法分析按规则 3 不用标注，超纲题应拒答，两类都不计。
-const CITE_KINDS = new Set(["first-explain", "parse-key", "my-thinking"]);
+const CITE_KINDS = new Set(["first-explain", "parse-key", "my-thinking", "analogy"]);
 const inScope = rows.filter((r) => CITE_KINDS.has(r.kind) && !r.empty && !r.error);
 const citedRows = inScope.filter((r) => r.validCites > 0).length;
 const quotedRows = inScope.filter((r) => r.validQuotes > 0).length;
@@ -374,6 +397,11 @@ const metrics = [
   ...(() => {
     const keyed = rows.filter((r) => ["first-explain", "parse-key"].includes(r.kind) && r.keyIds && !r.empty && !r.error);
     return keyed.length ? [{ name: "依据句一致率", value: pct(keyed.filter((r) => r.hitKey).length, keyed.length), pass: (v) => v >= 90, line: "≥ 90% 的讲解 / 拆解答案句引到了离线标注的依据句", detail: `${keyed.filter((r) => r.hitKey).length}/${keyed.length}` }] : [];
+  })(),
+  ...(() => {
+    const an = rows.filter((r) => r.kind === "analogy" && !r.empty && !r.error);
+    const used = an.filter((r) => /\[题\d+\]/.test(r.answer)).length;
+    return an.length ? [{ name: "举一反三点到对比题", value: pct(used, an.length), pass: (v) => v >= 90, line: "≥ 90% 的举一反三回答用 [题N] 提到了对比题", detail: `${used}/${an.length}` }] : [];
   })(),
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },

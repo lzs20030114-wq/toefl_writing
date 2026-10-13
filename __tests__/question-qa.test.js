@@ -296,7 +296,7 @@ describe("§1.1 小工具", () => {
     expect(sentenceLabel(one[1], one)).toBe("第 2 句");
   });
   test("预设问题换成往深处走的三个；拆解答案句没选区时先让 AI 写出依据句", () => {
-    expect(QA_PRESETS.map((p) => p.id)).toEqual(["parse-key", "my-thinking", "simpler"]);
+    expect(QA_PRESETS.map((p) => p.id)).toEqual(["parse-key", "my-thinking", "simpler", "analogy"]);
     expect(presetText("parse-key")).toContain("[S编号]");
     expect(presetText("parse-key", { selection: { text: "x y" } })).toContain("选中的这句");
     expect(presetText("my-thinking", { selectedLabel: "A" })).toBe("我当时选 A，是因为");
