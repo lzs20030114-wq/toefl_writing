@@ -57,7 +57,7 @@
 
 ## 成品数据里的置信度
 
-`data/realBank/reading/distractor-labels.json` 里每个选项都有 `text`（选项完整文案，逐字和题库比对，用来发现重建题库后选项文案变了或互换了）和 `confidence`：两票一致取两票中较低的一档；终审采纳某一票取那票的（最高记 medium）；终审另判记 medium；待老师定记 low。不是 high 时，`alt` 写另一票或标注员给的第二候选类别（有的话，且必须在该题型的类别表里）。
+`data/realBank/reading/distractor-labels.json` 里每道题存完整题干 `stem`，每个选项都有 `text`（选项完整文案，逐字和题库比对，用来发现重建题库后选项文案变了或互换了）和 `confidence`：两票一致取两票中较低的一档；终审采纳某一票取那票的（最高记 medium）；终审另判记 medium；待老师定记 low。不是 high 时，`alt` 写另一票或标注员给的第二候选类别（有的话，且必须在该题型的类别表里）。
 
 ## 两票怎么出
 

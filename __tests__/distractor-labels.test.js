@@ -24,13 +24,13 @@ for (const it of bank.items || bank) {
 describe("学术阅读真题干扰项标注", () => {
   const entries = Object.entries(labels.items);
 
-  test("每道有选项的题都标了，题干对得上（题号挪位会被拦下）", () => {
+  test("每道有选项的题都标了，完整题干逐字对得上（题号挪位或题干改动会被拦下）", () => {
     const withOptions = [...questions.entries()].filter(([, { q }]) => Object.keys(q.options || {}).length > 1);
     expect(entries.length).toBe(withOptions.length);
     for (const [qid, entry] of entries) {
       const hit = questions.get(qid);
       expect(hit).toBeTruthy();
-      expect(String(hit.q.stem).trim().startsWith(entry.stem)).toBe(true);
+      expect(entry.stem).toBe(String(hit.q.stem).trim());
     }
   });
 
