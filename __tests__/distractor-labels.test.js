@@ -1,4 +1,5 @@
 import { numberSentences } from "../lib/qa/questionQa";
+import { createHash } from "crypto";
 import { evidenceKey, quoteInSentences } from "../lib/qa/answerEvidence";
 
 const bank = require("../data/realBank/reading/ap.json");
@@ -22,7 +23,8 @@ const SUBLABELS = new Set(["沾边无据", "常识干扰", "毫不相关", "空�
 const questions = new Map();
 for (const it of bank.items || bank) {
   const sentences = numberSentences(it.passage);
-  (it.questions || []).forEach((q, i) => questions.set(evidenceKey(it.id, i), { q, sentences }));
+  const passageHash = createHash("sha256").update(String(it.passage)).digest("hex");
+  (it.questions || []).forEach((q, i) => questions.set(evidenceKey(it.id, i), { q, sentences, passageHash }));
 }
 
 describe("学术阅读真题干扰项标注", () => {
@@ -36,6 +38,11 @@ describe("学术阅读真题干扰项标注", () => {
       expect(hit).toBeTruthy();
       expect(entry.stem).toBe(String(hit.q.stem).trim());
     }
+  });
+
+  test("正文没变（重建题库改了正文任何一处，整篇的标注都要重审）", () => {
+    const changed = entries.filter(([qid, entry]) => entry.passage_sha256 !== questions.get(qid).passageHash).map(([qid]) => qid);
+    expect(changed).toEqual([]);
   });
 
   test("只标错误选项，每个错误选项都有标签，且选项文案对得上（重建题库改了文案或互换选项会被拦下）", () => {
