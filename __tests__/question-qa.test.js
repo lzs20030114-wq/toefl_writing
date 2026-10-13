@@ -311,11 +311,11 @@ describe("出处带原话 / 结论配对", () => {
     expect(c).toEqual([["S2", true], ["S3", false]]);
     expect(citationStats(segs)).toEqual({ cites: 3, badCites: 0, badQuotes: 0, unbound: 1 });
   });
-  test("citationClaims：每组出处配上它前面那句话；连写出处算一组；坏句号不收", () => {
-    const segs = parseAnswer("开头一句。作者说植物固土 \"anchor the soil\" [S2][S1]。后来 Lee 不同意 [S3]，还有 [S99]。", sentences);
-    expect(citationClaims(segs)).toEqual([
-      { claim: "作者说植物固土 \"anchor the soil\"", ids: ["S2", "S1"], sentences: [sentences[1].text, sentences[0].text] },
-      { claim: "后来 Lee 不同意", ids: ["S3"], sentences: [sentences[2].text] },
+  test("citationClaims：按中文整句配出处；同句多个出处合一条；坏句号不收", () => {
+    const text = "开头一句。作者说植物固土 \"anchor the soil\" [S2][S1]，所以选 B。后来 Lee 不同意 [S3]，还有 [S99]。";
+    expect(citationClaims(text, sentences)).toEqual([
+      { claim: "作者说植物固土 \"anchor the soil\" [S2][S1]，所以选 B。", ids: ["S2", "S1"], sentences: [sentences[1].text, sentences[0].text] },
+      { claim: "后来 Lee 不同意 [S3]，还有 [S99]。", ids: ["S3"], sentences: [sentences[2].text] },
     ]);
   });
 });
