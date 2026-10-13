@@ -1,0 +1,42 @@
+import { verifyEvidence, answerEvidenceFor, evidenceKey } from "../lib/qa/answerEvidence";
+import { numberSentences, buildEvidence } from "../lib/qa/questionQa";
+
+const PASSAGE = "Farmers use cover crops. These plants anchor the soil at 7 a.m. daily.\n\nDr. Lee disagrees. She says yields fall.";
+const sentences = numberSentences(PASSAGE);
+
+describe("verifyEvidence：两票合并", () => {
+  test("两票句号有交集、引文在交集句里 → ok，只留交集", () => {
+    const r = verifyEvidence([{ ids: ["S2", "S1"], quote: "anchor the soil" }, { ids: ["S2"], quote: "anchor the soil" }], sentences);
+    expect(r).toEqual({ status: "ok", ids: ["S2"], sentences: [sentences[1].text], quote: "anchor the soil" });
+  });
+  test("两票无交集 → disputed", () => {
+    expect(verifyEvidence([{ ids: ["S1"], quote: "cover crops" }, { ids: ["S3"], quote: "disagrees" }], sentences).status).toBe("disputed");
+  });
+  test("引文是编的 → disputed；一票失败 → 有效票不足", () => {
+    expect(verifyEvidence([{ ids: ["S2"], quote: "holds the dirt" }, { ids: ["S2"], quote: "holds the dirt" }], sentences).reason).toBe("引文在所标句子里找不到");
+    expect(verifyEvidence([{ ids: ["S2"], quote: "anchor" }, null], sentences).reason).toBe("有效票不足");
+  });
+  test("不存在的句号丢掉；只跑一票时一票就够", () => {
+    expect(verifyEvidence([{ ids: ["S99", "2"], quote: "anchor" }], sentences)).toMatchObject({ status: "ok", ids: ["S2"] });
+  });
+});
+
+describe("answerEvidenceFor：运行时按原文对回句号", () => {
+  const detail = { qid: evidenceKey("real_ap_1", 0), stem: "The word anchor is closest in meaning to", passage: PASSAGE, correct: "B", options: { A: "x", B: "y" } };
+  const data = { items: { "real_ap_1-q0": { stem: detail.stem.slice(0, 80), status: "ok", ids: ["S2"], sentences: [sentences[1].text] } } };
+  test("键、题干都对得上 → 当前句号", () => {
+    expect(answerEvidenceFor(data, detail, sentences)).toEqual({ ids: ["S2"], sentences: [sentences[1].text] });
+  });
+  test("题干对不上 / 没有这题 / disputed / 原文里找不到这句 → null", () => {
+    expect(answerEvidenceFor(data, { ...detail, stem: "other" }, sentences)).toBe(null);
+    expect(answerEvidenceFor(data, { ...detail, qid: "x" }, sentences)).toBe(null);
+    expect(answerEvidenceFor({ items: { "real_ap_1-q0": { ...data.items["real_ap_1-q0"], status: "disputed" } } }, detail, sentences)).toBe(null);
+    expect(answerEvidenceFor({ items: { "real_ap_1-q0": { ...data.items["real_ap_1-q0"], sentences: ["Not in passage at all."] } } }, detail, sentences)).toBe(null);
+    expect(answerEvidenceFor(null, detail, sentences)).toBe(null);
+  });
+  test("buildEvidence 带上依据句一行", () => {
+    const key = answerEvidenceFor(data, detail, sentences);
+    expect(buildEvidence(detail, null, key).text).toContain("答案依据句（离线标注，两次独立标注一致，供参考；与原文冲突时以原文为准）：[S2]");
+    expect(buildEvidence(detail).text).not.toContain("答案依据句");
+  });
+});

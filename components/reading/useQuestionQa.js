@@ -19,6 +19,7 @@ import {
   plainText,
 } from "../../lib/qa/questionQa";
 import { trapOfBrief, trapOfDetail } from "../../lib/qa/trapStore";
+import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
 import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
 
 // 练习记录逐题「继续追问」的状态层。第一轮仍是 useReadingAiExplain 的讲解（prompt 与缓存桶都不动），
@@ -96,7 +97,8 @@ export function useQuestionQa(detail, firstExplain) {
       let related = cur.related;
       const wantMistakes = wantsMistakeContext(q, presetId);
       if (wantMistakes && !related) related = readRelatedMistakes(detail);
-      const ev = wantMistakes ? buildEvidence(detail, related) : evidence;
+      const keyEvidence = answerEvidenceFor(await loadAnswerEvidence(), detail, evidence.sentences);
+      const ev = wantMistakes || keyEvidence ? buildEvidence(detail, wantMistakes ? related : null, keyEvidence) : evidence;
 
       // 选中了短语、或提问里点名了一个原文里的词，就查 ECDICT；整句选区不查。
       let dict = null;

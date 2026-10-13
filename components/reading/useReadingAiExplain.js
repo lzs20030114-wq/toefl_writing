@@ -4,6 +4,7 @@ import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { EXPLAIN_SYSTEM, EXPLAIN_SYSTEM_CORRECT, buildEvidence, parseTrap, plainText } from "../../lib/qa/questionQa";
 import { saveTrap } from "../../lib/qa/trapStore";
+import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
 import { AiExplainView } from "../shared/AiExplainView";
 import { QuestionQaPanel, CitedText } from "./QuestionQaPanel";
 
@@ -64,8 +65,8 @@ function getFromCache(detail) {
  * 组装喂给模型的 message：和追问同一份证据包（lib/qa/questionQa 的 buildEvidence）——
  * 原文按句编号、选句题的 S 键换成句子原文并对回原文句号、插入句位置标号、题库解析标「仅供参考」。
  */
-export function buildReadingExplainMessage(detail) {
-  return buildEvidence(detail).text;
+export function buildReadingExplainMessage(detail, keyEvidence = null) {
+  return buildEvidence(detail, null, keyEvidence).text;
 }
 
 export function useReadingAiExplain() {
@@ -81,7 +82,9 @@ export function useReadingAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3));
+      // 真题有离线标注的答案依据句就一并给（lib/qa/answerEvidence）；加载失败照常讲。
+      const keyEvidence = answerEvidenceFor(await loadAnswerEvidence(), detail, buildEvidence(detail).sentences);
+      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail, keyEvidence), AI_HELPER_MAX_TOKENS, 60000, 0.3));
       if (!text) throw new Error("Empty AI response");
       saveToCache(detail, text);
       if (!detail.isCorrect) saveTrap(detail, parseTrap(text));

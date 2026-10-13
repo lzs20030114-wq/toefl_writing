@@ -31,6 +31,10 @@ const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "re
 const { QA_SYSTEM, EXPLAIN_SYSTEM, parseTrap, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
+const { answerEvidenceFor } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
+// 线上同款：有离线标注的答案依据句就放进证据包（文件不存在或空 = 不放）。
+const EVIDENCE_FILE = join(ROOT, "data", "realBank", "reading", "answer-evidence.json");
+const ANSWER_EVIDENCE = existsSync(EVIDENCE_FILE) ? JSON.parse(readFileSync(EVIDENCE_FILE, "utf-8")) : null;
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
 // token 预算同理，取线上追问用的共享常量（追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×2）。
 const { AI_HELPER_MAX_TOKENS } = await import(pathToFileURL(join(ROOT, "lib", "ai", "client.js")).href);
@@ -142,7 +146,9 @@ function buildCases(x) {
     subtype: x.subtype,
     isCorrect: false,
   };
-  const evidence = buildEvidence(detail);
+  const base = buildEvidence(detail);
+  const keyEvidence = answerEvidenceFor(ANSWER_EVIDENCE, detail, base.sentences);
+  const evidence = keyEvidence ? buildEvidence(detail, null, keyEvidence) : base;
   const longest = evidence.sentences.slice().sort((a, b) => b.text.length - a.text.length)[0];
   // 真题里有一批选句题被拍成了 A–D 普通选项（isSentenceSelection 判为普通选择题），那批照选项键写。
   const optText = isSentenceSelection(x.q) ? "那一句" : `${selected}`;
@@ -153,10 +159,11 @@ function buildCases(x) {
     { kind: "out-of-scope", question: "这篇文章的作者是谁？最早发表在哪里？" },
   ];
   return [
-    // 第一轮讲解：和追问同一份证据包、同一套出处规则（components/reading/useReadingAiExplain）
-    { kind: "first-explain", question: "（第一轮讲解）", detail, evidence, system: EXPLAIN_SYSTEM, message: evidence.text },
+    // 第一轮讲解（keyEvidence 挂在用例上，算「依据句一致率」用）：和追问同一份证据包、同一套出处规则（components/reading/useReadingAiExplain）
+    { kind: "first-explain", question: "（第一轮讲解）", detail, evidence, keyEvidence, system: EXPLAIN_SYSTEM, message: evidence.text },
     ...cases.map((c) => ({
       ...c,
+      keyEvidence,
       detail,
       evidence,
       system: QA_SYSTEM,
@@ -318,6 +325,9 @@ async function runOne(c, i) {
     badQuoteTexts: segs.filter((s) => s.type === "quote" && !s.valid).map((s) => s.text),
     judged,
     trap: c.kind === "first-explain" ? parseTrap(text) : undefined,
+    // 有离线依据句时：回答里核对通过的原文出处有没有落在依据句上
+    keyIds: c.keyEvidence ? c.keyEvidence.ids : null,
+    hitKey: c.keyEvidence ? segs.some((s) => s.type === "cite" && s.kind === "sentence" && s.valid && c.keyEvidence.ids.includes(s.id)) : null,
   };
   process.stdout.write(`[${i + 1}/${cases.length}] ${c.itemId} ${c.kind} 出处 ${stats.cites}（错 ${stats.badCites}） 引文 ${quotes}（错 ${stats.badQuotes}）${row.empty ? " 空" : ""}${row.error ? ` 错误：${row.error.slice(0, 60)}` : ""}\n`);
   return row;
@@ -361,6 +371,10 @@ const metrics = [
   ...(JUDGE ? [{ name: "出处支撑率", value: pct(judgedAll.filter((x) => x.support).length, judgedAll.length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的讲解句能由所引原文推出（评审模型判）", detail: `${judgedAll.filter((x) => x.support).length}/${judgedAll.length}` },
     { name: "评审覆盖率", value: pct(judgedAll.length, claimsAll.length), pass: (v) => v != null && v >= 95, line: "≥ 95% 的讲解句评出了结果（低了支撑率不可信）", detail: `${judgedAll.length}/${claimsAll.length}` }] : []),
   { name: "陷阱行完整率", value: pct(rows.filter((r) => r.kind === "first-explain" && r.trap).length, rows.filter((r) => r.kind === "first-explain").length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的第一轮讲解末尾给出合法陷阱类型", detail: `${rows.filter((r) => r.kind === "first-explain" && r.trap).length}/${rows.filter((r) => r.kind === "first-explain").length}` },
+  ...(() => {
+    const keyed = rows.filter((r) => ["first-explain", "parse-key"].includes(r.kind) && r.keyIds && !r.empty && !r.error);
+    return keyed.length ? [{ name: "依据句一致率", value: pct(keyed.filter((r) => r.hitKey).length, keyed.length), pass: (v) => v >= 90, line: "≥ 90% 的讲解 / 拆解答案句引到了离线标注的依据句", detail: `${keyed.filter((r) => r.hitKey).length}/${keyed.length}` }] : [];
+  })(),
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
   { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },
