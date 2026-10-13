@@ -151,6 +151,10 @@ describe("noteQa 提示词", () => {
     expect(message.trim().endsWith("【学生现在的问题】列出所有词形")).toBe(true);
     expect(NOTE_SYSTEM).toContain("格式 [S3]");
     expect(NOTE_SYSTEM).not.toContain("非本题材料");
+    // 只问意思不写「为什么」（2026-10-13 用户要求）：快捷问题不夹带「为什么」，提示词写明只答问到的。
+    const meaning = NOTE_PRESETS.phrase.find((p) => p.id === "meaning");
+    expect(meaning.text).not.toContain("为什么");
+    expect(NOTE_SYSTEM).toContain("只答学生问到的");
   });
   it("跨句选区落在两句", () => {
     const sentences = numberSentences(PASSAGE);
