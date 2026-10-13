@@ -9,7 +9,8 @@ import React, { useState } from "react";
 
 const INDIGO = { text: "#4338CA", bd: "#C7D2FE", bg: "#EEF2FF", hover: "#E0E7FF", solid: "#6366F1", cardBg: "#F7F7FE", cardBd: "#E0E7FF" };
 
-export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文分析…", testId, extra = null }) {
+// body：可选的正文渲染（阅读讲解传带出处标签的 CitedText）；不传就按纯文本显示 ex.text。
+export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文分析…", testId, extra = null, body = null }) {
   // 收起只是本地视图状态；再点「AI 讲解」会回到已有结果（hook 里有缓存 / 已有文本，不会重复计费）。
   const [hidden, setHidden] = useState(false);
 
@@ -20,7 +21,7 @@ export function AiExplainView({ ex, onRun, loadingText = "AI 正在结合原文�
           <span style={{ fontSize: 11, fontWeight: 800, color: INDIGO.text, letterSpacing: "0.04em" }}>AI 讲解</span>
           <button type="button" onClick={() => setHidden(true)} style={{ border: "none", background: "none", color: "#94a39a", fontSize: 11, cursor: "pointer" }}>收起</button>
         </div>
-        <div style={{ fontSize: 12.5, lineHeight: 1.7, color: "#1a2420", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{ex.text}</div>
+        <div style={{ fontSize: 12.5, lineHeight: 1.7, color: "#1a2420", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{body || ex.text}</div>
       </div>
     );
   }

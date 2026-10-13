@@ -5,6 +5,9 @@ import {
   parseAnswer,
   citationStats,
   citationClaims,
+  parseTrap,
+  selectedSignature,
+  EXPLAIN_SYSTEM,
   dictTermFor,
   pickRelatedMistakes,
   locateSentence,
@@ -122,9 +125,19 @@ describe("pickRelatedMistakes", () => {
     expect(r.sameQuestionWrongCount).toBe(3);
     expect(r.items.map((x) => x.stem)).toEqual(["q2", "q1", "q5"]);
   });
+  test("给了本题陷阱：同陷阱的错题排前面，再按时间；每条带上当时的陷阱", () => {
+    const cards = [card("q1", "detail", "2026-10-09"), card("q2", "detail", "2026-10-01"), card("q3", "detail", "2026-10-05")];
+    const traps = { q2: "偷换概念", q3: "过度推断" };
+    const r = pickRelatedMistakes(cards, { questionType: "detail", subtype: "ap", stem: "x", trap: "偷换概念", trapOf: (b) => traps[b.stem] || null });
+    expect(r.items.map((x) => [x.stem, x.trap])).toEqual([["q2", "偷换概念"], ["q1", null], ["q3", "过度推断"]]);
+    expect(r.sameTrapCount).toBe(1);
+    const ev = buildEvidence(DETAIL, { ...r, ownTrap: "偷换概念" }).text;
+    expect(ev).toContain("其中 1 道和本题一样是「偷换概念」");
+    expect(ev).toContain("当时讲解归纳的陷阱：偷换概念");
+  });
   test("没有题型时不取同类题，但仍报本题错次", () => {
     const r = pickRelatedMistakes([card("a", "detail", "x", { wrongCount: 2 }), card("b", "detail", "y")], { stem: "a" });
-    expect(r).toEqual({ total: 0, sameQuestionWrongCount: 2, items: [] });
+    expect(r).toEqual({ total: 0, sameTrapCount: 0, sameQuestionWrongCount: 2, items: [] });
   });
 });
 
@@ -283,23 +296,40 @@ describe("§1.1 小工具", () => {
     expect(sentenceLabel(one[1], one)).toBe("第 2 句");
   });
   test("预设问题换成往深处走的三个；拆解答案句没选区时先让 AI 写出依据句", () => {
-    expect(QA_PRESETS.map((p) => p.id)).toEqual(["parse-key", "my-thinking", "simpler"]);
+    expect(QA_PRESETS.map((p) => p.id)).toEqual(["parse-key", "my-thinking", "simpler", "analogy"]);
     expect(presetText("parse-key")).toContain("[S编号]");
     expect(presetText("parse-key", { selection: { text: "x y" } })).toContain("选中的这句");
     expect(presetText("my-thinking", { selectedLabel: "A" })).toBe("我当时选 A，是因为");
   });
   test("QA_SYSTEM：原文出处要先引原话；第一轮讲解以原文为准；错题看不出同类陷阱就不提", () => {
     expect(QA_SYSTEM).toContain("先用英文双引号引出原文里支撑这个结论的原话");
-    expect(QA_SYSTEM).toContain("没有逐句核对过");
+    expect(QA_SYSTEM).toContain("与原文冲突时以原文为准");
+    expect(QA_SYSTEM).toContain("不要评论它讲得详不详细");
     expect(QA_SYSTEM).toContain("看不出来就不要提");
   });
-  test("buildQaMessage：第一轮讲解标明未核对、仅供参考", () => {
+  test("buildQaMessage：第一轮讲解标明仅供参考", () => {
     const msg = buildQaMessage({ evidence: "材料", firstExplain: "答案在 S2。", question: "为什么" });
-    expect(msg).toContain("【本题已给出的讲解】（上一轮自动生成，未逐句核对，仅供参考；与原文冲突时以原文为准）\n答案在 S2。");
+    expect(msg).toContain("【本题已给出的讲解】（上一轮自动生成，仅供参考；与原文冲突时以原文为准）\n答案在 S2。");
   });
   test("QA_SYSTEM：语法分析不算超纲；说思路时先指出哪一步对不上", () => {
     expect(QA_SYSTEM).toContain("语法、词汇、句意分析，属于本题范围");
     expect(QA_SYSTEM).toContain("哪一步和原文对不上");
+  });
+});
+
+describe("第一轮讲解：陷阱行与作答签名", () => {
+  test("parseTrap 只认末行的陷阱类型名", () => {
+    expect(parseTrap("答案依据 \"anchor\" [S2]。\n陷阱：偷换概念")).toBe("偷换概念");
+    expect(parseTrap("……\n陷阱：范围扩大或缩小。")).toBe("范围扩大或缩小");
+    expect(parseTrap("……\n陷阱：未作答")).toBe("未作答");
+    expect(parseTrap("……\n陷阱：粗心")).toBe(null);
+    expect(parseTrap("这里没有陷阱行")).toBe(null);
+    expect(EXPLAIN_SYSTEM).toContain("陷阱：类型名");
+    expect(EXPLAIN_SYSTEM).toContain("[S编号]");
+  });
+  test("selectedSignature 与错题卡 brief.userAnswer 同口径", () => {
+    expect(selectedSignature(DETAIL)).toBe("A. fertilize");
+    expect(selectedSignature({ ...DETAIL, selected: null })).toBe("");
   });
 });
 

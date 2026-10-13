@@ -108,7 +108,7 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     expect(callAI.mock.calls[0][0]).toContain("学生答对了");
     expect(callAI.mock.calls[0][0]).toContain("不要虚构学生的错误");
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：A.");
+    expect(callAI.mock.calls[0][1]).toContain("学生作答：A.");
   });
 
   test("非 Pro：逐题回顾照常渲染，但没有 AI 按钮，也不计费", () => {
@@ -130,11 +130,15 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     expect(system).toContain("TOEFL 阅读");
     // 面板是 pre-wrap 纯文本渲染，markdown 星号会原样显示
     expect(system).toContain("不要使用 markdown");
-    expect(message).toContain(PASSAGE);
+    // 原文按句编号（与追问同一份证据包），整篇都在
+    expect(message).toContain("[S1] USED TEXTBOOK SALE!");
     expect(message).toContain(Q_DETAIL.stem);
-    expect(message).toContain("学生选择：B. A flat fee of fifteen dollars each");
-    expect(message).toContain("正确答案：A. Between three and twenty-five dollars");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect(message).toContain("学生作答：B. A flat fee of fifteen dollars each");
+    expect(message).toContain("标准答案：A. Between three and twenty-five dollars");
+    // 出处规则与追问同一套；错题要在末尾写陷阱类型
+    expect(system).toContain("[S编号]");
+    expect(system).toContain("陷阱：");
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, 60000, 0.3]);
 
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
   });
@@ -146,7 +150,7 @@ describe("RDLDetail（阅读练习历史 / 真题练习记录）", () => {
     })} />);
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：未作答");
+    expect(callAI.mock.calls[0][1]).toContain("学生作答：未作答");
   });
 
   test("老记录没存题面（questions 缺失）时不放按钮 —— 讲不了就不放", () => {
@@ -194,8 +198,8 @@ describe("RDLTask 交卷后的逐题复盘", () => {
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     const message = callAI.mock.calls[0][1];
-    expect(message).toContain(PASSAGE);
-    expect(message).toContain("学生选择：B. A flat fee of fifteen dollars each");
+    expect(message).toContain("[S1] USED TEXTBOOK SALE!");
+    expect(message).toContain("学生作答：B. A flat fee of fifteen dollars each");
     expect(await screen.findByText(/答案句在第二段末尾/)).toBeInTheDocument();
   });
 
@@ -235,8 +239,8 @@ describe("RDLTask 交卷后的逐题复盘", () => {
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     const message = callAI.mock.calls[0][1];
     expect(message).toContain("选句题");
-    expect(message).toContain("学生选的句子：Beta sits still.");
-    expect(message).toContain("正确句子：Alpha runs fast.");
+    expect(message).toMatch(/学生选的句子：(\[S\d+\] )?Beta sits still\./);
+    expect(message).toMatch(/正确句子：(\[S\d+\] )?Alpha runs fast\./);
   });
 
   test("题库没带 explanation 的题照样有 AI 按钮 —— 独立于静态解析渲染", () => {
@@ -314,6 +318,25 @@ describe("缓存不许跨题串味", () => {
   });
 });
 
+describe("第一轮讲解的出处与陷阱", () => {
+  test("讲解里的 [S编号] 显示成可点开的出处标签；陷阱写进陷阱表", async () => {
+    callAI.mockImplementationOnce(async () => "原文说 \"Prices range from three to twenty-five dollars\" [S3]，你选的 B 不对。\n陷阱：偷换概念");
+    render(<RDLDetail session={historySession()} />);
+    fireEvent.click(aiButtons()[0]);
+    const box = await screen.findByTestId("explain-answer");
+    expect(box.querySelector('[data-testid="qa-cite"]')).not.toBeNull();
+    expect(box.querySelector('[data-testid="qa-cite-bad"]')).toBeNull();
+    expect(Object.values(JSON.parse(localStorage.getItem("reading-trap-v1")))).toEqual(["偷换概念"]);
+  });
+  test("编出来的句号标灰", async () => {
+    callAI.mockImplementationOnce(async () => "原文说 \"free coffee for everyone\" [S9]。\n陷阱：原文未提");
+    render(<RDLDetail session={historySession()} />);
+    fireEvent.click(aiButtons()[0]);
+    const box = await screen.findByTestId("explain-answer");
+    expect(box.querySelector('[data-testid="qa-cite-bad"]')).not.toBeNull();
+  });
+});
+
 describe("buildReadingExplainMessage 纯函数", () => {
   // 真题 AP 选句题：作答值是 S 键，讲解前提是把键换成句子原文。
   const SS_PASSAGE = "Intro paragraph.\n\nAlpha runs fast. Beta sits still. Gamma jumps high.";
@@ -338,8 +361,8 @@ describe("buildReadingExplainMessage 纯函数", () => {
     });
     expect(message).toContain("选句题");
     expect(message).toContain("第 2 段");
-    expect(message).toContain("学生选的句子：Beta sits still.");
-    expect(message).toContain("正确句子：Alpha runs fast.");
+    expect(message).toMatch(/学生选的句子：(\[S\d+\] )?Beta sits still\./);
+    expect(message).toMatch(/正确句子：(\[S\d+\] )?Alpha runs fast\./);
     // S 键本身不能是唯一信息 —— 不许出现「学生选的句子：S2」这种写法
     expect(message).not.toContain("学生选的句子：S2");
   });
@@ -383,7 +406,7 @@ describe("buildReadingExplainMessage 纯函数", () => {
       isCorrect: false,
     });
     expect(message).not.toContain("选句题");
-    expect(message).toContain("学生选择：B. Beta sits.");
+    expect(message).toContain("学生作答：B. Beta sits.");
   });
 
   test("AP 长度的原文（~1500 字符）整篇喂进去，不砍尾段", () => {

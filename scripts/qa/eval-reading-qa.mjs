@@ -3,7 +3,7 @@
 //
 // 测的是「追问 prompt 在 DeepSeek 上守不守规矩」：出处有效率、引文核实率、超纲拒答率、
 // 语法误拒率、空回复率、疑似翻案。题目来自真题库，固定随机种子抽 24 道（AP 16 + RDL 8），
-// 每道模拟一次错答、问 4 个问题 → 96 次调用。
+// 每道模拟一次错答、先出第一轮讲解、再问 4 个问题，有同题型对比题的再加一问举一反三 → 约 140 次调用。
 //
 // 用法：
 //   node scripts/qa/eval-reading-qa.mjs                 # 默认 dry-run：只打印「将调用 N 次 / 预计 ¥X」
@@ -28,11 +28,16 @@ const require = createRequire(import.meta.url);
 
 const qa = await import(pathToFileURL(join(ROOT, "lib", "qa", "questionQa.js")).href);
 const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "reading", "sentenceSelection.js")).href);
-const { QA_SYSTEM, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
+const { QA_SYSTEM, EXPLAIN_SYSTEM, parseTrap, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
+const { pickAnalogies, analogyLines, analogyMaterials, pastItemMaterials } = await import(pathToFileURL(join(ROOT, "lib", "qa", "pastQuestions.js")).href);
+const { answerEvidenceFor } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
+// 线上同款：有离线标注的答案依据句就放进证据包（文件不存在或空 = 不放）。
+const EVIDENCE_FILE = join(ROOT, "data", "realBank", "reading", "answer-evidence.json");
+const ANSWER_EVIDENCE = existsSync(EVIDENCE_FILE) ? JSON.parse(readFileSync(EVIDENCE_FILE, "utf-8")) : null;
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
-// token 预算同理，取线上追问用的共享常量（追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×2）。
+// token 预算同理，取线上追问用的共享常量（第一轮讲解与追问 = AI_HELPER_MAX_TOKENS × --tokens-mult，默认 ×3，与线上一致）。
 const { AI_HELPER_MAX_TOKENS } = await import(pathToFileURL(join(ROOT, "lib", "ai", "client.js")).href);
 
 function loadEnv() {
@@ -58,7 +63,7 @@ const RUN = flag("run");
 const YES = flag("yes");
 const SEED = Number(opt("seed", 20261012));
 const LIMIT = Number(opt("limit", 24));
-const TOKENS_MULT = Number(opt("tokens-mult", 2));
+const TOKENS_MULT = Number(opt("tokens-mult", 3));
 const MAX_CALLS = Number(opt("max-calls", 200));
 const CONCURRENCY = Number(opt("concurrency", 4));
 const REJUDGE = opt("rejudge", null);
@@ -120,12 +125,23 @@ const sample = [
   ...take(rdl, 8, () => true, used),
 ].slice(0, LIMIT);
 
-/* ── 每道题的 4 个问法 ─────────────────────────────────── */
+/* ── 每道题的第一轮讲解 + 4 个问法 ─────────────────────────────────── */
 const FIRST_EXPLAIN = "（评估占位）第一轮讲解：正确答案在原文中有直接依据，学生所选选项与原文表述不符。";
 
 function wrongKey(q) {
   const keys = Object.keys(q.options).filter((k) => k !== q.correct_answer);
   return keys[Math.floor(rand() * keys.length)];
+}
+
+// 举一反三：拿同一批抽样里其他同题型的题当「以前做过的题」，按抽样顺序交替记成做错 / 做对。
+function pastFor(x) {
+  return sample
+    .filter((y) => y !== x && y.q.question_type === x.q.question_type && y.subtype === x.subtype)
+    .map((y, k) => {
+      const wrong = k % 2 === 0;
+      const sel = wrong ? Object.keys(y.q.options).find((key) => key !== y.q.correct_answer) : y.q.correct_answer;
+      return { qid: `${y.itemId}-q${y.qIndex}`, stem: y.q.stem, question: y.q, options: y.q.options, selected: sel, correct: y.q.correct_answer, passage: y.passage, isCorrect: !wrong, date: `2026-10-${String(10 + k).padStart(2, "0")}` };
+    });
 }
 
 function buildCases(x) {
@@ -142,7 +158,9 @@ function buildCases(x) {
     subtype: x.subtype,
     isCorrect: false,
   };
-  const evidence = buildEvidence(detail);
+  const base = buildEvidence(detail);
+  const keyEvidence = answerEvidenceFor(ANSWER_EVIDENCE, detail, base.sentences);
+  const evidence = keyEvidence ? buildEvidence(detail, null, keyEvidence) : base;
   const longest = evidence.sentences.slice().sort((a, b) => b.text.length - a.text.length)[0];
   // 真题里有一批选句题被拍成了 A–D 普通选项（isSentenceSelection 判为普通选择题），那批照选项键写。
   const optText = isSentenceSelection(x.q) ? "那一句" : `${selected}`;
@@ -152,12 +170,29 @@ function buildCases(x) {
     { kind: "grammar", question: "这句的主干是什么？后面那部分修饰的是谁？", selection: longest ? { kind: "sentence", text: longest.text, sentenceId: longest.id } : null },
     { kind: "out-of-scope", question: "这篇文章的作者是谁？最早发表在哪里？" },
   ];
-  return cases.map((c) => ({
-    ...c,
-    detail,
-    evidence,
-    message: buildQaMessage({ evidence: evidence.text, firstExplain: FIRST_EXPLAIN, question: c.question, selection: c.selection || null }),
-  }));
+  return [
+    // 第一轮讲解（keyEvidence 挂在用例上，算「依据句一致率」用）：和追问同一份证据包、同一套出处规则（components/reading/useReadingAiExplain）
+    { kind: "first-explain", question: "（第一轮讲解）", detail, evidence, keyEvidence, system: EXPLAIN_SYSTEM, message: evidence.text },
+    ...(() => {
+      const an = pickAnalogies(pastFor(x), { evidenceData: ANSWER_EVIDENCE });
+      if (!an.items.length) return [];
+      const ev = buildEvidence(detail, null, keyEvidence, analogyLines(an));
+      return [{
+        kind: "analogy", question: presetText("analogy"), detail, keyEvidence, past: an.items.map(pastItemMaterials),
+        evidence: { ...ev, materials: [...ev.materials, ...analogyMaterials(an)] },
+        system: QA_SYSTEM,
+        message: buildQaMessage({ evidence: ev.text, firstExplain: FIRST_EXPLAIN, question: presetText("analogy") }),
+      }];
+    })(),
+    ...cases.map((c) => ({
+      ...c,
+      keyEvidence,
+      detail,
+      evidence,
+      system: QA_SYSTEM,
+      message: buildQaMessage({ evidence: evidence.text, firstExplain: FIRST_EXPLAIN, question: c.question, selection: c.selection || null }),
+    })),
+  ];
 }
 
 const cases = sample.flatMap((x) => buildCases(x).map((c) => ({ ...c, itemId: x.itemId, qIndex: x.qIndex, subtype: x.subtype, qtype: x.q.question_type })));
@@ -168,16 +203,18 @@ const estTokens = (s) => {
   const cjk = (String(s).match(/[一-鿿]/g) || []).length;
   return Math.round(cjk * 0.7 + (String(s).length - cjk) / 4);
 };
-const inTok = cases.reduce((n, c) => n + estTokens(QA_SYSTEM) + estTokens(c.message), 0);
+const inTok = cases.reduce((n, c) => n + estTokens(c.system) + estTokens(c.message), 0);
 const outTok = cases.length * 1500;
 // 评审调用：每次带整份材料 + 至多 6 条讲解句；上次实测每个回答平均约 3.5 条带出处的句子 → 约 1 次评审 / 回答。
 // 按每次 ~2500 入 / ~1500 出估（含推理）。
 const judgeCalls = JUDGE ? Math.ceil(cases.filter((c) => c.kind !== "out-of-scope").length * 1.3) : 0;
 const qaCalls = REJUDGE ? 0 : cases.length;
-const estCny = (((REJUDGE ? 0 : inTok + outTok) + judgeCalls * 4000) / 1e6) * CNY_PER_MTOK;
-const totalCalls = qaCalls + judgeCalls;
+const estCny = (((REJUDGE ? 0 : inTok + outTok) + (judgeCalls + (JUDGE ? Math.ceil(judgeCalls * 0.3) : 0)) * 4000) / 1e6) * CNY_PER_MTOK;
+// 评审漏评补评一次：次数封顶为首轮评审的 30%，算进报价和 --max-calls（按最坏情况）。
+const judgeRetryBudget = JUDGE ? Math.ceil(judgeCalls * 0.3) : 0;
+const totalCalls = qaCalls + judgeCalls + judgeRetryBudget;
 console.log(`抽样：AP ${sample.filter((x) => x.subtype === "ap").length} 道（选句 ${sample.filter((x) => x.q.question_type === "sentence_selection").length}、插入句 ${sample.filter((x) => x.q.question_type === "insert_text").length}），RDL ${sample.filter((x) => x.subtype === "rdl").length} 道；种子 ${SEED}`);
-console.log(`将调用 ~${totalCalls} 次${JUDGE ? `（追问 ${qaCalls} + 评审约 ${judgeCalls}）` : ""} / 追问输入 ~${REJUDGE ? 0 : inTok} tokens、输出 ~${REJUDGE ? 0 : outTok} tokens / 预计 ¥${estCny.toFixed(2)}（¥${CNY_PER_MTOK}/M）；max_tokens=${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`);
+console.log(`将调用至多 ~${totalCalls} 次${JUDGE ? `（追问 ${qaCalls} + 评审约 ${judgeCalls} + 补评至多 ${judgeRetryBudget}）` : ""} / 追问输入 ~${REJUDGE ? 0 : inTok} tokens、输出 ~${REJUDGE ? 0 : outTok} tokens / 预计 ¥${estCny.toFixed(2)}（¥${CNY_PER_MTOK}/M）；max_tokens=${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`);
 if (flag("show")) console.log(cases.slice(0, 4).concat(cases.filter((c) => c.qtype === "insert_text").slice(0, 1)).map((c) => `---- ${c.itemId} ${c.kind}\n${c.message}`).join("\n\n"));
 if (!RUN) {
   console.log("这是 dry-run。确认后加 --run 真跑。");
@@ -212,6 +249,7 @@ const JUDGE_SYSTEM =
 
 // 实际发出的评审请求数（含失败的），摘要里和追问次数分开记，方便与 DeepSeek 台账对账。
 let judgeRequests = 0;
+let judgeRetries = 0;
 
 async function judgeBatch(material, claims) {
   judgeRequests++;
@@ -219,7 +257,7 @@ async function judgeBatch(material, claims) {
     claims.map((c, k) => `${k + 1}. ${c.claim}\n   （标的出处：${c.ids.join("、")}）`).join("\n");
   const raw = await callDeepSeekViaCurl({
     apiKey,
-    payload: { model: MODEL, max_tokens: 4000, temperature: 0, messages: [{ role: "system", content: JUDGE_SYSTEM }, { role: "user", content: body }] },
+    payload: { model: MODEL, max_tokens: 8000, temperature: 0, messages: [{ role: "system", content: JUDGE_SYSTEM }, { role: "user", content: body }] },
     timeoutMs: 120000,
     meta: { script: "qa/eval-reading-qa", label: "judge" },
   });
@@ -236,11 +274,21 @@ async function judgeClaims(material, claims) {
   const out = [];
   for (let k = 0; k < claims.length; k += JUDGE_BATCH) {
     const part = claims.slice(k, k + JUDGE_BATCH);
+    let got;
     try {
-      out.push(...await judgeBatch(material, part));
+      got = await judgeBatch(material, part);
     } catch (e) {
-      out.push(...part.map((x) => ({ ...x, support: null, why: `评审失败：${String(e?.message || e).slice(0, 80)}` })));
+      got = part.map((x) => ({ ...x, support: null, why: `评审失败：${String(e?.message || e).slice(0, 80)}` }));
     }
+    // 评审没给结果的（空输出、JSON 坏了、漏条）单独再评一次；仍没有就记 null，计入评审覆盖率。
+    const miss = got.filter((x) => x.support === null);
+    if (miss.length && judgeRetries < judgeRetryBudget) {
+      judgeRetries++;
+      let again = [];
+      try { again = await judgeBatch(material, miss.map(({ support, why, ...c }) => c)); } catch {}
+      got = got.map((x) => (x.support === null ? again.find((y) => y.claim === x.claim && y.support !== null) || x : x));
+    }
+    out.push(...got);
   }
   return out;
 }
@@ -266,10 +314,11 @@ async function runOne(c, i) {
       apiKey,
       payload: {
         model: MODEL,
+        // 第一轮讲解线上用 1 倍预算（useReadingAiExplain），追问用 --tokens-mult 倍
         max_tokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT,
         temperature: 0.3,
         messages: [
-          { role: "system", content: QA_SYSTEM },
+          { role: "system", content: c.system },
           { role: "user", content: c.message },
         ],
       },
@@ -280,7 +329,7 @@ async function runOne(c, i) {
     error = String(e?.message || e).slice(0, 300);
   }
   const text = plainText(answer);
-  const segs = parseAnswer(text, c.evidence.sentences, c.evidence.materials);
+  const segs = parseAnswer(text, c.evidence.sentences, c.evidence.materials, { past: c.past || 0 });
   const stats = citationStats(segs);
   const quotes = segs.filter((s) => s.type === "quote").length;
   let judged = [];
@@ -305,12 +354,16 @@ async function runOne(c, i) {
     validQuotes: segs.filter((s) => s.type === "quote" && s.valid).length,
     empty: !text,
     // 没有句末标点多半是被 max_tokens 截断
-    truncated: !!text && !/[。！？.!?」）)\]】"”]\s*$/.test(text),
+    truncated: !!text && !/[。！？.!?」）)\]】"”]\s*$/.test(text) && !(c.kind === "first-explain" && parseTrap(text)),
     refused: REFUSE_RE.test(text),
     overturn: OVERTURN_RE.test(text),
     badCiteIds: segs.filter((s) => s.type === "cite" && !s.valid).map((s) => s.id),
     badQuoteTexts: segs.filter((s) => s.type === "quote" && !s.valid).map((s) => s.text),
     judged,
+    trap: c.kind === "first-explain" ? parseTrap(text) : undefined,
+    // 有离线依据句时：回答里核对通过的原文出处有没有落在依据句上
+    keyIds: c.keyEvidence ? c.keyEvidence.ids : null,
+    hitKey: c.keyEvidence ? segs.some((s) => s.type === "cite" && s.kind === "sentence" && s.valid && c.keyEvidence.ids.includes(s.id)) : null,
   };
   process.stdout.write(`[${i + 1}/${cases.length}] ${c.itemId} ${c.kind} 出处 ${stats.cites}（错 ${stats.badCites}） 引文 ${quotes}（错 ${stats.badQuotes}）${row.empty ? " 空" : ""}${row.error ? ` 错误：${row.error.slice(0, 60)}` : ""}\n`);
   return row;
@@ -337,7 +390,7 @@ const gram = rows.filter((r) => r.kind === "grammar");
 // 覆盖率：聚合比例只看「给了的出处对不对」，一两条合格出处就能撑起 100%；
 // 这里再按回答数，要求该讲题的回答大多各自给出出处和引文。只算 prompt 要求标出处的两类：
 // 语法分析按规则 3 不用标注，超纲题应拒答，两类都不计。
-const CITE_KINDS = new Set(["parse-key", "my-thinking"]);
+const CITE_KINDS = new Set(["first-explain", "parse-key", "my-thinking", "analogy"]);
 const inScope = rows.filter((r) => CITE_KINDS.has(r.kind) && !r.empty && !r.error);
 const citedRows = inScope.filter((r) => r.validCites > 0).length;
 const quotedRows = inScope.filter((r) => r.validQuotes > 0).length;
@@ -353,9 +406,27 @@ const metrics = [
   { name: "出处带原话率", value: pct(sum((r) => r.sentenceCites - r.unbound), sum((r) => r.sentenceCites)), pass: (v) => v != null && v >= 70, line: "≥ 70% 的原文出处前面带英文原话（新指标，首跑后再定线）", detail: `${sum((r) => r.sentenceCites - r.unbound)}/${sum((r) => r.sentenceCites)}` },
   ...(JUDGE ? [{ name: "出处支撑率", value: pct(judgedAll.filter((x) => x.support).length, judgedAll.length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的讲解句能由所引原文推出（评审模型判）", detail: `${judgedAll.filter((x) => x.support).length}/${judgedAll.length}` },
     { name: "评审覆盖率", value: pct(judgedAll.length, claimsAll.length), pass: (v) => v != null && v >= 95, line: "≥ 95% 的讲解句评出了结果（低了支撑率不可信）", detail: `${judgedAll.length}/${claimsAll.length}` }] : []),
+  { name: "陷阱行完整率", value: pct(rows.filter((r) => r.kind === "first-explain" && r.trap).length, rows.filter((r) => r.kind === "first-explain").length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的第一轮讲解末尾给出合法陷阱类型", detail: `${rows.filter((r) => r.kind === "first-explain" && r.trap).length}/${rows.filter((r) => r.kind === "first-explain").length}` },
+  ...(() => {
+    const keyed = rows.filter((r) => ["first-explain", "parse-key"].includes(r.kind) && r.keyIds && !r.empty && !r.error);
+    return keyed.length ? [{ name: "依据句一致率", value: pct(keyed.filter((r) => r.hitKey).length, keyed.length), pass: (v) => v >= 90, line: "≥ 90% 的讲解 / 拆解答案句引到了离线标注的依据句", detail: `${keyed.filter((r) => r.hitKey).length}/${keyed.length}` }] : [];
+  })(),
+  ...(() => {
+    const an = rows.filter((r) => r.kind === "analogy" && !r.empty && !r.error);
+    const used = an.filter((r) => /\[题\d+\]/.test(r.answer)).length;
+    return an.length ? [{ name: "举一反三点到对比题", value: pct(used, an.length), pass: (v) => v >= 90, line: "≥ 90% 的举一反三回答用 [题N] 提到了对比题", detail: `${used}/${an.length}` }] : [];
+  })(),
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
-  { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },
+  { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}${(() => {
+    const by = {};
+    for (const r of rows.filter((x) => x.empty || x.truncated || x.error)) {
+      const why = r.error ? "错误" : r.empty ? "空" : "截断";
+      by[`${r.kind}${why}`] = (by[`${r.kind}${why}`] || 0) + 1;
+    }
+    const parts = Object.entries(by).map(([k, n]) => `${k} ${n}`);
+    return parts.length ? `（${parts.join("、")}）` : "";
+  })()}` },
   { name: "疑似翻案", value: rows.filter((r) => r.overturn).length, pass: () => true, line: "逐条人工复核，应为 0", detail: "" },
 ];
 

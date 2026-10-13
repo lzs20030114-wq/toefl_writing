@@ -14,6 +14,7 @@ jest.mock("../lib/AuthContext", () => ({
 let SESSIONS = [];
 jest.mock("../lib/sessionStore", () => ({
   loadHist: jest.fn(() => ({ sessions: SESSIONS })),
+  SESSION_STORE_EVENTS: { HISTORY_UPDATED_EVENT: "toefl-history-updated" },
 }));
 
 const lookupWord = jest.fn(async (w) => ({ word: w, p: "kæʃ", t: "n. 现金" }));
@@ -179,7 +180,7 @@ describe("请求内容", () => {
     expect(message).toContain("【本题已给出的讲解】");
     expect(message).toContain(FIRST);
     expect(message).not.toContain("同类错题");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 2, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, 60000, 0.3]);
   });
 
   test("「我是这么想的…」只预填输入框，不发请求；补完发出后附上同类错题", async () => {
@@ -436,3 +437,60 @@ describe("上报", () => {
     }
   });
 });
+
+describe("举一反三（练习记录里同题型的题，对错各至多 2 道）", () => {
+  const right = (n, date) => ({
+    id: 100 + n, type: "reading", date,
+    details: { subtype: "rdl", itemId: `rdl-r${n}`, passage: "Lunch is served at noon.",
+      questions: [{ question_type: "detail", stem: `When is lunch served? (${n})`, options: { A: "At noon", B: "At one" }, correct_answer: "A" }],
+      results: [{ selected: "A", correct: "A", isCorrect: true }] },
+  });
+
+  test("有以前做过的同题型题才出按钮；点了 message 带对比题，回答里的 [题N] 可点开", async () => {
+    SESSIONS = [MISTAKE_SESSION, right(1, "2026-10-02"), right(2, "2026-10-05"), right(3, "2026-10-03")];
+    QA_REPLY = "先说本题 [S3]。再看 [题1]：你选了 \"At nine\"，和这题一样是偷换概念；[题2] 你做对了。[题9] 不存在。";
+    await openPanel();
+    fireEvent.click(screen.getByTestId("qa-preset-analogy"));
+    await waitFor(() => expect(qaCalls()).toHaveLength(1));
+    const message = qaCalls()[0][1];
+    expect(message).toContain("学生以前做过的同题型题（共 4 道：做错 1、做对 3；挑了下面 3 道");
+    expect(message).toContain("[题1] 2026-10-01 做错｜题目：When does the gym open?");
+    // 做对的按时间挑最近 2 道
+    expect(message).toContain("(2)");
+    expect(message).toContain("(3)");
+    expect(message).not.toContain("(1)");
+    // 举一反三优先，不再另附错题
+    expect(message).not.toContain("学生以前的同类错题");
+    const answer = await screen.findByTestId("qa-answer");
+    const tags = answer.querySelectorAll('[data-testid="qa-cite-past-tag"]');
+    expect(tags).toHaveLength(2);
+    expect(answer.querySelector('[data-testid="qa-bad-quote"]')).toBeNull();
+    expect(answer.querySelectorAll('[data-testid="qa-cite-bad"]')).toHaveLength(1);
+    fireEvent.click(tags[0]);
+    expect(screen.getByTestId("qa-cite-past")).toHaveTextContent("When does the gym open?");
+  });
+
+  test("没有同题型的记录就不出按钮", async () => {
+    SESSIONS = [];
+    await openPanel();
+    expect(screen.queryByTestId("qa-preset-analogy")).toBeNull();
+  });
+
+  test("打开时历史还空着，云端同步回来（history-updated）后按钮出现", async () => {
+    SESSIONS = [];
+    await openPanel();
+    expect(screen.queryByTestId("qa-preset-analogy")).toBeNull();
+    SESSIONS = [MISTAKE_SESSION, right(1, "2026-10-02")];
+    act(() => { window.dispatchEvent(new CustomEvent("toefl-history-updated")); });
+    expect(await screen.findByTestId("qa-preset-analogy")).toBeInTheDocument();
+  });
+
+  test("自由提问说「这类题」也会触发", async () => {
+    await openPanel();
+    fireEvent.change(screen.getByTestId("qa-input"), { target: { value: "这类题一般怎么找答案？" } });
+    fireEvent.click(screen.getByTestId("qa-send"));
+    await waitFor(() => expect(qaCalls()).toHaveLength(1));
+    expect(qaCalls()[0][1]).toContain("学生以前做过的同题型题");
+  });
+});
+
