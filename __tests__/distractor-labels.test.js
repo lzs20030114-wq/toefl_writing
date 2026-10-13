@@ -5,13 +5,14 @@ const bank = require("../data/realBank/reading/ap.json");
 const labels = require("../data/realBank/reading/distractor-labels.json");
 
 // 规则见 docs/distractor-label-rules.md；类别名只能用表里的
-const LABELS = new Set([
-  "与原文相反", "原文未提", "偷换概念", "范围扩大或缩小", "过度推断", "因果倒置", "答非所问", "其他",
-  "原文提到",
-  "常见义非语境义", "形近或词根干扰", "不符合语境义",
-  "就近名词误指", "语义不通",
-  "指代或话题不衔接", "衔接词不对应", "打断逻辑链",
-]);
+// 按题型分表：词汇、指代、插入句各有一张表，其余题型用意义类表（反向题的干扰项另记「原文提到」）
+const MEANING = ["与原文相反", "原文未提", "偷换概念", "范围扩大或缩小", "过度推断", "因果倒置", "答非所问", "其他", "原文提到"];
+const BY_TYPE = {
+  vocabulary_in_context: ["常见义非语境义", "形近或词根干扰", "不符合语境义", "其他"],
+  reference: ["就近名词误指", "语义不通", "其他"],
+  insert_text: ["指代或话题不衔接", "衔接词不对应", "打断逻辑链", "其他"],
+};
+const labelsFor = (type) => new Set(BY_TYPE[type] || MEANING);
 const SUBLABELS = new Set(["沾边无据", "常识干扰", "毫不相关", "空泛套话"]);
 
 const questions = new Map();
@@ -41,19 +42,22 @@ describe("学术阅读真题干扰项标注", () => {
     }
   });
 
-  test("类别在规则表里；子类只给「原文未提」", () => {
-    for (const [, entry] of entries) {
-      for (const o of Object.values(entry.options)) {
-        expect(LABELS.has(o.label)).toBe(true);
+  test("类别和备选类别都在该题型的表里；子类只给「原文未提」", () => {
+    const bad = [];
+    for (const [qid, entry] of entries) {
+      const allowed = labelsFor(questions.get(qid).q.question_type);
+      for (const [opt, o] of Object.entries(entry.options)) {
+        if (!allowed.has(o.label) || (o.alt != null && !allowed.has(o.alt))) bad.push(`${qid} ${opt}`);
         if (o.sublabel != null) {
           expect(o.label).toBe("原文未提");
           expect(SUBLABELS.has(o.sublabel)).toBe(true);
         }
       }
     }
+    expect(bad).toEqual([]);
   });
 
-  test("置信度合法；不是 high 的有备选类别时 alt 不等于本类，low 必带 alt", () => {
+  test("置信度合法；high 不带备选类别，备选类别不等于本类，low 必带备选类别", () => {
     for (const [, entry] of entries) {
       for (const o of Object.values(entry.options)) {
         expect(["high", "medium", "low"]).toContain(o.confidence);
