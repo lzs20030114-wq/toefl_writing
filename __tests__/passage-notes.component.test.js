@@ -147,7 +147,7 @@ describe("原文批注提问", () => {
     expect(loadAllNotes("guest")).toHaveLength(1);
   });
 
-  it("选中短语走词典弹窗，底部多一块「问 AI」，问词形会查词典", async () => {
+  it("选中单个词走词典弹窗，底部多一块「问 AI」，问词形会查词典", async () => {
     render(<NotedPassage passage={PASSAGE} />);
     select(paragraph(P1), "nectar");
     fireEvent.click(await screen.findByTestId("note-preset-forms"));
@@ -155,6 +155,57 @@ describe("原文批注提问", () => {
     expect(callAI.mock.calls[0][1]).toContain("【词典】（ECDICT）nectar");
     expect(callAI.mock.calls[0][1]).toContain("列出这个词的所有词形");
     expect(screen.getByTestId("note-mark")).toHaveTextContent("nectar");
+  });
+
+  it("鼠标划词后浏览器选区换成自绘高亮（压住 Edge 划词菜单），关弹窗就清掉；Ctrl+C 照样复制", async () => {
+    const store = new Map();
+    global.CSS = { highlights: { set: (k, v) => store.set(k, v), delete: (k) => store.delete(k) } };
+    global.Highlight = function Highlight(r) { this.range = r; };
+    try {
+      render(<NotedPassage passage={PASSAGE} />);
+      const host = paragraph(P1);
+      const quote = "In doing so, they carry pollen from one flower to another.";
+      const at = host.firstChild.nodeValue.indexOf(quote);
+      const r = document.createRange();
+      r.setStart(host.firstChild, at);
+      r.setEnd(host.firstChild, at + quote.length);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(r);
+      const notPrevented = fireEvent.mouseUp(host);
+      expect(notPrevented).toBe(false); // mouseup 被阻止了默认行为
+      expect(await screen.findByTestId("note-ask-bubble")).toBeInTheDocument();
+      expect(window.getSelection().isCollapsed).toBe(true);
+      expect(store.get("note-pending").range.toString()).toBe(quote);
+
+      const setData = jest.fn();
+      const copy = new Event("copy", { bubbles: true, cancelable: true });
+      copy.clipboardData = { setData };
+      document.dispatchEvent(copy);
+      expect(setData).toHaveBeenCalledWith("text/plain", quote);
+
+      fireEvent.click(screen.getByRole("button", { name: "关闭" }));
+      expect(store.has("note-pending")).toBe(false);
+    } finally {
+      delete global.CSS;
+      delete global.Highlight;
+    }
+  });
+
+  it("选中两个词就直接弹提问气泡，不再显示最后一个词的词典释义；快捷问题按短语给", async () => {
+    render(<NotedPassage passage={PASSAGE} />);
+    select(paragraph(P1), "carry pollen");
+    expect(await screen.findByTestId("note-ask-bubble")).toBeInTheDocument();
+    expect(screen.queryByText("讲讲这句里的用法")).toBeNull();
+    expect(screen.getByTestId("note-preset-collocations")).toBeInTheDocument();
+    expect(lookupWord).not.toHaveBeenCalled();
+  });
+
+  it("非 Pro：选中几个词仍走词典（看不到提问）", async () => {
+    TIER = "free";
+    render(<NotedPassage passage={PASSAGE} />);
+    select(paragraph(P1), "carry pollen");
+    expect(screen.queryByTestId("note-ask-bubble")).toBeNull();
+    await waitFor(() => expect(lookupWord).toHaveBeenCalled());
   });
 
   it("非 Pro：长选区不弹提问气泡", () => {

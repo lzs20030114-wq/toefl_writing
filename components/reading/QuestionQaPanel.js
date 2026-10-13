@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { getSavedCode } from "../../lib/AuthContext";
-import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence, buildEvidence } from "../../lib/qa/questionQa";
+import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, buildEvidence } from "../../lib/qa/questionQa";
 import { analogyMaterials, pastItemMaterials } from "../../lib/qa/pastQuestions";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
@@ -17,27 +16,6 @@ const THEMES = {
 };
 const MUTED = "#6b7280";
 
-// 多个面板同时展开时，只让最近一次点过 / 展开的那个接收原文选区。
-let activePanelId = null;
-const activeListeners = new Set();
-function setActivePanel(id) {
-  activePanelId = id;
-  activeListeners.forEach((fn) => fn(id));
-}
-
-const ENGLISH_WORD_RE = /[A-Za-z][A-Za-z'’-]*/g;
-const normText = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-
-/** 选区能不能当「问这句」用：≥2 个英文词、≤600 字，且出自本题原文。 */
-function usableSelection(text, sentences) {
-  const t = String(text || "").replace(/\s+/g, " ").trim();
-  if (!t || t.length > 600) return null;
-  if ((t.match(ENGLISH_WORD_RE) || []).length < 2) return null;
-  const sentenceId = locateSentence(sentences, t);
-  if (sentenceId) return { kind: "sentence", text: t, sentenceId };
-  const whole = normText(sentences.map((s) => s.text).join(" "));
-  return whole.includes(normText(t)) ? { kind: "sentence", text: t, sentenceId: null } : null;
-}
 
 function Tag({ children, tone, onClick, title, testId }) {
   const tones = {
@@ -178,57 +156,12 @@ function ReportBox({ detail, answer, onDone }) {
 export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded = false }) {
   const theme = THEMES[variant === "review" ? "review" : "default"];
   const qa = useQuestionQa(detail, firstExplain);
-  const panelId = useId();
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [input, setInput] = useState("");
-  const [selection, setSelection] = useState(null);
   const [lastAsk, setLastAsk] = useState(null);
   // 正在上报哪一条回答的原话（null = 没在上报）。点哪条回答下的「上报这题」就带哪条，页脚链接带最后一轮。
   const [reporting, setReporting] = useState(null);
-  const [inputVisible, setInputVisible] = useState(true);
-  const [isActive, setIsActive] = useState(false);
-  const rootRef = useRef(null);
   const inputRef = useRef(null);
-  const inputAreaRef = useRef(null);
-
-  useEffect(() => {
-    const fn = (id) => setIsActive(id === panelId);
-    activeListeners.add(fn);
-    return () => {
-      activeListeners.delete(fn);
-      if (activePanelId === panelId) activePanelId = null;
-    };
-  }, [panelId]);
-
-  // 展开时监听原文选区（100ms 防抖）。选区先记进 state：点 chip 时浏览器清掉选区也不影响。
-  useEffect(() => {
-    if (!expanded || !isActive || typeof document === "undefined") return undefined;
-    let timer = null;
-    const onChange = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        const sel = typeof window !== "undefined" && window.getSelection ? window.getSelection() : null;
-        if (!sel || sel.isCollapsed) return;
-        const node = sel.anchorNode;
-        if (node && rootRef.current && rootRef.current.contains(node)) return;
-        const got = usableSelection(sel.toString(), qa.sentences);
-        if (got) setSelection(got);
-      }, 100);
-    };
-    document.addEventListener("selectionchange", onChange);
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener("selectionchange", onChange);
-    };
-  }, [expanded, isActive, qa.sentences]);
-
-  // 输入区不在视口里时，底部浮出「问 AI：拆解这句」（手机上下布局，面板常在很下面）。
-  useEffect(() => {
-    if (!expanded || typeof IntersectionObserver === "undefined" || !inputAreaRef.current) return undefined;
-    const io = new IntersectionObserver((entries) => setInputVisible(entries.some((e) => e.isIntersecting)));
-    io.observe(inputAreaRef.current);
-    return () => io.disconnect();
-  }, [expanded]);
 
   const answered = !!detail?.selected;
   const ss = isSentenceSelection(detail?.question) || isSentenceSelection({ question_type: detail?.questionType, options: detail?.options });
@@ -238,19 +171,17 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   const disabled = qa.loading || atTurnCap || atDailyCap;
 
   const send = useCallback(async (question, opts = {}) => {
-    const args = { question, opts: { ...opts, selection: opts.selection === undefined ? selection : opts.selection } };
+    const args = { question, opts };
     setLastAsk(args);
     const ok = await qa.ask(args.question, args.opts);
     if (ok) {
       // 等回答的时候用户可能已经开始打下一问：只有框里还是刚发出的那句才清空。
       if (opts.fromInput) setInput((cur) => (cur.trim() === question ? "" : cur));
-      setSelection(null);
       setLastAsk(null);
     }
     return ok;
-  }, [qa, selection]);
+  }, [qa]);
 
-  const activate = () => setActivePanel(panelId);
   // 「我是这么想的…」只预填输入框；用户补完发出去时仍按这个预设走（要附同类错题）。
   const thinkingPrefix = presetText("my-thinking", { selectedLabel });
   const sendInput = () => {
@@ -262,7 +193,6 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   // 还没追问时，页脚上报带的是第一轮讲解（用户质疑的就是它）。
   const lastAnswer = qa.turns.length ? qa.turns[qa.turns.length - 1].a : (firstExplain || "");
   const onPreset = (p) => {
-    activate();
     if (p.id === "my-thinking") {
       setInput(thinkingPrefix);
       setTimeout(() => {
@@ -271,7 +201,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       }, 0);
       return;
     }
-    send(presetText(p.id, { selection }), { presetId: p.id, label: p.id === "parse-key" && selection ? "拆解这句" : p.label });
+    send(presetText(p.id), { presetId: p.id, label: p.label });
   };
 
   // 「讲简单点」是把上一轮再讲一遍：还没有讲解、也没追问过时没有可简化的东西。
@@ -289,7 +219,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
           <button
             type="button"
             data-testid="qa-open"
-            onClick={() => { setExpanded(true); activate(); }}
+            onClick={() => setExpanded(true)}
             style={{ fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer" }}
           >
             {`继续追问（已问 ${n} 轮）`}
@@ -317,7 +247,6 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
           data-testid="qa-open"
           onClick={() => {
             setExpanded(true);
-            activate();
             setTimeout(() => inputRef.current?.focus(), 0);
           }}
           style={{ ...chip, cursor: "pointer", opacity: 1, fontWeight: 700 }}
@@ -341,29 +270,9 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   else if (atDailyCap) statusLine = <span>今天的追问已经很多了，明天再继续吧；写作批改不受影响</span>;
   else statusLine = <span>{`还可以追问 ${qa.remaining} 次`}</span>;
 
-  const floating = selection && !inputVisible && isActive && typeof document !== "undefined"
-    ? createPortal(
-      <button
-        type="button"
-        data-testid="qa-float"
-        onClick={() => {
-          inputAreaRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-          if (!disabled) send(presetText("parse-key", { selection }), { presetId: "parse-key", label: "拆解这句" });
-        }}
-        style={{ position: "fixed", left: "50%", transform: "translateX(-50%)", bottom: "calc(16px + env(safe-area-inset-bottom))", zIndex: 60, fontSize: 14, fontWeight: 700, color: "#fff", background: theme.solid, border: "none", borderRadius: 999, padding: "10px 18px", boxShadow: "0 6px 20px rgba(0,0,0,0.18)", cursor: "pointer" }}
-      >
-        问 AI：拆解这句
-      </button>,
-      document.body,
-    )
-    : null;
-
   return (
     <div
-      ref={rootRef}
       data-testid="qa-panel"
-      onMouseDown={activate}
-      onFocus={activate}
       style={{ marginTop: 8, padding: "10px 12px", borderRadius: 10, background: theme.cardBg, border: `1px solid ${theme.cardBd}`, display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -374,6 +283,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       {qa.turns.map((t, i) => (
         <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <div style={{ alignSelf: "flex-end", maxWidth: "85%", minWidth: 0, background: "#F3F4F6", color: "#111827", borderRadius: 10, padding: "6px 10px", fontSize: 12.5, lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+            {/* 旧存档里「选中原文再问」的轮次照常显示选区；新提问不再带选区（改走原文批注） */}
             {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
             {t.label || t.q}
           </div>
@@ -383,14 +293,6 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
           ) : null}
         </div>
       ))}
-
-      {selection ? (
-        <div data-testid="qa-selection" style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "#374151", background: "#fff", border: `1px dashed ${theme.bd}`, borderRadius: 8, padding: "5px 8px", minWidth: 0 }}>
-          <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{`已选中："${selection.text}"`}</span>
-          <button type="button" disabled={disabled} onClick={() => onPreset(QA_PRESETS[0])} style={{ flexShrink: 0, fontSize: 12, fontWeight: 700, color: theme.text, background: theme.bg, border: `1px solid ${theme.bd}`, borderRadius: 6, padding: "2px 8px", cursor: disabled ? "default" : "pointer" }}>拆解这句</button>
-          <button type="button" aria-label="取消选中" onClick={() => setSelection(null)} style={{ flexShrink: 0, border: "none", background: "none", color: MUTED, cursor: "pointer", fontSize: 14 }}>×</button>
-        </div>
-      ) : null}
 
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
         {presets.map((p) => (
@@ -407,7 +309,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
         ))}
       </div>
 
-      <div ref={inputAreaRef} style={{ display: "flex", gap: 6, alignItems: "flex-end", minWidth: 0 }}>
+      <div style={{ display: "flex", gap: 6, alignItems: "flex-end", minWidth: 0 }}>
         <textarea
           ref={inputRef}
           data-testid="qa-input"
@@ -445,7 +347,6 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
         回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。
         {reporting == null ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(lastAnswer)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
       </div>
-      {floating}
     </div>
   );
 }

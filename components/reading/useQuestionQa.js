@@ -108,7 +108,7 @@ export function useQuestionQa(detail, firstExplain) {
   const dailyLeft = QA_DAILY_LIMIT - daily;
   const remaining = Math.max(0, Math.min(turnsLeft, dailyLeft));
 
-  const ask = useCallback(async (question, { presetId = null, label = null, selection = null } = {}) => {
+  const ask = useCallback(async (question, { presetId = null, label = null } = {}) => {
     const q = String(question || "").trim();
     if (!q || inflight.current) return false;
     const cur = convRef.current;
@@ -138,9 +138,9 @@ export function useQuestionQa(detail, firstExplain) {
         ? buildEvidence(detail, wantMistakes ? related : null, keyEvidence, analogyLines(analogies))
         : evidence;
 
-      // 选中了短语、或提问里点名了一个原文里的词，就查 ECDICT；整句选区不查。
+      // 提问里点名了一个原文里的词，就查 ECDICT（在原文里选中再问已改走原文批注，见 components/notes）。
       let dict = null;
-      const term = dictTermFor(q, selection, ev.sentences);
+      const term = dictTermFor(q, null, ev.sentences);
       if (term) {
         try {
           dict = await lookupWord(term);
@@ -150,12 +150,12 @@ export function useQuestionQa(detail, firstExplain) {
       }
 
       const history = cur.turns.map((t) => ({ q: t.selection?.text ? `（选中："${t.selection.text}"）${t.q}` : t.q, a: t.a }));
-      const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, selection, dict });
+      const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, dict });
       const raw = await callAI(QA_SYSTEM, message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {
-        turns: [...cur.turns, { q, label, a, presetId, selection: selection || null, dict: dict ? dict.word || true : null, mistakes: wantMistakes ? related?.items?.length || 0 : 0, past: analogies?.items?.length ? analogies.items : null, at: new Date().toISOString() }],
+        turns: [...cur.turns, { q, label, a, presetId, dict: dict ? dict.word || true : null, mistakes: wantMistakes ? related?.items?.length || 0 : 0, past: analogies?.items?.length ? analogies.items : null, at: new Date().toISOString() }],
         related: related || cur.related || null,
       };
       saveConversation(account, key, next);
