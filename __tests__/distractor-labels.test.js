@@ -5,14 +5,16 @@ const bank = require("../data/realBank/reading/ap.json");
 const labels = require("../data/realBank/reading/distractor-labels.json");
 
 // 规则见 docs/distractor-label-rules.md；类别名只能用表里的
-// 按题型分表：词汇、指代、插入句各有一张表，其余题型用意义类表（反向题的干扰项另记「原文提到」）
-const MEANING = ["与原文相反", "原文未提", "偷换概念", "范围扩大或缩小", "过度推断", "因果倒置", "答非所问", "其他", "原文提到"];
+// 按题型分表：词汇、指代、插入句各有一张表，其余题型用意义类表；「原文提到」只给反向题
+const MEANING = ["与原文相反", "原文未提", "偷换概念", "范围扩大或缩小", "过度推断", "因果倒置", "答非所问", "其他"];
 const BY_TYPE = {
   vocabulary_in_context: ["常见义非语境义", "形近或词根干扰", "不符合语境义", "其他"],
   reference: ["就近名词误指", "语义不通", "其他"],
   insert_text: ["指代或话题不衔接", "衔接词不对应", "打断逻辑链", "其他"],
 };
-const labelsFor = (type) => new Set(BY_TYPE[type] || MEANING);
+// 反向题：题型标成 negative_factual，或题干是 NOT / EXCEPT / LEAST 问法（题库里有两道反向题题型记成了 factual_detail）
+const isNegative = (q) => q.question_type === "negative_factual" || /\b(NOT|EXCEPT|LEAST)\b|\bleast likely\b/.test(String(q.stem));
+const labelsFor = (q) => new Set(BY_TYPE[q.question_type] || (isNegative(q) ? [...MEANING, "原文提到"] : MEANING));
 const SUBLABELS = new Set(["沾边无据", "常识干扰", "毫不相关", "空泛套话"]);
 
 const questions = new Map();
@@ -47,10 +49,10 @@ describe("学术阅读真题干扰项标注", () => {
     expect(bad).toEqual([]);
   });
 
-  test("类别和备选类别都在该题型的表里；子类只给「原文未提」", () => {
+  test("类别和备选类别都在该题型的表里（「原文提到」只给反向题）；子类只给「原文未提」", () => {
     const bad = [];
     for (const [qid, entry] of entries) {
-      const allowed = labelsFor(questions.get(qid).q.question_type);
+      const allowed = labelsFor(questions.get(qid).q);
       for (const [opt, o] of Object.entries(entry.options)) {
         if (!allowed.has(o.label) || (o.alt != null && !allowed.has(o.alt))) bad.push(`${qid} ${opt}`);
         if (o.sublabel != null) {
