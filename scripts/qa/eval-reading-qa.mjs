@@ -209,10 +209,12 @@ const outTok = cases.length * 1500;
 // 按每次 ~2500 入 / ~1500 出估（含推理）。
 const judgeCalls = JUDGE ? Math.ceil(cases.filter((c) => c.kind !== "out-of-scope").length * 1.3) : 0;
 const qaCalls = REJUDGE ? 0 : cases.length;
-const estCny = (((REJUDGE ? 0 : inTok + outTok) + judgeCalls * 4000) / 1e6) * CNY_PER_MTOK;
-const totalCalls = qaCalls + judgeCalls;
+const estCny = (((REJUDGE ? 0 : inTok + outTok) + (judgeCalls + (JUDGE ? Math.ceil(judgeCalls * 0.3) : 0)) * 4000) / 1e6) * CNY_PER_MTOK;
+// 评审漏评补评一次：次数封顶为首轮评审的 30%，算进报价和 --max-calls（按最坏情况）。
+const judgeRetryBudget = JUDGE ? Math.ceil(judgeCalls * 0.3) : 0;
+const totalCalls = qaCalls + judgeCalls + judgeRetryBudget;
 console.log(`抽样：AP ${sample.filter((x) => x.subtype === "ap").length} 道（选句 ${sample.filter((x) => x.q.question_type === "sentence_selection").length}、插入句 ${sample.filter((x) => x.q.question_type === "insert_text").length}），RDL ${sample.filter((x) => x.subtype === "rdl").length} 道；种子 ${SEED}`);
-console.log(`将调用 ~${totalCalls} 次${JUDGE ? `（追问 ${qaCalls} + 评审约 ${judgeCalls}）` : ""} / 追问输入 ~${REJUDGE ? 0 : inTok} tokens、输出 ~${REJUDGE ? 0 : outTok} tokens / 预计 ¥${estCny.toFixed(2)}（¥${CNY_PER_MTOK}/M）；max_tokens=${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`);
+console.log(`将调用至多 ~${totalCalls} 次${JUDGE ? `（追问 ${qaCalls} + 评审约 ${judgeCalls} + 补评至多 ${judgeRetryBudget}）` : ""} / 追问输入 ~${REJUDGE ? 0 : inTok} tokens、输出 ~${REJUDGE ? 0 : outTok} tokens / 预计 ¥${estCny.toFixed(2)}（¥${CNY_PER_MTOK}/M）；max_tokens=${AI_HELPER_MAX_TOKENS * TOKENS_MULT}`);
 if (flag("show")) console.log(cases.slice(0, 4).concat(cases.filter((c) => c.qtype === "insert_text").slice(0, 1)).map((c) => `---- ${c.itemId} ${c.kind}\n${c.message}`).join("\n\n"));
 if (!RUN) {
   console.log("这是 dry-run。确认后加 --run 真跑。");
@@ -247,6 +249,7 @@ const JUDGE_SYSTEM =
 
 // 实际发出的评审请求数（含失败的），摘要里和追问次数分开记，方便与 DeepSeek 台账对账。
 let judgeRequests = 0;
+let judgeRetries = 0;
 
 async function judgeBatch(material, claims) {
   judgeRequests++;
@@ -279,7 +282,8 @@ async function judgeClaims(material, claims) {
     }
     // 评审没给结果的（空输出、JSON 坏了、漏条）单独再评一次；仍没有就记 null，计入评审覆盖率。
     const miss = got.filter((x) => x.support === null);
-    if (miss.length) {
+    if (miss.length && judgeRetries < judgeRetryBudget) {
+      judgeRetries++;
       let again = [];
       try { again = await judgeBatch(material, miss.map(({ support, why, ...c }) => c)); } catch {}
       got = got.map((x) => (x.support === null ? again.find((y) => y.claim === x.claim && y.support !== null) || x : x));
