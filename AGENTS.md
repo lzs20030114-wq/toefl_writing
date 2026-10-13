@@ -108,6 +108,7 @@ data/                         # 题库 + 校准语料 (JSON)
 │                             #   + drop-ledger.json(落库丢弃明细: build_bank 每道闸扔掉的每一题, 原因码=stats 键名)
 │                             #   + writing-recall.json(第一来源邮件/讨论补录账本, 逐条对过原卷)
 │                             #   + audit-overrides.json(盲审两票都不认、人工对原卷核过「答案页对」的放行清单, 每条写依据)
+│                             #   + reading/distractor-labels.json(学术阅读每个错误选项的类别+依据句+原话, 规则 docs/distractor-label-rules.md)
 ├── eval-profiles/            # 各题型 eval 画像 + gate 标准 (bs/ad/email/ctw/ap/listening/...)
 ├── vocabulary/               # 词表
 ├── announcements.json        # 应用内更新公告 (发版时改)

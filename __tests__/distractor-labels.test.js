@@ -34,12 +34,17 @@ describe("学术阅读真题干扰项标注", () => {
     }
   });
 
-  test("只标错误选项，且每个错误选项都有标签", () => {
+  test("只标错误选项，每个错误选项都有标签，且选项文案对得上（重建题库改了文案或互换选项会被拦下）", () => {
+    const bad = [];
     for (const [qid, entry] of entries) {
       const { q } = questions.get(qid);
       const wrong = Object.keys(q.options).filter((k) => k !== q.correct_answer).sort();
       expect(Object.keys(entry.options).sort()).toEqual(wrong);
+      for (const [k, o] of Object.entries(entry.options)) {
+        if (!o.text || !String(q.options[k]).trim().startsWith(o.text)) bad.push(`${qid} ${k}`);
+      }
     }
+    expect(bad).toEqual([]);
   });
 
   test("类别和备选类别都在该题型的表里；子类只给「原文未提」", () => {
