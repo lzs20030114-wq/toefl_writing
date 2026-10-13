@@ -5,6 +5,8 @@ import { usePassageNotes } from "./usePassageNotes";
 import { paragraphSpans, highlightSegments, notesByParagraph, NOTE_MAX_TURNS, NOTE_MAX_QUESTION } from "../../lib/notes/passageNotes";
 import { parseAnswer, sentenceLabel } from "../../lib/qa/questionQa";
 import { tidyNoteSegments } from "../../lib/notes/noteQa";
+import { splitWordForms } from "../../lib/notes/wordForms";
+import { WordFormList } from "./WordFormList";
 
 // 带原文批注的文章：划词词典 + 选中提问，问过的地方留高亮和序号，点一下展开笔记卡（默认收起）。
 // 用法：<NotedPassage passage={passage} style={…} />，原样替换「<WordLookupLayer passage>{passage}</WordLookupLayer>」。
@@ -41,6 +43,19 @@ function CiteTag({ ok, children, title }) {
 }
 
 function NoteAnswer({ text, sentences, dict }) {
+  // 「列出所有词形」的回答带一段词形表：拆出来单独渲染成可收藏的列表，表前表后的文字照常显示。
+  const split = useMemo(() => splitWordForms(text), [text]);
+  if (!split) return <AnswerText text={text} sentences={sentences} dict={dict} />;
+  return (
+    <div data-testid="note-answer-forms">
+      {split.before ? <AnswerText text={split.before} sentences={sentences} dict={dict} /> : null}
+      <WordFormList forms={split.forms} />
+      {split.after ? <AnswerText text={split.after} sentences={sentences} dict={dict} /> : null}
+    </div>
+  );
+}
+
+function AnswerText({ text, sentences, dict }) {
   const segments = useMemo(
     () => tidyNoteSegments(parseAnswer(text, sentences, [], { dict: !!dict }), sentences, (s) => sentenceLabel(s, sentences)),
     [text, sentences, dict],

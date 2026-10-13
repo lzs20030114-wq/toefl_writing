@@ -239,4 +239,35 @@ describe("原文批注提问", () => {
       jest.useRealTimers();
     }
   });
+
+  it("词形表：一个词形一行，点「收藏」直接进单词本（带释义、例句和音标），再显示「已收藏」", async () => {
+    const answer = [
+      "[词形]",
+      "nectar｜n.｜花蜜｜原词｜Bees collect nectar.",
+      "nectarous｜adj.｜花蜜的；甜美的｜派生形容词｜A nectarous scent.",
+      "[/词形]",
+      "补充：nectar 多为不可数名词。",
+    ].join("\n");
+    const note = { ...makeNote({ passage: PASSAGE, quote: "nectar" }), turns: [{ q: "列词形", label: "列出所有词形", a: answer, at: "x" }] };
+    localStorage.setItem(`${NOTE_STORE_PREFIX}:guest`, JSON.stringify({ notes: [note] }));
+    render(<NotedPassage passage={PASSAGE} />);
+    fireEvent.click(screen.getByTestId("note-mark"));
+
+    const rows = await screen.findAllByTestId("word-form-row");
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent("nectar");
+    expect(rows[0]).toHaveTextContent("花蜜");
+    expect(screen.getByTestId("note-answer")).toHaveTextContent("nectar 多为不可数名词");
+    expect(screen.queryByText(/\[词形\]/)).toBeNull();
+
+    fireEvent.click(screen.getByTestId("word-form-save-nectar"));
+    await waitFor(() => expect(screen.getByTestId("word-form-save-nectar")).toHaveTextContent("已收藏"));
+    const { getCard } = require("../lib/vocab/vocabStore");
+    const card = getCard("nectar");
+    expect(card.def).toBe("n. 花蜜");
+    expect(card.sentence).toBe("Bees collect nectar.");
+    expect(card.phonetic).toBe("'nektə");
+    expect(card.source).toBe("passage-note");
+    expect(screen.getByTestId("word-form-save-nectarous")).toHaveTextContent("收藏");
+  });
 });

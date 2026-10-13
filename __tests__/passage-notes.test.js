@@ -195,3 +195,43 @@ describe("tidyNoteSegments（笔记回答的显示整理）", () => {
     expect(segs[5].text).toBe("语法");
   });
 });
+
+import { splitWordForms, parseFormLine, formVocabEntry, exampleHasForm } from "../lib/notes/wordForms";
+
+describe("词形表", () => {
+  it("拆出词形段：表前表后文字保留，同词去重，坏行跳过", () => {
+    const text = "词条：analysis 是名词。\n[词形]\n- analysis｜n.｜分析｜原词｜Further analysis is needed.\nanalyses｜n.｜分析（复数）｜复数｜\nanalyze | v. | 分析 | 动词 | Engineers analyze the signal.\nAnalysis｜n.｜重复\n这一行不是词形\n[/词形]\n补充：analyse 是英式拼写。";
+    const r = splitWordForms(text);
+    expect(r.before).toBe("词条：analysis 是名词。");
+    expect(r.after).toBe("补充：analyse 是英式拼写。");
+    expect(r.forms.map((f) => f.word)).toEqual(["analysis", "analyses", "analyze"]);
+    expect(r.forms[2]).toEqual({ word: "analyze", pos: "v.", zh: "分析", note: "动词", example: "Engineers analyze the signal." });
+    expect(r.forms[1].example).toBe("");
+  });
+
+  it("没有词形段、或段里没有能用的行，就按普通回答显示", () => {
+    expect(splitWordForms("意思：花蜜。")).toBeNull();
+    expect(splitWordForms("[词形]\n没有内容\n[/词形]")).toBeNull();
+    expect(parseFormLine("只有中文｜n.")).toBeNull();
+  });
+
+  it("缺了结束标记也能拆（回答被截断时）", () => {
+    const r = splitWordForms("[词形]\nnectar｜n.｜花蜜｜原词｜Bees collect nectar.");
+    expect(r.forms).toHaveLength(1);
+    expect(r.after).toBe("");
+  });
+
+  it("收藏 entry：释义带词性并锁定；例句含这个词形才当语境句；音标只取同一个词的", () => {
+    const e = formVocabEntry({ word: "Analyzed", pos: "v.", zh: "分析（过去式）", example: "They analyzed it." }, { dict: { word: "analyze", p: "x" } });
+    expect(e).toMatchObject({ word: "analyzed", display: "Analyzed", def: "v. 分析（过去式）", definitionLocked: true, sentence: "They analyzed it.", phonetic: "", source: "passage-note" });
+    expect(formVocabEntry({ word: "analysis", pos: "n.", zh: "分析", example: "An analyst works." }).sentence).toBe("");
+    expect(exampleHasForm("Data analysis matters.", "analysis")).toBe(true);
+    expect(exampleHasForm("Data analyses matter.", "analysis")).toBe(false);
+  });
+
+  it("提示词要求列词形时用词形表", () => {
+    expect(NOTE_SYSTEM).toContain("[词形]");
+    expect(NOTE_PRESETS.phrase.find((p) => p.id === "forms").text).toContain("词形表");
+  });
+});
+
