@@ -235,3 +235,14 @@ describe("词形表", () => {
   });
 });
 
+import { tidyCites, parseAnswer as parseQa, numberSentences as numberQa } from "../lib/qa/questionQa";
+
+describe("讲解出处整理", () => {
+  it("同一句的出处只留第一次，正文漏出的 S 编号换成句位", () => {
+    const ss = numberQa("Bees visit flowers. They carry pollen.\n\nSome flowers attract bees.");
+    const segs = tidyCites(parseQa('答案依据在 S2："carry pollen" [S2]，又说 "They carry" [S2]，另见 "attract bees" [S3]', ss, []), ss);
+    expect(segs.filter((x) => x.type === "cite").map((x) => x.id)).toEqual(["S2", "S3"]);
+    expect(segs[0].text).toBe("答案依据在 第 1 段第 2 句：");
+  });
+});
+

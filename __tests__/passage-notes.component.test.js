@@ -270,4 +270,18 @@ describe("原文批注提问", () => {
     expect(card.source).toBe("passage-note");
     expect(screen.getByTestId("word-form-save-nectarous")).toHaveTextContent("收藏");
   });
+
+  it("点出处高亮原文那句：原文里有这句就接住（跨笔记高亮也能找到），没有就返回 false", async () => {
+    const note = { ...makeNote({ passage: PASSAGE, quote: "carry pollen" }), turns: [{ q: "q", a: "a", at: "x" }] };
+    localStorage.setItem(`${NOTE_STORE_PREFIX}:guest`, JSON.stringify({ notes: [note] }));
+    render(<NotedPassage passage={PASSAGE} />);
+    const { flashPassageSentence } = require("../lib/notes/passageFlash");
+    let ok;
+    act(() => { ok = flashPassageSentence("In doing so, they carry pollen from one flower to another."); });
+    expect(ok).toBe(true);
+    // 选区跨过笔记序号角标（DOM 上它在句子中间），所以文字里会带上角标数字
+    expect(window.getSelection().toString().replace(/\d/g, "")).toBe("In doing so, they carry pollen from one flower to another.");
+    expect(flashPassageSentence("Not in this passage at all.")).toBe(false);
+  });
 });
+
