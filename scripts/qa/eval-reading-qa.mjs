@@ -3,7 +3,7 @@
 //
 // 测的是「追问 prompt 在 DeepSeek 上守不守规矩」：出处有效率、引文核实率、超纲拒答率、
 // 语法误拒率、空回复率、疑似翻案。题目来自真题库，固定随机种子抽 24 道（AP 16 + RDL 8），
-// 每道模拟一次错答、问 4 个问题 → 96 次调用。
+// 每道模拟一次错答、先出第一轮讲解、再问 4 个问题 → 120 次调用。
 //
 // 用法：
 //   node scripts/qa/eval-reading-qa.mjs                 # 默认 dry-run：只打印「将调用 N 次 / 预计 ¥X」
@@ -28,7 +28,7 @@ const require = createRequire(import.meta.url);
 
 const qa = await import(pathToFileURL(join(ROOT, "lib", "qa", "questionQa.js")).href);
 const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "reading", "sentenceSelection.js")).href);
-const { QA_SYSTEM, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
+const { QA_SYSTEM, EXPLAIN_SYSTEM, parseTrap, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
@@ -120,7 +120,7 @@ const sample = [
   ...take(rdl, 8, () => true, used),
 ].slice(0, LIMIT);
 
-/* ── 每道题的 4 个问法 ─────────────────────────────────── */
+/* ── 每道题的第一轮讲解 + 4 个问法 ─────────────────────────────────── */
 const FIRST_EXPLAIN = "（评估占位）第一轮讲解：正确答案在原文中有直接依据，学生所选选项与原文表述不符。";
 
 function wrongKey(q) {
@@ -152,12 +152,17 @@ function buildCases(x) {
     { kind: "grammar", question: "这句的主干是什么？后面那部分修饰的是谁？", selection: longest ? { kind: "sentence", text: longest.text, sentenceId: longest.id } : null },
     { kind: "out-of-scope", question: "这篇文章的作者是谁？最早发表在哪里？" },
   ];
-  return cases.map((c) => ({
-    ...c,
-    detail,
-    evidence,
-    message: buildQaMessage({ evidence: evidence.text, firstExplain: FIRST_EXPLAIN, question: c.question, selection: c.selection || null }),
-  }));
+  return [
+    // 第一轮讲解：和追问同一份证据包、同一套出处规则（components/reading/useReadingAiExplain）
+    { kind: "first-explain", question: "（第一轮讲解）", detail, evidence, system: EXPLAIN_SYSTEM, message: evidence.text },
+    ...cases.map((c) => ({
+      ...c,
+      detail,
+      evidence,
+      system: QA_SYSTEM,
+      message: buildQaMessage({ evidence: evidence.text, firstExplain: FIRST_EXPLAIN, question: c.question, selection: c.selection || null }),
+    })),
+  ];
 }
 
 const cases = sample.flatMap((x) => buildCases(x).map((c) => ({ ...c, itemId: x.itemId, qIndex: x.qIndex, subtype: x.subtype, qtype: x.q.question_type })));
@@ -168,7 +173,7 @@ const estTokens = (s) => {
   const cjk = (String(s).match(/[一-鿿]/g) || []).length;
   return Math.round(cjk * 0.7 + (String(s).length - cjk) / 4);
 };
-const inTok = cases.reduce((n, c) => n + estTokens(QA_SYSTEM) + estTokens(c.message), 0);
+const inTok = cases.reduce((n, c) => n + estTokens(c.system) + estTokens(c.message), 0);
 const outTok = cases.length * 1500;
 // 评审调用：每次带整份材料 + 至多 6 条讲解句；上次实测每个回答平均约 3.5 条带出处的句子 → 约 1 次评审 / 回答。
 // 按每次 ~2500 入 / ~1500 出估（含推理）。
@@ -266,10 +271,11 @@ async function runOne(c, i) {
       apiKey,
       payload: {
         model: MODEL,
-        max_tokens: AI_HELPER_MAX_TOKENS * TOKENS_MULT,
+        // 第一轮讲解线上用 1 倍预算（useReadingAiExplain），追问用 --tokens-mult 倍
+        max_tokens: c.kind === "first-explain" ? AI_HELPER_MAX_TOKENS : AI_HELPER_MAX_TOKENS * TOKENS_MULT,
         temperature: 0.3,
         messages: [
-          { role: "system", content: QA_SYSTEM },
+          { role: "system", content: c.system },
           { role: "user", content: c.message },
         ],
       },
@@ -305,12 +311,13 @@ async function runOne(c, i) {
     validQuotes: segs.filter((s) => s.type === "quote" && s.valid).length,
     empty: !text,
     // 没有句末标点多半是被 max_tokens 截断
-    truncated: !!text && !/[。！？.!?」）)\]】"”]\s*$/.test(text),
+    truncated: !!text && !/[。！？.!?」）)\]】"”]\s*$/.test(text) && !(c.kind === "first-explain" && parseTrap(text)),
     refused: REFUSE_RE.test(text),
     overturn: OVERTURN_RE.test(text),
     badCiteIds: segs.filter((s) => s.type === "cite" && !s.valid).map((s) => s.id),
     badQuoteTexts: segs.filter((s) => s.type === "quote" && !s.valid).map((s) => s.text),
     judged,
+    trap: c.kind === "first-explain" ? parseTrap(text) : undefined,
   };
   process.stdout.write(`[${i + 1}/${cases.length}] ${c.itemId} ${c.kind} 出处 ${stats.cites}（错 ${stats.badCites}） 引文 ${quotes}（错 ${stats.badQuotes}）${row.empty ? " 空" : ""}${row.error ? ` 错误：${row.error.slice(0, 60)}` : ""}\n`);
   return row;
@@ -337,7 +344,7 @@ const gram = rows.filter((r) => r.kind === "grammar");
 // 覆盖率：聚合比例只看「给了的出处对不对」，一两条合格出处就能撑起 100%；
 // 这里再按回答数，要求该讲题的回答大多各自给出出处和引文。只算 prompt 要求标出处的两类：
 // 语法分析按规则 3 不用标注，超纲题应拒答，两类都不计。
-const CITE_KINDS = new Set(["parse-key", "my-thinking"]);
+const CITE_KINDS = new Set(["first-explain", "parse-key", "my-thinking"]);
 const inScope = rows.filter((r) => CITE_KINDS.has(r.kind) && !r.empty && !r.error);
 const citedRows = inScope.filter((r) => r.validCites > 0).length;
 const quotedRows = inScope.filter((r) => r.validQuotes > 0).length;
@@ -353,6 +360,7 @@ const metrics = [
   { name: "出处带原话率", value: pct(sum((r) => r.sentenceCites - r.unbound), sum((r) => r.sentenceCites)), pass: (v) => v != null && v >= 70, line: "≥ 70% 的原文出处前面带英文原话（新指标，首跑后再定线）", detail: `${sum((r) => r.sentenceCites - r.unbound)}/${sum((r) => r.sentenceCites)}` },
   ...(JUDGE ? [{ name: "出处支撑率", value: pct(judgedAll.filter((x) => x.support).length, judgedAll.length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的讲解句能由所引原文推出（评审模型判）", detail: `${judgedAll.filter((x) => x.support).length}/${judgedAll.length}` },
     { name: "评审覆盖率", value: pct(judgedAll.length, claimsAll.length), pass: (v) => v != null && v >= 95, line: "≥ 95% 的讲解句评出了结果（低了支撑率不可信）", detail: `${judgedAll.length}/${claimsAll.length}` }] : []),
+  { name: "陷阱行完整率", value: pct(rows.filter((r) => r.kind === "first-explain" && r.trap).length, rows.filter((r) => r.kind === "first-explain").length), pass: (v) => v != null && v >= 90, line: "≥ 90% 的第一轮讲解末尾给出合法陷阱类型", detail: `${rows.filter((r) => r.kind === "first-explain" && r.trap).length}/${rows.filter((r) => r.kind === "first-explain").length}` },
   { name: "超纲拒答率", value: pct(oos.filter((r) => r.refused).length, oos.length), pass: (v) => v >= 90, line: "≥ 90%", detail: `${oos.filter((r) => r.refused).length}/${oos.length}` },
   { name: "语法误拒率", value: pct(gram.filter((r) => r.refused).length, gram.length), pass: (v) => v <= 5, line: "≤ 5%", detail: `${gram.filter((r) => r.refused).length}/${gram.length}` },
   { name: "空回复/截断率", value: pct(rows.filter((r) => r.empty || r.truncated || r.error).length, rows.length), pass: (v) => v <= 2, line: "≤ 2%", detail: `${rows.filter((r) => r.empty || r.truncated || r.error).length}/${rows.length}` },

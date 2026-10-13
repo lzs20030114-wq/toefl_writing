@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from "react";
 import { createPortal } from "react-dom";
 import { getSavedCode } from "../../lib/AuthContext";
-import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence } from "../../lib/qa/questionQa";
+import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence, buildEvidence } from "../../lib/qa/questionQa";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
 
@@ -57,7 +57,7 @@ function Tag({ children, tone, onClick, title, testId }) {
   );
 }
 
-function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme }) {
+function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme, testId = "qa-answer" }) {
   const [open, setOpen] = useState(null);
   const segments = useMemo(() => parseAnswer(text, sentences, materials, { mistakes, dict }), [text, sentences, materials, mistakes, dict]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
@@ -75,7 +75,7 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme
 
   return (
     <div style={{ minWidth: 0 }}>
-      <div data-testid="qa-answer" style={{ fontSize: 12.5, lineHeight: 1.75, color: theme.body, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+      <div data-testid={testId} style={{ fontSize: 12.5, lineHeight: 1.75, color: theme.body, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
         {segments.map((s, i) => {
           if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
           if (s.type === "quote") {
@@ -104,6 +104,16 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, theme
       {bad > 0 ? <div data-testid="qa-bad-note" style={{ marginTop: 4, fontSize: 11, color: MUTED }}>{`有 ${bad} 处出处或引文核对不上，已标灰，请以原文为准`}</div> : null}
     </div>
   );
+}
+
+/**
+ * 第一轮「AI 讲解」也用同一个核对器显示：出处变成可点开的「第 2 段第 3 句」，核不上的标灰。
+ * 证据包和追问同源（buildEvidence），所以讲解里的 [S编号] 与追问、原文页上的句号一致。
+ */
+export function CitedText({ text, detail, variant }) {
+  const theme = THEMES[variant === "review" ? "review" : "default"];
+  const ev = useMemo(() => buildEvidence(detail), [detail]);
+  return <Answer text={text} sentences={ev.sentences} materials={ev.materials} theme={theme} testId="explain-answer" />;
 }
 
 function ReportBox({ detail, answer, onDone }) {

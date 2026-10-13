@@ -18,6 +18,7 @@ import {
   dictTermFor,
   plainText,
 } from "../../lib/qa/questionQa";
+import { trapOfBrief, trapOfDetail } from "../../lib/qa/trapStore";
 import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
 
 // 练习记录逐题「继续追问」的状态层。第一轮仍是 useReadingAiExplain 的讲解（prompt 与缓存桶都不动），
@@ -38,12 +39,17 @@ function readRelatedMistakes(detail) {
     const sessions = loadHist()?.sessions || [];
     const { pool } = mergeEntries(loadPool(), extractMistakeEntries(sessions));
     const question = detail?.question || null;
-    return pickRelatedMistakes(activeCards(pool), {
+    // 本题的陷阱来自第一轮讲解（lib/qa/trapStore）；没讲解过就退回按题型 + 时间。
+    const ownTrap = trapOfDetail(detail);
+    const related = pickRelatedMistakes(activeCards(pool), {
       questionType: question?.question_type || detail?.questionType || "",
       subtype: detail?.subtype || "",
       stem: detail?.stem || "",
       correctAnswer: answerSignature(detail),
+      trap: ownTrap,
+      trapOf: trapOfBrief,
     });
+    return { ...related, ownTrap };
   } catch {
     return { total: 0, sameQuestionWrongCount: 0, items: [] };
   }
