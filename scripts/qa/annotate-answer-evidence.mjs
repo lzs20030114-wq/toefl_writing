@@ -11,7 +11,9 @@
 //   node scripts/qa/annotate-answer-evidence.mjs                # 默认 dry-run：打印「将调用 N 次 / 预计 ¥X」
 //   node scripts/qa/annotate-answer-evidence.mjs --run --yes    # 真跑（需要 .env.local 里的 DEEPSEEK_API_KEY）
 // 选项：--limit N（只标前 N 道，试跑用）  --votes 2  --concurrency 4  --max-calls 200（超过要 --yes）
+//       --retry-disputed（只重标上次没收的题）
 //       已标过的题（键 + 题干签名都对得上）自动跳过，可以中断后续跑；每 20 题落一次盘。
+//       没收的题会存两票的原始输出（raw，各截 300 字），方便看是模型没给对还是解析没认出来。
 // 开头那条 MODULE_TYPELESS_PACKAGE_JSON 警告无害。调用走 lib/ai/deepseekHttp，自动记台账。
 import { register, createRequire } from "node:module";
 import { pathToFileURL, fileURLToPath } from "node:url";
@@ -23,8 +25,8 @@ const ROOT = join(__dirname, "..", "..");
 register(pathToFileURL(join(__dirname, "_extless-loader.mjs")));
 const require = createRequire(import.meta.url);
 
-const { buildEvidence, plainText } = await import(pathToFileURL(join(ROOT, "lib", "qa", "questionQa.js")).href);
-const { evidenceKey, verifyEvidence, ANSWER_EVIDENCE_VERSION } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
+const { buildEvidence } = await import(pathToFileURL(join(ROOT, "lib", "qa", "questionQa.js")).href);
+const { evidenceKey, verifyEvidence, parseVote, ANSWER_EVIDENCE_VERSION } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
 const { DEFAULT_MODEL: MODEL } = await import(pathToFileURL(join(ROOT, "lib", "ai", "upstream.js")).href);
 
 function loadEnv() {
@@ -45,6 +47,7 @@ const opt = (name, dflt) => {
   return i >= 0 && argv[i + 1] != null ? argv[i + 1] : dflt;
 };
 const RUN = flag("run");
+const RETRY_DISPUTED = flag("retry-disputed");
 const YES = flag("yes");
 const LIMIT = Number(opt("limit", 0));
 const VOTES = Math.max(1, Number(opt("votes", 2)));
@@ -68,7 +71,7 @@ const all = [
 const existing = existsSync(OUT) ? JSON.parse(readFileSync(OUT, "utf-8")) : { version: ANSWER_EVIDENCE_VERSION, items: {} };
 const done = (x) => {
   const e = existing.items[x.key];
-  return e && e.stem === String(x.detail.stem).slice(0, 80);
+  return e && e.stem === String(x.detail.stem).slice(0, 80) && !(RETRY_DISPUTED && e.status !== "ok");
 };
 let todo = all.filter((x) => !done(x));
 if (LIMIT) todo = todo.slice(0, LIMIT);
@@ -108,19 +111,13 @@ if (!apiKey) {
 const { callDeepSeekViaCurl } = require(join(ROOT, "lib", "ai", "deepseekHttp.js"));
 
 async function vote(material) {
-  const raw = await callDeepSeekViaCurl({
+  const text = await callDeepSeekViaCurl({
     apiKey,
-    payload: { model: MODEL, max_tokens: 2000, temperature: 0.3, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: material }] },
+    payload: { model: MODEL, max_tokens: 6000, temperature: 0.3, messages: [{ role: "system", content: SYSTEM }, { role: "user", content: material }] },
     timeoutMs: 120000,
     meta: { script: "qa/annotate-answer-evidence", label: "vote" },
   });
-  const m = plainText(raw).match(/\{[\s\S]*\}/);
-  try {
-    const v = m ? JSON.parse(m[0]) : null;
-    return v && Array.isArray(v.ids) ? { ids: v.ids.map(String), quote: String(v.quote || "") } : null;
-  } catch {
-    return null;
-  }
+  return parseVote(text);
 }
 
 let n = 0;
@@ -134,11 +131,12 @@ async function one(x) {
     try {
       votes.push(await vote(ev.text));
     } catch (e) {
-      votes.push(null);
+      votes.push({ ids: [], quote: "", raw: `调用失败：${String(e?.message || e).slice(0, 200)}` });
     }
   }
   const res = verifyEvidence(votes, ev.sentences);
   existing.items[x.key] = { stem: String(x.detail.stem).slice(0, 80), ...res };
+  if (res.status !== "ok") existing.items[x.key].raw = votes.map((v) => String(v.raw || "").slice(0, 300));
   if (res.status === "ok") kept++;
   else disputed++;
   n++;

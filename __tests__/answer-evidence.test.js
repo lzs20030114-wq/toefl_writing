@@ -1,4 +1,4 @@
-import { verifyEvidence, answerEvidenceFor, evidenceKey } from "../lib/qa/answerEvidence";
+import { verifyEvidence, answerEvidenceFor, evidenceKey, normalizeIds, parseVote } from "../lib/qa/answerEvidence";
 import { numberSentences, buildEvidence } from "../lib/qa/questionQa";
 
 const PASSAGE = "Farmers use cover crops. These plants anchor the soil at 7 a.m. daily.\n\nDr. Lee disagrees. She says yields fall.";
@@ -38,5 +38,27 @@ describe("answerEvidenceFor：运行时按原文对回句号", () => {
     const key = answerEvidenceFor(data, detail, sentences);
     expect(buildEvidence(detail, null, key).text).toContain("答案依据句（离线标注，两次独立标注一致，供参考；与原文冲突时以原文为准）：[S2]");
     expect(buildEvidence(detail).text).not.toContain("答案依据句");
+  });
+});
+
+describe("标注输出解析：句号写法与坏 JSON", () => {
+  test("各种句号写法统一成 S 编号，范围展开", () => {
+    expect(normalizeIds("S7")).toEqual(["S7"]);
+    expect(normalizeIds(["[S7]", "8"])).toEqual(["S7", "S8"]);
+    expect(normalizeIds(["S3-S5"])).toEqual(["S3", "S4", "S5"]);
+    expect(normalizeIds("S7, S9")).toEqual(["S7", "S9"]);
+    expect(normalizeIds(null)).toEqual([]);
+  });
+  test("正常 JSON、ids 是字符串、包在代码块里都能解析", () => {
+    expect(parseVote('{"ids":["S2"],"quote":"anchor the soil"}')).toMatchObject({ ids: ["S2"], quote: "anchor the soil" });
+    expect(parseVote('```json\n{"ids":"S2","quote":"anchor"}\n```')).toMatchObject({ ids: ["S2"], quote: "anchor" });
+  });
+  test("引文里有没转义的引号导致 JSON 坏掉 → 从字面上抠出句号和引文", () => {
+    const v = parseVote('{"ids":["S2"],"quote":"the so-called "anchor" effect"}');
+    expect(v.ids).toEqual(["S2"]);
+    expect(v.quote).toContain("anchor");
+  });
+  test("空输出 → ids 为空、留下 raw", () => {
+    expect(parseVote("")).toEqual({ ids: [], quote: "", raw: "" });
   });
 });
