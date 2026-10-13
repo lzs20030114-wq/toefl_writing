@@ -1,4 +1,4 @@
-import { verifyEvidence, answerEvidenceFor, evidenceKey, normalizeIds, parseVote } from "../lib/qa/answerEvidence";
+import { verifyEvidence, answerEvidenceFor, evidenceKey, normalizeIds, parseVote, quoteInSentences } from "../lib/qa/answerEvidence";
 import { numberSentences, buildEvidence } from "../lib/qa/questionQa";
 
 const PASSAGE = "Farmers use cover crops. These plants anchor the soil at 7 a.m. daily.\n\nDr. Lee disagrees. She says yields fall.";
@@ -60,5 +60,17 @@ describe("标注输出解析：句号写法与坏 JSON", () => {
   });
   test("空输出 → ids 为空、留下 raw", () => {
     expect(parseVote("")).toEqual({ ids: [], quote: "", raw: "" });
+  });
+});
+
+describe("引文核对：分号拼接、跨句", () => {
+  const texts = [sentences[0].text, sentences[1].text];
+  test("分号拼起来的几段、跨两句的引文都认", () => {
+    expect(quoteInSentences("use cover crops; anchor the soil", texts)).toBe(true);
+    expect(quoteInSentences("Farmers use cover crops. These plants anchor the soil", texts)).toBe(true);
+    expect(verifyEvidence([{ ids: ["S1", "S2"], quote: "cover crops; anchor the soil" }, { ids: ["S1", "S2"], quote: "x" }], sentences).status).toBe("ok");
+  });
+  test("有一段是编的就不认", () => {
+    expect(quoteInSentences("use cover crops; holds the dirt", texts)).toBe(false);
   });
 });

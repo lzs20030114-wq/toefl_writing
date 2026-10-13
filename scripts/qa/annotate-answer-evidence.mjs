@@ -12,6 +12,7 @@
 //   node scripts/qa/annotate-answer-evidence.mjs --run --yes    # 真跑（需要 .env.local 里的 DEEPSEEK_API_KEY）
 // 选项：--limit N（只标前 N 道，试跑用）  --votes 2  --concurrency 4  --max-calls 200（超过要 --yes）
 //       --retry-disputed（只重标上次没收的题）
+//       --reverify（不调用 API：用没收的题存下的 raw 按当前规则重新核一遍，规则放宽后救回误杀的）
 //       已标过的题（键 + 题干签名都对得上）自动跳过，可以中断后续跑；每 20 题落一次盘。
 //       没收的题会存两票的原始输出（raw，各截 300 字），方便看是模型没给对还是解析没认出来。
 // 开头那条 MODULE_TYPELESS_PACKAGE_JSON 警告无害。调用走 lib/ai/deepseekHttp，自动记台账。
@@ -48,6 +49,7 @@ const opt = (name, dflt) => {
 };
 const RUN = flag("run");
 const RETRY_DISPUTED = flag("retry-disputed");
+const REVERIFY = flag("reverify");
 const YES = flag("yes");
 const LIMIT = Number(opt("limit", 0));
 const VOTES = Math.max(1, Number(opt("votes", 2)));
@@ -81,6 +83,27 @@ const SYSTEM =
   "请找出原文里支撑标准答案的句子：读者要读哪一句（最多 3 句）才能得出这个答案。" +
   "词汇题选目标词所在的句子；主旨题选最能概括主旨的句子；否定题（NOT / EXCEPT）选能排除其余三个选项的句子。" +
   '只输出 JSON，例如 {"ids":["S7"],"quote":"原文里最关键的几个英文词，必须与该句一字不差"}，不要别的文字。';
+
+if (REVERIFY) {
+  let saved = 0;
+  let left = 0;
+  for (const x of all) {
+    const e = existing.items[x.key];
+    if (!e || e.status === "ok" || !Array.isArray(e.raw) || e.stem !== String(x.detail.stem).slice(0, 80)) continue;
+    const res = verifyEvidence(e.raw.map((r) => parseVote(r)), buildEvidence(x.detail).sentences);
+    if (res.status === "ok") {
+      existing.items[x.key] = { stem: e.stem, ...res };
+      saved++;
+    } else {
+      existing.items[x.key] = { ...e, reason: res.reason };
+      left++;
+    }
+  }
+  writeFileSync(OUT, JSON.stringify(existing, null, 1));
+  const total = Object.values(existing.items);
+  console.log(`按当前规则重核：救回 ${saved} 道，仍没收 ${left} 道；文件里 ok ${total.filter((e) => e.status === "ok").length} / ${total.length}。`);
+  process.exit(0);
+}
 
 const estTokens = (s) => {
   const cjk = (String(s).match(/[一-鿿]/g) || []).length;
