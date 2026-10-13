@@ -73,3 +73,18 @@ describe("触发与出处", () => {
     expect(cites(0)).toEqual([["题1", false], ["题3", false]]);
   });
 });
+
+describe("[题N] 的引文按第 N 道题核对", () => {
+  const sentences = numberSentences("Bees matter a lot.");
+  const past = [["When does the gym open?", "A. At nine"], ["When is lunch served?", "A. At noon"]];
+  const cites = (text) => parseAnswer(text, sentences, past.flat(), { past }).filter((s) => s.type === "cite");
+  test("引文出自那道题 → 核得上；引了别的题的原话标成 [题1] → 核不上", () => {
+    expect(cites('你当时选了 "At nine" [题1]。')[0].valid).toBe(true);
+    expect(cites('你当时选了 "At noon" [题1]。')[0].valid).toBe(false);
+    expect(cites("这题和 [题2] 一样。")[0].valid).toBe(true);
+    expect(cites("见 [题3]。")[0].valid).toBe(false);
+  });
+  test("只传数量时照旧只核编号", () => {
+    expect(parseAnswer('"At noon" [题1]', sentences, past.flat(), { past: 2 }).find((s) => s.type === "cite").valid).toBe(true);
+  });
+});

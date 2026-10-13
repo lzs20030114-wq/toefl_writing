@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback, useId } from 
 import { createPortal } from "react-dom";
 import { getSavedCode } from "../../lib/AuthContext";
 import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, locateSentence, buildEvidence } from "../../lib/qa/questionQa";
-import { analogyMaterials } from "../../lib/qa/pastQuestions";
+import { analogyMaterials, pastItemMaterials } from "../../lib/qa/pastQuestions";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
 
@@ -62,7 +62,7 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
   const [open, setOpen] = useState(null);
   // 举一反三那一轮：对比题的题干、选项、依据句也算可引的材料
   const allMaterials = useMemo(() => (past?.length ? [...materials, ...analogyMaterials({ items: past })] : materials), [materials, past]);
-  const segments = useMemo(() => parseAnswer(text, sentences, allMaterials, { mistakes, dict, past: past?.length || 0 }), [text, sentences, allMaterials, mistakes, dict, past]);
+  const segments = useMemo(() => parseAnswer(text, sentences, allMaterials, { mistakes, dict, past: past?.length ? past.map(pastItemMaterials) : 0 }), [text, sentences, allMaterials, mistakes, dict, past]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);

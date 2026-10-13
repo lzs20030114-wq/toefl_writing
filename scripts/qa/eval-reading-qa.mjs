@@ -31,7 +31,7 @@ const { isSentenceSelection } = await import(pathToFileURL(join(ROOT, "lib", "re
 const { QA_SYSTEM, EXPLAIN_SYSTEM, parseTrap, buildEvidence, buildQaMessage, parseAnswer, citationStats, citationClaims, presetText, plainText } = qa;
 
 // 模型直接取线上 /api/ai 用的那个，线上换模型时评估跟着换，不会静默测旧模型。
-const { pickAnalogies, analogyLines, analogyMaterials } = await import(pathToFileURL(join(ROOT, "lib", "qa", "pastQuestions.js")).href);
+const { pickAnalogies, analogyLines, analogyMaterials, pastItemMaterials } = await import(pathToFileURL(join(ROOT, "lib", "qa", "pastQuestions.js")).href);
 const { answerEvidenceFor } = await import(pathToFileURL(join(ROOT, "lib", "qa", "answerEvidence.js")).href);
 // 线上同款：有离线标注的答案依据句就放进证据包（文件不存在或空 = 不放）。
 const EVIDENCE_FILE = join(ROOT, "data", "realBank", "reading", "answer-evidence.json");
@@ -178,7 +178,7 @@ function buildCases(x) {
       if (!an.items.length) return [];
       const ev = buildEvidence(detail, null, keyEvidence, analogyLines(an));
       return [{
-        kind: "analogy", question: presetText("analogy"), detail, keyEvidence, past: an.items.length,
+        kind: "analogy", question: presetText("analogy"), detail, keyEvidence, past: an.items.map(pastItemMaterials),
         evidence: { ...ev, materials: [...ev.materials, ...analogyMaterials(an)] },
         system: QA_SYSTEM,
         message: buildQaMessage({ evidence: ev.text, firstExplain: FIRST_EXPLAIN, question: presetText("analogy") }),
