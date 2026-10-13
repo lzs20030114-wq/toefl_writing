@@ -20,6 +20,14 @@ describe("collectPastQuestions", () => {
     const r = collectPastQuestions(sessions, { questionType: "factual_detail", stem: "current", correctAnswer: "A. bees" });
     expect(r.map((d) => [d.stem, d.isCorrect, d.date])).toEqual([["Q1", true, "2026-10-05"]]);
   });
+  test("同一天重做同一道题，按完整时间留后做的那次（不论记录先后顺序）", () => {
+    const early = sess(1, "2026-10-05T08:00:00.000Z", "Q1", "B", false);
+    const late = sess(2, "2026-10-05T20:00:00.000Z", "Q1", "A", true);
+    for (const sessions of [[early, late], [late, early]]) {
+      const r = collectPastQuestions(sessions, { questionType: "factual_detail", stem: "current" });
+      expect(r.map((d) => [d.isCorrect, d.date])).toEqual([[true, "2026-10-05"]]);
+    }
+  });
 });
 
 describe("pickAnalogies", () => {
