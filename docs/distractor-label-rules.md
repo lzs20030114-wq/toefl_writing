@@ -55,6 +55,10 @@
 
 如果确实没有任何类别贴切，label 写「其他」，并在 `new_rule` 里用一句话描述你建议的新类别（名称 + 判定标准）。不要为了凑类别硬套。
 
+## 成品数据里的置信度
+
+`data/realBank/reading/distractor-labels.json` 里每个选项都有 `confidence`：两票一致取两票中较低的一档；终审采纳某一票取那票的（最高记 medium）；终审另判记 medium；待老师定记 low。不是 high 时，`alt` 写另一票或标注员给的第二候选类别（有的话）。
+
 ## 两票怎么出
 
 - 第一票（Sonnet，中等强度）：先判类别，再找依据句。

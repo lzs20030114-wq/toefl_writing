@@ -53,6 +53,17 @@ describe("学术阅读真题干扰项标注", () => {
     }
   });
 
+  test("置信度合法；不是 high 的有备选类别时 alt 不等于本类，low 必带 alt", () => {
+    for (const [, entry] of entries) {
+      for (const o of Object.values(entry.options)) {
+        expect(["high", "medium", "low"]).toContain(o.confidence);
+        if (o.confidence === "high") expect(o.alt).toBeUndefined();
+        if (o.alt != null) expect(o.alt).not.toBe(o.label);
+        if (o.confidence === "low") expect(o.alt).toBeTruthy();
+      }
+    }
+  });
+
   test("依据句存在，原话逐字出自依据句", () => {
     const bad = [];
     for (const [qid, entry] of entries) {
