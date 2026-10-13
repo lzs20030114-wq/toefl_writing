@@ -5,6 +5,8 @@ import { lookupWord, normalizeWord, prefetchShards } from "../../lib/dict/lookup
 import { sentenceAtOffsets, splitSenses } from "../../lib/dict/core";
 import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense, usableContextSense } from "../../lib/dict/aiSense";
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
+import { NoteAskBox } from "../notes/NoteAskBox";
+import { NOTE_MAX_QUOTE } from "../../lib/notes/passageNotes";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { getCard, saveWord, removeWord, addSentence, chooseSense, adoptContextSense, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { MAX_CONTEXTS, definitionForContext, hasReviewMode, toggleReviewMode } from "../../lib/vocab/book";
@@ -148,6 +150,38 @@ function saveAiCache(key, value) {
   } catch {}
 }
 
+// 弹窗贴在选区的正下方；下方装不下就翻到上方，左右不越界。
+function placeNear(rect) {
+  const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const spaceBelow = vh - rect.bottom - 16;
+  const spaceAbove = rect.top - 16;
+  // 下方够放就放下方，否则挑空间大的一侧
+  const below = spaceBelow >= 200 || spaceBelow >= spaceAbove;
+  // AI 讲解会把弹窗撑高：限制在可用空间内，让它自己内部滚动，别顶出视口
+  const maxHeight = Math.round(Math.max(140, Math.min(320, below ? spaceBelow : spaceAbove)));
+  const left = Math.max(8, Math.min(rect.left + rect.width / 2 - POP_W / 2, vw - POP_W - 8));
+  return below
+    ? { top: Math.round(rect.bottom + 8), left: Math.round(left), maxHeight }
+    : { bottom: Math.round(vh - rect.top + 8), left: Math.round(left), maxHeight };
+}
+
+// 选区起点在原文里大约第几个字（跳过段号、批注序号、笔记卡这些 data-no-dict 节点）。
+// 只用来在同一短语出现多次时挑离得最近的那处，差几个字不要紧。
+function textOffsetIn(root, range) {
+  if (!root || !range || typeof document === "undefined") return null;
+  try {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let n = 0;
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const skip = node.parentElement?.closest?.("[data-no-dict]");
+      if (node === range.startContainer) return skip ? n : n + range.startOffset;
+      if (!skip) n += node.nodeValue.length;
+    }
+  } catch {}
+  return null;
+}
+
 /**
  * 用法：<WordLookupLayer passage={passage}>…原文…</WordLookupLayer>
  * 带 data-no-dict 属性的子节点（例如 CTW 里点开解析的填空 chip）不触发查词。
@@ -156,8 +190,11 @@ function saveAiCache(key, value) {
  * source 会记进单词本，用来在 /vocab-notebook 里显示这个词是从哪儿收藏的。
  * onPlaySentence(index) 可选：听力复盘传进来后，词落在某一句里时弹窗多一颗「听这一句」
  * （index 是 SentenceTranscript 渲染的那份句子列表的下标）；不传就当没有这个功能。
+ * notes 可选（components/notes/usePassageNotes 的返回值）：传进来后弹窗底部多一块「问 AI」，
+ * 选得比词典门槛长（一句、几句）时改弹只有提问的气泡；回答记成原文批注。
+ * 带 data-note-mark 的节点（批注高亮）单击不查词，留给它自己的展开 / 收起。
  */
-export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence, listeningAudio }) {
+export function WordLookupLayer({ passage, children, style, source = "reading", onPlaySentence, listeningAudio, notes = null }) {
   const rootRef = useRef(null);
   const popRef = useRef(null);
   const rangeRef = useRef(null); // 被查那个词的 Range，滚动时用它重算位置
@@ -165,6 +202,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
   const openSequence = useRef(0);
   const aiSequence = useRef(0);
   const [pop, setPop] = useState(null); // { word, rect, entry, loading, notFound }
+  const [ask, setAsk] = useState(null); // 长选区的提问气泡 { quote, rect, sentenceText, hint }
   const [ai, setAi] = useState(null); // { loading, text, sense, error }
   const [senseEdit, setSenseEdit] = useState(null);
   const [senseFeedback, setSenseFeedback] = useState(null);
@@ -183,6 +221,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setSenseEdit(null);
     setSenseFeedback(null);
     setPop(null);
+    setAsk(null);
     setAi(null);
     setCard(null);
   }, []);
@@ -235,8 +274,11 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     const sentenceEl = sentenceElementOf(range);
     const sentenceText = sentenceEl?.getAttribute("data-sentence-text")?.trim()
       || sentenceEl?.textContent?.trim() || sentenceFromRange(rootRef.current, range);
+    setAsk(null);
     setPop({
       word,
+      quote: String(raw || "").replace(/\s+/g, " ").trim(),
+      hint: textOffsetIn(rootRef.current, range),
       identityId: identity.id,
       account: identity.account,
       rect: range.getBoundingClientRect(),
@@ -257,11 +299,36 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     );
   }, [source]);
 
+  const openAsk = useCallback((raw, range) => {
+    // 气泡也占一个 identity：页面别处一按下就收起（和词典弹窗同一套关闭手势）。
+    identityRef.current = { id: ++openSequence.current, account: getVocabAccountKey(), word: null };
+    aiSequence.current += 1;
+    setPop(null);
+    setAi(null);
+    setCard(null);
+    rangeRef.current = range;
+    const sentenceEl = sentenceElementOf(range);
+    setAsk({
+      quote: String(raw || "").replace(/\s+/g, " ").trim(),
+      rect: range.getBoundingClientRect(),
+      sentenceText: sentenceEl?.getAttribute("data-sentence-text")?.trim() || sentenceFromRange(rootRef.current, range) || "",
+      hint: textOffsetIn(rootRef.current, range),
+    });
+  }, []);
+
+  const submitNote = useCallback((sel, question, opts) => {
+    if (!notes) return;
+    notes.askNew(sel, question, opts);
+    try { window.getSelection()?.removeAllRanges(); } catch {}
+    close();
+  }, [notes, close]);
+
   const handlePick = useCallback(
     (ev) => {
       if (ev.type === "mouseup" && touchMousePending) return;
       if (ev.target && ev.target.closest && ev.target.closest("[data-no-dict]")) return;
       if (popRef.current && popRef.current.contains(ev.target)) return;
+      const onMark = ev.target && ev.target.closest && ev.target.closest("[data-note-mark]");
       const gesture = ev.lookupGesture || lookupGesture || { blocked: false };
       if (gesture.blocked || gesture.superseded
         || (ev.lookupGesture && gesture.sequence != null && gesture.sequence !== lookupGestureSequence)) return;
@@ -270,9 +337,14 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
 
       const sel = window.getSelection();
       const picked = sel && !sel.isCollapsed ? sel.toString().trim() : "";
+      if (!picked && onMark) return; // 点批注高亮：展开 / 收起它自己的笔记
       if (picked) {
         // 划词：限制在一句以内，别把整段当词查
-        if (picked.length > 60 || picked.split(/\s+/).length > 6) return;
+        if (picked.length > 60 || picked.split(/\s+/).length > 6) {
+          // 选了一句、几句：能批注提问的页面改弹提问气泡
+          if (notes?.isPro && picked.length <= NOTE_MAX_QUOTE) openAsk(picked, sel.getRangeAt(0).cloneRange());
+          return;
+        }
         // selection 的 Range 是 live 的（用户再选别处就会变），克隆一份快照留着定位
         openFor(picked, sel.getRangeAt(0).cloneRange());
         return;
@@ -291,7 +363,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
       }
       openFor(r.toString(), r);
     },
-    [openFor, close]
+    [openFor, close, notes?.isPro, openAsk]
   );
 
   // 手指长按选词后 selection 要一拍才稳定
@@ -310,7 +382,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
 
   // 只在「开/关」这个布尔翻转时装拆监听——位置更新走 ref，不进依赖，
   // 否则每滚一帧 setPop 都会把监听重装一遍。
-  const isOpen = !!pop;
+  const isOpen = !!pop || !!ask;
   useEffect(() => {
     if (!isOpen) return undefined;
     const onKey = (e) => {
@@ -330,14 +402,16 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
         close();
         return;
       }
-      setPop((prev) => {
+      const follow = (prev) => {
         if (!prev) return prev;
         const p = prev.rect;
         if (p && Math.abs(p.top - r.top) < 0.5 && Math.abs(p.left - r.left) < 0.5) {
           return prev; // 词没动（例如在弹窗内部滚动），别白白重渲染
         }
         return { ...prev, rect: r };
-      });
+      };
+      setPop(follow);
+      setAsk(follow);
     };
     document.addEventListener("keydown", onKey);
     window.addEventListener("scroll", reposition, true);
@@ -576,25 +650,9 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     ? []
     : splitSenses(pop.entry.t);
 
-  // 贴在词的正下方；下方装不下就翻到上方，左右不越界。
-  let popStyle = null;
-  if (pop && pop.rect) {
-    const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
-    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const spaceBelow = vh - pop.rect.bottom - 16;
-    const spaceAbove = pop.rect.top - 16;
-    // 下方够放就放下方，否则挑空间大的一侧
-    const below = spaceBelow >= 200 || spaceBelow >= spaceAbove;
-    // AI 讲解会把弹窗撑高：限制在可用空间内，让它自己内部滚动，别顶出视口
-    const maxHeight = Math.round(Math.max(140, Math.min(320, below ? spaceBelow : spaceAbove)));
-    const left = Math.max(
-      8,
-      Math.min(pop.rect.left + pop.rect.width / 2 - POP_W / 2, vw - POP_W - 8)
-    );
-    popStyle = below
-      ? { top: Math.round(pop.rect.bottom + 8), left: Math.round(left), maxHeight }
-      : { bottom: Math.round(vh - pop.rect.top + 8), left: Math.round(left), maxHeight };
-  }
+  const popStyle = pop && pop.rect ? placeNear(pop.rect) : null;
+  const askStyle = ask && ask.rect ? placeNear(ask.rect) : null;
+  const askOnPop = !!(notes?.isPro && pop && !pop.loading && (pop.quote || pop.word));
 
   return (
     <div ref={rootRef} onMouseUp={handlePick} onTouchEnd={handleTouch} style={style}>
@@ -960,6 +1018,52 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
             </div>
           )}
           {senseFeedback?.error && <div role="alert" style={{ marginTop: 6, fontSize: 12, color: "#E11D48" }}>{senseFeedback.text}</div>}
+          {askOnPop && (
+            <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px dashed #e5d3b3" }}>
+              <NoteAskBox
+                quote={pop.quote || pop.word}
+                dailyLeft={notes.dailyLeft}
+                onAsk={(q, opts) => submitNote({ quote: pop.quote || pop.word, sentenceText: pop.crossSentence ? "" : pop.sentenceText, start: pop.hint }, q, opts)}
+              />
+            </div>
+          )}
+        </div>,
+        document.body
+      )}
+      {ask && askStyle && typeof document !== "undefined" && createPortal(
+        <div
+          ref={popRef}
+          data-testid="note-ask-bubble"
+          onMouseUp={(e) => e.stopPropagation()}
+          style={{
+            position: "fixed",
+            ...askStyle,
+            width: POP_W,
+            boxSizing: "border-box",
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            background: "#fff",
+            border: "1px solid #ecdcbc",
+            borderRadius: 12,
+            boxShadow: "0 8px 28px rgba(15, 42, 30, 0.16)",
+            padding: "10px 12px",
+            zIndex: 4000,
+            fontSize: 13,
+            lineHeight: 1.6,
+            color: "#22322a",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+            <div style={{ flex: 1, minWidth: 0, fontSize: 12, color: "#57534e", fontFamily: "Georgia, serif", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+              “{ask.quote}”
+            </div>
+            <button type="button" aria-label="关闭" onClick={close} style={{ border: "none", background: "transparent", color: "#9ca3af", fontSize: 16, lineHeight: 1, cursor: "pointer", padding: 0 }}>×</button>
+          </div>
+          <NoteAskBox
+            quote={ask.quote}
+            dailyLeft={notes?.dailyLeft ?? 0}
+            onAsk={(q, opts) => submitNote({ quote: ask.quote, sentenceText: ask.sentenceText, start: ask.hint }, q, opts)}
+          />
         </div>,
         document.body
       )}
