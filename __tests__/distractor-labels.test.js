@@ -41,7 +41,7 @@ describe("学术阅读真题干扰项标注", () => {
       const wrong = Object.keys(q.options).filter((k) => k !== q.correct_answer).sort();
       expect(Object.keys(entry.options).sort()).toEqual(wrong);
       for (const [k, o] of Object.entries(entry.options)) {
-        if (!o.text || !String(q.options[k]).trim().startsWith(o.text)) bad.push(`${qid} ${k}`);
+        if (o.text !== String(q.options[k]).trim()) bad.push(`${qid} ${k}`);
       }
     }
     expect(bad).toEqual([]);
