@@ -23,6 +23,7 @@ import { trapOfBrief, trapOfDetail } from "../../lib/qa/trapStore";
 import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
 import { collectPastQuestions, pickAnalogies, analogyLines } from "../../lib/qa/pastQuestions";
 import { loadConversation, saveConversation, dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
+import { QA_FORMATS, formatFor } from "../../lib/qa/answerFormats";
 
 // 练习记录逐题「继续追问」的状态层。第一轮仍是 useReadingAiExplain 的讲解（prompt 与缓存桶都不动），
 // 这里只管之后的多轮：证据包 + 历史拼进同一条 message 走 /api/ai（接口不改）。
@@ -150,7 +151,7 @@ export function useQuestionQa(detail, firstExplain) {
       }
 
       const history = cur.turns.map((t) => ({ q: t.selection?.text ? `（选中："${t.selection.text}"）${t.q}` : t.q, a: t.a }));
-      const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, dict });
+      const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, dict, format: formatFor(QA_FORMATS, presetId) });
       const raw = await callAI(QA_SYSTEM, message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
