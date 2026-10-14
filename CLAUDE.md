@@ -63,7 +63,7 @@ components/                   # 分科任务 UI + 后台
 │                             #   | RealDetail(左 rail + 头部 + 编号导航 + 吸顶筛选条 + 上/下一条) → review/{Ctw,Mcq,Bs,Speaking,Writing}Review
 │                             #   (查词典/AI 讲解/逐句点播/口语再练/WritingFeedbackPanel 仍复用各科历史页的 hook 与组件, AI 讲解外观见 shared/AiExplainView)
 │                             #   realBankMeta=来源分档/考试日期/题库总量(会 import 整个真题库, 只给本路由用)
-│                             #   RealFavorites=「★ 收藏夹」视图: 题目级收藏(题型+题目 id 一题一条, lib/realBankFavorites 本地按账号存),
+│                             #   RealFavorites=「★ 收藏夹」视图: 题目级收藏(题型+题目 id 一题一条, lib/realBankFavorites 本地优先+云同步),
 │                             #   「去做这道题」走 /real-bank?type=&item= 直达(造句/听力应答打开所在整套)
 ├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
@@ -90,7 +90,7 @@ lib/
 │                             #   vocabStore(本地优先+云同步) + reviewLog(复习日志)
 ├── dict/                     # 划词词典查询层 (core 纯函数 + lookup 分片 fetch)
 ├── realBank.js realBankModes.js realBankHistory.js   # 真题专区数据层 / 三档限时 / 练习记录纯函数
-├── realBankFavorites.js                                # 真题收藏夹(题目级, localStorage 按账号分 key, 无云同步)
+├── realBankFavorites.js realBankFavoriteRow.js         # 真题收藏夹(题目级; localStorage 按账号分 key 是真源 + /api/real-favorites 双向合并, 软删除) / 入库校验
 ├── realBankReview.js realBankRescore.js              # 记录页逐题模型(units/速览/日分组/词级 diff) / 评分失败的写作记录「重试评分」(patchSession 回写 score+details)
 ├── realExam/                 # blueprint.mjs: 2026 整卷结构蓝图(题号带/槽位) — scripts/realbank/assemble_sets.mjs 用
 ├── wechatQr/                 # 群二维码 Storage 层 (app_assets 桶, 自动建桶, 60s 缓存)
@@ -276,7 +276,7 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 - `ai/` 写作评分 · `audio/[...path]/` 听力音频 Edge 代理 · `speech/{transcribe,consent}` 口语 STT
 - `user-bank/` 存量 GET/DELETE；POST 与 extract/extract-image/render-audio/verify 已退役（410） · `vocab/` 单词本同步 + `vocab/logs` 复习日志
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
-- `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
+- `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏 · `real-favorites/` 真题收藏夹同步
 - `analytics/track` 事件 · `feedback/` 反馈
 - `admin/` 后台：content/users/codes/grant-pro/analytics/retention/report/real-bank(真题专区练习统计)/voice-vote/surveys/referrals/wechat-qr(群二维码上传)
 
@@ -294,6 +294,7 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 | `user_question_banks` | 个人题库 (widen-types 迁移后支持全 12 题型) |
 | `referrals` / `referral_events` | 推荐关系 + 事件 |
 | `mistake_favorites` | 错题收藏 |
+| `real_bank_favorites` | 真题收藏夹（user_code+fav_key「题型:题目 id」去重，整条 JSONB，软删除；本地 localStorage 才是真源） |
 | `vocab_cards` | 单词本（word + 整卡 JSONB，本地 localStorage 才是真源，这是跨设备镜像） |
 | `vocab_review_logs` | 每次复习一行，供日后用真实数据重拟合 FSRS 权重 / 做留存率校准 |
 | `user_surveys` | 问卷/语音投票 |
