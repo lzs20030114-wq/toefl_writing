@@ -18,26 +18,37 @@ global.window = new EventTarget();
 let mockCode = "SYNC01";
 jest.mock("../lib/AuthContext", () => ({ getSavedCode: jest.fn(() => mockCode) }));
 
-// 内存版 supabaseAdmin：只实现路由用到的 select/eq/in/order/limit/upsert。
+// 内存版 supabaseAdmin：实现路由的条件更新与唯一约束插入。
 let mockRows = [];
 jest.mock("../lib/supabaseAdmin", () => {
   const from = () => {
     const filters = [];
     let lim = Infinity;
+    let update = null;
+    const run = () => {
+      const rows = mockRows.filter((r) => filters.every((f) => f(r))).slice(0, lim);
+      if (update) rows.forEach((r) => Object.assign(r, update));
+      return { data: rows.map((r) => ({ ...r })), error: null };
+    };
     const q = {
       select: () => q,
       eq: (c, v) => { filters.push((r) => r[c] === v); return q; },
       in: (c, vs) => { filters.push((r) => vs.includes(r[c])); return q; },
       order: () => q,
       limit: (n) => { lim = n; return q; },
-      upsert: async (rows) => {
-        rows.forEach((row) => {
-          const i = mockRows.findIndex((r) => r.user_code === row.user_code && r.fav_key === row.fav_key);
-          if (i >= 0) mockRows[i] = { ...mockRows[i], ...row }; else mockRows.push(row);
-        });
+      update: (value) => { update = value; return q; },
+      insert: async (row) => {
+        if (mockRows.some((r) => r.user_code === row.user_code && r.fav_key === row.fav_key)) {
+          return { error: { code: "23505", message: "duplicate key" } };
+        }
+        mockRows.push({ ...row });
         return { error: null };
       },
-      then: (res) => res({ data: mockRows.filter((r) => filters.every((f) => f(r))).slice(0, lim), error: null }),
+      maybeSingle: async () => {
+        const result = run();
+        return { ...result, data: result.data[0] || null };
+      },
+      then: (res) => res(run()),
     };
     return q;
   };

@@ -436,7 +436,7 @@ function DrillStage({ stage, index, count, onComplete, onExit }) {
     return <CTWTask item={stage.item} isPractice onComplete={onComplete} onExit={onExit} />;
   }
   if (stage.kind === "rdl") {
-    return <RDLTask item={stage.item} isPractice title={stage.title} section={section} onComplete={onComplete} onExit={onExit} />;
+    return <RDLTask item={stage.item} subtype={stage.subtype} isPractice title={stage.title} section={section} onComplete={onComplete} onExit={onExit} />;
   }
   if (stage.kind === "lcr") {
     return <LCRTask batchItems={stage.items} isPractice onComplete={onComplete} onExit={onExit} />;

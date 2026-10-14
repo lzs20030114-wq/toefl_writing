@@ -642,6 +642,7 @@ function RealBankPageClient() {
           {taskType === "ap" && (
             <RDLTask
               item={apAsRdl}
+              subtype="ap"
               onExit={backToPicker}
               onComplete={(result) => saveRealReadingSession("ap", item, result, mode)}
               timeLimit={taskTimeLimit}

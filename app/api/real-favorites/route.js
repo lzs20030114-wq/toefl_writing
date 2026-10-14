@@ -12,11 +12,38 @@ import { toFavRow, favTime as time } from "../../../lib/realBankFavoriteRow";
 
 const TABLE = "real_bank_favorites";
 const MAX_PER_REQUEST = 100;
+const CAS_ATTEMPTS = 5;
 
 const limiter = createRateLimiter("real-favorites", { window: 60_000, max: 60 });
 
 function normalizeCode(raw) {
   return String(raw || "").toUpperCase().trim();
+}
+
+async function saveFavorite(code, row, initial) {
+  let current = initial;
+  for (let attempt = 0; attempt < CAS_ATTEMPTS; attempt += 1) {
+    if (current && time(row.updated_at) <= time(current.updated_at)) return { saved: false };
+    if (current) {
+      // Only replace the version actually observed. A newer cancellation must
+      // survive an older favorite request that read before that cancellation.
+      const { data, error } = await supabaseAdmin.from(TABLE)
+        .update({ fav: row.fav, updated_at: row.updated_at })
+        .eq("user_code", code).eq("fav_key", row.fav_key).eq("updated_at", current.updated_at)
+        .select("fav_key");
+      if (error) return { error: error.message || "Save favorites failed" };
+      if (data?.length) return { saved: true };
+    } else {
+      const { error } = await supabaseAdmin.from(TABLE).insert(row);
+      if (!error) return { saved: true };
+      if (error.code !== "23505") return { error: error.message || "Save favorites failed" };
+    }
+    const { data, error } = await supabaseAdmin.from(TABLE).select("fav_key,updated_at")
+      .eq("user_code", code).eq("fav_key", row.fav_key).maybeSingle();
+    if (error) return { error: error.message || "Reload favorites failed" };
+    current = data;
+  }
+  return { error: "Favorite changed concurrently; retry sync" };
 }
 
 export async function GET(request) {
@@ -59,13 +86,14 @@ export async function POST(request) {
     const { data: existing, error: readError } = await supabaseAdmin.from(TABLE)
       .select("fav_key,updated_at").eq("user_code", code).in("fav_key", rows.map((r) => r.fav_key));
     if (readError) return jsonError(503, readError.message || "Load favorites failed");
-    const remoteAt = new Map((existing || []).map((r) => [r.fav_key, time(r.updated_at)]));
-    const writes = rows.filter((r) => !remoteAt.has(r.fav_key) || time(r.updated_at) > remoteAt.get(r.fav_key));
-    if (writes.length) {
-      const { error } = await supabaseAdmin.from(TABLE).upsert(writes, { onConflict: "user_code,fav_key" });
-      if (error) return jsonError(503, error.message || "Save favorites failed");
+    const known = new Map((existing || []).map((r) => [r.fav_key, r]));
+    let saved = 0;
+    for (const row of rows) {
+      const result = await saveFavorite(code, row, known.get(row.fav_key));
+      if (result.error) return jsonError(503, result.error);
+      if (result.saved) saved += 1;
     }
-    return Response.json({ ok: true, saved: writes.length });
+    return Response.json({ ok: true, saved });
   } catch (e) {
     return jsonError(500, e.message || "Unexpected server error");
   }

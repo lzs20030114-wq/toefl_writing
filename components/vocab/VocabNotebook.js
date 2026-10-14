@@ -8,7 +8,7 @@ import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { ListeningVocabReview } from "./ListeningVocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
-import { SORT_OPTIONS, cardStage, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards, hasReviewMode } from "../../lib/vocab/book";
+import { SORT_OPTIONS, cardStage, cleanContextSentence, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards, hasReviewMode } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import { clearReviewSave, readReviewSave, resumableQueue, writeReviewSave } from "../../lib/vocab/reviewSave";
 import RootExplorer from "./RootExplorer";
@@ -70,6 +70,7 @@ const dayLabel = (key, index) => {
 
 /** 把例句里的目标词标出来；匹配不到就原样返回。 */
 function Highlighted({ sentence, word }) {
+  sentence = cleanContextSentence(sentence);
   if (!sentence) return null;
   let re;
   try { re = new RegExp(`(\\b${String(word).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b)`, "ig"); } catch { return sentence; }

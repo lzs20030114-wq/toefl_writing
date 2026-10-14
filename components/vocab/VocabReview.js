@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { activeSentence, definitionForContext, cardDirection, clozeSentence, contextSentence, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
 import { cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
@@ -927,7 +927,7 @@ export function VocabReview({
                       background: C.bg, borderRadius: 10, padding: "10px 14px",
                       borderLeft: `3px solid ${ACCENT}`,
                     }}>
-                      {highlight(shownSentence, card.word)}
+                      {highlight(cleanContextSentence(shownSentence), card.word)}
                     </div>
                   )}
                 </>

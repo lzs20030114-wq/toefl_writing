@@ -330,6 +330,7 @@ function ReadingPageClient() {
     return (
       <RDLTask
         item={apAsRdl}
+        subtype="ap"
         onExit={taskOnExit}
         onComplete={(result) => saveReadingSession("ap", item, result)}
         timeLimit={timeLimit}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { C, FONT, READING_FONT, Btn, SurfaceCard, TopBar } from "../shared/ui";
 import { buildDraftKey, loadDraft, clearDraft, useDraftPersist } from "../../lib/draftPersist";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
@@ -17,6 +17,8 @@ import {
 } from "../../lib/reading/sentenceSelection";
 import { WordLookupLayer } from "./WordLookupLayer";
 import { questionLookupContext } from "../../lib/dict/core";
+import { McqReview } from "../realBank/review/McqReview";
+import { buildReviewModel } from "../../lib/realBankReview";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
 
 function ReviewLookup({ enabled, passage, children, style }) {
@@ -50,9 +52,8 @@ const SENTENCE_SELECTION_CSS = [
  * 原图模式下这道题强制显示文字（图上点不了句子）。
  * 版面定位不到时（mapper 已拦，这里兜底）右栏退回逐句列表作答，绝不出点不了的死题。
  */
-export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, title = "Read in Daily Life", section = "Reading | Task 2" }) {
-  // Scope drafts by item id; reading tasks use the same RDLTask shell for AP too,
-  // so prefix the id with the perceived subtype to avoid collisions.
+export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = false, subtype = "rdl", title = "Read in Daily Life", section = "Reading | Task 2" }) {
+  // AP shares this task's persisted draft namespace; the picker uses it too.
   const draftKey = buildDraftKey("rdl", item?.id || "");
   const draftRestored = loadDraft(draftKey);
   const [selections, setSelections] = useState(() => {
@@ -68,6 +69,16 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return 0;
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submission, setSubmission] = useState(null);
+  const [openQuestion, setOpenQuestion] = useState(null);
+  const [wide, setWide] = useState(true);
+  const submittedRef = useRef(false);
+  useEffect(() => {
+    const resize = () => setWide(window.innerWidth >= 1100);
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
   // 材料框原图（真题专区独有的可选字段）。有图默认显示图 —— 真题界面的版面
   // （邮件表头 / 短信气泡 / 海报分栏 / 柱状图）在纯文本里是丢掉的。
   const materialImage = materialImageSrc(item);
@@ -83,7 +94,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
   const autoSubmittedRef = useRef(false);
 
   const accent = { color: "#3B82F6", soft: "#EFF6FF" };
-  const questions = item.questions || [];
+  const questions = useMemo(() => item.questions || [], [item.questions]);
   const question = questions[currentQ];
   const lookupContext = questionLookupContext(item.text || item.passage, [question]);
   // 插入句题：题干拆成「指令 / 待插入句 / 提问」三段（lib/reading/insertSentence.js），拆不出照旧整段。
@@ -143,23 +154,32 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [submitted, timeLimit]);
 
+  const submitAnswers = useCallback(() => {
+    // The timer and submit button can fire in the same render. Save once per attempt.
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+    setSubmitted(true);
+    clearDraft(draftKey);
+    setCurrentQ(0);
+    const results = questions.map((q, i) => ({
+      selected: selections[i], correct: q.correct_answer,
+      isCorrect: selections[i] === q.correct_answer,
+    }));
+    const result = { results, correct: results.filter(r => r.isCorrect).length, total: questions.length };
+    setSubmission({ id: `${subtype}-result-${item.id}-${Date.now()}`, type: "reading", details: {
+      subtype, itemId: item.id, passage: item.text || item.passage, paragraphs: item.paragraphs, questions, ...result,
+    } });
+    setOpenQuestion(null);
+    if (onComplete) onComplete(result);
+  }, [draftKey, questions, selections, item.id, item.text, item.passage, item.paragraphs, subtype, onComplete]);
+
   // Auto-submit when time runs out
   useEffect(() => {
     if (timeLimit > 0 && timeLeft === 0 && !submitted && !autoSubmittedRef.current) {
       autoSubmittedRef.current = true;
-      // Force submit with whatever is answered
-      setSubmitted(true);
-      clearDraft(draftKey);
-      setCurrentQ(0);
-      const results = questions.map((q, i) => ({
-        selected: selections[i],
-        correct: q.correct_answer,
-        isCorrect: selections[i] === q.correct_answer,
-      }));
-      const correct = results.filter(r => r.isCorrect).length;
-      if (onComplete) onComplete({ results, correct, total: questions.length });
+      submitAnswers();
     }
-  }, [timeLeft, timeLimit, submitted, selections, questions, onComplete, draftKey]);
+  }, [timeLeft, timeLimit, submitted, submitAnswers]);
 
   function handleSelect(key) {
     if (submitted) return;
@@ -182,19 +202,26 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
     }
   }
 
+
   function handleSubmit() {
-    if (!allAnswered) return;
-    setSubmitted(true);
-    clearDraft(draftKey);
-    setCurrentQ(0); // Go back to Q1 to review
-    const results = questions.map((q, i) => ({
-      selected: selections[i],
-      correct: q.correct_answer,
-      isCorrect: selections[i] === q.correct_answer,
-    }));
-    const correct = results.filter(r => r.isCorrect).length;
-    if (onComplete) onComplete({ results, correct, total: questions.length });
+    if (allAnswered) submitAnswers();
   }
+
+  function handleRedo() {
+    clearDraft(draftKey);
+    submittedRef.current = false;
+    autoSubmittedRef.current = false;
+    setSelections(questions.map(() => null));
+    setCurrentQ(0);
+    setTimeLeft(timeLimit > 0 ? timeLimit : 0);
+    setElapsed(0);
+    setOpenQuestion(null);
+    setSubmission(null);
+    setHoverSentence(null);
+    setShowMaterialImage(true);
+    setSubmitted(false);
+  }
+  const reviewModel = useMemo(() => submission && subtype === "ap" ? buildReviewModel(submission, "ap") : null, [submission, subtype]);
 
   const results = submitted ? questions.map((q, i) => ({
     selected: selections[i],
@@ -336,14 +363,24 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
               {correctCount} / {questions.length}
             </div>
             <div style={{ fontSize: 13, color: C.t2, marginTop: 4 }}>
-              {correctCount === questions.length ? "全部正确！" : "使用下方导航回顾每道题的详解。"}
+              {correctCount === questions.length ? "全部正确！" : subtype === "ap" ? "回顾下方每道题的详解。" : "使用下方导航回顾每道题的详解。"}
             </div>
             <div style={{ marginTop: 10 }}>
               <Btn onClick={onExit} variant="secondary" style={{ fontSize: 13 }}>返回</Btn>
+              {subtype === "ap" && <Btn onClick={handleRedo} variant="secondary" style={{ fontSize: 13, marginLeft: 10 }}>重新作答</Btn>}
             </div>
           </SurfaceCard>
         )}
 
+        {submitted && subtype === "ap" ? (
+          <SurfaceCard style={{ padding: "20px 24px" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: C.t2, marginBottom: 14 }}>逐题回顾</div>
+            <McqReview session={submission} subtype="ap" model={reviewModel} vid={submission.id}
+              ctx={{ pass: () => true, isOpen: (i) => openQuestion === i,
+                toggle: (i) => setOpenQuestion(prev => prev === i ? null : i),
+                wide, emptyText: "暂无题目记录" }} />
+          </SurfaceCard>
+        ) : <>
         {/* Two-column split: passage (left) + question (right) — real TOEFL layout */}
         <div
           className="tp-reading-split"
@@ -685,6 +722,7 @@ export function RDLTask({ item, onExit, onComplete, timeLimit = 0, isPractice = 
             </div>
           </div>
         </div>
+        </>}
       </div>
     </div>
   );
