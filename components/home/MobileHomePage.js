@@ -17,7 +17,6 @@ import { getRealBankTimeLabels } from "../../lib/realBankModes";
 import { FREE_DAILY_LIMIT } from "../../lib/dailyUsage";
 import { SECTIONS, SECTION_ACCENTS, SECTION_STATUS } from "./sections";
 import { openFirstSetSurvey } from "../../lib/survey/openFirstSetSurvey";
-import MyBankImporter from "../userBank/MyBankImporter";
 // 故意**不** import lib/realBank：那会把 238 KB 写作真题 JSON + 阅读三个题库打进首页
 // bundle（实测 `/` 的 First Load JS 255 kB → 318 kB）。阅读题量改读 build_bank 落库时
 // 顺手写的几十字节计数文件，只有 {ctw,rdl,ap} 三个数字。
@@ -28,7 +27,6 @@ import { REAL_WRITING_COUNTS } from "./realExamCounts";
 // 听力 / 口语（三期）同理，只读几十字节的 counts.json。
 import REAL_LISTENING_COUNTS from "../../data/realBank/listening/counts.json";
 import REAL_SPEAKING_COUNTS from "../../data/realBank/speaking/counts.json";
-import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { DailyTasksCard } from "./DailyTasksCard";
 import { LISTENING_TOTAL_QUESTIONS, listeningModuleSeconds, moduleTimeLabel } from "../../lib/mockExam/modulePlans";
 
@@ -50,13 +48,6 @@ export function MobileHomePage({
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const tier = userTier || "free";
 
-  // 「我的题库」新功能一次性聚光灯引导（与桌面端共用同一 featureId，不会重复弹）
-  const bankSpotlight = useSpotlightGate({
-    featureId: "my-bank-2026-07",
-    enabled: isLoggedIn && !isChallenge,
-    alreadyThere: activeSection === "my-bank",
-    targetSelector: '[data-section-id="my-bank"]',
-  });
   const [showDesktopTip, setShowDesktopTip] = useState(false);
   const desktopTipRef = useRef(false);
 
@@ -211,12 +202,6 @@ export function MobileHomePage({
           tier={tier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
           onUpgrade={() => setUpgradeOpen(true)} t1={t1} t2={t2}
         />
-      ) : activeSection === "my-bank" ? (
-        <MobileMyBankSection
-          userCode={userCode} tier={tier} isLoggedIn={isLoggedIn}
-          showLoginModal={showLoginModal} onUpgrade={() => setUpgradeOpen(true)}
-          t1={t1} t2={t2}
-        />
       ) : activeSection === "listening" ? (
         <MobileListeningSection
           isChallenge={isChallenge} isPractice={isPractice} mode={mode} switchMode={switchMode}
@@ -362,15 +347,6 @@ export function MobileHomePage({
         />
       )}
 
-      {bankSpotlight.open && !isChallenge && (
-        <FeatureSpotlight
-          targetSelector='[data-section-id="my-bank"]'
-          title="我的题库"
-          description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
-          onCta={() => { bankSpotlight.close(); onSectionChange("my-bank"); }}
-          onDismiss={bankSpotlight.close}
-        />
-      )}
     </div>
   );
 }
@@ -731,28 +707,6 @@ function MobileReadingSection({ isChallenge, isPractice, mode, switchMode, query
           <span style={{ color: t2 }}>›</span>
         </Link>
       </div>
-    </>
-  );
-}
-
-/* ── Mobile My Bank Section ── */
-
-function MobileMyBankSection({ userCode, tier, isLoggedIn, showLoginModal, onUpgrade, t1, t2 }) {
-  return (
-    <>
-      <div style={{ marginBottom: 14 }}>
-        <h1 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: t1, lineHeight: 1.2 }}>我的题库</h1>
-        <div style={{ fontSize: 12, color: t2, lineHeight: 1.5 }}>
-          导入你自己的学术讨论 / 邮件题——粘贴文本或上传截图，AI 识别后在练习页以「我的」标签出现。
-        </div>
-      </div>
-      <MyBankImporter
-        variant="panel"
-        code={isLoggedIn ? userCode : ""}
-        tier={tier}
-        onRequireUpgrade={onUpgrade}
-        onRequireLogin={showLoginModal}
-      />
     </>
   );
 }

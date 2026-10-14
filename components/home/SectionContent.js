@@ -9,7 +9,6 @@ import { ComingSoonSection } from "./ComingSoonSection";
 import { ReadingSectionContent } from "./ReadingSectionContent";
 import { ListeningSectionContent } from "./ListeningSectionContent";
 import { SpeakingSectionContent } from "./SpeakingSectionContent";
-import { MyBankSectionContent } from "./MyBankSectionContent";
 import { RealExamSectionContent } from "./RealExamSectionContent";
 
 export function SectionContent({
@@ -67,16 +66,6 @@ export function SectionContent({
         hoverKey={hoverKey} setHoverKey={setHoverKey}
         userTier={userTier} isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
         sessions={sessions}
-      />
-    );
-  }
-
-  if (activeSection === "my-bank") {
-    return (
-      <MyBankSectionContent
-        isChallenge={isChallenge} fadeIn={fadeIn}
-        userCode={userCode} userTier={userTier}
-        isLoggedIn={isLoggedIn} showLoginModal={showLoginModal}
       />
     );
   }

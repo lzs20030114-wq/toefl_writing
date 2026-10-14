@@ -22,7 +22,7 @@ jest.mock("../components/shared/UpgradeModal", () => ({
 // 重型子组件替换成空壳，隔离出监听者逻辑
 jest.mock("../hooks/useIsMobile", () => ({ useIsMobile: () => false }));
 jest.mock("../components/home/NavSidebar", () => ({ NavSidebar: () => null }));
-jest.mock("../components/home/SectionContent", () => ({ SectionContent: () => null }));
+jest.mock("../components/home/SectionContent", () => ({ SectionContent: ({ activeSection }) => <div data-testid="active-section">{activeSection}</div> }));
 jest.mock("../components/home/StudyPlanColumn", () => ({ StudyPlanColumn: () => null }));
 jest.mock("../components/home/MobileHomePage", () => ({ MobileHomePage: () => null }));
 jest.mock("../components/home/ChallengeEffects", () => ({ ChallengeEffects: () => null }));
@@ -37,8 +37,9 @@ jest.mock("../components/referral/ReferralToasts", () => ({
   InvitationCapturedToast: () => null,
   ActivatedToast: () => null,
 }));
+let mockSearchParams = new URLSearchParams();
 jest.mock("next/navigation", () => ({
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => mockSearchParams,
 }));
 jest.mock("../lib/sessionStore", () => ({
   loadHist: () => ({ sessions: [] }),
@@ -91,4 +92,19 @@ describe("HomePageClient：全局 open-upgrade-modal 事件监听者", () => {
     expect(showLoginModal).toHaveBeenCalledTimes(1);
     expect(screen.queryByTestId("upgrade-modal")).toBeNull();
   });
+});
+
+ test("旧 my-bank query 归写作并保留练习模式，其余深链仍正常", () => {
+  mockSearchParams = new URLSearchParams("section=my-bank&mode=practice");
+  window.history.replaceState({}, "", "/?section=my-bank&mode=practice");
+  const props = { userCode: "HOME01", userTier: "pro", isLoggedIn: true, showLoginModal: jest.fn(), onLogout: jest.fn() };
+  const { unmount } = render(<HomePageClient {...props} />);
+  expect(screen.getByTestId("active-section").textContent).toBe("writing");
+  expect(new URL(window.location.href).searchParams.get("section")).toBe("writing");
+  expect(new URL(window.location.href).searchParams.get("mode")).toBe("practice");
+  unmount();
+  mockSearchParams = new URLSearchParams("section=reading");
+  render(<HomePageClient {...props} />);
+  expect(screen.getByTestId("active-section").textContent).toBe("reading");
+  mockSearchParams = new URLSearchParams();
 });

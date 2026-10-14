@@ -121,3 +121,12 @@ describe("NavSidebar：账户操作收进「···」菜单", () => {
     expect(screen.queryByText(/天 · 续费/)).toBeNull();
   });
 });
+
+ test("个人题库退休后，其余导航仍可切换", () => {
+  const { container, props } = renderSidebar();
+  expect(container.querySelector('[data-section-id="my-bank"]')).toBeNull();
+  for (const id of ["writing", "reading", "listening", "speaking", "real-bank"]) {
+    fireEvent.click(container.querySelector(`[data-section-id="${id}"]`));
+    expect(props.onSectionChange).toHaveBeenLastCalledWith(id);
+  }
+});

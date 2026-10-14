@@ -1,40 +1,42 @@
-import { render, screen } from "@testing-library/react";
-import { MyBankSectionContent } from "../components/home/MyBankSectionContent";
+import { render, fireEvent } from "@testing-library/react";
+import MyBankPage from "../app/my-bank/page";
+import { SECTIONS } from "../components/home/sections";
+import { MobileHomePage } from "../components/home/MobileHomePage";
+import fs from "fs";
+import path from "path";
 
-// Regression: a logged-in user must see the importer, NOT the login gate.
-// The original bug was HomePageClient not forwarding userCode to <SectionContent>,
-// so the panel computed code="" and showed 「请先登录」 even when logged in.
-// This locks the panel contract: given isLoggedIn + a code, render the importer.
-describe("MyBankSectionContent gating", () => {
-  beforeEach(() => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({ ok: true, json: () => Promise.resolve({ ok: true, items: [] }) })
-    );
-  });
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+jest.mock("../components/home/HomePageClient", () => ({ PromoBanner: () => null }));
+jest.mock("../components/home/DailyTasksCard", () => ({ DailyTasksCard: () => null }));
+jest.mock("../components/vocab/MobileVocabEntry", () => ({ MobileVocabEntry: () => null }));
+jest.mock("../components/mistakes/MobileMistakeEntry", () => ({ MobileMistakeEntry: () => null }));
+const mockRedirect = jest.fn();
+jest.mock("next/navigation", () => ({ redirect: (...args) => mockRedirect(...args) }));
 
-  const baseProps = { isChallenge: false, fadeIn: () => ({}), showLoginModal: () => {} };
+test("旧个人题库地址重定向回首页，不挂载导入器", () => {
+  expect(MyBankPage()).toBeUndefined();
+  expect(mockRedirect).toHaveBeenCalledWith("/");
+});
 
-  test("logged-in user with a code sees the importer, not the login gate", async () => {
-    render(<MyBankSectionContent {...baseProps} userCode="TEST12" userTier="legacy" isLoggedIn={true} />);
-    expect(await screen.findByText("AI 抽取题目")).toBeTruthy();
-    // 「学术讨论」出现在题型卡片和②区选中徽章两处，用 getAllByText
-    expect(screen.getAllByText("学术讨论").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("点击选择或拖入图片")).toBeTruthy();
-    expect(screen.queryByText("请先登录")).toBeNull();
-  });
+test("桌面和移动端共用导航不再注册个人题库，其余五科入口保留", () => {
+  expect(SECTIONS.map(({ id }) => id)).toEqual(["writing", "reading", "listening", "speaking", "real-bank"]);
+  for (const name of ["HomePageClient", "MobileHomePage", "SectionContent"]) {
+    const src = fs.readFileSync(path.join(__dirname, "../components/home", `${name}.js`), "utf8");
+    expect(src).not.toMatch(/MyBankImporter|MyBankSectionContent|bankSpotlight|MobileMyBankSection/);
+  }
+});
 
-  test("logged-out shows the login gate, not the importer", () => {
-    render(<MyBankSectionContent {...baseProps} userCode="" userTier="free" isLoggedIn={false} />);
-    expect(screen.getByText("请先登录")).toBeTruthy();
-    expect(screen.queryByText("AI 抽取题目")).toBeNull();
-  });
-
-  test("logged-in but userCode missing (the exact bug) → gate, proving code must be threaded", () => {
-    // isLoggedIn true but userCode undefined (what a missing prop looks like) → gate.
-    render(<MyBankSectionContent {...baseProps} userCode={undefined} userTier="legacy" isLoggedIn={true} />);
-    expect(screen.getByText("请先登录")).toBeTruthy();
-  });
+ test("移动端真实首页仅呈现保留的五个 tab，仍能切换科目", () => {
+  const onSectionChange = jest.fn();
+  const { container } = render(<MobileHomePage
+    activeSection="writing" onSectionChange={onSectionChange} isChallenge={false} isPractice={false}
+    mode="standard" switchMode={jest.fn()} gridItems={[]} postWritingCounts={{ total: 0 }}
+    sessions={[]} fbHistory={[]} fadeIn={() => ({})} querySuffix="" showLoginModal={jest.fn()}
+    userTier="free" isLoggedIn={false} onOpenReferral={jest.fn()}
+  />);
+  expect(container.querySelector('[data-section-id="my-bank"]')).toBeNull();
+  expect(container.textContent).not.toMatch(/My Bank|我的题库|粘贴文字|上传题目截图/);
+  for (const id of ["writing", "reading", "listening", "speaking", "real-bank"]) {
+    fireEvent.click(container.querySelector(`[data-section-id="${id}"]`));
+    expect(onSectionChange).toHaveBeenLastCalledWith(id);
+  }
 });

@@ -14,7 +14,6 @@ import { BankUpdateModal } from "./BankUpdateModal";
 import { NavSidebar } from "./NavSidebar";
 import { SectionContent } from "./SectionContent";
 import { StudyPlanColumn } from "./StudyPlanColumn";
-import { FeatureSpotlight, useSpotlightGate } from "./FeatureSpotlight";
 import { MyReferralModal } from "./MyReferralModal";
 import { InvitationCapturedToast, ActivatedToast } from "../referral/ReferralToasts";
 import UpgradeModal from "../shared/UpgradeModal";
@@ -95,8 +94,15 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
   const [mode, setMode] = useState(() => normalizePracticeMode(searchParams.get("mode")));
   const [activeSection, setActiveSection] = useState(() => {
     const s = searchParams.get("section");
-    return s && ["writing", "reading", "listening", "speaking", "real-bank", "my-bank", "vocab", "mistakes"].includes(s) ? s : "writing";
+    return s && ["writing", "reading", "listening", "speaking", "real-bank", "vocab", "mistakes"].includes(s) ? s : "writing";
   });
+  // Keep retired bookmarked sections on the normal writing home, preserving other query options.
+  useEffect(() => {
+    if (searchParams.get("section") !== "my-bank") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("section", "writing");
+    window.history.replaceState(window.history.state, "", url);
+  }, [searchParams]);
   // 错题本内嵌时的初始科目（旧地址 /mistake-notebook?section=reading 重定向过来带 sub=reading）
   const [initialMistakeSubject] = useState(() => {
     const sub = searchParams.get("sub");
@@ -135,13 +141,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
     window.history.replaceState(window.history.state, "", url);
   }
 
-  // 「我的题库」新功能一次性聚光灯引导（桌面端；移动端在 MobileHomePage 内自带）
-  const bankSpotlight = useSpotlightGate({
-    featureId: "my-bank-2026-07",
-    enabled: !isMobile && isLoggedIn && !isChallenge,
-    alreadyThere: activeSection === "my-bank",
-    targetSelector: '[data-section-id="my-bank"]',
-  });
 
   useEffect(() => {
     const refresh = () => setSessions(loadHist().sessions || []);
@@ -420,15 +419,6 @@ export default function HomePageClient({ userCode, userTier, userEmail, authMeth
           /></>}
         </div>
       </div>
-      {bankSpotlight.open && !isChallenge && (
-        <FeatureSpotlight
-          targetSelector='[data-section-id="my-bank"]'
-          title="我的题库"
-          description="把你收集的学术讨论 / 邮件题导入进来练：直接粘贴文字，或上传题目截图自动识别。"
-          onCta={() => { bankSpotlight.close(); changeSection("my-bank"); }}
-          onDismiss={bankSpotlight.close}
-        />
-      )}
       {referralModalOpen && (
         <MyReferralModal userCode={userCode} onClose={() => setReferralModalOpen(false)} />
       )}

@@ -49,7 +49,7 @@ export const SECTIONS = [
   {
     id: "real-bank",
     label: "真题专区",
-    // 移动端 tab 是 6 等分横排（11.5px 字号，320px 屏也不能溢出），完整 label 会被挤爆，
+    // 移动端 tab 是等分横排（11.5px 字号，320px 屏也不能溢出），完整 label 会被挤爆，
     // 所以移动端读 shortLabel（见 MobileHomePage 的 tab 渲染）。
     shortLabel: "真题",
     labelZh: "真题专区",
@@ -58,15 +58,6 @@ export const SECTIONS = [
     description: "Public real questions — Writing (Discussion · Email · Build a Sentence) + Reading + Listening + Speaking",
     // 阅读题量随 build_bank 产物持续变化，这里只说题型不写数字（写死会过期）。
     descriptionZh: "公开真题集中练：写作（讨论 125 / 邮件 13 / 造句 20）+ 阅读填词、日常阅读、学术阅读 + 听力四题型 + 口语跟读、访谈",
-  },
-  {
-    id: "my-bank",
-    label: "My Bank",
-    labelZh: "我的题库",
-    icon: "📥",
-    status: SECTION_STATUS.ACTIVE,
-    description: "Import your own Discussion & Email prompts",
-    descriptionZh: "导入你自己的学术讨论 / 邮件题，粘贴文本或上传截图识别",
   },
 ];
 
@@ -78,5 +69,4 @@ export const SECTION_ACCENTS = {
   // 金琥珀（amber-700）= 真题的权威感。与 speaking 的 amber-500 同色系但明度差一大截，
   // 且导航里同一时刻只有 active 项显色（侧栏 3px accent bar / 移动端 tab 文字），不会并排撞色。
   "real-bank": { color: "#B45309", soft: "#FFF7ED" },
-  "my-bank": { color: "#E11D48", soft: "#FFF1F2" },
 };

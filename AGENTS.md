@@ -9,7 +9,7 @@
 - **Framework**: Next.js 14 (App Router)
 - **Database**: Supabase (PostgreSQL + Auth)
 - **AI 评分/出题**: DeepSeek(写作评分, curl-based HTTP) + Codex(云端 routine 出题)
-- **视觉识别**: 通义千问 Qwen3-VL (个人题库图片抽题, OpenAI 兼容接口)
+- **视觉识别**: 通义千问 Qwen3-VL (共享视觉识别；个人题库识图入口已退役)
 - **语音**: TTS 双 provider(edge-tts 免费 / gpt-4o-mini-tts) + STT(OpenAI Whisper, 口语评分)
 - **Payments**: XorPay (扫码) / Afdian 爱发电 (跳转)
 - **Hosting**: Vercel (serverless + edge runtime)
@@ -36,7 +36,7 @@ app/                          # Next.js App Router
 ├── progress/                 # 练习历史 (+ reading/ listening/ speaking/ 分科历史页)
 ├── real-bank/                # 真题专区 (?type=12 题型, Pro 专属) + progress/ 真题练习记录
 │                             #   (lib/realBankHistory 辨认真题记录, 复用各科历史页的逐题回顾渲染)
-├── my-bank/                  # 个人题库 (Pro 专属)
+├── my-bank/                  # 已退役导入入口 → 首页；存量题兼容
 ├── terms/                    # 条款页
 ├── admin*/                   # 后台页 (codes/users/content/analytics/
 │                             #   retention/report/voice-vote/surveys/referrals/wechat-qr/…)
@@ -44,7 +44,7 @@ app/                          # Next.js App Router
     ├── ai/                   # DeepSeek 写作评分 (限流 45/min + origin 校验)
     ├── audio/[...path]/      # 听力音频同源流式代理 (Edge, 国内可达 Supabase Storage)
     ├── speech/               # 口语 STT (transcribe) + 录音授权 (consent)
-    ├── user-bank/            # 个人题库 (extract / extract-image / render-audio / verify)
+    ├── user-bank/            # 存量 GET/DELETE；POST 与生成子路由返回 410
     ├── vocab/                # 单词本云端副本 (卡片 JSONB 镜像 + logs/ 复习日志归档)
     ├── wechat-qr/            # 群二维码同源代理 (Edge；后台 /admin-wechat-qr 拖图上传到 Supabase Storage)
     ├── auth/ iap/ usage/ admin/ analytics/ feedback/ referral/ survey/ mistakes/
@@ -56,7 +56,7 @@ components/                   # 分科任务 UI + 后台
 ├── writing/                  # WritingTask, WritingFeedbackPanel, ScoringReport
 ├── buildSentence/            # 拖拽造句 UI + useBuildSentenceSession hook
 ├── mockExam/                 # MockExamShell, MockExamResult (+ 自适应壳)
-├── userBank/                 # 个人题库导入/管理 UI
+├── userBank/                 # 退役导入 UI 留存；现有题由各科 picker 加载
 ├── realBank/                 # RealBankProgressView (真题练习记录: 侧栏最新一次+题库覆盖, 右栏逐题回顾)
 ├── vocab/                    # 单词本 (VocabNotebook 列表页 + VocabReview 复习卡 + 三处首页入口)
 ├── referral/                 # 推荐邀请浮层/入口
@@ -207,19 +207,16 @@ hard-gate 要求 detector_precision≥0.95，否则只能 monitor/drift。
 每条设定的实证依据、FSRS-6 公式与参数核对表见 **docs/vocab-srs-research.md**；
 `__tests__/vocab-srs.test.js` 把出厂参数应算出的具体数值钉成了断言，改权重前先看那一组。
 
-### 7. 个人题库 (User Bank, Pro 专属, v1.11.0 全 12 题型)
+### 7. 个人题库存量兼容 (User Bank)
 
-```
-my-bank/ 上传(文本或图片) → /api/user-bank/extract(-image):
-  图片走 Qwen3-VL 抽题；听力题 render-audio 用 edge-tts 免费配音(fail-open → 浏览器朗读)
-→ user_question_banks 表 → lib/userBank/personalBank.js 运行时拉取
-→ 只并入各科 practice picker(带「我的」标签)，不进 standard 随机池。
-```
+2026-10-14 下线新增导入：移除首页入口，`/my-bank` 转回首页；保存、抽题、识图、验证及新配音 API 返回 410。
+`user_question_banks` 存量题仍由 GET → `lib/userBank/personalBank.js` 拉取，并入各科 practice picker（「我的」标签），不进 standard 随机池。
+保留已有音频、练习历史及用户自主 DELETE；不删除数据库或 Storage，不改共享管理员解析器。证据与边界见 `docs/my-bank-retirement.md`。
 
 ## API 一览 (app/api/*)
 
 - `ai/` 写作评分 · `audio/[...path]/` 听力音频 Edge 代理 · `speech/{transcribe,consent}` 口语 STT
-- `user-bank/{extract,extract-image,render-audio,verify}` 个人题库 · `vocab/` 单词本同步 + `vocab/logs` 复习日志
+- `user-bank/` 存量 GET/DELETE；POST 与 extract/extract-image/render-audio/verify 已退役（410） · `vocab/` 单词本同步 + `vocab/logs` 复习日志
 - `auth/` 认证 · `iap/{checkout,webhook,entitlements,products}` 支付 · `usage/` 每日用量
 - `referral/{bind,activate,stats}` 推荐 · `survey/` 问卷/投票 · `mistakes/favorites` 错题收藏
 - `analytics/track` 事件 · `feedback/` 反馈
@@ -266,7 +263,7 @@ DEEPSEEK_API_KEY=             # DeepSeek API 密钥
 OPENAI_API_KEY=
 # HTTPS_PROXY=http://127.0.0.1:10808
 
-# Qwen3-VL (个人题库图片抽题, OpenAI 兼容；默认大陆 endpoint 直连)
+# Qwen3-VL (共享视觉识别；个人题库导入不再使用；默认大陆 endpoint 直连)
 DASHSCOPE_API_KEY=
 # DASHSCOPE_BASE_URL=         # 默认大陆；国际/免费额度区用 dashscope-intl
 # QWEN_VL_MODEL=qwen3-vl-plus # 批量可换 qwen3-vl-flash
@@ -313,7 +310,7 @@ AFDIAN_API_TOKEN= AFDIAN_USER_ID= AFDIAN_SPONSOR_URL=   # afdian
   阅读/听力/口语 item 形状见各 `lib/*Gen/*Validator.js`
 - **出题不许自由发挥**: 一切以 `data/realExam2026/` 真题为锚，改 prompt 前先看 `docs/eval-spec/` 对应文件
 - **安全**: middleware.js 设安全头, admin API 需 token, /api/ai 有限流 + origin 校验；
-  个人题库 strip audio_url/白名单删桶；音频代理拒 `..`/反斜杠/非白名单扩展名
+  个人题库存量音频按用户路径白名单删除；音频代理拒 `..`/反斜杠/非白名单扩展名
 - **DeepSeek 成本护栏**: 本地批量脚本的每次调用都记台账 `.ops/deepseek-usage.jsonl`（Node 走 `lib/ai/deepseekHttp` 自动记，
   Python 走 `scripts/ops/_usage_ledger.py`），对账 `node scripts/ops/deepseek-usage-report.mjs`；真题结构化脚本先
   `--dry-run` 看「将调用 N 次/预计 ¥X」再跑，超 `--max-calls`(默认 200) 须 `--yes`。详见 docs/deepseek-usage-ledger.md

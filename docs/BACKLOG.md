@@ -13,7 +13,7 @@
 - [高→已恢复,余手动一步] 盲审 routine：R2(19:30)/R3(20:00) trigger 已重建且每晚运行(2026-08-01 均有 fired 记录)，原「停摆」条目过时。**剩余动作：R3 prompt 需手动替换为 v2**（docs/routine-prompts/audit-r3-v2.md，agent 无权改 http_api 创建的 trigger）——v2 告知 R3「听力被 merge-staging fail-closed HOLD 是设计行为，21:00 的 merge-listening-audited.yml 负责第二票+合库」，不换 R3 也能安全跑但可能对 held 多折腾。旧积压 staging 可在 L1 修复后用 workflow 手动 dispatch run_id=all 全量扫尾（id/内容双去重防重复入库）。
 - [中] 备考计划云同步生效前置：`scripts/sql/study-plan-fields.sql` 迁移未跑未登记（代码 fail-open 已上线，跑完自动生效无需重部署；生效前不进用户公告）。出处：commit 513ed7d。
 - [高] 认证模型改造：6位码 bearer 可爆破（`app/api/auth/verify-code` 限流是内存滑动窗口，Vercel 多实例不全局生效）+ legacy 码自助升级仍在（同文件自动 upsert `legacy=pro`）。出处：PROJECT-REVIEW-2026-06-17，2026-07-05 复核仍在，未修复。
-- [中] v1.11.0 线上冒烟未做（12 题型导入→练习全链路，重点 edge-tts 首次 Vercel 真实环境跑通）+ `DASHSCOPE_API_KEY` 是否已在 Vercel Production 环境勾选未确认。
+- [已取消] v1.11.0 个人题库导入线上冒烟：历史上未完成 12 题型导入→练习及 edge-tts/Vercel 环境核对；2026-10-14 用户批准下线新增导入后已不适用。存量题、已有音频及历史仍兼容，见 `docs/my-bank-retirement.md`；本次部署状态以实际 QA/发布结果为准。
 - [中] 语音全库切换 gpt-4o-mini-tts 的 go/no-go：成本报价已出（全库一次性 ¥117，增量满勤 ¥50/月，2026-07-05 实测），只差 `/admin-voice-vote` 票数；lat/la/lcr persona 推广、音色定稿后重新生成听力库均挂在此决策之后。
 - [中] 插入题专属 UI 立项与否：2026-07-05 复测确认数据面已清零（154/154 恰 4 个 ■ 标记+双重校验兜底），但渲染复用通用选择题壳（■ 是普通字符，肉眼数方块选 ABCD），无"点方块插入"原生交互。接受现状 or 立项做专属组件。
 - [中] 2026-07-05 合并的支付修复 + CTW 防呆是否发版（用户可见变更：升级按钮修通 + CTW 灰底 chip；走 /release-notes）。

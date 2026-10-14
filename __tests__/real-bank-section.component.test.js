@@ -435,7 +435,7 @@ describe("真题专区 section：练习记录入口（/real-bank/progress）", (
 
   test("SectionContent 把 sessions 透传给真题面板（漏传 = 入口卡永远「暂无记录」）", () => {
     const src = fs.readFileSync(path.join(__dirname, "..", "components/home/SectionContent.js"), "utf8");
-    const block = src.slice(src.indexOf('activeSection === "real-bank"'), src.indexOf('activeSection === "my-bank"'));
+    const block = src.slice(src.indexOf('activeSection === "real-bank"'), src.indexOf('// Active section: Writing'));
     expect(block).toMatch(/sessions=\{sessions\}/);
   });
 });
