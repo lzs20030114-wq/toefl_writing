@@ -147,6 +147,19 @@ describe("原文批注提问", () => {
     expect(loadAllNotes("guest")).toHaveLength(1);
   });
 
+  it("快捷问题第一次失败后重试，仍带着那个按钮的回答格式", async () => {
+    callAI.mockRejectedValueOnce(new Error("Empty AI response"));
+    render(<NotedPassage passage={PASSAGE} />);
+    select(paragraph(P1), "nectar");
+    fireEvent.click(await screen.findByTestId("note-preset-collocations"));
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(callAI.mock.calls[0][1]).toContain("【回答格式】");
+    fireEvent.click(screen.getByText("重试"));
+    expect(await screen.findByTestId("note-answer")).toBeInTheDocument();
+    expect(callAI.mock.calls[1][1]).toContain("【回答格式】");
+    expect(callAI.mock.calls[1][1]).toContain("[搭配]");
+  });
+
   it("选中单个词走词典弹窗，底部多一块「问 AI」，问词形会查词典", async () => {
     render(<NotedPassage passage={PASSAGE} />);
     select(paragraph(P1), "nectar");

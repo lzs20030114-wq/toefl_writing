@@ -108,7 +108,7 @@ export function usePassageNotes(passage, { source = "reading" } = {}) {
     const quote = String(sel?.quote || "").trim();
     if (!quote || !text || inflight.current) return false;
     const note = makeNote({ passage: text, quote: quote.slice(0, NOTE_MAX_QUOTE), sentenceText: sel.sentenceText || "", start: sel.start ?? null, source });
-    setDraft({ ...note, draft: true, pendingQuestion: { q: String(question || "").trim(), label: opts.label || null } });
+    setDraft({ ...note, draft: true, pendingQuestion: { q: String(question || "").trim(), label: opts.label || null, presetId: opts.presetId || null } });
     setOpenId(note.id, true);
     return run(note, question, opts);
   }, [text, source, run, setOpenId]);
@@ -124,7 +124,8 @@ export function usePassageNotes(passage, { source = "reading" } = {}) {
   const retryDraft = useCallback(() => {
     if (!draft) return false;
     const { draft: _d, pendingQuestion, ...clean } = draft;
-    return run(clean, pendingQuestion?.q, { label: pendingQuestion?.label || null });
+    // 重试也要带上 presetId，不然快捷问题的回答格式（lib/qa/answerFormats）会丢
+    return run(clean, pendingQuestion?.q, { label: pendingQuestion?.label || null, presetId: pendingQuestion?.presetId || null });
   }, [draft, run]);
 
   const remove = useCallback((id) => {
