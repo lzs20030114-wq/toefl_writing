@@ -23,9 +23,11 @@ import { applyRescore, canRescoreSession, rescoreWritingEntry } from "../../lib/
 // 题库重建会给阅读条目改名 / 归位（放错进学术阅读的日常材料挪回 RDL、跨卷同篇合并）：
 // 覆盖率 / 最新一次 / 分类筛选都按解析后的「当前 id + 当前题型」算，旧记录照样对得上账。
 import { resolveRealReadingRef } from "../../lib/realBankAliases";
+import { realFavoriteKey, removeRealFavorite, subscribeRealFavorites, toggleRealFavorite } from "../../lib/realBankFavorites";
 import { ACCENT, buildCoverage, getRealItemIndex } from "./realBankMeta";
 import { RealOverview } from "./RealOverview";
 import { RealDetail } from "./RealDetail";
+import { RealFavorites } from "./RealFavorites";
 
 const shortOf = (t) => REAL_SUBTYPE_META[t]?.short || t;
 
@@ -54,12 +56,16 @@ export function RealBankProgressView({ onBack }) {
   // 重试评分拿到了反馈、但回写记录没成功（或还没刷回来）时，本页内先按它展示，不让用户白等一场。
   const [rescored, setRescored] = useState({});
   const [toast, setToast] = useState(null);
+  // 「练习记录 / 收藏夹」两个视图；收藏是题目级的（lib/realBankFavorites.js），本地按账号存。
+  const [view, setView] = useState("records");
+  const [favorites, setFavorites] = useState([]);
   const wide = useWide();
   const alive = useRef(true);
   const toastTimer = useRef(null);
   const mockDeepLinkConsumed = useRef(false);
 
   useEffect(() => subscribeHistory(setHist), []);
+  useEffect(() => subscribeRealFavorites(setFavorites), []);
   // StrictMode（开发态）会 挂载 → 卸载 → 再挂载：挂载时必须把 alive 置回 true，
   // 否则重试评分回来后所有 setState 都被当成「页面已卸载」跳过，界面永远卡在「评分中…」。
   useEffect(() => {
@@ -125,6 +131,14 @@ export function RealBankProgressView({ onBack }) {
     } catch { /* 地址栏改不了也不影响已打开的记录 */ }
   }, [entries, openEntry, showToast]);
 
+  const favKeys = useMemo(() => new Set(favorites.map((f) => f.key)), [favorites]);
+  const isFav = useCallback((fav) => !!fav && favKeys.has(realFavoriteKey(fav.subtype, fav.itemId)), [favKeys]);
+  const toggleFav = useCallback((fav) => {
+    if (!fav) return;
+    const on = toggleRealFavorite(fav);
+    showToast(on ? "已收藏，可在「收藏夹」里找到这道题" : "已取消收藏");
+  }, [showToast]);
+
   function pickSubject(next) {
     setSubject(next);
     setType("all");
@@ -163,6 +177,21 @@ export function RealBankProgressView({ onBack }) {
     }
   }
 
+  const tabs = (
+    <div role="tablist" data-testid="real-view-tabs" style={{ display: "inline-flex", gap: 3, padding: 3, marginBottom: 14, background: "#fff", border: "1px solid #dde5df", borderRadius: 999 }}>
+      {[["records", "练习记录", entries.length], ["favorites", "★ 收藏夹", favorites.length]].map(([k, label, n]) => {
+        const on = view === k;
+        return (
+          <button key={k} type="button" role="tab" aria-selected={on} data-testid={`real-view-${k}`}
+            onClick={() => { setView(k); setActiveIdx(null); }}
+            style={{ border: "none", borderRadius: 999, padding: "6px 14px", fontSize: 12.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: on ? "#1a2420" : "transparent", color: on ? "#fff" : "#5a6b62" }}>
+            {label} <span style={{ fontVariantNumeric: "tabular-nums", opacity: .75 }}>{n}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+
   const chrome = (children) => (
     <div className="rb-root" style={{ minHeight: "100vh", background: "#F4F7F5", fontFamily: FONT, color: "#1a2420" }}>
       <style>{`
@@ -183,7 +212,11 @@ export function RealBankProgressView({ onBack }) {
   return chrome(
     <>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "22px 24px 80px" }}>
-        {entries.length === 0 ? (
+        {!activeEntry && (entries.length > 0 || favorites.length > 0) ? tabs : null}
+        {view === "favorites" && !activeEntry ? (
+          <RealFavorites favorites={favorites} entries={entries} index={index} models={models}
+            onOpen={(e) => openEntry(e)} onRemove={(key) => { removeRealFavorite(key); showToast("已取消收藏"); }} />
+        ) : entries.length === 0 ? (
           <div style={{ background: "#fff", border: "1px solid #dde5df", borderRadius: 14, padding: "48px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 10, animation: "rbFadeUp .35s ease both" }}>
             <div style={{ width: 48, height: 48, borderRadius: 14, background: ACCENT.soft, display: "grid", placeItems: "center", fontSize: 22 }}>📜</div>
             <div style={{ fontSize: 15, fontWeight: 800 }}>还没有真题练习记录</div>
@@ -198,6 +231,7 @@ export function RealBankProgressView({ onBack }) {
             railMin={railMin} onToggleRail={() => setRailMin((v) => !v)}
             initialFocus={focus} onOpenEntry={(e) => openEntry(e)} onBack={() => setActiveIdx(null)} onDelete={handleDelete}
             rescoring={rescoring} rescoreError={rescoreError} canRescoreEntry={(e) => canRescoreSession(e.session)} onRescore={rescore}
+            isFav={isFav} onToggleFav={toggleFav}
           />
         ) : (
           <RealOverview
@@ -208,6 +242,7 @@ export function RealBankProgressView({ onBack }) {
             onOpen={openEntry} onDelete={handleDelete} onClearAll={clearAll}
             onRescore={rescore} rescoring={rescoring} rescoreError={rescoreError} canRescoreEntry={(e) => canRescoreSession(e.session)}
             subtypeOrder={REAL_ENTRY_SUBTYPE_ORDER}
+            isFav={isFav} onToggleFav={toggleFav}
           />
         )}
       </div>

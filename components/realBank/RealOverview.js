@@ -17,8 +17,8 @@ import {
 } from "../../lib/realBankHistory";
 import { buildDailyAveragePoints } from "../../lib/history/scoreMetrics";
 import { averagePct, buildPreview, groupEntriesByDay, rowTimeLabel, stripUnits, whenLabel } from "../../lib/realBankReview";
-import { ACCENT, describeEntry, retryHref } from "./realBankMeta";
-import { Chev, IconBox, LV, ScoreRing, TierBadge, hoverStyle } from "./realBankUi";
+import { ACCENT, describeEntry, favoriteOf, retryHref } from "./realBankMeta";
+import { Chev, FavButton, IconBox, LV, ScoreRing, TierBadge, hoverStyle } from "./realBankUi";
 
 const A = ACCENT.color;
 
@@ -181,7 +181,7 @@ function SummaryCard({ all, bySubject, list, subject, onSubject, coverage, covOp
   );
 }
 
-function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, onRescore, rescoring, rescoreError, canRescore }) {
+function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, onRescore, rescoring, rescoreError, canRescore, isFav, onToggleFav }) {
   const [confirming, setConfirming] = useState(false);
   const s = entry.session;
   const info = describeEntry(entry, index);
@@ -189,6 +189,7 @@ function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, o
   const strip = stripUnits(s, model);
   const pv = buildPreview(model);
   const rowTime = rowTimeLabel(s.date);
+  const fav = favoriteOf(entry, index);
 
   return (
     <div data-testid="real-entry-row" data-expanded={expanded ? "1" : "0"}
@@ -215,6 +216,7 @@ function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, o
           {strip.length > 14 ? <span style={{ fontSize: 10, color: "#94a39a", marginLeft: 3 }}>+{strip.length - 14}</span> : null}
         </div>
         <span style={{ minWidth: 56, textAlign: "center", fontVariantNumeric: "tabular-nums", fontSize: 13, fontWeight: 750, color: sc, background: `${sc}12`, padding: "3px 10px", borderRadius: 8, whiteSpace: "nowrap" }}>{model.score.label}</span>
+        {fav && isFav ? <FavButton compact on={isFav(fav)} onToggle={() => onToggleFav(fav)} /> : null}
         <Chev open={expanded} size={14} />
       </div>
 
@@ -267,7 +269,7 @@ function EntryRow({ entry, index, model, expanded, onToggle, onOpen, onDelete, o
 
 export function RealOverview({
   entries, index, models, coverage, subject, type, onSubject, onType, groupsClosed, onToggleGroup, covOpen, onToggleCov,
-  onOpen, onDelete, onClearAll, onRescore, rescoring, rescoreError, canRescoreEntry, subtypeOrder,
+  onOpen, onDelete, onClearAll, onRescore, rescoring, rescoreError, canRescoreEntry, subtypeOrder, isFav, onToggleFav,
 }) {
   const [expanded, setExpanded] = useState(null);
   const [clearConfirm, setClearConfirm] = useState(false);
@@ -334,7 +336,8 @@ export function RealOverview({
                         expanded={expanded === entry.sourceIndex}
                         onToggle={() => setExpanded(expanded === entry.sourceIndex ? null : entry.sourceIndex)}
                         onOpen={onOpen} onDelete={() => { setExpanded(null); onDelete(entry); }}
-                        canRescore={canRescoreEntry(entry)} rescoring={rescoring[entry.sourceIndex] === "loading"} rescoreError={rescoreError[entry.sourceIndex] || ""} onRescore={() => onRescore(entry)} />
+                        canRescore={canRescoreEntry(entry)} rescoring={rescoring[entry.sourceIndex] === "loading"} rescoreError={rescoreError[entry.sourceIndex] || ""} onRescore={() => onRescore(entry)}
+                        isFav={isFav} onToggleFav={onToggleFav} />
                     ))}
                   </div>
                 ) : null}

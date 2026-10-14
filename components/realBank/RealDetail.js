@@ -9,8 +9,8 @@ import Link from "next/link";
 import { ModeChip } from "../shared/ui";
 import { REAL_SUBTYPE_META, realScoreColor } from "../../lib/realBankHistory";
 import { buildMockTasks, formatHM, formatMD, whenLabel } from "../../lib/realBankReview";
-import { ACCENT, describeEntry, retryHref } from "./realBankMeta";
-import { IconBox, LV, ScoreRing, TierBadge, hoverStyle } from "./realBankUi";
+import { ACCENT, describeEntry, favoriteOf, favoriteOfMockTask, retryHref } from "./realBankMeta";
+import { FavButton, IconBox, LV, ScoreRing, TierBadge, hoverStyle } from "./realBankUi";
 import { scrollToKey } from "./review/shared";
 import { CtwReview } from "./review/CtwReview";
 import { McqReview } from "./review/McqReview";
@@ -124,7 +124,7 @@ function MockTaskList({ tasks, note, aborted, onOpen }) {
   );
 }
 
-function DetailMain({ entry, navList, models, index, wide, initialFocus, onOpenEntry, onBack, onDelete, rescoring, rescoreError, canRescoreEntry, onRescore }) {
+function DetailMain({ entry, navList, models, index, wide, initialFocus, onOpenEntry, onBack, onDelete, rescoring, rescoreError, canRescoreEntry, onRescore, isFav, onToggleFav }) {
   const record = entry.session;
   const recordModel = models.get(entry.sourceIndex);
   const isMock = recordModel.kind === "mock";
@@ -182,6 +182,8 @@ function DetailMain({ entry, navList, models, index, wide, initialFocus, onOpenE
   if (!inTask && info.duration) metaParts.push(`用时 ${info.duration}`);
   const itemId = inTask ? cur.task.itemId : info.itemId;
   if (itemId) metaParts.push(itemId);
+  // 收藏的是「这道题」：单题记录收藏本题；整卷模考在点进某个题组后收藏那一组的题。
+  const fav = inTask ? favoriteOfMockTask(cur.task, index) : favoriteOf(entry, index);
   const subtitle = inTask ? String(cur.task.task?.topic || cur.task.task?.title || "") : info.subtitle;
 
   let stats = "";
@@ -268,6 +270,7 @@ function DetailMain({ entry, navList, models, index, wide, initialFocus, onOpenE
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <ScoreRing pct={model.score.pct} label={model.score.label} color={sc} size={56} />
+            {fav && isFav && onToggleFav ? <FavButton on={isFav(fav)} onToggle={() => onToggleFav(fav)} /> : null}
             <Link href={retryHref(entry)} style={{ padding: "7px 12px", borderRadius: 8, border: `1px solid ${A}55`, background: ACCENT.soft, color: A, fontSize: 12, fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>再练一套</Link>
             {!inTask && !confirmDel ? (
               <button type="button" onClick={() => setConfirmDel(true)} style={{ padding: "7px 12px", borderRadius: 8, border: "1px solid #dde5df", background: "#fff", color: "#94a39a", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }} {...hoverStyle({ color: "#dc2626", borderColor: "#fecaca" })}>删除</button>
@@ -345,13 +348,13 @@ function DetailMain({ entry, navList, models, index, wide, initialFocus, onOpenE
   );
 }
 
-export function RealDetail({ entry, navList, models, index, wide, railMin, onToggleRail, initialFocus, onOpenEntry, onBack, onDelete, rescoring, rescoreError, canRescoreEntry, onRescore }) {
+export function RealDetail({ entry, navList, models, index, wide, railMin, onToggleRail, initialFocus, onOpenEntry, onBack, onDelete, rescoring, rescoreError, canRescoreEntry, onRescore, isFav, onToggleFav }) {
   return (
     <div style={{ display: "flex", gap: 18, alignItems: "flex-start" }}>
       {wide ? <Rail navList={navList} models={models} current={entry.sourceIndex} index={index} min={railMin} onToggle={onToggleRail} onOpenEntry={onOpenEntry} /> : null}
       <DetailMain key={entry.sourceIndex} entry={entry} navList={navList} models={models} index={index} wide={wide} initialFocus={initialFocus}
         onOpenEntry={onOpenEntry} onBack={onBack} onDelete={onDelete} rescoring={rescoring} rescoreError={rescoreError}
-        canRescoreEntry={canRescoreEntry} onRescore={onRescore} />
+        canRescoreEntry={canRescoreEntry} onRescore={onRescore} isFav={isFav} onToggleFav={onToggleFav} />
     </div>
   );
 }

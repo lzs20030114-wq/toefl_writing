@@ -84,3 +84,29 @@ export const pillBtn = {
 };
 
 export const cardStyle = { background: "#fff", border: "1px solid #dde5df", borderRadius: 14 };
+
+/** 收藏星标按钮（题目级收藏，见 lib/realBankFavorites.js）。compact = 行内小图标，否则是带字的按钮。 */
+export function FavButton({ on, onToggle, compact = false }) {
+  const label = on ? "取消收藏这道题" : "收藏这道题";
+  const star = (
+    <svg width={compact ? 15 : 13} height={compact ? 15 : 13} viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 1.6l1.95 4.1 4.45.55-3.28 3.08.84 4.42L8 11.6l-3.96 2.15.84-4.42L1.6 6.25l4.45-.55L8 1.6z"
+        fill={on ? "#F59E0B" : "none"} stroke={on ? "#F59E0B" : "#94a39a"} strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  );
+  const click = (e) => { e.stopPropagation(); onToggle(); };
+  if (compact) {
+    return (
+      <button type="button" data-testid="real-fav-toggle" aria-pressed={on} aria-label={label} title={label} onClick={click}
+        onKeyDown={(e) => e.stopPropagation()}
+        style={{ width: 28, height: 28, borderRadius: 7, border: "none", background: "transparent", cursor: "pointer", display: "grid", placeItems: "center", flexShrink: 0 }}
+        {...hoverStyle({ background: "#fef3c7" })}>{star}</button>
+    );
+  }
+  return (
+    <button type="button" data-testid="real-fav-toggle" aria-pressed={on} title={label} onClick={click}
+      style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "7px 12px", borderRadius: 8, border: `1px solid ${on ? "#FCD34D" : "#dde5df"}`, background: on ? "#FFFBEB" : "#fff", color: on ? "#B45309" : "#5a6b62", fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap", fontFamily: "inherit" }}>
+      {star}{on ? "已收藏" : "收藏"}
+    </button>
+  );
+}

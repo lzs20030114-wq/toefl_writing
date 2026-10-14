@@ -151,3 +151,26 @@ export function retryHref(entry) {
   if (mode && mode !== "standard") qs.set("mode", mode);
   return `/real-bank?${qs.toString()}`;
 }
+
+/* ── 收藏夹（lib/realBankFavorites.js）：从记录 / 模考题组取「这道题」的收藏快照 ─────── */
+
+/** 一条记录对应的收藏快照；整卷模考记录本身不是一道题，返回 null（在题组里收藏）。 */
+export function favoriteOf(entry, index) {
+  if (!entry || entry.session?.details?.realMock) return null;
+  const info = describeEntry(entry, index);
+  if (!info.itemId) return null;
+  return { subtype: entry.subtype, itemId: info.itemId, subtitle: info.subtitle, tier: info.tier, examDate: info.examDate };
+}
+
+/** 真题模考里某个题组对应的收藏快照（没到达的组题目没展示过，不给收藏）。 */
+export function favoriteOfMockTask(task, index) {
+  if (!task || task.unreached || !task.itemId || !REAL_SUBTYPE_META[task.type]) return null;
+  const hit = index.get(String(task.itemId));
+  return {
+    subtype: task.type,
+    itemId: String(task.itemId),
+    subtitle: truncate(task.task?.topic || task.task?.title || hit?.label || ""),
+    tier: hit?.tier || "",
+    examDate: formatExamDate(hit?.date || ""),
+  };
+}

@@ -163,3 +163,17 @@ describe("按旧 id 打开题目", () => {
     expect(screen.getByTestId("topic-picker")).toBeInTheDocument();
   });
 });
+
+describe("收藏夹「去做这道题」：?item= 直达", () => {
+  test("带 item 直接打开那道题；不带就停在选题页", async () => {
+    mockSearch = new URLSearchParams("type=rdl&item=real_rdl_other_1_1");
+    render(<RealBankPage />);
+    expect((await screen.findByTestId("rdl-task")).textContent).toContain("id=real_rdl_other_1_1");
+  });
+
+  test("旧 id 也能直达（走别名）", async () => {
+    mockSearch = new URLSearchParams("type=ap&item=real_ap_53_1_32");
+    render(<RealBankPage />);
+    expect((await screen.findByTestId("rdl-task")).textContent).toContain("id=real_ap_128a_1_27");
+  });
+});

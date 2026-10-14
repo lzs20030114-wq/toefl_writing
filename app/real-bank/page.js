@@ -367,6 +367,29 @@ function RealBankPageClient() {
     return [];
   }, [type, audioItems]);
 
+  // 收藏夹「去做这道题」带 `?item=<题目 id>`：直接打开这道题（造句 / 听力应答打开它所在的那一套）。
+  // 每个 type+item 只消费一次 —— 做完返回选题页不会又被拉回这道题。找不到（题库已下线）就停在选题页。
+  const deepItem = searchParams.get("item") || "";
+  const [deepConsumed, setDeepConsumed] = useState("");
+  useEffect(() => {
+    const tag = `${type}:${deepItem}`;
+    if (!deepItem || deepConsumed === tag) return;
+    setDeepConsumed(tag);
+    if (type === "bs") {
+      const batch = bsBatches.find((b) => b.questions.some((q) => String(q.id) === deepItem));
+      if (batch) setPickedBatchId(batch.id);
+    } else if (type === "lcr") {
+      const set = audioItems.find((s) => String(s.id) === deepItem || (s.items || []).some((it) => String(it.id) === deepItem));
+      if (set) setPickedAudioId(String(set.id));
+    } else if (READING_TYPES.has(type)) {
+      setPickedReadingId(deepItem);
+    } else if (LISTENING_TYPES.has(type) || SPEAKING_TYPES.has(type)) {
+      if (audioItems.some((it) => String(it.id) === deepItem)) setPickedAudioId(deepItem);
+    } else if (writingById.has(deepItem)) {
+      setPickedPromptId(deepItem);
+    }
+  }, [type, deepItem, deepConsumed, bsBatches, audioItems, writingById]);
+
   // 回首页时把档位带上 —— HomePageClient 从 ?mode 读初始档，否则「切了档再返回」会被打回 standard。
   const onExit = () => router.push(
     mode === PRACTICE_MODE.STANDARD ? "/?section=real-bank" : `/?section=real-bank&mode=${mode}`
