@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { getSavedCode } from "../../lib/AuthContext";
-import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, buildEvidence } from "../../lib/qa/questionQa";
+import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, buildEvidence, tidyCites, TRAP_TYPES } from "../../lib/qa/questionQa";
 import { analogyMaterials, pastItemMaterials } from "../../lib/qa/pastQuestions";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
+import { flashPassageSentence } from "../../lib/notes/passageFlash";
 
 // 练习记录逐题「继续追问」窗口：挂在阅读选择题「AI 讲解」下面，默认收起。
 // 计划见 docs/rag-qa-implementation-plan.md §4。回答只按纯文本渲染（不许 innerHTML）；
@@ -36,14 +37,40 @@ function Tag({ children, tone, onClick, title, testId }) {
   );
 }
 
+// 「陷阱：偷换概念」里的类型名做成高亮标签（只认 TRAP_TYPES 和「未作答」，别的照原文显示）。
+const TRAP_RE = new RegExp(`(陷阱[:：]\\s*)(${[...TRAP_TYPES, "未作答"].join("|")})`, "g");
+
+function TextWithTrap({ text }) {
+  const parts = [];
+  let last = 0;
+  for (const m of text.matchAll(TRAP_RE)) {
+    parts.push(text.slice(last, m.index), m[1]);
+    parts.push(
+      <span key={m.index} data-testid="qa-trap" style={{ display: "inline-block", fontSize: 11.5, fontWeight: 700, lineHeight: 1.5, color: "#9A3412", background: "#FFEDD5", border: "1px solid #FDBA74", borderRadius: 4, padding: "0 6px", margin: "0 2px", verticalAlign: "baseline" }}>
+        {m[2]}
+      </span>,
+    );
+    last = m.index + m[0].length;
+  }
+  if (!parts.length) return text;
+  parts.push(text.slice(last));
+  return <>{parts}</>;
+}
+
 function Answer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer" }) {
   const [open, setOpen] = useState(null);
   // 举一反三那一轮：对比题的题干、选项、依据句也算可引的材料
   const allMaterials = useMemo(() => (past?.length ? [...materials, ...analogyMaterials({ items: past })] : materials), [materials, past]);
-  const segments = useMemo(() => parseAnswer(text, sentences, allMaterials, { mistakes, dict, past: past?.length ? past.map(pastItemMaterials) : 0 }), [text, sentences, allMaterials, mistakes, dict, past]);
+  const segments = useMemo(() => tidyCites(parseAnswer(text, sentences, allMaterials, { mistakes, dict, past: past?.length ? past.map(pastItemMaterials) : 0 }), sentences), [text, sentences, allMaterials, mistakes, dict, past]);
   const bad = segments.filter((s) => (s.type === "cite" || s.type === "quote") && !s.valid).length;
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
+  // 点句子出处：页面上的原文接住就在原文里高亮那句；原文不在（收起了 / 这页没有）才把原句贴在下面。
+  const openSentence = (id) => {
+    const sent = byId.get(id);
+    if (sent && flashPassageSentence(sent.text)) { setOpen(null); return; }
+    toggle(id);
+  };
 
   let detailBox = null;
   if (open?.startsWith("S")) {
@@ -61,7 +88,7 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
     <div style={{ minWidth: 0 }}>
       <div data-testid={testId} style={{ fontSize: 12.5, lineHeight: 1.75, color: theme.body, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
         {segments.map((s, i) => {
-          if (s.type === "text") return <React.Fragment key={i}>{s.text}</React.Fragment>;
+          if (s.type === "text") return <React.Fragment key={i}><TextWithTrap text={s.text} /></React.Fragment>;
           if (s.type === "quote") {
             return s.valid
               ? <React.Fragment key={i}>{s.text}</React.Fragment>
@@ -70,7 +97,7 @@ function Answer({ text, sentences, materials, related, dict, mistakes = 0, past 
           if (s.kind === "sentence") {
             const sent = byId.get(s.id);
             return s.valid
-              ? <Tag key={i} tone="ok" testId="qa-cite" onClick={() => toggle(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
+              ? <Tag key={i} tone="ok" testId="qa-cite" title="点一下在原文里高亮这句" onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
               : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
           }
           if (s.kind === "past") {

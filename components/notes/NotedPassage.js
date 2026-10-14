@@ -1,10 +1,13 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { usePassageNotes } from "./usePassageNotes";
 import { paragraphSpans, highlightSegments, notesByParagraph, NOTE_MAX_TURNS, NOTE_MAX_QUESTION } from "../../lib/notes/passageNotes";
 import { parseAnswer, sentenceLabel } from "../../lib/qa/questionQa";
 import { tidyNoteSegments } from "../../lib/notes/noteQa";
+import { splitWordForms } from "../../lib/notes/wordForms";
+import { WordFormList } from "./WordFormList";
+import { PASSAGE_FLASH_EVENT, FLASH_HIGHLIGHT, FLASH_MS, findSentenceRange } from "../../lib/notes/passageFlash";
 
 // 带原文批注的文章：划词词典 + 选中提问，问过的地方留高亮和序号，点一下展开笔记卡（默认收起）。
 // 用法：<NotedPassage passage={passage} style={…} />，原样替换「<WordLookupLayer passage>{passage}</WordLookupLayer>」。
@@ -17,6 +20,7 @@ const AMBER = "#B45309";
 const SELECTION_CSS = `
 [data-noted-passage] ::selection { background: rgba(251, 191, 36, 0.38); color: inherit; }
 [data-noted-passage] [data-note-card] ::selection { background: Highlight; color: HighlightText; }
+::highlight(cite-flash) { background-color: rgba(129, 140, 248, 0.32); text-decoration: underline 2px #6366F1; text-underline-offset: 3px; }
 ::highlight(note-pending) { background-color: rgba(251, 191, 36, 0.45); text-decoration: underline 2px #F59E0B; text-underline-offset: 3px; }
 `;
 
@@ -41,6 +45,19 @@ function CiteTag({ ok, children, title }) {
 }
 
 function NoteAnswer({ text, sentences, dict }) {
+  // 「列出所有词形」的回答带一段词形表：拆出来单独渲染成可收藏的列表，表前表后的文字照常显示。
+  const split = useMemo(() => splitWordForms(text), [text]);
+  if (!split) return <AnswerText text={text} sentences={sentences} dict={dict} />;
+  return (
+    <div data-testid="note-answer-forms">
+      {split.before ? <AnswerText text={split.before} sentences={sentences} dict={dict} /> : null}
+      <WordFormList forms={split.forms} />
+      {split.after ? <AnswerText text={split.after} sentences={sentences} dict={dict} /> : null}
+    </div>
+  );
+}
+
+function AnswerText({ text, sentences, dict }) {
   const segments = useMemo(
     () => tidyNoteSegments(parseAnswer(text, sentences, [], { dict: !!dict }), sentences, (s) => sentenceLabel(s, sentences)),
     [text, sentences, dict],
@@ -191,6 +208,42 @@ export function NotedPassage({ passage, style, source = "reading", paragraphWrap
   const byPara = useMemo(() => notesByParagraph(paras, notes.placed), [paras, notes.placed]);
   const idOf = useMemo(() => new Map(notes.placed.map((p) => [p.index, p.note.id])), [notes.placed]);
 
+  // 讲解 / 追问里点出处：这篇原文里有那句就高亮几秒并滚到眼前（见 lib/notes/passageFlash）。
+  const rootRef = useRef(null);
+  useEffect(() => {
+    let timer = null;
+    const clear = () => {
+      if (timer) clearTimeout(timer);
+      timer = null;
+      try { if (typeof CSS !== "undefined" && CSS.highlights) CSS.highlights.delete(FLASH_HIGHLIGHT); } catch { /* 不支持就算了 */ }
+    };
+    const onFlash = (e) => {
+      const d = e.detail;
+      if (!d || d.handled || !rootRef.current) return;
+      const range = findSentenceRange(rootRef.current, d.text);
+      if (!range) return;
+      d.handled = true;
+      clear();
+      const hasHighlight = typeof CSS !== "undefined" && CSS.highlights && typeof Highlight !== "undefined";
+      if (hasHighlight) {
+        CSS.highlights.set(FLASH_HIGHLIGHT, new Highlight(range));
+      } else {
+        // 不支持 Highlight API 的浏览器：用选区当高亮（原文里的选区是同一套琥珀色）。
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      const el = range.startContainer.parentElement;
+      el?.scrollIntoView?.({ block: "center", behavior: "smooth" });
+      timer = setTimeout(clear, FLASH_MS);
+    };
+    window.addEventListener(PASSAGE_FLASH_EVENT, onFlash);
+    return () => {
+      window.removeEventListener(PASSAGE_FLASH_EVENT, onFlash);
+      clear();
+    };
+  }, []);
+
   const toggleIndex = (index) => {
     const id = idOf.get(index);
     if (id) notes.toggle(id);
@@ -199,7 +252,7 @@ export function NotedPassage({ passage, style, source = "reading", paragraphWrap
   return (
     <WordLookupLayer passage={passage} style={style} source={source} notes={notes}>
       <style dangerouslySetInnerHTML={{ __html: SELECTION_CSS }} />
-      <div data-noted-passage>
+      <div data-noted-passage ref={rootRef}>
       {paras.length === 0 ? passage : null}
       {paras.map((para, i) => {
         const segs = highlightSegments(para.text, para.start, notes.placed);

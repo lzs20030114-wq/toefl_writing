@@ -326,6 +326,7 @@ describe("第一轮讲解的出处与陷阱", () => {
     const box = await screen.findByTestId("explain-answer");
     expect(box.querySelector('[data-testid="qa-cite"]')).not.toBeNull();
     expect(box.querySelector('[data-testid="qa-cite-bad"]')).toBeNull();
+    expect(box.querySelector('[data-testid="qa-trap"]').textContent).toBe("偷换概念");
     expect(Object.values(JSON.parse(localStorage.getItem("reading-trap-v1")))).toEqual(["偷换概念"]);
   });
   test("编出来的句号标灰", async () => {
