@@ -139,10 +139,13 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "true");
-    expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "正确答案：Could you send the slides after class today please?"
+    // 结果页和练习记录同一个组件：逐题默认收起，点开才看答案；答对的题不再单列正确答案
+    expect(screen.queryByRole("button", { name: "AI 解释" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("build-result-toggle-0"));
+    expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
+      "你的答案Could you send the slides after class today please?"
     );
-    expect(screen.getByTestId("build-result-0")).toHaveTextContent("答对");
+    expect(screen.queryByTestId("build-correct-answer-0")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "AI 解释" })).toBeInTheDocument();
   });
 
@@ -202,11 +205,12 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
+    fireEvent.click(screen.getByTestId("build-result-toggle-0"));
     expect(screen.getByTestId("build-your-sentence-0")).toHaveTextContent(
-      "你的答案：Please you today class after slides the send could?"
+      "你的答案Please you today class after slides the send could?"
     );
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "正确答案：Could you send the slides after class today please?"
+      "正确答案Could you send the slides after class today please?"
     );
   });
 
@@ -218,8 +222,9 @@ describe("ToeflApp navigation", () => {
     fireEvent.click(screen.getByTestId("build-submit"));
 
     expect(screen.getByTestId("build-result-0")).toHaveAttribute("data-correct", "false");
+    fireEvent.click(screen.getByTestId("build-result-toggle-0"));
     expect(screen.getByTestId("build-correct-answer-0")).toHaveTextContent(
-      "正确答案：Could you upload the file tonight please now."
+      "正确答案Could you upload the file tonight please now."
     );
   });
 
