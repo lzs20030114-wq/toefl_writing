@@ -1,5 +1,5 @@
 import {
-  bookStats, buildQueue, clusterFamilies, familyPosition, mergeCards, normalizeCard, normalizeFamily, FAMILY_AHEAD_DAYS,
+  addedHistory, bookStats, buildQueue, clusterFamilies, familyPosition, mergeCards, normalizeCard, normalizeFamily, FAMILY_AHEAD_DAYS,
 } from "../lib/vocab/book";
 import { resumableQueue } from "../lib/vocab/reviewSave";
 import { familyHead, formVocabEntry } from "../lib/notes/wordForms";
@@ -111,4 +111,20 @@ test("词形表组名：选中的词在表里就用它，否则用第一行；�
   expect(familyHead(forms, "the machinery")).toBe("machinery");
   expect(formVocabEntry(forms[1], { family: "machinery" }).family).toBe("machinery");
   expect(formVocabEntry(forms[1]).family).toBe("");
+});
+
+test("addedHistory：按本地日期分天、新的在前，窗口外和已移除的不算", () => {
+  const at = (d, h = 10) => new Date(2026, 9, d, h).toISOString();
+  const cards = [
+    { word: "a", createdAt: at(15) }, { word: "b", createdAt: at(15, 0), reviewMode: "both" },
+    { word: "c", createdAt: at(13), reviewMode: "listening" }, { word: "d", createdAt: at(1) },
+    { word: "e", createdAt: at(14), deletedAt: at(15) },
+  ].map((c) => normalizeCard(c, now));
+  const h = addedHistory(cards, now, 7);
+  expect(h.rows).toEqual([
+    { day: "2026-10-15", total: 2, reading: 2, listening: 1 },
+    { day: "2026-10-13", total: 1, reading: 0, listening: 1 },
+  ]);
+  expect(h.total).toBe(3);
+  expect(addedHistory(cards, now).activeDays).toBe(3);
 });

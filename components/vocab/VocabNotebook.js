@@ -8,7 +8,7 @@ import { useVocabBook } from "./useVocabBook";
 import { VocabReview } from "./VocabReview";
 import { ListeningVocabReview } from "./ListeningVocabReview";
 import { STATE, currentRetrievability, isDue } from "../../lib/vocab/srs";
-import { SORT_OPTIONS, cardStage, cleanContextSentence, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards, hasReviewMode } from "../../lib/vocab/book";
+import { SORT_OPTIONS, addedHistory, cardStage, localDayKey, cleanContextSentence, estimateMinutes, isAddedToday, isLeech, reviewCard, sortCards, hasReviewMode } from "../../lib/vocab/book";
 import { humanizeDef } from "../../lib/dict/core";
 import { clearReviewSave, readReviewSave, resumableQueue, writeReviewSave } from "../../lib/vocab/reviewSave";
 import RootExplorer from "./RootExplorer";
@@ -61,6 +61,14 @@ function dueLabel(card, now) {
   if (days < 1) return `${Math.max(1, Math.round(ms / 60000))} 分钟后`;
   if (days < 31) return `${Math.round(days)} 天后`;
   return `${Math.round(days / 30)} 个月后`;
+}
+/** 新增记录里的日期：今天 / 昨天 / 10月13日 周一（跨年带年份）。 */
+function addedDayLabel(key, now) {
+  if (key === localDayKey(now)) return "今天";
+  const y0 = new Date(now);
+  if (key === localDayKey(new Date(y0.getFullYear(), y0.getMonth(), y0.getDate() - 1))) return "昨天";
+  const [y, m, d] = key.split("-").map(Number);
+  return `${y !== y0.getFullYear() ? `${y}年` : ""}${m}月${d}日 周${WEEKDAYS[new Date(y, m - 1, d).getDay()]}`;
 }
 const dayLabel = (key, index) => {
   if (index === 0) return "今天";
@@ -176,6 +184,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   const [filter, setFilter] = useState("all");
   // 点词旁的「xx 组」标签：只看这一个词形组
   const [famFilter, setFamFilter] = useState("");
+  // 新增记录：展开 / 看全部日子 / 点某一天只看那天收藏的词
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyAll, setHistoryAll] = useState(false);
+  const [addedDay, setAddedDay] = useState("");
   const [sortKey, setSortKey] = useState("urgency");
   const [q, setQ] = useState("");
   const [shown, setShown] = useState(PAGE_SIZE);
@@ -228,9 +240,12 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     const kw = q.trim().toLowerCase();
     let out = modeCards.filter((card) => matches(filter, card, now));
     if (famFilter) out = out.filter((c) => c.family === famFilter);
+    if (addedDay) out = out.filter((c) => c.createdAt && localDayKey(c.createdAt) === addedDay);
     if (kw) out = out.filter((c) => c.word.includes(kw) || (c.def || "").toLowerCase().includes(kw));
     return sortCards(out, sortKey, now);
-  }, [modeCards, filter, famFilter, q, sortKey, now]);
+  }, [modeCards, filter, famFilter, addedDay, q, sortKey, now]);
+  const history = useMemo(() => addedHistory(cards, now, historyAll ? null : 30), [cards, now, historyAll]);
+  const historyMax = Math.max(1, ...history.rows.map((r) => r.total));
   const familySizes = useMemo(() => {
     const out = new Map();
     for (const card of cards) if (card.family) out.set(card.family, (out.get(card.family) || 0) + 1);
@@ -286,7 +301,15 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     resetListView();
     libraryRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
   };
+  const viewAddedOn = (day) => {
+    setQ("");
+    setSortKey("recent");
+    setFamFilter("");
+    setAddedDay(day);
+    pickDist("all");
+  };
   const viewAddedToday = () => {
+    setAddedDay("");
     setQ("");
     setSortKey("recent");
     pickDist("today-added");
@@ -438,7 +461,34 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
             <p>{!ready ? "正在读取…" : addedToday.total ? `阅读 ${addedToday.reading} · 听力 ${addedToday.listening}` : "今天还没有新增单词"}</p>
             {ready && addedToday.both > 0 && <p>其中 {addedToday.both} 词同时练阅读和听力</p>}
           </div>
-          <button type="button" className={styles.todayAddedCta} disabled={!ready} onClick={viewAddedToday}>查看今日新增 <span aria-hidden="true">›</span></button>
+          <div className={styles.todayAddedActions}>
+            <button type="button" className={styles.historyToggle} disabled={!ready} aria-expanded={historyOpen}
+              aria-controls="vn-added-history" onClick={() => setHistoryOpen((open) => !open)}>
+              新增记录 <span aria-hidden="true">{historyOpen ? "▴" : "▾"}</span></button>
+            <button type="button" className={styles.todayAddedCta} disabled={!ready} onClick={viewAddedToday}>查看今日新增 <span aria-hidden="true">›</span></button>
+          </div>
+          {historyOpen && ready && <div id="vn-added-history" className={styles.history} data-testid="added-history">
+            <div className={styles.historyHead}>
+              {historyAll ? "全部" : "近 30 天"}共新增 <strong>{history.total}</strong> 词，有 {history.activeDays} 天在加词
+              {history.activeDays > 0 && `，有加词的日子平均 ${Math.round(history.total / history.activeDays)} 词`}
+            </div>
+            {history.rows.length === 0 ? <div className={styles.historyEmpty}>{historyAll ? "单词本里还没有词" : "近 30 天没有新增单词"}</div>
+              : <ul className={styles.historyList}>
+                {history.rows.map((r) => <li key={r.day}>
+                  <button type="button" onClick={() => viewAddedOn(r.day)} aria-label={`查看${addedDayLabel(r.day, now)}新增的 ${r.total} 个词`}>
+                    <span className={styles.historyDay}>{addedDayLabel(r.day, now)}</span>
+                    <span className={styles.historyBar} aria-hidden="true"><i style={{ width: `${(r.total / historyMax) * 100}%` }} /></span>
+                    <strong>{r.total} 词</strong>
+                    <small>{r.listening ? `阅读 ${r.reading} · 听力 ${r.listening}` : "阅读"}</small>
+                    <span aria-hidden="true">›</span>
+                  </button>
+                </li>)}
+              </ul>}
+            <div className={styles.historyFoot}>
+              按收藏到单词本的日期统计，已移除的词不算。点某一天可在下方词库里只看那天收藏的词。
+              <button type="button" onClick={() => setHistoryAll((all) => !all)}>{historyAll ? "只看近 30 天" : "看全部日子"}</button>
+            </div>
+          </div>}
         </section>
 
         <RootExplorer />
@@ -465,6 +515,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
                   onClick={() => { setFilter(id); resetListView(); }}>{label}<span>{counts[id]}</span></button>)}
             </div>
           </div>
+          {addedDay && <div className={styles.familyBar} role="status">
+            只看{addedDayLabel(addedDay, now)}新增的 {list.length} 个词
+            <button type="button" onClick={() => { setAddedDay(""); resetListView(); }}>× 看全部</button>
+          </div>}
           {famFilter && <div className={styles.familyBar} role="status">
             只看「{famFilter}」组 · {familySizes.get(famFilter) || 0} 个词，复习时这些词连着出现
             <button type="button" onClick={() => { setFamFilter(""); resetListView(); }}>× 看全部</button>
@@ -490,7 +544,7 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
                     onSuspend={suspend} onEditDef={editDef}
                     selecting={selecting} selected={selectionAccount === accountKey && selectedWords.has(card.word)} onSelect={toggleSelected}
                     familySize={card.family ? familySizes.get(card.family) || 0 : 0}
-                    onFamily={(family) => { setFamFilter(family); setFilter("all"); resetListView(); }} />)}
+                    onFamily={(family) => { setFamFilter(family); setAddedDay(""); setFilter("all"); resetListView(); }} />)}
             {list.length > shown && <button className={styles.showMore} type="button"
               onClick={() => setShown((value) => value + PAGE_SIZE)}>还有 {list.length - shown} 个，继续显示</button>}
           </div>
