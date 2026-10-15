@@ -290,3 +290,33 @@ describe("过关规则（真实调度 + 真实回插）", () => {
     expect(others.every(([, n]) => n === 1)).toBe(true);
   });
 });
+
+describe("词形组", () => {
+  const fam = (word) => ({ word, display: word, def: `${word} 释义`, state: STATE.REVIEW, productive: false, source: "passage-note", family: "machinery", reviewMode: "reading" });
+  const store = jest.requireMock("../lib/vocab/vocabStore");
+
+  test("同组卡标「组 · 序号」，整组过完弹组小结，空格继续", () => {
+    const spy = jest.spyOn(store, "familyMembers").mockReturnValue([fam("machinery"), fam("machine"), { ...fam("machinist") }]);
+    const queue = [fam("machinery"), fam("machine"), mk(9)];
+    const onGrade = jest.fn((word) => ({ ...queue.find((c) => c.word === word), due: farFuture() }));
+    render(<VocabReview initialQueue={queue} onGrade={onGrade} onExit={jest.fn()} />);
+    expect(screen.getByTestId("family-tag")).toHaveTextContent("machinery 组 · 1/2");
+    good();
+    expect(screen.getByTestId("family-tag")).toHaveTextContent("machinery 组 · 2/2");
+    expect(screen.queryByTestId("family-recap")).toBeNull();
+    again();
+    const recap = screen.getByTestId("family-recap");
+    const rows = within(recap).getAllByTestId("family-recap-row");
+    expect(rows.map((r) => r.textContent)).toEqual([
+      expect.stringContaining("这次记得"), expect.stringContaining("这次忘了"), expect.stringContaining("今天不用复习"),
+    ]);
+    // 小结时按 1/2 不评分
+    act(() => { fireEvent.keyDown(window, { key: "1" }); });
+    expect(onGrade).toHaveBeenCalledTimes(2);
+    act(() => { fireEvent.keyDown(window, { key: " " }); });
+    expect(screen.queryByTestId("family-recap")).toBeNull();
+    expect(screen.getByText("word9")).toBeInTheDocument();
+    expect(screen.queryByTestId("family-tag")).toBeNull();
+    spy.mockRestore();
+  });
+});

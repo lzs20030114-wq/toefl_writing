@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, familyPosition, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
 import { cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
@@ -11,7 +11,8 @@ import { lookupWord } from "../../lib/dict/lookup";
 import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense } from "../../lib/dict/aiSense";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
-import { adoptDictEntry, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { adoptDictEntry, familyMembers, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
+import { FamilyRecap } from "./FamilyRecap";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
 import ReviewSummary from "./ReviewSummary";
@@ -197,6 +198,9 @@ export function VocabReview({
     segment: [], // 当前这一段评过的 { word, good, n }
     segNo: resume?.segNo || 0,
     checkpoint: false,
+    // 词形组连着复习完后弹的整组小结（组名）；每组一场只弹一次
+    recap: null,
+    recapped: [],
     resumed: !!resume,
     endedAt: null,
   }));
@@ -309,16 +313,16 @@ export function VocabReview({
   useEffect(() => {
     cancelSpeakWord();
     const current = audioCardRef.current;
-    if (audioActiveRef.current && getVocabAccountKey() === sessionAccountRef.current && !sess.checkpoint && current.card && !current.revealed) {
+    if (audioActiveRef.current && getVocabAccountKey() === sessionAccountRef.current && !sess.checkpoint && !sess.recap && current.card && !current.revealed) {
       speakWord(current.card.display || current.card.word, {});
     }
     if (finished) releasePreload();
     return () => cancelSpeakWord();
-  }, [pos, sess.checkpoint, autoRevision, accountKey, finished, releasePreload]);
+  }, [pos, sess.checkpoint, sess.recap, autoRevision, accountKey, finished, releasePreload]);
 
   useEffect(() => {
     shownAtRef.current = Date.now();
-  }, [pos]);
+  }, [pos, sess.recap]);
 
   useEffect(() => {
     aiRequestRef.current += 1;
@@ -417,7 +421,7 @@ export function VocabReview({
 
   const grade = useCallback(
     (rating) => {
-      if (!card || sess.checkpoint || getVocabAccountKey() !== accountKey) return;
+      if (!card || sess.checkpoint || sess.recap || getVocabAccountKey() !== accountKey) return;
       const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current);
       if (!updated) return;
       const good = rating !== RATING.AGAIN;
@@ -430,6 +434,13 @@ export function VocabReview({
       const done = nextPos >= nextQueue.length;
       const segment = [...sess.segment, { word: card.word, good, n: times }];
       const hit = !done && segment.length >= SEGMENT_SIZE;
+      // 这一组的词都过了一遍、下一张不再是同组 → 弹整组小结
+      const famPos = familyPosition(sess.queue, card);
+      const nextCard = nextQueue[nextPos];
+      const groupDone = famPos && !sess.recapped.includes(card.family)
+        && !(nextCard && nextCard.family === card.family)
+        && sess.queue.every((c) => c.family !== card.family || c.word === card.word || sess.seen[c.word]);
+      const recap = groupDone ? card.family : null;
       const next = {
         ...sess,
         queue: nextQueue,
@@ -442,6 +453,8 @@ export function VocabReview({
         segment,
         segNo: hit ? sess.segNo + 1 : sess.segNo,
         checkpoint: hit,
+        recap,
+        recapped: recap ? [...sess.recapped, recap] : sess.recapped,
         endedAt: done ? Date.now() : null,
       };
       setHistory(hit || done ? [] : [...history, sess]);
@@ -459,6 +472,10 @@ export function VocabReview({
     },
     [accountKey, card, history, onCheckpoint, onFinish, onGrade, resetFace, sess, startStats],
   );
+
+  const closeRecap = useCallback(() => {
+    setSess((s) => ({ ...s, recap: null }));
+  }, []);
 
   const continueSegment = useCallback(() => {
     segStartRef.current = Date.now();
@@ -567,6 +584,10 @@ export function VocabReview({
   continueRef.current = continueSegment;
   const checkpointRef = useRef(sess.checkpoint);
   checkpointRef.current = sess.checkpoint;
+  const recapRef = useRef(sess.recap);
+  recapRef.current = sess.recap;
+  const closeRecapRef = useRef(closeRecap);
+  closeRecapRef.current = closeRecap;
   const revealedRef = useRef(revealed);
   revealedRef.current = revealed;
   const spellStageRef = useRef(spellStage);
@@ -582,6 +603,10 @@ export function VocabReview({
       if (e.key === "Escape") { setMenuOpen(false); return; }
       if (!checkpointRef.current && (e.key === "z" || e.key === "Z")) { e.preventDefault(); undoRef.current(); return; }
       if (e.target && e.target.tagName === "BUTTON") return;
+      if (recapRef.current) {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); closeRecapRef.current(); }
+        return;
+      }
       if (checkpointRef.current) {
         if (e.key === " " || e.key === "Enter") { e.preventDefault(); continueRef.current(); }
         return;
@@ -613,6 +638,16 @@ export function VocabReview({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  if (sess.recap) {
+    const rows = familyMembers(sess.recap).map((info) => ({
+      word: info.word,
+      display: info.display || info.word,
+      sense: senseOf(info, activeSentence(info)),
+      status: info.word in sess.first ? (sess.first[info.word] ? "good" : "again") : "rest",
+    }));
+    return <FamilyRecap family={sess.recap} rows={rows} onContinue={closeRecap} />;
+  }
+
   if (finished) {
     const summary = buildReviewSummary({
       first: sess.first, tally, lost: sess.lost,
@@ -634,6 +669,7 @@ export function VocabReview({
 
   if (!card) return null;
 
+  const famPos = familyPosition(queue, card);
   const dirMeta = spellStage ? SPELL_META : DIRECTION_META[mode] || DIRECTION_META.recognize;
   const progress = sess.answered + remaining > 0 ? sess.answered / (sess.answered + remaining) : 0;
   const segmentRows = sess.segment.map((g) => {
@@ -701,6 +737,11 @@ export function VocabReview({
           {card.state === STATE.NEW && (
             <span style={{ fontSize: 10, fontWeight: 700, color: "#087355", background: "#ECFDF5", border: "1px solid #D1FAE5", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
               新词
+            </span>
+          )}
+          {famPos && (
+            <span data-testid="family-tag" style={{ fontSize: 10, fontWeight: 700, color: "#92400E", background: "#FEF3C7", border: "1px solid #F3D9A4", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
+              {famPos.family} 组 · {famPos.index}/{famPos.total}
             </span>
           )}
           {timesSeen > 0 && (
