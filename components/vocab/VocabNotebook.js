@@ -16,7 +16,7 @@ import MeaningExplorer from "./MeaningExplorer";
 import DailyQuotaCard from "./DailyQuotaCard";
 import VocabImportDialog from "./VocabImportDialog";
 import VocabExportDialog from "./VocabExportDialog";
-import { getVocabAccountKey, loadBook } from "../../lib/vocab/vocabStore";
+import { getVocabAccountKey, loadBook, setWordFamily } from "../../lib/vocab/vocabStore";
 import styles from "./VocabNotebook.module.css";
 
 const PAGE_SIZE = 60;
@@ -77,7 +77,7 @@ function Highlighted({ sentence, word }) {
   return sentence.split(re).map((part, i) => (i % 2 === 1 ? <strong key={i}>{part}</strong> : part));
 }
 
-function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onReset, onRemove, onSuspend, onEditDef, selecting, selected, onSelect }) {
+function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onReset, onRemove, onSuspend, onEditDef, selecting, selected, onSelect, familySize = 0, onFamily }) {
   const name = card.display || card.word;
   const r = currentRetrievability(card, now);
   const productive = card.productive !== false;
@@ -112,6 +112,8 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
           {mode === "both" && <span className={styles.tag} style={{ color: "#087355", background: "#ECFDF5" }}>阅读</span>}
           {hasReviewMode(mode, "listening") && <span className={`${styles.tag} ${styles.tagListening}`}>听力</span>}
           {isLeech(card) && <span className={`${styles.tag} ${styles.tagLeech}`}>易忘 · 忘过 {card.lapses} 次</span>}
+          {familySize > 1 && <button type="button" className={`${styles.tag} ${styles.tagFamily}`} title="只看这一组"
+            onClick={() => onFamily(card.family)}>{card.family} 组</button>}
         </div>
         {card.phonetic && <div className={styles.phonetic}>/{card.phonetic}/</div>}
         <div className={styles.mobileMeta}>
@@ -147,6 +149,7 @@ function WordRow({ card, now, open, onToggle, onReviewMode, onProductive, onRese
         {onEditDef && <button type="button" onClick={() => { setDraft(card.def || ""); setEditing(true); }}>编辑释义</button>}
         {card.reps > 0 && <button type="button" onClick={() => { onReset(card.word, card.reviewMode); onToggle(null); }}>重学</button>}
         {onSuspend && <button type="button" onClick={() => onSuspend(card.word, !card.suspended)}>{card.suspended ? "恢复复习" : "暂停复习"}</button>}
+        {card.family && <button type="button" onClick={() => setWordFamily([card.word], "")}>移出「{card.family}」组</button>}
         <button type="button" onClick={() => { onRemove(card.word); onToggle(null); }}>移除</button>
         <small>
           {card.reps > 0 ? `复习 ${card.reps} 次` : "尚未复习"}
@@ -171,6 +174,8 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   }, [reviewing, onReviewingChange]);
   const [listMode, setListMode] = useState("all");
   const [filter, setFilter] = useState("all");
+  // 点词旁的「xx 组」标签：只看这一个词形组
+  const [famFilter, setFamFilter] = useState("");
   const [sortKey, setSortKey] = useState("urgency");
   const [q, setQ] = useState("");
   const [shown, setShown] = useState(PAGE_SIZE);
@@ -222,9 +227,15 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
   const list = useMemo(() => {
     const kw = q.trim().toLowerCase();
     let out = modeCards.filter((card) => matches(filter, card, now));
+    if (famFilter) out = out.filter((c) => c.family === famFilter);
     if (kw) out = out.filter((c) => c.word.includes(kw) || (c.def || "").toLowerCase().includes(kw));
     return sortCards(out, sortKey, now);
-  }, [modeCards, filter, q, sortKey, now]);
+  }, [modeCards, filter, famFilter, q, sortKey, now]);
+  const familySizes = useMemo(() => {
+    const out = new Map();
+    for (const card of cards) if (card.family) out.set(card.family, (out.get(card.family) || 0) + 1);
+    return out;
+  }, [cards]);
   const stageCounts = useMemo(() => {
     const out = { new: 0, learning: 0, review: 0, mature: 0, paused: 0 };
     for (const card of cards) out[cardStage(reviewCard(card))] += 1;
@@ -454,6 +465,10 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
                   onClick={() => { setFilter(id); resetListView(); }}>{label}<span>{counts[id]}</span></button>)}
             </div>
           </div>
+          {famFilter && <div className={styles.familyBar} role="status">
+            只看「{famFilter}」组 · {familySizes.get(famFilter) || 0} 个词，复习时这些词连着出现
+            <button type="button" onClick={() => { setFamFilter(""); resetListView(); }}>× 看全部</button>
+          </div>}
           {selecting && <div className={styles.selectionBar} role="group" aria-label="导出单词选择">
             <strong aria-live="polite">已选 {selectedCards.length} 个词</strong>
             <button type="button" disabled={!list.length} onClick={() => setSelectedWords((previous) => new Set([...previous, ...list.map((card) => card.word)]))}>全选当前筛选（{list.length} 词）</button>
@@ -473,7 +488,9 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
                     open={openWord === card.word} onToggle={setOpenWord} onReviewMode={setReviewMode}
                     onProductive={setProductive} onReset={reset} onRemove={remove}
                     onSuspend={suspend} onEditDef={editDef}
-                    selecting={selecting} selected={selectionAccount === accountKey && selectedWords.has(card.word)} onSelect={toggleSelected} />)}
+                    selecting={selecting} selected={selectionAccount === accountKey && selectedWords.has(card.word)} onSelect={toggleSelected}
+                    familySize={card.family ? familySizes.get(card.family) || 0 : 0}
+                    onFamily={(family) => { setFamFilter(family); setFilter("all"); resetListView(); }} />)}
             {list.length > shown && <button className={styles.showMore} type="button"
               onClick={() => setShown((value) => value + PAGE_SIZE)}>还有 {list.length - shown} 个，继续显示</button>}
           </div>

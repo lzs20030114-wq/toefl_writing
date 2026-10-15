@@ -284,6 +284,35 @@ describe("原文批注提问", () => {
     expect(screen.getByTestId("word-form-save-nectarous")).toHaveTextContent("收藏");
   });
 
+  it("词形表「整组收藏」：没收藏的收进来，已收藏的也归进同一组（组名 = 选中的词），复习进度不动", async () => {
+    const answer = ["[词形]", "nectar｜n.｜花蜜｜原词｜Bees collect nectar.", "nectarous｜adj.｜花蜜的｜派生形容词｜A nectarous scent.", "[/词形]"].join("\n");
+    const note = { ...makeNote({ passage: PASSAGE, quote: "nectar" }), turns: [{ q: "列词形", label: "列出所有词形", a: answer, at: "x" }] };
+    localStorage.setItem(`${NOTE_STORE_PREFIX}:guest`, JSON.stringify({ notes: [note] }));
+    const store = require("../lib/vocab/vocabStore");
+    store.saveWord({ word: "nectarous", def: "adj. 甜的", reps: 4 });
+    render(<NotedPassage passage={PASSAGE} />);
+    fireEvent.click(screen.getByTestId("note-mark"));
+
+    const btn = await screen.findByTestId("word-forms-save-group");
+    expect(btn).toHaveTextContent("整组收藏（2 个）");
+    fireEvent.click(btn);
+    await waitFor(() => expect(screen.getByTestId("word-forms-save-group")).toHaveTextContent("已成组"));
+    expect(store.getCard("nectar").family).toBe("nectar");
+    expect(store.getCard("nectarous").family).toBe("nectar");
+    expect(store.getCard("nectarous").def).toBe("adj. 甜的");
+    expect(screen.getByTestId("word-forms-group")).toHaveTextContent("已成「nectar」组");
+  });
+
+  it("搭配表不显示「整组收藏」", async () => {
+    const answer = ["[搭配]", "collect nectar｜采集花蜜｜Bees collect nectar.", "sweet nectar｜甜美的花蜜｜Sweet nectar draws bees.", "[/搭配]"].join("\n");
+    const note = { ...makeNote({ passage: PASSAGE, quote: "nectar" }), turns: [{ q: "搭配", label: "常见搭配", a: answer, at: "x" }] };
+    localStorage.setItem(`${NOTE_STORE_PREFIX}:guest`, JSON.stringify({ notes: [note] }));
+    render(<NotedPassage passage={PASSAGE} />);
+    fireEvent.click(screen.getByTestId("note-mark"));
+    await screen.findAllByTestId("word-form-row");
+    expect(screen.queryByTestId("word-forms-save-group")).toBeNull();
+  });
+
   it("点出处高亮原文那句：原文里有这句就接住（跨笔记高亮也能找到），没有就返回 false", async () => {
     const note = { ...makeNote({ passage: PASSAGE, quote: "carry pollen" }), turns: [{ q: "q", a: "a", at: "x" }] };
     localStorage.setItem(`${NOTE_STORE_PREFIX}:guest`, JSON.stringify({ notes: [note] }));

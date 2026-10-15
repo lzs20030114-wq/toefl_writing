@@ -47,14 +47,17 @@ function CiteTag({ ok, children, title }) {
   );
 }
 
-export function NoteAnswer({ text, sentences, dict }) {
+export function NoteAnswer({ text, sentences, dict, quote = "" }) {
   // 「列出所有词形」「常见搭配」的回答带一段表：拆出来单独渲染成可收藏的列表，表前表后的文字照常显示。
-  const split = useMemo(() => splitWordForms(text) || splitCollocations(text), [text]);
+  const split = useMemo(() => {
+    const forms = splitWordForms(text);
+    return forms ? { ...forms, family: true } : splitCollocations(text);
+  }, [text]);
   if (!split) return <AnswerText text={text} sentences={sentences} dict={dict} />;
   return (
     <div data-testid="note-answer-forms">
       {split.before ? <AnswerText text={split.before} sentences={sentences} dict={dict} /> : null}
-      <WordFormList forms={split.forms} />
+      <WordFormList forms={split.forms} quote={quote} grouping={!!split.family} />
       {split.after ? <AnswerText text={split.after} sentences={sentences} dict={dict} /> : null}
     </div>
   );
@@ -172,7 +175,7 @@ function NoteCard({ placed, notes, collapsedOnly = false }) {
           {turns.map((t, i) => (
             <div key={i} style={{ marginTop: i ? 10 : 0 }}>
               <div style={{ fontWeight: 700, color: AMBER, marginBottom: 2 }}>{`问：${t.label || t.q}`}</div>
-              <NoteAnswer text={t.a} sentences={notes.sentences} dict={t.dict} />
+              <NoteAnswer text={t.a} sentences={notes.sentences} dict={t.dict} quote={note.quote} />
             </div>
           ))}
           {note.draft && note.pendingQuestion ? (
