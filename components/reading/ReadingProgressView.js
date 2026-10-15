@@ -16,7 +16,7 @@ import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { MockSessionDetail } from "./MockSessionDetail";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "./useCtwAiExplain";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
-import { WordLookupLayer } from "./WordLookupLayer";
+import { NotedLookup } from "../notes/NotedLookup";
 import { NotedPassage } from "../notes/NotedPassage";
 import { questionLookupContext } from "../../lib/dict/core";
 import { isSentenceSelection, sentenceOptionText } from "../../lib/reading/sentenceSelection";
@@ -199,9 +199,9 @@ export function CTWDetail({ session }) {
     <div>
       {/* Passage with blanks highlighted as colored inline tags（点词/划词查词典） */}
       {passage && (
-        <WordLookupLayer passage={passage} style={{ fontSize: 13, color: P.text, lineHeight: 2.2, padding: "14px 18px", background: "#fafbfa", borderRadius: 12, marginBottom: 12, border: `1px solid ${P.borderSubtle}` }}>
+        <NotedLookup passage={passage} style={{ fontSize: 13, color: P.text, lineHeight: 2.2, padding: "14px 18px", background: "#fafbfa", borderRadius: 12, marginBottom: 12, border: `1px solid ${P.borderSubtle}` }}>
           {renderMarkedPassage()}
-        </WordLookupLayer>
+        </NotedLookup>
       )}
       {/* Summary: correct vs total */}
       <div style={{ fontSize: 12, color: P.textSec, marginBottom: 8 }}>
@@ -348,7 +348,7 @@ export function RDLDetail({ session }) {
       )}
       {/* Per-question detail with full stem + options */}
       {Array.isArray(results) && (
-        <WordLookupLayer passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <NotedLookup passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions && questions[i];
             const insertParts = q ? insertStemParts(q) : null;
@@ -437,7 +437,7 @@ export function RDLDetail({ session }) {
               </div>
             );
           })}
-        </WordLookupLayer>
+        </NotedLookup>
       )}
     </div>
   );

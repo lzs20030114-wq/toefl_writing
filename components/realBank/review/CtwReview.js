@@ -3,7 +3,7 @@
 // 原文点词查词典（WordLookupLayer），挖空词也一样查词典（data-dict-word 让拆成两段上色的词整块当一个词查）；
 // 别再给原文里的空挂「跳到下方解析」—— 那会把词典顶掉（2026-10 用户反馈）。
 import React from "react";
-import { WordLookupLayer } from "../../reading/WordLookupLayer";
+import { NotedLookup } from "../../notes/NotedLookup";
 import { splitBlankToken } from "../../../lib/reading/ctwToken";
 import { useCtwAiExplain, CtwAiExplainBlock, locateBlankSentence } from "../../reading/useCtwAiExplain";
 import { LV, MONO, READ_FONT } from "../realBankUi";
@@ -26,7 +26,7 @@ export function CtwReview({ session, model, vid, ctx }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       {passage ? (
-        <WordLookupLayer passage={passage} style={{ fontFamily: READ_FONT, fontSize: 14.5, lineHeight: 2.2, padding: "16px 20px", background: "#fafbfa", border: "1px solid #ebf0ed", borderRadius: 12 }}>
+        <NotedLookup passage={passage} style={{ fontFamily: READ_FONT, fontSize: 14.5, lineHeight: 2.2, padding: "16px 20px", background: "#fafbfa", border: "1px solid #ebf0ed", borderRadius: 12 }}>
           {words.map((word, wi) => {
             const bi = posToIdx[wi];
             if (bi == null) return <span key={wi}>{word} </span>;
@@ -47,7 +47,7 @@ export function CtwReview({ session, model, vid, ctx }) {
               </span>
             );
           })}
-        </WordLookupLayer>
+        </NotedLookup>
       ) : null}
 
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", fontSize: 12, color: "#5a6b62" }}>

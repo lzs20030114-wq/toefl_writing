@@ -15,7 +15,7 @@ import {
   sentenceSelectionLayout,
   sentenceSelectionSegments,
 } from "../../lib/reading/sentenceSelection";
-import { WordLookupLayer } from "./WordLookupLayer";
+import { NotedLookup } from "../notes/NotedLookup";
 import { questionLookupContext } from "../../lib/dict/core";
 import { McqReview } from "../realBank/review/McqReview";
 import { buildReviewModel } from "../../lib/realBankReview";
@@ -23,7 +23,7 @@ import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplai
 
 function ReviewLookup({ enabled, passage, children, style }) {
   return enabled
-    ? <WordLookupLayer passage={passage} source="reading" style={style}>{children}</WordLookupLayer>
+    ? <NotedLookup passage={passage} source="reading" style={style}>{children}</NotedLookup>
     : <div style={style}>{children}</div>;
 }
 

@@ -7,7 +7,7 @@
 // 听力应答没有原文面板：每题自带「Speaker」口播 + 播放器。
 // 查词典（WordLookupLayer）、逐句点播、AI 讲解的 Pro 门与缓存都复用各科历史页同一套，这里只管版面。
 import React, { useMemo, useState } from "react";
-import { WordLookupLayer } from "../../reading/WordLookupLayer";
+import { NotedLookup } from "../../notes/NotedLookup";
 import { NotedPassage } from "../../notes/NotedPassage";
 import { paragraphSpans } from "../../../lib/notes/passageNotes";
 import { AudioPlayer } from "../../listening/AudioPlayer";
@@ -76,11 +76,11 @@ function LcrSpeaker({ item, speakerText }) {
         <AudioPlayer ref={sp.playerRef} compact playbackRateControl src={audioUrl} text={speakerText} isPractice onTime={sp.onTime} />
       </div>
       {speakerText ? (
-        <WordLookupLayer passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }}
+        <NotedLookup passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }}
           style={{ fontFamily: READ_FONT, fontSize: 13.5, lineHeight: 1.7, fontStyle: "italic", padding: "7px 12px", background: "#fafbfa", borderLeft: "3px solid #8B5CF6", borderRadius: "0 8px 8px 0" }}>
           <span style={{ fontStyle: "normal", fontSize: 11, fontWeight: 700, color: "#8B5CF6", marginRight: 6, fontFamily: "inherit" }}>Speaker</span>
           <SentenceTranscript timings={sp.timings} transcript={speakerText} activeIndex={sp.activeIndex} onPick={sp.onPick} />
-        </WordLookupLayer>
+        </NotedLookup>
       ) : null}
     </>
   );
@@ -157,16 +157,16 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                 </>
               ) : null}
               {isTranscript ? (
-                <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ whiteSpace: "pre-wrap" }}>
+                <NotedLookup passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ whiteSpace: "pre-wrap" }}>
                   <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
-                </WordLookupLayer>
+                </NotedLookup>
               ) : null}
               {isTurns ? (
-                <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }}>
+                <NotedLookup passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }}>
                   {conversation.length > 0
                     ? <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
                     : <div style={{ whiteSpace: "pre-wrap" }}>{transcript}</div>}
-                </WordLookupLayer>
+                </NotedLookup>
               ) : null}
             </div>
           ) : null}
@@ -174,7 +174,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
       ) : null}
 
       <div style={{ flex: "1 1 400px", minWidth: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-        <WordLookupLayer passage={lookupContext} source={isReading ? "reading" : "listening"} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <NotedLookup passage={lookupContext} source={isReading ? "reading" : "listening"} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {visible.map((u) => {
             const i = u.idx;
             const r = results[i] || {};
@@ -250,7 +250,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
               </ReviewCard>
             );
           })}
-        </WordLookupLayer>
+        </NotedLookup>
         {visible.length === 0 ? <EmptyNote>{ctx.emptyText}</EmptyNote> : null}
       </div>
     </div>

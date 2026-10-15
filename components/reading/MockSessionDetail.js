@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { useReadingAiExplain, ReadingAiExplainBlock } from "./useReadingAiExplain";
-import { WordLookupLayer } from "./WordLookupLayer";
+import { NotedLookup } from "../notes/NotedLookup";
 import { NotedPassage } from "../notes/NotedPassage";
 import { questionLookupContext } from "../../lib/dict/core";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
@@ -106,7 +106,7 @@ function CtwTaskBody({ task }) {
 
   return (
     <div>
-      <WordLookupLayer
+      <NotedLookup
         passage={passage}
         style={{
           fontSize: 14,
@@ -119,7 +119,7 @@ function CtwTaskBody({ task }) {
         }}
       >
         {rendered}
-      </WordLookupLayer>
+      </NotedLookup>
       {mistakes.length > 0 && (
         <div>
           <div style={{ fontSize: 11, fontWeight: 700, color: C.textSec, marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.4 }}>
@@ -228,7 +228,7 @@ function McqTaskBody({ task, explainHook }) {
           🎧 原音频已记录
         </div>
       )}
-      <WordLookupLayer passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <NotedLookup passage={lookupContext} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {renderable.map((q, i) => {
           const r = results[i];
           const correctKey = q.correct_answer || q.answer;
@@ -366,7 +366,7 @@ function McqTaskBody({ task, explainHook }) {
             </div>
           );
         })}
-      </WordLookupLayer>
+      </NotedLookup>
     </div>
   );
 }

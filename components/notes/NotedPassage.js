@@ -20,7 +20,7 @@ const AMBER = "#B45309";
 
 // 选中效果和批注高亮同一套琥珀色：拖选时（::selection）和松手后弹窗开着时（::highlight，
 // WordLookupLayer 把浏览器选区换成的那段高亮）看着是一回事。笔记卡里不改，保持系统默认。
-const SELECTION_CSS = `
+export const SELECTION_CSS = `
 [data-noted-passage] ::selection { background: rgba(251, 191, 36, 0.38); color: inherit; }
 [data-noted-passage] [data-note-card] ::selection { background: Highlight; color: HighlightText; }
 ::highlight(cite-flash) { background-color: rgba(129, 140, 248, 0.32); text-decoration: underline 2px #6366F1; text-underline-offset: 3px; }
@@ -133,7 +133,7 @@ function FollowUp({ onAsk, left }) {
   );
 }
 
-function NoteCard({ placed, notes, collapsedOnly = false }) {
+export function NoteCard({ placed, notes, collapsedOnly = false }) {
   const { note, index } = placed;
   const [confirm, setConfirm] = useState(false);
   const open = notes.isOpen(note.id);
