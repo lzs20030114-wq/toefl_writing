@@ -128,3 +128,36 @@ test("addedHistory：按本地日期分天、新的在前，窗口外和已移�
   expect(h.total).toBe(3);
   expect(addedHistory(cards, now).activeDays).toBe(3);
 });
+
+test("从存档继续：存档之后才成组的词，续上时补齐组员并排到一起", () => {
+  const cards = [
+    review("a1", -day), fresh("machining", { family: "machinery" }), review("b1", -day),
+    review("machine", -day, { family: "machinery" }),
+    review("machinist", 1.5 * day, { family: "machinery" }),
+    fresh("machinery", { family: "machinery" }),
+    review("far", 5 * day, { family: "machinery" }),
+  ];
+  // 开场时这些词还没成组：存档里只有 a1、machining、b1、machine，顺序是打散的
+  const q = words(resumableQueue({ words: ["a1", "machining", "b1", "machine"] }, cards, "reading", now));
+  expect(q).toEqual(["a1", "machinery", "machining", "machine", "machinist", "b1"]);
+});
+
+test("旧收藏补组：按笔记里的词形表补，只补从没进过组的词", () => {
+  const { familyBackfillPlan } = require("../lib/vocab/familyBackfill");
+  const table = "[词形]\nmachinery｜n.｜机器｜原词｜x\nmachine｜n.｜机器｜｜x\nmachining｜n.｜机械加工｜｜x\nmachinist｜n.｜机械师｜｜x\n[/词形]";
+  const notes = [
+    { id: "n1", quote: "machinery", createdAt: iso(now.getTime() - 2 * day), turns: [{ q: "列出所有词形", a: `词形如下\n${table}` }] },
+    { id: "n2", quote: "analysis", createdAt: iso(now.getTime() - day), turns: [{ q: "x", a: "[词形]\nanalysis｜n.｜分析｜｜x\nanalyze｜v.｜分析｜｜x\n[/词形]" }] },
+    { id: "n3", quote: "gone", deletedAt: iso(now), turns: [{ a: "[词形]\ngone｜v.｜去｜｜x\ngo｜v.｜去｜｜x\n[/词形]" }] },
+  ];
+  const cards = [
+    fresh("machinery"), fresh("machining"),
+    fresh("machine", { family: "", familyUpdatedAt: iso(now) }), // 用户移出过组
+    fresh("analysis"), // 表里只收了一个，不成组
+    fresh("gone"), fresh("go"),
+  ];
+  expect(familyBackfillPlan(notes, cards)).toEqual([{ family: "machinery", words: ["machinery", "machining"] }]);
+  // 已经成组的不再动
+  const grouped = cards.map((c) => (["machinery", "machining"].includes(c.word) ? { ...c, family: "machinery", familyUpdatedAt: iso(now) } : c));
+  expect(familyBackfillPlan(notes, grouped)).toEqual([]);
+});
