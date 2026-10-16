@@ -238,11 +238,11 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                         {...readingAi} />
                     ) : isLcr ? (
                       <ListeningAiExplainBlock variant="review" includeCorrect explainKey={`${session.id}-lcr${i}`}
-                        detail={{ subtype: "lcr", qid: q.id || `${session.id}-lcr${i}`, speaker: speakerText, situation: q.situation || d.topic || "", pragmaticFunction: q.pragmatic_function || "", options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
+                        detail={{ subtype: "lcr", qid: q.id || `${session.id}-lcr${i}`, speaker: speakerText, audioUrl: q.audio_url || null, situation: q.situation || d.topic || "", pragmaticFunction: q.pragmatic_function || "", options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
                         {...listeningAi} />
                     ) : (
                       <ListeningAiExplainBlock variant="review" includeCorrect explainKey={`${session.id}-q${i}`}
-                        detail={{ subtype: d.subtype || subtype, qid: q.qid || `${d.itemIds?.[0] || session.id}-q${i}`, stem, contextText: transcript || (isTurns ? conversationText(conversation) : ""), conversation: isTurns ? conversation : null, options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
+                        detail={{ subtype: d.subtype || subtype, qid: q.qid || `${d.itemIds?.[0] || session.id}-q${i}`, stem, contextText: transcript || (isTurns ? conversationText(conversation) : ""), conversation: isTurns ? conversation : null, audioUrl, options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
                         {...listeningAi} />
                     )}
                   </div>

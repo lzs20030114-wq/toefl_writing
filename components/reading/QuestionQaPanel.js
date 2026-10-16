@@ -18,6 +18,8 @@ export const QA_THEMES = {
   default: { text: "#0c4a6e", bd: "#bae6fd", bg: "#f0f9ff", solid: "#0284c7", cardBg: "#f8fcff", cardBd: "#bae6fd", body: "#0c4a6e" },
 };
 const MUTED = "#6b7280";
+// 听力题点出处时播放哪段录音（lib/notes/passageFlash playPassageSentence）；没有录音地址就只高亮。
+const qaAudio = (detail) => (detail?.audioUrl ? { audioUrl: detail.audioUrl, whole: detail.qaKind === "lcr" } : null);
 const PLACEHOLDER = {
   reading: "问这道题的任何问题，比如某句为什么这么说",
   ctw: "问这个空的任何问题，比如为什么不能填别的词",
@@ -77,7 +79,7 @@ function TrapLine({ segs, renderSeg }) {
   );
 }
 
-export function QaAnswer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer" }) {
+export function QaAnswer({ text, sentences, materials, related, dict, mistakes = 0, past = null, theme, testId = "qa-answer", audio = null }) {
   const [open, setOpen] = useState(null);
   // 举一反三那一轮：对比题的题干、选项、依据句也算可引的材料
   const allMaterials = useMemo(() => (past?.length ? [...materials, ...analogyMaterials({ items: past })] : materials), [materials, past]);
@@ -89,7 +91,7 @@ export function QaAnswer({ text, sentences, materials, related, dict, mistakes =
   // 听力原文还会播放这一句（有逐句时间戳的录音接住时；lib/notes/passageFlash playPassageSentence）。
   const openSentence = (id) => {
     const sent = byId.get(id);
-    const played = sent ? playPassageSentence(sent.text) : false;
+    const played = sent && audio?.audioUrl ? playPassageSentence(sent.text, audio) : false;
     if (sent && (flashPassageSentence(sent.text) || played)) { setOpen(null); return; }
     toggle(id);
   };
@@ -105,7 +107,7 @@ export function QaAnswer({ text, sentences, materials, related, dict, mistakes =
     if (s.kind === "sentence") {
       const sent = byId.get(s.id);
       return s.valid
-        ? <Tag key={i} tone="ok" testId="qa-cite" title={sent?.label ? "点一下播放并高亮这句" : "点一下在原文里高亮这句"} onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
+        ? <Tag key={i} tone="ok" testId="qa-cite" title={audio?.audioUrl ? "点一下播放并高亮这句" : "点一下在原文里高亮这句"} onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
         : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
     }
     if (s.kind === "past") {
@@ -163,7 +165,7 @@ export function QaAnswer({ text, sentences, materials, related, dict, mistakes =
 export function CitedText({ text, detail, variant }) {
   const theme = QA_THEMES[variant === "review" ? "review" : "default"];
   const ev = useMemo(() => buildEvidence(detail), [detail]);
-  return <QaAnswer text={text} sentences={ev.sentences} materials={ev.materials} theme={theme} testId="explain-answer" />;
+  return <QaAnswer text={text} sentences={ev.sentences} materials={ev.materials} theme={theme} testId="explain-answer" audio={qaAudio(detail)} />;
 }
 
 function ReportBox({ detail, answer, onDone }) {
@@ -226,6 +228,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
 
   const answered = !!detail?.selected;
   const kind = qa.kind;
+  const audio = useMemo(() => qaAudio(detail), [detail]);
   const ss = kind === "reading" && (isSentenceSelection(detail?.question) || isSentenceSelection({ question_type: detail?.questionType, options: detail?.options }));
   const selectedLabel = ss ? "那一句" : String(detail?.selected || "");
   const atTurnCap = qa.turns.length >= QA_MAX_TURNS;
@@ -349,7 +352,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
             {t.selection?.text ? <div style={{ fontSize: 11, color: MUTED, marginBottom: 2 }}>{`选中："${t.selection.text.length > 80 ? `${t.selection.text.slice(0, 80)}…` : t.selection.text}"`}</div> : null}
             {t.label || t.q}
           </div>
-          <QaAnswer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} past={t.past || null} theme={theme} />
+          <QaAnswer text={t.a} sentences={qa.sentences} materials={qa.materials} related={qa.related} dict={!!t.dict} mistakes={t.mistakes || 0} past={t.past || null} theme={theme} audio={audio} />
           {/可能有出入/.test(t.a) && reporting == null ? (
             <button type="button" onClick={() => setReporting(t.a)} style={{ alignSelf: "flex-start", fontSize: 12, color: "#B91C1C", background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 6, padding: "2px 10px", cursor: "pointer" }}>上报这题</button>
           ) : null}

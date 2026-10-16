@@ -42,6 +42,7 @@ const LC_DETAIL = {
   selected: "A",
   correct: "B",
   isCorrect: false,
+  audioUrl: "https://x/lc-1.mp3",
 };
 
 function ListeningHarness({ detail = LC_DETAIL }) {
@@ -97,12 +98,13 @@ describe("听力选择题", () => {
     expect(message).not.toContain("学生以前");
 
     const played = [];
-    const onPlay = (e) => { played.push(e.detail.text); e.detail.handled = true; };
+    const onPlay = (e) => { played.push([e.detail.text, e.detail.audioUrl, e.detail.whole]); e.detail.handled = true; };
     window.addEventListener(SENTENCE_PLAY_EVENT, onPlay);
     const answer = await screen.findByTestId("qa-answer");
     fireEvent.click(answer.querySelector("[data-testid='qa-cite']"));
     window.removeEventListener(SENTENCE_PLAY_EVENT, onPlay);
-    expect(played).toEqual(["I lost my student card yesterday."]);
+    // 带着录音地址：只有放这段录音的播放器接（别的题可能有一模一样的句子）
+    expect(played).toEqual([["I lost my student card yesterday.", "https://x/lc-1.mp3", false]]);
   });
 
   test("应答题：不看讲解也能直接问，按钮是应答题那套", async () => {
@@ -110,6 +112,7 @@ describe("听力选择题", () => {
       subtype: "lcr",
       qid: "lcr-1",
       speaker: "Could you lend me your notes from Monday?",
+      audioUrl: "https://x/lcr-1.mp3",
       options: { A: "Sure, here you go.", B: "On Monday." },
       selected: "B",
       correct: "A",
@@ -123,7 +126,13 @@ describe("听力选择题", () => {
     const [system, message] = callAI.mock.calls[0];
     expect(system).toBe(QA_SYSTEM_LCR);
     expect(message).toContain("[S1] Could you lend me your notes from Monday?");
-    expect(await screen.findByText("原话")).toBeInTheDocument();
+    // 应答题的录音就是这一句：没有逐句时间戳时整段放（whole）
+    const played = [];
+    const onPlay = (e) => { played.push(e.detail.whole); e.detail.handled = true; };
+    window.addEventListener(SENTENCE_PLAY_EVENT, onPlay);
+    fireEvent.click(await screen.findByText("原话"));
+    window.removeEventListener(SENTENCE_PLAY_EVENT, onPlay);
+    expect(played).toEqual([true]);
   });
 });
 
@@ -168,5 +177,30 @@ describe("错题本卡片 → 答疑 detail", () => {
     const lcr = qaDetailForCard({ subject: "listening", subtype: "lcr", itemKey: "lcr:x", brief: { selected: "B", correctKey: "A" } }, items);
     expect(lcr).toMatchObject({ qaKind: "lcr", passage: "Could you help?" });
     expect(qaDetailForCard({ subject: "reading", subtype: "rdl", itemKey: "rdl:gone", brief: {} }, items)).toBeNull();
+  });
+});
+
+describe("逐句点播只接自己那段录音", () => {
+  test("两段录音里有同一句：只有地址对得上的播放器播放；没有时间戳的应答题整段放", () => {
+    const { renderHook, act } = require("@testing-library/react");
+    const { useSentencePlayback } = require("../components/listening/ListeningProgressView");
+    const { playPassageSentence } = require("../lib/notes/passageFlash");
+    const timings = [{ text: "Could you help me?", start: 0, end: 1.5 }];
+    const a = renderHook(() => useSentencePlayback(timings, "https://x/a.mp3"));
+    const b = renderHook(() => useSentencePlayback(timings, "https://x/b.mp3"));
+    const c = renderHook(() => useSentencePlayback(null, "https://x/c.mp3"));
+    const mk = () => ({ calls: [], playRange(s, e) { this.calls.push([s, e]); return true; } });
+    a.result.current.playerRef.current = mk();
+    b.result.current.playerRef.current = mk();
+    c.result.current.playerRef.current = mk();
+    let ok;
+    act(() => { ok = playPassageSentence("Could you help me?", { audioUrl: "https://x/b.mp3" }); });
+    expect(ok).toBe(true);
+    expect(a.result.current.playerRef.current.calls).toEqual([]);
+    expect(b.result.current.playerRef.current.calls).toEqual([[0, 1.5]]);
+    expect(playPassageSentence("Could you help me?", { audioUrl: "https://x/c.mp3", whole: true })).toBe(true);
+    expect(c.result.current.playerRef.current.calls[0][0]).toBe(0);
+    // 不带地址不播
+    expect(playPassageSentence("Could you help me?")).toBe(false);
   });
 });
