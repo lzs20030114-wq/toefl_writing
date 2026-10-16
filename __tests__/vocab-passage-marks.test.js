@@ -70,3 +70,23 @@ describe("useVocabMarks", () => {
     delete global.Highlight;
   });
 });
+
+describe("听力原文里的标签", () => {
+  it("旧卡片语境句带了「Speaker:」也认得出；标签本身不标", () => {
+    const passage = "I heard the library is extending its hours during finals week.";
+    expect(savedWordsInPassage([{ word: "extending", sentence: "Speaker:I heard the library is extending its hours during finals week." }], passage)).toEqual(["extending"]);
+    const div = document.createElement("div");
+    div.innerHTML = '<span data-no-dict>Speaker extending:</span><span>I heard the library is extending its hours.</span>';
+    document.body.appendChild(div);
+    expect(findWordRanges(div, [wordPattern("extending")]).map((r) => r.toString())).toEqual(["extending"]);
+    div.remove();
+  });
+  it("外层容器挂 data-no-dict 不影响里面的原文", () => {
+    const outer = document.createElement("div");
+    outer.setAttribute("data-no-dict", "");
+    outer.innerHTML = "<div><p>a blend of artistry</p></div>";
+    document.body.appendChild(outer);
+    expect(findWordRanges(outer.firstChild, [wordPattern("blend")]).map((r) => r.toString())).toEqual(["blend"]);
+    outer.remove();
+  });
+});
