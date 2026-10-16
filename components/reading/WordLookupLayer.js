@@ -115,17 +115,61 @@ function sentenceElementOf(range) {
   return start && start === end ? start : null;
 }
 
+// 收藏取「所在原句」时不算进正文的东西：样式表、脚本、段号/批注序号/笔记卡（data-no-dict）。
+// 以前直接拿整块的 textContent，<style> 里的 CSS 和「¶1」段号都混进了例句（2026-10-16 用户截图）。
+const SKIP_TEXT_SELECTOR = "style, script, noscript, template, [data-no-dict]";
+const BLOCK_TAGS = new Set(["P", "DIV", "LI", "UL", "OL", "H1", "H2", "H3", "H4", "H5", "H6", "SECTION", "ARTICLE", "BLOCKQUOTE", "TR", "TD", "TH", "PRE", "BR", "HEADER", "FOOTER"]);
+// 块与块之间插一个段落分隔符：标题没有句号、紧跟第一段时也不会被连成一句。
+// sentenceAtOffsets 把它当句子边界，它本身是空白，返回前会被去掉。
+const BLOCK_BREAK = "\u2029";
+
+function blockOf(node, root) {
+  for (let el = node.parentElement; el && el !== root; el = el.parentElement) {
+    if (BLOCK_TAGS.has(el.tagName)) return el;
+  }
+  return root;
+}
+
+/** 划词层里「读者看得见的正文」，以及选区两端在这段正文里的位置。 */
+export function lookupTextAt(root, range) {
+  const upTo = (container, offset) => {
+    const r = document.createRange();
+    r.setStart(root, 0);
+    r.setEnd(container, offset);
+    return r;
+  };
+  const startR = upTo(range.startContainer, range.startOffset);
+  const endR = upTo(range.endContainer, range.endOffset);
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let text = "";
+  let start = null;
+  let end = null;
+  let lastBlock = null;
+  const place = (node, value, r, container, offset) => {
+    if (node === container) return text.length + Math.min(offset, value.length);
+    try { if (r.comparePoint(node, 0) > 0) return text.length; } catch { /* 不在同一棵树 */ }
+    return null;
+  };
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const skip = node.parentElement?.closest?.(SKIP_TEXT_SELECTOR);
+    const value = node.nodeValue || "";
+    if (!skip) {
+      const block = blockOf(node, root);
+      if (lastBlock && block !== lastBlock) text += BLOCK_BREAK;
+      lastBlock = block;
+    }
+    if (start == null) start = place(node, skip ? "" : value, startR, range.startContainer, skip ? 0 : range.startOffset);
+    if (end == null) end = place(node, skip ? "" : value, endR, range.endContainer, skip ? 0 : range.endOffset);
+    if (!skip) text += value;
+  }
+  return { text, start: start ?? text.length, end: end ?? text.length };
+}
+
 function sentenceFromRange(root, range) {
   if (!root || !range || !root.contains(range.startContainer) || !root.contains(range.endContainer)) return "";
   try {
-    const full = document.createRange();
-    full.selectNodeContents(root);
-    const text = full.toString();
-    const before = full.cloneRange();
-    before.setEnd(range.startContainer, range.startOffset);
-    const through = full.cloneRange();
-    through.setEnd(range.endContainer, range.endOffset);
-    return sentenceAtOffsets(text, before.toString().length, through.toString().length);
+    const { text, start, end } = lookupTextAt(root, range);
+    return sentenceAtOffsets(text, start, end);
   } catch { return ""; }
 }
 

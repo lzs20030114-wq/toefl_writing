@@ -78,7 +78,7 @@ const dayLabel = (key, index) => {
 
 /** 把例句里的目标词标出来；匹配不到就原样返回。 */
 function Highlighted({ sentence, word }) {
-  sentence = cleanContextSentence(sentence);
+  sentence = cleanContextSentence(sentence, word);
   if (!sentence) return null;
   let re;
   try { re = new RegExp(`(\\b${String(word).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\w*\\b)`, "ig"); } catch { return sentence; }
