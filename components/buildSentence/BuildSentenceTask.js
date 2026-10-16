@@ -5,7 +5,7 @@ import { useBuildSentenceSession } from "./useBuildSentenceSession";
 import { formatLongDuration, PRACTICE_MODE, STANDARD_TIME_SECONDS } from "../../lib/practiceMode";
 import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
-import { useBsAiExplain, BsAiExplainBlock } from "./useBsAiExplain";
+import { BsSessionDetail } from "../history/BsSessionDetail";
 import { useIsMobile } from "../../hooks/useIsMobile";
 
 /* ── 触觉反馈 ── */
@@ -367,9 +367,6 @@ export function BuildSentenceTask({
     }
   }
 
-  /* ── 交卷后 AI 解释（Pro / legacy） ── */
-  const { aiExplains, isLegacy, handleAiExplain } = useBsAiExplain();
-
   if (phase === "review") {
     const ok = results.filter((r) => r && r.isCorrect).length;
     const ge = {};
@@ -431,20 +428,13 @@ export function BuildSentenceTask({
               </div>
             </SurfaceCard>
           )}
-          {results.map((r, i) => (
-            <div data-testid={`build-result-${i}`} data-correct={r.isCorrect ? "true" : "false"} key={i} style={{ background: "#fff", border: "1px solid " + (r.isCorrect ? "#c6f6d5" : "#fed7d7"), borderLeft: "4px solid " + (r.isCorrect ? C.green : C.red), borderRadius: 4, padding: 14, marginBottom: 8 }}>
-              <div style={{ fontSize: 12, color: C.t2, marginBottom: 4 }}>第 {i + 1} 题：{r.q.prompt}</div>
-              <div style={{ fontSize: 14, color: r.isCorrect ? C.green : C.red }}>{r.isCorrect ? "答对" : "答错"}</div>
-              <div data-testid={`build-your-sentence-${i}`} style={{ fontSize: 13, color: C.t1, marginTop: 4 }}><b>你的答案：</b>{r.userAnswer}</div>
-              <div data-testid={`build-correct-answer-${i}`} style={{ fontSize: 13, color: C.blue, marginTop: 4 }}><b>正确答案：</b>{r.correctAnswer}</div>
-              {(r.q.grammar_points || []).length > 0 && (
-                <div style={{ fontSize: 12, color: C.t2, marginTop: 6 }}>
-                  <b>语法点：</b>{r.q.grammar_points.map(translateGrammarPoint).join("、")}
-                </div>
-              )}
-              <BsAiExplainBlock explainKey={i} detail={{ ...r.q, userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect }} aiExplains={aiExplains} isLegacy={isLegacy} handleAiExplain={handleAiExplain} includeCorrect />
-            </div>
-          ))}
+          {/* 逐题明细和练习记录里看这次练习是同一个组件 */}
+          <BsSessionDetail
+            details={results.map((r) => ({ prompt: r.q.prompt, userAnswer: r.userAnswer, correctAnswer: r.correctAnswer, isCorrect: r.isCorrect, grammar_points: r.q.grammar_points || [] }))}
+            correct={ok}
+            total={results.length}
+            explainPrefix="result"
+          />
           <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
             <Btn onClick={() => onExit({ completed: true, results })} variant="secondary">{embedded ? "返回" : "返回练习"}</Btn>
           </div>

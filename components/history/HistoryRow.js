@@ -6,6 +6,7 @@ import { ScoringReport } from "../writing/ScoringReport";
 import { useBsAiExplain, BsAiExplainBlock } from "../buildSentence/useBsAiExplain";
 import { buildRetryHref, startRetryFromHistory } from "../../lib/history/retry";
 import { isV1Session } from "../../lib/history/bankVersion";
+import { BsSessionDetail, renderWordDiff } from "./BsSessionDetail";
 
 const MOCK_TASK_IDS = {
   BUILD: "build-sentence",
@@ -81,26 +82,6 @@ function truncate(text, max = 40) {
   if (!s) return "（空）";
   if (s.length <= max) return s;
   return `${s.slice(0, max)}...`;
-}
-
-function renderWordDiff(userText, correctText) {
-  if (!userText) return <span style={{ color: "#9ca3af", fontStyle: "italic" }}>（未作答）</span>;
-  const normalize = (word) => String(word).toLowerCase().replace(/[.,!?;:'"]/g, "");
-  const userWords = String(userText).trim().split(/\s+/);
-  const correctWords = String(correctText || "").trim().split(/\s+/);
-  return (
-    <>
-      {userWords.map((word, index) => {
-        const isWrong = normalize(word) !== normalize(correctWords[index] || "");
-        return (
-          <React.Fragment key={index}>
-            <span style={{ textDecoration: isWrong ? "underline" : "none", textDecorationColor: "#ef4444", textDecorationThickness: 2, color: isWrong ? "#ef4444" : "#111827", fontWeight: isWrong ? 600 : 400 }}>{word}</span>
-            {index < userWords.length - 1 ? " " : ""}
-          </React.Fragment>
-        );
-      })}
-    </>
-  );
 }
 
 function countWords(text) {
@@ -358,8 +339,6 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
   const typeAvg = typeAvgs?.[session.type] ?? null;
   const showTrend = sessionNorm !== null && typeAvg !== null;
   const isAboveAvg = showTrend && sessionNorm > typeAvg;
-  const [expandedBsItems, setExpandedBsItems] = useState({});
-  const bsAi = useBsAiExplain();
   const practiceAttempt = Number(session?.details?.practiceAttempt || 1);
   const retryHref = buildRetryHref(session);
   const isV1 = isV1Session(session);
@@ -419,43 +398,7 @@ export function HistoryRow({ entry, isExpanded, isLast, onToggle, onDelete, type
       ) : null}
 
       {isExpanded && session.type === "bs" && session.details && Array.isArray(session.details) ? (
-        <SurfaceCard style={{ background: "#f9fafb", padding: 12, margin: "5px 0 7px", boxShadow: "none" }}>
-          <div style={{ fontSize: 11, color: C.t2, marginBottom: 8 }}>答对 {session.correct}/{session.total}</div>
-          {session.details.map((detail, index) => {
-            const itemOpen = !!expandedBsItems[index];
-            const statusColor = detail.isCorrect ? C.green : C.red;
-            return (
-              <div key={index} style={{ borderBottom: index < session.details.length - 1 ? "1px solid #e5e7eb" : "none" }}>
-                <button onClick={() => setExpandedBsItems((prev) => ({ ...prev, [index]: !prev[index] }))} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 0", cursor: "pointer", width: "100%", border: "none", background: "transparent", textAlign: "left" }}>
-                  <span style={{ color: statusColor, fontWeight: 700, fontSize: 15, flexShrink: 0, width: 18, textAlign: "center" }}>{detail.isCorrect ? "✓" : "!"}</span>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: C.t1, flexShrink: 0 }}>第 {index + 1} 题</span>
-                  <span style={{ fontSize: 11, color: C.t2, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{detail.prompt}</span>
-                  <ChevronIcon open={itemOpen} size={10} />
-                </button>
-                {itemOpen ? (
-                  <div style={{ paddingLeft: 26, paddingBottom: 10, display: "flex", flexDirection: "column", gap: 7 }}>
-                    <div>
-                      <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>你的答案</div>
-                      <div style={{ fontSize: 13, lineHeight: 1.65 }}>{renderWordDiff(detail.userAnswer, detail.correctAnswer)}</div>
-                    </div>
-                    {!detail.isCorrect ? (
-                      <div>
-                        <div style={{ fontSize: 11, color: C.t2, marginBottom: 4 }}>正确答案</div>
-                        <div style={{ fontSize: 13, color: C.blue, lineHeight: 1.65 }}>{detail.correctAnswer}</div>
-                      </div>
-                    ) : null}
-                    {Array.isArray(detail.grammar_points) && detail.grammar_points.length > 0 ? (
-                      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                        {detail.grammar_points.map((g, gi) => <Chip key={gi}>{translateGrammarPoint(g)}</Chip>)}
-                      </div>
-                    ) : null}
-                    <BsAiExplainBlock explainKey={`hist-${index}`} detail={detail} aiExplains={bsAi.aiExplains} isLegacy={bsAi.isLegacy} handleAiExplain={bsAi.handleAiExplain} includeCorrect />
-                  </div>
-                ) : null}
-              </div>
-            );
-          })}
-        </SurfaceCard>
+        <BsSessionDetail details={session.details} correct={session.correct} total={session.total} />
       ) : null}
 
       {isExpanded && session.type === "mock" && session.details ? <MockExamDetails session={session} /> : null}
