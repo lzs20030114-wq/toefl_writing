@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
-import { getCard, saveWord, setWordFamily, VOCAB_UPDATED_EVENT } from "../../lib/vocab/vocabStore";
+import { useEffect, useRef, useState } from "react";
+import { getCard, getVocabAccountKey, saveWord, saveWordGroup, VOCAB_UPDATED_EVENT } from "../../lib/vocab/vocabStore";
+import { AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { lookupWord } from "../../lib/dict/lookup";
 import { familyHead, formVocabEntry } from "../../lib/notes/wordForms";
 
@@ -9,15 +10,29 @@ import { familyHead, formVocabEntry } from "../../lib/notes/wordForms";
 // 表头「整组收藏」把整张表收进单词本并归成一个词形组（组名 = 问的那个词），复习时同组词连着出现；
 // 单个点收藏的新词也进这组。从别处收藏过、已在别的组的词，只有点「整组收藏」才会被归进来。
 
+function currentCard(word) {
+  return getCard(word, getVocabAccountKey());
+}
+
+function subscribeChanges(on) {
+  window.addEventListener(VOCAB_UPDATED_EVENT, on);
+  window.addEventListener(AUTH_CHANGED_EVENT, on);
+  window.addEventListener("storage", on);
+  return () => {
+    window.removeEventListener(VOCAB_UPDATED_EVENT, on);
+    window.removeEventListener(AUTH_CHANGED_EVENT, on);
+    window.removeEventListener("storage", on);
+  };
+}
+
 function useSavedSet(words) {
   const key = words.join("|");
-  const read = () => new Set(words.filter((w) => getCard(w)).map((w) => w.toLowerCase()));
+  const read = () => new Set(words.filter((w) => currentCard(w)).map((w) => w.toLowerCase()));
   const [saved, setSaved] = useState(read);
   useEffect(() => {
     setSaved(read());
     const on = () => setSaved(read());
-    window.addEventListener(VOCAB_UPDATED_EVENT, on);
-    return () => window.removeEventListener(VOCAB_UPDATED_EVENT, on);
+    return subscribeChanges(on);
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   return [saved, setSaved];
 }
@@ -25,13 +40,12 @@ function useSavedSet(words) {
 /** 这张表里的词是不是都已收藏、且都在 family 这一组。 */
 function useGrouped(words, family) {
   const key = `${family}|${words.join("|")}`;
-  const read = () => !!family && words.every((w) => getCard(w)?.family === family);
+  const read = () => !!family && words.every((w) => currentCard(w)?.family === family);
   const [grouped, setGrouped] = useState(read);
   useEffect(() => {
     setGrouped(read());
     const on = () => setGrouped(read());
-    window.addEventListener(VOCAB_UPDATED_EVENT, on);
-    return () => window.removeEventListener(VOCAB_UPDATED_EVENT, on);
+    return subscribeChanges(on);
   }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   return grouped;
 }
@@ -52,30 +66,72 @@ export function WordFormList({ forms, quote = "", grouping = false }) {
   const grouped = useGrouped(words, family);
   const [busy, setBusy] = useState(null);
   const [failed, setFailed] = useState(null);
+  const operation = useRef(null);
+
+  useEffect(() => {
+    const cancelStale = (event) => {
+      const pending = operation.current;
+      if (!pending) return;
+      // Check the event too: another tab may have switched A → B → A before
+      // this tab receives its queued storage events.
+      const identityChanged = event.type === "storage" &&
+        (!event.storageArea || event.storageArea === localStorage) &&
+        (event.key === null || (event.key === "toefl-user-code" && event.oldValue !== event.newValue));
+      if (identityChanged || pending.account !== getVocabAccountKey()) {
+        operation.current = null;
+        setBusy(null);
+        setFailed(null);
+      }
+    };
+    const unsubscribe = subscribeChanges(cancelStale);
+    return () => { operation.current = null; unsubscribe(); };
+  }, []);
+
+  const begin = (key) => {
+    const pending = { account: getVocabAccountKey() };
+    operation.current = pending;
+    setBusy(key);
+    setFailed(null);
+    return pending;
+  };
+  const isCurrent = pending => operation.current === pending && pending.account === getVocabAccountKey();
+  const finish = pending => {
+    if (operation.current !== pending) return;
+    operation.current = null;
+    setBusy(null);
+  };
 
   const save = async (form) => {
     const key = form.word.toLowerCase();
-    if (saved.has(key) || busy) return;
-    setBusy(key);
-    setFailed(null);
-    const dict = await dictOf(form.word);
-    const card = saveWord(formVocabEntry(form, { dict, family }));
-    setBusy(null);
-    if (card) setSaved((cur) => new Set(cur).add(key));
-    else setFailed(key);
+    if (saved.has(key) || operation.current) return;
+    const pending = begin(key);
+    try {
+      const dict = await dictOf(form.word);
+      if (!isCurrent(pending)) return;
+      const card = saveWord(formVocabEntry(form, { dict, family }), new Date(), pending.account);
+      if (!isCurrent(pending)) return;
+      if (card) setSaved((cur) => new Set(cur).add(key));
+      else setFailed(key);
+    } catch {
+      if (isCurrent(pending)) setFailed(key);
+    } finally { finish(pending); }
   };
 
   const saveGroup = async () => {
-    if (busy || grouped || !family) return;
-    setBusy("__group");
-    setFailed(null);
-    const missing = forms.filter((f) => !getCard(f.word));
-    const dicts = await Promise.all(missing.map((f) => dictOf(f.word)));
-    const ok = missing.every((f, i) => saveWord(formVocabEntry(f, { dict: dicts[i], family })));
-    setWordFamily(words, family);
-    setBusy(null);
-    setSaved(new Set(words.filter((w) => getCard(w)).map((w) => w.toLowerCase())));
-    if (!ok) setFailed("__group");
+    if (operation.current || grouped || !family) return;
+    const pending = begin("__group");
+    try {
+      const missing = forms.filter((f) => !getCard(f.word, pending.account));
+      const dicts = await Promise.all(missing.map((f) => dictOf(f.word)));
+      if (!isCurrent(pending)) return;
+      const entries = missing.map((f, i) => formVocabEntry(f, { dict: dicts[i], family }));
+      const cards = saveWordGroup(entries, words, family, new Date(), pending.account);
+      if (!isCurrent(pending)) return;
+      setSaved(new Set(words.filter((w) => currentCard(w)).map((w) => w.toLowerCase())));
+      if (!cards) setFailed("__group");
+    } catch {
+      if (isCurrent(pending)) setFailed("__group");
+    } finally { finish(pending); }
   };
 
   return (
