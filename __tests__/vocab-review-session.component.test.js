@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { VocabReview } from "../components/vocab/VocabReview";
-import { STATE } from "../lib/vocab/srs";
+import { RATING, STATE } from "../lib/vocab/srs";
 
 jest.mock("../lib/vocab/vocabStore", () => ({
   ...jest.requireActual("../lib/vocab/vocabStore"),
@@ -295,28 +295,28 @@ describe("词形组", () => {
   const fam = (word) => ({ word, display: word, def: `${word} 释义`, state: STATE.REVIEW, productive: false, source: "passage-note", family: "machinery", reviewMode: "reading" });
   const store = jest.requireMock("../lib/vocab/vocabStore");
 
-  test("同组卡标「组 · 序号」，整组过完弹组小结，空格继续", () => {
-    const spy = jest.spyOn(store, "familyMembers").mockReturnValue([fam("machinery"), fam("machine"), { ...fam("machinist") }]);
+  test("连着的同组词合成一张组卡：一起翻面、一次评分记到每个词上，只算答了一张", () => {
+    const spy = jest.spyOn(store, "familyMembers").mockReturnValue([fam("machinery"), fam("machine")]);
     const queue = [fam("machinery"), fam("machine"), mk(9)];
     const onGrade = jest.fn((word) => ({ ...queue.find((c) => c.word === word), due: farFuture() }));
-    render(<VocabReview initialQueue={queue} onGrade={onGrade} onExit={jest.fn()} />);
-    expect(screen.getByTestId("family-tag")).toHaveTextContent("machinery 组 · 1/2");
-    good();
-    expect(screen.getByTestId("family-tag")).toHaveTextContent("machinery 组 · 2/2");
-    expect(screen.queryByTestId("family-recap")).toBeNull();
-    again();
-    const recap = screen.getByTestId("family-recap");
-    const rows = within(recap).getAllByTestId("family-recap-row");
-    expect(rows.map((r) => r.textContent)).toEqual([
-      expect.stringContaining("这次记得"), expect.stringContaining("这次忘了"), expect.stringContaining("今天不用复习"),
-    ]);
-    // 小结时按 1/2 不评分
-    act(() => { fireEvent.keyDown(window, { key: "1" }); });
-    expect(onGrade).toHaveBeenCalledTimes(2);
-    act(() => { fireEvent.keyDown(window, { key: " " }); });
+    const onUndo = jest.fn(() => ({}));
+    render(<VocabReview initialQueue={queue} onGrade={onGrade} onUndo={onUndo} onExit={jest.fn()} />);
+    expect(screen.getByTestId("family-tag")).toHaveTextContent("machinery 组 · 2 个词");
+    expect(screen.getAllByTestId("family-card-row")).toHaveLength(2);
+    expect(screen.queryByText("machine 释义")).toBeNull();
+    expect(screen.getByText(/剩 2/)).toBeInTheDocument();
+    reveal();
+    expect(screen.getByText("machine 释义")).toBeInTheDocument();
+    // 组卡不弹拼写，直接记分
+    fireEvent.click(screen.getByRole("button", { name: /^记得/ }));
+    expect(onGrade.mock.calls.map((c) => [c[0], c[1]])).toEqual([["machinery", RATING.GOOD], ["machine", RATING.GOOD]]);
     expect(screen.queryByTestId("family-recap")).toBeNull();
     expect(screen.getByText("word9")).toBeInTheDocument();
-    expect(screen.queryByTestId("family-tag")).toBeNull();
+    expect(screen.getByText(/已答 1 · 剩 1/)).toBeInTheDocument();
+    // 撤销：倒着把两个词都撤回，回到组卡
+    act(() => { fireEvent.click(screen.getByRole("button", { name: /撤销上一张/ })); });
+    expect(onUndo.mock.calls.map((c) => c[0])).toEqual(["machine", "machinery"]);
+    expect(screen.getByTestId("family-card")).toBeInTheDocument();
     spy.mockRestore();
   });
 

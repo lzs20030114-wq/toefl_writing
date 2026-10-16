@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, familyPosition, needsDictFill, needsSpelling, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, familyPosition, familyRunAt, needsDictFill, queueUnits, needsSpelling, sourceLabel } from "../../lib/vocab/book";
 import { cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
@@ -13,6 +13,7 @@ import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/cli
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { adoptDictEntry, familyMembers, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { FamilyRecap } from "./FamilyRecap";
+import { FamilyCardFace } from "./FamilyCardFace";
 import { reinsertAfterGap } from "../../lib/vocab/reinsert";
 import { SESSION_WINDOW_MS } from "../../lib/vocab/reviewSave";
 import ReviewSummary from "./ReviewSummary";
@@ -275,6 +276,9 @@ export function VocabReview({
 
   const { queue, pos, tally } = sess;
   const card = queue[pos] || null;
+  // 连着的同组词合成一张「组卡」：一起看、一次评分，进度里只算一张（2026-10-16 用户要求「成组的词算一个词」）。
+  const run = useMemo(() => familyRunAt(queue, pos), [queue, pos]);
+  const isGroup = run.length >= 2;
   const extraEntry = extra && card && extra.forWord === card.word ? extra.entry : null;
   const definitionSentence = card?.reviewMode === "listening" ? card.listeningContext?.text || "" : activeSentence(card) || "";
   const contextDef = definitionForContext(card, definitionSentence);
@@ -289,7 +293,8 @@ export function VocabReview({
   const canGenerateDefinition = (tier === "pro" || tier === "legacy") && !!shownSentence?.trim();
   const mode = useMemo(() => (card ? cardDirection(card) : "recognize"), [card]);
   // 这一次选「记得」后要不要拼：按卡进队列时的状态定，本场改「要会写」开关下次才生效。
-  const spellingOn = useMemo(() => (card ? needsSpelling(card) : false), [card]);
+  // 组卡不弹拼写：一次要写好几个词形，拼写留给它们单独出现的时候。
+  const spellingOn = useMemo(() => (card && !isGroup ? needsSpelling(card) : false), [card, isGroup]);
   // 拼写格子按词条摆；卡面写法只差大小写时（Renaissance）用卡面写法显示答案
   const answerWord = card ? (lettersOf(card.display) === lettersOf(card.word) ? card.display : card.word) : "";
   // 「填在原句的空里」只在挖得出空的时候成立，否则退回独立一行
@@ -302,7 +307,7 @@ export function VocabReview({
   const productiveChangedForThisCard = card && productiveOn !== (card.productive !== false);
 
   const finished = pos >= queue.length;
-  const remaining = Math.max(0, queue.length - pos);
+  const remaining = queueUnits(queue, pos);
   const timesSeen = card ? sess.seen[card.word] || 0 : 0;
   const canUndo = !!onUndo && history.length > 0 && !sess.checkpoint;
 
@@ -419,9 +424,77 @@ export function VocabReview({
     };
   }, [accountKey, fillWord]);
 
+  // 组卡：同一个评分记到组里每个词上（各自的进度照常各自调度），整组只算答了一张。
+  const gradeGroup = useCallback(
+    (groupRun, rating) => {
+      const good = rating !== RATING.AGAIN;
+      const ms = Date.now() - shownAtRef.current;
+      let nextQueue = sess.queue;
+      let first = sess.first;
+      let lost = sess.lost;
+      const seen = { ...sess.seen };
+      const segment = [...sess.segment];
+      let graded = 0;
+      for (const c of groupRun) {
+        const updated = onGrade(c.word, rating, ms);
+        if (!updated) break;
+        infoRef.current.set(c.word, c);
+        const times = (seen[c.word] || 0) + 1;
+        seen[c.word] = times;
+        nextQueue = reinsertAfterGap(nextQueue, sess.pos + graded, updated, times, {
+          gap: REINSERT_GAP, maxAppearances: MAX_APPEARANCES, windowMs: SESSION_WINDOW_MS,
+        });
+        if (!(c.word in first)) first = { ...first, [c.word]: good };
+        if (!good && !lost.includes(c.word)) lost = [...lost, c.word];
+        segment.push({ word: c.word, good, n: times });
+        graded += 1;
+      }
+      if (!graded) return;
+      const nextPos = sess.pos + graded;
+      const done = nextPos >= nextQueue.length;
+      const hit = !done && segment.length >= SEGMENT_SIZE;
+      const family = groupRun[0].family;
+      const next = {
+        ...sess,
+        queue: nextQueue,
+        pos: nextPos,
+        answered: sess.answered + 1,
+        tally: { again: sess.tally.again + (good ? 0 : 1), good: sess.tally.good + (good ? 1 : 0) },
+        first,
+        seen,
+        lost,
+        segment,
+        segNo: hit ? sess.segNo + 1 : sess.segNo,
+        checkpoint: hit,
+        // 组卡背面已经是整组一览，不再弹组小结
+        recap: null,
+        recapped: sess.recapped.includes(family) ? sess.recapped : [...sess.recapped, family],
+        endedAt: done ? Date.now() : null,
+      };
+      setHistory(hit || done ? [] : [...history, sess]);
+      setSess(next);
+      resetFace(false);
+      if (hit) {
+        setSegDurMs(Date.now() - segStartRef.current);
+        onCheckpoint?.({
+          words: nextQueue.slice(nextPos).map((c) => c.word),
+          answered: next.answered, tally: next.tally, first: next.first, seen: next.seen, lost: next.lost,
+          segNo: next.segNo, elapsedMs: Date.now() - startedAtRef.current, startStats,
+        });
+      }
+      if (done) onFinish?.();
+    },
+    [history, onCheckpoint, onFinish, onGrade, resetFace, sess, startStats],
+  );
+
   const grade = useCallback(
     (rating) => {
       if (!card || sess.checkpoint || sess.recap || getVocabAccountKey() !== accountKey) return;
+      const groupRun = familyRunAt(sess.queue, sess.pos);
+      if (groupRun.length >= 2) {
+        gradeGroup(groupRun, rating);
+        return;
+      }
       const updated = onGrade(card.word, rating, Date.now() - shownAtRef.current);
       if (!updated) return;
       const good = rating !== RATING.AGAIN;
@@ -470,7 +543,7 @@ export function VocabReview({
       }
       if (done) onFinish?.();
     },
-    [accountKey, card, history, onCheckpoint, onFinish, onGrade, resetFace, sess, startStats],
+    [accountKey, card, gradeGroup, history, onCheckpoint, onFinish, onGrade, resetFace, sess, startStats],
   );
 
   const closeRecap = useCallback(() => {
@@ -488,7 +561,11 @@ export function VocabReview({
     if (!canUndo || getVocabAccountKey() !== accountKey) return;
     const prev = history[history.length - 1];
     const prevCard = prev.queue[prev.pos];
-    if (!prevCard || !onUndo(prevCard.word)) return;
+    if (!prevCard) return;
+    // 组卡一次评了好几个词：倒着逐个撤回
+    const prevRun = familyRunAt(prev.queue, prev.pos);
+    const words = (prevRun.length >= 2 ? prevRun.map((c) => c.word) : [prevCard.word]).reverse();
+    if (!words.every((w) => onUndo(w))) return;
     setHistory(history.slice(0, -1));
     setSess(prev);
     // 摆回「已翻面、还没选」：直接重新选；要拼写的话选「记得」后从空输入框重新拼，不带旧结果
@@ -729,6 +806,18 @@ export function VocabReview({
           cursor: !spellStage && !revealed ? "pointer" : "default",
         }}
       >
+        {isGroup ? (
+          <FamilyCardFace
+            family={card.family}
+            revealed={revealed}
+            sentence={(() => {
+              const head = run.find((c) => c.word === card.family) || run[0];
+              const text = cleanContextSentence(activeSentence(head) || head.sentence || "", head.word);
+              return text ? highlight(text, head.word) : null;
+            })()}
+            rows={run.map((c) => ({ word: c.word, display: c.display || c.word, sense: senseOf(c, activeSentence(c)) }))}
+          />
+        ) : (<>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, flexWrap: "wrap" }}>
           <span style={{
             fontSize: 11, fontWeight: 700, color: ACCENT, background: ACCENT_SOFT,
@@ -990,6 +1079,7 @@ export function VocabReview({
             </div>
           )}
         </div>
+        </>)}
       </div>
 
       {/* 操作区 —— 两个键，不显示下次间隔 */}

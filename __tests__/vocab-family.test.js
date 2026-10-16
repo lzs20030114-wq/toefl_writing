@@ -161,3 +161,31 @@ test("旧收藏补组：按笔记里的词形表补，只补从没进过组的�
   const grouped = cards.map((c) => (["machinery", "machining"].includes(c.word) ? { ...c, family: "machinery", familyUpdatedAt: iso(now) } : c));
   expect(familyBackfillPlan(notes, grouped)).toEqual([]);
 });
+
+test("额度里一组只算一个词：新词额度、复习额度都按组计", () => {
+  const { familyRunAt, queueUnits, introducedToday } = require("../lib/vocab/book");
+  // 新词额度 2：alpha 一个 + machinery 组（3 个词）一个，omega 进不来
+  const cards = [
+    fresh("alpha", { createdAt: iso(now.getTime() - 3 * day) }),
+    fresh("machinery", { family: "machinery" }), fresh("machine", { family: "machinery" }), fresh("machinist", { family: "machinery" }),
+    fresh("beta"),
+  ];
+  const q = words(buildQueue(cards, now, { newPerDay: 2, maxReviews: 0 }, Math.random, "reading"));
+  expect(q).not.toContain("beta");
+  const withBeta = words(buildQueue(cards, now, { newPerDay: 3, maxReviews: 0 }, Math.random, "reading"));
+  expect(withBeta).toContain("beta");
+  // 今天已放出的按组算
+  const intro = cards.map((c) => (c.word.startsWith("mach") ? { ...c, introducedAt: iso(now) } : c));
+  expect(introducedToday(intro, now)).toBe(1);
+  // 复习额度 2：组里三个到期词 + 一个单词，全进得来
+  const due = [
+    review("m1", -day, { family: "machinery" }), review("m2", -day, { family: "machinery" }), review("m3", -day, { family: "machinery" }),
+    review("solo", -day), review("late", -day + 1),
+  ];
+  const dq = buildQueue(due, now, { newPerDay: 0, maxReviews: 2 }, Math.random, "reading");
+  expect(words(dq).filter((w) => w.startsWith("m"))).toHaveLength(3);
+  expect(dq).toHaveLength(4);
+  // 队列里连着的同组卡算一张
+  expect(familyRunAt(dq, dq.findIndex((c) => c.family)).length).toBe(3);
+  expect(queueUnits(dq)).toBe(2);
+});
