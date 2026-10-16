@@ -106,6 +106,21 @@ describe("今日新增按首次收藏的设备本地日期查看", () => {
     expect(wordsShown()).toEqual(["heard"]);
   });
 
+  test("新增记录按天列出新增词数，点某天只看那天收藏的词", () => {
+    render(<VocabNotebook embedded />);
+    fireEvent.click(screen.getByRole("button", { name: /^新增记录/ }));
+    const panel = screen.getByTestId("added-history");
+    expect(panel).toHaveTextContent("近 30 天共新增 4 词，有 2 天在加词");
+    const rows = within(panel).getAllByRole("button", { name: /^查看/ });
+    expect(rows.map((b) => b.getAttribute("aria-label"))).toEqual(["查看今天新增的 3 个词", "查看昨天新增的 1 个词"]);
+    expect(rows[0]).toHaveTextContent("阅读 2 · 听力 1");
+    fireEvent.click(rows[1]);
+    expect(wordsShown()).toEqual(["yesterday"]);
+    expect(screen.getByText(/只看昨天新增的 1 个词/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "× 看全部" }));
+    expect(wordsShown()).toHaveLength(5);
+  });
+
   test("页面跨午夜后定时刷新今日新增数量和当前筛选，不改词库", () => {
     render(<VocabNotebook embedded />);
     fireEvent.click(screen.getByRole("button", { name: "查看今日新增" }));
