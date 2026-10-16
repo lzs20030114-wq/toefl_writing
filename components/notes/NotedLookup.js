@@ -4,6 +4,8 @@ import { WordLookupLayer } from "../reading/WordLookupLayer";
 import { usePassageNotes } from "./usePassageNotes";
 import { NoteCard, SELECTION_CSS } from "./NotedPassage";
 import { findSentenceRange } from "../../lib/notes/passageFlash";
+import { setHighlightRanges, clearHighlightRanges } from "../../lib/notes/highlightRegistry";
+import { useVocabMarks } from "./useVocabMarks";
 
 // 划词词典 + 划词问 AI，给「内容不是一整篇纯文字」的地方用（挖空的填词原文、听力逐句原文、题干和选项…）：
 // 用法和 WordLookupLayer 一样，children 原样渲染；Pro 用户选中几个词 / 一句就能问 AI，
@@ -13,33 +15,19 @@ import { findSentenceRange } from "../../lib/notes/passageFlash";
 export const SAVED_HIGHLIGHT = "note-saved";
 const SAVED_CSS = `::highlight(${SAVED_HIGHLIGHT}) { background-color: rgba(254, 243, 199, 0.9); text-decoration: underline 2px #F59E0B; text-underline-offset: 3px; }`;
 
-// CSS 高亮按名字全局只有一份：页面上每块各自报自己的 ranges，合起来一起画。
-const savedRanges = new Map();
-function paintSaved() {
-  try {
-    if (typeof CSS === "undefined" || !CSS.highlights || typeof Highlight === "undefined") return;
-    const all = [...savedRanges.values()].flat();
-    if (all.length) CSS.highlights.set(SAVED_HIGHLIGHT, new Highlight(...all));
-    else CSS.highlights.delete(SAVED_HIGHLIGHT);
-  } catch { /* 不支持就不画 */ }
-}
-
 export function NotedLookup({ passage, source = "reading", children, style, onPlaySentence, listeningAudio }) {
   const notes = usePassageNotes(passage, { source });
   const id = useId();
   const bodyRef = useRef(null);
   const cardsRef = useRef(null);
   const placed = notes.placed;
+  useVocabMarks(bodyRef, passage);
   const quotes = placed.map((p) => p.note.quote).join("\u0001");
 
   useEffect(() => {
     const root = bodyRef.current;
-    savedRanges.set(id, root ? placed.map((p) => findSentenceRange(root, p.note.quote)).filter(Boolean) : []);
-    paintSaved();
-    return () => {
-      savedRanges.delete(id);
-      paintSaved();
-    };
+    setHighlightRanges(SAVED_HIGHLIGHT, id, root ? placed.map((p) => findSentenceRange(root, p.note.quote)).filter(Boolean) : []);
+    return () => clearHighlightRanges(SAVED_HIGHLIGHT, id);
   }, [id, quotes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 新问的那一处：笔记卡排在最后，外面是限高滚动框时要滚到看得见。

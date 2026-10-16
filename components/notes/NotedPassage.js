@@ -10,6 +10,7 @@ import { splitCollocations } from "../../lib/notes/collocations";
 import { answerBlocks } from "../../lib/qa/answerLayout";
 import { AnswerBlocks } from "../shared/AnswerBlocks";
 import { WordFormList } from "./WordFormList";
+import { useVocabMarks, VOCAB_MARK_CSS } from "./useVocabMarks";
 import { PASSAGE_FLASH_EVENT, FLASH_HIGHLIGHT, FLASH_MS, findSentenceRange } from "../../lib/notes/passageFlash";
 
 // 带原文批注的文章：划词词典 + 选中提问，问过的地方留高亮和序号，点一下展开笔记卡（默认收起）。
@@ -25,6 +26,7 @@ export const SELECTION_CSS = `
 [data-noted-passage] [data-note-card] ::selection { background: Highlight; color: HighlightText; }
 ::highlight(cite-flash) { background-color: rgba(129, 140, 248, 0.32); text-decoration: underline 2px #6366F1; text-underline-offset: 3px; }
 ::highlight(note-pending) { background-color: rgba(251, 191, 36, 0.45); text-decoration: underline 2px #F59E0B; text-underline-offset: 3px; }
+${VOCAB_MARK_CSS}
 `;
 
 function hasSelection() {
@@ -223,6 +225,8 @@ export function NotedPassage({ passage, style, source = "reading", paragraphWrap
 
   // 讲解 / 追问里点出处：这篇原文里有那句就高亮几秒并滚到眼前（见 lib/notes/passageFlash）。
   const rootRef = useRef(null);
+  // 在这篇里查词典收藏过的词：青色下划线（问过 AI 的是琥珀色）。
+  useVocabMarks(rootRef, passage);
   useEffect(() => {
     let timer = null;
     const clear = () => {

@@ -131,7 +131,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
     <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "flex-start" }}>
       {hasCtx ? (
         <div data-testid="mcq-context" style={{ flex: "1 1 380px", minWidth: 0, position: ctxPos, top: 112, background: "#fafbfa", border: "1px solid #ebf0ed", borderRadius: 12, overflow: "hidden" }}>
-          <ContextHeader title={isPassage ? "原文" : "原文精听"} hint={isPassage ? "点任意词查释义" : "点编号逐句点播 · 点词查释义"} open={ctxOpen} onToggle={() => setCtxOpen(!ctxOpen)} />
+          <ContextHeader title={isPassage ? "原文" : "原文精听"} hint={isPassage ? "点任意词查释义 · 青色下划线是收藏过的词" : "点编号逐句点播 · 点词查释义"} open={ctxOpen} onToggle={() => setCtxOpen(!ctxOpen)} />
           {!isPassage && (audioUrl || audioText) ? (
             <div data-no-dict style={{ padding: "10px 14px 0", display: "flex" }}>
               <AudioPlayer ref={sp.playerRef} compact playbackRateControl src={audioUrl} text={audioText} isPractice onTime={sp.onTime} />

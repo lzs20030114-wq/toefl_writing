@@ -37,7 +37,7 @@ test("AP submits mixed answers into the real history review with passage lookup 
   expect(screen.getByText("逐题回顾")).toBeTruthy();
   expect(container.querySelector(".tp-reading-split")).toBeNull();
   const passage = screen.getByTestId("mcq-context");
-  expect(within(passage).getByText("点任意词查释义")).toBeTruthy();
+  expect(within(passage).getByText("点任意词查释义 · 青色下划线是收藏过的词")).toBeTruthy();
   const paragraph = passage.querySelector("p");
   document.caretRangeFromPoint = () => {
     const range = document.createRange();
