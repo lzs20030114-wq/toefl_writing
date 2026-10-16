@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { QuestionQaPanel, AskQuestionButton } from "../reading/QuestionQaPanel";
 
 // Pro-only AI explainer for Reading / Listening MCQ mistakes, mirroring the
 // Build-a-Sentence useBsAiExplain pattern. Responses are cached in
@@ -90,8 +91,10 @@ export function useMcqAiExplain(section = "reading") {
   return { aiExplains, isPro, handleAiExplain };
 }
 
-export function McqAiExplainBlock({ explainKey, mistake, context, aiExplains, isPro, handleAiExplain, section }) {
+/** qaDetail：答疑窗口要的那道题（components/mistakes/MistakeCardView qaDetailForCard）；给了就在讲解下面接「继续追问」。 */
+export function McqAiExplainBlock({ explainKey, mistake, context, aiExplains, isPro, handleAiExplain, section, qaDetail = null }) {
   const ex = aiExplains[explainKey];
+  const [askOpen, setAskOpen] = useState(false);
 
   useEffect(() => {
     if (!isPro) return;
@@ -114,11 +117,19 @@ export function McqAiExplainBlock({ explainKey, mistake, context, aiExplains, is
     );
   }
 
+  const canAsk = !!qaDetail && String(qaDetail.passage || "").trim() !== "";
+  const qaPanel = canAsk && (ex?.text || askOpen)
+    ? <QuestionQaPanel key={explainKey} detail={qaDetail} firstExplain={ex?.text || ""} defaultExpanded={askOpen} />
+    : null;
+
   if (ex?.text) {
     return (
+      <>
       <div style={{ marginTop: 8, padding: "10px 12px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 6, fontSize: 13, color: "#1a2420", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
         {ex.text}
       </div>
+      {qaPanel}
+      </>
     );
   }
 
@@ -131,7 +142,9 @@ export function McqAiExplainBlock({ explainKey, mistake, context, aiExplains, is
       >
         {ex?.loading ? "分析中..." : "AI 解释"}
       </button>
+      {canAsk && !askOpen ? <AskQuestionButton label={qaDetail.qaKind === "ctw" ? "问这个空" : "问这道题"} onClick={() => setAskOpen(true)} /> : null}
       {ex?.error && <span style={{ fontSize: 12, color: "#E11D48", marginLeft: 8 }}>{ex.error}</span>}
+      {qaPanel}
     </div>
   );
 }

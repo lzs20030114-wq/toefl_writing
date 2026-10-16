@@ -7,7 +7,8 @@
  *      LCRTask 交卷后的结果页；答对和答错均可解释，Pro 专属，点了才计费；
  *   ② 应答题（lcr）必须走语用那支：整道题只有说话人一句话，没有「原文定位」可讲，
  *      system prompt 与 message 都不能用讲座那套话术；
- *   ③ 讲座 / 对话题走定位那支，原文要真的喂进去（对话没存 transcript 时按 turns 拼）；
+ *   ③ 讲座 / 对话题走定位那支，原文要真的喂进去，并和追问同一份证据包按句编号
+ *      （对话按轮编号、标说话人，没存 transcript 时也照样有）；
  *   ④ 讲座原文不许被截断：LAT 原文 1080–1893 字符，错题本那侧 1500 的上限会砍掉大半；
  *   ⑤ 未作答时写「未作答」，不假装学生选了什么。
  */
@@ -180,10 +181,13 @@ describe("LADetail（通知 / 讲座练习历史）", () => {
     const [system, message] = callAI.mock.calls[0];
     expect(system).toContain("听力");
     expect(system).toContain("定位");
-    expect(message).toContain(TRANSCRIPT);
+    // 原文按句编号（和逐句点播同一个切句函数），引原话要标 [S编号]
+    expect(message).toContain("[S1] Today we'll look at how coral reefs record climate.");
+    expect(message).toContain("[S2] The skeleton grows in annual bands, and the thickness of each band tracks the water temperature of that year.");
+    expect(system).toContain("[S编号]");
     expect(message).toContain(LA_QUESTION.stem);
-    expect(message).toContain("学生选择：A. The age of the colony");
-    expect(message).toContain("正确答案：B. The water temperature that year");
+    expect(message).toContain("学生作答：A. The age of the colony");
+    expect(message).toContain("标准答案：B. The water temperature that year");
   });
 
   test("历史答对题有按钮，点击后讲证据且不虚构错因", async () => {
@@ -200,7 +204,7 @@ describe("LADetail（通知 / 讲座练习历史）", () => {
     render(<LADetail session={session({ results: [{ selected: null, correct: "B", isCorrect: false }] })} />);
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：未作答");
+    expect(callAI.mock.calls[0][1]).toContain("学生作答：未作答");
   });
 
   test("老记录没存题面（stem 与 options 都空）时不放按钮 —— 讲不了就不放", () => {
@@ -240,9 +244,9 @@ describe("LCDetail（对话练习历史）", () => {
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     const message = callAI.mock.calls[0][1];
-    expect(message).toContain("Student: Do you know when the library closes tonight?");
-    expect(message).toContain("Clerk: It closes at ten, but the study rooms stay open until midnight.");
-    expect(message).toContain("学生选择：A. They close at ten");
+    expect(message).toContain("[S1] （Student）Do you know when the library closes tonight?");
+    expect(message).toContain("[S2] （Clerk）It closes at ten, but the study rooms stay open until midnight.");
+    expect(message).toContain("学生作答：A. They close at ten");
   });
 });
 
@@ -295,8 +299,8 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     const message = callAI.mock.calls[0][1];
-    expect(message).toContain(TRANSCRIPT);
-    expect(message).toContain("学生选择：A. The age of the colony");
+    expect(message).toContain("[S1] Today we'll look at how coral reefs record climate.");
+    expect(message).toContain("学生作答：A. The age of the colony");
   });
 
   test("交卷后答对题也有 AI 按钮，点击时使用正确题提示词", async () => {
@@ -306,7 +310,7 @@ describe("ListeningMCQTask 交卷后的结果页", () => {
     fireEvent.click(aiButtons()[0]);
     await waitFor(() => expect(callAI).toHaveBeenCalledTimes(1));
     expect(callAI.mock.calls[0][0]).toContain("学生答对了");
-    expect(callAI.mock.calls[0][1]).toContain("学生选择：B. The water temperature that year");
+    expect(callAI.mock.calls[0][1]).toContain("学生作答：B. The water temperature that year");
   });
 });
 

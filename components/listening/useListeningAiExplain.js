@@ -1,8 +1,11 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { AiExplainView } from "../shared/AiExplainView";
+import { LISTENING_EXPLAIN_SYSTEM, LISTENING_EXPLAIN_SYSTEM_CORRECT, buildEvidence, plainText } from "../../lib/qa/questionQa";
+import { listeningQaDetail } from "../../lib/qa/qaKinds";
+import { QuestionQaPanel, CitedText, AskQuestionButton } from "../reading/QuestionQaPanel";
 
 // 听力题的 AI 讲解。与 useReadingAiExplain / useCtwAiExplain / useBsAiExplain 同一骨架：
 // Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——而听力内部还要再分两支：
@@ -26,26 +29,15 @@ const SYSTEM_LCR =
   // 面板是 whiteSpace: pre-wrap 的纯文本渲染，markdown 星号会原样显示成 **word**。
   "直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 
-const SYSTEM_MCQ =
-  "你是一位 TOEFL 听力辅导老师。学生做错了一道听力选择题，请用中文简短讲解（3-5 句）：" +
-  "1）定位——原文哪一句给出了正确答案，把那句话的意思说清楚；" +
-  "2）学生选的选项错在哪——指出听力特有的陷阱类型（原词复现但意思相反、同音近音词混淆、" +
-  "漏听否定、把时间或步骤的先后顺序颠倒、张冠李戴说错人、过度推断等），并说明原文其实怎么说。" +
-  "如果学生未作答，就只讲第 1 点，并说明该听哪个信号词定位到答案句（同样 3-5 句，不要只写一句）。" +
-  "不要重复题干和选项原文，不要空话。" +
-  "直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 const SYSTEM_LCR_CORRECT =
   "你是一位 TOEFL 听力应答题辅导老师。学生选对了回应，请用中文简短讲解（3-5 句）：说明说话人的语用意图、正确回应为什么接得上，以及听到哪些线索可判断。不要虚构学生的错误，不要重复选项原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
-const SYSTEM_MCQ_CORRECT =
-  "你是一位 TOEFL 听力辅导老师。学生答对了这道选择题，请用中文简短讲解（3-5 句）：指出听力原文中支持答案的具体信息、题干关键词和定位信号，并说明正确选项如何对应原文。不要虚构学生的错误，不要重复题干和选项原文。直接输出纯文本，不要使用 markdown 的 ** 加粗、# 标题或列表符号。";
 
+// 应答题的讲解没变，仍用 v1 桶；选择题 2026-10 改成和阅读一样按句编号、先引原话再标 [S编号]
+//（lib/qa/questionQa LISTENING_EXPLAIN_SYSTEM），换 v2 桶——旧讲解没有出处，核对器无从核对。
 const CACHE_KEY = "listening-ai-explain-cache-v1";
+const MCQ_CACHE_KEY = "listening-ai-explain-cache-v2";
 const MAX_CACHE = 200;
 
-// 原文全给。LAT 讲座原文 1080–1893 字符（生成库 91/149、真题 42/74 超过 1500），
-// 错题本那侧 1500 的上限会砍掉大半讲座的后半段，而答案句经常就在后半段——
-// 模型看不到答案句时讲解必然是编的。4000 是防脏数据的兜底，不是正常路径会碰到的线。
-const MAX_CONTEXT_CHARS = 4000;
 
 /** 应答题（lcr）走语用那支，其余选择题走定位那支。 */
 export function isRespondKind(subtype) {
@@ -64,9 +56,11 @@ function cacheKey(detail) {
   return `${qid}|${stemSig}|||${detail?.selected || ""}|||${detail?.correct || ""}`;
 }
 
-function loadCache() {
+const bucketOf = (detail) => (isRespondKind(detail?.subtype) ? CACHE_KEY : MCQ_CACHE_KEY);
+
+function loadCache(bucket) {
   try {
-    return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}");
+    return JSON.parse(localStorage.getItem(bucket) || "{}");
   } catch {
     return {};
   }
@@ -74,19 +68,20 @@ function loadCache() {
 
 function saveToCache(detail, text) {
   try {
-    const cache = loadCache();
+    const bucket = bucketOf(detail);
+    const cache = loadCache(bucket);
     cache[cacheKey(detail)] = text;
     const keys = Object.keys(cache);
     if (keys.length > MAX_CACHE) {
       keys.slice(0, keys.length - MAX_CACHE).forEach((k) => delete cache[k]);
     }
-    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    localStorage.setItem(bucket, JSON.stringify(cache));
   } catch {}
 }
 
 function getFromCache(detail) {
   try {
-    return loadCache()[cacheKey(detail)] || null;
+    return loadCache(bucketOf(detail))[cacheKey(detail)] || null;
   } catch {
     return null;
   }
@@ -122,14 +117,6 @@ export function buildListeningExplainMessage(detail) {
     const v = key && options ? options[key] : "";
     return v ? `${key}. ${v}` : key || "";
   };
-  const optionsBlock = () => {
-    if (!options) return;
-    lines.push(
-      `选项：\n${Object.entries(options)
-        .map(([k, v]) => `  ${k}. ${v}`)
-        .join("\n")}`
-    );
-  };
 
   if (isRespondKind(detail?.subtype)) {
     if (detail?.situation) lines.push(`场景：${detail.situation}`);
@@ -148,17 +135,9 @@ export function buildListeningExplainMessage(detail) {
     return lines.join("\n");
   }
 
-  const context = String(detail?.contextText || "");
-  if (context) {
-    lines.push(
-      `听力原文：\n${context.slice(0, MAX_CONTEXT_CHARS)}${context.length > MAX_CONTEXT_CHARS ? "..." : ""}\n`
-    );
-  }
-  lines.push(`题目：${detail?.stem || ""}`);
-  optionsBlock();
-  lines.push(`学生选择：${answered ? optText(detail.selected) : "未作答"}`);
-  lines.push(`正确答案：${optText(detail?.correct)}`);
-  return lines.join("\n");
+  // 选择题（对话 / 通知 / 讲座）：和追问同一份证据包（lib/qa/questionQa buildEvidence），原文按句编号，
+  // 对话题给了 conversation 就按轮编号并标说话人。原文全给（讲座的答案句经常在后半段），4000 字是防脏数据的兜底。
+  return buildEvidence(listeningQaDetail(detail)).text;
 }
 
 export function useListeningAiExplain() {
@@ -174,10 +153,16 @@ export function useListeningAiExplain() {
     }
     setAiExplains((prev) => ({ ...prev, [key]: { loading: true, text: null, error: null } }));
     try {
-      const system = isRespondKind(detail?.subtype)
-        ? (detail.isCorrect ? SYSTEM_LCR_CORRECT : SYSTEM_LCR)
-        : (detail.isCorrect ? SYSTEM_MCQ_CORRECT : SYSTEM_MCQ);
-      const text = await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      let text;
+      if (isRespondKind(detail?.subtype)) {
+        text = await callAI(detail.isCorrect ? SYSTEM_LCR_CORRECT : SYSTEM_LCR, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      } else {
+        // 选择题：和追问同一份证据包（原文按句编号，对话标说话人）。预算 ×3 同阅读讲解：先引原话再标句号，
+        // v4-flash 的推理 token 又计入 max_tokens。只是上限，用不到不计费。
+        const system = detail.isCorrect ? LISTENING_EXPLAIN_SYSTEM_CORRECT : LISTENING_EXPLAIN_SYSTEM;
+        text = plainText(await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS * 3, 60000, 0.3));
+      }
+      if (!text) throw new Error("Empty AI response");
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {
@@ -188,9 +173,13 @@ export function useListeningAiExplain() {
   return { aiExplains, isPro, handleAiExplain };
 }
 
-/** Inline UI：按钮 + 结果。有缓存则自动回填（不发请求），否则等用户点（点了才计费）。 */
+/** Inline UI：按钮 + 结果。有缓存则自动回填（不发请求），否则等用户点（点了才计费）。
+ *  讲解出来之后（或点了「问这道题」）下面接「继续追问」（components/reading/QuestionQaPanel，听力题型见 lib/qa/qaKinds）；
+ *  选择题的讲解按出处核对显示，点「第 3 句」就播放并高亮那句。对话题在 detail 里带上 conversation 才能标说话人。 */
 export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
+  const [askOpen, setAskOpen] = useState(false);
+  const qaDetail = useMemo(() => listeningQaDetail(detail), [detail]);
 
   useEffect(() => {
     if (!isPro || (detail?.isCorrect && !includeCorrect)) return;
@@ -201,13 +190,29 @@ export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro,
 
   if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
 
+  const cited = !isRespondKind(detail?.subtype);
+  const body = ex?.text ? (cited ? <CitedText text={ex.text} detail={qaDetail} variant={variant} /> : ex.text) : null;
+  // key 带上 explainKey：同一位置换了题时面板状态跟着重置。没有原文的老记录追问不了（面板自己不渲染），不放按钮。
+  const qaPanel = ex?.text || askOpen
+    ? <QuestionQaPanel key={explainKey} detail={qaDetail} firstExplain={ex?.text || ""} variant={variant} defaultExpanded={askOpen} />
+    : null;
+  const askBtn = !ex?.text && !askOpen && String(qaDetail.passage || "").trim()
+    ? <AskQuestionButton review={variant === "review"} onClick={() => setAskOpen(true)} />
+    : null;
+
   // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
   if (variant === "review") {
-    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="listening-ai-explain" />;
+    return (
+      <>
+        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="listening-ai-explain" extra={askBtn} body={body} />
+        {qaPanel}
+      </>
+    );
   }
 
   if (ex?.text) {
     return (
+      <>
       <div
         data-testid="listening-ai-explain"
         style={{
@@ -224,8 +229,10 @@ export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro,
         }}
       >
         <span style={{ fontWeight: 700, marginRight: 4 }}>🤖 AI:</span>
-        {ex.text}
+        {body}
       </div>
+      {qaPanel}
+      </>
     );
   }
   return (
@@ -247,9 +254,11 @@ export function ListeningAiExplainBlock({ explainKey, detail, aiExplains, isPro,
       >
         {ex?.loading ? "分析中..." : "🤖 AI 深入解析"}
       </button>
+      {askBtn}
       {ex?.error && (
         <span style={{ fontSize: 12, color: "#E11D48", marginLeft: 8 }}>{ex.error}</span>
       )}
+      {qaPanel}
     </div>
   );
 }

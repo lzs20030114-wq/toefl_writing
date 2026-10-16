@@ -1,8 +1,10 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { AiExplainView } from "../shared/AiExplainView";
+import { ctwQaDetail } from "../../lib/qa/qaKinds";
+import { QuestionQaPanel, AskQuestionButton } from "./QuestionQaPanel";
 
 // CTW（阅读填词 / C-test）专用的 AI 讲解。与 useReadingAiExplain / useMcqAiExplain
 // 同一骨架（Pro 门 + localStorage 缓存 + 点了才计费），差别只在 prompt：
@@ -152,9 +154,12 @@ export function useCtwAiExplain() {
   return { aiExplains, isPro, handleAiExplain };
 }
 
-/** 展开面板里的 AI 讲解块：有缓存则自动填充，否则等用户点按钮（点了才计费）。 */
+/** 展开面板里的 AI 讲解块：有缓存则自动填充，否则等用户点按钮（点了才计费）。
+ *  讲解出来之后（或点了「问这个空」）下面接「继续追问」（components/reading/QuestionQaPanel，填词题型见 lib/qa/qaKinds）。 */
 export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handleAiExplain, includeCorrect = false, variant }) {
   const ex = aiExplains[explainKey];
+  const [askOpen, setAskOpen] = useState(false);
+  const qaDetail = useMemo(() => ctwQaDetail(detail), [detail]);
 
   // 缓存命中才自动调（走的是 getFromCache 分支，不发请求）；未命中不自动打 API。
   useEffect(() => {
@@ -166,13 +171,26 @@ export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handl
 
   if (!isPro || (detail?.isCorrect && !includeCorrect)) return null;
 
+  const qaPanel = ex?.text || askOpen
+    ? <QuestionQaPanel key={explainKey} detail={qaDetail} firstExplain={ex?.text || ""} variant={variant} defaultExpanded={askOpen} />
+    : null;
+  const askBtn = !ex?.text && !askOpen && qaDetail.passage.trim()
+    ? <AskQuestionButton review={variant === "review"} label="问这个空" onClick={() => setAskOpen(true)} />
+    : null;
+
   // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在上面的 hook 里）。
   if (variant === "review") {
-    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="ctw-ai-explain" />;
+    return (
+      <>
+        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} testId="ctw-ai-explain" extra={askBtn} />
+        {qaPanel}
+      </>
+    );
   }
 
   if (ex?.text) {
     return (
+      <>
       <div
         style={{
           marginTop: 8,
@@ -190,6 +208,8 @@ export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handl
         <span style={{ fontWeight: 700, marginRight: 4 }}>🤖 AI:</span>
         {ex.text}
       </div>
+      {qaPanel}
+      </>
     );
   }
   return (
@@ -211,9 +231,11 @@ export function CtwAiExplainBlock({ explainKey, detail, aiExplains, isPro, handl
       >
         {ex?.loading ? "分析中..." : "🤖 AI 深入解析"}
       </button>
+      {askBtn}
       {ex?.error && (
         <span style={{ fontSize: 12, color: "#E11D48", marginLeft: 8 }}>{ex.error}</span>
       )}
+      {qaPanel}
     </div>
   );
 }

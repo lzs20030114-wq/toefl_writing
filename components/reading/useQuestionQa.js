@@ -7,7 +7,7 @@ import { loadPool, mergeEntries, activeCards } from "../../lib/mistakes/pool";
 import { extractMistakeEntries } from "../../lib/mistakes/extract";
 import { lookupWord } from "../../lib/dict/lookup";
 import {
-  QA_SYSTEM,
+  qaSystemFor,
   QA_MAX_TURNS,
   buildEvidence,
   buildQaMessage,
@@ -19,6 +19,7 @@ import {
   dictTermFor,
   plainText,
 } from "../../lib/qa/questionQa";
+import { qaKindOf } from "../../lib/qa/qaKinds";
 import { trapOfBrief, trapOfDetail } from "../../lib/qa/trapStore";
 import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
 import { collectPastQuestions, pickAnalogies, analogyLines } from "../../lib/qa/pastQuestions";
@@ -76,6 +77,9 @@ function readPastQuestions(detail) {
 
 export function useQuestionQa(detail, firstExplain) {
   const account = accountKey();
+  // 题型（lib/qa/qaKinds）：同类错题、举一反三、离线答案依据句目前只有阅读选择题（reading）有。
+  const kind = qaKindOf(detail);
+  const isReading = kind === "reading";
   const key = useMemo(() => conversationKey(detail), [detail]);
   const evidence = useMemo(() => buildEvidence(detail), [detail]);
   const [conv, setConv] = useState(() => loadConversation(account, key) || { turns: [], related: null });
@@ -103,7 +107,7 @@ export function useQuestionQa(detail, firstExplain) {
     return () => window.removeEventListener(ev, bump);
   }, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const pastCount = useMemo(() => readPastQuestions(detail).length, [detail, histVer]);
+  const pastCount = useMemo(() => (isReading ? readPastQuestions(detail).length : 0), [detail, histVer, isReading]);
 
   const turnsLeft = QA_MAX_TURNS - conv.turns.length;
   const dailyLeft = QA_DAILY_LIMIT - daily;
@@ -127,11 +131,11 @@ export function useQuestionQa(detail, firstExplain) {
     try {
       let related = cur.related;
       // 举一反三优先：对比题里已经含做错的题（同陷阱优先），就不再另附错题。
-      const analogy = wantsAnalogy(q, presetId);
-      const wantMistakes = !analogy && wantsMistakeContext(q, presetId);
+      const analogy = isReading && wantsAnalogy(q, presetId);
+      const wantMistakes = isReading && !analogy && wantsMistakeContext(q, presetId);
       if (wantMistakes && !related) related = readRelatedMistakes(detail);
-      const evidenceData = await loadAnswerEvidence();
-      const keyEvidence = answerEvidenceFor(evidenceData, detail, evidence.sentences);
+      const evidenceData = isReading ? await loadAnswerEvidence() : null;
+      const keyEvidence = isReading ? answerEvidenceFor(evidenceData, detail, evidence.sentences) : null;
       const analogies = analogy
         ? pickAnalogies(readPastQuestions(detail), { trap: trapOfDetail(detail), trapOf: trapOfBrief, evidenceData })
         : null;
@@ -152,7 +156,7 @@ export function useQuestionQa(detail, firstExplain) {
 
       const history = cur.turns.map((t) => ({ q: t.selection?.text ? `（选中："${t.selection.text}"）${t.q}` : t.q, a: t.a }));
       const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, dict, format: formatFor(QA_FORMATS, presetId) });
-      const raw = await callAI(QA_SYSTEM, message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
+      const raw = await callAI(qaSystemFor(kind), message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {
@@ -171,9 +175,10 @@ export function useQuestionQa(detail, firstExplain) {
       inflight.current = false;
       setLoading(false);
     }
-  }, [account, key, detail, evidence, firstExplain]);
+  }, [account, key, detail, evidence, firstExplain, kind, isReading]);
 
   return {
+    kind,
     turns: conv.turns,
     related: conv.related,
     sentences: evidence.sentences,

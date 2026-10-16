@@ -9,6 +9,7 @@ import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceA
 import { NotedLookup } from "../notes/NotedLookup";
 import { questionLookupContext } from "../../lib/dict/core";
 import { findSentenceTimingsByAudioUrl } from "../../lib/listening/timingsLookup";
+import { SENTENCE_PLAY_EVENT, sentenceMatchKey } from "../../lib/notes/passageFlash";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions } from "../../lib/sessionStore";
 import { subscribeHistory } from "../../lib/history/subscribeHistory";
@@ -243,6 +244,9 @@ function taskToReviewDetails(task) {
 
 // 逐句点播（docs/listening-sentence-timings.md）：播放器 ref + 「正在放哪一句」的高亮下标。
 // 只在有真实音频时认时间戳；只在当前句变了才 setState，播放中不会每帧重渲染。
+// 「放到结尾」：playRange 要有限的终点，录音放完自己会停。
+const WHOLE_CLIP_END = 1e6;
+
 export function useSentencePlayback(timings, audioUrl) {
   const playerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -276,6 +280,32 @@ export function useSentencePlayback(timings, audioUrl) {
     const s = sentenceAt(usable, i);
     if (s) onPick(i, s);
   }, [usable, onPick]);
+  // 答疑窗口里点出处（「第 3 句」）→ 放这一句（lib/notes/passageFlash playPassageSentence）。
+  // 同一页可能有好几段录音（应答题一题一段），谁的时间戳里有这句谁接。
+  // 事件带着录音地址，只有放同一段录音的播放器接（不同题可能有一模一样的句子）。
+  // 应答题的录音就是那一句：没有逐句时间戳时从头放整段（whole）。
+  useEffect(() => {
+    if (!audioUrl || typeof window === "undefined") return undefined;
+    const onPlay = (e) => {
+      const d = e.detail;
+      if (!d || d.handled || d.audioUrl !== audioUrl || !playerRef.current) return;
+      const want = sentenceMatchKey(d.text);
+      if (!want) return;
+      const i = Array.isArray(usable) ? usable.findIndex((s) => sentenceMatchKey(s.text) === want) : -1;
+      const s = i >= 0 ? usable[i] : null;
+      if (s && s.start != null && s.end != null) {
+        if (playerRef.current.playRange(s.start, s.end)) {
+          pinRef.current = { index: i, start: s.start, end: s.end };
+          setActiveIndex(i);
+          d.handled = true;
+        }
+      } else if (d.whole && playerRef.current.playRange(0, WHOLE_CLIP_END)) {
+        d.handled = true;
+      }
+    };
+    window.addEventListener(SENTENCE_PLAY_EVENT, onPlay);
+    return () => window.removeEventListener(SENTENCE_PLAY_EVENT, onPlay);
+  }, [usable, audioUrl]);
   return { playerRef, activeIndex, onTime, onPick, onPlaySentence, timings: usable };
 }
 
@@ -410,6 +440,7 @@ export function LCRDetail({ session }) {
                   subtype: "lcr",
                   qid: q.id || `${session.id}-lcr${i}`,
                   speaker: speakerText,
+                  audioUrl: q.audio_url || null,
                   situation: q.situation || session.details?.topic || "",
                   pragmaticFunction: q.pragmatic_function || "",
                   options,
@@ -507,6 +538,7 @@ export function LADetail({ session }) {
                       explainKey={`${session.id}-q${i}`}
                       detail={{
                         subtype: session.details?.subtype || "lat",
+                        audioUrl,
                         qid: q.qid || `${session.details?.itemIds?.[0] || session.id}-q${i}`,
                         stem,
                         contextText: transcript,
@@ -620,9 +652,11 @@ export function LCDetail({ session }) {
                       explainKey={`${session.id}-q${i}`}
                       detail={{
                         subtype: "lc",
+                        audioUrl,
                         qid: q.qid || `${session.details?.itemIds?.[0] || session.id}-q${i}`,
                         stem,
                         contextText: transcript || conversationText(conversation),
+                        conversation,
                         options,
                         selected: r.selected,
                         correct: r.correct || q.answer,
