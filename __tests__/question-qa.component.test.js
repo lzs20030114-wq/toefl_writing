@@ -31,7 +31,7 @@ jest.mock("../lib/ai/client", () => ({
 import { useReadingAiExplain, ReadingAiExplainBlock } from "../components/reading/useReadingAiExplain";
 import { QA_SYSTEM, numberSentences, sentenceLabel, conversationKey } from "../lib/qa/questionQa";
 import { saveConversation, pruneStore, QA_DAILY_PREFIX, localDate } from "../lib/qa/qaStore";
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../lib/ai/client";
 
 const PASSAGE =
   "Used textbook sale on Saturday in Room 112. Students can bring their own bags.\n\n" +
@@ -180,7 +180,7 @@ describe("请求内容", () => {
     expect(message).toContain("【本题已给出的讲解】");
     expect(message).toContain(FIRST);
     expect(message).not.toContain("同类错题");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS * 3, AI_HELPER_TIMEOUT_MS, 0.3]);
   });
 
   test("「我是这么想的…」只预填输入框，不发请求；补完发出后附上同类错题", async () => {

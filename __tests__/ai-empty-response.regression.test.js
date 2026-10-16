@@ -20,7 +20,7 @@ jest.mock("../lib/AuthContext", () => ({
   getSavedTier: jest.fn(() => "pro"),
 }));
 
-import { callAI, callAIMulti, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { callAI, callAIMulti, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_MAX_TOKENS } from "../lib/ai/client";
 
 const DETAIL = {
   prompt: "Will you be attending the conference next week?",
@@ -125,6 +125,25 @@ describe("AI 解释按钮：上游空正文时必须给出可见反馈", () => {
     expect(body.maxTokens).toBe(AI_HELPER_MAX_TOKENS);
     // 推理型模型下 260-700 就是这次故障的量级，别再退回去。
     expect(AI_HELPER_MAX_TOKENS).toBeGreaterThanOrEqual(1500);
+  });
+});
+
+describe("预算倍数不能顶穿服务端上限", () => {
+  // 2026-10-16: 划词问 AI 用 ×2、逐题追问用 ×3。AI_HELPER_MAX_TOKENS 抬到 4096 后
+  // ×3 会超过 /api/ai 的 MAX_TOKENS，服务端直接 400 —— 客户端必须先夹住。
+  test("超过上限的 maxTokens 被夹到 AI_MAX_TOKENS", async () => {
+    mockAiResponse({ content: "ok" });
+    await callAI("s", "m", AI_HELPER_MAX_TOKENS * 3, 5000, 0.3);
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.maxTokens).toBe(AI_MAX_TOKENS);
+  });
+
+  test("客户端上限与 app/api/ai/route.js 的 MAX_TOKENS 一致", () => {
+    const fs = require("fs");
+    const path = require("path");
+    const src = fs.readFileSync(path.join(process.cwd(), "app/api/ai/route.js"), "utf8");
+    const m = src.match(/const MAX_TOKENS = (\d+);/);
+    expect(m && Number(m[1])).toBe(AI_MAX_TOKENS);
   });
 });
 

@@ -42,7 +42,7 @@ jest.mock("../lib/ai/client", () => ({
   callAI: (...args) => callAI(...args),
 }));
 
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../lib/ai/client";
 import { CTWDetail } from "../components/reading/ReadingProgressView";
 import { locateBlankSentence } from "../components/reading/useCtwAiExplain";
 
@@ -292,7 +292,7 @@ describe("CTWDetail 面板里的 AI 解析", () => {
     expect(message).toContain(PASSAGE);
     // 预算收口到共享常量（2026-09-13：260-700 会被 v4-flash 的推理 token 吃光，
     // 上游回空正文 → 「AI 解释点了不出内容」）。断言常量本身，别再写死数字。
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3]);
 
     expect(await screen.findByText(/被动语态要求过去分词/)).toBeInTheDocument();
   });

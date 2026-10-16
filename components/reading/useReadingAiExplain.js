@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { EXPLAIN_SYSTEM, EXPLAIN_SYSTEM_CORRECT, buildEvidence, parseTrap, plainText } from "../../lib/qa/questionQa";
 import { saveTrap } from "../../lib/qa/trapStore";
 import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
@@ -86,7 +86,7 @@ export function useReadingAiExplain() {
       // 预算 ×3（与追问同）：讲解要先引英文原话再标句号、末尾写陷阱行，v4-flash 的推理 token 又计入
       // max_tokens；2026-10-13 离线评估在 ×1 下空回复/截断 5.6%。只是上限，用不到不计费。
       const keyEvidence = answerEvidenceFor(await loadAnswerEvidence(), detail, buildEvidence(detail).sentences);
-      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail, keyEvidence), AI_HELPER_MAX_TOKENS * 3, 60000, 0.3));
+      const text = plainText(await callAI(detail.isCorrect ? EXPLAIN_SYSTEM_CORRECT : EXPLAIN_SYSTEM, buildReadingExplainMessage(detail, keyEvidence), AI_HELPER_MAX_TOKENS * 3, AI_HELPER_TIMEOUT_MS, 0.3));
       if (!text) throw new Error("Empty AI response");
       saveToCache(detail, text);
       if (!detail.isCorrect) saveTrap(detail, parseTrap(text));

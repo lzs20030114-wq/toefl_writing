@@ -7,7 +7,7 @@ import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense, usableCon
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { NoteAskBox } from "../notes/NoteAskBox";
 import { NOTE_MAX_QUOTE } from "../../lib/notes/passageNotes";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { getCard, saveWord, removeWord, addSentence, chooseSense, adoptContextSense, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { MAX_CONTEXTS, definitionForContext, hasReviewMode, toggleReviewMode } from "../../lib/vocab/book";
 import { SpeakButton } from "../shared/SpeakButton";
@@ -583,7 +583,7 @@ export function WordLookupLayer({ passage, children, style, source = "reading", 
     setAi({ loading: true, text: null, sense: "", error: null });
     try {
       const message = contextSenseMessage(pop.word, sentence, pop.entry?.t);
-      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
       if (!current()) return;
       const result = parseContextSense(raw);
       if (!result.text) {

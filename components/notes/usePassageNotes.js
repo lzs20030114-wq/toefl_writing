@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { lookupWord } from "../../lib/dict/lookup";
 import { numberSentences, plainText } from "../../lib/qa/questionQa";
 import { dailyCount, bumpDaily, releaseDaily, QA_DAILY_LIMIT } from "../../lib/qa/qaStore";
@@ -85,7 +85,7 @@ export function usePassageNotes(passage, { source = "reading" } = {}) {
       }
       const history = (note.turns || []).map((t) => ({ q: t.q, a: t.a }));
       const { message } = buildNoteMessage({ passage: text, quote: note.quote, history, question: q, dict, format: formatFor(NOTE_FORMATS, presetId) });
-      const raw = await callAI(NOTE_SYSTEM, message, AI_HELPER_MAX_TOKENS * 2, 60000, 0.3);
+      const raw = await callAI(NOTE_SYSTEM, message, AI_HELPER_MAX_TOKENS * 2, AI_HELPER_TIMEOUT_MS, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const turn = { q, label, a, presetId, dict: dict ? dict.word || term : null, at: new Date().toISOString() };

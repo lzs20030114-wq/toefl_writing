@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { AiExplainView } from "../shared/AiExplainView";
 import { LISTENING_EXPLAIN_SYSTEM, LISTENING_EXPLAIN_SYSTEM_CORRECT, buildEvidence, plainText } from "../../lib/qa/questionQa";
 import { listeningQaDetail } from "../../lib/qa/qaKinds";
@@ -155,12 +155,12 @@ export function useListeningAiExplain() {
     try {
       let text;
       if (isRespondKind(detail?.subtype)) {
-        text = await callAI(detail.isCorrect ? SYSTEM_LCR_CORRECT : SYSTEM_LCR, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+        text = await callAI(detail.isCorrect ? SYSTEM_LCR_CORRECT : SYSTEM_LCR, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
       } else {
         // 选择题：和追问同一份证据包（原文按句编号，对话标说话人）。预算 ×3 同阅读讲解：先引原话再标句号，
         // v4-flash 的推理 token 又计入 max_tokens。只是上限，用不到不计费。
         const system = detail.isCorrect ? LISTENING_EXPLAIN_SYSTEM_CORRECT : LISTENING_EXPLAIN_SYSTEM;
-        text = plainText(await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS * 3, 60000, 0.3));
+        text = plainText(await callAI(system, buildListeningExplainMessage(detail), AI_HELPER_MAX_TOKENS * 3, AI_HELPER_TIMEOUT_MS, 0.3));
       }
       if (!text) throw new Error("Empty AI response");
       saveToCache(detail, text);

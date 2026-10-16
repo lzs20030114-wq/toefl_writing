@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { AiExplainView } from "../shared/AiExplainView";
 import { ctwQaDetail } from "../../lib/qa/qaKinds";
 import { QuestionQaPanel, AskQuestionButton } from "./QuestionQaPanel";
@@ -143,7 +143,7 @@ export function useCtwAiExplain() {
     try {
       // 预算见 AI_HELPER_MAX_TOKENS 的注释：这里曾单独调到 700（350 会把讲解截断在
       // 句子中间），但同一个根因在 6 个辅助调用点各有一份,现已统一到共享常量。
-      const text = await callAI(detail.isCorrect ? SYSTEM_CORRECT : SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAI(detail.isCorrect ? SYSTEM_CORRECT : SYSTEM, buildMessage(detail), AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
       saveToCache(detail, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

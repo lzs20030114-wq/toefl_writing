@@ -9,7 +9,7 @@ import { DefLine, DictSenses } from "../shared/DictSenses";
 import { hasUsableSense, parseSenses } from "../../lib/dict/core";
 import { lookupWord } from "../../lib/dict/lookup";
 import { CONTEXT_SENSE_SYSTEM, contextSenseMessage, parseContextSense } from "../../lib/dict/aiSense";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { getSavedTier, AUTH_CHANGED_EVENT } from "../../lib/AuthContext";
 import { adoptDictEntry, familyMembers, getCard, getVocabAccountKey } from "../../lib/vocab/vocabStore";
 import { FamilyRecap } from "./FamilyRecap";
@@ -611,7 +611,7 @@ export function VocabReview({
     try {
       const message = contextSenseMessage(card.display || card.word, shownSentence,
         card.defFull || card.baseDef || extraEntry?.t || card.def);
-      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const raw = await callAI(CONTEXT_SENSE_SYSTEM, message, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
       if (!current()) return;
       const { sense } = parseContextSense(raw);
       if (!sense) {

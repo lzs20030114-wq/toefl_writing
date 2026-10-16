@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { VocabReview } from "../components/vocab/VocabReview";
-import { callAI, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { callAI, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../lib/ai/client";
 import { AUTH_CHANGED_EVENT } from "../lib/AuthContext";
 import { editDefinition, getCard, saveWord } from "../lib/vocab/vocabStore";
 import { STATE } from "../lib/vocab/srs";
@@ -57,7 +57,7 @@ test("点击才请求当前完整原句和词典备份，生成只填草稿，�
   expect(box()).toBeDisabled();
   await screen.findByDisplayValue(SENSE);
   expect(callAI).toHaveBeenCalledTimes(1);
-  expect(callAI).toHaveBeenCalledWith(expect.any(String), expect.stringContaining(longSentence), AI_HELPER_MAX_TOKENS, 60000, 0.3);
+  expect(callAI).toHaveBeenCalledWith(expect.any(String), expect.stringContaining(longSentence), AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
   expect(callAI.mock.calls[0][1]).toContain("学生查的词：approach");
   expect(callAI.mock.calls[0][1]).toContain("词典释义：n. 接近；方法；vt. 接近；处理；vi. 靠近");
   expect(onEditDefinition).not.toHaveBeenCalled();

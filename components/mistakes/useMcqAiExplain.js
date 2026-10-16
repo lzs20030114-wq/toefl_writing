@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { QuestionQaPanel, AskQuestionButton } from "../reading/QuestionQaPanel";
 
 // Pro-only AI explainer for Reading / Listening MCQ mistakes, mirroring the
@@ -80,7 +80,7 @@ export function useMcqAiExplain(section = "reading") {
     try {
       const sys = SYSTEM_BY_SECTION[section] || SYSTEM_BY_SECTION.reading;
       const message = buildPrompt(section, mistake, context);
-      const text = await callAI(sys, message, AI_HELPER_MAX_TOKENS, 60000, 0.3);
+      const text = await callAI(sys, message, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3);
       saveToCache(section, mistake, text);
       setAiExplains((prev) => ({ ...prev, [key]: { loading: false, text, error: null } }));
     } catch (e) {

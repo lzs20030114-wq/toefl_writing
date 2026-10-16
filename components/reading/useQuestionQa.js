@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { getSavedCode } from "../../lib/AuthContext";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../../lib/ai/client";
 import { loadHist, SESSION_STORE_EVENTS } from "../../lib/sessionStore";
 import { loadPool, mergeEntries, activeCards } from "../../lib/mistakes/pool";
 import { extractMistakeEntries } from "../../lib/mistakes/extract";
@@ -156,7 +156,7 @@ export function useQuestionQa(detail, firstExplain) {
 
       const history = cur.turns.map((t) => ({ q: t.selection?.text ? `（选中："${t.selection.text}"）${t.q}` : t.q, a: t.a }));
       const message = buildQaMessage({ evidence: ev.text, firstExplain: firstExplain || "", history, question: q, dict, format: formatFor(QA_FORMATS, presetId) });
-      const raw = await callAI(qaSystemFor(kind), message, AI_HELPER_MAX_TOKENS * 3, 60000, 0.3);
+      const raw = await callAI(qaSystemFor(kind), message, AI_HELPER_MAX_TOKENS * 3, AI_HELPER_TIMEOUT_MS, 0.3);
       const a = plainText(raw);
       if (!a) throw new Error("Empty AI response");
       const next = {

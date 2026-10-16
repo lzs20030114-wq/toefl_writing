@@ -44,7 +44,7 @@ jest.mock("../lib/ai/client", () => ({
   callAI: (...args) => callAI(...args),
 }));
 
-import { AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../lib/ai/client";
 import { LCRDetail, LADetail, LCDetail } from "../components/listening/ListeningProgressView";
 import { ListeningMCQTask } from "../components/listening/ListeningMCQTask";
 import { LCRTask } from "../components/listening/LCRTask";
@@ -140,7 +140,7 @@ describe("LCRDetail（应答题练习历史 / 真题记录）", () => {
     expect(message).toContain("该句的语用功能：polite refusal with a reason");
     expect(message).toContain("学生选的回应：C. I didn't know you liked cooking.");
     expect(message).toContain("正确回应：B. That's too bad — maybe next week?");
-    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, 60000, 0.3]);
+    expect([maxTokens, timeoutMs, temperature]).toEqual([AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.3]);
 
     expect(await screen.findByText(/婉拒邀约/)).toBeInTheDocument();
   });

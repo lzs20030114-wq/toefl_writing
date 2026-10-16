@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { translateGrammarPoint } from "../lib/utils";
 import { C, PageShell, SurfaceCard } from "./shared/ui";
-import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../lib/ai/client";
+import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS } from "../lib/ai/client";
 import { getSavedTier } from "../lib/AuthContext";
 import { useMistakePool } from "./mistakes/useMistakePool";
 import { MistakeItemCard, useMistakeAi } from "./mistakes/MistakeCardView";
@@ -87,7 +87,7 @@ function BsAnalysis({ cards, drills, isLegacy }) {
     setAnalysis({ loading: true, text: null, error: null });
     try {
       const prompt = buildAnalysisPrompt(cards, gpFreq, drills);
-      const text = await callAI(ANALYSIS_SYSTEM, prompt, AI_HELPER_MAX_TOKENS, 60000, 0.4);
+      const text = await callAI(ANALYSIS_SYSTEM, prompt, AI_HELPER_MAX_TOKENS, AI_HELPER_TIMEOUT_MS, 0.4);
       setAnalysis({ loading: false, text, error: null });
     } catch (e) {
       setAnalysis({ loading: false, text: null, error: mapAiHelperError(e) });
