@@ -319,4 +319,18 @@ describe("词形组", () => {
     expect(screen.queryByTestId("family-tag")).toBeNull();
     spy.mockRestore();
   });
+
+  test("组里今天只轮到它一个：照样标组名，翻面列出同组其他词", () => {
+    const spy = jest.spyOn(store, "familyMembers").mockReturnValue([fam("machinery"), fam("machining")]);
+    const queue = [{ ...fam("machining"), state: STATE.NEW }, mk(9)];
+    render(<VocabReview initialQueue={queue} onGrade={jest.fn((word) => ({ ...queue.find((c) => c.word === word), due: farFuture() }))} onExit={jest.fn()} />);
+    expect(screen.getByTestId("family-tag")).toHaveTextContent(/^machinery 组$/);
+    expect(screen.queryByTestId("family-siblings")).toBeNull();
+    act(() => { fireEvent.keyDown(window, { key: " " }); });
+    const sib = screen.getByTestId("family-siblings");
+    expect(sib).toHaveTextContent("machinery");
+    expect(sib).toHaveTextContent("machinery 释义");
+    expect(sib).not.toHaveTextContent("machining");
+    spy.mockRestore();
+  });
 });

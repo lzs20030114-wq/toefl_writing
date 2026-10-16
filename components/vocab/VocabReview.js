@@ -670,6 +670,9 @@ export function VocabReview({
   if (!card) return null;
 
   const famPos = familyPosition(queue, card);
+  // 同组其他词（不管今天轮不轮到）：组里只有它今天到期时也能看到这组，背面列出来一起过一眼。
+  const famKey = card?.family || "";
+  const siblings = famKey ? familyMembers(famKey).filter((info) => info.word !== card.word) : [];
   const dirMeta = spellStage ? SPELL_META : DIRECTION_META[mode] || DIRECTION_META.recognize;
   const progress = sess.answered + remaining > 0 ? sess.answered / (sess.answered + remaining) : 0;
   const segmentRows = sess.segment.map((g) => {
@@ -739,9 +742,9 @@ export function VocabReview({
               新词
             </span>
           )}
-          {famPos && (
+          {(famPos || siblings.length > 0) && (
             <span data-testid="family-tag" style={{ fontSize: 10, fontWeight: 700, color: "#92400E", background: "#FEF3C7", border: "1px solid #F3D9A4", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
-              {famPos.family} 组 · {famPos.index}/{famPos.total}
+              {famPos ? `${famPos.family} 组 · ${famPos.index}/${famPos.total}` : `${famKey} 组`}
             </span>
           )}
           {timesSeen > 0 && (
@@ -972,6 +975,17 @@ export function VocabReview({
                     </div>
                   )}
                 </>
+              )}
+              {siblings.length > 0 && (
+                <div data-testid="family-siblings" style={{ marginTop: 12, border: "1px solid #F3D9A4", background: "#FFFDF7", borderRadius: 10, padding: "8px 14px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#92400E", marginBottom: 4 }}>同组词</div>
+                  {siblings.map((info) => (
+                    <div key={info.word} style={{ display: "flex", gap: 10, alignItems: "baseline", fontSize: 13, lineHeight: 1.8, minWidth: 0 }}>
+                      <strong style={{ color: C.t1, flexShrink: 0 }}>{info.display || info.word}</strong>
+                      <span style={{ color: C.t2, minWidth: 0, overflowWrap: "anywhere" }}>{senseOf(info, activeSentence(info))}</span>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}
