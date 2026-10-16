@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-10-17 — v1.30.0
+
+> 覆盖 v1.29.0 公告提交 `2efd5463` 之后至 `cd4a41dd` 的变更：词形表与词形组复习（PR #25、#29、#33、#34）、问 AI 排版与划词扩展（PR #26、#28）、追问推广到听力 / 填词 / 错题本（PR #35）、收藏词下划线（PR #37）、单词本新增记录（PR #30）、真题收藏夹、拼句结果页明细（PR #31）、个人题库导入下线。依赖 SQL 迁移 `scripts/sql/real-bank-favorites.sql`（已登记「已跑」）；无新 env 或 feature flag。未合入：拖拽造句追问（`dc4a1a6c`，分支 `claude/qa-window-all-question-types-gaoffe`）与 AI 辅助预算放宽（`fix/ai-helper-budget`）。未做线上部署验证。
+
+- **词形表可收藏 + 出处高亮原句**（`89bbcd6e` #25）：`NOTE_SYSTEM` 加词形表格式，`lib/notes/wordForms` 解析成收藏 entry，`WordFormList` 每行可收藏，来源标签新增「原文笔记」。点讲解 / 追问里的句位，`NotedPassage` 用 CSS Highlight 高亮 4 秒并滚动，原文不在时退回贴原句；`tidyCites` 同句出处只留一次；讲解末尾「陷阱：X」显示为标签。
+- **一键问 AI 按小标题排版**（`12364cf7` #26 / `712c7f35`）：批注 6 个快捷问题、逐题追问 4 个预设与第一轮讲解各有固定回答格式，只附在点了预设的那一轮；界面左列标签 + 分条，常见搭配改成可收藏的搭配表。重试草稿一并存 `presetId`，失败重试仍带格式。
+- **词形组复习**（`cd2c9256` #29 / `dd1c47df` #33 / `bbfebeba` #34）：卡片加 `family` / `familyUpdatedAt`（整卡 JSONB 同步，无 SQL）；整组收藏、同组连排、两天内到期组员提前带入、新词整组放出、组小结；旧词形收藏打开单词本时按笔记补组（手动移出的不拉回），续存档补组员。#34 起同组词合成一张组卡一次评分，额度和进度里一组算一个词。
+- **新增记录**（`63ce1797` #30）：`book.addedHistory` 按收藏本地日分天统计（近 30 天 / 全部），点某天筛词库。
+- **划词问 AI 全面接入**（`e7df943f` #28）：新增 `NotedLookup`（用法同 `WordLookupLayer`），接入填词原文、阅读 / 听力题干选项、听力原文与逐句原文、模考详情、真题回顾、练习复盘；笔记与额度沿用 `passage_notes` / 每日 30 轮。
+- **拼句结果页明细**（`3a3fd4f1` #31）：抽出 `components/history/BsSessionDetail`，`HistoryRow` 与 `BuildSentenceTask` 结果页共用。
+- **收藏例句清洗**（`753cfb95` #32）：取句改为逐文字节点拼接，跳过 `<style>` / `data-no-dict`；旧卡展示时清掉 CSS 残留与段号。
+- **追问推广第一步**（`e1c9b569` #35）：`lib/qa/qaKinds` 按 reading / ctw / listening / lcr 分材料编号、证据包、预设；听力出处广播「播放这一句」由同一录音的播放器接（`lib/notes/passageFlash`）；错题本卡片（`lib/qa/mistakeQaDetail`）接上追问。同类错题、举一反三、离线依据句仍只在阅读选择题上。
+- **收藏词青色下划线**（`cd4a41dd` #37）：语境句落在当前原文的卡片，把该词（含常见词尾）用 CSS 自定义高亮画下划线；`NotedPassage` 与 `NotedLookup` 共用，听力 Speaker 标签挂 `data-no-dict`。
+- **真题收藏夹**（`63b6133f` / `512a9a8f` / `11c1bd1e`）：题目级收藏、「★ 收藏夹」视图、`/real-bank?item=` 直达；localStorage 为真源，登录后经 `/api/real-favorites` 与 `real_bank_favorites` 表按 updatedAt 合并，取消为软删除。
+- **个人题库导入下线**（`629a64f9`）：移除首页入口，`/my-bank` 跳回首页，新增导入相关 POST 返回 410 `USER_BANK_RETIRED`；存量题目、音频与练习记录保留。记录见 `docs/my-bank-retirement.md`。
+- **数据**（`3033cdf0` #23）：学术阅读真题 1,305 个干扰项标注（规则见 `docs/distractor-label-rules.md`），本次不涉及前台展示。
+
 ## 2026-10-13 — v1.29.0
 
 > 覆盖 v1.28.0 公告提交 `c241973` 之后至 `e417b15` 的变更：阅读选择题逐题追问（PR #16–#19）与练后原文批注提问（PR #20–#22、#24）。依赖 SQL 迁移 `scripts/sql/passage-notes.sql`（已登记「已跑」）；无新 env 或 feature flag。未做线上部署验证。
