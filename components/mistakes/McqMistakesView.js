@@ -106,7 +106,7 @@ function OptionRow({ optionKey, text, isSelected, isCorrect }) {
   );
 }
 
-export function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handleAiExplain, section, bare = false }) {
+export function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro, handleAiExplain, section, bare = false, qaDetail = null }) {
   const hasOptions = mistake.options && mistake.optionsKey && mistake.optionsKey.length > 0;
   // 真题 AP 选句题：答案是原文里的一句（lib/readingMistakes 已把 S 键换成句子原文）。
   const isSentenceSelection = mistake.kind === "sentence_selection";
@@ -205,6 +205,7 @@ export function McqMistakeCard({ mistake, context, explainKey, aiExplains, isPro
         isPro={isPro}
         handleAiExplain={handleAiExplain}
         section={section}
+        qaDetail={qaDetail}
       />
     </div>
   );

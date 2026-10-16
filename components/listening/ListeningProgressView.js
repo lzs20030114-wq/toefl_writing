@@ -9,6 +9,7 @@ import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceA
 import { NotedLookup } from "../notes/NotedLookup";
 import { questionLookupContext } from "../../lib/dict/core";
 import { findSentenceTimingsByAudioUrl } from "../../lib/listening/timingsLookup";
+import { SENTENCE_PLAY_EVENT, sentenceMatchKey } from "../../lib/notes/passageFlash";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
 import { loadHist, deleteSession, clearAllSessions } from "../../lib/sessionStore";
 import { subscribeHistory } from "../../lib/history/subscribeHistory";
@@ -276,6 +277,27 @@ export function useSentencePlayback(timings, audioUrl) {
     const s = sentenceAt(usable, i);
     if (s) onPick(i, s);
   }, [usable, onPick]);
+  // 答疑窗口里点出处（「第 3 句」）→ 放这一句（lib/notes/passageFlash playPassageSentence）。
+  // 同一页可能有好几段录音（应答题一题一段），谁的时间戳里有这句谁接。
+  useEffect(() => {
+    if (!Array.isArray(usable) || typeof window === "undefined") return undefined;
+    const onPlay = (e) => {
+      const d = e.detail;
+      if (!d || d.handled) return;
+      const want = sentenceMatchKey(d.text);
+      if (!want) return;
+      const i = usable.findIndex((s) => sentenceMatchKey(s.text) === want);
+      const s = i >= 0 ? usable[i] : null;
+      if (!s || s.start == null || s.end == null) return;
+      if (playerRef.current && playerRef.current.playRange(s.start, s.end)) {
+        pinRef.current = { index: i, start: s.start, end: s.end };
+        setActiveIndex(i);
+        d.handled = true;
+      }
+    };
+    window.addEventListener(SENTENCE_PLAY_EVENT, onPlay);
+    return () => window.removeEventListener(SENTENCE_PLAY_EVENT, onPlay);
+  }, [usable]);
   return { playerRef, activeIndex, onTime, onPick, onPlaySentence, timings: usable };
 }
 
@@ -623,6 +645,7 @@ export function LCDetail({ session }) {
                         qid: q.qid || `${session.details?.itemIds?.[0] || session.id}-q${i}`,
                         stem,
                         contextText: transcript || conversationText(conversation),
+                        conversation,
                         options,
                         selected: r.selected,
                         correct: r.correct || q.answer,

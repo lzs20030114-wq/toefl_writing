@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { getSavedCode } from "../../lib/AuthContext";
-import { QA_PRESETS, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, buildEvidence, tidyCites, TRAP_TYPES } from "../../lib/qa/questionQa";
+import { qaPresetsFor, QA_MAX_TURNS, presetText, parseAnswer, sentenceLabel, buildEvidence, tidyCites, TRAP_TYPES } from "../../lib/qa/questionQa";
 import { analogyMaterials, pastItemMaterials } from "../../lib/qa/pastQuestions";
 import { isSentenceSelection } from "../../lib/reading/sentenceSelection";
 import { useQuestionQa } from "./useQuestionQa";
-import { flashPassageSentence } from "../../lib/notes/passageFlash";
+import { flashPassageSentence, playPassageSentence } from "../../lib/notes/passageFlash";
 import { answerBlocks } from "../../lib/qa/answerLayout";
 import { AnswerBlocks } from "../shared/AnswerBlocks";
 
@@ -18,6 +18,12 @@ export const QA_THEMES = {
   default: { text: "#0c4a6e", bd: "#bae6fd", bg: "#f0f9ff", solid: "#0284c7", cardBg: "#f8fcff", cardBd: "#bae6fd", body: "#0c4a6e" },
 };
 const MUTED = "#6b7280";
+const PLACEHOLDER = {
+  reading: "问这道题的任何问题，比如某句为什么这么说",
+  ctw: "问这个空的任何问题，比如为什么不能填别的词",
+  listening: "问这道题的任何问题，比如某句是什么意思、为什么没听出来",
+  lcr: "问这道题的任何问题，比如为什么我选的那句接不上",
+};
 
 
 function Tag({ children, tone, onClick, title, testId }) {
@@ -80,9 +86,11 @@ export function QaAnswer({ text, sentences, materials, related, dict, mistakes =
   const toggle = (k) => setOpen((cur) => (cur === k ? null : k));
   const byId = useMemo(() => new Map(sentences.map((s) => [s.id, s])), [sentences]);
   // 点句子出处：页面上的原文接住就在原文里高亮那句；原文不在（收起了 / 这页没有）才把原句贴在下面。
+  // 听力原文还会播放这一句（有逐句时间戳的录音接住时；lib/notes/passageFlash playPassageSentence）。
   const openSentence = (id) => {
     const sent = byId.get(id);
-    if (sent && flashPassageSentence(sent.text)) { setOpen(null); return; }
+    const played = sent ? playPassageSentence(sent.text) : false;
+    if (sent && (flashPassageSentence(sent.text) || played)) { setOpen(null); return; }
     toggle(id);
   };
 
@@ -97,7 +105,7 @@ export function QaAnswer({ text, sentences, materials, related, dict, mistakes =
     if (s.kind === "sentence") {
       const sent = byId.get(s.id);
       return s.valid
-        ? <Tag key={i} tone="ok" testId="qa-cite" title="点一下在原文里高亮这句" onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
+        ? <Tag key={i} tone="ok" testId="qa-cite" title={sent?.label ? "点一下播放并高亮这句" : "点一下在原文里高亮这句"} onClick={() => openSentence(s.id)}>{sentenceLabel(sent, sentences)}</Tag>
         : <Tag key={i} tone="bad" testId="qa-cite-bad" title="这条出处核对不上，请以原文为准">{`${sent ? sentenceLabel(sent, sentences) : "出处"}?`}</Tag>;
     }
     if (s.kind === "past") {
@@ -217,7 +225,8 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   const inputRef = useRef(null);
 
   const answered = !!detail?.selected;
-  const ss = isSentenceSelection(detail?.question) || isSentenceSelection({ question_type: detail?.questionType, options: detail?.options });
+  const kind = qa.kind;
+  const ss = kind === "reading" && (isSentenceSelection(detail?.question) || isSentenceSelection({ question_type: detail?.questionType, options: detail?.options }));
   const selectedLabel = ss ? "那一句" : String(detail?.selected || "");
   const atTurnCap = qa.turns.length >= QA_MAX_TURNS;
   const atDailyCap = !atTurnCap && qa.dailyLeft <= 0;
@@ -236,7 +245,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   }, [qa]);
 
   // 「我是这么想的…」只预填输入框；用户补完发出去时仍按这个预设走（要附同类错题）。
-  const thinkingPrefix = presetText("my-thinking", { selectedLabel });
+  const thinkingPrefix = presetText("my-thinking", { selectedLabel, kind });
   const sendInput = () => {
     const q = input.trim();
     if (!q || disabled) return;
@@ -254,11 +263,11 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       }, 0);
       return;
     }
-    send(presetText(p.id), { presetId: p.id, label: p.label });
+    send(presetText(p.id, { kind }), { presetId: p.id, label: p.label });
   };
 
   // 「讲简单点」是把上一轮再讲一遍：还没有讲解、也没追问过时没有可简化的东西。
-  const presets = QA_PRESETS.filter((p) => (!p.needsAnswer || answered) && (!p.needsPast || qa.pastCount > 0) && (p.id !== "simpler" || firstExplain || qa.turns.length));
+  const presets = qaPresetsFor(kind).filter((p) => (!p.needsAnswer || answered) && (!p.needsPast || qa.pastCount > 0) && (p.id !== "simpler" || firstExplain || qa.turns.length));
 
   if (!qa.sentences.length) return null;
 
@@ -311,7 +320,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   }
 
   let statusLine;
-  if (qa.loading) statusLine = <span style={{ color: theme.solid }}>AI 正在对照原文作答…</span>;
+  if (qa.loading) statusLine = <span style={{ color: theme.solid }}>{kind === "listening" || kind === "lcr" ? "AI 正在对照听力原文作答…" : "AI 正在对照原文作答…"}</span>;
   else if (qa.error) {
     statusLine = (
       <span style={{ color: "#E11D48" }}>
@@ -329,7 +338,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       style={{ marginTop: 8, padding: "10px 12px", borderRadius: 10, background: theme.cardBg, border: `1px solid ${theme.cardBd}`, display: "flex", flexDirection: "column", gap: 8, minWidth: 0 }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: 11, fontWeight: 800, color: theme.text, letterSpacing: "0.04em" }}>{firstExplain || qa.turns.length ? "继续追问" : "问这道题"}</span>
+        <span style={{ fontSize: 11, fontWeight: 800, color: theme.text, letterSpacing: "0.04em" }}>{firstExplain || qa.turns.length ? "继续追问" : kind === "ctw" ? "问这个空" : "问这道题"}</span>
         <button type="button" onClick={() => setExpanded(false)} style={{ border: "none", background: "none", color: "#94a39a", fontSize: 11, cursor: "pointer" }}>收起</button>
       </div>
 
@@ -378,7 +387,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
             e.preventDefault();
             sendInput();
           }}
-          placeholder="问这道题的任何问题，比如某句为什么这么说"
+          placeholder={PLACEHOLDER[kind] || PLACEHOLDER.reading}
           style={{ flex: 1, minWidth: 0, resize: "vertical", fontSize: 16, lineHeight: 1.5, padding: "6px 8px", border: `1px solid ${theme.bd}`, borderRadius: 8, fontFamily: "inherit", maxHeight: 120 }}
         />
         <button
@@ -397,9 +406,17 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       {reporting != null ? <ReportBox detail={detail} answer={reporting} onDone={() => setReporting(null)} /> : null}
 
       <div style={{ fontSize: 11, color: "#9CA3AF", lineHeight: 1.5 }}>
-        回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。
+        {kind === "listening" || kind === "lcr" ? "回答只依据本题听力原文和你的作答；标「非本题材料」的是通用常识。" : "回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。"}
         {reporting == null ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(lastAnswer)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
       </div>
     </div>
   );
+}
+
+/** 「问这道题」：不看讲解也能直接追问（打开就是展开的对话框，第一轮讲解为空）。 */
+export function AskQuestionButton({ review, onClick, label = "问这道题" }) {
+  const style = review
+    ? { padding: "5px 10px", borderRadius: 8, border: "1px solid #6366F1", background: "#fff", color: "#4338CA", fontSize: 12, fontWeight: 700, cursor: "pointer" }
+    : { marginLeft: 8, fontSize: 12, fontWeight: 600, color: "#0284c7", background: "#fff", border: "1px solid #0284c7", borderRadius: 6, padding: "4px 12px", cursor: "pointer" };
+  return <button type="button" data-testid="qa-ask" onClick={onClick} style={style}>{label}</button>;
 }

@@ -242,7 +242,7 @@ export function McqReview({ session, subtype, model, vid, ctx }) {
                         {...listeningAi} />
                     ) : (
                       <ListeningAiExplainBlock variant="review" includeCorrect explainKey={`${session.id}-q${i}`}
-                        detail={{ subtype: d.subtype || subtype, qid: q.qid || `${d.itemIds?.[0] || session.id}-q${i}`, stem, contextText: transcript || (isTurns ? conversationText(conversation) : ""), options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
+                        detail={{ subtype: d.subtype || subtype, qid: q.qid || `${d.itemIds?.[0] || session.id}-q${i}`, stem, contextText: transcript || (isTurns ? conversationText(conversation) : ""), conversation: isTurns ? conversation : null, options: q.options || r.options || {}, selected: r.selected, correct: correctKey, isCorrect: ok }}
                         {...listeningAi} />
                     )}
                   </div>

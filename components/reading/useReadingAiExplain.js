@@ -6,7 +6,7 @@ import { EXPLAIN_SYSTEM, EXPLAIN_SYSTEM_CORRECT, buildEvidence, parseTrap, plain
 import { saveTrap } from "../../lib/qa/trapStore";
 import { loadAnswerEvidence, answerEvidenceFor } from "../../lib/qa/answerEvidence";
 import { AiExplainView } from "../shared/AiExplainView";
-import { QuestionQaPanel, CitedText } from "./QuestionQaPanel";
+import { QuestionQaPanel, CitedText, AskQuestionButton } from "./QuestionQaPanel";
 
 // 阅读选择题（RDL / AP，含真题选句题）的 AI 讲解。与 useCtwAiExplain / useBsAiExplain
 // 同一骨架：Pro 门 + localStorage 缓存 + 点了才计费。差别只在 prompt——阅读考的是
@@ -187,11 +187,4 @@ export function ReadingAiExplainBlock({ explainKey, detail, aiExplains, isPro, h
       {qaPanel}
     </div>
   );
-}
-
-function AskQuestionButton({ review, onClick }) {
-  const style = review
-    ? { padding: "5px 10px", borderRadius: 8, border: "1px solid #6366F1", background: "#fff", color: "#4338CA", fontSize: 12, fontWeight: 700, cursor: "pointer" }
-    : { marginLeft: 8, fontSize: 12, fontWeight: 600, color: "#0284c7", background: "#fff", border: "1px solid #0284c7", borderRadius: 6, padding: "4px 12px", cursor: "pointer" };
-  return <button type="button" data-testid="qa-ask" onClick={onClick} style={style}>问这道题</button>;
 }

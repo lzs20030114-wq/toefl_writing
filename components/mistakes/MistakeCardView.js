@@ -8,6 +8,7 @@ import { useMcqAiExplain } from "./useMcqAiExplain";
 import { McqMistakeCard } from "./McqMistakesView";
 import { SUBJECT_META, SUBTYPE_META } from "../../lib/mistakes/extract";
 import { relativeDay } from "../../lib/mistakes/format";
+import { qaDetailForCard } from "../../lib/qa/mistakeQaDetail";
 
 /** 三科 AI 讲解 hook 打包（错题本 / 练错题报告共用；都是 Pro 门 + localStorage 缓存 + 点了才计费）。 */
 export function useMistakeAi() {
@@ -114,6 +115,8 @@ export function MistakeItemCard({ card, items, ai, onToggleStar, onRemove, onRes
   const sub = SUBTYPE_META[card.subtype];
   const explainKey = `mn-${card.key}`;
   const context = useMemo(() => contextForCard(card, items), [card, items]);
+  // 答疑窗口（继续追问）要的那道题；篇级快照不在（老错题）时为 null，就不放追问。
+  const qaDetail = useMemo(() => qaDetailForCard(card, items), [card, items]);
   const it = card.itemKey ? items?.[card.itemKey] : null;
 
   return (
@@ -168,6 +171,7 @@ export function MistakeItemCard({ card, items, ai, onToggleStar, onRemove, onRes
           isPro={ai[card.subject].isPro}
           handleAiExplain={ai[card.subject].handleAiExplain}
           section={card.subject}
+          qaDetail={qaDetail}
           bare
         />
       )}
