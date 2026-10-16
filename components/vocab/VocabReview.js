@@ -968,7 +968,7 @@ export function VocabReview({
                       background: C.bg, borderRadius: 10, padding: "10px 14px",
                       borderLeft: `3px solid ${ACCENT}`,
                     }}>
-                      {highlight(cleanContextSentence(shownSentence), card.word)}
+                      {highlight(cleanContextSentence(shownSentence, card.word), card.word)}
                     </div>
                   )}
                 </>
