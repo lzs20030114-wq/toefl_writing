@@ -355,7 +355,7 @@ function LCRSpeakerReview({ speakerText, item }) {
         <NotedLookup passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence}
           listeningAudio={{ audioUrl, timings: sp.timings }}
           style={{ fontSize: 13, color: P.text, lineHeight: 1.6, padding: "8px 12px", background: "#f8faf9", borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${ACCENT.color}`, fontStyle: "italic" }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>Speaker:</span>
+          <span data-no-dict style={{ fontSize: 11, fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>Speaker:</span>
           <SentenceTranscript timings={sp.timings} transcript={speakerText} activeIndex={sp.activeIndex} onPick={sp.onPick} />
         </NotedLookup>
       )}
