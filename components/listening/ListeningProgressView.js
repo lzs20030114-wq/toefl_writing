@@ -6,7 +6,7 @@ import { StatCard } from "../shared/StatCard";
 import { AccuracyTrendChart } from "../shared/AccuracyTrendChart";
 import { AudioPlayer } from "./AudioPlayer";
 import { SentenceTranscript, activeSentenceIndex, pinnedSentenceIndex, sentenceAt } from "./SentenceTranscript";
-import { WordLookupLayer } from "../reading/WordLookupLayer";
+import { NotedLookup } from "../notes/NotedLookup";
 import { questionLookupContext } from "../../lib/dict/core";
 import { findSentenceTimingsByAudioUrl } from "../../lib/listening/timingsLookup";
 import { useListeningAiExplain, ListeningAiExplainBlock, conversationText } from "./useListeningAiExplain";
@@ -322,12 +322,12 @@ function LCRSpeakerReview({ speakerText, item }) {
   return (
     <>
       {speakerText && (
-        <WordLookupLayer passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence}
+        <NotedLookup passage={speakerText} source="listening" onPlaySentence={sp.onPlaySentence}
           listeningAudio={{ audioUrl, timings: sp.timings }}
           style={{ fontSize: 13, color: P.text, lineHeight: 1.6, padding: "8px 12px", background: "#f8faf9", borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${ACCENT.color}`, fontStyle: "italic" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: ACCENT.color, marginRight: 6 }}>Speaker:</span>
           <SentenceTranscript timings={sp.timings} transcript={speakerText} activeIndex={sp.activeIndex} onPick={sp.onPick} />
-        </WordLookupLayer>
+        </NotedLookup>
       )}
       {(audioUrl || speakerText) && (
         <div data-no-dict style={{ marginBottom: 8 }}>
@@ -367,7 +367,7 @@ export function LCRDetail({ session }) {
             <LCRSpeakerReview speakerText={speakerText} item={q} />
             {/* Options A/B/C/D */}
             {Object.keys(options).length > 0 && (
-              <WordLookupLayer passage={Object.values(options).join(" ")} source="listening" style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: explanation ? 8 : 0 }}>
+              <NotedLookup passage={questionLookupContext(speakerText, [{ options }])} source="listening" style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: explanation ? 8 : 0 }}>
                 {["A", "B", "C", "D"].map(key => {
                   if (!options[key]) return null;
                   const isUserChoice = r.selected === key;
@@ -385,7 +385,7 @@ export function LCRDetail({ session }) {
                     </div>
                   );
                 })}
-              </WordLookupLayer>
+              </NotedLookup>
             )}
             {/* Fallback when no options saved */}
             {Object.keys(options).length === 0 && (
@@ -453,13 +453,13 @@ export function LADetail({ session }) {
       )}
       {/* Transcript / announcement text（有句级时间戳时逐句可点） */}
       {transcript && (
-        <WordLookupLayer passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <NotedLookup passage={transcript} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           <SentenceTranscript timings={sp.timings} transcript={transcript} activeIndex={sp.activeIndex} onPick={sp.onPick} />
-        </WordLookupLayer>
+        </NotedLookup>
       )}
       {/* Per-question detail */}
       {results.length > 0 ? (
-        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <NotedLookup passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -528,7 +528,7 @@ export function LADetail({ session }) {
               </div>
             );
           })}
-        </WordLookupLayer>
+        </NotedLookup>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}
@@ -563,19 +563,19 @@ export function LCDetail({ session }) {
       )}
       {/* Conversation turns as chat bubbles（有句级时间戳时逐句可点；气泡样式在 SentenceTranscript 里） */}
       {conversation.length > 0 ? (
-        <WordLookupLayer passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ marginBottom: 12 }}>
+        <NotedLookup passage={audioText} source="listening" onPlaySentence={sp.onPlaySentence} listeningAudio={{ audioUrl, timings: sp.timings }} style={{ marginBottom: 12 }}>
           <SentenceTranscript variant="turns" timings={sp.timings} conversation={conversation} activeIndex={sp.activeIndex} onPick={sp.onPick} />
-        </WordLookupLayer>
+        </NotedLookup>
       ) : transcript ? (
         /* Fallback: show transcript as plain text block */
-        <WordLookupLayer passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
+        <NotedLookup passage={transcript} source="listening" style={{ fontSize: 13, color: P.text, lineHeight: 1.7, padding: "10px 14px", background: "#f8faf9", borderRadius: 10, marginBottom: 10, whiteSpace: "pre-wrap", maxHeight: 180, overflow: "auto", fontStyle: "italic", borderLeft: `3px solid ${P.textDim}` }}>
           {transcript}
-        </WordLookupLayer>
+        </NotedLookup>
       ) : null}
 
       {/* Questions (same pattern as LA/LAT) */}
       {results.length > 0 ? (
-        <WordLookupLayer passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <NotedLookup passage={lookupContext} source="listening" style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {results.map((r, i) => {
             const q = questions[i] || {};
             const stem = q.stem || r.stem || "";
@@ -640,7 +640,7 @@ export function LCDetail({ session }) {
               </div>
             );
           })}
-        </WordLookupLayer>
+        </NotedLookup>
       ) : (
         <div style={{ fontSize: 12, color: P.textDim, fontStyle: "italic" }}>暂无详细题目数据</div>
       )}
