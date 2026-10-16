@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
+import { ETS, EtsTopBar, etsProgressLabel } from "../shared/etsExamUi";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { buildInterviewIntro } from "../../lib/speakingGen/introTemplates";
@@ -37,7 +38,8 @@ const ANSWER_DURATION = 45; // seconds per question
  *   realMock    — 真题模考（SpeakingExamShell realMock）：「跳过等待」时没评完的题无法评分，
  *                 整场不出估分，提示文案照实说。
  */
-export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPractice = false, realMock = false }) {
+// etsNumbering（真题模考传 { offset, total }）：作答页换成真题界面的细栏 + 白底，题号接着复述往下编。
+export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPractice = false, realMock = false, etsNumbering = null }) {
   // Exam-controller mode: the mock-exam shell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so question prompts play
   // through the shared persistent element. examController is non-null in practice
@@ -789,9 +791,18 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
   }
 
   // ── Active question screen ──
+  const ets = !!etsNumbering;
+  const Shell = ets ? EtsSpeakingShell : PageShell;
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+    <div style={{ minHeight: "100vh", background: ets ? ETS.canvas : C.bg, fontFamily: FONT }}>
       <style>{timerCSS}</style>
+      {ets ? (
+        <EtsTopBar
+          section="Speaking"
+          progress={etsProgressLabel(etsNumbering.offset + current + 1, etsNumbering.offset + current + 1, etsNumbering.total)}
+          onExit={onExit}
+        />
+      ) : (
       <TopBar
         title="Interview"
         section="Speaking | Task 2"
@@ -799,9 +810,10 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
         elapsedTime={totalElapsed}
         onExit={onExit}
       />
-      <PageShell narrow>
+      )}
+      <Shell narrow>
         {/* Progress dots */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 24 }}>
+        <div style={{ display: ets ? "none" : "flex", justifyContent: "center", gap: 8, marginBottom: 24 }}>
           {items.map((_, i) => (
             <div key={i} style={{
               width: i === current ? 32 : 10, height: 10, borderRadius: 5,
@@ -813,7 +825,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
           ))}
         </div>
 
-        <SurfaceCard style={{ padding: "32px 28px" }}>
+        <SurfaceCard style={{ padding: "32px 28px", ...(ets ? { border: "none", boxShadow: "none", borderRadius: 0, background: "transparent" } : {}) }}>
           {/* Question header */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -1062,7 +1074,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
             </button>
           </div>
         )}
-      </PageShell>
+      </Shell>
 
       <SpeechConsentModal
         open={needsConsent}
@@ -1071,6 +1083,10 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
       />
     </div>
   );
+}
+
+function EtsSpeakingShell({ children }) {
+  return <div className="tp-shell-inner" style={{ maxWidth: 920, margin: "0 auto", padding: "28px 20px 48px" }}>{children}</div>;
 }
 
 /** Dimension labels mapping. */

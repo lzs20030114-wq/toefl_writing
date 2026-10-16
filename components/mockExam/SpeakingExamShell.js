@@ -501,6 +501,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
           onExit={onExit}
           isPractice={false}
           realMock={realMock}
+          etsNumbering={realMock ? { offset: 0, total: (exam.repeatSet.sentences || []).length + (exam.interviewSet?.questions || []).length } : null}
         />
       )}
 
@@ -524,6 +525,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
           onExit={onExit}
           isPractice={false}
           realMock={realMock}
+          etsNumbering={realMock ? { offset: (exam.repeatSet?.sentences || []).length, total: (exam.repeatSet?.sentences || []).length + (exam.interviewSet.questions || []).length } : null}
         />
       )}
 

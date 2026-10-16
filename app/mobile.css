@@ -13,6 +13,14 @@
   .tp-topbar-mid {
     display: none !important;
   }
+  /* 真题模考的考试细栏：手机上收紧间距，「Hide Time」只留眼睛图标，给题号让位 */
+  .tp-ets-bar {
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+  .tp-ets-hide-label {
+    display: none !important;
+  }
 
   /* ── PageShell（练习页外壳）── */
   .tp-shell-inner {

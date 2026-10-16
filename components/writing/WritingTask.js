@@ -13,6 +13,7 @@ import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toa
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
 import { WritingPromptPanel } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
+import { ETS } from "../shared/etsExamUi";
 import { formatMinutesLabel, PRACTICE_MODE, STANDARD_TIME_SECONDS, formatLongDuration } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -93,6 +94,8 @@ export function WritingTask({
   // Null uses the regular bank; an explicitly empty bank must stay empty.
   prompts = null,
   embedded = false,
+  // 真题模考：桌面端作答页换成真题（ETS 机考）外观 —— 白底、左题右答、无提示条。
+  etsLook = false,
   persistSession = true,
   onComplete = null,
   deferScoring = false,
@@ -554,10 +557,12 @@ export function WritingTask({
     ? `Write an email addressing all 3 goals.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 80–120 words.`
     : `Read the discussion and write your response.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 100+ words.`;
   const mobileActiveWriting = isMobile && !initialError && pd && !(intro && phase === "ready");
+  // 真题外观不要 PageShell 的灰底，只保留同样的内容宽度。
+  const DesktopShell = etsLook ? EtsDesktopShell : PageShell;
 
   return (
     <div style={{
-      background: C.bg, fontFamily: FONT,
+      background: etsLook ? ETS.canvas : C.bg, fontFamily: FONT,
       ...(mobileActiveWriting
         ? {
             // In an embedded mock the shell pins a fixed 44px mobile countdown bar at
@@ -634,7 +639,7 @@ export function WritingTask({
           </div>
         </div>
       ) : (
-        <PageShell narrow>
+        <DesktopShell narrow>
           {initialError && (
             <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
@@ -671,7 +676,26 @@ export function WritingTask({
                   </div>
                 </SurfaceCard>
               ) : (
-                <>
+                etsLook ? (
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 0, paddingTop: 24 }}>
+                    <div style={{ paddingRight: 28, borderRight: "6px solid #e4e4e4" }}>
+                      <WritingPromptPanel type={type} pd={pd} etsLook />
+                    </div>
+                    <div style={{ paddingLeft: 28, display: "flex", flexDirection: "column", gap: 14 }}>
+                      <WritingResponsePanel
+                        type={type} pd={pd} phase={phase}
+                        text={text} onTextChange={setText}
+                        w={w} minW={minW} fb={fb}
+                        deferScoring={deferScoring}
+                        requestState={requestState} scoreError={scoreError}
+                        onStart={start} onSubmit={submitScore}
+                        onRetry={retryScore} onExit={onExit}
+                        embedded={embedded}
+                        etsLook
+                      />
+                    </div>
+                  </div>
+                ) : <>
                   <InfoStrip style={{ marginBottom: 20 }}>
                     <b>Directions: </b>{directionsText}
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
@@ -698,9 +722,12 @@ export function WritingTask({
               )}
             </>
           )}
-        </PageShell>
+        </DesktopShell>
       )}
     </div>
   );
 }
 
+function EtsDesktopShell({ children }) {
+  return <div className="tp-shell-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px 32px" }}>{children}</div>;
+}

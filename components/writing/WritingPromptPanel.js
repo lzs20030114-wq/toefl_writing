@@ -1,8 +1,10 @@
 ﻿"use client";
 import React from "react";
 import { C, SurfaceCard } from "../shared/ui";
+import { ETS } from "../shared/etsExamUi";
 
-export function WritingPromptPanel({ type, pd }) {
+// etsLook：真题模考里去掉卡片框和标题条，按真题界面直接排正文（只换皮，内容不变）。
+export function WritingPromptPanel({ type, pd, etsLook = false }) {
   const emailGoals = Array.isArray(pd?.goals) ? pd.goals : [];
   const professorName = String(pd?.professor?.name || "Professor");
   const professorText = String(pd?.professor?.text || "");
@@ -10,11 +12,12 @@ export function WritingPromptPanel({ type, pd }) {
   const professorInitial = professorName.trim() ? professorName.trim().slice(0, 1).toUpperCase() : "P";
   const course = pd?.course ? String(pd.course) : "";
 
+  const Shell = etsLook ? EtsPlain : SurfaceCard;
   return (
-    <SurfaceCard style={{ overflow: "hidden" }}>
-      <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle }}>
+    <Shell style={{ overflow: "hidden" }}>
+      {!etsLook && <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle }}>
         {type === "email" ? "Email Prompt" : "Discussion Board"}
-      </div>
+      </div>}
       {type === "email" ? (
         <div style={{ padding: 20 }}>
           <p style={{ fontSize: 14, color: C.t1, lineHeight: 1.7, margin: "0 0 12px" }}>{pd?.scenario || ""}</p>
@@ -65,6 +68,10 @@ export function WritingPromptPanel({ type, pd }) {
           ))}
         </div>
       )}
-    </SurfaceCard>
+    </Shell>
   );
+}
+
+function EtsPlain({ children }) {
+  return <div data-testid="writing-prompt-ets" style={{ fontFamily: ETS.font, color: ETS.ink, fontSize: 15 }}>{children}</div>;
 }

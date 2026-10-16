@@ -10,6 +10,7 @@ import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
 import { markRealMockSeen } from "../../lib/realMockExam/client";
 import { TaskTransitionCard } from "./TaskTransitionCard";
+import { ETS, EtsDirection } from "../shared/etsExamUi";
 
 const TRANSITION_SECONDS = 25;
 
@@ -34,7 +35,10 @@ export function MockExamMainPanel({
   realMockSeenItemIds,
   onRealMockSeen,
   realMockTaskDeadline,
+  onBsQuestionChange,
 }) {
+  // 真题模考：作答页换成真题（ETS 机考）外观 —— 白底、无卡片框，顶栏由 MockExamShell 换成考试细栏。
+  const ets = !!realMockPaper;
   const [transitionTaskId, setTransitionTaskId] = useState("");
   const [transitionLeft, setTransitionLeft] = useState(0);
   const seenBsIdsRef = useRef(new Set());
@@ -80,7 +84,7 @@ export function MockExamMainPanel({
   }, [showTransition, onTimerChange]);
 
   return (
-    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
+    <div style={ets ? { background: ETS.canvas, padding: "0 0 24px" } : { background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
       {showTransition && (
         <TaskTransitionCard
           taskId={currentTask?.taskId}
@@ -104,6 +108,8 @@ export function MockExamMainPanel({
           onTimerChange={onTimerChange}
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
+          etsLook={ets}
+          onQuestionChange={ets ? onBsQuestionChange : null}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: payload.correct || 0,
@@ -132,6 +138,7 @@ export function MockExamMainPanel({
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
+          etsLook={ets}
           autoStartOnMount
           reportLanguage={reportLanguage}
           draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
@@ -168,6 +175,7 @@ export function MockExamMainPanel({
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
+          etsLook={ets}
           autoStartOnMount
           reportLanguage={reportLanguage}
           draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
@@ -217,7 +225,7 @@ export function MockExamMainPanel({
       )}
 
       {session.status === MOCK_EXAM_STATUS.RUNNING && (
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={ets ? { display: "flex", gap: 10, maxWidth: 860, margin: "8px auto 0", padding: "0 24px", opacity: 0.85 } : { display: "flex", gap: 10 }}>
           <Btn onClick={onAbort} variant="danger">中止</Btn>
           <Btn onClick={onExit} variant="secondary">返回</Btn>
         </div>

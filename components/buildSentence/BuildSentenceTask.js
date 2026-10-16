@@ -7,6 +7,7 @@ import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 import { BsSessionDetail } from "../history/BsSessionDetail";
 import { useIsMobile } from "../../hooks/useIsMobile";
+import { ETS, EtsDirection, EtsButton } from "../shared/etsExamUi";
 
 /* ── 触觉反馈 ── */
 function vibrate(ms = 12) {
@@ -104,6 +105,9 @@ export function BuildSentenceTask({
   onTimerChange = null,
   timeLimitSeconds = 410,
   practiceMode = PRACTICE_MODE.STANDARD,
+  // 真题模考：桌面端作答页换成真题（ETS 机考）外观。只换皮，交互与判分不变；练习页不传。
+  etsLook = false,
+  onQuestionChange = null,
 }) {
   const {
     qs,
@@ -152,6 +156,8 @@ export function BuildSentenceTask({
   const seenQuestionIds = useRef(new Set());
   const autoStartedRef = useRef(false);
   const gateId = String(q?.id || q?.qid || "");
+  // 真题模考顶栏的「Question N of 10」跟着当前题走（含「上一题」回退）。
+  useEffect(() => { if (phase === "active") onQuestionChange?.(idx, qs.length); }, [phase, idx, qs.length, onQuestionChange]);
 
   useEffect(() => {
     if (!autoStartOnMount || autoStartedRef.current || phase !== "instruction") return;
@@ -517,7 +523,12 @@ export function BuildSentenceTask({
       userSelect: "none",
       transition: "border-color 0.15s, background 0.15s",
       animation: justPlaced ? "bsPopIn 0.35s cubic-bezier(0.34,1.56,0.64,1), bsPulseSlot 0.5s ease-out" : "none",
-      ...(filled
+      ...(etsLook
+        ? (filled
+          ? { background: "#f1f1f1", color: ETS.ink, border: "1px solid #b9b9b9", borderRadius: 3, fontFamily: ETS.font, fontWeight: 400,
+              opacity: dragItem && dragItem.from === "slot" && dragItem.slotIndex === i ? 0.4 : 1 }
+          : { background: isHover ? ETS.tealSoft : "transparent", color: "transparent", border: "none", borderBottom: "2px solid " + (isHover ? ETS.teal : "#4a4a4a"), borderRadius: 0 })
+        : filled
         ? {
             background: C.blue,
             color: "#fff",
@@ -547,7 +558,9 @@ export function BuildSentenceTask({
             <span
               key={`given-${i}-${gi}`}
               data-testid={`given-token-${i}`}
-              style={{
+              style={etsLook && !isMobile ? {
+                fontSize: 15, color: ETS.ink, fontFamily: ETS.font, padding: "4px 2px",
+              } : {
                 fontSize: isMobile ? 14 : 14,
                 color: "#555",
                 background: "#e8ede9",
@@ -594,7 +607,7 @@ export function BuildSentenceTask({
       onDrop={!isMobile ? onDropBank : undefined}
       style={{
         background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
-        border: "1px solid " + C.bdr,
+        border: etsLook ? "none" : "1px solid " + C.bdr,
         borderRadius: compact ? 10 : 4,
         padding: compact ? "8px 10px" : 16,
         display: "flex",
@@ -603,7 +616,7 @@ export function BuildSentenceTask({
         ...(compact ? { flex: 1, alignContent: "flex-start", overflow: "auto", minHeight: 0 } : { marginBottom: 20, minHeight: 48 }),
       }}
     >
-      {!compact && <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>}
+      {!compact && !etsLook && <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>}
       {bank.length === 0 && <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>{compact ? "已全部放入" : "所有词块都已放入句子，可点击已填槽位退回词块。"}</span>}
       {bank.map((chunk) => {
         const justReturned = animChunkId === chunk.id;
@@ -617,15 +630,15 @@ export function BuildSentenceTask({
             onDragEnd={!isMobile ? onDragEnd : undefined}
             onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
             style={{
-              background: compact ? "#fff" : "#f8f9fa",
-              color: C.t1,
-              border: (compact ? "1.5px" : "1px") + " solid " + C.bdr,
-              borderRadius: compact ? 8 : 4,
-              padding: compact ? "7px 12px" : "6px 14px",
-              fontSize: compact ? 14 : 14,
+              background: compact ? "#fff" : etsLook ? "#f1f1f1" : "#f8f9fa",
+              color: etsLook ? ETS.ink : C.t1,
+              border: (compact ? "1.5px" : "1px") + " solid " + (etsLook ? "#b9b9b9" : C.bdr),
+              borderRadius: compact ? 8 : etsLook ? 3 : 4,
+              padding: compact ? "7px 12px" : etsLook ? "7px 16px" : "6px 14px",
+              fontSize: compact ? 14 : etsLook ? 15 : 14,
               fontWeight: compact ? 500 : 400,
               cursor: "grab",
-              fontFamily: FONT,
+              fontFamily: etsLook ? ETS.font : FONT,
               userSelect: "none",
               touchAction: isMobile ? "none" : undefined,
               opacity: dragItem && dragItem.from === "bank" && dragItem.chunk.id === chunk.id ? 0.4 : 1,
@@ -642,6 +655,27 @@ export function BuildSentenceTask({
   );
 
   const topBarH = embedded ? 0 : 56;
+
+  if (etsLook && !isMobile) {
+    return (
+      <div style={{ background: ETS.canvas, fontFamily: ETS.font }}>
+        <style>{BS_INTERACTION_CSS}</style>
+        {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+        <EtsDirection>Make an appropriate sentence.</EtsDirection>
+        <div style={{ maxWidth: 860, margin: "0 auto", padding: "6px 24px 28px" }}>
+          <div data-testid="bs-ets-prompt" style={{ fontSize: 16, color: ETS.ink, lineHeight: 1.6, marginBottom: 26 }}>{q.prompt}</div>
+          {slotsJSX}
+          <div style={{ height: 1, background: ETS.line, margin: "28px 0 22px" }} />
+          {bankJSX(false)}
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+            <EtsButton variant="secondary" onClick={resetQ}>Reset</EtsButton>
+            {canGoBack && <EtsButton variant="secondary" onClick={goBack}>Back</EtsButton>}
+            <EtsButton data-testid="build-submit" onClick={handleSubmitClick}>Next</EtsButton>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: isMobile ? undefined : "100vh", height: isMobile ? "100dvh" : undefined, background: C.bg, fontFamily: FONT, display: isMobile ? "flex" : undefined, flexDirection: isMobile ? "column" : undefined, overflow: isMobile ? "hidden" : undefined }}>

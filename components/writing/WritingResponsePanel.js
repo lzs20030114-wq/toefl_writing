@@ -1,6 +1,7 @@
 ﻿"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { C, Btn, FONT, SurfaceCard } from "../shared/ui";
+import { ETS, EtsButton } from "../shared/etsExamUi";
 import UpgradeModal from "../shared/UpgradeModal";
 import { getSavedCode, saveAuth } from "../../lib/AuthContext";
 
@@ -113,6 +114,8 @@ export function WritingResponsePanel({
   onExit,
   embedded,
   isMobile,
+  // 真题模考：作答框换成真题界面的素色样式（只换皮）。
+  etsLook = false,
 }) {
   const taRef = useRef(null);
   const historyRef = useRef([]);
@@ -152,9 +155,11 @@ export function WritingResponsePanel({
         </SurfaceCard>
       ) : (
         <>
-          <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
-            <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
-              <span>Your Response</span>
+          <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column", ...(etsLook ? { borderRadius: 0, boxShadow: "none", border: "1px solid #9a9a9a" } : {}) }}>
+            <div style={etsLook
+              ? { background: ETS.canvas, padding: "12px 16px", fontSize: 14, fontWeight: 700, color: ETS.ink, fontFamily: ETS.font, borderBottom: "1px solid " + ETS.line, display: "flex", justifyContent: "space-between" }
+              : { background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
+              <span>{etsLook ? "Your Response:" : "Your Response"}</span>
               <span style={{ color: w < minW ? C.orange : C.green }}>{w} words{w < minW ? ` (${minW - w} more needed)` : ""}</span>
             </div>
 
@@ -246,13 +251,15 @@ export function WritingResponsePanel({
               autoCorrect="off"
               autoCapitalize="off"
               placeholder={type === "email" ? "Dear " + pd.to + ",\n\n" : ""}
-              style={{ flex: 1, minHeight: isMobile ? 80 : (type === "email" ? 280 : 320), border: "none", padding: isMobile ? "10px 12px" : 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
+              style={{ flex: 1, minHeight: isMobile ? 80 : (type === "email" ? 280 : 320), border: "none", padding: isMobile ? "10px 12px" : 16, fontSize: etsLook ? 15 : 14, fontFamily: etsLook ? ETS.font : FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
             />
           </SurfaceCard>
 
           {phase === "writing" ? (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit</Btn>
+              {etsLook
+                ? <EtsButton data-testid="writing-submit" onClick={onSubmit}>Submit</EtsButton>
+                : <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit</Btn>}
               <span style={{ fontSize: 11, color: C.t2 }}>Shortcut: Ctrl+Enter</span>
             </div>
           ) : null}

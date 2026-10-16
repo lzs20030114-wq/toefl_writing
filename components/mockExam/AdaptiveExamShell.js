@@ -24,7 +24,7 @@ import {
   describeModulePlan as describeListeningModulePlan,
   listeningModuleSeconds,
 } from "../../lib/mockExam/listeningPlanner";
-import { finalizeTimedOutResults, itemScorableCount } from "../../lib/mockExam/timeoutFinalize";
+import { finalizeTimedOutResults, itemScorableCount, plannedTotal } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
@@ -38,6 +38,7 @@ import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper 
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
+import { ETS, ETS_BAR_HEIGHT, EtsTopBar, EtsDirection, EtsChoice, EtsButton, etsProgressLabel, rdlDirection, splitPassageTitle } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -125,7 +126,7 @@ const PARTIAL_SAVE_MS = 800;
  * CTW Inline — fill-in-the-blanks within a passage.
  * Each blank shows the displayed_fragment + input for the missing letters.
  */
-function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false }) {
   const [answers, setAnswers] = useState(() => item.blanks.map((_, i) =>
     typeof partialState?.answers?.[i] === "string" ? partialState.answers[i] : ""
   ));
@@ -234,6 +235,38 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
       const isCorrect = submitted
         ? (blank.displayed_fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")
         : null;
+      if (ets) {
+        // 真题界面：给出的字母照常排版，缺的字母是一块灰底空格（不画下划线、不做「锁定」色块）。
+        rendered.push(" ");
+        rendered.push(
+          <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline" }}>
+            {lead && <span>{lead}</span>}
+            <span>{blank.displayed_fragment}</span>
+            <input
+              ref={(el) => (inputRefs.current[bi] = el)}
+              type="text"
+              aria-label={`Blank ${bi + 1}`}
+              value={answers[bi]}
+              onChange={(e) => handleChange(bi, e.target.value.slice(0, missingLen), missingLen)}
+              onKeyDown={(e) => handleKeyDown(bi, e)}
+              disabled={submitted}
+              maxLength={missingLen}
+              autoComplete="off"
+              spellCheck={false}
+              style={{
+                width: `${Math.max(missingLen, 2) * 0.68 + 0.5}em`,
+                height: "1.35em", margin: "0 1px", padding: "0 3px", boxSizing: "border-box",
+                border: "none", borderRadius: 2, outline: "none",
+                background: ETS.blank, color: ETS.ink,
+                fontSize: "inherit", fontFamily: ETS.font, letterSpacing: "0.06em", verticalAlign: "baseline",
+              }}
+            />
+            {tail && <span>{tail}</span>}
+          </span>
+        );
+        blankIdx++;
+        continue;
+      }
       rendered.push(
         <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline", margin: "2px 3px" }}>
           {lead && <span>{lead}</span>}
@@ -281,6 +314,22 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
     }
   }
 
+  if (ets) {
+    return (
+      <div>
+        <EtsDirection>Fill in the missing letters in the paragraph.</EtsDirection>
+        <div style={{ maxWidth: 860, margin: "0 auto", padding: "28px 24px 0" }}>
+          <div style={{ fontSize: 16, lineHeight: 2.1, color: ETS.ink, fontFamily: ETS.font }}>{rendered}</div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 28 }}>
+            {submitted
+              ? <span style={{ fontSize: 13, color: ETS.muted, fontFamily: ETS.font }}>已提交，即将进入下一题...</span>
+              : <EtsButton onClick={handleSubmit}>Next</EtsButton>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>
@@ -305,7 +354,7 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
  * MCQ Inline — generic multiple-choice for RDL, AP, LA, LC, LAT.
  * Shows passage/text, then one question at a time with A/B/C/D buttons.
  */
-function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false, onQuestionChange }) {
   const questions = item.questions || [];
   const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
   const answerSeconds = listeningSecondsForType(taskType);
@@ -356,6 +405,8 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
 
   const question = questions[currentQ];
   const insertParts = insertStemParts(question);
+  // 顶栏「Question N of M」跟着篇内题号走（只有真题外观用）。
+  useEffect(() => { onQuestionChange?.(currentQ); }, [currentQ, onQuestionChange]);
 
   const handleAudioEnded = useCallback(() => {
     setPhase((p) => (p === "listen" ? "answer" : p));
@@ -435,6 +486,19 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   const vocabWord = getVocabTargetWord(question);
   const answeredAll = selections.every((s) => s !== null);
   const correctAnswer = (q) => q.correct_answer || q.answer;
+
+  if (ets) {
+    return (
+      <EtsMCQView
+        item={item} taskType={taskType} question={question} insertParts={insertParts} stem={getStem(question)}
+        passage={passage} vocabWord={vocabWord} isListeningType={isListeningType} phase={phase}
+        answerTimeLeft={answerTimeLeft} currentQ={currentQ} questionCount={questions.length}
+        selected={selections[currentQ]} submitted={submitted} answeredAll={answeredAll}
+        onSelect={handleSelect} onPrev={handlePrev} onNext={handleNext} onSubmit={() => handleSubmit()}
+        onAudioEnded={handleAudioEnded} onStartAnswer={() => setPhase("answer")}
+      />
+    );
+  }
 
   // Task label (shared)
   const taskLabel = (
@@ -641,10 +705,137 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   );
 }
 
+const LISTENING_DIRECTIONS = {
+  lcr: "Choose the best response.",
+  lc: "Listen to a conversation.",
+  la: "Listen to an announcement.",
+  lat: "Listen to an academic talk.",
+};
+
+/** 听力播音阶段的提示：音频放完自动进作答，没声音时可手动开始。 */
+function EtsListenStage({ onStartAnswer }) {
+  return (
+    <div style={{ maxWidth: 640, margin: "0 auto", padding: "18px 24px 0", textAlign: "center" }}>
+      <div style={{ fontSize: 13, color: ETS.muted, marginBottom: 12, lineHeight: 1.6, fontFamily: ETS.font }}>
+        音频会自动播放；如果没有声音，请点击上方的播放按钮。
+      </div>
+      <EtsButton variant="secondary" onClick={onStartAnswer}>开始答题</EtsButton>
+    </div>
+  );
+}
+
+/** 听力作答倒计时：右上角一行小字，最后 10 秒变红。 */
+function EtsAnswerClock({ seconds }) {
+  return (
+    <div style={{ textAlign: "right", fontSize: 13, fontWeight: 600, fontFamily: ETS.font, color: seconds <= 10 ? ETS.wrong : ETS.sub, fontVariantNumeric: "tabular-nums", marginBottom: 6 }}>
+      Time left {formatAnswerTime(seconds)}
+    </div>
+  );
+}
+
+/**
+ * 真题外观的选择题（阅读 RDL / AP 两栏、听力 LA / LC / LAT 单栏）。
+ * 状态全在 MCQInlineTask 里，这里只管画：同一套判分 / 计时 / 存档逻辑不受影响。
+ */
+function EtsMCQView({
+  item, taskType, question, insertParts, stem, passage, vocabWord, isListeningType, phase, answerTimeLeft,
+  currentQ, questionCount, selected, submitted, answeredAll, onSelect, onPrev, onNext, onSubmit, onAudioEnded, onStartAnswer,
+}) {
+  const isLast = currentQ >= questionCount - 1;
+  const canSubmit = answeredAll || (isListeningType && isLast);
+  const choices = (
+    <div role="radiogroup" style={{ marginTop: 18 }}>
+      {["A", "B", "C", "D"].map((key) => question.options[key] ? (
+        <EtsChoice key={key} checked={selected === key} disabled={submitted} onClick={() => onSelect(key)}>
+          {question.options[key]}
+        </EtsChoice>
+      ) : null)}
+    </div>
+  );
+  const stemBlock = insertParts ? (
+    <InsertSentenceStem parts={insertParts} accent={ETS.teal} soft={ETS.tealSoft} />
+  ) : (
+    <div data-testid="ets-stem" style={{ fontSize: 16, fontWeight: 700, color: ETS.ink, lineHeight: 1.5, fontFamily: ETS.font }}>{stem}</div>
+  );
+  const nav = submitted ? (
+    <div style={{ fontSize: 13, color: ETS.muted, marginTop: 20, fontFamily: ETS.font }}>已提交，即将进入下一题...</div>
+  ) : (
+    <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 24 }}>
+      {currentQ > 0 && !isListeningType && <EtsButton variant="secondary" onClick={onPrev}>Back</EtsButton>}
+      {!isLast && <EtsButton onClick={onNext}>Next</EtsButton>}
+      {isLast && canSubmit && <EtsButton onClick={onSubmit}>Next</EtsButton>}
+    </div>
+  );
+
+  if (passage) {
+    const { title, body } = taskType === "ap" ? splitPassageTitle(passage) : { title: null, body: passage };
+    const heading = taskType === "ap" ? (title || "Read an academic passage.") : rdlDirection(item.genre);
+    return (
+      <div>
+        <EtsDirection style={{ paddingBottom: 18 }}><span className="tp-reading-title">{heading}</span></EtsDirection>
+        <div
+          className="tp-reading-split"
+          style={{ display: "flex", alignItems: "stretch", height: `calc(100vh - ${ETS_BAR_HEIGHT + 104}px)`, minHeight: 340, padding: "0 8px 12px" }}
+        >
+          <div className="tp-reading-left" style={{ flex: 1, minWidth: 0, overflowY: "auto", padding: "4px 28px 16px 20px", borderRight: `6px solid #e4e4e4` }}>
+            <div style={{ fontSize: 15, lineHeight: 1.7, color: ETS.ink, whiteSpace: "pre-wrap", fontFamily: ETS.font }}>
+              {vocabWord
+                ? splitForHighlight(body, vocabWord).map((seg, i) =>
+                    seg.hit
+                      ? <mark key={i} style={VOCAB_HIGHLIGHT_STYLE}>{seg.text}</mark>
+                      : <React.Fragment key={i}>{seg.text}</React.Fragment>
+                  )
+                : body}
+            </div>
+          </div>
+          <div className="tp-reading-right" style={{ flex: 1, minWidth: 0, overflowY: "auto", padding: "4px 20px 16px 32px" }}>
+            {stemBlock}
+            {choices}
+            {nav}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const player = (
+    <AudioPlayer
+      src={item.audio_url || null}
+      text={item.announcement || item.lecture || item.transcript || (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")}
+      onEnded={onAudioEnded}
+      maxReplays={0}
+      autoPlay
+      taskType={taskType}
+      itemId={item.id}
+    />
+  );
+  const listening = isListeningType && phase === "listen";
+  // 播放器在播音 / 作答两个阶段都挂在同一位置（换位置会卸载重挂、自动重播）；
+  // 作答时只是收起来，和真题界面一样只留题目。
+  return (
+    <div>
+      {listening && <EtsDirection>{LISTENING_DIRECTIONS[taskType] || "Listen."}</EtsDirection>}
+      {isListeningType && (
+        <div style={listening ? { maxWidth: 640, margin: "0 auto", padding: "8px 24px 0" } : { display: "none" }}>{player}</div>
+      )}
+      {listening ? (
+        <EtsListenStage onStartAnswer={onStartAnswer} />
+      ) : (
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "34px 24px 0" }}>
+          {isListeningType && <EtsAnswerClock seconds={answerTimeLeft} />}
+          {stemBlock}
+          {choices}
+          {nav}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /**
  * LCR Inline — listen and choose a response (single question per item).
  */
-function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(() => ["A", "B", "C", "D"].includes(partialState?.selected) ? partialState.selected : null);
   const [submitted, setSubmitted] = useState(false);
@@ -719,6 +910,35 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
     if (phase !== "choose" || submitted || answerTimeLeft !== 0) return;
     completeAnswer(selected);
   }, [answerTimeLeft, completeAnswer, phase, selected, submitted]);
+
+  if (ets) {
+    return (
+      <div>
+        <EtsDirection>{LISTENING_DIRECTIONS.lcr}</EtsDirection>
+        <div style={phase === "listen" ? { maxWidth: 640, margin: "0 auto", padding: "8px 24px 0" } : { display: "none" }}>
+          <AudioPlayer src={item.audio_url || null} text={item.speaker || ""} onEnded={handleAudioEnded} maxReplays={0} autoPlay taskType="lcr" itemId={item.id} />
+        </div>
+        {phase === "listen" && <EtsListenStage onStartAnswer={() => setPhase("choose")} />}
+        {phase === "choose" && (
+          <div style={{ maxWidth: 760, margin: "0 auto", padding: "8px 24px 0" }}>
+            <EtsAnswerClock seconds={answerTimeLeft} />
+            <div role="radiogroup">
+              {["A", "B", "C", "D"].map((key) => item.options[key] ? (
+                <EtsChoice key={key} checked={selected === key} disabled={submitted} onClick={() => handleSelect(key)}>
+                  {item.options[key]}
+                </EtsChoice>
+              ) : null)}
+            </div>
+            {submitted
+              ? <div style={{ fontSize: 13, color: ETS.muted, marginTop: 20, fontFamily: ETS.font }}>已提交，即将进入下一题...</div>
+              : <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+                  <EtsButton onClick={handleSubmit} disabled={!selected}>Next</EtsButton>
+                </div>}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -827,17 +1047,17 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
 /**
  * Routes to the correct inline renderer based on taskType.
  */
-function AdaptiveTaskRenderer({ item, onComplete, collectorRef, partialState, onProgress }) {
+function AdaptiveTaskRenderer({ item, onComplete, collectorRef, partialState, onProgress, ets = false, onQuestionChange }) {
   if (!item) return null;
 
   if (item.taskType === "ctw") {
-    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} />;
   }
   if (item.taskType === "lcr") {
-    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} />;
   }
   // RDL, AP, LA, LC, LAT all use MCQ
-  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} onQuestionChange={onQuestionChange} />;
 }
 
 // ------ Helper: aggregate module results ------
@@ -1263,6 +1483,23 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 
   const totalItemsInCurrentModule = currentItems ? currentItems.length : 0;
 
+  // 真题模考的做题页换成真题（ETS 机考）外观：顶栏按「题」计数（Question 12 of 35 /
+  // 填词一篇 Questions 1-10 of 35），不按篇计数。篇内题号由选择题组件回报。
+  const etsExam = isReal && (phase === "module1" || phase === "module2");
+  const itemKey = `${phase}-${currentItemIndex}`;
+  const [subQ, setSubQ] = useState({ key: null, q: 0 });
+  const handleQuestionChange = useCallback((q) => setSubQ({ key: itemKey, q }), [itemKey]);
+  let etsProgress = "";
+  if (etsExam && currentItem) {
+    const offset = plannedTotal(currentItems.slice(0, currentItemIndex));
+    const count = itemScorableCount(currentItem);
+    const total = plannedTotal(currentItems);
+    const q = subQ.key === itemKey ? subQ.q : 0;
+    etsProgress = currentItem.taskType === "ctw"
+      ? etsProgressLabel(offset + 1, offset + count, total)
+      : etsProgressLabel(offset + 1 + q, offset + 1 + q, total);
+  }
+
   // Reading passage tasks (RDL / AP) render as a wide two-column layout
   // (passage | question) to match the real exam. CTW (fill-in-the-blanks) and
   // every listening task stay single-column.
@@ -1684,8 +1921,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const routeLabel = (path) => (isReal ? (path === "upper" ? "进阶" : "普通") : (path === "upper" ? "Upper" : "Lower"));
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      {/* Top bar */}
+    <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
+      {/* Top bar — 真题模考做题时换成考试界面的细栏 */}
+      {etsExam ? (
+        <EtsTopBar section={config.label} progress={etsProgress} timeLeft={timeLeft} onExit={onExit} />
+      ) : (
       <TopBar
         title={
           phase === "module1" ? `Module 1 · 路由阶段` :
@@ -1703,9 +1943,13 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         }
         onExit={onExit}
       />
+      )}
 
-      <div className="tp-reading-exam-wrap" style={{ maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
+      <div className="tp-reading-exam-wrap" style={etsExam
+        ? { maxWidth: isWideReading ? 1280 : 1100, margin: "0 auto", padding: "0 12px" }
+        : { maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
         {/* Error state */}
+        {error && isReal && etsExam && <div style={{ height: 24 }} />}
         {error && isReal && (
           <RealErrorCard
             info={errorInfo}
@@ -1750,7 +1994,26 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         )}
 
         {/* Module 1 & 2 — task rendering */}
-        {(phase === "module1" || phase === "module2") && currentItem && !error && realTaskReady && (
+        {etsExam && currentItem && !error && realTaskReady && (
+          <div data-testid="ets-exam-page">
+            <AdaptiveTaskRenderer
+              key={`${phase}-${currentItemIndex}`}
+              item={currentItem}
+              onComplete={handleItemComplete}
+              collectorRef={partialCollectorRef}
+              partialState={partialForCurrent}
+              onProgress={handlePartialProgress}
+              ets
+              onQuestionChange={handleQuestionChange}
+            />
+            {answerError && <div style={{ maxWidth: 760, margin: "14px auto 0", padding: "0 24px", color: "#b91c1c", fontSize: 13, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+              <span>{answerError.message}</span>
+              {answerError.kind === "transient" && <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>}
+              <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
+            </div>}
+          </div>
+        )}
+        {!etsExam && (phase === "module1" || phase === "module2") && currentItem && !error && realTaskReady && (
           <SurfaceCard style={{ padding: "20px 24px" }}>
             {/* Module badge */}
             <div style={{
@@ -1778,7 +2041,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
           </SurfaceCard>
         )}
         {isReal && (phase === "module1" || phase === "module2") && currentItem && !error && !realTaskReady && (
-          <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
+          <SurfaceCard style={{ padding: 24, textAlign: "center", marginTop: 24 }}>
             <div style={{ color: C.t2, fontSize: 14, marginBottom: 12 }}>
               {seenGateError ? seenGateError.message : "正在确认这道题的已见记录…"}
             </div>

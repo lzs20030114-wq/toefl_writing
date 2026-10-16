@@ -92,13 +92,13 @@ test("real reading task stays hidden until seen succeeds, then a timeout routes 
   await page.goto("/reading-exam?source=real-bank");
   await page.getByRole("button", { name: "开始考试" }).click();
   await expect(page.getByText("正在确认这道题的已见记录…")).toBeVisible();
-  await expect(page.getByText("Complete the Words")).toHaveCount(0);
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toHaveCount(0);
   releaseSeen();
-  await expect(page.getByText("Complete the Words")).toBeVisible();
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toBeVisible();
   await page.screenshot({ path: path.join(reportDir, "reading-first-seen.png"), fullPage: true });
   await expect(page.getByText("正在进入下一模块…")).toBeVisible({ timeout: 15_000 });
-  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Lower" before the copy fix).
-  await expect(page.getByText("Module 2 · 普通").first()).toBeVisible({ timeout: 15_000 });
+  // Module 2 restarts the exam bar's count: the lower reading route has 15 questions, CTW first.
+  await expect(page.getByTestId("ets-progress")).toHaveText("Questions 1-10 of 15", { timeout: 15_000 });
   expect(calls.filter((c) => c.action === "seen").every((c) => c.items.every((it) => it.id === "r-sc-ctw" || it.id.startsWith("r-lo")))).toBe(true);
   expect(calls.filter((c) => c.action === "route")[0].path).toBe("lower");
   await expect(page.getByText("真题阅读模考结果")).toBeVisible({ timeout: 15_000 });
@@ -120,9 +120,9 @@ test("seen failure blocks the actual reading task until retry succeeds", async (
   await page.goto("/reading-exam?source=real-bank");
   await page.getByRole("button", { name: "开始考试" }).click();
   await expect(page.getByText("记录暂时失败")).toBeVisible();
-  await expect(page.getByText("Complete the Words")).toHaveCount(0);
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toHaveCount(0);
   await page.getByRole("button", { name: "重试加载" }).click();
-  await expect(page.getByText("Complete the Words")).toBeVisible();
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toBeVisible();
   expect(seenCalls).toBe(2);
   await page.screenshot({ path: path.join(reportDir, "reading-seen-retry.png"), fullPage: true });
 });
@@ -147,8 +147,7 @@ test("listening resumes the actual shell on upper route and a wrong account cann
   await expect(page.getByRole("button", { name: "继续上次模考" })).toBeVisible();
   await page.getByRole("button", { name: "继续上次模考" }).click();
   await expect(page.getByText("正在进入下一模块…")).toBeVisible({ timeout: 10_000 });
-  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Upper" before the copy fix).
-  await expect(page.getByText("Module 2 · 进阶").first()).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByTestId("ets-progress")).toHaveText("Question 1 of 15", { timeout: 10_000 });
   await page.screenshot({ path: path.join(reportDir, "listening-upper-module.png"), fullPage: true });
   await expect(page.getByText("真题听力模考结果")).toBeVisible({ timeout: 15_000 });
   await page.screenshot({ path: path.join(reportDir, "listening-upper-result.png"), fullPage: true });
@@ -166,9 +165,8 @@ test("listening starts a fresh full paper and times out through lower to results
   });
   await page.goto("/listening-exam?source=real-bank");
   await page.getByRole("button", { name: "开始考试" }).click();
-  await expect(page.getByText("Choose a Response")).toBeVisible();
-  // Real mode names the routes 进阶 / 普通 everywhere (was "Module 2 · Lower" before the copy fix).
-  await expect(page.getByText("Module 2 · 普通").first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("Choose the best response.")).toBeVisible();
+  await expect(page.getByTestId("ets-progress")).toHaveText("Question 1 of 15", { timeout: 15_000 });
   await expect(page.getByText("真题听力模考结果")).toBeVisible({ timeout: 15_000 });
   expect(calls.find((c) => c.action === "route")?.path).toBe("lower");
   expect(calls.filter((c) => c.action === "seen" && !c.answered).map((c) => c.items[0].id)).toEqual(["l-sc-0", "l-lo-0"]);
@@ -212,15 +210,15 @@ test("reading passage selection and question position survive refresh", async ({
   await page.route("**/api/real-mock-exam", (route) => route.fulfill({ contentType: "application/json", body: '{"ok":true}' }));
   await page.goto("/reading-exam?source=real-bank");
   await page.getByRole("button", { name: "继续上次模考" }).click();
-  await expect(page.getByText("Question 1 of 2")).toBeVisible();
-  await page.getByRole("button", { name: "B Two" }).click();
-  await page.getByRole("button", { name: "下一题" }).click();
+  await expect(page.getByTestId("ets-progress")).toHaveText("Question 11 of 35");
+  await page.getByRole("radio", { name: "Two" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
   await expect.poll(() => page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey) || "{}").currentPartial?.data?.currentQ, key)).toBe(1);
   await page.reload();
   await page.getByRole("button", { name: "继续上次模考" }).click();
-  await expect(page.getByText("Question 2 of 2")).toBeVisible();
-  await page.getByRole("button", { name: "上一题" }).click();
-  await expect(page.getByRole("button", { name: "B Two" })).toHaveCSS("border-color", "rgb(59, 130, 246)");
+  await expect(page.getByTestId("ets-progress")).toHaveText("Question 12 of 35");
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByRole("radio", { name: "Two" })).toHaveAttribute("aria-checked", "true");
   await page.screenshot({ path: path.join(reportDir, "reading-rdl-resumed-selection.png"), fullPage: true });
 });
 
@@ -235,14 +233,14 @@ test("listening LCR choice survives refresh while its material starts again", as
   await page.goto("/listening-exam?source=real-bank");
   await page.getByRole("button", { name: "开始考试" }).click();
   await page.getByRole("button", { name: "开始答题" }).click();
-  await page.getByRole("button", { name: "B No" }).click();
+  await page.getByRole("radio", { name: "No" }).click();
   const key = "toefl-adaptive-checkpoint:real-bank:ABC123:2026-full-v1:listening";
   await expect.poll(() => page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey) || "{}").currentPartial?.data?.selected, key)).toBe("B");
   await page.reload();
   await page.getByRole("button", { name: "继续上次模考" }).click();
   await expect(page.getByRole("button", { name: "开始答题" })).toBeVisible();
   await page.getByRole("button", { name: "开始答题" }).click();
-  await expect(page.getByRole("button", { name: "B No" })).toHaveCSS("border-color", "rgb(139, 92, 246)");
+  await expect(page.getByRole("radio", { name: "No" })).toHaveAttribute("aria-checked", "true");
   await page.screenshot({ path: path.join(reportDir, "listening-lcr-resumed-choice.png"), fullPage: true });
 });
 
@@ -301,7 +299,7 @@ test("another unfinished paper is released only by the confirmed release button,
   let confirmText = "";
   page.once("dialog", (dialog) => { confirmText = dialog.message(); return dialog.accept(); });
   await release.click();
-  await expect(page.getByText("Complete the Words")).toBeVisible();
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toBeVisible();
   expect(confirmText).toContain("确定放弃那份没做完的试卷吗");
   expect(prepares.map((p) => p.restartAttemptId || null)).toEqual([null, "other-device-attempt"]);
 });
@@ -329,7 +327,7 @@ test("a paper finished elsewhere offers a fresh paper instead of an endless relo
   expect(await page.evaluate((key) => localStorage.getItem(key), READING_CHECKPOINT_KEY)).toBeNull();
   await page.screenshot({ path: path.join(reportDir, "reading-dead-attempt.png"), fullPage: true });
   await page.getByRole("button", { name: "重新组卷" }).click();
-  await expect(page.getByText("Complete the Words")).toBeVisible();
+  await expect(page.getByText("Fill in the missing letters in the paragraph.")).toBeVisible();
   expect(prepares.map((p) => p.restartAttemptId || null)).toEqual([null, null]);
 });
 

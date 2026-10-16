@@ -138,7 +138,8 @@ test("writing reload keeps the current task's remaining time", async ({ page }) 
   await expect(page.getByTestId("mock-transition-skip")).toHaveCount(0);
   await expect(page.getByTestId("mock-section-timer")).toContainText(/^00:/);
   const afterReload = await page.getByTestId("mock-section-timer").textContent();
-  const clockSeconds = (value) => Number(value.slice(0, 2)) * 60 + Number(value.slice(3, 5));
+  // The real mock shows the exam bar clock, HH:MM:SS.
+  const clockSeconds = (value) => value.split(":").reduce((sum, part) => sum * 60 + Number(part), 0);
   expect(clockSeconds(beforeReload)).toBeLessThan(30);
   expect(clockSeconds(afterReload)).toBeLessThan(30);
   expect(clockSeconds(afterReload)).toBeLessThanOrEqual(clockSeconds(beforeReload) + 2);

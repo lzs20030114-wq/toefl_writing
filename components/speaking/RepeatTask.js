@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
+import { ETS, EtsTopBar, EtsDirection, etsProgressLabel } from "../shared/etsExamUi";
 import { VoiceRecorder, warmUpMicrophone } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { AssetPreloadGate } from "../shared/AssetPreloadGate";
@@ -112,7 +113,9 @@ function playOriginalSentence(sentence) {
  *   realMock    — 真题模考（SpeakingExamShell realMock）：「跳过等待」的后果不同 ——
  *                 录了音没识别完的题无法评分，整场不出估分，提示文案照实说。
  */
-function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock = false }) {
+// etsNumbering（真题模考传 { offset, total }）：作答页换成真题界面外观 ——
+// 「Speaking | Question 3 of 11」细栏 + 居中指令 + 白底，题号跨两个任务连续编。
+function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock = false, etsNumbering = null }) {
   // Exam-controller mode: the SpeakingExamShell AND (since 20dcc36) the speaking
   // practice page both mount an ExamAudioProvider, so sentence clips play through
   // the shared persistent element unlocked on the first gesture. examController
@@ -924,8 +927,17 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
   }
 
   // ── Active task screen ──
+  const ets = !!etsNumbering;
+  const Shell = ets ? EtsSpeakingShell : PageShell;
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
+    <div style={{ minHeight: "100vh", background: ets ? ETS.canvas : C.bg, fontFamily: FONT }}>
+      {ets ? (
+        <EtsTopBar
+          section="Speaking"
+          progress={etsProgressLabel(etsNumbering.offset + current + 1, etsNumbering.offset + current + 1, etsNumbering.total)}
+          onExit={onExit}
+        />
+      ) : (
       <TopBar
         title="Listen & Repeat"
         section="Speaking | Task 1"
@@ -933,9 +945,11 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
         elapsedTime={elapsed}
         onExit={onExit}
       />
-      <PageShell narrow>
+      )}
+      {ets && <EtsDirection>Listen and repeat only once.</EtsDirection>}
+      <Shell narrow>
         {/* Progress bar */}
-        <div style={{ marginBottom: 24 }}>
+        {!ets && <div style={{ marginBottom: 24 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <span style={{ fontSize: 14, fontWeight: 700, color: C.t1 }}>
               Sentence {current + 1} of {total}
@@ -950,10 +964,10 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
               transition: "width 300ms ease",
             }} />
           </div>
-        </div>
+        </div>}
 
         {/* Main card */}
-        <SurfaceCard style={{ padding: "32px 28px", textAlign: "center" }}>
+        <SurfaceCard style={{ padding: ets ? "8px 28px 32px" : "32px 28px", textAlign: "center", ...(ets ? ETS_FLAT_CARD : {}) }}>
           {/* 场景插图：听句 / 录音 / 复盘三阶段都常驻卡片顶部，按当前句切高亮帧。
               key 带上 url —— 换帧时重新挂载，上一帧的加载失败状态不会粘在新帧上。 */}
           {sceneFrame && <SceneImage key={sceneFrame.url} frame={sceneFrame} />}
@@ -1109,7 +1123,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
             </button>
           </div>
         )}
-      </PageShell>
+      </Shell>
 
       <SpeechConsentModal
         open={needsConsent}
@@ -1118,6 +1132,12 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
       />
     </div>
   );
+}
+
+const ETS_FLAT_CARD = { border: "none", boxShadow: "none", borderRadius: 0, background: "transparent" };
+
+function EtsSpeakingShell({ children }) {
+  return <div className="tp-shell-inner" style={{ maxWidth: 920, margin: "0 auto", padding: "0 20px 48px" }}>{children}</div>;
 }
 
 /**

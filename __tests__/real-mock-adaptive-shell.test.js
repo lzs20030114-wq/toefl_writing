@@ -190,7 +190,7 @@ describe("real reading mock shell", () => {
     await click(release);
     expect(prepareRealMockExam).toHaveBeenCalledTimes(2);
     expect(prepareRealMockExam).toHaveBeenLastCalledWith("reading", { restartAttemptId: "other-device" });
-    expect(await screen.findByText("Complete the Words")).toBeInTheDocument();
+    expect(await screen.findByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
     confirm.mockRestore();
   });
 
@@ -225,7 +225,7 @@ describe("real reading mock shell", () => {
     prepareRealMockExam.mockResolvedValueOnce(readingPaper({ attemptId: "attempt-2" }));
     await click(screen.getByRole("button", { name: "重新组卷" }));
     expect(prepareRealMockExam).toHaveBeenLastCalledWith("reading", undefined);
-    expect(await screen.findByText("Complete the Words")).toBeInTheDocument();
+    expect(await screen.findByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
   });
 
   test("a transient seen failure retries or saves and exits; an account failure only exits", async () => {
@@ -238,7 +238,7 @@ describe("real reading mock shell", () => {
     expect(onExit).toHaveBeenCalledTimes(1);
     expect(checkpoint()?.paper?.attemptId).toBe("attempt-1");
     await click(screen.getByRole("button", { name: "重试加载" }));
-    expect(screen.getByText("Complete the Words")).toBeInTheDocument();
+    expect(screen.getByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
     cleanup();
     markRealMockSeen.mockRejectedValueOnce(new RealMockError("真题模考需要 Pro 权限。", { code: "PRO_REQUIRED" }));
     renderShell();
@@ -255,10 +255,10 @@ describe("real reading mock shell", () => {
     renderShell();
     await startExam();
     await advance(2000);
-    expect(screen.getByText("09:58")).toBeInTheDocument();
-    await click(screen.getByRole("button", { name: "提交" }));
+    expect(screen.getByText("00:09:58")).toBeInTheDocument();
+    await click(screen.getByRole("button", { name: "Next" }));
     await advance(800); // the submit animation, then onComplete starts the answered sync
-    const frozen = screen.getByText(/^\d\d:\d\d$/).textContent;
+    const frozen = screen.getByText(/^\d\d:\d\d:\d\d$/).textContent;
     await advance(5000);
     expect(screen.getByText(frozen)).toBeInTheDocument();
     await act(async () => { answer.reject(new RealMockError("无法连接真题模考服务，请稍后重试。", { code: "NETWORK_ERROR" })); });
@@ -268,8 +268,9 @@ describe("real reading mock shell", () => {
     expect(screen.getByText(frozen)).toBeInTheDocument();
     markRealMockSeen.mockImplementation(ok);
     await click(screen.getByRole("button", { name: "重试同步" }));
-    expect(await screen.findByText("Question 1 of 2")).toBeInTheDocument();
-    expect(screen.getByText("2 / 7")).toBeInTheDocument();
+    // 真题外观的顶栏按题计数：填词占 1-10，下一篇日常阅读的第 1 题是第 11 题。
+    expect(await screen.findByText("Question 1 r-sc-rdl2")).toBeInTheDocument();
+    expect(screen.getByTestId("ets-progress")).toHaveTextContent("Question 11 of 35");
   });
 
   test("an answered sync on a dead paper drops the checkpoint and offers 重新组卷", async () => {
@@ -280,7 +281,7 @@ describe("real reading mock shell", () => {
     renderShell();
     await startExam();
     expect(checkpoint()).not.toBeNull();
-    await click(screen.getByRole("button", { name: "提交" }));
+    await click(screen.getByRole("button", { name: "Next" }));
     await advance(800);
     expect(screen.getByRole("button", { name: "重新组卷" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "重试同步" })).toBeNull();
@@ -304,7 +305,8 @@ describe("real reading mock shell", () => {
     await click(screen.getByRole("button", { name: "重试" }));
     await advance(2500);
     expect(routeRealMockExam).toHaveBeenCalledTimes(2);
-    expect(screen.getAllByText("Module 2 · 普通").length).toBeGreaterThan(0);
+    // 普通路线的 Module 2 共 15 题，第一篇是填词。
+    expect(screen.getByTestId("ets-progress")).toHaveTextContent("Questions 1-10 of 15");
   });
 
   test("the record is saved before finish, and a finish that never lands cannot hold the results back", async () => {
@@ -314,7 +316,7 @@ describe("real reading mock shell", () => {
     await advance(1000);
     await advance(1000); // Module 1 times out on the first CTW
     await advance(2500); // routing → lower
-    expect(screen.getAllByText("Module 2 · 普通").length).toBeGreaterThan(0);
+    expect(screen.getByTestId("ets-progress")).toHaveTextContent("Questions 1-10 of 15");
     await advance(1000);
     await advance(1000); // Module 2 times out on its first CTW
     expect(screen.getByText("真题阅读模考结果")).toBeInTheDocument();

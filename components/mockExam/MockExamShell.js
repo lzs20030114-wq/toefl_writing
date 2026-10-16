@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
+import { ETS, EtsTopBar, etsProgressLabel } from "../shared/etsExamUi";
 import { fmt } from "../../lib/utils";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
@@ -203,6 +204,9 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
 
   const progress = useMemo(() => mockExamRunner.getExamProgress(session), [session]);
   const currentTask = useMemo(() => mockExamRunner.getCurrentTask(session), [session]);
+  // 真题模考作答中：顶栏换成真题界面的细栏（Writing | Question 3 of 10 + 计时），侧栏计时卡收起。
+  const [bsQuestion, setBsQuestion] = useState({ idx: 0, total: 10 });
+  const onBsQuestionChange = useCallback((idx, total) => setBsQuestion({ idx, total }), []);
   currentTaskIdRef.current = currentTask?.taskId || "";
   const paper = realMock ? session?.realMockPaper : null;
   const onTaskTimerChange = useCallback(({ timeLeft, isRunning, phase }) => {
@@ -487,10 +491,17 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     </>
   );
 
+  const etsExam = realMock && session?.status === MOCK_EXAM_STATUS.RUNNING;
+  const etsProgress = !etsExam || !currentTask ? ""
+    : currentTask.taskId === TASK_IDS.BUILD_SENTENCE ? etsProgressLabel(bsQuestion.idx + 1, bsQuestion.idx + 1, bsQuestion.total)
+    : etsProgressLabel(currentTask.taskId === TASK_IDS.EMAIL_WRITING ? 1 : 2, currentTask.taskId === TASK_IDS.EMAIL_WRITING ? 1 : 2, 2);
+
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />
-      <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
+    <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
+      {etsExam
+        ? <EtsTopBar section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer" />
+        : <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />}
+      <div style={{ maxWidth: etsExam ? 1280 : 1200, margin: etsExam ? "0 auto" : "24px auto", padding: "0 20px" }}>
         {showCostModal && (
           <MockExamCostConfirmModal
             remaining={usageRemaining}
@@ -525,7 +536,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
                 far below the answer area on phones, so reuse the already-lifted
                 sectionTimer as a fixed top bar. Hidden on desktop (display:none →
                 flipped to flex by app/mobile.css). */}
-            {session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null && (
+            {!etsExam && session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null && (
               <div
                 className="tp-mobile-timer"
                 style={{
@@ -550,7 +561,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
             )}
             {/* 主栏写 minmax(0, 1fr)：裸 1fr = minmax(auto, 1fr)，主栏里的任务内容一旦有
                 不可断行的长串就会把整个 grid 顶宽，连带 280px 侧栏被推出可视区。 */}
-            <div className={"tp-exam-grid" + (session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
+            <div className={"tp-exam-grid" + (!etsExam && session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: etsExam ? "minmax(0, 1fr)" : "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
             {realMock && pendingSubmission ? <div style={{ background: "#fff", padding: 24, color: C.red }} role="alert">{taskGate.error}<button onClick={() => submitTaskResult(pendingSubmission)}>重试提交</button></div>
               : realMock && currentTask?.taskId !== TASK_IDS.BUILD_SENTENCE && session.status === MOCK_EXAM_STATUS.RUNNING && (taskGate.id !== currentTask?.taskId || taskGate.state !== "ready") ? <div role={taskGate.state === "error" ? "alert" : undefined} style={{ background: "#fff", padding: 24, color: taskGate.state === "error" ? C.red : C.t2 }}>{taskGate.state === "error" ? <>{taskGate.error}<button onClick={() => setGateRetryTick((tick) => tick + 1)} style={{ marginLeft: 12 }}>重试确认</button></> : "正在确认题目状态…"}</div>
               : <MockExamMainPanel
@@ -574,8 +585,9 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               realMockSeenItemIds={session.realMockSeenItemIds || []}
               onRealMockSeen={onRealMockSeen}
               realMockTaskDeadline={session.realMockTaskDeadlines?.[currentTask?.taskId] || null}
+              onBsQuestionChange={onBsQuestionChange}
             />}
-            <SectionTimerPanel
+            {!etsExam && <SectionTimerPanel
               currentTask={currentTask}
               progress={progress}
               sectionTimer={sectionTimer}
@@ -584,7 +596,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               aggregate={session.aggregate}
               isAborted={session.status === MOCK_EXAM_STATUS.ABORTED}
               realMock={realMock}
-            />
+            />}
             </div>
           </>
         )}
