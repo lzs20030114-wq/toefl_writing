@@ -17,6 +17,8 @@ import DailyQuotaCard from "./DailyQuotaCard";
 import VocabImportDialog from "./VocabImportDialog";
 import VocabExportDialog from "./VocabExportDialog";
 import { getVocabAccountKey, loadBook, setWordFamily } from "../../lib/vocab/vocabStore";
+import { familyBackfillPlan } from "../../lib/vocab/familyBackfill";
+import { ensureNotesPulled, loadAllNotes, noteAccount, subscribeNotes } from "../../lib/notes/noteStore";
 import styles from "./VocabNotebook.module.css";
 
 const PAGE_SIZE = 60;
@@ -174,6 +176,19 @@ export default function VocabNotebook({ onBack, sidebar, embedded = false, onRev
     makeQueue, grade, undo, suspend, editDef, remove, reset, setProductive, setReviewMode, schedule } = useVocabBook();
   const [queue, setQueue] = useState(null);
   useEffect(() => { setQueue(null); }, [accountKey]);
+  // 词形成组之前从词形表收藏的词：按笔记里那张表补进组（见 lib/vocab/familyBackfill）。
+  const cardsRef = useRef(cards);
+  cardsRef.current = cards;
+  useEffect(() => {
+    if (!ready || !accountKey || accountKey !== getVocabAccountKey() || accountKey !== noteAccount()) return undefined;
+    const run = () => {
+      if (getVocabAccountKey() !== accountKey) return;
+      for (const { family, words } of familyBackfillPlan(loadAllNotes(accountKey), cardsRef.current)) setWordFamily(words, family);
+    };
+    run();
+    ensureNotesPulled(accountKey);
+    return subscribeNotes((account) => { if (account === accountKey) run(); });
+  }, [ready, accountKey]);
   // 复习（含结算页）期间告诉外层：可以收起侧栏进入专注模式；离开页面时一定还原。
   const reviewing = !!queue && queue.account === accountKey;
   useEffect(() => {
