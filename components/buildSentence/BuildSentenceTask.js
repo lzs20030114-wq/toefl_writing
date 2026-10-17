@@ -99,6 +99,8 @@ export function BuildSentenceTask({
   persistSession = true,
   onComplete = null,
   beforeQuestion = null,
+  // 不挡题的版本：题目一出现就回调（真题模考在后台记已见，不暂停计时、不出「正在确认」）。
+  onQuestionShown = null,
   recordGroupDone = true,
   onProgress = null,
   autoStartOnMount = false,
@@ -164,6 +166,10 @@ export function BuildSentenceTask({
     autoStartedRef.current = true;
     startTimer();
   }, [autoStartOnMount, phase, startTimer]);
+
+  useEffect(() => {
+    if (onQuestionShown && phase === "active" && q) onQuestionShown(q, idx);
+  }, [onQuestionShown, phase, idx, q]);
 
   useEffect(() => {
     if (!beforeQuestion || phase !== "active" || !q || !gateId) return;

@@ -8,7 +8,7 @@ import { addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
-import { markRealMockSeen } from "../../lib/realMockExam/client";
+import { syncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { TaskTransitionCard } from "./TaskTransitionCard";
 import { ETS, EtsDirection } from "../shared/etsExamUi";
 
@@ -36,6 +36,7 @@ export function MockExamMainPanel({
   onRealMockSeen,
   realMockTaskDeadline,
   onBsQuestionChange,
+  onRealMockSyncFatal,
 }) {
   // 真题模考：作答页换成真题（ETS 机考）外观 —— 白底、无卡片框，顶栏由 MockExamShell 换成考试细栏。
   const ets = !!realMockPaper;
@@ -45,15 +46,16 @@ export function MockExamMainPanel({
   const taskTimeSeconds = realMockPaper && Number.isFinite(realMockTaskDeadline)
     ? Math.max(1, Math.min(currentTask?.seconds || 1, Math.ceil((realMockTaskDeadline - Date.now()) / 1000)))
     : currentTask?.seconds;
-  const beforeBsQuestion = useCallback(async (question) => {
+  // 已见在后台同步（lib/realMockExam/seenSync），造句题一出现就能作答。
+  const onBsQuestionShown = useCallback((question) => {
     if (!realMockPaper) return;
     const item = realMockPaper.bsQuestions.find((candidate) => candidate.id === question?.id);
-    if (!item) throw new Error("当前真题不在预选试卷中");
-    await markRealMockSeen(realMockPaper, [item]);
+    if (!item || seenBsIdsRef.current.has(item.id)) return;
     seenBsIdsRef.current.add(item.id);
     addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [item.id]);
     onRealMockSeen?.(item.id);
-  }, [realMockPaper, onRealMockSeen]);
+    syncRealMockSeen(realMockPaper, [item], { onFatal: onRealMockSyncFatal });
+  }, [realMockPaper, onRealMockSeen, onRealMockSyncFatal]);
 
   useEffect(() => {
     if (session.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
@@ -100,7 +102,7 @@ export function MockExamMainPanel({
           questions={realMockPaper?.bsQuestions}
           initialResults={realMockPaper ? realMockBsProgress : null}
           autoStartOnMount={!!realMockPaper && !!realMockTaskDeadline}
-          beforeQuestion={realMockPaper ? beforeBsQuestion : null}
+          onQuestionShown={realMockPaper ? onBsQuestionShown : null}
           recordGroupDone={!realMockPaper}
           onProgress={realMockPaper ? onRealMockBsProgress : null}
           persistSession={false}

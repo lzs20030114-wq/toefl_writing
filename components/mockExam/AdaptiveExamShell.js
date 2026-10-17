@@ -31,9 +31,10 @@ import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint
 import { getSavedCode } from "../../lib/AuthContext";
 import { REAL_MOCK_TEMPLATE_VERSION, getRealMockConfig } from "../../lib/realMockExam/config";
 import {
-  prepareRealMockExam, markRealMockSeen, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
+  prepareRealMockExam, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
 } from "../../lib/realMockExam/client";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
+import { syncRealMockSeen, flushRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper } from "../../lib/realMockExam/adaptiveScore";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
@@ -1262,11 +1263,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const [currentPartial, setCurrentPartial] = useState(null);
   const [preparing, setPreparing] = useState(false);
   // error: null, or the classified failure ({ kind, message, … }) of this item's seen call.
-  const [seenState, setSeenState] = useState({ key: null, ready: false, error: null });
-  const [seenRetry, setSeenRetry] = useState(0);
   // Classified failure of the current item's answered sync (real mode), or null.
-  const [answerError, setAnswerError] = useState(null);
-  const pendingAnswerRef = useRef(null);
   const answerBusyRef = useRef(false);
   // Completion guard: true once this exam has been saved, so a second completion
   // path (timeout racing the last submit, a stale delayed onComplete) can never
@@ -1408,12 +1405,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       const completeTimeout = async () => {
         // Only the item actually displayed can become answered. Later planned
         // items stay unseen even though they count as wrong in the score.
-        if (isReal && realTaskReady && currentItem) {
-          try { await markRealMockSeen(paper, [currentItem], { answered: true }); }
-          catch (e) {
-            showRealError(e, { title: "超时作答同步失败", retry: completeTimeout });
-            return;
-          }
+        if (isReal && currentItem) {
+          syncRealMockSeen(paper, [currentItem], { answered: true, onFatal: handleSyncFatal });
         }
         if (phase === "module1") {
           setM1Results(finalResults);
@@ -1436,34 +1429,28 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     setCurrentPartial({ phase, itemId: currentItem.id, itemIndex: currentItemIndex, data });
   }, [isReal, phase, currentItem, currentItemIndex]);
   const seenKey = currentItem ? `${paper?.attemptId || ""}:${phase}:${currentItemIndex}:${currentItem.realMockKey || currentItem.id}` : null;
-  const realTaskReady = !isReal || (seenState.key === seenKey && seenState.ready);
-  const seenGateError = seenState.key === seenKey ? seenState.error : null;
   // The clock also waits while an answer could not be synced (the item is
   // already submitted; the student can only retry or leave).
-  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || (isReal && (!realTaskReady || !!answerError)) || answerBusyRef.current;
+  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || answerBusyRef.current;
 
+  // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断考试；回调可能晚到，所以走 ref 取最新闭包。
+  const syncFatalRef = useRef(null);
+  syncFatalRef.current = (e) => {
+    if (examClosedRef.current) return;
+    showRealError(e, { title: "作答记录同步失败" });
+  };
+  const handleSyncFatal = useCallback((e) => syncFatalRef.current?.(e), []);
   const expired = timeLeft <= 0;
+  // 已见记录在后台同步（lib/realMockExam/seenSync）：题目一出现就能作答，不再停下来等服务器确认。
+  // 本地 seenItemIds 立刻记上（交卷记录与续考检查点都靠它），服务器那边串行重试；
+  // 只有卷已结束 / 过期这种再也不可能成功的错误才弹「重新组卷」。
   useEffect(() => {
     if (!isReal || !paper || !currentItem || expired || autoFinishedRef.current || (phase !== "module1" && phase !== "module2")) return;
-    let active = true;
-    setSeenState({ key: seenKey, ready: false, error: null });
-    markRealMockSeen(paper, [currentItem]).then(() => {
-      if (!active) return;
-      const doneKey = config.taskDoneKeys[currentItem.taskType];
-      if (doneKey) addDoneIds(doneKey, [currentItem.id]);
-      setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
-      setSeenState({ key: seenKey, ready: true, error: null });
-    }).catch((e) => {
-      if (!active) return;
-      // A finished / expired paper can never load this item (「重试加载」 would
-      // loop forever) and an account problem needs the user to leave; only a
-      // transient failure is worth retrying.
-      const info = describeRealMockError(e, "已见记录同步失败，请重试。");
-      if (info.kind === "dead-attempt") abandonDeadAttempt(info);
-      else setSeenState({ key: seenKey, ready: false, error: info });
-    });
-    return () => { active = false; };
-  }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, seenRetry, expired]);
+    const doneKey = config.taskDoneKeys[currentItem.taskType];
+    if (doneKey) addDoneIds(doneKey, [currentItem.id]);
+    setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
+    syncRealMockSeen(paper, [currentItem], { onFatal: handleSyncFatal });
+  }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, expired]);
 
   // Warm the next clip (same module only) as soon as the current one ends —
   // the shared element is idle between questions, so preloading there makes
@@ -1525,9 +1512,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     setFinalScore(null);
     setSavedSessionDate(null);
     setUsedIds(new Set());
-    setAnswerError(null);
-    pendingAnswerRef.current = null;
-    answerBusyRef.current = false;
+            answerBusyRef.current = false;
     cloudRetryRef.current = null;
     autoFinishedRef.current = false;
     examClosedRef.current = false;
@@ -1597,9 +1582,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         setM1Results([]);
         setM2Results([]);
         setTimeLeft(fresh.timing.module1Seconds);
-        setAnswerError(null);
-        pendingAnswerRef.current = null;
-        answerBusyRef.current = false;
+                        answerBusyRef.current = false;
         autoFinishedRef.current = false;
         examClosedRef.current = false;
         setPhase("module1");
@@ -1681,9 +1664,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       setRoutePath(resumed.routePath || null);
       setUsedIds(new Set(Array.isArray(resumed.usedIds) ? resumed.usedIds : []));
       setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : (isReal ? resumed.paper.timing.module1Seconds : config.module1TimeSeconds));
-      setAnswerError(null);
-      pendingAnswerRef.current = null;
-      answerBusyRef.current = false;
+                  answerBusyRef.current = false;
       autoFinishedRef.current = false;
       examClosedRef.current = false;
       setPhase(resumed.phase === "module2" ? "module2" : "module1");
@@ -1707,36 +1688,10 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // normal (non-timeout) flow is unaffected.
     if (autoFinishedRef.current || answerBusyRef.current || examClosedRef.current) return;
     answerBusyRef.current = true;
-    pendingAnswerRef.current = result;
     if (isReal) {
-      // Freeze the clock for the network call right now: holdTimersRef is
-      // otherwise only recomputed on the next render, so the countdown could
-      // still tick (even to zero) while this answer is in flight.
-      holdTimersRef.current = true;
-      let syncError = null;
-      try {
-        await markRealMockSeen(paper, [currentItem], { answered: true });
-      } catch (e) {
-        syncError = e;
-      }
-      // The clock ran out while the call was in flight: the timeout path has
-      // already scored this item through the partial collector, so appending
-      // it here as well would count it twice.
-      if (autoFinishedRef.current) {
-        answerBusyRef.current = false;
-        pendingAnswerRef.current = null;
-        return;
-      }
-      if (syncError) {
-        answerBusyRef.current = false;
-        const info = describeRealMockError(syncError, "作答同步失败，请重试后继续。");
-        if (info.kind === "dead-attempt") abandonDeadAttempt(info);
-        else setAnswerError(info);
-        return;
-      }
+      // 作答记录同样后台同步，不等网络就进下一题。
+      syncRealMockSeen(paper, [currentItem], { answered: true, onFatal: handleSyncFatal });
     }
-    pendingAnswerRef.current = null;
-    setAnswerError(null);
     answerBusyRef.current = false;
     setCurrentPartial(null);
     // Attach the item to the result so the post-exam review can render the
@@ -1895,7 +1850,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // Record first, finish later: `finish` only releases this paper's still-
     // unseen reservations (the 2-hour lease would too), so the saved exam never
     // waits on it. A finish that keeps failing is retried before the next prepare.
-    if (isReal) finishRealMockExamReliably(paper);
+    if (isReal) flushRealMockSeen(paper).then(() => finishRealMockExamReliably(paper));
   }
 
   function handleRestart() {
@@ -1994,7 +1949,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         )}
 
         {/* Module 1 & 2 — task rendering */}
-        {etsExam && currentItem && !error && realTaskReady && (
+        {etsExam && currentItem && !error && (
           <div data-testid="ets-exam-page">
             <AdaptiveTaskRenderer
               key={`${phase}-${currentItemIndex}`}
@@ -2006,14 +1961,9 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
               ets
               onQuestionChange={handleQuestionChange}
             />
-            {answerError && <div style={{ maxWidth: 760, margin: "14px auto 0", padding: "0 24px", color: "#b91c1c", fontSize: 13, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <span>{answerError.message}</span>
-              {answerError.kind === "transient" && <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>}
-              <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
-            </div>}
           </div>
         )}
-        {!etsExam && (phase === "module1" || phase === "module2") && currentItem && !error && realTaskReady && (
+        {!etsExam && (phase === "module1" || phase === "module2") && currentItem && !error && (
           <SurfaceCard style={{ padding: "20px 24px" }}>
             {/* Module badge */}
             <div style={{
@@ -2033,24 +1983,6 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
               partialState={partialForCurrent}
               onProgress={isReal ? handlePartialProgress : null}
             />
-            {answerError && <div style={{ marginTop: 14, color: "#b91c1c", fontSize: 13, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <span>{answerError.message}</span>
-              {answerError.kind === "transient" && <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>}
-              <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
-            </div>}
-          </SurfaceCard>
-        )}
-        {isReal && (phase === "module1" || phase === "module2") && currentItem && !error && !realTaskReady && (
-          <SurfaceCard style={{ padding: 24, textAlign: "center", marginTop: 24 }}>
-            <div style={{ color: C.t2, fontSize: 14, marginBottom: 12 }}>
-              {seenGateError ? seenGateError.message : "正在确认这道题的已见记录…"}
-            </div>
-            {seenGateError && (
-              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-                {seenGateError.kind === "transient" && <Btn onClick={() => setSeenRetry((n) => n + 1)}>重试加载</Btn>}
-                <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
-              </div>
-            )}
           </SurfaceCard>
         )}
 

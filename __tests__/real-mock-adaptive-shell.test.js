@@ -2,8 +2,8 @@ import { render, screen, fireEvent, act, cleanup } from "@testing-library/react"
 
 // Real reading mock (AdaptiveExamShell, source="real-bank") driven through the
 // real component with the cloud client mocked: record-first finishing, error
-// cards that never destroy progress, seen-gate classification, the clock hold
-// during answer sync, unreached-item stubs and throttled checkpoint writes.
+// cards that never destroy progress, background seen / answered sync,
+// unreached-item stubs and throttled checkpoint writes.
 
 const mockPush = jest.fn();
 jest.mock("next/navigation", () => ({ useRouter: () => ({ push: mockPush }) }));
@@ -228,27 +228,30 @@ describe("real reading mock shell", () => {
     expect(await screen.findByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
   });
 
-  test("a transient seen failure retries or saves and exits; an account failure only exits", async () => {
+  test("a transient seen failure never blocks the question: it is retried in the background", async () => {
     prepareRealMockExam.mockResolvedValue(readingPaper());
     markRealMockSeen.mockRejectedValueOnce(new RealMockError("记录暂时失败", { code: "REAL_MOCK_ERROR" }));
-    const { onExit } = renderShell();
-    await startExam();
-    expect(screen.getByText("记录暂时失败")).toBeInTheDocument();
-    await click(screen.getByRole("button", { name: "保存进度并退出" }));
-    expect(onExit).toHaveBeenCalledTimes(1);
-    expect(checkpoint()?.paper?.attemptId).toBe("attempt-1");
-    await click(screen.getByRole("button", { name: "重试加载" }));
-    expect(screen.getByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
-    cleanup();
-    markRealMockSeen.mockRejectedValueOnce(new RealMockError("真题模考需要 Pro 权限。", { code: "PRO_REQUIRED" }));
     renderShell();
-    await click(screen.getByRole("button", { name: "继续上次模考" }));
-    expect(screen.getByText("真题模考需要 Pro 权限。")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "重试加载" })).toBeNull();
-    expect(screen.getByRole("button", { name: "保存进度并退出" })).toBeInTheDocument();
+    await startExam();
+    expect(screen.getByText("Fill in the missing letters in the paragraph.")).toBeInTheDocument();
+    expect(screen.queryByText("记录暂时失败")).toBeNull();
+    expect(screen.queryByText(/正在确认/)).toBeNull();
+    await advance(1000);
+    expect(markRealMockSeen).toHaveBeenCalledTimes(2);
+    expect(markRealMockSeen.mock.calls[1][1]).toEqual([expect.objectContaining({ id: "r-sc-ctw" })]);
+    expect(checkpoint()?.seenItemIds).toEqual(["r-sc-ctw"]);
   });
 
-  test("the clock holds while an answer syncs; a failed sync offers 重试同步 and keeps holding", async () => {
+  test("an account failure in the background sync stops the exam with its message", async () => {
+    prepareRealMockExam.mockResolvedValue(readingPaper());
+    markRealMockSeen.mockRejectedValueOnce(new RealMockError("真题模考需要 Pro 权限。", { code: "PRO_REQUIRED" }));
+    renderShell();
+    await startExam();
+    expect(screen.getByText("真题模考需要 Pro 权限。")).toBeInTheDocument();
+    expect(markRealMockSeen).toHaveBeenCalledTimes(1);
+  });
+
+  test("an answer moves on at once while its sync runs in the background; the clock keeps going", async () => {
     prepareRealMockExam.mockResolvedValue(readingPaper());
     const answer = deferred();
     markRealMockSeen.mockImplementation((paper, items, opts) => (opts?.answered ? answer.promise : ok()));
@@ -257,20 +260,16 @@ describe("real reading mock shell", () => {
     await advance(2000);
     expect(screen.getByText("00:09:58")).toBeInTheDocument();
     await click(screen.getByRole("button", { name: "Next" }));
-    await advance(800); // the submit animation, then onComplete starts the answered sync
-    const frozen = screen.getByText(/^\d\d:\d\d:\d\d$/).textContent;
-    await advance(5000);
-    expect(screen.getByText(frozen)).toBeInTheDocument();
-    await act(async () => { answer.reject(new RealMockError("无法连接真题模考服务，请稍后重试。", { code: "NETWORK_ERROR" })); });
-    await flush();
-    expect(screen.getByText("无法连接真题模考服务，请稍后重试。")).toBeInTheDocument();
-    await advance(5000);
-    expect(screen.getByText(frozen)).toBeInTheDocument();
-    markRealMockSeen.mockImplementation(ok);
-    await click(screen.getByRole("button", { name: "重试同步" }));
+    await advance(800); // the submit animation, then onComplete
     // 真题外观的顶栏按题计数：填词占 1-10，下一篇日常阅读的第 1 题是第 11 题。
-    expect(await screen.findByText("Question 1 r-sc-rdl2")).toBeInTheDocument();
+    expect(screen.getByText("Question 1 r-sc-rdl2")).toBeInTheDocument();
     expect(screen.getByTestId("ets-progress")).toHaveTextContent("Question 11 of 35");
+    const shown = screen.getByText(/^\d\d:\d\d:\d\d$/).textContent;
+    await advance(3000);
+    expect(screen.queryByText(shown)).toBeNull();
+    await act(async () => { answer.resolve({ ok: true }); });
+    await flush();
+    expect(markRealMockSeen).toHaveBeenCalledWith(expect.objectContaining({ attemptId: "attempt-1" }), [expect.objectContaining({ id: "r-sc-ctw" })], { answered: true });
   });
 
   test("an answered sync on a dead paper drops the checkpoint and offers 重新组卷", async () => {
@@ -320,6 +319,7 @@ describe("real reading mock shell", () => {
     await advance(1000);
     await advance(1000); // Module 2 times out on its first CTW
     expect(screen.getByText("真题阅读模考结果")).toBeInTheDocument();
+    await flush(); // finish waits for the background seen queue
 
     expect(saveSess).toHaveBeenCalledTimes(1);
     expect(finishRealMockExamReliably).toHaveBeenCalledTimes(1);

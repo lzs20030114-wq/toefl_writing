@@ -12,7 +12,8 @@ import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
-import { prepareRealMockExam, markRealMockSeen, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { prepareRealMockExam, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { syncRealMockSeen, flushRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
@@ -174,6 +175,11 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     setError(info.message);
   }
 
+  // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断；回调可能晚到，走 ref 取最新闭包。
+  const syncFatalRef = useRef(null);
+  syncFatalRef.current = (e) => showRealMockError(e, "作答记录同步失败", null);
+  const handleSyncFatal = useCallback((e) => syncFatalRef.current?.(e), []);
+
   async function handleStartExam(restartAttemptId = "") {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
@@ -218,8 +224,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleRepeatComplete(result) {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.repeatSet], { answered: true }); }
-      catch (e) { showRealMockError(e, "跟读提交同步失败", { kind: "repeat", result }); return; }
+      syncRealMockSeen(exam, [exam.repeatSet], { answered: true, onFatal: handleSyncFatal });
     }
     clearError();
     setRepeatResults(result);
@@ -231,8 +236,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   // the browser's Web Speech API, so no controller gesture is needed here.
   async function handleRepeatNarrationContinue() {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.repeatSet]); }
-      catch (e) { showRealMockError(e, "记录跟读题已见失败", { kind: "repeatNarration" }); return; }
+      syncRealMockSeen(exam, [exam.repeatSet], { onFatal: handleSyncFatal });
     }
     clearError();
     setPhase("repeat");
@@ -240,8 +244,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleInterviewNarrationContinue() {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.interviewSet]); }
-      catch (e) { showRealMockError(e, "记录访谈题已见失败", { kind: "interviewNarration" }); return; }
+      syncRealMockSeen(exam, [exam.interviewSet], { onFatal: handleSyncFatal });
     }
     clearError();
     setPhase("interview");
@@ -249,15 +252,14 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleInterviewComplete(result) {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.interviewSet], { answered: true }); }
-      catch (e) { showRealMockError(e, "访谈提交同步失败", { kind: "interview", result }); return; }
+      syncRealMockSeen(exam, [exam.interviewSet], { answered: true, onFatal: handleSyncFatal });
     }
     clearError();
     setInterviewResults(result);
     computeScore(repeatResults, result);
     // 记录已存、结果页已出。finish 只是释放这份卷剩下的预留（2 小时租约本来也会放），
     // 所以不等它、它失败也不挡成绩 —— 没落地的会被记下，下次组卷前先补上。
-    if (realMock) finishRealMockExamReliably(exam);
+    if (realMock) flushRealMockSeen(exam).then(() => finishRealMockExamReliably(exam));
   }
 
   // 错误卡「重试」：重放失败的那一步。进行中错误卡保持显示（按钮禁用），成功由那一步自己收起。
