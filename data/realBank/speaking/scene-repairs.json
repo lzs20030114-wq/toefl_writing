@@ -1,0 +1,1975 @@
+{
+  "version": 1,
+  "_readme": [
+    "Explicit sentence-bound repairs. Replay: node scripts/realbank/repair_repeat_scenes.mjs --write",
+    "cross_source requires unchanged target/donor texts and the same donor frame metadata. No fuzzy matching at replay.",
+    "Only missing sentence frames are added; existing frames and all other item fields are preserved.",
+    "Original source assets are tracked under public/real-bank/speaking/recovered. SHA1 is checked before every dry/write replay.",
+    "frame_kind=unhighlighted_scene_shared_by_sentences means the same original static scene is scoped to those sentences, not a per-sentence highlight. No mixed-item base is assigned."
+  ],
+  "cross_source": [
+    {
+      "target_item_id": "real_repeat_rf0615_1",
+      "target_sentence_id": "real_repeat_rf0615_1_s1",
+      "target_text": "We serve coffee and tea at the main counter.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s1",
+      "donor_text": "We serve coffee and tea at the main counter.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q1.webp",
+        "w": 382,
+        "h": 326
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 3,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0615_1",
+      "target_sentence_id": "real_repeat_rf0615_1_s2",
+      "target_text": "Our pastries are all made fresh daily.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s2",
+      "donor_text": "Our pastries are all made fresh daily.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q2.webp",
+        "w": 383,
+        "h": 328
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 3,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0615_1",
+      "target_sentence_id": "real_repeat_rf0615_1_s3",
+      "target_text": "The menu board lists drinks that include a range of herbal teas.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s3",
+      "donor_text": "The menu board lists drinks that include a range of herbal teas.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q3.webp",
+        "w": 383,
+        "h": 328
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 3,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0615_1",
+      "target_sentence_id": "real_repeat_rf0615_1_s4",
+      "target_text": "Some tables in the seating area offer excellent views of campus.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s6",
+      "donor_text": "Some tables in the seating area offer excellent views of campus.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q6.webp",
+        "w": 384,
+        "h": 328
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 3,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0615_1",
+      "target_sentence_id": "real_repeat_rf0615_1_s5",
+      "target_text": "Free Wi-Fi is available for campus visitors as well as students.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s7",
+      "donor_text": "Free wi-fi is available for campus visitors as well as students.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q7.webp",
+        "w": 384,
+        "h": 328
+      },
+      "evidence": {
+        "match": "case_punctuation_normalized",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 3,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s1",
+      "target_text": "Enter your name and student ID number.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s1",
+      "donor_text": "Enter your name and student ID number.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q1.webp",
+        "w": 517,
+        "h": 643
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s2",
+      "target_text": "Browse the course catalog to choose your classes.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s2",
+      "donor_text": "Browse the course catalog to choose your classes.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q2.webp",
+        "w": 518,
+        "h": 635
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s3",
+      "target_text": "You can use the schedule planner tool to avoid time conflicts.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s3",
+      "donor_text": "You can use the Schedule Planner tool to avoid time conflicts.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q3.webp",
+        "w": 517,
+        "h": 635
+      },
+      "evidence": {
+        "match": "case_punctuation_normalized",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s4",
+      "target_text": "If a class is already full, a pop-up message will appear.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s4",
+      "donor_text": "If a class is already full, a pop-up message will appear.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q4.webp",
+        "w": 518,
+        "h": 635
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s5",
+      "target_text": "Contact the instructor to see if more seats can be added.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s5",
+      "donor_text": "Contact the instructor to see if more seats can be added.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q5.webp",
+        "w": 517,
+        "h": 635
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s6",
+      "target_text": "You can still add or drop classes up until the second week of the new semester.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s6",
+      "donor_text": "You can still add or drop classes up until the second week of the new semester.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q6.webp",
+        "w": 521,
+        "h": 638
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0704_1",
+      "target_sentence_id": "real_repeat_rp0704_1_s7",
+      "target_text": "For your records, print out a list of your classes or email a copy to yourself.",
+      "donor_item_id": "real_repeat_321_1",
+      "donor_sentence_id": "real_repeat_321_1_s7",
+      "donor_text": "For your records, print out a list of your classes or email a copy to yourself.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_321_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_321_1_q7.webp",
+        "w": 518,
+        "h": 634
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/321__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s15",
+      "target_text": "The resource desk is near the entrance.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s1",
+      "donor_text": "The resource desk is near the entrance.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q1.webp",
+        "w": 441,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s17",
+      "target_text": "You can access free printing and internet in the lab.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s3",
+      "donor_text": "You can access free printing and internet in the lab.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q3.webp",
+        "w": 442,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s18",
+      "target_text": "Our multi-purpose room is used for workshops and events.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s4",
+      "donor_text": "Our multi-purpose room is used for workshops and events.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q4.webp",
+        "w": 441,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s19",
+      "target_text": "Please do not bring food from the cafe to other places.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s5",
+      "donor_text": "Please do not bring food from the cafe to other places.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q5.webp",
+        "w": 441,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s20",
+      "target_text": "Check the bulletin board for daily announcements and activity schedules.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s6",
+      "donor_text": "Check the bulletin board for daily announcements and activity schedules.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q6.webp",
+        "w": 441,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s21",
+      "target_text": "If anyone has questions, feel free to stop by the help desk near the exit.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s7",
+      "donor_text": "If anyone has questions, feel free to stop by the help desk near the exit.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q7.webp",
+        "w": 441,
+        "h": 541
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 5,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/56v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s1",
+      "target_text": "Cardio machines and bikes are over here.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s1",
+      "donor_text": "Cardio machines and bikes are over here.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q1.webp",
+        "w": 431,
+        "h": 409
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/424__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s3",
+      "target_text": "Our yoga studio offers classes for all fitness levels.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s3",
+      "donor_text": "Our yoga studio offers classes for all fitness levels.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q3.webp",
+        "w": 428,
+        "h": 409
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/424__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s4",
+      "target_text": "Locker rooms contain storage bins and changing facilities.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s4",
+      "donor_text": "Locker rooms contain storage bins and changing facilities.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q4.webp",
+        "w": 431,
+        "h": 406
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/424__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s6",
+      "target_text": "Personal trainers are available for individual guidance.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s6",
+      "donor_text": "Personal trainers are available for individual guidance.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q6.webp",
+        "w": 433,
+        "h": 409
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/424__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s7",
+      "target_text": "Before you leave, check the gym floor plan for specific areas and equipment.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s7",
+      "donor_text": "Before you leave, check the gym floor plan for specific areas and equipment.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q7.webp",
+        "w": 428,
+        "h": 411
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/424__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s8",
+      "target_text": "Our hiking trails offer scenic routes.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s1",
+      "donor_text": "Our hiking trails offer scenic routes.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q1.webp",
+        "w": 384,
+        "h": 369
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s9",
+      "target_text": "Make a stop at the visitor center.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s2",
+      "donor_text": "Make a stop at the visitor center.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q2.webp",
+        "w": 386,
+        "h": 368
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s10",
+      "target_text": "Many outdoor campsites are available for overnight stays.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s3",
+      "donor_text": "Many outdoor campsites are available for overnight stays.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q3.webp",
+        "w": 381,
+        "h": 364
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s11",
+      "target_text": "Picnic areas are great for family gatherings.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s4",
+      "donor_text": "Picnic areas are great for family gatherings.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q4.webp",
+        "w": 385,
+        "h": 365
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s12",
+      "target_text": "Wildlife viewing spots are ideal for observing animals.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s5",
+      "donor_text": "Wildlife viewing spots are ideal for observing animals.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q5.webp",
+        "w": 380,
+        "h": 363
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s13",
+      "target_text": "Guided tours and educational programs are available by request.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s6",
+      "donor_text": "Guided tours and educational programs are available by request.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q6.webp",
+        "w": 380,
+        "h": 362
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s14",
+      "target_text": "As always, be sure to take the map with you on your nature walks and adventures.",
+      "donor_item_id": "real_repeat_427_1",
+      "donor_sentence_id": "real_repeat_427_1_s7",
+      "donor_text": "As always, be sure to take the map with you on your nature walks and adventures.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_427_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_427_1_q7.webp",
+        "w": 381,
+        "h": 363
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/427__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s8",
+      "target_text": "Cut stems at an angle using shears.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s1",
+      "donor_text": "Cut stems at an angle using shears.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q1.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s9",
+      "target_text": "Place pebbles in the bottom for support.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s2",
+      "donor_text": "Place pebbles in the bottom for support.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q2.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s10",
+      "target_text": "Begin by placing the taller flowers in the center.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s3",
+      "donor_text": "Begin by placing the taller flowers in the center.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q3.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s11",
+      "target_text": "Fill gaps with smaller flowers to maintain the visual balance.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s4",
+      "donor_text": "Fill gaps with smaller flowers to maintain the visual balance.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q4.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s12",
+      "target_text": "Add some greenery to enhance the overall fullness.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s5",
+      "donor_text": "Add some greenery to enhance the overall fullness.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q5.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s13",
+      "target_text": "You need to change the water regularly to keep everything looking fresh.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s6",
+      "donor_text": "You need to change the water regularly to keep everything looking fresh.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q6.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 6,
+        "longest_contiguous_sequence": 6,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510v2__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s8",
+      "target_text": "First, select the right tool to remove the wheel.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s1",
+      "donor_text": "First, select the right tool to remove the wheel.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q1.webp",
+        "w": 465,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s9",
+      "target_text": "Next, deflate the tire completely.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s2",
+      "donor_text": "Next, deflate the tire completely.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q2.webp",
+        "w": 466,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s10",
+      "target_text": "Carefully locate the puncture hole and mark it with a pen.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s3",
+      "donor_text": "Carefully locate the puncture hole and mark it with a pen.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q3.webp",
+        "w": 465,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s11",
+      "target_text": "Select a patch from the repair kit and apply it firmly.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s4",
+      "donor_text": "Select a patch from the repair kit and apply it firmly.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q4.webp",
+        "w": 465,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s12",
+      "target_text": "Use the pump to inflate the tire to the correct pressure.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s5",
+      "donor_text": "Use the pump to inflate the tire to the correct pressure.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q5.webp",
+        "w": 468,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s13",
+      "target_text": "Check for additional leaks by submerging the tube in a bucket of water.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s6",
+      "donor_text": "Check for additional leaks by submerging the tube in a bucket of water.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q6.webp",
+        "w": 465,
+        "h": 514
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s14",
+      "target_text": "If there are no new problems, reattach the wheel tightly back on the bicycle.",
+      "donor_item_id": "real_repeat_318_1",
+      "donor_sentence_id": "real_repeat_318_1_s7",
+      "donor_text": "If there are no new problems, reattach the wheel tightly back on the bicycle.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_318_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_318_1_q7.webp",
+        "w": 467,
+        "h": 515
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/318__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s1",
+      "target_text": "Log into the dashboard with your credentials.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s1",
+      "donor_text": "Log into the dashboard with your credentials.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q1.webp",
+        "w": 505,
+        "h": 608
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s2",
+      "target_text": "Check the Assignments tab for homework due dates.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s2",
+      "donor_text": "Check the Assignments tab for homework due dates.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q2.webp",
+        "w": 501,
+        "h": 610
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s3",
+      "target_text": "Access your course materials to read and download them.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s3",
+      "donor_text": "Access your course materials to read and download them.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q3.webp",
+        "w": 503,
+        "h": 610
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s4",
+      "target_text": "Participate in discussion boards to engage with peers.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s4",
+      "donor_text": "Participate in discussion boards to engage with peers.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q4.webp",
+        "w": 504,
+        "h": 618
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s5",
+      "target_text": "Track your progress by viewing your grades regularly online.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s5",
+      "donor_text": "Track your progress by viewing your grades regularly online.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q5.webp",
+        "w": 499,
+        "h": 614
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s6",
+      "target_text": "Set up your daily notifications to stay updated on any new posts.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s6",
+      "donor_text": "Set up your daily notifications to stay updated on any new posts.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q6.webp",
+        "w": 507,
+        "h": 609
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s7",
+      "target_text": "Please use the help section we provided if you feel the need to resolve any issues.",
+      "donor_item_id": "real_repeat_323_1",
+      "donor_sentence_id": "real_repeat_323_1_s7",
+      "donor_text": "Please use the Help section we provided if you feel the need to resolve any issues.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_323_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_323_1_q7.webp",
+        "w": 501,
+        "h": 613
+      },
+      "evidence": {
+        "match": "case_punctuation_normalized",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/323__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s1",
+      "target_text": "Welcome to our campus tour.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s1",
+      "donor_text": "Welcome to our campus tour.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q1.webp",
+        "w": 382,
+        "h": 422
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s2",
+      "target_text": "The enrollment office is straight ahead.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s2",
+      "donor_text": "The enrollment office is straight ahead.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q2.webp",
+        "w": 384,
+        "h": 422
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s3",
+      "target_text": "Next door you will see the library.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s3",
+      "donor_text": "Next door you will see the library.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q3.webp",
+        "w": 384,
+        "h": 426
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s4",
+      "target_text": "The cafeteria has many meal options available.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s4",
+      "donor_text": "The cafeteria has many meal options available.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q4.webp",
+        "w": 383,
+        "h": 423
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s5",
+      "target_text": "The University lecture halls are located over here.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s5",
+      "donor_text": "The university lecture halls are located over here.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q5.webp",
+        "w": 384,
+        "h": 421
+      },
+      "evidence": {
+        "match": "case_punctuation_normalized",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s6",
+      "target_text": "If you have any questions, please stop by the information desk.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s6",
+      "donor_text": "If you have any questions, please stop by the information desk.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q6.webp",
+        "w": 382,
+        "h": 421
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s7",
+      "target_text": "Lastly, please also remember to check the event schedule at the entrance.",
+      "donor_item_id": "real_repeat_510_1",
+      "donor_sentence_id": "real_repeat_510_1_s7",
+      "donor_text": "Lastly, please also remember to check the event schedule at the entrance.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510_1_q7.webp",
+        "w": 382,
+        "h": 421
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 7,
+        "longest_contiguous_sequence": 7,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/510__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s15",
+      "target_text": "Sculptures are located in the central hall.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s1",
+      "donor_text": "Sculptures are located in the central hall.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q1.webp",
+        "w": 562,
+        "h": 692
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/523__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s16",
+      "target_text": "We highlight paintings from local artists.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s2",
+      "donor_text": "We highlight paintings from local artists.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q2.webp",
+        "w": 562,
+        "h": 690
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/523__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s18",
+      "target_text": "Brochures about new exhibits are available free of charge.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s4",
+      "donor_text": "Brochures about new exhibits are available free of charge.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q4.webp",
+        "w": 562,
+        "h": 690
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/523__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s20",
+      "target_text": "For additional information, read the wall labels next to each piece of art.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s5",
+      "donor_text": "For additional information, read the wall labels next to each piece of art.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s5",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q6.webp",
+        "w": 562,
+        "h": 689
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/523__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s21",
+      "target_text": "Use the audio device to hear an expert talk about our collections.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s6",
+      "donor_text": "Use the audio device to hear an expert talk about our collections.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s6",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q7.webp",
+        "w": 562,
+        "h": 689
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 5,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/523__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0705_1",
+      "target_sentence_id": "real_repeat_rp0705_1_s4",
+      "target_text": "Milk, cream, and sugar are available at this station.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s4",
+      "donor_text": "Milk, cream and sugar are available at this station.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s4",
+        "n": 4,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q4.webp",
+        "w": 382,
+        "h": 325
+      },
+      "evidence": {
+        "match": "case_punctuation_normalized",
+        "matched_sentence_count": 2,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0705_1",
+      "target_sentence_id": "real_repeat_rp0705_1_s5",
+      "target_text": "Dispose of trash and recyclables in the bins near the door.",
+      "donor_item_id": "real_repeat_429_1",
+      "donor_sentence_id": "real_repeat_429_1_s5",
+      "donor_text": "Dispose of trash and recyclables in the bins near the door.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_429_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_429_1_q5.webp",
+        "w": 382,
+        "h": 326
+      },
+      "evidence": {
+        "match": "exact",
+        "matched_sentence_count": 2,
+        "longest_contiguous_sequence": 2,
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/repeat-scenes/review/429__sheet.png",
+        "visual_check": "Reviewed donor contact sheet: complete scene and highlighted object correspond to the bound donor sentence; target exact/normalized sentence correspondence checked."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0713_1",
+      "target_sentence_id": "real_repeat_rf0713_1_s1",
+      "target_text": "This area shows early sailing ships.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s1",
+      "donor_text": "This area shows early sailing ships.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s1",
+        "n": 1,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q1.webp",
+        "w": 468,
+        "h": 534
+      },
+      "evidence": {
+        "match": "exact_isolated_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same maritime museum sequence; highlighted early sailing ship matches both exact sentences.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0713_1",
+      "target_sentence_id": "real_repeat_rf0713_1_s2",
+      "target_text": "Other boats used steam for power.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s2",
+      "donor_text": "Some older style boats use steam for power.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q2.webp",
+        "w": 466,
+        "h": 534
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same maritime museum sequence; highlighted steam boat matches Other boats used versus Some older style boats use.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0713_1",
+      "target_sentence_id": "real_repeat_rf0713_1_s3",
+      "target_text": "These very accurate ship models show how designs have changed.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s3",
+      "donor_text": "These very accurate ship models show how designs have changed.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q3.webp",
+        "w": 467,
+        "h": 539
+      },
+      "evidence": {
+        "match": "exact_isolated_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same maritime museum sequence; highlighted ship models match both exact sentences.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0713_1",
+      "target_sentence_id": "real_repeat_rf0713_1_s5",
+      "target_text": "Let me explain how trade routes shaped global shipping over time.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s5",
+      "donor_text": "Let me explain how trade routes shape global shipping over time.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q5.webp",
+        "w": 473,
+        "h": 536
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same maritime museum sequence; highlighted trade-route map matches shape versus shaped transcription.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rf0713_1",
+      "target_sentence_id": "real_repeat_rf0713_1_s6",
+      "target_text": "Feel free to ask questions if you want to know more about anything you have seen.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s6",
+      "donor_text": "Feel free to ask questions if you want to know more about anything you've seen.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q6.webp",
+        "w": 467,
+        "h": 537
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same maritime museum sequence; highlighted question mark matches asking questions; contraction differs.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s16",
+      "target_text": "Some older style boats use steam for power.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s2",
+      "donor_text": "Some older style boats use steam for power.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q2.webp",
+        "w": 466,
+        "h": 534
+      },
+      "evidence": {
+        "match": "exact_isolated_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Exact steam-boat sentence from maritime museum scene; isolated source segment confirmed by object highlight.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s20",
+      "target_text": "Feel free to ask questions if you want to know more about anything you've seen.",
+      "donor_item_id": "real_repeat_415_1",
+      "donor_sentence_id": "real_repeat_415_1_s6",
+      "donor_text": "Feel free to ask questions if you want to know more about anything you've seen.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_415_1_s6",
+        "n": 6,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_415_1_q6.webp",
+        "w": 467,
+        "h": 537
+      },
+      "evidence": {
+        "match": "exact_isolated_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Exact asking-questions sentence from maritime museum scene; isolated source segment confirmed by question mark highlight.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0711_1",
+      "target_sentence_id": "real_repeat_rp0711_1_s16",
+      "target_text": "The lounge is a quiet place for studying.",
+      "donor_item_id": "real_repeat_56v2_1",
+      "donor_sentence_id": "real_repeat_56v2_1_s2",
+      "donor_text": "The lounge is a quiet space for studying.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_56v2_1_s2",
+        "n": 2,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_56v2_1_q2.webp",
+        "w": 442,
+        "h": 541
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same resource-center seven-sentence sequence; highlighted lounge seating matches quiet space versus quiet place.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0719_1",
+      "target_sentence_id": "real_repeat_rp0719_1_s14",
+      "target_text": "Once you are happy with your arrangement, decorate it with a pretty ribbon.",
+      "donor_item_id": "real_repeat_510v2_1",
+      "donor_sentence_id": "real_repeat_510v2_1_s7",
+      "donor_text": "Once you are happy with your arrangement, decorate it with a ribbon.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_510v2_1_s7",
+        "n": 7,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_510v2_1_q7.webp",
+        "w": 342,
+        "h": 419
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same flower-arrangement seven-sentence sequence; highlighted ribbon matches ribbon versus pretty ribbon.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0718_1",
+      "target_sentence_id": "real_repeat_rp0718_1_s5",
+      "target_text": "Enjoy our smoothie bar and sample nutritious drinks and snacks.",
+      "donor_item_id": "real_repeat_424_1",
+      "donor_sentence_id": "real_repeat_424_1_s5",
+      "donor_text": "Enjoy the bar and sample nutritious drinks and snacks.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_424_1_s5",
+        "n": 5,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_424_1_q5.webp",
+        "w": 428,
+        "h": 404
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same gym seven-sentence sequence; highlighted drinks-and-fruit bar matches bar versus our smoothie bar.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    },
+    {
+      "target_item_id": "real_repeat_rp0822_1",
+      "target_sentence_id": "real_repeat_rp0822_1_s17",
+      "target_text": "Visitors can use the touchscreen display to plan their day.",
+      "donor_item_id": "real_repeat_523_1",
+      "donor_sentence_id": "real_repeat_523_1_s3",
+      "donor_text": "Visitors can use the touch screen display to plan their day.",
+      "donor_frame": {
+        "sentence_id": "real_repeat_523_1_s3",
+        "n": 3,
+        "url": "https://ukoflmessliyvrvrddrd.supabase.co/storage/v1/object/public/real_bank_images/speaking/repeat/real_repeat_523_1_q3.webp",
+        "w": 564,
+        "h": 690
+      },
+      "evidence": {
+        "match": "explicit_transcription_variant_visual_confirmed",
+        "verified_by": "agent_visual_review",
+        "contact_sheet": ".codex-tmp/realbank/scene-recovery/approx-review.jpg",
+        "reason": "Same art-gallery seven-sentence sequence; highlighted touchscreen terminal matches touch screen versus touchscreen.",
+        "scope": "Only this explicitly bound donor/target pair; no fuzzy or semantic matching during replay. No base transfer."
+      }
+    }
+  ],
+  "original_source": [
+    {
+      "target_item_id": "real_repeat_121a_1",
+      "target_sentence_id": "real_repeat_121a_1_s1",
+      "target_text": "Welcome to the Help Desk.",
+      "url": "/real-bank/speaking/recovered/25935c65944d0805b19a70741c993139d533f9cb.webp",
+      "w": 600,
+      "h": 600,
+      "n": 1,
+      "sha1": "25935c65944d0805b19a70741c993139d533f9cb",
+      "source_file": "新托福真题01.pdf",
+      "source_page": 45,
+      "source_screen": 4,
+      "crop_box": [
+        414,
+        124,
+        1014,
+        724
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": true,
+      "reason": "Complete unhighlighted help desk/printer scene; no exam interface surrounding crop.",
+      "frame_kind": "unhighlighted_scene"
+    },
+    {
+      "target_item_id": "real_repeat_228_1",
+      "target_sentence_id": "real_repeat_228_1_s1",
+      "target_text": "Today will be sunny and clear.",
+      "url": "/real-bank/speaking/recovered/2e6b0b80365158f20b085065f3a3b99fb7264fbe.webp",
+      "w": 968,
+      "h": 1158,
+      "n": 1,
+      "sha1": "2e6b0b80365158f20b085065f3a3b99fb7264fbe",
+      "source_file": "2026新托福真题.pdf",
+      "source_page": 70,
+      "source_screen": 1,
+      "crop_box": [
+        220,
+        320,
+        1188,
+        1478
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "reason": "Complete weather scene; highlight matches Morning sun (sunny and clear).",
+      "frame_kind": "sentence_highlight"
+    },
+    {
+      "target_item_id": "real_repeat_228_1",
+      "target_sentence_id": "real_repeat_228_1_s2",
+      "target_text": "Expect cloudy conditions in the afternoon.",
+      "url": "/real-bank/speaking/recovered/bd9509e1bb6f3fef674d8cb43ee184d7cd9b0947.webp",
+      "w": 945,
+      "h": 1125,
+      "n": 2,
+      "sha1": "bd9509e1bb6f3fef674d8cb43ee184d7cd9b0947",
+      "source_file": "2026新托福真题.pdf",
+      "source_page": 71,
+      "source_screen": 1,
+      "crop_box": [
+        220,
+        330,
+        1165,
+        1455
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "reason": "Complete weather scene; highlight matches Afternoon partly cloudy icon (cloudy conditions).",
+      "frame_kind": "sentence_highlight"
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s15",
+      "target_text": "Start with the customer's travel dates.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 1,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s16",
+      "target_text": "Suggest flights that match their traveling times.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 2,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s17",
+      "target_text": "Propose lodgings that fit their budget and are close to attractions.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 3,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s18",
+      "target_text": "Offer travel insurance options to give clients peace of mind.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 4,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s19",
+      "target_text": "Recommend guided tours that highlight the local culture.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 5,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s20",
+      "target_text": "Before booking the reservation, go over the details with the client.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 6,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    },
+    {
+      "target_item_id": "real_repeat_rp0729_1",
+      "target_sentence_id": "real_repeat_rp0729_1_s21",
+      "target_text": "When customers are ready to pay, process the payment to confirm their booking.",
+      "url": "/real-bank/speaking/recovered/15b697400b9003afc84a30da6f532e667e049185.webp",
+      "w": 853,
+      "h": 805,
+      "n": 7,
+      "sha1": "15b697400b9003afc84a30da6f532e667e049185",
+      "source_file": "7月/7.29-国内线下/Speaking.docx",
+      "source_page": null,
+      "source_image_index": 2,
+      "source_docx_media": "media/image2.png",
+      "crop_box": [
+        1481,
+        317,
+        2334,
+        1122
+      ],
+      "verified_by": "agent_visual_review",
+      "reviewed": "2026-10-17",
+      "also_base": false,
+      "frame_kind": "unhighlighted_scene_shared_by_sentences",
+      "reason": "Original travel agency scene: calendar, airplane, hotel, insurance shield, tour/map, checklist and payment cards correspond to this seven-sentence group. Static shared scene, not a sentence-specific highlight. No whole-item base because this item combines three scenes."
+    }
+  ]
+}
