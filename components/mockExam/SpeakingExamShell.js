@@ -533,7 +533,9 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       {phase === "repeat" && exam?.repeatSet && !(realMock && error) && (
         <RepeatTask
           items={exam.repeatSet.sentences || []}
-          setInfo={exam.repeatSet}
+          // 真题：scenario 是整段原卷提示语（含「Repeat only once.」），照真题专区原样上屏，
+          // 不能交给 buildRepeatIntro 当地点短语拼模板（会拼出 "…visitors at the you are …" 病句）。
+          setInfo={realMock && exam.repeatSet.scenario ? { ...exam.repeatSet, settingText: exam.repeatSet.scenario, instructionText: "" } : exam.repeatSet}
           onComplete={handleRepeatComplete}
           onExit={onExit}
           isPractice={false}

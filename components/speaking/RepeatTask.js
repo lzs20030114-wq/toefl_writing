@@ -971,7 +971,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
         <SurfaceCard style={{ padding: ets ? "8px 28px 32px" : "32px 28px", textAlign: "center", ...(ets ? ETS_FLAT_CARD : {}) }}>
           {/* 场景插图：听句 / 录音 / 复盘三阶段都常驻卡片顶部，按当前句切高亮帧。
               key 带上 url —— 换帧时重新挂载，上一帧的加载失败状态不会粘在新帧上。 */}
-          {sceneFrame && <SceneImage key={sceneFrame.url} frame={sceneFrame} />}
+          {sceneFrame && <SceneImage key={sceneFrame.url} frame={sceneFrame} ets={ets} />}
 
           {/* Phase: Listen */}
           {phase === "listen" && ets && (

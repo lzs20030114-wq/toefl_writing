@@ -115,7 +115,7 @@ export function SpeakingIntroScreen({
               </div>
             ))}
           </div>
-          {pic ? <SceneImage frame={pic} /> : etsFigure ? <EtsFigure count={etsFigure} seed={title} style={{ height: 300 }} /> : null}
+          {pic ? <SceneImage frame={pic} ets /> : etsFigure ? <EtsFigure count={etsFigure} seed={title} style={{ height: 300 }} /> : null}
         </div>
         <EtsNav><EtsNavButton onClick={onStart}>{buttonLabel}</EtsNavButton></EtsNav>
       </div>
