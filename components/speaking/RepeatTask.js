@@ -7,6 +7,7 @@ import { VoiceRecorder, warmUpMicrophone } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { AssetPreloadGate } from "../shared/AssetPreloadGate";
 import { SceneImage } from "./SceneImage";
+import { sceneAssistsAllowed } from "../../lib/speakingGen/sceneAssists";
 import { buildRepeatIntro } from "../../lib/speakingGen/introTemplates";
 import { SpeechConsentModal } from "./SpeechConsentModal";
 import { RepeatRetake } from "./RepeatRetake";
@@ -32,24 +33,37 @@ const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
  * 找不到对应帧就退底图，底图也没有就什么都不渲染
  * （生成库 / 个人题库 / 无图真题：UI 一个像素都不变）。
  */
-export function pickSceneFrame(setInfo, sentenceId) {
+export function pickSceneFrame(setInfo, sentenceId, options = {}) {
   const frames = Array.isArray(setInfo?.sentence_frames) ? setInfo.sentence_frames : [];
   const sid = typeof sentenceId === "string" ? sentenceId : "";
   if (sid) {
     const hit = frames.find((f) => f && f.sentence_id === sid && f.url);
-    if (hit) return hit;
+    if (hit && !hit.frame_kind?.startsWith("unhighlighted")) return hit;
   }
+  if (sceneAssistsAllowed(options) && sid) {
+    const assist = setInfo?.assist_frames?.find((f) => f?.sentence_id === sid && f.url && f.auxiliary === true);
+    if (assist) return assist;
+  }
+  const originalFallback = frames.find((f) => f?.sentence_id === sid && f.url);
+  if (originalFallback) return originalFallback;
   const base = setInfo?.scene_image;
   return base && base.url ? base : null;
 }
 
 /** 进任务前要预热的图（底图 + 全部逐句帧）；没图返回空数组，AssetPreloadGate 原样透传。 */
-export function sceneImagePreloadUrls(setInfo) {
+export function sceneImagePreloadUrls(setInfo, options = {}) {
   const out = [];
   const base = setInfo?.scene_image;
   if (base && base.url) out.push(base.url);
   for (const f of Array.isArray(setInfo?.sentence_frames) ? setInfo.sentence_frames : []) {
     if (f && f.url) out.push(f.url);
+  }
+  if (sceneAssistsAllowed(options)) {
+    const sentences = Array.isArray(options.items) ? options.items : setInfo?.assist_frames || [];
+    for (const sentence of sentences) {
+      const f = pickSceneFrame(setInfo, sentence.id || sentence.sentence_id, options);
+      if (f?.auxiliary === true && f.url && !out.includes(f.url)) out.push(f.url);
+    }
   }
   return out;
 }
@@ -715,8 +729,8 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
 
   // 当前句该显示哪一帧（逐句帧按题号对齐，找不到退底图，都没有则 null）。
   const sceneFrame = useMemo(
-    () => pickSceneFrame(setInfo, sentence?.id),
-    [setInfo, sentence?.id],
+    () => pickSceneFrame(setInfo, sentence?.id, { realMock, etsNumbering }),
+    [setInfo, sentence?.id, realMock, etsNumbering],
   );
 
   const formatTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
@@ -917,7 +931,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
         title="Listen & Repeat"
         section="Speaking | Task 1"
         // 真考的场景插图在设定屏就已经在了；没图时 image 为空，引入屏一个节点都不多。
-        image={setInfo?.scene_image || null}
+        image={setInfo?.scene_image || (sceneAssistsAllowed({ realMock, etsNumbering }) ? pickSceneFrame(setInfo, items[0]?.id) : null)}
         lines={[intro.settingText, intro.instructionText]}
         buttonLabel={starting ? "正在准备麦克风…" : "开始"}
         onStart={handleStart}
@@ -1167,7 +1181,7 @@ function EtsSpeakingShell({ children }) {
 export function RepeatTask(props) {
   return (
     <AssetPreloadGate
-      images={sceneImagePreloadUrls(props.setInfo)}
+      images={sceneImagePreloadUrls(props.setInfo, props)}
       title="Listen & Repeat"
       section="Speaking | Task 1"
       onExit={props.onExit}

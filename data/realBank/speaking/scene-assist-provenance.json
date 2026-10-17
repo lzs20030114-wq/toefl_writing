@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "generated_date": "2026-10-18",
+  "scenes": [
+    {
+      "scene": "birdwatching",
+      "url": "/real-bank/speaking/assisted/0b7eb53467d8c345b142ee023cd99009be2a0b03.png",
+      "sha1": "0b7eb53467d8c345b142ee023cd99009be2a0b03",
+      "dimensions": [
+        1487,
+        1058
+      ],
+      "generation_tool": "built-in image_gen.imagegen",
+      "generation_source": "C:\\Users\\35827\\.codex\\generated_images\\01a14905-aed5-7173-88b9-9a4a20858873\\exec-ee08445f-b207-4811-b2d3-b90e4ebf0f91.png",
+      "generation_date": "2026-10-18",
+      "prompt": "Use case: precise-object-edit. Create ONE complete unhighlighted auxiliary practice illustration by reconstructing the same birdwatching scene from these two complementary screenshots. Image1 is the neutral scene with lower-left obscured by an editing-tool window; image2 reveals the original hiking boots in that lower-left area but has an orange/green highlighted tree and a tool window at lower-right. Preserve the exact scene layout and simple grayscale black-outline textbook cartoon style: large tree trunk on the right with brimmed sun hat resting against it upper-right, backpack lower-right, open bird-identification book bottom-center, binoculars center, closed observation notebook middle-left, smaller round tree in the middle distance, another tree at left, shrubs behind. Use the visible boots from Image2 to restore Image1's hidden lower-left; use Image1's visible backpack to restore Image2's hidden right. Remove only editing-tool UI and all orange/green highlighting. Keep original objects, relative positions and landscape aspect ratio about 1.4:1. Complete entire illustration with a thin dark rectangular border and small margin. No readable text, logos, labels, watermarks, no extra objects. This is an explicitly AI-assisted practice reconstruction; the application will render that attribution outside the image. Single stable neutral base for programmatic overlays.",
+      "references": [
+        {
+          "scene": "birdwatching",
+          "reference_role": "birdwatching-base",
+          "source_file": "D:\\桌面\\【2026改后全科真题】（持续更新中）\\5月\\5.18-1\\5.18 口语.docx",
+          "docx_media": "word/media/image1.png",
+          "original_file": ".codex-tmp\\realbank\\scene-assist\\references\\birdwatching-base-original.png",
+          "original_sha1": "33817d80eeb3ce29b363228c5f814c239d12f76a",
+          "file": ".codex-tmp\\realbank\\scene-assist\\references\\birdwatching-base-crop.png",
+          "crop_xyxy": [
+            572,
+            200,
+            1112,
+            584
+          ],
+          "dimensions": [
+            540,
+            384
+          ],
+          "sha1": "b463646dcf26e08339513f8b1400cec34c94a688",
+          "public_url": "/real-bank/speaking/assisted/b463646dcf26e08339513f8b1400cec34c94a688.png",
+          "published_sha1": "b463646dcf26e08339513f8b1400cec34c94a688"
+        },
+        {
+          "scene": "birdwatching",
+          "reference_role": "birdwatching-complement-q7",
+          "source_file": "D:\\桌面\\【2026改后全科真题】（持续更新中）\\5月\\5.18-1\\5.18 口语.docx",
+          "docx_media": "word/media/image8.png",
+          "original_file": ".codex-tmp\\realbank\\scene-assist\\references\\birdwatching-complement-q7-original.png",
+          "original_sha1": "6915e514726241124b1b1bc588c790e0ef7862a8",
+          "file": ".codex-tmp\\realbank\\scene-assist\\references\\birdwatching-complement-q7-crop.png",
+          "crop_xyxy": [
+            582,
+            195,
+            1122,
+            579
+          ],
+          "dimensions": [
+            540,
+            384
+          ],
+          "sha1": "b26d2baaa1b4fb75f2881ec4cebbdadb2f4a1bcb",
+          "public_url": "/real-bank/speaking/assisted/b26d2baaa1b4fb75f2881ec4cebbdadb2f4a1bcb.png",
+          "published_sha1": "b26d2baaa1b4fb75f2881ec4cebbdadb2f4a1bcb"
+        }
+      ],
+      "source_observations": [
+        "Large trunk behind at upper right; hat around upper-right trunk.",
+        "Small tree at upper middle; second tree at left; closed notebook left middle.",
+        "Binoculars center, boots lower left, open bird field guide lower middle, backpack lower right."
+      ],
+      "source_damage": [
+        "Base image toolbar covers lower-left portion from crop x=0..210,y=250..384, obscuring boots.",
+        "Q7 complementary toolbar covers rightmost x=478..540,y=233..384, obscuring right edge of backpack.",
+        "Together the two references show all principal objects; retain original irregular terrain and tree layout.",
+        "Q7 reference contains original green/orange tree highlight; source highlight numbering does not reliably prove sentence alignment."
+      ],
+      "usage": "practice_only_never_mock",
+      "bitmap_transform": "none; exact byte copy",
+      "visual_verified": true,
+      "sentence_overlay_notes": [
+        {
+          "sentence_id": "real_repeat_518_1_s7",
+          "overlay": [],
+          "note": "图中树冠没有可辨认的活鸟；该句讲避免惊飞附近鸟类，保留完整辅助重绘图，不以树冠高亮冒充活鸟。"
+        },
+        {
+          "sentence_id": "real_repeat_rp0830_1_s28",
+          "overlay": [],
+          "note": "图中树冠没有可辨认的活鸟；该句讲避免惊飞附近鸟类，保留完整辅助重绘图，不以树冠高亮冒充活鸟。"
+        }
+      ]
+    },
+    {
+      "scene": "online-resources",
+      "url": "/real-bank/speaking/assisted/c087664582d317927d51658384966f60f844a4eb.png",
+      "sha1": "c087664582d317927d51658384966f60f844a4eb",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "generation_tool": "built-in image_gen.imagegen",
+      "generation_source": "C:\\Users\\35827\\.codex\\generated_images\\01a14905-aed5-7173-88b9-9a4a20858873\\exec-465b6b2a-1e90-4423-8615-d848270efbb5.png",
+      "generation_date": "2026-10-18",
+      "prompt": "Edit the referenced cropped educational illustration into a complete auxiliary practice diagram. Preserve its simple grayscale flat icon drawing style, charcoal outlines, white background, and exact 2-row x 3-column arrangement of six circular icons inside a browser window. Top row: open digital book with wireless symbol; download arrow; database cylinder. Bottom row: citation quotation marks and wrench; librarian contact card/chat; wifi connectivity with thumbs-up. Extend the missing left and bottom browser edges with comfortable white margin, restore the complete border. Remove only the red/orange highlight from the book so ALL six circles are neutral light gray; no highlighted objects anywhere. Keep icons recognizable and their relative positions unchanged. This is an explicitly AI-assisted reconstruction, NOT an official exam screenshot; attribution label will be rendered by our application, so add no text, no logos, no UI header, no watermark. Square image, clean crisp lines, no photographic texture, no shadows. This single base will be reused with programmatic per-sentence overlays.",
+      "references": [
+        {
+          "scene": "online-resources",
+          "source_file": "D:\\桌面\\【2026改后全科真题】（持续更新中）\\6月-排版实验中有问题反馈\\6.10\\Speaking.docx",
+          "docx_media": "word/media/image1.png",
+          "file": ".codex-tmp\\realbank\\scene-assist\\references\\online-resources-original.png",
+          "sha1": "f9dd0d8899fef94ecbb9f26eb498dee712c8c3dd",
+          "dimensions": [
+            588,
+            588
+          ],
+          "public_url": "/real-bank/speaking/assisted/f9dd0d8899fef94ecbb9f26eb498dee712c8c3dd.png",
+          "published_sha1": "f9dd0d8899fef94ecbb9f26eb498dee712c8c3dd"
+        }
+      ],
+      "source_observations": [
+        "Browser-window schematic; top search field and close X.",
+        "Two rows of three round icons: top-left open book with wireless symbol (orange/red highlight), top-middle download arrow, top-right database cylinder.",
+        "Bottom-left quotation marks plus wrench, bottom-middle librarian/avatar speech balloon, bottom-right Wi-Fi plus thumbs-up."
+      ],
+      "source_damage": [
+        "Source left edge clips browser border and the leftmost top circular book icon; left browser title-bar control also cut.",
+        "No additional seventh icon is evidenced; seven sentences reuse search/digital-book concept."
+      ],
+      "usage": "practice_only_never_mock",
+      "bitmap_transform": "none; exact byte copy",
+      "visual_verified": true
+    },
+    {
+      "scene": "archives",
+      "url": "/real-bank/speaking/assisted/a30b5d37437d04d6a779e5ff1b7e5018a29e70b6.png",
+      "sha1": "a30b5d37437d04d6a779e5ff1b7e5018a29e70b6",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "generation_tool": "built-in image_gen.imagegen",
+      "generation_source": "C:\\Users\\35827\\.codex\\generated_images\\01a14905-aed5-7173-88b9-9a4a20858873\\exec-ed96284e-fd72-4193-8969-54bc23017b3f.png",
+      "generation_date": "2026-10-18",
+      "prompt": "Use case: precise-object-edit. Edit this cropped grayscale educational archive/library map into one complete auxiliary practice base illustration. Match existing charcoal outlines, simple flat grayscale pictograms, pale gray background and room-divider walls. Preserve existing objects and positions: upper-left security camera; upper-middle thermometer; upper-right two filing cabinets; lower-left open document storage box; lower-middle crossed repair tools. Complete the cropped bottom edge and missing lower-right room with a simple reading desk and open book, supported by the practice sentence about a quiet reading area. This completion is interpretive and will be explicitly labeled AI-assisted by the app. Keep a single coherent outer rectangular frame and all six zones, ample padding so nothing is cut off. Remove the partial orange highlight so every area is neutral grayscale. No text labels, letters, logos, numbers or any new unrelated objects. Do not change camera, thermometer, cabinets, box or tools into different objects. Clean complete diagram suitable as single stable base for per-sentence programmatic highlights. Portrait-ish or square canvas containing the full map.",
+      "references": [
+        {
+          "scene": "archives",
+          "source_file": "D:\\桌面\\【2026改后全科真题】（持续更新中）\\7月\\7.16\\Speaking.docx",
+          "docx_media": "word/media/image1.png",
+          "file": ".codex-tmp\\realbank\\scene-assist\\references\\archives-original.png",
+          "sha1": "0870bcac6064de740185aceb837a08a90fd6de13",
+          "dimensions": [
+            1200,
+            745
+          ],
+          "public_url": "/real-bank/speaking/assisted/0870bcac6064de740185aceb837a08a90fd6de13.png",
+          "published_sha1": "0870bcac6064de740185aceb837a08a90fd6de13"
+        }
+      ],
+      "source_observations": [
+        "Archive-room floor plan, gray outline dividers.",
+        "Security camera upper left; thermometer upper middle; two drawer cabinets upper right.",
+        "Document box with papers lower left; crossed wrench and hammer lower middle."
+      ],
+      "source_damage": [
+        "Original 1200x745 image abruptly clipped along bottom; bottom-right orange highlight border only partly visible.",
+        "Quiet reading area and long-term storage boxes are sentence-supported but complete appearance/location below cutoff cannot be observed.",
+        "Do not describe inferred missing lower region as recovered original pixels."
+      ],
+      "usage": "practice_only_never_mock",
+      "bitmap_transform": "none; exact byte copy",
+      "visual_verified": true
+    }
+  ]
+}

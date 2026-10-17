@@ -545,6 +545,7 @@ function RealBankPageClient() {
                 // 只有抠过图的套才带这两个键，其余为 undefined → RepeatTask 一个节点都不多渲染。
                 scene_image: audioItem.scene_image,
                 sentence_frames: audioItem.sentence_frames,
+                assist_frames: audioItem.assist_frames,
               }}
               onComplete={(result) => saveRealSpeakingSession("repeat", audioItem, result, mode)}
               onExit={backToAudioPicker}
