@@ -1474,11 +1474,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
 
   // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断考试；回调可能晚到，所以走 ref 取最新闭包。
   const syncFatalRef = useRef(null);
-  syncFatalRef.current = (e) => {
-    if (examClosedRef.current) return;
+  syncFatalRef.current = (e, attemptId) => {
+    if (examClosedRef.current || (attemptId && attemptId !== paper?.attemptId)) return;
     showRealError(e, { title: "作答记录同步失败" });
   };
-  const handleSyncFatal = useCallback((e) => syncFatalRef.current?.(e), []);
+  const handleSyncFatal = useCallback((e, attemptId) => syncFatalRef.current?.(e, attemptId), []);
   const expired = timeLeft <= 0;
   // 已见记录在后台同步（lib/realMockExam/seenSync）：题目一出现就能作答，不再停下来等服务器确认。
   // 本地 seenItemIds 立刻记上（交卷记录与续考检查点都靠它），服务器那边串行重试；

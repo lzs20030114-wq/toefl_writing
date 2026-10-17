@@ -178,8 +178,11 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断；回调可能晚到，走 ref 取最新闭包。
   const syncFatalRef = useRef(null);
-  syncFatalRef.current = (e) => showRealMockError(e, "作答记录同步失败", null);
-  const handleSyncFatal = useCallback((e) => syncFatalRef.current?.(e), []);
+  syncFatalRef.current = (e, attemptId) => {
+    if (attemptId && attemptId !== exam?.attemptId) return; // 换卷后旧卷迟到的失败
+    showRealMockError(e, "作答记录同步失败", null);
+  };
+  const handleSyncFatal = useCallback((e, attemptId) => syncFatalRef.current?.(e, attemptId), []);
 
   // 检查点里的阶段说明哪几套题已经展示过（进了复述 → 复述那套；进了面试 → 两套）。
   // 刷新时还在后台重试的已见同步随页面没了，所以恢复时补发一遍，重新组卷前再等它落地 ——
@@ -257,6 +260,8 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   // the browser's Web Speech API, so no controller gesture is needed here.
   async function handleRepeatNarrationContinue() {
     if (realMock) {
+      // 本机立刻记已做：就算服务端已见始终没落地，下次组卷带上的 doneIds 也会跳过它。
+      if (exam?.repeatSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT, [exam.repeatSet.id]);
       syncRealMockSeen(exam, [exam.repeatSet], { onFatal: handleSyncFatal });
     }
     clearError();
@@ -265,6 +270,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleInterviewNarrationContinue() {
     if (realMock) {
+      if (exam?.interviewSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW, [exam.interviewSet.id]);
       syncRealMockSeen(exam, [exam.interviewSet], { onFatal: handleSyncFatal });
     }
     clearError();

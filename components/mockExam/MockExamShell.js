@@ -7,7 +7,8 @@ import { fmt } from "../../lib/utils";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { loadMockExamHistory, saveMockExamSession, saveMockCheckpoint, loadMockCheckpoint, clearMockCheckpoint, clearMockDrafts } from "../../lib/mockExam/storage";
-import { upsertMockSess } from "../../lib/sessionStore";
+import { upsertMockSess, addDoneIds } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { buildPersistPayload, finalizeDeferredScoringSession, isTimeoutError, retryTimeoutScoringSession } from "../../lib/mockExam/service";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { SectionTimerPanel } from "./SectionTimerPanel";
@@ -235,7 +236,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   // 已见 / 已作答都在后台同步（lib/realMockExam/seenSync）：题目一出现就能作答，不再等服务器确认。
   // 只有卷已结束 / 过期这类再也不可能成功的错误才拦下来，只能中止本卷。
   const [syncFatalError, setSyncFatalError] = useState("");
-  const onRealMockSyncFatal = useCallback((error) => {
+  // 换卷后旧卷迟到的失败（比如中止后立刻开新卷，旧队列重试拿到 ATTEMPT_FINISHED）不算到新卷头上。
+  const currentAttemptIdRef = useRef("");
+  currentAttemptIdRef.current = session?.realMockPaper?.attemptId || "";
+  const onRealMockSyncFatal = useCallback((error, attemptId) => {
+    if (attemptId && attemptId !== currentAttemptIdRef.current) return;
     setSyncFatalError(describeRealMockError(error, "作答记录同步失败").message);
   }, []);
 
@@ -254,6 +259,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     const item = taskId === TASK_IDS.EMAIL_WRITING ? paper.emailPrompt : paper.discussionPrompt;
     if (!item) return;
     markedTaskIdsRef.current.add(taskId);
+    // 本机立刻记已做：就算服务端已见始终没落地，下次组卷带上的 doneIds 也会跳过它。
+    addDoneIds(taskId === TASK_IDS.EMAIL_WRITING ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION, [item.id]);
     onRealMockSeen(item.id);
     syncRealMockSeen(paper, [item], { onFatal: onRealMockSyncFatal });
   }, [realMock, paper, session?.status, currentTask?.taskId, onRealMockSeen, onRealMockSyncFatal]);

@@ -45,7 +45,7 @@ test("a dead paper is not retried and goes to onFatal; the queue keeps going", a
   const onFatal = jest.fn();
   await expect(syncRealMockSeen(p, [{ id: "a" }], { onFatal, delays: [0, 1, 1] })).resolves.toBe(false);
   expect(markRealMockSeen).toHaveBeenCalledTimes(1);
-  expect(onFatal).toHaveBeenCalledWith(expect.objectContaining({ code: "ATTEMPT_EXPIRED" }));
+  expect(onFatal).toHaveBeenCalledWith(expect.objectContaining({ code: "ATTEMPT_EXPIRED" }), "dead");
   await expect(syncRealMockSeen(p, [{ id: "b" }])).resolves.toBe(true);
 });
 
