@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { fmt } from "../../lib/utils";
+import { EtsTopBar } from "./etsExamUi";
 
 export const C = {
   nav: "#0f172a",
@@ -24,7 +25,7 @@ export const C = {
 export const FONT = "'Plus Jakarta Sans','Noto Sans SC','Segoe UI',sans-serif";
 // 真题阅读字体：ETS 2026 考试界面实测为 Open Sans（换行度量 + 字形比对锁定，
 // 自托管声明在 app/fonts.css）。阅读/听力题面统一用它以贴近真实考试观感。
-export const READING_FONT = "'Open Sans','Noto Sans SC','Segoe UI',sans-serif";
+export { READING_FONT } from "./fonts";
 
 // Neutral design tokens shared by the per-skill progress views' local `P` palettes.
 // Each view spreads NEUTRAL and adds its own area accent, e.g.
@@ -102,7 +103,12 @@ export function ChevronIcon({ open = false, size = 12, color = C.t3 }) {
   );
 }
 
-export function TopBar({ title, section, timeLeft, elapsedTime, examTimeNote, isRunning, qInfo, onExit }) {
+// variant="ets"：真题模考作答页的机考外观（深青考试头 + 白色细栏，见 etsExamUi.EtsTopBar），
+// 退出 / 计时与站内顶栏同一个入口；progress、right、clockTestId、exitLabel 只给这个外观用。
+export function TopBar({ title, section, timeLeft, elapsedTime, examTimeNote, isRunning, qInfo, onExit, variant, progress, right, clockTestId, exitLabel }) {
+  if (variant === "ets") {
+    return <EtsTopBar section={section} progress={progress} timeLeft={timeLeft} onExit={onExit} right={right} clockTestId={clockTestId} exitLabel={exitLabel} />;
+  }
   return (
     <div className="tp-topbar" style={{ background: "rgba(255,255,255,0.92)", color: C.t1, padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, fontFamily: FONT, fontSize: 14, borderBottom: "1px solid " + C.bdrSubtle, WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

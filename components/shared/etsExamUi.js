@@ -9,7 +9,7 @@
 
 import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { READING_FONT } from "./ui";
+import { READING_FONT } from "./fonts";
 
 export const ETS = {
   font: READING_FONT,

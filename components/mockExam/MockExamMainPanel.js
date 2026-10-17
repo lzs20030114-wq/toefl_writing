@@ -229,7 +229,7 @@ export function MockExamMainPanel({
         </div>
       )}
 
-      {/* 真题外观：「中止」在考试头上（MockExamShell 传给 EtsTopBar），「返回」是考试头左侧那颗，正文里不再放。 */}
+      {/* 真题外观：「中止」在考试头上（MockExamShell 传给考试头 TopBar variant="ets"），「返回」是考试头左侧那颗，正文里不再放。 */}
       {session.status === MOCK_EXAM_STATUS.RUNNING && !ets && (
         <div style={{ display: "flex", gap: 10 }}>
           <Btn onClick={onAbort} variant="danger">中止</Btn>

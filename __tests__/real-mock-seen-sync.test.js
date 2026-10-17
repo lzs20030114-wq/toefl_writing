@@ -2,7 +2,7 @@
 jest.mock("../lib/realMockExam/client", () => ({ markRealMockSeen: jest.fn() }));
 
 import { markRealMockSeen } from "../lib/realMockExam/client";
-import { syncRealMockSeen, flushRealMockSeen } from "../lib/realMockExam/seenSync";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../lib/realMockExam/seenSync";
 
 const err = (code) => Object.assign(new Error(code), { code });
 const paper = (id) => ({ attemptId: id });
@@ -55,4 +55,14 @@ test("giving up on a blip never throws, and flush of an idle paper resolves at o
   await expect(syncRealMockSeen(paper("down"), [{ id: "a" }], { onFatal, delays: [0, 1] })).resolves.toBe(false);
   expect(onFatal).not.toHaveBeenCalled();
   await expect(flushRealMockSeen(paper("idle"))).resolves.toBeUndefined();
+});
+
+test("resync re-sends only the items the checkpoint recorded as shown", async () => {
+  markRealMockSeen.mockResolvedValue({ ok: true });
+  const p = paper("resync");
+  const items = [{ id: "a" }, { id: "b" }, { id: "c" }];
+  await expect(resyncRealMockSeen(p, items, ["c", "a", "zzz"])).resolves.toBe(true);
+  expect(markRealMockSeen).toHaveBeenCalledWith(p, [{ id: "a" }, { id: "c" }]);
+  await expect(resyncRealMockSeen(p, items, [])).resolves.toBe(false);
+  expect(markRealMockSeen).toHaveBeenCalledTimes(1);
 });

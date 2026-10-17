@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { SceneImage } from "./SceneImage";
-import { ETS, ETS_BAR_HEIGHT, EtsTopBar, EtsNav, EtsNavButton, EtsFigure, etsSize } from "../shared/etsExamUi";
+import { ETS, ETS_BAR_HEIGHT, EtsNav, EtsNavButton, EtsFigure, etsSize } from "../shared/etsExamUi";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -106,7 +106,7 @@ export function SpeakingIntroScreen({
   if (ets) {
     return (
       <div style={{ minHeight: "100vh", background: ETS.canvas, fontFamily: ETS.font }}>
-        <EtsTopBar section="Speaking" onExit={onExit} />
+        <TopBar variant="ets" section="Speaking" onExit={onExit} />
         <div style={{ minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)`, maxWidth: 980, margin: "0 auto", padding: "28px 24px 40px", boxSizing: "border-box", textAlign: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 22 }}>
             {shown.map((line, i) => (

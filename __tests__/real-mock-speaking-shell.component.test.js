@@ -8,7 +8,7 @@
  *   ⑥ 重新组卷把内存里的旧卷作为 restartAttemptId 交给服务端，不再客户端先 finish。
  * 常规（非真题）模考的错误卡保持原样（「返回」= 回到开考页）。
  */
-import { render, screen, fireEvent, within, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, within, waitFor, act } from "@testing-library/react";
 
 jest.mock("../lib/AuthContext", () => ({ getSavedCode: () => "ABC123", getSavedTier: () => "pro" }));
 jest.mock("../lib/sessionStore", () => ({ saveSess: jest.fn(), loadDoneIds: jest.fn(() => []), addDoneIds: jest.fn() }));
@@ -261,6 +261,21 @@ describe("组卷与死卷", () => {
     ]);
     expect(finishRealMockExam).not.toHaveBeenCalled();
     expect(errorCard()).toBeNull();
+  });
+
+  test("刷新后重新组卷：先把检查点里已展示的两套题补记已见、等它落地，再让服务端结束旧卷", async () => {
+    saveMockCheckpoint({ phase: "interview", exam: PAPER, repeatResults: { items: scoredRepeat(4) }, interviewResults: null, finalScore: null, elapsed: 30 }, "interview", SCOPE);
+    let release;
+    markRealMockSeen.mockImplementationOnce(() => new Promise((resolve) => { release = () => resolve({ ok: true }); }));
+    render(<SpeakingExamShell realMock onExit={jest.fn()} />);
+    await waitFor(() => expect(markRealMockSeen).toHaveBeenCalledWith(PAPER, [repeatSet, interviewSet]));
+
+    fireEvent.click(screen.getByRole("button", { name: "重新组卷" }));
+    await act(async () => { await Promise.resolve(); });
+    expect(prepareRealMockExam).not.toHaveBeenCalled();
+    await act(async () => { release(); });
+    await screen.findByText("Speaking Section", { selector: "h3" });
+    expect(prepareRealMockExam).toHaveBeenCalledWith("speaking", { restartAttemptId: PAPER.attemptId });
   });
 
   test("开考页写明：展示过的题永久计为已做，录音中途刷新即作废", () => {

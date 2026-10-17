@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
-import { ETS, EtsTopBar, etsProgressLabel } from "../shared/etsExamUi";
+import { ETS, etsProgressLabel } from "../shared/etsExamUi";
 import { fmt } from "../../lib/utils";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
@@ -20,7 +20,7 @@ import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { checkCanPractice } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
 import { prepareRealMockExam, finishRealMockExamReliably } from "../../lib/realMockExam/client";
-import { syncRealMockSeen, flushRealMockSeen } from "../../lib/realMockExam/seenSync";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { getRealMockConfig, REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { buildRealWritingHistory, finalizeRealWriting, shouldKeepRealWritingCheckpoint } from "../../lib/realMockExam/linearWritingService";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
@@ -239,6 +239,14 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     setSyncFatalError(describeRealMockError(error, "作答记录同步失败").message);
   }, []);
 
+  // 刷新前还在后台重试的已见同步随页面没了：从检查点恢复进行中的卷时，把记着已展示的题补发一遍。
+  const resyncedOnMountRef = useRef(false);
+  useEffect(() => {
+    if (resyncedOnMountRef.current || !realMock || session?.status !== MOCK_EXAM_STATUS.RUNNING || !session?.realMockPaper) return;
+    resyncedOnMountRef.current = true;
+    resyncRealMockSeen(session.realMockPaper, session.realMockPaper.items, session.realMockSeenItemIds, { onFatal: onRealMockSyncFatal });
+  }, [realMock, session, onRealMockSyncFatal]);
+
   useEffect(() => {
     if (!realMock || !paper || session?.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
     const taskId = currentTask.taskId;
@@ -314,6 +322,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
           // Restarting from a result / aborted page hands the old paper to the server,
           // which finishes it (if still active) before planning the new one.
           const oldAttemptId = restartAttemptId || session?.realMockPaper?.attemptId || "";
+          // 旧卷还在进行中就重新组卷时，服务端会结束它并释放还没标已见的预留：先等已见队列
+          // （含恢复检查点时补发的那批）落地。交过卷 / 中止的卷 finish 前已经等过，不必再等。
+          if (session?.status === MOCK_EXAM_STATUS.RUNNING && session.realMockPaper?.attemptId === oldAttemptId) {
+            await flushRealMockSeen(session.realMockPaper);
+          }
           selectedPaper = await prepareRealMockExam("writing", oldAttemptId ? { restartAttemptId: oldAttemptId } : {});
         } catch (error) {
           const info = describeRealMockError(error, "真题组卷失败，请稍后重试。");
@@ -499,7 +512,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   return (
     <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
       {etsExam
-        ? <EtsTopBar section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer"
+        ? <TopBar variant="ets" section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer"
             right={<button type="button" onClick={abortExam} style={ETS_ABORT_STYLE}>中止</button>} />
         : <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />}
       {/* 真题外观铺满整宽（真题截图里题面贴着左边、作答框到右边），不留站内的 1200 内容宽。 */}

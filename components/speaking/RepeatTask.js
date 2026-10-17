@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
-import { ETS, EtsTopBar, EtsDirection, etsProgressLabel } from "../shared/etsExamUi";
+import { ETS, EtsDirection, etsProgressLabel } from "../shared/etsExamUi";
 import { VoiceRecorder, warmUpMicrophone } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { AssetPreloadGate } from "../shared/AssetPreloadGate";
@@ -933,7 +933,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
   return (
     <div style={{ minHeight: "100vh", background: ets ? ETS.canvas : C.bg, fontFamily: FONT }}>
       {ets ? (
-        <EtsTopBar
+        <TopBar variant="ets"
           section="Speaking"
           progress={etsProgressLabel(etsNumbering.offset + current + 1, etsNumbering.offset + current + 1, etsNumbering.total)}
           onExit={onExit}

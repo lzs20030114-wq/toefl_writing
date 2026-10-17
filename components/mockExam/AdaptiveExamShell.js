@@ -34,12 +34,12 @@ import {
   prepareRealMockExam, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
 } from "../../lib/realMockExam/client";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
-import { syncRealMockSeen, flushRealMockSeen } from "../../lib/realMockExam/seenSync";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper } from "../../lib/realMockExam/adaptiveScore";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
-import { ETS, ETS_BAR_HEIGHT, EtsTopBar, EtsDirection, EtsChoice, EtsNav, EtsNavButton, EtsFigure, etsSize, useEtsBarOverride, etsProgressLabel, rdlDirection, splitPassageTitle } from "../shared/etsExamUi";
+import { ETS, ETS_BAR_HEIGHT, EtsDirection, EtsChoice, EtsNav, EtsNavButton, EtsFigure, etsSize, useEtsBarOverride, etsProgressLabel, rdlDirection, splitPassageTitle } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -1604,6 +1604,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         // its id is sent only on an explicit request (handleIntroStart /
         // handleReleaseActiveAttempt), never by a plain retry.
         const restartAttemptId = typeof options?.restartAttemptId === "string" ? options.restartAttemptId : null;
+        // 放弃自己那份旧卷前，先把检查点里已展示的题补记为已见（刷新时没落地的后台同步随页面没了），
+        // 否则服务端结束旧卷时会把它们当未见释放回题池。
+        if (restartAttemptId && resumed?.paper?.attemptId === restartAttemptId) {
+          await resyncRealMockSeen(resumed.paper, [...(resumed.m1Items || []), ...(resumed.m2Items || [])], resumed.seenItemIds);
+        }
         const fresh = await prepareRealMockExam(section, restartAttemptId ? { restartAttemptId } : undefined);
         if (!validateRealAdaptivePaper(fresh, section, userCode)) {
           if (fresh?.attemptId) await finishRealMockExam(fresh).catch(() => {});
@@ -1691,6 +1696,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       if (isReal && (!resumed.paper || resumed.paper.userCode !== userCode || resumed.paper.templateVersion !== REAL_MOCK_TEMPLATE_VERSION)) throw new Error("断点账户或模板不匹配");
       setPaper(isReal ? resumed.paper : null);
       setSeenItemIds(isReal && Array.isArray(resumed.seenItemIds) ? resumed.seenItemIds : []);
+      // 刷新前还在后台重试的已见同步随页面没了：续考时把检查点里已展示的题补发一遍。
+      if (isReal) resyncRealMockSeen(resumed.paper, [...(resumed.m1Items || []), ...(resumed.m2Items || [])], resumed.seenItemIds, { onFatal: handleSyncFatal });
       setCurrentPartial(isReal && resumed.currentPartial?.phase === resumed.phase &&
         resumed.currentPartial?.itemIndex === resumed.currentItemIndex &&
         resumed.currentPartial?.itemId === (resumed.phase === "module2" ? resumed.m2Items : resumed.m1Items)?.[resumed.currentItemIndex]?.id
@@ -1918,7 +1925,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
       {/* Top bar — 真题模考做题时换成考试界面的细栏 */}
       {etsExam ? (
-        <EtsTopBar section={config.label} progress={etsProgress} timeLeft={timeLeft} onExit={onExit} />
+        <TopBar variant="ets" section={config.label} progress={etsProgress} timeLeft={timeLeft} onExit={onExit} />
       ) : (
       <TopBar
         title={

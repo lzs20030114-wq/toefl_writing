@@ -13,13 +13,13 @@ import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
 import { prepareRealMockExam, finishRealMockExamReliably } from "../../lib/realMockExam/client";
-import { syncRealMockSeen, flushRealMockSeen } from "../../lib/realMockExam/seenSync";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
 import { loadMockCheckpoint, saveMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
 import { getSavedCode } from "../../lib/AuthContext";
-import { ETS, ETS_BAR_HEIGHT, EtsTopBar, EtsNav, EtsNavButton, etsSize } from "../shared/etsExamUi";
+import { ETS, ETS_BAR_HEIGHT, EtsNav, EtsNavButton, etsSize } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -181,6 +181,25 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   syncFatalRef.current = (e) => showRealMockError(e, "作答记录同步失败", null);
   const handleSyncFatal = useCallback((e) => syncFatalRef.current?.(e), []);
 
+  // 检查点里的阶段说明哪几套题已经展示过（进了复述 → 复述那套；进了面试 → 两套）。
+  // 刷新时还在后台重试的已见同步随页面没了，所以恢复时补发一遍，重新组卷前再等它落地 ——
+  // 否则服务端结束旧卷会把这两套当未见释放回题池。
+  const restoredShownIds = (() => {
+    const p = restored.current?.phase;
+    const ex = restored.current?.exam;
+    if (!ex) return [];
+    if (p === "interview") return [ex.repeatSet?.id, ex.interviewSet?.id];
+    if (p === "repeat" || p === "interviewNarration") return [ex.repeatSet?.id];
+    return [];
+  })();
+  const resyncedRef = useRef(false);
+  useEffect(() => {
+    if (!realMock || resyncedRef.current || !restored.current?.exam || !restoredShownIds.length) return;
+    resyncedRef.current = true;
+    const ex = restored.current.exam;
+    resyncRealMockSeen(ex, [ex.repeatSet, ex.interviewSet], restoredShownIds);
+  }, [realMock]);
+
   async function handleStartExam(restartAttemptId = "") {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
@@ -190,6 +209,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     // 服务端若它仍是进行中的那份，会先结束它再组新卷（以前是客户端先 finish、失败就卡住开考）。
     const restartId = realMock ? restartAttemptId || exam?.attemptId || "" : "";
     try {
+      if (realMock && exam?.attemptId && exam.attemptId === restartId) await flushRealMockSeen(exam);
       // Prefer sets the user hasn't practised yet (shared done-set with practice
       // mode). repeat ids (rpt_*) and interview ids (intv_*) never collide, so a
       // single merged Set is safe; the planner's pickSet still falls back to the
@@ -427,7 +447,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       {/* Top bar — only show on intro, transition, and results */}
       {/* 真题模考的两段旁白页也是考试界面：深青考试头 + 「Speaking」细栏。 */}
       {realMock && (phase === "repeatNarration" || phase === "interviewNarration") && !error && (
-        <EtsTopBar section="Speaking" onExit={onExit} />
+        <TopBar variant="ets" section="Speaking" onExit={onExit} />
       )}
       {(phase === "intro" || phase === "resumeBlocked" || ((phase === "repeatNarration" || phase === "interviewNarration") && (!realMock || error)) || phase === "results") && (
         <TopBar

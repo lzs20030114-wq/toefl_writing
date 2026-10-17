@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { etsClock, etsProgressLabel, rdlDirection, splitPassageTitle, EtsTopBar } from "../components/shared/etsExamUi";
+import { TopBar } from "../components/shared/ui";
 
 describe("ETS exam chrome helpers", () => {
   test("the clock reads like the exam: HH:MM:SS", () => {
@@ -41,5 +42,15 @@ describe("ETS exam chrome helpers", () => {
     expect(screen.queryByTestId("ets-clock")).toBeNull();
     expect(screen.getByRole("button", { name: "Show Time" })).toBeInTheDocument();
     expect(screen.getByTestId("ets-progress")).toHaveTextContent("Question 3 of 35");
+  });
+
+  test("the shared TopBar renders the exam header as its ets variant, keeping exit and clock", () => {
+    const onExit = jest.fn();
+    render(<TopBar variant="ets" section="Writing" progress="Question 1 of 10" timeLeft={65} onExit={onExit} clockTestId="mock-section-timer" />);
+    expect(screen.getByTestId("ets-top-bar")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-section-timer")).toHaveTextContent("00:01:05");
+    expect(screen.queryByText("TreePractice")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "返回" }));
+    expect(onExit).toHaveBeenCalled();
   });
 });

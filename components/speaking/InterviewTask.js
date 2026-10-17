@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
-import { ETS, EtsTopBar, EtsFigure, etsProgressLabel } from "../shared/etsExamUi";
+import { ETS, EtsFigure, etsProgressLabel } from "../shared/etsExamUi";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { buildInterviewIntro } from "../../lib/speakingGen/introTemplates";
@@ -799,7 +799,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
     <div style={{ minHeight: "100vh", background: ets ? ETS.canvas : C.bg, fontFamily: FONT }}>
       <style>{timerCSS}</style>
       {ets ? (
-        <EtsTopBar
+        <TopBar variant="ets"
           section="Speaking"
           progress={etsProgressLabel(etsNumbering.offset + current + 1, etsNumbering.offset + current + 1, etsNumbering.total)}
           onExit={onExit}
