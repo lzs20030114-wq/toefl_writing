@@ -66,3 +66,18 @@ test("resync re-sends only the items the checkpoint recorded as shown", async ()
   await expect(resyncRealMockSeen(p, items, [])).resolves.toBe(false);
   expect(markRealMockSeen).toHaveBeenCalledTimes(1);
 });
+
+test("once a sync has given up on a blip, queued syncs try only once until one gets through", async () => {
+  markRealMockSeen.mockRejectedValue(err("NETWORK_ERROR"));
+  const p = paper("offline");
+  syncRealMockSeen(p, [{ id: "a" }], { delays: [0, 1, 1] });
+  syncRealMockSeen(p, [{ id: "b" }], { delays: [0, 1, 1] });
+  await syncRealMockSeen(p, [{ id: "c" }], { delays: [0, 1, 1] });
+  expect(markRealMockSeen).toHaveBeenCalledTimes(3 + 1 + 1);
+
+  markRealMockSeen.mockReset();
+  markRealMockSeen.mockResolvedValueOnce({ ok: true }).mockRejectedValueOnce(err("NETWORK_ERROR")).mockResolvedValue({ ok: true });
+  await syncRealMockSeen(p, [{ id: "d" }], { delays: [0, 1, 1] }); // back online: one call, full retries restored
+  await syncRealMockSeen(p, [{ id: "e" }], { delays: [0, 1, 1] }); // a blip is retried again
+  expect(markRealMockSeen).toHaveBeenCalledTimes(3);
+});
