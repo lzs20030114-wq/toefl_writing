@@ -922,6 +922,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
         buttonLabel={starting ? "正在准备麦克风…" : "开始"}
         onStart={handleStart}
         onExit={onExit}
+        ets={!!etsNumbering}
       />
     );
   }
@@ -946,7 +947,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
         onExit={onExit}
       />
       )}
-      {ets && <EtsDirection>Listen and repeat only once.</EtsDirection>}
+      {ets && <EtsDirection style={{ paddingBottom: 8 }}>Listen and repeat only once.</EtsDirection>}
       <Shell narrow>
         {/* Progress bar */}
         {!ets && <div style={{ marginBottom: 24 }}>
@@ -973,7 +974,21 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
           {sceneFrame && <SceneImage key={sceneFrame.url} frame={sceneFrame} />}
 
           {/* Phase: Listen */}
-          {phase === "listen" && (
+          {phase === "listen" && ets && (
+            <div style={{ fontFamily: ETS.font, color: ETS.muted, fontSize: 14, minHeight: 60 }}>
+              {ttsPlaying ? "Listen…" : ""}
+              {playBlocked && !ttsPlaying && (
+                <div style={{ marginTop: 6 }}>
+                  <div style={{ marginBottom: 10 }}>浏览器拦截了自动播放，请点击下方按钮手动播放</div>
+                  <button type="button" onClick={playSentence} style={{
+                    padding: "6px 20px", borderRadius: 999, border: `2px solid ${ETS.header}`, background: "#fff",
+                    color: ETS.header, fontFamily: ETS.font, fontSize: 14, fontWeight: 700, cursor: "pointer",
+                  }}>Play Again</button>
+                </div>
+              )}
+            </div>
+          )}
+          {phase === "listen" && !ets && (
             <div>
               <div style={{
                 width: 80, height: 80, borderRadius: "50%", margin: "0 auto 20px",
@@ -1030,6 +1045,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
           {/* Phase: Record */}
           {phase === "record" && (
             <div>
+              {!ets && <>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.t1, marginBottom: 4 }}>
                 Your Turn
               </div>
@@ -1038,6 +1054,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
                   ? "Repeat the sentence, then tap the button to stop — the next one follows automatically."
                   : "Repeat the sentence you just heard"}
               </div>
+              </>}
               {/* 真考节奏：原句一放完麦克风就自动打开，不等用户点；被浏览器拒绝时
                   退回手动点麦 + 提示。录完（点停止或 30s 到顶）直接进下一句。 */}
               <VoiceRecorder
@@ -1047,6 +1064,7 @@ function RepeatTaskInner({ items, setInfo = null, onComplete, onExit, realMock =
                 onAutoStartBlocked={() => setAutoBlocked(true)}
                 autoStart
                 maxDuration={30}
+                etsLook={ets}
               />
               {autoBlocked && !isRecording && (
                 <div style={{ marginTop: 12, fontSize: 13, color: "#92400E", lineHeight: 1.5 }}>

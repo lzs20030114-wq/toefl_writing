@@ -7,7 +7,7 @@ import { translateGrammarPoint } from "../../lib/utils";
 import { BANK_EXHAUSTED_ERRORS } from "../../lib/questionSelector";
 import { BsSessionDetail } from "../history/BsSessionDetail";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import { ETS, EtsDirection, EtsButton } from "../shared/etsExamUi";
+import { ETS, EtsDirection, EtsNav, EtsNavButton, EtsAvatar, etsSize, ETS_BAR_HEIGHT } from "../shared/etsExamUi";
 
 /* ── 触觉反馈 ── */
 function vibrate(ms = 12) {
@@ -530,10 +530,16 @@ export function BuildSentenceTask({
       transition: "border-color 0.15s, background 0.15s",
       animation: justPlaced ? "bsPopIn 0.35s cubic-bezier(0.34,1.56,0.64,1), bsPulseSlot 0.5s ease-out" : "none",
       ...(etsLook
-        ? (filled
-          ? { background: "#f1f1f1", color: ETS.ink, border: "1px solid #b9b9b9", borderRadius: 3, fontFamily: ETS.font, fontWeight: 400,
-              opacity: dragItem && dragItem.from === "slot" && dragItem.slotIndex === i ? 0.4 : 1 }
-          : { background: isHover ? ETS.tealSoft : "transparent", color: "transparent", border: "none", borderBottom: "2px solid " + (isHover ? ETS.teal : "#4a4a4a"), borderRadius: 0 })
+        // 真题界面：空位就是一条细下划线，填进去的词块是坐在线上的普通文字（没有灰底小方块）。
+        ? {
+            minWidth: etsSize(60), minHeight: 0, padding: `0 ${etsSize(3)} ${etsSize(1)}`, borderRadius: 0, justifyContent: "center",
+            fontFamily: ETS.font, fontSize: etsSize(16), fontWeight: 400, lineHeight: 1.35,
+            background: isHover ? ETS.tealSoft : "transparent",
+            color: filled ? ETS.text : "transparent",
+            border: "none", borderBottom: "1px solid " + (isHover ? ETS.teal : "#555"),
+            boxShadow: "none",
+            opacity: filled && dragItem && dragItem.from === "slot" && dragItem.slotIndex === i ? 0.4 : 1,
+          }
         : filled
         ? {
             background: C.blue,
@@ -557,7 +563,9 @@ export function BuildSentenceTask({
   // still empty — only the true sentence-initial token gets the capital.
   const firstTokenKey = givenSlots.some((gs) => gs.givenIndex === 0) ? "given-0" : "slot-0";
   const slotsJSX = (
-    <div data-answer-area="true" style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8, minHeight: isMobile ? 36 : 48, alignItems: "center", lineHeight: 1.5 }}>
+    <div data-answer-area="true" style={etsLook && !isMobile
+      ? { display: "flex", flexWrap: "wrap", columnGap: etsSize(10), rowGap: etsSize(12), alignItems: "flex-end", lineHeight: 1.35, minWidth: 0 }
+      : { display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8, minHeight: isMobile ? 36 : 48, alignItems: "center", lineHeight: 1.5 }}>
       {Array.from({ length: slots.length + 1 }, (_, i) => i).map((i) => (
         <React.Fragment key={`resp-${i}`}>
           {givenSlots.filter((gs) => gs.givenIndex === i).map((gs, gi) => (
@@ -565,7 +573,7 @@ export function BuildSentenceTask({
               key={`given-${i}-${gi}`}
               data-testid={`given-token-${i}`}
               style={etsLook && !isMobile ? {
-                fontSize: 15, color: ETS.ink, fontFamily: ETS.font, padding: "4px 2px",
+                fontSize: etsSize(16), color: ETS.text, fontFamily: ETS.font, padding: `0 0 ${etsSize(1)}`, lineHeight: 1.35,
               } : {
                 fontSize: isMobile ? 14 : 14,
                 color: "#555",
@@ -601,7 +609,9 @@ export function BuildSentenceTask({
           )}
         </React.Fragment>
       ))}
-      <span style={{ fontSize: isMobile ? 16 : 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
+      <span style={etsLook && !isMobile
+        ? { fontSize: etsSize(16), color: ETS.text, fontFamily: ETS.font, lineHeight: 1.35, marginLeft: `calc(-1 * ${etsSize(8)})`, paddingBottom: etsSize(1) }
+        : { fontSize: isMobile ? 16 : 18, color: C.t1, fontWeight: 700 }}>{punct}</span>
     </div>
   );
 
@@ -612,18 +622,20 @@ export function BuildSentenceTask({
       onDragLeave={!isMobile ? () => setHoverBank(false) : undefined}
       onDrop={!isMobile ? onDropBank : undefined}
       style={{
-        background: hoverBank && dragItem && dragItem.from === "slot" ? "#fff3f3" : "#fff",
+        background: hoverBank && dragItem && dragItem.from === "slot" ? (etsLook ? ETS.tealSoft : "#fff3f3") : "#fff",
         border: etsLook ? "none" : "1px solid " + C.bdr,
         borderRadius: compact ? 10 : 4,
-        padding: compact ? "8px 10px" : 16,
+        padding: compact ? "8px 10px" : etsLook ? `${etsSize(8)} ${etsSize(12)}` : 16,
         display: "flex",
         flexWrap: "wrap",
         gap: compact ? 8 : 8,
-        ...(compact ? { flex: 1, alignContent: "flex-start", overflow: "auto", minHeight: 0 } : { marginBottom: 20, minHeight: 48 }),
+        // 真题界面：词块是居中一行、间距很宽的普通文字。
+        ...(etsLook && !compact ? { justifyContent: "center", columnGap: etsSize(38), rowGap: etsSize(10) } : {}),
+        ...(compact ? { flex: 1, alignContent: "flex-start", overflow: "auto", minHeight: 0 } : { marginBottom: etsLook ? 0 : 20, minHeight: etsLook ? etsSize(40) : 48 }),
       }}
     >
       {!compact && !etsLook && <div style={{ fontSize: 11, color: C.t2, width: "100%", marginBottom: 4, letterSpacing: 1 }}>词块区</div>}
-      {bank.length === 0 && <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>{compact ? "已全部放入" : "所有词块都已放入句子，可点击已填槽位退回词块。"}</span>}
+      {bank.length === 0 && !(etsLook && !compact) && <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>{compact ? "已全部放入" : "所有词块都已放入句子，可点击已填槽位退回词块。"}</span>}
       {bank.map((chunk) => {
         const justReturned = animChunkId === chunk.id;
         return (
@@ -636,12 +648,13 @@ export function BuildSentenceTask({
             onDragEnd={!isMobile ? onDragEnd : undefined}
             onTouchStart={isMobile ? (e) => startTouch(e, { from: "bank", chunk }) : undefined}
             style={{
-              background: compact ? "#fff" : etsLook ? "#f1f1f1" : "#f8f9fa",
-              color: etsLook ? ETS.ink : C.t1,
-              border: (compact ? "1.5px" : "1px") + " solid " + (etsLook ? "#b9b9b9" : C.bdr),
-              borderRadius: compact ? 8 : etsLook ? 3 : 4,
-              padding: compact ? "7px 12px" : etsLook ? "7px 16px" : "6px 14px",
-              fontSize: compact ? 14 : etsLook ? 15 : 14,
+              background: compact ? "#fff" : etsLook ? "transparent" : "#f8f9fa",
+              color: etsLook ? ETS.text : C.t1,
+              border: etsLook && !compact ? "none" : (compact ? "1.5px" : "1px") + " solid " + (etsLook ? "#b9b9b9" : C.bdr),
+              borderRadius: compact ? 8 : etsLook ? 2 : 4,
+              padding: compact ? "7px 12px" : etsLook ? `${etsSize(3)} ${etsSize(2)}` : "6px 14px",
+              fontSize: compact ? 14 : etsLook ? etsSize(16) : 14,
+              lineHeight: etsLook && !compact ? 1.35 : undefined,
               fontWeight: compact ? 500 : 400,
               cursor: "grab",
               fontFamily: etsLook ? ETS.font : FONT,
@@ -663,22 +676,30 @@ export function BuildSentenceTask({
   const topBarH = embedded ? 0 : 56;
 
   if (etsLook && !isMobile) {
+    // 真题界面（对照 5.6 真题 PDF 写作造句截图，1152 宽）：居中粗体指令；左侧约 10% 处两行对话，
+    // 每行一个圆形头像（约 104px、青色细圈），对方的话加粗、回答句里给定词是普通字、空位是下划线；
+    // 下面居中一行纯文字词块。Reset / Back / Next 放到考试头右侧（EtsNav），正文里不放按钮。
     return (
-      <div style={{ background: ETS.canvas, fontFamily: ETS.font }}>
-        <style>{BS_INTERACTION_CSS}</style>
+      <div style={{ background: ETS.canvas, fontFamily: ETS.font, minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)`, display: "flex", flexDirection: "column" }}>
+        <style>{BS_INTERACTION_CSS}{ETS_AVATAR_CSS}</style>
         {toast && <Toast message={toast} onClose={() => setToast(null)} />}
-        <EtsDirection>Make an appropriate sentence.</EtsDirection>
-        <div style={{ maxWidth: 860, margin: "0 auto", padding: "6px 24px 28px" }}>
-          <div data-testid="bs-ets-prompt" style={{ fontSize: 16, color: ETS.ink, lineHeight: 1.6, marginBottom: 26 }}>{q.prompt}</div>
-          {slotsJSX}
-          <div style={{ height: 1, background: ETS.line, margin: "28px 0 22px" }} />
-          {bankJSX(false)}
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-            <EtsButton variant="secondary" onClick={resetQ}>Reset</EtsButton>
-            {canGoBack && <EtsButton variant="secondary" onClick={goBack}>Back</EtsButton>}
-            <EtsButton data-testid="build-submit" onClick={handleSubmitClick}>Next</EtsButton>
+        <EtsNav>
+          <EtsNavButton onClick={resetQ}>Reset</EtsNavButton>
+          {canGoBack && <EtsNavButton onClick={goBack}>Back</EtsNavButton>}
+          <EtsNavButton data-testid="build-submit" onClick={handleSubmitClick}>Next</EtsNavButton>
+        </EtsNav>
+        <EtsDirection style={{ paddingTop: etsSize(22) }}>Make an appropriate sentence.</EtsDirection>
+        <div style={{ padding: `${etsSize(150)} 4% ${etsSize(40)} 10.4%`, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: etsSize(6), minWidth: 0 }}>
+            <EtsRingAvatar seed={String(q.id || q.qid || "") + "a"} label="Speaker A" />
+            <div data-testid="bs-ets-prompt" style={{ flex: 1, minWidth: 0, fontSize: etsSize(16), fontWeight: 700, color: ETS.ink, lineHeight: 1.35, paddingBottom: etsSize(1) }}>{q.prompt}</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-end", gap: etsSize(6), marginTop: etsSize(30), minWidth: 0 }}>
+            <EtsRingAvatar seed={String(q.id || q.qid || "") + "b"} female label="Speaker B" />
+            <div style={{ flex: 1, minWidth: 0 }}>{slotsJSX}</div>
           </div>
         </div>
+        <div style={{ padding: `${etsSize(4)} 4% ${etsSize(32)}` }}>{bankJSX(false)}</div>
       </div>
     );
   }
@@ -738,5 +759,15 @@ export function BuildSentenceTask({
         </PageShell>
       )}
     </div>
+  );
+}
+
+// 造句对话的圆形头像：真题截图里约 104px（1152 宽）、外面一圈青色细边。
+const ETS_AVATAR_CSS = `.tp-ets-ring-avatar svg { width: 100% !important; height: 100% !important; box-shadow: 0 0 0 2px #5a9c98 !important; }`;
+function EtsRingAvatar({ seed, female = false, label }) {
+  return (
+    <span className="tp-ets-ring-avatar" style={{ width: etsSize(104), height: etsSize(104), flexShrink: 0, display: "block", margin: 2 }}>
+      <EtsAvatar seed={seed} female={female} label={label} size={104} />
+    </span>
   );
 }

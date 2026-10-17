@@ -46,30 +46,30 @@ test("desktop and mobile real-bank sections link all four mocks under the Pro ga
   await page.screenshot({ path: path.join(reportDir, "mobile-real-mock-entry.png"), fullPage: true });
 });
 
-test("writing uses the reserved 10-question paper and blocks the first BS prompt until seen succeeds", async ({ page }) => {
+test("writing uses the reserved 10-question paper and shows the first BS prompt while its seen is still pending", async ({ page }) => {
   await offlineAuth(page);
   const paper = writingPaper();
   const calls = [];
   let releaseFirstSeen;
+  const firstSeenHeld = new Promise((resolve) => { releaseFirstSeen = resolve; });
   await page.route("**/api/real-mock-exam", async (route) => {
     const body = route.request().postDataJSON();
     calls.push(body);
     if (body.action === "prepare") return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper }) });
-    if (body.action === "seen" && !releaseFirstSeen) {
-      await new Promise((resolve) => { releaseFirstSeen = resolve; });
-    }
+    if (body.action === "seen") await firstSeenHeld;
     return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
   });
   await page.goto("/mock-exam?source=real-bank&mode=practice");
   await page.getByRole("button", { name: "开始模考" }).click();
   await page.getByTestId("mock-transition-skip").click();
   await page.getByTestId("build-start").click();
-  await expect(page.getByText("正在确认题目状态…")).toBeVisible();
-  await expect(page.getByText("I can read book 1.")).toHaveCount(0);
-  releaseFirstSeen();
+  // No gate: the prompt is answerable at once although its seen has not landed.
   await expect(page.getByText("I can read book 1.")).toBeVisible();
+  await expect(page.getByText("正在确认题目状态…")).toHaveCount(0);
+  await expect(page.getByTestId("build-submit")).toBeEnabled();
   expect(calls.some((call) => call.action === "seen" && call.items?.[0]?.id === "real_mock_bs_1")).toBe(true);
   expect(calls.some((call) => call.action === "seen" && call.items?.some((item) => item.id === "real_mock_bs_2"))).toBe(false);
+  releaseFirstSeen();
   await page.screenshot({ path: path.join(reportDir, "writing-bs-first-question.png"), fullPage: true });
 });
 
@@ -78,10 +78,14 @@ test("writing completes the actual 10+1+1 tasks with blank timed essays and one 
   const paper = writingPaper();
   paper.timing.taskSeconds = { bs: 90, email: 3, discussion: 3 };
   const calls = [];
-  await page.route("**/api/real-mock-exam", (route) => {
+  let releaseDiscussionSeen;
+  const discussionSeenHeld = new Promise((resolve) => { releaseDiscussionSeen = resolve; });
+  await page.route("**/api/real-mock-exam", async (route) => {
     const body = route.request().postDataJSON();
     calls.push(body);
     if (body.action === "prepare") return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper }) });
+    // The discussion's seen hangs (the queue keeps its answered call behind it) until the result page is up.
+    if (body.action === "seen" && !body.answered && body.items?.[0]?.id === paper.discussionPrompt.id) await discussionSeenHeld;
     return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
   });
   await page.route("**/api/ai", () => { throw new Error("Blank essays must not call paid AI"); });
@@ -100,11 +104,17 @@ test("writing completes the actual 10+1+1 tasks with blank timed essays and one 
   await expect(page.getByText("Should students work together?")).toBeVisible();
   await expect(page.getByText("写作真题模考结果 · 本站估分")).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText(/原始分：/)).toBeVisible();
+  // The result is shown, but finish waits for the still-pending seen call.
+  await page.waitForTimeout(500);
+  expect(calls.some((call) => call.action === "finish")).toBe(false);
+  releaseDiscussionSeen();
+  await expect.poll(() => calls.some((call) => call.action === "finish")).toBe(true);
+  const finishAt = calls.findIndex((call) => call.action === "finish");
+  expect(calls.slice(finishAt).some((call) => call.action === "seen")).toBe(false);
   const answered = calls.filter((call) => call.action === "seen" && call.answered === true);
   expect(answered.flatMap((call) => call.items.map((item) => item.id))).toEqual(expect.arrayContaining([
     ...paper.bsQuestions.map((question) => question.id), paper.emailPrompt.id, paper.discussionPrompt.id,
   ]));
-  expect(calls.some((call) => call.action === "finish")).toBe(true);
   await page.screenshot({ path: path.join(reportDir, "writing-full-result-blank-essays.png"), fullPage: true });
 });
 
@@ -192,7 +202,7 @@ test("writing 开始新模考 on the result page explains why no new paper can b
   await expect(page.getByText("写作真题模考结果 · 本站估分")).toHaveCount(0);
 });
 
-test("writing BS seen failure offers 重试 in place instead of aborting the paper", async ({ page }) => {
+test("writing BS transient seen failure is retried in the background without blocking or pausing the clock", async ({ page }) => {
   await offlineAuth(page);
   const paper = writingPaper();
   let seenCalls = 0;
@@ -209,17 +219,51 @@ test("writing BS seen failure offers 重试 in place instead of aborting the pap
   await page.getByRole("button", { name: "开始模考" }).click();
   await page.getByTestId("mock-transition-skip").click();
   await page.getByTestId("build-start").click();
-  await expect(page.getByText("真题模考服务暂不可用，请稍后重试。")).toBeVisible();
-  await expect(page.getByText("I can read book 1.")).toHaveCount(0);
-  // The BS clock stays paused while the question is not confirmed.
-  const pausedAt = await page.getByTestId("mock-section-timer").textContent();
-  await page.waitForTimeout(2500);
-  await expect(page.getByTestId("mock-section-timer")).toHaveText(pausedAt);
-  await page.getByRole("button", { name: "重试", exact: true }).click();
   await expect(page.getByText("I can read book 1.")).toBeVisible();
+  await expect.poll(() => seenCalls).toBeGreaterThanOrEqual(2);
+  await expect(page.getByText("真题模考服务暂不可用，请稍后重试。")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "中止本卷" })).toHaveCount(0);
+  // The BS clock keeps running.
+  const before = await page.getByTestId("mock-section-timer").textContent();
+  await page.waitForTimeout(2500);
+  await expect(page.getByTestId("mock-section-timer")).not.toHaveText(before);
+  // The exam proceeds to the next prompt.
+  await page.getByTestId("build-submit").click();
+  await expect(page.getByText("I can read book 2.")).toBeVisible();
   await expect(page.getByText("模考已中止")).toHaveCount(0);
-  expect(seenCalls).toBeGreaterThanOrEqual(2);
   await page.screenshot({ path: path.join(reportDir, "writing-bs-seen-retry.png"), fullPage: true });
+});
+
+test("writing BS non-transient seen failure shows the sync error and only offers 中止本卷", async ({ page }) => {
+  await offlineAuth(page);
+  const paper = writingPaper();
+  const calls = [];
+  await page.route("**/api/real-mock-exam", (route) => {
+    const body = route.request().postDataJSON();
+    calls.push(body);
+    if (body.action === "prepare") return route.fulfill({ contentType: "application/json", body: JSON.stringify({ ok: true, paper }) });
+    if (body.action === "seen") {
+      return route.fulfill({ status: 409, contentType: "application/json", body: JSON.stringify({ ok: false, code: "ATTEMPT_FINISHED", error: "这份试卷已结束。" }) });
+    }
+    return route.fulfill({ contentType: "application/json", body: '{"ok":true}' });
+  });
+  page.on("dialog", (dialog) => dialog.accept());
+  await page.goto("/mock-exam?source=real-bank");
+  await page.getByRole("button", { name: "开始模考" }).click();
+  await page.getByTestId("mock-transition-skip").click();
+  await page.getByTestId("build-start").click();
+  const alert = page.getByRole("alert").filter({ hasText: "这份试卷已结束" });
+  await expect(alert).toBeVisible();
+  await expect(alert).toContainText("本卷无法继续作答");
+  await expect(page.getByText("I can read book 1.")).toHaveCount(0);
+  // Not retried: a dead paper can never be marked.
+  expect(calls.filter((call) => call.action === "seen")).toHaveLength(1);
+  await page.screenshot({ path: path.join(reportDir, "writing-bs-seen-fatal.png"), fullPage: true });
+  await alert.getByRole("button", { name: "中止本卷" }).click();
+  // Aborting ends the paper: the sync error gives way to the aborted page.
+  await expect(page.getByText("模考已中止")).toBeVisible();
+  await expect(alert).toHaveCount(0);
+  await expect.poll(() => calls.some((call) => call.action === "finish" && call.attemptId === paper.attemptId)).toBe(true);
 });
 
 test("writing hides 开始新模考 while AI scoring is pending", async ({ page }) => {

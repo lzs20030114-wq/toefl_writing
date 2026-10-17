@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
-import { ETS, EtsTopBar, etsProgressLabel } from "../shared/etsExamUi";
+import { ETS, EtsTopBar, EtsFigure, etsProgressLabel } from "../shared/etsExamUi";
 import { VoiceRecorder } from "./VoiceRecorder";
 import { SpeakingIntroScreen } from "./SpeakingIntroScreen";
 import { buildInterviewIntro } from "../../lib/speakingGen/introTemplates";
@@ -786,6 +786,8 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
         lines={[intro.settingText, intro.logisticsText]}
         onStart={handleStart}
         onExit={onExit}
+        ets={!!etsNumbering}
+        etsFigure={1}
       />
     );
   }
@@ -826,8 +828,14 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
         </div>
 
         <SurfaceCard style={{ padding: "32px 28px", ...(ets ? { border: "none", boxShadow: "none", borderRadius: 0, background: "transparent" } : {}) }}>
+          {/* 真题界面：屏幕上只有采访者，问题只放音频。 */}
+          {ets && phase !== "review" && (
+            <div style={{ height: 300, marginBottom: 18 }}>
+              <EtsFigure count={1} seed="Interview" />
+            </div>
+          )}
           {/* Question header */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+          <div style={{ display: ets ? "none" : "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               {diffBadge(question.difficulty)}
               {categoryBadge(question.category)}
@@ -871,8 +879,8 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
             </div>
           ) : (
             <div style={{
-              fontSize: 16, fontWeight: 600, color: C.t2, lineHeight: 1.7,
-              marginBottom: 28, textAlign: "center", padding: "0 12px",
+              fontSize: ets ? 15 : 16, fontWeight: 600, color: ets ? ETS.muted : C.t2, lineHeight: 1.7,
+              marginBottom: ets ? 18 : 28, textAlign: "center", padding: "0 12px", fontFamily: ets ? ETS.font : undefined,
             }}>
               Please answer the interviewer's question.
             </div>
@@ -905,7 +913,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
                   </div>
                 </div>
               ) : (
-                <>
+                ets ? <div style={{ fontSize: 14, color: ETS.muted, fontFamily: ETS.font }}>Listen…</div> : <>
                   <div style={{
                     width: 64, height: 64, borderRadius: "50%", margin: "0 auto 16px",
                     background: SPK.soft, border: "2px solid #FDE68A",
@@ -931,6 +939,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
                 onRecordingStart={() => setRecordingStarted(true)}
                 onStopRef={recorderStopRef}
                 onAutoStartBlocked={() => setAutoBlocked(true)}
+                etsLook={ets}
                 // Belt-and-braces: VoiceRecorder already stops the exam controller
                 // + Web Speech at record start; kill this task's legacy <Audio>
                 // prompt too so it can't leak into the mic if the user抢跑 before
@@ -945,6 +954,7 @@ export function InterviewTask({ items, setInfo = null, onComplete, onExit, isPra
 
               {/* Timer bar */}
               <div style={{
+                display: ets ? "none" : undefined,
                 marginTop: 20, height: 4, background: "#E5E7EB", borderRadius: 2,
                 overflow: "hidden",
               }}>

@@ -10,7 +10,7 @@ import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
 import { syncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { TaskTransitionCard } from "./TaskTransitionCard";
-import { ETS, EtsDirection } from "../shared/etsExamUi";
+import { ETS } from "../shared/etsExamUi";
 
 const TRANSITION_SECONDS = 25;
 
@@ -86,14 +86,17 @@ export function MockExamMainPanel({
   }, [showTransition, onTimerChange]);
 
   return (
-    <div style={ets ? { background: ETS.canvas, padding: "0 0 24px" } : { background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
+    <div style={ets ? { background: ETS.canvas, padding: 0 } : { background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
       {showTransition && (
-        <TaskTransitionCard
-          taskId={currentTask?.taskId}
-          seconds={currentTask?.seconds}
-          restSeconds={transitionLeft}
-          onSkip={() => setTransitionLeft(0)}
-        />
+        // 真题外观的外壳铺满整宽，过渡卡单独收回到阅读宽度。
+        <div style={ets ? { maxWidth: 860, margin: "32px auto 0", padding: "0 20px" } : undefined}>
+          <TaskTransitionCard
+            taskId={currentTask?.taskId}
+            seconds={currentTask?.seconds}
+            restSeconds={transitionLeft}
+            onSkip={() => setTransitionLeft(0)}
+          />
+        </div>
       )}
 
       {session.status === MOCK_EXAM_STATUS.RUNNING && !showTransition && currentTask?.taskId === TASK_IDS.BUILD_SENTENCE && (
@@ -226,8 +229,9 @@ export function MockExamMainPanel({
         </div>
       )}
 
-      {session.status === MOCK_EXAM_STATUS.RUNNING && (
-        <div style={ets ? { display: "flex", gap: 10, maxWidth: 860, margin: "8px auto 0", padding: "0 24px", opacity: 0.85 } : { display: "flex", gap: 10 }}>
+      {/* 真题外观：「中止」在考试头上（MockExamShell 传给 EtsTopBar），「返回」是考试头左侧那颗，正文里不再放。 */}
+      {session.status === MOCK_EXAM_STATUS.RUNNING && !ets && (
+        <div style={{ display: "flex", gap: 10 }}>
           <Btn onClick={onAbort} variant="danger">中止</Btn>
           <Btn onClick={onExit} variant="secondary">返回</Btn>
         </div>

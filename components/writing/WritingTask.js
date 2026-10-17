@@ -11,9 +11,9 @@ import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, normalizeEmailTopic, pickRand
 import { peekRetrySnapshot, clearRetrySnapshot } from "../../lib/history/retry";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
-import { WritingPromptPanel } from "./WritingPromptPanel";
+import { WritingPromptPanel, EtsStudentPosts } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
-import { ETS } from "../shared/etsExamUi";
+import { ETS, ETS_BAR_HEIGHT, etsSize } from "../shared/etsExamUi";
 import { formatMinutesLabel, PRACTICE_MODE, STANDARD_TIME_SECONDS, formatLongDuration } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -571,7 +571,7 @@ export function WritingTask({
             height: embedded ? "calc(100dvh - 44px)" : "100dvh",
             display: "flex", flexDirection: "column", overflow: "hidden",
           }
-        : { minHeight: "100vh" }),
+        : { minHeight: etsLook ? `calc(100vh - ${ETS_BAR_HEIGHT}px)` : "100vh" }),
     }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {showSubmitConfirm && (
@@ -677,11 +677,13 @@ export function WritingTask({
                 </SurfaceCard>
               ) : (
                 etsLook ? (
-                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 0, paddingTop: 24 }}>
-                    <div style={{ paddingRight: 28, borderRight: "6px solid #e4e4e4" }}>
+                  // 真题截图（1152 宽）：左栏约 40% 题面、浅灰竖线、右栏作答，两栏各自滚动，作答框铺到视口底。
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 40fr) minmax(0, 60fr)", gap: 0, height: `calc(100vh - ${ETS_BAR_HEIGHT}px)` }}>
+                    <div style={{ padding: `${etsSize(14)} ${etsSize(24)} ${etsSize(24)} ${etsSize(12)}`, borderRight: "2px solid #ececec", overflowY: "auto", minWidth: 0 }}>
                       <WritingPromptPanel type={type} pd={pd} etsLook />
                     </div>
-                    <div style={{ paddingLeft: 28, display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div style={{ padding: `${etsSize(type === "email" ? 22 : 30)} ${etsSize(2)} 0 ${etsSize(14)}`, display: "flex", flexDirection: "column", gap: etsSize(type === "email" ? 0 : 24), overflowY: "auto", minWidth: 0 }}>
+                      {type !== "email" && <EtsStudentPosts pd={pd} />}
                       <WritingResponsePanel
                         type={type} pd={pd} phase={phase}
                         text={text} onTextChange={setText}
@@ -729,5 +731,6 @@ export function WritingTask({
 }
 
 function EtsDesktopShell({ children }) {
-  return <div className="tp-shell-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px 32px" }}>{children}</div>;
+  // 真题界面题面贴着左边、作答框到右边：铺满整宽，不留站内的内容宽度。
+  return <div className="tp-shell-inner" style={{ maxWidth: "none", margin: 0, padding: 0 }}>{children}</div>;
 }

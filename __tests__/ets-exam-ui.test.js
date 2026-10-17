@@ -15,10 +15,11 @@ describe("ETS exam chrome helpers", () => {
   });
 
   test("daily-life directions follow the material's genre", () => {
-    expect(rdlDirection("notice")).toBe("Read the following notice.");
-    expect(rdlDirection("Email")).toBe("Read the following email.");
-    expect(rdlDirection("passage")).toBe("Read the following text.");
-    expect(rdlDirection("")).toBe("Read the following text.");
+    expect(rdlDirection("notice")).toBe("Read a notice.");
+    expect(rdlDirection("Email")).toBe("Read an email.");
+    expect(rdlDirection("advertisement")).toBe("Read an advertisement.");
+    expect(rdlDirection("passage")).toBe("Read a text.");
+    expect(rdlDirection("")).toBe("Read a text.");
   });
 
   test("an academic passage's title line becomes the heading; body text is never cut", () => {

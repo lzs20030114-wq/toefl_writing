@@ -1,7 +1,7 @@
 ﻿"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { C, Btn, FONT, SurfaceCard } from "../shared/ui";
-import { ETS, EtsButton } from "../shared/etsExamUi";
+import { ETS, EtsNav, EtsNavButton, etsSize } from "../shared/etsExamUi";
 import UpgradeModal from "../shared/UpgradeModal";
 import { getSavedCode, saveAuth } from "../../lib/AuthContext";
 
@@ -35,6 +35,78 @@ function ScoringWaitCard() {
   );
 }
 
+// 剪贴板粘贴进 textarea 当前选区（去掉中文字符），ExamToolbar 和真题外观的工具条共用。
+async function pasteIntoTextarea(ta, onTextChange) {
+  if (!ta) return;
+  try {
+    const raw = await navigator.clipboard.readText();
+    const cleaned = raw.replace(CJK_RE, "");
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const next = ta.value.slice(0, start) + cleaned + ta.value.slice(end);
+    onTextChange(next);
+    setTimeout(() => {
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = start + cleaned.length;
+    }, 0);
+  } catch {
+    // Ignore clipboard permission errors.
+  }
+}
+
+// 真题工具条（对照 5.6 真题 PDF 写作截图）：Cut / Paste / Undo / Redo 灰色圆角按钮，最近按过的那颗是青底白字
+// （一进来是 Cut）；右侧青色眼睛 +「Hide Word Count」+ 字数。
+const ETS_TOOL_TEAL = "#3f8b88";
+function EtsEyeIcon({ off }) {
+  return (
+    <svg width="20" height="14" viewBox="0 0 24 16" aria-hidden="true" style={{ display: "block" }}>
+      <path d="M1 8s4-7 11-7 11 7 11 7-4 7-11 7S1 8 1 8z" fill="currentColor" />
+      <circle cx="12" cy="8" r="3.4" fill="#fff" />
+      <circle cx="12" cy="8" r="1.6" fill="currentColor" />
+      {off && <line x1="3" y1="15" x2="21" y2="1" stroke="#fff" strokeWidth="3.4" />}
+      {off && <line x1="3" y1="15" x2="21" y2="1" stroke="currentColor" strokeWidth="1.8" />}
+    </svg>
+  );
+}
+function EtsToolbar({ disabled, onCut, onPaste, onUndo, onRedo, words }) {
+  const [active, setActive] = useState("Cut");
+  const [countHidden, setCountHidden] = useState(false);
+  const tools = [["Cut", onCut], ["Paste", onPaste], ["Undo", onUndo], ["Redo", onRedo]];
+  return (
+    <div data-testid="writing-ets-toolbar" style={{
+      display: "flex", alignItems: "center", gap: etsSize(6), padding: `${etsSize(10)} ${etsSize(12)}`,
+      border: "1px solid #ececec", borderBottom: "none", borderRadius: `${etsSize(10)} ${etsSize(10)} 0 0`, background: ETS.canvas,
+    }}>
+      {tools.map(([label, fn]) => {
+        const on = active === label;
+        return (
+          <button key={label} type="button" disabled={disabled}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => { setActive(label); fn(); }}
+            style={{
+              minWidth: etsSize(66), height: etsSize(38), padding: `0 ${etsSize(12)}`, borderRadius: etsSize(6),
+              border: "1px solid " + (on ? ETS_TOOL_TEAL : "#dadada"), background: on ? ETS_TOOL_TEAL : "#e6e6e6",
+              color: on ? "#fff" : "#4a4a4a", fontFamily: ETS.font, fontSize: etsSize(13.5), fontWeight: on ? 700 : 400,
+              cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.6 : 1, userSelect: "none",
+            }}
+          >{label}</button>
+        );
+      })}
+      <span style={{ flex: 1 }} />
+      <button type="button" onClick={() => setCountHidden((v) => !v)} aria-label={countHidden ? "Show Word Count" : "Hide Word Count"} style={{
+        display: "inline-flex", alignItems: "center", gap: etsSize(8), padding: 0, border: "none", background: "none",
+        color: ETS_TOOL_TEAL, fontFamily: ETS.font, fontSize: etsSize(13.5), fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap",
+      }}>
+        <EtsEyeIcon off={countHidden} />{countHidden ? "Show Word Count" : "Hide Word Count"}
+      </button>
+      <span data-testid="writing-ets-word-count" style={{
+        minWidth: etsSize(30), textAlign: "center", fontFamily: ETS.font, fontSize: etsSize(16), color: "#555",
+        fontVariantNumeric: "tabular-nums", visibility: countHidden ? "hidden" : "visible",
+      }}>{words}</span>
+    </div>
+  );
+}
+
 function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef }) {
   async function handleCopy() {
     const ta = taRef.current;
@@ -46,23 +118,8 @@ function ExamToolbar({ taRef, onTextChange, disabled, historyRef, prevTextRef })
     copyToClipboard(selected);
   }
 
-  async function handlePaste() {
-    const ta = taRef.current;
-    if (!ta) return;
-    try {
-      const raw = await navigator.clipboard.readText();
-      const cleaned = raw.replace(CJK_RE, "");
-      const start = ta.selectionStart;
-      const end = ta.selectionEnd;
-      const next = ta.value.slice(0, start) + cleaned + ta.value.slice(end);
-      onTextChange(next);
-      setTimeout(() => {
-        ta.focus();
-        ta.selectionStart = ta.selectionEnd = start + cleaned.length;
-      }, 0);
-    } catch {
-      // Ignore clipboard permission errors.
-    }
+  function handlePaste() {
+    return pasteIntoTextarea(taRef.current, onTextChange);
   }
 
   function handleUndo() {
@@ -138,28 +195,165 @@ export function WritingResponsePanel({
     try { imeTipDismissedRef.current = localStorage.getItem(IME_TIP_DISMISSED_KEY) === "1"; } catch {}
   }, []);
 
+  // 真题外观的 Redo：Undo 掉的值按栈存着，再敲任何字就清空（和普通编辑器一样）。
+  const redoRef = useRef([]);
+  function etsUndo() {
+    if (historyRef.current.length === 0) return;
+    const prev = historyRef.current.pop();
+    redoRef.current.push(prevTextRef.current);
+    prevTextRef.current = prev;
+    onTextChange(prev);
+    setTimeout(() => taRef.current?.focus(), 0);
+  }
+  function etsRedo() {
+    if (redoRef.current.length === 0) return;
+    const nextText = redoRef.current.pop();
+    historyRef.current.push(prevTextRef.current);
+    prevTextRef.current = nextText;
+    onTextChange(nextText);
+    setTimeout(() => taRef.current?.focus(), 0);
+  }
+  async function etsCut() {
+    const ta = taRef.current;
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    if (start === end) return;
+    const { copyToClipboard } = await import("../../lib/clipboard");
+    copyToClipboard(ta.value.slice(start, end));
+    onTextChange(ta.value.slice(0, start) + ta.value.slice(end));
+    setTimeout(() => {
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = start;
+    }, 0);
+  }
+
   useEffect(() => {
     if (text !== prevTextRef.current) {
+      redoRef.current = [];
       historyRef.current.push(prevTextRef.current);
       if (historyRef.current.length > 200) historyRef.current.shift();
       prevTextRef.current = text;
     }
   }, [text]);
 
+  const textareaNode = (
+    <textarea
+      ref={taRef}
+      data-testid="writing-textarea"
+      lang="en"
+      value={text}
+      onChange={(e) => {
+        const raw = e.target.value;
+        // Hold off filtering while the browser reports active IME
+        // composition — stripping would clobber the in-progress text.
+        if (e.nativeEvent?.isComposing === true) {
+          onTextChange(raw);
+          return;
+        }
+        // English fast path: nothing to strip, push through synchronously.
+        if (!CJK_RE.test(raw)) {
+          onTextChange(raw);
+          if (filterTimerRef.current) {
+            clearTimeout(filterTimerRef.current);
+            filterTimerRef.current = null;
+          }
+          return;
+        }
+        // CJK present (possibly an in-progress IME on Windows where
+        // the isComposing flag isn't reliable). Accept the raw text
+        // now so the cursor stays put, then strip after 200ms of
+        // inactivity. If the user is still composing, the next
+        // keystroke clears this timer and the filter never touches
+        // their text.
+        onTextChange(raw);
+        if (filterTimerRef.current) clearTimeout(filterTimerRef.current);
+        filterTimerRef.current = setTimeout(() => {
+          filterTimerRef.current = null;
+          const current = taRef.current?.value ?? raw;
+          const cleaned = current.replace(CJK_RE, "");
+          if (cleaned !== current) {
+            onTextChange(cleaned);
+            if (!imeTipDismissedRef.current) setImeTipVisible(true);
+          }
+        }, 200);
+      }}
+      onKeyDown={(e) => {
+        if (e.ctrlKey || e.metaKey) {
+          const k = e.key.toLowerCase();
+          if (k === "z") {
+            e.preventDefault();
+            if (etsLook) etsUndo();
+            else if (historyRef.current.length > 0) {
+              const prev = historyRef.current.pop();
+              prevTextRef.current = prev;
+              onTextChange(prev);
+            }
+          } else if (!["c", "v", "a", "enter"].includes(k)) {
+            e.preventDefault();
+          }
+        }
+      }}
+      disabled={!isEditable}
+      spellCheck={false}
+      autoCorrect="off"
+      autoCapitalize="off"
+      placeholder={type === "email" && !etsLook ? "Dear " + pd.to + ",\n\n" : ""}
+      style={etsLook
+        // 真题作答框：2px 青色边、方角、无阴影，铺满右栏剩下的高度。
+        ? { flex: 1, minHeight: 220, width: "100%", boxSizing: "border-box", border: "2px solid #5e9f9b", borderRadius: 2, boxShadow: "none", padding: `${etsSize(8)} ${etsSize(10)}`, fontSize: etsSize(16), fontFamily: ETS.font, lineHeight: 1.5, color: ETS.text, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }
+        : { flex: 1, minHeight: isMobile ? 80 : (type === "email" ? 280 : 320), border: "none", padding: isMobile ? "10px 12px" : 16, fontSize: 14, fontFamily: FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
+    />
+  );
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 8 : 12, ...(isMobile ? { flex: 1, minHeight: 0 } : {}) }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 8 : 12, ...(isMobile || etsLook ? { flex: 1, minHeight: 0 } : {}) }}>
       {phase === "ready" ? (
         <SurfaceCard style={{ padding: 40, textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
           <div style={{ fontSize: 14, color: C.t2 }}>Read the prompt carefully, then click below to begin writing.</div>
           <Btn data-testid="writing-start" onClick={onStart}>Start Writing</Btn>
         </SurfaceCard>
+      ) : etsLook ? (
+        // 真题外观：邮件题先是「Your Response: / To: / Subject:」三行粗体，再是工具条 + 青框作答区；
+        // Submit 放到考试头右侧（EtsNav）。
+        <div data-testid="writing-response-ets" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", fontFamily: ETS.font }}>
+          {type === "email" && (
+            <div style={{ fontSize: etsSize(17), fontWeight: 700, color: ETS.ink, lineHeight: 1.3, margin: `${etsSize(4)} 0 ${etsSize(20)}`, display: "flex", flexDirection: "column", gap: etsSize(19) }}>
+              <div>Your Response:</div>
+              <div>To: {pd?.to || ""}</div>
+              {pd?.subject && <div>Subject: {pd.subject}</div>}
+            </div>
+          )}
+          <EtsToolbar disabled={!isEditable} words={w} onCut={etsCut} onPaste={() => pasteIntoTextarea(taRef.current, onTextChange)} onUndo={etsUndo} onRedo={etsRedo} />
+          {imeTipVisible && (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "8px 12px", background: "#fffbeb", border: "1px solid #fde68a", fontSize: 12, color: "#92400e", lineHeight: 1.5 }}>
+              <div style={{ flex: 1 }}>
+                <b>检测到中文输入法</b> — 本练习仅支持英文。Mac 用户请前往「系统设置 &gt; 键盘 &gt; 输入法」开启「自动切换到文稿的输入法」，即可在答题时自动切换为英文。
+              </div>
+              <button
+                onClick={() => {
+                  setImeTipVisible(false);
+                  imeTipDismissedRef.current = true;
+                  try { localStorage.setItem(IME_TIP_DISMISSED_KEY, "1"); } catch {}
+                }}
+                style={{ flexShrink: 0, background: "none", border: "none", color: "#92400e", cursor: "pointer", fontSize: 14, fontWeight: 700, padding: "0 2px", lineHeight: 1 }}
+              >
+                &#10005;
+              </button>
+            </div>
+          )}
+          {textareaNode}
+          {phase === "writing" && (
+            <EtsNav>
+              <EtsNavButton data-testid="writing-submit" onClick={onSubmit}>Submit</EtsNavButton>
+            </EtsNav>
+          )}
+        </div>
       ) : (
         <>
-          <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column", ...(etsLook ? { borderRadius: 0, boxShadow: "none", border: "1px solid #9a9a9a" } : {}) }}>
-            <div style={etsLook
-              ? { background: ETS.canvas, padding: "12px 16px", fontSize: 14, fontWeight: 700, color: ETS.ink, fontFamily: ETS.font, borderBottom: "1px solid " + ETS.line, display: "flex", justifyContent: "space-between" }
-              : { background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
-              <span>{etsLook ? "Your Response:" : "Your Response"}</span>
+          <SurfaceCard style={{ overflow: "hidden", flex: 1, display: "flex", flexDirection: "column" }}>
+            <div style={{ background: C.ltB, padding: "12px 16px", fontSize: 12, fontWeight: 700, color: C.t2, borderBottom: "1px solid " + C.bdrSubtle, display: "flex", justifyContent: "space-between" }}>
+              <span>Your Response</span>
               <span style={{ color: w < minW ? C.orange : C.green }}>{w} words{w < minW ? ` (${minW - w} more needed)` : ""}</span>
             </div>
 
@@ -191,75 +385,12 @@ export function WritingResponsePanel({
               </div>
             )}
 
-            <textarea
-              ref={taRef}
-              data-testid="writing-textarea"
-              lang="en"
-              value={text}
-              onChange={(e) => {
-                const raw = e.target.value;
-                // Hold off filtering while the browser reports active IME
-                // composition — stripping would clobber the in-progress text.
-                if (e.nativeEvent?.isComposing === true) {
-                  onTextChange(raw);
-                  return;
-                }
-                // English fast path: nothing to strip, push through synchronously.
-                if (!CJK_RE.test(raw)) {
-                  onTextChange(raw);
-                  if (filterTimerRef.current) {
-                    clearTimeout(filterTimerRef.current);
-                    filterTimerRef.current = null;
-                  }
-                  return;
-                }
-                // CJK present (possibly an in-progress IME on Windows where
-                // the isComposing flag isn't reliable). Accept the raw text
-                // now so the cursor stays put, then strip after 200ms of
-                // inactivity. If the user is still composing, the next
-                // keystroke clears this timer and the filter never touches
-                // their text.
-                onTextChange(raw);
-                if (filterTimerRef.current) clearTimeout(filterTimerRef.current);
-                filterTimerRef.current = setTimeout(() => {
-                  filterTimerRef.current = null;
-                  const current = taRef.current?.value ?? raw;
-                  const cleaned = current.replace(CJK_RE, "");
-                  if (cleaned !== current) {
-                    onTextChange(cleaned);
-                    if (!imeTipDismissedRef.current) setImeTipVisible(true);
-                  }
-                }, 200);
-              }}
-              onKeyDown={(e) => {
-                if (e.ctrlKey || e.metaKey) {
-                  const k = e.key.toLowerCase();
-                  if (k === "z") {
-                    e.preventDefault();
-                    if (historyRef.current.length > 0) {
-                      const prev = historyRef.current.pop();
-                      prevTextRef.current = prev;
-                      onTextChange(prev);
-                    }
-                  } else if (!["c", "v", "a", "enter"].includes(k)) {
-                    e.preventDefault();
-                  }
-                }
-              }}
-              disabled={!isEditable}
-              spellCheck={false}
-              autoCorrect="off"
-              autoCapitalize="off"
-              placeholder={type === "email" ? "Dear " + pd.to + ",\n\n" : ""}
-              style={{ flex: 1, minHeight: isMobile ? 80 : (type === "email" ? 280 : 320), border: "none", padding: isMobile ? "10px 12px" : 16, fontSize: etsLook ? 15 : 14, fontFamily: etsLook ? ETS.font : FONT, lineHeight: 1.7, color: C.t1, resize: "none", outline: "none", background: phase === "done" ? "#fafafa" : "#fff" }}
-            />
+            {textareaNode}
           </SurfaceCard>
 
           {phase === "writing" ? (
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              {etsLook
-                ? <EtsButton data-testid="writing-submit" onClick={onSubmit}>Submit</EtsButton>
-                : <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit</Btn>}
+              <Btn data-testid="writing-submit" onClick={onSubmit} variant="success">Submit</Btn>
               <span style={{ fontSize: 11, color: C.t2 }}>Shortcut: Ctrl+Enter</span>
             </div>
           ) : null}

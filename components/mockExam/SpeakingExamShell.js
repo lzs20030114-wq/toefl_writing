@@ -19,6 +19,7 @@ import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
 import { loadMockCheckpoint, saveMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
 import { getSavedCode } from "../../lib/AuthContext";
+import { ETS, ETS_BAR_HEIGHT, EtsTopBar, EtsNav, EtsNavButton, etsSize } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -424,7 +425,11 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {/* Top bar — only show on intro, transition, and results */}
-      {(phase === "intro" || phase === "resumeBlocked" || phase === "repeatNarration" || phase === "interviewNarration" || phase === "results") && (
+      {/* 真题模考的两段旁白页也是考试界面：深青考试头 + 「Speaking」细栏。 */}
+      {realMock && (phase === "repeatNarration" || phase === "interviewNarration") && !error && (
+        <EtsTopBar section="Speaking" onExit={onExit} />
+      )}
+      {(phase === "intro" || phase === "resumeBlocked" || ((phase === "repeatNarration" || phase === "interviewNarration") && (!realMock || error)) || phase === "results") && (
         <TopBar
           title={realMock ? "口语真题模考" : topBarTitle}
           section={realMock ? "真题专区｜口语模考" : "Speaking | 模考模式"}
@@ -484,7 +489,10 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
       {/* Task-level narration before Task 1 (verbatim real-exam "Speaking section…").
           Hidden while an error is shown — retry goes through the error card. */}
-      {phase === "repeatNarration" && !error && (
+      {phase === "repeatNarration" && !error && realMock && (
+        <EtsNarration title="Speaking Section" body={SPEAKING_SECTION_NARRATION} onContinue={handleRepeatNarrationContinue} />
+      )}
+      {phase === "repeatNarration" && !error && !realMock && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Speaking Section"
@@ -495,7 +503,8 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       )}
 
       {/* Repeat Phase — embed RepeatTask full-screen */}
-      {phase === "repeat" && exam?.repeatSet && (
+      {/* 后台同步判死卷 / 账号问题后不再让人接着录（录了也存不下） */}
+      {phase === "repeat" && exam?.repeatSet && !(realMock && error) && (
         <RepeatTask
           items={exam.repeatSet.sentences || []}
           setInfo={exam.repeatSet}
@@ -508,7 +517,10 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       )}
 
       {/* Task-level narration before Task 2 (verbatim real-exam "Take an interview…") */}
-      {phase === "interviewNarration" && !error && (
+      {phase === "interviewNarration" && !error && realMock && (
+        <EtsNarration title="Take an Interview" body={INTERVIEW_TASK_NARRATION} onContinue={handleInterviewNarrationContinue} />
+      )}
+      {phase === "interviewNarration" && !error && !realMock && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Take an Interview"
@@ -519,7 +531,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       )}
 
       {/* Interview Phase — embed InterviewTask full-screen */}
-      {phase === "interview" && exam?.interviewSet && (
+      {phase === "interview" && exam?.interviewSet && !(realMock && error) && (
         <InterviewTask
           items={exam.interviewSet.questions || []}
           setInfo={exam.interviewSet}
@@ -712,6 +724,21 @@ function NarrationCard({ title, body, onContinue }) {
         {"\u7EE7\u7EED"}
       </Btn>
     </SurfaceCard>
+  );
+}
+
+/** 真题模考的旁白页：考试界面那样一段居中的粗体说明，继续按钮在考试头上。 */
+function EtsNarration({ title, body, onContinue }) {
+  useNarration(body);
+  return (
+    <div style={{ background: ETS.canvas, minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)`, fontFamily: ETS.font }}>
+      <h3 style={{ margin: 0, padding: `${etsSize(26)} 16px 0`, textAlign: "center", fontSize: etsSize(16), fontWeight: 600, color: ETS.muted }}>{title}</h3>
+      <p style={{
+        maxWidth: 1080, margin: "0 auto", padding: `${etsSize(14)} 3% 0`, textAlign: "center",
+        fontSize: etsSize(22), fontWeight: 700, lineHeight: 1.45, color: "#111",
+      }}>{body}</p>
+      <EtsNav><EtsNavButton onClick={onContinue}>继续</EtsNavButton></EtsNav>
+    </div>
   );
 }
 

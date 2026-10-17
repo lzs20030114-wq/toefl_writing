@@ -145,6 +145,12 @@ function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) 
   );
 }
 
+// 考试头右侧最前面的「中止」：和左侧「返回」同一种描边小按钮，跟白色的 Back / Next 区分开，免得误点。
+const ETS_ABORT_STYLE = {
+  padding: "4px 12px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.55)", background: "transparent",
+  color: "#fff", fontFamily: ETS.font, fontSize: 12.5, fontWeight: 600, cursor: "pointer", marginRight: 6,
+};
+
 export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage, realMock = false }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const checkpointScope = realMock ? { source: "real-bank", section: "writing", userCode: getSavedCode(), templateVersion: REAL_MOCK_TEMPLATE_VERSION } : null;
@@ -318,6 +324,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       }
       clearMockCheckpoint(checkpointScope); // clear any stale checkpoint before starting fresh
       setBlockedAttemptId("");
+      setSyncFatalError(""); // a sync failure belongs to the previous paper
       const blueprint = getDefaultMockExamBlueprint(realMock ? PRACTICE_MODE.STANDARD : mode).map((task) => realMock ? {
         ...task, seconds: task.taskId === TASK_IDS.BUILD_SENTENCE ? selectedPaper.timing.taskSeconds.bs
           : task.taskId === TASK_IDS.EMAIL_WRITING ? selectedPaper.timing.taskSeconds.email
@@ -492,9 +499,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
   return (
     <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
       {etsExam
-        ? <EtsTopBar section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer" />
+        ? <EtsTopBar section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer"
+            right={<button type="button" onClick={abortExam} style={ETS_ABORT_STYLE}>中止</button>} />
         : <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />}
-      <div style={{ maxWidth: etsExam ? 1280 : 1200, margin: etsExam ? "0 auto" : "24px auto", padding: "0 20px" }}>
+      {/* 真题外观铺满整宽（真题截图里题面贴着左边、作答框到右边），不留站内的 1200 内容宽。 */}
+      <div style={etsExam ? { maxWidth: "none", margin: 0, padding: 0 } : { maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
         {showCostModal && (
           <MockExamCostConfirmModal
             remaining={usageRemaining}
@@ -555,7 +564,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
             {/* 主栏写 minmax(0, 1fr)：裸 1fr = minmax(auto, 1fr)，主栏里的任务内容一旦有
                 不可断行的长串就会把整个 grid 顶宽，连带 280px 侧栏被推出可视区。 */}
             <div className={"tp-exam-grid" + (!etsExam && session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: etsExam ? "minmax(0, 1fr)" : "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
-            {realMock && syncFatalError ? <div style={{ background: "#fff", padding: 24, color: C.red }} role="alert">{syncFatalError}<button onClick={abortExam} style={{ marginLeft: 12 }}>中止本卷</button></div>
+            {realMock && syncFatalError && session.status === MOCK_EXAM_STATUS.RUNNING ? <div style={{ background: "#fff", padding: 24, color: C.red }} role="alert">{syncFatalError}<button onClick={abortExam} style={{ marginLeft: 12 }}>中止本卷</button></div>
               : <MockExamMainPanel
               session={session}
               currentTask={currentTask}
