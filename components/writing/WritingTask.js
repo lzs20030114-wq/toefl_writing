@@ -11,8 +11,9 @@ import { BANK_EXHAUSTED_ERRORS, DONE_STORAGE_KEYS, normalizeEmailTopic, pickRand
 import { peekRetrySnapshot, clearRetrySnapshot } from "../../lib/history/retry";
 import { C, FONT, Btn, InfoStrip, PageShell, SurfaceCard, DisclosureSection, Toast, TopBar } from "../shared/ui";
 import { WritingFeedbackPanel } from "./WritingFeedbackPanel";
-import { WritingPromptPanel } from "./WritingPromptPanel";
+import { WritingPromptPanel, EtsStudentPosts } from "./WritingPromptPanel";
 import { WritingResponsePanel } from "./WritingResponsePanel";
+import { ETS, ETS_BAR_HEIGHT, etsSize } from "../shared/etsExamUi";
 import { formatMinutesLabel, PRACTICE_MODE, STANDARD_TIME_SECONDS, formatLongDuration } from "../../lib/practiceMode";
 import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLanguage";
 import { useIsMobile } from "../../hooks/useIsMobile";
@@ -93,6 +94,8 @@ export function WritingTask({
   // Null uses the regular bank; an explicitly empty bank must stay empty.
   prompts = null,
   embedded = false,
+  // 真题模考：桌面端作答页换成真题（ETS 机考）外观 —— 白底、左题右答、无提示条。
+  etsLook = false,
   persistSession = true,
   onComplete = null,
   deferScoring = false,
@@ -554,10 +557,12 @@ export function WritingTask({
     ? `Write an email addressing all 3 goals.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 80–120 words.`
     : `Read the discussion and write your response.${isPracticeMode ? "" : ` ${formatMinutesLabel(limit)}.`} Aim for 100+ words.`;
   const mobileActiveWriting = isMobile && !initialError && pd && !(intro && phase === "ready");
+  // 真题外观不要 PageShell 的灰底，只保留同样的内容宽度。
+  const DesktopShell = etsLook ? EtsDesktopShell : PageShell;
 
   return (
     <div style={{
-      background: C.bg, fontFamily: FONT,
+      background: etsLook ? ETS.canvas : C.bg, fontFamily: FONT,
       ...(mobileActiveWriting
         ? {
             // In an embedded mock the shell pins a fixed 44px mobile countdown bar at
@@ -566,7 +571,7 @@ export function WritingTask({
             height: embedded ? "calc(100dvh - 44px)" : "100dvh",
             display: "flex", flexDirection: "column", overflow: "hidden",
           }
-        : { minHeight: "100vh" }),
+        : { minHeight: etsLook ? `calc(100vh - ${ETS_BAR_HEIGHT}px)` : "100vh" }),
     }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
       {showSubmitConfirm && (
@@ -634,7 +639,7 @@ export function WritingTask({
           </div>
         </div>
       ) : (
-        <PageShell narrow>
+        <DesktopShell narrow>
           {initialError && (
             <SurfaceCard style={{ padding: 28, marginBottom: 16 }}>
               <div style={{ fontSize: 16, fontWeight: 700, color: C.red, marginBottom: 8 }}>题库不可用</div>
@@ -671,7 +676,28 @@ export function WritingTask({
                   </div>
                 </SurfaceCard>
               ) : (
-                <>
+                etsLook ? (
+                  // 真题截图（1152 宽）：左栏约 40% 题面、浅灰竖线、右栏作答，两栏各自滚动，作答框铺到视口底。
+                  <div className="tp-writing-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 40fr) minmax(0, 60fr)", gap: 0, height: `calc(100vh - ${ETS_BAR_HEIGHT}px)` }}>
+                    <div style={{ padding: `${etsSize(14)} ${etsSize(24)} ${etsSize(24)} ${etsSize(12)}`, borderRight: "2px solid #ececec", overflowY: "auto", minWidth: 0 }}>
+                      <WritingPromptPanel type={type} pd={pd} etsLook />
+                    </div>
+                    <div style={{ padding: `${etsSize(type === "email" ? 22 : 30)} ${etsSize(2)} 0 ${etsSize(14)}`, display: "flex", flexDirection: "column", gap: etsSize(type === "email" ? 0 : 24), overflowY: "auto", minWidth: 0 }}>
+                      {type !== "email" && <EtsStudentPosts pd={pd} />}
+                      <WritingResponsePanel
+                        type={type} pd={pd} phase={phase}
+                        text={text} onTextChange={setText}
+                        w={w} minW={minW} fb={fb}
+                        deferScoring={deferScoring}
+                        requestState={requestState} scoreError={scoreError}
+                        onStart={start} onSubmit={submitScore}
+                        onRetry={retryScore} onExit={onExit}
+                        embedded={embedded}
+                        etsLook
+                      />
+                    </div>
+                  </div>
+                ) : <>
                   <InfoStrip style={{ marginBottom: 20 }}>
                     <b>Directions: </b>{directionsText}
                     {practiceMode === PRACTICE_MODE.CHALLENGE && <span> Challenge mode active — time limit is reduced.</span>}
@@ -698,9 +724,13 @@ export function WritingTask({
               )}
             </>
           )}
-        </PageShell>
+        </DesktopShell>
       )}
     </div>
   );
 }
 
+function EtsDesktopShell({ children }) {
+  // 真题界面题面贴着左边、作答框到右边：铺满整宽，不留站内的内容宽度。
+  return <div className="tp-shell-inner" style={{ maxWidth: "none", margin: 0, padding: 0 }}>{children}</div>;
+}

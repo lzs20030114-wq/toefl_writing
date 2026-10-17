@@ -12,7 +12,8 @@ import { C } from "../shared/ui";
  * 手机端占满宽度、高度自适应；桌面端限宽居中。带得到原始宽高时一并写上 width/height 与
  * aspectRatio，让浏览器提前留出位置，图到位时不跳版。
  */
-export function SceneImage({ frame, marginBottom = 20 }) {
+// ets：真题模考外观 —— 照真考截图，图更大（约半屏高）、方角无描边。
+export function SceneImage({ frame, marginBottom = 20, ets = false }) {
   const [broken, setBroken] = useState(false);
   if (!frame || !frame.url || broken) return null;
   const { url, w, h } = frame;
@@ -20,8 +21,8 @@ export function SceneImage({ frame, marginBottom = 20 }) {
   // 竖版图（平面图类接近 4:5）按满宽铺会有 500px+ 高，把听/录音控件顶出首屏。
   // 限高靠收窄 maxWidth 实现（高度仍由 aspectRatio 推出），不裁图、不变形。
   const maxWidth = sized
-    ? `min(420px, calc(min(42vh, 360px) * ${(w / h).toFixed(4)}))`
-    : 420;
+    ? (ets ? `min(560px, calc(min(52vh, 440px) * ${(w / h).toFixed(4)}))` : `min(420px, calc(min(42vh, 360px) * ${(w / h).toFixed(4)}))`)
+    : (ets ? 560 : 420);
   return (
     <div style={{ marginBottom }}>
       <img
@@ -32,7 +33,7 @@ export function SceneImage({ frame, marginBottom = 20 }) {
         onError={() => setBroken(true)}
         style={{
           display: "block", width: "100%", maxWidth, height: "auto",
-          margin: "0 auto", borderRadius: 12, border: `1px solid ${C.bdr}`,
+          margin: "0 auto", borderRadius: ets ? 0 : 12, border: ets ? "none" : `1px solid ${C.bdr}`,
           ...(sized ? { aspectRatio: `${w} / ${h}` } : {}),
         }}
       />

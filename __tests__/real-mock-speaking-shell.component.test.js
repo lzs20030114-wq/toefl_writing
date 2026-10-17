@@ -1,15 +1,14 @@
 /**
  * 口语真题模考壳（SpeakingExamShell realMock）的回归锁：
- *   ① 旁白「继续」记已见失败 → 错误卡只给「重试同步」（以前唯一的按钮是「返回」= handleRestart，
- *      会把做完的 7 句跟读整个丢掉）；错误期间旁白卡隐藏，重试成功即收起错误；
- *   ② 访谈答完只等 answered seen：先存记录、出结果页，再 finish 且不等它（以前 finish 失败就把成绩挡在「重试同步」后面）；
+ *   ① 已见 / 已作答在后台同步：网络抖动不出错误卡、不挡作答，后台自动重试；
+ *   ② 访谈答完先存记录、出结果页；后台同步落地后才 finish，且不等它；
  *   ③ 不出估分时不挂「中级」，说清楚原因；另一部分的原始分照常显示；记录里存 unanswered / unscored；
  *   ④ 死卷（已结束 / 过期 / 不存在）清本地存档，只给「重新组卷」+「返回真题专区」；
  *   ⑤ 另一份进行中的卷要确认才放弃；题目凑不齐只能回真题专区；
  *   ⑥ 重新组卷把内存里的旧卷作为 restartAttemptId 交给服务端，不再客户端先 finish。
  * 常规（非真题）模考的错误卡保持原样（「返回」= 回到开考页）。
  */
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { render, screen, fireEvent, within, waitFor, act } from "@testing-library/react";
 
 jest.mock("../lib/AuthContext", () => ({ getSavedCode: () => "ABC123", getSavedTier: () => "pro" }));
 jest.mock("../lib/sessionStore", () => ({ saveSess: jest.fn(), loadDoneIds: jest.fn(() => []), addDoneIds: jest.fn() }));
@@ -99,73 +98,45 @@ beforeEach(() => {
   mockTasks.interviewResult = { items: scoredInterview(3) };
 });
 
-describe("考试中途的同步失败", () => {
-  test("跟读旁白记已见失败：错误卡只给「重试同步」、旁白卡隐藏；重试成功即收起错误进入跟读", async () => {
+describe("考试中途的同步（后台进行，不挡作答）", () => {
+  test("跟读旁白记已见失败：不出错误卡、直接进入跟读，后台自动重试", async () => {
     markRealMockSeen.mockRejectedValueOnce(apiError("NETWORK_ERROR", "无法连接真题模考服务，请稍后重试。"));
     render(<SpeakingExamShell realMock onExit={jest.fn()} />);
     await startExam();
 
     fireEvent.click(screen.getByRole("button", { name: "继续" }));
-    const card = await screen.findByTestId("speaking-exam-error");
-    expect(card).toHaveTextContent("无法连接真题模考服务，请稍后重试。");
-    expect(buttonsIn(card)).toEqual(["重试同步"]);
-    expect(screen.queryByText("Speaking Section", { selector: "h3" })).toBeNull();
-
-    fireEvent.click(within(card).getByRole("button", { name: "重试同步" }));
     await screen.findByRole("button", { name: "完成跟读" });
     expect(errorCard()).toBeNull();
-    expect(markRealMockSeen.mock.calls).toEqual([[PAPER, [repeatSet]], [PAPER, [repeatSet]]]);
+    await waitFor(() => expect(markRealMockSeen.mock.calls).toEqual([[PAPER, [repeatSet]], [PAPER, [repeatSet]]]), { timeout: 3000 });
     expect(mockTasks.repeatProps.realMock).toBe(true);
   });
 
-  test("访谈旁白失败后重试恢复；答完只等 answered seen，存好记录出结果页后才 finish，且不等它", async () => {
+  test("答完不等 answered seen 落地：存好记录出结果页，等后台同步落地后才 finish，且不等 finish", async () => {
     finishRealMockExamReliably.mockReturnValue(new Promise(() => {})); // 永远不落地
+    let landAnswered;
+    markRealMockSeen.mockImplementation((paper, items, opts) => (opts?.answered && items[0] === interviewSet
+      ? new Promise((resolve) => { landAnswered = resolve; })
+      : Promise.resolve({ ok: true, status: "ok" })));
     render(<SpeakingExamShell realMock onExit={jest.fn()} />);
     await startExam();
     fireEvent.click(screen.getByRole("button", { name: "继续" }));
     fireEvent.click(await screen.findByRole("button", { name: "完成跟读" }));
     await screen.findByText("Take an Interview", { selector: "h3" });
-
-    markRealMockSeen.mockRejectedValueOnce(apiError("REAL_MOCK_ERROR", "真题模考服务暂不可用，请稍后重试。"));
     fireEvent.click(screen.getByRole("button", { name: "继续" }));
-    const card = await screen.findByTestId("speaking-exam-error");
-    expect(buttonsIn(card)).toEqual(["重试同步"]);
-    expect(screen.queryByText("Take an Interview", { selector: "h3" })).toBeNull();
-
-    fireEvent.click(within(card).getByRole("button", { name: "重试同步" }));
     fireEvent.click(await screen.findByRole("button", { name: "完成访谈" }));
     expect(mockTasks.interviewProps.realMock).toBe(true);
 
     await screen.findByText("口语模考结果");
     expect(errorCard()).toBeNull();
     expect(screen.getByText(/本站模考估分/)).toHaveTextContent("本站模考估分 · 中高级"); // 28 + 12 = 40/55 → 4.5
+    expect(saveSess).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(markRealMockSeen).toHaveBeenLastCalledWith(PAPER, [interviewSet], { answered: true }));
     expect(markRealMockSeen).toHaveBeenCalledWith(PAPER, [repeatSet], { answered: true });
-    expect(markRealMockSeen).toHaveBeenLastCalledWith(PAPER, [interviewSet], { answered: true });
-    expect(finishRealMockExamReliably).toHaveBeenCalledWith(PAPER);
-    expect(finishRealMockExam).not.toHaveBeenCalled();
-    expect(saveSess).toHaveBeenCalledTimes(1);
-    expect(saveSess.mock.invocationCallOrder[0]).toBeLessThan(finishRealMockExamReliably.mock.invocationCallOrder[0]);
-  });
-
-  test("交卷时 answered seen 失败：留在「重试同步」，重试成功才出成绩", async () => {
-    render(<SpeakingExamShell realMock onExit={jest.fn()} />);
-    await startExam();
-    fireEvent.click(screen.getByRole("button", { name: "继续" }));
-    fireEvent.click(await screen.findByRole("button", { name: "完成跟读" }));
-    fireEvent.click(await screen.findByRole("button", { name: "继续" }));
-    markRealMockSeen.mockRejectedValueOnce(apiError("NETWORK_ERROR", "无法连接真题模考服务，请稍后重试。"));
-    fireEvent.click(await screen.findByRole("button", { name: "完成访谈" }));
-
-    const card = await screen.findByTestId("speaking-exam-error");
-    expect(buttonsIn(card)).toEqual(["重试同步"]);
-    expect(saveSess).not.toHaveBeenCalled();
     expect(finishRealMockExamReliably).not.toHaveBeenCalled();
-
-    fireEvent.click(within(card).getByRole("button", { name: "重试同步" }));
-    await screen.findByText("口语模考结果");
-    expect(errorCard()).toBeNull();
-    expect(saveSess).toHaveBeenCalledTimes(1);
-    expect(finishRealMockExamReliably).toHaveBeenCalledTimes(1);
+    landAnswered({ ok: true, status: "ok" });
+    await waitFor(() => expect(finishRealMockExamReliably).toHaveBeenCalledWith(PAPER));
+    expect(finishRealMockExam).not.toHaveBeenCalled();
+    expect(saveSess.mock.invocationCallOrder[0]).toBeLessThan(finishRealMockExamReliably.mock.invocationCallOrder[0]);
   });
 });
 
@@ -290,6 +261,21 @@ describe("组卷与死卷", () => {
     ]);
     expect(finishRealMockExam).not.toHaveBeenCalled();
     expect(errorCard()).toBeNull();
+  });
+
+  test("刷新后重新组卷：先把检查点里已展示的两套题补记已见、等它落地，再让服务端结束旧卷", async () => {
+    saveMockCheckpoint({ phase: "interview", exam: PAPER, repeatResults: { items: scoredRepeat(4) }, interviewResults: null, finalScore: null, elapsed: 30 }, "interview", SCOPE);
+    let release;
+    markRealMockSeen.mockImplementationOnce(() => new Promise((resolve) => { release = () => resolve({ ok: true }); }));
+    render(<SpeakingExamShell realMock onExit={jest.fn()} />);
+    await waitFor(() => expect(markRealMockSeen).toHaveBeenCalledWith(PAPER, [repeatSet, interviewSet]));
+
+    fireEvent.click(screen.getByRole("button", { name: "重新组卷" }));
+    await act(async () => { await Promise.resolve(); });
+    expect(prepareRealMockExam).not.toHaveBeenCalled();
+    await act(async () => { release(); });
+    await screen.findByText("Speaking Section", { selector: "h3" });
+    expect(prepareRealMockExam).toHaveBeenCalledWith("speaking", { restartAttemptId: PAPER.attemptId });
   });
 
   test("开考页写明：展示过的题永久计为已做，录音中途刷新即作废", () => {

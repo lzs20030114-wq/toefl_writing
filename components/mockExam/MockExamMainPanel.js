@@ -8,8 +8,9 @@ import { addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { buildMockDraftKey } from "../../lib/mockExam/storage";
 import { MockExamResult } from "./MockExamResult";
-import { markRealMockSeen } from "../../lib/realMockExam/client";
+import { syncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { TaskTransitionCard } from "./TaskTransitionCard";
+import { ETS } from "../shared/etsExamUi";
 
 const TRANSITION_SECONDS = 25;
 
@@ -34,22 +35,27 @@ export function MockExamMainPanel({
   realMockSeenItemIds,
   onRealMockSeen,
   realMockTaskDeadline,
+  onBsQuestionChange,
+  onRealMockSyncFatal,
 }) {
+  // 真题模考：作答页换成真题（ETS 机考）外观 —— 白底、无卡片框，顶栏由 MockExamShell 换成考试细栏。
+  const ets = !!realMockPaper;
   const [transitionTaskId, setTransitionTaskId] = useState("");
   const [transitionLeft, setTransitionLeft] = useState(0);
   const seenBsIdsRef = useRef(new Set());
   const taskTimeSeconds = realMockPaper && Number.isFinite(realMockTaskDeadline)
     ? Math.max(1, Math.min(currentTask?.seconds || 1, Math.ceil((realMockTaskDeadline - Date.now()) / 1000)))
     : currentTask?.seconds;
-  const beforeBsQuestion = useCallback(async (question) => {
+  // 已见在后台同步（lib/realMockExam/seenSync），造句题一出现就能作答。
+  const onBsQuestionShown = useCallback((question) => {
     if (!realMockPaper) return;
     const item = realMockPaper.bsQuestions.find((candidate) => candidate.id === question?.id);
-    if (!item) throw new Error("当前真题不在预选试卷中");
-    await markRealMockSeen(realMockPaper, [item]);
+    if (!item || seenBsIdsRef.current.has(item.id)) return;
     seenBsIdsRef.current.add(item.id);
     addDoneIds(DONE_STORAGE_KEYS.BUILD_SENTENCE, [item.id]);
     onRealMockSeen?.(item.id);
-  }, [realMockPaper, onRealMockSeen]);
+    syncRealMockSeen(realMockPaper, [item], { onFatal: onRealMockSyncFatal });
+  }, [realMockPaper, onRealMockSeen, onRealMockSyncFatal]);
 
   useEffect(() => {
     if (session.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
@@ -80,14 +86,17 @@ export function MockExamMainPanel({
   }, [showTransition, onTimerChange]);
 
   return (
-    <div style={{ background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
+    <div style={ets ? { background: ETS.canvas, padding: 0 } : { background: "#fff", border: "1px solid " + C.bdr, borderRadius: 6, padding: 24 }}>
       {showTransition && (
-        <TaskTransitionCard
-          taskId={currentTask?.taskId}
-          seconds={currentTask?.seconds}
-          restSeconds={transitionLeft}
-          onSkip={() => setTransitionLeft(0)}
-        />
+        // 真题外观的外壳铺满整宽，过渡卡单独收回到阅读宽度。
+        <div style={ets ? { maxWidth: 860, margin: "32px auto 0", padding: "0 20px" } : undefined}>
+          <TaskTransitionCard
+            taskId={currentTask?.taskId}
+            seconds={currentTask?.seconds}
+            restSeconds={transitionLeft}
+            onSkip={() => setTransitionLeft(0)}
+          />
+        </div>
       )}
 
       {session.status === MOCK_EXAM_STATUS.RUNNING && !showTransition && currentTask?.taskId === TASK_IDS.BUILD_SENTENCE && (
@@ -96,7 +105,7 @@ export function MockExamMainPanel({
           questions={realMockPaper?.bsQuestions}
           initialResults={realMockPaper ? realMockBsProgress : null}
           autoStartOnMount={!!realMockPaper && !!realMockTaskDeadline}
-          beforeQuestion={realMockPaper ? beforeBsQuestion : null}
+          onQuestionShown={realMockPaper ? onBsQuestionShown : null}
           recordGroupDone={!realMockPaper}
           onProgress={realMockPaper ? onRealMockBsProgress : null}
           persistSession={false}
@@ -104,6 +113,8 @@ export function MockExamMainPanel({
           onTimerChange={onTimerChange}
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
+          etsLook={ets}
+          onQuestionChange={ets ? onBsQuestionChange : null}
           onComplete={(payload) => {
             onSubmitTaskResult({
               score: payload.correct || 0,
@@ -132,6 +143,7 @@ export function MockExamMainPanel({
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
+          etsLook={ets}
           autoStartOnMount
           reportLanguage={reportLanguage}
           draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
@@ -168,6 +180,7 @@ export function MockExamMainPanel({
           timeLimitSeconds={taskTimeSeconds}
           practiceMode={mode}
           showTaskIntro={false}
+          etsLook={ets}
           autoStartOnMount
           reportLanguage={reportLanguage}
           draftKey={buildMockDraftKey(session.id, currentTask.taskId)}
@@ -216,7 +229,8 @@ export function MockExamMainPanel({
         </div>
       )}
 
-      {session.status === MOCK_EXAM_STATUS.RUNNING && (
+      {/* 真题外观：「中止」在考试头上（MockExamShell 传给考试头 TopBar variant="ets"），「返回」是考试头左侧那颗，正文里不再放。 */}
+      {session.status === MOCK_EXAM_STATUS.RUNNING && !ets && (
         <div style={{ display: "flex", gap: 10 }}>
           <Btn onClick={onAbort} variant="danger">中止</Btn>
           <Btn onClick={onExit} variant="secondary">返回</Btn>

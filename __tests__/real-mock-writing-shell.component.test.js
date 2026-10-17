@@ -314,7 +314,7 @@ describe("task transition card", () => {
     saveMockCheckpoint(runningSession(paper, { taskIndex: 1, deadline: Date.now() + 200_000 }), "idle", SCOPE);
     renderShell();
     await flush();
-    expect(await screen.findByText("Write an email to Jessica.")).toBeInTheDocument();
+    expect(await screen.findByText("Write an email to Jessica. In your email, do the following:")).toBeInTheDocument();
     expect(screen.queryByTestId("mock-transition-skip")).not.toBeInTheDocument();
   });
 

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { C, FONT, Btn, TopBar, PageShell, SurfaceCard } from "../shared/ui";
 import { SceneImage } from "./SceneImage";
+import { ETS, ETS_BAR_HEIGHT, EtsNav, EtsNavButton, EtsFigure, etsSize } from "../shared/etsExamUi";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
 
@@ -94,10 +95,32 @@ export function SpeakingIntroScreen({
   buttonLabel = "开始",
   onStart,
   onExit,
+  ets = false,
+  etsFigure = 0,
 }) {
   const shown = lines.filter(Boolean);
   const pic = image && image.url ? image : null;
   useNarration(shown.join(" "));
+
+  // 真题模考：设定屏照真考 —— 细栏 + 白底，粗体设定语居中，下面是场景图（面试是人像），开始键在顶栏右侧。
+  if (ets) {
+    return (
+      <div style={{ minHeight: "100vh", background: ETS.canvas, fontFamily: ETS.font }}>
+        <TopBar variant="ets" section="Speaking" onExit={onExit} />
+        <div style={{ minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)`, maxWidth: 980, margin: "0 auto", padding: "28px 24px 40px", boxSizing: "border-box", textAlign: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 22 }}>
+            {shown.map((line, i) => (
+              <div key={i} style={{ fontSize: etsSize(25), fontWeight: 700, color: "#111", lineHeight: 1.35 }}>
+                {line}
+              </div>
+            ))}
+          </div>
+          {pic ? <SceneImage frame={pic} ets /> : etsFigure ? <EtsFigure count={etsFigure} seed={title} style={{ height: 300 }} /> : null}
+        </div>
+        <EtsNav><EtsNavButton onClick={onStart}>{buttonLabel}</EtsNavButton></EtsNav>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>

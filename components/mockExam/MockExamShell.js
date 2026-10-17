@@ -2,11 +2,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { C, FONT, TopBar } from "../shared/ui";
+import { ETS, etsProgressLabel } from "../shared/etsExamUi";
 import { fmt } from "../../lib/utils";
 import { mockExamRunner } from "../../lib/mockExam/runner";
 import { MOCK_EXAM_STATUS, TASK_IDS } from "../../lib/mockExam/contracts";
 import { loadMockExamHistory, saveMockExamSession, saveMockCheckpoint, loadMockCheckpoint, clearMockCheckpoint, clearMockDrafts } from "../../lib/mockExam/storage";
-import { upsertMockSess } from "../../lib/sessionStore";
+import { upsertMockSess, addDoneIds } from "../../lib/sessionStore";
+import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { buildPersistPayload, finalizeDeferredScoringSession, isTimeoutError, retryTimeoutScoringSession } from "../../lib/mockExam/service";
 import { evaluateWritingResponse } from "../../lib/ai/writingEval";
 import { SectionTimerPanel } from "./SectionTimerPanel";
@@ -18,7 +20,8 @@ import { normalizeReportLanguage, readReportLanguage } from "../../lib/reportLan
 import { getSavedCode, getSavedTier } from "../../lib/AuthContext";
 import { checkCanPractice } from "../../lib/dailyUsage";
 import UpgradeModal from "../shared/UpgradeModal";
-import { prepareRealMockExam, markRealMockSeen, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { prepareRealMockExam, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { getRealMockConfig, REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { buildRealWritingHistory, finalizeRealWriting, shouldKeepRealWritingCheckpoint } from "../../lib/realMockExam/linearWritingService";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
@@ -143,6 +146,12 @@ function MockExamCostConfirmModal({ remaining, onConfirm, onCancel, userCode }) 
   );
 }
 
+// 考试头右侧最前面的「中止」：和左侧「返回」同一种描边小按钮，跟白色的 Back / Next 区分开，免得误点。
+const ETS_ABORT_STYLE = {
+  padding: "4px 12px", borderRadius: 4, border: "1px solid rgba(255,255,255,0.55)", background: "transparent",
+  color: "#fff", fontFamily: ETS.font, fontSize: 12.5, fontWeight: 600, cursor: "pointer", marginRight: 6,
+};
+
 export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLanguage, realMock = false }) {
   const uiReportLanguage = normalizeReportLanguage(reportLanguage || readReportLanguage());
   const checkpointScope = realMock ? { source: "real-bank", section: "writing", userCode: getSavedCode(), templateVersion: REAL_MOCK_TEMPLATE_VERSION } : null;
@@ -179,9 +188,6 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     if (!session || !(prepareError || blockedAttemptId)) return;
     prepareStatusRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   }, [prepareError, blockedAttemptId]); // eslint-disable-line react-hooks/exhaustive-deps
-  const [taskGate, setTaskGate] = useState({ id: "", state: "pending", error: "" });
-  const [gateRetryTick, setGateRetryTick] = useState(0);
-  const [pendingSubmission, setPendingSubmission] = useState(null);
   const markedTaskIdsRef = useRef(new Set());
 
   useEffect(() => {
@@ -203,6 +209,9 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
 
   const progress = useMemo(() => mockExamRunner.getExamProgress(session), [session]);
   const currentTask = useMemo(() => mockExamRunner.getCurrentTask(session), [session]);
+  // 真题模考作答中：顶栏换成真题界面的细栏（Writing | Question 3 of 10 + 计时），侧栏计时卡收起。
+  const [bsQuestion, setBsQuestion] = useState({ idx: 0, total: 10 });
+  const onBsQuestionChange = useCallback((idx, total) => setBsQuestion({ idx, total }), []);
   currentTaskIdRef.current = currentTask?.taskId || "";
   const paper = realMock ? session?.realMockPaper : null;
   const onTaskTimerChange = useCallback(({ timeLeft, isRunning, phase }) => {
@@ -224,23 +233,37 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     setSession((previous) => previous ? { ...previous, realMockSeenItemIds: [...new Set([...(previous.realMockSeenItemIds || []), id])] } : previous);
   }, []);
 
+  // 已见 / 已作答都在后台同步（lib/realMockExam/seenSync）：题目一出现就能作答，不再等服务器确认。
+  // 只有卷已结束 / 过期这类再也不可能成功的错误才拦下来，只能中止本卷。
+  const [syncFatalError, setSyncFatalError] = useState("");
+  // 换卷后旧卷迟到的失败（比如中止后立刻开新卷，旧队列重试拿到 ATTEMPT_FINISHED）不算到新卷头上。
+  const currentAttemptIdRef = useRef("");
+  currentAttemptIdRef.current = session?.realMockPaper?.attemptId || "";
+  const onRealMockSyncFatal = useCallback((error, attemptId) => {
+    if (attemptId && attemptId !== currentAttemptIdRef.current) return;
+    setSyncFatalError(describeRealMockError(error, "作答记录同步失败").message);
+  }, []);
+
+  // 刷新前还在后台重试的已见同步随页面没了：从检查点恢复进行中的卷时，把记着已展示的题补发一遍。
+  const resyncedOnMountRef = useRef(false);
+  useEffect(() => {
+    if (resyncedOnMountRef.current || !realMock || session?.status !== MOCK_EXAM_STATUS.RUNNING || !session?.realMockPaper) return;
+    resyncedOnMountRef.current = true;
+    resyncRealMockSeen(session.realMockPaper, session.realMockPaper.items, session.realMockSeenItemIds, { onFatal: onRealMockSyncFatal });
+  }, [realMock, session, onRealMockSyncFatal]);
+
   useEffect(() => {
     if (!realMock || !paper || session?.status !== MOCK_EXAM_STATUS.RUNNING || !currentTask?.taskId) return;
     const taskId = currentTask.taskId;
     if (taskId === TASK_IDS.BUILD_SENTENCE || markedTaskIdsRef.current.has(taskId)) return;
     const item = taskId === TASK_IDS.EMAIL_WRITING ? paper.emailPrompt : paper.discussionPrompt;
     if (!item) return;
-    let cancelled = false;
-    setTaskGate({ id: taskId, state: "pending", error: "" });
-    markRealMockSeen(paper, [item]).then(() => {
-      markedTaskIdsRef.current.add(taskId);
-      onRealMockSeen(item.id);
-      if (!cancelled) setTaskGate({ id: taskId, state: "ready", error: "" });
-    }).catch((error) => {
-      if (!cancelled) setTaskGate({ id: taskId, state: "error", error: error?.message || "记录已见状态失败" });
-    });
-    return () => { cancelled = true; };
-  }, [realMock, paper, session?.status, currentTask?.taskId, onRealMockSeen, gateRetryTick]);
+    markedTaskIdsRef.current.add(taskId);
+    // 本机立刻记已做：就算服务端已见始终没落地，下次组卷带上的 doneIds 也会跳过它。
+    addDoneIds(taskId === TASK_IDS.EMAIL_WRITING ? DONE_STORAGE_KEYS.EMAIL : DONE_STORAGE_KEYS.DISCUSSION, [item.id]);
+    onRealMockSeen(item.id);
+    syncRealMockSeen(paper, [item], { onFatal: onRealMockSyncFatal });
+  }, [realMock, paper, session?.status, currentTask?.taskId, onRealMockSeen, onRealMockSyncFatal]);
 
   // Record part: this exam's own history row + local mock history (a real paper is
   // also finished, releasing its never-shown items). Safe for an exam no longer on screen.
@@ -250,7 +273,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       upsertMockSess(buildRealWritingHistory(finalSession, phase, err), finalSession.id);
       clearMockDrafts(finalSession.id);
       if (finalSession.status === MOCK_EXAM_STATUS.COMPLETED || finalSession.status === MOCK_EXAM_STATUS.ABORTED) {
-        finishRealMockExamReliably(finalSession.realMockPaper);
+        const finalPaper = finalSession.realMockPaper;
+        flushRealMockSeen(finalPaper).then(() => finishRealMockExamReliably(finalPaper));
       }
       return;
     }
@@ -305,6 +329,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
           // Restarting from a result / aborted page hands the old paper to the server,
           // which finishes it (if still active) before planning the new one.
           const oldAttemptId = restartAttemptId || session?.realMockPaper?.attemptId || "";
+          // 旧卷还在进行中就重新组卷时，服务端会结束它并释放还没标已见的预留：先等已见队列
+          // （含恢复检查点时补发的那批）落地。交过卷 / 中止的卷 finish 前已经等过，不必再等。
+          if (session?.status === MOCK_EXAM_STATUS.RUNNING && session.realMockPaper?.attemptId === oldAttemptId) {
+            await flushRealMockSeen(session.realMockPaper);
+          }
           selectedPaper = await prepareRealMockExam("writing", oldAttemptId ? { restartAttemptId: oldAttemptId } : {});
         } catch (error) {
           const info = describeRealMockError(error, "真题组卷失败，请稍后重试。");
@@ -315,6 +344,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       }
       clearMockCheckpoint(checkpointScope); // clear any stale checkpoint before starting fresh
       setBlockedAttemptId("");
+      setSyncFatalError(""); // a sync failure belongs to the previous paper
       const blueprint = getDefaultMockExamBlueprint(realMock ? PRACTICE_MODE.STANDARD : mode).map((task) => realMock ? {
         ...task, seconds: task.taskId === TASK_IDS.BUILD_SENTENCE ? selectedPaper.timing.taskSeconds.bs
           : task.taskId === TASK_IDS.EMAIL_WRITING ? selectedPaper.timing.taskSeconds.email
@@ -367,13 +397,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
       const items = taskId === TASK_IDS.BUILD_SENTENCE
         ? paper.bsQuestions.filter((item) => payload.meta?.seenItemIds?.includes(item.id))
         : [taskId === TASK_IDS.EMAIL_WRITING ? paper.emailPrompt : paper.discussionPrompt];
-      try { if (items.length) await markRealMockSeen(paper, items, { answered: true }); }
-      catch (error) {
-        setPendingSubmission(payload);
-        setTaskGate({ id: taskId, state: "error", error: error?.message || "提交状态同步失败，请重试" });
-        return;
-      }
-      setPendingSubmission(null);
+      if (items.length) syncRealMockSeen(paper, items, { answered: true, onFatal: onRealMockSyncFatal });
     }
     const next = mockExamRunner.submitAndAdvance(session, payload);
     setSession(next);
@@ -487,10 +511,19 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
     </>
   );
 
+  const etsExam = realMock && session?.status === MOCK_EXAM_STATUS.RUNNING;
+  const etsProgress = !etsExam || !currentTask ? ""
+    : currentTask.taskId === TASK_IDS.BUILD_SENTENCE ? etsProgressLabel(bsQuestion.idx + 1, bsQuestion.idx + 1, bsQuestion.total)
+    : etsProgressLabel(currentTask.taskId === TASK_IDS.EMAIL_WRITING ? 1 : 2, currentTask.taskId === TASK_IDS.EMAIL_WRITING ? 1 : 2, 2);
+
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />
-      <div style={{ maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
+    <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
+      {etsExam
+        ? <TopBar variant="ets" section="Writing" progress={etsProgress} timeLeft={sectionTimer ?? undefined} onExit={onExit} clockTestId="mock-section-timer"
+            right={<button type="button" onClick={abortExam} style={ETS_ABORT_STYLE}>中止</button>} />
+        : <TopBar title={realMock ? "写作真题模考" : mode === PRACTICE_MODE.CHALLENGE ? "整套模考（挑战模式）" : "整套模考"} section={realMock ? "真题专区｜写作模考" : "写作练习｜模考模式"} onExit={onExit} />}
+      {/* 真题外观铺满整宽（真题截图里题面贴着左边、作答框到右边），不留站内的 1200 内容宽。 */}
+      <div style={etsExam ? { maxWidth: "none", margin: 0, padding: 0 } : { maxWidth: 1200, margin: "24px auto", padding: "0 20px" }}>
         {showCostModal && (
           <MockExamCostConfirmModal
             remaining={usageRemaining}
@@ -525,7 +558,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
                 far below the answer area on phones, so reuse the already-lifted
                 sectionTimer as a fixed top bar. Hidden on desktop (display:none →
                 flipped to flex by app/mobile.css). */}
-            {session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null && (
+            {!etsExam && session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null && (
               <div
                 className="tp-mobile-timer"
                 style={{
@@ -550,9 +583,8 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
             )}
             {/* 主栏写 minmax(0, 1fr)：裸 1fr = minmax(auto, 1fr)，主栏里的任务内容一旦有
                 不可断行的长串就会把整个 grid 顶宽，连带 280px 侧栏被推出可视区。 */}
-            <div className={"tp-exam-grid" + (session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
-            {realMock && pendingSubmission ? <div style={{ background: "#fff", padding: 24, color: C.red }} role="alert">{taskGate.error}<button onClick={() => submitTaskResult(pendingSubmission)}>重试提交</button></div>
-              : realMock && currentTask?.taskId !== TASK_IDS.BUILD_SENTENCE && session.status === MOCK_EXAM_STATUS.RUNNING && (taskGate.id !== currentTask?.taskId || taskGate.state !== "ready") ? <div role={taskGate.state === "error" ? "alert" : undefined} style={{ background: "#fff", padding: 24, color: taskGate.state === "error" ? C.red : C.t2 }}>{taskGate.state === "error" ? <>{taskGate.error}<button onClick={() => setGateRetryTick((tick) => tick + 1)} style={{ marginLeft: 12 }}>重试确认</button></> : "正在确认题目状态…"}</div>
+            <div className={"tp-exam-grid" + (!etsExam && session.status === MOCK_EXAM_STATUS.RUNNING && sectionTimer != null ? " tp-exam-grid--timer" : "")} style={{ display: "grid", gridTemplateColumns: etsExam ? "minmax(0, 1fr)" : "minmax(0, 1fr) 280px", gap: 16, alignItems: "start" }}>
+            {realMock && syncFatalError && session.status === MOCK_EXAM_STATUS.RUNNING ? <div style={{ background: "#fff", padding: 24, color: C.red }} role="alert">{syncFatalError}<button onClick={abortExam} style={{ marginLeft: 12 }}>中止本卷</button></div>
               : <MockExamMainPanel
               session={session}
               currentTask={currentTask}
@@ -573,9 +605,11 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               onRealMockBsProgress={onRealMockBsProgress}
               realMockSeenItemIds={session.realMockSeenItemIds || []}
               onRealMockSeen={onRealMockSeen}
+              onRealMockSyncFatal={onRealMockSyncFatal}
               realMockTaskDeadline={session.realMockTaskDeadlines?.[currentTask?.taskId] || null}
+              onBsQuestionChange={onBsQuestionChange}
             />}
-            <SectionTimerPanel
+            {!etsExam && <SectionTimerPanel
               currentTask={currentTask}
               progress={progress}
               sectionTimer={sectionTimer}
@@ -584,7 +618,7 @@ export function MockExamShell({ onExit, mode = PRACTICE_MODE.STANDARD, reportLan
               aggregate={session.aggregate}
               isAborted={session.status === MOCK_EXAM_STATUS.ABORTED}
               realMock={realMock}
-            />
+            />}
             </div>
           </>
         )}

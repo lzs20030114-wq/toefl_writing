@@ -3,8 +3,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { C, FONT } from "../shared/ui";
 import { useExamAudio } from "../shared/ExamAudioProvider";
+import { ETS, etsClock } from "../shared/etsExamUi";
 
 const SPK = { color: "#F59E0B", soft: "#FFFBEB" };
+
+function MicIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+    </svg>
+  );
+}
 
 // Safari prefers audio/mp4 (AAC); Chrome/Firefox use webm/opus. We try the
 // modern formats first and fall back to whatever the platform supports so
@@ -149,7 +159,7 @@ export function warmUpMicrophone(timeoutMs = 10000) {
  *   autoStart                     — start recording on mount (best-effort; Safari may require a manual tap)
  *   disabled                      — prevent interaction
  */
-export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordingStateChange, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false }) {
+export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordingStateChange, onStopRef = null, onAutoStartBlocked, maxDuration = 0, autoStart = false, disabled = false, etsLook = false }) {
   // Exam-controller mode: silence the shared exam player before the mic opens
   // (iOS routes audio exclusively — playback fighting the mic garbles both).
   const examAudio = useExamAudio();
@@ -439,8 +449,49 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordi
         </div>
       )}
 
+      {/* 真题模考：考试界面那样一条青色「RESPONSE TIME」计时条，不用站内的橙色麦克风大按钮。 */}
+      {etsLook && state === "idle" && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <button
+            onClick={startRecording}
+            disabled={disabled}
+            aria-label="开始录音"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10, padding: "9px 22px", borderRadius: 999,
+              border: `2px solid ${ETS.header}`, background: "#fff", color: ETS.header,
+              fontFamily: ETS.font, fontSize: 14, fontWeight: 700, letterSpacing: 0.5,
+              cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1,
+            }}
+          >
+            <MicIcon /> {autoStartBlocked ? "点击开始录音" : autoStart && !permError ? "PREPARING…" : "START RECORDING"}
+          </button>
+        </div>
+      )}
+      {etsLook && state === "recording" && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 14, padding: "8px 10px 8px 22px", borderRadius: 999,
+            background: ETS.header, color: "#fff", fontFamily: ETS.font,
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1 }}>RESPONSE TIME</span>
+            <span style={{ fontSize: 15, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
+              {etsClock(maxDuration > 0 ? Math.max(0, maxDuration - elapsed) : elapsed)}
+            </span>
+            <button onClick={stopRecording} aria-label="停止录音" style={{
+              padding: "4px 14px", borderRadius: 999, border: "none", background: "#fff", color: ETS.header,
+              fontFamily: ETS.font, fontSize: 13, fontWeight: 700, cursor: "pointer",
+            }}>Stop</button>
+          </div>
+          {maxDuration > 0 && (
+            <div style={{ width: 260, height: 4, background: "#e2e2e2", borderRadius: 2, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${Math.min(100, (elapsed / maxDuration) * 100)}%`, background: ETS.teal, transition: "width 1s linear" }} />
+            </div>
+          )}
+        </div>
+      )}
+
       {/* === IDLE state === */}
-      {state === "idle" && (
+      {!etsLook && state === "idle" && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <button
             onClick={startRecording}
@@ -471,7 +522,7 @@ export function VoiceRecorder({ onRecordingComplete, onRecordingStart, onRecordi
       )}
 
       {/* === RECORDING state === */}
-      {state === "recording" && (
+      {!etsLook && state === "recording" && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
           <button
             onClick={stopRecording}

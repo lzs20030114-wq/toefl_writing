@@ -24,20 +24,22 @@ import {
   describeModulePlan as describeListeningModulePlan,
   listeningModuleSeconds,
 } from "../../lib/mockExam/listeningPlanner";
-import { finalizeTimedOutResults, itemScorableCount } from "../../lib/mockExam/timeoutFinalize";
+import { finalizeTimedOutResults, itemScorableCount, plannedTotal } from "../../lib/mockExam/timeoutFinalize";
 import { saveSess, loadDoneIds, addDoneIds } from "../../lib/sessionStore";
 import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { saveAdaptiveCheckpoint, loadAdaptiveCheckpoint, clearAdaptiveCheckpoint } from "../../lib/mockExam/adaptiveCheckpoint";
 import { getSavedCode } from "../../lib/AuthContext";
 import { REAL_MOCK_TEMPLATE_VERSION, getRealMockConfig } from "../../lib/realMockExam/config";
 import {
-  prepareRealMockExam, markRealMockSeen, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
+  prepareRealMockExam, routeRealMockExam, finishRealMockExam, finishRealMockExamReliably, RealMockError,
 } from "../../lib/realMockExam/client";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { calculateRealAdaptiveScore, routeRealModule, validateRealAdaptivePaper } from "../../lib/realMockExam/adaptiveScore";
 import { getVocabTargetWord, splitForHighlight, VOCAB_HIGHLIGHT_STYLE } from "../../lib/reading/vocabHighlight";
 import { splitBlankToken } from "../../lib/reading/ctwToken";
 import { listeningSecondsForType, LCR_SECONDS_PER_ITEM, formatAnswerTime } from "../../lib/listeningTiming";
+import { ETS, ETS_BAR_HEIGHT, EtsDirection, EtsChoice, EtsNav, EtsNavButton, EtsFigure, etsSize, useEtsBarOverride, etsProgressLabel, rdlDirection, splitPassageTitle } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -118,6 +120,8 @@ const LEVEL_LABELS = {
 // the payload carries the whole paper (~60 KB reading, ~155 KB listening), so
 // those saves are trailing and at most one per this many ms.
 const PARTIAL_SAVE_MS = 800;
+// 真题外观：按 Next 到换题之间只留一帧缓冲，不放提交动画。
+const ETS_ADVANCE_MS = 120;
 
 // ------ Inline Task Renderers ------
 
@@ -125,7 +129,20 @@ const PARTIAL_SAVE_MS = 800;
  * CTW Inline — fill-in-the-blanks within a passage.
  * Each blank shows the displayed_fragment + input for the missing letters.
  */
-function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+/** 真题填词的空：灰底块，缺几个字母就画几条短下划线，输入的字母落在下划线上。 */
+function etsBlankStyle(missingLen) {
+  const n = Math.max(missingLen, 1);
+  return {
+    width: `${n * 0.72 + 0.24}em`, height: "1.3em", margin: "0 1px", padding: "0 0 0 0.16em", boxSizing: "border-box",
+    border: "none", borderRadius: 1, outline: "none", color: ETS.ink,
+    backgroundColor: "#d6d6d6",
+    backgroundImage: "repeating-linear-gradient(90deg, #6f6f6f 0 0.52em, transparent 0.52em 0.72em)",
+    backgroundSize: `${n * 0.72}em 1px`, backgroundPosition: "0.2em calc(100% - 0.2em)", backgroundRepeat: "no-repeat",
+    fontSize: "inherit", fontFamily: "ui-monospace, Menlo, Consolas, monospace", letterSpacing: "0.12em", verticalAlign: "baseline",
+  };
+}
+
+function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false }) {
   const [answers, setAnswers] = useState(() => item.blanks.map((_, i) =>
     typeof partialState?.answers?.[i] === "string" ? partialState.answers[i] : ""
   ));
@@ -214,9 +231,10 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
       };
     });
     const correct = results.filter((r) => r.isCorrect).length;
+    // 真题外观下按 Next 就走（真题不放「已提交」过场）；站内样式保留原来的提交动画。
     setTimeout(() => {
       onComplete({ correct, total: item.blanks.length, results });
-    }, 800);
+    }, ets ? ETS_ADVANCE_MS : 800);
   }
 
   // Build passage with blanks rendered inline
@@ -234,6 +252,32 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
       const isCorrect = submitted
         ? (blank.displayed_fragment + answers[bi]).toLowerCase().replace(/[^a-z]/g, "") === blank.original_word.toLowerCase().replace(/[^a-z]/g, "")
         : null;
+      if (ets) {
+        // 真题界面：给出的字母照常排版，缺的字母是一块灰底空格，每个缺的字母一条短下划线。
+        rendered.push(" ");
+        rendered.push(
+          <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline" }}>
+            {lead && <span>{lead}</span>}
+            <span>{blank.displayed_fragment}</span>
+            <input
+              ref={(el) => (inputRefs.current[bi] = el)}
+              type="text"
+              aria-label={`Blank ${bi + 1}`}
+              value={answers[bi]}
+              onChange={(e) => handleChange(bi, e.target.value.slice(0, missingLen), missingLen)}
+              onKeyDown={(e) => handleKeyDown(bi, e)}
+              disabled={submitted}
+              maxLength={missingLen}
+              autoComplete="off"
+              spellCheck={false}
+              style={etsBlankStyle(missingLen)}
+            />
+            {tail && <span>{tail}</span>}
+          </span>
+        );
+        blankIdx++;
+        continue;
+      }
       rendered.push(
         <span key={`b-${bi}`} style={{ display: "inline-flex", alignItems: "baseline", margin: "2px 3px" }}>
           {lead && <span>{lead}</span>}
@@ -281,6 +325,19 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
     }
   }
 
+  if (ets) {
+    // 真题界面：标题贴顶，段落占满宽度、落在下方空白的中间偏上；Next 在考试头上。
+    return (
+      <div style={{ display: "flex", flexDirection: "column", minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)` }}>
+        <EtsDirection>Fill in the missing letters in the paragraph.</EtsDirection>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", padding: "0 4.3% 8vh" }}>
+          <div style={{ fontSize: etsSize(17), lineHeight: 1.5, color: ETS.text, fontFamily: ETS.font }}>{rendered}</div>
+        </div>
+        {!submitted && <EtsNav><EtsNavButton onClick={handleSubmit}>Next</EtsNavButton></EtsNav>}
+      </div>
+    );
+  }
+
   return (
     <div>
       <div style={{ fontSize: 12, fontWeight: 700, color: C.t3, marginBottom: 8, letterSpacing: 0.5, textTransform: "uppercase" }}>
@@ -305,7 +362,7 @@ function CTWInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
  * MCQ Inline — generic multiple-choice for RDL, AP, LA, LC, LAT.
  * Shows passage/text, then one question at a time with A/B/C/D buttons.
  */
-function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false, onQuestionChange }) {
   const questions = item.questions || [];
   const isListeningType = taskType === "la" || taskType === "lc" || taskType === "lat";
   const answerSeconds = listeningSecondsForType(taskType);
@@ -356,6 +413,8 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
 
   const question = questions[currentQ];
   const insertParts = insertStemParts(question);
+  // 顶栏「Question N of M」跟着篇内题号走（只有真题外观用）。
+  useEffect(() => { onQuestionChange?.(currentQ); }, [currentQ, onQuestionChange]);
 
   const handleAudioEnded = useCallback(() => {
     setPhase((p) => (p === "listen" ? "answer" : p));
@@ -403,8 +462,8 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
     const correct = results.filter((r) => r.isCorrect).length;
     setTimeout(() => {
       onComplete({ correct, total: questions.length, results });
-    }, 1200);
-  }, [onComplete, questions, selections]);
+    }, ets ? ETS_ADVANCE_MS : 1200);
+  }, [onComplete, questions, selections, ets]);
 
   // Answer timer — only runs in the answer phase, i.e. after the audio has
   // finished for listening tasks. Resets for each question.
@@ -435,6 +494,19 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   const vocabWord = getVocabTargetWord(question);
   const answeredAll = selections.every((s) => s !== null);
   const correctAnswer = (q) => q.correct_answer || q.answer;
+
+  if (ets) {
+    return (
+      <EtsMCQView
+        item={item} taskType={taskType} question={question} insertParts={insertParts} stem={getStem(question)}
+        passage={passage} vocabWord={vocabWord} isListeningType={isListeningType} phase={phase}
+        answerTimeLeft={answerTimeLeft} currentQ={currentQ} questionCount={questions.length}
+        selected={selections[currentQ]} submitted={submitted} answeredAll={answeredAll}
+        onSelect={handleSelect} onPrev={handlePrev} onNext={handleNext} onSubmit={() => handleSubmit()}
+        onAudioEnded={handleAudioEnded} onStartAnswer={() => setPhase("answer")}
+      />
+    );
+  }
 
   // Task label (shared)
   const taskLabel = (
@@ -641,10 +713,191 @@ function MCQInlineTask({ item, taskType, onComplete, collectorRef, revealAnswers
   );
 }
 
+/** 听力播音时的标题：对话 / 通知 / 讲座（学科已知就说「in a … class」）。 */
+function listeningDirection(item, taskType) {
+  if (taskType === "lcr") return "Choose the best response.";
+  if (taskType === "lc") return "Listen to a conversation.";
+  if (taskType === "la") return "Listen to an announcement.";
+  if (taskType === "lat") {
+    const subject = String(item?.subject || "").trim().toLowerCase();
+    if (!subject || subject === "general") return "Listen to a talk.";
+    return `Listen to a talk in ${/^[aeiou]/.test(subject) ? "an" : "a"} ${subject} class.`;
+  }
+  return "Listen.";
+}
+
+/** 几个说话人：对话两人，其余一人（真题界面画面上的人数）。 */
+function listeningFigure(item, taskType) {
+  return { count: taskType === "lc" ? 2 : 1, speakers: Array.isArray(item?.speakers) ? item.speakers : [], seed: item?.id || "" };
+}
+
+/**
+ * 真题听力：音频藏在后台自动播（考试开始那一下已解锁播放），页面上只有人物和题目。
+ * 万一没声音，留一个不显眼的小字入口直接作答。
+ */
+function EtsAudio({ item, taskType, onEnded, hidden }) {
+  return (
+    <div style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }} aria-hidden={hidden ? "true" : undefined}>
+      <AudioPlayer
+        src={item.audio_url || null}
+        text={item.speaker || item.announcement || item.lecture || item.transcript || (item.conversation ? item.conversation.map((t) => `${t.speaker}: ${t.text}`).join(". ") : "")}
+        onEnded={onEnded}
+        maxReplays={0}
+        autoPlay
+        taskType={taskType}
+        itemId={item.id}
+      />
+    </div>
+  );
+}
+
+function EtsNoSoundLink({ onStartAnswer }) {
+  return (
+    <button type="button" onClick={onStartAnswer} style={{
+      position: "fixed", right: 18, bottom: 14, padding: "4px 8px", border: "none", background: "transparent",
+      color: ETS.muted, fontFamily: ETS.font, fontSize: 12, cursor: "pointer", textDecoration: "underline",
+    }}>听不到声音？直接作答</button>
+  );
+}
+
+/** 听力 / 阅读右栏：题干 + 选项（题干粗体黑字，选项之间留真题那样的大间距）。 */
+function EtsQuestionColumn({ stemBlock, choices }) {
+  return <div>{stemBlock}{choices}</div>;
+}
+
+/**
+ * 真题外观的选择题：阅读 RDL / AP（左材料右题目）、听力 LA / LC / LAT（左人物右题目）。
+ * 状态全在 MCQInlineTask 里，这里只管画：同一套判分 / 计时 / 存档逻辑不受影响。
+ */
+function EtsMCQView({
+  item, taskType, question, insertParts, stem, passage, vocabWord, isListeningType, phase, answerTimeLeft,
+  currentQ, questionCount, selected, submitted, answeredAll, onSelect, onPrev, onNext, onSubmit, onAudioEnded, onStartAnswer,
+}) {
+  const isLast = currentQ >= questionCount - 1;
+  const canSubmit = answeredAll || (isListeningType && isLast);
+  const listening = isListeningType && phase === "listen";
+  // 听力：播音时细栏只留科目名；作答时计时换成这道题的作答时间（真题界面就是这样）。
+  useEtsBarOverride(isListeningType ? (listening ? { hideProgress: true, timeLeft: null } : { timeLeft: answerTimeLeft }) : null);
+  const choices = (
+    <div role="radiogroup" style={{ marginTop: etsSize(20) }}>
+      {["A", "B", "C", "D"].map((key) => question.options[key] ? (
+        <EtsChoice key={key} checked={selected === key} disabled={submitted} onClick={() => onSelect(key)}>
+          {question.options[key]}
+        </EtsChoice>
+      ) : null)}
+    </div>
+  );
+  const stemBlock = insertParts ? (
+    <div style={{ fontSize: etsSize(15), fontFamily: ETS.font }}><InsertSentenceStem parts={insertParts} accent={ETS.teal} soft={ETS.tealSoft} /></div>
+  ) : (
+    <div data-testid="ets-stem" style={{ fontSize: etsSize(15), fontWeight: 700, color: "#111", lineHeight: 1.4, fontFamily: ETS.font }}>{stem}</div>
+  );
+  const nav = submitted || listening ? null : (
+    <EtsNav>
+      {currentQ > 0 && !isListeningType && <EtsNavButton onClick={onPrev}>Back</EtsNavButton>}
+      {!isLast && <EtsNavButton onClick={onNext}>Next</EtsNavButton>}
+      {isLast && canSubmit && <EtsNavButton onClick={onSubmit}>Next</EtsNavButton>}
+    </EtsNav>
+  );
+
+  if (passage) {
+    const { title, body } = taskType === "ap" ? splitPassageTitle(passage) : { title: null, body: passage };
+    const heading = taskType === "ap" ? (title || "Read an academic passage.") : rdlDirection(item.genre);
+    const text = vocabWord
+      ? splitForHighlight(body, vocabWord).map((seg, i) =>
+          seg.hit
+            ? <mark key={i} style={{ ...VOCAB_HIGHLIGHT_STYLE, background: "#bfe3df", color: "inherit" }}>{seg.text}</mark>
+            : <React.Fragment key={i}>{seg.text}</React.Fragment>
+        )
+      : body;
+    // 日常阅读的材料在真题里装在一个黑色圆角框里（广告 / 通知 / 日程表），学术文章直接排在左栏。
+    const boxed = taskType === "rdl";
+    const centered = boxed && /advert|flyer|poster/i.test(String(item.genre || ""));
+    return (
+      <div>
+        <EtsDirection style={{ paddingBottom: etsSize(boxed ? 34 : 26) }}><span className="tp-reading-title">{heading}</span></EtsDirection>
+        <div
+          className="tp-reading-split"
+          style={{ display: "flex", alignItems: "stretch", gap: "4.5%", height: `calc(100vh - ${ETS_BAR_HEIGHT}px - ${etsSize(boxed ? 96 : 88)})`, minHeight: 340, padding: "0 1% 12px 2.2%" }}
+        >
+          <div className="tp-reading-left" style={{ flex: "0 0 46%", minWidth: 0, overflowY: "auto", paddingTop: boxed ? etsSize(28) : 0 }}>
+            <div style={boxed ? {
+              border: "3px solid #1f1f1f", borderRadius: 14, padding: `${etsSize(18)} ${etsSize(20)}`, margin: "0 0 4px 2%",
+              textAlign: centered ? "center" : "left",
+            } : null}>
+              <div style={{ fontSize: etsSize(15), lineHeight: 1.42, color: ETS.text, whiteSpace: "pre-wrap", fontFamily: ETS.font }}>{text}</div>
+            </div>
+          </div>
+          <div className="tp-reading-right" style={{ flex: 1, minWidth: 0, overflowY: "auto", paddingTop: etsSize(boxed ? 0 : 6), paddingRight: "1%" }}>
+            <EtsQuestionColumn stemBlock={stemBlock} choices={choices} />
+          </div>
+        </div>
+        {nav}
+      </div>
+    );
+  }
+
+  const fig = listeningFigure(item, taskType);
+  // 播放器在播音 / 作答两个阶段都挂在同一位置（换位置会卸载重挂、自动重播）。
+  return (
+    <div>
+      {isListeningType && <EtsAudio item={item} taskType={taskType} onEnded={onAudioEnded} hidden={!listening} />}
+      {listening ? (
+        <div>
+          <EtsDirection>{listeningDirection(item, taskType)}</EtsDirection>
+          <div style={{ height: `calc(100vh - ${ETS_BAR_HEIGHT}px - ${etsSize(120)})`, minHeight: 260, maxHeight: 560, padding: `${etsSize(8)} 0 ${etsSize(24)}` }}>
+            <EtsFigure {...fig} />
+          </div>
+          <EtsNoSoundLink onStartAnswer={onStartAnswer} />
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: "6%", padding: `${etsSize(44)} 1% 24px 2%`, minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px - 80px)` }}>
+          <div style={{ flex: "0 0 40%", minWidth: 0, height: `calc(100vh - ${ETS_BAR_HEIGHT}px - ${etsSize(110)})`, minHeight: 240, maxHeight: 540 }}>
+            {isListeningType && <EtsFigure {...fig} />}
+          </div>
+          <div style={{ flex: 1, minWidth: 0, maxWidth: 640 }}>
+            <EtsQuestionColumn stemBlock={stemBlock} choices={choices} />
+          </div>
+        </div>
+      )}
+      {nav}
+    </div>
+  );
+}
+
+/**
+ * 真题听力应答：标题「Choose the best response.」，左边说话人、右边四个回答（播音时就摆着，放完才能选）；
+ * 细栏计时在作答时换成这道题的作答时间，Next 在考试头上。
+ */
+function EtsLCRView({ item, phase, selected, submitted, answerTimeLeft, onSelect, onSubmit, onAudioEnded, onStartAnswer }) {
+  const listening = phase === "listen";
+  useEtsBarOverride(listening ? { timeLeft: null } : { timeLeft: answerTimeLeft });
+  return (
+    <div>
+      <EtsAudio item={item} taskType="lcr" onEnded={onAudioEnded} hidden={!listening} />
+      <EtsDirection>Choose the best response.</EtsDirection>
+      <div style={{ display: "flex", gap: "6%", padding: `${etsSize(6)} 1% 24px 2%` }}>
+        <div style={{ flex: "0 0 40%", minWidth: 0, height: `calc(100vh - ${ETS_BAR_HEIGHT}px - ${etsSize(150)})`, minHeight: 220, maxHeight: 420 }}>
+          <EtsFigure count={1} seed={item.id} />
+        </div>
+        <div role="radiogroup" style={{ flex: 1, minWidth: 0, maxWidth: 640, paddingTop: etsSize(26) }}>
+          {["A", "B", "C", "D"].map((key) => item.options[key] ? (
+            <EtsChoice key={key} checked={selected === key} disabled={submitted || listening} onClick={() => onSelect(key)}>
+              {item.options[key]}
+            </EtsChoice>
+          ) : null)}
+        </div>
+      </div>
+      {listening && <EtsNoSoundLink onStartAnswer={onStartAnswer} />}
+      {!submitted && !listening && <EtsNav><EtsNavButton onClick={onSubmit} disabled={!selected}>Next</EtsNavButton></EtsNav>}
+    </div>
+  );
+}
+
 /**
  * LCR Inline — listen and choose a response (single question per item).
  */
-function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress }) {
+function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, partialState, onProgress, ets = false }) {
   const [phase, setPhase] = useState("listen");
   const [selected, setSelected] = useState(() => ["A", "B", "C", "D"].includes(partialState?.selected) ? partialState.selected : null);
   const [submitted, setSubmitted] = useState(false);
@@ -697,8 +950,8 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
     const isCorrect = answerValue === item.answer;
     setTimeout(() => {
       onComplete({ correct: isCorrect ? 1 : 0, total: 1, results: [{ selected: answerValue || null, correct: item.answer, isCorrect }] });
-    }, 800);
-  }, [item.answer, onComplete, submitted]);
+    }, ets ? ETS_ADVANCE_MS : 800);
+  }, [item.answer, onComplete, submitted, ets]);
 
   function handleSubmit() {
     if (!selected || submitted) return;
@@ -719,6 +972,13 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
     if (phase !== "choose" || submitted || answerTimeLeft !== 0) return;
     completeAnswer(selected);
   }, [answerTimeLeft, completeAnswer, phase, selected, submitted]);
+
+  if (ets) {
+    return (
+      <EtsLCRView item={item} phase={phase} selected={selected} submitted={submitted} answerTimeLeft={answerTimeLeft}
+        onSelect={handleSelect} onSubmit={handleSubmit} onAudioEnded={handleAudioEnded} onStartAnswer={() => setPhase("choose")} />
+    );
+  }
 
   return (
     <div>
@@ -827,17 +1087,17 @@ function LCRInlineTask({ item, onComplete, collectorRef, revealAnswers = false, 
 /**
  * Routes to the correct inline renderer based on taskType.
  */
-function AdaptiveTaskRenderer({ item, onComplete, collectorRef, partialState, onProgress }) {
+function AdaptiveTaskRenderer({ item, onComplete, collectorRef, partialState, onProgress, ets = false, onQuestionChange }) {
   if (!item) return null;
 
   if (item.taskType === "ctw") {
-    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+    return <CTWInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} />;
   }
   if (item.taskType === "lcr") {
-    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+    return <LCRInlineTask item={item} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} />;
   }
   // RDL, AP, LA, LC, LAT all use MCQ
-  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} />;
+  return <MCQInlineTask item={item} taskType={item.taskType} onComplete={onComplete} collectorRef={collectorRef} partialState={partialState} onProgress={onProgress} ets={ets} onQuestionChange={onQuestionChange} />;
 }
 
 // ------ Helper: aggregate module results ------
@@ -1042,11 +1302,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const [currentPartial, setCurrentPartial] = useState(null);
   const [preparing, setPreparing] = useState(false);
   // error: null, or the classified failure ({ kind, message, … }) of this item's seen call.
-  const [seenState, setSeenState] = useState({ key: null, ready: false, error: null });
-  const [seenRetry, setSeenRetry] = useState(0);
   // Classified failure of the current item's answered sync (real mode), or null.
-  const [answerError, setAnswerError] = useState(null);
-  const pendingAnswerRef = useRef(null);
   const answerBusyRef = useRef(false);
   // Completion guard: true once this exam has been saved, so a second completion
   // path (timeout racing the last submit, a stale delayed onComplete) can never
@@ -1188,12 +1444,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       const completeTimeout = async () => {
         // Only the item actually displayed can become answered. Later planned
         // items stay unseen even though they count as wrong in the score.
-        if (isReal && realTaskReady && currentItem) {
-          try { await markRealMockSeen(paper, [currentItem], { answered: true }); }
-          catch (e) {
-            showRealError(e, { title: "超时作答同步失败", retry: completeTimeout });
-            return;
-          }
+        if (isReal && currentItem) {
+          syncRealMockSeen(paper, [currentItem], { answered: true, onFatal: handleSyncFatal });
         }
         if (phase === "module1") {
           setM1Results(finalResults);
@@ -1216,34 +1468,28 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     setCurrentPartial({ phase, itemId: currentItem.id, itemIndex: currentItemIndex, data });
   }, [isReal, phase, currentItem, currentItemIndex]);
   const seenKey = currentItem ? `${paper?.attemptId || ""}:${phase}:${currentItemIndex}:${currentItem.realMockKey || currentItem.id}` : null;
-  const realTaskReady = !isReal || (seenState.key === seenKey && seenState.ready);
-  const seenGateError = seenState.key === seenKey ? seenState.error : null;
   // The clock also waits while an answer could not be synced (the item is
   // already submitted; the student can only retry or leave).
-  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || (isReal && (!realTaskReady || !!answerError)) || answerBusyRef.current;
+  holdTimersRef.current = !!(examAudio && examAudio.holdTimers) || answerBusyRef.current;
 
+  // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断考试；回调可能晚到，所以走 ref 取最新闭包。
+  const syncFatalRef = useRef(null);
+  syncFatalRef.current = (e, attemptId) => {
+    if (examClosedRef.current || (attemptId && attemptId !== paper?.attemptId)) return;
+    showRealError(e, { title: "作答记录同步失败" });
+  };
+  const handleSyncFatal = useCallback((e, attemptId) => syncFatalRef.current?.(e, attemptId), []);
   const expired = timeLeft <= 0;
+  // 已见记录在后台同步（lib/realMockExam/seenSync）：题目一出现就能作答，不再停下来等服务器确认。
+  // 本地 seenItemIds 立刻记上（交卷记录与续考检查点都靠它），服务器那边串行重试；
+  // 只有卷已结束 / 过期这种再也不可能成功的错误才弹「重新组卷」。
   useEffect(() => {
     if (!isReal || !paper || !currentItem || expired || autoFinishedRef.current || (phase !== "module1" && phase !== "module2")) return;
-    let active = true;
-    setSeenState({ key: seenKey, ready: false, error: null });
-    markRealMockSeen(paper, [currentItem]).then(() => {
-      if (!active) return;
-      const doneKey = config.taskDoneKeys[currentItem.taskType];
-      if (doneKey) addDoneIds(doneKey, [currentItem.id]);
-      setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
-      setSeenState({ key: seenKey, ready: true, error: null });
-    }).catch((e) => {
-      if (!active) return;
-      // A finished / expired paper can never load this item (「重试加载」 would
-      // loop forever) and an account problem needs the user to leave; only a
-      // transient failure is worth retrying.
-      const info = describeRealMockError(e, "已见记录同步失败，请重试。");
-      if (info.kind === "dead-attempt") abandonDeadAttempt(info);
-      else setSeenState({ key: seenKey, ready: false, error: info });
-    });
-    return () => { active = false; };
-  }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, seenRetry, expired]);
+    const doneKey = config.taskDoneKeys[currentItem.taskType];
+    if (doneKey) addDoneIds(doneKey, [currentItem.id]);
+    setSeenItemIds((ids) => ids.includes(currentItem.id) ? ids : [...ids, currentItem.id]);
+    syncRealMockSeen(paper, [currentItem], { onFatal: handleSyncFatal });
+  }, [isReal, paper, phase, currentItemIndex, currentItem, seenKey, expired]);
 
   // Warm the next clip (same module only) as soon as the current one ends —
   // the shared element is idle between questions, so preloading there makes
@@ -1262,6 +1508,23 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   }, [examController]);
 
   const totalItemsInCurrentModule = currentItems ? currentItems.length : 0;
+
+  // 真题模考的做题页换成真题（ETS 机考）外观：顶栏按「题」计数（Question 12 of 35 /
+  // 填词一篇 Questions 1-10 of 35），不按篇计数。篇内题号由选择题组件回报。
+  const etsExam = isReal && (phase === "module1" || phase === "module2");
+  const itemKey = `${phase}-${currentItemIndex}`;
+  const [subQ, setSubQ] = useState({ key: null, q: 0 });
+  const handleQuestionChange = useCallback((q) => setSubQ({ key: itemKey, q }), [itemKey]);
+  let etsProgress = "";
+  if (etsExam && currentItem) {
+    const offset = plannedTotal(currentItems.slice(0, currentItemIndex));
+    const count = itemScorableCount(currentItem);
+    const total = plannedTotal(currentItems);
+    const q = subQ.key === itemKey ? subQ.q : 0;
+    etsProgress = currentItem.taskType === "ctw"
+      ? etsProgressLabel(offset + 1, offset + count, total)
+      : etsProgressLabel(offset + 1 + q, offset + 1 + q, total);
+  }
 
   // Reading passage tasks (RDL / AP) render as a wide two-column layout
   // (passage | question) to match the real exam. CTW (fill-in-the-blanks) and
@@ -1288,9 +1551,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     setFinalScore(null);
     setSavedSessionDate(null);
     setUsedIds(new Set());
-    setAnswerError(null);
-    pendingAnswerRef.current = null;
-    answerBusyRef.current = false;
+            answerBusyRef.current = false;
     cloudRetryRef.current = null;
     autoFinishedRef.current = false;
     examClosedRef.current = false;
@@ -1343,6 +1604,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         // its id is sent only on an explicit request (handleIntroStart /
         // handleReleaseActiveAttempt), never by a plain retry.
         const restartAttemptId = typeof options?.restartAttemptId === "string" ? options.restartAttemptId : null;
+        // 放弃自己那份旧卷前，先把检查点里已展示的题补记为已见（刷新时没落地的后台同步随页面没了），
+        // 否则服务端结束旧卷时会把它们当未见释放回题池。
+        if (restartAttemptId && resumed?.paper?.attemptId === restartAttemptId) {
+          await resyncRealMockSeen(resumed.paper, [...(resumed.m1Items || []), ...(resumed.m2Items || [])], resumed.seenItemIds);
+        }
         const fresh = await prepareRealMockExam(section, restartAttemptId ? { restartAttemptId } : undefined);
         if (!validateRealAdaptivePaper(fresh, section, userCode)) {
           if (fresh?.attemptId) await finishRealMockExam(fresh).catch(() => {});
@@ -1360,9 +1626,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         setM1Results([]);
         setM2Results([]);
         setTimeLeft(fresh.timing.module1Seconds);
-        setAnswerError(null);
-        pendingAnswerRef.current = null;
-        answerBusyRef.current = false;
+                        answerBusyRef.current = false;
         autoFinishedRef.current = false;
         examClosedRef.current = false;
         setPhase("module1");
@@ -1432,6 +1696,8 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       if (isReal && (!resumed.paper || resumed.paper.userCode !== userCode || resumed.paper.templateVersion !== REAL_MOCK_TEMPLATE_VERSION)) throw new Error("断点账户或模板不匹配");
       setPaper(isReal ? resumed.paper : null);
       setSeenItemIds(isReal && Array.isArray(resumed.seenItemIds) ? resumed.seenItemIds : []);
+      // 刷新前还在后台重试的已见同步随页面没了：续考时把检查点里已展示的题补发一遍。
+      if (isReal) resyncRealMockSeen(resumed.paper, [...(resumed.m1Items || []), ...(resumed.m2Items || [])], resumed.seenItemIds, { onFatal: handleSyncFatal });
       setCurrentPartial(isReal && resumed.currentPartial?.phase === resumed.phase &&
         resumed.currentPartial?.itemIndex === resumed.currentItemIndex &&
         resumed.currentPartial?.itemId === (resumed.phase === "module2" ? resumed.m2Items : resumed.m1Items)?.[resumed.currentItemIndex]?.id
@@ -1444,9 +1710,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
       setRoutePath(resumed.routePath || null);
       setUsedIds(new Set(Array.isArray(resumed.usedIds) ? resumed.usedIds : []));
       setTimeLeft(Number.isFinite(resumed.timeLeft) ? resumed.timeLeft : (isReal ? resumed.paper.timing.module1Seconds : config.module1TimeSeconds));
-      setAnswerError(null);
-      pendingAnswerRef.current = null;
-      answerBusyRef.current = false;
+                  answerBusyRef.current = false;
       autoFinishedRef.current = false;
       examClosedRef.current = false;
       setPhase(resumed.phase === "module2" ? "module2" : "module1");
@@ -1470,36 +1734,10 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // normal (non-timeout) flow is unaffected.
     if (autoFinishedRef.current || answerBusyRef.current || examClosedRef.current) return;
     answerBusyRef.current = true;
-    pendingAnswerRef.current = result;
     if (isReal) {
-      // Freeze the clock for the network call right now: holdTimersRef is
-      // otherwise only recomputed on the next render, so the countdown could
-      // still tick (even to zero) while this answer is in flight.
-      holdTimersRef.current = true;
-      let syncError = null;
-      try {
-        await markRealMockSeen(paper, [currentItem], { answered: true });
-      } catch (e) {
-        syncError = e;
-      }
-      // The clock ran out while the call was in flight: the timeout path has
-      // already scored this item through the partial collector, so appending
-      // it here as well would count it twice.
-      if (autoFinishedRef.current) {
-        answerBusyRef.current = false;
-        pendingAnswerRef.current = null;
-        return;
-      }
-      if (syncError) {
-        answerBusyRef.current = false;
-        const info = describeRealMockError(syncError, "作答同步失败，请重试后继续。");
-        if (info.kind === "dead-attempt") abandonDeadAttempt(info);
-        else setAnswerError(info);
-        return;
-      }
+      // 作答记录同样后台同步，不等网络就进下一题。
+      syncRealMockSeen(paper, [currentItem], { answered: true, onFatal: handleSyncFatal });
     }
-    pendingAnswerRef.current = null;
-    setAnswerError(null);
     answerBusyRef.current = false;
     setCurrentPartial(null);
     // Attach the item to the result so the post-exam review can render the
@@ -1658,7 +1896,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
     // Record first, finish later: `finish` only releases this paper's still-
     // unseen reservations (the 2-hour lease would too), so the saved exam never
     // waits on it. A finish that keeps failing is retried before the next prepare.
-    if (isReal) finishRealMockExamReliably(paper);
+    if (isReal) flushRealMockSeen(paper).then(() => finishRealMockExamReliably(paper));
   }
 
   function handleRestart() {
@@ -1684,8 +1922,11 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
   const routeLabel = (path) => (isReal ? (path === "upper" ? "进阶" : "普通") : (path === "upper" ? "Upper" : "Lower"));
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
-      {/* Top bar */}
+    <div style={{ minHeight: "100vh", background: etsExam ? ETS.canvas : C.bg, fontFamily: FONT }}>
+      {/* Top bar — 真题模考做题时换成考试界面的细栏 */}
+      {etsExam ? (
+        <TopBar variant="ets" section={config.label} progress={etsProgress} timeLeft={timeLeft} onExit={onExit} />
+      ) : (
       <TopBar
         title={
           phase === "module1" ? `Module 1 · 路由阶段` :
@@ -1703,10 +1944,14 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         }
         onExit={onExit}
       />
+      )}
 
-      <div className="tp-reading-exam-wrap" style={{ maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
+      <div className="tp-reading-exam-wrap" style={etsExam
+        ? { margin: 0, padding: 0 }
+        : { maxWidth: isWideReading ? 1180 : 800, margin: "24px auto", padding: "0 20px", transition: "max-width 200ms ease" }}>
         {/* Error state */}
         {error && isReal && (
+          <div style={etsExam ? { maxWidth: 800, margin: "24px auto 0", padding: "0 16px" } : undefined}>
           <RealErrorCard
             info={errorInfo}
             message={error}
@@ -1723,6 +1968,7 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
             onExit={onExit}
             onClose={clearError}
           />
+          </div>
         )}
         {error && !isReal && (
           <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
@@ -1750,7 +1996,21 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
         )}
 
         {/* Module 1 & 2 — task rendering */}
-        {(phase === "module1" || phase === "module2") && currentItem && !error && realTaskReady && (
+        {etsExam && currentItem && !error && (
+          <div data-testid="ets-exam-page">
+            <AdaptiveTaskRenderer
+              key={`${phase}-${currentItemIndex}`}
+              item={currentItem}
+              onComplete={handleItemComplete}
+              collectorRef={partialCollectorRef}
+              partialState={partialForCurrent}
+              onProgress={handlePartialProgress}
+              ets
+              onQuestionChange={handleQuestionChange}
+            />
+          </div>
+        )}
+        {!etsExam && (phase === "module1" || phase === "module2") && currentItem && !error && (
           <SurfaceCard style={{ padding: "20px 24px" }}>
             {/* Module badge */}
             <div style={{
@@ -1770,24 +2030,6 @@ function AdaptiveExamShellInner({ section = "reading", source = "standard", onEx
               partialState={partialForCurrent}
               onProgress={isReal ? handlePartialProgress : null}
             />
-            {answerError && <div style={{ marginTop: 14, color: "#b91c1c", fontSize: 13, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-              <span>{answerError.message}</span>
-              {answerError.kind === "transient" && <Btn onClick={() => pendingAnswerRef.current && handleItemComplete(pendingAnswerRef.current)}>重试同步</Btn>}
-              <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
-            </div>}
-          </SurfaceCard>
-        )}
-        {isReal && (phase === "module1" || phase === "module2") && currentItem && !error && !realTaskReady && (
-          <SurfaceCard style={{ padding: 24, textAlign: "center" }}>
-            <div style={{ color: C.t2, fontSize: 14, marginBottom: 12 }}>
-              {seenGateError ? seenGateError.message : "正在确认这道题的已见记录…"}
-            </div>
-            {seenGateError && (
-              <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-                {seenGateError.kind === "transient" && <Btn onClick={() => setSeenRetry((n) => n + 1)}>重试加载</Btn>}
-                <Btn onClick={handleSaveAndExit} variant="secondary">保存进度并退出</Btn>
-              </div>
-            )}
           </SurfaceCard>
         )}
 

@@ -12,12 +12,14 @@ import { DONE_STORAGE_KEYS } from "../../lib/questionSelector";
 import { ExamAudioProvider, useExamAudio } from "../shared/ExamAudioProvider";
 import { useNarration } from "../speaking/SpeakingIntroScreen";
 import { SPEAKING_SECTION_NARRATION, INTERVIEW_TASK_NARRATION } from "../../lib/speakingGen/introTemplates";
-import { prepareRealMockExam, markRealMockSeen, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { prepareRealMockExam, finishRealMockExamReliably } from "../../lib/realMockExam/client";
+import { syncRealMockSeen, flushRealMockSeen, resyncRealMockSeen } from "../../lib/realMockExam/seenSync";
 import { describeRealMockError, RELEASE_ACTIVE_ATTEMPT_CONFIRM } from "../../lib/realMockExam/messages";
 import { REAL_MOCK_TEMPLATE_VERSION } from "../../lib/realMockExam/config";
 import { scoreRealSpeaking } from "../../lib/realMockExam/linearScore";
 import { loadMockCheckpoint, saveMockCheckpoint, clearMockCheckpoint } from "../../lib/mockExam/storage";
 import { getSavedCode } from "../../lib/AuthContext";
+import { ETS, ETS_BAR_HEIGHT, EtsNav, EtsNavButton, etsSize } from "../shared/etsExamUi";
 
 // ------ Constants ------
 
@@ -174,6 +176,33 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     setError(info.message);
   }
 
+  // 后台同步最终放弃（卷已结束 / 过期，或账号问题）时才打断；回调可能晚到，走 ref 取最新闭包。
+  const syncFatalRef = useRef(null);
+  syncFatalRef.current = (e, attemptId) => {
+    if (attemptId && attemptId !== exam?.attemptId) return; // 换卷后旧卷迟到的失败
+    showRealMockError(e, "作答记录同步失败", null);
+  };
+  const handleSyncFatal = useCallback((e, attemptId) => syncFatalRef.current?.(e, attemptId), []);
+
+  // 检查点里的阶段说明哪几套题已经展示过（进了复述 → 复述那套；进了面试 → 两套）。
+  // 刷新时还在后台重试的已见同步随页面没了，所以恢复时补发一遍，重新组卷前再等它落地 ——
+  // 否则服务端结束旧卷会把这两套当未见释放回题池。
+  const restoredShownIds = (() => {
+    const p = restored.current?.phase;
+    const ex = restored.current?.exam;
+    if (!ex) return [];
+    if (p === "interview") return [ex.repeatSet?.id, ex.interviewSet?.id];
+    if (p === "repeat" || p === "interviewNarration") return [ex.repeatSet?.id];
+    return [];
+  })();
+  const resyncedRef = useRef(false);
+  useEffect(() => {
+    if (!realMock || resyncedRef.current || !restored.current?.exam || !restoredShownIds.length) return;
+    resyncedRef.current = true;
+    const ex = restored.current.exam;
+    resyncRealMockSeen(ex, [ex.repeatSet, ex.interviewSet], restoredShownIds);
+  }, [realMock]);
+
   async function handleStartExam(restartAttemptId = "") {
     // Unlock the shared exam audio element synchronously inside this click —
     // the one real user gesture WebKit will honor for the whole exam.
@@ -183,6 +212,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
     // 服务端若它仍是进行中的那份，会先结束它再组新卷（以前是客户端先 finish、失败就卡住开考）。
     const restartId = realMock ? restartAttemptId || exam?.attemptId || "" : "";
     try {
+      if (realMock && exam?.attemptId && exam.attemptId === restartId) await flushRealMockSeen(exam);
       // Prefer sets the user hasn't practised yet (shared done-set with practice
       // mode). repeat ids (rpt_*) and interview ids (intv_*) never collide, so a
       // single merged Set is safe; the planner's pickSet still falls back to the
@@ -218,8 +248,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleRepeatComplete(result) {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.repeatSet], { answered: true }); }
-      catch (e) { showRealMockError(e, "跟读提交同步失败", { kind: "repeat", result }); return; }
+      syncRealMockSeen(exam, [exam.repeatSet], { answered: true, onFatal: handleSyncFatal });
     }
     clearError();
     setRepeatResults(result);
@@ -231,8 +260,9 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   // the browser's Web Speech API, so no controller gesture is needed here.
   async function handleRepeatNarrationContinue() {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.repeatSet]); }
-      catch (e) { showRealMockError(e, "记录跟读题已见失败", { kind: "repeatNarration" }); return; }
+      // 本机立刻记已做：就算服务端已见始终没落地，下次组卷带上的 doneIds 也会跳过它。
+      if (exam?.repeatSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_REPEAT, [exam.repeatSet.id]);
+      syncRealMockSeen(exam, [exam.repeatSet], { onFatal: handleSyncFatal });
     }
     clearError();
     setPhase("repeat");
@@ -240,8 +270,8 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleInterviewNarrationContinue() {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.interviewSet]); }
-      catch (e) { showRealMockError(e, "记录访谈题已见失败", { kind: "interviewNarration" }); return; }
+      if (exam?.interviewSet?.id) addDoneIds(DONE_STORAGE_KEYS.SPEAKING_INTERVIEW, [exam.interviewSet.id]);
+      syncRealMockSeen(exam, [exam.interviewSet], { onFatal: handleSyncFatal });
     }
     clearError();
     setPhase("interview");
@@ -249,15 +279,14 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
   async function handleInterviewComplete(result) {
     if (realMock) {
-      try { await markRealMockSeen(exam, [exam.interviewSet], { answered: true }); }
-      catch (e) { showRealMockError(e, "访谈提交同步失败", { kind: "interview", result }); return; }
+      syncRealMockSeen(exam, [exam.interviewSet], { answered: true, onFatal: handleSyncFatal });
     }
     clearError();
     setInterviewResults(result);
     computeScore(repeatResults, result);
     // 记录已存、结果页已出。finish 只是释放这份卷剩下的预留（2 小时租约本来也会放），
     // 所以不等它、它失败也不挡成绩 —— 没落地的会被记下，下次组卷前先补上。
-    if (realMock) finishRealMockExamReliably(exam);
+    if (realMock) flushRealMockSeen(exam).then(() => finishRealMockExamReliably(exam));
   }
 
   // 错误卡「重试」：重放失败的那一步。进行中错误卡保持显示（按钮禁用），成功由那一步自己收起。
@@ -422,7 +451,11 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: FONT }}>
       {/* Top bar — only show on intro, transition, and results */}
-      {(phase === "intro" || phase === "resumeBlocked" || phase === "repeatNarration" || phase === "interviewNarration" || phase === "results") && (
+      {/* 真题模考的两段旁白页也是考试界面：深青考试头 + 「Speaking」细栏。 */}
+      {realMock && (phase === "repeatNarration" || phase === "interviewNarration") && !error && (
+        <TopBar variant="ets" section="Speaking" onExit={onExit} />
+      )}
+      {(phase === "intro" || phase === "resumeBlocked" || ((phase === "repeatNarration" || phase === "interviewNarration") && (!realMock || error)) || phase === "results") && (
         <TopBar
           title={realMock ? "口语真题模考" : topBarTitle}
           section={realMock ? "真题专区｜口语模考" : "Speaking | 模考模式"}
@@ -482,7 +515,10 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
 
       {/* Task-level narration before Task 1 (verbatim real-exam "Speaking section…").
           Hidden while an error is shown — retry goes through the error card. */}
-      {phase === "repeatNarration" && !error && (
+      {phase === "repeatNarration" && !error && realMock && (
+        <EtsNarration title="Speaking Section" body={SPEAKING_SECTION_NARRATION} onContinue={handleRepeatNarrationContinue} />
+      )}
+      {phase === "repeatNarration" && !error && !realMock && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Speaking Section"
@@ -493,19 +529,26 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       )}
 
       {/* Repeat Phase — embed RepeatTask full-screen */}
-      {phase === "repeat" && exam?.repeatSet && (
+      {/* 后台同步判死卷 / 账号问题后不再让人接着录（录了也存不下） */}
+      {phase === "repeat" && exam?.repeatSet && !(realMock && error) && (
         <RepeatTask
           items={exam.repeatSet.sentences || []}
-          setInfo={exam.repeatSet}
+          // 真题：scenario 是整段原卷提示语（含「Repeat only once.」），照真题专区原样上屏，
+          // 不能交给 buildRepeatIntro 当地点短语拼模板（会拼出 "…visitors at the you are …" 病句）。
+          setInfo={realMock && exam.repeatSet.scenario ? { ...exam.repeatSet, settingText: exam.repeatSet.scenario, instructionText: "" } : exam.repeatSet}
           onComplete={handleRepeatComplete}
           onExit={onExit}
           isPractice={false}
           realMock={realMock}
+          etsNumbering={realMock ? { offset: 0, total: (exam.repeatSet.sentences || []).length + (exam.interviewSet?.questions || []).length } : null}
         />
       )}
 
       {/* Task-level narration before Task 2 (verbatim real-exam "Take an interview…") */}
-      {phase === "interviewNarration" && !error && (
+      {phase === "interviewNarration" && !error && realMock && (
+        <EtsNarration title="Take an Interview" body={INTERVIEW_TASK_NARRATION} onContinue={handleInterviewNarrationContinue} />
+      )}
+      {phase === "interviewNarration" && !error && !realMock && (
         <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 20px" }}>
           <NarrationCard
             title="Take an Interview"
@@ -516,7 +559,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
       )}
 
       {/* Interview Phase — embed InterviewTask full-screen */}
-      {phase === "interview" && exam?.interviewSet && (
+      {phase === "interview" && exam?.interviewSet && !(realMock && error) && (
         <InterviewTask
           items={exam.interviewSet.questions || []}
           setInfo={exam.interviewSet}
@@ -524,6 +567,7 @@ function SpeakingExamShellInner({ onExit, realMock = false }) {
           onExit={onExit}
           isPractice={false}
           realMock={realMock}
+          etsNumbering={realMock ? { offset: (exam.repeatSet?.sentences || []).length, total: (exam.repeatSet?.sentences || []).length + (exam.interviewSet.questions || []).length } : null}
         />
       )}
 
@@ -708,6 +752,21 @@ function NarrationCard({ title, body, onContinue }) {
         {"\u7EE7\u7EED"}
       </Btn>
     </SurfaceCard>
+  );
+}
+
+/** 真题模考的旁白页：考试界面那样一段居中的粗体说明，继续按钮在考试头上。 */
+function EtsNarration({ title, body, onContinue }) {
+  useNarration(body);
+  return (
+    <div style={{ background: ETS.canvas, minHeight: `calc(100vh - ${ETS_BAR_HEIGHT}px)`, fontFamily: ETS.font }}>
+      <h3 style={{ margin: 0, padding: `${etsSize(26)} 16px 0`, textAlign: "center", fontSize: etsSize(16), fontWeight: 600, color: ETS.muted }}>{title}</h3>
+      <p style={{
+        maxWidth: 1080, margin: "0 auto", padding: `${etsSize(14)} 3% 0`, textAlign: "center",
+        fontSize: etsSize(22), fontWeight: 700, lineHeight: 1.45, color: "#111",
+      }}>{body}</p>
+      <EtsNav><EtsNavButton onClick={onContinue}>继续</EtsNavButton></EtsNav>
+    </div>
   );
 }
 
