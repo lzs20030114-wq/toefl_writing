@@ -189,3 +189,20 @@ test("额度里一组只算一个词：新词额度、复习额度都按组计",
   expect(familyRunAt(dq, dq.findIndex((c) => c.family)).length).toBe(3);
   expect(queueUnits(dq)).toBe(2);
 });
+
+test("回插的卡落在一组同组词中间时挪到这组后面，组不会被拆开", () => {
+  const { reinsertAfterGap } = require("../lib/vocab/reinsert");
+  const { familyRunAt } = require("../lib/vocab/book");
+  const solo = (w) => ({ word: w, reviewMode: "reading" });
+  const fam8 = ["demonstrated", "demonstrate", "demonstrates", "demonstrating"].map((w) => ({ word: w, family: "demonstrated", reviewMode: "reading" }));
+  // pos=0，回插点 = 0 + 1 + 3 = 3，正好在组中间
+  const queue = [solo("a"), solo("b"), fam8[0], fam8[1], fam8[2], fam8[3], solo("c")];
+  const back = { word: "lost", reviewMode: "reading", due: new Date(Date.now() + 60000).toISOString() };
+  const next = reinsertAfterGap(queue, 0, back, 1, { gap: 2 });
+  expect(next.map((c) => c.word)).toEqual(["a", "b", "demonstrated", "demonstrate", "demonstrates", "demonstrating", "lost", "c"]);
+  expect(familyRunAt(next, 2)).toHaveLength(4);
+  // 回插的就是同组词：可以接在组里
+  const member = { ...fam8[1], due: back.due };
+  const q2 = reinsertAfterGap([solo("a"), solo("b"), solo("x"), fam8[2], fam8[3], solo("c")], 0, member, 1, { gap: 3 });
+  expect(q2.map((c) => c.word)).toEqual(["a", "b", "x", "demonstrates", "demonstrate", "demonstrating", "c"]);
+});

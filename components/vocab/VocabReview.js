@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { C, FONT } from "../shared/ui";
 import { RATING, STATE } from "../../lib/vocab/srs";
-import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, contextSentence, familyPosition, familyRunAt, needsDictFill, queueUnits, needsSpelling, sourceLabel } from "../../lib/vocab/book";
+import { activeSentence, definitionForContext, cardDirection, cleanContextSentence, clozeSentence, clusterFamilies, contextSentence, familyPosition, familyRunAt, needsDictFill, queueUnits, needsSpelling, sourceLabel } from "../../lib/vocab/book";
 import { cancelSpeakWord, preloadSpeakWords, speakWord } from "../../lib/audio/speakWord";
 import { SpeakButton } from "../shared/SpeakButton";
 import { DefLine, DictSenses } from "../shared/DictSenses";
@@ -187,7 +187,8 @@ export function VocabReview({
   // 一场复习的全部「会因评分而变」的状态收在一个对象里：
   // 撤销就是把上一份整个换回来，不用逐项倒推。
   const [sess, setSess] = useState(() => ({
-    queue: initialQueue || [],
+    // 同组词排在一起才合得成组卡（中文找词等入口给的队列没排过）
+    queue: clusterFamilies(initialQueue || []),
     pos: 0,
     // 队列在本场内是活的（答错的卡会回插），进度条分母用「初始张数」会跳；
     // 用已答次数 /（已答 + 剩余）才稳。
