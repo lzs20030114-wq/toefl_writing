@@ -29,6 +29,19 @@ function applyCrossSourceRepairs(bank, ledger) {
   }
   return { bank: result, added: plans.length, unchanged: ledger.cross_source.length - plans.length };
 }
+function isHttpsSource(value) {
+  try { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password; } catch { return false; }
+}
+function hasSourceLocation(entry) {
+  const localFile = typeof entry.source_file === 'string' && entry.source_file.trim().length > 0;
+  const hasVideo = entry.source_video !== undefined || entry.source_time_seconds !== undefined;
+  const video = typeof entry.source_video === 'string' && entry.source_video.trim().length > 0 && Number.isFinite(entry.source_time_seconds) && entry.source_time_seconds >= 0;
+  const hasRemote = entry.source_url !== undefined || entry.source_image_url !== undefined || entry.source_sha256 !== undefined;
+  const remote = isHttpsSource(entry.source_url) && isHttpsSource(entry.source_image_url) && /^[a-f0-9]{64}$/.test(entry.source_sha256);
+  if (hasVideo && !video || hasRemote && !remote) return false;
+  if (entry.source_quad !== undefined && (!Array.isArray(entry.source_quad) || entry.source_quad.length !== 4 || !entry.source_quad.every(point => Array.isArray(point) && point.length === 2 && point.every(Number.isFinite)))) return false;
+  return video || remote || localFile && (Number.isInteger(entry.source_page) && entry.source_page > 0 || entry.source_page === null && Number.isInteger(entry.source_image_index) && entry.source_image_index > 0 && typeof entry.source_docx_media === 'string' && entry.source_docx_media.trim().length > 0);
+}
 function applyOriginalSourceRepairs(bank, ledger) {
   const result = JSON.parse(JSON.stringify(bank));
   const items = new Map(result.items.map(item => [item.id, item]));
@@ -42,8 +55,8 @@ function applyOriginalSourceRepairs(bank, ledger) {
     if (seen.has(entry.target_sentence_id)) throw new Error('Duplicate original source repair');
     seen.add(entry.target_sentence_id);
     if (!/^[a-f0-9]{40}$/.test(entry.sha1) || entry.url !== `/real-bank/speaking/recovered/${entry.sha1}.webp` || entry.verified_by !== 'agent_visual_review') throw new Error('Invalid original source hash, URL or review');
-    const hasSourceLocation = Number.isInteger(entry.source_page) && entry.source_page > 0 || entry.source_page === null && Number.isInteger(entry.source_image_index) && entry.source_image_index > 0 && typeof entry.source_docx_media === 'string';
-    if (![entry.w, entry.h, entry.n].every(n => Number.isInteger(n) && n > 0) || !hasSourceLocation || !entry.source_file || !Array.isArray(entry.crop_box) || entry.crop_box.length !== 4 || !entry.crop_box.every(Number.isInteger) || entry.crop_box[2] - entry.crop_box[0] !== entry.w || entry.crop_box[3] - entry.crop_box[1] !== entry.h) throw new Error('Invalid original source dimensions or provenance');
+    // With source_quad, crop_box is measured in the rectified image, not source pixels.
+    if (![entry.w, entry.h, entry.n].every(n => Number.isInteger(n) && n > 0) || !hasSourceLocation(entry) || !Array.isArray(entry.crop_box) || entry.crop_box.length !== 4 || !entry.crop_box.every(Number.isInteger) || entry.crop_box[0] < 0 || entry.crop_box[1] < 0 || entry.crop_box[2] - entry.crop_box[0] !== entry.w || entry.crop_box[3] - entry.crop_box[1] !== entry.h) throw new Error('Invalid original source dimensions or provenance');
     if (entry.also_base && item.sentences.length > 7) throw new Error('Mixed scene item cannot receive a whole-item base');
     if (!item.sentence_frames?.some(f => f.sentence_id === entry.target_sentence_id)) {
       (item.sentence_frames ||= []).push({ sentence_id: entry.target_sentence_id, n: entry.n, url: entry.url, w: entry.w, h: entry.h, ...(entry.frame_kind ? { frame_kind: entry.frame_kind } : {}) });

@@ -49,6 +49,42 @@ test('original source can also supply a missing base', () => {
   const { bank, ledger } = originalFixture(); delete bank.items[1].scene_image;
   expect(applyOriginalSourceRepairs(bank, ledger).addedBases).toBe(1);
 });
+
+test.each(['video', 'remote'])('accepts traceable %s source without inventing a page and replays idempotently', kind => {
+  const { bank, ledger, entry } = originalFixture();
+  delete entry.source_file; delete entry.source_page;
+  Object.assign(entry, kind === 'video'
+    ? { source_video: 'recording.mov', source_time_seconds: 0 }
+    : { source_url: 'https://example.com/article', source_image_url: 'https://example.com/original.png', source_sha256: 'b'.repeat(64) });
+  entry.source_quad = [[10, 20], [900, 10], [890, 700], [0, 690]];
+  const result = applyOriginalSourceRepairs(bank, ledger);
+  expect(result.added).toBe(1);
+  expect(applyOriginalSourceRepairs(result.bank, ledger).added).toBe(0);
+});
+
+test.each([-1, NaN, Infinity, '0', null])('rejects invalid source video time %s even with PDF fallback', time => {
+  const { bank, ledger, entry } = originalFixture();
+  Object.assign(entry, { source_video: 'recording.mov', source_time_seconds: time });
+  expect(() => applyOriginalSourceRepairs(bank, ledger)).toThrow(/provenance/);
+});
+
+test.each(['http://example.com/img.png', 'file:///original.png', 'https://user:pass@example.com/img.png'])('rejects unsafe remote source %s', source => {
+  const { bank, ledger, entry } = originalFixture();
+  Object.assign(entry, { source_url: 'https://example.com/article', source_image_url: source, source_sha256: 'b'.repeat(64) });
+  expect(() => applyOriginalSourceRepairs(bank, ledger)).toThrow(/provenance/);
+});
+
+test('rejects absent provenance, incomplete remote binding, and malformed perspective coordinates', () => {
+  for (const invalid of [
+    { source_file: undefined },
+    { source_url: 'https://example.com/article' },
+    { source_quad: [[0, 0], [1, 0], [1, Infinity], [0, 1]] },
+    { source_quad: [[0, 0], [1, 0], [1, 1]] },
+  ]) {
+    const { bank, ledger, entry } = originalFixture(); Object.assign(entry, invalid);
+    expect(() => applyOriginalSourceRepairs(bank, ledger)).toThrow(/provenance/);
+  }
+});
 test.each(['target_text', 'url', 'sha1', 'verified_by', 'w', 'source_page'])('original source rejects changed binding %s', key => {
   const { bank, ledger, entry } = originalFixture(); entry[key] = 'invalid';
   expect(() => applyOriginalSourceRepairs(bank, ledger)).toThrow();
