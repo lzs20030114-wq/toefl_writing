@@ -28,6 +28,8 @@ import { useCtwAiExplain, CtwAiExplainBlock } from "../components/reading/useCtw
 import { QA_SYSTEM_LISTENING, QA_SYSTEM_LCR, QA_SYSTEM_CTW, LISTENING_EXPLAIN_SYSTEM } from "../lib/qa/questionQa";
 import { SENTENCE_PLAY_EVENT } from "../lib/notes/passageFlash";
 import { qaDetailForCard } from "../lib/qa/mistakeQaDetail";
+import { useBsAiExplain, BsAiExplainBlock } from "../components/buildSentence/useBsAiExplain";
+import { QA_SYSTEM_BS } from "../lib/qa/questionQa";
 
 const LC_DETAIL = {
   subtype: "lc",
@@ -202,5 +204,40 @@ describe("逐句点播只接自己那段录音", () => {
     expect(c.result.current.playerRef.current.calls[0][0]).toBe(0);
     // 不带地址不播
     expect(playPassageSentence("Could you help me?")).toBe(false);
+  });
+});
+
+describe("拖拽造句", () => {
+  const BS = {
+    prompt: "What did your advisor say when you ran into her?",
+    userAnswer: "She asked whether had I already registered for classes.",
+    correctAnswer: "She asked whether I had already registered for classes.",
+    grammar_points: ["indirect question"],
+    isCorrect: false,
+  };
+  function BsHarness() {
+    const h = useBsAiExplain();
+    return <BsAiExplainBlock explainKey="bs-k" detail={BS} {...h} includeCorrect />;
+  }
+
+  test("讲解下面接造句的追问；追问用造句提示词，出处显示「正确句子」", async () => {
+    QA_REPLY = '"whether I had" [S2] 间接疑问句不倒装。';
+    render(<BsHarness />);
+    fireEvent.click(screen.getByRole("button", { name: /AI 解释/ }));
+    fireEvent.click(await screen.findByTestId("qa-entry-why-order"));
+    await waitFor(() => expect(callAI).toHaveBeenCalledTimes(2));
+    const [system, message] = callAI.mock.calls[1];
+    expect(system).toBe(QA_SYSTEM_BS);
+    expect(message).toContain("[S2] She asked whether I had already registered for classes.");
+    expect(message).toContain("【回答格式】");
+    expect(await screen.findByText("正确句子")).toBeInTheDocument();
+  });
+
+  test("不看讲解也能直接问；「我是这么排的…」只预填", async () => {
+    render(<BsHarness />);
+    fireEvent.click(screen.getByTestId("qa-ask"));
+    fireEvent.click(await screen.findByTestId("qa-preset-my-thinking"));
+    expect(screen.getByTestId("qa-input").value).toBe("我当时这么排，是因为");
+    expect(callAI).not.toHaveBeenCalled();
   });
 });

@@ -151,3 +151,40 @@ describe("存档键、预设、提示词", () => {
     }
   });
 });
+
+describe("拖拽造句", () => {
+  const { bsQaDetail, numberBs } = require("../lib/qa/qaKinds");
+  const { QA_SYSTEM_BS } = require("../lib/qa/questionQa");
+  const BS = bsQaDetail({
+    prompt: "What did your advisor say when you ran into her?",
+    userAnswer: "She asked whether had I already registered for classes.",
+    correctAnswer: "She asked whether I had already registered for classes.",
+    grammar_points: ["indirect question", "past perfect"],
+    isCorrect: false,
+  });
+
+  test("题目和正确句子各自编号，学生拼的句子能被引用核对", () => {
+    const s = numberBs(BS);
+    expect(s.map((x) => x.label)).toEqual(["题目", "正确句子"]);
+    const ev = buildEvidence(BS);
+    expect(ev.text).toContain("[S1] What did your advisor say when you ran into her?");
+    expect(ev.text).toContain("[S2] She asked whether I had already registered for classes.");
+    expect(ev.text).toContain('学生拼出的句子："She asked whether had I');
+    expect(ev.text).toContain("涉及语法点（题库标注）：indirect question, past perfect");
+    const seg = parseAnswer('"whether I had" [S2] 间接疑问句不倒装，你写成了 "whether had I"。', ev.sentences, ev.materials);
+    expect(seg.find((x) => x.type === "cite").valid).toBe(true);
+    expect(seg.filter((x) => x.type === "quote").every((x) => x.valid)).toBe(true);
+    expect(sentenceLabel(ev.sentences[1], ev.sentences)).toBe("正确句子");
+  });
+
+  test("没作答写「未作答」；存档键带 bs 前缀；预设和提示词是造句那套", () => {
+    expect(buildEvidence(bsQaDetail({ prompt: "Hi.", userAnswer: "", correctAnswer: "Nice to meet you." })).text).toContain("学生拼出的句子：未作答");
+    expect(conversationKey(BS).startsWith("bs|")).toBe(true);
+    expect(qaPresetsFor("bs").map((p) => p.id)).toEqual(["parse-sentence", "why-order", "my-thinking", "try-similar", "simpler"]);
+    expect(presetText("my-thinking", { kind: "bs", selectedLabel: "x" })).toBe("我当时这么排，是因为");
+    expect(qaSystemFor("bs")).toBe(QA_SYSTEM_BS);
+    expect(QA_SYSTEM_BS).toContain("间接疑问句不倒装");
+    const nums = [...QA_SYSTEM_BS.matchAll(/(\d+)）/g)].map((m) => Number(m[1]));
+    expect(nums).toEqual(nums.map((_, i) => i + 1));
+  });
+});

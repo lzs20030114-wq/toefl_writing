@@ -1,8 +1,10 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { getSavedTier } from "../../lib/AuthContext";
 import { callAI, mapAiHelperError, AI_HELPER_MAX_TOKENS } from "../../lib/ai/client";
 import { AiExplainView } from "../shared/AiExplainView";
+import { bsQaDetail } from "../../lib/qa/qaKinds";
+import { QuestionQaPanel, AskQuestionButton } from "../reading/QuestionQaPanel";
 
 const SYSTEM = "你是一位专业的英语语法老师。学生在拖拽造句练习中答错了一道题，请用中文简短解释（3-5句话）：1）学生的答案哪里有问题；2）正确答案为什么是对的。重点讲语法，不要重复题目内容。";
 const SYSTEM_CORRECT = "你是一位专业的英语语法老师。学生在拖拽造句练习中答对了这道题，请用中文简短解释（3-5句话）正确句子的语法结构和词序依据，帮助学生巩固解题思路。不要虚构学生的错误，不要重复题目内容。";
@@ -61,10 +63,13 @@ export function useBsAiExplain() {
   return { aiExplains, isLegacy, handleAiExplain };
 }
 
-/** Inline UI for the AI explain button + result. Pass a unique key, the detail object, and the hook returns. */
+/** Inline UI for the AI explain button + result. Pass a unique key, the detail object, and the hook returns.
+ *  讲解出来之后（或点了「问这道题」）下面接「继续追问」（components/reading/QuestionQaPanel，造句题型见 lib/qa/qaKinds）。 */
 export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, handleAiExplain, includeCorrect = false, variant }) {
   // Auto-load from cache on mount
   const ex = aiExplains[explainKey];
+  const [askOpen, setAskOpen] = useState(false);
+  const qaDetail = useMemo(() => bsQaDetail(detail), [detail]);
   useEffect(() => {
     if (!isLegacy || (detail.isCorrect && !includeCorrect)) return;
     if (ex) return; // already loaded or loading
@@ -76,16 +81,31 @@ export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, han
 
   if (!isLegacy || (detail.isCorrect && !includeCorrect)) return null;
 
+  const qaPanel = ex?.text || askOpen
+    ? <QuestionQaPanel key={explainKey} detail={qaDetail} firstExplain={ex?.text || ""} variant={variant} defaultExpanded={askOpen} />
+    : null;
+  const askBtn = !ex?.text && !askOpen && qaDetail.correct
+    ? <AskQuestionButton review={variant === "review"} onClick={() => setAskOpen(true)} />
+    : null;
+
   // 真题练习记录页的逐题回顾用统一的「AI 讲解」外观（状态与计费仍在 hook 里）。
   if (variant === "review") {
-    return <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} loadingText="AI 正在分析语序…" testId="bs-ai-explain" />;
+    return (
+      <>
+        <AiExplainView ex={ex} onRun={() => handleAiExplain(explainKey, detail)} loadingText="AI 正在分析语序…" testId="bs-ai-explain" extra={askBtn} />
+        {qaPanel}
+      </>
+    );
   }
 
   if (ex?.text) {
     return (
-      <div style={{ marginTop: 8, padding: "10px 12px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 6, fontSize: 13, color: "#1a2420", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-        {ex.text}
-      </div>
+      <>
+        <div style={{ marginTop: 8, padding: "10px 12px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 6, fontSize: 13, color: "#1a2420", lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+          {ex.text}
+        </div>
+        {qaPanel}
+      </>
     );
   }
   return (
@@ -97,7 +117,9 @@ export function BsAiExplainBlock({ explainKey, detail, aiExplains, isLegacy, han
       >
         {ex?.loading ? "分析中..." : "AI 解释"}
       </button>
+      {askBtn}
       {ex?.error && <span style={{ fontSize: 12, color: "#E11D48", marginLeft: 8 }}>{ex.error}</span>}
+      {qaPanel}
     </div>
   );
 }

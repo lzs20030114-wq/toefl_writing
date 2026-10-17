@@ -25,6 +25,12 @@ const PLACEHOLDER = {
   ctw: "问这个空的任何问题，比如为什么不能填别的词",
   listening: "问这道题的任何问题，比如某句是什么意思、为什么没听出来",
   lcr: "问这道题的任何问题，比如为什么我选的那句接不上",
+  bs: "问这道题的任何问题，比如这里为什么不能倒装",
+};
+const FOOTER = {
+  listening: "回答只依据本题听力原文和你的作答；标「非本题材料」的是通用常识。",
+  lcr: "回答只依据本题听力原文和你的作答；标「非本题材料」的是通用常识。",
+  bs: "回答只依据本题题目、正确句子和你拼出的句子；标「非本题材料」的是通用常识。",
 };
 
 
@@ -323,7 +329,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
   }
 
   let statusLine;
-  if (qa.loading) statusLine = <span style={{ color: theme.solid }}>{kind === "listening" || kind === "lcr" ? "AI 正在对照听力原文作答…" : "AI 正在对照原文作答…"}</span>;
+  if (qa.loading) statusLine = <span style={{ color: theme.solid }}>{kind === "listening" || kind === "lcr" ? "AI 正在对照听力原文作答…" : kind === "bs" ? "AI 正在对照正确句子作答…" : "AI 正在对照原文作答…"}</span>;
   else if (qa.error) {
     statusLine = (
       <span style={{ color: "#E11D48" }}>
@@ -409,7 +415,7 @@ export function QuestionQaPanel({ detail, firstExplain, variant, defaultExpanded
       {reporting != null ? <ReportBox detail={detail} answer={reporting} onDone={() => setReporting(null)} /> : null}
 
       <div style={{ fontSize: 11, color: "#9CA3AF", lineHeight: 1.5 }}>
-        {kind === "listening" || kind === "lcr" ? "回答只依据本题听力原文和你的作答；标「非本题材料」的是通用常识。" : "回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。"}
+        {FOOTER[kind] || "回答只依据本题原文和你的作答；标「非本题材料」的是通用常识。"}
         {reporting == null ? <button type="button" data-testid="qa-report-link" onClick={() => setReporting(lastAnswer)} style={{ marginLeft: 4, fontSize: 11, color: "#9CA3AF", background: "none", border: "none", textDecoration: "underline", cursor: "pointer", padding: 0 }}>这题有问题？上报</button> : null}
       </div>
     </div>
